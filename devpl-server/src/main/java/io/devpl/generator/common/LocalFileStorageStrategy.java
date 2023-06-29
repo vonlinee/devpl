@@ -2,6 +2,8 @@ package io.devpl.generator.common;
 
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
+
 /**
  * 本地文件存储
  */

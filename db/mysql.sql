@@ -1,3 +1,4 @@
+DROP TABLE IF exists gen_datasource;
 CREATE TABLE gen_datasource
 (
     id          bigint       NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -10,6 +11,7 @@ CREATE TABLE gen_datasource
     primary key (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='数据源管理';
 
+DROP TABLE IF exists gen_field_type;
 CREATE TABLE gen_field_type
 (
     id           bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -21,6 +23,7 @@ CREATE TABLE gen_field_type
     unique key (column_type)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='字段类型管理';
 
+DROP TABLE IF exists gen_base_class;
 CREATE TABLE gen_base_class
 (
     id           bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -32,6 +35,7 @@ CREATE TABLE gen_base_class
     primary key (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='基类管理';
 
+DROP TABLE IF exists gen_table;
 CREATE TABLE gen_table
 (
     id             bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -55,6 +59,7 @@ CREATE TABLE gen_table
     unique key (table_name)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表';
 
+DROP TABLE IF exists gen_table_field;
 CREATE TABLE gen_table_field
 (
     id              bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -82,6 +87,7 @@ CREATE TABLE gen_table_field
     primary key (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表字段';
 
+DROP TABLE IF exists gen_project_modify;
 CREATE TABLE gen_project_modify
 (
     id                     bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -101,6 +107,7 @@ CREATE TABLE gen_project_modify
 
 
 -- 用于测试代码生成器的表结构 --
+DROP TABLE IF exists gen_test_student;
 CREATE TABLE gen_test_student
 (
     id          bigint NOT NULL AUTO_INCREMENT COMMENT '学生ID',
