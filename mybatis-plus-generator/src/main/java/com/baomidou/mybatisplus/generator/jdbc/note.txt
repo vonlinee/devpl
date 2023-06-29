@@ -1,0 +1,6 @@
+
+
+jdbc 4.2 specification
+https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/jdbc_42.html
+
+
