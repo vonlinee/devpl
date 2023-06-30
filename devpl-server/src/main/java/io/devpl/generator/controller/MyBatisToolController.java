@@ -73,8 +73,7 @@ public class MyBatisToolController {
         Object val;
         switch (paramValueType) {
             case NUMBER -> val = Long.parseLong(literalValue);
-            case LIST -> val = LocalDateTime.parse(literalValue);
-            case SET -> val = Double.parseDouble(literalValue);
+            case COLLECTION -> val = LocalDateTime.parse(literalValue);
             default -> val = literalValue;
         }
         return val;
