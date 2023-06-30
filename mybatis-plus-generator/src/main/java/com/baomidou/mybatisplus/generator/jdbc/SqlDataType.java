@@ -1,33 +1,17 @@
 package com.baomidou.mybatisplus.generator.jdbc;
 
-import io.devpl.codegen.utils.TypeUtils;
+import com.baomidou.mybatisplus.generator.type.DataType;
 import io.devpl.codegen.utils.ByteArray;
+import io.devpl.codegen.utils.TypeUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.RowId;
-import java.sql.Struct;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 
 /**
- * this class if copied from Apache Calcite
+ * this class if copied from Apache Calcite.
  * Extends the information in {@link java.sql.Types}.
  *
  * <p>The information in the following conversions tables
@@ -277,7 +261,7 @@ import java.util.Map;
  * CHECKSTYLE: ON
  * -->
  */
-public enum SqlDataType {
+public enum SqlDataType implements DataType {
 
     BIT(Types.BIT, boolean.class),
     BOOLEAN(Types.BOOLEAN, boolean.class),
@@ -492,6 +476,11 @@ public enum SqlDataType {
     public static boolean canGet(Method method, SqlDataType sqlType) {
         final EnumSet<SqlDataType> sqlTypes = GET_LIST.get(method);
         return sqlTypes != null && sqlTypes.contains(sqlType);
+    }
+
+    @Override
+    public String getQualifier() {
+        return name();
     }
 
     /**

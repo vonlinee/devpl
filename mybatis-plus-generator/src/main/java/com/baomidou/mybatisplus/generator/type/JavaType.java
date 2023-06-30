@@ -4,7 +4,7 @@ package com.baomidou.mybatisplus.generator.type;
  * An object that is used to identify a generic Java type
  * @since 1.8
  */
-public interface JavaType {
+public interface JavaType extends DataType {
 
     /**
      * 类型标识，一般是数字或字符串
