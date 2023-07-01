@@ -29,7 +29,6 @@ public class TableController {
     @GetMapping("page")
     public Result<PageResult<TableEntity>> page(Query query) {
         PageResult<TableEntity> page = tableService.page(query);
-
         return Result.ok(page);
     }
 
@@ -44,7 +43,6 @@ public class TableController {
         // 获取表的字段
         List<TableFieldInfo> fieldList = tableFieldService.getByTableId(table.getId());
         table.setFieldList(fieldList);
-
         return Result.ok(table);
     }
 
@@ -89,7 +87,6 @@ public class TableController {
         for (String tableName : tableNameList) {
             tableService.tableImport(datasourceId, tableName);
         }
-
         return Result.ok();
     }
 
@@ -103,5 +100,4 @@ public class TableController {
         tableFieldService.updateTableField(tableId, tableFieldList);
         return Result.ok();
     }
-
 }

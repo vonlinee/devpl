@@ -1,17 +1,19 @@
 <script setup lang="ts">
 
-import FileTreeView from "@/components/FileTreeView.vue";
-import {ref} from "vue";
-
-let dialogRef = ref()
 </script>
 
 <template>
-    <el-button @click="dialogRef = true"></el-button>
-    <el-dialog v-model="dialogRef" draggable>
-        <file-tree-view></file-tree-view>
-    </el-dialog>
-
+    <splitpanes class="default-theme" horizontal style="height: 400px">
+        <pane min-size="20" max-size="70">
+            <span>1</span>
+        </pane>
+        <pane>
+            <span>2</span>
+        </pane>
+        <pane max-size="70">
+            <span>3</span>
+        </pane>
+    </splitpanes>
 </template>
 
 <style scoped lang="scss">

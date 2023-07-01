@@ -1,11 +1,14 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.service.CodeGenService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -15,7 +18,7 @@ public class FactoryController {
     private final CodeGenService generatorService;
 
     @GetMapping("/generator/file-tree")
-    public Result<?> get(String rootPath) {
+    public Result<List<FileNode>> get(String rootPath) {
         return Result.ok(generatorService.getFileTree(rootPath));
     }
 
@@ -25,7 +28,7 @@ public class FactoryController {
      * @return 文本内容
      */
     @GetMapping("/generator/file")
-    public Result<?> getFileContent(String path) {
+    public Result<String> getFileContent(String path) {
         return Result.ok(generatorService.getFileContent(path));
     }
 }

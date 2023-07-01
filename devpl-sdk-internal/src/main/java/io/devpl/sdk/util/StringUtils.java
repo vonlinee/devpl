@@ -22,6 +22,12 @@ public final class StringUtils {
     private StringUtils() {
     }
 
+    /**
+     * 字符串常量：{@code "null"} <br>
+     * 注意：{@code "null" != null}
+     */
+    public static final String NULL = "null";
+
     public static final String SINGLE_QUTATION = "'";
     public static final String NULL_STRING = "NULL";
     private static final String[] EMPTY_STRING_ARRAY = {};
@@ -52,14 +58,6 @@ public final class StringUtils {
      */
     public static boolean hasLength(String str) {
         return hasLength((CharSequence) str);
-    }
-
-    /**
-     * JDK的随机UUID
-     * @return
-     */
-    public static String simpleUUID() {
-        return UUID.randomUUID().toString();
     }
 
     /**
@@ -1850,5 +1848,141 @@ public final class StringUtils {
 
     public static boolean isNotBlank(String str) {
         return hasText(str);
+    }
+
+    /**
+     * 比较两个字符串是否相等，规则如下
+     * <ul>
+     *     <li>str1和str2都为{@code null}</li>
+     *     <li>忽略大小写使用{@link String#equalsIgnoreCase(String)}判断相等</li>
+     *     <li>不忽略大小写使用{@link String#contentEquals(CharSequence)}判断相等</li>
+     * </ul>
+     * @param str1       要比较的字符串1
+     * @param str2       要比较的字符串2
+     * @param ignoreCase 是否忽略大小写
+     * @return 如果两个字符串相同，或者都是{@code null}，则返回{@code true}
+     * @since 3.2.0
+     */
+    public static boolean equals(CharSequence str1, CharSequence str2, boolean ignoreCase) {
+        if (null == str1) {
+            // 只有两个都为null才判断相等
+            return str2 == null;
+        }
+        if (null == str2) {
+            // 字符串2空，字符串1非空，直接false
+            return false;
+        }
+        if (ignoreCase) {
+            return str1.toString().equalsIgnoreCase(str2.toString());
+        } else {
+            return str1.toString().contentEquals(str2);
+        }
+    }
+
+    public static boolean equalsAny(CharSequence str1, CharSequence... strs) {
+        return equalsAny(str1, false, strs);
+    }
+
+    /**
+     * 给定字符串是否与提供的中任一字符串相同，相同则返回{@code true}，没有相同的返回{@code false}<br>
+     * 如果参与比对的字符串列表为空，返回{@code false}
+     * @param str1       给定需要检查的字符串
+     * @param ignoreCase 是否忽略大小写
+     * @param strs       需要参与比对的字符串列表
+     * @return 是否相同
+     * @since 4.3.2
+     */
+    public static boolean equalsAny(CharSequence str1, boolean ignoreCase, CharSequence... strs) {
+        if (strs == null) {
+            return false;
+        }
+        for (CharSequence str : strs) {
+            if (equals(str1, str, ignoreCase)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 大写首字母<br>
+     * 例如：str = name, return Name
+     * @param str 字符串
+     * @return 字符串
+     */
+    public static String upperFirst(CharSequence str) {
+        if (null == str) {
+            return null;
+        }
+        if (str.length() > 0) {
+            char firstChar = str.charAt(0);
+            if (Character.isLowerCase(firstChar)) {
+                return Character.toUpperCase(firstChar) + substring(str, 1, str.length());
+            }
+        }
+        return str.toString();
+    }
+
+    public static String substring(CharSequence str, int from) {
+        return substring(str, from, str.length());
+    }
+
+    /**
+     * 改进JDK subString<br>
+     * index从0开始计算，最后一个字符为-1<br>
+     * 如果from和to位置一样，返回 "" <br>
+     * 如果from或to为负数，则按照length从后向前数位置，如果绝对值大于字符串长度，则from归到0，to归到length<br>
+     * 如果经过修正的index中from大于to，则互换from和to example: <br>
+     * abcdefgh 2 3 =》 c <br>
+     * abcdefgh 2 -3 =》 cde <br>
+     * @param str              String
+     * @param fromIndexInclude 开始的index（包括）
+     * @param toIndexExclude   结束的index（不包括）
+     * @return 字串
+     */
+    public static String substring(CharSequence str, int fromIndexInclude, int toIndexExclude) {
+        if (isEmpty(str)) {
+            return str(str);
+        }
+        int len = str.length();
+
+        if (fromIndexInclude < 0) {
+            fromIndexInclude = len + fromIndexInclude;
+            if (fromIndexInclude < 0) {
+                fromIndexInclude = 0;
+            }
+        } else if (fromIndexInclude > len) {
+            fromIndexInclude = len;
+        }
+
+        if (toIndexExclude < 0) {
+            toIndexExclude = len + toIndexExclude;
+            if (toIndexExclude < 0) {
+                toIndexExclude = len;
+            }
+        } else if (toIndexExclude > len) {
+            toIndexExclude = len;
+        }
+
+        if (toIndexExclude < fromIndexInclude) {
+            int tmp = fromIndexInclude;
+            fromIndexInclude = toIndexExclude;
+            toIndexExclude = tmp;
+        }
+
+        if (fromIndexInclude == toIndexExclude) {
+            return EMPTY;
+        }
+        return str.toString().substring(fromIndexInclude, toIndexExclude);
+    }
+
+    /**
+     * {@link CharSequence} 转为字符串，null安全
+     * @param cs {@link CharSequence}
+     * @return 字符串
+     */
+    public static String str(CharSequence cs) {
+        return null == cs ? null : cs.toString();
     }
 }

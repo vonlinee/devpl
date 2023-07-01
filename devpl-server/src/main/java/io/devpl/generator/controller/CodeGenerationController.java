@@ -2,13 +2,16 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.common.utils.ServletUtils;
+import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.service.CodeGenService;
+import io.devpl.sdk.collection.Lists;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -38,15 +41,18 @@ public class CodeGenerationController {
 
     /**
      * 生成代码（自定义目录）
+     *
      * @param tableIds 数据库表ID
      */
     @ResponseBody
     @PostMapping("/code")
-    public Result<String> code(@RequestBody Long[] tableIds) throws Exception {
+    public Result<List<String>> code(@RequestBody Long[] tableIds) throws Exception {
         // 生成代码
         for (Long tableId : tableIds) {
             codeGenService.generatorCode(tableId);
         }
-        return Result.ok();
+        GeneratorInfo generatorInfo = codeGenService.getGeneratorInfo();
+        return Result.ok(Lists.arrayOf(generatorInfo.getProject().getBackendPath(), generatorInfo.getProject()
+            .getFrontendPath()));
     }
 }
