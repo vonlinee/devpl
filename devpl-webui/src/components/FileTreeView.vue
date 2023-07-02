@@ -2,7 +2,7 @@
     <splitpanes class="tree-view-container">
         <pane min-size="40" style="height: 600px; width: 30%">
             <el-tree node-key="key" :data="treeData" :props="defaultProps"
-                     :default-expanded-keys="defaultExpandedKeys"
+                     default-expand-all
                      @node-click="handleFileTreeNodeClick"></el-tree>
         </pane>
         <pane style="width: 70%; height: 600px">
@@ -15,7 +15,7 @@
 import {apiGetFileContent, apiGetFileTree} from '@/api/factory'
 import {ref} from "vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { Splitpanes, Pane } from 'splitpanes'
+import {Pane, Splitpanes} from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 
 let editorRef = ref()
@@ -54,6 +54,11 @@ let handleFileTreeNodeClick = (fileNode: FileNode) => {
     }
 }
 
+/**
+ * 递归展开所有父节点
+ * @param fileNode 当前节点
+ * @param defaultExpandedKeys 保存展开节点的key，递归遍历节点数，填充key到此数组
+ */
 function expandAllParentNode(fileNode: FileNode, defaultExpandedKeys: string[]) {
     if (!fileNode.isLeaf) {
         return
