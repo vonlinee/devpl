@@ -2,18 +2,19 @@ package io.devpl.generator.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorConfig;
 import io.devpl.generator.config.template.GeneratorInfo;
+import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.BaseClassEntity;
 import io.devpl.generator.entity.TableEntity;
 import io.devpl.generator.entity.TableFieldInfo;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
+import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -59,6 +60,11 @@ public class CodeGenServiceImpl implements CodeGenService {
     }
 
     @Override
+    public GeneratorInfo getGeneratorInfo() {
+        return generatorInfo;
+    }
+
+    @Override
     public void downloadCode(Long tableId, ZipOutputStream zip) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableId);
@@ -83,6 +89,7 @@ public class CodeGenServiceImpl implements CodeGenService {
     public void generatorCode(Long tableId) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableId);
+        ProjectInfo project = generatorInfo.getProject();
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
@@ -94,6 +101,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取渲染的数据模型
+     *
      * @param tableId 表ID
      */
     private Map<String, Object> getDataModel(Long tableId) {
@@ -151,6 +159,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置基类信息
+     *
      * @param dataModel 数据模型
      * @param table     表
      */
@@ -166,7 +175,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         String[] fields = baseClass.getFields().split(",");
         // 标注为基类字段
         for (TableFieldInfo field : table.getFieldList()) {
-            if (ArrayUtil.contains(fields, field.getFieldName())) {
+            if (ArrayUtils.contains(fields, field.getFieldName())) {
                 field.setBaseField(true);
             }
         }
@@ -174,6 +183,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取文件树
+     *
      * @param workPath 工作路径
      * @return 文件节点列表
      */
@@ -192,8 +202,9 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 递归生成文件树
-     * @param path
-     * @param node
+     *
+     * @param path 目录
+     * @param node 保存节点
      */
     private void recursive(File path, List<FileNode> node) {
         if (path.isDirectory()) {
@@ -228,6 +239,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置字段分类信息
+     *
      * @param dataModel 数据模型
      * @param table     表
      */

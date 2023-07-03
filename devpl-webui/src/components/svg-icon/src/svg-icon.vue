@@ -10,6 +10,7 @@
 import { computed } from 'vue'
 
 const props = defineProps({
+    // 图标名称
 	icon: {
 		type: String,
 		required: true

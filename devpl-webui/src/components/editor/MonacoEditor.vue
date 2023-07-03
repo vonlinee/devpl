@@ -74,5 +74,6 @@ defineExpose({
     margin: 0;
     padding: 0;
     text-align: left;
+    display: inline-block;
 }
 </style>

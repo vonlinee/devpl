@@ -19,7 +19,7 @@ public interface TemplateService {
     String render(String template, Map<String, Object> dataModel);
 
     /**
-     * @return
+     * @return 分页数据
      */
     IPage<TemplateInfo> pages(int pageIndex, int pageSize);
 }

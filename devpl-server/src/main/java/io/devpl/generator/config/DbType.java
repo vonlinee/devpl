@@ -1,6 +1,6 @@
 package io.devpl.generator.config;
 
-import io.devpl.generator.utils.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * 数据库类型 枚举

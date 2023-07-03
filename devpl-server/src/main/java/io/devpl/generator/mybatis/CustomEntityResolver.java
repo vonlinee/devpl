@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 
 /**
- * https://blog.csdn.net/u011679955/article/details/93341605
+ * <a href="https://blog.csdn.net/u011679955/article/details/93341605">...</a>
  */
 public class CustomEntityResolver implements EntityResolver {
 
