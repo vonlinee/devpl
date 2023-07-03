@@ -119,7 +119,7 @@ const http = {
      * @param params
      * @param headers
      */
-    postForm(url: string, params?: any, headers = {"Content-Type": "multipart/form-data"}) {
+    postForm(url: string, params?: any, headers = {"Content-Type": "multipart/form-data"}): AxiosPromise {
         const config: config = {
             method: "post",
             url: url,

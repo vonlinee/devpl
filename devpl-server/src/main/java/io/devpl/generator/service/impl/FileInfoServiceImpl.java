@@ -45,7 +45,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         }
         // 信息验证end
         List<FileInfo> files = new ArrayList<>();
-        FileInfo fileInfo = null;
+        FileInfo fileInfo;
         String path = fileConf.getPath();  // 文件存储的目录
         // 获取相对路径，由file_conf、额外路径
         String relativePath = fileConf.getResourceRealm() + "/"
@@ -91,12 +91,11 @@ public class FileInfoServiceImpl implements FileInfoService {
         }
         for (MultipartFile mpf : mpfList) {
             // 验证文件大小是否超出配置大小
-            if (!StringUtils.isEmpty(fileConf.getFileSizeLimit()) && mpf.getSize() / 1024 > Integer.parseInt(fileConf.getFileSizeLimit())) {
+            if (StringUtils.hasText(fileConf.getFileSizeLimit()) && mpf.getSize() / 1024 > Integer.parseInt(fileConf.getFileSizeLimit())) {
                 return false;
             }
             // 验证文件类型是否符合文件配置的要求
-            if (!StringUtils.isEmpty(fileConf.getFileTypeLimit()) && fileConf.getFileTypeLimit()
-                .indexOf(mpf.getContentType()) < 0) {
+            if (StringUtils.hasText(fileConf.getFileTypeLimit()) && !fileConf.getFileTypeLimit().contains(mpf.getContentType())) {
                 return false;
             }
         }

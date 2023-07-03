@@ -1,6 +1,5 @@
 package io.devpl.generator.common.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
+import org.springframework.util.StringUtils;
 
 /**
  * 基础服务类，所有Service都要继承
@@ -27,13 +27,13 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
 
     protected QueryWrapper<T> getWrapper(Query query) {
         QueryWrapper<T> wrapper = new QueryWrapper<>();
-        wrapper.like(StrUtil.isNotBlank(query.getCode()), "code", query.getCode());
-        wrapper.like(StrUtil.isNotBlank(query.getTableName()), "table_name", query.getTableName());
-        wrapper.like(StrUtil.isNotBlank(query.getAttrType()), "attr_type", query.getAttrType());
-        wrapper.like(StrUtil.isNotBlank(query.getColumnType()), "column_type", query.getColumnType());
-        wrapper.like(StrUtil.isNotBlank(query.getConnName()), "conn_name", query.getConnName());
-        wrapper.eq(StrUtil.isNotBlank(query.getDbType()), "db_type", query.getDbType());
-        wrapper.like(StrUtil.isNotBlank(query.getProjectName()), "project_name", query.getProjectName());
+        wrapper.like(StringUtils.hasText(query.getCode()), "code", query.getCode());
+        wrapper.like(StringUtils.hasText(query.getTableName()), "table_name", query.getTableName());
+        wrapper.like(StringUtils.hasText(query.getAttrType()), "attr_type", query.getAttrType());
+        wrapper.like(StringUtils.hasText(query.getColumnType()), "column_type", query.getColumnType());
+        wrapper.like(StringUtils.hasText(query.getConnName()), "conn_name", query.getConnName());
+        wrapper.eq(StringUtils.hasText(query.getDbType()), "db_type", query.getDbType());
+        wrapper.like(StringUtils.hasText(query.getProjectName()), "project_name", query.getProjectName());
         return wrapper;
     }
 }

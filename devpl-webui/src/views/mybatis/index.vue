@@ -44,9 +44,7 @@
     <el-button type="primary" @click="getParams()">解析参数</el-button>
     <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
     <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
-    <el-button type="primary" @click="dialogVisiable = !dialogVisiable">展示编辑器弹窗</el-button>
 
-    <el-button type="primary" @click="updateEditorText()">更新编辑器文本</el-button>
     <el-dialog v-model="dialogVisiable">
         <template #default>
             <code-editor ref="dialogEditorRef"></code-editor>
@@ -131,10 +129,6 @@ export default {
             })
         })
 
-        function updateEditorText() {
-
-        }
-
         // codemirror 编辑器选项
         const options = reactive({
             style: {
@@ -203,7 +197,7 @@ export default {
             sqlRef,
             dialogEditorRef,
             cmOptions,
-            updateEditorText, getSqlOfMapperStatement
+            getSqlOfMapperStatement
         }
     }
 }

@@ -20,10 +20,14 @@ import java.util.Set;
 public class FieldTypeController {
     private final FieldTypeService fieldTypeService;
 
+    /**
+     * 字段类型
+     * @param query 查询参数
+     * @return
+     */
     @GetMapping("page")
     public Result<PageResult<FieldTypeEntity>> page(Query query) {
         PageResult<FieldTypeEntity> page = fieldTypeService.page(query);
-
         return Result.ok(page);
     }
 

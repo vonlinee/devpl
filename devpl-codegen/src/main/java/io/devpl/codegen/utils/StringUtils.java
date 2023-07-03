@@ -1968,7 +1968,7 @@ public final class StringUtils {
      */
     public static String prefixToLower(String rawString, int index) {
         return rawString.substring(0, index).toLowerCase() +
-                rawString.substring(index);
+            rawString.substring(index);
     }
 
 

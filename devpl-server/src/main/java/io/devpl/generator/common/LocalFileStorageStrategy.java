@@ -2,8 +2,6 @@ package io.devpl.generator.common;
 
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
-
 /**
  * 本地文件存储
  */
@@ -12,7 +10,7 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
 
     @Override
     public boolean isPathValid(String path) {
-        return false;
+        return true;
     }
 
     @Override

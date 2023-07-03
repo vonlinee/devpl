@@ -1,6 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
@@ -9,10 +8,10 @@ import io.devpl.generator.dao.FieldTypeDao;
 import io.devpl.generator.entity.FieldTypeEntity;
 import io.devpl.generator.service.FieldTypeService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 /**
  * 字段类型管理
@@ -42,8 +41,7 @@ public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeDao, FieldTyp
     @Override
     public Set<String> getPackageByTableId(Long tableId) {
         Set<String> importList = baseMapper.getPackageByTableId(tableId);
-
-        return importList.stream().filter(StrUtil::isNotBlank).collect(Collectors.toSet());
+        return importList.stream().filter(StringUtils::hasText).collect(Collectors.toSet());
     }
 
     @Override

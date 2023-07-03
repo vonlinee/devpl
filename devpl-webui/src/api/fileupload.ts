@@ -11,3 +11,7 @@ export const apiUploadSingleFile = (file: File) => {
         }
     })
 }
+
+export const apiUploadFile = (param: FormData) => {
+    return http.postForm('/api/file/upload/single', param)
+}
