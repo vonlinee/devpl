@@ -53,7 +53,6 @@ public class ProjectModifyController {
     @DeleteMapping
     public Result<String> delete(@RequestBody List<Long> idList) {
         projectModifyService.removeByIds(idList);
-
         return Result.ok();
     }
 

@@ -5,7 +5,7 @@
             <el-form-item label="模板名称" prop="templateName">
                 <el-input v-model="dataForm.templateName"></el-input>
             </el-form-item>
-            <el-form-item label="模板文件路径" prop="path">
+            <el-form-item label="模板文件路径" prop="templatePath">
                 <el-upload action="#"
                            :limit="1"
                            :auto-upload="false"
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {reactive, ref, toRaw} from 'vue'
-import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
+import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
 import {apiAddTemplate} from "@/api/template";
 
@@ -52,7 +52,7 @@ const emit = defineEmits(['refreshDataList'])
 const dataForm = reactive({
     id: '',
     templateName: '',
-    path: '',
+    templatePath: '',
     content: '',
 })
 
@@ -73,14 +73,23 @@ const headers = {
 }
 
 // 选择文件时被调用，将他赋值给fileUpload
-const handleChange = (file: any) => {
+const handleChange = (file: UploadFile) => {
     fileUpload.value = file
+    dataForm.templateName = file.name
 }
 
 // 确定上传
 const uploadBtn = async () => {
     apiUploadSingleFile("template", fileUpload.value.raw).then((res) => {
-        dataForm.path = res.data.pathList[0];
+        if (res.code === 200) {
+            ElMessage.info({
+                message: '保存成功',
+                duration: 500,
+                onClose: () => {
+                    dataForm.templatePath = res.data.pathList[0];
+                }
+            })
+        }
     })
 }
 

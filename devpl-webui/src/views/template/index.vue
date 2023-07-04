@@ -19,7 +19,7 @@
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 			<el-table-column prop="templateId" label="模板ID" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="templateName" label="模板名称" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="path" label="模板路径" show-overflow-tooltip header-align="center"
+			<el-table-column prop="templatePath" label="模板路径" show-overflow-tooltip header-align="center"
 			                 align="center"></el-table-column>
 			<el-table-column prop="content" label="模板内容" show-overflow-tooltip header-align="center"
 			                 align="center"></el-table-column>
