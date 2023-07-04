@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus/es'
+import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
 import { useDataSourceListApi } from '@/api/datasource'
 import { useTableImportSubmitApi } from '@/api/table'
 import { useDataSourceTableListApi } from '@/api/datasource'

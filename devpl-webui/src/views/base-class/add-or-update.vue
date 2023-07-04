@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import {reactive, ref} from 'vue'
-import {ElMessage} from 'element-plus/es'
+import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
 import {useBaseClassApi, useBaseClassSubmitApi} from '@/api/baseClass'
 
 const emit = defineEmits(['refreshDataList'])
@@ -42,12 +42,12 @@ const dataForm = reactive({
 const init = (id?: number) => {
 	visible.value = true
 	dataForm.id = ''
-	
+
 	// 重置表单数据
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields()
 	}
-	
+
 	// id 存在则为修改
 	if (id) {
 		getBaseClass(id)
@@ -72,7 +72,7 @@ const submitHandle = () => {
 		if (!valid) {
 			return false
 		}
-		
+
 		useBaseClassSubmitApi(dataForm).then(() => {
 			ElMessage.success({
 				message: '操作成功',

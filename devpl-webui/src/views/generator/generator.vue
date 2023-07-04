@@ -99,8 +99,6 @@
     <el-dialog v-model="fileTreeViewDialogRef" draggable>
         <file-tree-view ref="fileTreeViewRef"></file-tree-view>
     </el-dialog>
-
-    <code-gen-result></code-gen-result>
 </template>
 
 <script setup lang="ts">
