@@ -1,9 +1,11 @@
 package io.devpl.generator.common.exception;
 
 /**
- * 状态码
+ * Http状态码 + 自定义业务状态码
  */
 public enum StatusCode {
+
+    OK(200, "OK"),
     INTERNAL_SERVER_ERROR(500, "服务器异常，请稍后再试");
 
     private final int code;

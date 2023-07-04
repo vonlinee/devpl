@@ -44,7 +44,7 @@
 			@current-change="currentChangeHandle"
 		>
 		</el-pagination>
-		
+
 		<!-- 弹窗, 新增 / 修改 -->
 		<add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
 	</el-card>
@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 
-import {reactive, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {ElButton} from "element-plus";
 import AddOrUpdate from './add-or-update.vue'
 import {useCrud} from '@/hooks'
@@ -74,5 +74,5 @@ const addOrUpdateHandle = (id?: number) => {
 
 const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)
 
-getDataList()
+onMounted(() => getDataList())
 </script>

@@ -3,6 +3,7 @@ package io.devpl.generator.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.devpl.codegen.utils.CollectionUtils;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -24,10 +26,23 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class TemplateServiceImpl implements TemplateService {
+public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, TemplateInfo> implements TemplateService {
 
     @Resource
     TemplateInfoMapper templateInfoMapper;
+
+    /**
+     * 保存模板
+     * @param templateInfo 模板信息
+     * @return 是否成功
+     */
+    @Override
+    public boolean save(TemplateInfo templateInfo) {
+        templateInfo.setUpdateTime(LocalDateTime.now());
+        templateInfo.setCreateTime(LocalDateTime.now());
+        templateInfo.setDeleted(false);
+        return templateInfoMapper.insert(templateInfo) == 1;
+    }
 
     /**
      * 获取模板渲染后的内容

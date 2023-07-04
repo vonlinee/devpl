@@ -1,16 +1,15 @@
 package io.devpl.generator.common.utils;
 
 import io.devpl.generator.common.exception.StatusCode;
-import lombok.Data;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 
 /**
  * 响应数据
  */
-@Data
-public class Result<T> {
+public class Result<T> implements Serializable {
 
     // 编码 0表示成功，其他值表示失败
     private int code = 0;
@@ -28,6 +27,8 @@ public class Result<T> {
     public static <T> Result<T> ok(T data) {
         Result<T> result = new Result<>();
         result.setData(data);
+        result.setCode(StatusCode.OK.getCode());
+        result.setMsg(StatusCode.OK.getMsg());
         return result;
     }
 
@@ -66,5 +67,37 @@ public class Result<T> {
     public Result<T> code(int code) {
         this.code = code;
         return this;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public String getStackTrace() {
+        return stackTrace;
+    }
+
+    public void setStackTrace(String stackTrace) {
+        this.stackTrace = stackTrace;
     }
 }

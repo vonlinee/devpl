@@ -36,16 +36,19 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {reactive, ref, toRaw} from 'vue'
 import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
-import {useProjectApi, useProjectSubmitApi} from '@/api/project'
-import {apiUploadFile, apiUploadSingleFile} from "@/api/fileupload";
-
-const emit = defineEmits(['refreshDataList'])
+import {apiUploadSingleFile} from "@/api/fileupload";
+import {apiAddTemplate} from "@/api/template";
 
 const visible = ref(false)
 const dataFormRef = ref()
 
+const emit = defineEmits(['refreshDataList'])
+
+/**
+ * 表单数据
+ */
 const dataForm = reactive({
     id: '',
     templateName: '',
@@ -60,10 +63,6 @@ const init = (id?: number) => {
     // 重置表单数据
     if (dataFormRef.value) {
         dataFormRef.value.resetFields()
-    }
-
-    if (id) {
-        getProject(id)
     }
 }
 
@@ -80,28 +79,8 @@ const handleChange = (file: any) => {
 
 // 确定上传
 const uploadBtn = async () => {
-    let param = new FormData()
-    // 如果多个文件数组，可循环添加
-    param.append("file", fileUpload.value.raw)
-    // 发给后端
-    const res = await apiUploadFile(param)
-    if (res.code === 200) {
-        ElMessage({
-            message: '上传成功',
-            type: 'success'
-        })
-    } else {
-        ElMessage({
-            message: '上传失败',
-            type: 'error'
-        })
-    }
-}
-
-
-const getProject = (id: number) => {
-    useProjectApi(id).then(res => {
-        Object.assign(dataForm, res.data)
+    apiUploadSingleFile("template", fileUpload.value.raw).then((res) => {
+        dataForm.path = res.data.pathList[0];
     })
 }
 
@@ -118,15 +97,18 @@ const submitHandle = () => {
         if (!valid) {
             return false
         }
-        useProjectSubmitApi(dataForm).then(() => {
-            ElMessage.success({
-                message: '操作成功',
-                duration: 500,
-                onClose: () => {
-                    visible.value = false
-                    emit('refreshDataList')
-                }
-            })
+        apiAddTemplate(toRaw(dataForm)).then((res) => {
+            // @ts-ignore
+            if (res.code === 200) {
+                ElMessage.info({
+                    message: '保存成功',
+                    duration: 500,
+                    onClose: () => {
+                        visible.value = false
+                        emit('refreshDataList')
+                    }
+                })
+            }
         })
     })
 }

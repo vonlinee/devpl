@@ -204,10 +204,14 @@ VALUES ('maku-cloud', 'maku', 'net.maku', 'D:/makunet/maku-cloud', 'baba-cloud',
 
 DROP TABLE IF exists template_info;
 CREATE TABLE `template_info` (
-    `template_id` varchar(32) DEFAULT NULL,
-    `type` tinyint(4) DEFAULT NULL COMMENT '模板类型',
-    `content` text COMMENT '字符串模板内容',
-    `path` varchar(500) DEFAULT NULL COMMENT '文件模板路径',
-    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-    `update_time` datetime DEFAULT NULL COMMENT '更新时间'
+     `template_id` bigint(20) AUTO_INCREMENT COMMENT '模板ID主键',
+     `template_name` varchar(100) DEFAULT NULL COMMENT '模板名称',
+     `type` tinyint(4) DEFAULT NULL COMMENT '模板类型',
+     `content` text COMMENT '字符串模板内容',
+     `path` varchar(500) DEFAULT NULL COMMENT '文件模板路径',
+     `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+     `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+     `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
+     `deleted` tinyint(4) DEFAULT NULL COMMENT '逻辑删除状态',
+     PRIMARY KEY (template_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='模板记录表';

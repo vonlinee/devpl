@@ -1,19 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.devpl.sdk.io;
 
 import java.io.*;
@@ -235,7 +219,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static byte[] toByteArray(Reader input, String encoding)
-            throws IOException {
+        throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         copy(input, output, encoding);
         return output.toByteArray();
@@ -294,7 +278,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static char[] toCharArray(InputStream is, String encoding)
-            throws IOException {
+        throws IOException {
         CharArrayWriter output = new CharArrayWriter();
         copy(is, output, encoding);
         return output.toCharArray();
@@ -353,7 +337,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static String toString(InputStream input, String encoding)
-            throws IOException {
+        throws IOException {
         StringWriter sw = new StringWriter();
         copy(input, sw, encoding);
         return sw.toString();
@@ -402,7 +386,7 @@ public class IOUtils {
      * @deprecated Use {@link String#String(byte[], String)}
      */
     public static String toString(byte[] input, String encoding)
-            throws IOException {
+        throws IOException {
         if (encoding == null) {
             return new String(input);
         } else {
@@ -541,7 +525,7 @@ public class IOUtils {
      * @since Commons IO 1.2
      */
     public static LineIterator lineIterator(InputStream input, String encoding)
-            throws IOException {
+        throws IOException {
         Reader reader = null;
         if (encoding == null) {
             reader = new InputStreamReader(input);
@@ -595,7 +579,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(byte[] data, OutputStream output)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             output.write(data);
         }
@@ -636,7 +620,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(byte[] data, Writer output, String encoding)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -679,7 +663,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(char[] data, OutputStream output)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             output.write(new String(data).getBytes());
         }
@@ -703,7 +687,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(char[] data, OutputStream output, String encoding)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -743,7 +727,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(String data, OutputStream output)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             output.write(data.getBytes());
         }
@@ -765,7 +749,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(String data, OutputStream output, String encoding)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             if (encoding == null) {
                 write(data, output);
@@ -787,7 +771,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(StringBuffer data, Writer output)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             output.write(data.toString());
         }
@@ -806,7 +790,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void write(StringBuffer data, OutputStream output)
-            throws IOException {
+        throws IOException {
         if (data != null) {
             output.write(data.toString().getBytes());
         }
@@ -976,7 +960,7 @@ public class IOUtils {
      * @since Commons IO 1.3
      */
     public static long copyLarge(InputStream input, OutputStream output)
-            throws IOException {
+        throws IOException {
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
         long count = 0;
         int n = 0;
@@ -1002,7 +986,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void copy(InputStream input, Writer output)
-            throws IOException {
+        throws IOException {
         InputStreamReader in = new InputStreamReader(input);
         copy(in, output);
     }
@@ -1026,7 +1010,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void copy(InputStream input, Writer output, String encoding)
-            throws IOException {
+        throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1106,7 +1090,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void copy(Reader input, OutputStream output)
-            throws IOException {
+        throws IOException {
         OutputStreamWriter out = new OutputStreamWriter(output);
         copy(input, out);
         // XXX Unless anyone is planning on rewriting OutputStreamWriter, we
@@ -1137,7 +1121,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static void copy(Reader input, OutputStream output, String encoding)
-            throws IOException {
+        throws IOException {
         if (encoding == null) {
             copy(input, output);
         } else {
@@ -1166,7 +1150,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      */
     public static boolean contentEquals(InputStream input1, InputStream input2)
-            throws IOException {
+        throws IOException {
         if (!(input1 instanceof BufferedInputStream)) {
             input1 = new BufferedInputStream(input1);
         }
@@ -1202,7 +1186,7 @@ public class IOUtils {
      * @since Commons IO 1.1
      */
     public static boolean contentEquals(Reader input1, Reader input2)
-            throws IOException {
+        throws IOException {
         if (!(input1 instanceof BufferedReader)) {
             input1 = new BufferedReader(input1);
         }
@@ -1220,5 +1204,4 @@ public class IOUtils {
         int ch2 = input2.read();
         return (ch2 == -1);
     }
-
 }

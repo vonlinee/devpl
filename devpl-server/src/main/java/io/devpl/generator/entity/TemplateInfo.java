@@ -1,5 +1,6 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,8 +18,8 @@ public class TemplateInfo extends EntityBase {
     /**
      * 模板ID
      */
-    @TableId(value = "template_id")
-    private String templateId;
+    @TableId(value = "template_id", type = IdType.AUTO)
+    private Integer templateId;
 
     /**
      * 模板名称
@@ -27,10 +28,22 @@ public class TemplateInfo extends EntityBase {
     private String templateName;
 
     /**
+     * 模板名称
+     */
+    @TableField(value = "path")
+    private String templatePath;
+
+    /**
      * 模板内容
      */
     @TableField(value = "content")
     private String content;
+
+    /**
+     * 备注信息
+     */
+    @TableField(value = "remark")
+    private String remark;
 
     /**
      * 生成代码的路径

@@ -50,8 +50,8 @@ service.interceptors.response.use(
             return Promise.reject(new Error(response.statusText || 'Error'))
         }
         const res = response.data
-        // 响应成功
-        if (res.code === 0) {
+        // 响应成功 200
+        if (res.code === 200) {
             return res
         }
         // 开发模式下展示异常

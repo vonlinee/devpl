@@ -7,9 +7,7 @@ import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
 import io.devpl.generator.utils.BusinessUtils;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 模板管理控制器
@@ -20,6 +18,26 @@ public class TemplateController {
 
     @Resource
     TemplateService templateService;
+
+    /**
+     * 新增模板
+     * @param templateInfo 模板信息
+     * @return 是否成功
+     */
+    @PostMapping(value = "/save")
+    public Result<Boolean> addOne(@RequestBody TemplateInfo templateInfo) {
+        return Result.ok(templateService.save(templateInfo));
+    }
+
+    /**
+     * 新增模板
+     * @param templateId 模板ID
+     * @return 是否成功
+     */
+    @PostMapping(value = "/del/{templateId}")
+    public Result<Boolean> addOne(@PathVariable(value = "templateId") Integer templateId) {
+        return Result.ok(templateService.removeById(templateId));
+    }
 
     /**
      * 分页查询列表

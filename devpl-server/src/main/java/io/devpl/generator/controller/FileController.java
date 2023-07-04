@@ -1,9 +1,10 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.FileStorageStrategy;
-import io.devpl.generator.common.utils.JSONUtils;
 import io.devpl.generator.common.utils.Result;
-import io.devpl.generator.domain.param.SingleUploadParam;
+import io.devpl.generator.domain.param.MultiFileUploadParam;
+import io.devpl.generator.domain.param.SingleFileUploadParam;
+import io.devpl.generator.domain.vo.FileUploadResult;
+import io.devpl.generator.service.IFileUploadService;
 import jakarta.annotation.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,15 +21,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class FileController {
 
     @Resource
-    FileStorageStrategy fileStorageStrategy;
+    IFileUploadService fileUploadService;
 
     /**
      * 单文件上传
      */
-    @PostMapping(value = "/upload/single", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result<Object> upload(SingleUploadParam param) {
-        System.out.println(JSONUtils.toJsonString(param));
+    @PostMapping(value = "/upload/single")
+    public Result<FileUploadResult> uploadFile(SingleFileUploadParam param) {
+        try {
+            return Result.ok(fileUploadService.uploadSingleFile(param));
+        } catch (Exception exception) {
+            return Result.exception(exception);
+        }
+    }
 
-        return Result.ok(param);
+    /**
+     * 多文件上传
+     */
+    @PostMapping(value = "/upload/multiple", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result<FileUploadResult> uploadFile(MultiFileUploadParam param) {
+        fileUploadService.uploadMultiFiles(param);
+        return Result.ok();
     }
 }

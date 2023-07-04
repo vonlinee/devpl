@@ -3,6 +3,7 @@
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 import {ref} from "vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import FileUpload from "@/components/FileUpload.vue";
 
 let dirs = ref(['D:/Temp/2222', 'D:/Temp/menu'])
 
@@ -23,6 +24,8 @@ let langRef = ref(`javascript`)
     <monaco-editor ref="editorRef" language="json" style="height: 500px"></monaco-editor>
 
     {{ langRef}}
+
+    <file-upload></file-upload>
 </template>
 
 <style scoped lang="scss">
