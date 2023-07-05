@@ -9,6 +9,36 @@ import java.util.Objects;
  */
 public class ReflectionUtils {
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getTypedValue(Object object, String fieldName, T defaultValue) {
+        return (T) getValue(object, fieldName, defaultValue);
+    }
+
+    /**
+     * 直接读取对象的属性值, 忽略 private/protected 修饰符, 也不经过 getter
+     * @param object       对象
+     * @param fieldName    对象的字段
+     * @param defaultValue 当反射操作抛异常时，返回该值，获取的值为null时返回null
+     * @return 字段值
+     */
+    public static Object getValue(Object object, String fieldName, Object defaultValue) {
+        Field field = getDeclaredField(object, fieldName);
+        if (field == null) {
+            throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + object + "]");
+        }
+        if (!tryMakeAccessible(field)) {
+            return null;
+        }
+        Object result;
+        try {
+            result = field.get(object);
+        } catch (IllegalAccessException e) {
+            // ignore
+            result = defaultValue;
+        }
+        return result;
+    }
+
     /**
      * 直接读取对象的属性值, 忽略 private/protected 修饰符, 也不经过 getter
      * @param object    对象

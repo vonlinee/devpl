@@ -13,6 +13,11 @@ import java.util.*;
 
 public class MyBatisUtils {
 
+    /**
+     * TODO 解决ResultMap不存在的问题
+     * @param xml XML 标签内容
+     * @return 解析结果
+     */
     public static ParseResult parseXml(String xml) {
         // 直接获取XML中的节点
         XPathParser xPathParser = new XPathParser(xml, false, null, new IgnoreDTDEntityResolver());
