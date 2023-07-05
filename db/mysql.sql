@@ -1,3 +1,10 @@
+-- 删除数据库
+drop database if exists `devpl`;
+-- 新建数据库
+create database `devpl` default character set utf8mb4;
+-- 使用数据库
+use `devpl`;
+
 DROP TABLE IF exists gen_datasource;
 CREATE TABLE gen_datasource
 (
