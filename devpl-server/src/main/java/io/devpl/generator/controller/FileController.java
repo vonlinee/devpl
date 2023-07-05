@@ -6,7 +6,10 @@ import io.devpl.generator.domain.param.SingleFileUploadParam;
 import io.devpl.generator.domain.vo.FileUploadResult;
 import io.devpl.generator.service.IFileUploadService;
 import jakarta.annotation.Resource;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +28,7 @@ public class FileController {
 
     /**
      * 单文件上传
+     * @return 返回文件上传成功的路径
      */
     @PostMapping(value = "/upload/single")
     public Result<FileUploadResult> uploadFile(SingleFileUploadParam param) {
@@ -42,5 +46,14 @@ public class FileController {
     public Result<FileUploadResult> uploadFile(MultiFileUploadParam param) {
         fileUploadService.uploadMultiFiles(param);
         return Result.ok();
+    }
+
+    /**
+     * 文件下载，不通过静态资源访问
+     * @return 文件字节
+     */
+    @GetMapping(value = "/download")
+    public ResponseEntity<byte[]> download() {
+        return new ResponseEntity<>(new byte[]{}, HttpStatusCode.valueOf(200));
     }
 }

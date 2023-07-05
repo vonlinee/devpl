@@ -29,5 +29,5 @@ public interface IFileUploadService {
      * 多文件上传
      * @param param 多文件上传参数
      */
-    void uploadMultiFiles(MultiFileUploadParam param);
+    FileUploadResult uploadMultiFiles(MultiFileUploadParam param);
 }

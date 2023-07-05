@@ -27,8 +27,8 @@ public class EncryptParameterAspect {
     /**
      * 切面方法：page、list、get、save、update、tableList
      * @param proceedingJoinPoint ProceedingJoinPoint
-     * @return
-     * @throws Throwable
+     * @return 切点方法返回值
+     * @throws Throwable 切点方法抛异常
      */
     @Around("execution(* io.devpl.generator.controller.DataSourceController.*(..))")
     public Object doProcess(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -38,7 +38,6 @@ public class EncryptParameterAspect {
             handleItem(item, true);
         }
         Object result = proceedingJoinPoint.proceed();
-
         // 处理返回值
         handleObject(result);
         return result;
@@ -59,18 +58,16 @@ public class EncryptParameterAspect {
 
     /**
      * 加密返回结果中的字段
-     * @param object
-     * @throws Exception
+     * @param object 待加密的数据
      */
-    private void handleObject(Object object) throws Exception {
+    private void handleObject(Object object) {
         // 仅处理类型是Result的返回对象
         if (!(object instanceof Result) || Objects.isNull(((Result<?>) object).getData())) {
             return;
         }
-
         Object data = ((Result<?>) object).getData();
         if (data instanceof List || data instanceof PageResult) {
-            List itemList = data instanceof List ? (List) data : ((PageResult<?>) data).getList();
+            List<?> itemList = data instanceof List ? (List<?>) data : ((PageResult<?>) data).getList();
             itemList.forEach(f ->
                 handleItem(f, false)
             );

@@ -1,6 +1,5 @@
 package io.devpl.generator.service;
 
-import com.mysql.cj.jdbc.result.UpdatableResultSet;
 import io.devpl.generator.common.FileStorageStrategy;
 import io.devpl.generator.domain.param.FileUploadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
@@ -10,6 +9,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +46,9 @@ public class FileUploadServiceImpl implements IFileUploadService {
     }
 
     @Override
-    public void uploadMultiFiles(MultiFileUploadParam param) {
-
+    public FileUploadResult uploadMultiFiles(MultiFileUploadParam param) {
+        FileUploadResult result = new FileUploadResult();
+        MultipartFile[] files = param.getFiles();
+        return result;
     }
 }
