@@ -67,7 +67,10 @@ export default {
 
         /**
          * 树节点点击事件
+         * 如果是文件节点，调用后台接口获取文件内容
+         * 如果是目录节点，直接展开该目录
          * @param fileNode
+         * @see FileNode#isLeaf
          */
         let handleFileTreeNodeClick = (fileNode: FileNode) => {
             if (fileNode && fileNode.isLeaf) {

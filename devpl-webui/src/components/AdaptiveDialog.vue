@@ -1,19 +1,33 @@
 <template>
-    <el-dialog class="dialog">
+    <el-dialog class="dialog" v-model="visiable">
+        <monaco-editor language="ts"></monaco-editor>
     </el-dialog>
 </template>
 
 <script>
 
-import {defineComponent} from "vue";
+import {defineComponent, ref} from "vue";
 import {ElDialog} from "element-plus";
+import CodeEditor from "@/components/CodeEditor.vue";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 export default defineComponent({
-    components: {ElDialog},
+    components: {MonacoEditor, CodeEditor, ElDialog},
     setup(props, context) {
 
+        const visiable = ref()
+
+        function init() {
+            visiable.value = true
+        }
+        return {
+            visiable,
+            init
+        }
     }
 })
+
+
 </script>
 
 <style scoped>

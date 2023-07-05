@@ -59,7 +59,6 @@ import Generator from './generator.vue'
 import {useTableSyncApi} from '@/api/table'
 import {ElButton, ElMessage, ElMessageBox} from 'element-plus'
 import {useDownloadApi} from '@/api/generator'
-import FileTreeView from "@/components/FileTreeView.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/gen/table/page',

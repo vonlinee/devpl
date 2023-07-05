@@ -28,6 +28,12 @@ public class TemplateInfo extends EntityBase {
     private String templateName;
 
     /**
+     * 模板类型
+     */
+    @TableField(value = "type")
+    private Integer type;
+
+    /**
      * 模板名称
      */
     @TableField(value = "path")

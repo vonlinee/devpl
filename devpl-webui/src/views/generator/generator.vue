@@ -99,10 +99,12 @@
     <el-dialog v-model="fileTreeViewDialogRef" draggable>
         <file-tree-view ref="fileTreeViewRef"></file-tree-view>
     </el-dialog>
+
+    <code-gen-result ref="resultDialogRef"></code-gen-result>
 </template>
 
 <script setup lang="ts">
-import {nextTick, reactive, ref} from 'vue'
+import {reactive, ref} from 'vue'
 import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
 import {useBaseClassListApi} from '@/api/baseClass'
 import {useDownloadApi, useGeneratorApi} from '@/api/generator'
@@ -111,6 +113,7 @@ import FileTreeView from "@/components/FileTreeView.vue";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 
 const fileTreeViewDialogRef = ref(false)
+const resultDialogRef = ref()
 const fileTreeViewRef = ref()
 
 const emit = defineEmits(['refreshDataList'])
@@ -139,12 +142,10 @@ const dataForm = reactive({
 const init = (id: number) => {
     visible.value = true
     dataForm.id = ''
-
     // 重置表单数据
     if (dataFormRef.value) {
         dataFormRef.value.resetFields()
     }
-
     getBaseClassList()
     getTable(id)
 }
@@ -215,11 +216,11 @@ const generatorHandle = () => {
         // 生成代码，自定义路径
         useGeneratorApi([dataForm.id]).then((res) => {
             visible.value = false
-            emit('refreshDataList')
+            console.log(res.data)
             if (res.data) {
-                fileTreeViewDialogRef.value = true
-                nextTick(() => fileTreeViewRef.value.load(res.data[0]))
+                resultDialogRef.value.init(res.data)
             }
+            emit('refreshDataList')
         })
     })
 }
