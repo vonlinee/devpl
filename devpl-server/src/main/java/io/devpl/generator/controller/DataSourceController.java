@@ -26,6 +26,11 @@ import java.util.List;
 public class DataSourceController {
     private final DataSourceService datasourceService;
 
+    /**
+     * 获取数据源列表
+     * @param query
+     * @return
+     */
     @GetMapping("/datasource/page")
     public Result<PageResult<DataSourceEntity>> page(Query query) {
         PageResult<DataSourceEntity> page = datasourceService.page(query);

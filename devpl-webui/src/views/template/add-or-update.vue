@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
+    <el-dialog v-model="visible" :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false">
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="150px"
                  @keyup.enter="submitHandle()">
             <el-form-item label="模板名称" prop="templateName">
@@ -20,7 +20,7 @@
                     <template #trigger>
                         <el-button type="primary">选择文件</el-button>
                     </template>
-                    <template #default style="margin-left: 10px">
+                    <template #default>
                         <el-button type="primary" @click="uploadBtn">确定上传</el-button>
                     </template>
                     <template #tip>
@@ -54,23 +54,40 @@ const dataFormRef = ref()
 const emit = defineEmits(['refreshDataList'])
 
 /**
+ * 模板信息
+ */
+interface TemplateInfo {
+    templateId?: Number,
+    templateName: String,
+    templatePath: String,
+    content: String,
+    type: Number
+}
+
+/**
  * 表单数据
  */
-const dataForm = reactive({
-    id: '',
+const dataForm = reactive<TemplateInfo>({
+    templateId: undefined,
     templateName: '',
     templatePath: '',
     content: '',
     type: 1
 })
 
+/**
+ * 初始化函数
+ * @param id 行ID
+ */
 const init = (id?: number) => {
     visible.value = true
-    dataForm.id = ''
-
-    // 重置表单数据
-    if (dataFormRef.value) {
-        dataFormRef.value.resetFields()
+    if (id) {
+        dataForm.templateId = id
+    } else {
+        // 重置表单数据
+        if (dataFormRef.value) {
+            dataFormRef.value.resetFields()
+        }
     }
 }
 
