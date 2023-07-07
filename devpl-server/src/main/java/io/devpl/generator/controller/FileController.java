@@ -1,14 +1,16 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.domain.param.FileDownloadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
-import io.devpl.generator.domain.vo.FileUploadResult;
+import io.devpl.generator.domain.vo.FileUploadVO;
 import io.devpl.generator.service.IFileUploadService;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,7 @@ public class FileController {
      * @return 返回文件上传成功的路径
      */
     @PostMapping(value = "/upload/single")
-    public Result<FileUploadResult> uploadFile(SingleFileUploadParam param) {
+    public Result<FileUploadVO> uploadFile(@Validated SingleFileUploadParam param) {
         try {
             return Result.ok(fileUploadService.uploadSingleFile(param));
         } catch (Exception exception) {
@@ -43,7 +45,7 @@ public class FileController {
      * 多文件上传
      */
     @PostMapping(value = "/upload/multiple", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result<FileUploadResult> uploadFile(MultiFileUploadParam param) {
+    public Result<FileUploadVO> uploadFile(MultiFileUploadParam param) {
         fileUploadService.uploadMultiFiles(param);
         return Result.ok();
     }
@@ -53,7 +55,7 @@ public class FileController {
      * @return 文件字节
      */
     @GetMapping(value = "/download")
-    public ResponseEntity<byte[]> download() {
+    public ResponseEntity<byte[]> download(FileDownloadParam param) {
         return new ResponseEntity<>(new byte[]{}, HttpStatusCode.valueOf(200));
     }
 }

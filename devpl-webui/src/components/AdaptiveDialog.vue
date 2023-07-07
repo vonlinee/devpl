@@ -1,6 +1,6 @@
 <template>
     <el-dialog class="dialog" v-model="visiable">
-        <monaco-editor language="ts"></monaco-editor>
+        <monaco-editor language="typescript"></monaco-editor>
     </el-dialog>
 </template>
 

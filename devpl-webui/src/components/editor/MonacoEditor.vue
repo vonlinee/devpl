@@ -92,7 +92,7 @@ export default defineComponent({
             },
             /**
              * 设置语言模式 https://github.com/Microsoft/monaco-editor/issues/539
-             * @param lang
+             * @param lang 如果为null，则会设置为plaintext
              */
             setLanguage(lang: string) {
                 if (monacoEditor) {

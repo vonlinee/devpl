@@ -100,6 +100,7 @@ const headers = {
 // 选择文件时被调用，将他赋值给fileUpload
 const handleChange = (file: UploadFile) => {
     fileUpload.value = file
+    console.log(file)
     dataForm.templateName = file.name
 }
 
@@ -108,7 +109,7 @@ const uploadBtn = async () => {
     apiUploadSingleFile("template", fileUpload.value.raw).then((res) => {
         if (res.code === 200) {
             ElMessage.info({
-                message: '保存成功',
+                message: '上传成功',
                 duration: 500,
                 onClose: () => {
                     dataForm.templatePath = res.data.pathList[0];

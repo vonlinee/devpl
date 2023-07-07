@@ -3,7 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.domain.param.FileUploadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
-import io.devpl.generator.domain.vo.FileUploadResult;
+import io.devpl.generator.domain.vo.FileUploadVO;
 
 /**
  * 文件上传服务
@@ -12,22 +12,29 @@ import io.devpl.generator.domain.vo.FileUploadResult;
 public interface IFileUploadService {
 
     /**
-     * 分配存储路径
+     * 获取相对路径
      * @param param 文件上传参数
+     * @return 相对路径
+     */
+    String getRelativePath(FileUploadParam param);
+
+    /**
+     * 分配存储路径
+     * @param pathSegments 文件路径片段
      * @return 存储路径
      */
-    String assignFilePath(FileUploadParam param);
+    String assignFilePath(String... pathSegments);
 
     /**
      * 上传单个文件
      * @param param 单文件上传参数
      * @return 上传文件路径
      */
-    FileUploadResult uploadSingleFile(SingleFileUploadParam param);
+    FileUploadVO uploadSingleFile(SingleFileUploadParam param);
 
     /**
      * 多文件上传
      * @param param 多文件上传参数
      */
-    FileUploadResult uploadMultiFiles(MultiFileUploadParam param);
+    FileUploadVO uploadMultiFiles(MultiFileUploadParam param);
 }
