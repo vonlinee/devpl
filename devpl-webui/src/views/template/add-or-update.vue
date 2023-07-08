@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="visible" :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false">
+    <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false" :closed="onClose">
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="150px"
                  @keyup.enter="submitHandle()">
             <el-form-item label="模板名称" prop="templateName">
@@ -16,12 +16,13 @@
                            :limit="1"
                            :auto-upload="false"
                            :headers="headers"
+                           accept=".txt,.ftl,.vm"
                            :on-change="handleChange">
                     <template #trigger>
                         <el-button type="primary">选择文件</el-button>
                     </template>
                     <template #default>
-                        <el-button type="primary" @click="uploadBtn">确定上传</el-button>
+                        <el-button type="primary" @click="uploadBtn" style="margin-left: 11px">确定上传</el-button>
                     </template>
                     <template #tip>
                         <div class="el-upload__tip" style="color:red;">
@@ -91,6 +92,11 @@ const init = (id?: number) => {
     }
 }
 
+function onClose() {
+    console.log("onClose")
+    dataForm.templateId = undefined
+}
+
 let fileUpload = ref()
 // 设置请求头
 const headers = {
@@ -100,7 +106,6 @@ const headers = {
 // 选择文件时被调用，将他赋值给fileUpload
 const handleChange = (file: UploadFile) => {
     fileUpload.value = file
-    console.log(file)
     dataForm.templateName = file.name
 }
 

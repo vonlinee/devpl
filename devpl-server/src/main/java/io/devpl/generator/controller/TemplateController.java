@@ -6,6 +6,7 @@ import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
 import io.devpl.generator.utils.BusinessUtils;
+import io.devpl.sdk.validation.Validator;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class TemplateController {
      */
     @PostMapping(value = "/save")
     public Result<Boolean> addOne(@RequestBody TemplateInfo templateInfo) {
+        Validator.whenNull(templateInfo.getType(), "模板类型为空");
         return Result.ok(templateService.save(templateInfo));
     }
 

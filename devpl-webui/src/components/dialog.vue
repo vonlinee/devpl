@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, defineProps, ref} from "vue";
+import {computed, ref} from "vue";
 // 纯js调用时必须，不然解析不出<el-dialog></el-dialog>、<el-button />
 import {ElButton, ElDialog} from "element-plus";
 

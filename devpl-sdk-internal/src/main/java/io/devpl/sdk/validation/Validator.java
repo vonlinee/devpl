@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
  */
 public final class Validator {
 
-    private Validator() {}
+    private Validator() {
+    }
 
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 
@@ -125,8 +126,8 @@ public final class Validator {
 
     /**
      * 对Object的任意类型做值检查
-     * @param obj
-     * @param message
+     * @param obj     对象
+     * @param message 异常信息
      */
     @SuppressWarnings({"unhcecked", "raw"})
     public static void whenEmptyNull(Object obj, String message) {
@@ -137,9 +138,9 @@ public final class Validator {
             if (((String) obj).length() == 0) {
                 throw new IllegalArgumentException(message);
             }
-        } else if (obj instanceof Map && ((Map) obj).isEmpty()) {
+        } else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
             throw new IllegalArgumentException(message);
-        } else if (obj instanceof Collection && ((Collection) obj).isEmpty()) {
+        } else if (obj instanceof Collection && ((Collection<?>) obj).isEmpty()) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -153,7 +154,7 @@ public final class Validator {
      * 不包含null元素
      * @param iterable 可迭代类型
      * @param <T>      <T extends Iterable<?>>
-     * @return
+     * @return Iterable
      */
     public static <T extends Iterable<?>> T notNullElements(final T iterable) {
         return noNullElements(iterable, DEFAULT_NO_NULL_ELEMENTS_COLLECTION_EX_MESSAGE);
@@ -164,10 +165,11 @@ public final class Validator {
     }
 
     /**
+     * 非空元素
      * 数组没有NULL元素
-     * @param array
-     * @param message
-     * @param values
+     * @param array   数组
+     * @param message 消息
+     * @param values  值
      * @return T[]
      */
     public static <T> T[] notNullElements(final T[] array, final String message, final Object... values) {
@@ -247,11 +249,10 @@ public final class Validator {
     }
 
     /**
+     * 不存在关键
      * 不包含指定的key
-     * @param <T>
-     * @param <K>
-     * @param map
-     * @param key
+     * @param map 地图
+     * @param key 关键
      */
     public static <T extends Map<K, ?>, K> void notExistKey(final T map, K key) {
         notNull(map);
@@ -262,11 +263,11 @@ public final class Validator {
     }
 
     /**
+     * 非空值
      * map has null value for the specificied key
-     * @param <K>
-     * @param map
-     * @param key
      * @param message void
+     * @param map     地图
+     * @param key     关键
      */
     public static <T, K> void notNullValue(final Map<K, ?> map, K key, final String message) {
         notNull(map);
@@ -505,8 +506,8 @@ public final class Validator {
         // TODO when breaking BC, consider returning obj
         if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(String.format(DEFAULT_IS_INSTANCE_OF_EX_MESSAGE, type.getName(), obj == null ? "null" : obj
-                    .getClass()
-                    .getName()));
+                .getClass()
+                .getName()));
         }
     }
 
@@ -684,14 +685,12 @@ public final class Validator {
     }
 
     /**
-     * @param map
+     * 非空值
      * @param key       key
      * @param valueType 目标类型
-     * @param message
-     * @param <K>
-     * @param <T>
-     * @param <V>
-     * @return
+     * @param map       地图
+     * @param message   消息
+     * @return {@link T}
      */
     @SuppressWarnings("unchecked")
     public static <K, T, V> T notNullValue(Map<K, V> map, K key, Class<T> valueType, String message) {
