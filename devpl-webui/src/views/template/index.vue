@@ -23,7 +23,11 @@
             <el-table-column prop="templatePath" label="模板路径" show-overflow-tooltip header-align="center"
                              align="center"></el-table-column>
             <el-table-column prop="content" label="模板内容" show-overflow-tooltip header-align="center"
-                             align="center"></el-table-column>
+                             align="center">
+                <template #default="scope">
+                    <el-text v-text="scope.content" truncated></el-text>
+                </template>
+            </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
                              align="center"></el-table-column>
             <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip header-align="center"
@@ -58,6 +62,7 @@ import {ElButton} from "element-plus";
 import AddOrUpdate from './add-or-update.vue'
 import {useCrud} from '@/hooks'
 import {IHooksOptions} from '@/hooks/interface'
+import TextField from "@/components/TextField.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/api/template/page',
