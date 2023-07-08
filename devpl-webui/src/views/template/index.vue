@@ -62,7 +62,6 @@ import {ElButton} from "element-plus";
 import AddOrUpdate from './add-or-update.vue'
 import {useCrud} from '@/hooks'
 import {IHooksOptions} from '@/hooks/interface'
-import TextField from "@/components/TextField.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/api/template/page',
@@ -73,12 +72,12 @@ const state: IHooksOptions = reactive({
     isPage: true,
 })
 
+const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)
+
 const addOrUpdateRef = ref()
 const addOrUpdateHandle = (id?: number) => {
     addOrUpdateRef.value.init(id)
 }
-
-const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)
 
 onMounted(() => getDataList())
 </script>

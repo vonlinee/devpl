@@ -42,7 +42,7 @@ export const useCrud = (options: IHooksOptions) => {
     }
 
     // 覆盖默认值
-    const state = mergeDefaultOptions(defaultOptions, options)
+    const state: IHooksOptions = mergeDefaultOptions(defaultOptions, options)
 
     onMounted(() => {
         if (state.createdIsNeed) {
@@ -75,7 +75,7 @@ export const useCrud = (options: IHooksOptions) => {
     /**
      * 默认查询回调
      */
-    const getDataList = () => {
+    const getDataList = (): void => {
         state.page = 1
         query()
     }
@@ -84,7 +84,7 @@ export const useCrud = (options: IHooksOptions) => {
      * 每页大小变化回调，默认查第一页
      * @param val
      */
-    const sizeChangeHandle = (val: number) => {
+    const sizeChangeHandle = (val: number): void => {
         state.page = 1
         state.limit = val
         query()
@@ -94,7 +94,7 @@ export const useCrud = (options: IHooksOptions) => {
      * 当前页变化回调
      * @param val
      */
-    const currentChangeHandle = (val: number) => {
+    const currentChangeHandle = (val: number): void => {
         state.page = val
         query()
     }
@@ -103,7 +103,7 @@ export const useCrud = (options: IHooksOptions) => {
      * 多选回调
      * @param selections
      */
-    const selectionChangeHandle = (selections: any[]) => {
+    const selectionChangeHandle = (selections: any[]): void => {
         state.dataListSelections = selections.map((item: any) => state.primaryKey && item[state.primaryKey])
     }
 
@@ -111,16 +111,14 @@ export const useCrud = (options: IHooksOptions) => {
      * 排序回调
      * @param data
      */
-    const sortChangeHandle = (data: any) => {
+    const sortChangeHandle = (data: any): void => {
         const {prop, order} = data
-
         if (prop && order) {
             state.order = prop
             state.asc = order === 'ascending'
         } else {
             state.order = ''
         }
-
         query()
     }
 
@@ -128,11 +126,10 @@ export const useCrud = (options: IHooksOptions) => {
      * 删除回调
      * @param key
      */
-    const deleteHandle = (key: number | string) => {
+    const deleteHandle = (key: number | string): void => {
         if (!state.deleteUrl) {
             return
         }
-
         ElMessageBox.confirm('确定进行删除操作?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -141,7 +138,6 @@ export const useCrud = (options: IHooksOptions) => {
             .then(() => {
                 service.delete(state.deleteUrl + '/' + key).then(() => {
                     ElMessage.success('删除成功')
-
                     query()
                 })
             })
