@@ -1,5 +1,6 @@
 <template>
-    <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false" :closed="onClose">
+    <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false"
+               @closed="onClosed">
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="150px"
                  @keyup.enter="submitHandle()">
             <el-form-item label="模板名称" prop="templateName">
@@ -32,7 +33,7 @@
                 </el-upload>
             </el-form-item>
             <el-form-item v-if="dataForm.type === 2" label="模板内容" prop="frontendPath">
-                <text-field></text-field>
+                <text-field v-model:text="dataForm.content"></text-field>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -46,7 +47,7 @@
 import {reactive, ref, toRaw} from 'vue'
 import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
-import {apiAddTemplate} from "@/api/template";
+import {apiAddTemplate, apiUpdateTemplate} from "@/api/template";
 import TextField from "@/components/TextField.vue";
 
 const visible = ref(false)
@@ -92,8 +93,7 @@ const init = (id?: number) => {
     }
 }
 
-function onClose() {
-    console.log("onClose")
+function onClosed() {
     dataForm.templateId = undefined
 }
 
@@ -137,19 +137,36 @@ const submitHandle = () => {
         if (!valid) {
             return false
         }
-        apiAddTemplate(toRaw(dataForm)).then((res) => {
-            // @ts-ignore
-            if (res.code === 200) {
-                ElMessage.info({
-                    message: '保存成功',
-                    duration: 500,
-                    onClose: () => {
-                        visible.value = false
-                        emit('refreshDataList')
-                    }
-                })
-            }
-        })
+
+        if (dataForm.templateId) {
+            apiUpdateTemplate(toRaw(dataForm)).then((res) => {
+                // @ts-ignore
+                if (res.code === 200) {
+                    ElMessage.info({
+                        message: '修改成功',
+                        duration: 500,
+                        onClose: () => {
+                            visible.value = false
+                            emit('refreshDataList')
+                        }
+                    })
+                }
+            })
+        } else {
+            apiAddTemplate(toRaw(dataForm)).then((res) => {
+                // @ts-ignore
+                if (res.code === 200) {
+                    ElMessage.info({
+                        message: '保存成功',
+                        duration: 500,
+                        onClose: () => {
+                            visible.value = false
+                            emit('refreshDataList')
+                        }
+                    })
+                }
+            })
+        }
     })
 }
 

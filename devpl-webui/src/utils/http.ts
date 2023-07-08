@@ -70,7 +70,7 @@ const http = {
         if (params) config.params = params;
         return service(config);
     },
-    put(url: string, params?: any, headers = {"Content-Type": "application/json"}) {
+    putJson(url: string, params?: any, headers = {"Content-Type": "application/json"}) {
         const config: config = {
             method: "put",
             url: url,

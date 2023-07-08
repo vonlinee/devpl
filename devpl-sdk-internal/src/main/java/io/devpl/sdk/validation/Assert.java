@@ -636,7 +636,7 @@ public abstract class Assert {
      * Assert.isAssignable(Number.class, myClass, () -&gt; "Processing " + myAttributeName + ":");
      * </pre>
      * @param superType       the super type to check against
-     * @param subType         the sub type to check
+     * @param subType         the subtype to check
      * @param messageSupplier a supplier for the exception message to use if the
      *                        assertion fails. See {@link #isAssignable(Class, Class, String)} for details.
      * @throws IllegalArgumentException if the classes are not assignable

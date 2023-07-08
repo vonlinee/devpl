@@ -19,3 +19,12 @@ export function apiListTemplatesByPage(pageIndex: number | undefined, pageSize: 
 export function apiAddTemplate(params: object) {
     return http.postJson('/api/template/save', params);
 }
+
+
+/**
+ * 修改模板
+ * @param params
+ */
+export function apiUpdateTemplate(params: object) {
+    return http.putJson('/api/template/update', params);
+}

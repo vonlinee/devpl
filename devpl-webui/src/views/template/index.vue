@@ -61,7 +61,7 @@ import {IHooksOptions} from '@/hooks/interface'
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/api/template/page',
-    deleteUrl: '/gen/project',
+    deleteUrl: '/api/template/delete/batch/ids',
     queryForm: {
         projectName: ''
     },
@@ -70,7 +70,6 @@ const state: IHooksOptions = reactive({
 
 const addOrUpdateRef = ref()
 const addOrUpdateHandle = (id?: number) => {
-    console.log("id= ", id)
     addOrUpdateRef.value.init(id)
 }
 

@@ -159,13 +159,11 @@ export const useCrud = (options: IHooksOptions) => {
             data = [key]
         } else {
             data = state.dataListSelections ? state.dataListSelections : []
-
             if (data.length === 0) {
                 ElMessage.warning('请选择删除记录')
                 return
             }
         }
-
         ElMessageBox.confirm('确定进行删除操作?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -175,7 +173,6 @@ export const useCrud = (options: IHooksOptions) => {
                 if (state.deleteUrl) {
                     service.delete(state.deleteUrl, {data}).then(() => {
                         ElMessage.success('删除成功')
-
                         query()
                     })
                 }
