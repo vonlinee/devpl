@@ -10,7 +10,7 @@ export interface IHooksOptions {
     isPage?: boolean
     // 删除 Url
     deleteUrl?: string
-    // 主键key，用于删除场景
+    // 主键key，字段名称，用于多选删除场景
     primaryKey?: string
     // 导出 Url
     exportUrl?: string

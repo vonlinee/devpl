@@ -1,5 +1,5 @@
 <template>
-    <splitpanes class="default-theme" style="height: 400px">
+    <splitpanes class="default-theme">
         <pane max-size="35" style="overflow: auto">
             <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick"
                      style="width: 100%; height: 100%; display: inline-block; min-width: 100%;"/>

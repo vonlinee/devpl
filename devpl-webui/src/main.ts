@@ -8,7 +8,8 @@ import VXETable from 'vxe-table'
 import SvgIcon from '@/components/svg-icon'
 import 'vxe-table/lib/style.css'
 
-import '@/icons/iconfont/iconfont'
+// 使用svg目录下的svg文件
+// import '@/icons/iconfont/iconfont'
 import 'element-plus/dist/index.css'
 import '@/styles/index.scss'
 

@@ -1,72 +1,46 @@
 <template>
-    <el-dialog :title="title" v-model="visible" :width="800">
-        <slot>
-            <!-- 渲染纯js窗体 -->
-            <div v-html="contentBody" v-if="contentBody"></div>
-        </slot>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="handleCancel" :disabled="confirmLoading">
-                {{ cancelText }}</el-button>
-                <el-button
-                    type="primary"
-                    :loading="confirmLoading"
-                    @click="$emit('confirm')"
-                >{{ confirmText }}</el-button>
+    <div>
+        <el-button @click="showDialog">单击打开弹框</el-button>
+        <el-dialog
+            title="标题XX"
+            :visible="dialogVisible"
+            width="75%"
+            top="0vh"
+            custom-class="center-dialog">
+            <div style="height: 80vh;">dialog内容...</div>
+            <span slot="footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
             </span>
-        </template>
-    </el-dialog>
+        </el-dialog>
+    </div>
 </template>
 
-<script setup>
-import {computed, ref} from "vue";
-// 纯js调用时必须，不然解析不出<el-dialog></el-dialog>、<el-button />
-import {ElButton, ElDialog} from "element-plus";
+<script lang="ts">
+import {ref} from "vue";
 
-const props = defineProps({
-    modelValue: false,
-    title: "",
-    cancelText: {
-        type: String,
-        default: "取消"
-    },
-    confirmText: {
-        type: String,
-        default: "确定"
-    },
-    loading: false,
-    contentBody: null
-});
+export default {
+    name: 'TestDialog',
+    setup() {
+        const dialogVisible = ref(false)
 
-const emits = defineEmits(["update:modelValue", "cancel", "close"]);
-// 纯js实例调用改变loading属性
-const _loading = ref(false);
-const confirmLoading = computed(() => {
-    return props.loading || _loading.value;
-});
+        function showDialog() {
+            dialogVisible.value = true
+        }
 
-const visible = computed({
-    get() {
-        return props.modelValue;
-    },
-    set(val) {
-        emits("update:modelValue", val);
+        return {
+            dialogVisible,
+            showDialog
+        }
     }
-});
-
-// methods
-const handleCancel = () => {
-    emits("cancel");
-    visible.value = false;
-};
-
-const showLoading = () => {
-    _loading.value = true;
-};
-
-const hideLoading = () => {
-    _loading.value = false;
-};
-// 暴露给纯js实例调用，可在实例中使用instance._instance.exposed查询到
-defineExpose({showLoading, hideLoading});
+}
 </script>
+
+<style lang="scss">
+// 控制的dialog样式需要穿透到底层，所以这里不能写scoped属性
+// 如果不想影响全局，可以给el-dialog的父级定义一个class,再把.center-dialog置于这个class的嵌套里面
+//.center-dialog {
+//    top: 50%;
+//    transform: translateY(-50%)
+//}
+</style>

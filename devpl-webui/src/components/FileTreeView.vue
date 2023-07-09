@@ -103,5 +103,7 @@ defineExpose({
     font-family: Helvetica, Arial, sans-serif;
     color: rgba(255, 255, 255, 0.6);
     font-size: 5em;
+    width: 80%;
+    height: 80%;
 }
 </style>

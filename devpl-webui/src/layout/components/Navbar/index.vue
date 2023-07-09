@@ -25,19 +25,19 @@ import SvgIcon from "@/components/svg-icon/src/svg-icon.vue";
 	background: var(--theme-header-bg-color);
 	border-bottom: 1px solid var(--theme-border-color-light);
 	color: var(--theme-header-text-color);
-	
+
 	::v-deep(.svg-icon) {
 		align-items: center;
 		cursor: pointer;
 		height: var(--theme-header-height);
 		line-height: var(--theme-header-height);
 		padding: 0 12px;
-		
+
 		svg {
 			color: var(--theme-header-text-color) !important;
 			font-size: 16px;
 		}
-		
+
 		&:hover {
 			background: var(--theme-header-hover-color);
 		}
@@ -55,13 +55,13 @@ import SvgIcon from "@/components/svg-icon/src/svg-icon.vue";
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	
+
 	&-link {
 		height: 100%;
 		display: flex;
 		align-items: center;
 		white-space: nowrap;
-		
+
 		&-photo {
 			width: 25px;
 			height: 25px;

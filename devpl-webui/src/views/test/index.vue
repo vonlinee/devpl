@@ -2,13 +2,10 @@
 
 import {ref} from "vue";
 import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
-import FileUpload from "@/components/upload/FileUpload.vue";
 
 let dialogRef = ref()
 
-function show() {
-    dialogRef.value.init()
-}
+
 
 const editorRef = ref()
 const languageRef = ref()
@@ -19,14 +16,16 @@ function updateLanguage() {
     languageRef.value = editorRef.value.getLanguage()
 }
 
+const dialogVisible = ref(false)
+
+function show() {
+    // dialogRef.value.init()
+    dialogVisible.value = true
+}
+
 function setLanguage() {
     editorRef.value.setLanguage(inputRef.value)
 }
-
-function handleResponse() {
-    console.log("handleResponse")
-}
-
 let file = ref()
 
 </script>
@@ -38,10 +37,8 @@ let file = ref()
 
     <el-input v-model="inputRef"></el-input>
     <adaptive-dialog ref="dialogRef"></adaptive-dialog>
-
-    <file-upload accept="jpg"/>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 
 </style>

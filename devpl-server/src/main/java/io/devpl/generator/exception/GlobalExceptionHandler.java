@@ -1,5 +1,4 @@
-package io.devpl.generator.common;
-
+package io.devpl.generator.exception;
 
 import io.devpl.generator.common.utils.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;

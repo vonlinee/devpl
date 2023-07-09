@@ -24,9 +24,7 @@
                              align="center"></el-table-column>
             <el-table-column prop="content" label="模板内容" show-overflow-tooltip header-align="center"
                              align="center">
-                <template #default="scope">
-                    <el-text v-text="scope.content" truncated></el-text>
-                </template>
+
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
                              align="center"></el-table-column>
@@ -69,6 +67,7 @@ const state: IHooksOptions = reactive({
     queryForm: {
         projectName: ''
     },
+    primaryKey: 'templateId',
     isPage: true,
 })
 

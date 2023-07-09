@@ -12,7 +12,7 @@
                     <el-radio :label="2">字符串模板</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item v-if="dataForm.type === 1" label="选择文件" prop="backendPath">
+            <el-form-item v-if="dataForm.type === 1" label="选择文件" prop="type">
                 <el-upload action="#"
                            :limit="1"
                            :auto-upload="false"
@@ -32,8 +32,8 @@
                     </template>
                 </el-upload>
             </el-form-item>
-            <el-form-item v-if="dataForm.type === 2" label="模板内容" prop="frontendPath">
-                <text-field v-model:text="dataForm.content"></text-field>
+            <el-form-item v-if="dataForm.type === 2" label="模板内容" prop="content">
+                <text-input v-model:text="dataForm.content"></text-input>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -48,7 +48,7 @@ import {reactive, ref, toRaw} from 'vue'
 import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
 import {apiAddTemplate, apiUpdateTemplate} from "@/api/template";
-import TextField from "@/components/TextField.vue";
+import TextInput from "@/components/input/TextInput.vue";
 
 const visible = ref(false)
 const dataFormRef = ref()
