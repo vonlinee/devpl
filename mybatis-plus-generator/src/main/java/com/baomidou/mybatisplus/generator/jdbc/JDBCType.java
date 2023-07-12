@@ -63,8 +63,6 @@ public enum JDBCType implements SQLType {
     TIME_WITH_TIMEZONE(Types.TIME_WITH_TIMEZONE), // JDBC 4.2 JDK8
     TIMESTAMP_WITH_TIMEZONE(Types.TIMESTAMP_WITH_TIMEZONE); // JDBC 4.2 JDK8
 
-    public final int typeCode;
-
     private static final Map<Integer, JDBCType> codeLookup = new HashMap<>();
 
     static {
@@ -72,6 +70,8 @@ public enum JDBCType implements SQLType {
             codeLookup.put(type.typeCode, type);
         }
     }
+
+    public final int typeCode;
 
     JDBCType(int typeCode) {
         this.typeCode = typeCode;

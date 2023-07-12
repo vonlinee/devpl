@@ -12,7 +12,6 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * ClickHouse 字段类型转换
- *
  * @author urzeye
  * @date 2021年9月12日
  */
@@ -43,26 +42,8 @@ public class ClickHouseTypeConvert implements ITypeConvert {
         "enum8", "enum16", "ipv4", "ipv6", "string", "fixedstring", "nothing", "nested", "tuple", "aggregatefunction", "unknown"
     };
 
-
-    @Override
-    public IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
-        return TypeConverts.use(fieldType)
-            .test(containsAny(INTEGER_TYPE).then(INTEGER))
-            .test(containsAny(BIGINTEGER_TYPE).then(BIG_INTEGER))
-            .test(containsAny(BIGDECIMAL_TYPE).then(BIG_DECIMAL))
-            .test(containsAny(LONG_TYPE).then(LONG))
-            .test(contains("float32").then(FLOAT))
-            .test(contains("float64").then(DOUBLE))
-            .test(contains("map").then(MAP))
-            .test(contains("array").then(OBJECT))
-            .test(containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
-            .test(containsAny(STRING_TYPE).then(STRING))
-            .or(STRING);
-    }
-
     /**
      * 转换为日期类型
-     *
      * @param config 配置信息
      * @param type   类型
      * @return 返回对应的列类型
@@ -82,6 +63,22 @@ public class ClickHouseTypeConvert implements ITypeConvert {
             default:
                 return DbColumnType.DATE;
         }
+    }
+
+    @Override
+    public IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
+        return TypeConverts.use(fieldType)
+            .test(containsAny(INTEGER_TYPE).then(INTEGER))
+            .test(containsAny(BIGINTEGER_TYPE).then(BIG_INTEGER))
+            .test(containsAny(BIGDECIMAL_TYPE).then(BIG_DECIMAL))
+            .test(containsAny(LONG_TYPE).then(LONG))
+            .test(contains("float32").then(FLOAT))
+            .test(contains("float64").then(DOUBLE))
+            .test(contains("map").then(MAP))
+            .test(contains("array").then(OBJECT))
+            .test(containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
+            .test(containsAny(STRING_TYPE).then(STRING))
+            .or(STRING);
     }
 
 }

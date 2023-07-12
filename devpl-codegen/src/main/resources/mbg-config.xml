@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--publicId systemId-->
 <!DOCTYPE generatorConfiguration
-        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+    PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
     <!--数据库驱动 -->
     <classPathEntry
-            location="D:\Develop\Tools\maven-3.8.1\MavenLocalRepo\mysql\mysql-connector-java\5.1.49\mysql-connector-java-5.1.49.jar"/>
+        location="D:\Develop\Tools\maven-3.8.1\MavenLocalRepo\mysql\mysql-connector-java\5.1.49\mysql-connector-java-5.1.49.jar"/>
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -23,7 +23,7 @@
         </javaTypeResolver>
         <!--生成Model类存放位置 -->
         <javaModelGenerator
-                targetPackage="entity" targetProject="D:/Temp">
+            targetPackage="entity" targetProject="D:/Temp">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>

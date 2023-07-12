@@ -1,9 +1,9 @@
 package io.devpl.generator.service.impl;
 
+import io.devpl.generator.mybatis.SqlFormat;
 import io.devpl.generator.service.MyBatisService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import io.devpl.generator.mybatis.SqlFormat;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;

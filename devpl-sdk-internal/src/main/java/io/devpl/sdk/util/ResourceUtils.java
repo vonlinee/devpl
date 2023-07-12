@@ -85,6 +85,18 @@ public final class ResourceUtils {
      * Special separator between WAR URL and jar part on Tomcat.
      */
     public static final String WAR_URL_SEPARATOR = "*/";
+    /**
+     * 项目运行时的根路径
+     */
+    public static final String ROOT_PROJECT_PATH = new File("").getAbsolutePath();
+    /**
+     * 运行时的类路径的根路径
+     * 先获得本类的所在位置
+     */
+    public static final String ROOT_CLASSPATH = Objects.requireNonNull(System.getProperty("user.dir"));
+    // AppClassLoader
+    private static final ClassLoader loader = ResourceUtils.class.getClassLoader();
+    private static final URL CLASSPATH_ROOT = loader.getResource("");
 
     /**
      * Return whether the given resource location is a URL:
@@ -137,7 +149,7 @@ public final class ResourceUtils {
             // no URL -> treat as file path
             try {
                 return new File(resourceLocation).toURI()
-                        .toURL();
+                    .toURL();
             } catch (MalformedURLException ex2) {
                 throw new FileNotFoundException("Resource location [" + resourceLocation + "] is neither a URL not a well-formed file path");
             }
@@ -274,8 +286,8 @@ public final class ResourceUtils {
      */
     public static boolean isJarFileURL(URL url) {
         return (URL_PROTOCOL_FILE.equals(url.getProtocol()) && url.getPath()
-                .toLowerCase()
-                .endsWith(JAR_FILE_EXTENSION));
+            .toLowerCase()
+            .endsWith(JAR_FILE_EXTENSION));
     }
 
     /**
@@ -367,14 +379,9 @@ public final class ResourceUtils {
      */
     public static void useCachesIfNecessary(URLConnection con) {
         con.setUseCaches(con.getClass()
-                .getSimpleName()
-                .startsWith("JNLP"));
+            .getSimpleName()
+            .startsWith("JNLP"));
     }
-
-    // AppClassLoader
-    private static final ClassLoader loader = ResourceUtils.class.getClassLoader();
-
-    private static final URL CLASSPATH_ROOT = loader.getResource("");
 
     public static URL getProjectResource(String relativePath) {
         return newURLQuietly(CLASSPATH_ROOT, resolve(relativePath));
@@ -402,11 +409,6 @@ public final class ResourceUtils {
         }
     }
 
-    /**
-     * 项目运行时的根路径
-     */
-    public static final String ROOT_PROJECT_PATH = new File("").getAbsolutePath();
-
     public static ClassLoader getClassLoader() {
         return loader;
     }
@@ -419,12 +421,6 @@ public final class ResourceUtils {
         return CLASSPATH_ROOT;
     }
 
-    /**
-     * 运行时的类路径的根路径
-     * 先获得本类的所在位置
-     */
-    public static final String ROOT_CLASSPATH = Objects.requireNonNull(System.getProperty("user.dir"));
-
     public static URL getResource(String pathname) throws FileNotFoundException {
         if (pathname == null) {
             throw new NullPointerException("pathname is empty!");
@@ -435,7 +431,7 @@ public final class ResourceUtils {
         }
         try {
             return file.toURI()
-                    .toURL();
+                .toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

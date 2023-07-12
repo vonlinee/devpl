@@ -11,22 +11,22 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE,
-		ElementType.TYPE_USE })
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE,
+    ElementType.TYPE_USE})
 public @interface NotNull {
-	/**
-	 * @return Custom exception message
-	 */
-	String value() default "";
+    /**
+     * @return Custom exception message
+     */
+    String value() default "";
 
-	/**
-	 * @return Custom exception type that should be thrown when not-nullity contract
-	 *         is violated. The exception class should have a constructor with one
-	 *         String argument (message).
-	 *         <p>
-	 *         By default, {@link IllegalArgumentException} is thrown on null method
-	 *         arguments and {@link IllegalStateException} &mdash; on null return
-	 *         value.
-	 */
-	Class<? extends Exception> exception() default Exception.class;
+    /**
+     * @return Custom exception type that should be thrown when not-nullity contract
+     * is violated. The exception class should have a constructor with one
+     * String argument (message).
+     * <p>
+     * By default, {@link IllegalArgumentException} is thrown on null method
+     * arguments and {@link IllegalStateException} &mdash; on null return
+     * value.
+     */
+    Class<? extends Exception> exception() default Exception.class;
 }

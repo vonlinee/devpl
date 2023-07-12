@@ -9,9 +9,9 @@ import io.devpl.generator.config.template.GeneratorConfig;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.domain.FileNode;
-import io.devpl.generator.entity.BaseClassEntity;
-import io.devpl.generator.entity.TableEntity;
-import io.devpl.generator.entity.TableFieldInfo;
+import io.devpl.generator.entity.GenBaseClass;
+import io.devpl.generator.entity.GenTable;
+import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
@@ -101,13 +101,12 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取渲染的数据模型
-     *
      * @param tableId 表ID
      */
     private Map<String, Object> getDataModel(Long tableId) {
         // 表信息
-        TableEntity table = tableService.getById(tableId);
-        List<TableFieldInfo> fieldList = tableFieldService.getByTableId(tableId);
+        GenTable table = tableService.getById(tableId);
+        List<GenTableField> fieldList = tableFieldService.getByTableId(tableId);
         table.setFieldList(fieldList);
 
         // 数据模型
@@ -159,22 +158,21 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置基类信息
-     *
      * @param dataModel 数据模型
      * @param table     表
      */
-    private void setBaseClass(Map<String, Object> dataModel, TableEntity table) {
+    private void setBaseClass(Map<String, Object> dataModel, GenTable table) {
         if (table.getBaseclassId() == null) {
             return;
         }
         // 基类
-        BaseClassEntity baseClass = baseClassService.getById(table.getBaseclassId());
+        GenBaseClass baseClass = baseClassService.getById(table.getBaseclassId());
         baseClass.setPackageName(baseClass.getPackageName());
         dataModel.put("baseClass", baseClass);
         // 基类字段
         String[] fields = baseClass.getFields().split(",");
         // 标注为基类字段
-        for (TableFieldInfo field : table.getFieldList()) {
+        for (GenTableField field : table.getFieldList()) {
             if (ArrayUtils.contains(fields, field.getFieldName())) {
                 field.setBaseField(true);
             }
@@ -183,7 +181,6 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取文件树
-     *
      * @param workPath 工作路径
      * @return 文件节点列表
      */
@@ -202,7 +199,6 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 递归生成文件树
-     *
      * @param path 目录
      * @param node 保存节点
      */
@@ -239,20 +235,19 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置字段分类信息
-     *
      * @param dataModel 数据模型
      * @param table     表
      */
-    private void setFieldTypeList(Map<String, Object> dataModel, TableEntity table) {
+    private void setFieldTypeList(Map<String, Object> dataModel, GenTable table) {
         // 主键列表 (支持多主键)
-        List<TableFieldInfo> primaryList = new ArrayList<>();
+        List<GenTableField> primaryList = new ArrayList<>();
         // 表单列表
-        List<TableFieldInfo> formList = new ArrayList<>();
+        List<GenTableField> formList = new ArrayList<>();
         // 网格列表
-        List<TableFieldInfo> gridList = new ArrayList<>();
+        List<GenTableField> gridList = new ArrayList<>();
         // 查询列表
-        List<TableFieldInfo> queryList = new ArrayList<>();
-        for (TableFieldInfo field : table.getFieldList()) {
+        List<GenTableField> queryList = new ArrayList<>();
+        for (GenTableField field : table.getFieldList()) {
             if (field.isPrimaryPk()) {
                 primaryList.add(field);
             }

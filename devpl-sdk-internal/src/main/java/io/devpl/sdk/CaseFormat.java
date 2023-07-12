@@ -113,6 +113,40 @@ public enum CaseFormat {
     }
 
     /**
+     * 只将首字母大写，同时将其他字母小写
+     * @param word
+     * @return String
+     */
+    public static String firstCharOnlyToUpper(String word) {
+        return word.isEmpty() ? word : Ascii.toUpperCase(word.charAt(0)) + Ascii.toLowerCase(word.substring(1));
+    }
+
+    /**
+     * 数据表字段名转换为驼峰式名字的实体类属性名
+     * @param tabAttr 数据表字段名
+     * @return 转换后的驼峰式命名
+     */
+    public static String camelize(String tabAttr) {
+        if (StringUtils.isBlank(tabAttr)) return tabAttr;
+        Pattern pattern = Pattern.compile("(.*)_(\\w)(.*)");
+        Matcher matcher = pattern.matcher(tabAttr);
+        if (matcher.find()) {
+            return camelize(matcher.group(1) + matcher.group(2).toUpperCase() + matcher.group(3));
+        } else {
+            return tabAttr;
+        }
+    }
+
+    /**
+     * 驼峰式的实体类属性名转换为数据表字段名
+     * @param camelCaseStr 驼峰式的实体类属性名
+     * @return 转换后的以"_"分隔的数据表字段名
+     */
+    public static String decamelize(String camelCaseStr) {
+        return StringUtils.isBlank(camelCaseStr) ? camelCaseStr : camelCaseStr.replaceAll("[A-Z]", "_$0").toLowerCase();
+    }
+
+    /**
      * Converts the specified {@code String str} from this format to the specified
      * {@code format}. A "best effort" approach is taken; if {@code str} does not
      * conform to the assumed format, then the behavior of this method is undefined,
@@ -142,8 +176,8 @@ public enum CaseFormat {
             i = j + wordSeparator.length();
         }
         return (i == 0) ? format.normalizeFirstWord(s) : requireNonNull(out)
-                .append(format.normalizeWord(s.substring(i)))
-                .toString();
+            .append(format.normalizeWord(s.substring(i)))
+            .toString();
     }
 
     /**
@@ -155,8 +189,43 @@ public enum CaseFormat {
         return new StringConverter(this, targetFormat);
     }
 
+    abstract String normalizeWord(String word);
+
+    // normalize 规范化
+    String normalizeFirstWord(String word) {
+        return normalizeWord(word);
+    }
+
+    /**
+     * 将传入的字段进行驼峰命名的验证（大驼峰）
+     * @param field
+     * @return
+     */
+    private boolean isFieldHump(String field) {
+        int index = field.indexOf("_");
+        String humps = field.substring(index + 1);
+        String[] humpsList = humps.split("_");
+        for (int i = 0; i < humpsList.length; i++) {
+            if (!isRegularJudgment(humpsList[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 验证驼峰
+     * @param field
+     * @return
+     */
+    private boolean isRegularJudgment(String field) {
+        String pattern = "^([A-Z][a-z0-9]+)+";
+        return Pattern.matches(pattern, field);
+    }
+
     private static final class StringConverter extends Converter<String, String> implements Serializable {
 
+        private static final long serialVersionUID = 0L;
         private final CaseFormat sourceFormat;
         private final CaseFormat targetFormat;
 
@@ -193,75 +262,5 @@ public enum CaseFormat {
         public String toString() {
             return sourceFormat + ".converterTo(" + targetFormat + ")";
         }
-
-        private static final long serialVersionUID = 0L;
-    }
-
-    abstract String normalizeWord(String word);
-
-    // normalize 规范化
-    String normalizeFirstWord(String word) {
-        return normalizeWord(word);
-    }
-
-    /**
-     * 只将首字母大写，同时将其他字母小写
-     * @param word
-     * @return String
-     */
-    public static String firstCharOnlyToUpper(String word) {
-        return word.isEmpty() ? word : Ascii.toUpperCase(word.charAt(0)) + Ascii.toLowerCase(word.substring(1));
-    }
-
-    /**
-     * 将传入的字段进行驼峰命名的验证（大驼峰）
-     * @param field
-     * @return
-     */
-    private boolean isFieldHump(String field) {
-        int index = field.indexOf("_");
-        String humps = field.substring(index + 1);
-        String[] humpsList = humps.split("_");
-        for (int i = 0; i < humpsList.length; i++) {
-            if (!isRegularJudgment(humpsList[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 验证驼峰
-     * @param field
-     * @return
-     */
-    private boolean isRegularJudgment(String field) {
-        String pattern = "^([A-Z][a-z0-9]+)+";
-        return Pattern.matches(pattern, field);
-    }
-
-    /**
-     * 数据表字段名转换为驼峰式名字的实体类属性名
-     * @param tabAttr 数据表字段名
-     * @return 转换后的驼峰式命名
-     */
-    public static String camelize(String tabAttr) {
-        if (StringUtils.isBlank(tabAttr)) return tabAttr;
-        Pattern pattern = Pattern.compile("(.*)_(\\w)(.*)");
-        Matcher matcher = pattern.matcher(tabAttr);
-        if (matcher.find()) {
-            return camelize(matcher.group(1) + matcher.group(2).toUpperCase() + matcher.group(3));
-        } else {
-            return tabAttr;
-        }
-    }
-
-    /**
-     * 驼峰式的实体类属性名转换为数据表字段名
-     * @param camelCaseStr 驼峰式的实体类属性名
-     * @return 转换后的以"_"分隔的数据表字段名
-     */
-    public static String decamelize(String camelCaseStr) {
-        return StringUtils.isBlank(camelCaseStr) ? camelCaseStr : camelCaseStr.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
 }

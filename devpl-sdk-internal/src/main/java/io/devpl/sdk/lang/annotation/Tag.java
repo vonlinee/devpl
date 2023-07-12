@@ -7,8 +7,8 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface Tag {
 
-	String name();
+    String name();
 
-	Class<?> type();
+    Class<?> type();
 
 }

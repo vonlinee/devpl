@@ -145,7 +145,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
      */
     @SuppressWarnings("unchecked")
     public ConcurrentReferenceHashMap(
-            int initialCapacity, float loadFactor, int concurrencyLevel, ReferenceType referenceType) {
+        int initialCapacity, float loadFactor, int concurrencyLevel, ReferenceType referenceType) {
 
         Assert.isTrue(initialCapacity >= 0, "Initial capacity must not be negative");
         Assert.isTrue(loadFactor > 0f, "Load factor must be positive");
@@ -165,6 +165,22 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         this.segments = segments;
     }
 
+    /**
+     * Calculate a shift value that can be used to create a power-of-two value between
+     * the specified maximum and minimum values.
+     * @param minimumValue the minimum value
+     * @param maximumValue the maximum value
+     * @return the calculated shift (use {@code 1 << shift} to obtain a value)
+     */
+    protected static int calculateShift(int minimumValue, int maximumValue) {
+        int shift = 0;
+        int value = 1;
+        while (value < minimumValue && value < maximumValue) {
+            value <<= 1;
+            shift++;
+        }
+        return shift;
+    }
 
     protected final float getLoadFactor() {
         return this.loadFactor;
@@ -252,7 +268,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     public V putIfAbsent(K key, V value) {
         return put(key, value, false);
     }
-
 
     private V put(final K key, final V value, final boolean overwriteExisting) {
         return doTask(key, new Task<V>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.RESIZE) {
@@ -359,7 +374,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         }
     }
 
-
     @Override
     public int size() {
         int size = 0;
@@ -389,7 +403,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         return entrySet;
     }
 
-
     private <T> T doTask(Object key, Task<T> task) {
         int hash = getHash(key);
         return getSegmentForHash(hash).doTask(hash, key, task);
@@ -397,23 +410,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     private Segment getSegmentForHash(int hash) {
         return this.segments[(hash >>> (32 - this.shift)) & (this.segments.length - 1)];
-    }
-
-    /**
-     * Calculate a shift value that can be used to create a power-of-two value between
-     * the specified maximum and minimum values.
-     * @param minimumValue the minimum value
-     * @param maximumValue the maximum value
-     * @return the calculated shift (use {@code 1 << shift} to obtain a value)
-     */
-    protected static int calculateShift(int minimumValue, int maximumValue) {
-        int shift = 0;
-        int value = 1;
-        while (value < minimumValue && value < maximumValue) {
-            value <<= 1;
-            shift++;
-        }
-        return shift;
     }
 
 
@@ -435,6 +431,208 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
 
     /**
+     * Various options supported by a {@code Task}.
+     */
+    private enum TaskOption {
+
+        RESTRUCTURE_BEFORE,
+        RESTRUCTURE_AFTER,
+        SKIP_IF_EMPTY,
+        RESIZE
+    }
+
+
+    /**
+     * The types of restructuring that can be performed.
+     */
+    protected enum Restructure {
+
+        WHEN_NECESSARY,
+        NEVER
+    }
+
+
+    /**
+     * A reference to an {@link Entry} contained in the map. Implementations are usually
+     * wrappers around specific Java reference implementations (e.g., {@link SoftReference}).
+     * @param <K> the key type
+     * @param <V> the value type
+     */
+    protected interface Reference<K, V> {
+
+        /**
+         * Return the referenced entry, or {@code null} if the entry is no longer available.
+         */
+
+        Entry<K, V> get();
+
+        /**
+         * Return the hash for the reference.
+         */
+        int getHash();
+
+        /**
+         * Return the next reference in the chain, or {@code null} if none.
+         */
+
+        Reference<K, V> getNext();
+
+        /**
+         * Release this entry and ensure that it will be returned from
+         * {@code ReferenceManager#pollForPurge()}.
+         */
+        void release();
+    }
+
+
+    /**
+     * Allows a task access to Segment entries.
+     */
+    private interface Entries<V> {
+
+        /**
+         * Add a new entry with the specified value.
+         * @param value the value to add
+         */
+        void add(V value);
+    }
+
+    /**
+     * A single map entry.
+     * @param <K> the key type
+     * @param <V> the value type
+     */
+    protected static final class Entry<K, V> implements Map.Entry<K, V> {
+
+
+        private final K key;
+
+
+        private volatile V value;
+
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+
+        public K getKey() {
+            return this.key;
+        }
+
+        @Override
+
+        public V getValue() {
+            return this.value;
+        }
+
+        @Override
+
+        public V setValue(V value) {
+            V previous = this.value;
+            this.value = value;
+            return previous;
+        }
+
+        @Override
+        public String toString() {
+            return (this.key + "=" + this.value);
+        }
+
+        @Override
+        @SuppressWarnings("rawtypes")
+        public final boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof Map.Entry)) {
+                return false;
+            }
+            Map.Entry otherEntry = (Map.Entry) other;
+            return (ObjectUtils.nullSafeEquals(getKey(), otherEntry.getKey()) &&
+                ObjectUtils.nullSafeEquals(getValue(), otherEntry.getValue()));
+        }
+
+        @Override
+        public final int hashCode() {
+            return (ObjectUtils.nullSafeHashCode(this.key) ^ ObjectUtils.nullSafeHashCode(this.value));
+        }
+    }
+
+    /**
+     * Internal {@link Reference} implementation for {@link SoftReference SoftReferences}.
+     */
+    private static final class SoftEntryReference<K, V> extends SoftReference<Entry<K, V>> implements Reference<K, V> {
+
+        private final int hash;
+
+
+        private final Reference<K, V> nextReference;
+
+        public SoftEntryReference(Entry<K, V> entry, int hash, Reference<K, V> next,
+                                  ReferenceQueue<Entry<K, V>> queue) {
+
+            super(entry, queue);
+            this.hash = hash;
+            this.nextReference = next;
+        }
+
+        @Override
+        public int getHash() {
+            return this.hash;
+        }
+
+        @Override
+
+        public Reference<K, V> getNext() {
+            return this.nextReference;
+        }
+
+        @Override
+        public void release() {
+            enqueue();
+            clear();
+        }
+    }
+
+    /**
+     * Internal {@link Reference} implementation for {@link WeakReference WeakReferences}.
+     */
+    private static final class WeakEntryReference<K, V> extends WeakReference<Entry<K, V>> implements Reference<K, V> {
+
+        private final int hash;
+
+
+        private final Reference<K, V> nextReference;
+
+        public WeakEntryReference(Entry<K, V> entry, int hash, Reference<K, V> next,
+                                  ReferenceQueue<Entry<K, V>> queue) {
+
+            super(entry, queue);
+            this.hash = hash;
+            this.nextReference = next;
+        }
+
+        @Override
+        public int getHash() {
+            return this.hash;
+        }
+
+        @Override
+
+        public Reference<K, V> getNext() {
+            return this.nextReference;
+        }
+
+        @Override
+        public void release() {
+            enqueue();
+            clear();
+        }
+    }
+
+    /**
      * A single segment used to divide the map to allow better concurrent performance.
      */
     @SuppressWarnings("serial")
@@ -443,19 +641,16 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         private final ReferenceManager referenceManager;
 
         private final int initialSize;
-
-        /**
-         * Array of references indexed using the low order bits from the hash.
-         * This property should only be set along with {@code resizeThreshold}.
-         */
-        private volatile Reference<K, V>[] references;
-
         /**
          * The total number of references contained in this segment. This includes chained
          * references and references that have been garbage collected but not purged.
          */
         private final AtomicInteger count = new AtomicInteger();
-
+        /**
+         * Array of references indexed using the low order bits from the hash.
+         * This property should only be set along with {@code resizeThreshold}.
+         */
+        private volatile Reference<K, V>[] references;
         /**
          * The threshold when resizing of the references should occur. When {@code count}
          * exceeds this value references will be resized.
@@ -582,7 +777,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
                 // Either create a new table or reuse the existing one
                 Reference<K, V>[] restructured =
-                        (resizing ? createReferenceArray(restructureSize) : this.references);
+                    (resizing ? createReferenceArray(restructureSize) : this.references);
 
                 // Restructure
                 for (int i = 0; i < this.references.length; i++) {
@@ -596,7 +791,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
                             if (entry != null) {
                                 int index = getIndex(ref.getHash(), restructured);
                                 restructured[index] = this.referenceManager.createReference(
-                                        entry, ref.getHash(), restructured[index]);
+                                    entry, ref.getHash(), restructured[index]);
                             }
                         }
                         ref = ref.getNext();
@@ -656,104 +851,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         }
     }
 
-
-    /**
-     * A reference to an {@link Entry} contained in the map. Implementations are usually
-     * wrappers around specific Java reference implementations (e.g., {@link SoftReference}).
-     * @param <K> the key type
-     * @param <V> the value type
-     */
-    protected interface Reference<K, V> {
-
-        /**
-         * Return the referenced entry, or {@code null} if the entry is no longer available.
-         */
-
-        Entry<K, V> get();
-
-        /**
-         * Return the hash for the reference.
-         */
-        int getHash();
-
-        /**
-         * Return the next reference in the chain, or {@code null} if none.
-         */
-
-        Reference<K, V> getNext();
-
-        /**
-         * Release this entry and ensure that it will be returned from
-         * {@code ReferenceManager#pollForPurge()}.
-         */
-        void release();
-    }
-
-
-    /**
-     * A single map entry.
-     * @param <K> the key type
-     * @param <V> the value type
-     */
-    protected static final class Entry<K, V> implements Map.Entry<K, V> {
-
-
-        private final K key;
-
-
-        private volatile V value;
-
-        public Entry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-
-        public K getKey() {
-            return this.key;
-        }
-
-        @Override
-
-        public V getValue() {
-            return this.value;
-        }
-
-        @Override
-
-        public V setValue(V value) {
-            V previous = this.value;
-            this.value = value;
-            return previous;
-        }
-
-        @Override
-        public String toString() {
-            return (this.key + "=" + this.value);
-        }
-
-        @Override
-        @SuppressWarnings("rawtypes")
-        public final boolean equals(Object other) {
-            if (this == other) {
-                return true;
-            }
-            if (!(other instanceof Map.Entry)) {
-                return false;
-            }
-            Map.Entry otherEntry = (Map.Entry) other;
-            return (ObjectUtils.nullSafeEquals(getKey(), otherEntry.getKey()) &&
-                    ObjectUtils.nullSafeEquals(getValue(), otherEntry.getValue()));
-        }
-
-        @Override
-        public final int hashCode() {
-            return (ObjectUtils.nullSafeHashCode(this.key) ^ ObjectUtils.nullSafeHashCode(this.value));
-        }
-    }
-
-
     /**
      * A task that can be {@link Segment#doTask run} against a {@link Segment}.
      */
@@ -794,29 +891,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             return null;
         }
     }
-
-
-    /**
-     * Various options supported by a {@code Task}.
-     */
-    private enum TaskOption {
-
-        RESTRUCTURE_BEFORE, RESTRUCTURE_AFTER, SKIP_IF_EMPTY, RESIZE
-    }
-
-
-    /**
-     * Allows a task access to Segment entries.
-     */
-    private interface Entries<V> {
-
-        /**
-         * Add a new entry with the specified value.
-         * @param value the value to add
-         */
-        void add(V value);
-    }
-
 
     /**
      * Internal entry-set implementation.
@@ -860,7 +934,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             ConcurrentReferenceHashMap.this.clear();
         }
     }
-
 
     /**
      * Internal entry iterator implementation.
@@ -946,16 +1019,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         }
     }
 
-
-    /**
-     * The types of restructuring that can be performed.
-     */
-    protected enum Restructure {
-
-        WHEN_NECESSARY, NEVER
-    }
-
-
     /**
      * Strategy class used to manage {@link Reference References}.
      * This class can be overridden if alternative reference types need to be supported.
@@ -989,80 +1052,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         public Reference<K, V> pollForPurge() {
             return (Reference<K, V>) this.queue.poll();
-        }
-    }
-
-
-    /**
-     * Internal {@link Reference} implementation for {@link SoftReference SoftReferences}.
-     */
-    private static final class SoftEntryReference<K, V> extends SoftReference<Entry<K, V>> implements Reference<K, V> {
-
-        private final int hash;
-
-
-        private final Reference<K, V> nextReference;
-
-        public SoftEntryReference(Entry<K, V> entry, int hash, Reference<K, V> next,
-                                  ReferenceQueue<Entry<K, V>> queue) {
-
-            super(entry, queue);
-            this.hash = hash;
-            this.nextReference = next;
-        }
-
-        @Override
-        public int getHash() {
-            return this.hash;
-        }
-
-        @Override
-
-        public Reference<K, V> getNext() {
-            return this.nextReference;
-        }
-
-        @Override
-        public void release() {
-            enqueue();
-            clear();
-        }
-    }
-
-
-    /**
-     * Internal {@link Reference} implementation for {@link WeakReference WeakReferences}.
-     */
-    private static final class WeakEntryReference<K, V> extends WeakReference<Entry<K, V>> implements Reference<K, V> {
-
-        private final int hash;
-
-
-        private final Reference<K, V> nextReference;
-
-        public WeakEntryReference(Entry<K, V> entry, int hash, Reference<K, V> next,
-                                  ReferenceQueue<Entry<K, V>> queue) {
-
-            super(entry, queue);
-            this.hash = hash;
-            this.nextReference = next;
-        }
-
-        @Override
-        public int getHash() {
-            return this.hash;
-        }
-
-        @Override
-
-        public Reference<K, V> getNext() {
-            return this.nextReference;
-        }
-
-        @Override
-        public void release() {
-            enqueue();
-            clear();
         }
     }
 

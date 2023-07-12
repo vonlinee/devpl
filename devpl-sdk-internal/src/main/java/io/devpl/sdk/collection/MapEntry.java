@@ -20,6 +20,16 @@ public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
     private V value;
 
     /**
+     * 构造
+     * @param key   键
+     * @param value 值
+     */
+    public MapEntry(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    /**
      * 构建{@code Pair}对象
      * @param <K>   键类型
      * @param <V>   值类型
@@ -30,16 +40,6 @@ public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
      */
     public static <K, V> MapEntry<K, V> of(K key, V value) {
         return new MapEntry<>(key, value);
-    }
-
-    /**
-     * 构造
-     * @param key   键
-     * @param value 值
-     */
-    public MapEntry(K key, V value) {
-        this.key = key;
-        this.value = value;
     }
 
     /**
@@ -83,14 +83,14 @@ public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
         if (o instanceof MapEntry) {
             MapEntry<?, ?> pair = (MapEntry<?, ?>) o;
             return Objects.equals(getKey(), pair.getKey()) &&
-                    Objects.equals(getValue(), pair.getValue());
+                Objects.equals(getValue(), pair.getValue());
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        //copy from 1.8 HashMap.Node
+        // copy from 1.8 HashMap.Node
         return Objects.hashCode(key) ^ Objects.hashCode(value);
     }
 }

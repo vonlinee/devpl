@@ -3,7 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.entity.FieldTypeEntity;
+import io.devpl.generator.entity.GenFieldType;
 
 import java.util.Map;
 import java.util.Set;
@@ -11,10 +11,10 @@ import java.util.Set;
 /**
  * 字段类型管理
  */
-public interface FieldTypeService extends BaseService<FieldTypeEntity> {
-    PageResult<FieldTypeEntity> page(Query query);
+public interface FieldTypeService extends BaseService<GenFieldType> {
+    PageResult<GenFieldType> page(Query query);
 
-    Map<String, FieldTypeEntity> getMap();
+    Map<String, GenFieldType> getMap();
 
     /**
      * 根据tableId，获取包列表

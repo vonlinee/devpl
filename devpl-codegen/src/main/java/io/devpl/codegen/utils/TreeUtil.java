@@ -20,6 +20,7 @@ public class TreeUtil<T, R> {
      * 下级数据存放字段
      */
     private final BiConsumer<T, List<T>> children;
+    private final List<TreeNode<T, R>> rootNodes = new ArrayList<>();
     /**
      * 对象创建方法
      */
@@ -37,8 +38,6 @@ public class TreeUtil<T, R> {
      */
     private Predicate<TreeNode<T, R>> filter;
 
-    private final List<TreeNode<T, R>> rootNodes = new ArrayList<>();
-
     private TreeUtil(Function<T, R> getSuperCode, Function<T, R> getCode, BiConsumer<T, List<T>> children) {
         this.getSuperCode = getSuperCode;
         this.getCode = getCode;
@@ -46,44 +45,7 @@ public class TreeUtil<T, R> {
     }
 
     /**
-     * 解除与原始数据的关联（需在初始化之前进行设置，初始化后设置无效）
-     *
-     * @param newInstance 对象创建方法
-     */
-    public void setNewInstance(Supplier<T> newInstance) {
-        this.newInstance = newInstance;
-    }
-
-    /**
-     * 设置树形数据排序方法（需在初始化之前进行设置，初始化后设置无效）
-     *
-     * @param comparator 排序方法
-     */
-    public void setComparator(Comparator<T> comparator) {
-        this.comparator = comparator;
-    }
-
-    /**
-     * 设置对数据的操作（需在初始化之前进行设置，初始化后设置无效）
-     *
-     * @param operate 获取数据时的操作
-     */
-    public void setOperate(Consumer<T> operate) {
-        this.operate = operate;
-    }
-
-    /**
-     * 设置对数据的过滤
-     *
-     * @param filter 获取数据时的过滤
-     */
-    public void setFilter(Predicate<TreeNode<T, R>> filter) {
-        this.filter = filter;
-    }
-
-    /**
      * 获取工具类对象
-     *
      * @param getSuperCode 上级标识获取字段
      * @param getCode      当前数据主标识获取字段
      * @param children     下级数据存放字段
@@ -96,8 +58,39 @@ public class TreeUtil<T, R> {
     }
 
     /**
+     * 解除与原始数据的关联（需在初始化之前进行设置，初始化后设置无效）
+     * @param newInstance 对象创建方法
+     */
+    public void setNewInstance(Supplier<T> newInstance) {
+        this.newInstance = newInstance;
+    }
+
+    /**
+     * 设置树形数据排序方法（需在初始化之前进行设置，初始化后设置无效）
+     * @param comparator 排序方法
+     */
+    public void setComparator(Comparator<T> comparator) {
+        this.comparator = comparator;
+    }
+
+    /**
+     * 设置对数据的操作（需在初始化之前进行设置，初始化后设置无效）
+     * @param operate 获取数据时的操作
+     */
+    public void setOperate(Consumer<T> operate) {
+        this.operate = operate;
+    }
+
+    /**
+     * 设置对数据的过滤
+     * @param filter 获取数据时的过滤
+     */
+    public void setFilter(Predicate<TreeNode<T, R>> filter) {
+        this.filter = filter;
+    }
+
+    /**
      * 初始化工具
-     *
      * @param original 原始数据
      */
     public void init(List<T> original) {
@@ -154,7 +147,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取树型数据
-     *
      * @return 树型集合
      */
     public List<T> getTree() {
@@ -176,7 +168,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取节点
-     *
      * @param code 数据主标识
      * @return 与数据主标识匹配的节点
      */
@@ -198,7 +189,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取节点深度
-     *
      * @param code 数据主标识
      * @return 与数据主标识匹配的节点深度(- 1表示未找到)
      */
@@ -217,7 +207,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取父级节点
-     *
      * @param code 数据主标识
      * @return 与数据主标识匹配节点的上级节点
      */
@@ -243,7 +232,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取根节点
-     *
      * @param code 数据主标识
      * @return 与数据主标识匹配的树型链的根节点
      */
@@ -266,7 +254,6 @@ public class TreeUtil<T, R> {
 
     /**
      * 获取下级节点
-     *
      * @param code 数据主标识
      * @return 与数据主标识匹配的节点的下级节点
      */
@@ -293,10 +280,6 @@ public class TreeUtil<T, R> {
 
     public static class TreeNode<T, R> {
         /**
-         * 上级数据引用
-         */
-        private TreeNode<T, R> superNode;
-        /**
          * 当前节点主标识
          */
         private final R code;
@@ -308,6 +291,10 @@ public class TreeUtil<T, R> {
          * 当前节点真实数据
          */
         private final T nodeData;
+        /**
+         * 上级数据引用
+         */
+        private TreeNode<T, R> superNode;
         /**
          * 下级节点集合
          */
@@ -329,7 +316,6 @@ public class TreeUtil<T, R> {
 
         /**
          * 获取节点数据
-         *
          * @param children 下级数据填充
          * @return 节点数据
          */
@@ -355,7 +341,6 @@ public class TreeUtil<T, R> {
 
         /**
          * 获取下级节点
-         *
          * @param value 节点主标识
          * @return 下级节点
          */
@@ -379,7 +364,6 @@ public class TreeUtil<T, R> {
 
         /**
          * 判断是否包含此节点
-         *
          * @param value 节点主标识
          * @return true：包含
          */
@@ -400,7 +384,6 @@ public class TreeUtil<T, R> {
 
         /**
          * 获取当前节点级别
-         *
          * @return 节点级别
          */
         private int getLevel(Predicate<TreeNode<T, R>> filter) {
@@ -415,7 +398,6 @@ public class TreeUtil<T, R> {
 
         /**
          * 获取当前节点级别
-         *
          * @return 节点级别
          */
         public int getNoFilterLevel() {
@@ -423,14 +405,6 @@ public class TreeUtil<T, R> {
                 return 1;
             }
             return this.superNode.getNoFilterLevel() + 1;
-        }
-
-        public void setNextNodes(List<TreeNode<T, R>> nextNodes) {
-            if (nextNodes == null || nextNodes.isEmpty()) {
-                return;
-            }
-            nextNodes.forEach(node -> node.superNode = this);
-            this.nextNodes = nextNodes;
         }
 
         public TreeNode<T, R> getSuperNode() {
@@ -451,6 +425,14 @@ public class TreeUtil<T, R> {
 
         public List<TreeNode<T, R>> getNextNodes() {
             return nextNodes;
+        }
+
+        public void setNextNodes(List<TreeNode<T, R>> nextNodes) {
+            if (nextNodes == null || nextNodes.isEmpty()) {
+                return;
+            }
+            nextNodes.forEach(node -> node.superNode = this);
+            this.nextNodes = nextNodes;
         }
 
         public boolean equals(TreeNode<T, R> node) {

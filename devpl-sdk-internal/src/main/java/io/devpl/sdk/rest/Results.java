@@ -1,7 +1,6 @@
 package io.devpl.sdk.rest;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 工具类方法

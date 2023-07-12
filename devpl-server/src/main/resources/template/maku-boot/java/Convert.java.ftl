@@ -15,12 +15,14 @@ import java.util.List;
 */
 @Mapper
 public interface ${ClassName}Convert {
-    ${ClassName}Convert INSTANCE = Mappers.getMapper(${ClassName}Convert.class);
+${ClassName}Convert INSTANCE = Mappers.getMapper(${ClassName}Convert.class);
 
-    ${ClassName}Entity convert(${ClassName}VO vo);
+${ClassName}Entity convert(${ClassName}VO vo);
 
-    ${ClassName}VO convert(${ClassName}Entity entity);
+${ClassName}VO convert(${ClassName}Entity entity);
 
-    List<${ClassName}VO> convertList(List<${ClassName}Entity> list);
+List
+<${ClassName}VO> convertList(List
+    <${ClassName}Entity> list);
 
-}
+        }

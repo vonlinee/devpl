@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 /**
  * 注入配置
- *
  * @author hubin
  * @since 2016-12-07
  */
@@ -57,14 +56,12 @@ public class InjectionConfig {
 
     /**
      * 自定义模板文件列表
-     *
      * @since 3.5.3
      */
     private List<CustomFile> customFiles = new ArrayList<>();
 
     /**
      * 是否覆盖已有文件（默认 false）（已弃用，已放到自定义文件类CustomFile中，3.5.4版本会删除此方法）
-     *
      * @since 3.5.2
      */
     @Deprecated
@@ -129,7 +126,6 @@ public class InjectionConfig {
 
         /**
          * 输出文件之前消费者
-         *
          * @param biConsumer 消费者
          * @return this
          */
@@ -140,7 +136,6 @@ public class InjectionConfig {
 
         /**
          * 自定义配置 Map 对象
-         *
          * @param customMap Map 对象
          * @return this
          */
@@ -151,7 +146,6 @@ public class InjectionConfig {
 
         /**
          * 自定义配置模板文件
-         *
          * @param customFile key为文件名称，value为文件路径
          * @return this
          */

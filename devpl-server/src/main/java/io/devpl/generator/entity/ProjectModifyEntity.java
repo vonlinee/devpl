@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * 项目名变更
  */
-
 @Data
 @TableName("gen_project_modify")
 public class ProjectModifyEntity {

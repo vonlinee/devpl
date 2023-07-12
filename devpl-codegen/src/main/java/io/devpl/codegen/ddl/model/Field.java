@@ -1,9 +1,9 @@
 package io.devpl.codegen.ddl.model;
 
 
+import com.google.common.base.CaseFormat;
 import io.devpl.codegen.ddl.enums.SqlTypeAndJavaTypeEnum;
 import io.devpl.codegen.ddl.utils.SqlTypeMapUtil;
-import com.google.common.base.CaseFormat;
 
 import java.util.Objects;
 
@@ -17,6 +17,30 @@ public class Field {
 
     private String comment;
 
+    public Field() {
+    }
+
+    public Field(String name, String type) {
+        this.name = name;
+        this.type = type;
+        this.primaryKey = false;
+    }
+
+    public Field(String name, String type, Boolean primaryKey, String comment) {
+        this.name = name;
+        this.type = type;
+        this.primaryKey = primaryKey;
+        this.comment = comment;
+    }
+
+    public static Field newField(String name, String type, boolean primaryKey, String comment) {
+        return new Field(name, type, primaryKey, comment);
+    }
+
+    public static Field newField(String name, String type) {
+        return new Field(name, type);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,14 +52,6 @@ public class Field {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    public static Field newField(String name, String type, boolean primaryKey, String comment) {
-        return new Field(name, type, primaryKey, comment);
-    }
-
-    public static Field newField(String name, String type) {
-        return new Field(name, type);
     }
 
     public String getTableColumn() {
@@ -63,22 +79,6 @@ public class Field {
         return SqlTypeAndJavaTypeEnum.findByJavaType(this.type).getDefaultLength();
     }
 
-    public Field() {
-    }
-
-    public Field(String name, String type) {
-        this.name = name;
-        this.type = type;
-        this.primaryKey = false;
-    }
-
-    public Field(String name, String type, Boolean primaryKey, String comment) {
-        this.name = name;
-        this.type = type;
-        this.primaryKey = primaryKey;
-        this.comment = comment;
-    }
-
     public String getName() {
         return name;
     }
@@ -99,12 +99,12 @@ public class Field {
         return primaryKey;
     }
 
-    public void setPrimaryKey(Boolean primaryKey) {
-        this.primaryKey = primaryKey;
-    }
-
     public Boolean getPrimaryKey() {
         return primaryKey;
+    }
+
+    public void setPrimaryKey(Boolean primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
     public String getComment() {

@@ -33,12 +33,11 @@ public class ImportInfo {
     }
 
     private Map<String, String> getImportedIdentifierMap() {
-		return importedIdentifierMap;
-	}
+        return importedIdentifierMap;
+    }
 
-	/**
+    /**
      * 是否导入了该类型
-     *
      * @param typeName SimpleName
      * @return 是否导入了该类型
      */
@@ -48,7 +47,6 @@ public class ImportInfo {
 
     /**
      * 如果为null，如果该文件语法正确，那么则在同一包下，不用显示import
-     *
      * @param typeName
      * @return
      */

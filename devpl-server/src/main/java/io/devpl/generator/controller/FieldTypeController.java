@@ -3,7 +3,7 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.utils.Result;
-import io.devpl.generator.entity.FieldTypeEntity;
+import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.service.FieldTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +26,14 @@ public class FieldTypeController {
      * @return
      */
     @GetMapping("page")
-    public Result<PageResult<FieldTypeEntity>> page(Query query) {
-        PageResult<FieldTypeEntity> page = fieldTypeService.page(query);
+    public Result<PageResult<GenFieldType>> page(Query query) {
+        PageResult<GenFieldType> page = fieldTypeService.page(query);
         return Result.ok(page);
     }
 
     @GetMapping("{id}")
-    public Result<FieldTypeEntity> get(@PathVariable("id") Long id) {
-        FieldTypeEntity data = fieldTypeService.getById(id);
+    public Result<GenFieldType> get(@PathVariable("id") Long id) {
+        GenFieldType data = fieldTypeService.getById(id);
 
         return Result.ok(data);
     }
@@ -46,14 +46,14 @@ public class FieldTypeController {
     }
 
     @PostMapping
-    public Result<String> save(@RequestBody FieldTypeEntity entity) {
+    public Result<String> save(@RequestBody GenFieldType entity) {
         fieldTypeService.save(entity);
 
         return Result.ok();
     }
 
     @PutMapping
-    public Result<String> update(@RequestBody FieldTypeEntity entity) {
+    public Result<String> update(@RequestBody GenFieldType entity) {
         fieldTypeService.updateById(entity);
 
         return Result.ok();

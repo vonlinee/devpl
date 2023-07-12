@@ -33,11 +33,8 @@ import java.util.function.Supplier;
  */
 public class GlobalConfig {
 
-    private GlobalConfig() {
-    }
-
     protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
-
+    public ActionCallback callback;
     /**
      * 生成文件的输出目录【 windows:D://  linux or mac:/tmp 】
      */
@@ -48,24 +45,18 @@ public class GlobalConfig {
      */
     @Deprecated
     private boolean fileOverride;
-
-    public ActionCallback callback;
-
     /**
      * 是否打开输出目录
      */
     private boolean open = true;
-
     /**
      * 作者
      */
     private String author = "baomidou";
-
     /**
      * 开启 Kotlin 模式（默认 false）
      */
     private boolean kotlin;
-
     /**
      * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
      */
@@ -74,17 +65,18 @@ public class GlobalConfig {
      * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
      */
     private boolean springdoc;
-
     /**
      * 时间类型对应策略
      */
     private DateType dateType = DateType.TIME_PACK;
-
     /**
      * 获取注释日期
      * @since 3.5.0
      */
     private Supplier<String> commentDate = () -> new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+    private GlobalConfig() {
+    }
 
     public String getOutputDir() {
         return outputDir;

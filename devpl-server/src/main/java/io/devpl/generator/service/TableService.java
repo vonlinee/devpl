@@ -3,16 +3,16 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.entity.TableEntity;
+import io.devpl.generator.entity.GenTable;
 
 /**
  * 数据表
  */
-public interface TableService extends BaseService<TableEntity> {
+public interface TableService extends BaseService<GenTable> {
 
-    PageResult<TableEntity> page(Query query);
+    PageResult<GenTable> page(Query query);
 
-    TableEntity getByTableName(String tableName);
+    GenTable getByTableName(String tableName);
 
     void deleteBatchIds(Long[] ids);
 

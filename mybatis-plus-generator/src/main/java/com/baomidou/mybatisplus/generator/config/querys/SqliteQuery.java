@@ -17,7 +17,6 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * Sqlite 表数据查询
- *
  * @author chen
  * @since 2019-05-08
  */

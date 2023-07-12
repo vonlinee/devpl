@@ -10,12 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * this class is copied from Apache Calcite and was change into something more detailed.
@@ -36,9 +31,6 @@ public class TypeUtils {
 
     private static final int SKIP_BUFFER_SIZE = 4096;
 
-    private TypeUtils() {
-    }
-
     static {
         BOX = new HashMap<>();
         BOX.put(boolean.class, Boolean.class);
@@ -49,6 +41,9 @@ public class TypeUtils {
         BOX.put(long.class, Long.class);
         BOX.put(float.class, Float.class);
         BOX.put(double.class, Double.class);
+    }
+
+    private TypeUtils() {
     }
 
     private static MethodHandle method(Class<?> returnType, Class<?> targetType, String name, Class<?>... argTypes) {

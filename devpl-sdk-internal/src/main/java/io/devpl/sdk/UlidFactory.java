@@ -173,6 +173,41 @@ public final class UlidFactory {
     // Package-private inner classes
     // ******************************
 
+    interface IRandom {
+
+        static IRandom newInstance() {
+            return new ByteRandom();
+        }
+
+        static IRandom newInstance(Random random) {
+            if (random == null) {
+                return new ByteRandom();
+            } else {
+                if (random instanceof SecureRandom) {
+                    return new ByteRandom(random);
+                } else {
+                    return new LongRandom(random);
+                }
+            }
+        }
+
+        static IRandom newInstance(LongSupplier randomFunction) {
+            return new LongRandom(randomFunction);
+        }
+
+        static IRandom newInstance(IntFunction<byte[]> randomFunction) {
+            return new ByteRandom(randomFunction);
+        }
+
+        /**
+         * 生成随机的long型数据
+         * @return
+         */
+        long nextLong();
+
+        byte[] nextBytes(int length);
+    }
+
     /**
      * Function that creates ULIDs.
      */
@@ -201,14 +236,12 @@ public final class UlidFactory {
      */
     static final class MonotonicFunction implements LongFunction<ULID> {
 
-        private ULID lastUlid;
-
-        private final IRandom random;
-
         // Used to preserve monotonicity when the system clock is
         // adjusted by NTP after a small clock drift or when the
         // system clock jumps back by 1 second due to leap second.
         private static final int CLOCK_DRIFT_TOLERANCE = 10_000;
+        private final IRandom random;
+        private ULID lastUlid;
 
         public MonotonicFunction(IRandom random) {
             this.random = random;
@@ -240,41 +273,6 @@ public final class UlidFactory {
         }
     }
 
-    interface IRandom {
-
-        /**
-         * 生成随机的long型数据
-         * @return
-         */
-        long nextLong();
-
-        byte[] nextBytes(int length);
-
-        static IRandom newInstance() {
-            return new ByteRandom();
-        }
-
-        static IRandom newInstance(Random random) {
-            if (random == null) {
-                return new ByteRandom();
-            } else {
-                if (random instanceof SecureRandom) {
-                    return new ByteRandom(random);
-                } else {
-                    return new LongRandom(random);
-                }
-            }
-        }
-
-        static IRandom newInstance(LongSupplier randomFunction) {
-            return new LongRandom(randomFunction);
-        }
-
-        static IRandom newInstance(IntFunction<byte[]> randomFunction) {
-            return new ByteRandom(randomFunction);
-        }
-    }
-
     static class LongRandom implements IRandom {
 
         private final LongSupplier randomFunction;
@@ -289,6 +287,11 @@ public final class UlidFactory {
 
         public LongRandom(LongSupplier randomFunction) {
             this.randomFunction = randomFunction != null ? randomFunction : newRandomFunction(null);
+        }
+
+        static LongSupplier newRandomFunction(Random random) {
+            final Random entropy = random != null ? random : new SecureRandom();
+            return entropy::nextLong;
         }
 
         @Override
@@ -311,11 +314,6 @@ public final class UlidFactory {
             }
             return bytes;
         }
-
-        static LongSupplier newRandomFunction(Random random) {
-            final Random entropy = random != null ? random : new SecureRandom();
-            return entropy::nextLong;
-        }
     }
 
     static class ByteRandom implements IRandom {
@@ -334,6 +332,15 @@ public final class UlidFactory {
             this.randomFunction = randomFunction != null ? randomFunction : newRandomFunction(null);
         }
 
+        static IntFunction<byte[]> newRandomFunction(Random random) {
+            final Random entropy = random != null ? random : new SecureRandom();
+            return (final int length) -> {
+                final byte[] bytes = new byte[length];
+                entropy.nextBytes(bytes);
+                return bytes;
+            };
+        }
+
         @Override
         public long nextLong() {
             long number = 0;
@@ -347,15 +354,6 @@ public final class UlidFactory {
         @Override
         public byte[] nextBytes(int length) {
             return this.randomFunction.apply(length);
-        }
-
-        static IntFunction<byte[]> newRandomFunction(Random random) {
-            final Random entropy = random != null ? random : new SecureRandom();
-            return (final int length) -> {
-                final byte[] bytes = new byte[length];
-                entropy.nextBytes(bytes);
-                return bytes;
-            };
         }
     }
 }

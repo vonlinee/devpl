@@ -33,97 +33,78 @@ import java.util.Set;
  */
 public class StrategyConfig {
 
-    private StrategyConfig() {
-    }
-
-    /**
-     * 是否大写命名（默认 false）
-     */
-    private boolean isCapitalMode;
-
-    /**
-     * 是否跳过视图（默认 false）
-     */
-    private boolean skipView;
-
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")
      * result: t_simple -> Simple
      */
     private final Set<String> tablePrefix = new HashSet<>();
-
     /**
      * 过滤表后缀
      * example: addTableSuffix("_0")
      * result: t_simple_0 -> Simple
      */
     private final Set<String> tableSuffix = new HashSet<>();
-
     /**
      * 过滤字段前缀
      * example: addFieldPrefix("is_")
      * result: is_deleted -> deleted
      */
     private final Set<String> fieldPrefix = new HashSet<>();
-
     /**
      * 过滤字段后缀
      * example: addFieldSuffix("_flag")
      * result: deleted_flag -> deleted
      */
     private final Set<String> fieldSuffix = new HashSet<>();
-
     /**
      * 需要包含的表名，允许正则表达式（与exclude二选一配置）<br/>
      * 当{@link #enableSqlFilter}为true时，正则表达式无效.
      */
     private final Set<String> include = new HashSet<>();
-
     /**
      * 需要排除的表名，允许正则表达式<br/>
      * 当{@link #enableSqlFilter}为true时，正则表达式无效.
      */
     private final Set<String> exclude = new HashSet<>();
-
+    private final Entity.Builder entityBuilder = new Entity.Builder(this);
+    private final Controller.Builder controllerBuilder = new Controller.Builder(this);
+    private final Mapper.Builder mapperBuilder = new Mapper.Builder(this);
+    private final Service.Builder serviceBuilder = new Service.Builder(this);
+    /**
+     * 是否大写命名（默认 false）
+     */
+    private boolean isCapitalMode;
+    /**
+     * 是否跳过视图（默认 false）
+     */
+    private boolean skipView;
     /**
      * 启用sql过滤，语法不能支持使用sql过滤表的话，可以考虑关闭此开关.
      * @since 3.3.1
      */
     private boolean enableSqlFilter = true;
-
     /**
      * 启用 schema 默认 false
      */
     private boolean enableSchema;
-
     /**
      * 包含表名
      * @since 3.3.0
      */
     private LikeTable likeTable;
-
     /**
      * 不包含表名
      * @since 3.3.0
      */
     private LikeTable notLikeTable;
-
-    private final Entity.Builder entityBuilder = new Entity.Builder(this);
-
-    private final Controller.Builder controllerBuilder = new Controller.Builder(this);
-
-    private final Mapper.Builder mapperBuilder = new Mapper.Builder(this);
-
-    private final Service.Builder serviceBuilder = new Service.Builder(this);
-
     private Entity entity;
-
     private Controller controller;
-
     private Mapper mapper;
-
     private Service service;
+
+    private StrategyConfig() {
+    }
 
     public static StrategyConfig.Builder builder() {
         return new Builder();

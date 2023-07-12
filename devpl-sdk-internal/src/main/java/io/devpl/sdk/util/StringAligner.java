@@ -26,6 +26,37 @@ public class StringAligner {
         this.setMaxChars(maxChars);
     }
 
+    private static int maxLength(String[] str) {
+        int index = 0;
+        for (int i = 1; i <= str.length - 1; i++) {
+            if (str[i].length() > str[index].length()) {
+                index = i;
+            }
+        }
+        return str[index].length();
+    }
+
+    public static String[] align(final String[] strings) {
+        StringAligner aligner = new StringAligner(maxLength(strings), JUST_LEFT);
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = aligner.format(strings[i]);
+        }
+        return strings;
+    }
+
+    public static void main(String[] args) {
+        // 一行最多20个字符，居中显示
+        // 左对齐
+        StringAligner formatter = new StringAligner(20, StringAligner.JUST_LEFT);
+        System.out.println(formatter.format("- i -"));
+        System.out.println(formatter.format(Integer.toString(444)));
+        // 右对齐
+        System.out.println();
+        formatter = new StringAligner(20, StringAligner.JUST_CENTER);
+        System.out.println(formatter.format("- i -"));
+        System.out.println(formatter.format(Integer.toString(444)));
+    }
+
     public int getJust() {
         return just;
     }
@@ -58,24 +89,6 @@ public class StringAligner {
         } else {
             this.maxChars = maxChars;
         }
-    }
-
-    private static int maxLength(String[] str) {
-        int index = 0;
-        for (int i = 1; i <= str.length - 1; i++) {
-            if (str[i].length() > str[index].length()) {
-                index = i;
-            }
-        }
-        return str[index].length();
-    }
-
-    public static String[] align(final String[] strings) {
-        StringAligner aligner = new StringAligner(maxLength(strings), JUST_LEFT);
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = aligner.format(strings[i]);
-        }
-        return strings;
     }
 
     /**
@@ -123,18 +136,5 @@ public class StringAligner {
         for (int i = 0; i < howMany; i++) {
             to.append(" ");
         }
-    }
-
-    public static void main(String[] args) {
-        // 一行最多20个字符，居中显示
-        // 左对齐
-        StringAligner formatter = new StringAligner(20, StringAligner.JUST_LEFT);
-        System.out.println(formatter.format("- i -"));
-        System.out.println(formatter.format(Integer.toString(444)));
-        // 右对齐
-        System.out.println();
-        formatter = new StringAligner(20, StringAligner.JUST_CENTER);
-        System.out.println(formatter.format("- i -"));
-        System.out.println(formatter.format(Integer.toString(444)));
     }
 }

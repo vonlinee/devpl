@@ -29,15 +29,35 @@ import java.util.Optional;
 
 /**
  * https://houbb.github.io/2020/05/29/java-ast-06-comments
- *
  * @author wangliang
  * Created On 2022-12-29 10:11:33
  */
 public class JavaParserUtils {
 
+    private static final JavaParser JAVA_PARSER_INSTANCE;
+    // 打印配置
+    static PrinterConfiguration printerConfiguration;
+
+    static {
+        ParserConfiguration parserConfig = new ParserConfiguration();
+        parserConfig.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8); // JDK8
+        parserConfig.setCharacterEncoding(StandardCharsets.UTF_8); // 源代码字符编码
+        // 关闭注释分析 默认情况下启用注释分析，禁用将加快解析速度，但在处理单个源文件时速度提升不明显，如果要解析大量文件，建议禁用。
+        parserConfig.setAttributeComments(true);
+        // 设置为孤立注释
+        parserConfig.setDoNotAssignCommentsPrecedingEmptyLines(true);
+        JAVA_PARSER_INSTANCE = new JavaParser(parserConfig);
+    }
+
+    static {
+        printerConfiguration = new DefaultPrinterConfiguration();
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_COMMENTS, true));
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_JAVADOC, true));
+        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN, true));
+    }
+
     /**
      * 解析工程下的所有Java文件
-     *
      * @param path 工程根目录
      */
     public static void parseProject(String path) {
@@ -50,7 +70,7 @@ public class JavaParserUtils {
                     if (result.isSuccessful()) {
                         Optional<CompilationUnit> resultOptional = result.getResult();
                         NodeList<TypeDeclaration<?>> typeDeclarations = resultOptional.map(CompilationUnit::getTypes)
-                                .orElseGet(NodeList::new);
+                            .orElseGet(NodeList::new);
                         for (TypeDeclaration<?> typeDeclaration : typeDeclarations) {
                             TypeInfo typeInfo = TypeInfo.of(typeDeclaration);
                             typeInfo.setPath(absolutePath.toString());
@@ -164,7 +184,6 @@ public class JavaParserUtils {
 
     /**
      * 处理类型,方法,成员
-     *
      * @param node
      */
     public static void processNode(Node node) {
@@ -198,30 +217,6 @@ public class JavaParserUtils {
 
     private static boolean handleComment(String content) {
         return false;
-    }
-
-
-    private static final JavaParser JAVA_PARSER_INSTANCE;
-
-    static {
-        ParserConfiguration parserConfig = new ParserConfiguration();
-        parserConfig.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8); // JDK8
-        parserConfig.setCharacterEncoding(StandardCharsets.UTF_8); // 源代码字符编码
-        // 关闭注释分析 默认情况下启用注释分析，禁用将加快解析速度，但在处理单个源文件时速度提升不明显，如果要解析大量文件，建议禁用。
-        parserConfig.setAttributeComments(true);
-        // 设置为孤立注释
-        parserConfig.setDoNotAssignCommentsPrecedingEmptyLines(true);
-        JAVA_PARSER_INSTANCE = new JavaParser(parserConfig);
-    }
-
-    // 打印配置
-    static PrinterConfiguration printerConfiguration;
-
-    static {
-        printerConfiguration = new DefaultPrinterConfiguration();
-        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_COMMENTS, true));
-        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_JAVADOC, true));
-        printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN, true));
     }
 
     public static String toString(CompilationUnit compilationUnit) {

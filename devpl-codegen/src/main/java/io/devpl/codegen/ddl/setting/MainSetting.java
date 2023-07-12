@@ -2,9 +2,8 @@ package io.devpl.codegen.ddl.setting;
 
 public class MainSetting {
 
-    public MySettingProperties myProperties = new MySettingProperties();
-
     private static final MainSetting mainSetting = new MainSetting();
+    public MySettingProperties myProperties = new MySettingProperties();
 
     public static MainSetting getInstance() {
         return mainSetting;

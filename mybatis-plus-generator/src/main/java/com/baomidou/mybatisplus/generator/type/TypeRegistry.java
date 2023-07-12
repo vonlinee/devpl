@@ -37,16 +37,16 @@ public class TypeRegistry {
         typeMap.put(Types.BLOB, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.LONGVARBINARY, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.VARBINARY, DbColumnType.BYTE_ARRAY);
-        //byte
+        // byte
         typeMap.put(Types.TINYINT, DbColumnType.BYTE);
-        //long
+        // long
         typeMap.put(Types.BIGINT, DbColumnType.LONG);
-        //boolean
+        // boolean
         typeMap.put(Types.BIT, DbColumnType.BOOLEAN);
         typeMap.put(Types.BOOLEAN, DbColumnType.BOOLEAN);
-        //short
+        // short
         typeMap.put(Types.SMALLINT, DbColumnType.SHORT);
-        //string
+        // string
         typeMap.put(Types.CHAR, DbColumnType.STRING);
         typeMap.put(Types.CLOB, DbColumnType.STRING);
         typeMap.put(Types.VARCHAR, DbColumnType.STRING);
@@ -55,19 +55,19 @@ public class TypeRegistry {
         typeMap.put(Types.NCHAR, DbColumnType.STRING);
         typeMap.put(Types.NCLOB, DbColumnType.STRING);
         typeMap.put(Types.NVARCHAR, DbColumnType.STRING);
-        //date
+        // date
         typeMap.put(Types.DATE, DbColumnType.DATE);
-        //timestamp
+        // timestamp
         typeMap.put(Types.TIMESTAMP, DbColumnType.TIMESTAMP);
-        //double
+        // double
         typeMap.put(Types.FLOAT, DbColumnType.DOUBLE);
         typeMap.put(Types.REAL, DbColumnType.DOUBLE);
-        //int
+        // int
         typeMap.put(Types.INTEGER, DbColumnType.INTEGER);
-        //bigDecimal
+        // bigDecimal
         typeMap.put(Types.NUMERIC, DbColumnType.BIG_DECIMAL);
         typeMap.put(Types.DECIMAL, DbColumnType.BIG_DECIMAL);
-        //TODO 类型需要补充完整
+        // TODO 类型需要补充完整
     }
 
     /**
@@ -79,7 +79,7 @@ public class TypeRegistry {
      * @return Java类型
      */
     public static JavaType getColumnType(Integer jdbcType, Integer length, DateType dateType, Integer scale) {
-        //TODO 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
+        // TODO 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
         // TODO 需要增加类型处理，尚未补充完整
         JavaType columnType;
         switch (jdbcType) {

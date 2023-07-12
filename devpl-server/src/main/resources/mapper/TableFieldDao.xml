@@ -3,7 +3,7 @@
 
 <mapper namespace="io.devpl.generator.dao.TableFieldDao">
 
-    <select id="getByTableId" resultType="io.devpl.generator.entity.TableFieldInfo">
+    <select id="getByTableId" resultType="io.devpl.generator.entity.GenTableField">
         select *
         from gen_table_field
         where table_id = #{value}

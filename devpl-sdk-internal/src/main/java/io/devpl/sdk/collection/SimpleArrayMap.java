@@ -12,9 +12,11 @@ import java.util.Map;
  * APIs, allowing that code to be stripped by ProGuard.
  */
 public class SimpleArrayMap<K, V> {
+    static final int[] EMPTY_INTS = new int[0];
+    static final long[] EMPTY_LONGS = new long[0];
+    static final Object[] EMPTY_OBJECTS = new Object[0];
     private static final boolean DEBUG = false;
     private static final String TAG = "FixedMap";
-
     /**
      * Attempt to spot concurrent modifications to this data structure.
      * <p>
@@ -26,18 +28,15 @@ public class SimpleArrayMap<K, V> {
      * functions that change mSize (put/remove/clear).
      */
     private static final boolean CONCURRENT_MODIFICATION_EXCEPTIONS = true;
-
     /**
      * The minimum amount by which the capacity of a FixedMap will increase.
      * This is tuned to be relatively space-efficient.
      */
     private static final int BASE_SIZE = 4;
-
     /**
      * Maximum number of entries to have in array caches.
      */
     private static final int CACHE_SIZE = 10;
-
     /**
      * Caches of small array objects to avoid spamming garbage.  The cache
      * Object[] variable is a pointer to a linked list of array objects.
@@ -50,10 +49,43 @@ public class SimpleArrayMap<K, V> {
     static
     Object[] mTwiceBaseCache;
     static int mTwiceBaseCacheSize;
-
     int[] mHashes;
     Object[] mArray;
     int mSize;
+
+    /**
+     * Create a new empty FixedMap.  The default capacity of an array map is 0, and
+     * will grow once items are added to it.
+     */
+    public SimpleArrayMap() {
+        mHashes = EMPTY_INTS;
+        mArray = EMPTY_OBJECTS;
+        mSize = 0;
+    }
+
+    /**
+     * Create a new FixedMap with a given initial capacity.
+     */
+    @SuppressWarnings("NullAway") // allocArrays initializes mHashes and mArray.
+    public SimpleArrayMap(int capacity) {
+        if (capacity == 0) {
+            mHashes = EMPTY_INTS;
+            mArray = EMPTY_OBJECTS;
+        } else {
+            allocArrays(capacity);
+        }
+        mSize = 0;
+    }
+
+    /**
+     * Create a new FixedMap with the mappings from the given FixedMap.
+     */
+    public SimpleArrayMap(SimpleArrayMap<K, V> map) {
+        this();
+        if (map != null) {
+            putAll(map);
+        }
+    }
 
     private static int binarySearchHashes(int[] hashes, int N, int hash) {
         try {
@@ -86,6 +118,54 @@ public class SimpleArrayMap<K, V> {
         return ~lo;  // value not present
     }
 
+    @SuppressWarnings("ArrayToString")
+    private static void freeArrays(final int[] hashes, final Object[] array, final int size) {
+        if (hashes.length == (BASE_SIZE * 2)) {
+            synchronized (SimpleArrayMap.class) {
+                if (mTwiceBaseCacheSize < CACHE_SIZE) {
+                    array[0] = mTwiceBaseCache;
+                    array[1] = hashes;
+                    for (int i = (size << 1) - 1; i >= 2; i--) {
+                        array[i] = null;
+                    }
+                    mTwiceBaseCache = array;
+                    mTwiceBaseCacheSize++;
+                    if (DEBUG) System.out.println(TAG + " Storing 2x cache " + array
+                        + " now have " + mTwiceBaseCacheSize + " entries");
+                }
+            }
+        } else if (hashes.length == BASE_SIZE) {
+            synchronized (SimpleArrayMap.class) {
+                if (mBaseCacheSize < CACHE_SIZE) {
+                    array[0] = mBaseCache;
+                    array[1] = hashes;
+                    for (int i = (size << 1) - 1; i >= 2; i--) {
+                        array[i] = null;
+                    }
+                    mBaseCache = array;
+                    mBaseCacheSize++;
+                    if (DEBUG) System.out.println(TAG + " Storing 1x cache " + array
+                        + " now have " + mBaseCacheSize + " entries");
+                }
+            }
+        }
+    }
+
+    public static int idealIntArraySize(int need) {
+        return idealByteArraySize(need * 4) / 4;
+    }
+
+    public static int idealLongArraySize(int need) {
+        return idealByteArraySize(need * 8) / 8;
+    }
+
+    public static int idealByteArraySize(int need) {
+        for (int i = 4; i < 32; i++)
+            if (need <= (1 << i) - 12)
+                return (1 << i) - 12;
+
+        return need;
+    }
 
     int indexOf(Object key, int hash) {
         final int N = mSize;
@@ -175,7 +255,7 @@ public class SimpleArrayMap<K, V> {
                     array[0] = array[1] = null;
                     mTwiceBaseCacheSize--;
                     if (DEBUG) System.out.println(TAG + " Retrieving 2x cache " + mHashes
-                            + " now have " + mTwiceBaseCacheSize + " entries");
+                        + " now have " + mTwiceBaseCacheSize + " entries");
                     return;
                 }
             }
@@ -189,7 +269,7 @@ public class SimpleArrayMap<K, V> {
                     array[0] = array[1] = null;
                     mBaseCacheSize--;
                     if (DEBUG) System.out.println(TAG + " Retrieving 1x cache " + mHashes
-                            + " now have " + mBaseCacheSize + " entries");
+                        + " now have " + mBaseCacheSize + " entries");
                     return;
                 }
             }
@@ -197,93 +277,6 @@ public class SimpleArrayMap<K, V> {
 
         mHashes = new int[size];
         mArray = new Object[size << 1];
-    }
-
-    @SuppressWarnings("ArrayToString")
-    private static void freeArrays(final int[] hashes, final Object[] array, final int size) {
-        if (hashes.length == (BASE_SIZE * 2)) {
-            synchronized (SimpleArrayMap.class) {
-                if (mTwiceBaseCacheSize < CACHE_SIZE) {
-                    array[0] = mTwiceBaseCache;
-                    array[1] = hashes;
-                    for (int i = (size << 1) - 1; i >= 2; i--) {
-                        array[i] = null;
-                    }
-                    mTwiceBaseCache = array;
-                    mTwiceBaseCacheSize++;
-                    if (DEBUG) System.out.println(TAG + " Storing 2x cache " + array
-                            + " now have " + mTwiceBaseCacheSize + " entries");
-                }
-            }
-        } else if (hashes.length == BASE_SIZE) {
-            synchronized (SimpleArrayMap.class) {
-                if (mBaseCacheSize < CACHE_SIZE) {
-                    array[0] = mBaseCache;
-                    array[1] = hashes;
-                    for (int i = (size << 1) - 1; i >= 2; i--) {
-                        array[i] = null;
-                    }
-                    mBaseCache = array;
-                    mBaseCacheSize++;
-                    if (DEBUG) System.out.println(TAG + " Storing 1x cache " + array
-                            + " now have " + mBaseCacheSize + " entries");
-                }
-            }
-        }
-    }
-
-    static final int[] EMPTY_INTS = new int[0];
-    static final long[] EMPTY_LONGS = new long[0];
-    static final Object[] EMPTY_OBJECTS = new Object[0];
-
-    /**
-     * Create a new empty FixedMap.  The default capacity of an array map is 0, and
-     * will grow once items are added to it.
-     */
-    public SimpleArrayMap() {
-        mHashes = EMPTY_INTS;
-        mArray = EMPTY_OBJECTS;
-        mSize = 0;
-    }
-
-    /**
-     * Create a new FixedMap with a given initial capacity.
-     */
-    @SuppressWarnings("NullAway") // allocArrays initializes mHashes and mArray.
-    public SimpleArrayMap(int capacity) {
-        if (capacity == 0) {
-            mHashes = EMPTY_INTS;
-            mArray = EMPTY_OBJECTS;
-        } else {
-            allocArrays(capacity);
-        }
-        mSize = 0;
-    }
-
-    public static int idealIntArraySize(int need) {
-        return idealByteArraySize(need * 4) / 4;
-    }
-
-    public static int idealLongArraySize(int need) {
-        return idealByteArraySize(need * 8) / 8;
-    }
-
-    public static int idealByteArraySize(int need) {
-        for (int i = 4; i < 32; i++)
-            if (need <= (1 << i) - 12)
-                return (1 << i) - 12;
-
-        return need;
-    }
-
-    /**
-     * Create a new FixedMap with the mappings from the given FixedMap.
-     */
-    public SimpleArrayMap(SimpleArrayMap<K, V> map) {
-        this();
-        if (map != null) {
-            putAll(map);
-        }
     }
 
     /**
@@ -327,7 +320,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Check whether a key exists in the array.
-     *
      * @param key The key to search for.
      * @return Returns true if the key exists, else false.
      */
@@ -337,7 +329,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Returns the index of a key in the set.
-     *
      * @param key The key to search for.
      * @return Returns the index of the key if it exists, else a negative integer.
      */
@@ -367,7 +358,6 @@ public class SimpleArrayMap<K, V> {
     /**
      * Check whether a value exists in the array.  This requires a linear search
      * through the entire array.
-     *
      * @param value The value to search for.
      * @return Returns true if the value exists, else false.
      */
@@ -377,7 +367,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array.
-     *
      * @param key The key of the value to retrieve.
      * @return Returns the value associated with the given key,
      * or null if there is no such key.
@@ -394,7 +383,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array, or {@code defaultValue} if there is no mapping for the key.
-     *
      * @param key          The key of the value to retrieve.
      * @param defaultValue The default mapping of the key
      * @return Returns the value associated with the given key,
@@ -408,7 +396,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Return the key at the given index in the array.
-     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the key stored at the given index.
      */
@@ -419,7 +406,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Return the value at the given index in the array.
-     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value stored at the given index.
      */
@@ -430,7 +416,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Set the value at a given index in the array.
-     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @param value The new value to store at this index.
      * @return Returns the previous value at the given index.
@@ -452,7 +437,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Add a new value to the array map.
-     *
      * @param key   The key under which to store the value.  <b>Must not be null.</b>  If
      *              this key already exists in the array, its value will be replaced.
      * @param value The value to store for the given key.
@@ -481,7 +465,7 @@ public class SimpleArrayMap<K, V> {
         index = ~index;
         if (osize >= mHashes.length) {
             final int n = osize >= (BASE_SIZE * 2) ? (osize + (osize >> 1))
-                    : (osize >= BASE_SIZE ? (BASE_SIZE * 2) : BASE_SIZE);
+                : (osize >= BASE_SIZE ? (BASE_SIZE * 2) : BASE_SIZE);
 
             if (DEBUG) System.out.println(TAG + " put: grow from " + mHashes.length + " to " + n);
 
@@ -504,7 +488,7 @@ public class SimpleArrayMap<K, V> {
 
         if (index < osize) {
             if (DEBUG) System.out.println(TAG + " put: move " + index + "-" + (osize - index)
-                    + " to " + (index + 1));
+                + " to " + (index + 1));
             System.arraycopy(mHashes, index, mHashes, index + 1, osize - index);
             System.arraycopy(mArray, index << 1, mArray, (index + 1) << 1, (mSize - index) << 1);
         }
@@ -523,7 +507,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Perform a {@link #put(Object, Object)} of all key/value pairs in <var>array</var>
-     *
      * @param array The array whose contents are to be retrieved.
      */
     public void putAll(SimpleArrayMap<? extends K, ? extends V> array) {
@@ -545,7 +528,6 @@ public class SimpleArrayMap<K, V> {
     /**
      * Add a new value to the array map only if the key does not already have a value or it is
      * mapped to {@code null}.
-     *
      * @param key   The key under which to store the value.
      * @param value The value to store for the given key.
      * @return Returns the value that was stored for the given key, or null if there
@@ -562,7 +544,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map.
-     *
      * @param key The key of the mapping to remove.
      * @return Returns the value that was stored under the key, or null if there
      * was no such key.
@@ -579,7 +560,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map only if it is currently mapped to {@code value}.
-     *
      * @param key   The key of the mapping to remove.
      * @param value The value expected to be mapped to the key.
      * @return Returns true if the mapping was removed.
@@ -598,7 +578,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Remove the key/value mapping at the given index.
-     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value that was stored at this index.
      */
@@ -639,18 +618,18 @@ public class SimpleArrayMap<K, V> {
                 }
                 if (index < nsize) {
                     if (DEBUG) System.out.println(TAG + " remove: copy from " + (index + 1) + "-" + nsize
-                            + " to " + index);
+                        + " to " + index);
                     System.arraycopy(ohashes, index + 1, mHashes, index, nsize - index);
                     System.arraycopy(oarray, (index + 1) << 1, mArray, index << 1,
-                            (nsize - index) << 1);
+                        (nsize - index) << 1);
                 }
             } else {
                 if (index < nsize) {
                     if (DEBUG) System.out.println(TAG + " remove: move " + (index + 1) + "-" + nsize
-                            + " to " + index);
+                        + " to " + index);
                     System.arraycopy(mHashes, index + 1, mHashes, index, nsize - index);
                     System.arraycopy(mArray, (index + 1) << 1, mArray, index << 1,
-                            (nsize - index) << 1);
+                        (nsize - index) << 1);
                 }
                 mArray[nsize << 1] = null;
                 mArray[(nsize << 1) + 1] = null;
@@ -665,7 +644,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
-     *
      * @param key   The key of the mapping to replace.
      * @param value The value to store for the given key.
      * @return Returns the previous mapped value or null.
@@ -681,7 +659,6 @@ public class SimpleArrayMap<K, V> {
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
-     *
      * @param key      The key of the mapping to replace.
      * @param oldValue The value expected to be mapped to the key.
      * @param newValue The value to store for the given key.

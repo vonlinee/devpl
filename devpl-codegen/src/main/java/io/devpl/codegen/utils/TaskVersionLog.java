@@ -4,11 +4,10 @@ import java.util.List;
 
 public class TaskVersionLog {
 
-    private String id;
     String superId;
     String name;
-
     List<TaskVersionLog> list;
+    private String id;
 
     public String getId() {
         return id;

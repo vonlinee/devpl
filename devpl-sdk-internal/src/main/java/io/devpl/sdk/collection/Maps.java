@@ -12,18 +12,17 @@ import java.util.function.Predicate;
  */
 public final class Maps {
 
-    private Maps() {
-    }
-
     /**
      * 默认初始大小
      */
     public static final int DEFAULT_INITIAL_CAPACITY = 16;
-
     /**
      * 默认增长因子，当Map的size达到 容量*增长因子时，开始扩充Map
      */
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
+    private Maps() {
+    }
 
     /**
      * Map是否为空

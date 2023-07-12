@@ -22,7 +22,6 @@ import java.util.*;
 /**
  * postgresql关键字处理
  * https://www.postgresql.org/docs/11/sql-keywords-appendix.html
- *
  * @author nieqiurong 2020/5/9.
  * @since 3.3.2
  */

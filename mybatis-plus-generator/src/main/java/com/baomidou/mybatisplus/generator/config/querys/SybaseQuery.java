@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 /**
  * Sybase库表信息查询
- *
  * @author lroyia
  * @since 2022/1/19 17:08
  **/

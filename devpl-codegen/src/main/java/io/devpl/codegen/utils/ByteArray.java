@@ -12,16 +12,13 @@ import java.util.Arrays;
  */
 public class ByteArray implements Comparable<ByteArray>, Serializable {
 
-    private static final long serialVersionUID = -7661788929944453848L;
-
-    private final byte[] bytes;
-
     /**
      * An empty byte string.
      */
     public static final ByteArray EMPTY = new ByteArray(new byte[0], false);
-
+    private static final long serialVersionUID = -7661788929944453848L;
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private final byte[] bytes;
 
     /**
      * Creates a ByteString.
@@ -33,47 +30,6 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     private ByteArray(byte[] bytes, boolean dummy) {
         this.bytes = bytes;
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(bytes);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || obj instanceof ByteArray && Arrays.equals(bytes, ((ByteArray) obj).bytes);
-    }
-
-    public int compareTo(ByteArray that) {
-        final byte[] v1 = bytes;
-        final byte[] v2 = that.bytes;
-        final int n = Math.min(v1.length, v2.length);
-        for (int i = 0; i < n; i++) {
-            int c1 = v1[i] & 0xff;
-            int c2 = v2[i] & 0xff;
-            if (c1 != c2) {
-                return c1 - c2;
-            }
-        }
-        return v1.length - v2.length;
-    }
-
-    /**
-     * Returns this byte string in hexadecimal format.
-     * @return Hexadecimal string
-     */
-    @Override
-    public String toString() {
-        return toString(16);
-    }
-
-    /**
-     * Returns this byte string in a given base.
-     * @return String in given base
-     */
-    public String toString(int base) {
-        return toString(bytes, base);
     }
 
     /**
@@ -113,14 +69,6 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
                 throw new IllegalArgumentException("bad base " + base);
         }
         return new String(chars, 0, j);
-    }
-
-    /**
-     * Returns this byte string in Base64 format.
-     * @return Base64 string
-     */
-    public String toBase64String() {
-        return Base64.encodeBytes(bytes);
     }
 
     /**
@@ -219,6 +167,55 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
         } catch (IOException e) {
             throw new IllegalArgumentException("bad base64 string", e);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(bytes);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof ByteArray && Arrays.equals(bytes, ((ByteArray) obj).bytes);
+    }
+
+    public int compareTo(ByteArray that) {
+        final byte[] v1 = bytes;
+        final byte[] v2 = that.bytes;
+        final int n = Math.min(v1.length, v2.length);
+        for (int i = 0; i < n; i++) {
+            int c1 = v1[i] & 0xff;
+            int c2 = v2[i] & 0xff;
+            if (c1 != c2) {
+                return c1 - c2;
+            }
+        }
+        return v1.length - v2.length;
+    }
+
+    /**
+     * Returns this byte string in hexadecimal format.
+     * @return Hexadecimal string
+     */
+    @Override
+    public String toString() {
+        return toString(16);
+    }
+
+    /**
+     * Returns this byte string in a given base.
+     * @return String in given base
+     */
+    public String toString(int base) {
+        return toString(bytes, base);
+    }
+
+    /**
+     * Returns this byte string in Base64 format.
+     * @return Base64 string
+     */
+    public String toBase64String() {
+        return Base64.encodeBytes(bytes);
     }
 
     @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDoesntDeclareCloneNotSupportedException"})

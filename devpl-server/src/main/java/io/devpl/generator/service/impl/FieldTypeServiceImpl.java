@@ -5,7 +5,7 @@ import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.dao.FieldTypeDao;
-import io.devpl.generator.entity.FieldTypeEntity;
+import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.service.FieldTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
  * 字段类型管理
  */
 @Service
-public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeDao, FieldTypeEntity> implements FieldTypeService {
+public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeDao, GenFieldType> implements FieldTypeService {
 
     @Override
-    public PageResult<FieldTypeEntity> page(Query query) {
-        IPage<FieldTypeEntity> page = baseMapper.selectPage(
+    public PageResult<GenFieldType> page(Query query) {
+        IPage<GenFieldType> page = baseMapper.selectPage(
             getPage(query),
             getWrapper(query)
         );
@@ -29,10 +29,10 @@ public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeDao, FieldTyp
     }
 
     @Override
-    public Map<String, FieldTypeEntity> getMap() {
-        List<FieldTypeEntity> list = baseMapper.selectList(null);
-        Map<String, FieldTypeEntity> map = new LinkedHashMap<>(list.size());
-        for (FieldTypeEntity entity : list) {
+    public Map<String, GenFieldType> getMap() {
+        List<GenFieldType> list = baseMapper.selectList(null);
+        Map<String, GenFieldType> map = new LinkedHashMap<>(list.size());
+        for (GenFieldType entity : list) {
             map.put(entity.getColumnType().toLowerCase(), entity);
         }
         return map;
@@ -50,7 +50,7 @@ public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeDao, FieldTyp
     }
 
     @Override
-    public boolean save(FieldTypeEntity entity) {
+    public boolean save(GenFieldType entity) {
         entity.setCreateTime(new Date());
         return super.save(entity);
     }

@@ -11,5 +11,6 @@ public interface ActionCallback {
      * 写文件
      * @param file 文件
      */
-    default void writeFile(File file){}
+    default void writeFile(File file) {
+    }
 }

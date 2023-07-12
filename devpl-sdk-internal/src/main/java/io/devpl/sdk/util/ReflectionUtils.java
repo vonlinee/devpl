@@ -30,13 +30,13 @@ public abstract class ReflectionUtils {
      * @since 3.0.5
      */
     public static final MethodFilter USER_DECLARED_METHODS =
-            (method -> !method.isBridge() && !method.isSynthetic() && (method.getDeclaringClass() != Object.class));
+        (method -> !method.isBridge() && !method.isSynthetic() && (method.getDeclaringClass() != Object.class));
 
     /**
      * Pre-built FieldFilter that matches all non-static, non-final fields.
      */
     public static final FieldFilter COPYABLE_FIELDS =
-            (field -> !(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())));
+        (field -> !(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())));
 
 
     /**
@@ -158,7 +158,7 @@ public abstract class ReflectionUtils {
      * @since 5.0
      */
     public static <T> Constructor<T> accessibleConstructor(Class<T> clazz, Class<?>... parameterTypes)
-            throws NoSuchMethodException {
+        throws NoSuchMethodException {
 
         Constructor<T> ctor = clazz.getDeclaredConstructor(parameterTypes);
         makeAccessible(ctor);
@@ -176,7 +176,7 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Constructor<?> ctor) {
         if ((!Modifier.isPublic(ctor.getModifiers()) ||
-                !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) && !ctor.isAccessible()) {
+            !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) && !ctor.isAccessible()) {
             ctor.setAccessible(true);
         }
     }
@@ -214,7 +214,7 @@ public abstract class ReflectionUtils {
         Class<?> searchType = clazz;
         while (searchType != null) {
             Method[] methods = (searchType.isInterface() ? searchType.getMethods() :
-                    getDeclaredMethods(searchType, false));
+                getDeclaredMethods(searchType, false));
             for (Method method : methods) {
                 if (name.equals(method.getName()) && (paramTypes == null || hasSameParams(method, paramTypes))) {
                     return method;
@@ -227,7 +227,7 @@ public abstract class ReflectionUtils {
 
     private static boolean hasSameParams(Method method, Class<?>[] paramTypes) {
         return (paramTypes.length == method.getParameterCount() &&
-                Arrays.equals(paramTypes, method.getParameterTypes()));
+            Arrays.equals(paramTypes, method.getParameterTypes()));
     }
 
     /**
@@ -394,11 +394,11 @@ public abstract class ReflectionUtils {
             Method methodBeingOverriddenWithCovariantReturnType = null;
             for (Method existingMethod : methods) {
                 if (method.getName().equals(existingMethod.getName()) &&
-                        method.getParameterCount() == existingMethod.getParameterCount() &&
-                        Arrays.equals(method.getParameterTypes(), existingMethod.getParameterTypes())) {
+                    method.getParameterCount() == existingMethod.getParameterCount() &&
+                    Arrays.equals(method.getParameterTypes(), existingMethod.getParameterTypes())) {
                     // Is this a covariant return type situation?
                     if (existingMethod.getReturnType() != method.getReturnType() &&
-                            existingMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
+                        existingMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
                         methodBeingOverriddenWithCovariantReturnType = existingMethod;
                     } else {
                         knownSignature = true;
@@ -453,7 +453,7 @@ public abstract class ReflectionUtils {
                 declaredMethodsCache.put(clazz, (result.length == 0 ? EMPTY_METHOD_ARRAY : result));
             } catch (Throwable ex) {
                 throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +
-                        "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
+                    "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
             }
         }
         return (result.length == 0 || !defensive) ? result : result.clone();
@@ -513,7 +513,7 @@ public abstract class ReflectionUtils {
      */
     public static boolean isObjectMethod(Method method) {
         return (method != null && (method.getDeclaringClass() == Object.class ||
-                isEqualsMethod(method) || isHashCodeMethod(method) || isToStringMethod(method)));
+            isEqualsMethod(method) || isHashCodeMethod(method) || isToStringMethod(method)));
     }
 
     /**
@@ -544,7 +544,7 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Method method) {
         if ((!Modifier.isPublic(method.getModifiers()) ||
-                !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
+            !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
             method.setAccessible(true);
         }
     }
@@ -582,7 +582,7 @@ public abstract class ReflectionUtils {
             Field[] fields = getDeclaredFields(searchType);
             for (Field field : fields) {
                 if ((name == null || name.equals(field.getName())) &&
-                        (type == null || type.equals(field.getType()))) {
+                    (type == null || type.equals(field.getType()))) {
                     return field;
                 }
             }
@@ -706,7 +706,7 @@ public abstract class ReflectionUtils {
                 declaredFieldsCache.put(clazz, (result.length == 0 ? EMPTY_FIELD_ARRAY : result));
             } catch (Throwable ex) {
                 throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +
-                        "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
+                    "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
             }
         }
         return result;
@@ -723,7 +723,7 @@ public abstract class ReflectionUtils {
         Assert.notNull(dest, "Destination for field copy cannot be null");
         if (!src.getClass().isAssignableFrom(dest.getClass())) {
             throw new IllegalArgumentException("Destination class [" + dest.getClass().getName() +
-                    "] must be same or subclass as source class [" + src.getClass().getName() + "]");
+                "] must be same or subclass as source class [" + src.getClass().getName() + "]");
         }
         doWithFields(src.getClass(), field -> {
             makeAccessible(field);
@@ -752,8 +752,8 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) ||
-                !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
-                Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+            !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
+            Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
             field.setAccessible(true);
         }
     }

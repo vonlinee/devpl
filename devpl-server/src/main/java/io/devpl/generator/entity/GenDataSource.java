@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_datasource")
-public class DataSourceEntity {
+public class GenDataSource {
     /**
      * id
      */

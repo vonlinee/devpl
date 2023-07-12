@@ -95,7 +95,8 @@ public class FileInfoServiceImpl implements FileInfoService {
                 return false;
             }
             // 验证文件类型是否符合文件配置的要求
-            if (StringUtils.hasText(fileConf.getFileTypeLimit()) && !fileConf.getFileTypeLimit().contains(mpf.getContentType())) {
+            if (StringUtils.hasText(fileConf.getFileTypeLimit()) && !fileConf.getFileTypeLimit()
+                .contains(mpf.getContentType())) {
                 return false;
             }
         }

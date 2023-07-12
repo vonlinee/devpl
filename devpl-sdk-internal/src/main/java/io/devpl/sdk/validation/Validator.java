@@ -14,11 +14,7 @@ import java.util.regex.Pattern;
  */
 public final class Validator {
 
-    private Validator() {
-    }
-
     private static final DateTimeFormatter DEFAULT_DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-
     // 默认提示信息
     private static final String DEFAULT_NOT_NAN_EX_MESSAGE = "The validated value is not a number";
     private static final String DEFAULT_FINITE_EX_MESSAGE = "The value is invalid: %f";
@@ -40,6 +36,8 @@ public final class Validator {
     private static final String DEFAULT_VALID_STATE_EX_MESSAGE = "The validated state is false";
     private static final String DEFAULT_IS_ASSIGNABLE_EX_MESSAGE = "Cannot assign a %s to a %s";
     private static final String DEFAULT_IS_INSTANCE_OF_EX_MESSAGE = "Expected type: %s, actual: %s";
+    private Validator() {
+    }
 
     // =============================== WHEN ========================================
 

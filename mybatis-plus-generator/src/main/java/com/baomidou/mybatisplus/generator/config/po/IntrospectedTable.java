@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
-import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.jdbc.meta.TableMetadata;
+import com.baomidou.mybatisplus.generator.type.JavaType;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,98 +26,66 @@ public class IntrospectedTable {
      * 包导入信息
      */
     private final Set<String> importPackages = new TreeSet<>();
-
-    /**
-     * 是否转换
-     */
-    private boolean convert;
-
-    /**
-     * 表名称
-     */
-    private String name;
-
-    /**
-     * 表注释
-     */
-    private String comment;
-
-    /**
-     * 实体名称
-     */
-    private String entityName;
-
-    /**
-     * mapper名称
-     */
-    private String mapperName;
-
-    /**
-     * xml名称
-     */
-    private String xmlName;
-
-    /**
-     * service名称
-     */
-    private String serviceName;
-
-    /**
-     * serviceImpl名称
-     */
-    private String serviceImplName;
-
-    /**
-     * controller名称
-     */
-    private String controllerName;
-
-    /**
-     * 表字段
-     */
-    private List<IntrospectedColumn> columns = new ArrayList<>();
-
-    public List<IntrospectedColumn> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<IntrospectedColumn> columns) {
-        this.columns = columns;
-    }
-
-    /**
-     * 主键
-     */
-    private List<PrimaryKey> primaryKeys;
-
-    public List<PrimaryKey> getPrimaryKeys() {
-        return primaryKeys;
-    }
-
-    public void setPrimaryKeys(List<PrimaryKey> primaryKeys) {
-        this.primaryKeys = primaryKeys;
-    }
-
-    /**
-     * 是否有主键
-     */
-    private boolean havePrimaryKey;
-
     /**
      * 公共字段
      */
     private final List<IntrospectedColumn> commonFields = new ArrayList<>();
-
-    /**
-     * 字段名称集
-     */
-    private String fieldNames;
-
     /**
      * 实体
      */
     private final Entity entity;
-
+    /**
+     * 是否转换
+     */
+    private boolean convert;
+    /**
+     * 表名称
+     */
+    private String name;
+    /**
+     * 表注释
+     */
+    private String comment;
+    /**
+     * 实体名称
+     */
+    private String entityName;
+    /**
+     * mapper名称
+     */
+    private String mapperName;
+    /**
+     * xml名称
+     */
+    private String xmlName;
+    /**
+     * service名称
+     */
+    private String serviceName;
+    /**
+     * serviceImpl名称
+     */
+    private String serviceImplName;
+    /**
+     * controller名称
+     */
+    private String controllerName;
+    /**
+     * 表字段
+     */
+    private List<IntrospectedColumn> columns = new ArrayList<>();
+    /**
+     * 主键
+     */
+    private List<PrimaryKey> primaryKeys;
+    /**
+     * 是否有主键
+     */
+    private boolean havePrimaryKey;
+    /**
+     * 字段名称集
+     */
+    private String fieldNames;
     /**
      * 表信息
      */
@@ -134,6 +102,22 @@ public class IntrospectedTable {
         this.entity = context.getStrategyConfig().entity();
         this.metadata = metadata;
         this.name = metadata.getTableName();
+    }
+
+    public List<IntrospectedColumn> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<IntrospectedColumn> columns) {
+        this.columns = columns;
+    }
+
+    public List<PrimaryKey> getPrimaryKeys() {
+        return primaryKeys;
+    }
+
+    public void setPrimaryKeys(List<PrimaryKey> primaryKeys) {
+        this.primaryKeys = primaryKeys;
     }
 
     /**
@@ -158,17 +142,6 @@ public class IntrospectedTable {
 
     public String getEntityPath() {
         return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-    }
-
-    /**
-     * @param entityName 实体名称
-     * @return this
-     */
-    public IntrospectedTable setEntityName(String entityName) {
-        this.entityName = entityName;
-        //TODO 先放置在这里
-        setConvert();
-        return this;
     }
 
     /**
@@ -205,7 +178,7 @@ public class IntrospectedTable {
      * 转换filed实体为 xml mapper 中的 base column 字符串信息
      */
     public String getFieldNames() {
-        //TODO 感觉这个也啥必要,不打算公开set方法了
+        // TODO 感觉这个也啥必要,不打算公开set方法了
         if (StringUtils.isBlank(fieldNames)) {
             this.fieldNames = this.columns.stream().map(IntrospectedColumn::getColumnName)
                 .collect(Collectors.joining(", "));
@@ -261,7 +234,7 @@ public class IntrospectedTable {
             if (null != field.getFill()) {
                 // 填充字段
                 importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-                //TODO 好像default的不用处理也行,这个做优化项目.
+                // TODO 好像default的不用处理也行,这个做优化项目.
                 importPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
             }
             if (field.isVersionField()) {
@@ -287,11 +260,6 @@ public class IntrospectedTable {
         this.controllerName = strategyConfig.controller().getConverterFileName().convert(entityName);
     }
 
-    public IntrospectedTable setComment(String comment) {
-        this.comment = comment;
-        return this;
-    }
-
     public Set<String> getImportPackages() {
         return importPackages;
     }
@@ -313,8 +281,24 @@ public class IntrospectedTable {
         return comment;
     }
 
+    public IntrospectedTable setComment(String comment) {
+        this.comment = comment;
+        return this;
+    }
+
     public String getEntityName() {
         return entityName;
+    }
+
+    /**
+     * @param entityName 实体名称
+     * @return this
+     */
+    public IntrospectedTable setEntityName(String entityName) {
+        this.entityName = entityName;
+        // TODO 先放置在这里
+        setConvert();
+        return this;
     }
 
     public String getMapperName() {

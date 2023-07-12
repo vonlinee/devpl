@@ -11,7 +11,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.List;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -27,8 +26,23 @@ import java.util.zip.Checksum;
  */
 public class FileUtils {
 
+    /**
+     * The number of bytes in a kilobyte.
+     */
+    public static final long ONE_KB = 1024;
+    /**
+     * The number of bytes in a megabyte.
+     */
+    public static final long ONE_MB = ONE_KB * ONE_KB;
+    /**
+     * The number of bytes in a gigabyte.
+     */
+    public static final long ONE_GB = ONE_KB * ONE_MB;
+    /**
+     * An empty array of type <code>File</code>.
+     */
+    public static final File[] EMPTY_FILE_ARRAY = new File[0];
     private static final Pattern LINUX_PATH_PATTERN = Pattern.compile("(/([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255}/)*([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255})|/)");
-
     private static final Pattern WINDOWS_PATH_PATTERN = Pattern.compile("(^[A-Z]:((\\\\|/)([a-zA-Z0-9\\-_]){1,255}){1,255}|([A-Z]:(\\\\|/)))");
 
     /**
@@ -37,26 +51,6 @@ public class FileUtils {
     private FileUtils() {
         super();
     }
-
-    /**
-     * The number of bytes in a kilobyte.
-     */
-    public static final long ONE_KB = 1024;
-
-    /**
-     * The number of bytes in a megabyte.
-     */
-    public static final long ONE_MB = ONE_KB * ONE_KB;
-
-    /**
-     * The number of bytes in a gigabyte.
-     */
-    public static final long ONE_GB = ONE_KB * ONE_MB;
-
-    /**
-     * An empty array of type <code>File</code>.
-     */
-    public static final File[] EMPTY_FILE_ARRAY = new File[0];
 
     // -----------------------------------------------------------------------
 
@@ -1953,57 +1947,6 @@ public class FileUtils {
     }
 
     /**
-     * NIO读取文件
-     * @param allocate 分配字节数
-     * @throws IOException
-     */
-    public void read(File file, int allocate) throws IOException {
-        RandomAccessFile access = new RandomAccessFile(file, "r");
-        // FileInputStream inputStream = new FileInputStream(this.file);
-        FileChannel channel = access.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
-        CharBuffer charBuffer = CharBuffer.allocate(allocate);
-        Charset charset = Charset.forName("GBK");
-        CharsetDecoder decoder = charset.newDecoder();
-        int length = channel.read(byteBuffer);
-        while (length != -1) {
-            byteBuffer.flip();
-            decoder.decode(byteBuffer, charBuffer, true);
-            charBuffer.flip();
-            System.out.println(charBuffer.toString());
-            // 清空缓存
-            byteBuffer.clear();
-            charBuffer.clear();
-            // 再次读取文本内容
-            length = channel.read(byteBuffer);
-        }
-        channel.close();
-        access.close();
-    }
-
-    /**
-     * NIO写文件
-     * @param context
-     * @param allocate
-     * @param chartName
-     * @throws IOException
-     */
-    public void write(File file, String context, int allocate, String chartName) throws IOException {
-        // FileOutputStream outputStream = new FileOutputStream(this.file); //文件内容覆盖模式
-        // --不推荐
-        FileOutputStream outputStream = new FileOutputStream(file, true); // 文件内容追加模式--推荐
-        FileChannel channel = outputStream.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
-        byteBuffer.put(context.getBytes(chartName));
-        byteBuffer.flip();// 读取模式转换为写入模式
-        channel.write(byteBuffer);
-        channel.close();
-        if (outputStream != null) {
-            outputStream.close();
-        }
-    }
-
-    /**
      * nio事实现文件拷贝
      * @param source
      * @param target
@@ -2061,5 +2004,56 @@ public class FileUtils {
         }
         File[] files = directory.listFiles();
         return files == null ? new File[0] : files;
+    }
+
+    /**
+     * NIO读取文件
+     * @param allocate 分配字节数
+     * @throws IOException
+     */
+    public void read(File file, int allocate) throws IOException {
+        RandomAccessFile access = new RandomAccessFile(file, "r");
+        // FileInputStream inputStream = new FileInputStream(this.file);
+        FileChannel channel = access.getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
+        CharBuffer charBuffer = CharBuffer.allocate(allocate);
+        Charset charset = Charset.forName("GBK");
+        CharsetDecoder decoder = charset.newDecoder();
+        int length = channel.read(byteBuffer);
+        while (length != -1) {
+            byteBuffer.flip();
+            decoder.decode(byteBuffer, charBuffer, true);
+            charBuffer.flip();
+            System.out.println(charBuffer.toString());
+            // 清空缓存
+            byteBuffer.clear();
+            charBuffer.clear();
+            // 再次读取文本内容
+            length = channel.read(byteBuffer);
+        }
+        channel.close();
+        access.close();
+    }
+
+    /**
+     * NIO写文件
+     * @param context
+     * @param allocate
+     * @param chartName
+     * @throws IOException
+     */
+    public void write(File file, String context, int allocate, String chartName) throws IOException {
+        // FileOutputStream outputStream = new FileOutputStream(this.file); //文件内容覆盖模式
+        // --不推荐
+        FileOutputStream outputStream = new FileOutputStream(file, true); // 文件内容追加模式--推荐
+        FileChannel channel = outputStream.getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
+        byteBuffer.put(context.getBytes(chartName));
+        byteBuffer.flip();// 读取模式转换为写入模式
+        channel.write(byteBuffer);
+        channel.close();
+        if (outputStream != null) {
+            outputStream.close();
+        }
     }
 }

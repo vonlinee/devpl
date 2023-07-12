@@ -10,7 +10,19 @@ import java.util.List;
  */
 @Data
 public class GeneratorInfo {
+
+    /**
+     * 项目信息
+     */
     private ProjectInfo project;
+
+    /**
+     * 开发者信息
+     */
     private DeveloperInfo developer;
+
+    /**
+     * 模板信息
+     */
     private List<TemplateInfo> templates;
 }

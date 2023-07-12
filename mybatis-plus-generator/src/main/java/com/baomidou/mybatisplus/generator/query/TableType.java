@@ -8,5 +8,11 @@ import java.sql.DatabaseMetaData;
  */
 public enum TableType {
 
-    TABLE, VIEW, SYSTEM_TABLE, GLOBAL_TEMPORARY, LOCAL_TEMPORARY, ALIAS, SYNONYM
+    TABLE,
+    VIEW,
+    SYSTEM_TABLE,
+    GLOBAL_TEMPORARY,
+    LOCAL_TEMPORARY,
+    ALIAS,
+    SYNONYM
 }

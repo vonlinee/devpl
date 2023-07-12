@@ -22,7 +22,6 @@ import java.sql.SQLException;
 
 /**
  * PostgreSql 表数据查询
- *
  * @author hubin
  * @since 2018-01-16
  */
@@ -92,6 +91,7 @@ public class PostgreSqlQuery extends AbstractDbQuery {
 
     @Override
     public boolean isKeyIdentity(ResultSet results) throws SQLException {
-        return StringUtils.isNotBlank(results.getString("column_default")) && results.getString("column_default").contains("nextval");
+        return StringUtils.isNotBlank(results.getString("column_default")) && results.getString("column_default")
+            .contains("nextval");
     }
 }

@@ -1,6 +1,6 @@
 <template>
-    <el-dialog v-model="dialogVisiableRef" title="代码生成结果" draggable width="80%" height="80%">
-        <el-collapse v-model="activeName" accordion style="height: 80vh">
+    <el-dialog v-model="dialogVisiableRef" title="代码生成结果" draggable width="80%">
+        <el-collapse v-model="activeName" accordion>
             <el-collapse-item v-for="(item, index) in rootDirsRef" :title="item">
                 <component :is="CodeTreeView" style="height: 600px" :dir="item"></component>
             </el-collapse-item>

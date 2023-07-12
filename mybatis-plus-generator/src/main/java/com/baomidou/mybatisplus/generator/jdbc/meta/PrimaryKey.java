@@ -1,6 +1,5 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**

@@ -2,7 +2,7 @@ package io.devpl.sdk;
 
 /**
  * Holds {@link Attribute}s which can be accessed via {@link AttributeKey}.
- *
+ * <p>
  * Implementations must be Thread-safe.
  */
 public interface AttributeMap {

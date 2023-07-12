@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_field_type")
-public class FieldTypeEntity {
+public class GenFieldType {
     /**
      * id
      */

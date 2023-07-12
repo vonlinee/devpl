@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import ${package}.framework.common.query.Query;
 
 <#list importList as i>
-import ${i!};
+    import ${i!};
 </#list>
 
 /**
@@ -21,7 +21,7 @@ import ${i!};
 public class ${ClassName}Query extends Query {
 <#list queryList as field>
     <#if field.fieldComment!?length gt 0>
-    @Schema(description = "${field.fieldComment}")
+        @Schema(description = "${field.fieldComment}")
     </#if>
     private ${field.attrType} ${field.attrName};
 

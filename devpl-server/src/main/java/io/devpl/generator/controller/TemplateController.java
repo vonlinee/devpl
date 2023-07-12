@@ -6,7 +6,6 @@ import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
 import io.devpl.generator.utils.BusinessUtils;
-import io.devpl.sdk.collection.CollectionUtils;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;

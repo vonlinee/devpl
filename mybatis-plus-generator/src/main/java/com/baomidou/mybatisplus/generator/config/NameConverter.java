@@ -15,11 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-
-import java.util.Set;
 
 /**
  * 名称转换接口类

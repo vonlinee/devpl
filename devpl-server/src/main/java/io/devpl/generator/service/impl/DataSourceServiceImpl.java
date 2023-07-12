@@ -6,9 +6,8 @@ import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.config.DbType;
-import io.devpl.generator.config.GenDataSource;
 import io.devpl.generator.dao.DataSourceDao;
-import io.devpl.generator.entity.DataSourceEntity;
+import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.service.DataSourceService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +24,17 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSourceEntity> implements DataSourceService {
+public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDataSource> implements DataSourceService {
     private final DataSource dataSource;
 
     @Override
-    public PageResult<DataSourceEntity> page(Query query) {
-        IPage<DataSourceEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+    public PageResult<GenDataSource> page(Query query) {
+        IPage<GenDataSource> page = baseMapper.selectPage(getPage(query), getWrapper(query));
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
     @Override
-    public List<DataSourceEntity> getList() {
+    public List<GenDataSource> getList() {
         return baseMapper.selectList(Wrappers.emptyWrapper());
     }
 
@@ -49,24 +48,24 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
     }
 
     @Override
-    public GenDataSource get(Long datasourceId) {
+    public io.devpl.generator.config.GenDataSource get(Long datasourceId) {
         // 初始化配置信息
-        GenDataSource info = null;
+        io.devpl.generator.config.GenDataSource info = null;
         if (datasourceId.intValue() == 0) {
             try {
-                info = new GenDataSource(dataSource.getConnection());
+                info = new io.devpl.generator.config.GenDataSource(dataSource.getConnection());
             } catch (SQLException e) {
                 log.error(e.getMessage(), e);
             }
         } else {
-            info = new GenDataSource(this.getById(datasourceId));
+            info = new io.devpl.generator.config.GenDataSource(this.getById(datasourceId));
         }
 
         return info;
     }
 
     @Override
-    public boolean save(DataSourceEntity entity) {
+    public boolean save(GenDataSource entity) {
         entity.setCreateTime(new Date());
         return super.save(entity);
     }

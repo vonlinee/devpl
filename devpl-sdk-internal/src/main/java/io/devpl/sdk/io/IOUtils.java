@@ -75,6 +75,10 @@ public class IOUtils {
      * The system line separator string.
      */
     public static final String LINE_SEPARATOR;
+    /**
+     * The default buffer size to use.
+     */
+    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     static {
         // avoid security issues
@@ -83,11 +87,6 @@ public class IOUtils {
         out.println();
         LINE_SEPARATOR = buf.toString();
     }
-
-    /**
-     * The default buffer size to use.
-     */
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     /**
      * Instances should NOT be constructed in standard programming.

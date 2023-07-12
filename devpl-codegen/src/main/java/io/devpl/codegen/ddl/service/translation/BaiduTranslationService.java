@@ -24,37 +24,31 @@ import java.util.Map;
  */
 public class BaiduTranslationService implements TranslationService {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
     /**
      * 通用翻译API HTTPS 地址
      */
     private final static String UNIVERSAL_API = "https://fanyi-api.baidu.com/api/trans/vip/translate";
-
+    private final static String CHINESE = "zh";
+    private static final HttpClient client = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(3))
+        .build();
+    private static final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+        .expectContinue(true)
+        .timeout(Duration.ofSeconds(5));
     /**
      * 在个人账号信息界面-开发者信息界面查看
      */
     private final String appId;
-
     /**
      * 密钥
      */
     private final String secret;
-
-    private final static String CHINESE = "zh";
+    ObjectMapper objectMapper = new ObjectMapper();
 
     public BaiduTranslationService(String appId, String secret) {
         this.appId = appId;
         this.secret = secret;
     }
-
-    private static final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(3))
-            .build();
-
-    private static final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-            .expectContinue(true)
-            .timeout(Duration.ofSeconds(5));
 
     /**
      * 翻译成中文
@@ -64,7 +58,7 @@ public class BaiduTranslationService implements TranslationService {
     @Override
     public List<TranslationVO> toChinese(String content) {
         MultiValueMap<String, String> request = buildParameter(content, CHINESE,
-                this.appId, this.secret);
+            this.appId, this.secret);
 
         StringBuilder sb = new StringBuilder();
         sb.append("?");
@@ -77,8 +71,8 @@ public class BaiduTranslationService implements TranslationService {
         OkHttpClient okHttpClient = new OkHttpClient();
 
         Request okhttpRequest = new Request.Builder()
-                .url(url)
-                .build();
+            .url(url)
+            .build();
 
         try {
             Response response = okHttpClient.newCall(okhttpRequest).execute();

@@ -16,15 +16,15 @@ import java.util.Map;
 public final class Browser {
 
     private static final HttpClient client = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .connectTimeout(Duration.ofSeconds(3))
-            .followRedirects(HttpClient.Redirect.NORMAL)
-            .cookieHandler(new CookieManager())
-            .build();
+        .version(HttpClient.Version.HTTP_2)
+        .connectTimeout(Duration.ofSeconds(3))
+        .followRedirects(HttpClient.Redirect.NORMAL)
+        .cookieHandler(new CookieManager())
+        .build();
 
     private static final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .timeout(Duration.ofSeconds(3));
+        .version(HttpClient.Version.HTTP_2)
+        .timeout(Duration.ofSeconds(3));
 
     /**
      * 构建请求对象

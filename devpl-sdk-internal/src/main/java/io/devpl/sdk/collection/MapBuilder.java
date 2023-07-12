@@ -16,6 +16,14 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
     private final Map<K, V> map;
 
     /**
+     * 链式Map创建类
+     * @param map 要使用的Map实现类
+     */
+    public MapBuilder(Map<K, V> map) {
+        this.map = map;
+    }
+
+    /**
      * 创建Builder，默认HashMap实现
      * @param <K> Key类型
      * @param <V> Value类型
@@ -48,14 +56,6 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      */
     public static <K, V> MapBuilder<K, V> create(Map<K, V> map) {
         return new MapBuilder<>(map);
-    }
-
-    /**
-     * 链式Map创建类
-     * @param map 要使用的Map实现类
-     */
-    public MapBuilder(Map<K, V> map) {
-        this.map = map;
     }
 
     /**

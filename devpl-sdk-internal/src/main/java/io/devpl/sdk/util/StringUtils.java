@@ -19,17 +19,45 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
-    private StringUtils() {
-    }
-
     /**
      * 字符串常量：{@code "null"} <br>
      * 注意：{@code "null" != null}
      */
     public static final String NULL = "null";
-
     public static final String SINGLE_QUTATION = "'";
     public static final String NULL_STRING = "NULL";
+    /**
+     * A String for a space character.
+     * @since 3.2
+     */
+    public static final String SPACE = " ";
+    /**
+     * The empty String {@code ""}.
+     * @since 2.0
+     */
+    public static final String EMPTY = "";
+    /**
+     * A String for linefeed LF ("\n").
+     * @see <a href=
+     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
+     * JLF: Escape Sequences for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String LF = "\n";
+    /**
+     * A String for carriage return CR ("\r").
+     * @see <a href=
+     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
+     * Escape Sequences for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String CR = "\r";
+    /**
+     * Represents a failed index search.
+     * @since 2.1
+     */
+    public static final int INDEX_NOT_FOUND = -1;
+    public static final String DEFAULT_SEPARATOR = ",";
     private static final String[] EMPTY_STRING_ARRAY = {};
     private static final String FOLDER_SEPARATOR = "/";
     private static final char FOLDER_SEPARATOR_CHAR = '/';
@@ -37,6 +65,18 @@ public final class StringUtils {
     private static final String TOP_PATH = "..";
     private static final String CURRENT_PATH = ".";
     private static final char EXTENSION_SEPARATOR = '.';
+    private static final Pattern ALL_EN_WORDS = Pattern.compile("[a-zA-Z]+");
+    private static final Pattern CONTAIN_EN_WORDS = Pattern.compile(".*[a-zA-z].*");
+    private static final int STRING_BUILDER_SIZE = 256;
+    /**
+     * <p>
+     * The maximum size to which the padding(填充) constant(s) can expand.
+     * </p>
+     */
+    private static final int PAD_LIMIT = 8192;
+
+    private StringUtils() {
+    }
 
     public static String substring(String s, String b, char c) {
         int i = b.lastIndexOf(c);
@@ -81,7 +121,6 @@ public final class StringUtils {
         }
         return strings;
     }
-
 
     /**
      * <p>Checks if any of the CharSequences are empty ("") or null.</p>
@@ -160,9 +199,6 @@ public final class StringUtils {
         }
         return strings;
     }
-
-    private static final Pattern ALL_EN_WORDS = Pattern.compile("[a-zA-Z]+");
-    private static final Pattern CONTAIN_EN_WORDS = Pattern.compile(".*[a-zA-z].*");
 
     /**
      * Check whether the given object (possibly a {@code String}) is empty.
@@ -266,51 +302,6 @@ public final class StringUtils {
         }
         return false;
     }
-
-    private static final int STRING_BUILDER_SIZE = 256;
-
-    /**
-     * A String for a space character.
-     * @since 3.2
-     */
-    public static final String SPACE = " ";
-
-    /**
-     * The empty String {@code ""}.
-     * @since 2.0
-     */
-    public static final String EMPTY = "";
-
-    /**
-     * A String for linefeed LF ("\n").
-     * @see <a href=
-     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
-     * JLF: Escape Sequences for Character and String Literals</a>
-     * @since 3.2
-     */
-    public static final String LF = "\n";
-
-    /**
-     * A String for carriage return CR ("\r").
-     * @see <a href=
-     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
-     * Escape Sequences for Character and String Literals</a>
-     * @since 3.2
-     */
-    public static final String CR = "\r";
-
-    /**
-     * Represents a failed index search.
-     * @since 2.1
-     */
-    public static final int INDEX_NOT_FOUND = -1;
-
-    /**
-     * <p>
-     * The maximum size to which the padding(填充) constant(s) can expand.
-     * </p>
-     */
-    private static final int PAD_LIMIT = 8192;
 
     /**
      * Check whether the given {@code String} contains actual <em>text</em>.
@@ -422,8 +413,6 @@ public final class StringUtils {
     public static String join(final String separator, String... items) {
         return join(java.util.Arrays.asList(items).iterator(), separator);
     }
-
-    public static final String DEFAULT_SEPARATOR = ",";
 
     /**
      * 使用指定分隔符拼接字符串
@@ -1984,5 +1973,18 @@ public final class StringUtils {
      */
     public static String str(CharSequence cs) {
         return null == cs ? null : cs.toString();
+    }
+
+    /**
+     * 字符串是否以给定字符结尾
+     * @param str 字符串
+     * @param c   字符
+     * @return 是否结尾
+     */
+    public static boolean endWith(CharSequence str, char c) {
+        if (isEmpty(str)) {
+            return false;
+        }
+        return c == str.charAt(str.length() - 1);
     }
 }

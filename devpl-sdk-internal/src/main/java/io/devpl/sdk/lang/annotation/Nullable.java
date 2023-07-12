@@ -19,7 +19,6 @@ import java.lang.annotation.*;
  * <p>
  * Can be used in association with @NonNullApi or @NonNullFields to override the
  * default non-nullable semantic to nullable.
- *
  * @author Sebastien Deleuze
  * @author Juergen Hoeller
  * @since 5.0

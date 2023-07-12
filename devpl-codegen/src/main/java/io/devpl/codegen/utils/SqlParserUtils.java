@@ -145,7 +145,7 @@ public class SqlParserUtils {
             });
             // 暂时无法解析IS NOT NULL 和 IS NULL
             if (CollectionUtils.isEmpty(map) && (where.toUpperCase().contains("IS NOT NULL") || where.toUpperCase()
-                    .contains("IS NULL"))) {
+                .contains("IS NULL"))) {
                 map.put("leftExpression", where.substring(0, where.lastIndexOf("IS")));
                 map.put("operate", null);
                 map.put("rightExpression", where.substring(where.lastIndexOf("IS"), where.length()));

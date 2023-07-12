@@ -10,6 +10,14 @@ import java.util.StringTokenizer;
  */
 public class BeanUtils {
 
+    public static final Short DEFAULT_SHORT = (short) 0;
+    public static final Integer DEFAULT_INTEGER = 0;
+    public static final Long DEFAULT_LONG = 0L;
+    public static final Float DEFAULT_FLOAT = (float) 0.0;
+    public static final Double DEFAULT_DOUBLE = 0.0;
+    public static final Byte DEFAULT_BYTE = (byte) 0;
+    public static final Character DEFAULT_CHAR = (char) 0;
+
     public static boolean isGetterName(String name) {
         return name.startsWith("get") || name.startsWith("is") || name.startsWith("has");
     }
@@ -175,8 +183,8 @@ public class BeanUtils {
 
             // The method must be public
             if ((!Modifier.isPublic(method.getModifiers())) || (!Modifier.isPublic(method.getDeclaringClass()
-                    .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
-                    .equals(void.class))) {
+                .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
+                .equals(void.class))) {
                 continue;
             } else if (!ignoreCase && method.getName().equals(getName)) {
                 // If it matches the get name, it's the right method
@@ -209,23 +217,15 @@ public class BeanUtils {
 
             // The method name must match
             if (!(ignoreCase ? method.getName().equalsIgnoreCase(setName) : method.getName()
-                    .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
-                    .getDeclaringClass()
-                    .getModifiers()) || method.getParameterTypes().length != 1) continue;
+                .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
+                .getDeclaringClass()
+                .getModifiers()) || method.getParameterTypes().length != 1) continue;
 
             return method;
         }
 
         return null;
     }
-
-    public static final Short DEFAULT_SHORT = (short) 0;
-    public static final Integer DEFAULT_INTEGER = 0;
-    public static final Long DEFAULT_LONG = 0L;
-    public static final Float DEFAULT_FLOAT = (float) 0.0;
-    public static final Double DEFAULT_DOUBLE = 0.0;
-    public static final Byte DEFAULT_BYTE = (byte) 0;
-    public static final Character DEFAULT_CHAR = (char) 0;
 
     public static boolean isBooleanType(Type paramClass) {
         return paramClass == Boolean.class || paramClass == Boolean.TYPE;

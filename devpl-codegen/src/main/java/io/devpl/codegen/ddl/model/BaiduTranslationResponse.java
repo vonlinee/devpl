@@ -16,27 +16,6 @@ public class BaiduTranslationResponse {
     @JsonProperty("trans_result")
     private List<TransResult> transResult;
 
-    public static class TransResult {
-        private String src;
-        private String dst;
-
-        public String getSrc() {
-            return src;
-        }
-
-        public void setSrc(String src) {
-            this.src = src;
-        }
-
-        public String getDst() {
-            return dst;
-        }
-
-        public void setDst(String dst) {
-            this.dst = dst;
-        }
-    }
-
     public String getFrom() {
         return from;
     }
@@ -75,6 +54,27 @@ public class BaiduTranslationResponse {
 
     public void setTransResult(List<TransResult> transResult) {
         this.transResult = transResult;
+    }
+
+    public static class TransResult {
+        private String src;
+        private String dst;
+
+        public String getSrc() {
+            return src;
+        }
+
+        public void setSrc(String src) {
+            this.src = src;
+        }
+
+        public String getDst() {
+            return dst;
+        }
+
+        public void setDst(String dst) {
+            this.dst = dst;
+        }
     }
 
 }

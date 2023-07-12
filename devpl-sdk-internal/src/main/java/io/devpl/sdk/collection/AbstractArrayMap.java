@@ -15,6 +15,9 @@ import java.util.Objects;
  */
 public abstract class AbstractArrayMap<K, V> {
 
+    static final int[] EMPTY_INTS = new int[0];
+    // static final long[] EMPTY_LONGS = new long[0];
+    static final Object[] EMPTY_OBJECTS = new Object[0];
     /**
      * Attempt to spot concurrent modifications to this data structure.
      * <p>
@@ -26,18 +29,15 @@ public abstract class AbstractArrayMap<K, V> {
      * functions that change mSize (put/remove/clear).
      */
     private static final boolean CONCURRENT_MODIFICATION_EXCEPTIONS = true;
-
     /**
      * The minimum amount by which the capacity of a ArrayMap will increase.
      * This is tuned to be relatively space-efficient.
      */
     private static final int BASE_SIZE = 4;
-
     /**
      * Maximum number of entries to have in array caches.
      */
     private static final int CACHE_SIZE = 10;
-
     /**
      * Caches of small array objects to avoid spamming garbage.  The cache
      * Object[] variable is a pointer to a linked list of array objects.
@@ -48,10 +48,43 @@ public abstract class AbstractArrayMap<K, V> {
     static int mBaseCacheSize;
     static Object[] mTwiceBaseCache;
     static int mTwiceBaseCacheSize;
-
     transient int[] mHashes;
     transient int mSize;
     Object[] mArray;
+
+    /**
+     * Create a new empty ArrayMap.  The default capacity of an array map is 0, and
+     * will grow once items are added to it.
+     */
+    public AbstractArrayMap() {
+        mHashes = EMPTY_INTS;
+        mArray = EMPTY_OBJECTS;
+        mSize = 0;
+    }
+
+    /**
+     * Create a new ArrayMap with a given initial capacity.
+     */
+    @SuppressWarnings("NullAway") // allocArrays initializes mHashes and mArray.
+    public AbstractArrayMap(int capacity) {
+        if (capacity == 0) {
+            mHashes = EMPTY_INTS;
+            mArray = EMPTY_OBJECTS;
+        } else {
+            allocArrays(capacity);
+        }
+        mSize = 0;
+    }
+
+    /**
+     * Create a new ArrayMap with the mappings from the given ArrayMap.
+     */
+    public AbstractArrayMap(AbstractArrayMap<K, V> map) {
+        this();
+        if (map != null) {
+            putAll(map);
+        }
+    }
 
     private static int binarySearchHashes(int[] hashes, int N, int hash) {
         try {
@@ -81,6 +114,35 @@ public abstract class AbstractArrayMap<K, V> {
             }
         }
         return ~lo;  // value not present
+    }
+
+    @SuppressWarnings("ArrayToString")
+    private static void freeArrays(final int[] hashes, final Object[] array, final int size) {
+        if (hashes.length == (BASE_SIZE * 2)) {
+            synchronized (AbstractArrayMap.class) {
+                if (mTwiceBaseCacheSize < CACHE_SIZE) {
+                    array[0] = mTwiceBaseCache;
+                    array[1] = hashes;
+                    for (int i = (size << 1) - 1; i >= 2; i--) {
+                        array[i] = null;
+                    }
+                    mTwiceBaseCache = array;
+                    mTwiceBaseCacheSize++;
+                }
+            }
+        } else if (hashes.length == BASE_SIZE) {
+            synchronized (AbstractArrayMap.class) {
+                if (mBaseCacheSize < CACHE_SIZE) {
+                    array[0] = mBaseCache;
+                    array[1] = hashes;
+                    for (int i = (size << 1) - 1; i >= 2; i--) {
+                        array[i] = null;
+                    }
+                    mBaseCache = array;
+                    mBaseCacheSize++;
+                }
+            }
+        }
     }
 
     /**
@@ -184,73 +246,6 @@ public abstract class AbstractArrayMap<K, V> {
         }
         mHashes = new int[size];
         mArray = new Object[size << 1];
-    }
-
-    @SuppressWarnings("ArrayToString")
-    private static void freeArrays(final int[] hashes, final Object[] array, final int size) {
-        if (hashes.length == (BASE_SIZE * 2)) {
-            synchronized (AbstractArrayMap.class) {
-                if (mTwiceBaseCacheSize < CACHE_SIZE) {
-                    array[0] = mTwiceBaseCache;
-                    array[1] = hashes;
-                    for (int i = (size << 1) - 1; i >= 2; i--) {
-                        array[i] = null;
-                    }
-                    mTwiceBaseCache = array;
-                    mTwiceBaseCacheSize++;
-                }
-            }
-        } else if (hashes.length == BASE_SIZE) {
-            synchronized (AbstractArrayMap.class) {
-                if (mBaseCacheSize < CACHE_SIZE) {
-                    array[0] = mBaseCache;
-                    array[1] = hashes;
-                    for (int i = (size << 1) - 1; i >= 2; i--) {
-                        array[i] = null;
-                    }
-                    mBaseCache = array;
-                    mBaseCacheSize++;
-                }
-            }
-        }
-    }
-
-    static final int[] EMPTY_INTS = new int[0];
-    // static final long[] EMPTY_LONGS = new long[0];
-    static final Object[] EMPTY_OBJECTS = new Object[0];
-
-    /**
-     * Create a new empty ArrayMap.  The default capacity of an array map is 0, and
-     * will grow once items are added to it.
-     */
-    public AbstractArrayMap() {
-        mHashes = EMPTY_INTS;
-        mArray = EMPTY_OBJECTS;
-        mSize = 0;
-    }
-
-    /**
-     * Create a new ArrayMap with a given initial capacity.
-     */
-    @SuppressWarnings("NullAway") // allocArrays initializes mHashes and mArray.
-    public AbstractArrayMap(int capacity) {
-        if (capacity == 0) {
-            mHashes = EMPTY_INTS;
-            mArray = EMPTY_OBJECTS;
-        } else {
-            allocArrays(capacity);
-        }
-        mSize = 0;
-    }
-
-    /**
-     * Create a new ArrayMap with the mappings from the given ArrayMap.
-     */
-    public AbstractArrayMap(AbstractArrayMap<K, V> map) {
-        this();
-        if (map != null) {
-            putAll(map);
-        }
     }
 
     /**
@@ -396,7 +391,8 @@ public abstract class AbstractArrayMap<K, V> {
      */
     public V setValueAt(int index, V value) {
         index = (index << 1) + 1;
-        @SuppressWarnings("unchecked") V old = (V) mArray[index];
+        @SuppressWarnings("unchecked")
+        V old = (V) mArray[index];
         mArray[index] = value;
         return old;
     }
@@ -430,7 +426,8 @@ public abstract class AbstractArrayMap<K, V> {
         if (index >= 0) {
             // 存在该key，直接赋值即可
             index = (index << 1) + 1;
-            @SuppressWarnings("unchecked") final V old = (V) mArray[index];
+            @SuppressWarnings("unchecked")
+            final V old = (V) mArray[index];
             mArray[index] = value;
             return old;
         }
@@ -585,7 +582,8 @@ public abstract class AbstractArrayMap<K, V> {
             throw new ConcurrentModificationException();
         }
         mSize = nsize;
-        @SuppressWarnings("unchecked") final V value = (V) old;
+        @SuppressWarnings("unchecked")
+        final V value = (V) old;
         return value;
     }
 

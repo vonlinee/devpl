@@ -10,11 +10,10 @@ import lombok.Data;
  */
 @Data
 public class ColumnDefinitionWrapper {
+    final SQLColumnDefinition columnDefinition;
     private String columnName;
     private Boolean hasDefaultExpression;
     private String defaultExpression;
-
-    final SQLColumnDefinition columnDefinition;
 
     public ColumnDefinitionWrapper(SQLColumnDefinition columnDefinition) {
         this.columnDefinition = columnDefinition;

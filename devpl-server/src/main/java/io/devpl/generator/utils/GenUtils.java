@@ -7,8 +7,8 @@ import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.GenDataSource;
 import io.devpl.generator.config.query.AbstractQuery;
-import io.devpl.generator.entity.TableEntity;
-import io.devpl.generator.entity.TableFieldInfo;
+import io.devpl.generator.entity.GenTable;
+import io.devpl.generator.entity.GenTableField;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.DatabaseMetaData;
@@ -27,8 +27,8 @@ public class GenUtils {
      * 根据数据源，获取全部数据表
      * @param datasource 数据源
      */
-    public static List<TableEntity> getTableList(GenDataSource datasource) {
-        List<TableEntity> tableList = new ArrayList<>();
+    public static List<GenTable> getTableList(GenDataSource datasource) {
+        List<GenTable> tableList = new ArrayList<>();
         try {
             AbstractQuery query = datasource.getDbQuery();
 
@@ -36,7 +36,7 @@ public class GenUtils {
             PreparedStatement preparedStatement = datasource.getConnection().prepareStatement(query.tableSql(null));
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                TableEntity table = new TableEntity();
+                GenTable table = new GenTable();
                 table.setTableName(rs.getString(query.tableName()));
                 table.setTableComment(rs.getString(query.tableComment()));
                 table.setDatasourceId(datasource.getId());
@@ -56,7 +56,7 @@ public class GenUtils {
      * @param datasource 数据源
      * @param tableName  表名
      */
-    public static TableEntity getTable(GenDataSource datasource, String tableName) {
+    public static GenTable getTable(GenDataSource datasource, String tableName) {
         try {
             AbstractQuery query = datasource.getDbQuery();
 
@@ -65,7 +65,7 @@ public class GenUtils {
                 .prepareStatement(query.tableSql(tableName));
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                TableEntity table = new TableEntity();
+                GenTable table = new GenTable();
                 table.setTableName(rs.getString(query.tableName()));
                 table.setTableComment(rs.getString(query.tableComment()));
                 table.setDatasourceId(datasource.getId());
@@ -85,8 +85,8 @@ public class GenUtils {
      * @param tableId    表ID
      * @param tableName  表名
      */
-    public static List<TableFieldInfo> getTableFieldList(GenDataSource datasource, Long tableId, String tableName) {
-        List<TableFieldInfo> tableFieldList = new ArrayList<>();
+    public static List<GenTableField> getTableFieldList(GenDataSource datasource, Long tableId, String tableName) {
+        List<GenTableField> tableFieldList = new ArrayList<>();
 
         try {
             AbstractQuery query = datasource.getDbQuery();
@@ -100,7 +100,7 @@ public class GenUtils {
             PreparedStatement preparedStatement = datasource.getConnection().prepareStatement(tableFieldsSql);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                TableFieldInfo field = new TableFieldInfo();
+                GenTableField field = new GenTableField();
                 field.setTableId(tableId);
                 field.setFieldName(rs.getString(query.fieldName()));
                 String fieldType = rs.getString(query.fieldType());

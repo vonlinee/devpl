@@ -86,18 +86,18 @@ public class FileSystemUtils {
             if (osName.contains("windows")) {
                 os = WINDOWS;
             } else if (osName.contains("linux") ||
-                    osName.contains("sun os") ||
-                    osName.contains("sunos") ||
-                    osName.contains("solaris") ||
-                    osName.contains("mpe/ix") ||
-                    osName.contains("freebsd") ||
-                    osName.contains("irix") ||
-                    osName.contains("digital unix") ||
-                    osName.contains("unix") ||
-                    osName.contains("mac os x")) {
+                osName.contains("sun os") ||
+                osName.contains("sunos") ||
+                osName.contains("solaris") ||
+                osName.contains("mpe/ix") ||
+                osName.contains("freebsd") ||
+                osName.contains("irix") ||
+                osName.contains("digital unix") ||
+                osName.contains("unix") ||
+                osName.contains("mac os x")) {
                 os = UNIX;
             } else if (osName.contains("hp-ux") ||
-                    osName.contains("aix")) {
+                osName.contains("aix")) {
                 os = POSIX_UNIX;
             } else {
                 os = OTHER;
@@ -210,7 +210,7 @@ public class FileSystemUtils {
                 throw new IllegalStateException("Unsupported operating system");
             default:
                 throw new IllegalStateException(
-                        "Exception caught when determining operating system");
+                    "Exception caught when determining operating system");
         }
     }
 
@@ -246,8 +246,8 @@ public class FileSystemUtils {
         }
         // all lines are blank
         throw new IOException(
-                "Command line 'dir /-c' did not return any info " +
-                        "for path '" + path + "'");
+            "Command line 'dir /-c' did not return any info " +
+                "for path '" + path + "'");
     }
 
     /**
@@ -289,8 +289,8 @@ public class FileSystemUtils {
         }
         if (j < 0) {
             throw new IOException(
-                    "Command line 'dir /-c' did not return valid info " +
-                            "for path '" + path + "'");
+                "Command line 'dir /-c' did not return valid info " +
+                    "for path '" + path + "'");
         }
 
         // remove commas and dots in the bytes count
@@ -328,15 +328,15 @@ public class FileSystemUtils {
             flags += "P";
         }
         String[] cmdAttribs =
-                (flags.length() > 1 ? new String[]{"df", flags, path} : new String[]{"df", path});
+            (flags.length() > 1 ? new String[]{"df", flags, path} : new String[]{"df", path});
 
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
         List<?> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
-                    "Command line 'df' did not return info as expected " +
-                            "for path '" + path + "'- response was " + lines);
+                "Command line 'df' did not return info as expected " +
+                    "for path '" + path + "'- response was " + lines);
         }
         String line2 = (String) lines.get(1); // the line we're interested in
 
@@ -349,8 +349,8 @@ public class FileSystemUtils {
                 tok = new StringTokenizer(line3, " ");
             } else {
                 throw new IOException(
-                        "Command line 'df' did not return data as expected " +
-                                "for path '" + path + "'- check path is valid");
+                    "Command line 'df' did not return data as expected " +
+                        "for path '" + path + "'- check path is valid");
             }
         } else {
             tok.nextToken(); // Ignore Filesystem
@@ -375,15 +375,15 @@ public class FileSystemUtils {
             long bytes = Long.parseLong(freeSpace);
             if (bytes < 0) {
                 throw new IOException(
-                        "Command line 'df' did not find free space in response " +
-                                "for path '" + path + "'- check path is valid");
+                    "Command line 'df' did not find free space in response " +
+                        "for path '" + path + "'- check path is valid");
             }
             return bytes;
 
         } catch (NumberFormatException ex) {
             throw new IOException(
-                    "Command line 'df' did not return numeric data as expected " +
-                            "for path '" + path + "'- check path is valid");
+                "Command line 'df' did not return numeric data as expected " +
+                    "for path '" + path + "'- check path is valid");
         }
     }
 
@@ -428,21 +428,21 @@ public class FileSystemUtils {
             if (proc.exitValue() != 0) {
                 // os command problem, throw exception
                 throw new IOException(
-                        "Command line returned OS error code '" + proc.exitValue() +
-                                "' for command " + Arrays.asList(cmdAttribs));
+                    "Command line returned OS error code '" + proc.exitValue() +
+                        "' for command " + Arrays.asList(cmdAttribs));
             }
             if (lines.size() == 0) {
                 // unknown problem, throw exception
                 throw new IOException(
-                        "Command line did not return any info " +
-                                "for command " + Arrays.asList(cmdAttribs));
+                    "Command line did not return any info " +
+                        "for command " + Arrays.asList(cmdAttribs));
             }
             return lines;
 
         } catch (InterruptedException ex) {
             throw new IOException(
-                    "Command line threw an InterruptedException '" + ex.getMessage() +
-                            "' for command " + Arrays.asList(cmdAttribs));
+                "Command line threw an InterruptedException '" + ex.getMessage() +
+                    "' for command " + Arrays.asList(cmdAttribs));
         } finally {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);

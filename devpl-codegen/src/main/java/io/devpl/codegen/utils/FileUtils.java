@@ -1,7 +1,6 @@
 package io.devpl.codegen.utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
@@ -13,7 +12,6 @@ public class FileUtils {
      * not a directory then an IOException is thrown.
      * If the directory cannot be created (or does not already exist)
      * then an IOException is thrown.
-     *
      * @param directory directory to create, must not be {@code null}
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException          if the directory cannot be created or the file already exists but is not a directory
@@ -44,7 +42,6 @@ public class FileUtils {
     /**
      * Makes any necessary but nonexistent parent directories for a given File. If the parent directory cannot be
      * created then an IOException is thrown.
-     *
      * @param file file with parent to create, must not be {@code null}
      * @throws NullPointerException if the file is {@code null}
      * @throws IOException          if the parent directory cannot be created

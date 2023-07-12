@@ -57,6 +57,17 @@ public class TestTrees {
         System.out.println("总时间：" + (end - start));
     }
 
+    public static List<TaskVersionLog> getLog(String id, String superId, int row) {
+        List<TaskVersionLog> list = new ArrayList<>();
+        for (int index = 1; index <= row; index++) {
+            TaskVersionLog v1 = new TaskVersionLog();
+            v1.setId(id + "-" + index);
+            v1.setSuperId(superId);
+            list.add(v1);
+        }
+        return list;
+    }
+
     @Data
     static class Tree {
         /**
@@ -79,17 +90,6 @@ public class TestTrees {
          */
         private List<Tree> children;
 
-    }
-
-    public static List<TaskVersionLog> getLog(String id, String superId, int row) {
-        List<TaskVersionLog> list = new ArrayList<>();
-        for (int index = 1; index <= row; index++) {
-            TaskVersionLog v1 = new TaskVersionLog();
-            v1.setId(id + "-" + index);
-            v1.setSuperId(superId);
-            list.add(v1);
-        }
-        return list;
     }
 
 }

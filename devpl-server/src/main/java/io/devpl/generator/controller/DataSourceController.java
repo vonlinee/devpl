@@ -3,9 +3,8 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.utils.Result;
-import io.devpl.generator.config.GenDataSource;
-import io.devpl.generator.entity.DataSourceEntity;
-import io.devpl.generator.entity.TableEntity;
+import io.devpl.generator.entity.GenDataSource;
+import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.utils.DbUtils;
 import io.devpl.generator.utils.GenUtils;
@@ -32,21 +31,21 @@ public class DataSourceController {
      * @return
      */
     @GetMapping("/datasource/page")
-    public Result<PageResult<DataSourceEntity>> page(Query query) {
-        PageResult<DataSourceEntity> page = datasourceService.page(query);
+    public Result<PageResult<GenDataSource>> page(Query query) {
+        PageResult<GenDataSource> page = datasourceService.page(query);
         return Result.ok(page);
     }
 
     @GetMapping("/datasource/list")
-    public Result<List<DataSourceEntity>> list() {
-        List<DataSourceEntity> list = datasourceService.getList();
+    public Result<List<GenDataSource>> list() {
+        List<GenDataSource> list = datasourceService.getList();
 
         return Result.ok(list);
     }
 
     @GetMapping("/datasource/{id}")
-    public Result<DataSourceEntity> get(@PathVariable("id") Long id) {
-        DataSourceEntity data = datasourceService.getById(id);
+    public Result<GenDataSource> get(@PathVariable("id") Long id) {
+        GenDataSource data = datasourceService.getById(id);
 
         return Result.ok(data);
     }
@@ -54,9 +53,9 @@ public class DataSourceController {
     @GetMapping("/datasource/test/{id}")
     public Result<String> test(@PathVariable("id") Long id) {
         try {
-            DataSourceEntity entity = datasourceService.getById(id);
+            GenDataSource entity = datasourceService.getById(id);
 
-            DbUtils.getConnection(new GenDataSource(entity));
+            DbUtils.getConnection(new io.devpl.generator.config.GenDataSource(entity));
             return Result.ok("连接成功");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -65,14 +64,14 @@ public class DataSourceController {
     }
 
     @PostMapping("/datasource")
-    public Result<String> save(@RequestBody DataSourceEntity entity) {
+    public Result<String> save(@RequestBody GenDataSource entity) {
         datasourceService.save(entity);
 
         return Result.ok();
     }
 
     @PutMapping("/datasource")
-    public Result<String> update(@RequestBody DataSourceEntity entity) {
+    public Result<String> update(@RequestBody GenDataSource entity) {
         datasourceService.updateById(entity);
 
         return Result.ok();
@@ -90,12 +89,12 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list/{id}")
-    public Result<List<TableEntity>> tableList(@PathVariable("id") Long id) {
+    public Result<List<GenTable>> tableList(@PathVariable("id") Long id) {
         try {
             // 获取数据源
-            GenDataSource datasource = datasourceService.get(id);
+            io.devpl.generator.config.GenDataSource datasource = datasourceService.get(id);
             // 根据数据源，获取全部数据表
-            List<TableEntity> tableList = GenUtils.getTableList(datasource);
+            List<GenTable> tableList = GenUtils.getTableList(datasource);
             return Result.ok(tableList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

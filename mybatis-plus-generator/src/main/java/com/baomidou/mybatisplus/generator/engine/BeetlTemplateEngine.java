@@ -41,7 +41,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             method = GroupTemplate.class.getDeclaredMethod("getTemplate", Object.class);
         } catch (NoSuchMethodException e) {
             try {
-                //3.2.x 方法签名修改成了object,其他低版本为string
+                // 3.2.x 方法签名修改成了object,其他低版本为string
                 method = GroupTemplate.class.getDeclaredMethod("getTemplate", String.class);
             } catch (NoSuchMethodException exception) {
                 throw new RuntimeException(exception);

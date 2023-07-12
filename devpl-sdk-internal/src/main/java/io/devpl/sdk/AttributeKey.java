@@ -16,6 +16,10 @@ public final class AttributeKey<T> extends AbstractConstant<AttributeKey<T>> {
         }
     };
 
+    private AttributeKey(int id, String name) {
+        super(id, name);
+    }
+
     /**
      * Returns the singleton instance of the {@link AttributeKey} which has the specified {@code name}.
      */
@@ -43,9 +47,5 @@ public final class AttributeKey<T> extends AbstractConstant<AttributeKey<T>> {
     @SuppressWarnings("unchecked")
     public static <T> AttributeKey<T> valueOf(Class<?> firstNameComponent, String secondNameComponent) {
         return (AttributeKey<T>) pool.valueOf(firstNameComponent, secondNameComponent);
-    }
-
-    private AttributeKey(int id, String name) {
-        super(id, name);
     }
 }

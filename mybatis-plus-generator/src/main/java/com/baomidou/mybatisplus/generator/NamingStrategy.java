@@ -65,7 +65,7 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的前缀，然后截取前缀
         return prefix.stream().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
-                .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
+            .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
     }
 
     /**
@@ -90,7 +90,7 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的后缀，然后截取后缀
         return suffix.stream().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
-                .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
+            .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
     }
 
     /**

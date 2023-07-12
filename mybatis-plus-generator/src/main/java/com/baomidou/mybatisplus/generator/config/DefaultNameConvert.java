@@ -21,12 +21,14 @@ public class DefaultNameConvert implements NameConverter {
 
     @Override
     public String entityNameConvert(IntrospectedTable tableInfo) {
-        return NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity().getNamingStrategy(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
+        return NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity()
+            .getNamingStrategy(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
     }
 
     @Override
     public String propertyNameConvert(String propertyName) {
-        return processName(propertyName, strategyConfig.entity().getColumnNamingStrategy(), strategyConfig.getFieldPrefix(), strategyConfig.getFieldSuffix());
+        return processName(propertyName, strategyConfig.entity()
+            .getColumnNamingStrategy(), strategyConfig.getFieldPrefix(), strategyConfig.getFieldSuffix());
     }
 
     private String processName(String name, NamingStrategy strategy, Set<String> prefix, Set<String> suffix) {

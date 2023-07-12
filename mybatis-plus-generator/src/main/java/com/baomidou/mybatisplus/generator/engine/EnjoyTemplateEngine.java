@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.generator.config.builder.Context;
 import com.jfinal.template.Engine;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 /**

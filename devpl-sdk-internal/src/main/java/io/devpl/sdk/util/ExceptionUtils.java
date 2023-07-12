@@ -14,7 +14,6 @@ public class ExceptionUtils {
 
     /**
      * Assemble the detail message for the throwable with all of its cause included (at most 10 causes).
-     *
      * @param ex the exception
      * @return the message along with its causes
      */
@@ -26,7 +25,7 @@ public class ExceptionUtils {
         List<Throwable> causes = new LinkedList<>();
         int counter = 0;
         Throwable current = ex;
-        //retrieve up to 10 causes
+        // retrieve up to 10 causes
         while (current.getCause() != null && counter < 10) {
             Throwable next = current.getCause();
             causes.add(next);

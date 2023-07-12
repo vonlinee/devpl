@@ -1,7 +1,10 @@
 package io.devpl.sdk;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * 用于方法间的数据传输，可以动态地存放数据

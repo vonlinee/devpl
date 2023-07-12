@@ -31,32 +31,26 @@ public class Context {
      * 路径配置信息
      */
     private final Map<OutputFile, String> pathInfo = new HashMap<>();
-
-    /**
-     * 策略配置信息
-     */
-    private StrategyConfig strategyConfig;
-
-    /**
-     * 全局配置信息
-     */
-    private GlobalConfig globalConfig;
-
-    /**
-     * 注入配置信息
-     */
-    private InjectionConfig injectionConfig;
-
     /**
      * 包配置信息
      */
     private final PackageConfig packageConfig;
-
     /**
      * 数据库配置信息
      */
     private final DataSourceConfig dataSourceConfig;
-
+    /**
+     * 策略配置信息
+     */
+    private StrategyConfig strategyConfig;
+    /**
+     * 全局配置信息
+     */
+    private GlobalConfig globalConfig;
+    /**
+     * 注入配置信息
+     */
+    private InjectionConfig injectionConfig;
     /**
      * 数据查询实例
      * @since 3.5.3
@@ -95,21 +89,6 @@ public class Context {
         return pathInfoHandler.getPathInfo();
     }
 
-    public Context setStrategyConfig(StrategyConfig strategyConfig) {
-        this.strategyConfig = strategyConfig;
-        return this;
-    }
-
-    public Context setGlobalConfig(GlobalConfig globalConfig) {
-        this.globalConfig = globalConfig;
-        return this;
-    }
-
-    public Context setInjectionConfig(InjectionConfig injectionConfig) {
-        this.injectionConfig = injectionConfig;
-        return this;
-    }
-
     public TemplateConfig getTemplateConfig() {
         return templateConfig;
     }
@@ -142,13 +121,28 @@ public class Context {
         return strategyConfig;
     }
 
+    public Context setStrategyConfig(StrategyConfig strategyConfig) {
+        this.strategyConfig = strategyConfig;
+        return this;
+    }
+
     public GlobalConfig getGlobalConfig() {
         return globalConfig;
+    }
+
+    public Context setGlobalConfig(GlobalConfig globalConfig) {
+        this.globalConfig = globalConfig;
+        return this;
     }
 
     @Nullable
     public InjectionConfig getInjectionConfig() {
         return injectionConfig;
+    }
+
+    public Context setInjectionConfig(InjectionConfig injectionConfig) {
+        this.injectionConfig = injectionConfig;
+        return this;
     }
 
     public PackageConfig getPackageConfig() {

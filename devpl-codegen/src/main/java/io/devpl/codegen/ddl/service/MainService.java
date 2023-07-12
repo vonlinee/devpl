@@ -51,10 +51,10 @@ public class MainService {
 
     private boolean isAdditional(String canonicalText) {
         return (StringUtils.equals(Constant.STRING_PACKAGE, canonicalText)
-                || StringUtils.equals(Constant.DATE_PACKAGE, canonicalText)
-                || StringUtils.equals(Constant.BIG_DECIMAL_PACKAGE, canonicalText)
-                || StringUtils.equals(Constant.LOCAL_DATE, canonicalText)
-                || StringUtils.equals(Constant.LOCAL_TIME, canonicalText)
-                || StringUtils.equals(Constant.LOCAL_DATE_TIME, canonicalText));
+            || StringUtils.equals(Constant.DATE_PACKAGE, canonicalText)
+            || StringUtils.equals(Constant.BIG_DECIMAL_PACKAGE, canonicalText)
+            || StringUtils.equals(Constant.LOCAL_DATE, canonicalText)
+            || StringUtils.equals(Constant.LOCAL_TIME, canonicalText)
+            || StringUtils.equals(Constant.LOCAL_DATE_TIME, canonicalText));
     }
 }

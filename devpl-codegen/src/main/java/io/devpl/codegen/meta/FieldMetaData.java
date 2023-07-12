@@ -22,7 +22,6 @@ public class FieldMetaData {
      * 数据类型名称
      * java class name
      * 使用字符串来表示任意值，增加灵活性，使用时需解析此值得到相应的类型
-     *
      * @see java.sql.Types
      */
     private String dataTypeName;

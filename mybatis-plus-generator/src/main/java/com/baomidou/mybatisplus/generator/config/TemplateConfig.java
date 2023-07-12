@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 模板路径配置项
- *
  * @author tzg hubin
  * @since 2017-06-17
  */
@@ -85,7 +84,6 @@ public class TemplateConfig {
 
     /**
      * 当模板赋值为空时进行日志提示打印
-     *
      * @param value        模板值
      * @param templateType 模板类型
      */
@@ -97,7 +95,6 @@ public class TemplateConfig {
 
     /**
      * 获取实体模板路径
-     *
      * @param kotlin 是否kotlin
      * @return 模板路径
      */
@@ -113,7 +110,6 @@ public class TemplateConfig {
 
     /**
      * 禁用模板
-     *
      * @param templateTypes 模板类型
      * @return this
      * @since 3.3.2
@@ -125,7 +121,7 @@ public class TemplateConfig {
                     case ENTITY:
                         this.entity = null;
                         this.entityKt = null;
-                        //暂时没其他多的需求,使用一个单独的boolean变量进行支持一下.
+                        // 暂时没其他多的需求,使用一个单独的boolean变量进行支持一下.
                         this.disableEntity = true;
                         break;
                     case CONTROLLER:
@@ -152,7 +148,6 @@ public class TemplateConfig {
 
     /**
      * 禁用全部模板
-     *
      * @return this
      * @since 3.5.0
      */
@@ -182,7 +177,6 @@ public class TemplateConfig {
 
     /**
      * 模板路径配置构建者
-     *
      * @author nieqiurong 3.5.0
      */
     public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<TemplateConfig> {
@@ -198,7 +192,6 @@ public class TemplateConfig {
 
         /**
          * 禁用所有模板
-         *
          * @return this
          */
         public Builder disable() {
@@ -208,7 +201,6 @@ public class TemplateConfig {
 
         /**
          * 禁用模板
-         *
          * @return this
          */
         public Builder disable(@NotNull TemplateType... templateTypes) {
@@ -218,7 +210,6 @@ public class TemplateConfig {
 
         /**
          * 设置实体模板路径(JAVA)
-         *
          * @param entityTemplate 实体模板
          * @return this
          */
@@ -230,7 +221,6 @@ public class TemplateConfig {
 
         /**
          * 设置实体模板路径(kotlin)
-         *
          * @param entityKtTemplate 实体模板
          * @return this
          */
@@ -242,8 +232,7 @@ public class TemplateConfig {
 
         /**
          * 设置service模板路径
-         *
-         * @param serviceTemplate     service接口模板路径
+         * @param serviceTemplate service接口模板路径
          * @return this
          */
         public Builder service(@NotNull String serviceTemplate) {
@@ -253,7 +242,6 @@ public class TemplateConfig {
 
         /**
          * 设置serviceImpl模板路径
-         *
          * @param serviceImplTemplate service实现类模板路径
          * @return this
          */
@@ -264,7 +252,6 @@ public class TemplateConfig {
 
         /**
          * 设置mapper模板路径
-         *
          * @param mapperTemplate mapper模板路径
          * @return this
          */
@@ -275,7 +262,6 @@ public class TemplateConfig {
 
         /**
          * 设置mapperXml模板路径
-         *
          * @param xmlTemplate xml模板路径
          * @return this
          */
@@ -286,7 +272,6 @@ public class TemplateConfig {
 
         /**
          * 设置控制器模板路径
-         *
          * @param controllerTemplate 控制器模板路径
          * @return this
          */
@@ -297,7 +282,6 @@ public class TemplateConfig {
 
         /**
          * 构建模板配置对象
-         *
          * @return 模板配置对象
          */
         @Override

@@ -1,6 +1,9 @@
 package io.devpl.codegen.ddl.utils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Utils {
     // 首先初始化一个字符数组，用来存放每个16进制字符
     private static final char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
-            'e', 'f'};
+        'e', 'f'};
 
     /**
      * 获得一个字符串的MD5值

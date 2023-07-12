@@ -7,13 +7,12 @@ import java.util.function.Supplier;
  */
 public final class DataClass {
 
+    private static final DataClass INSTANCE = new DataClass(() -> new MapDataObject(5));
     private Supplier<DataObject> supplier;
 
     public DataClass(Supplier<DataObject> supplier) {
         this.supplier = supplier;
     }
-
-    private static final DataClass INSTANCE = new DataClass(() -> new MapDataObject(5));
 
     public static DataObject newObject() {
         return INSTANCE.supplier.get();

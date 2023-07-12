@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedColumn;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import com.baomidou.mybatisplus.generator.type.TypeConverter;
-import com.baomidou.mybatisplus.generator.util.JdbcUtils;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.jdbc.meta.TableMetadata;
+import com.baomidou.mybatisplus.generator.type.TypeConverter;
+import com.baomidou.mybatisplus.generator.util.JdbcUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         boolean isInclude = includeTables.size() > 0;
         boolean isExclude = excludeTables.size() > 0;
 
-        //所有的表信息
+        // 所有的表信息
         final List<IntrospectedTable> tableList = new ArrayList<>();
         try (Connection connection = dataSourceConfig.getConnection()) {
             final String catalog = connection.getCatalog();
@@ -71,7 +71,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);
             List<TableMetadata> tableMetadataList = JdbcUtils.extractRows(resultSet, TableMetadata.class);
 
-            //需要反向生成或排除的表信息
+            // 需要反向生成或排除的表信息
             List<IntrospectedTable> includeTableList = new ArrayList<>();
             List<IntrospectedTable> excludeTableList = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                 // 将已经存在的表移除，获取配置中数据库不存在的表
                 if (!notExistTables.isEmpty()) {
                     for (IntrospectedTable tabInfo : tableList) {
-                        //解决可能大小写不敏感的情况导致无法移除掉
+                        // 解决可能大小写不敏感的情况导致无法移除掉
                         notExistTables.remove(tabInfo.getName().toLowerCase());
                     }
                 }

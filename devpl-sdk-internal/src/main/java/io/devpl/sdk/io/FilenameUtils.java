@@ -1,13 +1,7 @@
 package io.devpl.sdk.io;
 
 import java.io.File;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,24 +63,19 @@ import java.util.regex.Pattern;
  */
 public class FilenameUtils {
 
-    private static final String[] EMPTY_STRING_ARRAY = {};
-
-    private static final String EMPTY_STRING = "";
-
-    private static final int NOT_FOUND = -1;
-
     /**
      * The extension separator character.
      * @since 1.4
      */
     public static final char EXTENSION_SEPARATOR = '.';
-
     /**
      * The extension separator String.
      * @since 1.4
      */
     public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
-
+    private static final String[] EMPTY_STRING_ARRAY = {};
+    private static final String EMPTY_STRING = "";
+    private static final int NOT_FOUND = -1;
     /**
      * The Unix separator character.
      */
@@ -106,6 +95,13 @@ public class FilenameUtils {
      * The separator character that is the opposite of the system separator.
      */
     private static final char OTHER_SEPARATOR;
+    private static final Pattern IPV4_PATTERN = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
+    private static final int IPV4_MAX_OCTET_VALUE = 255;
+    private static final int IPV6_MAX_HEX_GROUPS = 8;
+    private static final int IPV6_MAX_HEX_DIGITS_PER_GROUP = 4;
+    private static final int MAX_UNSIGNED_SHORT = 0xffff;
+    private static final int BASE_16 = 16;
+    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
 
     static {
         if (isSystemWindows()) {
@@ -1428,8 +1424,7 @@ public class FilenameUtils {
         return isIPv6Address(name) || isRFC3986HostName(name);
     }
 
-    private static final Pattern IPV4_PATTERN = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
-    private static final int IPV4_MAX_OCTET_VALUE = 255;
+    // copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet6Address
 
     /**
      * Checks whether a given string represents a valid IPv4 address.
@@ -1458,13 +1453,6 @@ public class FilenameUtils {
 
         return true;
     }
-
-    private static final int IPV6_MAX_HEX_GROUPS = 8;
-    private static final int IPV6_MAX_HEX_DIGITS_PER_GROUP = 4;
-    private static final int MAX_UNSIGNED_SHORT = 0xffff;
-    private static final int BASE_16 = 16;
-
-    // copied from org.apache.commons.validator.routines.InetAddressValidator#isValidInet6Address
 
     /**
      * Checks whether a given string represents a valid IPv6 address.
@@ -1529,8 +1517,6 @@ public class FilenameUtils {
         }
         return validOctets <= IPV6_MAX_HEX_GROUPS && (validOctets >= IPV6_MAX_HEX_GROUPS || containsCompressedZeroes);
     }
-
-    private static final Pattern REG_NAME_PART_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-]*$");
 
     /**
      * Checks whether a given string is a valid host name according to

@@ -22,7 +22,6 @@ import java.util.*;
 /**
  * h2数据库关键字处理
  * http://www.h2database.com/html/advanced.html#keywords
- *
  * @author nieqiurong 2020/5/7.
  * @since 3.3.2
  */

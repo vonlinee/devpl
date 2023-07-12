@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_base_class")
-public class BaseClassEntity {
+public class GenBaseClass {
     /**
      * id
      */

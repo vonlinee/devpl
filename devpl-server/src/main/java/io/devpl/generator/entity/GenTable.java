@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @TableName("gen_table")
-public class TableEntity {
+public class GenTable {
 
     @TableId
     private Long id;
@@ -87,5 +87,5 @@ public class TableEntity {
      * 字段列表
      */
     @TableField(exist = false)
-    private List<TableFieldInfo> fieldList;
+    private List<GenTableField> fieldList;
 }

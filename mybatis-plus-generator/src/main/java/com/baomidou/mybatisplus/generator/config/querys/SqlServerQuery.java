@@ -20,7 +20,6 @@ import java.sql.SQLException;
 
 /**
  * SqlServer 表数据查询
- *
  * @author hubin
  * @since 2018-01-16
  */

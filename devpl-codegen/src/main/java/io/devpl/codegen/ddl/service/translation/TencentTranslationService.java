@@ -20,13 +20,12 @@ public class TencentTranslationService implements TranslationService {
     private final String secretId;
 
     private final String secretKey;
+    private final Pattern p = Pattern.compile("\\[([^]]*)]");
 
     public TencentTranslationService(String secretId, String secretKey) {
         this.secretId = secretId;
         this.secretKey = secretKey;
     }
-
-    private final Pattern p = Pattern.compile("\\[([^]]*)]");
 
     @Override
     public List<TranslationVO> toChinese(String content) {
@@ -44,8 +43,8 @@ public class TencentTranslationService implements TranslationService {
         Matcher targetTextMatcher = p.matcher(targetText);
         while (contentMatcher.find() && targetTextMatcher.find()) {
             translationVOList.add(new TranslationVO(contentMatcher.group()
-                    .substring(1, contentMatcher.group().length() - 1),
-                    targetTextMatcher.group().substring(1, targetTextMatcher.group().length() - 1)));
+                .substring(1, contentMatcher.group().length() - 1),
+                targetTextMatcher.group().substring(1, targetTextMatcher.group().length() - 1)));
         }
         return translationVOList;
     }

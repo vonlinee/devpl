@@ -3,8 +3,8 @@ package io.devpl.generator.service.impl;
 import cn.hutool.core.text.NamingCase;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.dao.TableFieldDao;
-import io.devpl.generator.entity.FieldTypeEntity;
-import io.devpl.generator.entity.TableFieldInfo;
+import io.devpl.generator.entity.GenFieldType;
+import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.enums.AutoFillEnum;
 import io.devpl.generator.service.FieldTypeService;
 import io.devpl.generator.service.TableFieldService;
@@ -19,11 +19,11 @@ import java.util.Map;
  */
 @Service
 @AllArgsConstructor
-public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, TableFieldInfo> implements TableFieldService {
+public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTableField> implements TableFieldService {
     private final FieldTypeService fieldTypeService;
 
     @Override
-    public List<TableFieldInfo> getByTableId(Long tableId) {
+    public List<GenTableField> getByTableId(Long tableId) {
         return baseMapper.getByTableId(tableId);
     }
 
@@ -33,23 +33,23 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, TableF
     }
 
     @Override
-    public void updateTableField(Long tableId, List<TableFieldInfo> tableFieldList) {
+    public void updateTableField(Long tableId, List<GenTableField> tableFieldList) {
         // 更新字段数据
         int sort = 0;
-        for (TableFieldInfo tableField : tableFieldList) {
+        for (GenTableField tableField : tableFieldList) {
             tableField.setSort(sort++);
             this.updateById(tableField);
         }
     }
 
-    public void initFieldList(List<TableFieldInfo> tableFieldList) {
+    public void initFieldList(List<GenTableField> tableFieldList) {
         // 字段类型、属性类型映射
-        Map<String, FieldTypeEntity> fieldTypeMap = fieldTypeService.getMap();
+        Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
         int index = 0;
-        for (TableFieldInfo field : tableFieldList) {
+        for (GenTableField field : tableFieldList) {
             field.setAttrName(NamingCase.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
-            FieldTypeEntity fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
+            GenFieldType fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
             if (fieldTypeMapping == null) {
                 // 没找到对应的类型，则为Object类型
                 field.setAttrType("Object");

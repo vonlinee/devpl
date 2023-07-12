@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 public @interface Interceptor {
 
-	String name() default "";
+    String name() default "";
 
-	String[] value();
+    String[] value();
 }

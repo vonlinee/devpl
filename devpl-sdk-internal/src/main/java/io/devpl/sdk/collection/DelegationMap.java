@@ -11,7 +11,6 @@ public interface DelegationMap<K, V> extends Map<K, V> {
 
     /**
      * 不能为空
-     *
      * @return 返回一个Map类型
      */
     Map<K, V> delegator();

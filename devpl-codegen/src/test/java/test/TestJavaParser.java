@@ -32,23 +32,23 @@ public class TestJavaParser {
         book.addField("Person", "author");
 
         book.addConstructor(Modifier.Keyword.PUBLIC)
-                .addParameter("String", "title")
-                .addParameter("Person", "author")
-                .setBody(new BlockStmt()
-                        .addStatement(new ExpressionStmt(new AssignExpr(
-                                new FieldAccessExpr(new ThisExpr(), "title"),
-                                new NameExpr("title"),
-                                AssignExpr.Operator.ASSIGN)))
-                        .addStatement(new ExpressionStmt(new AssignExpr(
-                                new FieldAccessExpr(new ThisExpr(), "author"),
-                                new NameExpr("author"),
-                                AssignExpr.Operator.ASSIGN))));
+            .addParameter("String", "title")
+            .addParameter("Person", "author")
+            .setBody(new BlockStmt()
+                .addStatement(new ExpressionStmt(new AssignExpr(
+                    new FieldAccessExpr(new ThisExpr(), "title"),
+                    new NameExpr("title"),
+                    AssignExpr.Operator.ASSIGN)))
+                .addStatement(new ExpressionStmt(new AssignExpr(
+                    new FieldAccessExpr(new ThisExpr(), "author"),
+                    new NameExpr("author"),
+                    AssignExpr.Operator.ASSIGN))));
 
         book.addMethod("getTitle", Modifier.Keyword.PUBLIC).setBody(
-                new BlockStmt().addStatement(new ReturnStmt(new NameExpr("title"))));
+            new BlockStmt().addStatement(new ReturnStmt(new NameExpr("title"))));
 
         book.addMethod("getAuthor", Modifier.Keyword.PUBLIC).setBody(
-                new BlockStmt().addStatement(new ReturnStmt(new NameExpr("author"))));
+            new BlockStmt().addStatement(new ReturnStmt(new NameExpr("author"))));
 
         System.out.println(cu);
     }

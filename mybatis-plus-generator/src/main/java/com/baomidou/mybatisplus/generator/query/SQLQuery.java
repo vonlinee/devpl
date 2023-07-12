@@ -14,28 +14,28 @@
 // * License for the specific language governing permissions and limitations under
 // * the License.
 // */
-//package com.baomidou.mybatisplus.generator.query;
+// package com.baomidou.mybatisplus.generator.query;
 //
-//import com.baomidou.mybatisplus.annotation.DbType;
-//import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
-//import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-//import com.baomidou.mybatisplus.generator.config.builder.Context;
-//import com.baomidou.mybatisplus.generator.config.builder.Entity;
-//import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
-//import com.baomidou.mybatisplus.generator.config.converts.TypeConverts;
-//import com.baomidou.mybatisplus.generator.config.po.IntrospectedColumn;
-//import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-//import com.baomidou.mybatisplus.generator.config.po.MetaInfo;
-//import com.baomidou.mybatisplus.generator.config.querys.H2Query;
-//import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
-//import com.baomidou.mybatisplus.generator.util.JdbcUtils;
-//import com.baomidou.mybatisplus.generator.util.StringUtils;
-//import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
-//import org.jetbrains.annotations.NotNull;
+// import com.baomidou.mybatisplus.annotation.DbType;
+// import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
+// import com.baomidou.mybatisplus.generator.config.ITypeConvert;
+// import com.baomidou.mybatisplus.generator.config.builder.Context;
+// import com.baomidou.mybatisplus.generator.config.builder.Entity;
+// import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
+// import com.baomidou.mybatisplus.generator.config.converts.TypeConverts;
+// import com.baomidou.mybatisplus.generator.config.po.IntrospectedColumn;
+// import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
+// import com.baomidou.mybatisplus.generator.config.po.MetaInfo;
+// import com.baomidou.mybatisplus.generator.config.querys.H2Query;
+// import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+// import com.baomidou.mybatisplus.generator.util.JdbcUtils;
+// import com.baomidou.mybatisplus.generator.util.StringUtils;
+// import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
+// import org.jetbrains.annotations.NotNull;
 //
-//import java.sql.SQLException;
-//import java.util.*;
-//import java.util.stream.Collectors;
+// import java.sql.SQLException;
+// import java.util.*;
+// import java.util.stream.Collectors;
 //
 ///**
 // * 这是兼容以前旧版本提供的查询方式，需要每个数据库对接适配。
@@ -44,9 +44,9 @@
 // * @see ITypeConvert 类型适配处理
 // * @since 3.5.0
 // */
-//public class SQLQuery extends AbstractDatabaseIntrospector {
+// public class SQLQuery extends AbstractDatabaseIntrospector {
 //
-//protected final DbQueryDecorator dbQuery;
+// protected final DbQueryDecorator dbQuery;
 
 //    public SQLQuery(@NotNull Context context) {
 //        super(context);

@@ -2,7 +2,6 @@ package io.devpl.sdk.rest;
 
 /**
  * 不对外暴露
- *
  * @param <T> Result携带的数据类型
  * @since 0.0.1
  */

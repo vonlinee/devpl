@@ -82,16 +82,6 @@ public enum CommonJavaType implements JavaType {
         this.qualifier = qulifiedName;
     }
 
-    @Override
-    public String getName() {
-        return type;
-    }
-
-    @Override
-    public String getQualifier() {
-        return qualifier;
-    }
-
     public static Map<String, CommonJavaType> typeMap() {
         HashMap<String, CommonJavaType> map = new HashMap<>();
         for (CommonJavaType type : values()) {
@@ -105,14 +95,6 @@ public enum CommonJavaType implements JavaType {
         return map;
     }
 
-    /**
-     * 判断是否是基本数据类型
-     * @return 是否是基本数据类型
-     */
-    public boolean isPrimitive() {
-        return this.getName().startsWith("BASE");
-    }
-
     public static CommonJavaType valueOfQulifiedName(String qualifiedName) {
         for (CommonJavaType value : values()) {
             if (value.getQualifier().equals(qualifiedName)) {
@@ -120,5 +102,23 @@ public enum CommonJavaType implements JavaType {
             }
         }
         return null;
+    }
+
+    @Override
+    public String getName() {
+        return type;
+    }
+
+    @Override
+    public String getQualifier() {
+        return qualifier;
+    }
+
+    /**
+     * 判断是否是基本数据类型
+     * @return 是否是基本数据类型
+     */
+    public boolean isPrimitive() {
+        return this.getName().startsWith("BASE");
     }
 }

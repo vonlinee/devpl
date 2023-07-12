@@ -20,13 +20,12 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.IKeyWordsHandler;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
-import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
-import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
+import com.baomidou.mybatisplus.generator.type.JavaType;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -39,84 +38,69 @@ import java.util.Map;
 public class IntrospectedColumn {
 
     /**
-     * 是否做注解转换，模板参数
-     * 添加@TableName注解
-     */
-    private boolean convert;
-
-    /**
-     * 是否主键
-     */
-    private boolean keyFlag;
-
-    /**
-     * 主键是否为自增类型
-     */
-    private boolean keyIdentityFlag;
-
-    /**
      * 字段名称
      */
     private final String name;
-
-    /**
-     * 属性名称
-     */
-    private String propertyName;
-
-    private ColumnMetadata metadata;
-
     /**
      * 该字段属于哪个表
      */
     private final IntrospectedTable belongTable;
-
+    /**
+     * 实体属性配置
+     */
+    private final Entity entity;
+    /**
+     * 数据库配置
+     */
+    private final DataSourceConfig dataSourceConfig;
+    /**
+     * 全局配置
+     */
+    private final GlobalConfig globalConfig;
+    /**
+     * 是否做注解转换，模板参数
+     * 添加@TableName注解
+     */
+    private boolean convert;
+    /**
+     * 是否主键
+     */
+    private boolean keyFlag;
+    /**
+     * 主键是否为自增类型
+     */
+    private boolean keyIdentityFlag;
+    /**
+     * 属性名称
+     */
+    private String propertyName;
+    private ColumnMetadata metadata;
     /**
      * 字段类型
      */
     private JavaType columnType;
-
     /**
      * 字段注释
      */
     private String comment;
-
     /**
      * 填充
      */
     private String fill;
-
     /**
      * 是否关键字
      * @since 3.3.2
      */
     private boolean keyWords;
-
     /**
      * 数据库字段（关键字含转义符号）
      * @since 3.3.2
      */
     private String columnName;
-
     /**
      * 自定义查询字段列表
      */
     private Map<String, Object> customMap;
-
-    /**
-     * 实体属性配置
-     */
-    private final Entity entity;
-
-    /**
-     * 数据库配置
-     */
-    private final DataSourceConfig dataSourceConfig;
-
-    /**
-     * 全局配置
-     */
-    private final GlobalConfig globalConfig;
 
     /**
      * 构造方法
@@ -133,24 +117,6 @@ public class IntrospectedColumn {
         this.entity = configBuilder.getStrategyConfig().entity();
         this.dataSourceConfig = configBuilder.getDataSourceConfig();
         this.globalConfig = configBuilder.getGlobalConfig();
-    }
-
-    /**
-     * @param columnType 字段类型
-     */
-    public void setColumnType(JavaType columnType) {
-        this.columnType = columnType;
-    }
-
-    /**
-     * 设置属性名称
-     * @param propertyName 属性名
-     * @return this
-     * @since 3.5.0
-     */
-    public IntrospectedColumn setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-        return this;
     }
 
     /**
@@ -231,22 +197,6 @@ public class IntrospectedColumn {
         return this;
     }
 
-    public IntrospectedColumn setComment(String comment) {
-        //TODO 暂时挪动到这
-        this.comment = this.globalConfig.isSwagger() && StringUtils.hasText(comment) ? comment.replace("\"", "\\\"") : comment;
-        return this;
-    }
-
-    public IntrospectedColumn setColumnName(String columnName) {
-        this.columnName = columnName;
-        IKeyWordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
-        if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
-            this.keyWords = true;
-            this.columnName = keyWordsHandler.formatColumn(columnName);
-        }
-        return this;
-    }
-
     public IntrospectedColumn setCustomMap(Map<String, Object> customMap) {
         this.customMap = customMap;
         return this;
@@ -254,6 +204,10 @@ public class IntrospectedColumn {
 
     public boolean isConvert() {
         return convert;
+    }
+
+    public void setConvert(boolean convert) {
+        this.convert = convert;
     }
 
     public boolean isKeyFlag() {
@@ -272,18 +226,42 @@ public class IntrospectedColumn {
         return propertyName;
     }
 
+    /**
+     * 设置属性名称
+     * @param propertyName 属性名
+     * @return this
+     * @since 3.5.0
+     */
+    public IntrospectedColumn setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+        return this;
+    }
+
     public JavaType getColumnType() {
         return columnType;
+    }
+
+    /**
+     * @param columnType 字段类型
+     */
+    public void setColumnType(JavaType columnType) {
+        this.columnType = columnType;
     }
 
     public String getComment() {
         return comment;
     }
 
+    public IntrospectedColumn setComment(String comment) {
+        // TODO 暂时挪动到这
+        this.comment = this.globalConfig.isSwagger() && StringUtils.hasText(comment) ? comment.replace("\"", "\\\"") : comment;
+        return this;
+    }
+
     public String getFill() {
         if (StringUtils.isBlank(fill)) {
             entity.getTableFillList().stream()
-                //忽略大写字段问题
+                // 忽略大写字段问题
                 .filter(tf -> tf instanceof Column && tf.getName()
                     .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName)).findFirst()
                 .ifPresent(tf -> this.fill = tf.getFieldFill().name());
@@ -297,6 +275,16 @@ public class IntrospectedColumn {
 
     public String getColumnName() {
         return columnName;
+    }
+
+    public IntrospectedColumn setColumnName(String columnName) {
+        this.columnName = columnName;
+        IKeyWordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
+        if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
+            this.keyWords = true;
+            this.columnName = keyWordsHandler.formatColumn(columnName);
+        }
+        return this;
     }
 
     /**
@@ -315,9 +303,5 @@ public class IntrospectedColumn {
 
     public ColumnMetadata getColumnMetadata() {
         return metadata;
-    }
-
-    public void setConvert(boolean convert) {
-        this.convert = convert;
     }
 }

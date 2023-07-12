@@ -1,7 +1,6 @@
 package io.devpl.generator.config;
 
 import io.devpl.generator.config.query.*;
-import io.devpl.generator.entity.DataSourceEntity;
 import io.devpl.generator.utils.DbUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class GenDataSource {
 
     private Connection connection;
 
-    public GenDataSource(DataSourceEntity entity) {
+    public GenDataSource(io.devpl.generator.entity.GenDataSource entity) {
         this.id = entity.getId();
         this.dbType = DbType.getValue(entity.getDbType());
         this.connUrl = entity.getConnUrl();

@@ -23,12 +23,12 @@ public class HttpResponseInputStream extends InputStream implements HttpResponse
 
     // A queue of yet unprocessed ByteBuffers received from the flow API.
     private final BlockingQueue<List<ByteBuffer>> buffers;
+    private final AtomicBoolean subscribed = new AtomicBoolean();
     private volatile Flow.Subscription subscription;
     private volatile boolean closed;
     private volatile Throwable failed;
     private volatile Iterator<ByteBuffer> currentListItr;
     private volatile ByteBuffer currentBuffer;
-    private final AtomicBoolean subscribed = new AtomicBoolean();
 
     public HttpResponseInputStream() {
         this(MAX_BUFFERS_IN_QUEUE);

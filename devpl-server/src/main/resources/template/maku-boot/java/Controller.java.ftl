@@ -28,50 +28,58 @@ import java.util.List;
 @Tag(name="${tableComment}")
 @AllArgsConstructor
 public class ${ClassName}Controller {
-    private final ${ClassName}Service ${className}Service;
+private final ${ClassName}Service ${className}Service;
 
-    @GetMapping("page")
-    @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:page')")
-    public Result<PageResult<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){
-        PageResult<${ClassName}VO> page = ${className}Service.page(query);
+@GetMapping("page")
+@Operation(summary = "分页")
+@PreAuthorize("hasAuthority('${moduleName}:${functionName}:page')")
+public Result
+<PageResult
+<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){
+    PageResult
+    <${ClassName}VO> page = ${className}Service.page(query);
 
         return Result.ok(page);
-    }
+        }
 
-    @GetMapping("{id}")
-    @Operation(summary = "信息")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:info')")
-    public Result<${ClassName}VO> get(@PathVariable("id") Long id){
-        ${ClassName}Entity entity = ${className}Service.getById(id);
+        @GetMapping("{id}")
+        @Operation(summary = "信息")
+        @PreAuthorize("hasAuthority('${moduleName}:${functionName}:info')")
+        public Result
+        <${ClassName}VO> get(@PathVariable("id") Long id){
+            ${ClassName}Entity entity = ${className}Service.getById(id);
 
-        return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));
-    }
+            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));
+            }
 
-    @PostMapping
-    @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:save')")
-    public Result<String> save(@RequestBody ${ClassName}VO vo){
-        ${className}Service.save(vo);
+            @PostMapping
+            @Operation(summary = "保存")
+            @PreAuthorize("hasAuthority('${moduleName}:${functionName}:save')")
+            public Result
+            <String> save(@RequestBody ${ClassName}VO vo){
+                ${className}Service.save(vo);
 
-        return Result.ok();
-    }
+                return Result.ok();
+                }
 
-    @PutMapping
-    @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:update')")
-    public Result<String> update(@RequestBody @Valid ${ClassName}VO vo){
-        ${className}Service.update(vo);
+                @PutMapping
+                @Operation(summary = "修改")
+                @PreAuthorize("hasAuthority('${moduleName}:${functionName}:update')")
+                public Result
+                <String> update(@RequestBody @Valid ${ClassName}VO vo){
+                    ${className}Service.update(vo);
 
-        return Result.ok();
-    }
+                    return Result.ok();
+                    }
 
-    @DeleteMapping
-    @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:delete')")
-    public Result<String> delete(@RequestBody List<Long> idList){
-        ${className}Service.delete(idList);
+                    @DeleteMapping
+                    @Operation(summary = "删除")
+                    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:delete')")
+                    public Result
+                    <String> delete(@RequestBody List
+                        <Long> idList){
+                            ${className}Service.delete(idList);
 
-        return Result.ok();
-    }
-}
+                            return Result.ok();
+                            }
+                            }

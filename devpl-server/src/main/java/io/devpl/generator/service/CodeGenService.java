@@ -13,7 +13,6 @@ public interface CodeGenService {
 
     /**
      * 获取生成器配置信息
-     *
      * @return 生成器配置信息
      */
     GeneratorInfo getGeneratorInfo();

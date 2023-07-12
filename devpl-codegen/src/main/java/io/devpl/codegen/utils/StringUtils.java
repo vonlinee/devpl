@@ -17,6 +17,66 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
+    public static final String SINGLE_QUTATION = "'";
+    public static final String NULL_STRING_HCASE = "NULL";
+    public static final String NULL_STRING_LCASE = "null";
+    /**
+     * A String for a space character.
+     * @since 3.2
+     */
+    public static final String SPACE = " ";
+    /**
+     * The empty String {@code ""}.
+     * @since 2.0
+     */
+    public static final String EMPTY = "";
+    /**
+     * A String for linefeed LF ("\n").
+     * @see <a href=
+     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
+     * JLF: Escape Sequences for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String LF = "\n";
+    /**
+     * A String for carriage return CR ("\r").
+     * @see <a href=
+     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
+     * Escape Sequences for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String CR = "\r";
+    /**
+     * Represents a failed index search.
+     * @since 2.1
+     */
+    public static final int INDEX_NOT_FOUND = -1;
+    public static final String DEFAULT_SEPARATOR = ",";
+    private static final String[] EMPTY_STRING_ARRAY = {};
+    private static final String FOLDER_SEPARATOR = "/";
+    private static final char FOLDER_SEPARATOR_CHAR = '/';
+    private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
+    private static final String TOP_PATH = "..";
+    private static final String CURRENT_PATH = ".";
+    private static final char EXTENSION_SEPARATOR = '.';
+    private static final Pattern ALL_EN_WORDS = Pattern.compile("[a-zA-Z]+");
+    private static final Pattern CONTAIN_EN_WORDS = Pattern.compile(".*[a-zA-z].*");
+    private static final int STRING_BUILDER_SIZE = 256;
+    /**
+     * <p>
+     * The maximum size to which the padding constant(s) can expand.
+     * </p>
+     */
+    private static final int PAD_LIMIT = 8192;
+    /**
+     * Pattern used in {@link # stripAccents(String)}.
+     */
+    private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+    /**
+     * 是否为大写命名
+     */
+    private static final Pattern CAPITAL_MODE = Pattern.compile("^[0-9A-Z/_]+$");
+
     /**
      * 判断是否以某个字符串结尾（区分大小写）
      * Check if a String ends with a specified suffix.
@@ -74,17 +134,6 @@ public final class StringUtils {
     public static boolean isMixedMode(String word) {
         return matches(".*[A-Z]+.*", word) && matches(".*[/_]+.*", word);
     }
-
-    public static final String SINGLE_QUTATION = "'";
-    public static final String NULL_STRING_HCASE = "NULL";
-    public static final String NULL_STRING_LCASE = "null";
-    private static final String[] EMPTY_STRING_ARRAY = {};
-    private static final String FOLDER_SEPARATOR = "/";
-    private static final char FOLDER_SEPARATOR_CHAR = '/';
-    private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
-    private static final String TOP_PATH = "..";
-    private static final String CURRENT_PATH = ".";
-    private static final char EXTENSION_SEPARATOR = '.';
 
     public static String substring(String s, String b, char c) {
         int i = b.lastIndexOf(c);
@@ -210,9 +259,6 @@ public final class StringUtils {
         return strings;
     }
 
-    private static final Pattern ALL_EN_WORDS = Pattern.compile("[a-zA-Z]+");
-    private static final Pattern CONTAIN_EN_WORDS = Pattern.compile(".*[a-zA-z].*");
-
     /**
      * Check whether the given object (possibly a {@code String}) is empty.
      * This is effectively a shortcut for {@code !hasLength(String)}.
@@ -314,56 +360,6 @@ public final class StringUtils {
         }
         return false;
     }
-
-    private static final int STRING_BUILDER_SIZE = 256;
-
-    /**
-     * A String for a space character.
-     * @since 3.2
-     */
-    public static final String SPACE = " ";
-
-    /**
-     * The empty String {@code ""}.
-     * @since 2.0
-     */
-    public static final String EMPTY = "";
-
-    /**
-     * A String for linefeed LF ("\n").
-     * @see <a href=
-     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
-     * JLF: Escape Sequences for Character and String Literals</a>
-     * @since 3.2
-     */
-    public static final String LF = "\n";
-
-    /**
-     * A String for carriage return CR ("\r").
-     * @see <a href=
-     * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
-     * Escape Sequences for Character and String Literals</a>
-     * @since 3.2
-     */
-    public static final String CR = "\r";
-
-    /**
-     * Represents a failed index search.
-     * @since 2.1
-     */
-    public static final int INDEX_NOT_FOUND = -1;
-
-    /**
-     * <p>
-     * The maximum size to which the padding constant(s) can expand.
-     * </p>
-     */
-    private static final int PAD_LIMIT = 8192;
-
-    /**
-     * Pattern used in {@link # stripAccents(String)}.
-     */
-    private static final Pattern STRIP_ACCENTS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
     /**
      * Check whether the given {@code String} contains actual <em>text</em>.
@@ -475,8 +471,6 @@ public final class StringUtils {
     public static String join(final String separator, String... items) {
         return join(java.util.Arrays.asList(items).iterator(), separator);
     }
-
-    public static final String DEFAULT_SEPARATOR = ",";
 
     /**
      * 使用指定分隔符拼接字符串
@@ -986,6 +980,10 @@ public final class StringUtils {
         return replace(inString, pattern, "");
     }
 
+    //---------------------------------------------------------------------
+    // Convenience methods for working with formatted Strings
+    //---------------------------------------------------------------------
+
     /**
      * Delete any character in a given {@code String}.
      * @param inString      the original {@code String}
@@ -1011,10 +1009,6 @@ public final class StringUtils {
         }
         return new String(result, 0, lastCharIndex);
     }
-
-    //---------------------------------------------------------------------
-    // Convenience methods for working with formatted Strings
-    //---------------------------------------------------------------------
 
     /**
      * Quote the given {@code String} with single quotes.
@@ -1374,7 +1368,6 @@ public final class StringUtils {
         return tokenizeToStringArray(localeSource, "_ ", false, false);
     }
 
-
     private static Locale parseLocaleTokens(String localeString, String[] tokens) {
         String language = (tokens.length > 0 ? tokens[0] : "");
         String country = (tokens.length > 1 ? tokens[1] : "");
@@ -1422,6 +1415,10 @@ public final class StringUtils {
         return locale.getLanguage() + (hasText(locale.getCountry()) ? "-" + locale.getCountry() : "");
     }
 
+    //---------------------------------------------------------------------
+    // Convenience methods for working with String arrays
+    //---------------------------------------------------------------------
+
     /**
      * Parse the given {@code timeZoneString} value into a {@link TimeZone}.
      * @param timeZoneString the time zone {@code String}, following {@link TimeZone#getTimeZone(String)}
@@ -1437,10 +1434,6 @@ public final class StringUtils {
         }
         return timeZone;
     }
-
-    //---------------------------------------------------------------------
-    // Convenience methods for working with String arrays
-    //---------------------------------------------------------------------
 
     /**
      * Copy the given {@link Collection} into a {@code String} array.
@@ -1910,11 +1903,6 @@ public final class StringUtils {
         }
         return Pattern.matches(regex, input);
     }
-
-    /**
-     * 是否为大写命名
-     */
-    private static final Pattern CAPITAL_MODE = Pattern.compile("^[0-9A-Z/_]+$");
 
     /**
      * 是否为大写命名

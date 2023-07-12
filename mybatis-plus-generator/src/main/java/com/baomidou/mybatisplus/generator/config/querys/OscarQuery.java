@@ -2,7 +2,6 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * <p>Oscar（神通数据库） 表数据查询</p>
- *
  * @author whli
  * @version 1.0.0
  * @since 2020/7/28 18:54

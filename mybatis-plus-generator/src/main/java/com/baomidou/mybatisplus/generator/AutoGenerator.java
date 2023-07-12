@@ -50,6 +50,7 @@ public class AutoGenerator {
      * 注入配置
      */
     protected InjectionConfig injectionConfig;
+    AbstractTemplateEngine templateEngine;
     /**
      * 数据源配置
      */
@@ -70,8 +71,7 @@ public class AutoGenerator {
      * 全局 相关配置
      */
     private GlobalConfig globalConfig;
-
-    AbstractTemplateEngine templateEngine;
+    private ActionCallback callback;
 
     /**
      * 构造方法
@@ -79,7 +79,7 @@ public class AutoGenerator {
      * @since 3.5.0
      */
     public AutoGenerator(DataSourceConfig dataSourceConfig) {
-        //这个是必须参数,其他都是可选的,后续去除默认构造更改成final
+        // 这个是必须参数,其他都是可选的,后续去除默认构造更改成final
         this.dataSourceConfig = dataSourceConfig;
     }
 
@@ -372,7 +372,6 @@ public class AutoGenerator {
         }
     }
 
-
     /**
      * 获取模板路径
      * @param function function
@@ -388,8 +387,6 @@ public class AutoGenerator {
         }
         return Optional.empty();
     }
-
-    private ActionCallback callback;
 
     /**
      * 输出文件

@@ -39,7 +39,7 @@ public class PropertiesUtils {
      * Load properties from the given file into Properties.
      */
     public static Properties load(String pathname) {
-        try (InputStream is = new FileInputStream(pathname)){
+        try (InputStream is = new FileInputStream(pathname)) {
             return load(is);
         } catch (IOException e) {
             return new Properties();

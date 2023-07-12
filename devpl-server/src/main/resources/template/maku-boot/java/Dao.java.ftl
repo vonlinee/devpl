@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 * @since ${version} ${date}
 */
 @Mapper
-public interface ${ClassName}Dao extends BaseDao<${ClassName}Entity> {
-	
-}
+public interface ${ClassName}Dao extends BaseDao
+<${ClassName}Entity> {
+
+    }

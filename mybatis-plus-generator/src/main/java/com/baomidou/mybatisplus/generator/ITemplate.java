@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator;
 
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 

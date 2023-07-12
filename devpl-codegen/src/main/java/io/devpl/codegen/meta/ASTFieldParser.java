@@ -46,8 +46,8 @@ public class ASTFieldParser implements CompilationUnitVisitor<List<FieldMetaData
 
     public String findFieldDescription(FieldDeclaration field) {
         return field.getJavadocComment()
-                .map(JavadocComment::parse)
-                .map(Javadoc::toText)
-                .orElse("");
+            .map(JavadocComment::parse)
+            .map(Javadoc::toText)
+            .orElse("");
     }
 }

@@ -8,9 +8,8 @@ import java.util.*;
  */
 public class FixedList<E> implements List<E> {
 
-    private transient int cursor;
-
     private final Object[] elementData;
+    private transient int cursor;
 
     public FixedList(int intialCapacity) {
         if (intialCapacity < 0) {
@@ -45,7 +44,7 @@ public class FixedList<E> implements List<E> {
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public <T> T[] toArray(T[] a) {
         return (T[]) elementData;
     }
@@ -116,7 +115,7 @@ public class FixedList<E> implements List<E> {
 
     // 6 3
     @SuppressWarnings("unused")
-	private int rangeCompare(int index, int min, int max) {
+    private int rangeCompare(int index, int min, int max) {
         if (min == max) {
             return Integer.compare(index, min);
         }

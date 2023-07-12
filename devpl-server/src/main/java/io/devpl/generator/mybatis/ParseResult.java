@@ -1,8 +1,8 @@
 package io.devpl.generator.mybatis;
 
+import io.devpl.generator.mybatis.tree.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import io.devpl.generator.mybatis.tree.TreeNode;
 import org.apache.ibatis.mapping.MappedStatement;
 
 @Data

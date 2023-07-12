@@ -17,9 +17,6 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 /**
  * 表数据查询抽象类
  * @author hubin

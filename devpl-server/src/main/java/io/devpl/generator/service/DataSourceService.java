@@ -3,19 +3,18 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.config.GenDataSource;
-import io.devpl.generator.entity.DataSourceEntity;
+import io.devpl.generator.entity.GenDataSource;
 
 import java.util.List;
 
 /**
  * 数据源管理
  */
-public interface DataSourceService extends BaseService<DataSourceEntity> {
+public interface DataSourceService extends BaseService<GenDataSource> {
 
-    PageResult<DataSourceEntity> page(Query query);
+    PageResult<GenDataSource> page(Query query);
 
-    List<DataSourceEntity> getList();
+    List<GenDataSource> getList();
 
     /**
      * 获取数据库产品名，如：MySQL
@@ -28,5 +27,5 @@ public interface DataSourceService extends BaseService<DataSourceEntity> {
      * 根据数据源ID，获取数据源
      * @param datasourceId 数据源ID
      */
-    GenDataSource get(Long datasourceId);
+    io.devpl.generator.config.GenDataSource get(Long datasourceId);
 }

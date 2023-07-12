@@ -82,7 +82,8 @@ public class DbQueryDecorator extends AbstractDbQuery {
             if ((table = strategyConfig.getLikeTable()) != null) {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" LIKE '").append(table.getValue()).append("'");
             } else if ((table = strategyConfig.getNotLikeTable()) != null) {
-                sql.append(" AND ").append(dbQuery.tableName()).append(" NOT LIKE '").append(table.getValue()).append("'");
+                sql.append(" AND ").append(dbQuery.tableName()).append(" NOT LIKE '").append(table.getValue())
+                    .append("'");
             }
             if (!(tables = strategyConfig.getInclude()).isEmpty()) {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" IN (")

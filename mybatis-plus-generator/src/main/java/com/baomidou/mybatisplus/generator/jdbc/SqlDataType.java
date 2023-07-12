@@ -311,27 +311,8 @@ public enum SqlDataType implements DataType {
     TIMESTAMP_WITH_TIMEZONE(2014, String.class),
     COLUMN_LIST(Types.OTHER + 2, Object.class);
 
-    /**
-     * Type id as appears in {@link java.sql.Types},
-     * e.g. {@link java.sql.Types#INTEGER}.
-     */
-    public final int id;
-
-    /**
-     * Default Java type for this SQL type, as described in table B-1.
-     */
-    public final Class<?> clazz;
-
-    /**
-     * Class used internally in Calcite to represent instances of this type.
-     */
-    public final Class<?> internal;
-
-    /**
-     * Class used to serialize values of this type as JSON.
-     */
-    public final Class<?> serial;
-
+    public static final Map<Class<?>, EnumSet<SqlDataType>> SET_LIST;
+    public static final Map<Method, EnumSet<SqlDataType>> GET_LIST;
     private static final Map<Integer, SqlDataType> BY_ID = new HashMap<>();
 
     static {
@@ -339,52 +320,6 @@ public enum SqlDataType implements DataType {
             BY_ID.put(sqlType.id, sqlType);
         }
     }
-
-    SqlDataType(int id, Class<?> clazz, Class<?> internal, Class<?> serial) {
-        this.id = id;
-        this.clazz = clazz;
-        this.internal = internal;
-        this.serial = serial;
-    }
-
-    SqlDataType(int id, Class<?> clazz, Class<?> internal) {
-        this(id, clazz, internal, internal);
-    }
-
-    SqlDataType(int id, Class<?> clazz) {
-        this(id, clazz, clazz, clazz);
-    }
-
-    public static SqlDataType valueOf(int type) {
-        final SqlDataType sqlType = BY_ID.get(type);
-        if (sqlType == null) {
-            throw new IllegalArgumentException("Unknown SQL type " + type);
-        }
-        return sqlType;
-    }
-
-    /**
-     * Returns the boxed type.
-     */
-    public Class<?> boxedClass() {
-        return TypeUtils.box(clazz);
-    }
-
-    /**
-     * Returns the entries in JDBC table B-5.
-     */
-    public static Iterable<Map.Entry<Class<?>, SqlDataType>> getSetConversions() {
-        final ArrayList<Map.Entry<Class<?>, SqlDataType>> list = new ArrayList<>();
-        for (Map.Entry<Class<?>, EnumSet<SqlDataType>> entry : SET_LIST.entrySet()) {
-            for (SqlDataType sqlType : entry.getValue()) {
-                list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), sqlType));
-            }
-        }
-        return list;
-    }
-
-    public static final Map<Class<?>, EnumSet<SqlDataType>> SET_LIST;
-    public static final Map<Method, EnumSet<SqlDataType>> GET_LIST;
 
     static {
         SET_LIST = new HashMap<>();
@@ -446,6 +381,60 @@ public enum SqlDataType implements DataType {
         GET_LIST.put(Method.GET_SQLXML, EnumSet.of(SQLXML));
     }
 
+    /**
+     * Type id as appears in {@link java.sql.Types},
+     * e.g. {@link java.sql.Types#INTEGER}.
+     */
+    public final int id;
+    /**
+     * Default Java type for this SQL type, as described in table B-1.
+     */
+    public final Class<?> clazz;
+    /**
+     * Class used internally in Calcite to represent instances of this type.
+     */
+    public final Class<?> internal;
+    /**
+     * Class used to serialize values of this type as JSON.
+     */
+    public final Class<?> serial;
+
+    SqlDataType(int id, Class<?> clazz, Class<?> internal, Class<?> serial) {
+        this.id = id;
+        this.clazz = clazz;
+        this.internal = internal;
+        this.serial = serial;
+    }
+
+    SqlDataType(int id, Class<?> clazz, Class<?> internal) {
+        this(id, clazz, internal, internal);
+    }
+
+    SqlDataType(int id, Class<?> clazz) {
+        this(id, clazz, clazz, clazz);
+    }
+
+    public static SqlDataType valueOf(int type) {
+        final SqlDataType sqlType = BY_ID.get(type);
+        if (sqlType == null) {
+            throw new IllegalArgumentException("Unknown SQL type " + type);
+        }
+        return sqlType;
+    }
+
+    /**
+     * Returns the entries in JDBC table B-5.
+     */
+    public static Iterable<Map.Entry<Class<?>, SqlDataType>> getSetConversions() {
+        final ArrayList<Map.Entry<Class<?>, SqlDataType>> list = new ArrayList<>();
+        for (Map.Entry<Class<?>, EnumSet<SqlDataType>> entry : SET_LIST.entrySet()) {
+            for (SqlDataType sqlType : entry.getValue()) {
+                list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), sqlType));
+            }
+        }
+        return list;
+    }
+
     @SafeVarargs
     private static <E extends Enum<E>> EnumSet<E> concat(Collection<E>... ess) {
         final List<E> list = new ArrayList<>();
@@ -476,6 +465,13 @@ public enum SqlDataType implements DataType {
     public static boolean canGet(Method method, SqlDataType sqlType) {
         final EnumSet<SqlDataType> sqlTypes = GET_LIST.get(method);
         return sqlTypes != null && sqlTypes.contains(sqlType);
+    }
+
+    /**
+     * Returns the boxed type.
+     */
+    public Class<?> boxedClass() {
+        return TypeUtils.box(clazz);
     }
 
     @Override

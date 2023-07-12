@@ -42,10 +42,11 @@ import java.util.Properties;
  */
 public class DataSourceConfig {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
-
-    private DataSourceConfig() {
-    }
-
+    /**
+     * 数据库连接属性
+     * @since 3.5.3
+     */
+    private final Map<String, String> connectionProperties = new HashMap<>();
     /**
      * 数据库信息查询
      */
@@ -93,13 +94,6 @@ public class DataSourceConfig {
      * @since 3.5.0
      */
     private Connection connection;
-
-    /**
-     * 数据库连接属性
-     * @since 3.5.3
-     */
-    private final Map<String, String> connectionProperties = new HashMap<>();
-
     /**
      * 查询方式
      * @see DefaultDatabaseIntrospector 默认查询方式
@@ -107,6 +101,9 @@ public class DataSourceConfig {
      * @since 3.5.3
      */
     private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospector.class;
+
+    private DataSourceConfig() {
+    }
 
     /**
      * 获取数据库查询
@@ -180,16 +177,16 @@ public class DataSourceConfig {
         DbType dbType = getDbType();
         String schema = null;
         if (DbType.POSTGRE_SQL == dbType) {
-            //pg 默认 schema=public
+            // pg 默认 schema=public
             schema = "public";
         } else if (DbType.KINGBASE_ES == dbType) {
-            //kingbase 默认 schema=PUBLIC
+            // kingbase 默认 schema=PUBLIC
             schema = "PUBLIC";
         } else if (DbType.DB2 == dbType) {
-            //db2 默认 schema=current schema
+            // db2 默认 schema=current schema
             schema = "current schema";
         } else if (DbType.ORACLE == dbType) {
-            //oracle 默认 schema=username
+            // oracle 默认 schema=username
             schema = this.username.toUpperCase();
         }
         return schema;
@@ -267,7 +264,7 @@ public class DataSourceConfig {
                 try {
                     this.dataSourceConfig.schemaName = conn.getSchema();
                 } catch (Throwable exception) {
-                    //ignore  如果使用低版本的驱动，这里由于是1.7新增的方法，所以会报错，如果驱动太低，需要自行指定了。
+                    // ignore  如果使用低版本的驱动，这里由于是1.7新增的方法，所以会报错，如果驱动太低，需要自行指定了。
                 }
                 this.dataSourceConfig.connection = conn;
                 this.dataSourceConfig.username = conn.getMetaData().getUserName();

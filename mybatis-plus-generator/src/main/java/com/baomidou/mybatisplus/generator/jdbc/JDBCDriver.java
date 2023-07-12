@@ -29,6 +29,33 @@ public enum JDBCDriver {
     // 描述信息
     protected String description;
 
+    JDBCDriver(String driverClassName, String subProtocol) {
+        this.driverClassName = driverClassName;
+        this.subProtocol = subProtocol;
+    }
+
+    JDBCDriver(String driverClassName, String subProtocol, String description) {
+        this(driverClassName, subProtocol);
+        this.description = description;
+    }
+
+    public static String[] supportedDbNames() {
+        String[] names = new String[values().length];
+        JDBCDriver[] drivers = values();
+        for (int i = 0; i < drivers.length; i++) {
+            names[i] = drivers[i].name();
+        }
+        return names;
+    }
+
+    public static JDBCDriver valueOfDriverName(String driverName) {
+        try {
+            return JDBCDriver.valueOf(driverName.toUpperCase());
+        } catch (Exception exception) {
+            return null;
+        }
+    }
+
     /**
      * 协议名//[host name][/database name][username and password]
      * 获取JDBC URL连接字符串
@@ -79,35 +106,8 @@ public enum JDBCDriver {
         return sb.toString();
     }
 
-    JDBCDriver(String driverClassName, String subProtocol) {
-        this.driverClassName = driverClassName;
-        this.subProtocol = subProtocol;
-    }
-
-    JDBCDriver(String driverClassName, String subProtocol, String description) {
-        this(driverClassName, subProtocol);
-        this.description = description;
-    }
-
     public String getDriverClassName() {
         return driverClassName;
-    }
-
-    public static String[] supportedDbNames() {
-        String[] names = new String[values().length];
-        JDBCDriver[] drivers = values();
-        for (int i = 0; i < drivers.length; i++) {
-            names[i] = drivers[i].name();
-        }
-        return names;
-    }
-
-    public static JDBCDriver valueOfDriverName(String driverName) {
-        try {
-            return JDBCDriver.valueOf(driverName.toUpperCase());
-        } catch (Exception exception) {
-            return null;
-        }
     }
 
     public String getSubProtocol() {

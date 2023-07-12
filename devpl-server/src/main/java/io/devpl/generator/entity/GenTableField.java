@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 @TableName("gen_table_field")
-public class TableFieldInfo {
+public class GenTableField {
 
     @TableId
     private Long id;

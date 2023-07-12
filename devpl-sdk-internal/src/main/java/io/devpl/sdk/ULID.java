@@ -26,52 +26,42 @@ import java.util.UUID;
  */
 public final class ULID implements Serializable, Comparable<ULID> {
 
-    private static final long serialVersionUID = 2625269413446854731L;
-
-    private final long msb; // most significant bits
-    private final long lsb; // least significant bits
-
-    /**
-     * Number of characters of a ULID.
-     */
-    private static final int ULID_CHARS = 26;
-
-    /**
-     * Number of characters of the time component of a ULID.
-     */
-    private static final int TIME_CHARS = 10;
-
-    /**
-     * Number of characters of the random component of a ULID.
-     */
-    private static final int RANDOM_CHARS = 16;
-
-    /**
-     * Number of bytes of a ULID.
-     */
-    private static final int ULID_BYTES = 16;
-
-    /**
-     * Number of bytes of the time component of a ULID.
-     */
-    private static final int TIME_BYTES = 6;
-
     /**
      * Number of bytes of the random component of a ULID.
      */
     public static final int RANDOM_BYTES = 10;
-
+    private static final long serialVersionUID = 2625269413446854731L;
+    /**
+     * Number of characters of a ULID.
+     */
+    private static final int ULID_CHARS = 26;
+    /**
+     * Number of characters of the time component of a ULID.
+     */
+    private static final int TIME_CHARS = 10;
+    /**
+     * Number of characters of the random component of a ULID.
+     */
+    private static final int RANDOM_CHARS = 16;
+    /**
+     * Number of bytes of a ULID.
+     */
+    private static final int ULID_BYTES = 16;
+    /**
+     * Number of bytes of the time component of a ULID.
+     */
+    private static final int TIME_BYTES = 6;
     private static final char[] ALPHABET_UPPERCASE = //
-            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
-                    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', //
-                    'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'};
-
+        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', //
+            'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'};
     private static final char[] ALPHABET_LOWERCASE = //
-            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
-                    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', //
-                    'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
-
+        {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', //
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', //
+            'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'};
     private static final long[] ALPHABET_VALUES = new long[128];
+    // 0xffffffffffffffffL + 1 = 0x0000000000000000L
+    private static final long INCREMENT_OVERFLOW = 0x0000000000000000L;
 
     static {
         Arrays.fill(ALPHABET_VALUES, -1);
@@ -142,8 +132,8 @@ public final class ULID implements Serializable, Comparable<ULID> {
         ALPHABET_VALUES['L'] = 0x01;
     }
 
-    // 0xffffffffffffffffL + 1 = 0x0000000000000000L
-    private static final long INCREMENT_OVERFLOW = 0x0000000000000000L;
+    private final long msb; // most significant bits
+    private final long lsb; // least significant bits
 
     /**
      * Creates a new ULID.
@@ -335,6 +325,189 @@ public final class ULID implements Serializable, Comparable<ULID> {
     }
 
     /**
+     * Returns the instant of creation.
+     * <p>
+     * The instant of creation is extracted from the time component.
+     * @param string a canonical string
+     * @return the {@link Instant} of creation
+     * @throws IllegalArgumentException if the input string is invalid
+     */
+    public static Instant getInstant(String string) {
+        return Instant.ofEpochMilli(getTime(string));
+    }
+
+    /**
+     * Returns the time component as a number.
+     * <p>
+     * The time component is a number between 0 and 2^48-1. It is equivalent to the
+     * count of milliseconds since 1970-01-01 (Unix epoch).
+     * @param string a canonical string
+     * @return a number of milliseconds
+     * @throws IllegalArgumentException if the input string is invalid
+     */
+    public static long getTime(String string) {
+
+        final char[] chars = toCharArray(string);
+
+        long time = 0;
+
+        time |= ALPHABET_VALUES[chars[0x00]] << 45;
+        time |= ALPHABET_VALUES[chars[0x01]] << 40;
+        time |= ALPHABET_VALUES[chars[0x02]] << 35;
+        time |= ALPHABET_VALUES[chars[0x03]] << 30;
+        time |= ALPHABET_VALUES[chars[0x04]] << 25;
+        time |= ALPHABET_VALUES[chars[0x05]] << 20;
+        time |= ALPHABET_VALUES[chars[0x06]] << 15;
+        time |= ALPHABET_VALUES[chars[0x07]] << 10;
+        time |= ALPHABET_VALUES[chars[0x08]] << 5;
+        time |= ALPHABET_VALUES[chars[0x09]];
+
+        return time;
+    }
+
+    /**
+     * Returns the random component as a byte array.
+     * <p>
+     * The random component is an array of 10 bytes (80 bits).
+     * @param string a canonical string
+     * @return a byte array
+     * @throws IllegalArgumentException if the input string is invalid
+     */
+    public static byte[] getRandom(String string) {
+
+        final char[] chars = toCharArray(string);
+
+        long random0 = 0;
+        long random1 = 0;
+
+        random0 |= ALPHABET_VALUES[chars[0x0a]] << 35;
+        random0 |= ALPHABET_VALUES[chars[0x0b]] << 30;
+        random0 |= ALPHABET_VALUES[chars[0x0c]] << 25;
+        random0 |= ALPHABET_VALUES[chars[0x0d]] << 20;
+        random0 |= ALPHABET_VALUES[chars[0x0e]] << 15;
+        random0 |= ALPHABET_VALUES[chars[0x0f]] << 10;
+        random0 |= ALPHABET_VALUES[chars[0x10]] << 5;
+        random0 |= ALPHABET_VALUES[chars[0x11]];
+
+        random1 |= ALPHABET_VALUES[chars[0x12]] << 35;
+        random1 |= ALPHABET_VALUES[chars[0x13]] << 30;
+        random1 |= ALPHABET_VALUES[chars[0x14]] << 25;
+        random1 |= ALPHABET_VALUES[chars[0x15]] << 20;
+        random1 |= ALPHABET_VALUES[chars[0x16]] << 15;
+        random1 |= ALPHABET_VALUES[chars[0x17]] << 10;
+        random1 |= ALPHABET_VALUES[chars[0x18]] << 5;
+        random1 |= ALPHABET_VALUES[chars[0x19]];
+
+        final byte[] bytes = new byte[RANDOM_BYTES];
+
+        bytes[0x0] = (byte) (random0 >>> 32);
+        bytes[0x1] = (byte) (random0 >>> 24);
+        bytes[0x2] = (byte) (random0 >>> 16);
+        bytes[0x3] = (byte) (random0 >>> 8);
+        bytes[0x4] = (byte) (random0);
+
+        bytes[0x5] = (byte) (random1 >>> 32);
+        bytes[0x6] = (byte) (random1 >>> 24);
+        bytes[0x7] = (byte) (random1 >>> 16);
+        bytes[0x8] = (byte) (random1 >>> 8);
+        bytes[0x9] = (byte) (random1);
+
+        return bytes;
+    }
+
+    /**
+     * Checks if the input string is valid.
+     * <p>
+     * The input string must be 26 characters long and must contain only characters
+     * from Crockford's base 32 alphabet.
+     * <p>
+     * The first character of the input string must be between 0 and 7.
+     * @param string a canonical string
+     * @return true if the input string is valid
+     * @see <a href="https://www.crockford.com/base32.html">Crockford's Base 32</a>
+     */
+    public static boolean isValid(String string) {
+        return string != null && isValidCharArray(string.toCharArray());
+    }
+
+    static char[] toCharArray(String string) {
+        char[] chars = string == null ? null : string.toCharArray();
+        if (!isValidCharArray(chars)) {
+            throw new IllegalArgumentException(String.format("Invalid ULID: \"%s\"", string));
+        }
+        return chars;
+    }
+
+    /*
+     * Checks if the string is a valid ULID.
+     *
+     * A valid ULID string is a sequence of 26 characters from Crockford's Base 32
+     * alphabet.
+     *
+     * The first character of the input string must be between 0 and 7.
+     */
+    static boolean isValidCharArray(final char[] chars) {
+
+        if (chars == null || chars.length != ULID_CHARS) {
+            return false; // null or wrong size!
+        }
+
+        // The time component has 48 bits.
+        // The base32 encoded time component has 50 bits.
+        // The time component cannot be greater than 2^48-1.
+        // So the 2 first bits of the base32 decoded time component must be ZERO.
+        // As a consequence, the 1st char of the input string must be between 0 and 7.
+        if ((ALPHABET_VALUES[chars[0]] & 0b11000) != 0) {
+            // ULID specification:
+            // "Any attempt to decode or encode a ULID larger than this (time > 2^48-1)
+            // should be rejected by all implementations, to prevent overflow bugs."
+            return false; // time overflow!
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            if (ALPHABET_VALUES[chars[i]] == -1) {
+                return false; // invalid character!
+            }
+        }
+
+        return true; // It seems to be OK.
+    }
+
+    /**
+     * Returns a ULID.
+     * @return a ULID
+     */
+    public static ULID randomULID() {
+        return UlidFactoryHolder.INSTANCE.create();
+    }
+
+    /**
+     * Returns a ULID with a given time.
+     * @param time a number of milliseconds since 1970-01-01 (Unix epoch).
+     * @return a ULID
+     */
+    public static ULID getUlid(final long time) {
+        return UlidFactoryHolder.INSTANCE.create(time);
+    }
+
+    /**
+     * Returns a Monotonic ULID.
+     * @return a ULID
+     */
+    public static ULID getMonotonicUlid() {
+        return MonotonicFactoryHolder.INSTANCE.create();
+    }
+
+    /**
+     * Returns a Monotonic ULID with a given time.
+     * @param time a number of milliseconds since 1970-01-01 (Unix epoch).
+     * @return a ULID
+     */
+    public static ULID getMonotonicUlid(final long time) {
+        return MonotonicFactoryHolder.INSTANCE.create(time);
+    }
+
+    /**
      * Convert the ULID into a UUID.
      * <p>
      * A ULID has 128-bit compatibility with a {@link UUID}.
@@ -438,18 +611,6 @@ public final class ULID implements Serializable, Comparable<ULID> {
     }
 
     /**
-     * Returns the instant of creation.
-     * <p>
-     * The instant of creation is extracted from the time component.
-     * @param string a canonical string
-     * @return the {@link Instant} of creation
-     * @throws IllegalArgumentException if the input string is invalid
-     */
-    public static Instant getInstant(String string) {
-        return Instant.ofEpochMilli(getTime(string));
-    }
-
-    /**
      * Returns the time component as a number.
      * <p>
      * The time component is a number between 0 and 2^48-1. It is equivalent to the
@@ -458,35 +619,6 @@ public final class ULID implements Serializable, Comparable<ULID> {
      */
     public long getTime() {
         return this.msb >>> 16;
-    }
-
-    /**
-     * Returns the time component as a number.
-     * <p>
-     * The time component is a number between 0 and 2^48-1. It is equivalent to the
-     * count of milliseconds since 1970-01-01 (Unix epoch).
-     * @param string a canonical string
-     * @return a number of milliseconds
-     * @throws IllegalArgumentException if the input string is invalid
-     */
-    public static long getTime(String string) {
-
-        final char[] chars = toCharArray(string);
-
-        long time = 0;
-
-        time |= ALPHABET_VALUES[chars[0x00]] << 45;
-        time |= ALPHABET_VALUES[chars[0x01]] << 40;
-        time |= ALPHABET_VALUES[chars[0x02]] << 35;
-        time |= ALPHABET_VALUES[chars[0x03]] << 30;
-        time |= ALPHABET_VALUES[chars[0x04]] << 25;
-        time |= ALPHABET_VALUES[chars[0x05]] << 20;
-        time |= ALPHABET_VALUES[chars[0x06]] << 15;
-        time |= ALPHABET_VALUES[chars[0x07]] << 10;
-        time |= ALPHABET_VALUES[chars[0x08]] << 5;
-        time |= ALPHABET_VALUES[chars[0x09]];
-
-        return time;
     }
 
     /**
@@ -507,56 +639,6 @@ public final class ULID implements Serializable, Comparable<ULID> {
         bytes[0x7] = (byte) (lsb >>> 16);
         bytes[0x8] = (byte) (lsb >>> 8);
         bytes[0x9] = (byte) (lsb);
-        return bytes;
-    }
-
-    /**
-     * Returns the random component as a byte array.
-     * <p>
-     * The random component is an array of 10 bytes (80 bits).
-     * @param string a canonical string
-     * @return a byte array
-     * @throws IllegalArgumentException if the input string is invalid
-     */
-    public static byte[] getRandom(String string) {
-
-        final char[] chars = toCharArray(string);
-
-        long random0 = 0;
-        long random1 = 0;
-
-        random0 |= ALPHABET_VALUES[chars[0x0a]] << 35;
-        random0 |= ALPHABET_VALUES[chars[0x0b]] << 30;
-        random0 |= ALPHABET_VALUES[chars[0x0c]] << 25;
-        random0 |= ALPHABET_VALUES[chars[0x0d]] << 20;
-        random0 |= ALPHABET_VALUES[chars[0x0e]] << 15;
-        random0 |= ALPHABET_VALUES[chars[0x0f]] << 10;
-        random0 |= ALPHABET_VALUES[chars[0x10]] << 5;
-        random0 |= ALPHABET_VALUES[chars[0x11]];
-
-        random1 |= ALPHABET_VALUES[chars[0x12]] << 35;
-        random1 |= ALPHABET_VALUES[chars[0x13]] << 30;
-        random1 |= ALPHABET_VALUES[chars[0x14]] << 25;
-        random1 |= ALPHABET_VALUES[chars[0x15]] << 20;
-        random1 |= ALPHABET_VALUES[chars[0x16]] << 15;
-        random1 |= ALPHABET_VALUES[chars[0x17]] << 10;
-        random1 |= ALPHABET_VALUES[chars[0x18]] << 5;
-        random1 |= ALPHABET_VALUES[chars[0x19]];
-
-        final byte[] bytes = new byte[RANDOM_BYTES];
-
-        bytes[0x0] = (byte) (random0 >>> 32);
-        bytes[0x1] = (byte) (random0 >>> 24);
-        bytes[0x2] = (byte) (random0 >>> 16);
-        bytes[0x3] = (byte) (random0 >>> 8);
-        bytes[0x4] = (byte) (random0);
-
-        bytes[0x5] = (byte) (random1 >>> 32);
-        bytes[0x6] = (byte) (random1 >>> 24);
-        bytes[0x7] = (byte) (random1 >>> 16);
-        bytes[0x8] = (byte) (random1 >>> 8);
-        bytes[0x9] = (byte) (random1);
-
         return bytes;
     }
 
@@ -604,21 +686,6 @@ public final class ULID implements Serializable, Comparable<ULID> {
         }
 
         return new ULID(newMsb, newLsb);
-    }
-
-    /**
-     * Checks if the input string is valid.
-     * <p>
-     * The input string must be 26 characters long and must contain only characters
-     * from Crockford's base 32 alphabet.
-     * <p>
-     * The first character of the input string must be between 0 and 7.
-     * @param string a canonical string
-     * @return true if the input string is valid
-     * @see <a href="https://www.crockford.com/base32.html">Crockford's Base 32</a>
-     */
-    public static boolean isValid(String string) {
-        return string != null && isValidCharArray(string.toCharArray());
     }
 
     /**
@@ -704,83 +771,6 @@ public final class ULID implements Serializable, Comparable<ULID> {
         chars[0x19] = alphabet[(int) (random1 & 0b11111)];
 
         return new String(chars);
-    }
-
-    static char[] toCharArray(String string) {
-        char[] chars = string == null ? null : string.toCharArray();
-        if (!isValidCharArray(chars)) {
-            throw new IllegalArgumentException(String.format("Invalid ULID: \"%s\"", string));
-        }
-        return chars;
-    }
-
-    /*
-     * Checks if the string is a valid ULID.
-     *
-     * A valid ULID string is a sequence of 26 characters from Crockford's Base 32
-     * alphabet.
-     *
-     * The first character of the input string must be between 0 and 7.
-     */
-    static boolean isValidCharArray(final char[] chars) {
-
-        if (chars == null || chars.length != ULID_CHARS) {
-            return false; // null or wrong size!
-        }
-
-        // The time component has 48 bits.
-        // The base32 encoded time component has 50 bits.
-        // The time component cannot be greater than 2^48-1.
-        // So the 2 first bits of the base32 decoded time component must be ZERO.
-        // As a consequence, the 1st char of the input string must be between 0 and 7.
-        if ((ALPHABET_VALUES[chars[0]] & 0b11000) != 0) {
-            // ULID specification:
-            // "Any attempt to decode or encode a ULID larger than this (time > 2^48-1)
-            // should be rejected by all implementations, to prevent overflow bugs."
-            return false; // time overflow!
-        }
-
-        for (int i = 0; i < chars.length; i++) {
-            if (ALPHABET_VALUES[chars[i]] == -1) {
-                return false; // invalid character!
-            }
-        }
-
-        return true; // It seems to be OK.
-    }
-
-    /**
-     * Returns a ULID.
-     * @return a ULID
-     */
-    public static ULID randomULID() {
-        return UlidFactoryHolder.INSTANCE.create();
-    }
-
-    /**
-     * Returns a ULID with a given time.
-     * @param time a number of milliseconds since 1970-01-01 (Unix epoch).
-     * @return a ULID
-     */
-    public static ULID getUlid(final long time) {
-        return UlidFactoryHolder.INSTANCE.create(time);
-    }
-
-    /**
-     * Returns a Monotonic ULID.
-     * @return a ULID
-     */
-    public static ULID getMonotonicUlid() {
-        return MonotonicFactoryHolder.INSTANCE.create();
-    }
-
-    /**
-     * Returns a Monotonic ULID with a given time.
-     * @param time a number of milliseconds since 1970-01-01 (Unix epoch).
-     * @return a ULID
-     */
-    public static ULID getMonotonicUlid(final long time) {
-        return MonotonicFactoryHolder.INSTANCE.create(time);
     }
 
     private static class UlidFactoryHolder {

@@ -48,6 +48,29 @@ public enum IOCase {
     SYSTEM("System", !FilenameUtils.isSystemWindows());
 
     /**
+     * Serialization version.
+     */
+    private static final long serialVersionUID = -6343169151696340687L;
+    /**
+     * The enumeration name.
+     */
+    private final String name;
+    /**
+     * The sensitivity flag.
+     */
+    private final transient boolean sensitive;
+
+    /**
+     * Constructs a new instance.
+     * @param name      the name
+     * @param sensitive the sensitivity
+     */
+    IOCase(final String name, final boolean sensitive) {
+        this.name = name;
+        this.sensitive = sensitive;
+    }
+
+    /**
      * Tests for cases sensitivity in a null-safe manner.
      * @param caseSensitivity an IOCase.
      * @return true if the input is non-null and {@link #isCaseSensitive()}.
@@ -56,21 +79,6 @@ public enum IOCase {
     public static boolean isCaseSensitive(final IOCase caseSensitivity) {
         return caseSensitivity != null && !caseSensitivity.isCaseSensitive();
     }
-
-    /**
-     * Serialization version.
-     */
-    private static final long serialVersionUID = -6343169151696340687L;
-
-    /**
-     * The enumeration name.
-     */
-    private final String name;
-
-    /**
-     * The sensitivity flag.
-     */
-    private final transient boolean sensitive;
 
     /**
      * Factory method to create an IOCase from a name.
@@ -85,16 +93,6 @@ public enum IOCase {
             }
         }
         throw new IllegalArgumentException("Invalid IOCase name: " + name);
-    }
-
-    /**
-     * Constructs a new instance.
-     * @param name      the name
-     * @param sensitive the sensitivity
-     */
-    IOCase(final String name, final boolean sensitive) {
-        this.name = name;
-        this.sensitive = sensitive;
     }
 
     /**

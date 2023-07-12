@@ -27,7 +27,6 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * SQLite 字段类型转换
- *
  * @author chen_wj, hanchunlin
  * @since 2019-05-08
  */
