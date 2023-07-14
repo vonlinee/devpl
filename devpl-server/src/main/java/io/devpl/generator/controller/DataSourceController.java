@@ -3,6 +3,7 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
@@ -27,8 +28,8 @@ public class DataSourceController {
 
     /**
      * 获取数据源列表
-     * @param query
-     * @return
+     * @param query 查询参数
+     * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
     public Result<PageResult<GenDataSource>> page(Query query) {
@@ -39,14 +40,12 @@ public class DataSourceController {
     @GetMapping("/datasource/list")
     public Result<List<GenDataSource>> list() {
         List<GenDataSource> list = datasourceService.getList();
-
         return Result.ok(list);
     }
 
     @GetMapping("/datasource/{id}")
     public Result<GenDataSource> get(@PathVariable("id") Long id) {
         GenDataSource data = datasourceService.getById(id);
-
         return Result.ok(data);
     }
 
@@ -54,8 +53,7 @@ public class DataSourceController {
     public Result<String> test(@PathVariable("id") Long id) {
         try {
             GenDataSource entity = datasourceService.getById(id);
-
-            DbUtils.getConnection(new io.devpl.generator.config.GenDataSource(entity));
+            DbUtils.getConnection(new DataSourceInfo(entity));
             return Result.ok("连接成功");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -66,21 +64,18 @@ public class DataSourceController {
     @PostMapping("/datasource")
     public Result<String> save(@RequestBody GenDataSource entity) {
         datasourceService.save(entity);
-
         return Result.ok();
     }
 
     @PutMapping("/datasource")
     public Result<String> update(@RequestBody GenDataSource entity) {
         datasourceService.updateById(entity);
-
         return Result.ok();
     }
 
     @DeleteMapping("/datasource")
     public Result<String> delete(@RequestBody Long[] ids) {
         datasourceService.removeBatchByIds(Arrays.asList(ids));
-
         return Result.ok();
     }
 
@@ -92,7 +87,7 @@ public class DataSourceController {
     public Result<List<GenTable>> tableList(@PathVariable("id") Long id) {
         try {
             // 获取数据源
-            io.devpl.generator.config.GenDataSource datasource = datasourceService.get(id);
+            DataSourceInfo datasource = datasourceService.get(id);
             // 根据数据源，获取全部数据表
             List<GenTable> tableList = GenUtils.getTableList(datasource);
             return Result.ok(tableList);

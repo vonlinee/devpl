@@ -22,9 +22,11 @@
                              align="center"></el-table-column>
             <el-table-column prop="templatePath" label="模板路径" show-overflow-tooltip header-align="center"
                              align="center"></el-table-column>
-            <el-table-column prop="content" label="模板内容" show-overflow-tooltip header-align="center"
+            <el-table-column prop="content" label="模板内容" header-align="center"
                              align="center">
-
+                <template #default="scope">
+                    <el-text truncated>{{scope.row.content}}</el-text>
+                </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
                              align="center"></el-table-column>
@@ -32,6 +34,7 @@
                              align="center"></el-table-column>
             <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
                 <template #default="scope">
+                    <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>
                     <el-button type="primary" link @click="addOrUpdateHandle(scope.row.templateId)">修改</el-button>
                     <el-button type="primary" link @click="deleteBatchHandle(scope.row.templateId)">删除</el-button>
                 </template>
@@ -48,6 +51,10 @@
         >
         </el-pagination>
 
+        <el-dialog v-model="templateDialogShowing">
+            <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px"></monaco-editor>
+        </el-dialog>
+
         <!-- 弹窗, 新增 / 修改 -->
         <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
     </el-card>
@@ -60,6 +67,7 @@ import {ElButton} from "element-plus";
 import AddOrUpdate from './add-or-update.vue'
 import {useCrud} from '@/hooks'
 import {IHooksOptions} from '@/hooks/interface'
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/api/template/page',
@@ -76,6 +84,19 @@ const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle
 const addOrUpdateRef = ref()
 const addOrUpdateHandle = (id?: number) => {
     addOrUpdateRef.value.init(id)
+}
+
+const templateDialogShowing = ref(false)
+const templateContentEditorRef = ref()
+
+function showTemplateEditDialog(templateInfo: any) {
+    templateDialogShowing.value = true
+    if (templateInfo.type == 1) {
+        // 获取文件内容
+    } else {
+        // 字符串模板
+        templateContentEditorRef.value.setText(templateInfo.content)
+    }
 }
 
 onMounted(() => getDataList())

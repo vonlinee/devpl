@@ -60,7 +60,9 @@ export default defineComponent({
         </template>
     </el-input>
 
-    <el-dialog v-model="dialogShowing" height="600" width="600" show-footer
+    <!-- 嵌套弹窗需配置append-to-body为true -->
+    <el-dialog v-model="dialogShowing" show-footer
+               append-to-body
                @confirm="dialogInput"
                @show="dialogInputText = inputRef">
         <template #title>

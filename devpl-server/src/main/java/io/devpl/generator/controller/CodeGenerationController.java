@@ -34,8 +34,7 @@ public class CodeGenerationController {
                 codeGenService.downloadCode(Long.parseLong(tableId), zip);
             }
             // zip压缩包数据
-            byte[] data = outputStream.toByteArray();
-            ServletUtils.downloadFile(response, "devpl.zip", data);
+            ServletUtils.downloadFile(response, "devpl.zip", outputStream.toByteArray());
         }
     }
 
@@ -46,7 +45,7 @@ public class CodeGenerationController {
      */
     @ResponseBody
     @PostMapping("/code")
-    public Result<List<String>> code(@RequestBody Long[] tableIds) throws Exception {
+    public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) throws Exception {
         // 生成代码
         for (Long tableId : tableIds) {
             codeGenService.generatorCode(tableId);

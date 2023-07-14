@@ -23,7 +23,7 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTab
     private final FieldTypeService fieldTypeService;
 
     @Override
-    public List<GenTableField> getByTableId(Long tableId) {
+    public List<GenTableField> listByTableId(Long tableId) {
         return baseMapper.getByTableId(tableId);
     }
 
@@ -42,6 +42,7 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTab
         }
     }
 
+    @Override
     public void initFieldList(List<GenTableField> tableFieldList) {
         // 字段类型、属性类型映射
         Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
@@ -67,5 +68,4 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTab
             field.setSort(index++);
         }
     }
-
 }

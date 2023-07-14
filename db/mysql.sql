@@ -222,3 +222,28 @@ CREATE TABLE `template_info` (
      `deleted` tinyint(4) DEFAULT NULL COMMENT '逻辑删除状态',
      PRIMARY KEY (template_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='模板记录表';
+
+/**
+  文件生成表
+ */
+DROP TABLE IF EXISTS `template_file_generation`;
+CREATE TABLE `template_file_generation` (
+    `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
+    `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+    `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
+    PRIMARY KEY (`pid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='模板文件生成关联表';
+
+/**
+  表文件生成
+ */
+DROP TABLE IF EXISTS `table_file_generation`;
+CREATE TABLE `table_file_generation` (
+     `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+     `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
+     `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+     `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
+     `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
+     PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表文件生成记录表';

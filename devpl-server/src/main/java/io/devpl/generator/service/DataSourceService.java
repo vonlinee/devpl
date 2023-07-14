@@ -3,6 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
+import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.entity.GenDataSource;
 
 import java.util.List;
@@ -27,5 +28,5 @@ public interface DataSourceService extends BaseService<GenDataSource> {
      * 根据数据源ID，获取数据源
      * @param datasourceId 数据源ID
      */
-    io.devpl.generator.config.GenDataSource get(Long datasourceId);
+    DataSourceInfo get(Long datasourceId);
 }

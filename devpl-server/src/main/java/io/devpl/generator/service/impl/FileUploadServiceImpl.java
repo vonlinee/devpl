@@ -1,10 +1,11 @@
-package io.devpl.generator.service;
+package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.FileStorageStrategy;
 import io.devpl.generator.domain.param.FileUploadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
 import io.devpl.generator.domain.vo.FileUploadVO;
+import io.devpl.generator.service.IFileUploadService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

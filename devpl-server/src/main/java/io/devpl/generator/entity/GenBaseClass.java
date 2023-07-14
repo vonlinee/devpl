@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 基类管理
+ * 基类信息
  */
 @Data
 @TableName("gen_base_class")

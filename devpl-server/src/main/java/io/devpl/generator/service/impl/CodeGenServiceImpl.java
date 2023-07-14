@@ -85,6 +85,10 @@ public class CodeGenServiceImpl implements CodeGenService {
         }
     }
 
+    /**
+     * 生成某个表的文件
+     * @param tableId gen_table主键
+     */
     @Override
     public void generatorCode(Long tableId) {
         // 数据模型
@@ -103,10 +107,11 @@ public class CodeGenServiceImpl implements CodeGenService {
      * 获取渲染的数据模型
      * @param tableId 表ID
      */
-    private Map<String, Object> getDataModel(Long tableId) {
+    @Override
+    public Map<String, Object> getDataModel(Long tableId) {
         // 表信息
         GenTable table = tableService.getById(tableId);
-        List<GenTableField> fieldList = tableFieldService.getByTableId(tableId);
+        List<GenTableField> fieldList = tableFieldService.listByTableId(tableId);
         table.setFieldList(fieldList);
 
         // 数据模型

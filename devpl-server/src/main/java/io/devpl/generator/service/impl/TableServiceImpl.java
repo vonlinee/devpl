@@ -8,7 +8,7 @@ import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
-import io.devpl.generator.config.GenDataSource;
+import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.config.template.GeneratorConfig;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.dao.TableDao;
@@ -70,7 +70,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
     @Transactional(rollbackFor = Exception.class)
     public void tableImport(Long datasourceId, String tableName) {
         // 初始化配置信息
-        GenDataSource dataSource = dataSourceService.get(datasourceId);
+        DataSourceInfo dataSource = dataSourceService.get(datasourceId);
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
@@ -121,7 +121,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         GenTable table = this.getById(id);
 
         // 初始化配置信息
-        GenDataSource datasource = dataSourceService.get(table.getDatasourceId());
+        DataSourceInfo datasource = dataSourceService.get(table.getDatasourceId());
 
         // 从数据库获取表字段列表
         List<GenTableField> dbTableFieldList = GenUtils.getTableFieldList(datasource, table.getId(), table.getTableName());
@@ -133,7 +133,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
             .collect(Collectors.toList());
 
         // 表字段列表
-        List<GenTableField> tableFieldList = tableFieldService.getByTableId(id);
+        List<GenTableField> tableFieldList = tableFieldService.listByTableId(id);
 
         Map<String, GenTableField> tableFieldMap = tableFieldList.stream()
             .collect(Collectors.toMap(GenTableField::getFieldName, Function.identity()));

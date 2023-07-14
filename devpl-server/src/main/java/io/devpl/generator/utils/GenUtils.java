@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.config.DbType;
-import io.devpl.generator.config.GenDataSource;
+import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
@@ -27,7 +27,7 @@ public class GenUtils {
      * 根据数据源，获取全部数据表
      * @param datasource 数据源
      */
-    public static List<GenTable> getTableList(GenDataSource datasource) {
+    public static List<GenTable> getTableList(DataSourceInfo datasource) {
         List<GenTable> tableList = new ArrayList<>();
         try {
             AbstractQuery query = datasource.getDbQuery();
@@ -56,7 +56,7 @@ public class GenUtils {
      * @param datasource 数据源
      * @param tableName  表名
      */
-    public static GenTable getTable(GenDataSource datasource, String tableName) {
+    public static GenTable getTable(DataSourceInfo datasource, String tableName) {
         try {
             AbstractQuery query = datasource.getDbQuery();
 
@@ -85,7 +85,7 @@ public class GenUtils {
      * @param tableId    表ID
      * @param tableName  表名
      */
-    public static List<GenTableField> getTableFieldList(GenDataSource datasource, Long tableId, String tableName) {
+    public static List<GenTableField> getTableFieldList(DataSourceInfo datasource, Long tableId, String tableName) {
         List<GenTableField> tableFieldList = new ArrayList<>();
 
         try {

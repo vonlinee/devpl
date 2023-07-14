@@ -33,7 +33,8 @@
                 </el-upload>
             </el-form-item>
             <el-form-item v-if="dataForm.type === 2" label="模板内容" prop="content">
-                <text-input v-model:text="dataForm.content"></text-input>
+                <text-input v-model:text="dataForm.content">
+                </text-input>
             </el-form-item>
         </el-form>
         <template #footer>

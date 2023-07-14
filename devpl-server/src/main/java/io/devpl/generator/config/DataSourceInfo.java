@@ -1,6 +1,7 @@
 package io.devpl.generator.config;
 
 import io.devpl.generator.config.query.*;
+import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.utils.DbUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
  */
 @Data
 @Slf4j
-public class GenDataSource {
+public class DataSourceInfo {
     /**
      * 数据源ID
      */
@@ -39,7 +40,7 @@ public class GenDataSource {
 
     private Connection connection;
 
-    public GenDataSource(io.devpl.generator.entity.GenDataSource entity) {
+    public DataSourceInfo(GenDataSource entity) {
         this.id = entity.getId();
         this.dbType = DbType.getValue(entity.getDbType());
         this.connUrl = entity.getConnUrl();
@@ -67,7 +68,7 @@ public class GenDataSource {
         }
     }
 
-    public GenDataSource(Connection connection) throws SQLException {
+    public DataSourceInfo(Connection connection) throws SQLException {
         this.id = 0L;
         this.dbType = DbType.getValue(connection.getMetaData().getDatabaseProductName());
 

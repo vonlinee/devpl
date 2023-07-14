@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
+import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.dao.DataSourceDao;
 import io.devpl.generator.entity.GenDataSource;
@@ -48,17 +49,17 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDat
     }
 
     @Override
-    public io.devpl.generator.config.GenDataSource get(Long datasourceId) {
+    public DataSourceInfo get(Long datasourceId) {
         // 初始化配置信息
-        io.devpl.generator.config.GenDataSource info = null;
+        DataSourceInfo info = null;
         if (datasourceId.intValue() == 0) {
             try {
-                info = new io.devpl.generator.config.GenDataSource(dataSource.getConnection());
+                info = new DataSourceInfo(dataSource.getConnection());
             } catch (SQLException e) {
                 log.error(e.getMessage(), e);
             }
         } else {
-            info = new io.devpl.generator.config.GenDataSource(this.getById(datasourceId));
+            info = new DataSourceInfo(this.getById(datasourceId));
         }
 
         return info;

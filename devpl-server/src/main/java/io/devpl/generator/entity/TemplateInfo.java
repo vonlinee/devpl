@@ -28,7 +28,7 @@ public class TemplateInfo extends EntityBase {
     private String templateName;
 
     /**
-     * 模板类型
+     * 模板类型: 1-文件模板 2-字符串模板
      */
     @TableField(value = "type")
     private Integer type;

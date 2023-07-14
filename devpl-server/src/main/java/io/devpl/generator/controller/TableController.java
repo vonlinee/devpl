@@ -41,7 +41,7 @@ public class TableController {
         GenTable table = tableService.getById(id);
 
         // 获取表的字段
-        List<GenTableField> fieldList = tableFieldService.getByTableId(table.getId());
+        List<GenTableField> fieldList = tableFieldService.listByTableId(table.getId());
         table.setFieldList(fieldList);
         return Result.ok(table);
     }

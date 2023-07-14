@@ -10,7 +10,12 @@ import java.util.List;
  */
 public interface TableFieldService extends BaseService<GenTableField> {
 
-    List<GenTableField> getByTableId(Long tableId);
+    /**
+     * 查询表的所有字段
+     * @param tableId 表ID
+     * @return 表的字段
+     */
+    List<GenTableField> listByTableId(Long tableId);
 
     void deleteBatchTableIds(Long[] tableIds);
 
