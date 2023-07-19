@@ -6,7 +6,6 @@ import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorConfig;
 import io.devpl.generator.config.template.GeneratorInfo;
-import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.GenBaseClass;
 import io.devpl.generator.entity.GenTable;
@@ -16,7 +15,6 @@ import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FilenameUtils;
-import io.devpl.sdk.util.IdUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -26,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -76,7 +76,6 @@ public class CodeGenServiceImpl implements CodeGenService {
             String path = templateService.render(template.getGeneratorPath(), dataModel);
 
             path = tableId + File.separator + path;
-
             try {
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(path));
@@ -97,7 +96,6 @@ public class CodeGenServiceImpl implements CodeGenService {
     public void generatorCode(Long tableId) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableId);
-        ProjectInfo project = generatorInfo.getProject();
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
@@ -203,7 +201,11 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     @Override
     public String getFileContent(String path) {
-        return FileUtil.readString(path, StandardCharsets.UTF_8);
+        Path filepath = Path.of(path);
+        if (Files.exists(filepath)) {
+            return FileUtil.readString(path, StandardCharsets.UTF_8);
+        }
+        throw ServerException.create("文件%s不存在", path);
     }
 
     /**

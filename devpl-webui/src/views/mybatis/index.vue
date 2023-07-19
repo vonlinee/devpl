@@ -88,21 +88,7 @@ export default {
     },
     setup(props, context) {
         // 数据
-        const code = ref(`<select id="selectByReviewResult" resultType="com.lancoo.examuniv.entity.RankExamEnrollment">
-    SELECT enroll.id, enroll.school_id, enroll.student_id
-    FROM rank_exam_review AS review LEFT JOIN rank_exam_enrollment AS enroll ON review.enrollment_id = enroll.id
-    WHERE review.school_id = #{param.schoolId} AND review.reviewer_id = #{userId}
-    <choose>
-        <when test="pass">
-            AND review.is_pass = 1
-        </when>
-        <otherwise>
-            AND review.is_pass = 0
-        </otherwise>
-    </choose>
-    ORDER BY review.id DESC
-</select>`)
-
+        const code = ref('')
         let dialogVisiable = ref(false)
         let dialogEditorRef = ref(null)
         let editorRef = ref(null)

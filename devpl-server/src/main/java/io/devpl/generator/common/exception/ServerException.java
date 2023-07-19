@@ -30,4 +30,8 @@ public class ServerException extends RuntimeException {
         this.code = StatusCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
     }
+
+    public static ServerException create(String msgTemplate, Object... args) {
+        return new ServerException(msgTemplate.formatted(args));
+    }
 }

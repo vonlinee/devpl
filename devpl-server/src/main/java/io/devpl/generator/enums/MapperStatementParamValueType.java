@@ -7,11 +7,12 @@ import com.baomidou.mybatisplus.generator.type.DataType;
  */
 public enum MapperStatementParamValueType implements DataType {
 
-    NUMBER("NUMBER"),
+    BOOLEAN("Boolean"),
+    NUMBER("Number"),
     STRING("String"),
     COLLECTION("Collection");
 
-    private String typeName;
+    private final String typeName;
 
     MapperStatementParamValueType(String typeName) {
         this.typeName = typeName;
@@ -26,6 +27,6 @@ public enum MapperStatementParamValueType implements DataType {
 
     @Override
     public String getQualifier() {
-        return null;
+        return typeName;
     }
 }

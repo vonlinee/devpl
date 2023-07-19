@@ -18,6 +18,11 @@ public class TemplateFileGeneration {
     private Long pid;
 
     /**
+     * 代码生成任务ID
+     */
+    private String taskId;
+
+    /**
      * 文件名称
      */
     private String fileName;
@@ -31,4 +36,9 @@ public class TemplateFileGeneration {
      * 保存路径
      */
     private String savePath;
+
+    /**
+     * 备注信息
+     */
+    private String remark;
 }

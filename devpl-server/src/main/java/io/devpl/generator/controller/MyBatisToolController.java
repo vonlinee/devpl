@@ -12,7 +12,7 @@ import io.devpl.generator.mybatis.tree.TreeNode;
 import io.devpl.generator.service.MyBatisService;
 import io.devpl.generator.utils.TypeUtils;
 import io.devpl.sdk.collection.Lists;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -22,13 +22,16 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * MyBatis 控制器
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/tools/mybatis")
-@AllArgsConstructor
 public class MyBatisToolController {
 
-    private final MyBatisService myBatisService;
+    @Resource
+    private MyBatisService myBatisService;
 
     /**
      * 界面上输入的值都是字符串
@@ -120,7 +123,7 @@ public class MyBatisToolController {
      * 获取Mapper Statemtn结合输入参数获取sql
      */
     @PostMapping("/ms/sql")
-    public Result<?> getPreCompliedSql(@RequestBody GetSqlParam param) throws Exception {
+    public Result<String> getPreCompliedSql(@RequestBody GetSqlParam param) {
         List<TreeNode<ParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
         Map<String, Object> map = new HashMap<>();
         for (TreeNode<ParamNode> treeNode : treeNodes) {
@@ -128,15 +131,16 @@ public class MyBatisToolController {
         }
         // TODO 缓存解析结果
         ParseResult result = MyBatisUtils.parseXml(param.getMapperStatement());
-
         MappedStatement ms = result.getMappedStatement();
         BoundSql boundSql = ms.getBoundSql(map);
-
+        String resultSql;
         if (param.getReal() == 0) {
             // 预编译sql
-            return Result.ok(SqlFormat.mysql(boundSql.getSql()));
+            resultSql = SqlFormat.mysql(boundSql.getSql());
+        } else {
+            resultSql = myBatisService.getExecutableSql(ms, boundSql, map);
         }
-        return Result.ok(myBatisService.getExecutableSql(ms, boundSql, map));
+        return Result.ok(resultSql);
     }
 
     /**

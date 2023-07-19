@@ -71,7 +71,6 @@ public class DataSourceInfo {
     public DataSourceInfo(Connection connection) throws SQLException {
         this.id = 0L;
         this.dbType = DbType.getValue(connection.getMetaData().getDatabaseProductName());
-
         if (dbType == DbType.MySQL) {
             this.dbQuery = new MySqlQuery();
         } else if (dbType == DbType.Oracle) {
@@ -85,7 +84,6 @@ public class DataSourceInfo {
         } else if (dbType == DbType.Clickhouse) {
             this.dbQuery = new ClickHouseQuery();
         }
-
         this.connection = connection;
     }
 }
