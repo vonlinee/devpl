@@ -151,7 +151,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
 
             // 修改字段
             GenTableField updateField = tableFieldMap.get(field.getFieldName());
-            updateField.setPrimaryPk(field.isPrimaryPk());
+            updateField.setPrimaryKey(field.isPrimaryKey());
             updateField.setFieldComment(field.getFieldComment());
             updateField.setFieldType(field.getFieldType());
             updateField.setAttrType(field.getAttrType());

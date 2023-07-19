@@ -36,7 +36,7 @@ public class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if>
         <#if field.autoFill == "UPDATE">
             @TableField(fill = FieldFill.UPDATE)
         </#if>
-        <#if field.primaryPk>
+        <#if field.primaryKey>
             @TableId
         </#if>
         private ${field.attrType} ${field.attrName};

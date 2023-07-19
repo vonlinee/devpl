@@ -2,9 +2,9 @@
 
 import {ref} from "vue";
 import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 let dialogRef = ref()
-
 
 
 const editorRef = ref()
@@ -26,6 +26,7 @@ function show() {
 function setLanguage() {
     editorRef.value.setLanguage(inputRef.value)
 }
+
 let file = ref()
 
 </script>
@@ -36,7 +37,13 @@ let file = ref()
     <button @click="setLanguage()">设置语言</button>
 
     <el-input v-model="inputRef"></el-input>
-    <adaptive-dialog ref="dialogRef"></adaptive-dialog>
+    <adaptive-dialog ref="dialogRef">
+        <template #body>
+            <div style="height: 400px">
+                <monaco-editor language="JavaScript"></monaco-editor>
+            </div>
+        </template>
+    </adaptive-dialog>
 </template>
 
 <style lang="scss">

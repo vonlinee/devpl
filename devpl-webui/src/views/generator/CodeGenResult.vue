@@ -17,6 +17,7 @@ const dialogVisiableRef = ref(false)
 
 // 根目录列表
 const rootDirsRef = ref<string[]>()
+const activeName = ref<string | null>(null)
 
 /**
  * 初始化
@@ -25,11 +26,10 @@ const rootDirsRef = ref<string[]>()
 function init(dirs: string[]) {
     dialogVisiableRef.value = true
     rootDirsRef.value = dirs
+    activeName.value = null
 }
 
 defineExpose({
     init
 })
-
-const activeName = ref('1')
 </script>+

@@ -14,6 +14,7 @@
 import {Pane, Splitpanes} from "splitpanes";
 import 'splitpanes/dist/splitpanes.css'
 import {onMounted, ref, toRefs} from 'vue';
+import {getLanguage} from "@/components/editor/monaco-editor";
 import {apiGetFileContent, apiGetFileTree} from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
@@ -26,6 +27,7 @@ interface FileNode {
     label: string,
     isLeaf: boolean,
     selectable: boolean,
+    extension: string, // 文件后缀名
     children: FileNode[]
 }
 
@@ -74,7 +76,9 @@ export default {
          */
         let handleFileTreeNodeClick = (fileNode: FileNode) => {
             if (fileNode && fileNode.isLeaf) {
+                const lang = getLanguage(fileNode.extension)
                 apiGetFileContent(fileNode.path).then(res => {
+                    editorRef.value.setLanguage(lang)
                     editorRef.value.setText(res.data)
                 })
             }
@@ -118,7 +122,7 @@ export default {
 }
 
 .el-tree > .el-tree-node {
-    min-width: 100%; /* 我加在这里 */
+    min-width: 100%;
     display: inline-block !important;
 }
 </style>

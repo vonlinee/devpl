@@ -22,3 +22,4 @@ self.MonacoEnvironment = {
         return new EditorWorker()
     }
 }
+

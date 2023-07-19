@@ -42,9 +42,9 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
-					<vxe-column field="primaryPk" title="主键">
+					<vxe-column field="primaryKey" title="主键">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.primaryPk"></vxe-checkbox>
+							<vxe-checkbox v-model="row.primaryKey"></vxe-checkbox>
 						</template>
 					</vxe-column>
 				</vxe-table>

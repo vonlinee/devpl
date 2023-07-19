@@ -6,13 +6,6 @@ import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructi
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import ITextModel = editor.ITextModel;
 
-// 可用的语言选项
-const languageOptions = ref([
-    "bat", "cpp", "css", "dockerfile", "go", "graphql", "html", "ini",
-    "java", "javascript", "json", "julia", "kotlin", "less", "markdown", "mysql", "objective-c", "pascal", "pascaligo",
-    "perl", "php", "powershell", "python", "r", "redis", "rust", "scala", "scheme", "scss", "shell",
-    "sophia", "sql", "swift", "tcl", "typescript", "xml", "yaml"])
-
 export default defineComponent({
     name: 'MonacoEditor',
     props: {
@@ -64,6 +57,7 @@ export default defineComponent({
         /**
          * 创建编辑器节点
          * @param domElement
+         * @return IStandaloneCodeEditor
          */
         function createMonacoEditor(domElement: HTMLElement): IStandaloneCodeEditor {
             return monaco.editor.create(domElement!, editorOptions)
@@ -84,9 +78,19 @@ export default defineComponent({
          * 暴露API
          */
         context.expose({
-            getText: function () {
-                return monacoEditor?.getValue()
+            /**
+             * 获取编辑器的文本
+             */
+            getText: function (): string {
+                if (monacoEditor) {
+                    return monacoEditor.getValue()
+                }
+                return ''
             },
+            /**
+             * 设置编辑器的文本
+             * @param text
+             */
             setText: function (text: string) {
                 monacoEditor?.setValue(text)
             },
@@ -94,7 +98,7 @@ export default defineComponent({
              * 设置语言模式 https://github.com/Microsoft/monaco-editor/issues/539
              * @param lang 如果为null，则会设置为plaintext
              */
-            setLanguage(lang: string) {
+            setLanguage(lang: string): void {
                 if (monacoEditor) {
                     const textModel: ITextModel | null = monacoEditor.getModel()
                     if (textModel) {
@@ -103,13 +107,16 @@ export default defineComponent({
                     }
                 }
             },
-            getLanguage() {
+            /**
+             * 获取编辑器语言模式
+             */
+            getLanguage(): string | undefined {
                 return editorOptions.language;
             }
         })
         return () => h("div", {
             ref: editorBoxRef,
-            class: 'editor-container',
+            class: 'monaco-editor-container',
             style: {
                 width: width.value,
                 height: height.value,

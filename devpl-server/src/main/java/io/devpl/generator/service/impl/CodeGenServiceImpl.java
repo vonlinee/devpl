@@ -2,7 +2,6 @@ package io.devpl.generator.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorConfig;
@@ -16,6 +15,9 @@ import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
+import io.devpl.sdk.io.FilenameUtils;
+import io.devpl.sdk.util.IdUtils;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,6 @@ public class CodeGenServiceImpl implements CodeGenService {
     private TableService tableService;
     @Resource
     private TableFieldService tableFieldService;
-
     @Resource
     private TemplateService templateService;
 
@@ -73,6 +74,9 @@ public class CodeGenServiceImpl implements CodeGenService {
             dataModel.put("templateName", template.getTemplateName());
             String content = templateService.render(template.getContent(), dataModel);
             String path = templateService.render(template.getGeneratorPath(), dataModel);
+
+            path = tableId + File.separator + path;
+
             try {
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(path));
@@ -126,9 +130,9 @@ public class CodeGenServiceImpl implements CodeGenService {
         dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
-        dataModel.put("ModuleName", StrUtil.upperFirst(table.getModuleName()));
+        dataModel.put("ModuleName", StringUtils.upperFirst(table.getModuleName()));
         dataModel.put("functionName", table.getFunctionName());
-        dataModel.put("FunctionName", StrUtil.upperFirst(table.getFunctionName()));
+        dataModel.put("FunctionName", StringUtils.upperFirst(table.getFunctionName()));
         dataModel.put("formLayout", table.getFormLayout());
 
         // 开发者信息
@@ -150,7 +154,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         // 表信息
         dataModel.put("tableName", table.getTableName());
         dataModel.put("tableComment", table.getTableComment());
-        dataModel.put("className", StrUtil.lowerFirst(table.getClassName()));
+        dataModel.put("className", StringUtils.lowerFirst(table.getClassName()));
         dataModel.put("ClassName", table.getClassName());
         dataModel.put("fieldList", table.getFieldList());
 
@@ -226,6 +230,12 @@ public class CodeGenServiceImpl implements CodeGenService {
                 } else {
                     fileNode.setIsLeaf(true);
                     fileNode.setSelectable(true);
+
+                    String extension = FilenameUtils.getExtension(file.getName());
+                    if (!StringUtils.hasText(extension)) {
+                        extension = "txt";
+                    }
+                    fileNode.setExtension(extension);
                 }
             }
         } else {
@@ -253,7 +263,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         // 查询列表
         List<GenTableField> queryList = new ArrayList<>();
         for (GenTableField field : table.getFieldList()) {
-            if (field.isPrimaryPk()) {
+            if (field.isPrimaryKey()) {
                 primaryList.add(field);
             }
             if (field.isFormItem()) {

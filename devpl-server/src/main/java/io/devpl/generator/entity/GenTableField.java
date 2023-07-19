@@ -52,7 +52,7 @@ public class GenTableField {
     /**
      * 主键 0：否  1：是
      */
-    private boolean primaryPk;
+    private boolean primaryKey;
     /**
      * 基类字段 0：否  1：是
      */

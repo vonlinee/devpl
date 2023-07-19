@@ -24,4 +24,9 @@ public class FileNode {
     private String path;
 
     private List<FileNode> children;
+
+    /**
+     * 文件扩展名，如果是目录，则为null
+     */
+    private String extension;
 }

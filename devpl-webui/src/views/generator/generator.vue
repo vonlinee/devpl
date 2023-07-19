@@ -216,8 +216,8 @@ const generatorHandle = () => {
         // 生成代码，自定义路径
         useGeneratorApi([dataForm.id]).then((res) => {
             visible.value = false
-            console.log(res.data)
             if (res.data) {
+                // 返回所有根目录列表
                 resultDialogRef.value.init(res.data)
             }
             emit('refreshDataList')

@@ -110,7 +110,7 @@ public class GenUtils {
                 field.setFieldType(fieldType);
                 field.setFieldComment(rs.getString(query.fieldComment()));
                 String key = rs.getString(query.fieldKey());
-                field.setPrimaryPk(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
+                field.setPrimaryKey(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
 
                 tableFieldList.add(field);
             }
