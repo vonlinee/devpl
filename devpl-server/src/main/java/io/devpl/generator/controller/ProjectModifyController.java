@@ -1,9 +1,9 @@
 package io.devpl.generator.controller;
 
-import cn.hutool.core.io.IoUtil;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.utils.ServletUtils;
 import io.devpl.generator.entity.ProjectModifyEntity;
 import io.devpl.generator.service.ProjectModifyService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,36 +24,27 @@ public class ProjectModifyController {
 
     @GetMapping("page")
     public Result<PageResult<ProjectModifyEntity>> page(@Valid Query query) {
-        PageResult<ProjectModifyEntity> page = projectModifyService.page(query);
-
-        return Result.ok(page);
+        return Result.ok(projectModifyService.page(query));
     }
 
     @GetMapping("{id}")
     public Result<ProjectModifyEntity> get(@PathVariable("id") Long id) {
-        ProjectModifyEntity entity = projectModifyService.getById(id);
-
-        return Result.ok(entity);
+        return Result.ok(projectModifyService.getById(id));
     }
 
     @PostMapping
-    public Result<String> save(@RequestBody ProjectModifyEntity entity) {
-        projectModifyService.save(entity);
-
-        return Result.ok();
+    public Result<Boolean> save(@RequestBody ProjectModifyEntity entity) {
+        return Result.ok(projectModifyService.save(entity));
     }
 
     @PutMapping
-    public Result<String> update(@RequestBody @Valid ProjectModifyEntity entity) {
-        projectModifyService.updateById(entity);
-
-        return Result.ok();
+    public Result<Boolean> update(@RequestBody @Valid ProjectModifyEntity entity) {
+        return Result.ok(projectModifyService.updateById(entity));
     }
 
     @DeleteMapping
-    public Result<String> delete(@RequestBody List<Long> idList) {
-        projectModifyService.removeByIds(idList);
-        return Result.ok();
+    public Result<Boolean> delete(@RequestBody List<Long> idList) {
+        return Result.ok(projectModifyService.removeByIds(idList));
     }
 
     /**
@@ -63,14 +54,7 @@ public class ProjectModifyController {
     public void download(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
         // 项目信息
         ProjectModifyEntity project = projectModifyService.getById(id);
-
         byte[] data = projectModifyService.download(project);
-
-        response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + project.getModifyProjectName() + ".zip\"");
-        response.addHeader("Content-Length", String.valueOf(data.length));
-        response.setContentType("application/octet-stream; charset=UTF-8");
-
-        IoUtil.write(response.getOutputStream(), false, data);
+        ServletUtils.downloadFile(response, project.getModifyProjectName() + ".zip", data);
     }
 }

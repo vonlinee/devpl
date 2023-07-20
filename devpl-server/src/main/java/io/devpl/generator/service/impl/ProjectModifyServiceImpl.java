@@ -11,6 +11,7 @@ import io.devpl.generator.dao.ProjectModifyDao;
 import io.devpl.generator.entity.ProjectModifyEntity;
 import io.devpl.generator.service.ProjectModifyService;
 import io.devpl.generator.utils.ProjectUtils;
+import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,6 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
     @Override
     public PageResult<ProjectModifyEntity> page(Query query) {
         IPage<ProjectModifyEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
@@ -85,7 +85,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
 
         // 项目标识替换
         map.put(project.getProjectCode(), project.getModifyProjectCode());
-        map.put(StrUtil.upperFirst(project.getProjectCode()), StrUtil.upperFirst(project.getModifyProjectCode()));
+        map.put(StringUtils.upperFirst(project.getProjectCode()), StringUtils.upperFirst(project.getModifyProjectCode()));
 
         return map;
     }

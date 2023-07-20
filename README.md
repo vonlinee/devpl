@@ -31,3 +31,12 @@ import "codemirror/addon/hint/show-hint.css";
 ```
 vue-codemirror@4.x
 
+文件类型与模板
+该类型的文件生成使用什么模板
+
+模板 + 数据 => 文件
+
+1. 生成任务
+
+
+

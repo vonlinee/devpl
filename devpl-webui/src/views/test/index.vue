@@ -3,6 +3,7 @@
 import {ref} from "vue";
 import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import CodeGenStepPane from "@/views/generator/CodeGenStepPane.vue";
 
 let dialogRef = ref()
 
@@ -44,6 +45,8 @@ let file = ref()
             </div>
         </template>
     </adaptive-dialog>
+
+    <code-gen-step-pane></code-gen-step-pane>
 </template>
 
 <style lang="scss">

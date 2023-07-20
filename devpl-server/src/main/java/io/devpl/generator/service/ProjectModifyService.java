@@ -15,5 +15,4 @@ public interface ProjectModifyService extends BaseService<ProjectModifyEntity> {
     PageResult<ProjectModifyEntity> page(Query query);
 
     byte[] download(ProjectModifyEntity project) throws IOException;
-
 }

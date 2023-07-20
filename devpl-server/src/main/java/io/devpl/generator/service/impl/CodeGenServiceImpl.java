@@ -199,6 +199,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         return node;
     }
 
+
     @Override
     public String getFileContent(String path) {
         Path filepath = Path.of(path);
@@ -224,13 +225,13 @@ public class CodeGenServiceImpl implements CodeGenService {
                 fileNode.setPath(file.getAbsolutePath());
                 node.add(fileNode);
                 if (file.isDirectory()) {
-                    fileNode.setIsLeaf(false);
+                    fileNode.setLeaf(false);
                     fileNode.setSelectable(false);
                     List<FileNode> children = new ArrayList<>();
                     fileNode.setChildren(children);
                     recursive(file, children);
                 } else {
-                    fileNode.setIsLeaf(true);
+                    fileNode.setLeaf(true);
                     fileNode.setSelectable(true);
 
                     String extension = FilenameUtils.getExtension(file.getName());
@@ -244,7 +245,7 @@ public class CodeGenServiceImpl implements CodeGenService {
             FileNode fileNode = new FileNode();
             fileNode.setKey(SecurityUtils.base64Encode(path.getAbsolutePath()));
             fileNode.setLabel(path.getName());
-            fileNode.setIsLeaf(true);
+            fileNode.setLeaf(true);
             fileNode.setSelectable(true);
             node.add(fileNode);
         }
@@ -283,5 +284,6 @@ public class CodeGenServiceImpl implements CodeGenService {
         dataModel.put("gridList", gridList);
         dataModel.put("queryList", queryList);
     }
+
 
 }

@@ -120,24 +120,12 @@ export default {
             style: {
                 height: '500px'
             },
-            mode: 'text/x-c++src',
-            spellcheck: false, // 拼写检查
-            autofocus: true, // Focus editor immediately after mounted.
-            indentWithTab: true,
-            tabSize: 2,
-            placeholder: 'hello world',
-            extensions: [xml()] //传递给CodeMirror EditorState。创建({扩展})
-        })
-
-        const cmOptions = reactive({
-            style: {
-                height: '500px'
-            },
             mode: 'text/x-mysql',
             spellcheck: false, // 拼写检查
             autofocus: true, // Focus editor immediately after mounted.
             indentWithTab: true,
             tabSize: 2,
+            placeholder: 'hello world',
             extensions: [sql()] //传递给CodeMirror EditorState。创建({扩展})
         })
 
@@ -182,7 +170,6 @@ export default {
             editorRef,
             sqlRef,
             dialogEditorRef,
-            cmOptions,
             getSqlOfMapperStatement
         }
     }
