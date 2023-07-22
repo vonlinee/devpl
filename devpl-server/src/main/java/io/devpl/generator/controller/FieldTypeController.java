@@ -23,46 +23,35 @@ public class FieldTypeController {
     /**
      * 字段类型
      * @param query 查询参数
-     * @return
+     * @return GenFieldType
      */
     @GetMapping("page")
     public Result<PageResult<GenFieldType>> page(Query query) {
-        PageResult<GenFieldType> page = fieldTypeService.page(query);
-        return Result.ok(page);
+        return Result.ok(fieldTypeService.page(query));
     }
 
     @GetMapping("{id}")
     public Result<GenFieldType> get(@PathVariable("id") Long id) {
-        GenFieldType data = fieldTypeService.getById(id);
-
-        return Result.ok(data);
+        return Result.ok(fieldTypeService.getById(id));
     }
 
     @GetMapping("list")
     public Result<Set<String>> list() {
-        Set<String> set = fieldTypeService.getList();
-
-        return Result.ok(set);
+        return Result.ok(fieldTypeService.getList());
     }
 
     @PostMapping
-    public Result<String> save(@RequestBody GenFieldType entity) {
-        fieldTypeService.save(entity);
-
-        return Result.ok();
+    public Result<Boolean> save(@RequestBody GenFieldType entity) {
+        return Result.ok(fieldTypeService.save(entity));
     }
 
     @PutMapping
-    public Result<String> update(@RequestBody GenFieldType entity) {
-        fieldTypeService.updateById(entity);
-
-        return Result.ok();
+    public Result<Boolean> update(@RequestBody GenFieldType entity) {
+        return Result.ok(fieldTypeService.updateById(entity));
     }
 
     @DeleteMapping
-    public Result<String> delete(@RequestBody Long[] ids) {
-        fieldTypeService.removeBatchByIds(Arrays.asList(ids));
-
-        return Result.ok();
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
+        return Result.ok(fieldTypeService.removeBatchByIds(Arrays.asList(ids)));
     }
 }

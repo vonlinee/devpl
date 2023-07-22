@@ -89,8 +89,6 @@ public class TestTrees {
          * 下级数据
          */
         private List<Tree> children;
-
     }
-
 }
 

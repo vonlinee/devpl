@@ -49,8 +49,7 @@ public class DdlFormatUtil {
             .rightParenthesis();
         if (autoTranslation) {
             HashMap<String, String> map = new HashMap<>();
-            String tableNameCommend =
-                map.getOrDefault(tableName.replace("_", " "), tableName);
+            String tableNameCommend = map.getOrDefault(tableName.replace("_", " "), tableName);
             builder.space().addComment(tableNameCommend);
         }
         return builder.end();

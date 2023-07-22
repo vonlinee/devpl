@@ -6,6 +6,8 @@ package io.devpl.generator.common.exception;
 public enum StatusCode {
 
     OK(200, "OK"),
+    NOT_FOUND(404, "Not Found"),
+    IO_ERROR(6001, "IO异常"),
     INTERNAL_SERVER_ERROR(500, "服务器异常，请稍后再试");
 
     private final int code;

@@ -3,6 +3,10 @@ import service from '@/utils/request'
 import {onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 
+/**
+ * CRUD Hooks
+ * @param options
+ */
 export const useCrud = (options: IHooksOptions) => {
 
     /**
@@ -141,7 +145,8 @@ export const useCrud = (options: IHooksOptions) => {
                     query()
                 })
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error("删除错误", err)
             })
     }
 
@@ -173,7 +178,8 @@ export const useCrud = (options: IHooksOptions) => {
                     })
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error("删除错误", err)
             })
     }
 

@@ -32,4 +32,4 @@ function init(dirs: string[]) {
 defineExpose({
     init
 })
-</script>+
+</script>

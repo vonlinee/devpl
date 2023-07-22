@@ -22,26 +22,22 @@ public class BaseClassController {
 
     @GetMapping("/page")
     public Result<PageResult<GenBaseClass>> page(Query query) {
-        PageResult<GenBaseClass> page = baseClassService.page(query);
-        return Result.ok(page);
+        return Result.ok(baseClassService.page(query));
     }
 
     @GetMapping("/list")
     public Result<List<GenBaseClass>> list() {
-        List<GenBaseClass> list = baseClassService.getList();
-        return Result.ok(list);
+        return Result.ok(baseClassService.getList());
     }
 
     @GetMapping("/{id}")
     public Result<GenBaseClass> get(@PathVariable("id") Long id) {
-        GenBaseClass data = baseClassService.getById(id);
-        return Result.ok(data);
+        return Result.ok(baseClassService.getById(id));
     }
 
     @PostMapping
-    public Result<String> save(@RequestBody GenBaseClass entity) {
-        baseClassService.save(entity);
-        return Result.ok();
+    public Result<Boolean> save(@RequestBody GenBaseClass entity) {
+        return Result.ok(baseClassService.save(entity));
     }
 
     @PutMapping

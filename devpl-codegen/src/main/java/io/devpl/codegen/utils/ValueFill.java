@@ -48,8 +48,7 @@ public class ValueFill {
     @SuppressWarnings("unchecked")
     public static <T> T createDefaultValueForType(Type type) {
         Object emptyObject = null;
-        if (type instanceof Class) {
-            final Class<?> classType = (Class<?>) type;
+        if (type instanceof Class<?> classType) {
             // 获取类型参数列表
             // final TypeVariable<? extends Class<?>>[] typeParameters = classType.getTypeParameters();
             emptyObject = createDefaultValueForClass(classType);

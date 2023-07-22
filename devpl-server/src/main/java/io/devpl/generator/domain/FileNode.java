@@ -1,6 +1,5 @@
 package io.devpl.generator.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 
 import java.util.List;
@@ -24,8 +23,7 @@ public class FileNode {
     /**
      * 是否是叶子结点
      */
-    @JsonAlias(value = "isLeaf")
-    private boolean isLeaf;
+    private Boolean isLeaf;
 
     /**
      * 是否可选中

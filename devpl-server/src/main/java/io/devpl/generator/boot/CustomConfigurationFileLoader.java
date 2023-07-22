@@ -21,9 +21,9 @@ import java.util.List;
 public class CustomConfigurationFileLoader implements EnvironmentPostProcessor {
 
     // 配置文件名称匹配
-    private ResourcePatternResolver resourceLoader = new PathMatchingResourcePatternResolver();
+    private final ResourcePatternResolver resourceLoader = new PathMatchingResourcePatternResolver();
     // 配置文件加载处理器
-    private List<PropertySourceLoader> propertySourceLoaders;
+    private final List<PropertySourceLoader> propertySourceLoaders;
 
     public CustomConfigurationFileLoader() {
         super();

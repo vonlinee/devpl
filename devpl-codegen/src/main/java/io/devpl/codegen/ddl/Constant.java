@@ -17,5 +17,4 @@ public class Constant {
     public static final String SERIAL_VERSION_UID = "serialVersionUID";
 
     public static final String PRIMARY_KEY_COMMEND = "物理主键";
-
 }

@@ -1,0 +1,12 @@
+/**
+ * 表格行数据
+ */
+interface GenFile {
+    pid: number
+    fileName: string,
+    templateId?: number,
+    remark: string,
+    editing: boolean,
+    // 是否内置的生成文件类型，内置的不可删除
+    builtin: boolean
+}

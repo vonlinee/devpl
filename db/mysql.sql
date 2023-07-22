@@ -247,3 +247,5 @@ CREATE TABLE `table_file_generation` (
      `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
      PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表文件生成记录表';
+
+ALTER TABLE devpl.template_file_generation ADD builtin tinyint(1) NULL COMMENT '是否内置';

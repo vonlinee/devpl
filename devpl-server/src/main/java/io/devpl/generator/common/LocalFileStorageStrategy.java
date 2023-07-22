@@ -28,12 +28,12 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
 
     @Override
     public String normalize(String path) {
-        return null;
+        return Path.of(path).normalize().toString();
     }
 
     @Override
     public boolean exists(String path) {
-        return false;
+        return Files.exists(Path.of(path));
     }
 
     @Override

@@ -50,4 +50,9 @@ public class TemplateFileGeneration {
      * 备注信息
      */
     private String remark;
+
+    /**
+     * 是否内置
+     */
+    private boolean builtin = true;
 }

@@ -24,3 +24,11 @@ export const useGeneratorApi = (tableIds: any[]) => {
 export const apiListGenFiles = () => {
     return http.get('/gen/generator/genfiles')
 }
+
+/**
+ * 保存或更新生成文件类型
+ * @param genFiles
+ */
+export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
+    return http.postJson('/gen/generator/genfiles/replace', genFiles)
+}

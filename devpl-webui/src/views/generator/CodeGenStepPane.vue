@@ -46,7 +46,6 @@ function showFileTypeManagerDialog() {
                 </el-table-column>
                 <el-table-column prop="remark" label="说明"/>
             </el-table>
-            <el-button type="primary">自定义文件类型</el-button>
             <el-button type="primary" @click="showFileTypeManagerDialog()">文件类型管理</el-button>
         </el-tab-pane>
         <el-tab-pane label="确认结果">
