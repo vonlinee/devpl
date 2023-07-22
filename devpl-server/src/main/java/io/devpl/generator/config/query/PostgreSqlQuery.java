@@ -14,7 +14,7 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("select t1.tablename, obj_description(relfilenode, 'pg_class') as comments from pg_tables t1, pg_class t2 ");
         sql.append("where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname ");
@@ -27,7 +27,7 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return "select t2.attname as columnName, pg_type.typname as dataType, col_description(t2.attrelid,t2.attnum) as columnComment,"
             + "(CASE t3.contype WHEN 'p' THEN 'PRI' ELSE '' END) as columnKey "
             + "from pg_class as t1, pg_attribute as t2 inner join pg_type on pg_type.oid = t2.atttypid "

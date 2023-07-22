@@ -15,7 +15,7 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("select dt.table_name, dtc.comments from user_tables dt,user_tab_comments dtc ");
         sql.append("where dt.table_name = dtc.table_name ");
@@ -39,7 +39,7 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return "SELECT A.COLUMN_NAME, A.DATA_TYPE, B.COMMENTS,DECODE(C.POSITION, '1', 'PRI') KEY FROM ALL_TAB_COLUMNS A "
             + " INNER JOIN ALL_COL_COMMENTS B ON A.TABLE_NAME = B.TABLE_NAME AND A.COLUMN_NAME = B.COLUMN_NAME AND B.OWNER = '#schema'"
             + " LEFT JOIN ALL_CONSTRAINTS D ON D.TABLE_NAME = A.TABLE_NAME AND D.CONSTRAINT_TYPE = 'P' AND D.OWNER = '#schema'"

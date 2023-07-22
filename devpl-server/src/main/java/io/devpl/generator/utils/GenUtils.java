@@ -4,13 +4,14 @@ import cn.hutool.core.text.NamingCase;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.devpl.generator.common.exception.ServerException;
-import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.DataSourceInfo;
+import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,8 @@ public class GenUtils {
             AbstractQuery query = datasource.getDbQuery();
 
             // 查询数据
-            PreparedStatement preparedStatement = datasource.getConnection().prepareStatement(query.tableSql(null));
+            PreparedStatement preparedStatement = datasource.getConnection()
+                .prepareStatement(query.getTableQuerySql(null));
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 GenTable table = new GenTable();
@@ -57,12 +59,10 @@ public class GenUtils {
      * @param tableName  表名
      */
     public static GenTable getTable(DataSourceInfo datasource, String tableName) {
-        try {
+        try (Connection connection = datasource.getConnection()) {
             AbstractQuery query = datasource.getDbQuery();
-
             // 查询数据
-            PreparedStatement preparedStatement = datasource.getConnection()
-                .prepareStatement(query.tableSql(tableName));
+            PreparedStatement preparedStatement = connection.prepareStatement(query.getTableQuerySql(tableName));
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 GenTable table = new GenTable();
@@ -74,7 +74,6 @@ public class GenUtils {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
         throw new ServerException("数据表不存在：" + tableName);
     }
 
@@ -90,29 +89,31 @@ public class GenUtils {
 
         try {
             AbstractQuery query = datasource.getDbQuery();
-            String tableFieldsSql = query.tableFieldsSql();
+            String tableFieldsSql = query.getTableFieldsQuerySql();
             if (datasource.getDbType() == DbType.Oracle) {
                 DatabaseMetaData md = datasource.getConnection().getMetaData();
                 tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
             } else {
                 tableFieldsSql = String.format(tableFieldsSql, tableName);
             }
-            PreparedStatement preparedStatement = datasource.getConnection().prepareStatement(tableFieldsSql);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                GenTableField field = new GenTableField();
-                field.setTableId(tableId);
-                field.setFieldName(rs.getString(query.fieldName()));
-                String fieldType = rs.getString(query.fieldType());
-                if (fieldType.contains(" ")) {
-                    fieldType = fieldType.substring(0, fieldType.indexOf(" "));
-                }
-                field.setFieldType(fieldType);
-                field.setFieldComment(rs.getString(query.fieldComment()));
-                String key = rs.getString(query.fieldKey());
-                field.setPrimaryKey(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
+            try (Connection connection = datasource.getConnection()) {
+                PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
+                ResultSet rs = preparedStatement.executeQuery();
+                while (rs.next()) {
+                    GenTableField field = new GenTableField();
+                    field.setTableId(tableId);
+                    field.setFieldName(rs.getString(query.fieldName()));
+                    String fieldType = rs.getString(query.fieldType());
+                    if (fieldType.contains(" ")) {
+                        fieldType = fieldType.substring(0, fieldType.indexOf(" "));
+                    }
+                    field.setFieldType(fieldType);
+                    field.setFieldComment(rs.getString(query.fieldComment()));
+                    String key = rs.getString(query.fieldKey());
+                    field.setPrimaryKey(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
 
-                tableFieldList.add(field);
+                    tableFieldList.add(field);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -159,7 +160,7 @@ public class GenUtils {
             className = StrUtil.removePrefix(tableName, removePrefix);
         }
         // 移除后缀
-        if (StrUtil.isNotBlank(removeSuffix)) {
+        if (StringUtils.isNotBlank(removeSuffix)) {
             className = StrUtil.removeSuffix(className, removeSuffix);
         }
         // 是否首字母大写

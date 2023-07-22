@@ -14,7 +14,7 @@ public class SQLServerQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("select cast(so.name as varchar(500)) as TABLE_NAME, cast(sep.value as varchar(500)) as COMMENTS from sysobjects so ");
         sql.append("left JOIN sys.extended_properties sep on sep.major_id=so.id and sep.minor_id=0 where (xtype='U' or xtype='V') ");
@@ -29,7 +29,7 @@ public class SQLServerQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return "SELECT  cast(a.name AS VARCHAR(500)) AS TABLE_NAME,cast(b.name AS VARCHAR(500)) AS COLUMN_NAME, "
             + "cast(c.VALUE AS NVARCHAR(500)) AS COMMENTS,cast(sys.types.name AS VARCHAR (500)) AS DATA_TYPE,"
             + "(SELECT CASE count(1) WHEN 1 then 'PRI' ELSE '' END"

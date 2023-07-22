@@ -14,7 +14,7 @@ public class MySqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("select table_name, table_comment from information_schema.tables ");
         sql.append("where table_schema = (select database()) ");
@@ -38,7 +38,7 @@ public class MySqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return "select column_name, data_type, column_comment, column_key from information_schema.columns "
             + "where table_name = '%s' and table_schema = (select database()) order by ordinal_position";
     }

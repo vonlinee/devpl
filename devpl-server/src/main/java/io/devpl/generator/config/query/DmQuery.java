@@ -14,7 +14,7 @@ public class DmQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT T.* FROM (SELECT DISTINCT T1.TABLE_NAME AS TABLE_NAME,T2.COMMENTS AS TABLE_COMMENT FROM USER_TAB_COLUMNS T1 ");
         sql.append("INNER JOIN USER_TAB_COMMENTS T2 ON T1.TABLE_NAME = T2.TABLE_NAME) T WHERE 1=1 ");
@@ -23,13 +23,12 @@ public class DmQuery implements AbstractQuery {
             sql.append("and T.TABLE_NAME = '").append(tableName).append("' ");
         }
         sql.append("order by T.TABLE_NAME asc");
-
         return sql.toString();
     }
 
 
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return
             "SELECT T2.COLUMN_NAME,T1.COMMENTS," +
                 "CASE WHEN T2.DATA_TYPE='NUMBER' THEN (CASE WHEN T2.DATA_PRECISION IS NULL THEN T2.DATA_TYPE WHEN NVL(T2.DATA_SCALE, 0) > 0 THEN T2.DATA_TYPE||'('||T2.DATA_PRECISION||','||T2.DATA_SCALE||')' ELSE T2.DATA_TYPE||'('||T2.DATA_PRECISION||')' END) ELSE T2.DATA_TYPE END DATA_TYPE ," +

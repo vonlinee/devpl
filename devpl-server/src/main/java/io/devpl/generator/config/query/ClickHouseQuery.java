@@ -10,9 +10,8 @@ import io.devpl.generator.config.DbType;
  */
 public class ClickHouseQuery implements AbstractQuery {
 
-
     @Override
-    public String tableFieldsSql() {
+    public String getTableFieldsQuerySql() {
         return "select * from system.columns where table='%s'";
     }
 
@@ -22,7 +21,7 @@ public class ClickHouseQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableSql(String tableName) {
+    public String getTableQuerySql(String tableName) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM system.tables WHERE 1=1 ");
 

@@ -1,6 +1,5 @@
 package io.devpl.generator.config.query;
 
-
 import io.devpl.generator.config.DbType;
 
 /**
@@ -16,7 +15,7 @@ public interface AbstractQuery {
     /**
      * 表信息查询 SQL
      */
-    String tableSql(String tableName);
+    String getTableQuerySql(String tableName);
 
     /**
      * 表名称
@@ -31,7 +30,7 @@ public interface AbstractQuery {
     /**
      * 表字段信息查询 SQL
      */
-    String tableFieldsSql();
+    String getTableFieldsQuerySql();
 
     /**
      * 字段名称
