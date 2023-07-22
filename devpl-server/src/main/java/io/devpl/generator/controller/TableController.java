@@ -85,7 +85,7 @@ public class TableController {
     @PostMapping("import/{datasourceId}")
     public Result<String> tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<String> tableNameList) {
         for (String tableName : tableNameList) {
-            tableService.tableImport(datasourceId, tableName);
+            tableService.importTable(datasourceId, tableName);
         }
         return Result.ok();
     }

@@ -6,124 +6,85 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {ElTable} from 'element-plus'
+import {apiListSelectableTemplates} from "@/api/template";
+import {apiListGenFiles} from "@/api/generator";
 
 const dialogVisiableRef = ref(false)
 
-interface User {
-    date: string
-    name: string
-    address: string
+interface GenFile {
+    pid: number
+    fileName: string,
+    templateId?: number,
+    remark: string
 }
 
-const currentRow = ref()
+// 表格
 const singleTableRef = ref<InstanceType<typeof ElTable>>()
 
-const setCurrent = (row?: User) => {
-    singleTableRef.value!.setCurrentRow(row)
-}
-const handleCurrentChange = (val: User | undefined) => {
-    currentRow.value = val
-}
-const tableData: User[] = [
-    {
-        date: 'Entity',
-        name: 'Tom',
-        address: '实体类文件',
-    },
-    {
-        date: 'Mapper',
-        name: 'Tom',
-        address: 'Mapper文件',
-    },
-    {
-        date: 'Mapper Xml',
-        name: 'Tom',
-        address: 'Mapper XML文件',
-    },
-    {
-        date: 'Controller',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-]
+// 默认的文件生成与模板对应关系
+const tableData = ref()
 
-function init() {
-    dialogVisiableRef.value = true
-}
-
-const tableDataRef = ref(tableData)
-
-function addNewRow() {
-    tableDataRef.value.push({
-        date: '',
-        name: '',
-        address: ''
+/**
+ * 获取表格数据
+ */
+function refreshTableData() {
+    apiListGenFiles().then((res) => {
+        tableData.value = res.data
     })
 }
 
-const value = ref('')
-
-const options = [
-    {
-        value: 'Option1',
-        label: 'Option1',
-    },
-    {
-        value: 'Option2',
-        label: 'Option2',
-    },
-    {
-        value: 'Option3',
-        label: 'Option3',
-    },
-    {
-        value: 'Option4',
-        label: 'Option4',
-    },
-    {
-        value: 'Option5',
-        label: 'Option5',
-    },
-]
+function init() {
+    dialogVisiableRef.value = true
+    templateOptions.value = []
+    apiListSelectableTemplates().then(res => {
+        templateOptions.value = res.data
+    })
+    refreshTableData()
+}
 
 defineExpose({
     init
 })
 
+let templateOptions = ref([])
+
+function handleCurrentChange() {
+
+}
 </script>
 
 <template>
-    <el-dialog v-model="dialogVisiableRef" draggable destroy-on-close>
-        <el-button @click="addNewRow">新增</el-button>
+    <el-dialog v-model="dialogVisiableRef" title="目标生成文件类型管理" draggable destroy-on-close
+               v-if="dialogVisiableRef">
         <el-table
             ref="singleTableRef"
-            :data="tableDataRef"
+            :data="tableData"
+            table-layout="auto"
             highlight-current-row
             style="width: 100%"
             height="500px"
             @current-change="handleCurrentChange">
-            <el-table-column type="index" width="50"/>
-            <el-table-column property="date" label="文件类型" width="120"/>
-            <el-table-column label="模板" width="120">
+            <el-table-column type="index"/>
+            <el-table-column property="fileName" label="文件类型"/>
+            <el-table-column label="模板">
                 <template #default="scope">
                     <div>
-                        <el-select v-model="value" class="m-2" placeholder="Select" size="small" filterable>
+                        <el-select v-model="scope.row.templateId" class="m-2" placeholder="选择模板"
+                                   filterable>
                             <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
+                                v-for="item in templateOptions"
+                                :key="item.templateId"
+                                :label="item.templateName"
+                                :value="item.templateId"/>
                         </el-select>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column property="address" label="描述信息"/>
+            <el-table-column property="remark" label="描述信息" width="240"/>
         </el-table>
-        <div style="margin-top: 20px">
-            <el-button @click="setCurrent(tableDataRef[1])">Select second row</el-button>
-            <el-button @click="setCurrent()">Clear selection</el-button>
-        </div>
+        <template #footer>
+            <el-button>新增</el-button>
+        </template>
     </el-dialog>
 </template>
 

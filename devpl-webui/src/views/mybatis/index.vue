@@ -67,7 +67,6 @@
 // Vue Codemirror 文档：https://github.com/surmon-china/vue-codemirror
 import {Codemirror} from 'vue-codemirror'
 // 语言支持
-import {xml} from '@codemirror/lang-xml'
 import {sql} from '@codemirror/lang-sql'
 import {hasText} from '@/utils/tool'
 // import "codemirror/addon/hint/show-hint.css";
@@ -152,6 +151,10 @@ export default {
 
         // 获取sql
         function getSqlOfMapperStatement(real) {
+            if (!hasText(code.value)) {
+                ElMessage.warning('输入文本为空!')
+                return
+            }
             apiGetSql(code.value, mapperParams.value, real).then(res => {
                 sqlRef.value = res.data
             })

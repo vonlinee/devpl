@@ -79,7 +79,7 @@ CREATE TABLE gen_table_field
     package_name    varchar(200) COMMENT '属性包名',
     sort            int COMMENT '排序',
     auto_fill       varchar(20) COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
-    primary_pk      tinyint COMMENT '主键 0：否  1：是',
+    primary_key      tinyint COMMENT '主键 0：否  1：是',
     base_field      tinyint COMMENT '基类字段 0：否  1：是',
     form_item       tinyint COMMENT '表单项 0：否  1：是',
     form_required   tinyint COMMENT '表单必填 0：否  1：是',

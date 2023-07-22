@@ -12,6 +12,10 @@ public interface JavaType extends DataType {
      */
     String getName();
 
+    /**
+     * 类型名称
+     * @return 类型名称
+     */
     default String getType() {
         return getName();
     }

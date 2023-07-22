@@ -3,6 +3,7 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
 import io.devpl.generator.utils.BusinessUtils;
@@ -88,5 +89,14 @@ public class TemplateController {
     @GetMapping(value = "/page")
     public Result<PageResult<TemplateInfo>> list(PageQuery query) {
         return Result.ok(BusinessUtils.page2List(templateService.pages(query.getPageIndex(), query.getPageSize())));
+    }
+
+    /**
+     * 可选择的模板列表
+     * @return 列表
+     */
+    @GetMapping(value = "/list/select")
+    public Result<List<TemplateSelectVO>> listSelectableTemplates() {
+        return Result.ok(templateService.listSelectableTemplates());
     }
 }

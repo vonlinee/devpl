@@ -13,7 +13,7 @@ public enum JsonDataType implements DataType {
 
     @Override
     public String getQualifier() {
-        return null;
+        return name();
     }
 
 }

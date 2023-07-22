@@ -62,8 +62,6 @@ export const useCrud = (options: IHooksOptions) => {
                 asc: state.asc,
                 page: state.isPage ? state.page : null,
                 limit: state.isPage ? state.limit : null,
-                pageIndex: state.isPage ? state.page : null,
-                pageSize: state.isPage ? state.limit : null,
                 ...state.queryForm
             }
         }).then((res: any) => {

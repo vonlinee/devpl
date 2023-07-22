@@ -22,7 +22,7 @@ public class TemplateInfo extends EntityBase {
     private Integer templateId;
 
     /**
-     * 模板名称
+     * 模板名称：唯一
      */
     @TableField(value = "template_name")
     private String templateName;

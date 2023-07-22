@@ -3,6 +3,8 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.service.BaseService;
 import io.devpl.generator.entity.TemplateFileGeneration;
 
+import java.util.List;
+
 /**
  * 模板文件生成关联表
  * @author xxx xxx
@@ -10,4 +12,5 @@ import io.devpl.generator.entity.TemplateFileGeneration;
  */
 public interface TemplateFileGenerationService extends BaseService<TemplateFileGeneration> {
 
+    List<TemplateFileGeneration> listGeneratedFileTypes();
 }

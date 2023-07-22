@@ -4,6 +4,8 @@ import io.devpl.generator.common.dao.BaseDao;
 import io.devpl.generator.entity.TemplateFileGeneration;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 模板文件生成关联表
  * @author xxx xxx
@@ -12,4 +14,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TemplateFileGenerationMapper extends BaseDao<TemplateFileGeneration> {
 
+    List<TemplateFileGeneration> selectGeneratedFileTypes();
 }

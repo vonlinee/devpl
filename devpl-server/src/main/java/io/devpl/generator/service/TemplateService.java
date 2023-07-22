@@ -2,8 +2,10 @@ package io.devpl.generator.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,4 +35,6 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 分页数据
      */
     IPage<TemplateInfo> pages(int pageIndex, int pageSize);
+
+    List<TemplateSelectVO> listSelectableTemplates();
 }

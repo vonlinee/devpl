@@ -7,6 +7,8 @@ import io.devpl.generator.service.TemplateFileGenerationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 模板文件生成关联表
  */
@@ -14,4 +16,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TemplateFileGenerationServiceImpl extends BaseServiceImpl<TemplateFileGenerationMapper, TemplateFileGeneration> implements TemplateFileGenerationService {
 
+    @Override
+    public List<TemplateFileGeneration> listGeneratedFileTypes() {
+        return baseMapper.selectGeneratedFileTypes();
+    }
 }

@@ -9,6 +9,7 @@ import freemarker.template.TemplateException;
 import io.devpl.codegen.utils.CollectionUtils;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.dao.TemplateInfoMapper;
+import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
 import jakarta.annotation.Resource;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,5 +74,10 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public IPage<TemplateInfo> pages(int pageIndex, int pageSize) {
         return templateInfoMapper.selectPage(new Page<>(pageIndex, pageSize), new LambdaQueryWrapper<>());
+    }
+
+    @Override
+    public List<TemplateSelectVO> listSelectableTemplates() {
+        return baseMapper.selectTemplateIdAndNames();
     }
 }

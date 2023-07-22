@@ -21,7 +21,7 @@ public interface TableService extends BaseService<GenTable> {
      * @param datasourceId 数据源ID
      * @param tableName    表名
      */
-    void tableImport(Long datasourceId, String tableName);
+    void importTable(Long datasourceId, String tableName);
 
     /**
      * 同步数据库表

@@ -19,7 +19,7 @@ export const withInstall = <T>(component: T, alias?: string) => {
 }
 
 // 密钥
-const ENCRYPT_KEY: string = 'makulowcodeyyds1'
+const ENCRYPT_KEY: string = 'devpl11235813213'
 
 /**
  * 解密操作
@@ -56,8 +56,24 @@ export const encrypt = (plaintext: string): string => {
 
 /**
  * 文本是否为空
- * @param content
+ * @param content any, 字符串
  */
 export const hasText = (content: any): boolean => {
-    return typeof content == 'string' && content.length > 0;
+    return typeof content == 'string' && !isBlank(content);
+}
+
+/**
+ * 文本是否全由空格组成，至少包含1个字符
+ * @param content
+ */
+export const isBlank = (content: string): boolean => {
+    if (content.length == 0) {
+        return true
+    }
+    for (let i: number = 0; i < content.length; i++) {
+        if (content[i] !== ' ') {
+            return false;
+        }
+    }
+    return true
 }

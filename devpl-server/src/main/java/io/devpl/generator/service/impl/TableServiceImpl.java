@@ -68,7 +68,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void tableImport(Long datasourceId, String tableName) {
+    public void importTable(Long datasourceId, String tableName) {
         // 初始化配置信息
         DataSourceInfo dataSource = dataSourceService.get(datasourceId);
         // 查询表是否存在
@@ -129,8 +129,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
             throw new ServerException("同步失败，请检查数据库表：" + table.getTableName());
         }
 
-        List<String> dbTableFieldNameList = dbTableFieldList.stream().map(GenTableField::getFieldName)
-            .collect(Collectors.toList());
+        List<String> dbTableFieldNameList = dbTableFieldList.stream().map(GenTableField::getFieldName).toList();
 
         // 表字段列表
         List<GenTableField> tableFieldList = tableFieldService.listByTableId(id);

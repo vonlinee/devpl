@@ -28,3 +28,10 @@ export function apiAddTemplate(params: object) {
 export function apiUpdateTemplate(params: object) {
     return http.putJson('/api/template/update', params);
 }
+
+/**
+ * 可选择的模板列表
+ */
+export function apiListSelectableTemplates() {
+    return http.get('/api/template/list/select');
+}

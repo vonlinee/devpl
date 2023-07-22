@@ -1,5 +1,6 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.Data;
 /**
  * 生成的文件信息，以及使用的模板信息
  * 模板文件生成
+ * 对生成的文件类型进行分类，便于批处理
  */
 @Data
 @TableName("template_file_generation")
@@ -20,6 +22,7 @@ public class TemplateFileGeneration {
     /**
      * 代码生成任务ID
      */
+    @TableField(value = "task_id")
     private String taskId;
 
     /**
@@ -31,6 +34,12 @@ public class TemplateFileGeneration {
      * 模板ID
      */
     private Long templateId;
+
+    /**
+     * 模板名称
+     */
+    @TableField(exist = false)
+    private String templateName;
 
     /**
      * 保存路径
