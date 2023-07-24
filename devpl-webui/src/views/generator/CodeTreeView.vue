@@ -47,7 +47,7 @@ function expandAllParentNode(fileNode: FileNode, defaultExpandedKeys: string[]) 
 }
 
 export default {
-    name: 'CodeTreeVoew',
+    name: 'CodeTreeView',
     components: {MonacoEditor, Splitpanes, Pane},
     props: {
         // 展示该目录下的所有文件

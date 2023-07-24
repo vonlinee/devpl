@@ -17,7 +17,7 @@
         <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
                   @selection-change="selectionChangeHandle">
             <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-            <el-table-column prop="templateId" label="模板ID" header-align="center" align="center"></el-table-column>
+            <el-table-column prop="templateId" label="模板ID" header-align="center" align="center" width="80px"></el-table-column>
             <el-table-column prop="templateName" label="模板名称" header-align="center"
                              align="center"></el-table-column>
             <el-table-column prop="templatePath" label="模板路径" show-overflow-tooltip header-align="center"
@@ -29,9 +29,9 @@
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
-                             align="center"></el-table-column>
+                             align="center" width="170px"></el-table-column>
             <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip header-align="center"
-                             align="center"></el-table-column>
+                             align="center" width="170px"></el-table-column>
             <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
                 <template #default="scope">
                     <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>

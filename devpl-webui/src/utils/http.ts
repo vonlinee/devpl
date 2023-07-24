@@ -105,6 +105,17 @@ const http = {
         if (params) config.data = params;
         return service(config);
     },
+    deleteForm(url: string, params?: any, headers = {"Content-Type": "x-www-form-urlencoded"}) {
+        const config: config = {
+            method: "delete",
+            url: url,
+            headers,
+        };
+        if (params) {
+            config.data = params;
+        }
+        return service(config);
+    },
     deleteQuery(url: string, params?: any) {
         const config: config = {
             method: "delete",

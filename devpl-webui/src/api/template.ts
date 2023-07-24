@@ -20,7 +20,6 @@ export function apiAddTemplate(params: object) {
     return http.postJson('/api/template/save', params);
 }
 
-
 /**
  * 修改模板
  * @param params
@@ -34,4 +33,12 @@ export function apiUpdateTemplate(params: object) {
  */
 export function apiListSelectableTemplates() {
     return http.get('/api/template/list/select');
+}
+
+/**
+ * 获取模板信息
+ * @param templateId 模板ID
+ */
+export function apiGetTemplateById(templateId: number) {
+    return http.get(`/api/template/info/${templateId}`)
 }

@@ -99,4 +99,13 @@ public class TemplateController {
     public Result<List<TemplateSelectVO>> listSelectableTemplates() {
         return Result.ok(templateService.listSelectableTemplates());
     }
+
+    /**
+     * 根据ID获取模板信息
+     * @return 列表
+     */
+    @GetMapping(value = "/info/{templateId}")
+    public Result<TemplateInfo> getTemplateById(@PathVariable(value = "templateId") Integer templateId) {
+        return Result.ok(templateService.getById(templateId));
+    }
 }

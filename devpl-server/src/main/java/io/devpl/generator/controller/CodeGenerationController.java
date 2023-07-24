@@ -27,7 +27,7 @@ public class CodeGenerationController {
      * @return 所有生成的根目录
      */
     @PostMapping("/code")
-    public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) throws Exception {
+    public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) {
         // 生成代码
         for (Long tableId : tableIds) {
             codeGenService.generatorCode(tableId);
@@ -47,6 +47,15 @@ public class CodeGenerationController {
     }
 
     /**
+     * 修改和新增一条生成的文件类型列表
+     * @return 生成的文件列表
+     */
+    @PostMapping("/genfile")
+    public Result<Boolean> saveOrUpdateOne(@RequestBody TemplateFileGeneration param) {
+        return Result.ok(templateFileGenerationService.saveOrUpdate(param));
+    }
+
+    /**
      * 保存或更新生成的文件类型列表
      * 不存在的删除，更新或新增
      * @return 生成的文件列表
@@ -54,5 +63,15 @@ public class CodeGenerationController {
     @PostMapping("/genfiles/replace")
     public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TemplateFileGeneration> files) {
         return Result.ok(templateFileGenerationService.saveOrUpdateBatch(files));
+    }
+
+    /**
+     * 保存或更新生成的文件类型列表
+     * 不存在的删除，更新或新增
+     * @return 生成的文件列表
+     */
+    @DeleteMapping("/genfiles/replace")
+    public Result<?> deleteGeneratedFileTypes(@RequestBody List<Integer> ids) {
+        return Result.ok(templateFileGenerationService.removeBatchByIds(ids));
     }
 }
