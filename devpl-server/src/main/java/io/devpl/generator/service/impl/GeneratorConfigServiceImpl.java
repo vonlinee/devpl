@@ -45,8 +45,8 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
     }
 
     @Override
-    public GeneratorInfo getGeneratorInfo() {
-        if (generatorInfo == null) {
+    public GeneratorInfo getGeneratorInfo(boolean refresh) {
+        if (generatorInfo == null || refresh) {
             generatorInfo = getGeneratorConfig(properties.getTemplate());
         }
         return generatorInfo;
@@ -61,7 +61,6 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        log.info("{}", result);
         return result;
     }
 

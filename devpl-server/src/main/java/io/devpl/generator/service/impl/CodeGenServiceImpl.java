@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.DateUtils;
-import io.devpl.generator.config.template.GeneratorConfig;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.GenBaseClass;
@@ -16,7 +15,6 @@ import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.util.StringUtils;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,19 +47,18 @@ public class CodeGenServiceImpl implements CodeGenService {
     private TableFieldService tableFieldService;
     @Resource
     private TemplateService templateService;
-
     @Resource
     private GeneratorConfigService generatorConfigService;
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        return generatorConfigService.getGeneratorInfo();
+        return generatorConfigService.getGeneratorInfo(true);
     }
 
     @Override
     public void downloadCode(Long tableId, ZipOutputStream zip) {
         // 数据模型
-        Map<String, Object> dataModel = getDataModel(tableId);
+        Map<String, Object> dataModel = prepareDataModel(tableId);
 
         GeneratorInfo generatorInfo = getGeneratorInfo();
 
@@ -91,7 +88,7 @@ public class CodeGenServiceImpl implements CodeGenService {
     @Override
     public void generatorCode(Long tableId) {
         // 数据模型
-        Map<String, Object> dataModel = getDataModel(tableId);
+        Map<String, Object> dataModel = prepareDataModel(tableId);
         GeneratorInfo generatorInfo = getGeneratorInfo();
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
@@ -107,7 +104,7 @@ public class CodeGenServiceImpl implements CodeGenService {
      * @param tableId 表ID
      */
     @Override
-    public Map<String, Object> getDataModel(Long tableId) {
+    public Map<String, Object> prepareDataModel(Long tableId) {
         // 表信息
         GenTable table = tableService.getById(tableId);
         List<GenTableField> fieldList = tableFieldService.listByTableId(tableId);
@@ -153,7 +150,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         dataModel.put("ClassName", table.getClassName());
         dataModel.put("fieldList", table.getFieldList());
 
-        // 生成路径
+        // 前后端生成路径
         dataModel.put("backendPath", table.getBackendPath());
         dataModel.put("frontendPath", table.getFrontendPath());
 

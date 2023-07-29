@@ -2,8 +2,8 @@
     "project": {
         "packageName": "net.maku",
         "version": "1.0.0",
-        "backendPath": "D:\\generator\\maku-boot\\maku-server",
-        "frontendPath": "D:\\generator\\maku-admin"
+        "backendPath": "codegen\\maku-boot\\maku-server",
+        "frontendPath": "codegen\\maku-admin"
     },
     "developer": {
         "author": "111",

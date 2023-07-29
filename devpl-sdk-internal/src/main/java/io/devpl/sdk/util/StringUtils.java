@@ -170,25 +170,23 @@ public final class StringUtils {
     }
 
     /**
-     * @param sequence
-     * @param len
+     * @param sequence 字符串
+     * @param len      空格数量
      * @return String
      */
     public static String appendBlank(String sequence, int len) {
         int i = len - sequence.length();
         if (i > 0) {
-            for (int j = 0; j < i; j++) {
-                sequence += " ";
-            }
+            sequence = sequence + " ".repeat(i);
         }
         return sequence;
     }
 
     /**
      * 分割字符串
-     * @param str
-     * @param delimeter
-     * @return
+     * @param str       字符串
+     * @param delimeter 分隔符
+     * @return 分割后的字符串数组
      */
     public static String[] split1(String str, String delimeter) {
         StringTokenizer st = new StringTokenizer(str, delimeter);
@@ -242,7 +240,7 @@ public final class StringUtils {
      * @return true 包含中文字符 false 不包含中文字符
      */
     public static boolean containChineseWords(String str) {
-        if (str != null && str.length() != 0) {
+        if (str != null && !str.isEmpty()) {
             Pattern p = Pattern.compile("[\u4E00-\u9FA5|\\！|\\，|\\。|\\（|\\）|\\《|\\》|\\“|\\”|\\？|\\：|\\；|\\【|\\】]");
             Matcher m = p.matcher(str);
             return m.find();
@@ -395,7 +393,7 @@ public final class StringUtils {
      * <p>More specifically, this method returns {@code true} if the
      * {@code String} is not {@code null}, its length is greater than 0,
      * and it contains at least one non-whitespace character.
-     * @param str the {@code String} to check (may be {@code null})
+     * @param str the {@code String} to check (maybe {@code null})
      * @return {@code true} if the {@code String} is not {@code null}, its
      * length is greater than 0, and it does not contain whitespace only
      * @see #hasText(CharSequence)
@@ -573,15 +571,15 @@ public final class StringUtils {
                 } else if (tmpst == 0xE0) {
                     j += 3;
                     len += 2;
-                } else if (tmpst == 0xF0) {
+                } else { // tmpst == 0xF0
                     short tmpst0 = (short) (((short) bytes[j]) & 0x0F);
                     if (tmpst0 == 0) {
                         j += 4;
                         len += 2;
-                    } else if ((tmpst0 > 0) && (tmpst0 < 12)) {
+                    } else if (tmpst0 < 12) { // tmpst0 > 0
                         j += 5;
                         len += 2;
-                    } else if (tmpst0 > 11) {
+                    } else { // tmpst0 > 11
                         j += 6;
                         len += 2;
                     }
@@ -608,9 +606,9 @@ public final class StringUtils {
 
     /**
      * 重复字符串指定次数，然后new一个新字符串
-     * @param string
-     * @param count
-     * @return
+     * @param string 字符串
+     * @param count  重复次数
+     * @return 字符串
      */
     public static String repeat(String string, int count) {
         Validator.whenNull(string);

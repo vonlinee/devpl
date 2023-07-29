@@ -19,4 +19,16 @@ public class Paths {
         }
         return Path.of(path, pathSegment).toString();
     }
+
+    /**
+     * 是否是绝对路径 TODO 待实现
+     * /aaa/bb表示相对路径，但是上级路径是根路径
+     * aaa/bb表示相对路径
+     * 以/结尾表示目录
+     * @param path 路径
+     * @return 是否是绝对路径
+     */
+    public static boolean isAbsolute(String path) {
+        return false;
+    }
 }

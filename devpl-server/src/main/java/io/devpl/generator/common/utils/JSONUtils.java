@@ -57,7 +57,7 @@ public class JSONUtils {
      * 解析字符串，有语法错误直接抛异常
      * @param text 可能为JSON的字符串
      */
-    public static void validateJson(String text) {
+    public static void validateJson(String text) throws RuntimeException {
         parseObject(text, Object.class);
     }
 }

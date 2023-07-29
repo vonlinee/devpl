@@ -17,7 +17,7 @@ public interface TableFieldService extends BaseService<GenTableField> {
      */
     List<GenTableField> listByTableId(Long tableId);
 
-    void deleteBatchTableIds(Long[] tableIds);
+    boolean deleteBatchTableIds(Long[] tableIds);
 
     /**
      * 修改表字段数据

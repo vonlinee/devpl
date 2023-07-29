@@ -28,8 +28,8 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTab
     }
 
     @Override
-    public void deleteBatchTableIds(Long[] tableIds) {
-        baseMapper.deleteBatchTableIds(tableIds);
+    public boolean deleteBatchTableIds(Long[] tableIds) {
+        return baseMapper.deleteBatchTableIds(tableIds) > 0;
     }
 
     @Override

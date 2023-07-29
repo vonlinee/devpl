@@ -39,10 +39,8 @@ public class TableController {
     @GetMapping("{id}")
     public Result<GenTable> get(@PathVariable("id") Long id) {
         GenTable table = tableService.getById(id);
-
         // 获取表的字段
-        List<GenTableField> fieldList = tableFieldService.listByTableId(table.getId());
-        table.setFieldList(fieldList);
+        table.setFieldList(tableFieldService.listByTableId(table.getId()));
         return Result.ok(table);
     }
 
@@ -51,9 +49,8 @@ public class TableController {
      * @param table 表信息
      */
     @PutMapping
-    public Result<String> update(@RequestBody GenTable table) {
-        tableService.updateById(table);
-        return Result.ok();
+    public Result<Boolean> update(@RequestBody GenTable table) {
+        return Result.ok(tableService.updateById(table));
     }
 
     /**
@@ -61,10 +58,8 @@ public class TableController {
      * @param ids 表id数组
      */
     @DeleteMapping
-    public Result<String> delete(@RequestBody Long[] ids) {
-        tableService.deleteBatchIds(ids);
-
-        return Result.ok();
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
+        return Result.ok(tableService.deleteBatchIds(ids));
     }
 
     /**

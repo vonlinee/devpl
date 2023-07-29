@@ -30,7 +30,7 @@ public interface CodeGenService {
      * 获取渲染的数据模型
      * @param tableId 表ID
      */
-    Map<String, Object> getDataModel(Long tableId);
+    Map<String, Object> prepareDataModel(Long tableId);
 
     List<FileNode> getFileTree(String workPath);
 

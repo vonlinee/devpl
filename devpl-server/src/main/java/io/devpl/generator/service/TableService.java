@@ -18,7 +18,7 @@ public interface TableService extends BaseService<GenTable> {
 
     GenTable getByTableName(String tableName);
 
-    void deleteBatchIds(Long[] ids);
+    boolean deleteBatchIds(Long[] ids);
 
     /**
      * 导入表

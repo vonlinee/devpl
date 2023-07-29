@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 /**
  * 实体类父类
  */
-public abstract class EntityBase {
+public abstract class DatabaseTableEntity {
 
     /**
      * 更新时间

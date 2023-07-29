@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
-import cn.hutool.core.util.StrUtil;
 import io.devpl.generator.config.DbType;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * MySQL查询
@@ -19,7 +19,7 @@ public class MySqlQuery implements AbstractQuery {
         sql.append("select table_name, table_comment from information_schema.tables ");
         sql.append("where table_schema = (select database()) ");
         // 表名查询
-        if (StrUtil.isNotBlank(tableName)) {
+        if (StringUtils.hasText(tableName)) {
             sql.append("and table_name = '").append(tableName).append("' ");
         }
         sql.append("order by table_name asc");

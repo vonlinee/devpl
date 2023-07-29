@@ -3,9 +3,7 @@ package io.devpl.generator.service.impl;
 import cn.hutool.core.text.NamingCase;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import io.devpl.codegen.utils.JdbcUtils;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
@@ -13,8 +11,9 @@ import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
-import io.devpl.generator.config.template.GeneratorConfig;
+import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
+import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.TableDao;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
@@ -24,19 +23,17 @@ import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
-import io.devpl.generator.utils.DbUtils;
+import io.devpl.generator.utils.CollectionUtils;
 import io.devpl.generator.utils.GenUtils;
+import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.*;
 import java.util.Date;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * 数据表
@@ -63,11 +60,11 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteBatchIds(Long[] ids) {
+    public boolean deleteBatchIds(Long[] ids) {
         // 删除表
         baseMapper.deleteBatchIds(Arrays.asList(ids));
         // 删除列
-        tableFieldService.deleteBatchTableIds(ids);
+        return tableFieldService.deleteBatchTableIds(ids);
     }
 
     @Override
@@ -85,15 +82,21 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         // 从数据库获取表信息
         table = getTable(dataSource, tableName);
         // 代码生成器信息
-        GeneratorInfo generator = generatorConfigService.getGeneratorInfo();
+        GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
+
+        ProjectInfo project = generator.getProject();
+
+        DeveloperInfo developer = generator.getDeveloper();
 
         // 保存表信息
-        table.setPackageName(generator.getProject().getPackageName());
-        table.setVersion(generator.getProject().getVersion());
-        table.setBackendPath(generator.getProject().getBackendPath());
-        table.setFrontendPath(generator.getProject().getFrontendPath());
-        table.setAuthor(generator.getDeveloper().getAuthor());
-        table.setEmail(generator.getDeveloper().getEmail());
+        table.setPackageName(project.getPackageName());
+        table.setVersion(project.getVersion());
+        table.setBackendPath(project.getBackendPath());
+        table.setFrontendPath(project.getFrontendPath());
+
+        table.setAuthor(developer.getAuthor());
+        table.setEmail(developer.getEmail());
+
         table.setFormLayout(FormLayoutEnum.ONE.getValue());
         table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
         table.setClassName(NamingCase.toPascalCase(tableName));
@@ -106,10 +109,8 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         List<GenTableField> tableFieldList = getTableFieldList(dataSource, table.getId(), table.getTableName());
         // 初始化字段数据
         tableFieldService.initFieldList(tableFieldList);
-
         // 保存列数据
         tableFieldService.saveBatch(tableFieldList);
-
         try {
             // 释放数据源
             dataSource.getConnection().close();
@@ -119,7 +120,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
     }
 
     /**
-     * 根据数据源，获取指定数据表
+     * 根据数据源，获取指定数据表 GenTable 实体
      * @param datasource 数据源
      * @param tableName  表名
      */
@@ -128,13 +129,17 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         AbstractQuery query = datasource.getDbQuery();
         String tableQuerySql = query.getTableQuerySql(tableName);
         // 查询数据
-        try (Connection connection = datasource.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql); ResultSet rs = preparedStatement.executeQuery()) {
-            if (rs.next()) {
-                GenTable table = new GenTable();
-                table.setTableName(rs.getString(query.tableName()));
-                table.setTableComment(rs.getString(query.tableComment()));
-                table.setDatasourceId(datasource.getId());
-                return table;
+        try (Connection connection = datasource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    if (rs.next()) {
+                        GenTable table = new GenTable();
+                        table.setTableName(rs.getString(query.tableName()));
+                        table.setTableComment(rs.getString(query.tableComment()));
+                        table.setDatasourceId(datasource.getId());
+                        return table;
+                    }
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -152,17 +157,14 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
 
         // 从数据库获取表字段列表
         List<GenTableField> dbTableFieldList = getTableFieldList(datasource, table.getId(), table.getTableName());
-        if (dbTableFieldList.size() == 0) {
+        if (dbTableFieldList.isEmpty()) {
             throw new ServerException("同步失败，请检查数据库表：" + table.getTableName());
         }
-
-        List<String> dbTableFieldNameList = dbTableFieldList.stream().map(GenTableField::getFieldName).toList();
 
         // 表字段列表
         List<GenTableField> tableFieldList = tableFieldService.listByTableId(id);
 
-        Map<String, GenTableField> tableFieldMap = tableFieldList.stream()
-            .collect(Collectors.toMap(GenTableField::getFieldName, Function.identity()));
+        Map<String, GenTableField> tableFieldMap = CollectionUtils.toMap(tableFieldList, GenTableField::getFieldName);
 
         // 初始化字段数据
         tableFieldService.initFieldList(dbTableFieldList);
@@ -186,11 +188,11 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         });
 
         // 删除数据库表中没有的字段
-        List<GenTableField> delFieldList = tableFieldList.stream()
-            .filter(field -> !dbTableFieldNameList.contains(field.getFieldName())).toList();
-        if (delFieldList.size() > 0) {
-            List<Long> fieldIds = delFieldList.stream().map(GenTableField::getId).collect(Collectors.toList());
-            tableFieldService.removeBatchByIds(fieldIds);
+        List<String> dbTableFieldNameList = CollectionUtils.toList(dbTableFieldList, GenTableField::getFieldName);
+        List<GenTableField> delFieldList = CollectionUtils.filter(tableFieldList, field -> !dbTableFieldNameList.contains(field.getFieldName()));
+
+        if (!delFieldList.isEmpty()) {
+            tableFieldService.removeBatchByIds(CollectionUtils.toList(delFieldList, GenTableField::getId));
         }
     }
 
@@ -203,40 +205,48 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
     @Override
     public List<GenTableField> getTableFieldList(DataSourceInfo datasource, Long tableId, String tableName) {
         List<GenTableField> tableFieldList = new ArrayList<>();
+
+        AbstractQuery query = datasource.getDbQuery();
+        String tableFieldsSql = query.getTableFieldsQuerySql();
         try {
-            AbstractQuery query = datasource.getDbQuery();
-            String tableFieldsSql = query.getTableFieldsQuerySql();
+
             if (datasource.getDbType() == DbType.Oracle) {
                 DatabaseMetaData md = datasource.getConnection().getMetaData();
                 tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
             } else {
                 tableFieldsSql = String.format(tableFieldsSql, tableName);
             }
-            try (Connection connection = datasource.getConnection()) {
-                PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
-                ResultSet rs = preparedStatement.executeQuery();
-                while (rs.next()) {
-                    GenTableField field = new GenTableField();
-                    field.setTableId(tableId);
-                    field.setFieldName(rs.getString(query.fieldName()));
-                    String fieldType = rs.getString(query.fieldType());
-                    if (fieldType.contains(" ")) {
-                        fieldType = fieldType.substring(0, fieldType.indexOf(" "));
-                    }
-                    field.setFieldType(fieldType);
-                    field.setFieldComment(rs.getString(query.fieldComment()));
-                    String key = rs.getString(query.fieldKey());
-                    field.setPrimaryKey(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
 
-                    tableFieldList.add(field);
-                }
-            }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+
+        try (Connection connection = datasource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    while (rs.next()) {
+                        GenTableField field = new GenTableField();
+                        field.setTableId(tableId);
+                        field.setFieldName(rs.getString(query.fieldName()));
+                        String fieldType = rs.getString(query.fieldType());
+                        if (fieldType.contains(" ")) {
+                            fieldType = fieldType.substring(0, fieldType.indexOf(" "));
+                        }
+                        field.setFieldType(fieldType);
+                        field.setFieldComment(rs.getString(query.fieldComment()));
+                        String key = rs.getString(query.fieldKey());
+                        field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
+
+                        tableFieldList.add(field);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            throw ServerException.create("异常", e);
+        }
         return tableFieldList;
     }
-
 
     /**
      * 根据数据源，获取全部数据表
@@ -247,14 +257,18 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         List<GenTable> tableList = new ArrayList<>();
         AbstractQuery query = datasource.getDbQuery();
         String tableQuerySql = query.getTableQuerySql(null);
-        try (Connection connection = datasource.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql); ResultSet rs = preparedStatement.executeQuery();) {
-            // 查询数据
-            while (rs.next()) {
-                GenTable table = new GenTable();
-                table.setTableName(rs.getString(query.tableName()));
-                table.setTableComment(rs.getString(query.tableComment()));
-                table.setDatasourceId(datasource.getId());
-                tableList.add(table);
+        try (Connection connection = datasource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
+                try (ResultSet rs = preparedStatement.executeQuery()) {
+                    // 查询数据
+                    while (rs.next()) {
+                        GenTable table = new GenTable();
+                        table.setTableName(rs.getString(query.tableName()));
+                        table.setTableComment(rs.getString(query.tableComment()));
+                        table.setDatasourceId(datasource.getId());
+                        tableList.add(table);
+                    }
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);

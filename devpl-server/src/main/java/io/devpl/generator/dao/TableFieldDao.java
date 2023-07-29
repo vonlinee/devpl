@@ -14,5 +14,5 @@ public interface TableFieldDao extends BaseMapper<GenTableField> {
 
     List<GenTableField> getByTableId(Long tableId);
 
-    void deleteBatchTableIds(Long[] tableIds);
+    int deleteBatchTableIds(Long[] tableIds);
 }
