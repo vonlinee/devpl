@@ -2,6 +2,7 @@ package io.devpl.sdk.io;
 
 import io.devpl.sdk.validation.Validator;
 
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -12,8 +13,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
@@ -39,8 +38,6 @@ public class FileUtils {
      * An empty array of type <code>File</code>.
      */
     public static final File[] EMPTY_FILE_ARRAY = new File[0];
-    private static final Pattern LINUX_PATH_PATTERN = Pattern.compile("(/([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255}/)*([a-zA-Z0-9][a-zA-Z0-9_\\-]{0,255})|/)");
-    private static final Pattern WINDOWS_PATH_PATTERN = Pattern.compile("(^[A-Z]:((\\\\|/)([a-zA-Z0-9\\-_]){1,255}){1,255}|([A-Z]:(\\\\|/)))");
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -80,34 +77,6 @@ public class FileUtils {
             throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
-    }
-
-    /**
-     * Determines whether the {@code parent} directory contains the {@code child} element (a file or directory).
-     * <p>
-     * The files names are expected to be normalized.
-     * </p>
-     * <p>
-     * Edge cases:
-     * <ul>
-     * <li>A {@code directory} must not be null: if null, throw IllegalArgumentException</li>
-     * <li>A directory does not contain itself: return false</li>
-     * <li>A null child file is not contained in any parent: return false</li>
-     * </ul>
-     * @param canonicalParent the file to consider as the parent.
-     * @param canonicalChild  the file to consider as the child.
-     * @return true is the candidate leaf is under by the specified composite. False otherwise.
-     * @since 2.2
-     */
-    public static boolean directoryContains(final String canonicalParent, final String canonicalChild) {
-        Objects.requireNonNull(canonicalParent, "canonicalParent");
-        if (canonicalChild == null) {
-            return false;
-        }
-        if (IOCase.SYSTEM.checkEquals(canonicalParent, canonicalChild)) {
-            return false;
-        }
-        return IOCase.SYSTEM.checkStartsWith(canonicalChild, canonicalParent);
     }
 
     /**
@@ -251,195 +220,8 @@ public class FileUtils {
         return displaySize;
     }
 
-    // -----------------------------------------------------------------------
-
-    /**
-     * Implements the same behaviour as the "touch" utility on Unix. It creates a
-     * new file with size 0 or, if the file exists already, it is opened and closed
-     * without modifying it, but updating the file date and time.
-     * <p>
-     * NOTE: As from v1.3, this method throws an IOException if the last modified
-     * date of the file cannot be set. Also, as from v1.3 this method creates parent
-     * directories if they do not exist.
-     * @param file the File to touch
-     * @throws IOException If an I/O problem occurs
-     */
-    public static void touch(File file) throws IOException {
-        if (!file.exists()) {
-            closeQuietly(openOutputStream(file));
-        }
-        boolean success = file.setLastModified(System.currentTimeMillis());
-        if (!success) {
-            throw new IOException("Unable to set the last modification time for " + file);
-        }
-    }
-
-    /**
-     * Finds files within a given directory (and optionally its subdirectories). All
-     * files found are filtered by an IOFileFilter.
-     * @param files     the collection of files found.
-     * @param directory the directory to search in.
-     * @param filter    the filter to apply to files and directories.
-     */
-    public static void innerListFiles(Collection<File> files, File directory, FileFilter filter) {
-        File[] found = directory.listFiles(filter);
-        if (found != null) {
-            for (File file : found) {
-                if (file.isDirectory()) {
-                    innerListFiles(files, file, filter);
-                } else {
-                    files.add(file);
-                }
-            }
-        }
-    }
-
-    /**
-     * Finds files within a given directory (and optionally its subdirectories). All
-     * files found are filtered by an IOFileFilter.
-     * <p>
-     * If your search should recurse into subdirectories you can pass in an
-     * IOFileFilter for directories. You don't need to bind a DirectoryFileFilter
-     * (via logical AND) to this filter. This method does that for you.
-     * <p>
-     * An example: If you want to search through all directories called "temp" you
-     * pass in <code>FileFilterUtils.NameFileFilter("temp")</code>
-     * <p>
-     * Another common usage of this method is find files in a directory tree but
-     * ignoring the directories generated CVS. You can simply pass in
-     * <code>FileFilterUtils.makeCVSAware(null)</code>.
-     * @param directory  the directory to search in
-     * @param fileFilter filter to apply when finding files.
-     * @param dirFilter  optional filter to apply when finding subdirectories. If
-     *                   this parameter is <code>null</code>, subdirectories will
-     *                   not be included in the search. Use TrueFileFilter.INSTANCE
-     *                   to match all directories.
-     * @return an collection of java.io.File with the matching files
-     * @see //org.apache.commons.io.filefilter.FileFilterUtils
-     * @see //org.apache.commons.io.filefilter.NameFileFilter
-     */
-    public static Collection<File> listFiles(File directory, FileFilter fileFilter, FileFilter dirFilter) {
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException("Parameter 'directory' is not a directory");
-        }
-        if (fileFilter == null) {
-            throw new NullPointerException("Parameter 'fileFilter' is null");
-        }
-//		// Setup effective file filter
-//		IOFileFilter effFileFilter = FileFilterUtils.andFileFilter(fileFilter,
-//				FileFilterUtils.notFileFilter(DirectoryFileFilter.INSTANCE));
-//		// Setup effective directory filter
-//		IOFileFilter effDirFilter;
-//		if (dirFilter == null) {
-//			effDirFilter = FalseFileFilter.INSTANCE;
-//		} else {
-//			effDirFilter = FileFilterUtils.andFileFilter(dirFilter, DirectoryFileFilter.INSTANCE);
-//		}
-//		// Find files
-//		Collection<File> files = new LinkedList<>();
-//		innerListFiles(files, directory, FileFilterUtils.orFileFilter(effFileFilter, effDirFilter));
-        return null;
-    }
-
-    public static void closeQuietly(OutputStream output) {
-        try {
-            if (output != null) {
-                output.close();
-            }
-        } catch (IOException ioe) {
-            // ignore
-        }
-    }
-
-    public static void createNewEmptyFile(String directory, String filename) {
-        createNewEmptyFile(FilenameUtils.normalize(directory + File.separator + filename));
-    }
-
-    public static void createNewEmptyFile(String filepath) {
-        File file = new File(filepath);
-        if (file.exists()) {
-            return;
-        }
-        try {
-            Files.createFile(Paths.get(filepath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void createNewEmptyFile(File file) {
-        if (file.exists()) {
-            return;
-        }
-        try {
-            Files.createFile(file.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean normalize(String path) {
-        File file = new File(path);
-        return file.isFile();
-    }
-
-    /**
-     * 检查文件路径是否合法
-     * @param path 路径
-     * @return boolean
-     */
-    public static boolean isIllegalPath(String path) {
-        String regex = "[a-zA-Z]:(?:[/\\\\][^/\\\\:*?\"<>|]{1,255})+";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(path);
-        return matcher.matches();
-    }
-
-    public static List<File> listFiles(File directory, FileFilter filter) {
-        File[] files = directory.listFiles(filter);
-        List<File> fileList = new ArrayList<>();
-        listFiles(fileList, directory, filter);
-        assert files != null;
-        for (File file : files) {
-            if (file.isDirectory()) {
-                listFiles(fileList, directory, filter);
-            }
-        }
-        return fileList;
-    }
-
-    public static void listFiles(List<File> fileList, File directory, FileFilter filter) {
-        File[] files = directory.listFiles(filter);
-        if (files == null || files.length == 0) {
-            return;
-        }
-        fileList.addAll(Arrays.asList(files));
-    }
-
-    public static List<File> listFilesOf(File directory, FileFilter filter) {
-        File[] files = directory.listFiles(filter);
-        if (Validator.isEmpty(files)) {
-            return new ArrayList<>(0);
-        }
-        return Arrays.asList(files);
-    }
-
     public static boolean exists(File file) {
         return file.exists();
-    }
-
-    /**
-     * 关闭流
-     * @param closeableList Closeable
-     */
-    public static void closeQuitely(Closeable... closeableList) {
-        for (Closeable target : closeableList) {
-            try {
-                target.close();
-            } catch (IOException e) {
-                // ignore
-            }
-        }
     }
 
     /**
@@ -462,7 +244,7 @@ public class FileUtils {
             return new ArrayList<>(0);
         }
         LinkedList<File> directoryList = new LinkedList<>(Arrays.asList(directorys));
-        while (directoryList.size() > 0) { // 文件集合中若存在数据，则继续循环
+        while (!directoryList.isEmpty()) { // 文件集合中若存在数据，则继续循环
             File first = directoryList.removeFirst();
             if (first.exists()) {
                 if (first.isDirectory()) {
@@ -516,11 +298,11 @@ public class FileUtils {
         });
     }
 
-    public static String readFileUTF8String(File file) throws IOException {
-        return readFileToString(file, StandardCharsets.UTF_8);
+    public static String readUTF8String(File file) throws IOException {
+        return readString(file, StandardCharsets.UTF_8);
     }
 
-    public static String readFileToString(File file, Charset charset) throws IOException {
+    public static String readString(File file, Charset charset) throws IOException {
         Path path = file.toPath();
         // 一个文本文件如果已经大于int最大值，这种文件一般来说很少见有可能是log文件
         if (file.length() <= Integer.MAX_VALUE - 8) {
@@ -540,133 +322,6 @@ public class FileUtils {
             }
         }
         return msg.toString();
-    }
-
-    /**
-     * Allows iteration over the files in given directory (and optionally its
-     * subdirectories).
-     * <p>
-     * All files found are filtered by an IOFileFilter. This method is based on
-     * {@link #listFiles(File, IOFileFilter, IOFileFilter)}.
-     *
-     * @param directory  the directory to search in
-     * @param fileFilter filter to apply when finding files.
-     * @param dirFilter  optional filter to apply when finding subdirectories. If
-     *                   this parameter is <code>null</code>, subdirectories will
-     *                   not be included in the search. Use TrueFileFilter.INSTANCE
-     *                   to match all directories.
-     * @return an iterator of java.io.File for the matching files
-     * @see org.apache.commons.io.filefilter.FileFilterUtils
-     * @see org.apache.commons.io.filefilter.NameFileFilter
-     * @since Commons IO 1.2
-     */
-//    public static Iterator iterateFiles(File directory, IOFileFilter fileFilter, IOFileFilter dirFilter) {
-//        return listFiles(directory, fileFilter, dirFilter).iterator();
-//    }
-
-    // -----------------------------------------------------------------------
-
-    /**
-     * Converts an array of file extensions to suffixes for use with IOFileFilters.
-     * @param extensions an array of extensions. Format: {"java", "xml"}
-     * @return an array of suffixes. Format: {".java", ".xml"}
-     */
-    private static String[] toSuffixes(String[] extensions) {
-        String[] suffixes = new String[extensions.length];
-        for (int i = 0; i < extensions.length; i++) {
-            suffixes[i] = "." + extensions[i];
-        }
-        return suffixes;
-    }
-
-    /**
-     * Finds files within a given directory (and optionally its subdirectories)
-     * which match an array of extensions.
-     *
-     * @param directory  the directory to search in
-     * @param extensions an array of extensions, ex. {"java","xml"}. If this
-     *                   parameter is <code>null</code>, all files are returned.
-     * @param recursive  if true all subdirectories are searched as well
-     * @return an collection of java.io.File with the matching files
-     */
-//    public static Collection listFiles(File directory, String[] extensions, boolean recursive) {
-//        IOFileFilter filter;
-//        if (extensions == null) {
-//            filter = TrueFileFilter.INSTANCE;
-//        } else {
-//            String[] suffixes = toSuffixes(extensions);
-//            filter = new SuffixFileFilter(suffixes);
-//        }
-//        return listFiles(directory, filter, (recursive ? TrueFileFilter.INSTANCE : FalseFileFilter.INSTANCE));
-//    }
-
-//    /**
-//     * Allows iteration over the files in a given directory (and optionally its
-//     * subdirectories) which match an array of extensions. This method is based on
-//     * {@link #listFiles(File, String[], boolean)}.
-//     * @param directory  the directory to search in
-//     * @param extensions an array of extensions, ex. {"java","xml"}. If this
-//     *                   parameter is <code>null</code>, all files are returned.
-//     * @param recursive  if true all subdirectories are searched as well
-//     * @return an iterator of java.io.File with the matching files
-//     * @since Commons IO 1.2
-//     */
-//    public static Iterator iterateFiles(File directory, String[] extensions, boolean recursive) {
-//        return listFiles(directory, extensions, recursive).iterator();
-//    }
-
-    // -----------------------------------------------------------------------
-
-    /**
-     * Compare the contents of two files to determine if they are equal or not.
-     * <p>
-     * This method checks to see if the two files are different lengths or if they
-     * point to the same file, before resorting to byte-by-byte comparison of the
-     * contents.
-     * <p>
-     * Code origin: Avalon
-     * @param file1 the first file
-     * @param file2 the second file
-     * @return true if the content of the files are equal or they both don't exist,
-     * false otherwise
-     * @throws IOException in case of an I/O error
-     */
-    public static boolean contentEquals(File file1, File file2) throws IOException {
-        boolean file1Exists = file1.exists();
-        if (file1Exists != file2.exists()) {
-            return false;
-        }
-
-        if (!file1Exists) {
-            // two not existing files are equal
-            return true;
-        }
-
-        if (file1.isDirectory() || file2.isDirectory()) {
-            // don't want to compare directory contents
-            throw new IOException("Can't compare directories, only files");
-        }
-
-        if (file1.length() != file2.length()) {
-            // lengths differ, cannot be equal
-            return false;
-        }
-
-        if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
-            // same file
-            return true;
-        }
-
-        InputStream input1 = null;
-        InputStream input2 = null;
-        try {
-            input1 = new FileInputStream(file1);
-            input2 = new FileInputStream(file2);
-            return IOUtils.contentEquals(input1, input2);
-        } finally {
-            IOUtils.closeQuietly(input1);
-            IOUtils.closeQuietly(input2);
-        }
     }
 
     // -----------------------------------------------------------------------
@@ -727,7 +382,7 @@ public class FileUtils {
         for (int i = 0; i < urls.length; i++) {
             URL url = urls[i];
             if (url != null) {
-                if (url.getProtocol().equals("file") == false) {
+                if (!"file".equals(url.getProtocol())) {
                     throw new IllegalArgumentException("URL could not be converted to a File: " + url);
                 }
                 files[i] = toFile(url);
@@ -853,12 +508,12 @@ public class FileUtils {
         if (srcFile.getCanonicalPath().equals(destFile.getCanonicalPath())) {
             throw new IOException("Source '" + srcFile + "' and destination '" + destFile + "' are the same");
         }
-        if (destFile.getParentFile() != null && destFile.getParentFile().exists() == false) {
-            if (destFile.getParentFile().mkdirs() == false) {
+        if (destFile.getParentFile() != null && !destFile.getParentFile().exists()) {
+            if (!destFile.getParentFile().mkdirs()) {
                 throw new IOException("Destination '" + destFile + "' directory cannot be created");
             }
         }
-        if (destFile.exists() && destFile.canWrite() == false) {
+        if (destFile.exists() && !destFile.canWrite()) {
             throw new IOException("Destination '" + destFile + "' exists but is read-only");
         }
         doCopyFile(srcFile, destFile, preserveFileDate);
@@ -921,13 +576,13 @@ public class FileUtils {
         if (srcDir == null) {
             throw new NullPointerException("Source must not be null");
         }
-        if (srcDir.exists() && srcDir.isDirectory() == false) {
+        if (srcDir.exists() && !srcDir.isDirectory()) {
             throw new IllegalArgumentException("Source '" + destDir + "' is not a directory");
         }
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
-        if (destDir.exists() && destDir.isDirectory() == false) {
+        if (destDir.exists() && !destDir.isDirectory()) {
             throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
         }
         copyDirectory(srcDir, new File(destDir, srcDir.getName()), true);
@@ -980,10 +635,10 @@ public class FileUtils {
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
-        if (srcDir.exists() == false) {
+        if (!srcDir.exists()) {
             throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
         }
-        if (srcDir.isDirectory() == false) {
+        if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
         }
         if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
@@ -1004,18 +659,18 @@ public class FileUtils {
      */
     private static void doCopyDirectory(File srcDir, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir.exists()) {
-            if (destDir.isDirectory() == false) {
+            if (!destDir.isDirectory()) {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
             }
         } else {
-            if (destDir.mkdirs() == false) {
+            if (!destDir.mkdirs()) {
                 throw new IOException("Destination '" + destDir + "' directory cannot be created");
             }
             if (preserveFileDate) {
                 destDir.setLastModified(srcDir.lastModified());
             }
         }
-        if (destDir.canWrite() == false) {
+        if (!destDir.canWrite()) {
             throw new IOException("Destination '" + destDir + "' cannot be written to");
         }
         // recurse
@@ -1023,12 +678,12 @@ public class FileUtils {
         if (files == null) { // null if security restricted
             throw new IOException("Failed to list contents of " + srcDir);
         }
-        for (int i = 0; i < files.length; i++) {
-            File copiedFile = new File(destDir, files[i].getName());
-            if (files[i].isDirectory()) {
-                doCopyDirectory(files[i], copiedFile, preserveFileDate);
+        for (File file : files) {
+            File copiedFile = new File(destDir, file.getName());
+            if (file.isDirectory()) {
+                doCopyDirectory(file, copiedFile, preserveFileDate);
             } else {
-                doCopyFile(files[i], copiedFile, preserveFileDate);
+                doCopyFile(file, copiedFile, preserveFileDate);
             }
         }
     }
@@ -1105,8 +760,7 @@ public class FileUtils {
         }
 
         IOException exception = null;
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
+        for (File file : files) {
             try {
                 forceDelete(file);
             } catch (IOException ioe) {
@@ -1163,7 +817,7 @@ public class FileUtils {
      * @throws UnsupportedEncodingException if the encoding is not supported by the
      *                                      VM
      */
-    public static String readFileToString(File file, String encoding) throws IOException {
+    public static String readString(File file, String encoding) throws IOException {
         InputStream in = null;
         try {
             in = openInputStream(file);
@@ -1181,8 +835,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since Commons IO 1.3.1
      */
-    public static String readFileToString(File file) throws IOException {
-        return readFileToString(file, (Charset) null);
+    public static String readString(File file) throws IOException {
+        return readString(file, (Charset) null);
     }
 
     /**
@@ -1824,7 +1478,7 @@ public class FileUtils {
      * 使用相对路径创建的File对象没有父级目录 System.out.println(new File(""));
      * System.out.println(new File("D:/Temp/1.txt").getParentFile());
      * @param file File
-     * @return
+     * @return 返回父目录
      */
     public static File getParentFile(File file) {
         if (file == null) return null;
@@ -1840,8 +1494,8 @@ public class FileUtils {
      * File("./AAA").isAbsolute()); f System.out.println(new
      * File("D:/1.txt").isAbsolute()); t System.out.println(new
      * File("D:/Temp").isAbsolute()); t
-     * @param file
-     * @return
+     * @param file 文件
+     * @return 是否是绝对路径
      */
     public static boolean isPathAbsolute(File file) {
         if (file == null) return false;
@@ -1851,7 +1505,7 @@ public class FileUtils {
     /**
      * 不同平台
      * @param filepath 文件路径
-     * @return
+     * @return 文件是否存在
      */
     public static boolean exists(String filepath) {
         return Files.exists(Paths.get(filepath), LinkOption.NOFOLLOW_LINKS);
@@ -1868,17 +1522,14 @@ public class FileUtils {
 //			return matches(LINUX_PATH_PATTERN, path);
             return true;
         }
-        if (osName.equalsIgnoreCase("windows")) {
-            // return matches(WINDOWS_PATH_PATTERN, path);
-            return true;
-        }
-        return false;
+        // return matches(WINDOWS_PATH_PATTERN, path);
+        return osName.equalsIgnoreCase("windows");
     }
 
     /**
      * 获取文件名
      * @param file 文件对象
-     * @return
+     * @return 文件名
      */
     public static String getFileName(File file) {
         String filename = file.getName();
@@ -1887,15 +1538,6 @@ public class FileUtils {
             return filename.substring(index + 1);
         }
         return "";
-    }
-
-
-    public static String readToString(File file) {
-        try {
-            return Files.readString(file.toPath());
-        } catch (IOException e) {
-            return "";
-        }
     }
 
     /**
@@ -1959,6 +1601,23 @@ public class FileUtils {
     }
 
     /**
+     * 获取文件扩展名
+     * @param file 文件对象
+     * @return 文件扩展名
+     */
+    @Nonnull
+    public static String getExtension(File file, String placeholder) {
+        if (file == null) {
+            return placeholder;
+        }
+        String extension = FilenameUtils.getExtension(file.getName());
+        if (extension == null || extension.isEmpty()) {
+            extension = placeholder;
+        }
+        return extension;
+    }
+
+    /**
      * NIO读取文件
      * @param allocate 分配字节数
      * @throws IOException
@@ -1976,7 +1635,7 @@ public class FileUtils {
             byteBuffer.flip();
             decoder.decode(byteBuffer, charBuffer, true);
             charBuffer.flip();
-            System.out.println(charBuffer.toString());
+            System.out.println(charBuffer);
             // 清空缓存
             byteBuffer.clear();
             charBuffer.clear();
@@ -2004,8 +1663,6 @@ public class FileUtils {
         byteBuffer.flip();// 读取模式转换为写入模式
         channel.write(byteBuffer);
         channel.close();
-        if (outputStream != null) {
-            outputStream.close();
-        }
+        outputStream.close();
     }
 }

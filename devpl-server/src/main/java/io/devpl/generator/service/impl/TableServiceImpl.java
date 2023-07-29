@@ -111,12 +111,8 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         tableFieldService.initFieldList(tableFieldList);
         // 保存列数据
         tableFieldService.saveBatch(tableFieldList);
-        try {
-            // 释放数据源
-            dataSource.getConnection().close();
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-        }
+
+        dataSource.closeConnection();
     }
 
     /**
@@ -209,14 +205,12 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         AbstractQuery query = datasource.getDbQuery();
         String tableFieldsSql = query.getTableFieldsQuerySql();
         try {
-
             if (datasource.getDbType() == DbType.Oracle) {
                 DatabaseMetaData md = datasource.getConnection().getMetaData();
                 tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
             } else {
                 tableFieldsSql = String.format(tableFieldsSql, tableName);
             }
-
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

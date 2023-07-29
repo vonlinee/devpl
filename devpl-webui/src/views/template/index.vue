@@ -14,24 +14,21 @@
                 <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
             </el-form-item>
         </el-form>
-        <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
+        <el-table v-loading="state.dataListLoading" :data="state.dataList" border
                   @selection-change="selectionChangeHandle">
             <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-            <el-table-column prop="templateId" label="模板ID" header-align="center" align="center" width="80px"></el-table-column>
+            <el-table-column prop="templateId" label="模板ID" header-align="center" align="center"
+                             width="80px"></el-table-column>
             <el-table-column prop="templateName" label="模板名称" header-align="center"
                              align="center"></el-table-column>
-            <el-table-column prop="templatePath" label="模板路径" show-overflow-tooltip header-align="center"
+            <el-table-column prop="technologyProvider" label="技术类型" header-align="center" width="200px"
                              align="center"></el-table-column>
-            <el-table-column prop="content" label="模板内容" header-align="center"
-                             align="center">
-                <template #default="scope">
-                    <el-text truncated>{{scope.row.content}}</el-text>
-                </template>
-            </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
                              align="center" width="170px"></el-table-column>
             <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip header-align="center"
                              align="center" width="170px"></el-table-column>
+            <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
+                             align="center" width="300px"></el-table-column>
             <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
                 <template #default="scope">
                     <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>
@@ -62,7 +59,7 @@
 
 <script lang="ts" setup>
 
-import {onMounted, reactive, ref} from 'vue'
+import {nextTick, onMounted, reactive, ref} from 'vue'
 import {ElButton} from "element-plus";
 import AddOrUpdate from './add-or-update.vue'
 import {useCrud} from '@/hooks'
@@ -95,7 +92,7 @@ function showTemplateEditDialog(templateInfo: any) {
         // 获取文件内容
     } else {
         // 字符串模板
-        templateContentEditorRef.value.setText(templateInfo.content)
+        nextTick(() => templateContentEditorRef.value.setText(templateInfo.content))
     }
 }
 

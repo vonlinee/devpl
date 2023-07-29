@@ -23,27 +23,21 @@ public enum DbType {
         if (StringUtils.equalsAny(dbType, "MySQL")) {
             return MySQL;
         }
-
         if (StringUtils.equalsAny(dbType, "Oracle")) {
             return Oracle;
         }
-
         if (StringUtils.equalsAny(dbType, "PostgreSQL")) {
             return PostgreSQL;
         }
-
         if (StringUtils.equalsAny(dbType, "SQLServer", "Microsoft SQL Server")) {
             return SQLServer;
         }
-
         if (StringUtils.equalsAny(dbType, "DM", "DM DBMS")) {
             return DM;
         }
-
         if (StringUtils.equalsAny(dbType, "Clickhouse")) {
             return Clickhouse;
         }
-
         return null;
     }
 

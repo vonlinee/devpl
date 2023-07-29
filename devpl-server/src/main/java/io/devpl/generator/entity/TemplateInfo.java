@@ -46,6 +46,13 @@ public class TemplateInfo extends DatabaseTableEntity {
     private String content;
 
     /**
+     * 技术提供方，例如Apache Velocity, Apache FreeMarker
+     * @see io.devpl.generator.domain.TemplateProvider
+     */
+    @TableField(value = "tech_provider")
+    private String technologyProvider;
+
+    /**
      * 备注信息
      */
     @TableField(value = "remark")

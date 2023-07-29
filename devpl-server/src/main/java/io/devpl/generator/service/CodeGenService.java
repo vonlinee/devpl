@@ -18,6 +18,11 @@ public interface CodeGenService {
      */
     GeneratorInfo getGeneratorInfo();
 
+    /**
+     * 下载代码
+     * @param tableId 表ID
+     * @param zip     压缩包
+     */
     void downloadCode(Long tableId, ZipOutputStream zip);
 
     /**
@@ -32,7 +37,17 @@ public interface CodeGenService {
      */
     Map<String, Object> prepareDataModel(Long tableId);
 
+    /**
+     * 获取文件树
+     * @param workPath 根路径
+     * @return 文件树节点
+     */
     List<FileNode> getFileTree(String workPath);
 
+    /**
+     * 获取路径的文本
+     * @param path 文本
+     * @return 文本
+     */
     String getFileContent(String path);
 }

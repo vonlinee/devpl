@@ -20,19 +20,23 @@ public class MyBatisUtils {
      */
     public static ParseResult parseXml(String xml) {
         // 直接获取XML中的节点
-        XPathParser xPathParser = new XPathParser(xml, false, null, new IgnoreDTDEntityResolver());
-        XNode selectNode = xPathParser.evalNode("select");
-        Configuration configuration = new Configuration();
-        MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
-        // 解析结果会放到 Configuration里
-        statementParser.parseStatementNode();
-        Collection<MappedStatement> mappedStatements = configuration.getMappedStatements();
+        Collection<MappedStatement> mappedStatements = getMappedStatements(xml);
         // MyBatis会存在重复的两个 MappedStatement，但是ID不一样
         // StrictMap的put方法
         List<MappedStatement> list = mappedStatements.stream().distinct().toList();
         MappedStatement mappedStatement = list.get(0);
         Set<String> ognlVar = getOgnlVar(mappedStatement);
         return new ParseResult(tree(ognlVar), mappedStatement);
+    }
+
+    private static Collection<MappedStatement> getMappedStatements(String xml) {
+        XPathParser xPathParser = new XPathParser(xml, false, null, new IgnoreDTDEntityResolver());
+        XNode selectNode = xPathParser.evalNode("select");
+        Configuration configuration = new Configuration();
+        MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
+        // 解析结果会放到 Configuration里
+        statementParser.parseStatementNode();
+        return configuration.getMappedStatements();
     }
 
     public static TreeNode<String> tree(Set<String> ognlVar) {

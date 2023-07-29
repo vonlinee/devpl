@@ -60,12 +60,6 @@ public class DataSourceInfo {
         } else if (dbType == DbType.Clickhouse) {
             this.dbQuery = new ClickHouseQuery();
         }
-
-        try {
-            this.connection = DbUtils.getConnection(this);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     public DataSourceInfo(Connection connection) throws SQLException {
@@ -85,5 +79,34 @@ public class DataSourceInfo {
             this.dbQuery = new ClickHouseQuery();
         }
         this.connection = connection;
+    }
+
+    /**
+     * 获取数据库连接
+     * @return JDBC Connection 对象实例
+     */
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                return DbUtils.getConnection(this);
+            }
+            return connection;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public void closeConnection() {
+        if (connection == null) {
+            return;
+        }
+        try {
+            if (!connection.isClosed()) {
+                connection.close(); // 关闭连接
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 }

@@ -12,11 +12,11 @@ import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
-import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -50,6 +50,9 @@ public class CodeGenServiceImpl implements CodeGenService {
     @Resource
     private GeneratorConfigService generatorConfigService;
 
+    @Value("${devpl.file.codegen.root}")
+    private String codeGenRootDir;
+
     @Override
     public GeneratorInfo getGeneratorInfo() {
         return generatorConfigService.getGeneratorInfo(true);
@@ -70,7 +73,6 @@ public class CodeGenServiceImpl implements CodeGenService {
             try {
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(path));
-
                 IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                 zip.flush();
                 zip.closeEntry();
@@ -93,9 +95,10 @@ public class CodeGenServiceImpl implements CodeGenService {
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
             String content = templateService.render(template.getContent(), dataModel);
+            // 文件保存路径
             String path = templateService.render(template.getGeneratorPath(), dataModel);
             try {
-                FileUtils.writeStringToFile(new File(path), content, StandardCharsets.UTF_8.name());
+                FileUtils.writeStringToFile(new File(codeGenRootDir, path), content, StandardCharsets.UTF_8.name());
             } catch (Exception exception) {
                 log.error("写入模板失败{}", template.getTemplateName());
             }
@@ -201,7 +204,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         Path filepath = Path.of(path);
         if (Files.exists(filepath)) {
             try {
-                return FileUtils.readFileUTF8String(new File(path));
+                return FileUtils.readUTF8String(new File(path));
             } catch (Exception exception) {
                 throw ServerException.create("读取文件%s失败", path, exception.getMessage());
             }
@@ -233,12 +236,7 @@ public class CodeGenServiceImpl implements CodeGenService {
                 } else {
                     fileNode.setIsLeaf(true);
                     fileNode.setSelectable(true);
-
-                    String extension = FilenameUtils.getExtension(file.getName());
-                    if (!StringUtils.hasText(extension)) {
-                        extension = "txt";
-                    }
-                    fileNode.setExtension(extension);
+                    fileNode.setExtension(FileUtils.getExtension(file, "txt"));
                 }
             }
         } else {
@@ -284,6 +282,4 @@ public class CodeGenServiceImpl implements CodeGenService {
         dataModel.put("gridList", gridList);
         dataModel.put("queryList", queryList);
     }
-
-
 }
