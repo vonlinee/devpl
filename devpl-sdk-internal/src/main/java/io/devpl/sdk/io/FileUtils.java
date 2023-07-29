@@ -12,9 +12,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
@@ -83,19 +80,6 @@ public class FileUtils {
             throw new FileNotFoundException("File '" + file + "' does not exist");
         }
         return new FileInputStream(file);
-    }
-
-    /**
-     * 读取文件的每行并进行处理
-     * @param file
-     * @param lineConsumer
-     */
-    public static void handleLines(File file, Consumer<String> lineConsumer) {
-        try {
-            readLines(file).stream().filter(line -> !line.isEmpty()).forEach(lineConsumer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -445,42 +429,15 @@ public class FileUtils {
     }
 
     /**
-     * @param file
-     * @param predicate
-     * @param function
-     * @param <T>
-     * @return
-     */
-    public static <T> T whenTrue(File file, Predicate<File> predicate, Function<File, T> function) {
-        if (predicate.test(file)) {
-            return function.apply(file);
-        }
-        return null;
-    }
-
-    /**
-     * @param file
-     * @param function
-     * @param <T>
-     * @return
-     */
-    public static <T> T whenTrue(File file, boolean condition, Function<File, T> function) {
-        if (condition) {
-            return function.apply(file);
-        }
-        return null;
-    }
-
-    /**
      * 关闭流
-     * @param closeableList
+     * @param closeableList Closeable
      */
     public static void closeQuitely(Closeable... closeableList) {
         for (Closeable target : closeableList) {
             try {
                 target.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                // ignore
             }
         }
     }
@@ -559,16 +516,11 @@ public class FileUtils {
         });
     }
 
-    public static String readAsString() {
-
-        return "";
+    public static String readFileUTF8String(File file) throws IOException {
+        return readFileToString(file, StandardCharsets.UTF_8);
     }
 
-    public static String readerFileAll(File file) throws IOException {
-        return readerFileToString(file, StandardCharsets.UTF_8);
-    }
-
-    public static String readerFileToString(File file, Charset charset) throws IOException {
+    public static String readFileToString(File file, Charset charset) throws IOException {
         Path path = file.toPath();
         // 一个文本文件如果已经大于int最大值，这种文件一般来说很少见有可能是log文件
         if (file.length() <= Integer.MAX_VALUE - 8) {
@@ -1230,7 +1182,7 @@ public class FileUtils {
      * @since Commons IO 1.3.1
      */
     public static String readFileToString(File file) throws IOException {
-        return readFileToString(file, null);
+        return readFileToString(file, (Charset) null);
     }
 
     /**

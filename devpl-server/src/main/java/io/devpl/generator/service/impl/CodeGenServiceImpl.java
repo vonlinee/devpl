@@ -1,7 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorInfo;
@@ -13,7 +11,9 @@ import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.SecurityUtils;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
+import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -61,18 +61,17 @@ public class CodeGenServiceImpl implements CodeGenService {
         Map<String, Object> dataModel = prepareDataModel(tableId);
 
         GeneratorInfo generatorInfo = getGeneratorInfo();
-
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
             String content = templateService.render(template.getContent(), dataModel);
             String path = templateService.render(template.getGeneratorPath(), dataModel);
-
             path = tableId + File.separator + path;
             try {
                 // 添加到zip
                 zip.putNextEntry(new ZipEntry(path));
-                IoUtil.writeUtf8(zip, false, content);
+
+                IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                 zip.flush();
                 zip.closeEntry();
             } catch (IOException e) {
@@ -95,7 +94,11 @@ public class CodeGenServiceImpl implements CodeGenService {
             dataModel.put("templateName", template.getTemplateName());
             String content = templateService.render(template.getContent(), dataModel);
             String path = templateService.render(template.getGeneratorPath(), dataModel);
-            FileUtil.writeUtf8String(content, path);
+            try {
+                FileUtils.writeStringToFile(new File(path), content, StandardCharsets.UTF_8.name());
+            } catch (Exception exception) {
+                log.error("写入模板失败{}", template.getTemplateName());
+            }
         }
     }
 
@@ -193,12 +196,15 @@ public class CodeGenServiceImpl implements CodeGenService {
         return node;
     }
 
-
     @Override
     public String getFileContent(String path) {
         Path filepath = Path.of(path);
         if (Files.exists(filepath)) {
-            return FileUtil.readString(path, StandardCharsets.UTF_8);
+            try {
+                return FileUtils.readFileUTF8String(new File(path));
+            } catch (Exception exception) {
+                throw ServerException.create("读取文件%s失败", path, exception.getMessage());
+            }
         }
         throw ServerException.create("文件%s不存在", path);
     }

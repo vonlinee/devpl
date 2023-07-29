@@ -630,14 +630,13 @@ public final class Validator {
      * @return
      */
     public static boolean hasLength(final CharSequence sequence) {
-        return (sequence != null && sequence.length() > 0);
+        return (sequence != null && !sequence.isEmpty());
     }
 
     public static boolean hasLength(final Object maybeCharSequence) {
         if (maybeCharSequence == null) return true;
-        if (maybeCharSequence instanceof CharSequence) {
-            CharSequence sequence = (CharSequence) maybeCharSequence;
-            return sequence.length() > 0;
+        if (maybeCharSequence instanceof CharSequence sequence) {
+            return !sequence.isEmpty();
         }
         return false;
     }
@@ -662,7 +661,7 @@ public final class Validator {
         if (valueType == null) throw new IllegalArgumentException("the target type of value cannot be null");
         if (valueType == String.class) {
             String val = (String) v;
-            if (val.length() > 0) return (T) val;
+            if (!val.isEmpty()) return (T) val;
             throw new IllegalArgumentException(message);
         }
         try {
