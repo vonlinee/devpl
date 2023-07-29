@@ -1,8 +1,12 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.config.template.GeneratorConfig;
+import io.devpl.generator.config.template.GeneratorInfo;
 
 public interface GeneratorConfigService {
 
-    GeneratorConfig getConfig();
+    GeneratorInfo getGeneratorInfo();
+
+    String getCodeGenConfigContent();
+
+    boolean saveGeneratorConfig(String content);
 }

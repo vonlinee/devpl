@@ -1,5 +1,7 @@
 package io.devpl.generator.config;
 
+import io.devpl.sdk.util.StringUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -14,4 +16,12 @@ public class GeneratorProperties {
      * 模板路径
      */
     private String template = "/template/";
+
+    @PostConstruct
+    public void init() {
+        // 模板路径，如果不是以/结尾，则添加/
+        if (!StringUtils.endWith(template, '/')) {
+            template = template + "/";
+        }
+    }
 }

@@ -1,21 +1,6 @@
-import axios, {AxiosInstance, AxiosRequestConfig} from 'axios'
+import axios, {AxiosInstance} from 'axios'
 import qs from 'qs'
 import {ElMessage} from 'element-plus'
-
-import DialogHandle from "@/components/dialog.js";
-
-// 弹窗
-const handleOpenDialog = (title: string = "操作确认", content: string) => {
-    const dialog = DialogHandle({
-        title: title,
-        content: content,
-        onConfirm: () => {
-            return new Promise(async (resolve) => {
-                dialog.showLoading();
-            });
-        },
-    });
-};
 
 // axios实例
 const service: AxiosInstance = axios.create({
@@ -46,6 +31,7 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
     response => {
+        console.log(response)
         if (response.status !== 200) {
             return Promise.reject(new Error(response.statusText || 'Error'))
         }
@@ -58,7 +44,6 @@ service.interceptors.response.use(
         // if (res.stackTrace != null || res.stackTrace != undefined) {
         //     handleOpenDialog(response.request.responseURL, res.stackTrace)
         // }
-
         // 错误提示 通过自定义弹窗方式进行显示
         ElMessage.error(res.msg)
         return Promise.reject(new Error(res.msg || 'Error'))
@@ -71,6 +56,3 @@ service.interceptors.response.use(
 
 // 导出 axios 实例
 export default service
-
-
-

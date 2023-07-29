@@ -1,5 +1,5 @@
 {
-  "name": "maku-generator-ui",
+  "name": "devpl-ui",
   "version": "3.0.2",
   "scripts": {
     "dev": "vite",
@@ -63,7 +63,7 @@
     "vite",
     "element-plus",
     "generator",
-    "maku-generator"
+    "devpl"
   ],
   "license": "MIT"
 }

@@ -44,31 +44,27 @@ public class CodeGenServiceImpl implements CodeGenService {
     @Resource
     private BaseClassService baseClassService;
     @Resource
-    private GeneratorConfig generatorConfig;
-    @Resource
     private TableService tableService;
     @Resource
     private TableFieldService tableFieldService;
     @Resource
     private TemplateService templateService;
 
-    // 代码生成器信息
-    private GeneratorInfo generatorInfo;
-
-    @PostConstruct
-    public void initGeneratorConfig() {
-        generatorInfo = generatorConfig.getGeneratorConfig();
-    }
+    @Resource
+    private GeneratorConfigService generatorConfigService;
 
     @Override
     public GeneratorInfo getGeneratorInfo() {
-        return generatorInfo;
+        return generatorConfigService.getGeneratorInfo();
     }
 
     @Override
     public void downloadCode(Long tableId, ZipOutputStream zip) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableId);
+
+        GeneratorInfo generatorInfo = getGeneratorInfo();
+
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
@@ -96,6 +92,7 @@ public class CodeGenServiceImpl implements CodeGenService {
     public void generatorCode(Long tableId) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableId);
+        GeneratorInfo generatorInfo = getGeneratorInfo();
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());

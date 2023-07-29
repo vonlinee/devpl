@@ -28,5 +28,5 @@ public interface DataSourceService extends BaseService<GenDataSource> {
      * 根据数据源ID，获取数据源
      * @param datasourceId 数据源ID
      */
-    DataSourceInfo get(Long datasourceId);
+    DataSourceInfo findById(Long datasourceId);
 }

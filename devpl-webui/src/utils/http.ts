@@ -5,8 +5,8 @@ import {AxiosPromise} from "axios";
  * axios请求配置: https://www.axios-http.cn/docs/req_config
  */
 interface config {
-    // method: any,
-    // url: string,
+    method: any,
+    url: string,
     // headers?: object,
     // params?: object | string,
     // responseType?: string,

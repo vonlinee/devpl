@@ -78,7 +78,7 @@ public class TableController {
     }
 
     /**
-     * 导入数据源中的表
+     * 导入数据源中的表到gen_table
      * @param datasourceId  数据源ID
      * @param tableNameList 表名列表
      */

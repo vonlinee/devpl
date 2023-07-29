@@ -3,6 +3,7 @@ package io.devpl.generator.config.template;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.utils.JSONUtils;
 import io.devpl.generator.entity.TemplateInfo;
+import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.springframework.util.StreamUtils;
 
@@ -18,35 +19,5 @@ public class GeneratorConfig {
 
     public GeneratorConfig(String template) {
         this.template = template;
-    }
-
-    public GeneratorInfo getGeneratorConfig() {
-        // 模板路径，如果不是以/结尾，则添加/
-        if (!StringUtils.endWith(template, '/')) {
-            template = template + "/";
-        }
-        // 模板配置文件
-        InputStream isConfig = this.getClass().getResourceAsStream(template + "config.json");
-        if (isConfig == null) {
-            throw new ServerException("模板配置文件，config.json不存在");
-        }
-
-        try {
-            // 读取模板配置文件
-            String configContent = StreamUtils.copyToString(isConfig, StandardCharsets.UTF_8);
-            GeneratorInfo generator = JSONUtils.parseObject(configContent, GeneratorInfo.class);
-            for (TemplateInfo templateInfo : generator.getTemplates()) {
-                // 模板文件
-                InputStream isTemplate = this.getClass().getResourceAsStream(template + templateInfo.getTemplateName());
-                if (isTemplate == null) {
-                    throw new ServerException("模板文件 " + templateInfo.getTemplateName() + " 不存在");
-                }
-                // 读取模板内容
-                templateInfo.setContent(StreamUtils.copyToString(isTemplate, StandardCharsets.UTF_8));
-            }
-            return generator;
-        } catch (IOException e) {
-            throw new ServerException("读取config.json配置文件失败");
-        }
     }
 }

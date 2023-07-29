@@ -52,4 +52,12 @@ public class JSONUtils {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 解析字符串，有语法错误直接抛异常
+     * @param text 可能为JSON的字符串
+     */
+    public static void validateJson(String text) {
+        parseObject(text, Object.class);
+    }
 }

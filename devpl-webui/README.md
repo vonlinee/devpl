@@ -1,4 +1,4 @@
-# maku-generator-ui
+# Devpl-ui
 
 ## Project setup
 

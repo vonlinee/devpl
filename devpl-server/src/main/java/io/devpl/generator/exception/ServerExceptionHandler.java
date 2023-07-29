@@ -41,7 +41,8 @@ public class ServerExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
-        log.error(ex.getMessage(), ex);
-        return Result.error(StatusCode.INTERNAL_SERVER_ERROR);
+        Result<String> result = Result.error(StatusCode.INTERNAL_SERVER_ERROR);
+        result.setMsg(ex.getMessage());
+        return result;
     }
 }

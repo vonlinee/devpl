@@ -9,8 +9,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * 抄自谷歌的
  */
@@ -170,12 +168,12 @@ public enum CaseFormat {
                 out = new StringBuilder(s.length() + 4 * format.wordSeparator.length());
                 out.append(format.normalizeFirstWord(s.substring(i, j)));
             } else {
-                requireNonNull(out).append(format.normalizeWord(s.substring(i, j)));
+                Objects.requireNonNull(out).append(format.normalizeWord(s.substring(i, j)));
             }
             out.append(format.wordSeparator);
             i = j + wordSeparator.length();
         }
-        return (i == 0) ? format.normalizeFirstWord(s) : requireNonNull(out)
+        return (i == 0) ? format.normalizeFirstWord(s) : Objects.requireNonNull(out)
             .append(format.normalizeWord(s.substring(i)))
             .toString();
     }
@@ -246,8 +244,7 @@ public enum CaseFormat {
 
         @Override
         public boolean equals(Object object) {
-            if (object instanceof StringConverter) {
-                StringConverter that = (StringConverter) object;
+            if (object instanceof StringConverter that) {
                 return sourceFormat.equals(that.sourceFormat) && targetFormat.equals(that.targetFormat);
             }
             return false;

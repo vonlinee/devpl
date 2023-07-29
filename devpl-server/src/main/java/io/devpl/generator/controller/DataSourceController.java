@@ -7,6 +7,7 @@ import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
+import io.devpl.generator.service.TableService;
 import io.devpl.generator.utils.DbUtils;
 import io.devpl.generator.utils.GenUtils;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DataSourceController {
     private final DataSourceService datasourceService;
+    private final TableService tableService;
 
     /**
      * 获取数据源列表
@@ -87,9 +89,9 @@ public class DataSourceController {
     public Result<List<GenTable>> tableList(@PathVariable("id") Long id) {
         try {
             // 获取数据源
-            DataSourceInfo datasource = datasourceService.get(id);
+            DataSourceInfo datasource = datasourceService.findById(id);
             // 根据数据源，获取全部数据表
-            List<GenTable> tableList = GenUtils.getTableList(datasource);
+            List<GenTable> tableList = tableService.getTableList(datasource);
             return Result.ok(tableList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

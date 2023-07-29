@@ -1,7 +1,7 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import ElementPlus from 'element-plus'
 import App from './App.vue'
-import { router } from './router'
+import {router} from './router'
 import 'virtual:svg-icons-register'
 import 'xe-utils'
 import VXETable from 'vxe-table'
@@ -16,13 +16,14 @@ import '@/styles/index.scss'
 import './useMonaco'
 
 VXETable.setup({
-	zIndex: 3000,
-	select: {
-		transfer: true
-	}
+    zIndex: 3000,
+    select: {
+        transfer: true
+    }
 })
 
-const app = createApp(App)
+// @ts-ignore
+const app: App<Element> = createApp(App)
 
 app.use(router)
 app.use(SvgIcon)

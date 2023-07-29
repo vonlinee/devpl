@@ -1922,6 +1922,11 @@ public final class StringUtils {
         return arrayToDelimitedString(arr, ",");
     }
 
+    /**
+     * 是否不为空
+     * @param str 字符串
+     * @return 是否不为空
+     */
     public static boolean isNotBlank(String str) {
         return hasText(str);
     }
@@ -2073,5 +2078,102 @@ public final class StringUtils {
             return false;
         }
         return c == str.charAt(str.length() - 1);
+    }
+
+    /**
+     * 截取分隔字符串之后的字符串，不包括分隔字符串<br>
+     * 如果给定的字符串为空串（null或""），返回原字符串<br>
+     * 如果分隔字符串为空串（null或""），则返回空串，如果分隔字符串未找到，返回空串，举例如下：
+     *
+     * <pre>
+     * StrUtil.subAfter(null, *, false)      = null
+     * StrUtil.subAfter("", *, false)        = ""
+     * StrUtil.subAfter(*, null, false)      = ""
+     * StrUtil.subAfter("abc", "a", false)   = "bc"
+     * StrUtil.subAfter("abcba", "b", false) = "cba"
+     * StrUtil.subAfter("abc", "c", false)   = ""
+     * StrUtil.subAfter("abc", "d", false)   = ""
+     * StrUtil.subAfter("abc", "", false)    = "abc"
+     * </pre>
+     * @param string          被查找的字符串
+     * @param separator       分隔字符串（不包括）
+     * @param isLastSeparator 是否查找最后一个分隔字符串（多次出现分隔字符串时选取最后一个），true为选取最后一个
+     * @return 切割后的字符串
+     * @since 3.1.1
+     */
+    public static String subAfter(CharSequence string, CharSequence separator, boolean isLastSeparator) {
+        if (isEmpty(string)) {
+            return null == string ? null : EMPTY;
+        }
+        if (separator == null) {
+            return EMPTY;
+        }
+        final String str = string.toString();
+        final String sep = separator.toString();
+        final int pos = isLastSeparator ? str.lastIndexOf(sep) : str.indexOf(sep);
+        if (INDEX_NOT_FOUND == pos || (string.length() - 1) == pos) {
+            return EMPTY;
+        }
+        return str.substring(pos + separator.length());
+    }
+
+    /**
+     * 去掉指定前缀
+     * @param str    字符串
+     * @param prefix 前缀
+     * @return 切掉后的字符串，若前缀不是 preffix， 返回原字符串
+     */
+    public static String removePrefix(CharSequence str, CharSequence prefix) {
+        if (isEmpty(str) || isEmpty(prefix)) {
+            return str(str);
+        }
+
+        final String str2 = str.toString();
+        if (str2.startsWith(prefix.toString())) {
+            return subSuf(str2, prefix.length());// 截取后半段
+        }
+        return str2;
+    }
+
+    /**
+     * 切割指定位置之后部分的字符串
+     * @param string    字符串
+     * @param fromIndex 切割开始的位置（包括）
+     * @return 切割后后剩余的后半部分字符串
+     */
+    public static String subSuf(CharSequence string, int fromIndex) {
+        if (isEmpty(string)) {
+            return null;
+        }
+        return sub(string, fromIndex, string.length());
+    }
+
+
+    /**
+     * 去掉指定后缀
+     * @param str    字符串
+     * @param suffix 后缀
+     * @return 切掉后的字符串，若后缀不是 suffix， 返回原字符串
+     */
+    public static String removeSuffix(CharSequence str, CharSequence suffix) {
+        if (isEmpty(str) || isEmpty(suffix)) {
+            return str(str);
+        }
+
+        final String str2 = str.toString();
+        if (str2.endsWith(suffix.toString())) {
+            return subPre(str2, str2.length() - suffix.length());// 截取前半段
+        }
+        return str2;
+    }
+
+    /**
+     * 切割指定位置之前部分的字符串
+     * @param string         字符串
+     * @param toIndexExclude 切割到的位置（不包括）
+     * @return 切割后的剩余的前半部分字符串
+     */
+    public static String subPre(CharSequence string, int toIndexExclude) {
+        return sub(string, 0, toIndexExclude);
     }
 }

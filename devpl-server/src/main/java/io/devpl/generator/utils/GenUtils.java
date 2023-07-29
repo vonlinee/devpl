@@ -1,22 +1,8 @@
 package io.devpl.generator.utils;
 
 import cn.hutool.core.text.NamingCase;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import io.devpl.generator.common.exception.ServerException;
-import io.devpl.generator.config.DataSourceInfo;
-import io.devpl.generator.config.DbType;
-import io.devpl.generator.config.query.AbstractQuery;
-import io.devpl.generator.entity.GenTable;
-import io.devpl.generator.entity.GenTableField;
+import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 代码生成器 工具类
@@ -25,110 +11,12 @@ import java.util.List;
 public class GenUtils {
 
     /**
-     * 根据数据源，获取全部数据表
-     * @param datasource 数据源
-     */
-    public static List<GenTable> getTableList(DataSourceInfo datasource) {
-        List<GenTable> tableList = new ArrayList<>();
-        try {
-            AbstractQuery query = datasource.getDbQuery();
-
-            // 查询数据
-            PreparedStatement preparedStatement = datasource.getConnection()
-                .prepareStatement(query.getTableQuerySql(null));
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()) {
-                GenTable table = new GenTable();
-                table.setTableName(rs.getString(query.tableName()));
-                table.setTableComment(rs.getString(query.tableComment()));
-                table.setDatasourceId(datasource.getId());
-                tableList.add(table);
-            }
-
-            datasource.getConnection().close();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
-        return tableList;
-    }
-
-    /**
-     * 根据数据源，获取指定数据表
-     * @param datasource 数据源
-     * @param tableName  表名
-     */
-    public static GenTable getTable(DataSourceInfo datasource, String tableName) {
-        try (Connection connection = datasource.getConnection()) {
-            AbstractQuery query = datasource.getDbQuery();
-            // 查询数据
-            PreparedStatement preparedStatement = connection.prepareStatement(query.getTableQuerySql(tableName));
-            ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                GenTable table = new GenTable();
-                table.setTableName(rs.getString(query.tableName()));
-                table.setTableComment(rs.getString(query.tableComment()));
-                table.setDatasourceId(datasource.getId());
-                return table;
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        throw new ServerException("数据表不存在：" + tableName);
-    }
-
-
-    /**
-     * 获取表字段列表
-     * @param datasource 数据源
-     * @param tableId    表ID
-     * @param tableName  表名
-     */
-    public static List<GenTableField> getTableFieldList(DataSourceInfo datasource, Long tableId, String tableName) {
-        List<GenTableField> tableFieldList = new ArrayList<>();
-
-        try {
-            AbstractQuery query = datasource.getDbQuery();
-            String tableFieldsSql = query.getTableFieldsQuerySql();
-            if (datasource.getDbType() == DbType.Oracle) {
-                DatabaseMetaData md = datasource.getConnection().getMetaData();
-                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
-            } else {
-                tableFieldsSql = String.format(tableFieldsSql, tableName);
-            }
-            try (Connection connection = datasource.getConnection()) {
-                PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
-                ResultSet rs = preparedStatement.executeQuery();
-                while (rs.next()) {
-                    GenTableField field = new GenTableField();
-                    field.setTableId(tableId);
-                    field.setFieldName(rs.getString(query.fieldName()));
-                    String fieldType = rs.getString(query.fieldType());
-                    if (fieldType.contains(" ")) {
-                        fieldType = fieldType.substring(0, fieldType.indexOf(" "));
-                    }
-                    field.setFieldType(fieldType);
-                    field.setFieldComment(rs.getString(query.fieldComment()));
-                    String key = rs.getString(query.fieldKey());
-                    field.setPrimaryKey(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
-
-                    tableFieldList.add(field);
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-
-        return tableFieldList;
-    }
-
-    /**
      * 获取模块名
      * @param packageName 包名
      * @return 模块名
      */
     public static String getModuleName(String packageName) {
-        return StrUtil.subAfter(packageName, ".", true);
+        return StringUtils.subAfter(packageName, ".", true);
     }
 
     /**
@@ -137,11 +25,10 @@ public class GenUtils {
      * @return 功能名
      */
     public static String getFunctionName(String tableName) {
-        String functionName = StrUtil.subAfter(tableName, "_", true);
-        if (StrUtil.isBlank(functionName)) {
+        String functionName = StringUtils.subAfter(tableName, "_", true);
+        if (StringUtils.isBlank(functionName)) {
             functionName = tableName;
         }
-
         return functionName;
     }
 
@@ -156,12 +43,12 @@ public class GenUtils {
     public static String camelCase(boolean upperFirst, String tableName, String removePrefix, String removeSuffix) {
         String className = tableName;
         // 移除前缀
-        if (StrUtil.isNotBlank(removePrefix)) {
-            className = StrUtil.removePrefix(tableName, removePrefix);
+        if (StringUtils.isNotBlank(removePrefix)) {
+            className = StringUtils.removePrefix(tableName, removePrefix);
         }
         // 移除后缀
         if (StringUtils.isNotBlank(removeSuffix)) {
-            className = StrUtil.removeSuffix(className, removeSuffix);
+            className = StringUtils.removeSuffix(className, removeSuffix);
         }
         // 是否首字母大写
         if (upperFirst) {

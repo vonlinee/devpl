@@ -83,12 +83,6 @@
     </pluginRepository>
   </pluginRepositories>
 
-  <scm>
-    <connection>https://github.com/makunet/maku-generator.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com:makunet/maku-generator.git</developerConnection>
-    <url>https://github.com/makunet/maku-generator</url>
-  </scm>
-
   <profiles>
     <profile>
       <id>release</id>

@@ -16,6 +16,9 @@
             <el-form-item>
                 <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
             </el-form-item>
+            <el-form-item>
+                <el-button type="danger" @click="showConfig()">生成配置</el-button>
+            </el-form-item>
         </el-form>
         <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
                   @selection-change="selectionChangeHandle">
@@ -47,10 +50,19 @@
         <edit ref="editRef" @refresh-data-list="getDataList"></edit>
         <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
     </el-card>
+
+    <el-dialog v-model="configDialogRef" draggable>
+        <div style="height: 600px">
+            <monaco-editor ref="configEditor" language="json"></monaco-editor>
+        </div>
+        <template #footer>
+            <el-button @click="saveConfig()">确认</el-button>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {nextTick, reactive, ref} from 'vue'
 import {IHooksOptions} from '@/hooks/interface'
 import {useCrud} from '@/hooks'
 import Import from './import.vue'
@@ -58,7 +70,8 @@ import Edit from './edit.vue'
 import Generator from './generator.vue'
 import {useTableSyncApi} from '@/api/table'
 import {ElButton, ElMessage, ElMessageBox} from 'element-plus'
-import {useDownloadApi} from '@/api/generator'
+import {apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi} from '@/api/generator'
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/gen/table/page',
@@ -106,6 +119,32 @@ const syncHandle = (row: any) => {
         })
         .catch(() => {
         })
+}
+
+let configEditor = ref()
+let configDialogRef = ref(false)
+
+function showConfig() {
+    apiGetGeneratorConfig().then((res) => {
+        if (res.code == 200) {
+            configDialogRef.value = true
+            nextTick(() => configEditor.value.setText(res.data))
+        }
+    })
+}
+
+/**
+ * 保存配置
+ */
+function saveConfig() {
+    apiSaveGeneratorConfig(configEditor.value.getText()).then((res) => {
+        if (res.data) {
+            ElMessage.success('保存成功')
+            configDialogRef.value = false
+        }
+    }).catch((reason) => {
+        ElMessage.error('保存失败', reason)
+    })
 }
 
 const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)

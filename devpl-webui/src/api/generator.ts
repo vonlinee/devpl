@@ -48,3 +48,21 @@ export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
 export const apiDeleteGenFiles = (genFiles: GenFile[]) => {
     return http.delete('/gen/generator/genfiles/replace', genFiles.map((file: GenFile) => file.pid))
 }
+
+/**
+ * 获取生成器配置
+ * @return JSON字符串
+ */
+export const apiGetGeneratorConfig = () => {
+    return http.get('/gen/generator/config')
+}
+
+/**
+ * 生成代码（自定义目录）
+ * @return JSON字符串
+ */
+export const apiSaveGeneratorConfig = (content: string) => {
+    return http.postForm('/gen/generator/config', {
+        content: content
+    })
+}

@@ -49,7 +49,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDat
     }
 
     @Override
-    public DataSourceInfo get(Long datasourceId) {
+    public DataSourceInfo findById(Long datasourceId) {
         // 初始化配置信息
         DataSourceInfo info = null;
         if (datasourceId.intValue() == 0) {
@@ -61,7 +61,6 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDat
         } else {
             info = new DataSourceInfo(this.getById(datasourceId));
         }
-
         return info;
     }
 
