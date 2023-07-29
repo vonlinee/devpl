@@ -20,6 +20,11 @@ import java.util.List;
 public class BaseClassController {
     private final BaseClassService baseClassService;
 
+    /**
+     * 分页查询
+     * @param query 查询参数
+     * @return 基本类型
+     */
     @GetMapping("/page")
     public Result<PageResult<GenBaseClass>> page(Query query) {
         return Result.ok(baseClassService.page(query));

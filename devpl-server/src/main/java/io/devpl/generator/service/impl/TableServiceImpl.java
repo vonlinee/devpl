@@ -215,7 +215,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
             log.error(e.getMessage(), e);
         }
 
-        try (Connection connection = datasource.getConnection()) {
+        try (Connection connection = dataSourceService.getConnection(datasource.getId())) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
                 try (ResultSet rs = preparedStatement.executeQuery()) {
                     while (rs.next()) {

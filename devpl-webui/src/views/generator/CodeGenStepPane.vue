@@ -7,7 +7,7 @@
 import {ref} from "vue";
 import CodeGenInfo from "@/views/generator/CodeGenInfo.vue";
 import DataSourceSelector from "@/views/generator/DataSourceSelector.vue";
-import GenFileSelector from "@/views/generator/GenFileSelector.vue";
+import GenFileSelector from "@/views/generator/genfile/GenFileSelector.vue";
 
 const tabPosition = ref('left')
 
@@ -44,7 +44,7 @@ function updateTabDisableStatus(next: boolean) {
                 <code-gen-info v-if="activeName == '1'"></code-gen-info>
             </el-tab-pane>
             <el-tab-pane label="选择文件类型" :disabled="tabDisableFlag[1]" name="2">
-                <gen-file-selector v-if="activeName == '2'"></gen-file-selector>
+                <el-breadcrumb v-if="activeName == '2'"></el-breadcrumb>
             </el-tab-pane>
             <el-tab-pane label="模板数据源" :disabled="tabDisableFlag[2]" name="3">
                 <data-source-selector v-if="activeName == '3'"></data-source-selector>

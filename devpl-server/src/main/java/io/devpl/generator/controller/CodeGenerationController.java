@@ -32,7 +32,7 @@ public class CodeGenerationController {
     public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) {
         // 生成代码
         for (Long tableId : tableIds) {
-            codeGenService.generatorCode(tableId);
+            codeGenService.startCodeGeneration(tableId);
         }
         GeneratorInfo generatorInfo = codeGenService.getGeneratorInfo();
         return Result.ok(Lists.arrayOf(generatorInfo.getProject().getBackendPath(), generatorInfo.getProject()

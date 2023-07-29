@@ -35,7 +35,7 @@ function testButton() {
 </script>
 
 <template>
-    <el-table :data="tableData" style="width: 100%" height="600px">
+    <el-table :data="tableData" style="width: 100%" height="600px" border>
         <el-table-column type="selection" width="55" prop="selected"/>
         <el-table-column prop="fileName" label="文件类型"/>
         <el-table-column prop="templateName" label="模板">

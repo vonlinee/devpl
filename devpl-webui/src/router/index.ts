@@ -71,7 +71,24 @@ export const menuRoutes: RouteRecordRaw[] = [
                     title: '测试',
                     icon: 'icon-edit-square'
                 }
-            }
+            }, {
+                path: '/gen/files',
+                name: '目标文件管理',
+                component: () => import('@/views/generator/genfile/index.vue'),
+                meta: {
+                    title: '目标文件管理',
+                    icon: 'icon-menu'
+                }
+            },
+            {
+                path: '/gen/console',
+                name: '文件生成',
+                component: () => import('@/views/generator/gen/index.vue'),
+                meta: {
+                    title: '文件生成',
+                    icon: 'icon-menu'
+                }
+            },
         ]
     },
     {

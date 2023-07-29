@@ -6,6 +6,8 @@ import io.devpl.generator.common.service.BaseService;
 import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.entity.GenDataSource;
 
+import javax.annotation.Nullable;
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -28,5 +30,14 @@ public interface DataSourceService extends BaseService<GenDataSource> {
      * 根据数据源ID，获取数据源
      * @param datasourceId 数据源ID
      */
+    @Nullable
     DataSourceInfo findById(Long datasourceId);
+
+    /**
+     * 获取数据库连接
+     * @param dataSourceId 数据源ID
+     * @return 数据库连接
+     */
+    @Nullable
+    Connection getConnection(Long dataSourceId);
 }

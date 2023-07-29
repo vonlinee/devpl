@@ -29,7 +29,7 @@ public interface CodeGenService {
      * 生成某个表的文件
      * @param tableId gen_table主键
      */
-    void generatorCode(Long tableId);
+    void startCodeGeneration(Long tableId);
 
     /**
      * 获取渲染的数据模型

@@ -87,7 +87,7 @@ public class CodeGenServiceImpl implements CodeGenService {
      * @param tableId gen_table主键
      */
     @Override
-    public void generatorCode(Long tableId) {
+    public void startCodeGeneration(Long tableId) {
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
         GeneratorInfo generatorInfo = getGeneratorInfo();

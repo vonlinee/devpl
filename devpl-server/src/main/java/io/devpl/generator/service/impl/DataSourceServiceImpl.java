@@ -10,11 +10,14 @@ import io.devpl.generator.config.DbType;
 import io.devpl.generator.dao.DataSourceDao;
 import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.service.DataSourceService;
+import io.devpl.generator.utils.DbUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +29,10 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDataSource> implements DataSourceService {
+
+    /**
+     * 程序内部的数据源
+     */
     private final DataSource dataSource;
 
     @Override
@@ -53,6 +60,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDat
         // 初始化配置信息
         DataSourceInfo info = null;
         if (datasourceId.intValue() == 0) {
+            // 本系统连接的数据源
             try {
                 info = new DataSourceInfo(dataSource.getConnection());
             } catch (SQLException e) {
@@ -68,5 +76,21 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, GenDat
     public boolean save(GenDataSource entity) {
         entity.setCreateTime(new Date());
         return super.save(entity);
+    }
+
+    @Override
+    @Nullable
+    public Connection getConnection(Long dataSourceId) {
+        try {
+            if (dataSourceId.intValue() == 0) {
+                // 本系统连接的数据源
+                return dataSource.getConnection();
+            } else {
+                DataSourceInfo dataSourceInfo = new DataSourceInfo(this.getById(dataSourceId));
+                return DbUtils.getConnection(dataSourceInfo);
+            }
+        } catch (SQLException exception) {
+            return null;
+        }
     }
 }

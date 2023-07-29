@@ -1,13 +1,13 @@
 {
     "project": {
-        "packageName": "net.maku",
+        "packageName": "io.devpl",
         "version": "1.0.0",
         "backendPath": "codegen\\maku-boot\\maku-server",
         "frontendPath": "codegen\\maku-admin"
     },
     "developer": {
-        "author": "111",
-        "email": "222"
+        "author": "vonlinee",
+        "email": "vonlinee@163.com"
     },
     "templates": [
         {
