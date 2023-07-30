@@ -34,10 +34,16 @@ export default defineComponent({
         options: {
             type: Object,
             required: false
+        },
+        // 是否只读,不可通过界面输入，但是可以通过API设置文本
+        readOnly: {
+            type: Boolean,
+            default: false,
+            required: false
         }
     },
     setup(props: any, context) {
-        const {language, text, width, height} = toRefs(props)
+        const {language, text, width, height, readOnly} = toRefs(props)
         const editorOptions: IStandaloneEditorConstructionOptions = reactive({
             value: text.value, // 编辑器初始显示文字
             language: language.value, // 语言支持
@@ -48,7 +54,7 @@ export default defineComponent({
             foldingStrategy: 'indentation',
             renderLineHighlight: 'all', // 行亮
             selectOnLineNumbers: true, // 显示行号
-            readOnly: false, // 只读
+            readOnly: readOnly.value, // 只读
             roundedSelection: false,
             scrollBeyondLastLine: false, // 取消代码后面一大段空白
             overviewRulerBorder: false, // 不要滚动条的边框

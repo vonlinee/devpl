@@ -33,11 +33,8 @@ private final ${ClassName}Service ${className}Service;
 @GetMapping("page")
 @Operation(summary = "分页")
 @PreAuthorize("hasAuthority('${moduleName}:${functionName}:page')")
-public Result
-<PageResult
-<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){
-    PageResult
-    <${ClassName}VO> page = ${className}Service.page(query);
+public Result<PageResult<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){
+    PageResult <${ClassName}VO> page = ${className}Service.page(query);
 
         return Result.ok(page);
         }
@@ -55,8 +52,7 @@ public Result
             @PostMapping
             @Operation(summary = "保存")
             @PreAuthorize("hasAuthority('${moduleName}:${functionName}:save')")
-            public Result
-            <String> save(@RequestBody ${ClassName}VO vo){
+            public Result<String> save(@RequestBody ${ClassName}VO vo){
                 ${className}Service.save(vo);
 
                 return Result.ok();

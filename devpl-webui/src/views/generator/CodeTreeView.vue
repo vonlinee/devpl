@@ -13,7 +13,7 @@
 <script lang="ts">
 import {Pane, Splitpanes} from "splitpanes";
 import 'splitpanes/dist/splitpanes.css'
-import {onMounted, ref, toRefs} from 'vue';
+import {nextTick, onMounted, ref, toRefs} from 'vue';
 import {getLanguage} from "@/components/editor/monaco-editor";
 import {apiGetFileContent, apiGetFileTree} from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
@@ -84,10 +84,40 @@ export default {
             }
         }
 
+        /**
+         * 找到第一个文件节点
+         * @param fileNode
+         */
+        let findFirstLeafNode = function (fileNode: FileNode): FileNode | undefined {
+            if (fileNode.isLeaf) {
+                return fileNode
+            }
+            let firstNode: FileNode | undefined;
+            for (let i = 0; i < fileNode.children.length; i++) {
+                firstNode = findFirstLeafNode(fileNode.children[i])
+                if (fileNode) {
+                    break;
+                }
+            }
+            return firstNode
+        }
+
+        /**
+         * 手动模拟选中第一个文件
+         * @param fileNodes
+         */
+        let onClickFirstFile = async (fileNodes: FileNode[]) => {
+            let node = findFirstLeafNode(fileNodes[0]);
+            if (node) {
+                handleFileTreeNodeClick(node)
+            }
+        }
+
         // 加载文件树
         onMounted(() => {
             apiGetFileTree(dir.value).then(res => {
                 treeData.value = res.data
+                nextTick(() => onClickFirstFile(treeData.value))
             });
         });
 

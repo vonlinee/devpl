@@ -2,8 +2,8 @@
     "project": {
         "packageName": "io.devpl",
         "version": "1.0.0",
-        "backendPath": "codegen\\maku-boot\\maku-server",
-        "frontendPath": "codegen\\maku-admin"
+        "backendPath": "backend",
+        "frontendPath": "frontend"
     },
     "developer": {
         "author": "vonlinee",

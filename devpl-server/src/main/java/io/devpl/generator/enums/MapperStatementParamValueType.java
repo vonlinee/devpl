@@ -22,11 +22,16 @@ public enum MapperStatementParamValueType implements DataType {
         if (typeName == null) {
             return null;
         }
-        return valueOf(typeName);
+        for (MapperStatementParamValueType item : values()) {
+            if (item.getQualifier().equals(typeName)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     @Override
-    public String getQualifier() {
+    public final String getQualifier() {
         return typeName;
     }
 }

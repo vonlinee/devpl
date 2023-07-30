@@ -11,12 +11,11 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * String工具类
- * @since 11
+ * @since 15
  */
 public final class StringUtils {
 
@@ -95,7 +94,7 @@ public final class StringUtils {
     /**
      * 字符串是否有长度
      * @param str 字符串
-     * @return
+     * @return 字符串是否有长度
      */
     public static boolean hasLength(String str) {
         return hasLength((CharSequence) str);
@@ -138,7 +137,7 @@ public final class StringUtils {
      * Utils.isAnyEmpty(new String[]{})   = false
      * Utils.isAnyEmpty(new String[]{""}) = true
      * </pre>
-     * @param css the CharSequences to check, may be null or empty
+     * @param css the CharSequences to check, maybe null or empty
      * @return {@code true} if any of the CharSequences are empty or null
      * @since 3.2
      */
@@ -157,7 +156,7 @@ public final class StringUtils {
     /**
      * @param sequence
      * @param c
-     * @param len
+     * @param len      长度
      * @return String
      * @since 11
      */
@@ -235,26 +234,12 @@ public final class StringUtils {
     }
 
     /**
-     * 字符串是否包含中文
-     * @param str 待校验字符串
-     * @return true 包含中文字符 false 不包含中文字符
-     */
-    public static boolean containChineseWords(String str) {
-        if (str != null && !str.isEmpty()) {
-            Pattern p = Pattern.compile("[\u4E00-\u9FA5|\\！|\\，|\\。|\\（|\\）|\\《|\\》|\\“|\\”|\\？|\\：|\\；|\\【|\\】]");
-            Matcher m = p.matcher(str);
-            return m.find();
-        }
-        return false;
-    }
-
-    /**
      * 大写首字母
      * @param str 原字符串
      * @return 大写首字母后的字符串
      */
     public static String upperFirst(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return "";
         }
         return Character.toUpperCase(str.toCharArray()[0]) + str.substring(1);
@@ -270,7 +255,7 @@ public final class StringUtils {
         if (null == str) {
             return null;
         }
-        if (str.length() > 0) {
+        if (!str.isEmpty()) {
             char firstChar = str.charAt(0);
             if (Character.isUpperCase(firstChar)) {
                 return Character.toLowerCase(firstChar) + sub(str, 1);
@@ -381,7 +366,6 @@ public final class StringUtils {
     }
 
     public static boolean in(String target, String... group) {
-        if (group.length == 0) return false;
         for (String s : group) {
             if (target.equals(s)) return true;
         }
@@ -416,7 +400,7 @@ public final class StringUtils {
      * StringUtils.hasText("12345") = true
      * StringUtils.hasText(" 12345 ") = true
      * </pre>
-     * @param str the {@code CharSequence} to check (may be {@code null})
+     * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not {@code null},
      * its length is greater than 0, and it does not contain whitespace only
      * @see #hasText(String)
@@ -424,7 +408,7 @@ public final class StringUtils {
      * @see Character#isWhitespace
      */
     public static boolean hasText(CharSequence str) {
-        return (str != null && str.length() > 0 && containsText(str));
+        return (str != null && !str.isEmpty() && containsText(str));
     }
 
     /**
@@ -438,13 +422,13 @@ public final class StringUtils {
      * StringUtils.hasLength(" ") = true
      * StringUtils.hasLength("Hello") = true
      * </pre>
-     * @param str the {@code CharSequence} to check (may be {@code null})
+     * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not {@code null} and has length
      * @see #hasLength(String)
      * @see #hasText(CharSequence)
      */
     public static boolean hasLength(CharSequence str) {
-        return (str != null && str.length() > 0);
+        return (str != null && !str.isEmpty());
     }
 
     /**
@@ -477,7 +461,7 @@ public final class StringUtils {
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
      * @param iterable  the {@code Iterable} providing the values to join together,
-     *                  may be null
+     *                  maybe null
      * @param separator the separator character to use, null treated as ""
      * @return the joined String, {@code null} if null iterator input
      * @since 2.3
@@ -522,7 +506,7 @@ public final class StringUtils {
      * <p>
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
-     * @param iterator  the {@code Iterator} of values to join together, may be null
+     * @param iterator  the {@code Iterator} of values to join together, maybe null
      * @param separator the separator character to use, null treated as ""
      * @return the joined String, {@code null} if null iterator input
      */
@@ -703,8 +687,9 @@ public final class StringUtils {
 
     /**
      * 会对输入参数的可能情况进行检测
-     * @param o
-     * @return
+     * @param o object
+     * @return 字符串
+     * @see String#valueOf(Object)
      */
     public static String valueOf(Object o) {
         if (o == null) {
@@ -752,7 +737,7 @@ public final class StringUtils {
 
     /**
      * Check whether the given {@code CharSequence} contains any whitespace characters.
-     * @param str the {@code CharSequence} to check (may be {@code null})
+     * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not empty and
      * contains at least 1 whitespace character
      * @see Character#isWhitespace
@@ -772,7 +757,7 @@ public final class StringUtils {
 
     /**
      * Check whether the given {@code String} contains any whitespace characters.
-     * @param str the {@code String} to check (may be {@code null})
+     * @param str the {@code String} to check (maybe {@code null})
      * @return {@code true} if the {@code String} is not empty and
      * contains at least 1 whitespace character
      * @see #containsWhitespace(CharSequence)
@@ -1127,7 +1112,7 @@ public final class StringUtils {
     /**
      * Extract the filename from the given Java resource path,
      * e.g. {@code "mypath/myfile.txt" &rarr; "myfile.txt"}.
-     * @param path the file path (may be {@code null})
+     * @param path the file path (maybe {@code null})
      * @return the extracted filename, or {@code null} if none
      */
 
@@ -1143,7 +1128,7 @@ public final class StringUtils {
     /**
      * Extract the filename extension from the given Java resource path,
      * e.g. "mypath/myfile.txt" &rarr; "txt".
-     * @param path the file path (may be {@code null})
+     * @param path the file path (maybe {@code null})
      * @return the extracted filename extension, or {@code null} if none
      */
 
@@ -1232,7 +1217,7 @@ public final class StringUtils {
 
         // Strip prefix from path to analyze, to not treat it as part of the
         // first path element. This is necessary to correctly parse paths like
-        // "file:core/../core/io/Resource.class", where the ".." should just
+        // "file:core/../core/io/Resource.class", where the "." should just
         // strip the first "core" directory while keeping the "file:" prefix.
         int prefixIndex = pathToUse.indexOf(':');
         String prefix = "";
@@ -1353,7 +1338,7 @@ public final class StringUtils {
      * the {@link Locale#toString} format as well as BCP 47 language tags as
      * specified by {@link Locale#forLanguageTag}.
      * @param localeValue the locale value: following either {@code Locale's}
-     *                    {@code toString()} format ("en", "en_UK", etc), also accepting spaces as
+     *                    {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
      *                    separators (as an alternative to underscores), or BCP 47 (e.g. "en-UK")
      * @return a corresponding {@code Locale} instance, or {@code null} if none
      * @throws IllegalArgumentException in case of an invalid locale specification
@@ -1367,7 +1352,7 @@ public final class StringUtils {
         if (tokens.length == 1) {
             validateLocalePart(localeValue);
             Locale resolved = Locale.forLanguageTag(localeValue);
-            if (resolved.getLanguage().length() > 0) {
+            if (!resolved.getLanguage().isEmpty()) {
                 return resolved;
             }
         }
@@ -1383,7 +1368,7 @@ public final class StringUtils {
      * <p><b>Note: This delegate does not accept the BCP 47 language tag format.
      * Please use {@link #parseLocale} for lenient parsing of both formats.</b>
      * @param localeString the locale {@code String}: following {@code Locale's}
-     *                     {@code toString()} format ("en", "en_UK", etc), also accepting spaces as
+     *                     {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
      *                     separators (as an alternative to underscores)
      * @return a corresponding {@code Locale} instance, or {@code null} if none
      * @throws IllegalArgumentException in case of an invalid locale specification
@@ -1421,7 +1406,7 @@ public final class StringUtils {
             country = "";
         }
 
-        return (language.length() > 0 ? new Locale(language, country, variant) : null);
+        return (!language.isEmpty() ? new Locale(language, country, variant) : null);
     }
 
     private static void validateLocalePart(String localePart) {
@@ -1499,7 +1484,6 @@ public final class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return new String[]{str};
         }
-
         String[] newArr = new String[array.length + 1];
         System.arraycopy(array, 0, newArr, 0, array.length);
         newArr[array.length] = str;
@@ -1533,7 +1517,7 @@ public final class StringUtils {
      * Merge the given {@code String} arrays into one, with overlapping
      * array elements only included once.
      * <p>The order of elements in the original arrays is preserved
-     * (with the exception of overlapping elements, which are only
+     * (except overlapping elements, which are only
      * included on their first occurrence).
      * @param array1 the first array (can be {@code null})
      * @param array2 the second array (can be {@code null})
@@ -1569,7 +1553,6 @@ public final class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-
         Arrays.sort(array);
         return array;
     }
@@ -1744,7 +1727,7 @@ public final class StringUtils {
             if (trimTokens) {
                 token = token.trim();
             }
-            if (!ignoreEmptyTokens || token.length() > 0) {
+            if (!ignoreEmptyTokens || !token.isEmpty()) {
                 tokens.add(token);
             }
         }
@@ -1756,7 +1739,7 @@ public final class StringUtils {
      * {@code String} array.
      * <p>A single {@code delimiter} may consist of more than one character,
      * but it will still be considered as a single delimiter string, rather
-     * than as bunch of potential delimiter characters, in contrast to
+     * than as a bunch of potential delimiter characters, in contrast to
      * {@link #tokenizeToStringArray}.
      * @param str       the input {@code String} (potentially {@code null} or empty)
      * @param delimiter the delimiter between elements (this is a single delimiter,
@@ -1773,7 +1756,7 @@ public final class StringUtils {
      * a {@code String} array.
      * <p>A single {@code delimiter} may consist of more than one character,
      * but it will still be considered as a single delimiter string, rather
-     * than as bunch of potential delimiter characters, in contrast to
+     * than as a bunch of potential delimiter characters, in contrast to
      * {@link #tokenizeToStringArray}.
      * @param str           the input {@code String} (potentially {@code null} or empty)
      * @param delimiter     the delimiter between elements (this is a single delimiter,
@@ -1804,7 +1787,7 @@ public final class StringUtils {
                 result.add(deleteAny(str.substring(pos, delPos), charsToDelete));
                 pos = delPos + delimiter.length();
             }
-            if (str.length() > 0 && pos <= str.length()) {
+            if (!str.isEmpty() && pos <= str.length()) {
                 // Add rest of String, but not in case of empty input.
                 result.add(deleteAny(str.substring(pos), charsToDelete));
             }
@@ -1994,7 +1977,7 @@ public final class StringUtils {
         if (null == str) {
             return null;
         }
-        if (str.length() > 0) {
+        if (!str.isEmpty()) {
             char firstChar = str.charAt(0);
             if (Character.isLowerCase(firstChar)) {
                 return Character.toUpperCase(firstChar) + substring(str, 1, str.length());

@@ -3,6 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
@@ -28,8 +29,9 @@ public interface CodeGenService {
     /**
      * 生成某个表的文件
      * @param tableId gen_table主键
+     * @return 生成文件的根目录
      */
-    void startCodeGeneration(Long tableId);
+    String startCodeGeneration(Long tableId);
 
     /**
      * 获取渲染的数据模型

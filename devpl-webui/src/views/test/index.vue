@@ -26,6 +26,7 @@ function show() {
 
 function setLanguage() {
     editorRef.value.setLanguage(inputRef.value)
+    editorRef.value.setText("11111111111")
 }
 
 let file = ref()
@@ -45,7 +46,6 @@ let file = ref()
             </div>
         </template>
     </adaptive-dialog>
-
     <code-gen-step-pane></code-gen-step-pane>
 </template>
 

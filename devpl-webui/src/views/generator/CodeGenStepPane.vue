@@ -7,11 +7,10 @@
 import {ref} from "vue";
 import CodeGenInfo from "@/views/generator/CodeGenInfo.vue";
 import DataSourceSelector from "@/views/generator/DataSourceSelector.vue";
-import GenFileSelector from "@/views/generator/genfile/GenFileSelector.vue";
 
 const tabPosition = ref('left')
 
-let activeName = ref<string>('1')
+let activeName = ref<string>('0')
 
 let index = 0;
 let tabDisableFlag = ref<boolean[]>([false, true, true, true])

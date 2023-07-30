@@ -6,7 +6,7 @@ package com.baomidou.mybatisplus.generator.type;
 public interface DataType {
 
     /**
-     * 限定类型名称
+     * 唯一限定类型名称
      * @return 限定类型名称
      */
     String getQualifier();

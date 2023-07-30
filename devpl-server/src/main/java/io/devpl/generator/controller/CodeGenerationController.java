@@ -2,6 +2,7 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.config.template.GeneratorInfo;
+import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.TemplateFileGeneration;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
@@ -10,6 +11,7 @@ import io.devpl.sdk.collection.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,12 +33,11 @@ public class CodeGenerationController {
     @PostMapping("/code")
     public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) {
         // 生成代码
+        List<String> rootDirs = new ArrayList<>(tableIds.length);
         for (Long tableId : tableIds) {
-            codeGenService.startCodeGeneration(tableId);
+            rootDirs.add(codeGenService.startCodeGeneration(tableId));
         }
-        GeneratorInfo generatorInfo = codeGenService.getGeneratorInfo();
-        return Result.ok(Lists.arrayOf(generatorInfo.getProject().getBackendPath(), generatorInfo.getProject()
-            .getFrontendPath()));
+        return Result.ok(rootDirs);
     }
 
     /**
@@ -93,5 +94,25 @@ public class CodeGenerationController {
     @DeleteMapping("/genfiles/replace")
     public Result<?> deleteGeneratedFileTypes(@RequestBody List<Integer> ids) {
         return Result.ok(templateFileGenerationService.removeBatchByIds(ids));
+    }
+
+    /**
+     * 获取生成结果的文件树
+     * @param rootPath 根路径
+     * @return 该目录下的文件列表，树形结构
+     */
+    @GetMapping("/file-tree")
+    public Result<List<FileNode>> get(String rootPath) {
+        return Result.ok(codeGenService.getFileTree(rootPath));
+    }
+
+    /**
+     * 获取文件文本内容
+     * @param path 文件路径
+     * @return 文本内容
+     */
+    @GetMapping("/file")
+    public Result<String> getFileContent(String path) {
+        return Result.ok(codeGenService.getFileContent(path));
     }
 }

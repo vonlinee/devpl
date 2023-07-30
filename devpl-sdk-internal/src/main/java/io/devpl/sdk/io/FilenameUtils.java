@@ -68,11 +68,7 @@ public class FilenameUtils {
      * @since 1.4
      */
     public static final char EXTENSION_SEPARATOR = '.';
-    /**
-     * The extension separator String.
-     * @since 1.4
-     */
-    public static final String EXTENSION_SEPARATOR_STR = Character.toString(EXTENSION_SEPARATOR);
+
     private static final String[] EMPTY_STRING_ARRAY = {};
     private static final String EMPTY_STRING = "";
     private static final int NOT_FOUND = -1;
@@ -575,7 +571,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
-     * ie. both Unix and Windows prefixes are matched regardless.
+     * i.e. both Unix and Windows prefixes are matched regardless.
      * <p>
      * Note that a leading // (or \\) is used to indicate a UNC name on Windows.
      * These must be followed by a server name, so double-slashes are not collapsed
@@ -723,7 +719,7 @@ public class FilenameUtils {
      * </pre>
      * <p>
      * The output will be the same irrespective of the machine that the code is running on.
-     * ie. both Unix and Windows prefixes are matched regardless.
+     * i.e. both Unix and Windows prefixes are matched regardless.
      * @param fileName the fileName to query, null returns null
      * @return the prefix of the file, null if invalid. Null bytes inside string will be removed
      */
@@ -936,7 +932,7 @@ public class FilenameUtils {
     }
 
     /**
-     * Checks the input for null bytes, a sign of unsanitized data being passed to to file level functions.
+     * Checks the input for null bytes, a sign of sanitized data being passed to file level functions.
      * <p>
      * This may be used for poison byte attacks.
      * @param path the path to check
@@ -1388,7 +1384,7 @@ public class FilenameUtils {
         char prevChar = 0;
         for (final char ch : array) {
             if (ch == '?' || ch == '*') {
-                if (buffer.length() != 0) {
+                if (!buffer.isEmpty()) {
                     list.add(buffer.toString());
                     buffer.setLength(0);
                 }
@@ -1402,7 +1398,7 @@ public class FilenameUtils {
             }
             prevChar = ch;
         }
-        if (buffer.length() != 0) {
+        if (!buffer.isEmpty()) {
             list.add(buffer.toString());
         }
 
@@ -1515,7 +1511,7 @@ public class FilenameUtils {
             }
             validOctets++;
         }
-        return validOctets <= IPV6_MAX_HEX_GROUPS && (validOctets >= IPV6_MAX_HEX_GROUPS || containsCompressedZeroes);
+        return validOctets <= IPV6_MAX_HEX_GROUPS && (validOctets == IPV6_MAX_HEX_GROUPS || containsCompressedZeroes);
     }
 
     /**
@@ -1529,7 +1525,7 @@ public class FilenameUtils {
         final String[] parts = name.split("\\.", -1);
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].isEmpty()) {
-                // trailing dot is legal, otherwise we've hit a .. sequence
+                // trailing dot is legal, otherwise we've hit a . sequence
                 return i == parts.length - 1;
             }
             if (!REG_NAME_PART_PATTERN.matcher(parts[i]).matches()) {

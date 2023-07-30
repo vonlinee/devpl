@@ -10,12 +10,14 @@ import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
+import io.devpl.generator.utils.DateTimeUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,9 @@ public class CodeGenServiceImpl implements CodeGenService {
     @Resource
     private GeneratorConfigService generatorConfigService;
 
+    /**
+     * 代码生成根目录
+     */
     @Value("${devpl.file.codegen.root}")
     private String codeGenRootDir;
 
@@ -85,24 +90,30 @@ public class CodeGenServiceImpl implements CodeGenService {
     /**
      * 生成某个表的文件
      * @param tableId gen_table主键
+     * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
      */
     @Override
-    public void startCodeGeneration(Long tableId) {
+    public String startCodeGeneration(Long tableId) {
+
+        final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
+
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
         GeneratorInfo generatorInfo = getGeneratorInfo();
+
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
             dataModel.put("templateName", template.getTemplateName());
             String content = templateService.render(template.getContent(), dataModel);
             // 文件保存路径
-            String path = templateService.render(template.getGeneratorPath(), dataModel);
+            String path = parentDirectory + "/" + templateService.render(template.getGeneratorPath(), dataModel);
             try {
                 FileUtils.writeStringToFile(new File(codeGenRootDir, path), content, StandardCharsets.UTF_8.name());
             } catch (Exception exception) {
                 log.error("写入模板失败{}", template.getTemplateName());
             }
         }
+        return parentDirectory;
     }
 
     /**
@@ -120,8 +131,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         Map<String, Object> dataModel = new HashMap<>();
 
         // 获取数据库类型
-        String dbType = datasourceService.getDatabaseProductName(table.getDatasourceId());
-        dataModel.put("dbType", dbType);
+        dataModel.put("dbType", datasourceService.getDatabaseProductName(table.getDatasourceId()));
 
         // 项目信息
         dataModel.put("package", table.getPackageName());
@@ -193,7 +203,7 @@ public class CodeGenServiceImpl implements CodeGenService {
      */
     @Override
     public List<FileNode> getFileTree(String workPath) {
-        File root = new File(workPath);
+        File root = new File(codeGenRootDir, workPath);
         List<FileNode> node = new ArrayList<>();
         recursive(root, node);
         return node;

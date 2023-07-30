@@ -1,15 +1,11 @@
 package io.devpl.sdk.io;
 
-import io.devpl.sdk.validation.Validator;
-
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
@@ -240,7 +236,7 @@ public class FileUtils {
             return new ArrayList<>(0);
         }
         File[] directorys = file.listFiles(); // 获取根目录下所有文件与文件夹
-        if (Validator.isNullOrEmpty(directorys)) {
+        if (directorys == null || directorys.length == 0) {
             return new ArrayList<>(0);
         }
         LinkedList<File> directoryList = new LinkedList<>(Arrays.asList(directorys));
@@ -773,41 +769,6 @@ public class FileUtils {
         }
     }
 
-    // -----------------------------------------------------------------------
-
-    /**
-     * Waits for NFS to propagate a file creation, imposing a timeout.
-     * <p>
-     * This method repeatedly tests {@link File#exists()} until it returns true up
-     * to the maximum time specified in seconds.
-     * @param file    the file to check, must not be <code>null</code>
-     * @param seconds the maximum time in seconds to wait
-     * @return true if file exists
-     * @throws NullPointerException if the file is <code>null</code>
-     */
-    public static boolean waitFor(File file, int seconds) {
-        int timeout = 0;
-        int tick = 0;
-        while (!file.exists()) {
-            if (tick++ >= 10) {
-                tick = 0;
-                if (timeout++ > seconds) {
-                    return false;
-                }
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignore) {
-                // ignore exception
-            } catch (Exception ex) {
-                break;
-            }
-        }
-        return true;
-    }
-
-    // -----------------------------------------------------------------------
-
     /**
      * Reads the contents of a file into a String. The file is always closed.
      * @param file     the file to read, must not be <code>null</code>
@@ -967,8 +928,7 @@ public class FileUtils {
      * @param data     the content to write to the file
      * @param encoding the encoding to use, <code>null</code> means platform default
      * @throws IOException                  in case of an I/O error
-     * @throws UnsupportedEncodingException if the encoding is not supported by the
-     *                                      VM
+     * @throws UnsupportedEncodingException if the encoding is not supported by the VM
      */
     public static void writeStringToFile(File file, String data, String encoding) throws IOException {
         OutputStream out = null;
@@ -1431,50 +1391,6 @@ public class FileUtils {
     }
 
     /**
-     * 在资源管理器打开
-     * @param file
-     * @return
-     */
-    public static boolean openDirectory(File file) {
-        if (file.isDirectory()) {
-            return true;
-        }
-        return openDirectory(getParentFile(file));
-    }
-
-    public static boolean openUserHomeDir() {
-        return openDirectory(new File(System.getProperty("user.home")));
-    }
-
-    /**
-     * 调用平台的默认打开方式编辑文件
-     * @param file File
-     */
-    public static void edit(File file) {
-        if (file.isFile()) {
-            //                if (Desktop.isDesktopSupported()) {
-//                    Desktop desktop = Desktop.getDesktop();
-//                    if (desktop.isSupported(Desktop.Action.EDIT)) {
-//                        desktop.edit(file);
-//                    }
-//                }
-        }
-    }
-
-    public static void showFile(final File file) {
-        File tmp = null;
-        if (!file.isAbsolute() || file.isHidden() || !file.exists()) {
-            System.out.println("文件不是绝对路径，或者是隐藏文件，或者文件不存在");
-            return;
-        }
-        if (file.isFile() && file.isAbsolute()) {
-            tmp = file.getParentFile();
-        } else if (file.isDirectory()) {
-            tmp = file;
-        }
-    }
-
-    /**
      * 使用相对路径创建的File对象没有父级目录 System.out.println(new File(""));
      * System.out.println(new File("D:/Temp/1.txt").getParentFile());
      * @param file File
@@ -1512,21 +1428,6 @@ public class FileUtils {
     }
 
     /**
-     * check path is valid in windows and linux
-     * @param path path to be validate platform valid value: linux,windows
-     * @return whether the path is valid
-     **/
-    public static boolean isPathValid(String path) {
-        String osName = System.getProperty("os.name");
-        if (osName.equalsIgnoreCase("linux")) {
-//			return matches(LINUX_PATH_PATTERN, path);
-            return true;
-        }
-        // return matches(WINDOWS_PATH_PATTERN, path);
-        return osName.equalsIgnoreCase("windows");
-    }
-
-    /**
      * 获取文件名
      * @param file 文件对象
      * @return 文件名
@@ -1538,58 +1439,6 @@ public class FileUtils {
             return filename.substring(index + 1);
         }
         return "";
-    }
-
-    /**
-     * nio事实现文件拷贝
-     * @param source
-     * @param target
-     * @param allocate
-     * @throws IOException
-     */
-    public static void nioCpoy(String source, String target, int allocate) throws IOException {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
-        FileInputStream inputStream = new FileInputStream(source);
-        FileChannel inChannel = inputStream.getChannel();
-        FileOutputStream outputStream = new FileOutputStream(target);
-        FileChannel outChannel = outputStream.getChannel();
-        int length = inChannel.read(byteBuffer);
-        while (length != -1) {
-            byteBuffer.flip();// 读取模式转换写入模式
-            outChannel.write(byteBuffer);
-            byteBuffer.clear(); // 清空缓存，等待下次写入
-            // 再次读取文本内容
-            length = inChannel.read(byteBuffer);
-        }
-        outputStream.close();
-        outChannel.close();
-        inputStream.close();
-        inChannel.close();
-    }
-
-    /**
-     * 传统方法实现文件拷贝 IO方法实现文件拷贝
-     * @param sourcePath
-     * @param destPath
-     * @throws Exception
-     */
-    public static void traditionalCopy(String sourcePath, String destPath) throws Exception {
-        File source = new File(sourcePath);
-        File dest = new File(destPath);
-        if (!dest.exists()) {
-            if (dest.createNewFile()) {
-                System.out.println("创建文件成功：" + dest.getAbsolutePath());
-            }
-        }
-        FileInputStream fis = new FileInputStream(source);
-        FileOutputStream fos = new FileOutputStream(dest);
-        byte[] buf = new byte[1024];
-        int len = 0;
-        while ((len = fis.read(buf)) != -1) {
-            fos.write(buf, 0, len);
-        }
-        fis.close();
-        fos.close();
     }
 
     public static File[] listFiles(File directory) {
@@ -1615,54 +1464,5 @@ public class FileUtils {
             extension = placeholder;
         }
         return extension;
-    }
-
-    /**
-     * NIO读取文件
-     * @param allocate 分配字节数
-     * @throws IOException
-     */
-    public void read(File file, int allocate) throws IOException {
-        RandomAccessFile access = new RandomAccessFile(file, "r");
-        // FileInputStream inputStream = new FileInputStream(this.file);
-        FileChannel channel = access.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
-        CharBuffer charBuffer = CharBuffer.allocate(allocate);
-        Charset charset = Charset.forName("GBK");
-        CharsetDecoder decoder = charset.newDecoder();
-        int length = channel.read(byteBuffer);
-        while (length != -1) {
-            byteBuffer.flip();
-            decoder.decode(byteBuffer, charBuffer, true);
-            charBuffer.flip();
-            System.out.println(charBuffer);
-            // 清空缓存
-            byteBuffer.clear();
-            charBuffer.clear();
-            // 再次读取文本内容
-            length = channel.read(byteBuffer);
-        }
-        channel.close();
-        access.close();
-    }
-
-    /**
-     * NIO写文件
-     * @param context
-     * @param allocate
-     * @param chartName
-     * @throws IOException
-     */
-    public void write(File file, String context, int allocate, String chartName) throws IOException {
-        // FileOutputStream outputStream = new FileOutputStream(this.file); //文件内容覆盖模式
-        // --不推荐
-        FileOutputStream outputStream = new FileOutputStream(file, true); // 文件内容追加模式--推荐
-        FileChannel channel = outputStream.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(allocate);
-        byteBuffer.put(context.getBytes(chartName));
-        byteBuffer.flip();// 读取模式转换为写入模式
-        channel.write(byteBuffer);
-        channel.close();
-        outputStream.close();
     }
 }
