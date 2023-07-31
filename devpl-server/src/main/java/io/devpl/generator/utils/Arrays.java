@@ -2,7 +2,7 @@ package io.devpl.generator.utils;
 
 import java.util.Objects;
 
-public class ArrayUtils {
+public class Arrays {
 
     /**
      * 数组中元素未找到的下标，值为-1
@@ -26,5 +26,15 @@ public class ArrayUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 数组是否为空
+     * @param array 数组
+     * @param <T>   数组元素类型
+     * @return 数组是否为空
+     */
+    public static <T> boolean isEmpty(T[] array) {
+        return array == null || array.length == 0;
     }
 }

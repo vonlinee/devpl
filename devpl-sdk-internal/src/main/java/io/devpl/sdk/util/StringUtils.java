@@ -485,8 +485,8 @@ public final class StringUtils {
 
     /**
      * 使用指定分隔符拼接字符串
-     * @param items
-     * @return
+     * @param items 字符串列表
+     * @return 拼接后的字符串
      */
     public static String join(String... items) {
         return join(Arrays.asList(items).iterator(), DEFAULT_SEPARATOR);
@@ -1600,7 +1600,6 @@ public final class StringUtils {
      * index 1 being after the delimiter (neither element includes the delimiter);
      * or {@code null} if the delimiter wasn't found in the given input {@code String}
      */
-
     public static String[] split(String toSplit, String delimiter) {
         if (!hasLength(toSplit) || !hasLength(delimiter)) {
             return null;
@@ -1609,7 +1608,6 @@ public final class StringUtils {
         if (offset < 0) {
             return null;
         }
-
         String beforeDelimiter = toSplit.substring(0, offset);
         String afterDelimiter = toSplit.substring(offset + delimiter.length());
         return new String[]{beforeDelimiter, afterDelimiter};

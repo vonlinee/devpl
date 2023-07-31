@@ -2,51 +2,30 @@
 
 import {ref} from "vue";
 import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import CodeGenStepPane from "@/views/generator/CodeGenStepPane.vue";
 
 let dialogRef = ref()
-
-
-const editorRef = ref()
-const languageRef = ref()
-
-const inputRef = ref()
-
-function updateLanguage() {
-    languageRef.value = editorRef.value.getLanguage()
-}
-
-const dialogVisible = ref(false)
+let dialogRef1 = ref()
+let dialogVisiable = ref()
 
 function show() {
-    // dialogRef.value.init()
-    dialogVisible.value = true
+    dialogRef.value.init()
 }
 
-function setLanguage() {
-    editorRef.value.setLanguage(inputRef.value)
-    editorRef.value.setText("11111111111")
+function show1() {
+    dialogVisiable.value = true
 }
-
-let file = ref()
 
 </script>
 
 <template>
-    <button @click="show">展示弹窗</button>
-    <button @click="updateLanguage()">更新语言</button>
-    <button @click="setLanguage()">设置语言</button>
+    <el-button @click="show">打开弹窗</el-button>
+    <el-button @click="show1">打开弹窗1</el-button>
 
-    <el-input v-model="inputRef"></el-input>
-    <adaptive-dialog ref="dialogRef">
-        <template #body>
-            <div style="height: 400px">
-                <monaco-editor language="JavaScript"></monaco-editor>
-            </div>
-        </template>
-    </adaptive-dialog>
-    <code-gen-step-pane></code-gen-step-pane>
+    <adaptive-dialog ref="dialogRef"></adaptive-dialog>
+
+    <el-dialog v-model="dialogVisiable" draggable>
+        <div style="width: 1200px; height: 1000px"></div>
+    </el-dialog>
 </template>
 
 <style lang="scss">

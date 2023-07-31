@@ -1,6 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
@@ -12,6 +11,7 @@ import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.dao.ProjectModifyDao;
 import io.devpl.generator.entity.ProjectModifyEntity;
 import io.devpl.generator.service.ProjectModifyService;
+import io.devpl.generator.utils.Arrays;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,9 +51,9 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
         // 原项目根路径
         File srcRoot = new File(project.getProjectPath());
         // 临时项目根路径
-        File destRoot = new File(getTmpDirPath(project.getModifyProjectName()));
+        File destRoot = new File(getTempDirPath(project.getModifyProjectName()));
         // 排除的文件
-        List<String> exclusions = StrUtil.split(project.getExclusions(), SPLIT);
+        String[] exclusions = StringUtils.split(project.getExclusions(), SPLIT);
         // 获取替换规则
         Map<String, String> replaceMap = getReplaceMap(project);
         // 拷贝项目到新路径，并替换路径和文件名
@@ -102,7 +102,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
     /**
      * 生成临时路径
      */
-    public String getTmpDirPath(String... names) {
+    public String getTempDirPath(String... names) {
         StringBuilder tmpPath = new StringBuilder(System.getProperty("java.io.tmpdir"));
         tmpPath.append("generator");
         tmpPath.append(File.separator);
@@ -120,12 +120,12 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
      * @param exclusions 排除文件
      * @param replaceMap 替换规则
      */
-    public static void copyDirectory(File srcRoot, File destRoot, List<String> exclusions, Map<String, String> replaceMap) throws IOException {
+    public static void copyDirectory(File srcRoot, File destRoot, String[] exclusions, Map<String, String> replaceMap) throws IOException {
         String destPath = destRoot.getPath().replaceAll("\\\\", "/");
         destRoot = new File(replaceData(destPath, replaceMap));
 
         // 获取排除后的源文件
-        File[] srcFiles = CollectionUtil.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !exclusions.contains(file.getName()));
+        File[] srcFiles = Arrays.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !Arrays.contains(exclusions, file.getName()));
 
         if (srcFiles == null) {
             throw new IOException("没有需要拷贝的文件 " + srcRoot);

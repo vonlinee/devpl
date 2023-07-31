@@ -4,8 +4,9 @@ import io.devpl.generator.config.DataSourceInfo;
 import io.devpl.generator.config.DbType;
 import oracle.jdbc.OracleConnection;
 
-import java.sql.*;
-import java.util.function.Consumer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * DB工具类

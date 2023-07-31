@@ -20,7 +20,7 @@
 import {ref} from "vue";
 
 export default {
-    name: 'TestDialog',
+    name: 'Dialog',
     setup() {
         const dialogVisible = ref(false)
 
