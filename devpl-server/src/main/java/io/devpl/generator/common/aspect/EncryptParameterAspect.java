@@ -1,6 +1,6 @@
 package io.devpl.generator.common.aspect;
 
-import io.devpl.generator.common.annotation.EncryptParam;
+import io.devpl.generator.common.annotation.Encrypt;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.utils.EncryptUtils;
 import io.devpl.generator.common.utils.Result;
@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,12 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class EncryptParameterAspect {
+
+    /**
+     * 实体类所在包名
+     */
+    @Value("${devpl.package.entity}")
+    private String entityPackageName;
 
     /**
      * 切面方法：page、list、get、save、update、tableList
@@ -84,7 +91,7 @@ public class EncryptParameterAspect {
     private void handleItem(Object item, boolean isDecrypt) {
         // 只处理在entity包下面的对象
         if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName()
-            .startsWith("net.maku.generator.entity")) {
+            .startsWith(entityPackageName)) {
             return;
         }
         // 遍历所有字段
@@ -92,7 +99,7 @@ public class EncryptParameterAspect {
         for (Field field : fields) {
             // 若该字段被EncryptParameter注解,则进行解密/加密
             Class<?> fieldType = field.getType();
-            if (fieldType == String.class && Objects.nonNull(AnnotationUtils.findAnnotation(field, EncryptParam.class))) {
+            if (fieldType == String.class && Objects.nonNull(AnnotationUtils.findAnnotation(field, Encrypt.class))) {
                 // 设置private类型允许访问
                 field.setAccessible(Boolean.TRUE);
                 try {
@@ -101,8 +108,9 @@ public class EncryptParameterAspect {
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     throw new RuntimeException(e);
+                } finally {
+                    field.setAccessible(Boolean.FALSE);
                 }
-                field.setAccessible(Boolean.FALSE);
             }
         }
     }

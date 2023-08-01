@@ -11,6 +11,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Mapping
 @Documented
-public @interface EncryptParam {
+public @interface Encrypt {
 
 }

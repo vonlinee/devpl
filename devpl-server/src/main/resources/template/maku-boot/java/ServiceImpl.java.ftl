@@ -18,52 +18,41 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
-* ${tableComment}
-*
-* @author ${author} ${email}
-* @since ${version} ${date}
-*/
+ * ${tableComment}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ **/
 @Service
 @AllArgsConstructor
-public class ${ClassName}ServiceImpl extends BaseServiceImpl
-<${ClassName}Dao, ${ClassName}Entity> implements ${ClassName}Service {
+public class ${ClassName}ServiceImpl extends BaseServiceImpl<${ClassName}Dao, ${ClassName}Entity> implements ${ClassName}Service {
 
-@Override
-public PageResult
-<${ClassName}VO> page(${ClassName}Query query) {
-    IPage
-    <${ClassName}Entity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-
+    @Override
+    public PageResult<${ClassName}VO> page(${ClassName}Query query) {
+        IPage<${ClassName}Entity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
         return new PageResult<>(${ClassName}Convert.INSTANCE.convertList(page.getRecords()), page.getTotal());
-        }
+    }
 
-        private LambdaQueryWrapper
-        <${ClassName}Entity> getWrapper(${ClassName}Query query){
-            LambdaQueryWrapper
-            <${ClassName}Entity> wrapper = Wrappers.lambdaQuery();
+    private LambdaQueryWrapper<${ClassName}Entity> getWrapper(${ClassName}Query query){
+        LambdaQueryWrapper<${ClassName}Entity> wrapper = Wrappers.lambdaQuery();
+        return wrapper;
+    }
 
-                return wrapper;
-                }
+    @Override
+    public void save(${ClassName}VO vo) {
+        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);
+        baseMapper.insert(entity);
+    }
 
-                @Override
-                public void save(${ClassName}VO vo) {
-                ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);
+    @Override
+    public void update(${ClassName}VO vo) {
+        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);
+        updateById(entity);
+    }
 
-                baseMapper.insert(entity);
-                }
-
-                @Override
-                public void update(${ClassName}VO vo) {
-                ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);
-
-                updateById(entity);
-                }
-
-                @Override
-                @Transactional(rollbackFor = Exception.class)
-                public void delete(List
-                <Long> idList) {
-                    removeByIds(idList);
-                    }
-
-                    }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(List<Long> idList) {
+        removeByIds(idList);
+    }
+}

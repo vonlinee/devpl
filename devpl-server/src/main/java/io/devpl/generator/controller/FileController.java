@@ -10,18 +10,16 @@ import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 文件相关控制器，文件上传，下载等
  * 参考实现
  * <a href="https://blog.csdn.net/minaki_/article/details/85163343">...</a>
  */
-@RestController
+@Controller
 @RequestMapping(value = "/api/file")
 public class FileController {
 
@@ -32,6 +30,7 @@ public class FileController {
      * 单文件上传
      * @return 返回文件上传成功的路径
      */
+    @ResponseBody
     @PostMapping(value = "/upload/single")
     public Result<FileUploadVO> uploadFile(@Validated SingleFileUploadParam param) {
         try {
@@ -44,6 +43,7 @@ public class FileController {
     /**
      * 多文件上传
      */
+    @ResponseBody
     @PostMapping(value = "/upload/multiple", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result<FileUploadVO> uploadFile(MultiFileUploadParam param) {
         fileUploadService.uploadMultiFiles(param);

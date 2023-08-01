@@ -2,12 +2,13 @@ package ${package}.${moduleName}.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.*;
 <#list importList as i>
-    import ${i!};
+import ${i!};
 </#list>
 <#if baseClass??>
-    import ${baseClass.packageName}.${baseClass.code};
+import ${baseClass.packageName}.${baseClass.code};
 </#if>
 
 /**
@@ -21,26 +22,28 @@ import com.baomidou.mybatisplus.annotation.*;
 @TableName("${tableName}")
 public class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {
 <#list fieldList as field>
-    <#if !field.baseField>
-        <#if field.fieldComment!?length gt 0>
-            /**
-            * ${field.fieldComment}
-            */
-        </#if>
-        <#if field.autoFill == "INSERT">
-            @TableField(fill = FieldFill.INSERT)
-        </#if>
-        <#if field.autoFill == "INSERT_UPDATE">
-            @TableField(fill = FieldFill.INSERT_UPDATE)
-        </#if>
-        <#if field.autoFill == "UPDATE">
-            @TableField(fill = FieldFill.UPDATE)
-        </#if>
-        <#if field.primaryKey>
-            @TableId
-        </#if>
-        private ${field.attrType} ${field.attrName};
+<#if !field.baseField>
+    <#if field.fieldComment!?length gt 0>
+    /**
+     * ${field.fieldComment}
+     */
     </#if>
+    <#if field.autoFill == "INSERT">
+    @TableField(value = "${field.fieldName}", fill = FieldFill.INSERT)
+    <#elseif field.autoFill == "INSERT_UPDATE">
+    @TableField(value = "${field.fieldName}", fill = FieldFill.INSERT_UPDATE)
+    <#elseif field.autoFill == "UPDATE">
+    @TableField(value = "${field.fieldName}", fill = FieldFill.UPDATE)
+    <#elseif field.primaryKey>
+        <#--如果是主键，仅使用@TableId注解-->
+    <#else>
+    @TableField(value = "${field.fieldName}")
+    </#if>
+    <#if field.primaryKey>
+    @TableId(value = "${field.fieldName}", type = IdType.AUTO)
+    </#if>
+    private ${field.attrType} ${field.attrName};
+</#if>
 
 </#list>
 }

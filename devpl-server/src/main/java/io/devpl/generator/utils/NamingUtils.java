@@ -2,35 +2,11 @@ package io.devpl.generator.utils;
 
 import cn.hutool.core.text.NamingCase;
 import io.devpl.sdk.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * 代码生成器 工具类
+ * 命名工具类
  */
-@Slf4j
-public class GenUtils {
-
-    /**
-     * 获取模块名
-     * @param packageName 包名
-     * @return 模块名
-     */
-    public static String getModuleName(String packageName) {
-        return StringUtils.subAfter(packageName, ".", true);
-    }
-
-    /**
-     * 获取功能名
-     * @param tableName 表名
-     * @return 功能名
-     */
-    public static String getFunctionName(String tableName) {
-        String functionName = StringUtils.subAfter(tableName, "_", true);
-        if (StringUtils.isBlank(functionName)) {
-            functionName = tableName;
-        }
-        return functionName;
-    }
+public class NamingUtils {
 
     /**
      * 表名转驼峰并移除前后缀

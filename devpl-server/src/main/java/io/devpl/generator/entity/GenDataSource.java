@@ -2,7 +2,7 @@ package io.devpl.generator.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.devpl.generator.common.annotation.EncryptParam;
+import io.devpl.generator.common.annotation.Encrypt;
 import io.devpl.generator.config.DbType;
 import lombok.Data;
 
@@ -39,7 +39,7 @@ public class GenDataSource {
     /**
      * 密码
      */
-    @EncryptParam
+    @Encrypt
     private String password;
     /**
      * 创建时间

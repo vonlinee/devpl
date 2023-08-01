@@ -24,7 +24,6 @@ import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
 import io.devpl.generator.utils.CollectionUtils;
-import io.devpl.generator.utils.GenUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,8 +99,8 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         table.setFormLayout(FormLayoutEnum.ONE.getValue());
         table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
         table.setClassName(NamingCase.toPascalCase(tableName));
-        table.setModuleName(GenUtils.getModuleName(table.getPackageName()));
-        table.setFunctionName(GenUtils.getFunctionName(tableName));
+        table.setModuleName(getModuleName(table.getPackageName()));
+        table.setFunctionName(getFunctionName(tableName));
         table.setCreateTime(new Date());
         this.save(table);
 
@@ -113,6 +112,28 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         tableFieldService.saveBatch(tableFieldList);
 
         dataSource.closeConnection();
+    }
+
+    /**
+     * 获取功能名
+     * @param tableName 表名
+     * @return 功能名
+     */
+    public static String getFunctionName(String tableName) {
+        String functionName = StringUtils.subAfter(tableName, "_", true);
+        if (StringUtils.isBlank(functionName)) {
+            functionName = tableName;
+        }
+        return functionName;
+    }
+
+    /**
+     * 获取模块名
+     * @param packageName 包名
+     * @return 模块名
+     */
+    public static String getModuleName(String packageName) {
+        return StringUtils.subAfter(packageName, ".", true);
     }
 
     /**
