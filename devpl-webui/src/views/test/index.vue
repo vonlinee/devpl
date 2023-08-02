@@ -2,6 +2,7 @@
 
 import {ref} from "vue";
 import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
+import TestDialog from "@/components/dialog/TestDialog.vue";
 
 let dialogRef = ref()
 let dialogRef1 = ref()
@@ -26,6 +27,8 @@ function show1() {
     <el-dialog v-model="dialogVisiable" draggable>
         <div style="width: 1200px; height: 1000px"></div>
     </el-dialog>
+
+    <test-dialog></test-dialog>
 </template>
 
 <style lang="scss">

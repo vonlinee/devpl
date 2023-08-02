@@ -1,5 +1,5 @@
 // 可用的语言选项
-const languageOptions = [
+const languageOptions: string[] = [
     "bat", "cpp", "css", "dockerfile", "go", "graphql", "html", "ini",
     "java", "javascript", "json", "julia", "kotlin", "less", "markdown", "mysql", "objective-c", "pascal", "pascaligo",
     "perl", "php", "powershell", "python", "r", "redis", "rust", "scala", "scheme", "scss", "shell",
@@ -44,9 +44,11 @@ languageMap.set("ts", "typescript")
 languageMap.set("xml", "xml")
 languageMap.set("yaml", "yaml")
 languageMap.set("yml", "yaml")
+languageMap.set("vue", "html")
+languageMap.set("jsx", "javascript")
 
 /**
- * 此组件是否支持某种语言
+ * 编辑器组件是否支持某种语言
  * @param lang
  */
 export function isLanguageSupported(lang: string): boolean {
