@@ -7,13 +7,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
-public class ApiServiceImpl implements ApiService {
+public class HttpApiServiceImpl implements HttpApiService {
 
     @Resource
     RestTemplate restTemplate;
 
     @Override
-    public void setAddress(String address) {
+    public void setApiAddress(String address) {
 
     }
 

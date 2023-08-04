@@ -5,9 +5,9 @@ import java.util.List;
 /**
  * 解封装
  */
-public interface ApiService {
+public interface HttpApiService {
 
-    void setAddress(String address);
+    void setApiAddress(String address);
 
     <T> List<T> getForList(String api, Class<T> dataClass);
 }

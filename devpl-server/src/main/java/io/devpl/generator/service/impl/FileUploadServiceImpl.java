@@ -5,6 +5,7 @@ import io.devpl.generator.domain.param.FileUploadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
 import io.devpl.generator.domain.vo.FileUploadVO;
+import io.devpl.generator.service.FileInfoService;
 import io.devpl.generator.service.IFileUploadService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,8 @@ public class FileUploadServiceImpl implements IFileUploadService {
 
     @Resource
     FileStorageStrategy fileStorageStrategy;
+    @Resource
+    FileInfoService fileInfoService;
 
     /**
      * 上传文件存放根目录
@@ -52,6 +55,7 @@ public class FileUploadServiceImpl implements IFileUploadService {
         try (InputStream fileInputStream = param.getFile().getInputStream()) {
             fileStorageStrategy.write(uploadRootDir + "/" + path, fileInputStream);
         } catch (IOException e) {
+            log.error("[上传文件] 写入文件失败 {}", param);
             throw new RuntimeException(e);
         }
         FileUploadVO result = new FileUploadVO();

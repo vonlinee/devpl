@@ -18,7 +18,7 @@
                 </div>
                 <div class="bodybody">
                     <!-- 内容区我们使用默认插槽 -->
-                    <slot>
+                    <slot name="default">
                         <div style="height: 1080px; background-color: red"></div>
                     </slot>
                 </div>

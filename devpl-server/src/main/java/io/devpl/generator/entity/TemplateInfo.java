@@ -50,7 +50,7 @@ public class TemplateInfo extends DatabaseTableEntity {
      * @see io.devpl.generator.domain.TemplateProvider
      */
     @TableField(value = "provider")
-    private String technologyProvider;
+    private String provider;
 
     /**
      * 备注信息
