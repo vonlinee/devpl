@@ -11,8 +11,8 @@ import lombok.Data;
  * @since 1.0.0 2023-07-29
  */
 @Data
-@TableName("template_variable")
-public class TemplateVariableEntity {
+@TableName("template_param")
+public class TemplateParamEntity {
 
     /**
      * 主键ID

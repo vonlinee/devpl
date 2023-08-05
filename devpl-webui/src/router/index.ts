@@ -81,7 +81,7 @@ export const menuRoutes: RouteRecordRaw[] = [
                 }
             },
             {
-                path: '/gen/console',
+                path: '/filegen',
                 name: '文件生成',
                 component: () => import('@/views/generator/gen/index.vue'),
                 meta: {

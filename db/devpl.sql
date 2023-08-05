@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost-3306-mysql5
+ Source Server         : 127.0.0.1-mysql
  Source Server Type    : MySQL
  Source Server Version : 50740
- Source Host           : localhost:3306
+ Source Host           : 127.0.0.1:3306
  Source Schema         : devpl
 
  Target Server Type    : MySQL
  Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 30/07/2023 21:43:10
+ Date: 05/08/2023 20:58:16
 */
 
 SET NAMES utf8mb4;
@@ -34,13 +34,27 @@ CREATE TABLE `connection_config`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unk_conn_name`(`name`) USING BTREE,
   UNIQUE INDEX `unk_ip_port`(`host`, `port`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '连接配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of connection_config
 -- ----------------------------
 INSERT INTO `connection_config` VALUES ('01H320PDJQGCW97923WYYYJESA', '127.0.0.1_3306', '127.0.0.1', '3307', 'MySQL8', 'MYSQL5', 'null', 'root', '123456');
 INSERT INTO `connection_config` VALUES ('9c4c93ee-c0d6-4b10-b83d-2702756c6d11', '127.0.0.1-3306-MySQL5', '127.0.0.1', '3306', 'MySQL5', NULL, 'root', '123456', 'utf8');
+
+-- ----------------------------
+-- Table structure for data_type_mapping
+-- ----------------------------
+DROP TABLE IF EXISTS `data_type_mapping`;
+CREATE TABLE `data_type_mapping`  (
+  `id` int(11) NOT NULL COMMENT '主键ID',
+  `sql_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of data_type_mapping
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for dbs
@@ -239,7 +253,7 @@ CREATE TABLE `file_gen_group`  (
   `baseclass_id` bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`group_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件生成组记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件生成组记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of file_gen_group
@@ -277,11 +291,12 @@ CREATE TABLE `gen_datasource`  (
   `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_datasource
 -- ----------------------------
+INSERT INTO `gen_datasource` VALUES (1, 'MySQL', 'lancoo', 'jdbc:mysql://192.168.129.82:3306/lgdb_exam_management?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8', 'root', 'LancooECP', '2023-08-01 09:34:10');
 
 -- ----------------------------
 -- Table structure for gen_field_type
@@ -382,12 +397,16 @@ CREATE TABLE `gen_table`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `table_name`(`table_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table
 -- ----------------------------
 INSERT INTO `gen_table` VALUES (25, 'field_spec', 'FieldSpec', '字段信息表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'service', 'spec', 1, 0, NULL, '2023-07-30 20:44:06');
+INSERT INTO `gen_table` VALUES (26, 'msg_center_send_history', 'MsgCenterSendHistory', '消息中心发送历史表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'history', 1, 1, NULL, '2023-08-01 09:52:40');
+INSERT INTO `gen_table` VALUES (27, 'project', 'Project', '项目信息表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 0, 'backend', 'frontend', 'devpl', 'project', 1, 0, NULL, '2023-08-05 20:21:59');
+INSERT INTO `gen_table` VALUES (28, 'province_city_district', 'ProvinceCityDistrict', '省市县数据表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 0, 'backend', 'frontend', 'devpl', 'district', 1, 0, NULL, '2023-08-05 20:21:59');
+INSERT INTO `gen_table` VALUES (29, 'table_file_generation', 'TableFileGeneration', '表文件生成记录表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 0, 'backend', 'frontend', 'devpl', 'generation', 1, 0, NULL, '2023-08-05 20:21:59');
 
 -- ----------------------------
 -- Table structure for gen_table_field
@@ -417,7 +436,7 @@ CREATE TABLE `gen_table_field`  (
   `query_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询方式',
   `query_form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询表单类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 74 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table_field
@@ -427,6 +446,23 @@ INSERT INTO `gen_table_field` VALUES (70, 25, 'field_name', 'varchar', '字段�
 INSERT INTO `gen_table_field` VALUES (71, 25, 'data_type', 'varchar', '数据类型', 'dataType', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
 INSERT INTO `gen_table_field` VALUES (72, 25, 'description', 'varchar', '描述信息', 'description', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
 INSERT INTO `gen_table_field` VALUES (73, 25, 'field_value', 'varchar', '默认值', 'fieldValue', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (74, 26, 'id', 'bigint', '自增主键ID', 'id', 'Long', NULL, 0, 'INSERT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (75, 26, 'msg_id', 'varchar', '唯一消息ID', 'msgId', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (76, 26, 'exam_id', 'varchar', '考试id', 'examId', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (77, 26, 'scene_code', 'varchar', '消息发送场景', 'sceneCode', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (78, 26, 'receiver', 'json', '消息接收者', 'receiver', 'Object', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (79, 26, 'deleted', 'tinyint', '是否删除', 'deleted', 'Integer', NULL, 5, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (80, 26, 'create_time', 'datetime', '创建时间', 'createTime', 'Date', 'java.util.Date', 6, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (81, 26, 'update_time', 'datetime', '更新时间', 'updateTime', 'Date', 'java.util.Date', 7, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (82, 27, 'project_id', 'varchar', '项目ID', 'projectId', 'String', NULL, 0, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (83, 28, 'id', 'int', '地区代码', 'id', 'Integer', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (84, 28, 'pid', 'int', '当前地区的上一级地区代码', 'pid', 'Integer', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (85, 28, 'name', 'varchar', '地区名称', 'name', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (86, 29, 'pid', 'bigint', '主键ID', 'pid', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (87, 29, 'table_id', 'bigint', '表ID', 'tableId', 'Long', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (88, 29, 'template_id', 'bigint', '模板ID', 'templateId', 'Long', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (89, 29, 'file_name', 'varchar', '文件名称', 'fileName', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (90, 29, 'save_path', 'varchar', '保存路径', 'savePath', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
 
 -- ----------------------------
 -- Table structure for gen_test_student
@@ -4079,31 +4115,37 @@ CREATE TABLE `template_info`  (
   `template_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '模板ID主键',
   `template_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板名称',
   `type` tinyint(4) NULL DEFAULT NULL COMMENT '模板类型',
+  `provider` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '技术提供方',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字符串模板内容',
   `path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件模板路径',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   `deleted` tinyint(4) NULL DEFAULT NULL COMMENT '逻辑删除状态',
-  `provider` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '技术提供方',
   PRIMARY KEY (`template_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of template_info
 -- ----------------------------
-INSERT INTO `template_info` VALUES (1, 'Mapper.ftl', 2, '<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n', '', '2023-07-11 15:56:30', '2023-07-11 15:56:30', NULL, 0, 'FreeMarker');
-INSERT INTO `template_info` VALUES (2, 'Entity.java.ftl', 2, 'package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\n    import ${i!};\n</#list>\n<#if baseClass??>\n    import ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n    <#if !field.baseField>\n        <#if field.fieldComment!?length gt 0>\n            /**\n            * ${field.fieldComment}\n            */\n        </#if>\n        <#if field.autoFill == \"INSERT\">\n            @TableField(fill = FieldFill.INSERT)\n        </#if>\n        <#if field.autoFill == \"INSERT_UPDATE\">\n            @TableField(fill = FieldFill.INSERT_UPDATE)\n        </#if>\n        <#if field.autoFill == \"UPDATE\">\n            @TableField(fill = FieldFill.UPDATE)\n        </#if>\n        <#if field.primaryKey>\n            @TableId\n        </#if>\n        private ${field.attrType} ${field.attrName};\n    </#if>\n\n</#list>\n}\n', '', '2023-07-20 17:48:43', '2023-07-20 17:48:43', NULL, 0, 'FreeMarker');
-INSERT INTO `template_info` VALUES (3, 'Service.java.ftl', 2, 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:30', '2023-07-20 17:52:30', NULL, 0, 'FreeMarker');
-INSERT INTO `template_info` VALUES (4, 'ServiceImpl.java.ftl', 2, 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:51', '2023-07-20 17:52:51', NULL, 0, 'FreeMarker');
-INSERT INTO `template_info` VALUES (5, 'VO.java.ftl', 2, 'package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\n    import ${i!};\n</#list>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\nprivate static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n        @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n        @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n\n</#list>\n\n}\n', '', '2023-07-20 17:53:55', '2023-07-20 17:53:55', NULL, 0, 'FreeMarker');
-INSERT INTO `template_info` VALUES (6, 'Controller.java.ftl', 2, 'package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\nprivate final ${ClassName}Service ${className}Service;\n\n@GetMapping(\"page\")\n@Operation(summary = \"分页\")\n@PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\npublic Result\n<PageResult\n<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){\n    PageResult\n    <${ClassName}VO> page = ${className}Service.page(query);\n\n        return Result.ok(page);\n        }\n\n        @GetMapping(\"{id}\")\n        @Operation(summary = \"信息\")\n        @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n        public Result\n        <${ClassName}VO> get(@PathVariable(\"id\") Long id){\n            ${ClassName}Entity entity = ${className}Service.getById(id);\n\n            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n            }\n\n            @PostMapping\n            @Operation(summary = \"保存\")\n            @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n            public Result\n            <String> save(@RequestBody ${ClassName}VO vo){\n                ${className}Service.save(vo);\n\n                return Result.ok();\n                }\n\n                @PutMapping\n                @Operation(summary = \"修改\")\n                @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n                public Result\n                <String> update(@RequestBody @Valid ${ClassName}VO vo){\n                    ${className}Service.update(vo);\n\n                    return Result.ok();\n                    }\n\n                    @DeleteMapping\n                    @Operation(summary = \"删除\")\n                    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n                    public Result\n                    <String> delete(@RequestBody List\n                        <Long> idList){\n                            ${className}Service.delete(idList);\n\n                            return Result.ok();\n                            }\n                            }\n', '', '2023-07-20 17:54:53', '2023-07-20 17:54:53', NULL, 0, 'FreeMarker');
+INSERT INTO `template_info` VALUES (1, 'Mapper.ftl', 2, 'FreeMarker', '<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n', '', '2023-07-11 15:56:30', '2023-07-11 15:56:30', NULL, 0);
+INSERT INTO `template_info` VALUES (2, 'Entity.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\n    import ${i!};\n</#list>\n<#if baseClass??>\n    import ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n    <#if !field.baseField>\n        <#if field.fieldComment!?length gt 0>\n            /**\n            * ${field.fieldComment}\n            */\n        </#if>\n        <#if field.autoFill == \"INSERT\">\n            @TableField(fill = FieldFill.INSERT)\n        </#if>\n        <#if field.autoFill == \"INSERT_UPDATE\">\n            @TableField(fill = FieldFill.INSERT_UPDATE)\n        </#if>\n        <#if field.autoFill == \"UPDATE\">\n            @TableField(fill = FieldFill.UPDATE)\n        </#if>\n        <#if field.primaryKey>\n            @TableId\n        </#if>\n        private ${field.attrType} ${field.attrName};\n    </#if>\n\n</#list>\n}\n', '', '2023-07-20 17:48:43', '2023-07-20 17:48:43', NULL, 0);
+INSERT INTO `template_info` VALUES (3, 'Service.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:30', '2023-07-20 17:52:30', NULL, 0);
+INSERT INTO `template_info` VALUES (4, 'ServiceImpl.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:51', '2023-07-20 17:52:51', NULL, 0);
+INSERT INTO `template_info` VALUES (5, 'VO.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\n    import ${i!};\n</#list>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\nprivate static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n        @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n        @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n\n</#list>\n\n}\n', '', '2023-07-20 17:53:55', '2023-07-20 17:53:55', NULL, 0);
+INSERT INTO `template_info` VALUES (6, 'Controller.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\nprivate final ${ClassName}Service ${className}Service;\n\n@GetMapping(\"page\")\n@Operation(summary = \"分页\")\n@PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\npublic Result\n<PageResult\n<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){\n    PageResult\n    <${ClassName}VO> page = ${className}Service.page(query);\n\n        return Result.ok(page);\n        }\n\n        @GetMapping(\"{id}\")\n        @Operation(summary = \"信息\")\n        @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n        public Result\n        <${ClassName}VO> get(@PathVariable(\"id\") Long id){\n            ${ClassName}Entity entity = ${className}Service.getById(id);\n\n            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n            }\n\n            @PostMapping\n            @Operation(summary = \"保存\")\n            @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n            public Result\n            <String> save(@RequestBody ${ClassName}VO vo){\n                ${className}Service.save(vo);\n\n                return Result.ok();\n                }\n\n                @PutMapping\n                @Operation(summary = \"修改\")\n                @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n                public Result\n                <String> update(@RequestBody @Valid ${ClassName}VO vo){\n                    ${className}Service.update(vo);\n\n                    return Result.ok();\n                    }\n\n                    @DeleteMapping\n                    @Operation(summary = \"删除\")\n                    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n                    public Result\n                    <String> delete(@RequestBody List\n                        <Long> idList){\n                            ${className}Service.delete(idList);\n\n                            return Result.ok();\n                            }\n                            }\n', '', '2023-07-20 17:54:53', '2023-07-20 17:54:53', NULL, 0);
+INSERT INTO `template_info` VALUES (8, 'VO.java.ftl', 1, NULL, '', 'template\\VO.java.ftl', '2023-08-05 19:52:29', '2023-08-05 19:52:29', NULL, 0);
+INSERT INTO `template_info` VALUES (9, 'menu.sql.ftl', 1, NULL, '', 'template\\menu.sql.ftl', '2023-08-05 20:03:44', '2023-08-05 20:03:44', NULL, 0);
+INSERT INTO `template_info` VALUES (10, 'add-or-update.vue.ftl', 1, NULL, '', 'template\\add-or-update.vue.ftl', '2023-08-05 20:04:34', '2023-08-05 20:04:34', NULL, 0);
+INSERT INTO `template_info` VALUES (11, 'api.ts.ftl', 1, NULL, '', 'template\\api.ts.ftl', '2023-08-05 20:04:43', '2023-08-05 20:04:43', NULL, 0);
+INSERT INTO `template_info` VALUES (12, 'api.ts.ftl', 1, NULL, '', 'template\\api.ts.ftl', '2023-08-05 20:05:04', '2023-08-05 20:05:04', NULL, 0);
+INSERT INTO `template_info` VALUES (13, 'index.vue.ftl', 1, NULL, '', 'template\\index.vue.ftl', '2023-08-05 20:05:22', '2023-08-05 20:05:22', NULL, 0);
 
 -- ----------------------------
--- Table structure for template_variable
+-- Table structure for template_param
 -- ----------------------------
-DROP TABLE IF EXISTS `template_variable`;
-CREATE TABLE `template_variable`  (
+DROP TABLE IF EXISTS `template_param`;
+CREATE TABLE `template_param`  (
   `id` int(11) NOT NULL COMMENT '主键ID',
   `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
   `param_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
@@ -4115,7 +4157,7 @@ CREATE TABLE `template_variable`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of template_variable
+-- Records of template_param
 -- ----------------------------
 
 -- ----------------------------

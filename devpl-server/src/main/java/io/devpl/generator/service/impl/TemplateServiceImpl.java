@@ -8,7 +8,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.devpl.codegen.utils.CollectionUtils;
 import io.devpl.generator.common.exception.ServerException;
-import io.devpl.generator.dao.TemplateInfoMapper;
+import io.devpl.generator.dao.TemplateInfoDao;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
@@ -28,10 +28,10 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, TemplateInfo> implements TemplateService {
+public class TemplateServiceImpl extends ServiceImpl<TemplateInfoDao, TemplateInfo> implements TemplateService {
 
     @Resource
-    TemplateInfoMapper templateInfoMapper;
+    TemplateInfoDao templateInfoMapper;
 
     /**
      * 保存模板

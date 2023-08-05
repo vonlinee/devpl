@@ -12,7 +12,11 @@ import java.util.List;
  * @since 1.0.0 2023-07-14
  */
 @Mapper
-public interface TemplateFileGenerationMapper extends BaseDao<TemplateFileGeneration> {
+public interface TemplateFileGenerationDao extends BaseDao<TemplateFileGeneration> {
 
+    /**
+     * 查询可选择的生成文件
+     * @return 生成文件列表
+     */
     List<TemplateFileGeneration> selectGeneratedFileTypes();
 }

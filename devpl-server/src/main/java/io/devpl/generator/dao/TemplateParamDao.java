@@ -1,7 +1,7 @@
 package io.devpl.generator.dao;
 
 import io.devpl.generator.common.dao.BaseDao;
-import io.devpl.generator.entity.TemplateVariableEntity;
+import io.devpl.generator.entity.TemplateParamEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -10,6 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 1.0.0 2023-07-29
  */
 @Mapper
-public interface TemplateVariableDao extends BaseDao<TemplateVariableEntity> {
+public interface TemplateParamDao extends BaseDao<TemplateParamEntity> {
 
 }

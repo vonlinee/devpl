@@ -1,40 +1,35 @@
 <template>
     <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false"
                @closed="onClosed">
-        <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="150px"
+        <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
                  @keyup.enter="submitHandle()">
-            <el-form-item label="模板名称" prop="templateName">
-                <el-input v-model="dataForm.templateName"></el-input>
-            </el-form-item>
-            <el-form-item label="选择模板" prop="generatorType">
-                <el-radio-group v-model="dataForm.type">
-                    <el-radio :label="1">文件模板</el-radio>
-                    <el-radio :label="2">字符串模板</el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item v-if="dataForm.type === 1" label="选择文件" prop="type">
-                <el-upload action="#"
-                           :limit="1"
-                           :auto-upload="false"
-                           :headers="headers"
-                           accept=".txt,.ftl,.vm"
-                           :on-change="handleChange">
-                    <template #trigger>
-                        <el-button type="primary">选择文件</el-button>
-                    </template>
-                    <template #default>
-                        <el-button type="primary" @click="uploadBtn" style="margin-left: 11px">确定上传</el-button>
-                    </template>
-                    <template #tip>
-                        <div class="el-upload__tip" style="color:red;">
-                            限制一个文件，下一个文件会覆盖上一个文件
-                        </div>
-                    </template>
-                </el-upload>
-            </el-form-item>
-            <el-form-item v-if="dataForm.type === 2" label="模板内容" prop="content">
-                <text-input v-model:text="dataForm.content">
-                </text-input>
+            <el-row>
+                <el-col span="12">
+                    <el-form-item label="模板名称" prop="templateName">
+                        <el-input v-model="dataForm.templateName"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col span="8">
+                    <el-form-item prop="generatorType" style="padding-left: 30px">
+                        <el-radio-group v-model="dataForm.type">
+                            <el-radio :label="1">字符串模板</el-radio>
+                            <el-radio :label="2">文件模板</el-radio>
+                            <el-upload v-if="dataForm.type === 2"
+                                       ref="uploadRef"
+                                       class="upload-demo"
+                                       :auto-upload="false">
+                                <template #trigger>
+                                    <el-button type="primary" size="small">选择模板文件</el-button>
+                                </template>
+                            </el-upload>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-form-item label="模板内容" prop="content">
+                <div style="height: 400px; width: 100%">
+                    <monaco-editor language="plain" :text="dataForm.content"></monaco-editor>
+                </div>
             </el-form-item>
         </el-form>
         <template #footer>
@@ -49,7 +44,7 @@ import {reactive, ref, toRaw} from 'vue'
 import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
 import {apiAddTemplate, apiUpdateTemplate} from "@/api/template";
-import TextInput from "@/components/input/TextInput.vue";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 const visible = ref(false)
 const dataFormRef = ref()
