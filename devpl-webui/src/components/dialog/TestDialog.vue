@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <my-dialog
-            :isShowDialog.sync="isShowDialog"
+            :visiable.sync="isShowDialog"
             title="设置标题"
             :showCloseIcon="true"
             @beforeClose="beforeClose"
@@ -9,15 +9,8 @@
             :clickMaskClose="true"
         >
             <!-- 要与组件的具名插槽对应 -->
-            <template slot="header"> 具名插槽</template>
-            <template> 默认插槽</template>
-            <!-- 要与子组件的插槽对应 -->
-            <template slot="footer">
-                <el-button size="small" @click="isShowDialog = false">取消</el-button>
-                <el-button type="primary" size="small" @click="isShowDialog = false"
-                >确认
-                </el-button
-                >
+            <template #default>
+                <div style="height: 1080px; background-color: green"></div>
             </template>
         </my-dialog>
         <br/>

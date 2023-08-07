@@ -3,7 +3,7 @@
     <transition name="animation">
         <div class="dialogBox"
              :class="{ isShowMask: mask === true }"
-             v-show="isShowDialog"
+             v-show="visiable"
              @click="clickMaskCloseFn">
             <div class="dialogBoxContent" @click.stop>
                 <div class="headhead">
@@ -18,7 +18,9 @@
                 </div>
                 <div class="bodybody">
                     <!-- 内容区我们使用默认插槽 -->
-                    <slot></slot>
+                    <slot name="default">
+                        <div style="height: 1080px; background-color: red"></div>
+                    </slot>
                 </div>
                 <div class="footfoot">
                     <!-- 底部使用命名插槽 -->
@@ -37,7 +39,7 @@ export default {
     components: {Close},
     props: {
         // 控制是否展示或隐藏对话框
-        isShowDialog: {
+        visiable: {
             type: Boolean,
             default: false,
         },

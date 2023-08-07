@@ -1,7 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
-import io.devpl.generator.dao.TemplateFileGenerationMapper;
+import io.devpl.generator.dao.TemplateFileGenerationDao;
 import io.devpl.generator.entity.TemplateFileGeneration;
 import io.devpl.generator.service.TemplateFileGenerationService;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class TemplateFileGenerationServiceImpl extends BaseServiceImpl<TemplateFileGenerationMapper, TemplateFileGeneration> implements TemplateFileGenerationService {
+public class TemplateFileGenerationServiceImpl extends BaseServiceImpl<TemplateFileGenerationDao, TemplateFileGeneration> implements TemplateFileGenerationService {
 
     @Override
     public List<TemplateFileGeneration> listGeneratedFileTypes() {

@@ -1,31 +1,11 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
-import AdaptiveDialog from "@/components/AdaptiveDialog.vue";
-
-let dialogRef = ref()
-let dialogRef1 = ref()
-let dialogVisiable = ref()
-
-function show() {
-    dialogRef.value.init()
-}
-
-function show1() {
-    dialogVisiable.value = true
-}
+import App1 from "@/views/test/App1.vue";
 
 </script>
 
 <template>
-    <el-button @click="show">打开弹窗</el-button>
-    <el-button @click="show1">打开弹窗1</el-button>
-
-    <adaptive-dialog ref="dialogRef"></adaptive-dialog>
-
-    <el-dialog v-model="dialogVisiable" draggable>
-        <div style="width: 1200px; height: 1000px"></div>
-    </el-dialog>
+    <app1></app1>
 </template>
 
 <style lang="scss">

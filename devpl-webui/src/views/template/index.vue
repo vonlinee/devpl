@@ -21,7 +21,7 @@
                              width="80px"></el-table-column>
             <el-table-column prop="templateName" label="模板名称" header-align="center"
                              align="center"></el-table-column>
-            <el-table-column prop="technologyProvider" label="技术类型" header-align="center" width="200px"
+            <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
                              align="center"></el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
                              align="center" width="170px"></el-table-column>
@@ -48,8 +48,9 @@
         >
         </el-pagination>
 
-        <el-dialog v-model="templateDialogShowing" destroy-on-close draggable>
-            <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="90%"></monaco-editor>
+
+        <el-dialog v-model="templateDialogShowing">
+            <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px" read-only></monaco-editor>
         </el-dialog>
 
         <!-- 弹窗, 新增 / 修改 -->

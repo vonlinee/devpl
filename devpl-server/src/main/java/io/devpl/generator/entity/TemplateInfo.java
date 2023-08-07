@@ -50,7 +50,7 @@ public class TemplateInfo extends DatabaseTableEntity {
      * @see io.devpl.generator.domain.TemplateProvider
      */
     @TableField(value = "provider")
-    private String technologyProvider;
+    private String provider;
 
     /**
      * 备注信息
@@ -63,4 +63,12 @@ public class TemplateInfo extends DatabaseTableEntity {
      */
     @TableField(exist = false)
     private String generatorPath;
+
+    public boolean isStringTemplate() {
+        return this.getType() == 2;
+    }
+
+    public boolean isFileTemplate() {
+        return this.getType() == 1;
+    }
 }

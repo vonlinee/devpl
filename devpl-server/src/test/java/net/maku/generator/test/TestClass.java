@@ -1,7 +1,7 @@
 package net.maku.generator.test;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.devpl.generator.dao.DistrictMapper;
+import io.devpl.generator.dao.DistrictDao;
 import io.devpl.generator.entity.District;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import java.util.List;
 public class TestClass {
 
     @Autowired
-    private DistrictMapper districtMapper;
+    private DistrictDao districtMapper;
 
     @Test
     public void testAddUser() {

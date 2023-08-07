@@ -34,7 +34,7 @@ public class TemplateController {
     public Result<Boolean> addOne(@RequestBody TemplateInfo templateInfo) {
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
-        if (templateInfo.getType() == 1) {
+        if (templateInfo.isFileTemplate()) {
             Assert.hasText(templateInfo.getTemplatePath(), "文件路径不能为空");
         } else {
             Assert.hasText(templateInfo.getContent(), "模板内容不能为空");

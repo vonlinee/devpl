@@ -1,7 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.codegen.utils.StringUtils;
-import io.devpl.generator.dao.FileInfoMapper;
+import io.devpl.generator.dao.FileInfoDao;
 import io.devpl.generator.entity.FileConfig;
 import io.devpl.generator.entity.FileInfo;
 import io.devpl.generator.service.FileInfoService;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class FileInfoServiceImpl implements FileInfoService {
 
     @Resource
-    FileInfoMapper fileInfoMapper;
+    FileInfoDao fileInfoMapper;
 
     /**
      * 文件上传
