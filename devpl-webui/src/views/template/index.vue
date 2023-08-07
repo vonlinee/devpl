@@ -48,8 +48,8 @@
         >
         </el-pagination>
 
-        <el-dialog v-model="templateDialogShowing">
-            <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px"></monaco-editor>
+        <el-dialog v-model="templateDialogShowing" destroy-on-close draggable>
+            <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="90%"></monaco-editor>
         </el-dialog>
 
         <!-- 弹窗, 新增 / 修改 -->

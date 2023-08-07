@@ -1,13 +1,11 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
-import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.TemplateFileGeneration;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TemplateFileGenerationService;
-import io.devpl.sdk.collection.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

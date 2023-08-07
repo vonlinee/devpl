@@ -1,32 +1,31 @@
 <template>
-    <div style="overflow: hidden">
-        <el-dialog
-            class="dialog-vertical pub_dialog"
-            title="标题"
-            v-model="dialogVisible"
-            draggable
-            :close-on-click-modal="false"
-            :append-to-body="appenToBody">
-            <!-- body 区域 -->
-            <div slot="default" class="dialog__body_box">
-                <slot name="body">
-                    <div style="width: 1000px; height: 1080px;"></div>
-                </slot>
-            </div>
-            <span slot="footer">
+    <el-dialog
+        ref="dialogRef"
+        class="dialog-vertical"
+        title="标题"
+        v-model="dialogVisible"
+        draggable
+        :close-on-click-modal="false"
+        :append-to-body="appenToBody">
+        <!-- body 区域 -->
+        <div slot="default" class="dialog__body_box">
+            <slot name="body">
+                <div style="width: 1000px; height: 1080px; background-color: red"></div>
+            </slot>
+        </div>
+        <span slot="footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
         </span>
-            <div class="dialog__footer_box">
-                <!-- 底部使用命名插槽 -->
-                <slot name="footer"></slot>
-            </div>
-        </el-dialog>
-    </div>
+        <div class="dialog__footer_box">
+            <!-- 底部使用命名插槽 -->
+            <slot name="footer"></slot>
+        </div>
+    </el-dialog>
 </template>
 
 <script>
-import {defineComponent, ref} from "vue";
+import {defineComponent, onMounted, ref} from "vue";
 import {ElDialog} from "element-plus";
 
 export default defineComponent({
@@ -40,11 +39,18 @@ export default defineComponent({
     setup(props, context) {
         const dialogVisible = ref(false)
 
+        let dialogRef = ref()
+
         function init() {
             dialogVisible.value = true
         }
 
+        onMounted(() => {
+
+        })
+
         return {
+            dialogRef,
             dialogVisible,
             init
         }
@@ -53,7 +59,14 @@ export default defineComponent({
 
 </script>
 
+<style lang="scss">
+.el-overlay-dialog {
+    overflow: hidden;
+}
+</style>
+
 <style lang="scss" scoped>
+
 .dialog__body_box {
     // 必须有高度 overflow 为自动
     overflow: auto;
@@ -64,8 +77,8 @@ export default defineComponent({
 
     // 滚动条的样式,宽高分别对应横竖滚动条的尺寸
     &::-webkit-scrollbar {
-        width: 3px;
-        height: 3px;
+        width: 6px;
+        height: 6px;
     }
 
     // 滚动条里面默认的小方块,自定义样式
@@ -82,7 +95,6 @@ export default defineComponent({
 
 .dialog-vertical {
     display: flex;
-    padding: 20px;
 
     .el-dialog {
         margin: auto !important;
