@@ -21,6 +21,7 @@ module devpl.codegen {
     requires java.net.http;
     requires spring.core;
     requires tencentcloud.sdk.java;
+    requires com.google.common;
 
     exports io.devpl.codegen;
 

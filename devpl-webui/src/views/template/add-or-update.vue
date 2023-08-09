@@ -15,11 +15,9 @@
                             <el-radio :label="1">字符串模板</el-radio>
                             <el-radio :label="2">文件模板</el-radio>
                             <el-upload v-if="dataForm.type === 2"
-                                       ref="uploadRef"
-                                       class="upload-demo"
                                        :auto-upload="false">
                                 <template #trigger>
-                                    <el-button type="primary" size="small">选择模板文件</el-button>
+                                    <el-button type="primary">选择模板文件</el-button>
                                 </template>
                             </el-upload>
                         </el-radio-group>
