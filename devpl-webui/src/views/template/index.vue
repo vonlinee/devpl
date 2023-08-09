@@ -48,6 +48,7 @@
         >
         </el-pagination>
 
+
         <el-dialog v-model="templateDialogShowing">
             <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px" read-only></monaco-editor>
         </el-dialog>

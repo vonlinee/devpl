@@ -248,4 +248,20 @@ CREATE TABLE `table_file_generation` (
      PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表文件生成记录表';
 
+<<<<<<< Updated upstream
 ALTER TABLE devpl.template_file_generation ADD builtin tinyint(1) NULL COMMENT '是否内置';
+=======
+/**
+  字段信息表
+ */
+DROP TABLE IF EXISTS `field_info`;
+CREATE TABLE `field_info` (
+     `field_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+     `field_key` bigint(20) DEFAULT NULL COMMENT '字段key',
+     `field_name` bigint(20) DEFAULT NULL COMMENT '字段名称',
+     `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型',
+     `remark` varchar(100) DEFAULT NULL COMMENT '保存路径',
+     `order_num` bigint(20) DEFAULT NULL COMMENT '排序号',
+     PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字段信息表';
+>>>>>>> Stashed changes

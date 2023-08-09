@@ -38,12 +38,20 @@ public class DataSourceController {
         return Result.ok(page);
     }
 
+    /**
+     * 数据源列表
+     * @return 数据源列表
+     */
     @GetMapping("/datasource/list")
     public Result<List<GenDataSource>> list() {
         List<GenDataSource> list = datasourceService.getList();
         return Result.ok(list);
     }
 
+    /**
+     * 根据ID获取数据源
+     * @return 数据源信息
+     */
     @GetMapping("/datasource/{id}")
     public Result<GenDataSource> get(@PathVariable("id") Long id) {
         GenDataSource data = datasourceService.getById(id);

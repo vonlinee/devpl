@@ -44,6 +44,15 @@ export default defineComponent({
     },
     setup(props: any, context) {
         const {language, text, width, height, readOnly} = toRefs(props)
+
+        let index = height.value?.indexOf("%")
+
+        let initialHeight: string = height.value;
+        if (index == height.value?.length - 1) {
+            let hRatio = parseFloat(height.value)
+            initialHeight = (window.innerHeight * hRatio / 100) + 'px'
+        }
+
         const editorOptions: IStandaloneEditorConstructionOptions = reactive({
             value: text.value, // 编辑器初始显示文字
             language: language.value, // 语言支持
@@ -125,7 +134,7 @@ export default defineComponent({
             class: 'monaco-editor-container',
             style: {
                 width: width.value,
-                height: height.value,
+                height: initialHeight,
                 margin: 0,
                 padding: 0,
                 textAlign: 'left',
