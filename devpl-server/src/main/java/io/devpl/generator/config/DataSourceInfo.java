@@ -1,14 +1,19 @@
 package io.devpl.generator.config;
 
-import io.devpl.generator.config.query.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import io.devpl.generator.config.query.AbstractQuery;
+import io.devpl.generator.config.query.ClickHouseQuery;
+import io.devpl.generator.config.query.DmQuery;
+import io.devpl.generator.config.query.MySqlQuery;
+import io.devpl.generator.config.query.OracleQuery;
+import io.devpl.generator.config.query.PostgreSqlQuery;
+import io.devpl.generator.config.query.SQLServerQuery;
 import io.devpl.generator.entity.GenDataSource;
 import io.devpl.generator.utils.DbUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * 代码生成器 数据源

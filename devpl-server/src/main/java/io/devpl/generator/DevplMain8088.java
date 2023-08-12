@@ -5,8 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
-import javax.json.JsonArray;
-
 @SpringBootApplication
 public class DevplMain8088 {
     public static void main(String[] args) {
@@ -16,8 +14,5 @@ public class DevplMain8088 {
             .main(DevplMain8088.class)
             .build();
         app.run(args);
-
-
-        JsonArray jsonValues;
     }
 }

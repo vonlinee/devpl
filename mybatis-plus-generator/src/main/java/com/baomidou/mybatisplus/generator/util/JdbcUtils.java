@@ -1,10 +1,5 @@
 package com.baomidou.mybatisplus.generator.util;
 
-import com.baomidou.mybatisplus.annotation.DbType;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.SingleColumnRowMapper;
-
 import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
+
+import com.baomidou.mybatisplus.annotation.DbType;
 
 /**
  * @see org.springframework.jdbc.support.JdbcUtils
@@ -142,7 +143,6 @@ public class JdbcUtils {
         }
         return Collections.emptyList();
     }
-
 
     /**
      * Check whether the given value can be treated as a String value.
