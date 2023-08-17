@@ -44,14 +44,8 @@ export default defineComponent({
     },
     setup(props: any, context) {
         const {language, text, width, height, readOnly} = toRefs(props)
-
-        let index = height.value?.indexOf("%")
-
+        // 初始高度
         let initialHeight: string = height.value;
-        if (index == height.value?.length - 1) {
-            let hRatio = parseFloat(height.value)
-            initialHeight = (window.innerHeight * hRatio / 100) + 'px'
-        }
 
         const editorOptions: IStandaloneEditorConstructionOptions = reactive({
             value: text.value, // 编辑器初始显示文字
