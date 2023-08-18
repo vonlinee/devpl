@@ -10,5 +10,4 @@ public class NamedValue {
     private String name;
 
     private Object value;
-
 }

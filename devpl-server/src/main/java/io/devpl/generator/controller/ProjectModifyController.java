@@ -4,7 +4,7 @@ import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.common.utils.ServletUtils;
-import io.devpl.generator.entity.ProjectModifyEntity;
+import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -23,22 +23,22 @@ public class ProjectModifyController {
     private final ProjectModifyService projectModifyService;
 
     @GetMapping("page")
-    public Result<PageResult<ProjectModifyEntity>> page(@Valid Query query) {
+    public Result<PageResult<ProjectModify>> page(@Valid Query query) {
         return Result.ok(projectModifyService.page(query));
     }
 
     @GetMapping("{id}")
-    public Result<ProjectModifyEntity> get(@PathVariable("id") Long id) {
+    public Result<ProjectModify> get(@PathVariable("id") Long id) {
         return Result.ok(projectModifyService.getById(id));
     }
 
     @PostMapping
-    public Result<Boolean> save(@RequestBody ProjectModifyEntity entity) {
+    public Result<Boolean> save(@RequestBody ProjectModify entity) {
         return Result.ok(projectModifyService.save(entity));
     }
 
     @PutMapping
-    public Result<Boolean> update(@RequestBody @Valid ProjectModifyEntity entity) {
+    public Result<Boolean> update(@RequestBody @Valid ProjectModify entity) {
         return Result.ok(projectModifyService.updateById(entity));
     }
 
@@ -53,7 +53,7 @@ public class ProjectModifyController {
     @GetMapping("download/{id}")
     public void download(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
         // 项目信息
-        ProjectModifyEntity project = projectModifyService.getById(id);
+        ProjectModify project = projectModifyService.getById(id);
         byte[] data = projectModifyService.download(project);
         ServletUtils.downloadFile(response, project.getModifyProjectName() + ".zip", data);
     }

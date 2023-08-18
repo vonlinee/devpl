@@ -1,9 +1,10 @@
+<!--弹窗组件-->
 <template>
     <el-dialog ref="dialogRef" destroy-on-close :center="center" :modal="show_modal" :show-close="show_close"
                :close-on-press-escape="closeOnPressEscape" :close-on-click-modal="closeOnClickModal"
                :class="custom_class" :fullscreen="fullscreen" :draggable="true" :width="width" :top="top"
                :title="titleRef"
-               :append-to-body="append_to_body" :model-value="dialogVisible" @close="close" @closed="dlgClosed"
+               :append-to-body="appendToBody" :model-value="dialogVisible" @close="close" @closed="dlgClosed"
                @opened="opened" @open="open">
         <template #header>
             <div v-html="title" class="popup-window__title"></div>
@@ -12,6 +13,7 @@
         <div style="overflow-y: auto; height: 600px">
             <slot name="content"></slot>
         </div>
+        <!-- 底部操作栏 -->
         <template #footer>
             <slot name="footer"></slot>
         </template>
@@ -91,14 +93,13 @@ export default defineComponent({
             default: true
         },
         // Dialog 自身是否插入至 body 元素上。 嵌套的 Dialog 必须指定该属性并赋值为 true
-        append_to_body: {
+        appendToBody: {
             type: Boolean,
             default: false
         }
     },
     methods: {
         setTitle(title: string) {
-            console.log("title=", title)
             this.titleRef = title
         }
     },
