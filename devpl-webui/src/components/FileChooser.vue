@@ -5,7 +5,7 @@
 -->
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {defineComponent, ref} from "vue";
 
 const inputRef = ref()
 const text = ref()
@@ -24,6 +24,12 @@ function onChange() {
     let file: File = inputRef.value.files[0]
     text.value = file.name
 }
+
+defineComponent({
+
+})
+
+
 </script>
 
 <template>

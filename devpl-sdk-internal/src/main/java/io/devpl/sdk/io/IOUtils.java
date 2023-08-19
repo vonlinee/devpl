@@ -1,6 +1,7 @@
 package io.devpl.sdk.io;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -437,6 +438,10 @@ public class IOUtils {
             return readLines(reader);
         }
     }
+    
+    public static List<String> readLines(InputStream input, Charset encoding) throws IOException {
+        return readLines(input, encoding.name());
+    }
 
     /**
      * Get the contents of a <code>Reader</code> as a list of Strings,
@@ -577,8 +582,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static void write(byte[] data, OutputStream output)
-        throws IOException {
+    public static void write(byte[] data, OutputStream output) throws IOException {
         if (data != null) {
             output.write(data);
         }

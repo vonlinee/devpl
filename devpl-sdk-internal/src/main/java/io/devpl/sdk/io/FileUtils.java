@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
@@ -726,7 +727,6 @@ public class FileUtils {
         if (!directory.exists()) {
             return;
         }
-
         cleanDirectory(directory);
         if (!directory.delete()) {
             String message = "Unable to delete directory " + directory + ".";
@@ -839,6 +839,10 @@ public class FileUtils {
         }
     }
 
+    public static List<String> readLines(File file, Charset encoding) throws IOException {
+        return readLines(file, encoding.name());
+    }
+
     /**
      * Reads the contents of a file line by line to a List of Strings using the
      * default encoding for the VM. The file is always closed.
@@ -849,7 +853,7 @@ public class FileUtils {
      * @since Commons IO 1.3
      */
     public static List<String> readLines(File file) throws IOException {
-        return readLines(file, null);
+        return readLines(file, (String) null);
     }
 
     /**
@@ -1464,5 +1468,237 @@ public class FileUtils {
             extension = placeholder;
         }
         return extension;
+    }
+
+    /**
+     * 清空文件夹<br>
+     * 注意：清空文件夹时不会判断文件夹是否为空，如果不空则递归删除子文件或文件夹<br>
+     * 某个文件删除失败会终止删除操作
+     * @param directory 文件夹
+     * @return 成功与否
+     * @throws RuntimeException IO异常
+     * @since 3.0.6
+     */
+    public static boolean clean(File directory) throws RuntimeException {
+        if (directory == null || directory.exists() == false || false == directory.isDirectory()) {
+            return true;
+        }
+
+        final File[] files = directory.listFiles();
+        if (null != files) {
+            for (File childFile : files) {
+                if (false == del(childFile)) {
+                    // 删除一个出错则本次删除任务失败
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 删除文件或者文件夹<br>
+     * 注意：删除文件夹时不会判断文件夹是否为空，如果不空则递归删除子文件或文件夹<br>
+     * 某个文件删除失败会终止删除操作
+     *
+     * <p>
+     * 从5.7.6开始，删除文件使用{@link Files#delete(Path)}代替 {@link File#delete()}<br>
+     * 因为前者遇到文件被占用等原因时，抛出异常，而非返回false，异常会指明具体的失败原因。
+     * </p>
+     * @param file 文件对象
+     * @return 成功与否
+     * @throws RuntimeException IO异常
+     * @see Files#delete(Path)
+     */
+    public static boolean del(File file) throws RuntimeException {
+        if (file == null || false == file.exists()) {
+            // 如果文件不存在或已被删除，此处返回true表示删除成功
+            return true;
+        }
+
+        if (file.isDirectory()) {
+            // 清空目录下所有文件和目录
+            boolean isOk = clean(file);
+            if (false == isOk) {
+                return false;
+            }
+        }
+
+        // 删除文件或清空后的目录
+        final Path path = file.toPath();
+        try {
+            delFile(path);
+        } catch (DirectoryNotEmptyException e) {
+            // 遍历清空目录没有成功，此时补充删除一次（可能存在部分软链）
+            del(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    /**
+     * 删除文件或空目录，不追踪软链
+     * @param path 文件对象
+     * @throws IOException IO异常
+     * @since 5.7.7
+     */
+    protected static void delFile(Path path) throws IOException {
+        try {
+            Files.delete(path);
+        } catch (AccessDeniedException e) {
+            // 可能遇到只读文件，无法删除.使用 file 方法删除
+            if (!path.toFile().delete()) {
+                throw e;
+            }
+        }
+    }
+
+    /**
+     * 删除文件或者文件夹，不追踪软链<br>
+     * 注意：删除文件夹时不会判断文件夹是否为空，如果不空则递归删除子文件或文件夹<br>
+     * 某个文件删除失败会终止删除操作
+     * @param path 文件对象
+     * @return 成功与否
+     * @throws RuntimeException IO异常
+     * @since 4.4.2
+     */
+    public static boolean del(Path path) throws RuntimeException {
+        if (Files.notExists(path)) {
+            return true;
+        }
+        try {
+            if (isDirectory(path)) {
+                Files.walkFileTree(path, new SimpleFileVisitor<>() {
+
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    /**
+                     * 访问目录结束后删除目录，当执行此方法时，子文件或目录都已访问（删除）完毕<br>
+                     * 理论上当执行到此方法时，目录下已经被清空了
+                     *
+                     * @param dir 目录
+                     * @param e   异常
+                     * @return {@link FileVisitResult}
+                     * @throws IOException IO异常
+                     */
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+                        if (e == null) {
+                            Files.delete(dir);
+                            return FileVisitResult.CONTINUE;
+                        } else {
+                            throw e;
+                        }
+                    }
+                });
+            } else {
+                delFile(path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    public static boolean isDirectory(Path path) {
+        return isDirectory(path, false);
+    }
+
+    /**
+     * 判断是否为目录，如果file为null，则返回false
+     * @param path          {@link Path}
+     * @param isFollowLinks 是否追踪到软链对应的真实地址
+     * @return 如果为目录true
+     * @since 3.1.0
+     */
+    public static boolean isDirectory(Path path, boolean isFollowLinks) {
+        if (null == path) {
+            return false;
+        }
+        final LinkOption[] options = isFollowLinks ? new LinkOption[0] : new LinkOption[]{LinkOption.NOFOLLOW_LINKS};
+        return Files.isDirectory(path, options);
+    }
+
+    /**
+     * 遍历指定path下的文件并做处理
+     * @param start    起始路径，必须为目录
+     * @param maxDepth 最大遍历深度，-1表示不限制深度
+     * @param visitor  {@link FileVisitor} 接口，用于自定义在访问文件时，访问目录前后等节点做的操作
+     * @see Files#walkFileTree(Path, java.util.Set, int, FileVisitor)
+     * @since 4.6.3
+     */
+    public static void walkFiles(Path start, int maxDepth, FileVisitor<? super Path> visitor) {
+        if (maxDepth < 0) {
+            // < 0 表示遍历到最底层
+            maxDepth = Integer.MAX_VALUE;
+        }
+        try {
+            Files.walkFileTree(start, EnumSet.noneOf(FileVisitOption.class), maxDepth, visitor);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 递归遍历目录以及子目录中的所有文件<br>
+     * 如果提供file为文件，直接返回过滤结果
+     * @param file       当前遍历文件或目录
+     * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录
+     * @return 文件列表
+     */
+    public static List<File> findFiles(File file, FileFilter fileFilter) {
+        return findFiles(file, -1, fileFilter);
+    }
+
+    /**
+     * 递归遍历目录以及子目录中的所有文件<br>
+     * 如果提供file为文件，直接返回过滤结果
+     * @param file       当前遍历文件或目录
+     * @param maxDepth   遍历最大深度，-1表示遍历到没有目录为止
+     * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录，null表示接收全部文件
+     * @return 文件列表
+     * @since 4.6.3
+     */
+    public static List<File> findFiles(File file, int maxDepth, FileFilter fileFilter) {
+        return findFiles(file.toPath(), maxDepth, fileFilter);
+    }
+
+    /**
+     * 递归遍历目录以及子目录中的所有文件<br>
+     * 如果提供path为文件，直接返回过滤结果
+     * @param path       当前遍历文件或目录
+     * @param maxDepth   遍历最大深度，-1表示遍历到没有目录为止
+     * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录，null表示接收全部文件
+     * @return 文件列表
+     * @since 5.4.1
+     */
+    public static List<File> findFiles(Path path, int maxDepth, FileFilter fileFilter) {
+        final List<File> fileList = new ArrayList<>();
+        if (null == path || !Files.exists(path)) {
+            return fileList;
+        } else if (!isDirectory(path)) {
+            final File file = path.toFile();
+            if (null == fileFilter || fileFilter.accept(file)) {
+                fileList.add(file);
+            }
+            return fileList;
+        }
+        walkFiles(path, maxDepth, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                final File file = path.toFile();
+                if (null == fileFilter || fileFilter.accept(file)) {
+                    fileList.add(file);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return fileList;
     }
 }

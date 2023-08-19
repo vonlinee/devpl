@@ -1,9 +1,17 @@
 package io.devpl.generator.common.utils;
 
-import cn.hutool.core.io.IoUtil;
+import io.devpl.sdk.io.IOUtils;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ServletUtils {
+public final class ServletUtils {
+
+    private ServletUtils() {
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(ServletUtils.class);
 
     /**
      * 浏览器直接下载文件
@@ -16,10 +24,10 @@ public class ServletUtils {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
         response.addHeader("Content-Length", String.valueOf(data.length));
         response.setContentType("application/octet-stream; charset=UTF-8");
-        try {
-            IoUtil.write(response.getOutputStream(), false, data);
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            IOUtils.write(data, outputStream);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error("failed to download file", exception);
         }
     }
 }

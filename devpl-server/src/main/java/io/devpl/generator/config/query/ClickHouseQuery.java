@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import cn.hutool.core.util.StrUtil;
+import io.devpl.codegen.utils.StringUtils;
 import io.devpl.generator.config.DbType;
 
 /**
@@ -26,7 +26,7 @@ public class ClickHouseQuery implements AbstractQuery {
         sql.append("SELECT * FROM system.tables WHERE 1=1 ");
 
         // 表名查询
-        if (StrUtil.isNotBlank(tableName)) {
+        if (StringUtils.isNotBlank(tableName)) {
             sql.append("and name = '").append(tableName).append("' ");
         }
         return sql.toString();

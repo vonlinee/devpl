@@ -1,16 +1,19 @@
 <script setup lang="ts">
 
-import App1 from "@/views/test/App1.vue";
-import FileChooser from "@/components/FileChooser.vue";
+import FileSelect from './FileSelect.vue'
+import {ref} from "vue";
+
+let file = ref()
 
 </script>
 
 <template>
-    <app1></app1>
 
-    <div style="width: 300px">
-        <file-chooser></file-chooser>
-    </div>
+	<file-select ></file-select>
+
+	<el-select filterable>
+
+	</el-select>
 </template>
 
 <style lang="scss">
