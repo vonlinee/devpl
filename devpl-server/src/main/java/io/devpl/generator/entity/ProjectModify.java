@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_project_modify")
-public class ProjectModifyEntity {
+public class ProjectModify {
     /**
      * id
      */

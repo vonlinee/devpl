@@ -9,7 +9,7 @@ import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
 import io.devpl.generator.dao.ProjectModifyDao;
-import io.devpl.generator.entity.ProjectModifyEntity;
+import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
 import io.devpl.generator.utils.Arrays;
 import io.devpl.sdk.util.StringUtils;
@@ -25,7 +25,7 @@ import java.util.*;
  */
 @Service
 @AllArgsConstructor
-public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, ProjectModifyEntity> implements ProjectModifyService {
+public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, ProjectModify> implements ProjectModifyService {
 
     /**
      * 需要变更的文件后缀
@@ -41,13 +41,13 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
     public final static String SPLIT = ",";
 
     @Override
-    public PageResult<ProjectModifyEntity> page(Query query) {
-        IPage<ProjectModifyEntity> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+    public PageResult<ProjectModify> page(Query query) {
+        IPage<ProjectModify> page = baseMapper.selectPage(getPage(query), getWrapper(query));
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
     @Override
-    public byte[] download(ProjectModifyEntity project) throws IOException {
+    public byte[] download(ProjectModify project) throws IOException {
         // 原项目根路径
         File srcRoot = new File(project.getProjectPath());
         // 临时项目根路径
@@ -73,7 +73,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
     /**
      * 获取替换规则
      */
-    private Map<String, String> getReplaceMap(ProjectModifyEntity project) {
+    private Map<String, String> getReplaceMap(ProjectModify project) {
         Map<String, String> map = new LinkedHashMap<>();
 
         // 项目路径替换
@@ -92,7 +92,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
     }
 
     @Override
-    public boolean save(ProjectModifyEntity entity) {
+    public boolean save(ProjectModify entity) {
         entity.setExclusions(EXCLUSIONS);
         entity.setModifySuffix(MODIFY_SUFFIX);
         entity.setCreateTime(new Date());

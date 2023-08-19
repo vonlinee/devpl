@@ -33,6 +33,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected <T> Class<? extends T> resolveClass(String alias) {
         Class<? extends T> clazz;
         try {
@@ -80,23 +81,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                 resultMaps = Collections.emptyList();
             }
 
-            MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType)
-                .resource(resource)
-                .fetchSize(fetchSize)
-                .timeout(timeout)
-                .statementType(statementType)
-                .keyGenerator(keyGenerator)
-                .keyProperty(keyProperty)
-                .keyColumn(keyColumn)
-                .databaseId(databaseId)
-                .lang(lang)
-                .resultOrdered(resultOrdered)
-                .resultSets(resultSets)
-                .resultMaps(resultMaps)
-                .resultSetType(resultSetType)
-                .flushCacheRequired(valueOrDefault(flushCache, !isSelect))
-                .useCache(valueOrDefault(useCache, isSelect))
-                .cache(currentCache);
+            MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType).resource(resource).fetchSize(fetchSize).timeout(timeout).statementType(statementType).keyGenerator(keyGenerator).keyProperty(keyProperty).keyColumn(keyColumn).databaseId(databaseId).lang(lang).resultOrdered(resultOrdered).resultSets(resultSets).resultMaps(resultMaps).resultSetType(resultSetType).flushCacheRequired(valueOrDefault(flushCache, !isSelect)).useCache(valueOrDefault(useCache, isSelect)).cache(currentCache);
 
             ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
             if (statementParameterMap != null) {
@@ -112,10 +97,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
             return value == null ? defaultValue : value;
         }
 
-        private ParameterMap getStatementParameterMap(
-            String parameterMapName,
-            Class<?> parameterTypeClass,
-            String statementId) {
+        private ParameterMap getStatementParameterMap(String parameterMapName, Class<?> parameterTypeClass, String statementId) {
             parameterMapName = applyCurrentNamespace(parameterMapName, true);
             ParameterMap parameterMap = null;
             if (parameterMapName != null) {
@@ -126,21 +108,13 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                 }
             } else if (parameterTypeClass != null) {
                 List<ParameterMapping> parameterMappings = new ArrayList<>();
-                parameterMap = new ParameterMap.Builder(
-                    configuration,
-                    statementId + "-Inline",
-                    parameterTypeClass,
-                    parameterMappings).build();
+                parameterMap = new ParameterMap.Builder(configuration, statementId + "-Inline", parameterTypeClass, parameterMappings).build();
             }
             return parameterMap;
         }
 
-        private List<ResultMap> getStatementResultMaps(
-            String resultMap,
-            Class<?> resultType,
-            String statementId) {
+        private List<ResultMap> getStatementResultMaps(String resultMap, Class<?> resultType, String statementId) {
             resultMap = applyCurrentNamespace(resultMap, true);
-
             List<ResultMap> resultMaps = new ArrayList<>();
             if (resultMap != null) {
                 String[] resultMapNames = resultMap.split(",");
@@ -152,12 +126,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                     }
                 }
             } else if (resultType != null) {
-                ResultMap inlineResultMap = new ResultMap.Builder(
-                    configuration,
-                    statementId + "-Inline",
-                    resultType,
-                    new ArrayList<>(),
-                    null).build();
+                ResultMap inlineResultMap = new ResultMap.Builder(configuration, statementId + "-Inline", resultType, new ArrayList<>(), null).build();
                 resultMaps.add(inlineResultMap);
             }
             return resultMaps;

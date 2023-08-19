@@ -26,15 +26,14 @@ public class ReflectionUtils {
         if (field == null) {
             throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + object + "]");
         }
-        if (!tryMakeAccessible(field)) {
-            return null;
-        }
-        Object result;
-        try {
-            result = field.get(object);
-        } catch (IllegalAccessException e) {
-            // ignore
-            result = defaultValue;
+        Object result = null;
+        if (tryMakeAccessible(field)) {
+            try {
+                result = field.get(object);
+            } catch (IllegalAccessException e) {
+                // ignore
+                result = defaultValue;
+            }
         }
         return result;
     }
@@ -141,14 +140,11 @@ public class ReflectionUtils {
     /**
      * 使 filed 变为可访问
      * @param field 字段
+     * @see Field#trySetAccessible() 会抛异常，JDK9+
      */
     public static boolean tryMakeAccessible(Field field) {
         try {
-            if (!Modifier.isPublic(field.getModifiers())) {
-                field.setAccessible(true);
-                return true;
-            }
-            return false;
+            return field.trySetAccessible();
         } catch (SecurityException securityException) {
             // JDK 8会抛出此异常
             return false;
