@@ -2,7 +2,7 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
 import io.devpl.generator.domain.FileNode;
-import io.devpl.generator.entity.TemplateFileGeneration;
+import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TemplateFileGenerationService;
@@ -62,7 +62,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @GetMapping("/genfiles")
-    public Result<List<TemplateFileGeneration>> listGeneratedFileTypes() {
+    public Result<List<TargetGenFile>> listGeneratedFileTypes() {
         return Result.ok(templateFileGenerationService.listGeneratedFileTypes());
     }
 
@@ -71,7 +71,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfile")
-    public Result<Boolean> saveOrUpdateOne(@RequestBody TemplateFileGeneration param) {
+    public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenFile param) {
         return Result.ok(templateFileGenerationService.saveOrUpdate(param));
     }
 
@@ -81,7 +81,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfiles/replace")
-    public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TemplateFileGeneration> files) {
+    public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenFile> files) {
         return Result.ok(templateFileGenerationService.saveOrUpdateBatch(files));
     }
 

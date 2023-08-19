@@ -1,7 +1,7 @@
 package io.devpl.generator.service;
 
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.entity.TemplateFileGeneration;
+import io.devpl.generator.entity.TargetGenFile;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author xxx xxx
  * @since 1.0.0 2023-07-14
  */
-public interface TemplateFileGenerationService extends BaseService<TemplateFileGeneration> {
+public interface TemplateFileGenerationService extends BaseService<TargetGenFile> {
 
-    List<TemplateFileGeneration> listGeneratedFileTypes();
+    List<TargetGenFile> listGeneratedFileTypes();
 }

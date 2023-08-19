@@ -1,12 +1,13 @@
 <template>
+
+    <el-select>
+
+    </el-select>
+
     <el-table :data="tableData" style="width: 100%" max-height="250">
-        <el-table-column fixed prop="date" label="文件类型" width="150"/>
-        <el-table-column prop="name" label="Name" width="120"/>
-        <el-table-column prop="state" label="使用模板" width="120"/>
-        <el-table-column prop="city" label="City" width="120"/>
-        <el-table-column prop="address" label="Address" width="600"/>
-        <el-table-column prop="zip" label="Zip" width="120"/>
-        <el-table-column fixed="right" label="Operations" width="120">
+        <el-table-column fixed prop="fileTypeName" label="文件类型" width="150"/>
+        <el-table-column prop="templateName" label="模板"/>
+        <el-table-column fixed="right" label="操作">
             <template #default="scope">
                 <el-button
                     link type="primary" @click="openGenFileManager">数据
@@ -28,7 +29,6 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue'
-import dayjs from 'dayjs'
 import TemplateDataSourceManager from "@/views/generator/gen/TemplateDataSourceManager.vue";
 
 let templateDataSourceManagerRef = ref()
@@ -43,36 +43,14 @@ function openGenFileManager() {
 interface TargetGenFile {
     taskId: string,
     templateId: number,
-    templateName: string
+    templateName: string,
+    fileTypeName: string
 }
 
 const now = new Date()
 
 const tableData = ref([
-    {
-        date: '2016-05-01',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-    },
-    {
-        date: '2016-05-02',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-    },
-    {
-        date: '2016-05-03',
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-    },
+
 ])
 
 const deleteRow = (index: number) => {
@@ -81,13 +59,6 @@ const deleteRow = (index: number) => {
 
 const onAddItem = () => {
     now.setDate(now.getDate() + 1)
-    tableData.value.push({
-        date: dayjs(now).format('YYYY-MM-DD'),
-        name: 'Tom',
-        state: 'California',
-        city: 'Los Angeles',
-        address: 'No. 189, Grove St, Los Angeles',
-        zip: 'CA 90036',
-    })
+    tableData.value.push({})
 }
 </script>
