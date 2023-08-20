@@ -1,9 +1,9 @@
 <template>
     <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false"
-               @closed="onClosed">
+               @closed="onClosed" width="80%">
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
                  @keyup.enter="submitHandle()">
-            <el-row>
+            <el-row >
                 <el-col span="12">
                     <el-form-item label="模板名称" prop="templateName">
                         <el-input v-model="dataForm.templateName"></el-input>
@@ -14,13 +14,8 @@
                         <el-radio-group v-model="dataForm.type">
                             <el-radio :label="1">字符串模板</el-radio>
                             <el-radio :label="2">文件模板</el-radio>
-                            <el-upload v-if="dataForm.type === 2"
-                                       :auto-upload="false">
-                                <template #trigger>
-                                    <el-button type="primary">选择模板文件</el-button>
-                                </template>
-                            </el-upload>
                         </el-radio-group>
+                        <file-selector v-if="dataForm.type === 2" accept=".txt,.vm"></file-selector>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -43,6 +38,7 @@ import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
 import {apiAddTemplate, apiUpdateTemplate} from "@/api/template";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import FileSelector from "@/components/FileSelector.vue";
 
 const visible = ref(false)
 const dataFormRef = ref()
