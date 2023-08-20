@@ -1,19 +1,22 @@
 <script setup lang="ts">
 
-import FileSelect from './FileSelect.vue'
 import {ref} from "vue";
+import FileSelector from "@/components/FileSelector.vue";
 
 let file = ref()
+
+let fileSelectorRef = ref()
+
+function click() {
+    let files = fileSelectorRef.value.getFiles();
+    console.log(files)
+}
 
 </script>
 
 <template>
-
-	<file-select ></file-select>
-
-	<el-select filterable>
-
-	</el-select>
+    <file-selector ref="fileSelectorRef"></file-selector>
+    <el-button @click="click">显示</el-button>
 </template>
 
 <style lang="scss">

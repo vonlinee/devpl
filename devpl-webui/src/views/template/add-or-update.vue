@@ -1,33 +1,28 @@
 <template>
 	<el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false"
-	           @closed="onClosed">
+	           @closed="onClosed" width="75%" top="5px" append-to-body>
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
 		         @keyup.enter="submitHandle()">
 			<el-row>
-				<el-col span="12">
+				<el-col :span=12>
 					<el-form-item label="模板名称" prop="templateName">
 						<el-input v-model="dataForm.templateName"></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col span="8">
-					<el-form-item prop="generatorType" style="padding-left: 30px">
-						<el-radio-group v-model="dataForm.type">
-							<el-radio :label="1">字符串模板</el-radio>
-							<el-radio :label="2">文件模板</el-radio>
-
-						</el-radio-group>
-						<el-upload v-if="dataForm.type === 2"
-						           :auto-upload="false">
-							<template #trigger>
-								<el-button type="primary" size="small">选择模板文件</el-button>
-							</template>
-						</el-upload>
+				<el-col :span=12>
+					<el-form-item prop="generatorType" label="模板类型" style="padding-left: 30px">
+						<el-select v-model="dataForm.typeName" @change="templateTypeChange">
+							<el-option label="字符串模板" value="1"></el-option>
+							<el-option label="文件模板" value="2"></el-option>
+						</el-select>
 					</el-form-item>
+					<input ref="inputRef" type="file" style="display: none" @change="onFileListChange($event)"
+					       accept=".txt,.ftl.vm"/>
 				</el-col>
 			</el-row>
 			<el-form-item label="模板内容" prop="content">
 				<div style="height: 400px; width: 100%">
-					<monaco-editor language="plain" :text="dataForm.content"></monaco-editor>
+					<monaco-editor ref="monacoEditorRef" language="plain" :text="dataForm.content"></monaco-editor>
 				</div>
 			</el-form-item>
 		</el-form>
@@ -50,6 +45,43 @@ const dataFormRef = ref()
 
 const emit = defineEmits(['refreshDataList'])
 
+const inputRef = ref()
+const monacoEditorRef = ref()
+
+/**
+ * 模板文件选择
+ * @param event
+ */
+function onFileListChange(event: Event) {
+	const files: File[] = inputRef.value.files
+	if (files && files.length > 0) {
+		let file = files[0];
+		let fileReader = new FileReader();
+		fileReader.readAsText(file, 'UTF-8');
+		// 读取文件，得到文件内容
+		fileReader.onload = function (e: ProgressEvent) {
+			monacoEditorRef.value.setText(fileReader.result)
+		}
+	}
+}
+
+/**
+ * 打开文件选择弹窗
+ */
+async function showFileChooserDialog() {
+	inputRef.value.click()
+}
+
+/**
+ * 模板类型变更，默认字符串模板
+ * @param val
+ */
+function templateTypeChange(val: any) {
+	if (val == 2) {
+		showFileChooserDialog()
+	}
+}
+
 /**
  * 模板信息
  */
@@ -58,7 +90,8 @@ interface TemplateInfo {
 	templateName: String,
 	templatePath: String,
 	content: String,
-	type: Number
+	type: Number,
+	typeName?: String
 }
 
 /**
@@ -69,7 +102,8 @@ const dataForm = reactive<TemplateInfo>({
 	templateName: '',
 	templatePath: '',
 	content: '',
-	type: 1
+	type: 1,
+	typeName: '字符串模板'
 })
 
 /**
@@ -92,11 +126,7 @@ function onClosed() {
 	dataForm.templateId = undefined
 }
 
-let fileUpload = ref()
-// 设置请求头
-const headers = {
-	'Content-Type': 'multipart/form-data'
-}
+const fileUpload = ref()
 
 // 选择文件时被调用，将他赋值给fileUpload
 const handleChange = (file: UploadFile) => {
