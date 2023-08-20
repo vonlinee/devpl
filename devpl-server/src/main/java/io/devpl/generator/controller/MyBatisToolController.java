@@ -191,8 +191,7 @@ public class MyBatisToolController {
      */
     private List<TreeNode<ParamNode>> buildParamNodeTree(List<ParamNode> params) {
         Map<Integer, TreeNode<ParamNode>> parentNodeMap = new HashMap<>();
-        for (int i = 0; i < params.size(); i++) {
-            ParamNode curNode = params.get(i);
+        for (ParamNode curNode : params) {
             // 父节点为null则默认为-1
             if (curNode.isLeaf()) {
                 Integer parentId = curNode.getParentId();

@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import cn.hutool.core.util.StrUtil;
+import io.devpl.codegen.utils.StringUtils;
 import io.devpl.generator.config.DbType;
 
 /**
@@ -20,7 +20,7 @@ public class SQLServerQuery implements AbstractQuery {
         sql.append("left JOIN sys.extended_properties sep on sep.major_id=so.id and sep.minor_id=0 where (xtype='U' or xtype='V') ");
 
         // 表名查询
-        if (StrUtil.isNotBlank(tableName)) {
+        if (StringUtils.isNotBlank(tableName)) {
             sql.append("and cast(so.name as varchar(500)) = '").append(tableName).append("' ");
         }
         sql.append(" order by cast(so.name as varchar(500))");

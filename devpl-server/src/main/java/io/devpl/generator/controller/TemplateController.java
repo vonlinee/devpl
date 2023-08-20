@@ -19,11 +19,23 @@ import java.util.stream.Collectors;
  * 模板管理控制器
  */
 @RestController
-@RequestMapping(value = "/api/template")
+@RequestMapping(value = "/api/codegen/template")
 public class TemplateController {
 
     @Resource
     TemplateService templateService;
+
+    @PostMapping(value = "/save")
+    public Result<Boolean> uploadTemplate(TemplateInfo templateInfo) {
+        Assert.notNull(templateInfo.getType(), "模板类型为空");
+        Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
+        if (templateInfo.isFileTemplate()) {
+            Assert.hasText(templateInfo.getTemplatePath(), "文件路径不能为空");
+        } else {
+            Assert.hasText(templateInfo.getContent(), "模板内容不能为空");
+        }
+        return Result.ok(templateService.save(templateInfo));
+    }
 
     /**
      * 新增模板

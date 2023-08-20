@@ -1,10 +1,10 @@
 package io.devpl.generator.domain.param;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Getter
 @Setter
-public class SingleFileUploadParam extends FileUploadParam {
+public class SingleFileUploadParam extends SliceUploadParam {
 
     /**
      * 当"folder/filename"指向的文件存在时，是否覆盖文件，默认false
@@ -24,18 +24,6 @@ public class SingleFileUploadParam extends FileUploadParam {
      */
     @NotBlank(message = "文件名不能为空")
     private String filename;
-
-    /**
-     * 文件总块数，文件不分块时为1
-     */
-    @Min(value = 1, message = "文件总块数不能小于1")
-    private int chunks;
-
-    /**
-     * 当前块数，从0开始
-     */
-    @Min(value = 0, message = "当前块数不能小于0")
-    private int chunk;
 
     /**
      * 文件

@@ -1,8 +1,6 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.page.PageResult;
@@ -12,17 +10,25 @@ import io.devpl.generator.dao.ProjectModifyDao;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
 import io.devpl.generator.utils.Arrays;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 项目名变更
  */
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, ProjectModify> implements ProjectModifyService {
@@ -59,14 +65,14 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
         // 拷贝项目到新路径，并替换路径和文件名
         copyDirectory(srcRoot, destRoot, exclusions, replaceMap);
         // 需要替换的文件后缀
-        List<String> suffixList = StrUtil.split(project.getModifySuffix(), SPLIT);
         // 替换文件内容数据
-        contentFormat(destRoot, suffixList, replaceMap);
+        contentFormat(destRoot, List.of(project.getModifySuffix().split(SPLIT)), replaceMap);
         // 生成zip文件
         File zipFile = ZipUtil.zip(destRoot);
-        byte[] data = FileUtil.readBytes(zipFile);
+
+        byte[] data = FileUtils.readFileToByteArray(zipFile);
         // 清空文件
-        FileUtil.clean(destRoot.getParentFile().getParentFile());
+        FileUtils.deleteDirectory(destRoot.getParentFile().getParentFile());
         return data;
     }
 
@@ -140,7 +146,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
             if (srcFile.isDirectory()) {
                 copyDirectory(srcFile, destFile, exclusions, replaceMap);
             } else {
-                FileUtil.copyFile(srcFile, destFile);
+                FileUtils.copyFile(srcFile, destFile);
             }
         }
     }
@@ -152,14 +158,16 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, 
      * @param replaceMap 替换规则
      */
     public static void contentFormat(File rootFile, List<String> suffixList, Map<String, String> replaceMap) {
-        List<File> destList = FileUtil.loopFiles(rootFile, file -> suffixList.contains(FileNameUtil.getSuffix(file)));
+        List<File> destList = FileUtils.findFiles(rootFile, file -> suffixList.contains(FileNameUtil.getSuffix(file)));
         for (File dest : destList) {
-            List<String> lines = FileUtil.readUtf8Lines(dest);
-            List<String> newList = new ArrayList<>();
-            for (String line : lines) {
-                newList.add(replaceData(line, replaceMap));
+            try {
+                List<String> lines = FileUtils.readLines(dest, StandardCharsets.UTF_8);
+                List<String> newList = lines.stream().map(line -> replaceData(line, replaceMap))
+                        .collect(Collectors.toList());
+                FileUtils.writeLines(dest, newList);
+            } catch (IOException e) {
+                log.error("内容格式化失败", e);
             }
-            FileUtil.writeUtf8Lines(newList, dest);
         }
     }
 

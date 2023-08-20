@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import cn.hutool.core.util.StrUtil;
+import io.devpl.codegen.utils.StringUtils;
 import io.devpl.generator.config.DbType;
 
 /**
@@ -19,7 +19,7 @@ public class DmQuery implements AbstractQuery {
         sql.append("SELECT T.* FROM (SELECT DISTINCT T1.TABLE_NAME AS TABLE_NAME,T2.COMMENTS AS TABLE_COMMENT FROM USER_TAB_COLUMNS T1 ");
         sql.append("INNER JOIN USER_TAB_COMMENTS T2 ON T1.TABLE_NAME = T2.TABLE_NAME) T WHERE 1=1 ");
         // 表名查询
-        if (StrUtil.isNotBlank(tableName)) {
+        if (StringUtils.isNotBlank(tableName)) {
             sql.append("and T.TABLE_NAME = '").append(tableName).append("' ");
         }
         sql.append("order by T.TABLE_NAME asc");

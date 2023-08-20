@@ -3,10 +3,10 @@
 
     </el-select>
 
-    <el-table :data="tableData" style="width: 100%">
-        <el-table-column fixed prop="fileTypeName" label="文件类型名称" align="center" width="200"/>
-        <el-table-column prop="templateName" label="模板" align="center"/>
-        <el-table-column fixed="right" label="操作" align="center">
+    <el-table :data="tableData" style="width: 100%" max-height="250">
+        <el-table-column fixed prop="fileTypeName" label="文件类型" width="150"/>
+        <el-table-column prop="templateName" label="模板"/>
+        <el-table-column fixed="right" label="操作">
             <template #default="scope">
                 <el-button
                     link type="primary" @click="openGenFileManager">数据
@@ -28,7 +28,6 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue'
-import dayjs from 'dayjs'
 import TemplateDataSourceManager from "@/views/generator/gen/TemplateDataSourceManager.vue";
 
 let templateDataSourceManagerRef = ref()
@@ -49,7 +48,9 @@ interface TargetGenFile {
 
 const now = new Date()
 
-const tableData = ref<TargetGenFile[]>([])
+const tableData = ref([
+
+])
 
 const deleteRow = (index: number) => {
     tableData.value.splice(index, 1)
@@ -57,12 +58,6 @@ const deleteRow = (index: number) => {
 
 const onAddItem = () => {
     now.setDate(now.getDate() + 1)
-    tableData.value.push({
-        templateId: 1,
-        templateName: "模板名称",
-        fileTypeName: "文件类型名称",
-        taskId: ""
-
-    })
+    tableData.value.push({})
 }
 </script>

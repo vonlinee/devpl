@@ -47,10 +47,10 @@ export default defineComponent({
         }
 
         const options = ref<FileItem[]>([])
-        const selectedFiles = ref<File[]>()
+        const selectedFiles = ref<File[]>([])
         const selectedFileItem = ref(' ')
 
-        defineExpose({
+        context.expose({
             getFiles() {
                 return selectedFiles.value
             }
@@ -63,6 +63,7 @@ export default defineComponent({
             const files: File[] = inputRef.value.files
             if (files && files.length > 0) {
                 for (let file of files) {
+                    // TODO 文件去重
                     selectedFiles.value?.push(file)
                     // 在Web浏览器中，由于安全原因，在本地文件系统中获取文件的真实路径是不可行的。浏览器只会提供临时的虚拟路径，这是出于安全考虑的一种方式。
                     const newFileItem = {

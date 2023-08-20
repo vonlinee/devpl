@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import cn.hutool.core.util.StrUtil;
+import io.devpl.codegen.utils.StringUtils;
 import io.devpl.generator.config.DbType;
 
 /**
@@ -19,7 +19,7 @@ public class PostgreSqlQuery implements AbstractQuery {
         sql.append("select t1.tablename, obj_description(relfilenode, 'pg_class') as comments from pg_tables t1, pg_class t2 ");
         sql.append("where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname ");
         // 表名查询
-        if (StrUtil.isNotBlank(tableName)) {
+        if (StringUtils.isNotBlank(tableName)) {
             sql.append("and t1.tablename = '").append(tableName).append("' ");
         }
 

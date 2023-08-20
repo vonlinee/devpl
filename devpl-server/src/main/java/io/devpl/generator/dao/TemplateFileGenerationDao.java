@@ -1,7 +1,7 @@
 package io.devpl.generator.dao;
 
 import io.devpl.generator.common.dao.BaseDao;
-import io.devpl.generator.entity.TemplateFileGeneration;
+import io.devpl.generator.entity.TargetGenFile;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
  * @since 1.0.0 2023-07-14
  */
 @Mapper
-public interface TemplateFileGenerationDao extends BaseDao<TemplateFileGeneration> {
+public interface TemplateFileGenerationDao extends BaseDao<TargetGenFile> {
 
     /**
      * 查询可选择的生成文件
      * @return 生成文件列表
      */
-    List<TemplateFileGeneration> selectGeneratedFileTypes();
+    List<TargetGenFile> selectGeneratedFileTypes();
 }
