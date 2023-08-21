@@ -5,7 +5,7 @@ import java.sql.SQLType;
 /**
  * Type Adapter
  * <p>
- * https://blog.csdn.net/qq_44868502/article/details/104846191
+ * <a href="https://blog.csdn.net/qq_44868502/article/details/104846191">...</a>
  * https://blog.csdn.net/wei198621/article/details/113681660
  * </p>
  * SQLType（由各个厂商实现） <-> JDBCType（JDBC实现） <-> Standard Java Type (Java定义) <-> 自己的类型

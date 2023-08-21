@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 /**
  * 分片上传参数
  */
-public class SliceUploadParam {
+public class SliceUploadParam extends FileUploadParam {
 
     /**
      * 文件总块数，文件不分块时为1

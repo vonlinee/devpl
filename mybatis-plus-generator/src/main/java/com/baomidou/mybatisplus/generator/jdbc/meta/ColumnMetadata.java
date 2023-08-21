@@ -1,5 +1,6 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -8,6 +9,7 @@ import java.io.Serializable;
  */
 public class ColumnMetadata implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 7229302382943046967L;
 
     /**

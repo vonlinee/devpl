@@ -15,8 +15,6 @@ import java.nio.charset.StandardCharsets;
 @SpringBootApplication
 public class DevplMain8088 {
 
-    static final Logger log = LoggerFactory.getLogger(DevplMain8088.class);
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplicationBuilder()
             .bannerMode(Banner.Mode.OFF)
@@ -26,7 +24,7 @@ public class DevplMain8088 {
         app.run(args);
 
         final String frontEndRootDir = new File("").getAbsolutePath() + "\\devpl-webui";
-        String cmd = "cd " + frontEndRootDir + " && npm run dev";
-        log.info("run the frontend => {}", cmd);
+        System.out.println("cd " + frontEndRootDir + " && npm run dev");
+        System.out.println("cd " + frontEndRootDir + " ; npm run dev");
     }
 }

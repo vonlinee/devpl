@@ -8,6 +8,4 @@ import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 public class TemplateBasedGenerator {
 
     AbstractTemplateEngine templateEngine;
-
-
 }

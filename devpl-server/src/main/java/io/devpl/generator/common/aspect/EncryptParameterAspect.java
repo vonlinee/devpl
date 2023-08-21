@@ -13,9 +13,10 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 处理参数加密解密切面
@@ -54,13 +55,9 @@ public class EncryptParameterAspect {
      * 获取方法的请求参数
      */
     private List<Object> getMethodArgs(ProceedingJoinPoint proceedingJoinPoint) {
-        List<Object> methodArgs = new ArrayList<>();
-        for (Object arg : proceedingJoinPoint.getArgs()) {
-            if (Objects.nonNull(arg)) {
-                methodArgs.add(arg);
-            }
-        }
-        return methodArgs;
+        return Arrays.stream(proceedingJoinPoint.getArgs())
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -75,9 +72,7 @@ public class EncryptParameterAspect {
         Object data = ((Result<?>) object).getData();
         if (data instanceof List || data instanceof PageResult) {
             List<?> itemList = data instanceof List ? (List<?>) data : ((PageResult<?>) data).getList();
-            itemList.forEach(f ->
-                handleItem(f, false)
-            );
+            itemList.forEach(f -> handleItem(f, false));
         } else {
             handleItem(data, false);
         }
@@ -90,8 +85,7 @@ public class EncryptParameterAspect {
      */
     private void handleItem(Object item, boolean isDecrypt) {
         // 只处理在entity包下面的对象
-        if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName()
-            .startsWith(entityPackageName)) {
+        if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName().startsWith(entityPackageName)) {
             return;
         }
         // 遍历所有字段

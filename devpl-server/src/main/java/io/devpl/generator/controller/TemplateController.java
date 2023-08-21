@@ -25,7 +25,12 @@ public class TemplateController {
     @Resource
     TemplateService templateService;
 
-    @PostMapping(value = "/save")
+    /**
+     * 模板上传
+     * @param templateInfo 模板信息
+     * @return
+     */
+    @PostMapping(value = "/upload")
     public Result<Boolean> uploadTemplate(TemplateInfo templateInfo) {
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");

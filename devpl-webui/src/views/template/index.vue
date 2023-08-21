@@ -68,8 +68,8 @@ import {IHooksOptions} from '@/hooks/interface'
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 const state: IHooksOptions = reactive({
-    dataListUrl: '/api/template/page',
-    deleteUrl: '/api/template/delete/batch/ids',
+    dataListUrl: '/api/codegen/template/page',
+    deleteUrl: '/api/codegen/template/delete/batch/ids',
     queryForm: {
         projectName: ''
     },
