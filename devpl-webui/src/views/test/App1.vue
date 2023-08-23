@@ -124,10 +124,6 @@ export default defineComponent({
             console.log('dialog is max:', is_max)
         }
 
-
-
-
-
         return {
             setText,
             showDlg,

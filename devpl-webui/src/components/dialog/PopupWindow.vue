@@ -10,7 +10,7 @@
             <div v-html="title" class="popup-window__title"></div>
         </template>
         <!-- 内容区域 -->
-        <div style="overflow-y: auto; height: 600px">
+        <div :style="contentAreastyle">
             <slot name="content"></slot>
         </div>
         <!-- 底部操作栏 -->
@@ -31,6 +31,15 @@ export default defineComponent({
         title: {
             type: String,
             default: '',
+        },
+        // 内容区域样式
+        contentAreastyle: {
+            type: Object,
+            required: false,
+            default: {
+                overflowY: 'auto',
+                height: '600px'
+            }
         },
         // 是否全屏显示
         max_screen: {

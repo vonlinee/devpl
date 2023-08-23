@@ -3,6 +3,7 @@
 
 import {ref} from "vue";
 import FileSelector from "@/components/FileSelector.vue";
+import App1 from "@/views/test/App1.vue";
 
 let file = ref()
 
@@ -16,6 +17,8 @@ function click() {
 </script>
 
 <template>
+
+    <app1></app1>
 
     <file-selector ref="fileSelectorRef"></file-selector>
     <el-button @click="click">显示</el-button>
