@@ -14,7 +14,7 @@
                 <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
             </el-form-item>
         </el-form>
-        <el-table v-loading="state.dataListLoading" :data="state.dataList" border
+        <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
                   @selection-change="selectionChangeHandle">
             <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
             <el-table-column prop="templateId" label="模板ID" header-align="center" align="center"
@@ -32,7 +32,7 @@
             <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
                 <template #default="scope">
                     <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>
-                    <el-button type="primary" link @click="addOrUpdateHandle(scope.row.templateId)">修改</el-button>
+                    <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">修改</el-button>
                     <el-button type="primary" link @click="deleteBatchHandle(scope.row.templateId)">删除</el-button>
                 </template>
             </el-table-column>
@@ -80,21 +80,26 @@ const state: IHooksOptions = reactive({
 const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)
 
 const addOrUpdateRef = ref()
-const addOrUpdateHandle = (id?: number) => {
-    addOrUpdateRef.value.init(id)
+const addOrUpdateHandle = (row?: any) => {
+    addOrUpdateRef.value.init(row)
 }
 
 const templateDialogShowing = ref(false)
 const templateContentEditorRef = ref()
 
+/**
+ * 展示模板内容弹窗
+ * @param templateInfo
+ */
 function showTemplateEditDialog(templateInfo: any) {
     templateDialogShowing.value = true
+    let content = templateInfo.content;
     if (templateInfo.type == 1) {
         // 获取文件内容
     } else {
         // 字符串模板
-        nextTick(() => templateContentEditorRef.value.setText(templateInfo.content))
     }
+    nextTick(() => templateContentEditorRef.value.setText(content))
 }
 
 onMounted(() => getDataList())

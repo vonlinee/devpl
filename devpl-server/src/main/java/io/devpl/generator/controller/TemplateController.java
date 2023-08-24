@@ -44,6 +44,7 @@ public class TemplateController {
 
     /**
      * 新增模板
+     * 模板内容以字符串进行传输
      * @param templateInfo 模板信息
      * @return 是否成功
      */
@@ -51,11 +52,6 @@ public class TemplateController {
     public Result<Boolean> addOne(@RequestBody TemplateInfo templateInfo) {
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
-        if (templateInfo.isFileTemplate()) {
-            Assert.hasText(templateInfo.getTemplatePath(), "文件路径不能为空");
-        } else {
-            Assert.hasText(templateInfo.getContent(), "模板内容不能为空");
-        }
         return Result.ok(templateService.save(templateInfo));
     }
 
@@ -69,11 +65,6 @@ public class TemplateController {
         Assert.notNull(templateInfo.getTemplateId(), "模板ID为空");
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
-        if (templateInfo.getType() == 1) {
-            Assert.hasText(templateInfo.getTemplatePath(), "文件路径不能为空");
-        } else {
-            Assert.hasText(templateInfo.getContent(), "模板内容不能为空");
-        }
         return Result.ok(templateService.updateById(templateInfo));
     }
 

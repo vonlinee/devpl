@@ -1,8 +1,11 @@
 package io.devpl.generator.common;
 
+import lombok.Data;
+
 /**
  * 分页查询参数父类
  */
+@Data
 public class PageQuery {
 
     /**

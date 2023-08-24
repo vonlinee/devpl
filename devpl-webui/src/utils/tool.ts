@@ -66,14 +66,18 @@ export const hasText = (content: any): boolean => {
  * 文本是否全由空格组成，至少包含1个字符
  * @param content
  */
-export const isBlank = (content: string): boolean => {
-    if (content.length == 0) {
-        return true
-    }
-    for (let i: number = 0; i < content.length; i++) {
-        if (content[i] !== ' ') {
-            return false;
+export const isBlank = (content: string | undefined | any): boolean => {
+    if (typeof content === 'string') {
+        if (content.length == 0) {
+            return true
         }
+        for (let i: number = 0; i < content.length; i++) {
+            if (content[i] !== ' ') {
+                return false;
+            }
+        }
+    } else if (typeof content === 'object') {
+        return content === null || content == undefined
     }
     return true
 }

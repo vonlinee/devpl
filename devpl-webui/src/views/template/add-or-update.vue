@@ -1,6 +1,6 @@
 <template>
     <el-dialog v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :close-on-click-modal="false"
-               @closed="onClosed" width="75%" top="5px" append-to-body>
+               @closed="onClosed" width="75%" append-to-body>
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
                  @keyup.enter="submitHandle()">
             <el-row>
@@ -9,8 +9,8 @@
                         <el-input v-model="dataForm.templateName"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span=12>
-                    <el-form-item prop="generatorType" label="模板类型" style="padding-left: 30px">
+                <el-col :span=6>
+                    <el-form-item prop="typeName" label="模板类型" style="padding-left: 30px">
                         <el-select v-model="dataForm.typeName" @change="templateTypeChange">
                             <el-option label="字符串模板" value="1"></el-option>
                             <el-option label="文件模板" value="2"></el-option>
@@ -18,6 +18,14 @@
                     </el-form-item>
                     <input ref="inputRef" type="file" style="display: none" @change="onFileListChange($event)"
                            accept=".txt,.ftl.vm"/>
+                </el-col>
+                <el-col :span=6>
+                    <el-form-item prop="provider" label="技术类型" style="padding-left: 30px">
+                        <el-select v-model="dataForm.provider">
+                            <el-option label="Velocity" value="Velocity"></el-option>
+                            <el-option label="FreeMarker" value="FreeMarker"></el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-col>
             </el-row>
             <el-form-item label="模板内容" prop="content">
@@ -39,6 +47,7 @@ import {ElButton, ElDialog, ElMessage, UploadFile} from 'element-plus/es'
 import {apiUploadSingleFile} from "@/api/fileupload";
 import {apiAddTemplate, apiUpdateTemplate} from "@/api/template";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import {isBlank} from "@/utils/tool";
 
 const visible = ref(false)
 const dataFormRef = ref()
@@ -48,12 +57,23 @@ const emit = defineEmits(['refreshDataList'])
 const inputRef = ref()
 const monacoEditorRef = ref()
 
-
 /**
  * 打开文件选择弹窗
  */
-async function showFileChooserDialog() {
-    inputRef.value.click()
+async function showFileChooserDialog(v: boolean) {
+    if (v) {
+        inputRef.value.click()
+    }
+}
+
+function assignTemplateTypeName(val: Number): string {
+    if (val == 1) {
+        return '字符串模板'
+    }
+    if (val == 2) {
+        return '文件模板'
+    }
+    return ''
 }
 
 /**
@@ -61,9 +81,8 @@ async function showFileChooserDialog() {
  * @param val
  */
 function templateTypeChange(val: any) {
-    if (val == 2) {
-        showFileChooserDialog()
-    }
+    dataForm.typeName = assignTemplateTypeName(val)
+    showFileChooserDialog(val == 2)
 }
 
 /**
@@ -74,8 +93,9 @@ interface TemplateInfo {
     templateName: String,
     templatePath: String,
     content: String,
-    type: Number,
-    typeName?: String
+    type: Number,  // 模板类型，1-字符串模板 2-文件模板
+    typeName?: String,
+    provider: string
 }
 
 /**
@@ -87,7 +107,8 @@ const dataForm = reactive<TemplateInfo>({
     templatePath: '',
     content: '',
     type: 1,
-    typeName: '字符串模板'
+    typeName: '字符串模板',
+    provider: "vm"
 })
 
 /**
@@ -110,12 +131,18 @@ function onFileListChange(event: Event) {
 
 /**
  * 初始化函数
- * @param id 行ID
+ * @param row
  */
-const init = (id?: number) => {
+const init = (row: TemplateInfo) => {
     visible.value = true
-    if (id) {
-        dataForm.templateId = id
+    if (row.templateId) {
+        dataForm.templateId = row.templateId
+        dataForm.content = row.content
+        dataForm.type = row.type
+        dataForm.typeName = assignTemplateTypeName(row.type)
+        dataForm.templatePath = row.templatePath
+        dataForm.templateName = row.templateName
+        monacoEditorRef.value.setText(row.content)
     } else {
         // 重置表单数据
         if (dataFormRef.value) {
@@ -164,8 +191,11 @@ const submitHandle = () => {
         if (!valid) {
             return false
         }
-
+        if (isBlank(dataForm.content)) {
+            dataForm.content = monacoEditorRef.value.getText()
+        }
         if (dataForm.templateId) {
+            // 编辑
             apiUpdateTemplate(toRaw(dataForm)).then((res) => {
                 // @ts-ignore
                 if (res.code === 200) {
@@ -180,6 +210,7 @@ const submitHandle = () => {
                 }
             })
         } else {
+            // 新增模板
             apiAddTemplate(toRaw(dataForm)).then((res) => {
                 // @ts-ignore
                 if (res.code === 200) {
