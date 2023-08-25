@@ -5,7 +5,7 @@ import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
-import io.devpl.generator.service.TemplateFileGenerationService;
+import io.devpl.generator.service.TargetGenFileService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CodeGenerationController {
     private final CodeGenService codeGenService;
-    private final TemplateFileGenerationService templateFileGenerationService;
+    private final TargetGenFileService templateFileGenerationService;
     private final GeneratorConfigService generatorConfigService;
 
     /**

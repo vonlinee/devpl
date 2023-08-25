@@ -10,7 +10,7 @@ import java.util.List;
  * @author xxx xxx
  * @since 1.0.0 2023-07-14
  */
-public interface TemplateFileGenerationService extends BaseService<TargetGenFile> {
+public interface TargetGenFileService extends BaseService<TargetGenFile> {
 
     List<TargetGenFile> listGeneratedFileTypes();
 }

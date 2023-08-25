@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.generator.dao.TemplateFileGenerationDao">
+<mapper namespace="io.devpl.generator.dao.TargetGenFileDao">
 
     <resultMap type="io.devpl.generator.entity.TargetGenFile" id="templateFileGenerationMap">
         <result property="pid" column="pid"/>
@@ -10,7 +10,7 @@
     </resultMap>
 
     <select id="selectGeneratedFileTypes" resultType="io.devpl.generator.entity.TargetGenFile">
-        SELECT tfg.*, ti.template_name FROM template_file_generation tfg
+        SELECT tfg.*, ti.template_name FROM target_gen_file tfg
             LEFT JOIN template_info ti on tfg.template_id = ti.template_id
     </select>
 
