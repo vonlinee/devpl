@@ -3,7 +3,7 @@ package com.baomidou.mybatisplus.generator.type;
 /**
  * JSON数据类型枚举
  */
-public enum JsonDataTypeImpl implements JsonDataType {
+public enum StandardJsonDataType implements JsonDataType {
     ARRAY,
     OBJECT,
     STRING,

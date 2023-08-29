@@ -6,6 +6,8 @@ import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,6 +20,8 @@ import java.util.Map;
  * @since 2018-12-16
  */
 public class BeetlTemplateEngine extends AbstractTemplateEngine {
+
+    static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
 
     private static Method method;
 
@@ -42,7 +46,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             Configuration cfg = Configuration.defaultConfiguration();
             groupTemplate = new GroupTemplate(new ClasspathResourceLoader("/"), cfg);
         } catch (IOException e) {
-            LOGGER.error("初始化模板引擎失败:", e);
+            log.error("初始化模板引擎失败:", e);
             throw new RuntimeException(e);
         }
         return this;
@@ -58,5 +62,10 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {
         return filePath + ".btl";
+    }
+
+    @Override
+    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
+
     }
 }

@@ -16,7 +16,6 @@
 package com.baomidou.mybatisplus.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -24,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -37,21 +37,24 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     @Override
     public @NotNull FreemarkerTemplateEngine init(@NotNull Context configBuilder) {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-        configuration.setDefaultEncoding(ConstVal.UTF8);
+        configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
         configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, StringPool.SLASH);
         return this;
     }
 
-
     @Override
     public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull OutputStream outputStream) throws Exception {
         Template template = configuration.getTemplate(templatePath);
-        template.process(objectMap, new OutputStreamWriter(outputStream, ConstVal.UTF8));
+        template.process(objectMap, new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
     }
-
 
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {
         return filePath + ".ftl";
+    }
+
+    @Override
+    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
+
     }
 }

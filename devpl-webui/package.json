@@ -24,6 +24,7 @@
     "crypto-js": "^4.1.1",
     "element-plus": "2.3.4",
     "file-type": "^18.5.0",
+    "json5": "^2.2.3",
     "monaco-editor": "^0.34.0",
     "qs": "6.10.3",
     "sortablejs": "^1.15.0",

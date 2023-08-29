@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 
 /**
@@ -13,15 +15,13 @@ import java.util.Map;
  * @author hubin
  * @since 2018-01-10
  */
-public abstract class AbstractTemplateEngine {
-
-    protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+public abstract class AbstractTemplateEngine implements TemplateEngine {
 
     /**
      * 模板引擎初始化
      */
     @NotNull
-    public abstract AbstractTemplateEngine init(@NotNull Context configBuilder);
+    public abstract AbstractTemplateEngine init(@NotNull Context context);
 
     /**
      * 将模板转化成为文件
@@ -40,4 +40,9 @@ public abstract class AbstractTemplateEngine {
      */
     @NotNull
     public abstract String templateFilePath(@NotNull String filePath);
+
+    @Override
+    public String render(TemplateSource template, TemplateArguments arguments) {
+        return null;
+    }
 }

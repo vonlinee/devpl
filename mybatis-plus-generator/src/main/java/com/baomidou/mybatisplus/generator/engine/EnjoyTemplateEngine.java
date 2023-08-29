@@ -1,6 +1,5 @@
 package com.baomidou.mybatisplus.generator.engine;
 
-import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
 import com.jfinal.template.Engine;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -28,7 +28,7 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     @Override
     public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull OutputStream outputStream) throws Exception {
         String str = engine.getTemplate(templatePath).renderToString(objectMap);
-        try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, ConstVal.UTF8);
+        try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
              BufferedWriter writer = new BufferedWriter(ow)) {
             writer.append(str);
         }
@@ -38,6 +38,11 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     public @NotNull String templateFilePath(@NotNull String filePath) {
         final String dotVm = ".ej";
         return filePath.endsWith(dotVm) ? filePath : filePath + dotVm;
+    }
+
+    @Override
+    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
+
     }
 }
 

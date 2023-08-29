@@ -20,8 +20,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.IFill;
-import com.baomidou.mybatisplus.generator.ITemplate;
+import com.baomidou.mybatisplus.generator.fill.FieldFillStrategy;
+import com.baomidou.mybatisplus.generator.engine.TemplateSource;
 import com.baomidou.mybatisplus.generator.config.DefaultNameConvert;
 import com.baomidou.mybatisplus.generator.config.NameConverter;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
-public class Entity implements ITemplate {
+public class Entity implements TableInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     /**
@@ -58,7 +58,7 @@ public class Entity implements ITemplate {
     /**
      * 表填充字段
      */
-    private final List<IFill> tableFillList = new ArrayList<>();
+    private final List<FieldFillStrategy> tableFillList = new ArrayList<>();
     /**
      * 名称转换
      */
@@ -268,7 +268,7 @@ public class Entity implements ITemplate {
     }
 
     @NotNull
-    public List<IFill> getTableFillList() {
+    public List<FieldFillStrategy> getTableFillList() {
         return tableFillList;
     }
 
@@ -517,7 +517,7 @@ public class Entity implements ITemplate {
          * @return this
          * @since 3.5.0
          */
-        public Builder addTableFills(@NotNull IFill... tableFills) {
+        public Builder addTableFills(@NotNull FieldFillStrategy... tableFills) {
             return addTableFills(Arrays.asList(tableFills));
         }
 
@@ -527,7 +527,7 @@ public class Entity implements ITemplate {
          * @return this
          * @since 3.5.0
          */
-        public Builder addTableFills(@NotNull List<IFill> tableFillList) {
+        public Builder addTableFills(@NotNull List<FieldFillStrategy> tableFillList) {
             this.entity.tableFillList.addAll(tableFillList);
             return this;
         }

@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
+import {createRouter, createWebHashHistory, Router, RouteRecordRaw} from 'vue-router'
 
 // 菜单路由
 export const menuRoutes: RouteRecordRaw[] = [
@@ -99,6 +99,15 @@ export const menuRoutes: RouteRecordRaw[] = [
         },
         component: () => import('@/views/template/index.vue'),
         children: []
+    },
+    {
+        path: '/fields',
+        meta: {
+            title: '字段管理',
+            icon: 'icon-appstore'
+        },
+        component: () => import('@/views/fields/index.vue'),
+        children: []
     }
 ]
 
@@ -129,7 +138,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     }
 ]
 
-export const router = createRouter({
+export const router: Router = createRouter({
     history: createWebHashHistory(),
     routes: constantRoutes
 })

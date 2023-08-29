@@ -50,6 +50,10 @@ public class AutoGenerator {
      * 注入配置
      */
     protected InjectionConfig injectionConfig;
+
+    /**
+     * 模板引擎
+     */
     AbstractTemplateEngine templateEngine;
     /**
      * 数据源配置
@@ -460,12 +464,16 @@ public class AutoGenerator {
      */
     public Map<String, Object> getObjectMap(Context context, IntrospectedTable tableInfo) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
+        // Controller
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
         Map<String, Object> objectMap = new HashMap<>(controllerData);
+        // Mapper
         Map<String, Object> mapperData = strategyConfig.mapper().renderData(tableInfo);
         objectMap.putAll(mapperData);
+        // Service
         Map<String, Object> serviceData = strategyConfig.service().renderData(tableInfo);
         objectMap.putAll(serviceData);
+        // Entity
         Map<String, Object> entityData = strategyConfig.entity().renderData(tableInfo);
         objectMap.putAll(entityData);
         objectMap.put("context", context);

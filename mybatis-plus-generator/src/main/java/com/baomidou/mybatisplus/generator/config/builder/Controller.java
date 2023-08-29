@@ -15,13 +15,13 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.ITemplate;
+import com.baomidou.mybatisplus.generator.engine.TemplateSource;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.function.ConverterFileName;
 import com.baomidou.mybatisplus.generator.util.ClassUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
-public class Controller implements ITemplate {
+public class Controller implements TableInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Controller.class);
     /**

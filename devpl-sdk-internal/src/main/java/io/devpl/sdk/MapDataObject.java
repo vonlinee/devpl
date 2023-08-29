@@ -138,7 +138,7 @@ final class MapDataObject implements DataObject {
     }
 
     @Override
-    public void remove(String... keys) {
+    public void removeKeys(String... keys) {
         data.removeAll(Arrays.asList(keys));
     }
 

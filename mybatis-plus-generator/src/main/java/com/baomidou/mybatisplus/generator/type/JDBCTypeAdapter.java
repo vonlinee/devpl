@@ -93,15 +93,13 @@ public class JDBCTypeAdapter implements TypeAdapter {
     @Override
     public SQLType from(JavaType javaType) {
         CommonJavaType standardJavaType = (CommonJavaType) javaType;
-
         String qualifierName = standardJavaType.getQualifier();
-
         try {
             Class<?> clazz = Class.forName(qualifierName);
             int jdbcType = javaTypeToSqlParameterType(clazz);
             return JDBCType.valueOf(jdbcType);
         } catch (Exception exception) {
-            exception.printStackTrace();
+
         }
         return JDBCType.VARCHAR;
     }

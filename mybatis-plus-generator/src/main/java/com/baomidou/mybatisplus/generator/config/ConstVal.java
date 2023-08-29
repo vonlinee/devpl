@@ -37,8 +37,6 @@ public interface ConstVal {
     String PARENT = "Parent";
 
     String JAVA_TMPDIR = "java.io.tmpdir";
-    String UTF8 = StandardCharsets.UTF_8.name();
-    String UNDERLINE = "_";
 
     String JAVA_SUFFIX = StringPool.DOT_JAVA;
     String KT_SUFFIX = ".kt";
@@ -79,8 +77,6 @@ public interface ConstVal {
      */
     String TEMPLATE_SERVICE_IMPL = "/templates/serviceImpl.java";
 
-    String VM_LOAD_PATH_KEY = "file.resource.loader.class";
-    String VM_LOAD_PATH_VALUE = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
 
     String SUPER_MAPPER_CLASS = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
     String SUPER_SERVICE_CLASS = "com.baomidou.mybatisplus.extension.service.IService";

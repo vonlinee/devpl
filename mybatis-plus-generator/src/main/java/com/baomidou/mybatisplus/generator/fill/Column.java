@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator.fill;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.generator.IFill;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @author nieqiurong
  * @since 3.5.0 2020/12/1.
  */
-public class Column implements IFill {
+public class Column implements FieldFillStrategy {
 
     private final String columnName;
 

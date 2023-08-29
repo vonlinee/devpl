@@ -67,7 +67,7 @@ public final class StringUtils {
     }
 
     public static boolean isEmpty(CharSequence cs) {
-        return cs == null || cs.length() == 0;
+        return cs == null || cs.isEmpty();
     }
 
     /**
@@ -169,7 +169,7 @@ public final class StringUtils {
         if (hasText(concatStr)) {
             concatStr = "";
         }
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return str;
         }
 
@@ -280,10 +280,8 @@ public final class StringUtils {
      * @return ignore
      */
     public static String prefixToLower(String rawString, int index) {
-        StringBuilder field = new StringBuilder();
-        field.append(rawString.substring(0, index).toLowerCase());
-        field.append(rawString.substring(index));
-        return field.toString();
+        return rawString.substring(0, index).toLowerCase() +
+            rawString.substring(index);
     }
 
     /**
@@ -315,9 +313,8 @@ public final class StringUtils {
         char[] chars = input.toCharArray();
         for (char c : chars) {
             boolean isUpperCaseAndPreviousIsLowerCase = (Character.isLowerCase(previousChar)) && (Character.isUpperCase(c));
-
             boolean previousIsWhitespace = Character.isWhitespace(previousChar);
-            boolean lastOneIsNotUnderscore = (buf.length() > 0) && (buf.charAt(buf.length() - 1) != '_');
+            boolean lastOneIsNotUnderscore = (!buf.isEmpty()) && (buf.charAt(buf.length() - 1) != '_');
             boolean isNotUnderscore = c != '_';
             if (lastOneIsNotUnderscore && (isUpperCaseAndPreviousIsLowerCase || previousIsWhitespace)) {
                 buf.append("_");
@@ -346,7 +343,7 @@ public final class StringUtils {
         char lastChar = 'a';
         for (char c : s.toCharArray()) {
             if ((Character.isWhitespace(lastChar)) && (!Character.isWhitespace(c))
-                && ('-' != c) && (buf.length() > 0)
+                && ('-' != c) && (!buf.isEmpty())
                 && (buf.charAt(buf.length() - 1) != '-')) {
                 buf.append("-");
             }

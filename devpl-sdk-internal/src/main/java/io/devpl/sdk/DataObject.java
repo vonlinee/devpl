@@ -91,11 +91,10 @@ public interface DataObject extends Serializable, Cloneable {
     <V> V remove(String key);
 
     /**
-     * 删除某个名称的值
+     * 删除某些名称的值
      * @param keys 名称
-     * @throws ClassCastException 如果实际的类型和期望的值类型不兼容，会抛出ClassCastException
      */
-    void remove(String... keys);
+    void removeKeys(String... keys);
 
     /**
      * 判断两个DataObject是否相等，只需要比较DataObject所包含的数据，和DataObject本身无关系

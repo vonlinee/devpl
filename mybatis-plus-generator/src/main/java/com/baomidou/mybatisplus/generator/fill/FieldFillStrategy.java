@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator;
+package com.baomidou.mybatisplus.generator.fill;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import org.jetbrains.annotations.NotNull;
@@ -8,12 +8,11 @@ import org.jetbrains.annotations.NotNull;
  * @author nieqiurong
  * @since 3.5.0 2020/11/30.
  */
-public interface IFill {
+public interface FieldFillStrategy {
 
     @NotNull
     String getName();
 
     @NotNull
     FieldFill getFieldFill();
-
 }

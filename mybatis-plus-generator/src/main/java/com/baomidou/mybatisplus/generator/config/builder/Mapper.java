@@ -15,7 +15,6 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
-import com.baomidou.mybatisplus.generator.ITemplate;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
@@ -36,7 +35,7 @@ import java.util.Map;
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
-public class Mapper implements ITemplate {
+public class Mapper implements TableInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Mapper.class);
     /**
