@@ -19,7 +19,7 @@ public class Main {
                 "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
                 "  <table name='user'>\n" +
                 "    <column name='name' type='VARCHAR' size='32' primaryKey='true' description='主键'/>\n" +
-                "    <column name='age' type='INTEGER' primaryKey='true'/>\n" +
+                "    <column name='age' type='INTEGER' primaryKey='false'/>\n" +
                 "    <column name='sex' type='BINARY' size='100' required='true'/>\n" +
                 "    <column name='class_name' type='DOUBLE' required='true' default='-2.0'/>\n" +
                 "    <column name='col' type='CHAR' size='4' default='test'/>\n" +
