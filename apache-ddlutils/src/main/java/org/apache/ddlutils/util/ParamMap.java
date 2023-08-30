@@ -92,6 +92,26 @@ public class ParamMap {
     }
 
     /**
+     * 获取int型属性值
+     * @param key 属性名
+     * @return 属性值
+     */
+    public int getInt(String key, int placeholder) throws ClassCastException {
+        Object val = map.get(key);
+        return val == null ? placeholder : (int) val;
+    }
+
+    /**
+     * 获取Integer型属性值
+     * @param key 属性名
+     * @return 属性值
+     */
+    public Integer getInteger(String key, Integer placeholder) throws ClassCastException {
+        Object val = map.get(key);
+        return val == null ? placeholder : (Integer) val;
+    }
+
+    /**
      * 获取short型属性值
      * @param key 属性名
      * @return 属性值
@@ -107,6 +127,23 @@ public class ParamMap {
      */
     public Boolean getBoolean(String key) throws ClassCastException {
         return (Boolean) map.get(key);
+    }
+
+    /**
+     * 获取boolean型属性值
+     * @param key 属性名
+     * @return 属性值
+     */
+    public Boolean getCompatiableBoolean(String key) throws ClassCastException {
+        Object val = map.get(key);
+        if (val instanceof String) {
+            try {
+                return Boolean.parseBoolean((String) val);
+            } catch (Exception exception) {
+                return null;
+            }
+        }
+        return (Boolean) val;
     }
 
     /**
@@ -196,5 +233,10 @@ public class ParamMap {
             return placeholder;
         }
         return (V) val;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(map);
     }
 }
