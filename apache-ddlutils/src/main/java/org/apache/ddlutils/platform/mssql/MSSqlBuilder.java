@@ -1,10 +1,10 @@
 package org.apache.ddlutils.platform.mssql;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Types;

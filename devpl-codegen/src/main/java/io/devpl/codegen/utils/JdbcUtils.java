@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class JdbcUtils {
 
-    private static final Log logger = LogFactory.getLog(JdbcUtils.class);
+    private static final Log logger = LoggerFactory.getLogger(JdbcUtils.class);
     private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
 
     /**

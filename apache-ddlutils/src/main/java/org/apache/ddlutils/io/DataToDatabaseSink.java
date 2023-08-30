@@ -20,8 +20,8 @@ package org.apache.ddlutils.io;
  */
 
 import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
@@ -44,7 +44,7 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * Our log.
      */
-    private final Log _log = LogFactory.getLog(DataToDatabaseSink.class);
+    private final Logger _log = LoggerFactory.getLogger(DataToDatabaseSink.class);
 
     /**
      * Generates the sql and writes it to the database.

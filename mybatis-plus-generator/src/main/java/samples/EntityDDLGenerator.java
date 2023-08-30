@@ -17,13 +17,12 @@ public class EntityDDLGenerator {
 
         String path = root + Bean.class.getName().replace(".", "/") + ".java";
 
-
         JavaParserUtils.parse(new File(path), new ASTFieldParser()).ifPresent(fieldInfos -> {
             DdlBuilder builder = new DdlBuilder();
             builder.create().tableName("Table");
             for (MetaField field : fieldInfos) {
                 builder.addField(field.getIdentifier(), field.getDataType())
-                    .addComment(StringUtils.trimWrapCharacters(field.getDescription())).addComma();
+                    .addComment(StringUtils.trimWrapCharacters(field.getDescription())).addComma().wrap();
             }
             String result = builder.end();
             System.out.println(result);

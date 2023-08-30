@@ -1,17 +1,42 @@
 package org.apache.ddlutils.model;
 
-import org.apache.commons.lang.enums.ValuedEnum;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents the different cascade actions for the <code>onDelete</code> and
  * <code>onUpdate</code> properties of {@link ForeignKey}.
  * @version $Revision: $
  */
-public class CascadeActionEnum extends ValuedEnum {
+public enum CascadeActionEnum {
+
+    /**
+     * The enum value for a cascade action which directs the database to apply the change to
+     * the referenced table also to this table. E.g. if the referenced row is deleted, then
+     * the local one will also be deleted when this value is used for the onDelete action.
+     */
+    CASCADE("cascade", 1),
+    /**
+     * The enum value for a cascade action which directs the database to set the local columns
+     * referenced by the foreign key to null when the referenced row changes/is deleted.
+     */
+    SET_NULL("setnull", 2),
+    /**
+     * The enum value for a cascade action which directs the database to set the local columns
+     * referenced by the foreign key to the default value when the referenced row changes/is deleted.
+     */
+    SET_DEFAULT("setdefault", 3),
+    /**
+     * The enum value for a cascade action which directs the database to restrict the change
+     * changes to the referenced column. The interpretation of this is database-dependent, but it is
+     * usually the same as {@link #NONE}.
+     */
+    RESTRICT("restrict", 4),
+    /**
+     * The enum value for the cascade action that directs the database to not change the local column
+     * when the value of the referenced column changes, only check the foreign key constraint.
+     */
+    NONE("none", 5);
+
     /**
      * The integer value for the enum value for a cascade action.
      */
@@ -34,45 +59,21 @@ public class CascadeActionEnum extends ValuedEnum {
     public static final int VALUE_NONE = 5;
 
     /**
-     * The enum value for a cascade action which directs the database to apply the change to
-     * the referenced table also to this table. E.g. if the referenced row is deleted, then
-     * the local one will also be deleted when this value is used for the onDelete action.
-     */
-    public static final CascadeActionEnum CASCADE = new CascadeActionEnum("cascade", VALUE_CASCADE);
-    /**
-     * The enum value for a cascade action which directs the database to set the local columns
-     * referenced by the foreign key to null when the referenced row changes/is deleted.
-     */
-    public static final CascadeActionEnum SET_NULL = new CascadeActionEnum("setnull", VALUE_SET_NULL);
-    /**
-     * The enum value for a cascade action which directs the database to set the local columns
-     * referenced by the foreign key to the default value when the referenced row changes/is deleted.
-     */
-    public static final CascadeActionEnum SET_DEFAULT = new CascadeActionEnum("setdefault", VALUE_SET_DEFAULT);
-    /**
-     * The enum value for a cascade action which directs the database to restrict the change
-     * changes to the referenced column. The interpretation of this is database-dependent, but it is
-     * usually the same as {@link #NONE}.
-     */
-    public static final CascadeActionEnum RESTRICT = new CascadeActionEnum("restrict", VALUE_RESTRICT);
-    /**
-     * The enum value for the cascade action that directs the database to not change the local column
-     * when the value of the referenced column changes, only check the foreign key constraint.
-     */
-    public static final CascadeActionEnum NONE = new CascadeActionEnum("none", VALUE_NONE);
-
-    /**
      * Version id for this class as relevant for serialization.
      */
     private static final long serialVersionUID = -6378050861446415790L;
+
+    final String name;
+    final int value;
 
     /**
      * Creates a new enum object.
      * @param defaultTextRep The textual representation
      * @param value          The corresponding integer value
      */
-    private CascadeActionEnum(String defaultTextRep, int value) {
-        super(defaultTextRep, value);
+    CascadeActionEnum(String defaultTextRep, int value) {
+        this.name = defaultTextRep;
+        this.value = value;
     }
 
     /**
@@ -82,25 +83,12 @@ public class CascadeActionEnum extends ValuedEnum {
      * @return The enum value
      */
     public static CascadeActionEnum getEnum(String defaultTextRep) {
-        return (CascadeActionEnum) getEnum(CascadeActionEnum.class, defaultTextRep);
-    }
-
-    /**
-     * Returns the enum value that corresponds to the given integer
-     * representation.
-     * @param intValue The integer value
-     * @return The enum value
-     */
-    public static CascadeActionEnum getEnum(int intValue) {
-        return (CascadeActionEnum) getEnum(CascadeActionEnum.class, intValue);
-    }
-
-    /**
-     * Returns the map of enum values.
-     * @return The map of enum values
-     */
-    public static Map getEnumMap() {
-        return getEnumMap(CascadeActionEnum.class);
+        for (CascadeActionEnum item : values()) {
+            if (Objects.equals(item.name, defaultTextRep)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**
@@ -108,14 +96,23 @@ public class CascadeActionEnum extends ValuedEnum {
      * @return The list of enum values
      */
     public static List<CascadeActionEnum> getEnumList() {
-        return getEnumList(CascadeActionEnum.class);
+        return Arrays.stream(values()).toList();
     }
 
     /**
      * Returns an iterator of all enum values.
      * @return The iterator
      */
-    public static Iterator iterator() {
-        return iterator(CascadeActionEnum.class);
+    public static Iterator<CascadeActionEnum> iterator() {
+        List<CascadeActionEnum> list = new ArrayList<>(Arrays.asList(values()));
+        return list.iterator();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

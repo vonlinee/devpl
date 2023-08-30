@@ -1,33 +1,14 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import javax.xml.namespace.QName;
@@ -50,7 +31,7 @@ public class DataReader {
     /**
      * Our log.
      */
-    private final Log _log = LogFactory.getLog(DataReader.class);
+    private final Logger _log = LoggerFactory.getLogger(DataReader.class);
 
     /**
      * The database model.
@@ -264,7 +245,7 @@ public class DataReader {
             QName attrQName = xmlReader.getAttributeName(idx);
 
             attributes.put(isCaseSensitive() ? attrQName.getLocalPart() : attrQName.getLocalPart().toLowerCase(),
-                    xmlReader.getAttributeValue(idx));
+                xmlReader.getAttributeValue(idx));
         }
         readColumnSubElements(xmlReader, attributes);
 
@@ -278,14 +259,14 @@ public class DataReader {
 
         if (table == null) {
             _log.warn("Data XML contains an element " + elemQName + " at location " + location +
-                    " but there is no table defined with this name. This element will be ignored.");
+                " but there is no table defined with this name. This element will be ignored.");
         } else {
             DynaBean bean = _model.createDynaBeanFor(table);
 
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
                 Column column = table.getColumn(idx);
                 String value = (String) attributes.get(isCaseSensitive() ? column.getName() : column.getName()
-                        .toLowerCase());
+                    .toLowerCase());
 
                 if (value != null) {
                     setColumnValue(bean, table, column, value);
@@ -343,9 +324,9 @@ public class DataReader {
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 readColumnDataSubElement(xmlReader, attributes);
             } else if ((eventType == XMLStreamReader.CHARACTERS) ||
-                    (eventType == XMLStreamReader.CDATA) ||
-                    (eventType == XMLStreamReader.SPACE) ||
-                    (eventType == XMLStreamReader.ENTITY_REFERENCE)) {
+                (eventType == XMLStreamReader.CDATA) ||
+                (eventType == XMLStreamReader.SPACE) ||
+                (eventType == XMLStreamReader.ENTITY_REFERENCE)) {
                 content.append(xmlReader.getText());
             }
         }

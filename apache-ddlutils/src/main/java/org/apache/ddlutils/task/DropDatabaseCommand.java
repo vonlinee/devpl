@@ -22,7 +22,6 @@ package org.apache.ddlutils.task;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
-import org.apache.tools.ant.BuildException;
 
 /**
  * Sub task for dropping the target database. Note that this is only supported on some database
@@ -43,11 +42,11 @@ public class DropDatabaseCommand extends DatabaseCommand {
     /**
      * {@inheritDoc}
      */
-    public void execute(DatabaseTaskBase task, Database model) throws BuildException {
+    public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         BasicDataSource dataSource = getDataSource();
 
         if (dataSource == null) {
-            throw new BuildException("No database specified.");
+            throw new RuntimeException("No database specified.");
         }
 
         DatabasePlatform platform = getPlatform();

@@ -22,7 +22,6 @@ package org.apache.ddlutils.task;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.SqlBuildContext;
-import org.apache.tools.ant.BuildException;
 
 /**
  * Parses the schema XML files specified for the enclosing task, and creates the corresponding
@@ -80,9 +79,9 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
     /**
      * {@inheritDoc}
      */
-    public void execute(DatabaseTaskBase task, Database model) throws BuildException {
+    public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (getDataSource() == null) {
-            throw new BuildException("No database specified.");
+            throw new RuntimeException("No database specified.");
         }
 
         DatabasePlatform platform = getPlatform();

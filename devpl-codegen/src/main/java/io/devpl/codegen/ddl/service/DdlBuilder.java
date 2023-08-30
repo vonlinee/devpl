@@ -32,7 +32,7 @@ public class DdlBuilder {
     }
 
     public DdlBuilder addField(String field, String type, boolean isPrimaryKey) {
-        ddl.append(field).append(type);
+        ddl.append(field).append(" ").append(type);
         if (isPrimaryKey) {
             ddl.append(" AUTO_INCREMENT PRIMARY KEY");
         } else {

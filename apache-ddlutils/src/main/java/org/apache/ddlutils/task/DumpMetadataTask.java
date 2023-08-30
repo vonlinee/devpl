@@ -3,9 +3,6 @@ package org.apache.ddlutils.task;
 import org.apache.commons.collections.set.ListOrderedSet;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.io.PrettyPrintingXmlWriter;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -186,7 +183,7 @@ public class DumpMetadataTask extends Task {
     /**
      * {@inheritDoc}
      */
-    public void execute() throws BuildException {
+    public void execute() throws RuntimeException {
         if (_dataSource == null) {
             log("No data source specified, so there is nothing to do.", Project.MSG_INFO);
             return;
@@ -214,7 +211,7 @@ public class DumpMetadataTask extends Task {
 
             xmlWriter.writeDocumentEnd();
         } catch (Exception ex) {
-            throw new BuildException(ex);
+            throw new RuntimeException(ex);
         } finally {
             if (connection != null) {
                 try {
@@ -237,9 +234,9 @@ public class DumpMetadataTask extends Task {
      * @param metaData  The meta data to write
      */
     private void dumpMetaData(PrettyPrintingXmlWriter xmlWriter, DatabaseMetaData metaData) throws NoSuchMethodException,
-            IllegalAccessException,
-            InvocationTargetException,
-            SQLException {
+        IllegalAccessException,
+        InvocationTargetException,
+        SQLException {
         // We rather iterate over the methods because most metadata properties
         // do not follow the bean naming standard
         Method[] methods = metaData.getClass().getMethods();
@@ -249,9 +246,9 @@ public class DumpMetadataTask extends Task {
             // only no-arg methods that return something and that are not defined in Object
             // we also filter certain methods
             if ((methods[idx].getParameterTypes().length == 0) &&
-                    (methods[idx].getReturnType() != null) &&
-                    (Object.class != methods[idx].getDeclaringClass()) &&
-                    !filtered.contains(methods[idx].getName())) {
+                (methods[idx].getReturnType() != null) &&
+                (Object.class != methods[idx].getDeclaringClass()) &&
+                !filtered.contains(methods[idx].getName())) {
                 dumpProperty(xmlWriter, metaData, methods[idx]);
             }
         }
@@ -1148,13 +1145,17 @@ public class DumpMetadataTask extends Task {
 
                 if (value != null) {
                     try {
-                        xmlWriter.writeAttribute(null, attrName, new Boolean(value).toString());
+                        xmlWriter.writeAttribute(null, attrName, String.valueOf(Boolean.parseBoolean(value)));
                     } catch (NumberFormatException parseEx) {
                         log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
                     }
                 }
             }
         }
+    }
+
+    private void log(String msg, Object... args) {
+
     }
 
     /**

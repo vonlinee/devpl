@@ -19,10 +19,9 @@ package org.apache.ddlutils.task;
  * under the License.
  */
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.model.Database;
-import org.apache.tools.ant.BuildException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for commands that work with a model.
@@ -33,7 +32,7 @@ public abstract class Command {
     /**
      * The log.
      */
-    protected final Log _log = LogFactory.getLog(getClass());
+    protected final Logger _log = LoggerFactory.getLogger(getClass());
 
     /**
      * Whether to stop execution upon an error.
@@ -65,12 +64,12 @@ public abstract class Command {
      * @param msg The message to use unless this the exception is rethrown and it is
      *            already a build exception
      */
-    protected void handleException(Exception ex, String msg) throws BuildException {
+    protected void handleException(Exception ex, String msg) throws RuntimeException {
         if (isFailOnError()) {
-            if (ex instanceof BuildException) {
-                throw (BuildException) ex;
+            if (ex instanceof RuntimeException) {
+                throw (RuntimeException) ex;
             } else {
-                throw new BuildException(msg, ex);
+                throw new RuntimeException(msg, ex);
             }
         } else {
             _log.error(msg, ex);
@@ -89,5 +88,5 @@ public abstract class Command {
      * @param task  The executing task
      * @param model The database model
      */
-    public abstract void execute(DatabaseTaskBase task, Database model) throws BuildException;
+    public abstract void execute(DatabaseTaskBase task, Database model) throws RuntimeException;
 }

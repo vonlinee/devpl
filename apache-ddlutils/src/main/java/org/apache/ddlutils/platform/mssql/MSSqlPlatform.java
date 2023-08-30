@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.mssql;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
@@ -11,6 +10,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
 import org.apache.ddlutils.platform.SqlBuildContext;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -64,7 +64,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         info.addEquivalentOnDeleteActions(CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT);
 
         info.addNativeTypeMapping(Types.ARRAY, "IMAGE", Types.LONGVARBINARY);
-        // BIGINT will be mapped back to BIGINT by the model reader 
+        // BIGINT will be mapped back to BIGINT by the model reader
         info.addNativeTypeMapping(Types.BIGINT, "DECIMAL(19,0)");
         info.addNativeTypeMapping(Types.BLOB, "IMAGE", Types.LONGVARBINARY);
         info.addNativeTypeMapping(Types.BOOLEAN, "BIT", Types.BIT);

@@ -23,7 +23,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.PlatformUtils;
-import org.apache.tools.ant.BuildException;
 
 /**
  * Encloses the platform configuration for the Ant tasks.
@@ -182,11 +181,11 @@ public class PlatformConfiguration {
      * Creates the platform for the configured database.
      * @return The platform
      */
-    public DatabasePlatform getPlatform() throws BuildException {
+    public DatabasePlatform getPlatform() throws RuntimeException {
         if (_platform == null) {
             if (_databaseType == null) {
                 if (_dataSource == null) {
-                    throw new BuildException("No database specified.");
+                    throw new RuntimeException("No database specified.");
                 }
                 _databaseType = PlatformUtils.determineDatabaseType(_dataSource.getDriverClassName(),
                         _dataSource.getUrl());
@@ -197,10 +196,10 @@ public class PlatformConfiguration {
             try {
                 _platform = PlatformFactory.createNewPlatformInstance(_databaseType);
             } catch (Exception ex) {
-                throw new BuildException("Database type " + _databaseType + " is not supported.", ex);
+                throw new RuntimeException("Database type " + _databaseType + " is not supported.", ex);
             }
             if (_platform == null) {
-                throw new BuildException("Database type " + _databaseType + " is not supported.");
+                throw new RuntimeException("Database type " + _databaseType + " is not supported.");
             }
             _platform.setDataSource(_dataSource);
             _platform.setDelimitedIdentifierModeOn(isUseDelimitedSqlIdentifiers());

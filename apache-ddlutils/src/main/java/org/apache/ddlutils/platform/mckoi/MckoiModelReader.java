@@ -20,8 +20,8 @@ package org.apache.ddlutils.platform.mckoi;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
@@ -43,7 +43,7 @@ public class MckoiModelReader extends JdbcModelReader {
     /**
      * The log.
      */
-    protected Log _log = LogFactory.getLog(MckoiModelReader.class);
+    protected Logger _log = LoggerFactory.getLogger(MckoiModelReader.class);
 
     /**
      * Creates a new model reader for Mckoi databases.

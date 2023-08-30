@@ -1,31 +1,8 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.model.Database;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -100,7 +77,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * @ant.not-required The default value is 1.
      */
     public void setBatchSize(int batchSize) {
-        getDataIO().setBatchSize(new Integer(batchSize));
+        getDataIO().setBatchSize(batchSize);
     }
 
     /**
@@ -133,9 +110,9 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
     /**
      * {@inheritDoc}
      */
-    public void execute(DatabaseTaskBase task, Database model) throws BuildException {
+    public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if ((_singleDataFile != null) && !_fileSets.isEmpty()) {
-            throw new BuildException("Please use either the datafile attribute or the sub fileset element, but not both");
+            throw new RuntimeException("Please use either the datafile attribute or the sub fileset element, but not both");
         }
 
         DatabasePlatform platform = getPlatform();
@@ -174,7 +151,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * @param reader   The data reader
      * @param dataFile The schema file
      */
-    private void readSingleDataFile(Task task, DataReader reader, File dataFile) throws BuildException {
+    private void readSingleDataFile(Task task, DataReader reader, File dataFile) throws RuntimeException {
         if (!dataFile.exists()) {
             _log.error("Could not find data file " + dataFile.getAbsolutePath());
         } else if (!dataFile.isFile()) {

@@ -32,39 +32,22 @@ public class NumberConverter implements SqlTypeConverter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (textRep == null) {
             return null;
         } else {
-            Class targetClass = null;
+            Class<?> targetClass = switch (sqlTypeCode) {
+                case Types.BIGINT -> Long.class;
+                case Types.BIT, Types.BOOLEAN -> Boolean.class;
+                case Types.DECIMAL, Types.NUMERIC -> BigDecimal.class;
+                case Types.DOUBLE, Types.FLOAT -> Double.class;
+                case Types.INTEGER -> Integer.class;
+                case Types.REAL -> Float.class;
+                case Types.SMALLINT, Types.TINYINT -> Short.class;
+                default -> null;
+            };
 
-            switch (sqlTypeCode) {
-                case Types.BIGINT:
-                    targetClass = Long.class;
-                    break;
-                case Types.BIT:
-                case Types.BOOLEAN:
-                    targetClass = Boolean.class;
-                    break;
-                case Types.DECIMAL:
-                case Types.NUMERIC:
-                    targetClass = BigDecimal.class;
-                    break;
-                case Types.DOUBLE:
-                case Types.FLOAT:
-                    targetClass = Double.class;
-                    break;
-                case Types.INTEGER:
-                    targetClass = Integer.class;
-                    break;
-                case Types.REAL:
-                    targetClass = Float.class;
-                    break;
-                case Types.SMALLINT:
-                case Types.TINYINT:
-                    targetClass = Short.class;
-                    break;
-            }
             return targetClass == null ? textRep : ConvertUtils.convert(textRep, targetClass);
         }
     }
@@ -72,11 +55,12 @@ public class NumberConverter implements SqlTypeConverter {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         if (obj == null) {
             return null;
         } else if (sqlTypeCode == Types.BIT) {
-            return ((Boolean) obj).booleanValue() ? "1" : "0";
+            return (Boolean) obj ? "1" : "0";
         } else {
             return obj.toString();
         }

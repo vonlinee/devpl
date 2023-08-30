@@ -19,10 +19,8 @@ package org.apache.ddlutils.model;
  * under the License.
  */
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents a reference between a column in the local table and a column in another table.
@@ -166,13 +164,11 @@ public class Reference implements Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Reference) {
             Reference other = (Reference) obj;
-
-            return new EqualsBuilder().append(_localColumnName, other._localColumnName)
-                    .append(_foreignColumnName, other._foreignColumnName)
-                    .isEquals();
+            return Objects.equals(_localColumnName, other._localColumnName) && Objects.equals(_foreignColumnName, other._foreignColumnName);
         } else {
             return false;
         }
@@ -184,30 +180,22 @@ public class Reference implements Serializable {
      * @return <code>true</code> if this reference is equal (ignoring case) to the given one
      */
     public boolean equalsIgnoreCase(Reference otherRef) {
-        return (otherRef != null) &&
-                _localColumnName.equalsIgnoreCase(otherRef._localColumnName) &&
-                _foreignColumnName.equalsIgnoreCase(otherRef._foreignColumnName);
+        return (otherRef != null) && _localColumnName.equalsIgnoreCase(otherRef._localColumnName) && _foreignColumnName.equalsIgnoreCase(otherRef._foreignColumnName);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(_localColumnName)
-                .append(_foreignColumnName)
-                .toHashCode();
+        return Objects.hash(_localColumnName, _foreignColumnName);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
-
-        result.append(getLocalColumnName());
-        result.append(" -> ");
-        result.append(getForeignColumnName());
-
-        return result.toString();
+        return getLocalColumnName() + " -> " + getForeignColumnName();
     }
 }

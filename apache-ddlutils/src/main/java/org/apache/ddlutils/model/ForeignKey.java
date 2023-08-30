@@ -1,13 +1,12 @@
 package org.apache.ddlutils.model;
 
 import org.apache.commons.collections.set.ListOrderedSet;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Represents a database foreign key.
@@ -178,7 +177,7 @@ public class ForeignKey implements Serializable {
      * @return The references
      */
     public Reference[] getReferences() {
-        return (Reference[]) _references.toArray(new Reference[_references.size()]);
+        return (Reference[]) _references.toArray(new Object[0]);
     }
 
     /**
@@ -190,7 +189,7 @@ public class ForeignKey implements Serializable {
     }
 
     /**
-     * Adds a reference, ie. a mapping between a local column (in the table that owns this foreign key)
+     * Adds a reference, i.e. a mapping between a local column (in the table that owns this foreign key)
      * and a remote column.
      * @param reference The reference to add
      */
@@ -315,21 +314,15 @@ public class ForeignKey implements Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof ForeignKey) {
             ForeignKey otherFk = (ForeignKey) obj;
 
-            // Note that this compares case sensitive
+            // Note that this compares case-sensitive
             // Note also that we can simply compare the references regardless of their order
             // (which is irrelevant for fks) because they are contained in a set
-            EqualsBuilder builder = new EqualsBuilder();
-
-            if ((_name != null) && (_name.length() > 0) && (otherFk._name != null) && (otherFk._name.length() > 0)) {
-                builder.append(_name, otherFk._name);
-            }
-            return builder.append(_foreignTableName, otherFk._foreignTableName)
-                    .append(_references, otherFk._references)
-                    .isEquals();
+            return Objects.equals(_name, otherFk._name) && Objects.equals(_foreignTableName, otherFk._foreignTableName) && Objects.equals(_references, otherFk._references);
         } else {
             return false;
         }
@@ -341,11 +334,9 @@ public class ForeignKey implements Serializable {
      * @return <code>true</code> if this foreign key is equal (ignoring case) to the given one
      */
     public boolean equalsIgnoreCase(ForeignKey otherFk) {
-        boolean checkName = (_name != null) && (_name.length() > 0) &&
-                (otherFk._name != null) && (otherFk._name.length() > 0);
+        boolean checkName = (_name != null) && (_name.length() > 0) && (otherFk._name != null) && (otherFk._name.length() > 0);
 
-        if ((!checkName || _name.equalsIgnoreCase(otherFk._name)) &&
-                _foreignTableName.equalsIgnoreCase(otherFk._foreignTableName)) {
+        if ((!checkName || _name.equalsIgnoreCase(otherFk._name)) && _foreignTableName.equalsIgnoreCase(otherFk._foreignTableName)) {
             HashSet otherRefs = new HashSet();
 
             otherRefs.addAll(otherFk._references);
@@ -375,16 +366,15 @@ public class ForeignKey implements Serializable {
     /**
      * {@inheritDoc}
      */
+    @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(_name)
-                .append(_foreignTableName)
-                .append(_references)
-                .toHashCode();
+        return Objects.hash(_name, _foreignTableName, _references);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
 

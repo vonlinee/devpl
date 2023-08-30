@@ -19,9 +19,6 @@ package org.apache.ddlutils.model;
  * under the License.
  */
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.*;
@@ -699,9 +696,9 @@ public class Table implements SchemaObject, Serializable {
             Table other = (Table) obj;
             // Note that this compares case sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-            return new EqualsBuilder().append(name, other.name).append(_columns, other._columns)
-                    .append(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
-                    .append(new HashSet<>(_indices), new HashSet<>(other._indices)).isEquals();
+            return Objects.equals(name, other.name) && Objects.equals(_columns, other._columns)
+                && Objects.equals(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
+                && Objects.equals(new HashSet<>(_indices), new HashSet<>(other._indices));
         }
         return false;
     }
@@ -712,8 +709,7 @@ public class Table implements SchemaObject, Serializable {
     @Override
     public int hashCode() {
         // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
-        return new HashCodeBuilder(17, 37).append(name).append(_columns).append(new HashSet<>(_foreignKeys))
-                .append(new HashSet<>(_indices)).toHashCode();
+        return Objects.hash(name, _columns, _foreignKeys, _indices);
     }
 
 

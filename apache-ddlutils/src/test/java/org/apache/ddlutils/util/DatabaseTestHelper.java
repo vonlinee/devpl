@@ -3,8 +3,8 @@ package org.apache.ddlutils.util;
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
@@ -21,7 +21,7 @@ public class DatabaseTestHelper extends Assert {
     /**
      * The log for this class.
      */
-    private final Log _log = LogFactory.getLog(DatabaseTestHelper.class);
+    private final Logger _log = LoggerFactory.getLogger(DatabaseTestHelper.class);
 
     /**
      * Asserts that the data in the tables described by the given model is the same in the

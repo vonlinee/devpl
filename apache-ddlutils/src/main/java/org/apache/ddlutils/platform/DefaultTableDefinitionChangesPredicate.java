@@ -3,7 +3,6 @@ package org.apache.ddlutils.platform;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Table;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,10 +34,8 @@ public class DefaultTableDefinitionChangesPredicate implements TableDefinitionCh
     protected boolean isSupported(Table intermediateTable, TableChange change) {
         if (change instanceof AddColumnChange) {
             AddColumnChange addColumnChange = (AddColumnChange) change;
-            return addColumnChange.isAtEnd() &&
-                    (!addColumnChange.getNewColumn().isRequired() ||
-                            (addColumnChange.getNewColumn().getDefaultValue() != null) ||
-                            addColumnChange.getNewColumn().isAutoIncrement());
+            return addColumnChange.isAtEnd() && (!addColumnChange.getNewColumn().isRequired() || (addColumnChange
+                .getNewColumn().getDefaultValue() != null) || addColumnChange.getNewColumn().isAutoIncrement());
         } else return change instanceof AddPrimaryKeyChange;
     }
 }

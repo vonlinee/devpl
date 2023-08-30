@@ -21,7 +21,6 @@ package org.apache.ddlutils.io;
 
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.TypeMap;
-import org.apache.tools.ant.BuildException;
 
 /**
  * Represents the registration of a data converter for tasks that work on data files.
@@ -57,11 +56,11 @@ public class DataConverterRegistration {
      * Sets the converter class.
      * @param converterClassName The fully qualified converter class name
      */
-    public void setClassName(String converterClassName) throws BuildException {
+    public void setClassName(String converterClassName) throws RuntimeException {
         try {
             _converter = (SqlTypeConverter) getClass().getClassLoader().loadClass(converterClassName).newInstance();
         } catch (Exception ex) {
-            throw new BuildException(ex);
+            throw new RuntimeException(ex);
         }
     }
 
@@ -77,11 +76,11 @@ public class DataConverterRegistration {
      * Sets the jdbc type.
      * @param jdbcTypeName The jdbc type name
      */
-    public void setJdbcType(String jdbcTypeName) throws BuildException {
+    public void setJdbcType(String jdbcTypeName) throws RuntimeException {
         Integer typeCode = TypeMap.getJdbcTypeCode(jdbcTypeName);
 
         if (typeCode == null) {
-            throw new BuildException("Unknown jdbc type " + jdbcTypeName);
+            throw new RuntimeException("Unknown jdbc type " + jdbcTypeName);
         } else {
             _typeCode = typeCode.intValue();
         }
@@ -99,9 +98,9 @@ public class DataConverterRegistration {
      * Sets the column for which this converter is defined.
      * @param column The column
      */
-    public void setColumn(String column) throws BuildException {
+    public void setColumn(String column) throws RuntimeException {
         if ((column == null) || (column.length() == 0)) {
-            throw new BuildException("Please specify a non-empty column name");
+            throw new RuntimeException("Please specify a non-empty column name");
         }
         _column = column;
     }
@@ -118,9 +117,9 @@ public class DataConverterRegistration {
      * Sets the table for whose column this converter is defined.
      * @param table The table
      */
-    public void setTable(String table) throws BuildException {
+    public void setTable(String table) throws RuntimeException {
         if ((table == null) || (table.length() == 0)) {
-            throw new BuildException("Please specify a non-empty table name");
+            throw new RuntimeException("Please specify a non-empty table name");
         }
         _table = table;
     }

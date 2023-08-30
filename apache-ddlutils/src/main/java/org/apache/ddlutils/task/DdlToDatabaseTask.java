@@ -21,9 +21,6 @@ package org.apache.ddlutils.task;
 
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,7 +66,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * The input files.
      */
-    private final ArrayList<FileSet> _fileSets = new ArrayList<>();
+    private final ArrayList<Object> _fileSets = new ArrayList<>();
     /**
      * Whether XML input files are validated against the internal or an external DTD.
      */
@@ -103,7 +100,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
      * Adds a fileset.
      * @param fileset The additional input files
      */
-    public void addConfiguredFileset(FileSet fileset) {
+    public void addConfiguredFileset(Object fileset) {
         _fileSets.add(fileset);
     }
 
@@ -183,16 +180,16 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
 
         reader.setValidateXml(_validateXml);
         if ((_singleSchemaFile != null) && !_fileSets.isEmpty()) {
-            throw new BuildException("Please use either the schemafile attribute or the sub fileset element, but not both");
+            throw new RuntimeException("Please use either the schemafile attribute or the sub fileset element, but not both");
         }
         if (_singleSchemaFile != null) {
             model = readSingleSchemaFile(reader, _singleSchemaFile);
         } else {
-            for (FileSet fileSet : _fileSets) {
-                File fileSetDir = fileSet.getDir(getProject());
-                DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
-                String[] files = scanner.getIncludedFiles();
-
+            for (Object fileSet : _fileSets) {
+                File fileSetDir = new File("");
+                // DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
+                // String[] files = scanner.getIncludedFiles();
+                String[] files = _singleSchemaFile.list();
                 for (int idx = 0; (files != null) && (idx < files.length); idx++) {
                     Database curModel = readSingleSchemaFile(reader, new File(fileSetDir, files[idx]));
 
@@ -202,7 +199,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
                         try {
                             model.mergeWith(curModel);
                         } catch (IllegalArgumentException ex) {
-                            throw new BuildException("Could not merge with schema from file " + files[idx] + ": " + ex.getLocalizedMessage(), ex);
+                            throw new RuntimeException("Could not merge with schema from file " + files[idx] + ": " + ex.getLocalizedMessage(), ex);
                         }
                     }
                 }
@@ -229,7 +226,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
                 model = reader.read(schemaFile);
                 _log.info("Read schema file " + schemaFile.getAbsolutePath());
             } catch (Exception ex) {
-                throw new BuildException("Could not read schema file " + schemaFile.getAbsolutePath() + ": " + ex.getLocalizedMessage(), ex);
+                throw new RuntimeException("Could not read schema file " + schemaFile.getAbsolutePath() + ": " + ex.getLocalizedMessage(), ex);
             }
         }
         return model;

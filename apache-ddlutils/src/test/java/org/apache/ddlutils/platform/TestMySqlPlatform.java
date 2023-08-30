@@ -171,21 +171,23 @@ public class TestMySqlPlatform extends TestPlatformBase {
         getPlatform().getSqlBuilder().createTables(testDb, params, true);
 
         assertEqualsIgnoringWhitespaces(
-                "DROP TABLE IF EXISTS `constraints`;\n" +
-                        "CREATE TABLE `constraints`\n" +
-                        "(\n" +
-                        "    `COL_PK`               VARCHAR(32) NULL,\n" +
-                        "    `COL_PK_AUTO_INCR`     INTEGER,\n" +
-                        "    `COL_NOT_NULL`         BINARY(100) NOT NULL,\n" +
-                        "    `COL_NOT_NULL_DEFAULT` DOUBLE DEFAULT -2.0 NOT NULL,\n" +
-                        "    `COL_DEFAULT`          CHAR(4) DEFAULT 'test' NULL,\n" +
-                        "    `COL_AUTO_INCR`        BIGINT,\n" +
-                        "    PRIMARY KEY (`COL_PK`, `COL_PK_AUTO_INCR`)\n" +
-                        ") ENGINE=INNODB ROW_FORMAT=COMPRESSED;\n",
+                """
+                        DROP TABLE IF EXISTS `constraints`;
+                        CREATE TABLE `constraints`
+                        (
+                            `COL_PK`               VARCHAR(32) NULL,
+                            `COL_PK_AUTO_INCR`     INTEGER,
+                            `COL_NOT_NULL`         BINARY(100) NOT NULL,
+                            `COL_NOT_NULL_DEFAULT` DOUBLE DEFAULT -2.0 NOT NULL,
+                            `COL_DEFAULT`          CHAR(4) DEFAULT 'test' NULL,
+                            `COL_AUTO_INCR`        BIGINT,
+                            PRIMARY KEY (`COL_PK`, `COL_PK_AUTO_INCR`)
+                        ) ENGINE=INNODB ROW_FORMAT=COMPRESSED;
+                        """,
                 getBuilderOutput());
 
         final String builderOutput = getBuilderOutput();
-        System.out.println(builderOutput);
+        // System.out.println(builderOutput);
     }
 
     /**

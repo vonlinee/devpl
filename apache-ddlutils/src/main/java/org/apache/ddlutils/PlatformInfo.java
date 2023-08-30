@@ -1,8 +1,8 @@
 package org.apache.ddlutils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.model.CascadeActionEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.sql.Types;
@@ -19,7 +19,7 @@ public class PlatformInfo {
     /**
      * The Log to which logging calls will be made.
      */
-    private final Log _log = LogFactory.getLog(PlatformInfo.class);
+    private final Logger _log = LoggerFactory.getLogger(PlatformInfo.class);
 
     // properties influencing the definition of columns
 

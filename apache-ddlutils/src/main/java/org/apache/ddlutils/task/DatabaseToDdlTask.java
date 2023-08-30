@@ -3,7 +3,6 @@ package org.apache.ddlutils.task;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
-import org.apache.tools.ant.BuildException;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -217,7 +216,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      */
     protected Database readModel() {
         if (getDataSource() == null) {
-            throw new BuildException("No database specified.");
+            throw new RuntimeException("No database specified.");
         }
 
         try {
@@ -255,7 +254,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
             }
             return model;
         } catch (Exception ex) {
-            throw new BuildException("Could not read the schema from the specified database: " + ex.getLocalizedMessage(), ex);
+            throw new RuntimeException("Could not read the schema from the specified database: " + ex.getLocalizedMessage(), ex);
         }
     }
 }

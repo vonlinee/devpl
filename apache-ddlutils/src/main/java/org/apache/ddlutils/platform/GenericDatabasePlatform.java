@@ -2,8 +2,8 @@ package org.apache.ddlutils.platform;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
@@ -38,7 +38,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * The log for this platform.
      */
-    private final Log _log = LogFactory.getLog(getClass());
+    private final Logger _log = LoggerFactory.getLogger(getClass());
 
     /**
      * The platform info.
@@ -246,7 +246,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * Returns the log for this platform.
      * @return The log
      */
-    protected Log getLog() {
+    protected Logger getLog() {
         return _log;
     }
 
@@ -319,7 +319,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                         // on level warn, and the exception itself on level debug
                         _log.warn("SQL Command " + command + " failed with: " + ex.getMessage());
                         if (_log.isDebugEnabled()) {
-                            _log.debug(ex);
+                            _log.debug("SQL Command " + command + " failed" , ex);
                         }
                         errors++;
                     } else {
@@ -2393,11 +2393,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             // in general we're trying to retrieve the value using the original type
             // but sometimes we also need the target type:
             if ((originalJdbcType == Types.BLOB) && (targetJdbcType != Types.BLOB)) {
-                // we should not use the Blob interface if the database doesn't map to this type 
+                // we should not use the Blob interface if the database doesn't map to this type
                 jdbcType = targetJdbcType;
             }
             if ((originalJdbcType == Types.CLOB) && (targetJdbcType != Types.CLOB)) {
-                // we should not use the Clob interface if the database doesn't map to this type 
+                // we should not use the Clob interface if the database doesn't map to this type
                 jdbcType = targetJdbcType;
             }
             value = extractColumnValue(resultSet, columnName, 0, jdbcType);
@@ -2424,11 +2424,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         // in general we're trying to retrieve the value using the original type
         // but sometimes we also need the target type:
         if ((originalJdbcType == Types.BLOB) && (targetJdbcType != Types.BLOB)) {
-            // we should not use the Blob interface if the database doesn't map to this type 
+            // we should not use the Blob interface if the database doesn't map to this type
             jdbcType = targetJdbcType;
         }
         if ((originalJdbcType == Types.CLOB) && (targetJdbcType != Types.CLOB)) {
-            // we should not use the Clob interface if the database doesn't map to this type 
+            // we should not use the Clob interface if the database doesn't map to this type
             jdbcType = targetJdbcType;
         }
         value = extractColumnValue(resultSet, null, idx, jdbcType);

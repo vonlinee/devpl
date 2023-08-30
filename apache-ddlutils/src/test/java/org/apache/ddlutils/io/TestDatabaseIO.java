@@ -231,14 +231,14 @@ public class TestDatabaseIO extends TestCase {
     public void testDatabaseWithoutName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -250,18 +250,18 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testNoTables() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "</database>");
 
         assertEquals("test",
-                model.getName());
+            model.getName());
         assertEquals(0,
-                model.getTableCount());
+            model.getTableCount());
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\" />\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\" />\n",
+            model);
     }
 
     /**
@@ -269,23 +269,23 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testTableWithoutColumns() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
         assertEquals("SomeTable", "Some table", 0, 0, 0, 0, 0,
-                model.getTable(0));
+            model.getTable(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\" />\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\" />\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -294,14 +294,14 @@ public class TestDatabaseIO extends TestCase {
     public void testTableWithoutName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -313,13 +313,13 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testSingleColumn() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='INTEGER'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='INTEGER'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -327,18 +327,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.INTEGER, 0, 0, null, null, null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -347,13 +347,13 @@ public class TestDatabaseIO extends TestCase {
     public void testColumnWithoutName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -366,13 +366,13 @@ public class TestDatabaseIO extends TestCase {
     public void testColumnWithoutType() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -407,11 +407,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", types.length, 0, 0, 0, 0,
-                table);
+            table);
 
         for (int idx = 0; idx < types.length; idx++) {
             assertEquals("ID" + idx, types[idx], 0, 0, null, null, null, false, false, false,
-                    table.getColumn(idx));
+                table.getColumn(idx));
         }
 
         modelXml.setLength(0);
@@ -437,14 +437,14 @@ public class TestDatabaseIO extends TestCase {
     public void testColumnWithIllegalType() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='illegal'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='illegal'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -456,14 +456,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testPrimaryKeyColumn() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='INTEGER'\n" +
-                        "            primaryKey='true'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='INTEGER'\n" +
+                "            primaryKey='true'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -471,23 +471,23 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 1, 0, 0, 0,
-                table);
+            table);
 
         Column column = table.getColumn(0);
 
         assertEquals("ID", Types.INTEGER, 0, 0, null, null, null, true, false, false,
-                column);
+            column);
 
         assertEquals(column, table.getPrimaryKeyColumns()[0]);
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"true\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"true\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -495,14 +495,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testRequiredColumn() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='INTEGER'\n" +
-                        "            required='true'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='INTEGER'\n" +
+                "            required='true'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -510,18 +510,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.INTEGER, 0, 0, null, null, null, false, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"true\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"true\" type=\"INTEGER\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -529,14 +529,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testAutoIncrementColumn() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='INTEGER'\n" +
-                        "            autoIncrement='true'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='INTEGER'\n" +
+                "            autoIncrement='true'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -544,23 +544,23 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 1, 0, 0,
-                table);
+            table);
 
         Column column = table.getColumn(0);
 
         assertEquals("ID", Types.INTEGER, 0, 0, null, null, null, false, false, true,
-                column);
+            column);
 
         assertEquals(column, table.getAutoIncrementColumns()[0]);
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"true\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"true\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -568,14 +568,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testColumnWithSize1() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='20'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='20'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -583,18 +583,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.VARCHAR, 20, 0, null, null, null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"20\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"20\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -602,14 +602,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testColumnWithSize2() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='DECIMAL'\n" +
-                        "            size='10,3'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='DECIMAL'\n" +
+                "            size='10,3'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -617,18 +617,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.DECIMAL, 10, 3, null, null, null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"DECIMAL\" size=\"10,3\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"DECIMAL\" size=\"10,3\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -636,14 +636,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testColumnWithDescription() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='INTEGER'\n" +
-                        "            description='Foo'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='INTEGER'\n" +
+                "            description='Foo'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -651,18 +651,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.INTEGER, 0, 0, null, "Foo", null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"Foo\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"Foo\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -670,15 +670,15 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testColumnWithDefault() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='32'\n" +
-                        "            default='org.apache.ddlutils.Test string'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='32'\n" +
+                "            default='org.apache.ddlutils.Test string'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -686,18 +686,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.VARCHAR, 32, 0, "org.apache.ddlutils.Test string", null, null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"32\" default=\"org.apache.ddlutils.Test string\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"32\" default=\"org.apache.ddlutils.Test string\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -705,14 +705,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testColumnWithJavaName() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            javaName='testString'/>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='DOUBLE'\n" +
+                "            javaName='testString'/>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -720,18 +720,18 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("ID", Types.DOUBLE, 0, 0, null, null, "testString", false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" javaName=\"testString\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" javaName=\"testString\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -739,27 +739,27 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testSingleForeignkey() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key'/>\n" +
-                        "  </table>\n" +
-                        "  <table name='AnotherTable'\n" +
-                        "         description='And another table'>\n" +
-                        "    <column name='Some_ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            description='The foreign key'/>\n" +
-                        "    <foreign-key foreignTable='SomeTable'>\n" +
-                        "       <reference local='Some_ID' foreign='ID'/>\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key'/>\n" +
+                "  </table>\n" +
+                "  <table name='AnotherTable'\n" +
+                "         description='And another table'>\n" +
+                "    <column name='Some_ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            description='The foreign key'/>\n" +
+                "    <foreign-key foreignTable='SomeTable'>\n" +
+                "       <reference local='Some_ID' foreign='ID'/>\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(2, model.getTableCount());
@@ -767,22 +767,22 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 1, 0, 0, 0,
-                someTable);
+            someTable);
 
         Column pkColumn = someTable.getColumn(0);
 
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                pkColumn);
+            pkColumn);
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 1, 0, 0, 1, 0,
-                anotherTable);
+            anotherTable);
 
         Column fkColumn = anotherTable.getColumn(0);
 
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                fkColumn);
+            fkColumn);
 
         ForeignKey fk = anotherTable.getForeignKey(0);
 
@@ -790,19 +790,19 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(fkColumn, pkColumn, fk.getFirstReference());
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
-                        "  </table>\n" +
-                        "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
-                        "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
-                        "    <foreign-key foreignTable=\"SomeTable\">\n" +
-                        "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
+                "  </table>\n" +
+                "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
+                "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
+                "    <foreign-key foreignTable=\"SomeTable\">\n" +
+                "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -810,38 +810,38 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testForeignkeyWithTwoReferences() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key'/>\n" +
-                        "    <column name='VALUE1'\n" +
-                        "            type='INTEGER'\n" +
-                        "            required='false'\n" +
-                        "            description='A value'/>\n" +
-                        "    <column name='VALUE2'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            required='false'\n" +
-                        "            description='Another value'/>\n" +
-                        "  </table>\n" +
-                        "  <table name='AnotherTable'\n" +
-                        "         description='And another table'>\n" +
-                        "    <column name='Some_ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            description='The foreign key'/>\n" +
-                        "    <column name='Some_Value'\n" +
-                        "            type='DOUBLE'/>\n" +
-                        "    <foreign-key foreignTable='SomeTable'>\n" +
-                        "       <reference local='Some_ID' foreign='ID'/>\n" +
-                        "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key'/>\n" +
+                "    <column name='VALUE1'\n" +
+                "            type='INTEGER'\n" +
+                "            required='false'\n" +
+                "            description='A value'/>\n" +
+                "    <column name='VALUE2'\n" +
+                "            type='DOUBLE'\n" +
+                "            required='false'\n" +
+                "            description='Another value'/>\n" +
+                "  </table>\n" +
+                "  <table name='AnotherTable'\n" +
+                "         description='And another table'>\n" +
+                "    <column name='Some_ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            description='The foreign key'/>\n" +
+                "    <column name='Some_Value'\n" +
+                "            type='DOUBLE'/>\n" +
+                "    <foreign-key foreignTable='SomeTable'>\n" +
+                "       <reference local='Some_ID' foreign='ID'/>\n" +
+                "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(2, model.getTableCount());
@@ -849,16 +849,16 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 3, 1, 0, 0, 0,
-                someTable);
+            someTable);
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                someTable.getColumn(0));
+            someTable.getColumn(0));
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 2, 0, 0, 1, 0,
-                anotherTable);
+            anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                anotherTable.getColumn(0));
+            anotherTable.getColumn(0));
 
         ForeignKey fk = anotherTable.getForeignKey(0);
 
@@ -867,23 +867,23 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(anotherTable.getColumn(1), someTable.getColumn(2), fk.getReference(1));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
-                        "    <column name=\"VALUE1\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"A value\" />\n" +
-                        "    <column name=\"VALUE2\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" description=\"Another value\" />\n" +
-                        "  </table>\n" +
-                        "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
-                        "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
-                        "    <column name=\"Some_Value\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <foreign-key foreignTable=\"SomeTable\">\n" +
-                        "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
-                        "      <reference local=\"Some_Value\" foreign=\"VALUE2\" />\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
+                "    <column name=\"VALUE1\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"A value\" />\n" +
+                "    <column name=\"VALUE2\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" description=\"Another value\" />\n" +
+                "  </table>\n" +
+                "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
+                "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
+                "    <column name=\"Some_Value\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <foreign-key foreignTable=\"SomeTable\">\n" +
+                "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
+                "      <reference local=\"Some_Value\" foreign=\"VALUE2\" />\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -892,26 +892,26 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithoutReferences() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable'>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable'>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -923,27 +923,27 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testNamedForeignkey() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key'/>\n" +
-                        "  </table>\n" +
-                        "  <table name='AnotherTable'\n" +
-                        "         description='And another table'>\n" +
-                        "    <column name='Some_ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            description='The foreign key'/>\n" +
-                        "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
-                        "       <reference local='Some_ID' foreign='ID'/>\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key'/>\n" +
+                "  </table>\n" +
+                "  <table name='AnotherTable'\n" +
+                "         description='And another table'>\n" +
+                "    <column name='Some_ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            description='The foreign key'/>\n" +
+                "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
+                "       <reference local='Some_ID' foreign='ID'/>\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(2, model.getTableCount());
@@ -951,16 +951,16 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 1, 0, 0, 0,
-                someTable);
+            someTable);
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                someTable.getColumn(0));
+            someTable.getColumn(0));
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 1, 0, 0, 1, 0,
-                anotherTable);
+            anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                anotherTable.getColumn(0));
+            anotherTable.getColumn(0));
 
         ForeignKey fk = anotherTable.getForeignKey(0);
 
@@ -968,26 +968,26 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(anotherTable.getColumn(0), someTable.getColumn(0), fk.getReference(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
-                        "  </table>\n" +
-                        "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
-                        "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
-                        "    <foreign-key foreignTable=\"SomeTable\" name=\"The foreignkey\">\n" +
-                        "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
+                "  </table>\n" +
+                "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
+                "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
+                "    <foreign-key foreignTable=\"SomeTable\" name=\"The foreignkey\">\n" +
+                "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
      * Tests a database model containing foreignkeys with onUpdate values.
      */
     public void testForeignkeysWithOnUpdate() throws Exception {
-        StringBuffer modelXml = new StringBuffer();
+        StringBuilder modelXml = new StringBuilder();
 
         modelXml.append("<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n");
         modelXml.append("  <table name='SomeTable'\n");
@@ -1005,8 +1005,8 @@ public class TestDatabaseIO extends TestCase {
         modelXml.append("            type='VARCHAR'\n");
         modelXml.append("            size='16'\n");
         modelXml.append("            description='The foreign key'/>\n");
-        for (Iterator it = CascadeActionEnum.iterator(); it.hasNext(); ) {
-            CascadeActionEnum enumValue = (CascadeActionEnum) it.next();
+        for (Iterator<CascadeActionEnum> it = CascadeActionEnum.iterator(); it.hasNext(); ) {
+            CascadeActionEnum enumValue = it.next();
 
             modelXml.append("    <foreign-key name='foreignkey ");
             modelXml.append(enumValue.getName());
@@ -1027,21 +1027,21 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 1, 0, 0, 0,
-                someTable);
+            someTable);
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                someTable.getColumn(0));
+            someTable.getColumn(0));
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.getEnumList().size(), 0,
-                anotherTable);
+            anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                anotherTable.getColumn(0));
+            anotherTable.getColumn(0));
 
         int idx = 0;
 
-        for (Iterator it = CascadeActionEnum.iterator(); it.hasNext(); idx++) {
-            CascadeActionEnum enumValue = (CascadeActionEnum) it.next();
+        for (Iterator<CascadeActionEnum> it = CascadeActionEnum.iterator(); it.hasNext(); idx++) {
+            CascadeActionEnum enumValue = it.next();
             ForeignKey fk = anotherTable.getForeignKey(idx);
 
             assertEquals("foreignkey " + enumValue.getName(), enumValue, CascadeActionEnum.NONE, someTable, 1, fk);
@@ -1119,16 +1119,16 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 1, 1, 0, 0, 0,
-                someTable);
+            someTable);
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                someTable.getColumn(0));
+            someTable.getColumn(0));
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.getEnumList().size(), 0,
-                anotherTable);
+            anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                anotherTable.getColumn(0));
+            anotherTable.getColumn(0));
 
         int idx = 0;
 
@@ -1173,27 +1173,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithIllegalOnUpdateValue() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable' onUpdate='illegal'>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable' onUpdate='illegal'>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1206,27 +1206,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithEmptyOnUpdateValue() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable' onUpdate=''>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable' onUpdate=''>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1239,27 +1239,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithIllegalOnDeleteValue() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable' onDelete='illegal'>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable' onDelete='illegal'>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1272,27 +1272,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithEmptyOnDeleteValue() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable' onDelete=''>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable' onDelete=''>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1305,27 +1305,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyReferencingUndefinedTable() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='TheTable'>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='TheTable'>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -1338,27 +1338,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyUsingUndefinedColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable'>\n" +
-                            "       <reference local='ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable'>\n" +
+                    "       <reference local='ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -1371,27 +1371,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyReferencingUndefinedColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable'>\n" +
-                            "       <reference local='Some_ID' foreign='TheID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable'>\n" +
+                    "       <reference local='Some_ID' foreign='TheID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -1404,27 +1404,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithoutLocalColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable'>\n" +
-                            "       <reference foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable'>\n" +
+                    "       <reference foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1437,27 +1437,27 @@ public class TestDatabaseIO extends TestCase {
     public void testForeignKeyWithoutRemoteColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <foreign-key foreignTable='SomeTable'>\n" +
-                            "       <reference local='Some_ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <foreign-key foreignTable='SomeTable'>\n" +
+                    "       <reference local='Some_ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1469,40 +1469,40 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testTwoForeignkeys() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'\n" +
-                        "         description='Some table'>\n" +
-                        "    <column name='ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key'/>\n" +
-                        "    <column name='VALUE1'\n" +
-                        "            type='INTEGER'\n" +
-                        "            required='false'\n" +
-                        "            description='A value'/>\n" +
-                        "    <column name='VALUE2'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            required='false'\n" +
-                        "            description='Another value'/>\n" +
-                        "  </table>\n" +
-                        "  <table name='AnotherTable'\n" +
-                        "         description='And another table'>\n" +
-                        "    <column name='Some_ID'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='16'\n" +
-                        "            description='The foreign key'/>\n" +
-                        "    <column name='Some_Value'\n" +
-                        "            type='DOUBLE'/>\n" +
-                        "    <foreign-key foreignTable='SomeTable'>\n" +
-                        "       <reference local='Some_ID' foreign='ID'/>\n" +
-                        "    </foreign-key>\n" +
-                        "    <foreign-key foreignTable='SomeTable'>\n" +
-                        "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'\n" +
+                "         description='Some table'>\n" +
+                "    <column name='ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key'/>\n" +
+                "    <column name='VALUE1'\n" +
+                "            type='INTEGER'\n" +
+                "            required='false'\n" +
+                "            description='A value'/>\n" +
+                "    <column name='VALUE2'\n" +
+                "            type='DOUBLE'\n" +
+                "            required='false'\n" +
+                "            description='Another value'/>\n" +
+                "  </table>\n" +
+                "  <table name='AnotherTable'\n" +
+                "         description='And another table'>\n" +
+                "    <column name='Some_ID'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='16'\n" +
+                "            description='The foreign key'/>\n" +
+                "    <column name='Some_Value'\n" +
+                "            type='DOUBLE'/>\n" +
+                "    <foreign-key foreignTable='SomeTable'>\n" +
+                "       <reference local='Some_ID' foreign='ID'/>\n" +
+                "    </foreign-key>\n" +
+                "    <foreign-key foreignTable='SomeTable'>\n" +
+                "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(2, model.getTableCount());
@@ -1510,16 +1510,16 @@ public class TestDatabaseIO extends TestCase {
         Table someTable = model.getTable(0);
 
         assertEquals("SomeTable", "Some table", 3, 1, 0, 0, 0,
-                someTable);
+            someTable);
         assertEquals("ID", Types.VARCHAR, 16, 0, null, "The primary key", null, true, true, false,
-                someTable.getColumn(0));
+            someTable.getColumn(0));
 
         Table anotherTable = model.getTable(1);
 
         assertEquals("AnotherTable", "And another table", 2, 0, 0, 2, 0,
-                anotherTable);
+            anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false,
-                anotherTable.getColumn(0));
+            anotherTable.getColumn(0));
 
         ForeignKey fk = anotherTable.getForeignKey(0);
 
@@ -1532,25 +1532,25 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(anotherTable.getColumn(1), someTable.getColumn(2), fk.getReference(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\" description=\"Some table\">\n" +
-                        "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
-                        "    <column name=\"VALUE1\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"A value\" />\n" +
-                        "    <column name=\"VALUE2\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" description=\"Another value\" />\n" +
-                        "  </table>\n" +
-                        "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
-                        "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
-                        "    <column name=\"Some_Value\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <foreign-key foreignTable=\"SomeTable\">\n" +
-                        "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
-                        "    </foreign-key>\n" +
-                        "    <foreign-key foreignTable=\"SomeTable\">\n" +
-                        "      <reference local=\"Some_Value\" foreign=\"VALUE2\" />\n" +
-                        "    </foreign-key>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\" description=\"Some table\">\n" +
+                "    <column name=\"ID\" primaryKey=\"true\" required=\"true\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The primary key\" />\n" +
+                "    <column name=\"VALUE1\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"A value\" />\n" +
+                "    <column name=\"VALUE2\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" description=\"Another value\" />\n" +
+                "  </table>\n" +
+                "  <table name=\"AnotherTable\" description=\"And another table\">\n" +
+                "    <column name=\"Some_ID\" primaryKey=\"false\" required=\"false\" type=\"VARCHAR\" size=\"16\" autoIncrement=\"false\" description=\"The foreign key\" />\n" +
+                "    <column name=\"Some_Value\" primaryKey=\"false\" required=\"false\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <foreign-key foreignTable=\"SomeTable\">\n" +
+                "      <reference local=\"Some_ID\" foreign=\"ID\" />\n" +
+                "    </foreign-key>\n" +
+                "    <foreign-key foreignTable=\"SomeTable\">\n" +
+                "      <reference local=\"Some_Value\" foreign=\"VALUE2\" />\n" +
+                "    </foreign-key>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1559,40 +1559,40 @@ public class TestDatabaseIO extends TestCase {
     public void testTwoForeignkeysWithSameName() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='SomeTable'\n" +
-                            "         description='Some table'>\n" +
-                            "    <column name='ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'\n" +
-                            "            description='The primary key'/>\n" +
-                            "    <column name='VALUE1'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='false'\n" +
-                            "            description='A value'/>\n" +
-                            "    <column name='VALUE2'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            required='false'\n" +
-                            "            description='Another value'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='AnotherTable'\n" +
-                            "         description='And another table'>\n" +
-                            "    <column name='Some_ID'\n" +
-                            "            type='VARCHAR'\n" +
-                            "            size='16'\n" +
-                            "            description='The foreign key'/>\n" +
-                            "    <column name='Some_Value'\n" +
-                            "            type='DOUBLE'/>\n" +
-                            "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
-                            "       <reference local='Some_ID' foreign='ID'/>\n" +
-                            "    </foreign-key>\n" +
-                            "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
-                            "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
-                            "    </foreign-key>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='SomeTable'\n" +
+                    "         description='Some table'>\n" +
+                    "    <column name='ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'\n" +
+                    "            description='The primary key'/>\n" +
+                    "    <column name='VALUE1'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='false'\n" +
+                    "            description='A value'/>\n" +
+                    "    <column name='VALUE2'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            required='false'\n" +
+                    "            description='Another value'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='AnotherTable'\n" +
+                    "         description='And another table'>\n" +
+                    "    <column name='Some_ID'\n" +
+                    "            type='VARCHAR'\n" +
+                    "            size='16'\n" +
+                    "            description='The foreign key'/>\n" +
+                    "    <column name='Some_Value'\n" +
+                    "            type='DOUBLE'/>\n" +
+                    "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
+                    "       <reference local='Some_ID' foreign='ID'/>\n" +
+                    "    </foreign-key>\n" +
+                    "    <foreign-key name='The foreignkey' foreignTable='SomeTable'>\n" +
+                    "       <reference local='Some_Value' foreign='VALUE2'/>\n" +
+                    "    </foreign-key>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -1604,20 +1604,20 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testSingleIndex() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <index>\n" +
-                        "      <index-column name='value'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <index>\n" +
+                "      <index-column name='value'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1625,11 +1625,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 2, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         Index index = table.getIndex(0);
 
@@ -1637,17 +1637,17 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <index>\n" +
-                        "      <index-column name=\"value\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <index>\n" +
+                "      <index-column name=\"value\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1655,24 +1655,24 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testIndexWithTwoColumns() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='when'\n" +
-                        "            type='TIMESTAMP'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <index>\n" +
-                        "      <index-column name='when'/>\n" +
-                        "      <index-column name='id'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='when'\n" +
+                "            type='TIMESTAMP'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <index>\n" +
+                "      <index-column name='when'/>\n" +
+                "      <index-column name='id'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1680,13 +1680,13 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 3, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("when", Types.TIMESTAMP, 0, 0, null, null, null, false, true, false,
-                table.getColumn(1));
+            table.getColumn(1));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(2));
+            table.getColumn(2));
 
         Index index = table.getIndex(0);
 
@@ -1695,19 +1695,19 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(0), null, index.getColumn(1));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"when\" primaryKey=\"false\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <index>\n" +
-                        "      <index-column name=\"when\" />\n" +
-                        "      <index-column name=\"id\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"when\" primaryKey=\"false\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <index>\n" +
+                "      <index-column name=\"when\" />\n" +
+                "      <index-column name=\"id\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1715,20 +1715,20 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testIndexWithName() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <index name='The Index'>\n" +
-                        "      <index-column name='value'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <index name='The Index'>\n" +
+                "      <index-column name='value'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1736,11 +1736,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 2, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         Index index = table.getIndex(0);
 
@@ -1748,17 +1748,17 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <index name=\"The Index\">\n" +
-                        "      <index-column name=\"value\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <index name=\"The Index\">\n" +
+                "      <index-column name=\"value\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1767,19 +1767,19 @@ public class TestDatabaseIO extends TestCase {
     public void testIndexWithoutColumns() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <index>\n" +
-                            "    </index>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <index>\n" +
+                    "    </index>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1792,20 +1792,20 @@ public class TestDatabaseIO extends TestCase {
     public void testIndexWithUndefinedColumns() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <index>\n" +
-                            "      <index-column name='theValue'/>\n" +
-                            "    </index>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <index>\n" +
+                    "      <index-column name='theValue'/>\n" +
+                    "    </index>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -1818,20 +1818,20 @@ public class TestDatabaseIO extends TestCase {
     public void testIndexWithNoNameColumn() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <index>\n" +
-                            "      <index-column/>\n" +
-                            "    </index>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <index>\n" +
+                    "      <index-column/>\n" +
+                    "    </index>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -1844,20 +1844,20 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testSingleUniqueIndex() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name='value'/>\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <unique>\n" +
+                "      <unique-column name='value'/>\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1865,11 +1865,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 2, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         Index index = table.getIndex(0);
 
@@ -1877,17 +1877,17 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name=\"value\" />\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <unique>\n" +
+                "      <unique-column name=\"value\" />\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1895,24 +1895,24 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testUniqueIndexWithTwoColumns() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='when'\n" +
-                        "            type='TIMESTAMP'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name='when'/>\n" +
-                        "      <unique-column name='id'/>\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='when'\n" +
+                "            type='TIMESTAMP'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <unique>\n" +
+                "      <unique-column name='when'/>\n" +
+                "      <unique-column name='id'/>\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1920,13 +1920,13 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 3, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("when", Types.TIMESTAMP, 0, 0, null, null, null, false, true, false,
-                table.getColumn(1));
+            table.getColumn(1));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(2));
+            table.getColumn(2));
 
         Index index = table.getIndex(0);
 
@@ -1935,19 +1935,19 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(0), null, index.getColumn(1));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"when\" primaryKey=\"false\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name=\"when\" />\n" +
-                        "      <unique-column name=\"id\" />\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"when\" primaryKey=\"false\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <unique>\n" +
+                "      <unique-column name=\"when\" />\n" +
+                "      <unique-column name=\"id\" />\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -1955,20 +1955,20 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testUniqueIndexWithName() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndex'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='DOUBLE'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'/>\n" +
-                        "    <column name='value'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            default='1'/>\n" +
-                        "    <unique name='The Index'>\n" +
-                        "      <unique-column name='value'/>\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndex'>\n" +
+                "    <column name='id'\n" +
+                "            type='DOUBLE'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'/>\n" +
+                "    <column name='value'\n" +
+                "            type='SMALLINT'\n" +
+                "            default='1'/>\n" +
+                "    <unique name='The Index'>\n" +
+                "      <unique-column name='value'/>\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -1976,11 +1976,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndex", null, 2, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.DOUBLE, 0, 0, null, null, null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("value", Types.SMALLINT, 0, 0, "1", null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         Index index = table.getIndex(0);
 
@@ -1988,17 +1988,17 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndex\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
-                        "    <unique name=\"The Index\">\n" +
-                        "      <unique-column name=\"value\" />\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndex\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"DOUBLE\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"value\" primaryKey=\"false\" required=\"false\" type=\"SMALLINT\" default=\"1\" autoIncrement=\"false\" />\n" +
+                "    <unique name=\"The Index\">\n" +
+                "      <unique-column name=\"value\" />\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -2007,19 +2007,19 @@ public class TestDatabaseIO extends TestCase {
     public void testUniqueIndexWithoutColumns() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <unique>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <unique>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -2032,20 +2032,20 @@ public class TestDatabaseIO extends TestCase {
     public void testUniqueIndexWithUndefinedColumns() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <unique>\n" +
-                            "      <unique-column name='theValue'/>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <unique>\n" +
+                    "      <unique-column name='theValue'/>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2058,20 +2058,20 @@ public class TestDatabaseIO extends TestCase {
     public void testUniqueIndexWithNoNameColumn() throws Exception {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWithIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='DOUBLE'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value'\n" +
-                            "            type='SMALLINT'\n" +
-                            "            default='1'/>\n" +
-                            "    <unique>\n" +
-                            "      <unique-column/>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWithIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='DOUBLE'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value'\n" +
+                    "            type='SMALLINT'\n" +
+                    "            default='1'/>\n" +
+                    "    <unique>\n" +
+                    "      <unique-column/>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -2083,23 +2083,23 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testMixedIndexes() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='TableWithIndexes'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='SMALLINT'\n" +
-                        "            primaryKey='false'\n" +
-                        "            required='true'\n" +
-                        "            autoIncrement='true'/>\n" +
-                        "    <column name='when'\n" +
-                        "            type='DATE'/>\n" +
-                        "    <unique name='important column'>\n" +
-                        "      <unique-column name='id'/>\n" +
-                        "    </unique>\n" +
-                        "    <index>\n" +
-                        "      <index-column name='when'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='TableWithIndexes'>\n" +
+                "    <column name='id'\n" +
+                "            type='SMALLINT'\n" +
+                "            primaryKey='false'\n" +
+                "            required='true'\n" +
+                "            autoIncrement='true'/>\n" +
+                "    <column name='when'\n" +
+                "            type='DATE'/>\n" +
+                "    <unique name='important column'>\n" +
+                "      <unique-column name='id'/>\n" +
+                "    </unique>\n" +
+                "    <index>\n" +
+                "      <index-column name='when'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -2107,11 +2107,11 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("TableWithIndexes", null, 2, 0, 1, 0, 2,
-                table);
+            table);
         assertEquals("id", Types.SMALLINT, 0, 0, null, null, null, false, true, true,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("when", Types.DATE, 0, 0, null, null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
         assertEquals(table.getColumn(0), table.getAutoIncrementColumns()[0]);
 
         Index index = table.getIndex(0);
@@ -2125,20 +2125,20 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"TableWithIndexes\">\n" +
-                        "    <column name=\"id\" primaryKey=\"false\" required=\"true\" type=\"SMALLINT\" autoIncrement=\"true\" />\n" +
-                        "    <column name=\"when\" primaryKey=\"false\" required=\"false\" type=\"DATE\" autoIncrement=\"false\" />\n" +
-                        "    <unique name=\"important column\">\n" +
-                        "      <unique-column name=\"id\" />\n" +
-                        "    </unique>\n" +
-                        "    <index>\n" +
-                        "      <index-column name=\"when\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"TableWithIndexes\">\n" +
+                "    <column name=\"id\" primaryKey=\"false\" required=\"true\" type=\"SMALLINT\" autoIncrement=\"true\" />\n" +
+                "    <column name=\"when\" primaryKey=\"false\" required=\"false\" type=\"DATE\" autoIncrement=\"false\" />\n" +
+                "    <unique name=\"important column\">\n" +
+                "      <unique-column name=\"id\" />\n" +
+                "    </unique>\n" +
+                "    <index>\n" +
+                "      <index-column name=\"when\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -2150,71 +2150,71 @@ public class TestDatabaseIO extends TestCase {
         // C = id:CHAR(32), text:LONGVARCHAR; index 'byText' (text)
 
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='A'\n" +
-                        "         description='Table A'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='INTEGER'\n" +
-                        "            autoIncrement='true'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key of table A'/>\n" +
-                        "    <column name='parentId'\n" +
-                        "            type='INTEGER'\n" +
-                        "            description='The field for the foreign key parent'/>\n" +
-                        "    <column name='name'\n" +
-                        "            type='VARCHAR'\n" +
-                        "            size='32'\n" +
-                        "            required='true'\n" +
-                        "            description='The name'/>\n" +
-                        "    <foreign-key name='parent' foreignTable='A'>\n" +
-                        "       <reference local='parentId' foreign='id'/>\n" +
-                        "    </foreign-key>\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name='name'/>\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "  <table name='B'\n" +
-                        "         description='Table B'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='TIMESTAMP'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key of table B'/>\n" +
-                        "    <column name='aid'\n" +
-                        "            type='INTEGER'\n" +
-                        "            description='The field for the foreign key towards A'/>\n" +
-                        "    <column name='cid'\n" +
-                        "            type='CHAR'\n" +
-                        "            size='32'\n" +
-                        "            description='The field for the foreign key towards C'/>\n" +
-                        "    <foreign-key foreignTable='A'>\n" +
-                        "       <reference local='aid' foreign='id'/>\n" +
-                        "    </foreign-key>\n" +
-                        "    <foreign-key foreignTable='C'>\n" +
-                        "       <reference local='cid' foreign='id'/>\n" +
-                        "    </foreign-key>\n" +
-                        "    <index>\n" +
-                        "      <index-column name='aid'/>\n" +
-                        "      <index-column name='cid'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "  <table name='C'\n" +
-                        "         description='Table C'>\n" +
-                        "    <column name='id'\n" +
-                        "            type='CHAR'\n" +
-                        "            size='32'\n" +
-                        "            primaryKey='true'\n" +
-                        "            required='true'\n" +
-                        "            description='The primary key of table C'/>\n" +
-                        "    <column name='text'\n" +
-                        "            type='LONGVARCHAR'\n" +
-                        "            description='The text'/>\n" +
-                        "    <index name='byText'>\n" +
-                        "      <index-column name='text'/>\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='A'\n" +
+                "         description='Table A'>\n" +
+                "    <column name='id'\n" +
+                "            type='INTEGER'\n" +
+                "            autoIncrement='true'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key of table A'/>\n" +
+                "    <column name='parentId'\n" +
+                "            type='INTEGER'\n" +
+                "            description='The field for the foreign key parent'/>\n" +
+                "    <column name='name'\n" +
+                "            type='VARCHAR'\n" +
+                "            size='32'\n" +
+                "            required='true'\n" +
+                "            description='The name'/>\n" +
+                "    <foreign-key name='parent' foreignTable='A'>\n" +
+                "       <reference local='parentId' foreign='id'/>\n" +
+                "    </foreign-key>\n" +
+                "    <unique>\n" +
+                "      <unique-column name='name'/>\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "  <table name='B'\n" +
+                "         description='Table B'>\n" +
+                "    <column name='id'\n" +
+                "            type='TIMESTAMP'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key of table B'/>\n" +
+                "    <column name='aid'\n" +
+                "            type='INTEGER'\n" +
+                "            description='The field for the foreign key towards A'/>\n" +
+                "    <column name='cid'\n" +
+                "            type='CHAR'\n" +
+                "            size='32'\n" +
+                "            description='The field for the foreign key towards C'/>\n" +
+                "    <foreign-key foreignTable='A'>\n" +
+                "       <reference local='aid' foreign='id'/>\n" +
+                "    </foreign-key>\n" +
+                "    <foreign-key foreignTable='C'>\n" +
+                "       <reference local='cid' foreign='id'/>\n" +
+                "    </foreign-key>\n" +
+                "    <index>\n" +
+                "      <index-column name='aid'/>\n" +
+                "      <index-column name='cid'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "  <table name='C'\n" +
+                "         description='Table C'>\n" +
+                "    <column name='id'\n" +
+                "            type='CHAR'\n" +
+                "            size='32'\n" +
+                "            primaryKey='true'\n" +
+                "            required='true'\n" +
+                "            description='The primary key of table C'/>\n" +
+                "    <column name='text'\n" +
+                "            type='LONGVARCHAR'\n" +
+                "            description='The text'/>\n" +
+                "    <index name='byText'>\n" +
+                "      <index-column name='text'/>\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(3, model.getTableCount());
@@ -2224,13 +2224,13 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("A", "Table A", 3, 1, 1, 1, 1,
-                table);
+            table);
         assertEquals("id", Types.INTEGER, 0, 0, null, "The primary key of table A", null, true, true, true,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("parentId", Types.INTEGER, 0, 0, null, "The field for the foreign key parent", null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
         assertEquals("name", Types.VARCHAR, 32, 0, null, "The name", null, false, true, false,
-                table.getColumn(2));
+            table.getColumn(2));
         assertEquals(table.getColumn(0), table.getAutoIncrementColumns()[0]);
 
         ForeignKey fk = table.getForeignKey(0);
@@ -2248,13 +2248,13 @@ public class TestDatabaseIO extends TestCase {
         table = model.getTable(1);
 
         assertEquals("B", "Table B", 3, 1, 0, 2, 1,
-                table);
+            table);
         assertEquals("id", Types.TIMESTAMP, 0, 0, null, "The primary key of table B", null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("aid", Types.INTEGER, 0, 0, null, "The field for the foreign key towards A", null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
         assertEquals("cid", Types.CHAR, 32, 0, null, "The field for the foreign key towards C", null, false, false, false,
-                table.getColumn(2));
+            table.getColumn(2));
 
         fk = table.getForeignKey(0);
 
@@ -2277,11 +2277,11 @@ public class TestDatabaseIO extends TestCase {
         table = model.getTable(2);
 
         assertEquals("C", "Table C", 2, 1, 0, 0, 1,
-                table);
+            table);
         assertEquals("id", Types.CHAR, 32, 0, null, "The primary key of table C", null, true, true, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("text", Types.LONGVARCHAR, 0, 0, null, "The text", null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         index = table.getIndex(0);
 
@@ -2289,43 +2289,43 @@ public class TestDatabaseIO extends TestCase {
         assertEquals(table.getColumn(1), null, index.getColumn(0));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"A\" description=\"Table A\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"INTEGER\" autoIncrement=\"true\" description=\"The primary key of table A\" />\n" +
-                        "    <column name=\"parentId\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"The field for the foreign key parent\" />\n" +
-                        "    <column name=\"name\" primaryKey=\"false\" required=\"true\" type=\"VARCHAR\" size=\"32\" autoIncrement=\"false\" description=\"The name\" />\n" +
-                        "    <foreign-key foreignTable=\"A\" name=\"parent\">\n" +
-                        "      <reference local=\"parentId\" foreign=\"id\" />\n" +
-                        "    </foreign-key>\n" +
-                        "    <unique>\n" +
-                        "      <unique-column name=\"name\" />\n" +
-                        "    </unique>\n" +
-                        "  </table>\n" +
-                        "  <table name=\"B\" description=\"Table B\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" description=\"The primary key of table B\" />\n" +
-                        "    <column name=\"aid\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"The field for the foreign key towards A\" />\n" +
-                        "    <column name=\"cid\" primaryKey=\"false\" required=\"false\" type=\"CHAR\" size=\"32\" autoIncrement=\"false\" description=\"The field for the foreign key towards C\" />\n" +
-                        "    <foreign-key foreignTable=\"A\">\n" +
-                        "      <reference local=\"aid\" foreign=\"id\" />\n" +
-                        "    </foreign-key>\n" +
-                        "    <foreign-key foreignTable=\"C\">\n" +
-                        "      <reference local=\"cid\" foreign=\"id\" />\n" +
-                        "    </foreign-key>\n" +
-                        "    <index>\n" +
-                        "      <index-column name=\"aid\" />\n" +
-                        "      <index-column name=\"cid\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "  <table name=\"C\" description=\"Table C\">\n" +
-                        "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"CHAR\" size=\"32\" autoIncrement=\"false\" description=\"The primary key of table C\" />\n" +
-                        "    <column name=\"text\" primaryKey=\"false\" required=\"false\" type=\"LONGVARCHAR\" autoIncrement=\"false\" description=\"The text\" />\n" +
-                        "    <index name=\"byText\">\n" +
-                        "      <index-column name=\"text\" />\n" +
-                        "    </index>\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"A\" description=\"Table A\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"INTEGER\" autoIncrement=\"true\" description=\"The primary key of table A\" />\n" +
+                "    <column name=\"parentId\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"The field for the foreign key parent\" />\n" +
+                "    <column name=\"name\" primaryKey=\"false\" required=\"true\" type=\"VARCHAR\" size=\"32\" autoIncrement=\"false\" description=\"The name\" />\n" +
+                "    <foreign-key foreignTable=\"A\" name=\"parent\">\n" +
+                "      <reference local=\"parentId\" foreign=\"id\" />\n" +
+                "    </foreign-key>\n" +
+                "    <unique>\n" +
+                "      <unique-column name=\"name\" />\n" +
+                "    </unique>\n" +
+                "  </table>\n" +
+                "  <table name=\"B\" description=\"Table B\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"TIMESTAMP\" autoIncrement=\"false\" description=\"The primary key of table B\" />\n" +
+                "    <column name=\"aid\" primaryKey=\"false\" required=\"false\" type=\"INTEGER\" autoIncrement=\"false\" description=\"The field for the foreign key towards A\" />\n" +
+                "    <column name=\"cid\" primaryKey=\"false\" required=\"false\" type=\"CHAR\" size=\"32\" autoIncrement=\"false\" description=\"The field for the foreign key towards C\" />\n" +
+                "    <foreign-key foreignTable=\"A\">\n" +
+                "      <reference local=\"aid\" foreign=\"id\" />\n" +
+                "    </foreign-key>\n" +
+                "    <foreign-key foreignTable=\"C\">\n" +
+                "      <reference local=\"cid\" foreign=\"id\" />\n" +
+                "    </foreign-key>\n" +
+                "    <index>\n" +
+                "      <index-column name=\"aid\" />\n" +
+                "      <index-column name=\"cid\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "  <table name=\"C\" description=\"Table C\">\n" +
+                "    <column name=\"id\" primaryKey=\"true\" required=\"true\" type=\"CHAR\" size=\"32\" autoIncrement=\"false\" description=\"The primary key of table C\" />\n" +
+                "    <column name=\"text\" primaryKey=\"false\" required=\"false\" type=\"LONGVARCHAR\" autoIncrement=\"false\" description=\"The text\" />\n" +
+                "    <index name=\"byText\">\n" +
+                "      <index-column name=\"text\" />\n" +
+                "    </index>\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 
     /**
@@ -2334,18 +2334,18 @@ public class TestDatabaseIO extends TestCase {
     public void testUndefinedIndexColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWidthIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <index name='test index'>\n" +
-                            "      <index-column name='id'/>\n" +
-                            "      <index-column name='value'/>\n" +
-                            "    </index>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWidthIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <index name='test index'>\n" +
+                    "      <index-column name='id'/>\n" +
+                    "      <index-column name='value'/>\n" +
+                    "    </index>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2358,20 +2358,20 @@ public class TestDatabaseIO extends TestCase {
     public void testTwoTablesWithTheSameName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id1'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id2'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id1'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id2'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2385,16 +2385,16 @@ public class TestDatabaseIO extends TestCase {
     public void testTwoColumnsWithTheSameName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TestTable'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='id'\n" +
-                            "            type='VARCHAR'/>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TestTable'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='id'\n" +
+                    "            type='VARCHAR'/>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2407,17 +2407,17 @@ public class TestDatabaseIO extends TestCase {
     public void testUndefinedUniqueColumn() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWidthUnique'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <unique>\n" +
-                            "      <unique-column name='value'/>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWidthUnique'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <unique>\n" +
+                    "      <unique-column name='value'/>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2430,26 +2430,26 @@ public class TestDatabaseIO extends TestCase {
     public void testTwoIndicesWithTheSameName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWidthIndex'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value1'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value2'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <index name='the index'>\n" +
-                            "      <index-column name='value1'/>\n" +
-                            "    </index>\n" +
-                            "    <index name='the index'>\n" +
-                            "      <index-column name='value2'/>\n" +
-                            "    </index>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWidthIndex'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value1'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value2'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <index name='the index'>\n" +
+                    "      <index-column name='value1'/>\n" +
+                    "    </index>\n" +
+                    "    <index name='the index'>\n" +
+                    "      <index-column name='value2'/>\n" +
+                    "    </index>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2463,26 +2463,26 @@ public class TestDatabaseIO extends TestCase {
     public void testTwoUniqueIndicesWithTheSameName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWidthUnique'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value1'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value2'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <unique name='the unique'>\n" +
-                            "      <unique-column name='value1'/>\n" +
-                            "    </unique>\n" +
-                            "    <unique name='the unique'>\n" +
-                            "      <unique-column name='value2'/>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWidthUnique'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value1'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value2'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <unique name='the unique'>\n" +
+                    "      <unique-column name='value1'/>\n" +
+                    "    </unique>\n" +
+                    "    <unique name='the unique'>\n" +
+                    "      <unique-column name='value2'/>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2496,26 +2496,26 @@ public class TestDatabaseIO extends TestCase {
     public void testUniqueAndNormalIndexWithTheSameName() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                            "  <table name='TableWidthUnique'>\n" +
-                            "    <column name='id'\n" +
-                            "            type='INTEGER'\n" +
-                            "            primaryKey='true'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value1'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <column name='value2'\n" +
-                            "            type='INTEGER'\n" +
-                            "            required='true'/>\n" +
-                            "    <index name='test'>\n" +
-                            "      <index-column name='value1'/>\n" +
-                            "    </index>\n" +
-                            "    <unique name='test'>\n" +
-                            "      <unique-column name='value2'/>\n" +
-                            "    </unique>\n" +
-                            "  </table>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                    "  <table name='TableWidthUnique'>\n" +
+                    "    <column name='id'\n" +
+                    "            type='INTEGER'\n" +
+                    "            primaryKey='true'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value1'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <column name='value2'\n" +
+                    "            type='INTEGER'\n" +
+                    "            required='true'/>\n" +
+                    "    <index name='test'>\n" +
+                    "      <index-column name='value1'/>\n" +
+                    "    </index>\n" +
+                    "    <unique name='test'>\n" +
+                    "      <unique-column name='value2'/>\n" +
+                    "    </unique>\n" +
+                    "  </table>\n" +
+                    "</database>");
 
             fail();
         } catch (ModelException ex) {
@@ -2528,9 +2528,9 @@ public class TestDatabaseIO extends TestCase {
     public void testFaultReadOfTable() {
         try {
             readModel(
-                    "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='db' >\n" +
-                            "  <index name='NotATable'/>\n" +
-                            "</database>");
+                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='db' >\n" +
+                    "  <index name='NotATable'/>\n" +
+                    "</database>");
 
             fail();
         } catch (DdlUtilsXMLException ex) {
@@ -2542,14 +2542,14 @@ public class TestDatabaseIO extends TestCase {
      */
     public void testTurbineExtension() throws Exception {
         Database model = readModel(
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
-                        "  <table name='SomeTable'>\n" +
-                        "    <column name='intField'\n" +
-                        "            type='BOOLEANINT'/>\n" +
-                        "    <column name='charField'\n" +
-                        "            type='BOOLEANCHAR' />\n" +
-                        "  </table>\n" +
-                        "</database>");
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='test'>\n" +
+                "  <table name='SomeTable'>\n" +
+                "    <column name='intField'\n" +
+                "            type='BOOLEANINT'/>\n" +
+                "    <column name='charField'\n" +
+                "            type='BOOLEANCHAR' />\n" +
+                "  </table>\n" +
+                "</database>");
 
         assertEquals("test", model.getName());
         assertEquals(1, model.getTableCount());
@@ -2557,20 +2557,20 @@ public class TestDatabaseIO extends TestCase {
         Table table = model.getTable(0);
 
         assertEquals("SomeTable", null, 2, 0, 0, 0, 0,
-                table);
+            table);
         assertEquals("intField", Types.TINYINT, 0, 0, null, null, null, false, false, false,
-                table.getColumn(0));
+            table.getColumn(0));
         assertEquals("charField", Types.CHAR, 0, 0, null, null, null, false, false, false,
-                table.getColumn(1));
+            table.getColumn(1));
 
         assertEquals(
-                "<?xml version='1.0' encoding='UTF-8'?>\n" +
-                        "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
-                        "  <table name=\"SomeTable\">\n" +
-                        "    <column name=\"intField\" primaryKey=\"false\" required=\"false\" type=\"TINYINT\" autoIncrement=\"false\" />\n" +
-                        "    <column name=\"charField\" primaryKey=\"false\" required=\"false\" type=\"CHAR\" autoIncrement=\"false\" />\n" +
-                        "  </table>\n" +
-                        "</database>\n",
-                model);
+            "<?xml version='1.0' encoding='UTF-8'?>\n" +
+                "<database xmlns=\"" + DatabaseIO.DDLUTILS_NAMESPACE + "\" name=\"test\">\n" +
+                "  <table name=\"SomeTable\">\n" +
+                "    <column name=\"intField\" primaryKey=\"false\" required=\"false\" type=\"TINYINT\" autoIncrement=\"false\" />\n" +
+                "    <column name=\"charField\" primaryKey=\"false\" required=\"false\" type=\"CHAR\" autoIncrement=\"false\" />\n" +
+                "  </table>\n" +
+                "</database>\n",
+            model);
     }
 }

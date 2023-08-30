@@ -1,10 +1,10 @@
 package org.apache.ddlutils.alteration;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class ModelComparator {
     /**
      * The log for this comparator.
      */
-    private final Log _log = LogFactory.getLog(ModelComparator.class);
+    private final Logger _log = LoggerFactory.getLogger(ModelComparator.class);
 
     /**
      * The platform information.

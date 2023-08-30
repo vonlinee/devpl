@@ -20,19 +20,14 @@ package org.apache.ddlutils.task;
  */
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.tools.ant.AntClassLoader;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -46,7 +41,7 @@ public abstract class DatabaseTaskBase extends Task {
     /**
      * The log.
      */
-    protected Log _log;
+    protected Logger _log;
 
     /**
      * The platform configuration.
@@ -280,19 +275,19 @@ public abstract class DatabaseTaskBase extends Task {
             LogManager.resetConfiguration();
             PropertyConfigurator.configure(props);
         }
-        _log = LogFactory.getLog(getClass());
+        _log = LoggerFactory.getLogger(getClass());
     }
 
     /**
      * Executes the commands.
      * @param model The database model
      */
-    protected void executeCommands(Database model) throws BuildException {
+    protected void executeCommands(Database model) throws RuntimeException {
         for (Iterator it = getCommands(); it.hasNext(); ) {
             Command cmd = (Command) it.next();
 
             if (cmd.isRequiringModel() && (model == null)) {
-                throw new BuildException("No database model specified");
+                throw new RuntimeException("No database model specified");
             }
             if (cmd instanceof DatabaseCommand) {
                 ((DatabaseCommand) cmd).setPlatformConfiguration(_platformConf);
@@ -304,7 +299,7 @@ public abstract class DatabaseTaskBase extends Task {
     /**
      * {@inheritDoc}
      */
-    public void execute() throws BuildException {
+    public void execute() throws RuntimeException {
         initLogging();
 
         if (!hasCommands()) {
@@ -312,21 +307,16 @@ public abstract class DatabaseTaskBase extends Task {
             return;
         }
 
-        ClassLoader sysClassLoader = (ClassLoader) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                try {
-                    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                    AntClassLoader newClassLoader = new AntClassLoader(getClass().getClassLoader(), true);
+        ClassLoader sysClassLoader;
 
-                    // we're changing the thread classloader so that we can access resources
-                    // from the classpath used to load this task's class
-                    Thread.currentThread().setContextClassLoader(newClassLoader);
-                    return contextClassLoader;
-                } catch (SecurityException ex) {
-                    throw new BuildException("Could not change the context clas loader", ex);
-                }
-            }
-        });
+        try {
+            sysClassLoader = Thread.currentThread().getContextClassLoader();
+            // we're changing the thread classloader so that we can access resources
+            // from the classpath used to load this task's class
+            Thread.currentThread().setContextClassLoader(sysClassLoader);
+        } catch (SecurityException ex) {
+            throw new RuntimeException("Could not change the context clas loader", ex);
+        }
 
         try {
             executeCommands(readModel());

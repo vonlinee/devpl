@@ -21,11 +21,10 @@ package org.apache.ddlutils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.FileSet;
+import org.apache.ddlutils.task.DirectoryScanner;
+import org.apache.ddlutils.task.FileSet;
+import org.apache.ddlutils.task.Project;
+import org.apache.ddlutils.task.Task;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -227,7 +226,7 @@ public class TestSummaryCreatorTask extends Task {
      * @param element            The element to add the relevant database properties to
      * @param jdbcPropertiesFile The path of the properties file
      */
-    protected void addTargetDatabaseInfo(Element element, String jdbcPropertiesFile) throws IOException, BuildException {
+    protected void addTargetDatabaseInfo(Element element, String jdbcPropertiesFile) throws IOException, RuntimeException {
         if (jdbcPropertiesFile == null) {
             return;
         }
@@ -256,7 +255,7 @@ public class TestSummaryCreatorTask extends Task {
             if (platformName == null) {
                 platformName = new PlatformUtils().determineDatabaseType(dataSource);
                 if (platformName == null) {
-                    throw new BuildException("Could not determine platform from datasource, please specify it in the jdbc.properties via the ddlutils.platform property");
+                    throw new RuntimeException("Could not determine platform from datasource, please specify it in the jdbc.properties via the ddlutils.platform property");
                 }
             }
 
@@ -303,7 +302,7 @@ public class TestSummaryCreatorTask extends Task {
                 // we ignore it
             }
         } catch (Exception ex) {
-            throw new BuildException(ex);
+            throw new RuntimeException(ex);
         } finally {
             if (conn != null) {
                 try {
@@ -334,14 +333,14 @@ public class TestSummaryCreatorTask extends Task {
                 if (propFile.exists() && propFile.isFile() && propFile.canRead()) {
                     propStream = new FileInputStream(propFile);
                 } else {
-                    throw new BuildException("Cannot load test jdbc properties from file " + jdbcPropertiesFile);
+                    throw new RuntimeException("Cannot load test jdbc properties from file " + jdbcPropertiesFile);
                 }
             }
             props.load(propStream);
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new BuildException("Cannot load test jdbc properties from file " + jdbcPropertiesFile, ex);
+            throw new RuntimeException("Cannot load test jdbc properties from file " + jdbcPropertiesFile, ex);
         } finally {
             if (propStream != null) {
                 try {
@@ -358,7 +357,7 @@ public class TestSummaryCreatorTask extends Task {
     /**
      * {@inheritDoc}
      */
-    public void execute() throws BuildException {
+    public void execute() throws RuntimeException {
         try {
             log("Processing test results", Project.MSG_INFO);
 
@@ -376,7 +375,11 @@ public class TestSummaryCreatorTask extends Task {
 
             log("Processing finished", Project.MSG_INFO);
         } catch (Exception ex) {
-            throw new BuildException("Error while processing the test results: " + ex.getLocalizedMessage(), ex);
+            throw new RuntimeException("Error while processing the test results: " + ex.getLocalizedMessage(), ex);
         }
+    }
+
+    private void log(String msg, Object... args) {
+
     }
 }

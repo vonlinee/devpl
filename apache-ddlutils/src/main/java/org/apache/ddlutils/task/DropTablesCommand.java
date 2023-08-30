@@ -6,7 +6,6 @@ import org.apache.ddlutils.model.CloneHelper;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
-import org.apache.tools.ant.BuildException;
 
 /**
  * Sub task for dropping tables.
@@ -52,11 +51,11 @@ public class DropTablesCommand extends DatabaseCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(DatabaseTaskBase task, Database model) throws BuildException {
+    public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         BasicDataSource dataSource = getDataSource();
 
         if (dataSource == null) {
-            throw new BuildException("No database specified.");
+            throw new RuntimeException("No database specified.");
         }
 
         DatabasePlatform platform = getPlatform();

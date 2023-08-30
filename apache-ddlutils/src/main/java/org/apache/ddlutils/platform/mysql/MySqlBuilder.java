@@ -40,9 +40,6 @@ public class MySqlBuilder extends SqlBuilder {
         addEscapedCharSequence("_", "\\_");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void dropTable(Table table) throws IOException {
         print("DROP TABLE IF EXISTS ");
@@ -110,9 +107,7 @@ public class MySqlBuilder extends SqlBuilder {
 
     @Override
     protected String getSqlType(Column column) {
-        final String sqlType = super.getSqlType(column);
-        System.out.println(column.getName() + " " + sqlType);
-        return sqlType;
+        return super.getSqlType(column);
     }
 
     @Override
@@ -204,9 +199,6 @@ public class MySqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
@@ -221,14 +213,10 @@ public class MySqlBuilder extends SqlBuilder {
                 case Types.TINYINT:
                 case Types.SMALLINT:
                 case Types.INTEGER:
-                case Types.BIGINT:
+                case Types.BIGINT, Types.FLOAT, Types.REAL, Types.DOUBLE:
                     targetNativeType = "SIGNED";
                     break;
-                case Types.FLOAT:
-                case Types.REAL:
-                case Types.DOUBLE:
-                    targetNativeType = "SIGNED"; // ?
-                    break;
+                // ?
                 case Types.DECIMAL:
                 case Types.NUMERIC:
                     targetNativeType = "DECIMAL";

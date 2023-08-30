@@ -1,12 +1,12 @@
 package org.apache.ddlutils.platform;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -43,7 +43,7 @@ public abstract class SqlBuilder {
     /**
      * The Log to which logging calls will be made.
      */
-    protected final Log _log = LogFactory.getLog(SqlBuilder.class);
+    protected final Logger _log = LoggerFactory.getLogger(SqlBuilder.class);
 
     /**
      * The platform that this builder belongs to.
@@ -335,9 +335,7 @@ public abstract class SqlBuilder {
             // table comment
             writeTableComment(table);
             // output table
-            createTable(database,
-                    table,
-                    params == null ? null : params.getParametersFor(table));
+            createTable(database, table, params == null ? null : params.getParametersFor(table));
         }
 
         // we're writing the external foreignkeys last to ensure that all referenced tables are already defined
@@ -379,8 +377,7 @@ public abstract class SqlBuilder {
 
         for (int idx = 0; idx < sourceTable.getColumnCount(); idx++) {
             Column sourceColumn = sourceTable.getColumn(idx);
-            Column targetColumn = targetTable.findColumn(sourceColumn.getName(),
-                    getPlatform().isDelimitedIdentifierModeOn());
+            Column targetColumn = targetTable.findColumn(sourceColumn.getName(), getPlatform().isDelimitedIdentifierModeOn());
 
             if (targetColumn != null) {
                 columns.put(sourceColumn, targetColumn);
@@ -595,8 +592,7 @@ public abstract class SqlBuilder {
         // we're dropping the external foreignkeys first
         for (int idx = database.getTableCount() - 1; idx >= 0; idx--) {
             Table table = database.getTable(idx);
-            if ((table.getName() != null) &&
-                    (table.getName().length() > 0)) {
+            if ((table.getName() != null) && (!table.getName().isEmpty())) {
                 dropForeignKeys(table);
             }
         }
@@ -607,8 +603,7 @@ public abstract class SqlBuilder {
         //       * alter the tables first to drop the internal foreignkeys
         for (int idx = database.getTableCount() - 1; idx >= 0; idx--) {
             Table table = database.getTable(idx);
-            if ((table.getName() != null) &&
-                    (table.getName().length() > 0)) {
+            if ((table.getName() != null) && (!table.getName().isEmpty())) {
                 writeTableComment(table);
                 dropTable(table);
             }
@@ -800,7 +795,7 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map<String, Object>  oldColumnValues, Map<String, Object>  newColumnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, Map<String, Object> oldColumnValues, Map<String, Object> newColumnValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
 
@@ -993,8 +988,7 @@ public abstract class SqlBuilder {
         StringBuilder result = new StringBuilder();
 
         result.append(name, 0, startCut);
-        if (((startCut == 0) || (name.charAt(startCut - 1) != '_')) &&
-                ((startCut + delta + 1 == originalLength) || (name.charAt(startCut + delta + 1) != '_'))) {
+        if (((startCut == 0) || (name.charAt(startCut - 1) != '_')) && ((startCut + delta + 1 == originalLength) || (name.charAt(startCut + delta + 1) != '_'))) {
             // just to make sure that there isn't already a '_' right before or right
             // after the cutting place (which would look odd with an aditional one)
             result.append("_");
@@ -1103,7 +1097,7 @@ public abstract class SqlBuilder {
      * @param column The column
      */
     protected void writeColumn(Table table, Column column) throws IOException {
-        //see comments in columnsDiffer about null/"" defaults
+        // see comments in columnsDiffer about null/"" defaults
         printIdentifier(getColumnName(column));
         print(" ");
         print(getSqlType(column));
@@ -1113,8 +1107,7 @@ public abstract class SqlBuilder {
         if (column.isRequired()) {
             print(" ");
             writeColumnNotNullableStmt();
-        } else if (platformInfo.isNullAsDefaultValueRequired() &&
-                platformInfo.hasNullDefault(column.getJdbcTypeCode())) {
+        } else if (platformInfo.isNullAsDefaultValueRequired() && platformInfo.hasNullDefault(column.getJdbcTypeCode())) {
             print(" ");
             writeColumnNullableStmt();
         }
@@ -1238,9 +1231,7 @@ public abstract class SqlBuilder {
      * @return <code>true</code> if the default value spec is valid
      */
     protected boolean isValidDefaultValue(String defaultSpec, int typeCode) {
-        return (defaultSpec != null) &&
-                ((defaultSpec.length() > 0) ||
-                        (!TypeMap.isNumericType(typeCode) && !TypeMap.isDateTimeType(typeCode)));
+        return (defaultSpec != null) && ((!defaultSpec.isEmpty()) || (!TypeMap.isNumericType(typeCode) && !TypeMap.isDateTimeType(typeCode)));
     }
 
     /**
@@ -1251,8 +1242,7 @@ public abstract class SqlBuilder {
     protected void writeColumnDefaultValueStatement(Table table, Column column) throws IOException {
         Object parsedDefault = column.getParsedDefaultValue();
         if (parsedDefault != null) {
-            if (!getPlatformInfo().isDefaultValuesForLongTypesSupported() &&
-                    ((column.getJdbcTypeCode() == Types.LONGVARBINARY) || (column.getJdbcTypeCode() == Types.LONGVARCHAR))) {
+            if (!getPlatformInfo().isDefaultValuesForLongTypesSupported() && ((column.getJdbcTypeCode() == Types.LONGVARBINARY) || (column.getJdbcTypeCode() == Types.LONGVARCHAR))) {
                 throw new ModelException("The platform does not support default values for LONGVARCHAR or LONGVARBINARY columns");
             }
             // we write empty default value strings only if the type is not a numeric or date/time type
@@ -1285,7 +1275,7 @@ public abstract class SqlBuilder {
             boolean shouldUseQuotes = !TypeMap.isNumericType(typeCode);
 
             if (shouldUseQuotes) {
-                // characters are only escaped when within a string literal 
+                // characters are only escaped when within a string literal
                 print(getPlatformInfo().getValueQuoteToken());
                 print(escapeStringValue(defaultValue.toString()));
                 print(getPlatformInfo().getValueQuoteToken());
@@ -1328,30 +1318,26 @@ public abstract class SqlBuilder {
      * @return <code>true</code> if the column specifications differ
      */
     protected boolean columnsDiffer(Column currentColumn, Column desiredColumn) {
-        //The createColumn method leaves off the default clause if column.getDefaultValue()
-        //is null.  mySQL interprets this as a default of "" or 0, and thus the columns
-        //are always different according to this method.  alterDatabase will generate
-        //an alter statement for the column, but it will be the exact same definition
-        //as before.  In order to avoid this situation I am ignoring the comparison
-        //if the desired default is null.  In order to "un-default" a column you'll
-        //have to have a default="" or default="0" in the schema xml.
-        //If this is bad for other databases, it is recommended that the createColumn
-        //method use a "DEFAULT NULL" statement if that is what is needed.
-        //A good way to get this would be to require a defaultValue="<NULL>" in the
-        //schema xml if you really want null and not just unspecified.
+        // The createColumn method leaves off the default clause if column.getDefaultValue()
+        // is null.  mySQL interprets this as a default of "" or 0, and thus the columns
+        // are always different according to this method.  alterDatabase will generate
+        // an alter statement for the column, but it will be the exact same definition
+        // as before.  In order to avoid this situation I am ignoring the comparison
+        // if the desired default is null.  In order to "un-default" a column you'll
+        // have to have a default="" or default="0" in the schema xml.
+        // If this is bad for other databases, it is recommended that the createColumn
+        // method use a "DEFAULT NULL" statement if that is what is needed.
+        // A good way to get this would be to require a defaultValue="<NULL>" in the
+        // schema xml if you really want null and not just unspecified.
 
         String desiredDefault = desiredColumn.getDefaultValue();
         String currentDefault = currentColumn.getDefaultValue();
         boolean defaultsEqual = (desiredDefault == null) || desiredDefault.equals(currentDefault);
-        boolean sizeMatters = getPlatformInfo().hasSize(currentColumn.getJdbcTypeCode()) &&
-                (desiredColumn.getSize() != null);
+        boolean sizeMatters = getPlatformInfo().hasSize(currentColumn.getJdbcTypeCode()) && (desiredColumn.getSize() != null);
 
         // We're comparing the jdbc type that corresponds to the native type for the
         // desired type, in order to avoid repeated altering of a perfectly valid column
-        return (getPlatformInfo().getTargetJdbcType(desiredColumn.getJdbcTypeCode()) != currentColumn.getJdbcTypeCode()) ||
-                (desiredColumn.isRequired() != currentColumn.isRequired()) ||
-                (sizeMatters && !StringUtils.equals(desiredColumn.getSize(), currentColumn.getSize())) ||
-                !defaultsEqual;
+        return (getPlatformInfo().getTargetJdbcType(desiredColumn.getJdbcTypeCode()) != currentColumn.getJdbcTypeCode()) || (desiredColumn.isRequired() != currentColumn.isRequired()) || (sizeMatters && !StringUtils.equals(desiredColumn.getSize(), currentColumn.getSize())) || !defaultsEqual;
     }
 
     /**
@@ -1379,8 +1365,7 @@ public abstract class SqlBuilder {
         fkName = shortenName(fkName, getMaxForeignKeyNameLength());
 
         if (needsName) {
-            _log.warn("Encountered a foreign key in table " + table.getName() + " that has no name. " +
-                    "DdlUtils will use the auto-generated and shortened name " + fkName + " instead.");
+            _log.warn("Encountered a foreign key in table " + table.getName() + " that has no name. " + "DdlUtils will use the auto-generated and shortened name " + fkName + " instead.");
         }
 
         return fkName;
@@ -1595,8 +1580,7 @@ public abstract class SqlBuilder {
                 _log.info("The platform does not support the " + action + " action for onDelete; using " + getPlatformInfo().getDefaultOnDeleteAction() + " instead");
                 action = getPlatformInfo().getDefaultOnDeleteAction();
             } else {
-                throw new ModelException("The platform does not support the action '" + action +
-                        "' for onDelete in foreign key in table " + table.getName());
+                throw new ModelException("The platform does not support the action '" + action + "' for onDelete in foreign key in table " + table.getName());
             }
         }
         if (action != getPlatformInfo().getDefaultOnDeleteAction()) {
@@ -1618,8 +1602,7 @@ public abstract class SqlBuilder {
                     print("NO ACTION");
                     break;
                 default:
-                    throw new ModelException("Unsupported cascade value '" + action +
-                            "' for onDelete in foreign key in table " + table.getName());
+                    throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
             }
         }
     }
@@ -1637,8 +1620,7 @@ public abstract class SqlBuilder {
                 _log.info("The platform does not support the " + action + " action for onUpdate; using " + getPlatformInfo().getDefaultOnUpdateAction() + " instead");
                 action = getPlatformInfo().getDefaultOnUpdateAction();
             } else {
-                throw new ModelException("The platform does not support the action '" + action +
-                        "' for onUpdate in foreign key in table " + table.getName());
+                throw new ModelException("The platform does not support the action '" + action + "' for onUpdate in foreign key in table " + table.getName());
             }
         }
         if (action != getPlatformInfo().getDefaultOnUpdateAction()) {
@@ -1660,8 +1642,7 @@ public abstract class SqlBuilder {
                     print("NO ACTION");
                     break;
                 default:
-                    throw new ModelException("Unsupported cascade value '" + action +
-                            "' for onUpdate in foreign key in table " + table.getName());
+                    throw new ModelException("Unsupported cascade value '" + action + "' for onUpdate in foreign key in table " + table.getName());
             }
         }
     }
@@ -1716,7 +1697,7 @@ public abstract class SqlBuilder {
      * Prints some text.
      * @param text The text to print
      */
-    protected void print(String text) throws IOException {
+    public void print(String text) throws IOException {
         writer.write(text);
     }
 

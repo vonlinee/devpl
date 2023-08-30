@@ -22,7 +22,7 @@ package org.apache.ddlutils.task;
 import junit.framework.Test;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
-import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.RuntimeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -205,7 +205,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -285,7 +285,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -389,7 +389,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -496,7 +496,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -576,7 +576,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -656,7 +656,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -750,7 +750,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }
@@ -850,7 +850,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
         try {
             runTask(task, readModelFromDatabase("roundtriptest"));
             fail();
-        } catch (BuildException ex) {
+        } catch (RuntimeException ex) {
             // expected
         }
     }

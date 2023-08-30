@@ -1,11 +1,11 @@
 package org.apache.ddlutils.platform;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.text.Collator;
@@ -19,7 +19,7 @@ public class JdbcModelReader {
     /**
      * The Log to which logging calls will be made.
      */
-    private final Log _log = LogFactory.getLog(getClass());
+    private final Logger _log = LoggerFactory.getLogger(getClass());
 
     /**
      * The descriptors for the relevant columns in the table meta data.
@@ -101,14 +101,6 @@ public class JdbcModelReader {
         _columnsForPK = initColumnsForPK();
         _columnsForFK = initColumnsForFK();
         _columnsForIndex = initColumnsForIndex();
-    }
-
-    /**
-     * Returns the log used by the model reader.
-     * @return The log
-     */
-    protected Log getLog() {
-        return _log;
     }
 
     /**
@@ -478,7 +470,7 @@ public class JdbcModelReader {
         String tableName = (String) values.get("TABLE_NAME");
         Table table = null;
 
-        if ((tableName != null) && (tableName.length() > 0)) {
+        if ((tableName != null) && (!tableName.isEmpty())) {
             table = new Table();
 
             table.setName(tableName);
@@ -581,7 +573,7 @@ public class JdbcModelReader {
      * @param columnsToSearchFor The names of the columns that the index should be for
      * @return <code>true</code> if the index matches the columns
      */
-    protected boolean matches(Index index, List columnsToSearchFor) {
+    protected boolean matches(Index index, List<String> columnsToSearchFor) {
         if (index.getColumnCount() != columnsToSearchFor.size()) {
             return false;
         }
@@ -908,7 +900,7 @@ public class JdbcModelReader {
             return;
         }
 
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
 
         query.append("SELECT ");
         for (int idx = 0; idx < columnsToCheck.length; idx++) {
@@ -1020,10 +1012,10 @@ public class JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                Map values = readColumns(tableData, getColumnsForTable());
+                Map<String, Object> values = readColumns(tableData, getColumnsForTable());
                 String tableName = (String) values.get("TABLE_NAME");
 
-                if ((tableName != null) && (tableName.length() > 0)) {
+                if ((tableName != null) && (!tableName.isEmpty())) {
                     schema = (String) values.get("TABLE_SCHEM");
                     columnData = metaData.getColumns(metaData.escapeForSearch(tableName), getDefaultColumnPattern());
                     found = true;
