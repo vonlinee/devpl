@@ -224,13 +224,17 @@ public class Json5Lexer {
      */
     StringBuilder comment = new StringBuilder();
 
-    public void clearComment() {
+    public void emptyComment() {
         this.comment.delete(0, this.comment.length());
         commentStart = false;
     }
 
     public boolean hasComments() {
         return !comment.isEmpty();
+    }
+
+    public String getCommmentContent() {
+        return comment.toString();
     }
 
     /**
@@ -477,7 +481,7 @@ public class Json5Lexer {
         while (true) {
             if (!more()) throw syntaxError("Unexpected end of data");
 
-            boolean part = result.length() > 0;
+            boolean part = !result.isEmpty();
 
             prev = n;
             n = next();

@@ -38,8 +38,7 @@ public class SqlUtils {
         SQLSelectQuery query = select.getQuery();
         Map<String, Set<String>> columnMap = new HashMap<>();
 
-        if (query instanceof SQLSelectQueryBlock) {
-            SQLSelectQueryBlock queryBlock = (SQLSelectQueryBlock) query;
+        if (query instanceof SQLSelectQueryBlock queryBlock) {
             List<SQLSelectItem> selectList = queryBlock.getSelectList();
             SQLTableSource from = queryBlock.getFrom();
             // 找到所有的别名和表明映射
@@ -74,23 +73,20 @@ public class SqlUtils {
         if (from instanceof SQLJoinTableSource) {
             SQLTableSource tmp = from;
             for (; ; ) {
-                if (!(tmp instanceof SQLJoinTableSource)) {
-                    if (tmp instanceof SQLExprTableSource) {
-                        SQLExprTableSource tableSource = (SQLExprTableSource) tmp;
+                if (!(tmp instanceof SQLJoinTableSource currentTableSource)) {
+                    if (tmp instanceof SQLExprTableSource tableSource) {
                         final String alias = tableSource.getAlias();
                         tableAliasMapping.put(alias, tableSource.getTableName());
                     }
                     break;
                 }
                 // 当前表：倒数第二个表
-                SQLJoinTableSource currentTableSource = (SQLJoinTableSource) tmp;
                 tmp = currentTableSource.getLeft();
                 // 获取右连接表
                 SQLTableSource right = currentTableSource.getRight();
 
                 String currTableName = null;
-                if (right instanceof SQLExprTableSource) {
-                    SQLExprTableSource sqlExprTableSource = (SQLExprTableSource) right;
+                if (right instanceof SQLExprTableSource sqlExprTableSource) {
                     currTableName = sqlExprTableSource.getTableName();
                 }
                 String alias = right.getAlias();
@@ -100,9 +96,8 @@ public class SqlUtils {
                 }
                 tableAliasMapping.put(alias, currTableName);
             }
-        } else if (from instanceof SQLExprTableSource) {
+        } else if (from instanceof SQLExprTableSource exprTableSource) {
             // 单表
-            SQLExprTableSource exprTableSource = (SQLExprTableSource) from;
             final String alias = exprTableSource.getAlias();
             final String tableName = exprTableSource.getTableName();
             tableAliasMapping.put(String.valueOf(alias), tableName);

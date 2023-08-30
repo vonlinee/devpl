@@ -84,19 +84,20 @@ public final class Json5Parser {
         char control;
         String key;
 
-
+        // point to the previous member, to fill the comment
         Json5Element previousValue = null;
 
         while (true) {
             control = lexer.nextClean();
             switch (control) {
-                case 0:
-                    throw lexer.syntaxError("A json object must end with '}'");
-                case '}':
+                case 0 -> throw lexer.syntaxError("A json object must end with '}'");
+                case '}' -> {
                     return object;
-                default:
+                }
+                default -> {
                     lexer.back();
                     key = lexer.nextMemberName();
+                }
             }
 
             if (object.has(key)) {
@@ -108,24 +109,28 @@ public final class Json5Parser {
             }
 
             final Json5Element nextValue = lexer.nextValue();
-
             object.add(key, nextValue);
-            control = lexer.nextClean();
 
             // 注释信息
-            if (previousValue != null && lexer.hasComments()) {
-                previousValue.getComment().setCommentContent(lexer.comment.toString());
-                lexer.clearComment();
-            }
+            consumeComment(lexer, previousValue);
+            control = lexer.nextClean();
             previousValue = nextValue;
 
             if (control == '}') {
+                consumeComment(lexer, previousValue);
                 return object;
             }
 
             if (control != ',') {
                 throw lexer.syntaxError("Expected ',' or '}' after value, got '" + control + "' instead");
             }
+        }
+    }
+
+    private static void consumeComment(Json5Lexer lexer, Json5Element element) {
+        if (element != null && lexer.hasComments()) {
+            element.getComment().setCommentContent(lexer.getCommmentContent());
+            lexer.emptyComment();
         }
     }
 
@@ -149,12 +154,11 @@ public final class Json5Parser {
         while (true) {
             control = lexer.nextClean();
             switch (control) {
-                case 0:
-                    throw lexer.syntaxError("A json array must end with ']'");
-                case ']':
+                case 0 -> throw lexer.syntaxError("A json array must end with ']'");
+                case ']' -> {
                     return array;
-                default:
-                    lexer.back();
+                }
+                default -> lexer.back();
             }
 
             array.add(lexer.nextValue());

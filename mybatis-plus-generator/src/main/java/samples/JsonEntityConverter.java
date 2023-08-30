@@ -29,11 +29,9 @@ public class JsonEntityConverter {
               "Msg": "成功",
               "Data": [
                 {
-                  "attendRate": "1",    //  出勤率
-                  "leaveNum": 5,    //  请假次数
-                  "LateNum": 0,    // 迟到次数
-                  "absentNum": 0,    // 缺勤次数
-                  "userName": 0    // 姓名
+                  "LateNum": 423,    // 迟到次数
+                  "absentNum": 12,    // 缺勤次数
+                  "userName": "张三"    // 姓名
                 }
               ]
             }
@@ -52,13 +50,8 @@ public class JsonEntityConverter {
                 Json5Object json5Object = (Json5Object) jsonElement;
 
                 for (Map.Entry<String, Json5Element> entry : json5Object.entrySet()) {
-
-                    System.out.println(entry.getKey());
-
-                    System.out.println(getType(entry.getValue().getClass()));
-
                     Comment comment = entry.getValue().getComment();
-                    System.out.println(comment.getCommentContent());
+                    System.out.println(entry.getKey() + " " + getType(entry.getValue().getClass()) + " " + comment.getCommentContent());
                 }
             }
         }

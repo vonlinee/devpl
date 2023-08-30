@@ -21,7 +21,8 @@
         <module>devpl-sdk-internal</module>
         <module>devpl-codegen</module>
         <module>mybatis-plus-generator</module>
-      <module>json5-java</module>
+        <module>json5-java</module>
+        <module>ddlutils-trunk</module>
     </modules>
 
     <properties>
