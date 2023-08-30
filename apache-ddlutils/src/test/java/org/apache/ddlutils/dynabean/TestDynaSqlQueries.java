@@ -49,6 +49,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         System.setProperty("jdbc.properties.file", "jdbc.properties.mysql57");
         Properties props = readTestProperties();
         DataSource dataSource = initDataSourceFromProperties(props);
+        assert props != null;
         String databaseName = determineDatabaseName(props, dataSource);
 
         setTestProperties(props);
@@ -67,12 +68,12 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable TheId='1' TheText='Text 1'/>\n" +
-                        "  <TestTable TheId='2' TheText='Text 2'/>\n" +
-                        "  <TestTable TheId='3' TheText='Text 3'/>" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable TheId='1' TheText='Text 1'/>
+                          <TestTable TheId='2' TheText='Text 2'/>
+                          <TestTable TheId='3' TheText='Text 3'/></data>""");
 
         ModelBasedResultSetIterator it = (ModelBasedResultSetIterator) getPlatform().query(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
@@ -124,12 +125,12 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable TheId='1' TheText='Text 1'/>\n" +
-                        "  <TestTable TheId='2' TheText='Text 2'/>\n" +
-                        "  <TestTable TheId='3' TheText='Text 3'/>" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable TheId='1' TheText='Text 1'/>
+                          <TestTable TheId='2' TheText='Text 2'/>
+                          <TestTable TheId='3' TheText='Text 3'/></data>""");
 
         List<DynaBean> beans = getPlatform().fetch(getModel(),
                 "SELECT * FROM " + asIdentifier("TestTable"),
@@ -190,7 +191,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
         // we're inserting the rows manually via beans since we do want to
         // check the back-reading of the auto-increment columns
         SqlDynaClass dynaClass = getModel().getDynaClassFor("TestTable");
-        DynaBean bean = null;
+        DynaBean bean;
         Object id1 = null;
         Object id2 = null;
         Object id3 = null;
@@ -276,14 +277,14 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable1 Id1='1'/>\n" +
-                        "  <TestTable1 Id1='2' Id2='3'/>\n" +
-                        "  <TestTable2 Id='1' Avalue='Text 1'/>\n" +
-                        "  <TestTable2 Id='2' Avalue='Text 2'/>\n" +
-                        "  <TestTable2 Id='3' Avalue='Text 3'/>" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable1 Id1='1'/>
+                          <TestTable1 Id1='2' Id2='3'/>
+                          <TestTable2 Id='1' Avalue='Text 1'/>
+                          <TestTable2 Id='2' Avalue='Text 2'/>
+                          <TestTable2 Id='3' Avalue='Text 3'/></data>""");
 
         String sql = "SELECT " +
                 asIdentifier("Id1") +
@@ -420,10 +421,11 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable TheId='1' TheText='Text 1'/>\n" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable TheId='1' TheText='Text 1'/>
+                        </data>""");
 
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);
@@ -460,11 +462,12 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable TheId='1' TheText='Text 1'/>\n" +
-                        "  <TestTable TheId='3' TheText='Text 3'/>\n" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable TheId='1' TheText='Text 1'/>
+                          <TestTable TheId='3' TheText='Text 3'/>
+                        </data>""");
 
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean1 = new SqlDynaBean(dynaClass);
@@ -533,10 +536,11 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
                         "</database>");
 
         insertData(
-                "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                        "<data>\n" +
-                        "  <TestTable TheId='1' TheText='Text 1'/>\n" +
-                        "</data>");
+                """
+                        <?xml version='1.0' encoding='ISO-8859-1'?>
+                        <data>
+                          <TestTable TheId='1' TheText='Text 1'/>
+                        </data>""");
 
         SqlDynaClass dynaClass = SqlDynaClass.newInstance(getModel().getTable(0));
         DynaBean dynaBean = new SqlDynaBean(dynaClass);

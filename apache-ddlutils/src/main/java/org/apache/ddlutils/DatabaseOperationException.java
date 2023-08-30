@@ -41,5 +41,4 @@ public class DatabaseOperationException extends DdlUtilsException {
     public DatabaseOperationException(String msg, Throwable baseEx) {
         super(msg, baseEx);
     }
-
 }

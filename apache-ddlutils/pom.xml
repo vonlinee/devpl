@@ -29,23 +29,8 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>apache-ddlutils</artifactId>
-    <packaging>jar</packaging>
 
-    <version>1.1</version>
-    <name>Apache DdlUtils</name>
-    <description>
-        DdlUtils is a small, easy-to-use component for working with Database Definition (DDL) files.
-    </description>
-    <inceptionYear>2005</inceptionYear>
-    <url>https://db.apache.org/ddlutils</url>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <name>apache-ddlutils</name>
 
     <dependencies>
         <dependency>
@@ -192,18 +177,6 @@
             <version>5.1.47</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Repository Switchboard</name>
-            <layout>default</layout>
-            <url>https://repo1.maven.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <profiles>
         <profile>

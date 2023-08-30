@@ -1,6 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.dynabean.DynaBean;
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.dynabean.DynaClassCache;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Represents the database model, ie. the tables in the database. It also
+ * Represents the database model, i.e. the tables in the database. It also
  * contains the corresponding dyna classes for creating dyna beans for the
  * objects stored in the tables.
  * @version $Revision$

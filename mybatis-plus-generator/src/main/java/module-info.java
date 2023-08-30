@@ -33,6 +33,4 @@ open module mybatis.plus.generator {
     requires com.google.common;
     requires devpl.codegen;
     requires jsonfive.java;
-
-    requires apache.ddlutils;
 }

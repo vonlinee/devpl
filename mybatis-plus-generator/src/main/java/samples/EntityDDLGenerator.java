@@ -6,7 +6,6 @@ import io.devpl.codegen.meta.ASTFieldParser;
 import io.devpl.codegen.meta.Bean;
 import io.devpl.codegen.meta.JavaParserUtils;
 import io.devpl.codegen.meta.MetaField;
-import org.hibernate.mapping.Table;
 
 import java.io.File;
 
@@ -23,7 +22,6 @@ public class EntityDDLGenerator {
             DdlBuilder builder = new DdlBuilder();
             builder.create().tableName("Table");
             for (MetaField field : fieldInfos) {
-
                 builder.addField(field.getIdentifier(), field.getDataType())
                     .addComment(StringUtils.trimWrapCharacters(field.getDescription())).addComma();
             }

@@ -415,7 +415,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
     /**
      * Inserts a row into the designated table.
-     * @param tableName    The name of the table (case insensitive)
+     * @param tableName    The name of the table (case-insensitive)
      * @param columnValues The values for the columns in order of definition
      * @return The dyna bean for the row
      */
