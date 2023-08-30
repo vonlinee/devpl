@@ -16,7 +16,7 @@ public class DdlFormatUtil {
         Boolean autoTranslation = MainSetting.getInstance().myProperties.getAutoTranslationRadio();
         DdlBuilder builder = new DdlBuilder().create()
             .tableName(tableName)
-            .LeftParenthesis()
+            .leftParenthesis()
             .wrap();
         int maxFieldStringLength = 0;
         int maxFieldSqlTypeStringLength = 0;
@@ -54,5 +54,4 @@ public class DdlFormatUtil {
         }
         return builder.end();
     }
-
 }

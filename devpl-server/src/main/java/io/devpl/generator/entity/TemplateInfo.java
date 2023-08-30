@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(value = "template_info")
-public class TemplateInfo extends DatabaseTableEntity {
+public class TemplateInfo extends DBEntityBase {
 
     /**
      * 模板ID

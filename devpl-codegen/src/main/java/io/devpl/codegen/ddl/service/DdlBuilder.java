@@ -1,5 +1,8 @@
 package io.devpl.codegen.ddl.service;
 
+/**
+ * 创建DDL
+ */
 public class DdlBuilder {
 
     private final StringBuffer ddl = new StringBuffer();
@@ -14,7 +17,7 @@ public class DdlBuilder {
         return this.wrap();
     }
 
-    public DdlBuilder LeftParenthesis() {
+    public DdlBuilder leftParenthesis() {
         ddl.append("(");
         return this.space();
     }
@@ -58,6 +61,10 @@ public class DdlBuilder {
         return this;
     }
 
+    /**
+     * 添加逗号
+     * @return
+     */
     public DdlBuilder addComma() {
         ddl.append(",");
         return this;

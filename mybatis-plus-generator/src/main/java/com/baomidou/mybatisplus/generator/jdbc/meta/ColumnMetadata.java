@@ -1,6 +1,5 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,16 +8,15 @@ import java.io.Serializable;
  */
 public class ColumnMetadata implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 7229302382943046967L;
 
     /**
-     * TABLE_CAT String => table catalog (may be null)
+     * TABLE_CAT String => table catalog (maybe null)
      */
     private String tableCat;
 
     /**
-     * TABLE_SCHEM String => table schema (may be null)
+     * TABLE_SCHEM String => table schema (maybe null)
      */
     private String tableSchem;
 

@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.jdbc.meta.TableMetadata;
 import com.baomidou.mybatisplus.generator.type.JavaType;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
+import com.baomidou.mybatisplus.generator.utils.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -12,7 +12,7 @@ public class Field {
 
     private String type;
 
-    private Boolean primaryKey;
+    private boolean primaryKey;
 
     private String comment;
 
@@ -94,15 +94,11 @@ public class Field {
         this.type = type;
     }
 
-    public Boolean isPrimaryKey() {
+    public boolean isPrimaryKey() {
         return primaryKey;
     }
 
-    public Boolean getPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(Boolean primaryKey) {
+    public void setPrimaryKey(boolean primaryKey) {
         this.primaryKey = primaryKey;
     }
 

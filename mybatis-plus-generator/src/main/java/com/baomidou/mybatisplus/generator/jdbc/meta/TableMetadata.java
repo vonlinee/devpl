@@ -18,7 +18,7 @@ public final class TableMetadata implements Serializable {
     private String tableCat;
 
     /**
-     * TABLE_SCHEM String => table schema (may be null)
+     * TABLE_SCHEM String => table schema (maybe null)
      */
     private String tableSchem;
 

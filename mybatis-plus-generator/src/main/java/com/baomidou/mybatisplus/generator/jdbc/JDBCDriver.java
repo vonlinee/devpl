@@ -6,6 +6,7 @@ import java.util.Properties;
 /**
  * 数据库驱动类型
  * 连接URL格式：jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]...
+ * @see DbType
  */
 public enum JDBCDriver {
 
@@ -21,7 +22,7 @@ public enum JDBCDriver {
     SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", "sqlserver"),
     SQLITE("org.sqlite.JDBC", "sqlite");
 
-    public static final String JDBC_PROTOCOL = "jdbc";
+    private static final String JDBC_PROTOCOL = "jdbc";
     // 驱动类全类名
     protected final String driverClassName;
     // 子协议
@@ -39,7 +40,7 @@ public enum JDBCDriver {
         this.description = description;
     }
 
-    public static String[] supportedDbNames() {
+    public static String[] listSupportedDbNames() {
         String[] names = new String[values().length];
         JDBCDriver[] drivers = values();
         for (int i = 0; i < drivers.length; i++) {
@@ -66,7 +67,7 @@ public enum JDBCDriver {
      */
     public String getConnectionUrl(String hostname, String port, String databaseName, Properties props) {
         int portNum;
-        if (port == null || port.length() == 0) {
+        if (port == null || port.isEmpty()) {
             portNum = 3306;
         } else {
             portNum = Integer.parseInt(port);
@@ -83,7 +84,7 @@ public enum JDBCDriver {
      */
     protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
         String connectionUrl = JDBC_PROTOCOL + ":" + subProtocol + "://" + hostname + ":" + port;
-        if (databaseName != null && databaseName.length() != 0) {
+        if (databaseName != null && !databaseName.isEmpty()) {
             connectionUrl += "/" + databaseName;
         }
         return connectionUrl;
@@ -108,9 +109,5 @@ public enum JDBCDriver {
 
     public String getDriverClassName() {
         return driverClassName;
-    }
-
-    public String getSubProtocol() {
-        return subProtocol;
     }
 }

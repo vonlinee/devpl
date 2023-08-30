@@ -15,13 +15,12 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
-import com.baomidou.mybatisplus.generator.engine.TemplateSource;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.function.ConverterFileName;
-import com.baomidou.mybatisplus.generator.util.ClassUtils;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
+import com.baomidou.mybatisplus.generator.utils.ClassUtils;
+import com.baomidou.mybatisplus.generator.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.generator.config.querys.DbQueryDecorator;
 import com.baomidou.mybatisplus.generator.query.AbstractDatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.query.DatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.query.DefaultDatabaseIntrospector;
-import com.baomidou.mybatisplus.generator.util.JdbcUtils;
+import com.baomidou.mybatisplus.generator.utils.JdbcUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

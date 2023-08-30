@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class FieldParser {
 
-    public List<FieldMetaData> parse(Class<?> clazz) {
+    public List<MetaField> parse(Class<?> clazz) {
         return new ArrayList<>();
     }
 }

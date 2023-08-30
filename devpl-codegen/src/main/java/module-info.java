@@ -32,5 +32,6 @@ module devpl.codegen {
 
     opens io.devpl.codegen to com.google.gson;
     opens io.devpl.codegen.meta to com.google.gson;
+    exports io.devpl.codegen.ddl.service;
 
 }

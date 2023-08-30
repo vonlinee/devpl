@@ -22,8 +22,8 @@ public class SqlUtils {
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, DbType.mysql, true);
         List<SQLStatement> sqlStatements = parser.parseStatementList();
         SQLStatement sqlStatement = sqlStatements.get(0);
-        if (sqlStatement instanceof SQLSelectStatement) {
-            return getSelectedColumns((SQLSelectStatement) sqlStatement);
+        if (sqlStatement instanceof SQLSelectStatement sst) {
+            return getSelectedColumns(sst);
         }
         return Collections.emptyMap();
     }

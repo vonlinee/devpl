@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.function.ConverterFileName;
-import com.baomidou.mybatisplus.generator.util.ClassUtils;
+import com.baomidou.mybatisplus.generator.utils.ClassUtils;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
 import org.jetbrains.annotations.NotNull;

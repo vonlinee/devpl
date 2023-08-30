@@ -2,7 +2,7 @@ package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.util.StringUtils;
+import com.baomidou.mybatisplus.generator.utils.StringUtils;
 
 import java.util.Set;
 

@@ -22,7 +22,7 @@
         <module>devpl-codegen</module>
         <module>mybatis-plus-generator</module>
         <module>json5-java</module>
-        <module>ddlutils-trunk</module>
+        <module>apache-ddlutils</module>
     </modules>
 
     <properties>

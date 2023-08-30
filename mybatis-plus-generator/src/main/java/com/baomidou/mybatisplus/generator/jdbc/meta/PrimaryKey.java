@@ -15,7 +15,7 @@ public class PrimaryKey implements Serializable {
     private String tableCat;
 
     /**
-     * String => table schema (may be null)
+     * String => table schema (maybe null)
      */
     private String tableSchem;
 

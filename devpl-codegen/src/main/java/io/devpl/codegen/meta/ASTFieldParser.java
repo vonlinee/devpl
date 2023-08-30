@@ -14,27 +14,28 @@ import java.util.List;
 /**
  * AST 字段解析
  */
-public class ASTFieldParser implements CompilationUnitVisitor<List<FieldMetaData>> {
+public class ASTFieldParser implements CompilationUnitVisitor<List<MetaField>> {
 
     @Override
-    public List<FieldMetaData> visit(CompilationUnit cu) {
+    public List<MetaField> visit(CompilationUnit cu) {
         NodeList<TypeDeclaration<?>> types = cu.getTypes();
-        List<FieldMetaData> fieldMetaDataList = new ArrayList<>();
+        List<MetaField> fieldMetaDataList = new ArrayList<>();
         for (TypeDeclaration<?> type : types) {
             List<FieldDeclaration> fields = type.getFields();
             for (FieldDeclaration field : fields) {
                 if (field.isStatic()) {
                     continue; // 忽略静态变量
                 }
-                FieldMetaData fieldMetaData = new FieldMetaData();
+                MetaField fieldMetaData = new MetaField();
                 final NodeList<VariableDeclarator> variables = field.getVariables();
 
                 for (VariableDeclarator variable : variables) {
                     String fieldName = variable.getName().asString();
                     // 字段名
                     fieldMetaData.setName(fieldName);
+                    fieldMetaData.setIdentifier(fieldName);
                     // 类型名称
-                    fieldMetaData.setDataTypeName(variable.getTypeAsString());
+                    fieldMetaData.setDataType(variable.getTypeAsString());
                 }
                 // 注释信息
                 fieldMetaData.setDescription(findFieldDescription(field));
