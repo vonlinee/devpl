@@ -1,8 +1,10 @@
 package samples;
 
+import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.type.JsonDataType;
 import com.baomidou.mybatisplus.generator.type.StandardJsonDataType;
+import com.baomidou.mybatisplus.generator.utils.StringUtils;
 import de.marhail.json5.*;
 import de.marhail.json5.comment.Comment;
 
@@ -16,6 +18,11 @@ import java.util.Map;
 public class JsonEntityConverter {
 
     static final Map<JsonDataType, JavaType> typeMapping = new HashMap<>();
+
+    static {
+        typeMapping.put(StandardJsonDataType.NUMBER, CommonJavaType.INTEGER);
+        typeMapping.put(StandardJsonDataType.BOOLEAN, CommonJavaType.BOOLEAN);
+    }
 
     static final String input = "D:/Temp/1.json";
 
@@ -31,7 +38,8 @@ public class JsonEntityConverter {
                 {
                   "LateNum": 423,    // 迟到次数
                   "absentNum": 12,    // 缺勤次数
-                  "userName": "张三"    // 姓名
+                  "userName": "张三" ,   // 姓名
+                  "age": 23 // 年龄
                 }
               ]
             }
@@ -43,7 +51,6 @@ public class JsonEntityConverter {
 
         Json5Array data = obj.getAsJson5Array("Data");
         if (!data.isEmpty()) {
-
             Json5Element jsonElement = data.get(0);
 
             if (jsonElement.isJson5Object()) {
@@ -51,13 +58,38 @@ public class JsonEntityConverter {
 
                 for (Map.Entry<String, Json5Element> entry : json5Object.entrySet()) {
                     Comment comment = entry.getValue().getComment();
-                    System.out.println(entry.getKey() + " " + getType(entry.getValue().getClass()) + " " + comment.getCommentContent());
+                    System.out.println(entry.getKey() + " " + getJavaType(entry.getValue()) + " " + StringUtils.trimWrapCharacters(comment.getCommentContent()));
                 }
             }
         }
     }
 
-    public static JsonDataType getType(Class<?> type) {
+    /**
+     * 获取字段的Java类型
+     * @param element JSON字段
+     * @return Java类型
+     */
+    public static CommonJavaType getJavaType(Json5Element element) {
+        JsonDataType jsonType = getJsonType(element);
+        if (jsonType == StandardJsonDataType.ARRAY) {
+            return CommonJavaType.LIST;
+        } else if (jsonType == StandardJsonDataType.OBJECT) {
+            return CommonJavaType.OBJECT;
+        } else if (jsonType == StandardJsonDataType.NUMBER) {
+            return CommonJavaType.INTEGER;
+        } else if (jsonType == StandardJsonDataType.STRING) {
+            return CommonJavaType.STRING;
+        }
+        return CommonJavaType.BASE_BYTE;
+    }
+
+    /**
+     * 获取JSON类型枚举
+     * @param element
+     * @return
+     */
+    public static JsonDataType getJsonType(Json5Element element) {
+        Class<?> type = element.getClass();
         if (type == Json5Array.class) {
             return StandardJsonDataType.ARRAY;
         } else if (type == Json5Object.class) {
@@ -66,6 +98,8 @@ public class JsonEntityConverter {
             return StandardJsonDataType.BOOLEAN;
         } else if (type == Json5Number.class) {
             return StandardJsonDataType.NUMBER;
+        } else if (type == Json5String.class) {
+            return StandardJsonDataType.STRING;
         } else {
             return StandardJsonDataType.OBJECT;
         }

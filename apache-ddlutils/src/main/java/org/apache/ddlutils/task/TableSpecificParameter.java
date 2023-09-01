@@ -44,7 +44,7 @@ public class TableSpecificParameter extends Parameter {
      * Specifies the comma-separated list of table names in whose creation this parameter
      * shall be used. For every table not in this list, the parameter is ignored.
      * @param tableList The tables
-     * @ant.not-required Use this or the <code>table</code> parameter. If neither is specified,
+     *   Use this or the <code>table</code> parameter. If neither is specified,
      * the parameter is applied in the creation of all tables.
      */
     public void setTables(String tableList) {
@@ -61,7 +61,7 @@ public class TableSpecificParameter extends Parameter {
     /**
      * Specifies the name of the table in whose creation this parameter shall be applied.
      * @param tableName The table
-     * @ant.not-required Use this or the <code>tables</code> parameter. If neither is specified,
+     *   Use this or the <code>tables</code> parameter. If neither is specified,
      * the parameter is applied in the creation of all tables.
      */
     public void setTable(String tableName) {

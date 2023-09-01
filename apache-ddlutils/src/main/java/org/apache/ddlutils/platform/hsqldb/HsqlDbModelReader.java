@@ -26,6 +26,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
@@ -44,11 +45,12 @@ public class HsqlDbModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (TypeMap.isTextType(column.getJdbcTypeCode()) &&
-                (column.getDefaultValue() != null)) {
+            (column.getDefaultValue() != null)) {
             column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
         }
         return column;
@@ -57,6 +59,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         String name = index.getName();
 
@@ -66,6 +69,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         String name = index.getName();
 

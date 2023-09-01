@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.firebird;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
@@ -45,26 +26,28 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    public void createTable(Database database, Table table, Map parameters) throws IOException {
+    @Override
+    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment
         Column[] columns = table.getAutoIncrementColumns();
 
-        for (int idx = 0; idx < columns.length; idx++) {
-            writeAutoIncrementCreateStmts(database, table, columns[idx]);
+        for (Column column : columns) {
+            writeAutoIncrementCreateStmts(database, table, column);
         }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropTable(Table table) throws IOException {
         // dropping generators for auto-increment
         Column[] columns = table.getAutoIncrementColumns();
 
-        for (int idx = 0; idx < columns.length; idx++) {
-            writeAutoIncrementDropStmts(table, columns[idx]);
+        for (Column column : columns) {
+            writeAutoIncrementDropStmts(table, column);
         }
         super.dropTable(table);
     }
@@ -130,13 +113,14 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();
 
         if (columns.length == 0) {
             return null;
         } else {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
 
             result.append("SELECT ");
             for (int idx = 0; idx < columns.length; idx++) {
@@ -163,6 +147,7 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void createForeignKeys(Database database) throws IOException {
         for (int idx = 0; idx < database.getTableCount(); idx++) {
             createForeignKeys(database, database.getTable(idx));
@@ -172,6 +157,7 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropIndex(Table table, Index index) throws IOException {
         // Index names in Firebird are unique to a schema and hence Firebird does not
         // use the ON <tablename> clause
@@ -183,6 +169,7 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
         printlnIdentifier(getTableName(table));
@@ -244,13 +231,14 @@ public class FirebirdBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
 
         if (sizeChanged || typeChanged) {
             boolean needSubstr = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged &&
-                    (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
+                (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
 
             if (needSubstr) {
                 print("SUBSTRING(");

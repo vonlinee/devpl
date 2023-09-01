@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.oracle;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
@@ -70,30 +51,32 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    public void createTable(Database database, Table table, Map parameters) throws IOException {
+    @Override
+    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         // lets create any sequences
         Column[] columns = table.getAutoIncrementColumns();
 
-        for (int idx = 0; idx < columns.length; idx++) {
-            createAutoIncrementSequence(table, columns[idx]);
+        for (Column value : columns) {
+            createAutoIncrementSequence(table, value);
         }
 
         super.createTable(database, table, parameters);
 
-        for (int idx = 0; idx < columns.length; idx++) {
-            createAutoIncrementTrigger(table, columns[idx]);
+        for (Column column : columns) {
+            createAutoIncrementTrigger(table, column);
         }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropTable(Table table) throws IOException {
         Column[] columns = table.getAutoIncrementColumns();
 
-        for (int idx = 0; idx < columns.length; idx++) {
-            dropAutoIncrementTrigger(table, columns[idx]);
-            dropAutoIncrementSequence(table, columns[idx]);
+        for (Column column : columns) {
+            dropAutoIncrementTrigger(table, column);
+            dropAutoIncrementSequence(table, column);
         }
 
         print("DROP TABLE ");
@@ -197,13 +180,15 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    protected void createTemporaryTable(Database database, Table table, Map parameters) throws IOException {
+    @Override
+    protected void createTemporaryTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void dropTemporaryTable(Database database, Table table) throws IOException {
         dropTable(table);
     }
@@ -211,6 +196,7 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropForeignKeys(Table table) throws IOException {
         // no need to as we drop the table with CASCASE CONSTRAINTS
     }
@@ -218,6 +204,7 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropIndex(Table table, Index index) throws IOException {
         // Index names in Oracle are unique to a schema and hence Oracle does not
         // use the ON <tablename> clause
@@ -229,13 +216,14 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void printDefaultValue(Object defaultValue, int typeCode) throws IOException {
         if (defaultValue != null) {
             String defaultValueStr = defaultValue.toString();
             boolean shouldUseQuotes = !TypeMap.isNumericType(typeCode) && !defaultValueStr.startsWith("TO_DATE(");
 
             if (shouldUseQuotes) {
-                // characters are only escaped when within a string literal 
+                // characters are only escaped when within a string literal
                 print(getPlatformInfo().getValueQuoteToken());
                 print(escapeStringValue(defaultValueStr));
                 print(getPlatformInfo().getValueQuoteToken());
@@ -248,6 +236,7 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
             return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
@@ -274,6 +263,7 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using sequences instead
     }
@@ -281,11 +271,12 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();
 
         if (columns.length > 0) {
-            StringBuffer result = new StringBuffer();
+            StringBuilder result = new StringBuilder();
 
             result.append("SELECT ");
             for (int idx = 0; idx < columns.length; idx++) {
@@ -305,6 +296,7 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
         printlnIdentifier(getTableName(table));
@@ -351,10 +343,11 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
-                ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
-                !StringUtils.isEmpty(targetColumn.getSize());
+            ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
+            !StringUtils.isEmpty(targetColumn.getSize());
 
         if (sizeChanged) {
             print("SUBSTR(");

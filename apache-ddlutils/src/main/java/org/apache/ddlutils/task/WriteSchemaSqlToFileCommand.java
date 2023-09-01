@@ -36,7 +36,7 @@ import java.sql.SQLException;
  * data source is specified (via the <code>database</code> sub element) or the
  * <code>databaseType</code> attribute is used to specify the database type.
  * @version $Revision: 289996 $
- * @ant.task name="writeSchemaSqlToFile"
+ *    name="writeSchemaSqlToFile"
  */
 public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationParameters {
     /**
@@ -73,7 +73,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
      * Specifies whether DdlUtils shall generate SQL to alter an existing database rather
      * than SQL for clearing it and creating it new.
      * @param alterTheDb <code>true</code> if SQL to alter the database shall be created
-     * @ant.not-required Per default SQL for altering the database is created
+     *   Per default SQL for altering the database is created
      */
     public void setAlterDatabase(boolean alterTheDb) {
         _alterDb = alterTheDb;
@@ -92,7 +92,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
      * Specifies whether SQL for dropping tables, external constraints, etc. is created if necessary.
      * Note that this is only relevant when <code>alterDatabase</code> is <code>false</code>.
      * @param doDrops <code>true</code> if drops shall be performed if necessary
-     * @ant.not-required Per default, drop SQL statements are created
+     *   Per default, drop SQL statements are created
      */
     public void setDoDrops(boolean doDrops) {
         _doDrops = doDrops;

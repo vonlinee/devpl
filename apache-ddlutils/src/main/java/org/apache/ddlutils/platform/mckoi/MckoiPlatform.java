@@ -1,40 +1,20 @@
 package org.apache.ddlutils.platform.mckoi;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +69,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -96,10 +77,11 @@ public class MckoiPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    @Override
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For McKoi, you create databases by simply appending "?create=true" to the connection url
         if (JDBC_DRIVER.equals(jdbcDriverClassName)) {
-            StringBuffer creationUrl = new StringBuffer();
+            StringBuilder creationUrl = new StringBuilder();
             Connection connection = null;
 
             creationUrl.append(connectionUrl);
@@ -107,22 +89,20 @@ public class MckoiPlatform extends GenericDatabasePlatform {
             //       (in which case e'd have to use '&' instead)
             creationUrl.append("?create=true");
             if ((parameters != null) && !parameters.isEmpty()) {
-                for (Iterator it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                    Map.Entry entry = (Map.Entry) it.next();
-
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
                     // no need to specify create twice (and create=false wouldn't help anyway)
-                    if (!"create".equalsIgnoreCase(entry.getKey().toString())) {
+                    if (!"create".equalsIgnoreCase(entry.getKey())) {
                         creationUrl.append("&");
-                        creationUrl.append(entry.getKey().toString());
+                        creationUrl.append(entry.getKey());
                         creationUrl.append("=");
                         if (entry.getValue() != null) {
-                            creationUrl.append(entry.getValue().toString());
+                            creationUrl.append(entry.getValue());
                         }
                     }
                 }
             }
             if (getLog().isDebugEnabled()) {
-                getLog().debug("About to create database using this URL: " + creationUrl.toString());
+                getLog().debug("About to create database using this URL: " + creationUrl);
             }
             try {
                 Class.forName(jdbcDriverClassName);
@@ -136,6 +116,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
                     try {
                         connection.close();
                     } catch (SQLException ex) {
+
                     }
                 }
             }
@@ -147,9 +128,11 @@ public class MckoiPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
-            public boolean areSupported(Table intermediateTable, List changes) {
+            @Override
+            public boolean areSupported(Table intermediateTable, List<TableChange> changes) {
                 // McKoi has this nice ALTER CREATE TABLE statement which saves us a lot of work
                 // Thus, we reject all table level changes and instead redefine the handling of the
                 // RecreateTableChange
@@ -161,15 +144,14 @@ public class MckoiPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void processChange(Database currentModel, SqlBuildContext params, RecreateTableChange change) throws IOException {
         // McKoi has this nice ALTER CREATE TABLE statement which saves us a lot of work
         // We only have to handle auto-increment changes manually
         MckoiBuilder sqlBuilder = (MckoiBuilder) getSqlBuilder();
         Table changedTable = findChangedTable(currentModel, change);
 
-        for (Iterator it = change.getOriginalChanges().iterator(); it.hasNext(); ) {
-            TableChange tableChange = (TableChange) it.next();
-
+        for (TableChange tableChange : change.getOriginalChanges()) {
             if (tableChange instanceof ColumnDefinitionChange) {
                 ColumnDefinitionChange colChange = (ColumnDefinitionChange) tableChange;
                 Column origColumn = changedTable.findColumn(colChange.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -192,9 +174,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         sqlBuilder.writeRecreateTableStmt(currentModel, change.getTargetTable(), parameters);
 
         // we have to defer removal of the sequences until they are no longer used
-        for (Iterator it = change.getOriginalChanges().iterator(); it.hasNext(); ) {
-            TableChange tableChange = (TableChange) it.next();
-
+        for (TableChange tableChange : change.getOriginalChanges()) {
             if (tableChange instanceof ColumnDefinitionChange) {
                 ColumnDefinitionChange colChange = (ColumnDefinitionChange) tableChange;
                 Column origColumn = changedTable.findColumn(colChange.getChangedColumn(), isDelimitedIdentifierModeOn());

@@ -30,7 +30,7 @@ import java.io.FileWriter;
  * This sub task does not require a database connection, so the <code>dataSource</code>
  * sub element of the enclosing task can be omitted.
  * @version $Revision: 289996 $
- * @ant.task name="writeDtdToFile"
+ *    name="writeDtdToFile"
  */
 public class WriteDtdToFileCommand extends Command {
     /**

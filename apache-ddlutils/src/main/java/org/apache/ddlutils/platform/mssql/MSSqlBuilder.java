@@ -39,7 +39,7 @@ public class MSSqlBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    public void createTable(Database database, Table table, Map parameters) throws IOException {
+    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }

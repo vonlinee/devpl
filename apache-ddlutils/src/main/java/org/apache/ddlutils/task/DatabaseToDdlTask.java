@@ -66,7 +66,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * for the the <code>writeSchemaToFile</code> sub-task as it ensures that the generated
      * XML defines a valid model.
      * @param modelName The model name. Use <code>null</code> or an empty string for the default name
-     * @ant.not-required By default, DldUtils uses the schema name returned from the database
+     *   By default, DldUtils uses the schema name returned from the database
      * or <code>"default"</code> if no schema name was returned by the database.
      */
     public void setModelName(String modelName) {
@@ -80,7 +80,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * this string if they are actually part of the table name (i.e. in delimited
      * identifer mode).
      * @param tableNameList The comma-separated list of table names
-     * @ant.not-required If no table filter is specified, then all tables will be read unless
+     *   If no table filter is specified, then all tables will be read unless
      * <code>excludeTables</code> or <code>excludeTableFilter</code> is
      * specifed
      */
@@ -93,7 +93,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * For case insensitive matching, an uppercase name can be assumed.
      * @param tableNameRegExp The regular expression; see {@link java.util.regex.Pattern}
      *                        for details
-     * @ant.not-required If no table filter is specified, then all tables will be read unless
+     *   If no table filter is specified, then all tables will be read unless
      * <code>excludeTables</code> or <code>excludeTableFilter</code> is
      * specifed
      */
@@ -108,7 +108,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * this string if they are actually part of the table name (i.e. in delimited
      * identifer mode).
      * @param tableNameList The comma-separated list of table names
-     * @ant.not-required If no table filter is specified, then all tables will be read unless
+     *   If no table filter is specified, then all tables will be read unless
      * <code>includeTables</code> or <code>includeTableFilter</code> is
      * specifed
      */
@@ -121,7 +121,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * For case insensitive matching, an uppercase name can be assumed.
      * @param tableNameRegExp The regular expression; see {@link java.util.regex.Pattern}
      *                        for details
-     * @ant.not-required If no table filter is specified, then all tables will be read unless
+     *   If no table filter is specified, then all tables will be read unless
      * <code>includeTables</code> or <code>includeTableFilter</code> is
      * specifed
      */
@@ -205,7 +205,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * typical table types see
      * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/DatabaseMetaData.html#getTables(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String[])">java.sql.DatabaseMetaData#getTables</a>.
      * @param tableTypes The table types as a comma-separated list
-     * @ant.not-required By default, only tables of type <code>TABLE</code> are used by the task.
+     *   By default, only tables of type <code>TABLE</code> are used by the task.
      */
     public void setTableTypes(String tableTypes) {
         _tableTypes = tableTypes;

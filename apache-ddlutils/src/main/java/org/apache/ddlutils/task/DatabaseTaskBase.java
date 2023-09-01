@@ -1,24 +1,5 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
@@ -34,8 +15,7 @@ import java.util.Properties;
 
 /**
  * Base class for DdlUtils Ant tasks that operate on a database.
- * @version $Revision: 289996 $
- * @ant.task ignore="true"
+ * ignore="true"
  */
 public abstract class DatabaseTaskBase extends Task {
     /**
@@ -48,9 +28,9 @@ public abstract class DatabaseTaskBase extends Task {
      */
     private PlatformConfiguration _platformConf = new PlatformConfiguration();
     /**
-     * The sub tasks to execute.
+     * The sub-tasks to execute.
      */
-    private ArrayList _commands = new ArrayList();
+    private ArrayList<Command> _commands = new ArrayList<>();
     /**
      * Whether to use simple logging (that the Ant task configures itself via the {@link #_verbosity} setting.
      */
@@ -65,7 +45,7 @@ public abstract class DatabaseTaskBase extends Task {
      * setting) shall be used, or whether logging is configured outside of the task
      * (e.g. via a log4j properties file).
      * @param simpleLogging Whether to use simple logging or not
-     * @ant.not-required Per default, simple logging is enabled.
+     *                      Per default, simple logging is enabled.
      */
     public void setSimpleLogging(boolean simpleLogging) {
         _simpleLogging = simpleLogging;
@@ -74,7 +54,7 @@ public abstract class DatabaseTaskBase extends Task {
     /**
      * Specifies the verbosity of the task's debug output.
      * @param level The verbosity level
-     * @ant.not-required Default is <code>INFO</code>.
+     *              Default is <code>INFO</code>.
      */
     public void setVerbosity(VerbosityLevel level) {
         _verbosity = level;
@@ -96,10 +76,10 @@ public abstract class DatabaseTaskBase extends Task {
      * Valid values are currently:<br/><code>axion, cloudscape, db2, derby, firebird, hsqldb, interbase,
      * maxdb, mckoi, mssql, mysql, mysql5, oracle, oracle9, oracle10, postgresql, sapdb, sybase</code>
      * @param type The database type
-     * @ant.not-required Per default, DdlUtils tries to determine the database type via JDBC.
+     *             Per default, DdlUtils tries to determine the database type via JDBC.
      */
     public void setDatabaseType(String type) {
-        if ((type != null) && (type.length() > 0)) {
+        if ((type != null) && (!type.isEmpty())) {
             _platformConf.setDatabaseType(type);
         }
     }
@@ -125,10 +105,10 @@ public abstract class DatabaseTaskBase extends Task {
      * more info on catalog patterns and JDBC, see
      * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/DatabaseMetaData.html">java.sql.DatabaseMetaData</a>.
      * @param catalogPattern The catalog pattern
-     * @ant.not-required Per default no specific catalog is used.
+     *                       Per default no specific catalog is used.
      */
     public void setCatalogPattern(String catalogPattern) {
-        if ((catalogPattern != null) && (catalogPattern.length() > 0)) {
+        if ((catalogPattern != null) && (!catalogPattern.isEmpty())) {
             _platformConf.setCatalogPattern(catalogPattern);
         }
     }
@@ -138,10 +118,10 @@ public abstract class DatabaseTaskBase extends Task {
      * more info on schema patterns and JDBC, see
      * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/DatabaseMetaData.html">java.sql.DatabaseMetaData</a>.
      * @param schemaPattern The schema pattern
-     * @ant.not-required Per default no specific schema is used.
+     *                      Per default no specific schema is used.
      */
     public void setSchemaPattern(String schemaPattern) {
-        if ((schemaPattern != null) && (schemaPattern.length() > 0)) {
+        if ((schemaPattern != null) && (!schemaPattern.isEmpty())) {
             _platformConf.setSchemaPattern(schemaPattern);
         }
     }
@@ -165,7 +145,7 @@ public abstract class DatabaseTaskBase extends Task {
      * in double quotes, and that the case of the identifier will be important in every SQL command
      * executed against the database.
      * @param useDelimitedSqlIdentifiers <code>true</code> if delimited SQL identifiers shall be used
-     * @ant.not-required Default is <code>false</code>.
+     *                                   Default is <code>false</code>.
      */
     public void setUseDelimitedSqlIdentifiers(boolean useDelimitedSqlIdentifiers) {
         _platformConf.setUseDelimitedSqlIdentifiers(useDelimitedSqlIdentifiers);
@@ -186,7 +166,7 @@ public abstract class DatabaseTaskBase extends Task {
      * the sort is case sensitive only if delimited identifier mode is on
      * (<code>useDelimitedSqlIdentifiers</code> is set to <code>true</code>).
      * @param sortForeignKeys <code>true</code> if the foreign keys shall be sorted
-     * @ant.not-required Default is <code>false</code>.
+     *                        Default is <code>false</code>.
      */
     public void setSortForeignKeys(boolean sortForeignKeys) {
         _platformConf.setSortForeignKeys(sortForeignKeys);
@@ -204,7 +184,7 @@ public abstract class DatabaseTaskBase extends Task {
      * Specifies whether DdlUtils shall shut down the database after the task has finished.
      * This is mostly useful for embedded databases.
      * @param shutdownDatabase <code>true</code> if the database shall be shut down
-     * @ant.not-required Default is <code>false</code>.
+     *                         Default is <code>false</code>.
      */
     public void setShutdownDatabase(boolean shutdownDatabase) {
         _platformConf.setShutdownDatabase(shutdownDatabase);
@@ -230,7 +210,7 @@ public abstract class DatabaseTaskBase extends Task {
      * Returns the commands.
      * @return The commands
      */
-    protected Iterator getCommands() {
+    protected Iterator<Command> getCommands() {
         return _commands.iterator();
     }
 
@@ -283,9 +263,8 @@ public abstract class DatabaseTaskBase extends Task {
      * @param model The database model
      */
     protected void executeCommands(Database model) throws RuntimeException {
-        for (Iterator it = getCommands(); it.hasNext(); ) {
-            Command cmd = (Command) it.next();
-
+        for (Iterator<Command> it = getCommands(); it.hasNext(); ) {
+            Command cmd = it.next();
             if (cmd.isRequiringModel() && (model == null)) {
                 throw new RuntimeException("No database model specified");
             }

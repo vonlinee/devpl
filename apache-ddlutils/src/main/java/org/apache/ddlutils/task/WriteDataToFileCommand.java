@@ -28,7 +28,7 @@ import java.io.FileOutputStream;
  * Reads the data currently in the table in the live database (as specified by the
  * enclosing task), and writes it as XML to a file.
  * @version $Revision: 289996 $
- * @ant.task name="writeDataToFile"
+ *    name="writeDataToFile"
  */
 public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
     /**
@@ -57,7 +57,7 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
     /**
      * Specifies the encoding of the XML file.
      * @param encoding The encoding
-     * @ant.not-required The default encoding is <code>UTF-8</code>.
+     *   The default encoding is <code>UTF-8</code>.
      */
     public void setEncoding(String encoding) {
         _encoding = encoding;

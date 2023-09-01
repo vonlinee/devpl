@@ -65,6 +65,7 @@ public class CloudscapePlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }

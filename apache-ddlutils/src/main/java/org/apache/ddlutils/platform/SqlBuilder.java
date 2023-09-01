@@ -29,7 +29,6 @@ import java.util.Map;
  * An implementation of this class can always delegate down to some templating technology such as Velocity if
  * it requires. Though often that can be quite complex when attempting to reuse code across many databases.
  * Hopefully only a small amount code needs to be changed on a per-database basis.
- * @version $Revision$
  */
 public abstract class SqlBuilder {
     /**

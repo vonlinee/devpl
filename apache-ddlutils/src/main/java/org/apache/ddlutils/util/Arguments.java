@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 /**
  * @since 8
  */
-public class ParamMap {
+public class Arguments {
 
     private final Map<String, Object> map = new HashMap<>();
 
@@ -47,11 +47,7 @@ public class ParamMap {
      * @return 属性值
      */
     public Object getObject(String key, Object placeholder, Predicate<Object> condition) {
-        Object val = map.get(key);
-        if (condition != null && condition.test(val)) {
-            return placeholder;
-        }
-        return val;
+        return getTypedValue(key, placeholder, condition);
     }
 
     /**
@@ -131,6 +127,16 @@ public class ParamMap {
 
     /**
      * 获取boolean型属性值
+     * @param key 属性名
+     * @return 属性值
+     */
+    public Boolean getBoolean(String key, boolean placeholder) throws ClassCastException {
+        Object val = map.get(key);
+        return val == null ? placeholder : (Boolean) val;
+    }
+
+    /**
+     * 获取兼容的boolean型属性值，比如 如果是字符串，那么自动转换 "true" -> true
      * @param key 属性名
      * @return 属性值
      */
@@ -220,14 +226,6 @@ public class ParamMap {
 
     @SuppressWarnings("unchecked")
     public <V> V getTypedValue(String key, V placeholder, Predicate<V> condition) throws ClassCastException {
-        Object val = map.get(key);
-        if (condition != null && condition.test((V) val)) {
-            return placeholder;
-        }
-        return (V) val;
-    }
-
-    public <V, T> V getTypeCompatiableValue(String key, V placeholder, Class<T> requiredType, Predicate<V> condition) {
         Object val = map.get(key);
         if (condition != null && condition.test((V) val)) {
             return placeholder;

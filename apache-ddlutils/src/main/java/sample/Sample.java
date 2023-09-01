@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-public class Main {
+public class Sample {
 
     public static void main(String[] args) throws IOException {
 
@@ -18,7 +18,7 @@ public class Main {
             "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
                 "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
                 "  <table name='user'>\n" +
-                "    <column name='name' type='VARCHAR' size='32' primaryKey='true' description='主键'/>\n" +
+                "    <column name='name' type='varchar' size='32' primaryKey='true' description='主键'/>\n" +
                 "    <column name='age' type='INTEGER' primaryKey='false'/>\n" +
                 "    <column name='sex' type='BINARY' size='100' required='true'/>\n" +
                 "    <column name='class_name' type='DOUBLE' required='true' default='-2.0'/>\n" +
@@ -34,7 +34,7 @@ public class Main {
         // we're turning the comment creation off to make testing easier
         // disable the comment
         DatabasePlatform platform = new MySql50Platform();
-        platform.setSqlCommentsOn(true);
+        platform.setSqlCommentsOn(false);
 
         SqlBuilder sqlBuilder = platform.getSqlBuilder();
 

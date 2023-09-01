@@ -29,7 +29,7 @@ import java.io.FileWriter;
  * Reads the schema of the live database (as specified in the enclosing task), and writes
  * it as XML to a file.
  * @version $Revision: 289996 $
- * @ant.task name="writeSchemaToFile"
+ *    name="writeSchemaToFile"
  */
 public class WriteSchemaToFileCommand extends Command {
     /**

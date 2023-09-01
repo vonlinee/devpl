@@ -48,7 +48,7 @@ public enum CommonJavaType implements JavaType {
     INSTANT("Instant", "java.time.Instant"),
 
     // 其他杂类
-    MAP("Map", "java.util.Map"),
+
     OBJECT("Object", "java.lang.Object"),
     DATE("Date", "java.util.Date"),
     BIG_INTEGER("BigInteger", "java.math.BigInteger"),
@@ -59,6 +59,12 @@ public enum CommonJavaType implements JavaType {
     BYTE_ARRAY("byte[]", "byte[]"),
     ANY_ARRAY("*[]", "*[]"),
 
+    // 常见集合类型 无法知道元素类型
+    LIST("List", "java.util.List"),
+    SET("Set", "java.util.List"),
+    MAP("Map", "java.util.Map"),
+
+    // 未知类型，使用Object进行兼容
     UNKNOWN(OBJECT),
     ;
 

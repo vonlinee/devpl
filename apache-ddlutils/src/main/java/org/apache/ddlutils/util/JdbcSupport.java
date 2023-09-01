@@ -13,7 +13,7 @@ import java.util.HashSet;
 /**
  * JdbcSupport is an abstract base class for objects which need to
  * perform JDBC operations. It contains a number of useful methods
- * for implementation inheritence..
+ * for implementation inheritence.
  * @version $Revision$
  */
 public abstract class JdbcSupport {

@@ -9,12 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The sub task for creating the target database. Note that this is only supported on some database
+ * The sub-task for creating the target database. Note that this is only supported on some database
  * platforms. See the database support documentation for details on which platforms support this.<br/>
- * This sub task does not require schema files. Therefore the <code>fileset</code> subelement and
+ * This sub-task does not require schema files. Therefore, the <code>fileset</code> subelement and
  * the <code>schemaFile</code> attribute of the enclosing task can be omitted.
- * @version $Revision: 231306 $
- * @ant.task name="createDatabase"
+ * name="createDatabase"
  */
 public class CreateDatabaseCommand extends DatabaseCommand {
     /**
@@ -53,16 +52,16 @@ public class CreateDatabaseCommand extends DatabaseCommand {
 
         try {
             platform.createDatabase(dataSource.getDriverClassName(),
-                    dataSource.getUrl(),
-                    dataSource.getUsername(),
-                    dataSource.getPassword(),
-                    getFilteredParameters(platform.getName()));
+                dataSource.getUrl(),
+                dataSource.getUsername(),
+                dataSource.getPassword(),
+                getFilteredParameters(platform.getName()));
 
             _log.info("Created database");
         } catch (UnsupportedOperationException ex) {
             _log.error("Database platform " + platform.getName() + " does not support database creation " +
-                            "via JDBC or there was an error while creating it.",
-                    ex);
+                    "via JDBC or there was an error while creating it.",
+                ex);
         } catch (Exception ex) {
             handleException(ex, ex.getMessage());
         }

@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 /**
  * Base class for platform implementations.
- * @version $Revision: 231110 $
  */
 public abstract class GenericDatabasePlatform extends JdbcSupport implements DatabasePlatform {
 
@@ -1545,7 +1544,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             // columns out
             return input.getColumn()
                     .isAutoIncrement() && (!isIdentityOverrideOn() || !getPlatformInfo().isIdentityOverrideAllowed() || (bean.get(input.getName()) == null));
-        }).collect(Collectors.toList());
+        }).toList();
 
         Column[] columns = new Column[relevantProperties.size()];
         int idx = 0;
@@ -2055,7 +2054,6 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             returnConnection(connection);
         }
     }
-
 
     /**
      * {@inheritDoc}

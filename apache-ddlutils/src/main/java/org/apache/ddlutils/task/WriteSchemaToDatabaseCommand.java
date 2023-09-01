@@ -27,7 +27,7 @@ import org.apache.ddlutils.platform.SqlBuildContext;
  * Parses the schema XML files specified for the enclosing task, and creates the corresponding
  * schema in the database.
  * @version $Revision: 289996 $
- * @ant.task name="writeSchemaToDatabase"
+ *    name="writeSchemaToDatabase"
  */
 public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationParameters {
     /**
@@ -51,7 +51,7 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
      * Specifies whether DdlUtils shall alter an existing database rather than clearing it and
      * creating it new.
      * @param alterTheDb <code>true</code> if to alter the database
-     * @ant.not-required Per default an existing database is altered
+     *   Per default an existing database is altered
      */
     public void setAlterDatabase(boolean alterTheDb) {
         _alterDb = alterTheDb;
@@ -70,7 +70,7 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
      * Specifies whether tables, external constraints, etc. can be dropped if necessary.
      * Note that this is only relevant when <code>alterDatabase</code> is <code>false</code>.
      * @param doDrops <code>true</code> if drops shall be performed
-     * @ant.not-required Per default database structures are dropped if necessary
+     *   Per default database structures are dropped if necessary
      */
     public void setDoDrops(boolean doDrops) {
         _doDrops = doDrops;

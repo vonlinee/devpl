@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class JdbcUtils {
 
-    private static final Log logger = LoggerFactory.getLogger(JdbcUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JdbcUtils.class);
     private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
 
     /**

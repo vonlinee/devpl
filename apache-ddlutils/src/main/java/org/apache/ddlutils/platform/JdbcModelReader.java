@@ -793,18 +793,10 @@ public class JdbcModelReader {
 
         if (jdbcActionValue != null) {
             switch (jdbcActionValue) {
-                case DatabaseMetaData.importedKeyCascade:
-                    action = CascadeActionEnum.CASCADE;
-                    break;
-                case DatabaseMetaData.importedKeySetNull:
-                    action = CascadeActionEnum.SET_NULL;
-                    break;
-                case DatabaseMetaData.importedKeySetDefault:
-                    action = CascadeActionEnum.SET_DEFAULT;
-                    break;
-                case DatabaseMetaData.importedKeyRestrict:
-                    action = CascadeActionEnum.RESTRICT;
-                    break;
+                case DatabaseMetaData.importedKeyCascade -> action = CascadeActionEnum.CASCADE;
+                case DatabaseMetaData.importedKeySetNull -> action = CascadeActionEnum.SET_NULL;
+                case DatabaseMetaData.importedKeySetDefault -> action = CascadeActionEnum.SET_DEFAULT;
+                case DatabaseMetaData.importedKeyRestrict -> action = CascadeActionEnum.RESTRICT;
             }
         }
         return action;

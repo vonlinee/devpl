@@ -408,6 +408,9 @@ public final class StringUtils {
      * @return 去掉首尾换行符
      */
     public static String trimWrapCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
         int left = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) != '\n') {
@@ -422,6 +425,6 @@ public final class StringUtils {
             }
             right--;
         }
-        return str.substring(left, right);
+        return str.substring(left, right + 1);
     }
 }

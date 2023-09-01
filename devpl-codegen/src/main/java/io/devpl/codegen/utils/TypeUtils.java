@@ -191,13 +191,13 @@ public class TypeUtils {
                 left = className.substring(0, i);
                 right = className.substring(i + 1);
                 // noinspection unchecked
-                final Class<T> clazz = (Class) Class.forName(left);
+                final Class<T> clazz = (Class<T>) Class.forName(left);
                 final Field field;
                 field = clazz.getField(right);
                 return pluginClass.cast(field.get(null));
             }
             // noinspection unchecked
-            final Class<T> clazz = (Class) Class.forName(className);
+            final Class<T> clazz = (Class<T>) Class.forName(className);
             try {
                 // We assume that if there is an INSTANCE field it is static and
                 // has the right type.

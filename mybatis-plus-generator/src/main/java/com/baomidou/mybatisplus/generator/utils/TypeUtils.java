@@ -1,4 +1,4 @@
-package io.devpl.generator.utils;
+package com.baomidou.mybatisplus.generator.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,7 +23,7 @@ public class TypeUtils {
      * @return 目标数据类型对应的值
      */
     public static Object parseString(String input, Class<?> requiredType) throws Exception {
-        boolean nullOrEmpty = input == null || input.length() == 0;
+        boolean nullOrEmpty = input == null || input.isEmpty();
         if (double.class.equals(requiredType)) {
             return nullOrEmpty ? 0 : Double.parseDouble(input);
         } else if (long.class.equals(requiredType)) {
@@ -44,14 +44,14 @@ public class TypeUtils {
     }
 
     public static boolean isInteger(String str) {
-        if (null == str || "".equals(str)) {
+        if (null == str || str.isEmpty()) {
             return false;
         }
         return PATTERN_INTEGER.matcher(str).matches();
     }
 
     public static boolean isDouble(String str) {
-        if (null == str || "".equals(str)) {
+        if (null == str || str.isEmpty()) {
             return false;
         }
         return PATTERN_DOUBLE.matcher(str).matches();

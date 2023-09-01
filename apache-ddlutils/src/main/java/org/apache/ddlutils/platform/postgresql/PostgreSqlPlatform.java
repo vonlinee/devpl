@@ -14,12 +14,10 @@ import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  * The platform implementation for PostgresSql.
- * @version $Revision: 231306 $
  */
 public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
@@ -82,6 +80,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return DATABASENAME;
     }
@@ -95,7 +94,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
      * @param parameters          Additional parameters for the operation
      * @param createDb            Whether to create or drop the database
      */
-    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
+    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
         if (JDBC_DRIVER.equals(jdbcDriverClassName)) {
             int slashPos = connectionUrl.lastIndexOf('/');
 
@@ -114,14 +113,12 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
             sql.append(" DATABASE ");
             sql.append(dbName);
             if ((parameters != null) && !parameters.isEmpty()) {
-                for (Iterator it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                    Map.Entry entry = (Map.Entry) it.next();
-
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
                     sql.append(" ");
-                    sql.append(entry.getKey().toString());
+                    sql.append(entry.getKey());
                     if (entry.getValue() != null) {
                         sql.append(" ");
-                        sql.append(entry.getValue().toString());
+                        sql.append(entry.getValue());
                     }
                 }
             }
@@ -159,8 +156,9 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
-        // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually 
+    @Override
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
+        // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually
         // the template1 database because it usually exists)
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, parameters, true);
     }
@@ -168,8 +166,9 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password) throws DatabaseOperationException, UnsupportedOperationException {
-        // With PostgreSQL, you create a database by executing "DROP DATABASE" in an existing database (usually 
+        // With PostgreSQL, you create a database by executing "DROP DATABASE" in an existing database (usually
         // the template1 database because it usually exists)
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, null, false);
     }
@@ -177,6 +176,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void setObject(PreparedStatement statement, int sqlIndex, DynaBean dynaBean, SqlDynaProperty property) throws SQLException {
         int typeCode = property.getColumn().getJdbcTypeCode();
         Object value = dynaBean.get(property.getName());
@@ -184,15 +184,9 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         // PostgreSQL doesn't like setNull for BYTEA columns
         if (value == null) {
             switch (typeCode) {
-                case Types.BINARY:
-                case Types.VARBINARY:
-                case Types.LONGVARBINARY:
-                case Types.BLOB:
-                    statement.setBytes(sqlIndex, null);
-                    break;
-                default:
-                    statement.setNull(sqlIndex, typeCode);
-                    break;
+                case Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY, Types.BLOB ->
+                        statement.setBytes(sqlIndex, null);
+                default -> statement.setNull(sqlIndex, typeCode);
             }
         } else {
             super.setObject(statement, sqlIndex, dynaBean, property);
@@ -202,6 +196,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -212,8 +207,10 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
+            @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if (change instanceof RemoveColumnChange) {
                     return true;

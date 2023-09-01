@@ -21,7 +21,7 @@ import java.util.Iterator;
  * primary key values when inserting the data. Note though that not every database supports the
  * retrieval of auto-increment values which is necessary for this to work.
  * @version $Revision: 289996 $
- * @ant.task name="writeDataToDatabase"
+ *    name="writeDataToDatabase"
  */
 public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
     /**
@@ -46,7 +46,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * @param useExplicitIdentityValues <code>true</code> if explicitly specified identity
      *                                  column values should be inserted instead of letting
      *                                  the database define the values for these columns
-     * @ant.not-required Default is <code>false</code>
+     *   Default is <code>false</code>
      */
     public void setUseExplicitIdentityValues(boolean useExplicitIdentityValues) {
         _useExplicitIdentityValues = useExplicitIdentityValues;
@@ -63,7 +63,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
     /**
      * Specifies the name of the single XML file that contains the data to insert into the database.
      * @param dataFile The data file
-     * @ant.not-required Use either this or <code>fileset</code> sub elements.
+     *   Use either this or <code>fileset</code> sub elements.
      */
     public void setDataFile(File dataFile) {
         _singleDataFile = dataFile;
@@ -74,7 +74,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * depends on the JDBC driver and the amount of available memory.<br/>
      * This value is only used if <code>useBatchMode</code> is <code>true</code>.
      * @param batchSize The number of objects
-     * @ant.not-required The default value is 1.
+     *   The default value is 1.
      */
     public void setBatchSize(int batchSize) {
         getDataIO().setBatchSize(batchSize);
@@ -88,7 +88,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * because a batch insert only works for one table at a time. Thus when the table changes in an
      * entry in the XML file, the batch is committed and then a new one is started.
      * @param useBatchMode <code>true</code> if batch mode shall be used
-     * @ant.not-required Per default batch mode is not used.
+     *   Per default batch mode is not used.
      */
     public void setUseBatchMode(boolean useBatchMode) {
         getDataIO().setUseBatchMode(useBatchMode);
@@ -101,7 +101,7 @@ public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
      * has to ensure the foreign-key order of the data. Thus if you know that the data is specified in
      * foreign key order turn this off.
      * @param ensureFKOrder <code>true</code> if the foreign key order shall be followed
-     * @ant.not-required Per default foreign key order is honored.
+     *   Per default foreign key order is honored.
      */
     public void setEnsureForeignKeyOrder(boolean ensureFKOrder) {
         getDataIO().setEnsureFKOrder(ensureFKOrder);

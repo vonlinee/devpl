@@ -1,27 +1,8 @@
 package org.apache.ddlutils.platform;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import org.apache.commons.beanutils.ConversionException;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.ddlutils.model.TypeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -30,9 +11,11 @@ import java.sql.Types;
 
 /**
  * Helper class for dealing with default values, e.g. converting them to other types.
- * @version $Revision: 289996 $
  */
 public class DefaultValueHelper {
+
+    private static final Logger log = LoggerFactory.getLogger(DefaultValueHelper.class);
+
     /**
      * Converts the given default value from the specified original to the target
      * jdbc type.
@@ -43,33 +26,29 @@ public class DefaultValueHelper {
      */
     public String convert(String defaultValue, int originalTypeCode, int targetTypeCode) {
         String result = defaultValue;
-
         if (defaultValue != null) {
             switch (originalTypeCode) {
-                case Types.BIT:
-                case Types.BOOLEAN:
-                    result = convertBoolean(defaultValue, targetTypeCode).toString();
-                    break;
-                case Types.DATE:
+                case Types.BIT, Types.BOOLEAN -> result = convertBoolean(defaultValue, targetTypeCode).toString();
+                case Types.DATE -> {
                     if (targetTypeCode == Types.TIMESTAMP) {
                         try {
                             Date date = Date.valueOf(result);
-
                             return new Timestamp(date.getTime()).toString();
                         } catch (IllegalArgumentException ex) {
+                            log.error("", ex);
                         }
                     }
-                    break;
-                case Types.TIME:
+                }
+                case Types.TIME -> {
                     if (targetTypeCode == Types.TIMESTAMP) {
                         try {
                             Time time = Time.valueOf(result);
-
                             return new Timestamp(time.getTime()).toString();
                         } catch (IllegalArgumentException ex) {
+                            log.error("", ex);
                         }
                     }
-                    break;
+                }
             }
         }
         return result;
@@ -82,21 +61,20 @@ public class DefaultValueHelper {
      * @return The converted value
      */
     private Object convertBoolean(String defaultValue, int targetTypeCode) {
-        Boolean value = null;
-        Object result = null;
-
+        boolean value;
+        Object result;
         try {
-            value = (Boolean) ConvertUtils.convert(defaultValue, Boolean.class);
-        } catch (ConversionException ex) {
+            value = Boolean.parseBoolean(defaultValue);
+        } catch (Exception ex) {
+            log.error("convertBoolean {}", defaultValue);
             return defaultValue;
         }
-
         if ((targetTypeCode == Types.BIT) || (targetTypeCode == Types.BOOLEAN)) {
             result = value;
         } else if (TypeMap.isNumericType(targetTypeCode)) {
-            result = (value.booleanValue() ? new Integer(1) : new Integer(0));
+            result = (value ? 1 : 0);
         } else {
-            result = value.toString();
+            result = Boolean.toString(value);
         }
         return result;
     }

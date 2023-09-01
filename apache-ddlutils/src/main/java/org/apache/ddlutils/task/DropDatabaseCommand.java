@@ -29,7 +29,7 @@ import org.apache.ddlutils.model.Database;
  * This sub task does not require schema files. Therefore the <code>fileset</code> subelement and
  * the <code>schemaFile</code> attribute of the enclosing task can be omitted.
  * @version $Revision: 289996 $
- * @ant.task name="dropDatabase"
+ *    name="dropDatabase"
  */
 public class DropDatabaseCommand extends DatabaseCommand {
     /**

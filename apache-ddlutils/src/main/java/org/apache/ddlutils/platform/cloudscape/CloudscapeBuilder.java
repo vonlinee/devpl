@@ -43,6 +43,7 @@ public class CloudscapeBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("GENERATED ALWAYS AS IDENTITY");
     }
@@ -50,6 +51,7 @@ public class CloudscapeBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSelectLastIdentityValues(Table table) {
         return "VALUES IDENTITY_VAL_LOCAL()";
     }

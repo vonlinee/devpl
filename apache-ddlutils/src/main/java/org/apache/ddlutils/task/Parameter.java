@@ -25,7 +25,7 @@ public class Parameter {
     /**
      * The platforms for which this parameter is applicable.
      */
-    private Set _platforms = new HashSet();
+    private Set<String> _platforms = new HashSet<>();
 
     /**
      * Returns the name.

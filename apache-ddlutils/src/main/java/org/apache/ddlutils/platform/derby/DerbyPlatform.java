@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.derby;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.AddColumnChange;
@@ -88,7 +69,7 @@ public class DerbyPlatform extends CloudscapePlatform {
      * {@inheritDoc}
      */
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
         if (JDBC_DRIVER.equals(jdbcDriverClassName) || JDBC_DRIVER_EMBEDDED.equals(jdbcDriverClassName)) {
             StringBuilder creationUrl = new StringBuilder();
@@ -96,15 +77,14 @@ public class DerbyPlatform extends CloudscapePlatform {
             creationUrl.append(connectionUrl);
             creationUrl.append(";create=true");
             if ((parameters != null) && !parameters.isEmpty()) {
-                for (Iterator<Map.Entry<?, ?>> it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                    Map.Entry entry = it.next();
+                for (Map.Entry<String, String> entry : parameters.entrySet()) {
                     // no need to specify create twice (and create=false wouldn't help anyway)
-                    if (!"create".equalsIgnoreCase(entry.getKey().toString())) {
+                    if (!"create".equalsIgnoreCase(entry.getKey())) {
                         creationUrl.append(";");
-                        creationUrl.append(entry.getKey().toString());
+                        creationUrl.append(entry.getKey());
                         creationUrl.append("=");
                         if (entry.getValue() != null) {
-                            creationUrl.append(entry.getValue().toString());
+                            creationUrl.append(entry.getValue());
                         }
                     }
                 }

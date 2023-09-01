@@ -24,7 +24,7 @@ import org.apache.log4j.Level;
 /**
  * Helper class that defines the possible values for the verbosity attribute.
  * @version $Revision: $
- * @ant.task ignore="true"
+ *    ignore="true"
  */
 public class VerbosityLevel {
     /**

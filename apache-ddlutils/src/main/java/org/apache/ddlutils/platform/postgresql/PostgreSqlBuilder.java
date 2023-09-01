@@ -61,7 +61,8 @@ public class PostgreSqlBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    public void createTable(Database database, Table table, Map parameters) throws IOException {
+    @Override
+    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
 

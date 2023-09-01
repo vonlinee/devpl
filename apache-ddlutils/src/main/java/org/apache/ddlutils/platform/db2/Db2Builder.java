@@ -32,7 +32,6 @@ import java.sql.Types;
 
 /**
  * The SQL Builder for DB2.
- * @version $Revision$
  */
 public class Db2Builder extends SqlBuilder {
     /**
