@@ -402,6 +402,27 @@ public final class StringUtils {
         return true;
     }
 
+    public static String trimInvisiableCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        int left = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != '\n' || str.charAt(i) != '\t') {
+                break;
+            }
+            left++;
+        }
+        int right = str.length() - 1;
+        for (int i = str.length() - 1; i > 0; i--) {
+            if (i < left || str.charAt(i) != '\n') {
+                break;
+            }
+            right--;
+        }
+        return str.substring(left, right + 1);
+    }
+
     /**
      * 去掉首尾换行符
      * @param str 字符串

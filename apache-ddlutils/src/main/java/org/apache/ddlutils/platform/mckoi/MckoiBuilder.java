@@ -5,9 +5,9 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * The SQL Builder for the Mckoi database.
@@ -30,7 +30,7 @@ public class MckoiBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
+    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         // we use sequences instead of the UNIQUEKEY function because this way
         // we can read their values back
         Column[] columns = table.getAutoIncrementColumns();
@@ -134,7 +134,7 @@ public class MckoiBuilder extends SqlBuilder {
      * @param table      The table to recreate
      * @param parameters The table creation parameters
      */
-    protected void writeRecreateTableStmt(Database model, Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeRecreateTableStmt(Database model, Table table, ValueMap parameters) throws IOException {
         print("ALTER ");
         super.createTable(model, table, parameters);
     }

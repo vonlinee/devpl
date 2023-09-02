@@ -4,6 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -27,7 +28,7 @@ public class FirebirdBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
+    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment

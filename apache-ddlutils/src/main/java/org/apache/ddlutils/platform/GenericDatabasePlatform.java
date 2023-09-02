@@ -2,6 +2,7 @@ package org.apache.ddlutils.platform;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;
@@ -1069,7 +1070,8 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
      * @param change       The change object
      */
     public void processChange(Database currentModel, SqlBuildContext params, AddTableChange change) throws IOException {
-        getSqlBuilder().createTable(currentModel, change.getNewTable(), params == null ? null : params.getParametersFor(change.getNewTable()));
+        SqlBuilder sqlBuilder = getSqlBuilder();
+        sqlBuilder.createTable(currentModel, change.getNewTable(), params == null ? null : params.getParametersFor(change.getNewTable()));
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }
 
@@ -1206,7 +1208,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
         Table changedTable = findChangedTable(currentModel, change);
         Table targetTable = change.getTargetTable();
-        Map<String, Object> parameters = (params == null ? null : params.getParametersFor(targetTable));
+        ValueMap parameters = (params == null ? null : params.getParametersFor(targetTable));
 
         if (canMigrateData) {
             Table tempTable = getTemporaryTableFor(targetTable);

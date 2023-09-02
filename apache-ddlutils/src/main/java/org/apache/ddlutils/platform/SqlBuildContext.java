@@ -1,6 +1,7 @@
 package org.apache.ddlutils.platform;
 
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,18 +17,31 @@ public final class SqlBuildContext {
     /**
      * The parameter maps keyed by the tables.
      */
-    private final Map<String, Map<String, Object>> parametersPerTable = new HashMap<>();
+    private final Map<String, ValueMap> parametersPerTable = new HashMap<>();
+
+    public ValueMap getGlobalParameters() {
+        ValueMap valueMap = parametersPerTable.get(null);
+        if (valueMap == null) {
+            valueMap = new ValueMap();
+            parametersPerTable.put(null, valueMap);
+        }
+        return valueMap;
+    }
+
+    public void addGlobalParam(String paramName, Object value) {
+        getGlobalParameters().put(paramName, value);
+    }
 
     /**
      * Returns the parameters for the given table.
      * @param table The table
      * @return The parameters
      */
-    public Map<String, Object> getParametersFor(Table table) {
-        Map<String, Object> result = new HashMap<>();
+    public ValueMap getParametersFor(Table table) {
+        ValueMap result = new ValueMap();
         // the null location of the map contains global param
-        Map<String, Object> globalParams = parametersPerTable.get(null);
-        Map<String, Object> tableParams = parametersPerTable.get(table.getName());
+        ValueMap globalParams = parametersPerTable.get(null);
+        ValueMap tableParams = parametersPerTable.get(table.getName());
 
         if (globalParams != null) {
             result.putAll(globalParams);
@@ -44,11 +58,11 @@ public final class SqlBuildContext {
      * @param paramName  The name of the parameter
      * @param paramValue The value of the parameter
      */
-    public void addParameter(Table table, String paramName, String paramValue) {
+    public void addParameter(Table table, String paramName, Object paramValue) {
         String key = (table == null ? null : table.getName());
         // we're using a list ordered map to retain the order
         // change: not using an ordered list
-        Map<String, Object> params = parametersPerTable.computeIfAbsent(key, k -> new HashMap<>());
+        ValueMap params = parametersPerTable.computeIfAbsent(key, k -> new ValueMap());
         params.put(paramName, paramValue);
     }
 }

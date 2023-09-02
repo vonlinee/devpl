@@ -21,12 +21,13 @@ package org.apache.ddlutils.platform.mysql;
 
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * The SQL Builder for MySQL version 5 and above.
- * @version $Revision: $
  */
 public class MySql50Builder extends MySqlBuilder {
     /**
@@ -37,13 +38,15 @@ public class MySql50Builder extends MySqlBuilder {
         super(platform);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void copyData(Table sourceTable, Table targetTable) throws IOException {
         print("SET sql_mode=''");
         printEndOfStatement();
         super.copyData(sourceTable, targetTable);
+    }
+
+    @Override
+    protected void beforeTableCreationStmtEnding(Table table, ValueMap parameters) {
+        print("11111111111");
     }
 }

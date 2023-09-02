@@ -18,6 +18,8 @@ import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
 import io.devpl.codegen.utils.FieldsData;
 import io.devpl.codegen.utils.JSONUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -28,11 +30,13 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * https://houbb.github.io/2020/05/29/java-ast-06-comments
+ * <a href="https://houbb.github.io/2020/05/29/java-ast-06-comments">...</a>
  * @author wangliang
  * Created On 2022-12-29 10:11:33
  */
 public class JavaParserUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(JavaParserUtils.class);
 
     private static final JavaParser JAVA_PARSER_INSTANCE;
     // 打印配置
@@ -80,7 +84,7 @@ public class JavaParserUtils {
                     return SourceRoot.Callback.Result.SAVE;
                 });
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("failed to parse file {}", path, e);
             }
         });
     }
@@ -107,7 +111,7 @@ public class JavaParserUtils {
         try {
             result = javaParser.parse(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("failed to parse file {}", file, e);
         }
         return result;
     }
@@ -142,6 +146,7 @@ public class JavaParserUtils {
                         if (member.isFieldDeclaration()) {
                             FieldDeclaration fd = member.asFieldDeclaration();
                             if (fd.isStatic()) {
+
                             } else {
                                 NodeList<VariableDeclarator> variables = fd.getVariables();
                                 VariableDeclarator variableDeclarator = variables.get(0);
@@ -280,7 +285,7 @@ public class JavaParserUtils {
             ParseResult<CompilationUnit> cu = JAVA_PARSER_INSTANCE.parse(in);
             System.out.println(cu);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("failed to parse file {}", filePath, e);
         }
         return null;
     }

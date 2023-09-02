@@ -22,11 +22,10 @@ public class EntityDDLGenerator {
             builder.create().tableName("Table");
             for (MetaField field : fieldInfos) {
                 builder.addField(field.getIdentifier(), field.getDataType())
-                    .addComment(StringUtils.trimWrapCharacters(field.getDescription())).addComma().wrap();
+                    .addComment(StringUtils.trimInvisiableCharacters(field.getDescription())).addComma().wrap();
             }
             String result = builder.end();
             System.out.println(result);
         });
-
     }
 }

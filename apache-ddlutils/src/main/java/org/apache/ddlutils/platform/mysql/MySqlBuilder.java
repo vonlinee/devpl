@@ -8,6 +8,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -84,7 +85,7 @@ public class MySqlBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
         if (parameters != null) {
             print(" ");
             // MySql supports additional table creation options which are appended

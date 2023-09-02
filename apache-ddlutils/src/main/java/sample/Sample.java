@@ -2,13 +2,15 @@ package sample;
 
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.io.DatabaseIO;
-import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.platform.mysql.MySql50Platform;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
 
 public class Sample {
 
@@ -31,6 +33,14 @@ public class Sample {
         dbIO.setValidateXml(false);
         Database database = dbIO.read(new StringReader(schema));
 
+        Table table = database.getTable(0);
+
+        Index index = new UniqueIndex();
+        index.setName("idx_001");
+        index.addColumn(new IndexColumn(table.getColumn(3)));
+
+        table.addIndex(index);
+
         // we're turning the comment creation off to make testing easier
         // disable the comment
         DatabasePlatform platform = new MySql50Platform();
@@ -41,7 +51,13 @@ public class Sample {
         StringWriter sw = new StringWriter();
 
         sqlBuilder.setWriter(sw);
-        sqlBuilder.createTables(database, null, true);
+
+        SqlBuildContext context = new SqlBuildContext();
+
+        context.addGlobalParam("engine", "InnoDB");
+        context.addGlobalParam("encoding", "utf8mb4");
+
+        sqlBuilder.createTables(database, context, true);
 
         System.out.println(sw);
     }

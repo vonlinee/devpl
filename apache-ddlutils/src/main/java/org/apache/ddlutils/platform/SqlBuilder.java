@@ -5,6 +5,7 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
+import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,6 @@ public abstract class SqlBuilder {
      * The Log to which logging calls will be made.
      */
     protected final Logger _log = LoggerFactory.getLogger(SqlBuilder.class);
-
     /**
      * The platform that this builder belongs to.
      */
@@ -52,6 +52,10 @@ public abstract class SqlBuilder {
      * The current Writer used to output the SQL to.
      */
     private Writer writer;
+    /**
+     * 配置选项
+     */
+    private ValueMap options;
     /**
      * The indentation used to indent commands.
      */
@@ -343,12 +347,12 @@ public abstract class SqlBuilder {
 
     /**
      * Outputs the DDL to create the given temporary table. Per default this is simply
-     * a call to {@link #createTable(Database, Table, Map)}.
+     * a call to {@link #createTable(Database, Table, ValueMap)}.
      * @param database   The database model
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void createTemporaryTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, ValueMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
@@ -433,7 +437,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    public void createTable(Database database, Table table, Map<String, Object> parameters) throws IOException {
+    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         writeCreateTableStatement(database, table, parameters);
         writeTableCreationStmtEnding(table, parameters);
 
@@ -963,8 +967,7 @@ public abstract class SqlBuilder {
     //
 
     /**
-     * Generates a version of the name that has at most the specified
-     * length.
+     * Generates a version of the name that has at most the specified length.
      * @param name          The original name
      * @param desiredLength The desired maximum length
      * @return The shortened version
@@ -1033,7 +1036,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeCreateTableStatement(Database database, Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeCreateTableStatement(Database database, Table table, ValueMap parameters) throws IOException {
         print("CREATE TABLE ");
         printlnIdentifier(getTableName(table));
         println("(");
@@ -1061,8 +1064,18 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
+        beforeTableCreationStmtEnding(table, parameters);
         printEndOfStatement();
+    }
+
+    /**
+     * 创建表结束 ) 时的回调
+     * @param table      表
+     * @param parameters 该表的配置项
+     */
+    protected void beforeTableCreationStmtEnding(Table table, ValueMap parameters) {
+
     }
 
     /**
@@ -1070,7 +1083,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters 该表的上下文参数
      */
-    protected void writeColumns(Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeColumns(Table table, ValueMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             writeColumn(table, table.getColumn(idx));
@@ -1462,7 +1475,7 @@ public abstract class SqlBuilder {
      * @param index The index
      */
     protected void writeEmbeddedIndexCreateStmt(Table table, Index index) throws IOException {
-        if ((index.getName() != null) && (index.getName().length() > 0)) {
+        if ((index.getName() != null) && (!index.getName().isEmpty())) {
             print(" CONSTRAINT ");
             printIdentifier(getIndexName(index));
         }
@@ -1625,30 +1638,20 @@ public abstract class SqlBuilder {
         if (action != getPlatformInfo().getDefaultOnUpdateAction()) {
             print(" ON UPDATE ");
             switch (action.getValue()) {
-                case CascadeActionEnum.VALUE_CASCADE:
-                    print("CASCADE");
-                    break;
-                case CascadeActionEnum.VALUE_SET_NULL:
-                    print("SET NULL");
-                    break;
-                case CascadeActionEnum.VALUE_SET_DEFAULT:
-                    print("SET DEFAULT");
-                    break;
-                case CascadeActionEnum.VALUE_RESTRICT:
-                    print("RESTRICT");
-                    break;
-                case CascadeActionEnum.VALUE_NONE:
-                    print("NO ACTION");
-                    break;
-                default:
+                case CascadeActionEnum.VALUE_CASCADE -> print("CASCADE");
+                case CascadeActionEnum.VALUE_SET_NULL -> print("SET NULL");
+                case CascadeActionEnum.VALUE_SET_DEFAULT -> print("SET DEFAULT");
+                case CascadeActionEnum.VALUE_RESTRICT -> print("RESTRICT");
+                case CascadeActionEnum.VALUE_NONE -> print("NO ACTION");
+                default ->
                     throw new ModelException("Unsupported cascade value '" + action + "' for onUpdate in foreign key in table " + table.getName());
             }
         }
     }
 
-    //
-    // Helper methods
-    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods Start
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Prints an SQL comment to the current stream.
@@ -1696,8 +1699,12 @@ public abstract class SqlBuilder {
      * Prints some text.
      * @param text The text to print
      */
-    public void print(String text) throws IOException {
-        writer.write(text);
+    public void print(String text) {
+        try {
+            writer.write(text);
+        } catch (Exception exception) {
+
+        }
     }
 
     /**
@@ -1756,4 +1763,8 @@ public abstract class SqlBuilder {
     protected String createUniqueIdentifier() {
         return new UID().toString().replace(':', '_').replace('-', '_');
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Helper methods End
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

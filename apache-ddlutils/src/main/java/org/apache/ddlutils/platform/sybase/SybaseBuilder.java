@@ -23,10 +23,10 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Types;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -46,7 +46,8 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
-    public void createTable(Database database, Table table, Map parameters) throws IOException {
+    @Override
+    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
@@ -55,7 +56,7 @@ public class SybaseBuilder extends SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    protected void writeTableCreationStmtEnding(Table table, Map<String, Object> parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
         if (parameters != null) {
             // We support
             // - 'lock'
@@ -76,8 +77,7 @@ public class SybaseBuilder extends SqlBuilder {
 
             boolean writtenWithParameters = false;
 
-            for (Iterator<Map.Entry<String, Object>> it = parameters.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<String, Object> entry = it.next();
+            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
                 String name = entry.getKey();
 
                 if (!"lock".equals(name) && !"at".equals(name) && !"external table at".equals(name) && !"on".equals(name)) {
@@ -114,6 +114,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void writeColumn(Table table, Column column) throws IOException {
         printIdentifier(getColumnName(column));
         print(" ");
@@ -128,7 +129,7 @@ public class SybaseBuilder extends SqlBuilder {
             if (column.isRequired()) {
                 writeColumnNotNullableStmt();
             } else {
-                // we'll write a NULL for all columns that are not required 
+                // we'll write a NULL for all columns that are not required
                 writeColumnNullableStmt();
             }
         }
@@ -137,6 +138,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
             return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
@@ -148,6 +150,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropTable(Table table) throws IOException {
         turnOnQuotation();
         print("IF EXISTS (SELECT 1 FROM sysobjects WHERE type = 'U' AND name = ");
@@ -164,6 +167,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
         String constraintName = getForeignKeyName(table, foreignKey);
 
@@ -181,6 +185,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropIndex(Table table, Index index) throws IOException {
         print("DROP INDEX ");
         printIdentifier(getTableName(table));
@@ -192,6 +197,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropForeignKeys(Table table) throws IOException {
         turnOnQuotation();
         super.dropForeignKeys(table);
@@ -200,6 +206,7 @@ public class SybaseBuilder extends SqlBuilder {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSelectLastIdentityValues(Table table) {
         return "SELECT @@IDENTITY";
     }
@@ -210,13 +217,10 @@ public class SybaseBuilder extends SqlBuilder {
      * @return The SQL
      */
     protected String getEnableIdentityOverrideSql(Table table) {
-        StringBuffer result = new StringBuffer();
 
-        result.append("SET IDENTITY_INSERT ");
-        result.append(getDelimitedIdentifier(getTableName(table)));
-        result.append(" ON");
-
-        return result.toString();
+        return "SET IDENTITY_INSERT " +
+            getDelimitedIdentifier(getTableName(table)) +
+            " ON";
     }
 
     /**
@@ -225,13 +229,10 @@ public class SybaseBuilder extends SqlBuilder {
      * @return The SQL
      */
     protected String getDisableIdentityOverrideSql(Table table) {
-        StringBuffer result = new StringBuffer();
 
-        result.append("SET IDENTITY_INSERT ");
-        result.append(getDelimitedIdentifier(getTableName(table)));
-        result.append(" OFF");
-
-        return result.toString();
+        return "SET IDENTITY_INSERT " +
+            getDelimitedIdentifier(getTableName(table)) +
+            " OFF";
     }
 
     /**
@@ -419,7 +420,7 @@ public class SybaseBuilder extends SqlBuilder {
         Object newParsedDefault = newColumn.getParsedDefaultValue();
         String newDefault = newColumn.getDefaultValue();
         boolean defaultChanges = ((oldParsedDefault == null) && (newParsedDefault != null)) ||
-                ((oldParsedDefault != null) && !oldParsedDefault.equals(newParsedDefault));
+            ((oldParsedDefault != null) && !oldParsedDefault.equals(newParsedDefault));
 
         // Sybase does not like it if there is a default spec in the ALTER TABLE ALTER
         // statement; thus we have to change the default afterwards

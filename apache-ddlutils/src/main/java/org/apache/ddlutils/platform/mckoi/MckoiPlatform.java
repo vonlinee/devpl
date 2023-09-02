@@ -9,6 +9,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
 import org.apache.ddlutils.platform.SqlBuildContext;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -169,7 +170,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
             }
         }
 
-        Map<String, Object> parameters = (params == null ? null : params.getParametersFor(changedTable));
+        ValueMap parameters = (params == null ? null : params.getParametersFor(changedTable));
 
         sqlBuilder.writeRecreateTableStmt(currentModel, change.getTargetTable(), parameters);
 
