@@ -60,5 +60,9 @@ public class Sample {
         sqlBuilder.createTables(database, context, true);
 
         System.out.println(sw);
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+
     }
 }

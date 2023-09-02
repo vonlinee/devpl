@@ -5,4 +5,7 @@ package io.devpl.generator.jdbc;
  */
 public interface JdbcDriverManager {
 
+    boolean isRegisted(String driverClassName);
+
+    void register(String driverClassName);
 }

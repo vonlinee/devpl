@@ -4,7 +4,6 @@ import org.apache.ddlutils.DdlUtilsException;
 
 /**
  * Indicates a model error.
- * @version $Revision: 289996 $
  */
 public class ModelException extends DdlUtilsException {
     /**
@@ -43,5 +42,4 @@ public class ModelException extends DdlUtilsException {
     public ModelException(String msg, Throwable baseEx) {
         super(msg, baseEx);
     }
-
 }

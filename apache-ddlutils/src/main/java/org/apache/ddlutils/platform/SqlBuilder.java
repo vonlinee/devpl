@@ -333,8 +333,7 @@ public abstract class SqlBuilder {
         if (dropTables) {
             dropTables(database);
         }
-        for (int idx = 0; idx < database.getTableCount(); idx++) {
-            Table table = database.getTable(idx);
+        for (Table table : database.getTables()) {
             // table comment
             writeTableComment(table);
             // output table
@@ -1703,7 +1702,7 @@ public abstract class SqlBuilder {
         try {
             writer.write(text);
         } catch (Exception exception) {
-
+            _log.error("error when write", exception);
         }
     }
 

@@ -15,5 +15,4 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
     public void setContext(Context context) {
         this.context = context;
     }
-
 }

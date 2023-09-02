@@ -13,7 +13,6 @@ import java.util.*;
 
 /**
  * An utility class to create a Database model from a live database.
- * @version $Revision$
  */
 public class JdbcModelReader {
     /**
@@ -41,7 +40,6 @@ public class JdbcModelReader {
      * The descriptors for the relevant columns in the index meta data.
      */
     private final List<MetaDataColumnDescriptor> _columnsForIndex;
-
     /**
      * The platform that this model reader belongs to.
      */
@@ -77,7 +75,7 @@ public class JdbcModelReader {
 
     /**
      * Creates a new model reader instance.
-     * @param platform The plaftform this builder belongs to
+     * @param platform The platform this builder belongs to
      */
     public JdbcModelReader(DatabasePlatform platform) {
         _platform = platform;
@@ -140,7 +138,7 @@ public class JdbcModelReader {
 
     /**
      * Returns descriptors for the columns that shall be read from the result set when
-     * reading the meta data for table columns. Note that the columns are read in the order
+     * reading the metadata for table columns. Note that the columns are read in the order
      * defined by this list.<br/>
      * Redefine this method if you want more columns or a different order.
      * @return The map column name -> descriptor for the result set columns
@@ -167,7 +165,7 @@ public class JdbcModelReader {
 
     /**
      * Returns descriptors for the columns that shall be read from the result set when
-     * reading the meta data for primary keys. Note that the columns are read in the order
+     * reading the metadata for primary keys. Note that the columns are read in the order
      * defined by this list.<br/>
      * Redefine this method if you want more columns or a different order.
      * @return The map column name -> descriptor for the result set columns
@@ -209,7 +207,7 @@ public class JdbcModelReader {
 
     /**
      * Returns descriptors for the columns that shall be read from the result set when
-     * reading the meta data for indices. Note that the columns are read in the order
+     * reading the metadata for indices. Note that the columns are read in the order
      * defined by this list.<br/>
      * Redefine this method if you want more columns or a different order.
      * @return The map column name -> descriptor for the result set columns
@@ -315,7 +313,6 @@ public class JdbcModelReader {
             _defaultTableTypes = null;
         } else {
             _defaultTableTypes = new String[types.length];
-
             System.arraycopy(types, 0, types, 0, types.length);
         }
     }
@@ -345,7 +342,7 @@ public class JdbcModelReader {
     }
 
     /**
-     * Returns the descriptors for the columns to be read from the foreign key meta data result set.
+     * Returns the descriptors for the columns to be read from the foreign key metadata result set.
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForFK() {
@@ -353,7 +350,7 @@ public class JdbcModelReader {
     }
 
     /**
-     * Returns the descriptors for the columns to be read from the index meta data result set.
+     * Returns the descriptors for the columns to be read from the index metadata result set.
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForIndex() {

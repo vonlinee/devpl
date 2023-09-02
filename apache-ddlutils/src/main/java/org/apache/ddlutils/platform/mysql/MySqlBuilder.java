@@ -81,9 +81,6 @@ public class MySqlBuilder extends SqlBuilder {
         return "SELECT LAST_INSERT_ID() " + autoIncrementKeyName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
         if (parameters != null) {
@@ -119,9 +116,6 @@ public class MySqlBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
         writeTableAlterStmt(table);

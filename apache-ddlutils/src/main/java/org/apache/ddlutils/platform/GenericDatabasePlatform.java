@@ -497,16 +497,11 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
         return sql;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getCreateModelSql(Database model, SqlBuildContext params, boolean dropTablesFirst, boolean continueOnError) {
         String sql = null;
-
         try {
             StringWriter buffer = new StringWriter();
-
             getSqlBuilder().setWriter(buffer);
             getSqlBuilder().createTables(model, params, dropTablesFirst);
             sql = buffer.toString();

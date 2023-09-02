@@ -25,7 +25,6 @@ import java.util.*;
 
 /**
  * Represents a table in the database model.
- * @version $Revision$
  */
 public class Table implements SchemaObject, Serializable {
     /**
@@ -727,7 +726,6 @@ public class Table implements SchemaObject, Serializable {
      */
     public String toVerboseString() {
         StringBuilder result = new StringBuilder();
-
         result.append("Table [name=");
         result.append(getName());
         result.append("; catalog=");
@@ -751,7 +749,6 @@ public class Table implements SchemaObject, Serializable {
             result.append(" ");
             result.append(getForeignKey(idx).toVerboseString());
         }
-
         return result.toString();
     }
 }

@@ -8,4 +8,14 @@ import java.util.Map;
 public class ServerJdbcDriverManager implements JdbcDriverManager {
 
     Map<JDBCDriver, Class<?>> drivers = new HashMap<>();
+
+    @Override
+    public boolean isRegisted(String driverClassName) {
+        return false;
+    }
+
+    @Override
+    public void register(String driverClassName) {
+
+    }
 }
