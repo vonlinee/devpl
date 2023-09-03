@@ -47,7 +47,7 @@ public class Identifier implements Comparable<Identifier> {
      * @return The identifier form, or {@code null} if text was {@code null}
      */
     public static Identifier toIdentifier(String text, boolean quote) {
-        if (text == null || text.length() == 0) {
+        if (text == null || text.isEmpty()) {
             return null;
         }
         final String trimmedText = text.trim();
@@ -84,7 +84,7 @@ public class Identifier implements Comparable<Identifier> {
      * @param quoted Is this a quoted identifier?
      */
     public Identifier(String text, boolean quoted) {
-        if (text == null || text.length() == 0) {
+        if (text == null || text.isEmpty()) {
             throw new IllegalIdentifierException("Identifier text cannot be null");
         }
         if (isQuoted(text)) {
@@ -153,7 +153,6 @@ public class Identifier implements Comparable<Identifier> {
         if (!(o instanceof Identifier that)) {
             return false;
         }
-
         return getCanonicalName().equals(that.getCanonicalName());
     }
 
