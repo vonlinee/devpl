@@ -66,7 +66,7 @@ public class StringUtils {
      * <p>Compares two Strings, returning <code>true</code> if they are equal.</p>
      *
      * <p><code>null</code>s are handled without exceptions. Two <code>null</code>
-     * references are considered to be equal. The comparison is case sensitive.</p>
+     * references are considered to be equal. The comparison is case-sensitive.</p>
      *
      * <pre>
      * StringUtils.equals(null, null)   = true

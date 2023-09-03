@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.mysql;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.*;
@@ -36,7 +17,7 @@ public class MySqlModelComparator extends ModelComparator {
      * @param platformInfo            The platform info
      * @param tableDefChangePredicate The predicate that defines whether tables changes are supported
      *                                by the platform or not; all changes are supported if this is null
-     * @param caseSensitive           Whether comparison is case sensitive
+     * @param caseSensitive           Whether comparison is case-sensitive
      */
     public MySqlModelComparator(PlatformInfo platformInfo,
                                 TableDefinitionChangesPredicate tableDefChangePredicate,
@@ -47,19 +28,20 @@ public class MySqlModelComparator extends ModelComparator {
     /**
      * {@inheritDoc}
      */
-    protected List checkForRemovedIndexes(Database sourceModel,
-                                          Table sourceTable,
-                                          Database intermediateModel,
-                                          Table intermediateTable,
-                                          Database targetModel,
-                                          Table targetTable) {
+    @Override
+    protected List<TableChange> checkForRemovedIndexes(Database sourceModel,
+                                                       Table sourceTable,
+                                                       Database intermediateModel,
+                                                       Table intermediateTable,
+                                                       Database targetModel,
+                                                       Table targetTable) {
         // Handling for http://bugs.mysql.com/bug.php?id=21395: we need to drop and then recreate FKs that reference columns
         // included in indexes that will be dropped
-        List changes = super.checkForRemovedIndexes(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
-        Set columnNames = new HashSet();
+        List<TableChange> changes = super.checkForRemovedIndexes(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
+        Set<String> columnNames = new HashSet<>();
 
-        for (Iterator it = changes.iterator(); it.hasNext(); ) {
-            RemoveIndexChange change = (RemoveIndexChange) it.next();
+        for (TableChange tableChange : changes) {
+            RemoveIndexChange change = (RemoveIndexChange) tableChange;
             Index index = change.findChangedIndex(sourceModel, isCaseSensitive());
 
             for (int colIdx = 0; colIdx < index.getColumnCount(); colIdx++) {
@@ -76,20 +58,18 @@ public class MySqlModelComparator extends ModelComparator {
     /**
      * {@inheritDoc}
      */
-    protected List compareTables(Database sourceModel,
+    @Override
+    protected List<TableChange> compareTables(Database sourceModel,
                                  Table sourceTable,
                                  Database intermediateModel,
                                  Table intermediateTable,
                                  Database targetModel, Table targetTable) {
         // we need to drop and recreate foreign keys that reference columns whose data type will be changed (but not size)
-        List changes = super.compareTables(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
+        List<TableChange> changes = super.compareTables(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
         Set<String> columnNames = new HashSet<>();
 
-        for (Iterator it = changes.iterator(); it.hasNext(); ) {
-            Object change = it.next();
-
-            if (change instanceof ColumnDefinitionChange) {
-                ColumnDefinitionChange colDefChange = (ColumnDefinitionChange) change;
+        for (Object change : changes) {
+            if (change instanceof ColumnDefinitionChange colDefChange) {
                 Column sourceColumn = sourceTable.findColumn(colDefChange.getChangedColumn(), isCaseSensitive());
 
                 if (ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn())) {

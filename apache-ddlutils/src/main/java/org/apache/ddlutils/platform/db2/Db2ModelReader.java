@@ -8,6 +8,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -53,15 +54,12 @@ public class Db2ModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
 
-        for (int idx = 0; idx < KNOWN_SYSTEM_TABLES.length; idx++) {
-            if (KNOWN_SYSTEM_TABLES[idx].equals(tableName)) {
+        for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
+            if (knownSystemTable.equals(tableName)) {
                 return null;
             }
         }
@@ -79,7 +77,7 @@ public class Db2ModelReader extends JdbcModelReader {
      * {@inheritDoc}
      */
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -108,7 +106,7 @@ public class Db2ModelReader extends JdbcModelReader {
 
                 // Db2 returns "YYYY-MM-DD-HH24.MI.SS.FF"
                 if (matcher.matches()) {
-                    StringBuffer newDefault = new StringBuffer();
+                    StringBuilder newDefault = new StringBuilder();
 
                     newDefault.append("'");
                     // group 1 is the date which has the correct format
@@ -189,7 +187,7 @@ public class Db2ModelReader extends JdbcModelReader {
             try {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(table.getName()));
                 while (pkData.next()) {
-                    Map<String, Object> values = readColumns(pkData, getColumnsForPK());
+                    ValueMap values = readColumns(pkData, getColumnsForPK());
                     pkNames.add(String.valueOf(values.get("PK_NAME")));
                 }
             } finally {

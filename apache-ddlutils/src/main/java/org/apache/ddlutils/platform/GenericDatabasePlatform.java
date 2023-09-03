@@ -2,9 +2,6 @@ package org.apache.ddlutils.platform;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.ddlutils.util.ValueMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
@@ -15,6 +12,9 @@ import org.apache.ddlutils.dynabean.SqlDynaProperty;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.JdbcSupport;
 import org.apache.ddlutils.util.SqlTokenizer;
+import org.apache.ddlutils.util.ValueMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Base class for platform implementations.
@@ -298,7 +297,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
 
                 // ignore whitespace
                 command = command.trim();
-                if (command.length() == 0) {
+                if (command.isEmpty()) {
                     continue;
                 }
 
@@ -319,7 +318,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                         // on level warn, and the exception itself on level debug
                         _log.warn("SQL Command " + command + " failed with: " + ex.getMessage());
                         if (_log.isDebugEnabled()) {
-                            _log.debug("SQL Command " + command + " failed" , ex);
+                            _log.debug("SQL Command " + command + " failed", ex);
                         }
                         errors++;
                     } else {
@@ -327,7 +326,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                     }
                 }
 
-                // lets display any warnings
+                // let's display any warnings
                 SQLWarning warning = connection.getWarnings();
 
                 while (warning != null) {
@@ -891,6 +890,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropTables(Database model, boolean continueOnError) throws DatabaseOperationException {
         dropModel(model, continueOnError);
     }
@@ -898,6 +898,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropTables(Connection connection, Database model, boolean continueOnError) throws DatabaseOperationException {
         dropModel(connection, model, continueOnError);
     }
@@ -905,6 +906,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDropTablesSql(Database model, boolean continueOnError) {
         return getDropModelSql(model);
     }
@@ -912,6 +914,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropModel(Database model, boolean continueOnError) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
@@ -925,6 +928,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void dropModel(Connection connection, Database model, boolean continueOnError) throws DatabaseOperationException {
         String sql = getDropModelSql(model);
 
@@ -934,6 +938,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDropModelSql(Database model) {
         String sql = null;
 
@@ -1193,9 +1198,9 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 AddColumnChange addColumnChange = (AddColumnChange) curChange;
 
                 if (addColumnChange.getNewColumn().isRequired() && !addColumnChange.getNewColumn()
-                        .isAutoIncrement() && (addColumnChange.getNewColumn().getDefaultValue() == null)) {
+                    .isAutoIncrement() && (addColumnChange.getNewColumn().getDefaultValue() == null)) {
                     _log.warn("Data cannot be retained in table " + change.getChangedTable() + " because of the addition of the required column " + addColumnChange
-                            .getNewColumn().getName());
+                        .getNewColumn().getName());
                     canMigrateData = false;
                 }
             }
@@ -1513,7 +1518,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
                 // the platform does not allow the override of the auto-increment
                 // specification
                 return !input.getColumn()
-                        .isAutoIncrement() || (isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed());
+                    .isAutoIncrement() || (isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed());
             } else {
                 // we also return properties without a value in the bean
                 // if they ain't auto-increment and don't have a default value
@@ -1540,7 +1545,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             // in INSERT/UPDATE statements, then we need to filter the corresponding
             // columns out
             return input.getColumn()
-                    .isAutoIncrement() && (!isIdentityOverrideOn() || !getPlatformInfo().isIdentityOverrideAllowed() || (bean.get(input.getName()) == null));
+                .isAutoIncrement() && (!isIdentityOverrideOn() || !getPlatformInfo().isIdentityOverrideAllowed() || (bean.get(input.getName()) == null));
         }).toList();
 
         Column[] columns = new Column[relevantProperties.size()];
@@ -2262,7 +2267,7 @@ public abstract class GenericDatabasePlatform extends JdbcSupport implements Dat
             JdbcModelReader reader = getModelReader();
             Database model = reader.getDatabase(connection, name, catalog, schema, tableTypes);
             postprocessModelFromDatabase(model);
-            if ((model.getName() == null) || (model.getName().length() == 0)) {
+            if ((model.getName() == null) || (model.getName().isEmpty())) {
                 model.setName(MODEL_DEFAULT_NAME);
             }
             return model;

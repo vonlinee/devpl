@@ -27,6 +27,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.*;
 import java.util.Map;
@@ -74,11 +75,12 @@ public class MSSqlModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    @Override
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
 
-        for (int idx = 0; idx < KNOWN_SYSTEM_TABLES.length; idx++) {
-            if (KNOWN_SYSTEM_TABLES[idx].equals(tableName)) {
+        for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
+            if (knownSystemTable.equals(tableName)) {
                 return null;
             }
         }
@@ -109,13 +111,12 @@ public class MSSqlModelReader extends JdbcModelReader {
      */
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         // Sql Server generates an index "PK__[table name]__[hex number]"
-        StringBuffer pkIndexName = new StringBuffer();
 
-        pkIndexName.append("PK__");
-        pkIndexName.append(table.getName());
-        pkIndexName.append("__");
+        String pkIndexName = "PK__" +
+            table.getName() +
+            "__";
 
-        return index.getName().toUpperCase().startsWith(pkIndexName.toString().toUpperCase());
+        return index.getName().toUpperCase().startsWith(pkIndexName.toUpperCase());
     }
 
     /**
@@ -142,10 +143,8 @@ public class MSSqlModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    @Override
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
         String defaultValue = column.getDefaultValue();
 

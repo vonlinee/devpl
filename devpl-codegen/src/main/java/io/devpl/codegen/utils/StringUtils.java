@@ -82,7 +82,7 @@ public final class StringUtils {
      * Check if a String ends with a specified suffix.
      * <p>
      * <code>null</code>s are handled without exceptions. Two <code>null</code>
-     * references are considered to be equal. The comparison is case sensitive.
+     * references are considered to be equal. The comparison is case-sensitive.
      * </p>
      * <p>
      * <pre>
@@ -1981,7 +1981,7 @@ public final class StringUtils {
      * equal sequences of characters.</p>
      *
      * <p>{@code null}s are handled without exceptions. Two {@code null}
-     * references are considered to be equal. The comparison is <strong>case sensitive</strong>.</p>
+     * references are considered to be equal. The comparison is <strong>case-sensitive</strong>.</p>
      *
      * <pre>
      * StringUtils.equals(null, null)   = true

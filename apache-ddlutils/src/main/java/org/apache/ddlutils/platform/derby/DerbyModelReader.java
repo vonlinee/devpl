@@ -23,6 +23,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class DerbyModelReader extends JdbcModelReader {
      * {@inheritDoc}
      */
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
         String defaultValue = column.getDefaultValue();
 

@@ -36,7 +36,7 @@ public enum IOCase {
      * Windows is case-insensitive when comparing file names, Unix is case-sensitive.
      * <p>
      * <strong>Note:</strong> This only caters for Windows and Unix. Other operating
-     * systems (e.g. OSX and OpenVMS) are treated as case sensitive if they use the
+     * systems (e.g. OSX and OpenVMS) are treated as case-sensitive if they use the
      * Unix file separator and case-insensitive if they use the Windows file separator
      * (see {@link java.io.File#separatorChar}).
      * </p>
@@ -113,8 +113,8 @@ public enum IOCase {
     }
 
     /**
-     * Does the object represent case sensitive comparison.
-     * @return true if case sensitive
+     * Does the object represent case-sensitive comparison.
+     * @return true if case-sensitive
      */
     public boolean isCaseSensitive() {
         return sensitive;

@@ -20,6 +20,8 @@ package org.apache.ddlutils.platform.mckoi;
  */
 
 import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.ddlutils.model.Index;
+import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabasePlatform;
@@ -58,8 +60,9 @@ public class MckoiModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
-        // Mckoi does not currently return unique indices in the metadata so we have to query
+    @Override
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+        // Mckoi does not currently return unique indices in the metadata, so we have to query
         // internal tables to get this info
         final String query =
                 "SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name" +
@@ -71,7 +74,7 @@ public class MckoiModelReader extends JdbcModelReader {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
-            Map indices = new ListOrderedMap();
+            Map<String, Index> indices = new HashMap<>();
             PreparedStatement stmt = null;
 
             try {
@@ -82,12 +85,12 @@ public class MckoiModelReader extends JdbcModelReader {
                 }
 
                 ResultSet resultSet = stmt.executeQuery();
-                Map indexValues = new HashMap();
+                ValueMap indexValues = new ValueMap();
 
                 indexValues.put("NON_UNIQUE", Boolean.FALSE);
                 while (resultSet.next()) {
                     indexValues.put("COLUMN_NAME", resultSet.getString(1));
-                    indexValues.put("ORDINAL_POSITION", new Short(resultSet.getShort(2)));
+                    indexValues.put("ORDINAL_POSITION", resultSet.getShort(2));
                     indexValues.put("INDEX_NAME", resultSet.getString(3));
 
                     readIndex(metaData, indexValues, indices);
@@ -105,7 +108,8 @@ public class MckoiModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    @Override
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getSize() != null) {

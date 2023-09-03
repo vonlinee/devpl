@@ -98,7 +98,7 @@ public class CloneHelper {
      * Returns a clone of the given source index.
      * @param source        The source index
      * @param targetTable   The table whose columns shall be used by the clone
-     * @param caseSensitive Whether comparison is case sensitive (for finding the columns
+     * @param caseSensitive Whether comparison is case-sensitive (for finding the columns
      *                      in the target table)
      * @return The clone
      */
@@ -118,7 +118,7 @@ public class CloneHelper {
      * Returns a clone of the given index column.
      * @param source        The source index column
      * @param targetTable   The table containing the column to be used by the clone
-     * @param caseSensitive Whether comparison is case sensitive (for finding the columns
+     * @param caseSensitive Whether comparison is case-sensitive (for finding the columns
      *                      in the target table)
      * @return The clone
      */
@@ -136,7 +136,7 @@ public class CloneHelper {
      * @param source        The source foreign key
      * @param owningTable   The table owning the source foreign key
      * @param targetModel   The target model containing the tables that the clone shall link
-     * @param caseSensitive Whether comparison is case sensitive (for finding the columns
+     * @param caseSensitive Whether comparison is case-sensitive (for finding the columns
      *                      in the target model)
      * @return The clone
      */
@@ -164,7 +164,7 @@ public class CloneHelper {
      * @param source        The source reference
      * @param localTable    The table containing the local column to be used by the reference
      * @param foreignTable  The table containing the foreign column to be used by the reference
-     * @param caseSensitive Whether comparison is case sensitive (for finding the columns
+     * @param caseSensitive Whether comparison is case-sensitive (for finding the columns
      *                      in the tables)
      * @return The clone
      */

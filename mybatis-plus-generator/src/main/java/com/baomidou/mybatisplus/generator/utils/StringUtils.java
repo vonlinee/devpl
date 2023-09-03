@@ -220,7 +220,7 @@ public final class StringUtils {
      * Check if a String ends with a specified suffix.
      * <p>
      * <code>null</code>s are handled without exceptions. Two <code>null</code>
-     * references are considered to be equal. The comparison is case sensitive.
+     * references are considered to be equal. The comparison is case-sensitive.
      * </p>
      * <p>
      * <pre>

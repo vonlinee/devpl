@@ -23,15 +23,18 @@ import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.Column;
+import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -76,8 +79,9 @@ public class Oracle8ModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
-        String tableName = (String) values.get("TABLE_NAME");
+    @Override
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+        String tableName = values.getString("TABLE_NAME");
 
         // system table ?
         if (tableName.indexOf('$') > 0) {
@@ -96,7 +100,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    @Override
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -247,7 +252,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
     /**
      * {@inheritDoc}
      */
-    protected Collection readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
+    @Override
+    protected Collection<Index> readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         // Oracle has a bug in the DatabaseMetaData#getIndexInfo method which fails when
         // delimited identifiers are being used
         // Therefore, we're rather accessing the user_indexes table which contains the same info
@@ -262,7 +268,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
         final String queryWithSchema =
                 query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
 
-        Map indices = new ListOrderedMap();
+        Map<String, Index> indices = new TreeMap<>();
         PreparedStatement stmt = null;
 
         try {
@@ -277,14 +283,14 @@ public class Oracle8ModelReader extends JdbcModelReader {
             }
 
             ResultSet rs = stmt.executeQuery();
-            Map values = new HashMap();
+            ValueMap values = new ValueMap();
 
             while (rs.next()) {
                 values.put("INDEX_NAME", rs.getString(1));
-                values.put("INDEX_TYPE", new Short(DatabaseMetaData.tableIndexOther));
+                values.put("INDEX_TYPE", DatabaseMetaData.tableIndexOther);
                 values.put("NON_UNIQUE", "UNIQUE".equalsIgnoreCase(rs.getString(3)) ? Boolean.FALSE : Boolean.TRUE);
                 values.put("COLUMN_NAME", rs.getString(4));
-                values.put("ORDINAL_POSITION", new Short(rs.getShort(5)));
+                values.put("ORDINAL_POSITION", rs.getShort(5));
 
                 readIndex(metaData, values, indices);
             }

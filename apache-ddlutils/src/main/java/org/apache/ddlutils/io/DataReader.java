@@ -46,7 +46,7 @@ public class DataReader {
      */
     private ConverterConfiguration _converterConf = new ConverterConfiguration();
     /**
-     * Whether to be case sensitive or not.
+     * Whether to be case-sensitive or not.
      */
     private boolean _caseSensitive = false;
 
@@ -91,7 +91,7 @@ public class DataReader {
     }
 
     /**
-     * Determines whether this rules object matches case sensitively.
+     * Determines whether this rules object matches case-sensitively.
      * @return <code>true</code> if the case of the pattern matters
      */
     public boolean isCaseSensitive() {
@@ -100,7 +100,7 @@ public class DataReader {
 
 
     /**
-     * Specifies whether this rules object shall match case sensitively.
+     * Specifies whether this rules object shall match case-sensitively.
      * @param beCaseSensitive <code>true</code> if the case of the pattern shall matter
      */
     public void setCaseSensitive(boolean beCaseSensitive) {

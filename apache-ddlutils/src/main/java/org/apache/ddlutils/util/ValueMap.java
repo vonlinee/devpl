@@ -11,12 +11,46 @@ import java.util.function.Predicate;
 /**
  * @since 8
  */
-public class ValueMap implements Map<String, Object> {
+@SuppressWarnings("unused")
+public class ValueMap implements Map<String, Object>, Cloneable {
 
-    private final Map<String, Object> map = new HashMap<>();
+    private Map<String, Object> map;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ValueMap cloneMap = (ValueMap) super.clone();
+        cloneMap.putAll(this.map);
+        return cloneMap;
+    }
+
+    public ValueMap copy() {
+        try {
+            return (ValueMap) clone();
+        } catch (CloneNotSupportedException e) {
+            return new ValueMap(0);
+        }
+    }
+
+    public ValueMap() {
+        this(10);
+    }
+
+    public ValueMap(int initialCapacity) {
+        this.map = new HashMap<>();
+    }
 
     public Object set(String key, Object value) {
         return map.put(key, value);
+    }
+
+    public Map<String, Object> replace(Map<String, Object> newValue) {
+        Map<String, Object> oldMap = this.map;
+        this.map = newValue;
+        return oldMap;
+    }
+
+    public Map<String, Object> asMap() {
+        return map;
     }
 
     // ============================== UNSAFE　getter ==============================
@@ -277,7 +311,9 @@ public class ValueMap implements Map<String, Object> {
 
     @Override
     public void putAll(Map<? extends String, ?> m) {
-        map.putAll(m);
+        if (m != null) {
+            map.putAll(m);
+        }
     }
 
     @Override

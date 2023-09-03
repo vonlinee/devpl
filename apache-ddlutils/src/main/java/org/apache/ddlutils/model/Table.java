@@ -504,7 +504,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the index with the specified name, using case sensitive or insensitive
+     * Finds the index with the specified name, using case-sensitive or insensitive
      * matching depending on the <code>caseSensitive</code> parameter.
      * Note that this method is not called getIndex to avoid introspection
      * problems.
@@ -538,7 +538,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the foreign key with the specified name, using case sensitive or insensitive
+     * Finds the foreign key with the specified name, using case-sensitive or insensitive
      * matching depending on the <code>caseSensitive</code> parameter.
      * Note that this method is not called getForeignKey to avoid introspection
      * problems.
@@ -693,7 +693,7 @@ public class Table implements SchemaObject, Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Table) {
             Table other = (Table) obj;
-            // Note that this compares case sensitive
+            // Note that this compares case-sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
             return Objects.equals(name, other.name) && Objects.equals(_columns, other._columns)
                 && Objects.equals(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))

@@ -4,6 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
+import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -440,7 +441,7 @@ public class JdbcModelReader {
             List<Table> tables = new ArrayList<>();
 
             while (tableData.next()) {
-                Map<String, Object> values = readColumns(tableData, getColumnsForTable());
+                ValueMap values = readColumns(tableData, getColumnsForTable());
                 Table table = readTable(metaData, values);
 
                 if (table != null) {
@@ -463,7 +464,7 @@ public class JdbcModelReader {
      * @param values   The table metadata values as defined by {@link #getColumnsForTable()}
      * @return The table or <code>null</code> if the result set row did not contain a valid table
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map<String, Object> values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
         Table table = null;
 
@@ -628,7 +629,7 @@ public class JdbcModelReader {
             List<Column> columns = new ArrayList<>();
 
             while (columnData.next()) {
-                Map<String, Object> values = readColumns(columnData, getColumnsForColumn());
+                ValueMap values = readColumns(columnData, getColumnsForColumn());
 
                 columns.add(readColumn(metaData, values));
             }
@@ -644,7 +645,7 @@ public class JdbcModelReader {
      * @param values   The column meta data values as defined by {@link #getColumnsForColumn()}
      * @return The column
      */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map<String, Object> values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = new Column();
 
         column.setName((String) values.get("COLUMN_NAME"));
@@ -696,7 +697,7 @@ public class JdbcModelReader {
         try {
             pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
             while (pkData.next()) {
-                Map<String, Object> values = readColumns(pkData, getColumnsForPK());
+                ValueMap values = readColumns(pkData, getColumnsForPK());
 
                 pks.add(readPrimaryKeyName(metaData, values));
             }
@@ -730,7 +731,7 @@ public class JdbcModelReader {
             fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
 
             while (fkData.next()) {
-                Map<String, Object> values = readColumns(fkData, getColumnsForFK());
+                ValueMap values = readColumns(fkData, getColumnsForFK());
 
                 readForeignKey(metaData, values, fks);
             }
@@ -813,7 +814,7 @@ public class JdbcModelReader {
             indexData = metaData.getIndices(metaData.escapeForSearch(tableName), false, false);
 
             while (indexData.next()) {
-                Map<String, Object> values = readColumns(indexData, getColumnsForIndex());
+                ValueMap values = readColumns(indexData, getColumnsForIndex());
 
                 readIndex(metaData, values, indices);
             }
@@ -829,7 +830,7 @@ public class JdbcModelReader {
      * @param values       The index metadata as defined by {@link #getColumnsForIndex()}
      * @param knownIndices The already read indices for the current table
      */
-    protected void readIndex(DatabaseMetaDataWrapper metaData, Map<String, Object> values, Map<String, Index> knownIndices) throws SQLException {
+    protected void readIndex(DatabaseMetaDataWrapper metaData, ValueMap values, Map<String, Index> knownIndices) throws SQLException {
         Short indexType = (Short) values.get("TYPE");
 
         // we're ignoring statistic indices
@@ -869,8 +870,8 @@ public class JdbcModelReader {
      * @param columnDescriptors The dscriptors of the columns to read
      * @return The read values keyed by the column name
      */
-    protected Map<String, Object> readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
-        HashMap<String, Object> values = new HashMap<>();
+    protected ValueMap readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
+        ValueMap values = new ValueMap();
 
         for (MetaDataColumnDescriptor descriptor : columnDescriptors) {
             values.put(descriptor.getName(), descriptor.readColumn(resultSet));
@@ -1001,7 +1002,7 @@ public class JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                Map<String, Object> values = readColumns(tableData, getColumnsForTable());
+                ValueMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = (String) values.get("TABLE_NAME");
 
                 if ((tableName != null) && (!tableName.isEmpty())) {

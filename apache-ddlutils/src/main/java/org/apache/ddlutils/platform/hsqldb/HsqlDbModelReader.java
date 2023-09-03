@@ -4,6 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -27,12 +28,12 @@ public class HsqlDbModelReader extends JdbcModelReader {
      * {@inheritDoc}
      */
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
             // For at least version 1.7.2 we have to determine the auto-increment columns
-            // from a result set meta data because the database does not put this info
+            // from a result set metadata because the database does not put this info
             // into the database metadata
             // Since Hsqldb only allows IDENTITY for primary key columns, we restrict
             // our search to those columns
@@ -46,7 +47,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
      * {@inheritDoc}
      */
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, Map values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (TypeMap.isTextType(column.getJdbcTypeCode()) &&
