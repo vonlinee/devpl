@@ -39,7 +39,7 @@ public class DatabaseDataIO {
     /**
      * The converters to use for converting between data and its XML representation.
      */
-    private ArrayList _converters = new ArrayList();
+    private ArrayList<DataConverterRegistration> _converters = new ArrayList<>();
     /**
      * Whether we should continue when an error was detected.
      */

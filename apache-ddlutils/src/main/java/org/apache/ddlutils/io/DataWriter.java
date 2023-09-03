@@ -47,7 +47,7 @@ public class DataWriter extends PrettyPrintingXmlWriter {
     /**
      * The converters.
      */
-    private ConverterConfiguration _converterConf = new ConverterConfiguration();
+    private final ConverterConfiguration _converterConf = new ConverterConfiguration();
 
     /**
      * Creates a data writer instance using UTF-8 encoding.
@@ -119,7 +119,7 @@ public class DataWriter extends PrettyPrintingXmlWriter {
         SqlDynaClass dynaClass = (SqlDynaClass) bean.getDynaClass();
         Table table = dynaClass.getTable();
         TableXmlWriter tableWriter = new TableXmlWriter(table);
-        List columnWriters = new ArrayList();
+        List<ColumnXmlWriter> columnWriters = new ArrayList<>();
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);

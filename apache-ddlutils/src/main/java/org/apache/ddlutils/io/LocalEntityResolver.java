@@ -41,6 +41,7 @@ public class LocalEntityResolver implements EntityResolver {
     /**
      * {@inheritDoc}
      */
+    @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException {
         InputSource result = null;
 

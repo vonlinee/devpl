@@ -22,12 +22,13 @@ package org.apache.ddlutils.io;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * <p>Contains basic utility methods for XML.</p>
- * Parts of this class are borrowed from <a href='http://commons.apache.org/betwixt/'>Apache Commons Betwixt</a>
+ * Parts of this class are borrowed from <a href='<a href="http://commons.apache.org/betwixt/">...</a>'>Apache Commons Betwixt</a>
  * whose class in turn is based on code in <a href='http://xerces.apache.org/xerces2-j/index.html'>Apache Xerces</a>.
  * <p>The code for {@link #isWellFormedXMLName} is based on code in
  * <code>org.apache.xerces.util.XMLChar</code>
@@ -69,7 +70,7 @@ public class XMLUtils {
         // [4] NameChar ::= Letter | Digit | '.' | '-' | '_' | ':' |
         //                  CombiningChar | Extender
         //
-        int nameChar[] =
+        int[] nameChar =
                 {
                         0x002D, 0x002E, // '-' and '.'
                 };
@@ -77,7 +78,7 @@ public class XMLUtils {
         //
         // [5] Name ::= (Letter | '_' | ':') (NameChar)*
         //
-        int nameStartChar[] =
+        int[] nameStartChar =
                 {
                         0x003A, 0x005F, // ':' and '_'
                 };
@@ -85,7 +86,7 @@ public class XMLUtils {
         //
         // [84] Letter ::= BaseChar | Ideographic
         //
-        int letterRange[] =
+        int[] letterRange =
                 {
                         // BaseChar
                         0x0041, 0x005A, 0x0061, 0x007A, 0x00C0, 0x00D6, 0x00D8, 0x00F6,
@@ -129,7 +130,7 @@ public class XMLUtils {
                         // Ideographic
                         0x3021, 0x3029, 0x4E00, 0x9FA5,
                 };
-        int letterChar[] =
+        int[] letterChar =
                 {
                         // BaseChar
                         0x0386, 0x038C, 0x03DA, 0x03DC, 0x03DE, 0x03E0, 0x0559, 0x06D5,
@@ -146,7 +147,7 @@ public class XMLUtils {
         //
         // [87] CombiningChar ::= ...
         //
-        int combiningCharRange[] =
+        int[] combiningCharRange =
                 {
                         0x0300, 0x0345, 0x0360, 0x0361, 0x0483, 0x0486, 0x0591, 0x05A1,
                         0x05A3, 0x05B9, 0x05BB, 0x05BD, 0x05C1, 0x05C2, 0x064B, 0x0652,
@@ -167,7 +168,7 @@ public class XMLUtils {
                         0x20D0, 0x20DC, 0x302A, 0x302F,
                 };
 
-        int combiningCharChar[] =
+        int[] combiningCharChar =
                 {
                         0x05BF, 0x05C4, 0x0670, 0x093C, 0x094D, 0x09BC, 0x09BE, 0x09BF,
                         0x09D7, 0x0A02, 0x0A3C, 0x0A3E, 0x0A3F, 0x0ABC, 0x0B3C, 0x0BD7,
@@ -178,7 +179,7 @@ public class XMLUtils {
         //
         // [88] Digit ::= ...
         //
-        int digitRange[] =
+        int[] digitRange =
                 {
                         0x0030, 0x0039, 0x0660, 0x0669, 0x06F0, 0x06F9, 0x0966, 0x096F,
                         0x09E6, 0x09EF, 0x0A66, 0x0A6F, 0x0AE6, 0x0AEF, 0x0B66, 0x0B6F,
@@ -189,12 +190,12 @@ public class XMLUtils {
         //
         // [89] Extender ::= ...
         //
-        int extenderRange[] =
+        int[] extenderRange =
                 {
                         0x3031, 0x3035, 0x309D, 0x309E, 0x30FC, 0x30FE,
                 };
 
-        int extenderChar[] =
+        int[] extenderChar =
                 {
                         0x00B7, 0x02D0, 0x02D1, 0x0387, 0x0640, 0x0E46, 0x0EC6, 0x3005,
                 };
@@ -237,7 +238,6 @@ public class XMLUtils {
         for (int idx = 0; idx < extenderChar.length; idx++) {
             CHARS[extenderChar[idx]] |= MASK_NAME;
         }
-
     }
 
     /**
@@ -246,27 +246,27 @@ public class XMLUtils {
      * names in xml. For example, white space is not allowed in a name.</p>
      *
      * <p>The code for this method is based on code in <code>org.apache.xerces.util.XMLChar</code>
-     * in <a href='http://xerces.apache.org/xerces2-j/index.html'>Apache Xerces</a>.
+     * in <a href='<a href="http://xerces.apache.org/xerces2-j/index.html">...</a>'>Apache Xerces</a>.
      * The authors of this class are credited at the top of this class.</p>
      * @param name The string to be checked for use as an xml attribute or element name.
      *             Returns <code>false</code> if <code>name</code> is null
      * @return Whether this string would be a well-formed name
      */
     public static boolean isWellFormedXMLName(String name) {
-        if ((name == null) || (name.length() == 0)) {
+        if ((name == null) || (name.isEmpty())) {
             return false;
         }
 
         char ch = name.charAt(0);
 
-        if (isNameStartChar(ch) == false) {
+        if (!isNameStartChar(ch)) {
             return false;
 
         }
 
         for (int idx = 1; idx < name.length(); idx++) {
             ch = name.charAt(idx);
-            if (isNameChar(ch) == false) {
+            if (!isNameChar(ch)) {
                 return false;
             }
         }
@@ -316,11 +316,7 @@ public class XMLUtils {
      * @return The encoded value
      */
     public static String base64Encode(String value) {
-        try {
-            return value == null ? null : new String(Base64.encodeBase64(value.getBytes("UTF-8")), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new IllegalStateException(ex);
-        }
+        return value == null ? null : new String(Base64.encodeBase64(value.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
     /**
@@ -330,8 +326,8 @@ public class XMLUtils {
      * @param text The text
      * @return <code>null</code> if the text contains special characters, or the list of cut points otherwise
      */
-    public static List findCDataCutPoints(String text) {
-        List cutPoints = new ArrayList();
+    public static List<Integer> findCDataCutPoints(String text) {
+        List<Integer> cutPoints = new ArrayList<>();
         int numChars = text.length();
         int numFoundCDataEndChars = 0;
 
@@ -345,7 +341,7 @@ public class XMLUtils {
                     numFoundCDataEndChars++;
                 } else if ((c == '>') && (numFoundCDataEndChars == 2)) {
                     // we have to split the CDATA right here before the '>' (see DDLUTILS-174)
-                    cutPoints.add(new Integer(charPos));
+                    cutPoints.add(charPos);
                     numFoundCDataEndChars = 0;
                 } else {
                     numFoundCDataEndChars = 0;

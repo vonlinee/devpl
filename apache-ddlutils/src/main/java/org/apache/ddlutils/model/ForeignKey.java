@@ -334,7 +334,7 @@ public class ForeignKey implements Serializable {
      * @return <code>true</code> if this foreign key is equal (ignoring case) to the given one
      */
     public boolean equalsIgnoreCase(ForeignKey otherFk) {
-        boolean checkName = (_name != null) && (_name.length() > 0) && (otherFk._name != null) && (otherFk._name.length() > 0);
+        boolean checkName = (_name != null) && (!_name.isEmpty()) && (otherFk._name != null) && (!otherFk._name.isEmpty());
 
         if ((!checkName || _name.equalsIgnoreCase(otherFk._name)) && _foreignTableName.equalsIgnoreCase(otherFk._foreignTableName)) {
             HashSet otherRefs = new HashSet();
@@ -376,10 +376,10 @@ public class ForeignKey implements Serializable {
      */
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("Foreign key [");
-        if ((getName() != null) && (getName().length() > 0)) {
+        if ((getName() != null) && (!getName().isEmpty())) {
             result.append("name=");
             result.append(getName());
             result.append("; ");
@@ -398,10 +398,10 @@ public class ForeignKey implements Serializable {
      * @return The string representation
      */
     public String toVerboseString() {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
 
         result.append("ForeignK ky [");
-        if ((getName() != null) && (getName().length() > 0)) {
+        if ((getName() != null) && (!getName().isEmpty())) {
             result.append("name=");
             result.append(getName());
             result.append("; ");

@@ -111,6 +111,6 @@ public class WaitingObject {
     public String toString() {
         return _objIdentity +
                 " waiting for " +
-                _waitedForIdentites.toString();
+                _waitedForIdentites;
     }
 }

@@ -249,14 +249,14 @@ public class Database implements SchemaObject, Serializable {
         HashSet<String> namesOfProcessedIndices = new HashSet<>();
         int tableIdx = 0;
 
-        if ((getName() == null) || (getName().length() == 0)) {
+        if ((getName() == null) || (getName().isEmpty())) {
             throw new ModelException("The database model has no name");
         }
 
         for (Iterator<Table> tableIt = tables.iterator(); tableIt.hasNext(); tableIdx++) {
             Table curTable = tableIt.next();
 
-            if ((curTable.getName() == null) || (curTable.getName().length() == 0)) {
+            if ((curTable.getName() == null) || (curTable.getName().isEmpty())) {
                 throw new ModelException("The table nr. " + tableIdx + " has no name");
             }
             if (namesOfProcessedTables.contains(curTable.getName())) {
@@ -271,7 +271,7 @@ public class Database implements SchemaObject, Serializable {
             for (int idx = 0; idx < curTable.getColumnCount(); idx++) {
                 Column column = curTable.getColumn(idx);
 
-                if ((column.getName() == null) || (column.getName().length() == 0)) {
+                if ((column.getName() == null) || (column.getName().isEmpty())) {
                     throw new ModelException("The column nr. " + idx + " in table " + curTable.getName() + " has no name");
                 }
                 if (namesOfProcessedColumns.contains(column.getName())) {
@@ -279,7 +279,7 @@ public class Database implements SchemaObject, Serializable {
                 }
                 namesOfProcessedColumns.add(column.getName());
 
-                if ((column.getType() == null) || (column.getType().length() == 0)) {
+                if ((column.getType() == null) || (column.getType().isEmpty())) {
                     throw new ModelException("The column nr. " + idx + " in table " + curTable.getName() + " has no type");
                 }
                 if ((column.getJdbcTypeCode() == Types.OTHER) && !"OTHER".equalsIgnoreCase(column.getType())) {
@@ -291,9 +291,9 @@ public class Database implements SchemaObject, Serializable {
             for (int idx = 0; idx < curTable.getForeignKeyCount(); idx++) {
                 ForeignKey fk = curTable.getForeignKey(idx);
                 String fkName = (fk.getName() == null ? "" : fk.getName());
-                String fkDesc = (fkName.length() == 0 ? "nr. " + idx : fkName);
+                String fkDesc = (fkName.isEmpty() ? "nr. " + idx : fkName);
 
-                if (fkName.length() > 0) {
+                if (!fkName.isEmpty()) {
                     if (namesOfProcessedFks.contains(fkName)) {
                         throw new ModelException("There are multiple foreign keys in table " + curTable.getName() + " with the name " + fkName);
                     }
@@ -340,9 +340,9 @@ public class Database implements SchemaObject, Serializable {
             for (int idx = 0; idx < curTable.getIndexCount(); idx++) {
                 Index index = curTable.getIndex(idx);
                 String indexName = (index.getName() == null ? "" : index.getName());
-                String indexDesc = (indexName.length() == 0 ? "nr. " + idx : indexName);
+                String indexDesc = (indexName.isEmpty() ? "nr. " + idx : indexName);
 
-                if (indexName.length() > 0) {
+                if (!indexName.isEmpty()) {
                     if (namesOfProcessedIndices.contains(indexName)) {
                         throw new ModelException("There are multiple indices in table " + curTable.getName() + " with the name " + indexName);
                     }
