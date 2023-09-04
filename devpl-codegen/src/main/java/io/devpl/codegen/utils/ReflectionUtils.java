@@ -161,11 +161,9 @@ public class ReflectionUtils {
      */
     public static List<StringBuilder> getMethods(Class<?> clazz) {
         Method[] methods = clazz.getDeclaredMethods();
-        int len = methods.length;
-        List<StringBuilder> list = new ArrayList<>();
+        ArrayList<StringBuilder> list = new ArrayList<>();
         StringBuilder sb;
-        for (int i = 0; i < len; i++) {
-            Method method = methods[i];
+        for (Method method : methods) {
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(method.getModifiers());
@@ -205,8 +203,7 @@ public class ReflectionUtils {
         int len = methods.length;
         List<StringBuilder> list = new ArrayList<>();
         StringBuilder sb;
-        for (int i = 0; i < len; i++) {
-            Method method = methods[i];
+        for (Method method : methods) {
             sb = new StringBuilder();
             // 修饰符
             String modifier = Modifier.toString(method.getModifiers());
@@ -245,8 +242,7 @@ public class ReflectionUtils {
         Annotation[] annotations = clazz.getAnnotations();
         int len = annotations.length;
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < len; i++) {
-            Annotation annotation = annotations[i];
+        for (Annotation annotation : annotations) {
             String annotationName = annotation.annotationType().getSimpleName();
             list.add(annotationName);
         }
@@ -261,9 +257,8 @@ public class ReflectionUtils {
         Type genericSuperClass = clazz.getGenericSuperclass();
         Class<?> superClassGenericParameterizedType = null;
         // 判断父类是否有泛型
-        if (genericSuperClass instanceof ParameterizedType) {
+        if (genericSuperClass instanceof ParameterizedType pt) {
             // 向下转型，以便调用方法
-            ParameterizedType pt = (ParameterizedType) genericSuperClass;
             // 只取第一个，因为一个类只能继承一个父类
             Type superClazz = pt.getActualTypeArguments()[0];
             // 转换为Class类型
@@ -280,17 +275,13 @@ public class ReflectionUtils {
         Type[] genericInterfaces = clazz.getGenericInterfaces();
         int len = genericInterfaces.length;
         List<Class<?>> list = new ArrayList<>();
-        for (int i = 0; i < len; i++) {
-            Type genericInterface = genericInterfaces[i];
+        for (Type genericInterface : genericInterfaces) {
             // 判断接口是否有泛型
-            if (genericInterface instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) genericInterface;
+            if (genericInterface instanceof ParameterizedType pt) {
                 // 得到所有的泛型【Type类型的数组】
                 Type[] interfaceTypes = pt.getActualTypeArguments();
-                int length = interfaceTypes.length;
-                for (int j = 0; j < length; j++) {
+                for (Type interfaceType : interfaceTypes) {
                     // 获取对应的泛型【Type类型】
-                    Type interfaceType = interfaceTypes[j];
                     // 转换为Class类型
                     Class<?> interfaceClass = (Class<?>) interfaceType;
                     list.add(interfaceClass);
@@ -388,8 +379,8 @@ public class ReflectionUtils {
         List<StringBuilder> list = getMethods(clazz);
         int size = list.size();
         if (0 < size) {
-            for (int i = 0; i < size; i++) {
-                System.out.println(list.get(i));
+            for (StringBuilder stringBuilder : list) {
+                System.out.println(stringBuilder);
             }
         } else {
             System.out.println("没有方法！");

@@ -79,6 +79,7 @@ public class UnsynchronizedBuffer extends OutputStream {
      * @param length number of bytes to add
      * @throws IndexOutOfBoundsException if off or length are invalid
      */
+    @Override
     public void write(byte[] bytes, int off, int length) {
         reserve(length);
         System.arraycopy(bytes, off, data, offset, length);

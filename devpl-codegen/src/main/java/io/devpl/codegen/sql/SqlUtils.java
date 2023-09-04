@@ -43,8 +43,9 @@ public class SqlUtils {
 
         if (query instanceof SQLSelectQueryBlock queryBlock) {
             List<SQLSelectItem> selectList = queryBlock.getSelectList();
+            // FROM 子句 可能包含临时表
             SQLTableSource from = queryBlock.getFrom();
-            // 找到所有的别名和表明映射
+            // 找到所有的别名和表名映射
             Map<String, String> tableNames = findAllTalbeNames(from);
             for (SQLSelectItem sqlSelectItem : selectList) {
                 SQLExpr expr = sqlSelectItem.getExpr();
@@ -68,7 +69,7 @@ public class SqlUtils {
     /**
      * 解析SQL中所有表名和别名
      * @param from 根SQL
-     * @return
+     * @return 表.字段
      */
     private static Map<String, String> findAllTalbeNames(SQLTableSource from) {
         Map<String, String> tableAliasMapping = new LinkedHashMap<>();
@@ -77,6 +78,7 @@ public class SqlUtils {
             SQLTableSource tmp = from;
             for (; ; ) {
                 if (!(tmp instanceof SQLJoinTableSource currentTableSource)) {
+                    // 连接查询的最后一张表
                     if (tmp instanceof SQLExprTableSource tableSource) {
                         final String alias = tableSource.getAlias();
                         tableAliasMapping.put(alias, tableSource.getTableName());
@@ -91,7 +93,10 @@ public class SqlUtils {
                 String currTableName = null;
                 if (right instanceof SQLExprTableSource sqlExprTableSource) {
                     currTableName = sqlExprTableSource.getTableName();
+                } else if (right instanceof SQLSubqueryTableSource sqlSubqueryTableSource) {
+                    currTableName = sqlSubqueryTableSource.getAlias();
                 }
+
                 String alias = right.getAlias();
                 // 没有别名
                 if (alias == null) {

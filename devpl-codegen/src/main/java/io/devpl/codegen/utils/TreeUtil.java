@@ -129,7 +129,7 @@ public class TreeUtil<T, R> {
         // 开始构树
         for (Map.Entry<R, List<TreeNode<T, R>>> entry : trNodes.entrySet()) {
             List<TreeNode<T, R>> treeNodes = entry.getValue();
-            if (treeNodes == null || treeNodes.size() == 0) {
+            if (treeNodes == null || treeNodes.isEmpty()) {
                 continue;
             }
             if (comparator != null) {
@@ -271,7 +271,7 @@ public class TreeUtil<T, R> {
                 continue;
             }
             List<TreeNode<T, R>> nextNodes = nextNode.nextNodes;
-            if (nextNodes != null && nextNodes.size() > 0) {
+            if (nextNodes != null && !nextNodes.isEmpty()) {
                 nextNodes.forEach(node -> trModels.add(node.getNodeModel(this.children, this.filter)));
             }
         }
@@ -326,7 +326,7 @@ public class TreeUtil<T, R> {
             if (filter != null && !filter.test(this)) {
                 return null;
             }
-            if (this.nextNodes != null && this.nextNodes.size() > 0) {
+            if (this.nextNodes != null && !this.nextNodes.isEmpty()) {
                 List<T> models = new ArrayList<>();
                 for (TreeNode<T, R> nextNode : nextNodes) {
                     T nodeModel = nextNode.getNodeModel(children, filter);
@@ -351,7 +351,7 @@ public class TreeUtil<T, R> {
                 }
                 return this;
             }
-            if (this.nextNodes != null && this.nextNodes.size() > 0) {
+            if (this.nextNodes != null && !this.nextNodes.isEmpty()) {
                 for (TreeNode<T, R> nextNode : this.nextNodes) {
                     TreeNode<T, R> model = nextNode.getNextNode(value, filter);
                     if (model != null) {
@@ -371,7 +371,7 @@ public class TreeUtil<T, R> {
             if (Objects.deepEquals(this.code, value)) {
                 return filter == null || filter.test(this);
             }
-            if (this.nextNodes != null && this.nextNodes.size() > 0) {
+            if (this.nextNodes != null && !this.nextNodes.isEmpty()) {
                 for (TreeNode<T, R> nextNode : this.nextNodes) {
                     boolean hasNode = nextNode.hasNode(value, filter);
                     if (hasNode) {
