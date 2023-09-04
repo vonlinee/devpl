@@ -104,7 +104,7 @@ public class BeanUtils {
         else if (methodName.startsWith("set")) methodName = methodName.substring(3);
         else if (methodName.startsWith("is")) methodName = methodName.substring(2);
 
-        if (methodName.length() == 0) return null;
+        if (methodName.isEmpty()) return null;
 
         char ch = methodName.charAt(0);
         if (Character.isUpperCase(ch) && (methodName.length() == 1 || !Character.isUpperCase(methodName.charAt(1)))) {
@@ -134,8 +134,7 @@ public class BeanUtils {
     }
 
     public static Class<?> getCollectionType(Type type) {
-        if (type instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) type;
+        if (type instanceof ParameterizedType pt) {
             if (pt.getActualTypeArguments().length == 1) {
                 final Type argType = pt.getActualTypeArguments()[0];
                 if (argType instanceof Class) {
@@ -178,13 +177,11 @@ public class BeanUtils {
      * Finds the matching set method
      */
     private static Method getGetMethod(Method[] methods, String getName, String isName, boolean ignoreCase) {
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-
+        for (Method method : methods) {
             // The method must be public
             if ((!Modifier.isPublic(method.getModifiers())) || (!Modifier.isPublic(method.getDeclaringClass()
-                .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
-                .equals(void.class))) {
+                    .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
+                    .equals(void.class))) {
                 continue;
             } else if (!ignoreCase && method.getName().equals(getName)) {
                 // If it matches the get name, it's the right method
@@ -203,7 +200,6 @@ public class BeanUtils {
                 return method;
             }
         }
-
         return null;
     }
 
@@ -212,14 +208,12 @@ public class BeanUtils {
      * @param setName the method name
      */
     private static Method getSetMethod(Method[] methods, String setName, boolean ignoreCase) {
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-
+        for (Method method : methods) {
             // The method name must match
             if (!(ignoreCase ? method.getName().equalsIgnoreCase(setName) : method.getName()
-                .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
-                .getDeclaringClass()
-                .getModifiers()) || method.getParameterTypes().length != 1) continue;
+                    .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
+                    .getDeclaringClass()
+                    .getModifiers()) || method.getParameterTypes().length != 1) continue;
 
             return method;
         }
@@ -257,7 +251,7 @@ public class BeanUtils {
         return Number.class.isAssignableFrom(paramClass) || paramClass == Short.TYPE || paramClass == Integer.TYPE || paramClass == Long.TYPE || paramClass == Double.TYPE || paramClass == Float.TYPE || paramClass == Byte.TYPE;
     }
 
-    public static Object invokeObjectMethod(Object object, String name, Class<?> paramTypes[], Object args[]) throws Throwable {
+    public static Object invokeObjectMethod(Object object, String name, Class<?>[] paramTypes, Object[] args) throws Throwable {
         Method method = object.getClass().getMethod(name, paramTypes);
         method.setAccessible(true);
         try {
@@ -293,7 +287,7 @@ public class BeanUtils {
         throw new NoSuchMethodException("Cannot find declared method " + methodName + "(" + Arrays.toString(paramTypes) + ")");
     }
 
-    public static Object invokeStaticMethod(Class<?> objectType, String name, Class<?> paramTypes[], Object args[]) throws Throwable {
+    public static Object invokeStaticMethod(Class<?> objectType, String name, Class<?>[] paramTypes, Object[] args) throws Throwable {
         Method method = objectType.getMethod(name, paramTypes);
         method.setAccessible(true);
         try {

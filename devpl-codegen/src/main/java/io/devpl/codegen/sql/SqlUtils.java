@@ -15,8 +15,10 @@ import java.util.*;
 public class SqlUtils {
 
     /**
+     * 获取sql查询的字段，不会进行实际的数据库查询，只解析sql，得到真实的表名，字段名，不包含sql中的自定义别名
+     * TODO 如果有子查询，别名，需要得到对应的查询真实的表字段
      * @param sql 查询SQL语句
-     * @return 返回格式：{tableName}{columnName}
+     * @return 返回格式：{tableName} -> {columnName} 每张表查询的字段
      */
     public static Map<String, Set<String>> getSelectColumns(String sql) {
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, DbType.mysql, true);
@@ -33,7 +35,8 @@ public class SqlUtils {
      * @param sqlStatement SQLStatement
      * @return 查询的所有列
      */
-    public static Map<String, Set<String>> getSelectedColumns(SQLSelectStatement sqlStatement) {
+    private static Map<String, Set<String>> getSelectedColumns(SQLSelectStatement sqlStatement) {
+        // 获取查询sql
         SQLSelect select = sqlStatement.getSelect();
         SQLSelectQuery query = select.getQuery();
         Map<String, Set<String>> columnMap = new HashMap<>();
