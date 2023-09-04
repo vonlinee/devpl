@@ -40,17 +40,13 @@ public class CloudscapeBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("GENERATED ALWAYS AS IDENTITY");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getSelectLastIdentityValues(Table table) {
         return "VALUES IDENTITY_VAL_LOCAL()";

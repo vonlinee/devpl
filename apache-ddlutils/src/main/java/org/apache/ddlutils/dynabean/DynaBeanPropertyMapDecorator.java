@@ -4,21 +4,21 @@ package org.apache.ddlutils.dynabean;
  * <p>Decorates a {@link DynaBean} to provide <code>Map</code> behavior.</p>
  *
  * <p>The motivation for this implementation is to provide access to {@link DynaBean}
- *    properties in technologies that are unaware of BeanUtils and {@link DynaBean}s -
- *    such as the expression languages of JSTL and JSF.</p>
+ * properties in technologies that are unaware of BeanUtils and {@link DynaBean}s -
+ * such as the expression languages of JSTL and JSF.</p>
  *
  * <p>This can be achieved either by wrapping the {@link DynaBean} prior to
- *    providing it to the technology to process or by providing a <code>Map</code>
- *    accessor method on the DynaBean implementation:
- *    <pre><code>
+ * providing it to the technology to process or by providing a <code>Map</code>
+ * accessor method on the DynaBean implementation:
+ * <pre><code>
  *         public Map&lt;String, Object&gt; getMap() {
  *             return new DynaBeanPropertyMapDecorator(this);
  *         }</code></pre>
- *   </ul>
+ * </ul>
  * </p>
  *
  * <p>This, for example, could be used in JSTL in the following way to access
- *    a DynaBean's <code>fooProperty</code>:
+ * a DynaBean's <code>fooProperty</code>:
  *    <ul><li><code>${myDynaBean.<b>map</b>.fooProperty}</code></li></ul>
  * </p>
  *
@@ -42,17 +42,15 @@ package org.apache.ddlutils.dynabean;
  *    and <code>values()</code> methods create an <b><i>unmodifiable</i></b>
  *    <code>Set</code> and it does not support the Map's <code>clear()</code>
  *    and <code>remove()</code> operations.</p>
- *
- * @since BeanUtils 1.9.0
  * @version $Id$
+ * @since BeanUtils 1.9.0
  */
 public class DynaBeanPropertyMapDecorator extends BaseDynaBeanMapDecorator<String> {
     /**
      * Construct a Map for the specified {@link DynaBean}.
-     *
      * @param dynaBean The dyna bean being decorated
      * @param readOnly <code>true</code> if the Map is read only
-     * otherwise <code>false</code>
+     *                 otherwise <code>false</code>
      * @throws IllegalArgumentException if the {@link DynaBean} is null.
      */
     public DynaBeanPropertyMapDecorator(final DynaBean dynaBean, final boolean readOnly) {
@@ -62,7 +60,6 @@ public class DynaBeanPropertyMapDecorator extends BaseDynaBeanMapDecorator<Strin
     /**
      * Constructs a read only Map for the specified
      * {@link DynaBean}.
-     *
      * @param dynaBean The dyna bean being decorated
      * @throws IllegalArgumentException if the {@link DynaBean} is null.
      */

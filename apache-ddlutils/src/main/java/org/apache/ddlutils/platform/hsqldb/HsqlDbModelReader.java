@@ -7,7 +7,6 @@ import org.apache.ddlutils.platform.JdbcModelReader;
 import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Reads a database model from a HsqlDb database.
@@ -24,9 +23,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
         setDefaultSchemaPattern(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
@@ -43,9 +40,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -57,9 +52,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
         return column;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         String name = index.getName();
@@ -67,9 +60,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
         return (name != null) && name.startsWith("SYS_IDX_");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         String name = index.getName();

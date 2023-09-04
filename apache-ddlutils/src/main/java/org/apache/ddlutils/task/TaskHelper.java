@@ -41,7 +41,7 @@ public class TaskHelper {
             String str = tokens[idx];
             int strLen = str.length();
             boolean endsInSlash = (strLen > 0) && (str.charAt(strLen - 1) == '\\') &&
-                    ((strLen == 1) || (str.charAt(strLen - 2) != '\\'));
+                ((strLen == 1) || (str.charAt(strLen - 2) != '\\'));
 
             if (last != null) {
                 last += "," + str;

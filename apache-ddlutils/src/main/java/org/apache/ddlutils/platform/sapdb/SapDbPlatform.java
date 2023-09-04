@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
@@ -103,9 +103,7 @@ public class SapDbPlatform extends GenericDatabasePlatform {
         setModelReader(new SapDbModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
@@ -122,27 +120,23 @@ public class SapDbPlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) ||
-                        (change instanceof AddPrimaryKeyChange) ||
-                        (change instanceof PrimaryKeyChange) ||
-                        (change instanceof RemovePrimaryKeyChange)) {
+                    (change instanceof AddPrimaryKeyChange) ||
+                    (change instanceof PrimaryKeyChange) ||
+                    (change instanceof RemovePrimaryKeyChange)) {
                     return true;
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // SapDB can only add not insert columns, and required columns have to have
                     // a default value or be IDENTITY
                     return (addColumnChange.getNextColumn() == null) &&
-                            (!addColumnChange.getNewColumn().isRequired() ||
-                                    !StringUtils.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
-                } else if (change instanceof ColumnDefinitionChange) {
-                    ColumnDefinitionChange colChange = (ColumnDefinitionChange) change;
+                        (!addColumnChange.getNewColumn().isRequired() ||
+                            !StringUtils.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
+                } else if (change instanceof ColumnDefinitionChange colChange) {
 
                     // SapDB has a ALTER TABLE MODIFY COLUMN but it is limited regarding the type conversions
                     // it can perform, so we don't use it here but rather rebuild the table
@@ -151,8 +145,8 @@ public class SapDbPlatform extends GenericDatabasePlatform {
 
                     // we can however handle the change if only the default value or the required status was changed
                     return ((curColumn.getJdbcTypeCode() == newColumn.getJdbcTypeCode()) &&
-                            !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), curColumn, newColumn) &&
-                            (curColumn.isAutoIncrement() == newColumn.isAutoIncrement()));
+                        !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), curColumn, newColumn) &&
+                        (curColumn.isAutoIncrement() == newColumn.isAutoIncrement()));
                 } else {
                     return false;
                 }
@@ -231,13 +225,13 @@ public class SapDbPlatform extends GenericDatabasePlatform {
 
         if (!StringUtils.equals(changedColumn.getDefaultValue(), change.getNewColumn().getDefaultValue())) {
             ((SapDbBuilder) getSqlBuilder()).changeColumnDefaultValue(changedTable,
-                    changedColumn,
-                    change.getNewColumn().getDefaultValue());
+                changedColumn,
+                change.getNewColumn().getDefaultValue());
         }
         if (changedColumn.isRequired() != change.getNewColumn().isRequired()) {
             ((SapDbBuilder) getSqlBuilder()).changeColumnRequiredStatus(changedTable,
-                    changedColumn,
-                    change.getNewColumn().isRequired());
+                changedColumn,
+                change.getNewColumn().isRequired());
         }
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }

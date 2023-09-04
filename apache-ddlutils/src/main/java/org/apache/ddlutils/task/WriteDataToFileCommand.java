@@ -28,7 +28,7 @@ import java.io.FileOutputStream;
  * Reads the data currently in the table in the live database (as specified by the
  * enclosing task), and writes it as XML to a file.
  * @version $Revision: 289996 $
- *    name="writeDataToFile"
+ * name="writeDataToFile"
  */
 public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
     /**
@@ -57,7 +57,7 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
     /**
      * Specifies the encoding of the XML file.
      * @param encoding The encoding
-     *   The default encoding is <code>UTF-8</code>.
+     *                 The default encoding is <code>UTF-8</code>.
      */
     public void setEncoding(String encoding) {
         _encoding = encoding;
@@ -73,21 +73,17 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
         _determineSchema = determineSchema;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public boolean isRequiringModel() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         try {
             getDataIO().setDetermineSchema(_determineSchema);
             getDataIO().writeDataToXML(getPlatform(), model,
-                    new FileOutputStream(_outputFile), _encoding);
+                new FileOutputStream(_outputFile), _encoding);
             _log.info("Written data XML to file" + _outputFile.getAbsolutePath());
         } catch (Exception ex) {
             handleException(ex, ex.getMessage());

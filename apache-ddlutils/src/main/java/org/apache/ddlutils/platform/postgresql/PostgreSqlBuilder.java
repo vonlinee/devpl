@@ -10,7 +10,6 @@ import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * The SQL Builder for PostgresSql.
@@ -34,9 +33,7 @@ public class PostgreSqlBuilder extends SqlBuilder {
         addEscapedCharSequence("\t", "\\t");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void dropTable(Table table) throws IOException {
         print("DROP TABLE ");
         printIdentifier(getTableName(table));
@@ -50,18 +47,14 @@ public class PostgreSqlBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void dropIndex(Table table, Index index) throws IOException {
         print("DROP INDEX ");
         printIdentifier(getIndexName(index));
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
@@ -96,18 +89,14 @@ public class PostgreSqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("UNIQUE DEFAULT nextval('");
         printIdentifier(getConstraintName(null, table, column.getName(), "seq"));
         print("')");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();
 
@@ -130,9 +119,7 @@ public class PostgreSqlBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         if (newColumn.isAutoIncrement()) {
             createAutoIncrementSequence(table, newColumn);
@@ -157,9 +144,7 @@ public class PostgreSqlBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);

@@ -70,16 +70,12 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
         setModelReader(new HsqlDbModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void shutdownDatabase(Connection connection) {
         Statement stmt = null;
@@ -94,9 +90,7 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -108,19 +102,14 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
 
                     // HsqlDb can only drop columns that are not part of a primary key
                     return !column.isPrimaryKey();
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // adding IDENTITY columns is not supported without a table rebuild because they have to
                     // be PK columns, but we add them to the PK later
                     return addColumnChange.isAtEnd() &&
                         (!addColumnChange.getNewColumn().isRequired() ||
                             (addColumnChange.getNewColumn().getDefaultValue() != null));
-                } else if (change instanceof AddPrimaryKeyChange) {
-                    return true;
-                } else {
-                    return false;
-                }
+                } else return change instanceof AddPrimaryKeyChange;
             }
         };
     }

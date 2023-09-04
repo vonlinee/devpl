@@ -1,28 +1,9 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.PlatformUtils;
+import org.apache.ddlutils.platform.PooledDataSource;
 
 /**
  * Encloses the platform configuration for the Ant tasks.
@@ -37,7 +18,7 @@ public class PlatformConfiguration {
     /**
      * The data source to use for accessing the database.
      */
-    private BasicDataSource _dataSource;
+    private PooledDataSource _dataSource;
     /**
      * Whether to use delimited SQL identifiers.
      */
@@ -47,7 +28,7 @@ public class PlatformConfiguration {
      */
     private boolean _sortForeignKeys;
     /**
-     * Whether to shutdown the database after the task has finished.
+     * Whether to shut down the database after the task has finished.
      */
     private boolean _shutdownDatabase;
     /**
@@ -83,7 +64,7 @@ public class PlatformConfiguration {
      * Returns the data source to use for accessing the database.
      * @return The data source
      */
-    public BasicDataSource getDataSource() {
+    public PooledDataSource getDataSource() {
         return _dataSource;
     }
 
@@ -91,7 +72,7 @@ public class PlatformConfiguration {
      * Sets the data source to use for accessing the database.
      * @param dataSource The data source pointing to the database
      */
-    public void setDataSource(BasicDataSource dataSource) {
+    public void setDataSource(PooledDataSource dataSource) {
         _dataSource = dataSource;
     }
 
@@ -188,7 +169,7 @@ public class PlatformConfiguration {
                     throw new RuntimeException("No database specified.");
                 }
                 _databaseType = PlatformUtils.determineDatabaseType(_dataSource.getDriverClassName(),
-                        _dataSource.getUrl());
+                    _dataSource.getUrl());
                 if (_databaseType == null) {
                     _databaseType = new PlatformUtils().determineDatabaseType(_dataSource);
                 }

@@ -1,16 +1,14 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.CloneHelper;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.platform.PooledDataSource;
 
 /**
  * Sub task for dropping tables.
- * @version $Revision: $
- * ant.task name="dropTables"
  */
 public class DropTablesCommand extends DatabaseCommand {
     /**
@@ -47,12 +45,10 @@ public class DropTablesCommand extends DatabaseCommand {
         _tableNameRegExp = tableNameRegExp;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
-        BasicDataSource dataSource = getDataSource();
+        PooledDataSource dataSource = getDataSource();
 
         if (dataSource == null) {
             throw new RuntimeException("No database specified.");
@@ -66,7 +62,7 @@ public class DropTablesCommand extends DatabaseCommand {
             targetModel.initialize();
 
             Table[] tables = _tableNames != null ? targetModel.findTables(_tableNames, task.isUseDelimitedSqlIdentifiers())
-                    : targetModel.findTables(_tableNameRegExp, task.isUseDelimitedSqlIdentifiers());
+                : targetModel.findTables(_tableNameRegExp, task.isUseDelimitedSqlIdentifiers());
 
             new ModelHelper().removeForeignKeysToAndFromTables(targetModel, tables);
             targetModel.removeTables(tables);

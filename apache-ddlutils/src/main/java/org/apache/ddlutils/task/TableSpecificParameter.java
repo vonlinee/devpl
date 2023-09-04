@@ -38,14 +38,14 @@ public class TableSpecificParameter extends Parameter {
     /**
      * The tables for which this parameter is applicable.
      */
-    private ArrayList _tables = new ArrayList();
+    private final ArrayList _tables = new ArrayList();
 
     /**
      * Specifies the comma-separated list of table names in whose creation this parameter
      * shall be used. For every table not in this list, the parameter is ignored.
      * @param tableList The tables
-     *   Use this or the <code>table</code> parameter. If neither is specified,
-     * the parameter is applied in the creation of all tables.
+     *                  Use this or the <code>table</code> parameter. If neither is specified,
+     *                  the parameter is applied in the creation of all tables.
      */
     public void setTables(String tableList) {
         StringTokenizer tokenizer = new StringTokenizer(tableList, ",");
@@ -61,8 +61,8 @@ public class TableSpecificParameter extends Parameter {
     /**
      * Specifies the name of the table in whose creation this parameter shall be applied.
      * @param tableName The table
-     *   Use this or the <code>tables</code> parameter. If neither is specified,
-     * the parameter is applied in the creation of all tables.
+     *                  Use this or the <code>tables</code> parameter. If neither is specified,
+     *                  the parameter is applied in the creation of all tables.
      */
     public void setTable(String tableName) {
         _tables.add(tableName);
@@ -82,7 +82,7 @@ public class TableSpecificParameter extends Parameter {
             String tableName = (String) it.next();
 
             if ((caseSensitive && tableName.equals(table.getName())) ||
-                    (!caseSensitive && tableName.equalsIgnoreCase(table.getName()))) {
+                (!caseSensitive && tableName.equalsIgnoreCase(table.getName()))) {
                 return true;
             }
         }

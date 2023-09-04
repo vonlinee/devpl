@@ -66,8 +66,8 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * for the the <code>writeSchemaToFile</code> sub-task as it ensures that the generated
      * XML defines a valid model.
      * @param modelName The model name. Use <code>null</code> or an empty string for the default name
-     *   By default, DldUtils uses the schema name returned from the database
-     * or <code>"default"</code> if no schema name was returned by the database.
+     *                  By default, DldUtils uses the schema name returned from the database
+     *                  or <code>"default"</code> if no schema name was returned by the database.
      */
     public void setModelName(String modelName) {
         _modelName = modelName;
@@ -80,9 +80,9 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * this string if they are actually part of the table name (i.e. in delimited
      * identifer mode).
      * @param tableNameList The comma-separated list of table names
-     *   If no table filter is specified, then all tables will be read unless
-     * <code>excludeTables</code> or <code>excludeTableFilter</code> is
-     * specifed
+     *                      If no table filter is specified, then all tables will be read unless
+     *                      <code>excludeTables</code> or <code>excludeTableFilter</code> is
+     *                      specifed
      */
     public void setIncludeTables(String tableNameList) {
         _includeTableNames = new TaskHelper().parseCommaSeparatedStringList(tableNameList);
@@ -90,12 +90,12 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
 
     /**
      * Sets the regular expression matching the names of the tables that shall be read.
-     * For case insensitive matching, an uppercase name can be assumed.
+     * For case-insensitive matching, an uppercase name can be assumed.
      * @param tableNameRegExp The regular expression; see {@link java.util.regex.Pattern}
      *                        for details
-     *   If no table filter is specified, then all tables will be read unless
-     * <code>excludeTables</code> or <code>excludeTableFilter</code> is
-     * specifed
+     *                        If no table filter is specified, then all tables will be read unless
+     *                        <code>excludeTables</code> or <code>excludeTableFilter</code> is
+     *                        specifed
      */
     public void setIncludeTableFilter(String tableNameRegExp) {
         _includeTableNameRegExp = tableNameRegExp;
@@ -108,9 +108,9 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * this string if they are actually part of the table name (i.e. in delimited
      * identifer mode).
      * @param tableNameList The comma-separated list of table names
-     *   If no table filter is specified, then all tables will be read unless
-     * <code>includeTables</code> or <code>includeTableFilter</code> is
-     * specifed
+     *                      If no table filter is specified, then all tables will be read unless
+     *                      <code>includeTables</code> or <code>includeTableFilter</code> is
+     *                      specifed
      */
     public void setExcludeTables(String tableNameList) {
         _excludeTableNames = new TaskHelper().parseCommaSeparatedStringList(tableNameList);
@@ -118,12 +118,12 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
 
     /**
      * Sets the regular expression matching the names of the tables that shall be ignored.
-     * For case insensitive matching, an uppercase name can be assumed.
+     * For case-insensitive matching, an uppercase name can be assumed.
      * @param tableNameRegExp The regular expression; see {@link java.util.regex.Pattern}
      *                        for details
-     *   If no table filter is specified, then all tables will be read unless
-     * <code>includeTables</code> or <code>includeTableFilter</code> is
-     * specifed
+     *                        If no table filter is specified, then all tables will be read unless
+     *                        <code>includeTables</code> or <code>includeTableFilter</code> is
+     *                        specifed
      */
     public void setExcludeTableFilter(String tableNameRegExp) {
         _excludeTableNameRegExp = tableNameRegExp;
@@ -182,7 +182,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * @return The table types
      */
     private String[] getTableTypes() {
-        if ((_tableTypes == null) || (_tableTypes.length() == 0)) {
+        if ((_tableTypes == null) || (_tableTypes.isEmpty())) {
             return new String[0];
         }
 
@@ -205,15 +205,14 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
      * typical table types see
      * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/DatabaseMetaData.html#getTables(java.lang.String,%20java.lang.String,%20java.lang.String,%20java.lang.String[])">java.sql.DatabaseMetaData#getTables</a>.
      * @param tableTypes The table types as a comma-separated list
-     *   By default, only tables of type <code>TABLE</code> are used by the task.
+     *                   By default, only tables of type <code>TABLE</code> are used by the task.
      */
     public void setTableTypes(String tableTypes) {
         _tableTypes = tableTypes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
+    @Override
     protected Database readModel() {
         if (getDataSource() == null) {
             throw new RuntimeException("No database specified.");
@@ -221,12 +220,12 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
 
         try {
             Database model = getPlatform().readModelFromDatabase(_modelName,
-                    getPlatformConfiguration().getCatalogPattern(),
-                    getPlatformConfiguration().getSchemaPattern(),
-                    getTableTypes());
+                getPlatformConfiguration().getCatalogPattern(),
+                getPlatformConfiguration().getSchemaPattern(),
+                getTableTypes());
 
             if ((_includeTableNames != null) || (_includeTableNameRegExp != null) ||
-                    (_excludeTableNames != null) || (_excludeTableNameRegExp != null)) {
+                (_excludeTableNames != null) || (_excludeTableNameRegExp != null)) {
                 ModelHelper helper = new ModelHelper();
 
                 if (_includeTableNames != null) {
@@ -256,5 +255,9 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
         } catch (Exception ex) {
             throw new RuntimeException("Could not read the schema from the specified database: " + ex.getLocalizedMessage(), ex);
         }
+    }
+
+    public void setProject(Project project) {
+
     }
 }

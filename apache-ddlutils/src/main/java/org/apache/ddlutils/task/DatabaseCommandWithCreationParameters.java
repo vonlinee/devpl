@@ -35,7 +35,7 @@ public abstract class DatabaseCommandWithCreationParameters extends DatabaseComm
     /**
      * The additional creation parameters.
      */
-    private ArrayList _parameters = new ArrayList();
+    private final ArrayList _parameters = new ArrayList();
 
     /**
      * Adds a parameter which is a name-value pair.

@@ -84,7 +84,7 @@ public class CloneHelper {
 
         result.setName(source.getName());
         result.setJavaName(source.getJavaName());
-        result.setPrimaryKey(clonePrimaryKeyStatus ? source.isPrimaryKey() : false);
+        result.setPrimaryKey(clonePrimaryKeyStatus && source.isPrimaryKey());
         result.setRequired(source.isRequired());
         result.setAutoIncrement(source.isAutoIncrement());
         result.setJdbcTypeCode(source.getJdbcTypeCode());
@@ -103,7 +103,7 @@ public class CloneHelper {
      * @return The clone
      */
     public Index clone(Index source, Table targetTable, boolean caseSensitive) {
-        Index result = (source.isUnique() ? (Index) new UniqueIndex() : (Index) new NonUniqueIndex());
+        Index result = (source.isUnique() ? new UniqueIndex() : new NonUniqueIndex());
 
         result.setName(source.getName());
         for (int colIdx = 0; colIdx < source.getColumnCount(); colIdx++) {

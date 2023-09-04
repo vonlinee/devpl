@@ -12,11 +12,11 @@ import java.util.List;
  * @version $Revision: $
  */
 public abstract class IndexChangeImplBase extends TableChangeImplBase
-        implements IndexChange {
+    implements IndexChange {
     /**
      * The names of the columns in the index.
      */
-    private List _columnNames = new ArrayList();
+    private final List _columnNames = new ArrayList();
 
     /**
      * Creates a new change object.
@@ -31,9 +31,7 @@ public abstract class IndexChangeImplBase extends TableChangeImplBase
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public Index findChangedIndex(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 
@@ -47,7 +45,7 @@ public abstract class IndexChangeImplBase extends TableChangeImplBase
                         String expectedColName = (String) _columnNames.get(colIdx);
 
                         if ((caseSensitive && curColName.equals(expectedColName)) ||
-                                (!caseSensitive && curColName.equalsIgnoreCase(expectedColName))) {
+                            (!caseSensitive && curColName.equalsIgnoreCase(expectedColName))) {
                             return curIndex;
                         }
                     }

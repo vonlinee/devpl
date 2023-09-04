@@ -119,7 +119,6 @@ public class IndexColumn implements Serializable, Cloneable {
     }
 
 
-
     /**
      * Compares this index column to the given one while ignoring the case of identifiers.
      * @param other The other index column
@@ -129,15 +128,13 @@ public class IndexColumn implements Serializable, Cloneable {
         return Objects.equals(_name, other._name) && Objects.equals(_size, other._size);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String toString() {
         return "Index column [name=" +
-                getName() +
-                "; size=" +
-                getSize() +
-                "]";
+            getName() +
+            "; size=" +
+            getSize() +
+            "]";
     }
 
     @Override

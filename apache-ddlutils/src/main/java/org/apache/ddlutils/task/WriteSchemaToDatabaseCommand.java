@@ -27,7 +27,7 @@ import org.apache.ddlutils.platform.SqlBuildContext;
  * Parses the schema XML files specified for the enclosing task, and creates the corresponding
  * schema in the database.
  * @version $Revision: 289996 $
- *    name="writeSchemaToDatabase"
+ * name="writeSchemaToDatabase"
  */
 public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationParameters {
     /**
@@ -51,7 +51,7 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
      * Specifies whether DdlUtils shall alter an existing database rather than clearing it and
      * creating it new.
      * @param alterTheDb <code>true</code> if to alter the database
-     *   Per default an existing database is altered
+     *                   Per default an existing database is altered
      */
     public void setAlterDatabase(boolean alterTheDb) {
         _alterDb = alterTheDb;
@@ -70,15 +70,13 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
      * Specifies whether tables, external constraints, etc. can be dropped if necessary.
      * Note that this is only relevant when <code>alterDatabase</code> is <code>false</code>.
      * @param doDrops <code>true</code> if drops shall be performed
-     *   Per default database structures are dropped if necessary
+     *                Per default database structures are dropped if necessary
      */
     public void setDoDrops(boolean doDrops) {
         _doDrops = doDrops;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (getDataSource() == null) {
             throw new RuntimeException("No database specified.");
@@ -98,9 +96,9 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
                 platform.alterModel(currentModel, model, params, true);
             } else {
                 platform.createModel(model,
-                        params,
-                        _doDrops,
-                        true);
+                    params,
+                    _doDrops,
+                    true);
             }
 
             _log.info("Written schema to database");

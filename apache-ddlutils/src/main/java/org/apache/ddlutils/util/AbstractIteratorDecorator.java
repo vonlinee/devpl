@@ -6,23 +6,23 @@ import java.util.Iterator;
  * Provides basic behaviour for decorating an iterator with extra functionality.
  * <p>
  * All methods are forwarded to the decorated iterator.
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.4 $ $Date: 2004/02/18 00:59:50 $
- *
  * @author James Strachan
  * @author Stephen Colebourne
+ * @version $Revision: 1.4 $ $Date: 2004/02/18 00:59:50 $
+ * @since Commons Collections 3.0
  */
 public class AbstractIteratorDecorator<E> implements Iterator<E> {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     protected final Iterator<E> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that decorates the specified iterator.
-     *
-     * @param iterator  the iterator to decorate, must not be null
+     * @param iterator the iterator to decorate, must not be null
      * @throws IllegalArgumentException if the collection is null
      */
     public AbstractIteratorDecorator(Iterator<E> iterator) {
@@ -35,7 +35,6 @@ public class AbstractIteratorDecorator<E> implements Iterator<E> {
 
     /**
      * Gets the iterator being decorated.
-     *
      * @return the decorated iterator
      */
     protected Iterator<E> getIterator() {

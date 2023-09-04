@@ -8,9 +8,7 @@ import org.apache.ddlutils.platform.db2.Db2Platform;
  * @version $Revision: 231110 $
  */
 public class TestDB2Platform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return Db2Platform.DATABASENAME;
     }

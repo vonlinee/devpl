@@ -1,5 +1,3 @@
-package org.apache.ddlutils.platform.sybase;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,26 +16,3 @@ package org.apache.ddlutils.platform.sybase;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-/**
- * The platform implementation for Sybase ASE 15 and above.
- * @version $Revision:  $
- */
-public class SybaseASE15Platform extends SybasePlatform {
-    /**
-     * Database name of this platform.
-     */
-    public static final String DATABASENAME = "SybaseASE15";
-
-    /**
-     * Creates a new platform instance.
-     */
-    public SybaseASE15Platform() {
-        super();
-    }
-
-
-    public String getName() {
-        return DATABASENAME;
-    }
-}

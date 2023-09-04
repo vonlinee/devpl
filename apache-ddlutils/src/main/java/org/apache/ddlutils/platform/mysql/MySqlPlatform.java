@@ -71,13 +71,13 @@ public class MySqlPlatform extends GenericDatabasePlatform {
         info.setSyntheticDefaultValueForRequiredReturned(true);
         info.setPrimaryKeyColumnAutomaticallyRequired(true);
         info.setCommentPrefix("#");
-        // Double quotes are only allowed for delimiting identifiers if the server SQL mode includes ANSI_QUOTES 
+        // Double quotes are only allowed for delimiting identifiers if the server SQL mode includes ANSI_QUOTES
         info.setDelimiterToken("`");
         info.setSupportedOnUpdateActions(new CascadeActionEnum[]{CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT,
-                CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
+            CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
         info.setDefaultOnUpdateAction(CascadeActionEnum.RESTRICT);
         info.setSupportedOnDeleteActions(new CascadeActionEnum[]{CascadeActionEnum.NONE, CascadeActionEnum.RESTRICT,
-                CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
+            CascadeActionEnum.CASCADE, CascadeActionEnum.SET_NULL});
         info.setDefaultOnDeleteAction(CascadeActionEnum.RESTRICT);
 
         info.addNativeTypeMapping(Types.ARRAY, "LONGBLOB", Types.LONGVARBINARY);
@@ -113,48 +113,39 @@ public class MySqlPlatform extends GenericDatabasePlatform {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected ModelComparator getModelComparator() {
         return new MySqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
 
             @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
-                if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                if (change instanceof AddColumnChange addColumnChange) {
 
                     return !addColumnChange.getNewColumn().isAutoIncrement() &&
-                            (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
-                                    .getDefaultValue() != null));
-                } else if (change instanceof ColumnDefinitionChange) {
-                    ColumnDefinitionChange colDefChange = (ColumnDefinitionChange) change;
+                        (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
+                            .getDefaultValue() != null));
+                } else if (change instanceof ColumnDefinitionChange colDefChange) {
                     Column sourceColumn = intermediateTable.findColumn(colDefChange.getChangedColumn(), isDelimitedIdentifierModeOn());
 
                     return !ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn()) &&
-                            !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn());
+                        !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn());
                 } else {
                     return (change instanceof RemoveColumnChange) ||
-                            (change instanceof AddPrimaryKeyChange) ||
-                            (change instanceof PrimaryKeyChange) ||
-                            (change instanceof RemovePrimaryKeyChange);
+                        (change instanceof AddPrimaryKeyChange) ||
+                        (change instanceof PrimaryKeyChange) ||
+                        (change instanceof RemovePrimaryKeyChange);
                 }
             }
         };

@@ -353,9 +353,7 @@ public class TestSummaryCreatorTask extends Task {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute() throws RuntimeException {
         try {
             log("Processing test results", Project.MSG_INFO);

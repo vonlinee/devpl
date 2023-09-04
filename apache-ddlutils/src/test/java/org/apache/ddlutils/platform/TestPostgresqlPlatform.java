@@ -28,9 +28,7 @@ import org.apache.ddlutils.platform.postgresql.PostgreSqlPlatform;
  * @version $Revision: 231110 $
  */
 public class TestPostgresqlPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return PostgreSqlPlatform.DATABASENAME;
     }

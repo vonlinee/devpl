@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -31,11 +30,11 @@ public class Db2ModelReader extends JdbcModelReader {
     /**
      * The regular expression pattern for the time values that Db2 returns.
      */
-    private Pattern _db2TimePattern;
+    private final Pattern _db2TimePattern;
     /**
      * The regular expression pattern for the timestamp values that Db2 returns.
      */
-    private Pattern _db2TimestampPattern;
+    private final Pattern _db2TimestampPattern;
 
     /**
      * Creates a new model reader for Db2 databases.
@@ -73,9 +72,7 @@ public class Db2ModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -86,20 +83,19 @@ public class Db2ModelReader extends JdbcModelReader {
 
                 // Db2 returns "HH24.MI.SS"
                 if (matcher.matches()) {
-                    StringBuffer newDefault = new StringBuffer();
 
-                    newDefault.append("'");
-                    // the hour
-                    newDefault.append(matcher.group(1));
-                    newDefault.append(":");
-                    // the minute
-                    newDefault.append(matcher.group(2));
-                    newDefault.append(":");
-                    // the second
-                    newDefault.append(matcher.group(3));
-                    newDefault.append("'");
+                    String newDefault = "'" +
+                        // the hour
+                        matcher.group(1) +
+                        ":" +
+                        // the minute
+                        matcher.group(2) +
+                        ":" +
+                        // the second
+                        matcher.group(3) +
+                        "'";
 
-                    column.setDefaultValue(newDefault.toString());
+                    column.setDefaultValue(newDefault);
                 }
             } else if (column.getJdbcTypeCode() == Types.TIMESTAMP) {
                 Matcher matcher = _db2TimestampPattern.matcher(column.getDefaultValue());
@@ -163,9 +159,7 @@ public class Db2ModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         // Db2 uses the form "SQL060205225246220" if the primary key was defined during table creation

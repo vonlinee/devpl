@@ -33,9 +33,7 @@ public class TestPlatform extends GenericDatabasePlatform {
         });
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return "TestPlatform";
     }

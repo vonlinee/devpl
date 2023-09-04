@@ -28,9 +28,7 @@ import org.apache.ddlutils.platform.hsqldb.HsqlDbPlatform;
  * @version $Revision: 231110 $
  */
 public class TestHsqlDbPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return HsqlDbPlatform.DATABASENAME;
     }

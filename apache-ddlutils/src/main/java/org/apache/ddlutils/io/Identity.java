@@ -33,17 +33,17 @@ import java.util.Map;
  */
 public class Identity {
     /**
+     * The identity columns and their values.
+     */
+    private final HashMap<String, Object> _columnValues = new HashMap<>();
+    /**
      * The table.
      */
-    private Table _table;
+    private final Table _table;
     /**
      * The optional foreign key name whose referenced object this identity represents.
      */
     private String _fkName;
-    /**
-     * The identity columns and their values.
-     */
-    private final HashMap<String, Object> _columnValues = new HashMap<>();
 
     /**
      * Creates a new identity object for the given table.
@@ -99,16 +99,12 @@ public class Identity {
         return _columnValues.get(name);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Identity)) {
+        if (!(obj instanceof Identity otherIdentity)) {
             return false;
         }
-
-        Identity otherIdentity = (Identity) obj;
 
         if (!_table.equals(otherIdentity._table)) {
             return false;
@@ -133,17 +129,13 @@ public class Identity {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();

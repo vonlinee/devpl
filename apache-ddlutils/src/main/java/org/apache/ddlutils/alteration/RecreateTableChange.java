@@ -57,9 +57,7 @@ public class RecreateTableChange extends TableChangeImplBase {
         return _targetTable;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void apply(Database database, boolean caseSensitive) {
         // we only need to replace the table in the model, as there can't be a
@@ -68,7 +66,7 @@ public class RecreateTableChange extends TableChangeImplBase {
             Table curTable = database.getTable(tableIdx);
 
             if ((caseSensitive && curTable.getName().equals(getChangedTable())) || (!caseSensitive && curTable.getName()
-                    .equalsIgnoreCase(getChangedTable()))) {
+                .equalsIgnoreCase(getChangedTable()))) {
                 database.removeTable(tableIdx);
                 database.addTable(tableIdx, new CloneHelper().clone(_targetTable, true, false, database, caseSensitive));
                 break;

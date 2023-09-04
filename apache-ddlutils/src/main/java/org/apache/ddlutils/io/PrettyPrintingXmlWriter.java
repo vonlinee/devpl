@@ -44,7 +44,7 @@ public class PrettyPrintingXmlWriter {
     /**
      * The output encoding.
      */
-    private String _encoding;
+    private final String _encoding;
     /**
      * Whether we're pretty-printing.
      */

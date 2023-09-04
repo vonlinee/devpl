@@ -35,17 +35,13 @@ public class TestDateConverter extends TestCase {
      */
     private DateConverter _dateConverter;
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void setUp() throws Exception {
         super.setUp();
         _dateConverter = new DateConverter();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void tearDown() throws Exception {
         _dateConverter = null;
         super.tearDown();

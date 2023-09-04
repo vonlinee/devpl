@@ -36,7 +36,7 @@ import java.sql.SQLException;
  * data source is specified (via the <code>database</code> sub element) or the
  * <code>databaseType</code> attribute is used to specify the database type.
  * @version $Revision: 289996 $
- *    name="writeSchemaSqlToFile"
+ * name="writeSchemaSqlToFile"
  */
 public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationParameters {
     /**
@@ -73,7 +73,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
      * Specifies whether DdlUtils shall generate SQL to alter an existing database rather
      * than SQL for clearing it and creating it new.
      * @param alterTheDb <code>true</code> if SQL to alter the database shall be created
-     *   Per default SQL for altering the database is created
+     *                   Per default SQL for altering the database is created
      */
     public void setAlterDatabase(boolean alterTheDb) {
         _alterDb = alterTheDb;
@@ -92,15 +92,13 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
      * Specifies whether SQL for dropping tables, external constraints, etc. is created if necessary.
      * Note that this is only relevant when <code>alterDatabase</code> is <code>false</code>.
      * @param doDrops <code>true</code> if drops shall be performed if necessary
-     *   Per default, drop SQL statements are created
+     *                Per default, drop SQL statements are created
      */
     public void setDoDrops(boolean doDrops) {
         _doDrops = doDrops;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {
             throw new RuntimeException("No output file specified");
@@ -129,7 +127,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
                 if (getDataSource() == null) {
                     shouldAlter = false;
                     _log.warn("Cannot alter the database because no database connection was specified." +
-                            " SQL for database creation will be generated instead.");
+                        " SQL for database creation will be generated instead.");
                 } else {
                     try {
                         Connection connection = getDataSource().getConnection();
@@ -138,15 +136,15 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
                     } catch (SQLException ex) {
                         shouldAlter = false;
                         _log.warn("Could not establish a connection to the specified database, " +
-                                        "so SQL for database creation will be generated instead.",
-                                ex);
+                                "so SQL for database creation will be generated instead.",
+                            ex);
                     }
                 }
             }
             if (shouldAlter) {
                 Database currentModel = (getCatalogPattern() != null) || (getSchemaPattern() != null) ?
-                        platform.readModelFromDatabase("unnamed", getCatalogPattern(), getSchemaPattern(), null) :
-                        platform.readModelFromDatabase("unnamed");
+                    platform.readModelFromDatabase("unnamed", getCatalogPattern(), getSchemaPattern(), null) :
+                    platform.readModelFromDatabase("unnamed");
 
                 writer.write(platform.getAlterModelSql(currentModel, model, params));
             } else {

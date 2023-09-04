@@ -39,6 +39,44 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
     protected final List<E> setOrder;
 
     /**
+     * Constructs a new empty <code>ListOrderedSet</code> using
+     * a <code>HashSet</code> and an <code>ArrayList</code> internally.
+     * @since Commons Collections 3.1
+     */
+    public ListOrderedSet() {
+        super(new HashSet<>());
+        setOrder = new ArrayList<>();
+    }
+
+    /**
+     * Constructor that wraps (not copies).
+     * @param set the set to decorate, must not be null
+     * @throws IllegalArgumentException if set is null
+     */
+    protected ListOrderedSet(Set<E> set) {
+        super(set);
+        setOrder = new ArrayList<>(set);
+    }
+
+    /**
+     * Constructor that wraps (not copies) the Set and specifies the list to use.
+     * <p>
+     * The set and list must both be correctly initialised to the same elements.
+     * @param set  the set to decorate, must not be null
+     * @param list the list to decorate, must not be null
+     * @throws IllegalArgumentException if set or list is null
+     */
+    protected ListOrderedSet(Set<E> set, List<E> list) {
+        super(set);
+        if (list == null) {
+            throw new IllegalArgumentException("List must not be null");
+        }
+        setOrder = list;
+    }
+
+    //-----------------------------------------------------------------------
+
+    /**
      * Factory method to create an ordered set specifying the list and set to use.
      * @param set  the set to decorate, must be empty and not null
      * @param list the list to decorate, must be empty and not null
@@ -85,44 +123,6 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
         list.retainAll(set);
 
         return new ListOrderedSet<>(set, list);
-    }
-
-    //-----------------------------------------------------------------------
-
-    /**
-     * Constructs a new empty <code>ListOrderedSet</code> using
-     * a <code>HashSet</code> and an <code>ArrayList</code> internally.
-     * @since Commons Collections 3.1
-     */
-    public ListOrderedSet() {
-        super(new HashSet<>());
-        setOrder = new ArrayList<>();
-    }
-
-    /**
-     * Constructor that wraps (not copies).
-     * @param set the set to decorate, must not be null
-     * @throws IllegalArgumentException if set is null
-     */
-    protected ListOrderedSet(Set<E> set) {
-        super(set);
-        setOrder = new ArrayList<>(set);
-    }
-
-    /**
-     * Constructor that wraps (not copies) the Set and specifies the list to use.
-     * <p>
-     * The set and list must both be correctly initialised to the same elements.
-     * @param set  the set to decorate, must not be null
-     * @param list the list to decorate, must not be null
-     * @throws IllegalArgumentException if set or list is null
-     */
-    protected ListOrderedSet(Set<E> set, List<E> list) {
-        super(set);
-        if (list == null) {
-            throw new IllegalArgumentException("List must not be null");
-        }
-        setOrder = list;
     }
 
     //-----------------------------------------------------------------------

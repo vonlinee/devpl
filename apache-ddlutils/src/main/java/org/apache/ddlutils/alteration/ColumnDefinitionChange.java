@@ -15,7 +15,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
     /**
      * The target column definition.
      */
-    private Column _newColumnDef;
+    private final Column _newColumnDef;
 
     /**
      * Creates a new change object.
@@ -37,10 +37,10 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
      */
     public static boolean isChanged(PlatformInfo platformInfo, Column sourceColumn, Column targetColumn) {
         return isTypeChanged(platformInfo, sourceColumn, targetColumn) ||
-                isSizeChanged(platformInfo, sourceColumn, targetColumn) ||
-                isDefaultValueChanged(sourceColumn, targetColumn) ||
-                isRequiredStatusChanged(sourceColumn, targetColumn) ||
-                isAutoIncrementChanged(sourceColumn, targetColumn);
+            isSizeChanged(platformInfo, sourceColumn, targetColumn) ||
+            isDefaultValueChanged(sourceColumn, targetColumn) ||
+            isRequiredStatusChanged(sourceColumn, targetColumn) ||
+            isAutoIncrementChanged(sourceColumn, targetColumn);
     }
 
     /**
@@ -73,13 +73,9 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
 
         if (sizeMatters && !StringUtils.equals(sourceColumn.getSize(), targetColumn.getSize())) {
             return true;
-        } else if (scaleMatters &&
+        } else return scaleMatters &&
                 ((sourceColumn.getPrecisionRadix() != targetColumn.getPrecisionRadix()) ||
-                        (sourceColumn.getScale() != targetColumn.getScale()))) {
-            return true;
-        } else {
-            return false;
-        }
+                        (sourceColumn.getScale() != targetColumn.getScale()));
     }
 
     /**
@@ -101,13 +97,9 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
 
         if (sizeMatters && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt())) {
             return true;
-        } else if (scaleMatters &&
+        } else return scaleMatters &&
                 ((sourceColumn.getPrecisionRadix() > targetColumn.getPrecisionRadix()) ||
-                        (sourceColumn.getScale() > targetColumn.getScale()))) {
-            return true;
-        } else {
-            return false;
-        }
+                        (sourceColumn.getScale() > targetColumn.getScale()));
     }
 
     /**
@@ -122,7 +114,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
         Object targetDefaultValue = targetColumn.getParsedDefaultValue();
 
         return ((sourceDefaultValue == null) && (targetDefaultValue != null)) ||
-                ((sourceDefaultValue != null) && !sourceDefaultValue.equals(targetDefaultValue));
+            ((sourceDefaultValue != null) && !sourceDefaultValue.equals(targetDefaultValue));
     }
 
     /**
@@ -153,9 +145,7 @@ public class ColumnDefinitionChange extends ColumnChangeImplBase {
         return _newColumnDef;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void apply(Database model, boolean caseSensitive) {
         Column column = findChangedColumn(model, caseSensitive);
 

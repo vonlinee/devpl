@@ -24,7 +24,7 @@ import org.apache.log4j.Level;
 /**
  * Helper class that defines the possible values for the verbosity attribute.
  * @version $Revision: $
- *    ignore="true"
+ * ignore="true"
  */
 public class VerbosityLevel {
     /**
@@ -40,6 +40,7 @@ public class VerbosityLevel {
         Level.WARN.toString().toLowerCase(),
         Level.INFO.toString().toLowerCase(),
         Level.DEBUG.toString().toLowerCase()};
+    private String value;
 
     /**
      * Creates an uninitialized verbosity level object.
@@ -47,8 +48,6 @@ public class VerbosityLevel {
     public VerbosityLevel() {
         super();
     }
-
-    private String value;
 
     /**
      * Creates an initialized verbosity level object.
@@ -59,9 +58,7 @@ public class VerbosityLevel {
         setValue(level);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String[] getValues() {
         String[] result = new String[LEVELS.length];
 

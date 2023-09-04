@@ -16,7 +16,7 @@ public class ColumnOrderChange extends TableChangeImplBase {
     /**
      * The map containing the new positions keyed by the source columns.
      */
-    private Map _newPositions;
+    private final Map _newPositions;
 
     /**
      * Creates a new change object.
@@ -53,9 +53,7 @@ public class ColumnOrderChange extends TableChangeImplBase {
         return newPos == null ? -1 : newPos.intValue();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void apply(Database database, boolean caseSensitive) {
         Table table = findChangedTable(database, caseSensitive);
         ArrayList newColumns = new ArrayList();

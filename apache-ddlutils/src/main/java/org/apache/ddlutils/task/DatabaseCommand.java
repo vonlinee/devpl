@@ -19,13 +19,12 @@ package org.apache.ddlutils.task;
  * under the License.
  */
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
+import org.apache.ddlutils.platform.PooledDataSource;
 
 /**
  * Base type for commands that have the database info embedded.
  * @version $Revision: 289996 $
- * @ant.type ignore="true"
  */
 public abstract class DatabaseCommand extends Command {
     /**
@@ -45,7 +44,7 @@ public abstract class DatabaseCommand extends Command {
      * Returns the data source to use for accessing the database.
      * @return The data source
      */
-    protected BasicDataSource getDataSource() {
+    protected PooledDataSource getDataSource() {
         return _platformConf.getDataSource();
     }
 
@@ -81,9 +80,7 @@ public abstract class DatabaseCommand extends Command {
         return _platformConf.getPlatform();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public boolean isRequiringModel() {
         return true;
     }

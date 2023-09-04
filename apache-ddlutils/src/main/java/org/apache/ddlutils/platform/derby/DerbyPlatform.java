@@ -13,12 +13,10 @@ import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Types;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  * The platform implementation for Derby.
- * @version $Revision: 231306 $
  */
 public class DerbyPlatform extends CloudscapePlatform {
     /**
@@ -57,17 +55,12 @@ public class DerbyPlatform extends CloudscapePlatform {
         setModelReader(new DerbyModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
@@ -104,9 +97,7 @@ public class DerbyPlatform extends CloudscapePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -114,7 +105,7 @@ public class DerbyPlatform extends CloudscapePlatform {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 // Derby cannot add IDENTITY columns
                 if ((change instanceof AddColumnChange) && ((AddColumnChange) change).getNewColumn()
-                        .isAutoIncrement()) {
+                    .isAutoIncrement()) {
                     return false;
                 } else {
                     return super.isSupported(intermediateTable, change);

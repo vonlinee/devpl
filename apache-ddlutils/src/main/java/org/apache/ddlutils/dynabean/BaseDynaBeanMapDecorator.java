@@ -180,7 +180,7 @@ public abstract class BaseDynaBeanMapDecorator<K> implements Map<K, Object> {
      * property names.
      */
     @Override
-    public Set<K> keySet() {
+    public @NotNull Set<K> keySet() {
         if (keySet != null) {
             return keySet;
         }

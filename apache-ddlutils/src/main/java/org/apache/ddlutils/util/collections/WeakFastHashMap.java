@@ -1,12 +1,6 @@
 package org.apache.ddlutils.util.collections;
 
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.*;
 
 /**
  * <p>A customized implementation of <code>java.util.HashMap</code> designed
@@ -41,9 +35,8 @@ import java.util.WeakHashMap;
  * For more information on the double-checked locking idiom, see the
  * <a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">
  * Double-Checked Locking Idiom Is Broken Declaration</a>.</p>
- *
- * @since Commons Collections 1.0
  * @version $Id$
+ * @since Commons Collections 1.0
  */
 class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
@@ -70,8 +63,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Construct an empty map with the specified capacity.
-     *
-     * @param capacity  the initial capacity of the empty map
+     * @param capacity the initial capacity of the empty map
      */
     public WeakFastHashMap(final int capacity) {
         super();
@@ -80,9 +72,8 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Construct an empty map with the specified capacity and load factor.
-     *
-     * @param capacity  the initial capacity of the empty map
-     * @param factor  the load factor of the new map
+     * @param capacity the initial capacity of the empty map
+     * @param factor   the load factor of the new map
      */
     public WeakFastHashMap(final int capacity, final float factor) {
         super();
@@ -91,8 +82,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Construct a new map with the same mappings as the specified map.
-     *
-     * @param map  the map whose mappings are to be copied
+     * @param map the map whose mappings are to be copied
      */
     public WeakFastHashMap(final Map<? extends K, ? extends V> map) {
         super();
@@ -104,18 +94,16 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     // ----------------------------------------------------------------------
 
     /**
-     *  Returns true if this map is operating in fast mode.
-     *
-     *  @return true if this map is operating in fast mode
+     * Returns true if this map is operating in fast mode.
+     * @return true if this map is operating in fast mode
      */
     public boolean getFast() {
         return (this.fast);
     }
 
     /**
-     *  Sets whether this map is operating in fast mode.
-     *
-     *  @param fast true if this map should operate in fast mode
+     * Sets whether this map is operating in fast mode.
+     * @param fast true if this map should operate in fast mode
      */
     public void setFast(final boolean fast) {
         this.fast = fast;
@@ -132,8 +120,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
      * <code>null</code> if the map contains no mapping for this key, or if
      * there is a mapping with a value of <code>null</code>.  Use the
      * <code>containsKey()</code> method to disambiguate these cases.
-     *
-     * @param key  the key whose value is to be returned
+     * @param key the key whose value is to be returned
      * @return the value mapped to that key, or null
      */
     @Override
@@ -149,7 +136,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Return the number of key-value mappings in this map.
-     *
      * @return the current size of the map
      */
     @Override
@@ -165,7 +151,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Return <code>true</code> if this map contains no mappings.
-     *
      * @return is the map currently empty
      */
     @Override
@@ -182,8 +167,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     /**
      * Return <code>true</code> if this map contains a mapping for the
      * specified key.
-     *
-     * @param key  the key to be searched for
+     * @param key the key to be searched for
      * @return true if the map contains the key
      */
     @Override
@@ -200,8 +184,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     /**
      * Return <code>true</code> if this map contains one or more keys mapping
      * to the specified value.
-     *
-     * @param value  the value to be searched for
+     * @param value the value to be searched for
      * @return true if the map contains the value
      */
     @Override
@@ -225,9 +208,8 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
      * Associate the specified value with the specified key in this map.
      * If the map previously contained a mapping for this key, the old
      * value is replaced and returned.
-     *
-     * @param key  the key with which the value is to be associated
-     * @param value  the value to be associated with this key
+     * @param key   the key with which the value is to be associated
+     * @param value the value to be associated with this key
      * @return the value previously mapped to the key, or null
      */
     @Override
@@ -249,14 +231,13 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     /**
      * Copy all of the mappings from the specified map to this one, replacing
      * any mappings with the same keys.
-     *
-     * @param in  the map whose mappings are to be copied
+     * @param in the map whose mappings are to be copied
      */
     @Override
     public void putAll(final Map<? extends K, ? extends V> in) {
         if (fast) {
             synchronized (this) {
-                final Map<K, V> temp =  cloneMap(map);
+                final Map<K, V> temp = cloneMap(map);
                 temp.putAll(in);
                 map = temp;
             }
@@ -270,8 +251,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     /**
      * Remove any mapping for this key, and return any previously
      * mapped value.
-     *
-     * @param key  the key whose mapping is to be removed
+     * @param key the key whose mapping is to be removed
      * @return the value removed, or null
      */
     @Override
@@ -314,8 +294,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
      * implementation uses exactly the code that is used to define the
      * list equals function in the documentation for the
      * <code>Map.equals</code> method.
-     *
-     * @param o  the object to be compared to this list
+     * @param o the object to be compared to this list
      * @return true if the two maps are equal
      */
     @Override
@@ -375,7 +354,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
      * Return the hash code value for this map.  This implementation uses
      * exactly the code that is used to define the list hash function in the
      * documentation for the <code>Map.hashCode</code> method.
-     *
      * @return suitable integer hash code
      */
     @Override
@@ -400,7 +378,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     /**
      * Return a shallow copy of this <code>FastHashMap</code> instance.
      * The keys and values themselves are not copied.
-     *
      * @return a clone of this map
      */
     @Override
@@ -476,7 +453,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
     /**
      * Abstract collection implementation shared by keySet(), values() and entrySet().
-     *
      * @param <E> the element type
      */
     private abstract class CollectionView<E> implements Collection<E> {
@@ -485,6 +461,7 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
         }
 
         protected abstract Collection<E> get(Map<K, V> map);
+
         protected abstract E iteratorNext(Map.Entry<K, V> entry);
 
 
@@ -646,9 +623,9 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
         private class CollectionViewIterator implements Iterator<E> {
 
+            private final Iterator<Map.Entry<K, V>> iterator;
             private Map<K, V> expected;
             private Map.Entry<K, V> lastReturned = null;
-            private final Iterator<Map.Entry<K, V>> iterator;
 
             public CollectionViewIterator() {
                 this.expected = map;

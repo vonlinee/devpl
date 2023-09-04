@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.interbase.InterbasePlatform;
  * @version $Revision: 231110 $
  */
 public class TestInterbasePlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return InterbasePlatform.DATABASENAME;
     }

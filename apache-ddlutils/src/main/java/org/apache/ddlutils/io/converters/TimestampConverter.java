@@ -28,9 +28,7 @@ import java.sql.Types;
  * @version $Revision: 289996 $
  */
 public class TimestampConverter implements SqlTypeConverter {
-    /**
-     * {@inheritDoc}
-     */
+
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (textRep == null) {
             return null;
@@ -41,10 +39,8 @@ public class TimestampConverter implements SqlTypeConverter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
-        return obj == null ? null : ((Timestamp) obj).toString();
+        return obj == null ? null : obj.toString();
     }
 }

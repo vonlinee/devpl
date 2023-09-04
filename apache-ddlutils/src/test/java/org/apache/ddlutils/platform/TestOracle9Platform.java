@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.oracle.Oracle9Platform;
  * @version $Revision: 231110 $
  */
 public class TestOracle9Platform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return Oracle9Platform.DATABASENAME;
     }

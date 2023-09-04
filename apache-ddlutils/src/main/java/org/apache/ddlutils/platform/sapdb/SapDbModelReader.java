@@ -27,7 +27,6 @@ import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Map;
 
 /**
  * Reads a database model from a SapDb database.
@@ -45,9 +44,7 @@ public class SapDbModelReader extends JdbcModelReader {
         setDefaultTablePattern("%");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);

@@ -7,6 +7,9 @@ import java.util.Iterator;
 
 public class IOUtils {
 
+    private static final int DEFAULT_BUFFER_SIZE = 8192;
+    private static final int MAX_BUFFER_SIZE = 2147483639;
+
     public static void closeQuitely(Closeable... closeable) {
         if (closeable == null) {
             return;
@@ -46,9 +49,6 @@ public class IOUtils {
         }
         return sb.toString();
     }
-
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
-    private static final int MAX_BUFFER_SIZE = 2147483639;
 
     public static byte[] readExactlyNBytes(InputStream var0, int var1) throws IOException {
         byte[] var2 = readNBytesOrEOF(var0, var1);

@@ -12,16 +12,12 @@ public class NonUniqueIndex extends GenericIndex {
      */
     private static final long serialVersionUID = -3591499395114850301L;
 
-    /**
-     * {@inheritDoc}
-     */
+
     public boolean isUnique() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public Index copy() throws ModelException {
         NonUniqueIndex result = new NonUniqueIndex();
         result.name = name;
@@ -43,17 +39,14 @@ public class NonUniqueIndex extends GenericIndex {
         return super.equals(obj);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equalsIgnoreCase(Index other) {
-        if (other instanceof NonUniqueIndex) {
-            NonUniqueIndex otherIndex = (NonUniqueIndex) other;
+        if (other instanceof NonUniqueIndex otherIndex) {
             boolean checkName = (name != null) && (name.length() > 0) &&
-                    (otherIndex.name != null) && (otherIndex.name.length() > 0);
+                (otherIndex.name != null) && (otherIndex.name.length() > 0);
             if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) &&
-                    (getColumnCount() == otherIndex.getColumnCount())) {
+                (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
                     if (!getColumn(idx).equalsIgnoreCase(otherIndex.getColumn(idx))) {
                         return false;
@@ -65,21 +58,17 @@ public class NonUniqueIndex extends GenericIndex {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return "Index [name=" +
-                getName() +
-                "; " +
-                getColumnCount() +
-                " columns]";
+            getName() +
+            "; " +
+            getColumnCount() +
+            " columns]";
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toVerboseString() {
         StringBuilder result = new StringBuilder();

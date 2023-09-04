@@ -11,8 +11,52 @@ public class Base64 {
     static final int FOURBYTE = 4;
     static final int SIGN = -128;
     static final byte PAD = 61;
-    private static byte[] base64Alphabet = new byte[255];
-    private static byte[] lookUpBase64Alphabet = new byte[64];
+    private static final byte[] base64Alphabet = new byte[255];
+    private static final byte[] lookUpBase64Alphabet = new byte[64];
+
+    static {
+        int i;
+        for (i = 0; i < 255; ++i) {
+            base64Alphabet[i] = -1;
+        }
+
+        for (i = 90; i >= 65; --i) {
+            base64Alphabet[i] = (byte) (i - 65);
+        }
+
+        for (i = 122; i >= 97; --i) {
+            base64Alphabet[i] = (byte) (i - 97 + 26);
+        }
+
+        for (i = 57; i >= 48; --i) {
+            base64Alphabet[i] = (byte) (i - 48 + 52);
+        }
+
+        base64Alphabet[43] = 62;
+        base64Alphabet[47] = 63;
+
+        for (i = 0; i <= 25; ++i) {
+            lookUpBase64Alphabet[i] = (byte) (65 + i);
+        }
+
+        i = 26;
+
+        int j;
+        for (j = 0; i <= 51; ++j) {
+            lookUpBase64Alphabet[i] = (byte) (97 + j);
+            ++i;
+        }
+
+        i = 52;
+
+        for (j = 0; i <= 61; ++j) {
+            lookUpBase64Alphabet[i] = (byte) (48 + j);
+            ++i;
+        }
+
+        lookUpBase64Alphabet[62] = 43;
+        lookUpBase64Alphabet[63] = 47;
+    }
 
     public Base64() {
     }
@@ -47,18 +91,6 @@ public class Base64 {
 
     public static byte[] encodeBase64Chunked(byte[] binaryData) {
         return encodeBase64(binaryData, true);
-    }
-
-    public Object decode(Object pObject) throws RuntimeException {
-        if (!(pObject instanceof byte[])) {
-            throw new RuntimeException("Parameter supplied to Base64 decode is not a byte[]");
-        } else {
-            return this.decode((byte[]) pObject);
-        }
-    }
-
-    public byte[] decode(byte[] pArray) {
-        return decodeBase64(pArray);
     }
 
     public static byte[] encodeBase64(byte[] binaryData, boolean isChunked) {
@@ -225,6 +257,18 @@ public class Base64 {
         return packedData;
     }
 
+    public Object decode(Object pObject) throws RuntimeException {
+        if (!(pObject instanceof byte[])) {
+            throw new RuntimeException("Parameter supplied to Base64 decode is not a byte[]");
+        } else {
+            return this.decode((byte[]) pObject);
+        }
+    }
+
+    public byte[] decode(byte[] pArray) {
+        return decodeBase64(pArray);
+    }
+
     public Object encode(Object pObject) throws RuntimeException {
         if (!(pObject instanceof byte[])) {
             throw new RuntimeException("Parameter supplied to Base64 encode is not a byte[]");
@@ -235,49 +279,5 @@ public class Base64 {
 
     public byte[] encode(byte[] pArray) {
         return encodeBase64(pArray, false);
-    }
-
-    static {
-        int i;
-        for (i = 0; i < 255; ++i) {
-            base64Alphabet[i] = -1;
-        }
-
-        for (i = 90; i >= 65; --i) {
-            base64Alphabet[i] = (byte) (i - 65);
-        }
-
-        for (i = 122; i >= 97; --i) {
-            base64Alphabet[i] = (byte) (i - 97 + 26);
-        }
-
-        for (i = 57; i >= 48; --i) {
-            base64Alphabet[i] = (byte) (i - 48 + 52);
-        }
-
-        base64Alphabet[43] = 62;
-        base64Alphabet[47] = 63;
-
-        for (i = 0; i <= 25; ++i) {
-            lookUpBase64Alphabet[i] = (byte) (65 + i);
-        }
-
-        i = 26;
-
-        int j;
-        for (j = 0; i <= 51; ++j) {
-            lookUpBase64Alphabet[i] = (byte) (97 + j);
-            ++i;
-        }
-
-        i = 52;
-
-        for (j = 0; i <= 61; ++j) {
-            lookUpBase64Alphabet[i] = (byte) (48 + j);
-            ++i;
-        }
-
-        lookUpBase64Alphabet[62] = 43;
-        lookUpBase64Alphabet[63] = 47;
     }
 }

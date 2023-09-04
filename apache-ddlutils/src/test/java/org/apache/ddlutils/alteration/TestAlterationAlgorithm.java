@@ -37,18 +37,14 @@ public class TestAlterationAlgorithm extends TestBase {
      */
     private DatabasePlatform _platform;
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void setUp() throws Exception {
         _platform = new TestPlatform();
         _platform.setSqlCommentsOn(false);
         _platform.setDelimitedIdentifierModeOn(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void tearDown() throws Exception {
         _platform = null;
     }

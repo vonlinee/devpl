@@ -6,7 +6,6 @@ package org.apache.ddlutils.dynabean;
  * <code>DynaBean</code> interface.  DynaBean instances that share the same
  * DynaClass all have the same set of available properties, along with any
  * associated data types, read-only states, and write-only states.</p>
- *
  * @version $Id$
  */
 
@@ -18,23 +17,20 @@ public interface DynaClass {
      * <code>getName()</code> method of <code>java.lang.Class</code), which
      * allows the same <code>DynaClass</code> implementation class to support
      * different dynamic classes, with different sets of properties.
-     *
      * @return the name of the DynaClass
      */
-    public String getName();
+    String getName();
 
 
     /**
      * Return a property descriptor for the specified property, if it exists;
      * otherwise, return <code>null</code>.
-     *
      * @param name Name of the dynamic property for which a descriptor
-     *  is requested
+     *             is requested
      * @return The descriptor for the specified property
-     *
      * @throws IllegalArgumentException if no property name is specified
      */
-    public DynaProperty getDynaProperty(String name);
+    DynaProperty getDynaProperty(String name);
 
 
     /**
@@ -45,24 +41,21 @@ public interface DynaClass {
      * <p><strong>FIXME</strong> - Should we really be implementing
      * <code>getBeanInfo()</code> instead, which returns property descriptors
      * and a bunch of other stuff?</p>
-     *
      * @return the set of properties for this DynaClass
      */
-    public DynaProperty[] getDynaProperties();
+    DynaProperty[] getDynaProperties();
 
 
     /**
      * Instantiate and return a new DynaBean instance, associated
      * with this DynaClass.
-     *
      * @return A new <code>DynaBean</code> instance
-     *
      * @throws IllegalAccessException if the Class or the appropriate
-     *  constructor is not accessible
+     *                                constructor is not accessible
      * @throws InstantiationException if this Class represents an abstract
-     *  class, an array class, a primitive type, or void; or if instantiation
-     *  fails for some other reason
+     *                                class, an array class, a primitive type, or void; or if instantiation
+     *                                fails for some other reason
      */
-    public DynaBean newInstance()
-            throws IllegalAccessException, InstantiationException;
+    DynaBean newInstance()
+        throws IllegalAccessException, InstantiationException;
 }

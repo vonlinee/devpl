@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.sapdb.SapDbPlatform;
  * @version $Revision: 231110 $
  */
 public class TestSapDbPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return SapDbPlatform.DATABASENAME;
     }

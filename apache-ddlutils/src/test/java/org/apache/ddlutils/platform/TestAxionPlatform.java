@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.axion.AxionPlatform;
  * @version $Revision: 231110 $
  */
 public class TestAxionPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return AxionPlatform.DATABASENAME;
     }

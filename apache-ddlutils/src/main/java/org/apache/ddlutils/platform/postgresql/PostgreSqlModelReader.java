@@ -26,9 +26,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         setDefaultTablePattern(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
@@ -52,7 +50,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
                     String indexName = table.getName() + "_" + column.getName() + "_key";
 
                     if (uniquesByName.containsKey(indexName)) {
-                        table.removeIndex((Index) uniquesByName.get(indexName));
+                        table.removeIndex(uniquesByName.get(indexName));
                         uniquesByName.remove(indexName);
                     }
                 }
@@ -61,9 +59,7 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -163,18 +159,14 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         // PostgreSQL does not return an index for a foreign key
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         // PostgreSql uses the form "[tablename]_pkey"

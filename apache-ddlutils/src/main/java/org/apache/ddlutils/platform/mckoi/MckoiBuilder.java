@@ -11,7 +11,6 @@ import java.io.IOException;
 
 /**
  * The SQL Builder for the Mckoi database.
- * @version $Revision$
  */
 public class MckoiBuilder extends SqlBuilder {
     /**
@@ -26,9 +25,7 @@ public class MckoiBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "\\'");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         // we use sequences instead of the UNIQUEKEY function because this way
@@ -42,9 +39,7 @@ public class MckoiBuilder extends SqlBuilder {
         super.createTable(database, table, parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropTable(Table table) throws IOException {
         print("DROP TABLE IF EXISTS ");
@@ -88,9 +83,7 @@ public class MckoiBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumnDefaultValue(Table table, Column column) throws IOException {
         if (column.isAutoIncrement()) {
@@ -103,9 +96,7 @@ public class MckoiBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();

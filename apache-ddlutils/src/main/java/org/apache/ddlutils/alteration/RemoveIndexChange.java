@@ -17,9 +17,7 @@ public class RemoveIndexChange extends IndexChangeImplBase {
         super(tableName, index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void apply(Database model, boolean caseSensitive) {
         findChangedTable(model, caseSensitive).removeIndex(findChangedIndex(model, caseSensitive));
     }

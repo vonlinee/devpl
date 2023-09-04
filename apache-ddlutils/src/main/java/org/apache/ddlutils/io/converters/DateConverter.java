@@ -37,11 +37,11 @@ public class DateConverter implements SqlTypeConverter {
     /**
      * The regular expression pattern for the parsing of ISO dates.
      */
-    private Pattern _datePattern;
+    private final Pattern _datePattern;
     /**
      * The calendar object to convert to/from dates.
      */
-    private Calendar _calendar;
+    private final Calendar _calendar;
 
     /**
      * Creates a new date converter object.
@@ -57,9 +57,7 @@ public class DateConverter implements SqlTypeConverter {
         _calendar.setLenient(false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (sqlTypeCode != Types.DATE) {
             return textRep;
@@ -100,16 +98,14 @@ public class DateConverter implements SqlTypeConverter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         String result = null;
 
         if (obj != null) {
             if (!(obj instanceof Date)) {
                 throw new ConversionException("Expected object of type java.sql.Date, but instead received " + obj
-                        .getClass().getName());
+                    .getClass().getName());
             }
             result = obj.toString();
         }

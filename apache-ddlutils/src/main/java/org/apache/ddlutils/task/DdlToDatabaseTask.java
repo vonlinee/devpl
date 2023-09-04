@@ -1,24 +1,5 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 
@@ -26,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Task for performing operations on a live database. Sub tasks e.g. create the
+ * Task for performing operations on a live database. Sub-tasks e.g. create the
  * schema in the database, drop database schemas, insert data into the database,
  * create DTDs for data files, or write the SQL for creating a schema to a file.
  * <br/>
@@ -55,18 +36,16 @@ import java.util.ArrayList;
  * </pre>
  * This Ant build file snippet essentially creates a database, creates tables, foreign keys
  * etc. int it and then writes data into the newly created tables.
- * @version $Revision: 289996 $
- * ant.task name="ddlToDatabase"
  */
 public class DdlToDatabaseTask extends DatabaseTaskBase {
-    /**
-     * A single schema file to read.
-     */
-    private File _singleSchemaFile = null;
     /**
      * The input files.
      */
     private final ArrayList<Object> _fileSets = new ArrayList<>();
+    /**
+     * A single schema file to read.
+     */
+    private File _singleSchemaFile = null;
     /**
      * Whether XML input files are validated against the internal or an external DTD.
      */
@@ -81,7 +60,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
      * it matches <code><a href="http://db.apache.org/torque/dtd/database.dtd">...</a></code>). This is
      * especially useful in environments where no web access is possible or desired.
      * @param useInternalDtd <code>true</code> if input files are to be validated against the internal DTD
-     * ant.not-required Default is <code>true</code>.
+     *                       ant.not-required Default is <code>true</code>.
      */
     public void setUseInternalDtd(boolean useInternalDtd) {
         _useInternalDtd = useInternalDtd;
@@ -90,7 +69,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * Specifies whether XML input files should be validated against the DTD at all.
      * @param validateXml <code>true</code> if input files are to be validated
-     * ant.not-required Default is <code>false</code> meaning that the XML is not validated at all.
+     *                    ant.not-required Default is <code>false</code> meaning that the XML is not validated at all.
      */
     public void setValidateXml(boolean validateXml) {
         _validateXml = validateXml;
@@ -108,7 +87,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
      * Defines the single file that contains the database file. You can use this instead of embedded
      * <code>fileset</code> elements if you only have one schema file.
      * @param schemaFile The schema
-     * ant.not-required Use either this or one or more embedded fileset elements.
+     *                   ant.not-required Use either this or one or more embedded fileset elements.
      */
     public void setSchemaFile(File schemaFile) {
         _singleSchemaFile = schemaFile;
@@ -170,9 +149,7 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
         addCommand(command);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Database readModel() {
         DatabaseIO reader = new DatabaseIO();
@@ -230,5 +207,9 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
             }
         }
         return model;
+    }
+
+    public void setProject(Project project) {
+
     }
 }

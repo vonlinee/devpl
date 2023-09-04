@@ -21,7 +21,6 @@ import java.util.Map;
 
 /**
  * The Mckoi database platform implementation.
- * @version $Revision: 231306 $
  */
 public class MckoiPlatform extends GenericDatabasePlatform {
     /**
@@ -67,17 +66,13 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         setModelReader(new MckoiModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For McKoi, you create databases by simply appending "?create=true" to the connection url
@@ -126,9 +121,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -142,9 +135,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         };
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void processChange(Database currentModel, SqlBuildContext params, RecreateTableChange change) throws IOException {
         // McKoi has this nice ALTER CREATE TABLE statement which saves us a lot of work
@@ -153,16 +144,14 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         Table changedTable = findChangedTable(currentModel, change);
 
         for (TableChange tableChange : change.getOriginalChanges()) {
-            if (tableChange instanceof ColumnDefinitionChange) {
-                ColumnDefinitionChange colChange = (ColumnDefinitionChange) tableChange;
+            if (tableChange instanceof ColumnDefinitionChange colChange) {
                 Column origColumn = changedTable.findColumn(colChange.getChangedColumn(), isDelimitedIdentifierModeOn());
                 Column newColumn = colChange.getNewColumn();
 
                 if (!origColumn.isAutoIncrement() && newColumn.isAutoIncrement()) {
                     sqlBuilder.createAutoIncrementSequence(changedTable, origColumn);
                 }
-            } else if (tableChange instanceof AddColumnChange) {
-                AddColumnChange addColumnChange = (AddColumnChange) tableChange;
+            } else if (tableChange instanceof AddColumnChange addColumnChange) {
 
                 if (addColumnChange.getNewColumn().isAutoIncrement()) {
                     sqlBuilder.createAutoIncrementSequence(changedTable, addColumnChange.getNewColumn());
@@ -176,16 +165,14 @@ public class MckoiPlatform extends GenericDatabasePlatform {
 
         // we have to defer removal of the sequences until they are no longer used
         for (TableChange tableChange : change.getOriginalChanges()) {
-            if (tableChange instanceof ColumnDefinitionChange) {
-                ColumnDefinitionChange colChange = (ColumnDefinitionChange) tableChange;
+            if (tableChange instanceof ColumnDefinitionChange colChange) {
                 Column origColumn = changedTable.findColumn(colChange.getChangedColumn(), isDelimitedIdentifierModeOn());
                 Column newColumn = colChange.getNewColumn();
 
                 if (origColumn.isAutoIncrement() && !newColumn.isAutoIncrement()) {
                     sqlBuilder.dropAutoIncrementSequence(changedTable, origColumn);
                 }
-            } else if (tableChange instanceof RemoveColumnChange) {
-                RemoveColumnChange removeColumnChange = (RemoveColumnChange) tableChange;
+            } else if (tableChange instanceof RemoveColumnChange removeColumnChange) {
                 Column removedColumn = changedTable.findColumn(removeColumnChange.getChangedColumn(), isDelimitedIdentifierModeOn());
 
                 if (removedColumn.isAutoIncrement()) {

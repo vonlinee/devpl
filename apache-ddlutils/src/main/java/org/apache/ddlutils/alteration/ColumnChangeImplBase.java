@@ -9,11 +9,11 @@ import org.apache.ddlutils.model.Table;
  * @version $Revision: $
  */
 public abstract class ColumnChangeImplBase extends TableChangeImplBase
-        implements ColumnChange {
+    implements ColumnChange {
     /**
      * The column's name.
      */
-    private String _columnName;
+    private final String _columnName;
 
     /**
      * Creates a new change object.
@@ -25,16 +25,12 @@ public abstract class ColumnChangeImplBase extends TableChangeImplBase
         _columnName = columnName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getChangedColumn() {
         return _columnName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public Column findChangedColumn(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

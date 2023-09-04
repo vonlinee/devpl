@@ -161,13 +161,10 @@ public class Reference implements Serializable {
         _foreignColumnName = foreignColumnName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Reference) {
-            Reference other = (Reference) obj;
+        if (obj instanceof Reference other) {
             return Objects.equals(_localColumnName, other._localColumnName) && Objects.equals(_foreignColumnName, other._foreignColumnName);
         } else {
             return false;
@@ -183,17 +180,13 @@ public class Reference implements Serializable {
         return (otherRef != null) && _localColumnName.equalsIgnoreCase(otherRef._localColumnName) && _foreignColumnName.equalsIgnoreCase(otherRef._foreignColumnName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         return Objects.hash(_localColumnName, _foreignColumnName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return getLocalColumnName() + " -> " + getForeignColumnName();

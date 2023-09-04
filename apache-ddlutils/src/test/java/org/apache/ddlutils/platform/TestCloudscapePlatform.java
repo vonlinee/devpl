@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
  * @version $Revision: 231110 $
  */
 public class TestCloudscapePlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return CloudscapePlatform.DATABASENAME;
     }

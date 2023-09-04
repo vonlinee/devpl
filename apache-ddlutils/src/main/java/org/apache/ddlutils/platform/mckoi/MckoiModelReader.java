@@ -1,15 +1,15 @@
 package org.apache.ddlutils.platform.mckoi;
 
-import org.apache.ddlutils.model.Index;
-import org.apache.ddlutils.util.ValueMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Column;
+import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ValueMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,6 @@ import java.util.Map;
 
 /**
  * Reads a database model from a Mckoi database.
- * @version $Revision: $
  */
 public class MckoiModelReader extends JdbcModelReader {
     /**
@@ -37,19 +36,17 @@ public class MckoiModelReader extends JdbcModelReader {
         setDefaultSchemaPattern(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         // Mckoi does not currently return unique indices in the metadata, so we have to query
         // internal tables to get this info
         final String query =
-                "SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name" +
-                        " FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo" +
-                        " WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?";
+            "SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name" +
+                " FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo" +
+                " WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?";
         final String queryWithSchema =
-                query + " AND uniqueInfo.schema = ?";
+            query + " AND uniqueInfo.schema = ?";
 
         Table table = super.readTable(metaData, values);
 
@@ -85,9 +82,7 @@ public class MckoiModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -102,7 +97,7 @@ public class MckoiModelReader extends JdbcModelReader {
 
         if (defaultValue != null) {
             if (defaultValue.toLowerCase().startsWith("nextval('") ||
-                    defaultValue.toLowerCase().startsWith("uniquekey('")) {
+                defaultValue.toLowerCase().startsWith("uniquekey('")) {
                 column.setDefaultValue(null);
                 column.setAutoIncrement(true);
             } else if (TypeMap.isTextType(column.getJdbcTypeCode())) {

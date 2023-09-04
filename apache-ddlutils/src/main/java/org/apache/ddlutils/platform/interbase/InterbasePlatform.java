@@ -25,9 +25,9 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -105,21 +105,16 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         setModelReader(new InterbaseModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void setStatementParameterValue(PreparedStatement statement, int sqlIndex, int typeCode, Object value) throws SQLException {
         if (value != null) {
-            if ((value instanceof byte[]) &&
-                    ((typeCode == Types.BINARY) || (typeCode == Types.VARBINARY) || (typeCode == Types.BLOB))) {
-                byte[] bytes = (byte[]) value;
+            if ((value instanceof byte[] bytes) &&
+                ((typeCode == Types.BINARY) || (typeCode == Types.VARBINARY) || (typeCode == Types.BLOB))) {
                 ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 
                 statement.setBinaryStream(sqlIndex, stream, bytes.length);
@@ -133,9 +128,7 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         super.setStatementParameterValue(statement, sqlIndex, typeCode, value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws SQLException {
         boolean useIdx = (columnName == null);
 
@@ -182,9 +175,7 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -193,9 +184,7 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             public boolean areSupported(Table intermediateTable, List changes) {
@@ -234,7 +223,7 @@ public class InterbasePlatform extends GenericDatabasePlatform {
                 // since we add/drop the primary key with separate changes anyways, this will
                 // no problem here
                 if ((change instanceof RemoveColumnChange) ||
-                        (change instanceof AddColumnChange)) {
+                    (change instanceof AddColumnChange)) {
                     return true;
                 } else {
                     return super.isSupported(intermediateTable, change);
@@ -261,9 +250,9 @@ public class InterbasePlatform extends GenericDatabasePlatform {
             prevColumn = changedTable.findColumn(change.getPreviousColumn(), isDelimitedIdentifierModeOn());
         }
         ((InterbaseBuilder) getSqlBuilder()).insertColumn(currentModel,
-                changedTable,
-                change.getNewColumn(),
-                prevColumn);
+            changedTable,
+            change.getNewColumn(),
+            prevColumn);
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }
 

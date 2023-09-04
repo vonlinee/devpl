@@ -5,7 +5,10 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A model comparator customized for MySql.
@@ -25,9 +28,7 @@ public class MySqlModelComparator extends ModelComparator {
         super(platformInfo, tableDefChangePredicate, caseSensitive);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForRemovedIndexes(Database sourceModel,
                                                        Table sourceTable,
@@ -55,15 +56,13 @@ public class MySqlModelComparator extends ModelComparator {
         return changes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> compareTables(Database sourceModel,
-                                 Table sourceTable,
-                                 Database intermediateModel,
-                                 Table intermediateTable,
-                                 Database targetModel, Table targetTable) {
+                                              Table sourceTable,
+                                              Database intermediateModel,
+                                              Table intermediateTable,
+                                              Database targetModel, Table targetTable) {
         // we need to drop and recreate foreign keys that reference columns whose data type will be changed (but not size)
         List<TableChange> changes = super.compareTables(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
         Set<String> columnNames = new HashSet<>();

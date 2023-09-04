@@ -18,49 +18,37 @@ public abstract class GenericIndex implements Index {
      */
     protected ArrayList<IndexColumn> columns = new ArrayList<>();
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int getColumnCount() {
         return columns.size();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public IndexColumn getColumn(int idx) {
         return columns.get(idx);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public IndexColumn[] getColumns() {
         return columns.toArray(new IndexColumn[0]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean hasColumn(Column column) {
         for (int idx = 0; idx < columns.size(); idx++) {
@@ -72,9 +60,7 @@ public abstract class GenericIndex implements Index {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean hasColumn(String columnName, boolean caseSensitive) {
         for (int idx = 0; idx < columns.size(); idx++) {
@@ -86,9 +72,7 @@ public abstract class GenericIndex implements Index {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void addColumn(IndexColumn column) {
         if (column != null) {
@@ -104,17 +88,13 @@ public abstract class GenericIndex implements Index {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void removeColumn(IndexColumn column) {
         columns.remove(column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void removeColumn(int idx) {
         columns.remove(idx);

@@ -49,6 +49,14 @@ public abstract class SqlBuilder {
      */
     private final DatabasePlatform platform;
     /**
+     * Helper object for dealing with default values.
+     */
+    private final DefaultValueHelper defaultValueHelper = new DefaultValueHelper();
+    /**
+     * The character sequences that need escaping.
+     */
+    private final Map<String, String> charSequencesToEscape = new HashMap<>();
+    /**
      * The current Writer used to output the SQL to.
      */
     private Writer writer;
@@ -76,14 +84,6 @@ public abstract class SqlBuilder {
      * The number formatter.
      */
     private NumberFormat valueNumberFormat;
-    /**
-     * Helper object for dealing with default values.
-     */
-    private final DefaultValueHelper defaultValueHelper = new DefaultValueHelper();
-    /**
-     * The character sequences that need escaping.
-     */
-    private final Map<String, String> charSequencesToEscape = new HashMap<>();
 
     /**
      * Creates a new sql builder.

@@ -40,9 +40,7 @@ public class MaxDbBuilder extends SapDbBuilder {
         super(platform);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void createPrimaryKey(Table table, Column[] primaryKeyColumns) throws IOException {
         if ((primaryKeyColumns.length > 0) && shouldGeneratePrimaryKeys(primaryKeyColumns)) {
             print("ALTER TABLE ");
@@ -56,9 +54,7 @@ public class MaxDbBuilder extends SapDbBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
         writeTableAlterStmt(table);
         print("DROP CONSTRAINT ");

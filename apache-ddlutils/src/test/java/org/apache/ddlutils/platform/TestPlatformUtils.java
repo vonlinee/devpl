@@ -23,16 +23,12 @@ import org.apache.ddlutils.platform.sybase.SybasePlatform;
  */
 public class TestPlatformUtils extends TestCase {
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void setUp() throws Exception {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void tearDown() throws Exception {
 
     }

@@ -24,7 +24,6 @@ import java.util.Map;
 
 /**
  * Utility functions for dealing with database platforms.
- * @version $Revision: 279421 $
  */
 public class PlatformUtils {
 
@@ -266,16 +265,6 @@ public class PlatformUtils {
      * Tries to determine the database type for the given data source. Note that this will establish
      * a connection to the database.
      * @param dataSource The data source
-     * @return The database type or <code>null</code> if the database type couldn't be determined
-     */
-    public String determineDatabaseType(DataSource dataSource) throws DatabaseOperationException {
-        return determineDatabaseType(dataSource, null, null);
-    }
-
-    /**
-     * Tries to determine the database type for the given data source. Note that this will establish
-     * a connection to the database.
-     * @param dataSource The data source
      * @param username   The username to use for connecting to the database
      * @param password   The password to use for connecting to the database
      * @return The database type or <code>null</code> if the database type couldn't be determined
@@ -318,5 +307,15 @@ public class PlatformUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Tries to determine the database type for the given data source. Note that this will establish
+     * a connection to the database.
+     * @param dataSource The data source
+     * @return The database type or <code>null</code> if the database type couldn't be determined
+     */
+    public String determineDatabaseType(DataSource dataSource) throws DatabaseOperationException {
+        return determineDatabaseType(dataSource, null, null);
     }
 }

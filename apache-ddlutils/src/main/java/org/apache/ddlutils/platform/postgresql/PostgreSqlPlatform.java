@@ -77,9 +77,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         setModelReader(new PostgreSqlModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;
@@ -123,7 +121,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
                 }
             }
             if (getLog().isDebugEnabled()) {
-                getLog().debug("About to create database via " + baseDb + " using this SQL: " + sql.toString());
+                getLog().debug("About to create database via " + baseDb + " using this SQL: " + sql);
             }
             try {
                 Class.forName(jdbcDriverClassName);
@@ -153,9 +151,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually
@@ -163,9 +159,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, parameters, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "DROP DATABASE" in an existing database (usually
@@ -173,9 +167,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, null, false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void setObject(PreparedStatement statement, int sqlIndex, DynaBean dynaBean, SqlDynaProperty property) throws SQLException {
         int typeCode = property.getColumn().getJdbcTypeCode();
@@ -185,7 +177,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         if (value == null) {
             switch (typeCode) {
                 case Types.BINARY, Types.VARBINARY, Types.LONGVARBINARY, Types.BLOB ->
-                        statement.setBytes(sqlIndex, null);
+                    statement.setBytes(sqlIndex, null);
                 default -> statement.setNull(sqlIndex, typeCode);
             }
         } else {
@@ -193,9 +185,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
@@ -204,9 +194,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -214,8 +202,7 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if (change instanceof RemoveColumnChange) {
                     return true;
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // We can only handle this if
                     // * the column is not set to NOT NULL (the constraint would be applied immediately
@@ -226,8 +213,8 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
                     // * the column is added at the end of the table (PostgreSQL does not support
                     //   insertion of a column)
                     return !addColumnChange.getNewColumn().isRequired() &&
-                            (addColumnChange.getNewColumn().getDefaultValue() == null) &&
-                            (addColumnChange.getNextColumn() == null);
+                        (addColumnChange.getNewColumn().getDefaultValue() == null) &&
+                        (addColumnChange.getNextColumn() == null);
                 } else {
                     // TODO: PK changes ?
                     return false;

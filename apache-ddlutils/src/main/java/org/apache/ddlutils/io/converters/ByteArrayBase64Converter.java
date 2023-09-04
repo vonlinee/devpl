@@ -6,9 +6,7 @@ import org.apache.ddlutils.util.Base64;
  * Converts between a byte array and its Base64 encoded string representation (e.g. for use in XML).
  */
 public class ByteArrayBase64Converter implements SqlTypeConverter {
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         try {
@@ -18,9 +16,7 @@ public class ByteArrayBase64Converter implements SqlTypeConverter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         try {

@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * A simple helper task that dumps information about a database using JDBC.
  * @version $Revision: 289996 $
- *    name="dumpMetadata"
+ * name="dumpMetadata"
  */
 public class DumpMetadataTask extends Task {
     /**
@@ -89,7 +89,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies the encoding of the output file.
      * @param encoding The encoding
-     *   Per default, <code>UTF-8</code> is used.
+     *                 Per default, <code>UTF-8</code> is used.
      */
     public void setOutputEncoding(String encoding) {
         _outputEncoding = encoding;
@@ -98,7 +98,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Sets the catalog pattern used when accessing the database.
      * @param catalogPattern The catalog pattern
-     *   Per default, no specific catalog is used (value <code>%</code>).
+     *                       Per default, no specific catalog is used (value <code>%</code>).
      */
     public void setCatalogPattern(String catalogPattern) {
         _catalogPattern = ((catalogPattern == null) || (catalogPattern.length() == 0) ? null : catalogPattern);
@@ -107,7 +107,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Sets the schema pattern used when accessing the database.
      * @param schemaPattern The schema pattern
-     *   Per default, no specific schema is used (value <code>%</code>).
+     *                      Per default, no specific schema is used (value <code>%</code>).
      */
     public void setSchemaPattern(String schemaPattern) {
         _schemaPattern = ((schemaPattern == null) || (schemaPattern.length() == 0) ? null : schemaPattern);
@@ -116,7 +116,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies the table to be processed. For details see {@link DatabaseMetaData#getTables(String, String, String, String[])}.
      * @param tablePattern The table pattern
-     *   By default, all tables are read (value <code>%</code>).
+     *                     By default, all tables are read (value <code>%</code>).
      */
     public void setTablePattern(String tablePattern) {
         _tablePattern = ((tablePattern == null) || (tablePattern.length() == 0) ? null : tablePattern);
@@ -125,7 +125,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies the procedures to be processed. For details and typical table types see {@link DatabaseMetaData#getProcedures(String, String, String)}.
      * @param procedurePattern The procedure pattern
-     *   By default, all procedures are read (value <code>%</code>).
+     *                         By default, all procedures are read (value <code>%</code>).
      */
     public void setProcedurePattern(String procedurePattern) {
         _procedurePattern = ((procedurePattern == null) || (procedurePattern.length() == 0) ? null : procedurePattern);
@@ -134,7 +134,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies the columns to be processed. For details and typical table types see {@link DatabaseMetaData#getColumns(String, String, String, String)}.
      * @param columnPattern The column pattern
-     *   By default, all columns are read (value <code>%</code>).
+     *                      By default, all columns are read (value <code>%</code>).
      */
     public void setColumnPattern(String columnPattern) {
         _columnPattern = ((columnPattern == null) || (columnPattern.length() == 0) ? null : columnPattern);
@@ -143,7 +143,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies the table types to be processed. For details and typical table types see {@link DatabaseMetaData#getTables(String, String, String, String[])}.
      * @param tableTypes The table types to read
-     *   By default, all types of tables are read.
+     *                   By default, all types of tables are read.
      */
     public void setTableTypes(String tableTypes) {
         ArrayList types = new ArrayList();
@@ -165,7 +165,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies whether procedures shall be read from the database.
      * @param readProcedures <code>true</code> if procedures shall be read
-     *   By default, procedures are read.
+     *                       By default, procedures are read.
      */
     public void setDumpProcedures(boolean readProcedures) {
         _dumpProcedures = readProcedures;
@@ -174,15 +174,13 @@ public class DumpMetadataTask extends Task {
     /**
      * Specifies whether tables shall be read from the database.
      * @param readTables <code>true</code> if tables shall be read
-     *   By default, tables are read.
+     *                   By default, tables are read.
      */
     public void setDumpTables(boolean readTables) {
         _dumpTables = readTables;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute() throws RuntimeException {
         if (_dataSource == null) {
             log("No data source specified, so there is nothing to do.", Project.MSG_INFO);
@@ -229,9 +227,9 @@ public class DumpMetadataTask extends Task {
     }
 
     /**
-     * Dumps the database meta data into XML elements under the current element in the given writer.
+     * Dumps the database metadata into XML elements under the current element in the given writer.
      * @param xmlWriter The XML writer to write to
-     * @param metaData  The meta data to write
+     * @param metaData  The metadata to write
      */
     private void dumpMetaData(PrettyPrintingXmlWriter xmlWriter, DatabaseMetaData metaData) throws NoSuchMethodException,
         IllegalAccessException,
@@ -416,7 +414,7 @@ public class DumpMetadataTask extends Task {
     /**
      * Dumps the catalogs and schemas of the database.
      * @param xmlWriter The xml writer to write to
-     * @param metaData  The database meta data
+     * @param metaData  The database metadata
      */
     private void dumpCatalogsAndSchemas(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData) {
         performResultSetXmlOperation(xmlWriter, "catalogs", new ResultSetXmlOperation() {
@@ -1089,7 +1087,7 @@ public class DumpMetadataTask extends Task {
 
                 if (value != null) {
                     try {
-                        xmlWriter.writeAttribute(null, attrName, new Integer(value).toString());
+                        xmlWriter.writeAttribute(null, attrName, Integer.valueOf(value).toString());
                     } catch (NumberFormatException parseEx) {
                         log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
                     }
@@ -1117,7 +1115,7 @@ public class DumpMetadataTask extends Task {
 
                 if (value != null) {
                     try {
-                        xmlWriter.writeAttribute(null, attrName, new Short(value).toString());
+                        xmlWriter.writeAttribute(null, attrName, Short.valueOf(value).toString());
                     } catch (NumberFormatException parseEx) {
                         log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
                     }
@@ -1178,24 +1176,24 @@ public class DumpMetadataTask extends Task {
      * Defines an interface for a callback that retrieves a specific result set from the metadata, and
      * also writes rows to a given xml writer as well as handles errors.
      */
-    private static interface ResultSetXmlOperation {
+    private interface ResultSetXmlOperation {
         /**
          * Returns the result set to work on.
          * @return The result set
          */
-        public ResultSet getResultSet() throws SQLException;
+        ResultSet getResultSet() throws SQLException;
 
         /**
          * Writes the row currently maintained by the given result set to the given xml writer.
          * @param xmlWriter The xml writer to write to
          * @param result    The row to write
          */
-        public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException;
+        void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException;
 
         /**
          * Handles the given exception.
          * @param ex The sql exception
          */
-        public void handleError(SQLException ex);
+        void handleError(SQLException ex);
     }
 }

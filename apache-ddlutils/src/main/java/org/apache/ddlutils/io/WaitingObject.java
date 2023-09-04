@@ -104,13 +104,11 @@ public class WaitingObject {
         return !_waitedForIdentites.isEmpty();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return _objIdentity +
-                " waiting for " +
-                _waitedForIdentites;
+            " waiting for " +
+            _waitedForIdentites;
     }
 }

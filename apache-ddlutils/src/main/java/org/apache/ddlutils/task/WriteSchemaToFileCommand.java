@@ -29,7 +29,7 @@ import java.io.FileWriter;
  * Reads the schema of the live database (as specified in the enclosing task), and writes
  * it as XML to a file.
  * @version $Revision: 289996 $
- *    name="writeSchemaToFile"
+ * name="writeSchemaToFile"
  */
 public class WriteSchemaToFileCommand extends Command {
     /**
@@ -46,16 +46,12 @@ public class WriteSchemaToFileCommand extends Command {
         _outputFile = outputFile;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public boolean isRequiringModel() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {
             throw new RuntimeException("No output file specified");

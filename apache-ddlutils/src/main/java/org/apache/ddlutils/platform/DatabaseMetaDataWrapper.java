@@ -3,10 +3,11 @@ package org.apache.ddlutils.platform;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * Wrapper class for database meta data that stores additional info.
+ * Wrapper class for database metadata that stores additional info.
  */
 public class DatabaseMetaDataWrapper {
     /**
@@ -14,7 +15,7 @@ public class DatabaseMetaDataWrapper {
      */
     private final Pattern searchStringPattern = Pattern.compile("[_%]");
     /**
-     * The database meta data.
+     * The database metadata.
      */
     private DatabaseMetaData _metaData;
     /**
@@ -31,16 +32,16 @@ public class DatabaseMetaDataWrapper {
     private String[] _tableTypes;
 
     /**
-     * Returns the database meta data.
-     * @return The meta data
+     * Returns the database metadata.
+     * @return The metadata
      */
     public DatabaseMetaData getMetaData() {
         return _metaData;
     }
 
     /**
-     * Sets the database meta data.
-     * @param metaData The meta data
+     * Sets the database metadata.
+     * @param metaData The metadata
      */
     public void setMetaData(DatabaseMetaData metaData) {
         _metaData = metaData;
@@ -111,44 +112,36 @@ public class DatabaseMetaDataWrapper {
      * Escape a string literal so that it can be used as a search pattern.
      * @param literalString The string to escape.
      * @return A string that can be properly used as a search string.
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @throws SQLException If an error occurred retrieving the metadata
      */
     public String escapeForSearch(String literalString) throws SQLException {
         String escape = getMetaData().getSearchStringEscape();
 
-        if (escape == "") {
+        if (Objects.equals(escape, "")) {
             // No escape string, so nothing to do...
             return literalString;
         } else {
             // with Java 5, we would just use Matcher.quoteReplacement
-            StringBuffer quotedEscape = new StringBuffer();
-
+            StringBuilder quotedEscape = new StringBuilder();
             for (int idx = 0; idx < escape.length(); idx++) {
                 char c = escape.charAt(idx);
-
                 switch (c) {
-                    case '\\':
-                        quotedEscape.append("\\\\");
-                        break;
-                    case '$':
-                        quotedEscape.append("\\$");
-                        break;
-                    default:
-                        quotedEscape.append(c);
+                    case '\\' -> quotedEscape.append("\\\\");
+                    case '$' -> quotedEscape.append("\\$");
+                    default -> quotedEscape.append(c);
                 }
             }
             quotedEscape.append("$0");
-
             return searchStringPattern.matcher(literalString).replaceAll(quotedEscape.toString());
         }
     }
 
     /**
-     * Convenience method to return the table meta data using the configured catalog,
+     * Convenience method to return the table metadata using the configured catalog,
      * schema pattern and table types.
      * @param tableNamePattern The pattern identifying for which tables to return info
-     * @return The table meta data
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @return The table metadata
+     * @throws SQLException If an error occurred retrieving the metadata
      * @see DatabaseMetaData#getTables(java.lang.String, java.lang.String, java.lang.String, java.lang.String[])
      */
     public ResultSet getTables(String tableNamePattern) throws SQLException {
@@ -156,12 +149,12 @@ public class DatabaseMetaDataWrapper {
     }
 
     /**
-     * Convenience method to return the column meta data using the configured catalog and
+     * Convenience method to return the column metadata using the configured catalog and
      * schema pattern.
      * @param tableNamePattern  The pattern identifying for which tables to return info
      * @param columnNamePattern The pattern identifying for which columns to return info
-     * @return The column meta data
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @return The column metadata
+     * @throws SQLException If an error occurred retrieving the metadata
      * @see DatabaseMetaData#getColumns(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     public ResultSet getColumns(String tableNamePattern, String columnNamePattern) throws SQLException {
@@ -169,11 +162,11 @@ public class DatabaseMetaDataWrapper {
     }
 
     /**
-     * Convenience method to return the primary key meta data using the configured catalog and
+     * Convenience method to return the primary key metadata using the configured catalog and
      * schema pattern.
      * @param tableNamePattern The pattern identifying for which tables to return info
-     * @return The primary key meta data
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @return The primary key metadata
+     * @throws SQLException If an error occurred retrieving the metadata
      * @see DatabaseMetaData#getPrimaryKeys(java.lang.String, java.lang.String, java.lang.String)
      */
     public ResultSet getPrimaryKeys(String tableNamePattern) throws SQLException {
@@ -181,11 +174,11 @@ public class DatabaseMetaDataWrapper {
     }
 
     /**
-     * Convenience method to return the foreign key meta data using the configured catalog and
+     * Convenience method to return the foreign key metadata using the configured catalog and
      * schema pattern.
      * @param tableNamePattern The pattern identifying for which tables to return info
-     * @return The foreign key meta data
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @return The foreign key metadata
+     * @throws SQLException If an error occurred retrieving the metadata
      * @see DatabaseMetaData#getImportedKeys(java.lang.String, java.lang.String, java.lang.String)
      */
     public ResultSet getForeignKeys(String tableNamePattern) throws SQLException {
@@ -193,13 +186,13 @@ public class DatabaseMetaDataWrapper {
     }
 
     /**
-     * Convenience method to return the index meta data using the configured catalog and
+     * Convenience method to return the index metadata using the configured catalog and
      * schema pattern.
      * @param tableNamePattern The pattern identifying for which tables to return info
      * @param unique           Whether to return only indices for unique values
      * @param approximate      Whether the result is allowed to reflect approximate or out of data values
-     * @return The index meta data
-     * @throws SQLException If an error occurred retrieving the meta data
+     * @return The index metadata
+     * @throws SQLException If an error occurred retrieving the metadata
      * @see DatabaseMetaData#getIndexInfo(java.lang.String, java.lang.String, java.lang.String, boolean, boolean)
      */
     public ResultSet getIndices(String tableNamePattern, boolean unique, boolean approximate) throws SQLException {

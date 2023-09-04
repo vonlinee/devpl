@@ -126,8 +126,7 @@ public class SqlDynaClass extends BasicDynaClass {
         List<SqlDynaProperty> nonPkProps = new ArrayList<>();
         DynaProperty[] properties = getDynaProperties();
         for (DynaProperty property : properties) {
-            if (property instanceof SqlDynaProperty) {
-                SqlDynaProperty sqlProperty = (SqlDynaProperty) property;
+            if (property instanceof SqlDynaProperty sqlProperty) {
                 if (sqlProperty.isPrimaryKey()) {
                     pkProps.add(sqlProperty);
                 } else {

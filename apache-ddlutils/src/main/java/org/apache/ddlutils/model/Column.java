@@ -423,9 +423,7 @@ public class Column implements SchemaObject, Serializable {
         return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, jdbcTypeCode, jdbcTypeName, _size, _sizeAsInt, _scale, _defaultValue);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String toString() {
         return "Column [name=" + getName() + "; type=" + getType() + "]";
     }

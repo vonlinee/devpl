@@ -43,18 +43,14 @@ public class SybaseBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
         if (parameters != null) {
@@ -111,9 +107,7 @@ public class SybaseBuilder extends SqlBuilder {
         super.writeTableCreationStmtEnding(table, parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumn(Table table, Column column) throws IOException {
         printIdentifier(getColumnName(column));
@@ -135,9 +129,7 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
@@ -147,9 +139,7 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropTable(Table table) throws IOException {
         turnOnQuotation();
@@ -164,9 +154,7 @@ public class SybaseBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
         String constraintName = getForeignKeyName(table, foreignKey);
@@ -182,9 +170,7 @@ public class SybaseBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
         print("DROP INDEX ");
@@ -194,18 +180,14 @@ public class SybaseBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropForeignKeys(Table table) throws IOException {
         turnOnQuotation();
         super.dropForeignKeys(table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getSelectLastIdentityValues(Table table) {
         return "SELECT @@IDENTITY";
@@ -288,20 +270,15 @@ public class SybaseBuilder extends SqlBuilder {
         print("'");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void copyData(Table sourceTable, Table targetTable) throws IOException {
         // We need to turn on identity override except when the identity column was added to the column
         Column[] targetAutoIncrCols = targetTable.getAutoIncrementColumns();
         boolean needIdentityOverride = false;
 
         if (targetAutoIncrCols.length > 0) {
-            needIdentityOverride = true;
             // Sybase only allows for one identity column per table
-            if (sourceTable.findColumn(targetAutoIncrCols[0].getName(), getPlatform().isDelimitedIdentifierModeOn()) == null) {
-                needIdentityOverride = false;
-            }
+            needIdentityOverride = sourceTable.findColumn(targetAutoIncrCols[0].getName(), getPlatform().isDelimitedIdentifierModeOn()) != null;
         }
         if (needIdentityOverride) {
             print(getEnableIdentityOverrideSql(targetTable));
@@ -314,9 +291,7 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         String sourceNativeType = getBareNativeType(sourceColumn);
         String targetNativeType = getBareNativeType(targetColumn);
@@ -332,9 +307,7 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
         printlnIdentifier(getTableName(table));

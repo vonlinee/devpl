@@ -62,9 +62,7 @@ public class CloudscapePlatform extends GenericDatabasePlatform {
         setSqlBuilder(new CloudscapeBuilder(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;

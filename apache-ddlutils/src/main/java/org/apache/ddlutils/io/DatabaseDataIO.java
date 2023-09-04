@@ -39,7 +39,7 @@ public class DatabaseDataIO {
     /**
      * The converters to use for converting between data and its XML representation.
      */
-    private ArrayList<DataConverterRegistration> _converters = new ArrayList<>();
+    private final ArrayList<DataConverterRegistration> _converters = new ArrayList<>();
     /**
      * Whether we should continue when an error was detected.
      */
@@ -173,14 +173,14 @@ public class DatabaseDataIO {
 
             if (registrationInfo.getTypeCode() != Integer.MIN_VALUE) {
                 converterConf.registerConverter(registrationInfo.getTypeCode(),
-                        registrationInfo.getConverter());
+                    registrationInfo.getConverter());
             } else {
                 if ((registrationInfo.getTable() == null) || (registrationInfo.getColumn() == null)) {
                     throw new DdlUtilsException("Please specify either the jdbc type or a table/column pair for which the converter shall be defined");
                 }
                 converterConf.registerConverter(registrationInfo.getTable(),
-                        registrationInfo.getColumn(),
-                        registrationInfo.getConverter());
+                    registrationInfo.getColumn(),
+                    registrationInfo.getConverter());
             }
         }
     }

@@ -32,13 +32,13 @@ public class CallbackClosure {
      */
     private final Object[] _parameters;
     /**
-     * The position of the callback parameter type.
-     */
-    private int _callbackTypePos = -1;
-    /**
      * The cached callbacks.
      */
     private final Map<Class<?>, Method> _callbacks = new HashMap<>();
+    /**
+     * The position of the callback parameter type.
+     */
+    private int _callbackTypePos = -1;
 
     /**
      * Creates a new closure object.
@@ -114,9 +114,7 @@ public class CallbackClosure {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(Object obj) throws DdlUtilsException {
         LinkedList<Class<?>> queue = new LinkedList<>();
         queue.add(obj.getClass());

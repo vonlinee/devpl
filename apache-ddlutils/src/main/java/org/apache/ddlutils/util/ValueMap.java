@@ -16,6 +16,14 @@ public class ValueMap implements Map<String, Object>, Cloneable {
 
     private Map<String, Object> map;
 
+    public ValueMap() {
+        this(10);
+    }
+
+    public ValueMap(int initialCapacity) {
+        this.map = new HashMap<>();
+    }
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         ValueMap cloneMap = (ValueMap) super.clone();
@@ -29,14 +37,6 @@ public class ValueMap implements Map<String, Object>, Cloneable {
         } catch (CloneNotSupportedException e) {
             return new ValueMap(0);
         }
-    }
-
-    public ValueMap() {
-        this(10);
-    }
-
-    public ValueMap(int initialCapacity) {
-        this.map = new HashMap<>();
     }
 
     public Object set(String key, Object value) {

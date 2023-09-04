@@ -1,8 +1,8 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.platform.PooledDataSource;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
@@ -26,11 +26,11 @@ public abstract class DatabaseTaskBase extends Task {
     /**
      * The platform configuration.
      */
-    private PlatformConfiguration _platformConf = new PlatformConfiguration();
+    private final PlatformConfiguration _platformConf = new PlatformConfiguration();
     /**
      * The sub-tasks to execute.
      */
-    private ArrayList<Command> _commands = new ArrayList<>();
+    private final ArrayList<Command> _commands = new ArrayList<>();
     /**
      * Whether to use simple logging (that the Ant task configures itself via the {@link #_verbosity} setting.
      */
@@ -88,7 +88,7 @@ public abstract class DatabaseTaskBase extends Task {
      * Returns the data source.
      * @return The data source
      */
-    public BasicDataSource getDataSource() {
+    public PooledDataSource getDataSource() {
         return _platformConf.getDataSource();
     }
 
@@ -96,7 +96,7 @@ public abstract class DatabaseTaskBase extends Task {
      * Adds the data source to use for accessing the database.
      * @param dataSource The data source
      */
-    public void addConfiguredDatabase(BasicDataSource dataSource) {
+    public void addConfiguredDatabase(PooledDataSource dataSource) {
         _platformConf.setDataSource(dataSource);
     }
 
@@ -275,9 +275,7 @@ public abstract class DatabaseTaskBase extends Task {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute() throws RuntimeException {
         initLogging();
 

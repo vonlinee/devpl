@@ -42,7 +42,7 @@ public class DataReader {
     /**
      * The converters.
      */
-    private ConverterConfiguration _converterConf = new ConverterConfiguration();
+    private final ConverterConfiguration _converterConf = new ConverterConfiguration();
     /**
      * Whether to be case-sensitive or not.
      */

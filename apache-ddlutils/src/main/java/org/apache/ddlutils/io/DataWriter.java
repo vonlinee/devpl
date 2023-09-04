@@ -20,13 +20,13 @@ package org.apache.ddlutils.io;
  */
 
 import org.apache.ddlutils.dynabean.DynaBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.dynabean.SqlDynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.OutputStream;
 import java.io.Writer;
@@ -76,9 +76,7 @@ public class DataWriter extends PrettyPrintingXmlWriter {
         super(output, encoding);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void throwException(Exception baseEx) throws DdlUtilsXMLException {
         throw new DataWriterException(baseEx);
     }

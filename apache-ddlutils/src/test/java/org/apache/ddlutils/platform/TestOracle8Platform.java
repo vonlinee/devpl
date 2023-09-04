@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.oracle.Oracle8Platform;
  * @version $Revision: 231110 $
  */
 public class TestOracle8Platform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return Oracle8Platform.DATABASENAME;
     }

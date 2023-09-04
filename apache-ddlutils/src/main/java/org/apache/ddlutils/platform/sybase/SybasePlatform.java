@@ -96,9 +96,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
         setModelReader(new SybaseModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;
@@ -125,9 +123,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws DatabaseOperationException, SQLException {
         boolean useIdx = (columnName == null);
@@ -157,7 +153,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
                     return result;
                 } catch (IOException ex) {
                     throw new DatabaseOperationException("Error while extracting the value of column " + columnName + " of type " +
-                            TypeMap.getJdbcTypeName(jdbcType) + " from a result set", ex);
+                        TypeMap.getJdbcTypeName(jdbcType) + " from a result set", ex);
                 }
             }
         } else {
@@ -165,16 +161,13 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void setStatementParameterValue(PreparedStatement statement, int sqlIndex, int typeCode, Object value) throws SQLException {
         if ((typeCode == Types.BLOB) || (typeCode == Types.LONGVARBINARY)) {
             // jConnect doesn't like the BLOB type, but works without problems with LONGVARBINARY
             // even when using the Blob class
-            if (value instanceof byte[]) {
-                byte[] data = (byte[]) value;
+            if (value instanceof byte[] data) {
 
                 statement.setBinaryStream(sqlIndex, new ByteArrayInputStream(data), data.length);
             } else {
@@ -190,36 +183,28 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, parameters, queryHints, start, end);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public List fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, queryHints, start, end);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, parameters, queryHints);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Iterator<DynaBean> query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
@@ -233,13 +218,11 @@ public class SybasePlatform extends GenericDatabasePlatform {
      */
     private boolean useIdentityOverrideFor(Table table) {
         return isIdentityOverrideOn() &&
-                getPlatformInfo().isIdentityOverrideAllowed() &&
-                (table.getAutoIncrementColumns().length > 0);
+            getPlatformInfo().isIdentityOverrideAllowed() &&
+            (table.getAutoIncrementColumns().length > 0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void beforeInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
@@ -256,9 +239,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void afterInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
@@ -275,25 +256,19 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void beforeUpdate(Connection connection, Table table) throws SQLException {
         beforeInsert(connection, table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void afterUpdate(Connection connection, Table table) throws SQLException {
         afterInsert(connection, table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
@@ -303,30 +278,26 @@ public class SybasePlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) ||
-                        (change instanceof AddPrimaryKeyChange) ||
-                        (change instanceof RemovePrimaryKeyChange)) {
+                    (change instanceof AddPrimaryKeyChange) ||
+                    (change instanceof RemovePrimaryKeyChange)) {
                     return true;
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // Sybase can only add not insert columns, and they cannot be IDENTITY columns
                     // We also have to force recreation of the table if a required column is added
                     // that is neither IDENTITY nor has a default value
                     return (addColumnChange.getNextColumn() == null) &&
-                            !addColumnChange.getNewColumn().isAutoIncrement() &&
-                            (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
-                                    .getNewColumn().getDefaultValue()));
-                } else if (change instanceof ColumnDefinitionChange) {
-                    ColumnDefinitionChange columnChange = (ColumnDefinitionChange) change;
+                        !addColumnChange.getNewColumn().isAutoIncrement() &&
+                        (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
+                            .getNewColumn().getDefaultValue()));
+                } else if (change instanceof ColumnDefinitionChange columnChange) {
                     Column oldColumn = intermediateTable.findColumn(columnChange.getChangedColumn(), isDelimitedIdentifierModeOn());
 
                     // Sybase cannot change the IDENTITY state of a column via ALTER TABLE MODIFY
@@ -338,9 +309,7 @@ public class SybasePlatform extends GenericDatabasePlatform {
         };
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {
@@ -400,9 +369,9 @@ public class SybasePlatform extends GenericDatabasePlatform {
 
         // if we only change the default value, then we need to use different SQL
         if (!ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), changedColumn, newColumn) &&
-                !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), changedColumn, newColumn) &&
-                !ColumnDefinitionChange.isRequiredStatusChanged(changedColumn, newColumn) &&
-                !ColumnDefinitionChange.isAutoIncrementChanged(changedColumn, newColumn)) {
+            !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), changedColumn, newColumn) &&
+            !ColumnDefinitionChange.isRequiredStatusChanged(changedColumn, newColumn) &&
+            !ColumnDefinitionChange.isAutoIncrementChanged(changedColumn, newColumn)) {
             sqlBuilder.changeColumnDefaultValue(changedTable, changedColumn, newColumn.getDefaultValue());
         } else {
             sqlBuilder.changeColumn(changedTable, changedColumn, newColumn);

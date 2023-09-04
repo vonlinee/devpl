@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.derby.DerbyPlatform;
  * @version $Revision: 231110 $
  */
 public class TestDerbyPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return DerbyPlatform.DATABASENAME;
     }

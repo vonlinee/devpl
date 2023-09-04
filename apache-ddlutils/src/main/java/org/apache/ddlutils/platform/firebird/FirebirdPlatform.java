@@ -25,9 +25,9 @@ import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
+import org.apache.ddlutils.platform.SqlBuildContext;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -97,16 +97,12 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
         setModelReader(new FirebirdModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -114,9 +110,7 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             public boolean areSupported(Table intermediateTable, List changes) {
@@ -154,16 +148,15 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
                 // Firebird cannot add columns to the primary key or drop columns from it but
                 // since we add/drop the primary key with separate changes anyways, this will
                 // no problem here
-                if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                if (change instanceof AddColumnChange addColumnChange) {
 
                     // Firebird does not apply default values or identity status to existing rows when adding a column
                     return !addColumnChange.getNewColumn().isAutoIncrement() &&
-                            ((addColumnChange.getNewColumn().getDefaultValue() == null) && !addColumnChange
-                                    .getNewColumn().isRequired());
+                        ((addColumnChange.getNewColumn().getDefaultValue() == null) && !addColumnChange
+                            .getNewColumn().isRequired());
                 } else {
                     return (change instanceof RemoveColumnChange) ||
-                            super.isSupported(intermediateTable, change);
+                        super.isSupported(intermediateTable, change);
                 }
             }
         };
@@ -189,9 +182,9 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
                 prevColumn = changedTable.findColumn(change.getPreviousColumn(), isDelimitedIdentifierModeOn());
             }
             ((FirebirdBuilder) getSqlBuilder()).insertColumn(currentModel,
-                    changedTable,
-                    change.getNewColumn(),
-                    prevColumn);
+                changedTable,
+                change.getNewColumn(),
+                prevColumn);
         }
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }

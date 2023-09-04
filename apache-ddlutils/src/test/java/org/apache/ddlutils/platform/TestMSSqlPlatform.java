@@ -30,9 +30,7 @@ import java.util.regex.Pattern;
  * @version $Revision: 231110 $
  */
 public class TestMSSqlPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return MSSqlPlatform.DATABASENAME;
     }
@@ -130,7 +128,7 @@ public class TestMSSqlPlatform extends TestPlatformBase {
             tableNameVar = matcher.group(1);
             constraintNameVar = matcher.group(2);
         }
-        // Note that this is not valid SQL as a table can have only one identity column at most 
+        // Note that this is not valid SQL as a table can have only one identity column at most
         assertEqualsIgnoringWhitespaces(
                 "SET quoted_identifier on;\n" +
                         "SET quoted_identifier on;\n" +

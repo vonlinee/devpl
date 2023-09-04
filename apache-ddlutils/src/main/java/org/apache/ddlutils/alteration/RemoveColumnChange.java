@@ -16,9 +16,7 @@ public class RemoveColumnChange extends ColumnChangeImplBase {
         super(tableName, columnName);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void apply(Database model, boolean caseSensitive) {
         findChangedTable(model, caseSensitive).removeColumn(findChangedColumn(model, caseSensitive));
     }

@@ -9,7 +9,6 @@ import java.util.Set;
 /**
  * A class that maps SQL type names to their JDBC type ID found in
  * {@link java.sql.Types} and vice versa.
- * @version $Revision$
  */
 public abstract class TypeMap {
     /**

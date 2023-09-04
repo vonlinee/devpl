@@ -1,5 +1,7 @@
 package org.apache.ddlutils.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -16,17 +18,17 @@ import java.util.Set;
  * undesirable, for example if you are trying to write a validating
  * implementation it would provide a loophole around the validation.
  * But, you might want that loophole, so this class is kept simple.
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.5 $ $Date: 2004/04/02 21:02:54 $
- *
  * @author Daniel Rall
  * @author Stephen Colebourne
+ * @version $Revision: 1.5 $ $Date: 2004/04/02 21:02:54 $
+ * @since Commons Collections 3.0
  */
-public abstract class AbstractMapDecorator implements Map {
+public abstract class AbstractMapDecorator<K, V> implements Map<K, V> {
 
-    /** The map to decorate */
-    protected transient Map map;
+    /**
+     * The map to decorate
+     */
+    protected transient Map<K, V> map;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
@@ -38,11 +40,10 @@ public abstract class AbstractMapDecorator implements Map {
 
     /**
      * Constructor that wraps (not copies).
-     *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws IllegalArgumentException if the collection is null
      */
-    public AbstractMapDecorator(Map map) {
+    public AbstractMapDecorator(Map<K, V> map) {
         if (map == null) {
             throw new IllegalArgumentException("Map must not be null");
         }
@@ -51,62 +52,74 @@ public abstract class AbstractMapDecorator implements Map {
 
     /**
      * Gets the map being decorated.
-     *
      * @return the decorated map
      */
-    protected Map getMap() {
+    protected Map<K, V> getMap() {
         return map;
     }
 
     //-----------------------------------------------------------------------
+    @Override
     public void clear() {
         map.clear();
     }
 
+    @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
     }
 
+    @Override
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
 
-    public Set entrySet() {
+    @Override
+    public Set<Map.Entry<K, V>> entrySet() {
         return map.entrySet();
     }
 
-    public Object get(Object key) {
+    @Override
+    public V get(Object key) {
         return map.get(key);
     }
 
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
-    public Set keySet() {
+    @Override
+    public Set<K> keySet() {
         return map.keySet();
     }
 
-    public Object put(Object key, Object value) {
+    @Override
+    public V put(K key, V value) {
         return map.put(key, value);
     }
 
-    public void putAll(Map mapToCopy) {
-        map.putAll(mapToCopy);
+    @Override
+    public void putAll(Map<? extends K, ? extends V> m) {
+        map.putAll(m);
     }
 
-    public Object remove(Object key) {
+    @Override
+    public V remove(Object key) {
         return map.remove(key);
     }
 
+    @Override
     public int size() {
         return map.size();
     }
 
-    public Collection values() {
+    @Override
+    public @NotNull Collection<V> values() {
         return map.values();
     }
 
+    @Override
     public boolean equals(Object object) {
         if (object == this) {
             return true;
@@ -114,12 +127,13 @@ public abstract class AbstractMapDecorator implements Map {
         return map.equals(object);
     }
 
+    @Override
     public int hashCode() {
         return map.hashCode();
     }
 
+    @Override
     public String toString() {
         return map.toString();
     }
-
 }

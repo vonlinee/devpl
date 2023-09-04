@@ -13,11 +13,11 @@ import java.util.List;
  * @version $Revision: $
  */
 public abstract class ForeignKeyChangeImplBase extends TableChangeImplBase
-        implements ForeignKeyChange {
+    implements ForeignKeyChange {
     /**
      * List of pairs of local and corresponding foreign column names that make up the foreign key.
      */
-    private List _referenceColumnNames = new ArrayList();
+    private final List _referenceColumnNames = new ArrayList();
 
     /**
      * Creates a new change object.
@@ -34,9 +34,7 @@ public abstract class ForeignKeyChangeImplBase extends TableChangeImplBase
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public ForeignKey findChangedForeignKey(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 
@@ -50,13 +48,13 @@ public abstract class ForeignKeyChangeImplBase extends TableChangeImplBase
                         Pair colNames = (Pair) _referenceColumnNames.get(refIdx);
 
                         if (caseSensitive) {
-                            if (ref.getLocalColumnName().equals((String) colNames.getFirst()) &&
-                                    ref.getForeignColumnName().equals((String) colNames.getSecond())) {
+                            if (ref.getLocalColumnName().equals(colNames.getFirst()) &&
+                                ref.getForeignColumnName().equals(colNames.getSecond())) {
                                 return curFk;
                             }
                         } else {
                             if (ref.getLocalColumnName().equalsIgnoreCase((String) colNames.getFirst()) &&
-                                    ref.getForeignColumnName().equalsIgnoreCase((String) colNames.getSecond())) {
+                                ref.getForeignColumnName().equalsIgnoreCase((String) colNames.getSecond())) {
                                 return curFk;
                             }
                         }

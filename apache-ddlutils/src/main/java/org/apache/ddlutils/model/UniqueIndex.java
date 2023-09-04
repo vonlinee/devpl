@@ -17,16 +17,12 @@ public class UniqueIndex extends GenericIndex {
      */
     private static final long serialVersionUID = -4097003126550294993L;
 
-    /**
-     * {@inheritDoc}
-     */
+
     public boolean isUnique() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Index copy() throws ModelException {
         UniqueIndex result = new UniqueIndex();
@@ -35,29 +31,23 @@ public class UniqueIndex extends GenericIndex {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof UniqueIndex) {
-            UniqueIndex other = (UniqueIndex) obj;
+        if (obj instanceof UniqueIndex other) {
             return Objects.equals(name, other.name) && Objects.equals(columns, other.columns);
         } else {
             return false;
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equalsIgnoreCase(Index other) {
-        if (other instanceof UniqueIndex) {
-            UniqueIndex otherIndex = (UniqueIndex) other;
+        if (other instanceof UniqueIndex otherIndex) {
             boolean checkName = StringUtils.hasText(name, otherIndex.name);
             if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) &&
-                    (getColumnCount() == otherIndex.getColumnCount())) {
+                (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
                     if (!getColumn(idx).equalsIgnoreCase(otherIndex.getColumn(idx))) {
                         return false;
@@ -69,29 +59,23 @@ public class UniqueIndex extends GenericIndex {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         return columns.hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return "Unique index [name=" +
-                getName() +
-                "; " +
-                getColumnCount() +
-                " columns]";
+            getName() +
+            "; " +
+            getColumnCount() +
+            " columns]";
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toVerboseString() {
         StringBuilder result = new StringBuilder();

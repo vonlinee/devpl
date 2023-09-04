@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.maxdb.MaxDbPlatform;
  * @version $Revision: 231110 $
  */
 public class TestMaxDbPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return MaxDbPlatform.DATABASENAME;
     }

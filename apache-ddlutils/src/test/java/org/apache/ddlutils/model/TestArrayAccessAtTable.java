@@ -28,9 +28,7 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     private NonUniqueIndex _nonUniqueIndex;
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void setUp() {
         _testedTable = new Table();
 

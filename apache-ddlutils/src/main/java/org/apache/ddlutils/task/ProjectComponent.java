@@ -6,23 +6,29 @@
 package org.apache.ddlutils.task;
 
 public abstract class ProjectComponent implements Cloneable {
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     protected Project project;
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     protected Location location;
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     protected String description;
 
     public ProjectComponent() {
         this.location = Location.UNKNOWN_LOCATION;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
     public Project getProject() {
         return this.project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public Location getLocation() {
@@ -33,12 +39,12 @@ public abstract class ProjectComponent implements Cloneable {
         this.location = location;
     }
 
-    public void setDescription(String desc) {
-        this.description = desc;
-    }
-
     public String getDescription() {
         return this.description;
+    }
+
+    public void setDescription(String desc) {
+        this.description = desc;
     }
 
     public void log(String msg) {
@@ -55,7 +61,7 @@ public abstract class ProjectComponent implements Cloneable {
     }
 
     public Object clone() throws CloneNotSupportedException {
-        ProjectComponent pc = (ProjectComponent)super.clone();
+        ProjectComponent pc = (ProjectComponent) super.clone();
         pc.setLocation(this.getLocation());
         pc.setProject(this.getProject());
         return pc;

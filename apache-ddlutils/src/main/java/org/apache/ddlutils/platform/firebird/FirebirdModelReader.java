@@ -44,9 +44,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         setDefaultTablePattern("%");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
@@ -58,9 +56,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<Column> readColumns(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         ResultSet columnData = null;
@@ -97,9 +93,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -154,9 +148,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<String> readPrimaryKeyNames(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         List<String> pks = new ArrayList<>();
@@ -189,9 +181,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         return pks;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<ForeignKey> readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         Map<String, ForeignKey> fks = new LinkedHashMap<>();
@@ -224,17 +214,15 @@ public class FirebirdModelReader extends JdbcModelReader {
         return fks.values();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<Index> readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         // Jaybird is not able to read indices when delimited identifiers are turned on,
         // so we gather the data manually using Firebird's system tables
         final String query =
-                "SELECT a.RDB$INDEX_NAME INDEX_NAME, b.RDB$RELATION_NAME TABLE_NAME, b.RDB$UNIQUE_FLAG NON_UNIQUE, " +
-                        "a.RDB$FIELD_POSITION ORDINAL_POSITION, a.RDB$FIELD_NAME COLUMN_NAME, 3 INDEX_TYPE " +
-                        "FROM RDB$INDEX_SEGMENTS a, RDB$INDICES b WHERE a.RDB$INDEX_NAME=b.RDB$INDEX_NAME AND b.RDB$RELATION_NAME = ?";
+            "SELECT a.RDB$INDEX_NAME INDEX_NAME, b.RDB$RELATION_NAME TABLE_NAME, b.RDB$UNIQUE_FLAG NON_UNIQUE, " +
+                "a.RDB$FIELD_POSITION ORDINAL_POSITION, a.RDB$FIELD_NAME COLUMN_NAME, 3 INDEX_TYPE " +
+                "FROM RDB$INDEX_SEGMENTS a, RDB$INDICES b WHERE a.RDB$INDEX_NAME=b.RDB$INDEX_NAME AND b.RDB$RELATION_NAME = ?";
 
         Map<String, Index> indices = new LinkedHashMap<>();
         PreparedStatement stmt = null;
@@ -263,14 +251,12 @@ public class FirebirdModelReader extends JdbcModelReader {
         return indices.values();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         final String query =
-                "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-                        "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
+            "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
+                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -290,14 +276,12 @@ public class FirebirdModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) throws SQLException {
         final String query =
-                "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-                        "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
+            "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
+                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -319,9 +303,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;
@@ -367,12 +349,12 @@ public class FirebirdModelReader extends JdbcModelReader {
                         values = readColumns(columnData, getColumnsForColumn());
 
                         if (getPlatform().isDelimitedIdentifierModeOn() &&
-                                !tableName.equals(values.getString("TABLE_NAME"))) {
+                            !tableName.equals(values.getString("TABLE_NAME"))) {
                             continue;
                         }
 
                         if (table.findColumn(values.getString("COLUMN_NAME"),
-                                getPlatform().isDelimitedIdentifierModeOn()) == null) {
+                            getPlatform().isDelimitedIdentifierModeOn()) == null) {
                             found = false;
                         }
                     }

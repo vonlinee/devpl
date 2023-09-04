@@ -1,8 +1,8 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.platform.PooledDataSource;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,20 +29,16 @@ public class CreateDatabaseCommand extends DatabaseCommand {
         _parameters.add(param);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean isRequiringModel() {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
-        BasicDataSource dataSource = getDataSource();
+        PooledDataSource dataSource = getDataSource();
 
         if (dataSource == null) {
             throw new RuntimeException("No database specified.");

@@ -1,8 +1,8 @@
 package org.apache.ddlutils.util;
 
+import org.apache.ddlutils.DatabaseOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.ddlutils.DatabaseOperationException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,6 +22,10 @@ public abstract class JdbcSupport {
      */
     private final Logger _log = LoggerFactory.getLogger(JdbcSupport.class);
     /**
+     * The names of the currently borrowed connections (for debugging).
+     */
+    private final HashSet<String> openConnectionNames = new HashSet<>();
+    /**
      * The data source.
      */
     private DataSource dataSource;
@@ -33,10 +37,6 @@ public abstract class JdbcSupport {
      * The password for accessing the database.
      */
     private String password;
-    /**
-     * The names of the currently borrowed connections (for debugging).
-     */
-    private final HashSet<String> openConnectionNames = new HashSet<>();
 
     // Properties
     //-------------------------------------------------------------------------

@@ -10,7 +10,6 @@ import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Types;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -22,15 +21,15 @@ public class Oracle8Builder extends SqlBuilder {
     /**
      * The regular expression pattern for ISO dates, i.e. 'YYYY-MM-DD'.
      */
-    private Pattern _isoDatePattern;
+    private final Pattern _isoDatePattern;
     /**
      * The regular expression pattern for ISO times, i.e. 'HH:MI:SS'.
      */
-    private Pattern _isoTimePattern;
+    private final Pattern _isoTimePattern;
     /**
      * The regular expression pattern for ISO timestamps, i.e. 'YYYY-MM-DD HH:MI:SS.fffffffff'.
      */
-    private Pattern _isoTimestampPattern;
+    private final Pattern _isoTimestampPattern;
 
     /**
      * Creates a new builder instance.
@@ -49,9 +48,7 @@ public class Oracle8Builder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         // lets create any sequences
@@ -68,9 +65,7 @@ public class Oracle8Builder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropTable(Table table) throws IOException {
         Column[] columns = table.getAutoIncrementColumns();
@@ -178,33 +173,25 @@ public class Oracle8Builder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void createTemporaryTable(Database database, Table table, ValueMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void dropTemporaryTable(Database database, Table table) throws IOException {
         dropTable(table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropForeignKeys(Table table) throws IOException {
         // no need to as we drop the table with CASCASE CONSTRAINTS
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
         // Index names in Oracle are unique to a schema and hence Oracle does not
@@ -214,9 +201,7 @@ public class Oracle8Builder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void printDefaultValue(Object defaultValue, int typeCode) throws IOException {
         if (defaultValue != null) {
@@ -234,9 +219,7 @@ public class Oracle8Builder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
@@ -261,17 +244,13 @@ public class Oracle8Builder extends SqlBuilder {
         return super.getNativeDefaultValue(column);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using sequences instead
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();
@@ -294,9 +273,7 @@ public class Oracle8Builder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
@@ -341,9 +318,7 @@ public class Oracle8Builder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&

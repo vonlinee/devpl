@@ -12,9 +12,7 @@ import java.util.List;
  * @version $Revision: $
  */
 public class DefaultTableDefinitionChangesPredicate implements TableDefinitionChangesPredicate {
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean areSupported(Table intermediateTable, List<TableChange> changes) {
         for (TableChange change : changes) {
@@ -32,8 +30,7 @@ public class DefaultTableDefinitionChangesPredicate implements TableDefinitionCh
      * @return <code>true</code> if the change is supported
      */
     protected boolean isSupported(Table intermediateTable, TableChange change) {
-        if (change instanceof AddColumnChange) {
-            AddColumnChange addColumnChange = (AddColumnChange) change;
+        if (change instanceof AddColumnChange addColumnChange) {
             return addColumnChange.isAtEnd() && (!addColumnChange.getNewColumn().isRequired() || (addColumnChange
                 .getNewColumn().getDefaultValue() != null) || addColumnChange.getNewColumn().isAutoIncrement());
         } else return change instanceof AddPrimaryKeyChange;

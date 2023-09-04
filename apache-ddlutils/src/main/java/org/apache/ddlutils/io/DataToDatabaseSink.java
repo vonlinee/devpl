@@ -19,13 +19,13 @@ package org.apache.ddlutils.io;
  * under the License.
  */
 
-import org.apache.ddlutils.dynabean.DynaBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DatabasePlatform;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -45,39 +45,14 @@ public class DataToDatabaseSink implements DataSink {
      * Our log.
      */
     private final Logger _log = LoggerFactory.getLogger(DataToDatabaseSink.class);
-
-    /**
-     * Generates the sql and writes it to the database.
-     */
-    private DatabasePlatform _platform;
     /**
      * The database model.
      */
     private final Database model;
     /**
-     * The connection to the database.
-     */
-    private Connection connection;
-    /**
-     * Whether to stop when an error has occurred while inserting a bean into the database.
-     */
-    private boolean _haltOnErrors = true;
-    /**
-     * Whether to delay the insertion of beans so that the beans referenced by it via foreignkeys, are already inserted into the database.
-     */
-    private boolean _ensureFkOrder = true;
-    /**
-     * Whether to use batch mode inserts.
-     */
-    private boolean _useBatchMode = false;
-    /**
      * The queued objects for batch insertion.
      */
     private final ArrayList<DynaBean> _batchQueue = new ArrayList<>();
-    /**
-     * The number of beans to insert in one batch.
-     */
-    private int batchSize = 1024;
     /**
      * Stores the tables that are target of a foreign key.
      */
@@ -98,6 +73,30 @@ public class DataToDatabaseSink implements DataSink {
      * Stores the objects that are waiting for other objects to be inserted.
      */
     private final ArrayList<WaitingObject> _waitingObjects = new ArrayList<>();
+    /**
+     * Generates the sql and writes it to the database.
+     */
+    private final DatabasePlatform _platform;
+    /**
+     * The connection to the database.
+     */
+    private Connection connection;
+    /**
+     * Whether to stop when an error has occurred while inserting a bean into the database.
+     */
+    private boolean _haltOnErrors = true;
+    /**
+     * Whether to delay the insertion of beans so that the beans referenced by it via foreignkeys, are already inserted into the database.
+     */
+    private boolean _ensureFkOrder = true;
+    /**
+     * Whether to use batch mode inserts.
+     */
+    private boolean _useBatchMode = false;
+    /**
+     * The number of beans to insert in one batch.
+     */
+    private int batchSize = 1024;
 
     /**
      * Creates a new sink instance.
@@ -202,9 +201,7 @@ public class DataToDatabaseSink implements DataSink {
         this.batchSize = batchSize;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void end() throws DataSinkException {
         purgeBatchQueue();
@@ -237,9 +234,7 @@ public class DataToDatabaseSink implements DataSink {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void start() throws DataSinkException {
         _fkTables.clear();
@@ -262,9 +257,7 @@ public class DataToDatabaseSink implements DataSink {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void addBean(DynaBean bean) throws DataSinkException {
         Table table = model.getDynaClassFor(bean).getTable();
@@ -278,7 +271,7 @@ public class DataToDatabaseSink implements DataSink {
                 Identity fkIdentity = buildIdentityFromFK(table, fk, bean);
 
                 if ((fkIdentity != null) && !fkIdentity.equals(origIdentity)) {
-                    Identity processedIdentity = (Identity) _identityMap.get(fkIdentity);
+                    Identity processedIdentity = _identityMap.get(fkIdentity);
 
                     if (processedIdentity != null) {
                         updateFKColumns(bean, fkIdentity.getForeignKeyName(), processedIdentity);
@@ -411,7 +404,7 @@ public class DataToDatabaseSink implements DataSink {
             ForeignKey selfRefFk = null;
 
             if (!_platform.isIdentityOverrideOn() &&
-                    _tablesWithSelfIdentityReference.contains(table)) {
+                _tablesWithSelfIdentityReference.contains(table)) {
                 selfRefFk = table.getSelfReferencingForeignKey();
 
                 // in case of a self-reference (fk points to the very row that we're inserting)
@@ -525,7 +518,7 @@ public class DataToDatabaseSink implements DataSink {
         Identity identity = new Identity(fk.getForeignTable(), getFKName(owningTable, fk));
 
         for (int idx = 0; idx < fk.getReferenceCount(); idx++) {
-            Reference reference = (Reference) fk.getReference(idx);
+            Reference reference = fk.getReference(idx);
             Object value = bean.get(reference.getLocalColumnName());
 
             if (value == null) {

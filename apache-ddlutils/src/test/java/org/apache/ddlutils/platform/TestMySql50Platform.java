@@ -10,9 +10,7 @@ import org.apache.ddlutils.platform.mysql.MySql50Platform;
  * @version $Revision: 231110 $
  */
 public class TestMySql50Platform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getDatabaseName() {
         return MySql50Platform.DATABASENAME;

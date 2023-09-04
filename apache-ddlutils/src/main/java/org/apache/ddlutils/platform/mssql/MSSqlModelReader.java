@@ -30,7 +30,6 @@ import org.apache.ddlutils.platform.JdbcModelReader;
 import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.*;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -47,11 +46,11 @@ public class MSSqlModelReader extends JdbcModelReader {
     /**
      * The regular expression pattern for the ISO dates.
      */
-    private Pattern _isoDatePattern;
+    private final Pattern _isoDatePattern;
     /**
      * The regular expression pattern for the ISO times.
      */
-    private Pattern _isoTimePattern;
+    private final Pattern _isoTimePattern;
 
     /**
      * Creates a new model reader for Microsoft Sql Server databases.
@@ -72,9 +71,6 @@ public class MSSqlModelReader extends JdbcModelReader {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
@@ -106,9 +102,7 @@ public class MSSqlModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         // Sql Server generates an index "PK__[table name]__[hex number]"
 

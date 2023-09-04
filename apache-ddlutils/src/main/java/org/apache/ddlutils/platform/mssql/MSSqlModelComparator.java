@@ -27,16 +27,14 @@ public class MSSqlModelComparator extends ModelComparator {
         setCanDropPrimaryKeyColumns(false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForPrimaryKeyChanges(Database sourceModel,
-                                             Table sourceTable,
-                                             Database intermediateModel,
-                                             Table intermediateTable,
-                                             Database targetModel,
-                                             Table targetTable) {
+                                                          Table sourceTable,
+                                                          Database intermediateModel,
+                                                          Table intermediateTable,
+                                                          Database targetModel,
+                                                          Table targetTable) {
         List<TableChange> changes = super.checkForPrimaryKeyChanges(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
 
         // now we add pk changes if one of the pk columns was changed
@@ -55,16 +53,14 @@ public class MSSqlModelComparator extends ModelComparator {
         return changes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForRemovedIndexes(Database sourceModel,
-                                          Table sourceTable,
-                                          Database intermediateModel,
-                                          Table intermediateTable,
-                                          Database targetModel,
-                                          Table targetTable) {
+                                                       Table sourceTable,
+                                                       Database intermediateModel,
+                                                       Table intermediateTable,
+                                                       Database targetModel,
+                                                       Table targetTable) {
         List<TableChange> changes = super.checkForRemovedIndexes(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
         Index[] targetIndexes = targetTable.getIndices();
         List<RemoveIndexChange> additionalChanges = new ArrayList<>();
@@ -95,16 +91,14 @@ public class MSSqlModelComparator extends ModelComparator {
         return changes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForAddedIndexes(Database sourceModel,
-                                        Table sourceTable,
-                                        Database intermediateModel,
-                                        Table intermediateTable,
-                                        Database targetModel,
-                                        Table targetTable) {
+                                                     Table sourceTable,
+                                                     Database intermediateModel,
+                                                     Table intermediateTable,
+                                                     Database targetModel,
+                                                     Table targetTable) {
         List<TableChange> changes = super.checkForAddedIndexes(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable);
         Index[] targetIndexes = targetTable.getIndices();
         List<AddIndexChange> additionalChanges = new ArrayList<>();
@@ -127,13 +121,11 @@ public class MSSqlModelComparator extends ModelComparator {
         return changes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForRemovedForeignKeys(Database sourceModel,
-                                              Database intermediateModel,
-                                              Database targetModel) {
+                                                           Database intermediateModel,
+                                                           Database targetModel) {
         List<TableChange> changes = super.checkForRemovedForeignKeys(sourceModel, intermediateModel, targetModel);
         List<RemoveForeignKeyChange> additionalChanges = new ArrayList<>();
 
@@ -169,13 +161,11 @@ public class MSSqlModelComparator extends ModelComparator {
         return changes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected List<TableChange> checkForAddedForeignKeys(Database sourceModel,
-                                            Database intermediateModel,
-                                            Database targetModel) {
+                                                         Database intermediateModel,
+                                                         Database targetModel) {
         List<TableChange> changes = super.checkForAddedForeignKeys(sourceModel, intermediateModel, targetModel);
         List<AddForeignKeyChange> additionalChanges = new ArrayList<>();
 

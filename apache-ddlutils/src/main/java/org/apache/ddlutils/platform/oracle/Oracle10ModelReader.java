@@ -27,7 +27,6 @@ import org.apache.ddlutils.util.ValueMap;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Reads a database model from an Oracle 10 database.
@@ -42,9 +41,7 @@ public class Oracle10ModelReader extends Oracle8ModelReader {
         super(platform);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         // Oracle 10 added the recycle bin which contains dropped database objects not yet purged

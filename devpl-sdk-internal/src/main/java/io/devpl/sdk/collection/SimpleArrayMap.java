@@ -750,9 +750,7 @@ public class SimpleArrayMap<K, V> {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         final int[] hashes = mHashes;

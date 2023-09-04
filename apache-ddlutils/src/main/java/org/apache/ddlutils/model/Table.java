@@ -1,24 +1,5 @@
 package org.apache.ddlutils.model;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.*;
@@ -31,7 +12,18 @@ public class Table implements SchemaObject, Serializable {
      * Unique ID for serialization purposes.
      */
     private static final long serialVersionUID = -5541154961302342608L;
-
+    /**
+     * The columns in this table.
+     */
+    private final List<Column> _columns = new ArrayList<>();
+    /**
+     * The foreign keys associated to this table.
+     */
+    private final List<ForeignKey> _foreignKeys = new ArrayList<>();
+    /**
+     * The indices applied to this table.
+     */
+    private final ArrayList<Index> _indices = new ArrayList<>();
     /**
      * The catalog of this table as read from the database.
      */
@@ -52,18 +44,6 @@ public class Table implements SchemaObject, Serializable {
      * The table's type as read from the database.
      */
     private String _type;
-    /**
-     * The columns in this table.
-     */
-    private final List<Column> _columns = new ArrayList<>();
-    /**
-     * The foreign keys associated to this table.
-     */
-    private final List<ForeignKey> _foreignKeys = new ArrayList<>();
-    /**
-     * The indices applied to this table.
-     */
-    private final ArrayList<Index> _indices = new ArrayList<>();
 
     /**
      * Returns the catalog of this table as read from the database.
@@ -160,7 +140,7 @@ public class Table implements SchemaObject, Serializable {
      * @return The column at this position
      */
     public Column getColumn(int idx) {
-        return (Column) _columns.get(idx);
+        return _columns.get(idx);
     }
 
     /**
@@ -443,7 +423,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the column with the specified name, using case insensitive matching.
+     * Finds the column with the specified name, using case-insensitive matching.
      * Note that this method is not called getColumn(String) to avoid introspection
      * problems.
      * @param name The name of the column
@@ -454,7 +434,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the column with the specified name, using case insensitive matching.
+     * Finds the column with the specified name, using case-insensitive matching.
      * Note that this method is not called getColumn(String) to avoid introspection
      * problems.
      * @param name          The name of the column
@@ -493,7 +473,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the index with the specified name, using case insensitive matching.
+     * Finds the index with the specified name, using case-insensitive matching.
      * Note that this method is not called getIndex to avoid introspection
      * problems.
      * @param name The name of the index
@@ -527,7 +507,7 @@ public class Table implements SchemaObject, Serializable {
     }
 
     /**
-     * Finds the foreign key with the specified name, using case insensitive matching.
+     * Finds the foreign key with the specified name, using case-insensitive matching.
      * Note that this method is not called getForeignKey to avoid introspection
      * problems.
      * @param name The name of the foreign key
@@ -686,13 +666,10 @@ public class Table implements SchemaObject, Serializable {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Table) {
-            Table other = (Table) obj;
+        if (obj instanceof Table other) {
             // Note that this compares case-sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
             return Objects.equals(name, other.name) && Objects.equals(_columns, other._columns)
@@ -702,9 +679,7 @@ public class Table implements SchemaObject, Serializable {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
@@ -712,9 +687,6 @@ public class Table implements SchemaObject, Serializable {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         return "Table [name=" + getName() + "; " + getColumnCount() + " columns]";

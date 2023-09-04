@@ -38,9 +38,7 @@ public class LocalEntityResolver implements EntityResolver {
      */
     public static final String DTD_PREFIX = "http://db.apache.org/torque/dtd/database";
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException {
         InputSource result = null;

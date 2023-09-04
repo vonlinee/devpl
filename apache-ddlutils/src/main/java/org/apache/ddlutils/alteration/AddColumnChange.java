@@ -32,15 +32,15 @@ public class AddColumnChange extends TableChangeImplBase {
     /**
      * The new column.
      */
-    private Column newColumn;
+    private final Column newColumn;
     /**
      * The name of the column after which the new column should be added.
      */
-    private String previousColumnName;
+    private final String previousColumnName;
     /**
      * The name of the column before which the new column should be added.
      */
-    private String nextColumnName;
+    private final String nextColumnName;
 
     /**
      * Creates a new change object.
@@ -89,9 +89,7 @@ public class AddColumnChange extends TableChangeImplBase {
         return nextColumnName == null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);

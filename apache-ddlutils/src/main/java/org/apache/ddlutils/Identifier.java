@@ -11,6 +11,31 @@ public class Identifier implements Comparable<Identifier> {
     private final boolean isQuoted;
 
     /**
+     * Constructs an identifier instance.
+     * @param text   The identifier text.
+     * @param quoted Is this a quoted identifier?
+     */
+    public Identifier(String text, boolean quoted) {
+        if (text == null || text.isEmpty()) {
+            throw new IllegalIdentifierException("Identifier text cannot be null");
+        }
+        if (isQuoted(text)) {
+            throw new IllegalIdentifierException("Identifier text should not contain quote markers (` or \")");
+        }
+        this.text = text;
+        this.isQuoted = quoted;
+    }
+
+    /**
+     * Constructs an unquoted identifier instance.
+     * @param text The identifier text.
+     */
+    protected Identifier(String text) {
+        this.text = text;
+        this.isQuoted = false;
+    }
+
+    /**
      * Means to generate an {@link Identifier} instance from its simple text form.
      * <p/>
      * If passed text is {@code null}, {@code null} is returned.
@@ -74,33 +99,22 @@ public class Identifier implements Comparable<Identifier> {
      */
     public static boolean isQuoted(String name) {
         return (name.startsWith("`") && name.endsWith("`"))
-                || (name.startsWith("[") && name.endsWith("]"))
-                || (name.startsWith("\"") && name.endsWith("\""));
+            || (name.startsWith("[") && name.endsWith("]"))
+            || (name.startsWith("\"") && name.endsWith("\""));
     }
 
-    /**
-     * Constructs an identifier instance.
-     * @param text   The identifier text.
-     * @param quoted Is this a quoted identifier?
-     */
-    public Identifier(String text, boolean quoted) {
-        if (text == null || text.isEmpty()) {
-            throw new IllegalIdentifierException("Identifier text cannot be null");
+    public static boolean areEqual(Identifier id1, Identifier id2) {
+        if (id1 == null) {
+            return id2 == null;
+        } else {
+            return id1.equals(id2);
         }
-        if (isQuoted(text)) {
-            throw new IllegalIdentifierException("Identifier text should not contain quote markers (` or \")");
-        }
-        this.text = text;
-        this.isQuoted = quoted;
     }
 
-    /**
-     * Constructs an unquoted identifier instance.
-     * @param text The identifier text.
-     */
-    protected Identifier(String text) {
-        this.text = text;
-        this.isQuoted = false;
+    public static Identifier quote(Identifier identifier) {
+        return identifier.isQuoted()
+            ? identifier
+            : Identifier.toIdentifier(identifier.getText(), true);
     }
 
     /**
@@ -129,14 +143,14 @@ public class Identifier implements Comparable<Identifier> {
      */
     public String render(DatabasePlatform dialect) {
         return isQuoted
-                ? dialect.openQuote() + getText() + dialect.closeQuote()
-                : getText();
+            ? dialect.openQuote() + getText() + dialect.closeQuote()
+            : getText();
     }
 
     public String render() {
         return isQuoted
-                ? '`' + getText() + '`'
-                : getText();
+            ? '`' + getText() + '`'
+            : getText();
     }
 
     public String getCanonicalName() {
@@ -159,20 +173,6 @@ public class Identifier implements Comparable<Identifier> {
     @Override
     public int hashCode() {
         return isQuoted ? text.hashCode() : text.toLowerCase(Locale.ENGLISH).hashCode();
-    }
-
-    public static boolean areEqual(Identifier id1, Identifier id2) {
-        if (id1 == null) {
-            return id2 == null;
-        } else {
-            return id1.equals(id2);
-        }
-    }
-
-    public static Identifier quote(Identifier identifier) {
-        return identifier.isQuoted()
-                ? identifier
-                : Identifier.toIdentifier(identifier.getText(), true);
     }
 
     @Override

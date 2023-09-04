@@ -30,7 +30,7 @@ import java.io.FileWriter;
  * This sub task does not require a database connection, so the <code>dataSource</code>
  * sub element of the enclosing task can be omitted.
  * @version $Revision: 289996 $
- *    name="writeDtdToFile"
+ * name="writeDtdToFile"
  */
 public class WriteDtdToFileCommand extends Command {
     /**
@@ -47,16 +47,12 @@ public class WriteDtdToFileCommand extends Command {
         _outputFile = outputFile;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public boolean isRequiringModel() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {
             throw new RuntimeException("No output file specified");

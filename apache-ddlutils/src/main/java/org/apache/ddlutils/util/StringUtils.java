@@ -9,6 +9,11 @@ import java.util.Objects;
 public class StringUtils {
 
     /**
+     * The empty String {@code ""}.
+     * @since 2.0
+     */
+    public static final String EMPTY = "";
+    /**
      * <p>The maximum size to which the padding constant(s) can expand.</p>
      */
     private static final int PAD_LIMIT = 8192;
@@ -98,7 +103,7 @@ public class StringUtils {
      * the case.</p>
      *
      * <p><code>null</code>s are handled without exceptions. Two <code>null</code>
-     * references are considered equal. Comparison is case insensitive.</p>
+     * references are considered equal. Comparison is case-insensitive.</p>
      *
      * <pre>
      * StringUtils.equalsIgnoreCase(null, null)   = true
@@ -200,11 +205,10 @@ public class StringUtils {
      * StringUtils.repeat("ab", 2) = "abab"
      * StringUtils.repeat("a", -2) = ""
      * </pre>
-     *
-     * @param str  the String to repeat, may be null
-     * @param repeat  number of times to repeat str, negative treated as zero
+     * @param str    the String to repeat, may be null
+     * @param repeat number of times to repeat str, negative treated as zero
      * @return a new String consisting of the original String repeated,
-     *  {@code null} if null String input
+     * {@code null} if null String input
      */
     public static String repeat(final String str, final int repeat) {
         // Performance tuned for 2.0 (JDK1.4)
@@ -243,7 +247,6 @@ public class StringUtils {
         }
     }
 
-
     /**
      * <p>Returns padding using the specified delimiter repeated
      * to a given length.</p>
@@ -260,9 +263,8 @@ public class StringUtils {
      * If you are needing to support full I18N of your applications
      * consider using {@link #repeat(String, int)} instead.
      * </p>
-     *
-     * @param ch  character to repeat
-     * @param repeat  number of times to repeat char, negative treated as zero
+     * @param ch     character to repeat
+     * @param repeat number of times to repeat char, negative treated as zero
      * @return String with repeated character
      * @see #repeat(String, int)
      */
@@ -274,10 +276,4 @@ public class StringUtils {
         Arrays.fill(buf, ch);
         return new String(buf);
     }
-
-    /**
-     * The empty String {@code ""}.
-     * @since 2.0
-     */
-    public static final String EMPTY = "";
 }

@@ -3,13 +3,11 @@ package org.apache.ddlutils.util;
 /**
  * Defines a map that maintains order and allows both forward and backward
  * iteration through that order.
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.6 $ $Date: 2004/02/18 01:15:42 $
- *
  * @author Stephen Colebourne
+ * @version $Revision: 1.6 $ $Date: 2004/02/18 01:15:42 $
+ * @since Commons Collections 3.0
  */
-public interface OrderedMap extends IterableMap {
+public interface OrderedMap<K, V> extends IterableMap<K, V> {
 
     /**
      * Obtains an <code>OrderedMapIterator</code> over the map.
@@ -26,41 +24,35 @@ public interface OrderedMap extends IterableMap {
      *   Object previousKey = it.previous();
      * }
      * </pre>
-     *
      * @return a map iterator
      */
-    OrderedMapIterator orderedMapIterator();
+    OrderedMapIterator<K> orderedMapIterator();
 
     /**
      * Gets the first key currently in this map.
-     *
      * @return the first key currently in this map
      * @throws java.util.NoSuchElementException if this map is empty
      */
-    public Object firstKey();
+    K firstKey();
 
     /**
      * Gets the last key currently in this map.
-     *
      * @return the last key currently in this map
      * @throws java.util.NoSuchElementException if this map is empty
      */
-    public Object lastKey();
+    K lastKey();
 
     /**
      * Gets the next key after the one specified.
-     *
-     * @param key  the key to search for next from
+     * @param key the key to search for next from
      * @return the next key, null if no match or at end
      */
-    public Object nextKey(Object key);
+    K nextKey(K key);
 
     /**
      * Gets the previous key before the one specified.
-     *
-     * @param key  the key to search for previous from
+     * @param key the key to search for previous from
      * @return the previous key, null if no match or at start
      */
-    public Object previousKey(Object key);
-
+    K previousKey(K key);
 }

@@ -14,9 +14,7 @@ import java.io.InputStreamReader;
  * @version $Revision: 231110 $
  */
 public class TestMySqlPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getDatabaseName() {
         return MySqlPlatform.DATABASENAME;

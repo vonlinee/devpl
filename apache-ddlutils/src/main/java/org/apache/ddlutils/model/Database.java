@@ -329,7 +329,7 @@ public class Database implements SchemaObject, Serializable {
 
                         if (foreignColumn == null) {
                             throw new ModelException("The foreignkey " + fkDesc + " in table " + curTable.getName() + " references the undefined local column " + ref.getForeignColumnName() + " in table " + fk
-                                    .getForeignTable().getName());
+                                .getForeignTable().getName());
                         } else {
                             ref.setForeignColumn(foreignColumn);
                         }
@@ -495,9 +495,7 @@ public class Database implements SchemaObject, Serializable {
         return getDynaClassCache().createNewInstance(table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Database other) {
@@ -507,17 +505,13 @@ public class Database implements SchemaObject, Serializable {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         return Objects.hash(this.tables);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         return "Database [name=" + getName() + "; " + getTableCount() + " tables]";

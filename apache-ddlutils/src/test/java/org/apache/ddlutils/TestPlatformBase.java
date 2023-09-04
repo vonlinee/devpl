@@ -43,9 +43,7 @@ public abstract class TestPlatformBase extends TestBase {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void tearDown() throws Exception {
         platform = null;

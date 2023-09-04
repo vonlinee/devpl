@@ -37,11 +37,11 @@ public class TimeConverter implements SqlTypeConverter {
     /**
      * The regular expression pattern for the parsing of ISO times.
      */
-    private Pattern _timePattern;
+    private final Pattern _timePattern;
     /**
      * The calendar object to convert to/from times.
      */
-    private Calendar _calendar;
+    private final Calendar _calendar;
 
     /**
      * Creates a new time converter object.
@@ -57,9 +57,7 @@ public class TimeConverter implements SqlTypeConverter {
         _calendar.setLenient(false);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (sqlTypeCode != Types.TIME) {
             return textRep;
@@ -102,16 +100,14 @@ public class TimeConverter implements SqlTypeConverter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         String result = null;
 
         if (obj != null) {
             if (!(obj instanceof Time)) {
                 throw new ConversionException("Expected object of type java.sql.Time, but instead received " + obj
-                        .getClass().getName());
+                    .getClass().getName());
             }
             result = obj.toString();
         }

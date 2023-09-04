@@ -28,9 +28,7 @@ import org.apache.ddlutils.platform.mckoi.MckoiPlatform;
  * @version $Revision: 231110 $
  */
 public class TestMcKoiPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return MckoiPlatform.DATABASENAME;
     }

@@ -48,17 +48,13 @@ public class MySqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("AUTO_INCREMENT");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean shouldGeneratePrimaryKeys(Column[] primaryKeyColumns) {
         // mySQL requires primary key indication for autoincrement key columns

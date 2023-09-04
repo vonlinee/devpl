@@ -21,24 +21,20 @@ package org.apache.ddlutils.util;
  * A Map Entry has considerable additional semantics over and above a simple
  * key-value pair. This interface defines the minimum key value, with just the
  * two get methods.
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:42 $
- *
  * @author Stephen Colebourne
+ * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:42 $
+ * @since Commons Collections 3.0
  */
 public interface KeyValue {
 
     /**
      * Gets the key from the pair.
-     *
      * @return the key
      */
     Object getKey();
 
     /**
      * Gets the value from the pair.
-     *
      * @return the value
      */
     Object getValue();

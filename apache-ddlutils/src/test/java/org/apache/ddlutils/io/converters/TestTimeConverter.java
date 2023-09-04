@@ -35,17 +35,13 @@ public class TestTimeConverter extends TestCase {
      */
     private TimeConverter _timeConverter;
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void setUp() throws Exception {
         super.setUp();
         _timeConverter = new TimeConverter();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void tearDown() throws Exception {
         _timeConverter = null;
         super.tearDown();
@@ -155,7 +151,7 @@ public class TestTimeConverter extends TestCase {
             _timeConverter.convertFromString(textRep, Types.TIME);
             fail("ConversionException expected");
         } catch (ConversionException ex) {
-            // We expect the exception 
+            // We expect the exception
         }
     }
 

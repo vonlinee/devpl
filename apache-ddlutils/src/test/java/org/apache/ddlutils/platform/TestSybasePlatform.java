@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.sybase.SybasePlatform;
  * @version $Revision: 231110 $
  */
 public class TestSybasePlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return SybasePlatform.DATABASENAME;
     }
@@ -87,7 +85,7 @@ public class TestSybasePlatform extends TestPlatformBase {
      * Tests the column constraints.
      */
     public void testColumnConstraints() throws Exception {
-        // this is not valid sql as a table can have only one identity column at most 
+        // this is not valid sql as a table can have only one identity column at most
         assertEqualsIgnoringWhitespaces(
                 "SET quoted_identifier on;\n" +
                         "SET quoted_identifier on;\n" +

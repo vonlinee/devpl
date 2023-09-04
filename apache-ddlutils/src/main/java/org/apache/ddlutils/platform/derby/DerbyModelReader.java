@@ -26,7 +26,6 @@ import org.apache.ddlutils.platform.JdbcModelReader;
 import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Reads a database model from a Derby database.
@@ -41,9 +40,7 @@ public class DerbyModelReader extends JdbcModelReader {
         super(platform);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -63,17 +60,13 @@ public class DerbyModelReader extends JdbcModelReader {
         return column;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         return isInternalIndex(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         return isInternalIndex(index);

@@ -38,9 +38,7 @@ public class Oracle10Builder extends Oracle8Builder {
         super(platform);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropTable(Table table) throws IOException {
         // The only difference to the Oracle 8/9 variant is the purge which prevents the

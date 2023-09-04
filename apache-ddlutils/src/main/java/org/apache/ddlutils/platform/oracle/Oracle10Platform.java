@@ -38,9 +38,7 @@ public class Oracle10Platform extends Oracle9Platform {
         setModelReader(new Oracle10ModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }

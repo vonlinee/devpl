@@ -94,16 +94,12 @@ public class Db2Platform extends GenericDatabasePlatform {
         setModelReader(new Db2ModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -112,24 +108,21 @@ public class Db2Platform extends GenericDatabasePlatform {
         return comparator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) ||
-                        (change instanceof PrimaryKeyChange) ||
-                        (change instanceof RemovePrimaryKeyChange)) {
+                    (change instanceof PrimaryKeyChange) ||
+                    (change instanceof RemovePrimaryKeyChange)) {
                     return true;
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // DB2 cannot add IDENTITY columns, and required columns need a default value
                     return (addColumnChange.getNextColumn() == null) &&
-                            !addColumnChange.getNewColumn().isAutoIncrement() &&
-                            (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
-                                    .getNewColumn().getDefaultValue()));
+                        !addColumnChange.getNewColumn().isAutoIncrement() &&
+                        (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
+                            .getNewColumn().getDefaultValue()));
                 } else {
                     return false;
                 }

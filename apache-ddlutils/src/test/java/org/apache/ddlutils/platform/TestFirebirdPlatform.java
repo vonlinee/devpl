@@ -27,9 +27,7 @@ import org.apache.ddlutils.platform.firebird.FirebirdPlatform;
  * @version $Revision: 231110 $
  */
 public class TestFirebirdPlatform extends TestPlatformBase {
-    /**
-     * {@inheritDoc}
-     */
+
     protected String getDatabaseName() {
         return FirebirdPlatform.DATABASENAME;
     }

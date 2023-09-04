@@ -275,9 +275,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         _dataSource = dataSource;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getDatabaseName() {
         return _databaseName;
@@ -299,9 +297,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         return model;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void setUp() throws Exception {
         setDatabaseName("mysql");
@@ -311,9 +307,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         platform.setDelimitedIdentifierModeOn(_useDelimitedIdentifiers);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void tearDown() throws Exception {
         try {
@@ -450,7 +444,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
     /**
      * Deletes the specified row from the table.
-     * @param tableName      The name of the table (case insensitive)
+     * @param tableName      The name of the table (case-insensitive)
      * @param pkColumnValues The values for the pk columns in order of definition
      */
     protected void deleteRow(String tableName, Object[] pkColumnValues) {

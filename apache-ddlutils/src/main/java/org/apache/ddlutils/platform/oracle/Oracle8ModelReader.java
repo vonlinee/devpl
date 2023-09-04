@@ -45,15 +45,15 @@ public class Oracle8ModelReader extends JdbcModelReader {
     /**
      * The regular expression pattern for the Oracle conversion of ISO dates.
      */
-    private Pattern _oracleIsoDatePattern;
+    private final Pattern _oracleIsoDatePattern;
     /**
      * The regular expression pattern for the Oracle conversion of ISO times.
      */
-    private Pattern _oracleIsoTimePattern;
+    private final Pattern _oracleIsoTimePattern;
     /**
      * The regular expression pattern for the Oracle conversion of ISO timestamps.
      */
-    private Pattern _oracleIsoTimestampPattern;
+    private final Pattern _oracleIsoTimestampPattern;
 
     /**
      * Creates a new model reader for Oracle 8 databases.
@@ -74,9 +74,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         String tableName = values.getString("TABLE_NAME");
@@ -95,9 +93,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -247,9 +243,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<Index> readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         // Oracle has a bug in the DatabaseMetaData#getIndexInfo method which fails when
@@ -260,11 +254,11 @@ public class Oracle8ModelReader extends JdbcModelReader {
         // name of the primary key of the table
 
         final String query =
-                "SELECT a.INDEX_NAME, a.INDEX_TYPE, a.UNIQUENESS, b.COLUMN_NAME, b.COLUMN_POSITION FROM USER_INDEXES a, USER_IND_COLUMNS b WHERE " +
-                        "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
-                        "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
+            "SELECT a.INDEX_NAME, a.INDEX_TYPE, a.UNIQUENESS, b.COLUMN_NAME, b.COLUMN_POSITION FROM USER_INDEXES a, USER_IND_COLUMNS b WHERE " +
+                "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
+                "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
         final String queryWithSchema =
-                query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
+            query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
 
         Map<String, Index> indices = new TreeMap<>();
         PreparedStatement stmt = null;

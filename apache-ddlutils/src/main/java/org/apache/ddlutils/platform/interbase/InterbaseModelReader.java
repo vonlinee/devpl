@@ -45,9 +45,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         setDefaultColumnPattern("%");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
@@ -61,9 +59,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<Column> readColumns(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         ResultSet columnData = null;
@@ -218,9 +214,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<String> readPrimaryKeyNames(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         List<String> pks = new ArrayList<>();
@@ -253,9 +247,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         return pks;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Collection<ForeignKey> readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         Map<String, ForeignKey> fks = new TreeMap<>();
@@ -287,9 +279,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         return fks.values();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         final String query =
@@ -314,9 +304,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) throws SQLException {
         final String query =
@@ -343,9 +331,7 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;

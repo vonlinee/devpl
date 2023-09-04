@@ -27,9 +27,7 @@ public class MySqlModelReader extends JdbcModelReader {
         setDefaultTablePattern(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         // TODO This needs some more work, since table names can be case-sensitive or lowercase
@@ -44,9 +42,7 @@ public class MySqlModelReader extends JdbcModelReader {
         return table;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
@@ -59,18 +55,14 @@ public class MySqlModelReader extends JdbcModelReader {
         return column;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {
         // MySql defines a unique index "PRIMARY" for primary keys
         return "PRIMARY".equals(index.getName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         // MySql defines a non-unique index of the same name as the fk

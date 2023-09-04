@@ -8,9 +8,7 @@ import java.sql.Types;
  * @version $Revision: 289996 $
  */
 public class NumberConverter implements SqlTypeConverter {
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (textRep == null) {
@@ -33,9 +31,7 @@ public class NumberConverter implements SqlTypeConverter {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         if (obj == null) {

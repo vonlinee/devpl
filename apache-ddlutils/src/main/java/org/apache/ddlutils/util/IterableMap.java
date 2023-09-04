@@ -16,13 +16,11 @@ import java.util.Map;
  *   it.setValue("newValue");
  * }
  * </pre>
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:43 $
- *
  * @author Stephen Colebourne
+ * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:43 $
+ * @since Commons Collections 3.0
  */
-public interface IterableMap extends Map {
+public interface IterableMap<K, V> extends Map<K, V> {
 
     /**
      * Obtains a <code>MapIterator</code> over the map.
@@ -38,7 +36,6 @@ public interface IterableMap extends Map {
      *   it.setValue("newValue");
      * }
      * </pre>
-     *
      * @return a map iterator
      */
     MapIterator mapIterator();

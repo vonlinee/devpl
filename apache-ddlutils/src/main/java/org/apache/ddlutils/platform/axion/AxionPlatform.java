@@ -50,17 +50,13 @@ public class AxionPlatform extends GenericDatabasePlatform {
         setModelReader(new AxionModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return DATABASENAME;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // Axion will create the database automatically when connecting for the first time
@@ -82,9 +78,7 @@ public class AxionPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws SQLException {
         boolean useIdx = (columnName == null);
@@ -92,7 +86,7 @@ public class AxionPlatform extends GenericDatabasePlatform {
 
         if (jdbcType == Types.BIGINT) {// The Axion JDBC driver does not support reading BIGINT values directly
             String strValue = useIdx ? resultSet.getString(columnIdx) : resultSet.getString(columnName);
-            value = resultSet.wasNull() ? null : new Long(strValue);
+            value = resultSet.wasNull() ? null : Long.valueOf(strValue);
         } else {
             value = super.extractColumnValue(resultSet, columnName, columnIdx, jdbcType);
         }

@@ -10,7 +10,6 @@ import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
 import java.sql.Types;
-import java.util.Map;
 
 /**
  * The SQL Builder for the Interbase database.
@@ -26,9 +25,7 @@ public class InterbaseBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         super.createTable(database, table, parameters);
@@ -41,9 +38,7 @@ public class InterbaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
@@ -53,9 +48,7 @@ public class InterbaseBuilder extends SqlBuilder {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropTable(Table table) throws IOException {
         // dropping generators for auto-increment
@@ -67,9 +60,7 @@ public class InterbaseBuilder extends SqlBuilder {
         super.dropTable(table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
         // Index names in Interbase are unique to a schema and hence we do not
@@ -140,17 +131,13 @@ public class InterbaseBuilder extends SqlBuilder {
         return getConstraintName("gen", table, column.getName(), null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using a generator
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();

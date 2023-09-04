@@ -28,7 +28,7 @@ public class ModelHelper {
 
                 if (curTableIsInList != tableList.contains(curFk.getForeignTable())) {
                     throw new ModelException("The table " + curTable.getName() + " has a foreign key to table " + curFk
-                            .getForeignTable().getName());
+                        .getForeignTable().getName());
                 }
             }
         }

@@ -94,9 +94,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         setModelReader(new MSSqlModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }
@@ -110,9 +108,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         return isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed() && (table.getAutoIncrementColumns().length > 0);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void beforeInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
             MSSqlBuilder builder = (MSSqlBuilder) getSqlBuilder();
@@ -121,9 +117,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void afterInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
             MSSqlBuilder builder = (MSSqlBuilder) getSqlBuilder();
@@ -132,53 +126,43 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void beforeUpdate(Connection connection, Table table) throws SQLException {
         beforeInsert(connection, table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected void afterUpdate(Connection connection, Table table) throws SQLException {
         afterInsert(connection, table);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected ModelComparator getModelComparator() {
         return new MSSqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) || (change instanceof AddPrimaryKeyChange) || (change instanceof PrimaryKeyChange) || (change instanceof RemovePrimaryKeyChange)) {
                     return true;
-                } else if (change instanceof AddColumnChange) {
-                    AddColumnChange addColumnChange = (AddColumnChange) change;
+                } else if (change instanceof AddColumnChange addColumnChange) {
 
                     // Sql Server can only add not insert columns, and they cannot be requird unless also
                     // auto increment or with a DEFAULT value
                     return (addColumnChange.getNextColumn() == null) && (!addColumnChange.getNewColumn()
-                            .isRequired() || addColumnChange.getNewColumn()
-                            .isAutoIncrement() || !StringUtils.isEmpty(addColumnChange.getNewColumn()
-                            .getDefaultValue()));
-                } else if (change instanceof ColumnDefinitionChange) {
-                    ColumnDefinitionChange colDefChange = (ColumnDefinitionChange) change;
+                        .isRequired() || addColumnChange.getNewColumn()
+                        .isAutoIncrement() || !StringUtils.isEmpty(addColumnChange.getNewColumn()
+                        .getDefaultValue()));
+                } else if (change instanceof ColumnDefinitionChange colDefChange) {
                     Column curColumn = intermediateTable.findColumn(colDefChange.getChangedColumn(), isDelimitedIdentifierModeOn());
                     Column newColumn = colDefChange.getNewColumn();
 
                     // Sql Server has no way of adding or removing an IDENTITY constraint
                     // Also, Sql Server cannot handle reducing the size (even with the CAST in place)
                     return (curColumn.isAutoIncrement() == colDefChange.getNewColumn()
-                            .isAutoIncrement()) && (curColumn.isRequired() || (curColumn.isRequired() == newColumn.isRequired())) && !ColumnDefinitionChange.isSizeReduced(getPlatformInfo(), curColumn, newColumn);
+                        .isAutoIncrement()) && (curColumn.isRequired() || (curColumn.isRequired() == newColumn.isRequired())) && !ColumnDefinitionChange.isSizeReduced(getPlatformInfo(), curColumn, newColumn);
                 } else {
                     return false;
                 }
@@ -186,9 +170,7 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         };
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
         if (!changes.isEmpty()) {

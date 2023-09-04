@@ -40,7 +40,7 @@ public class ForeignKey implements Serializable {
     /**
      * The references between local and remote columns.
      */
-    private ListOrderedSet<Reference> _references = new ListOrderedSet<>();
+    private final ListOrderedSet<Reference> _references = new ListOrderedSet<>();
     /**
      * Whether this foreign key has an associated auto-generated index.
      */
@@ -311,9 +311,7 @@ public class ForeignKey implements Serializable {
         _autoIndexPresent = autoIndexPresent;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ForeignKey otherFk) {
@@ -360,17 +358,13 @@ public class ForeignKey implements Serializable {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public int hashCode() {
         return Objects.hash(_name, _foreignTableName, _references);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

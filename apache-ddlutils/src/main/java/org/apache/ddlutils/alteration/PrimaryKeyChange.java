@@ -12,7 +12,7 @@ public class PrimaryKeyChange extends TableChangeImplBase {
     /**
      * The names of the columns making up the new primary key.
      */
-    private String[] _newPrimaryKeyColumns;
+    private final String[] _newPrimaryKeyColumns;
 
     /**
      * Creates a new change object.
@@ -41,9 +41,7 @@ public class PrimaryKeyChange extends TableChangeImplBase {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
         Column[] pkCols = table.getPrimaryKeyColumns();

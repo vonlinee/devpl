@@ -43,9 +43,7 @@ public class MaxDbPlatform extends SapDbPlatform {
         setModelReader(new MaxDbModelReader(this));
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     public String getName() {
         return DATABASENAME;
     }

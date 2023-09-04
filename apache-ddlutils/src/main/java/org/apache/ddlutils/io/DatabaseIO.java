@@ -129,7 +129,7 @@ public class DatabaseIO {
      * Qualified name of the version attribute.
      */
     public static final QName QNAME_ATTRIBUTE_VERSION = new QName(DDLUTILS_NAMESPACE, "version");
-
+    ModelValidator modelValidator = new ModelValidator();
     /**
      * Whether to validate the XML.
      */
@@ -207,8 +207,6 @@ public class DatabaseIO {
             IOUtils.closeQuitely(reader);
         }
     }
-
-    ModelValidator modelValidator = new ModelValidator();
 
     /**
      * Reads the database model given by the reader. Note that this method does not close the

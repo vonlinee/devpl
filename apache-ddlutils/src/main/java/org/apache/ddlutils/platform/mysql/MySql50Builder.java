@@ -24,7 +24,6 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.util.ValueMap;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * The SQL Builder for MySQL version 5 and above.
