@@ -48,12 +48,10 @@ public class MySqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("AUTO_INCREMENT");
     }
-
 
     @Override
     protected boolean shouldGeneratePrimaryKeys(Column[] primaryKeyColumns) {

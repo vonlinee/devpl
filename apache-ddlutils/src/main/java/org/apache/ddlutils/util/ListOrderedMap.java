@@ -55,7 +55,7 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
      * @param map the map to decorate, must not be null
      * @throws IllegalArgumentException if map is null
      */
-    protected ListOrderedMap(Map map) {
+    protected ListOrderedMap(Map<K, V> map) {
         super(map);
         insertOrder.addAll(getMap().keySet());
     }

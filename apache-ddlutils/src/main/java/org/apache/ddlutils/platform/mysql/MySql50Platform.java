@@ -28,7 +28,6 @@ public class MySql50Platform extends MySqlPlatform {
         setModelReader(new MySql50ModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;

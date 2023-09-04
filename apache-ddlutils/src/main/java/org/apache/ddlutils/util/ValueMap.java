@@ -2,10 +2,8 @@ package org.apache.ddlutils.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
@@ -292,6 +290,27 @@ public class ValueMap implements Map<String, Object>, Cloneable {
     @Override
     public boolean containsValue(Object value) {
         return map.containsValue(value);
+    }
+
+    /**
+     * 指定的key是否有相等的值
+     * @param key   key
+     * @param value 比较的值
+     * @return 是否有相等的值
+     */
+    public boolean containsValue(String key, Object value) {
+        return Objects.equals(map.get(key), value);
+    }
+
+    /**
+     * 指定的key是否有相等的值
+     * @param key   key
+     * @param value 比较的值
+     * @return 是否有相等的值
+     */
+    public <T> boolean containsValue(String key, T value, BiPredicate<Object, T> condition) {
+        Object val = map.get(key);
+        return condition.test(val, value);
     }
 
     @Override

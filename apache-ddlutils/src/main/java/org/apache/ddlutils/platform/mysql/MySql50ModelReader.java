@@ -20,7 +20,6 @@ public class MySql50ModelReader extends MySqlModelReader {
         super(platform);
     }
 
-
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);

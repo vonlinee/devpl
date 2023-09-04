@@ -1,24 +1,5 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.Column;
@@ -172,15 +153,12 @@ public class DatabaseDataIO {
             DataConverterRegistration registrationInfo = (DataConverterRegistration) it.next();
 
             if (registrationInfo.getTypeCode() != Integer.MIN_VALUE) {
-                converterConf.registerConverter(registrationInfo.getTypeCode(),
-                    registrationInfo.getConverter());
+                converterConf.registerConverter(registrationInfo.getTypeCode(), registrationInfo.getConverter());
             } else {
                 if ((registrationInfo.getTable() == null) || (registrationInfo.getColumn() == null)) {
                     throw new DdlUtilsException("Please specify either the jdbc type or a table/column pair for which the converter shall be defined");
                 }
-                converterConf.registerConverter(registrationInfo.getTable(),
-                    registrationInfo.getColumn(),
-                    registrationInfo.getConverter());
+                converterConf.registerConverter(registrationInfo.getTable(), registrationInfo.getColumn(), registrationInfo.getConverter());
             }
         }
     }
@@ -322,11 +300,11 @@ public class DatabaseDataIO {
 
         // TODO: An advanced algorithm could be employed here that writes individual
         //       objects related by foreign keys, in the correct order
-        List tables = sortTables(model.getTables());
+        List<Table> tables = sortTables(model.getTables());
 
         writer.writeDocumentStart();
-        for (Iterator it = tables.iterator(); it.hasNext(); ) {
-            writeDataForTableToXML(platform, model, (Table) it.next(), writer);
+        for (Table table : tables) {
+            writeDataForTableToXML(platform, model, table, writer);
         }
         writer.writeDocumentEnd();
     }
@@ -336,19 +314,17 @@ public class DatabaseDataIO {
      * @param tables The tables
      * @return The sorted tables
      */
-    private List sortTables(Table[] tables) {
-        ArrayList result = new ArrayList();
-        HashSet processed = new HashSet();
-        ListOrderedMap pending = new ListOrderedMap();
+    private List<Table> sortTables(Table[] tables) {
+        List<Table> result = new ArrayList<>();
+        Set<Table> processed = new HashSet<>();
+        ListOrderedMap<Table, Set<Table>> pending = new ListOrderedMap<>();
 
-        for (int idx = 0; idx < tables.length; idx++) {
-            Table table = tables[idx];
-
+        for (Table table : tables) {
             if (table.getForeignKeyCount() == 0) {
                 result.add(table);
                 processed.add(table);
             } else {
-                HashSet waitedFor = new HashSet();
+                Set<Table> waitedFor = new HashSet<>();
 
                 for (int fkIdx = 0; fkIdx < table.getForeignKeyCount(); fkIdx++) {
                     Table waitedForTable = table.getForeignKey(fkIdx).getForeignTable();
@@ -361,14 +337,13 @@ public class DatabaseDataIO {
             }
         }
 
-        HashSet newProcessed = new HashSet();
+        Set<Table> newProcessed = new HashSet<>();
 
         while (!processed.isEmpty() && !pending.isEmpty()) {
-            newProcessed.clear();
-            for (Iterator it = pending.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) it.next();
-                Table table = (Table) entry.getKey();
-                HashSet waitedFor = (HashSet) entry.getValue();
+            for (Iterator<Map.Entry<Table, Set<Table>>> it = pending.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<Table, Set<Table>> entry = it.next();
+                Table table = entry.getKey();
+                HashSet<Table> waitedFor = (HashSet<Table>) entry.getValue();
 
                 waitedFor.removeAll(processed);
                 if (waitedFor.isEmpty()) {
@@ -379,15 +354,13 @@ public class DatabaseDataIO {
             }
             processed.clear();
 
-            HashSet tmp = processed;
+            Set<Table> tmp = processed;
 
             processed = newProcessed;
             newProcessed = tmp;
         }
         // the remaining are within circular dependencies
-        for (Iterator it = pending.keySet().iterator(); it.hasNext(); ) {
-            result.add(it.next());
-        }
+        result.addAll(pending.keySet());
         return result;
     }
 
@@ -400,7 +373,7 @@ public class DatabaseDataIO {
      */
     private void writeDataForTableToXML(DatabasePlatform platform, Database model, Table table, DataWriter writer) {
         Table[] tables = {table};
-        StringBuffer query = new StringBuffer();
+        StringBuilder query = new StringBuilder();
 
         query.append("SELECT ");
 
@@ -470,7 +443,7 @@ public class DatabaseDataIO {
         sink.setEnsureForeignKeyOrder(_ensureFKOrder);
         sink.setUseBatchMode(_useBatchMode);
         if (_batchSize != null) {
-            sink.setBatchSize(_batchSize.intValue());
+            sink.setBatchSize(_batchSize);
         }
 
         reader.setModel(model);

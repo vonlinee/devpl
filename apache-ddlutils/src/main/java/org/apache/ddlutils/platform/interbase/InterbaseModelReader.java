@@ -100,13 +100,13 @@ public class InterbaseModelReader extends JdbcModelReader {
      * @param table The table
      */
     protected void determineExtraColumnInfo(Table table) throws SQLException {
-        final String query =
-            "SELECT a.RDB$FIELD_NAME, a.RDB$DEFAULT_SOURCE, b.RDB$FIELD_PRECISION, b.RDB$FIELD_SCALE," +
-                " b.RDB$FIELD_TYPE, b.RDB$FIELD_SUB_TYPE FROM RDB$RELATION_FIELDS a, RDB$FIELDS b" +
-                " WHERE a.RDB$RELATION_NAME=? AND a.RDB$FIELD_SOURCE=b.RDB$FIELD_NAME";
+        final String query = """
+            SELECT a.RDB$FIELD_NAME, a.RDB$DEFAULT_SOURCE, b.RDB$FIELD_PRECISION, b.RDB$FIELD_SCALE,
+                             b.RDB$FIELD_TYPE, b.RDB$FIELD_SUB_TYPE FROM RDB$RELATION_FIELDS a, RDB$FIELDS b
+                             WHERE a.RDB$RELATION_NAME=? AND a.RDB$FIELD_SOURCE=b.RDB$FIELD_NAME
+                            """;
 
         PreparedStatement prepStmt = null;
-
         try {
             prepStmt = getConnection().prepareStatement(query);
             prepStmt.setString(1, getPlatform().isDelimitedIdentifierModeOn() ? table.getName() : table.getName()
@@ -214,7 +214,6 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     protected Collection<String> readPrimaryKeyNames(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         List<String> pks = new ArrayList<>();
@@ -282,9 +281,7 @@ public class InterbaseModelReader extends JdbcModelReader {
 
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
-        final String query =
-            "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
+        final String query = "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " + "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -304,12 +301,9 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) throws SQLException {
-        final String query =
-            "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
+        final String query = "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " + "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -376,13 +370,11 @@ public class InterbaseModelReader extends JdbcModelReader {
                     while (found && columnData.next()) {
                         values = readColumns(columnData, getColumnsForColumn());
 
-                        if (getPlatform().isDelimitedIdentifierModeOn() &&
-                            !tableName.equals(values.get("TABLE_NAME"))) {
+                        if (getPlatform().isDelimitedIdentifierModeOn() && !tableName.equals(values.get("TABLE_NAME"))) {
                             continue;
                         }
 
-                        if (table.findColumn(values.getString("COLUMN_NAME"),
-                            getPlatform().isDelimitedIdentifierModeOn()) == null) {
+                        if (table.findColumn(values.getString("COLUMN_NAME"), getPlatform().isDelimitedIdentifierModeOn()) == null) {
                             found = false;
                         }
                     }

@@ -6,8 +6,6 @@ package org.apache.ddlutils.util;
  * @author Michael A. Smith
  * @author Neil O'Toole
  * @author Stephen Colebourne
- * @version $Revision: 1.3 $ $Date: 2004/02/18 01:00:08 $
- * @since Commons Collections 3.0
  */
 public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
 
@@ -35,6 +33,7 @@ public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
      * Gets the key from the pair.
      * @return the key
      */
+    @Override
     public K getKey() {
         return key;
     }
@@ -43,6 +42,7 @@ public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
      * Gets the value from the pair.
      * @return the value
      */
+    @Override
     public V getValue() {
         return value;
     }
@@ -51,9 +51,10 @@ public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
      * Gets a debugging String view of the pair.
      * @return a String view of the entry
      */
+    @Override
     public String toString() {
         return String.valueOf(getKey()) +
-            '=' +
-            getValue();
+               '=' +
+               getValue();
     }
 }

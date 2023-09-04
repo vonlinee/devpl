@@ -713,8 +713,8 @@ public class JdbcModelReader {
      * @param values   The primary key metadata values as defined by {@link #getColumnsForPK()}
      * @return The primary key name
      */
-    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, Map<String, Object> values) throws SQLException {
-        return String.valueOf(values.get("COLUMN_NAME"));
+    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+        return values.getString("COLUMN_NAME");
     }
 
     /**
@@ -975,8 +975,7 @@ public class JdbcModelReader {
      * @param schemaPattern The schema pattern to limit the schemas to search in
      * @param table         The table to search for
      * @return The schema name or <code>null</code> if the schema of the table
-     * could not be found
-     * @deprecated Will be removed once full schema support is in place
+     * could not be found Will be removed once full schema support is in place
      */
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;
