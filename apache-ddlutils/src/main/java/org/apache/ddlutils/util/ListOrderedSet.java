@@ -1,5 +1,7 @@
 package org.apache.ddlutils.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
@@ -75,14 +77,14 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * @param list the list to decorate, must not be null
      * @throws IllegalArgumentException if list is null
      */
-    public static ListOrderedSet decorate(List list) {
+    public static <T> ListOrderedSet<T> decorate(List<T> list) {
         if (list == null) {
             throw new IllegalArgumentException("List must not be null");
         }
-        Set set = new HashSet(list);
+        Set<T> set = new HashSet<>(list);
         list.retainAll(set);
 
-        return new ListOrderedSet(set, list);
+        return new ListOrderedSet<>(set, list);
     }
 
     //-----------------------------------------------------------------------
@@ -93,8 +95,8 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * @since Commons Collections 3.1
      */
     public ListOrderedSet() {
-        super(new HashSet());
-        setOrder = new ArrayList();
+        super(new HashSet<>());
+        setOrder = new ArrayList<>();
     }
 
     /**
@@ -102,9 +104,9 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * @param set the set to decorate, must not be null
      * @throws IllegalArgumentException if set is null
      */
-    protected ListOrderedSet(Set set) {
+    protected ListOrderedSet(Set<E> set) {
         super(set);
-        setOrder = new ArrayList(set);
+        setOrder = new ArrayList<>(set);
     }
 
     /**
@@ -115,7 +117,7 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * @param list the list to decorate, must not be null
      * @throws IllegalArgumentException if set or list is null
      */
-    protected ListOrderedSet(Set set, List list) {
+    protected ListOrderedSet(Set<E> set, List<E> list) {
         super(set);
         if (list == null) {
             throw new IllegalArgumentException("List must not be null");
@@ -129,20 +131,23 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * Gets an unmodifiable view of the order of the Set.
      * @return an unmodifiable list view
      */
-    public List asList() {
+    public List<E> asList() {
         return Collections.unmodifiableList(setOrder);
     }
 
     //-----------------------------------------------------------------------
+    @Override
     public void clear() {
         collection.clear();
         setOrder.clear();
     }
 
-    public Iterator iterator() {
-        return new OrderedSetIterator(setOrder.iterator(), collection);
+    @Override
+    public @NotNull Iterator<E> iterator() {
+        return new OrderedSetIterator<>(setOrder.iterator(), collection);
     }
 
+    @Override
     public boolean add(E object) {
         if (collection.contains(object)) {
             // re-adding doesn't change order
@@ -164,12 +169,14 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
         return result;
     }
 
+    @Override
     public boolean remove(Object object) {
         boolean result = collection.remove(object);
         setOrder.remove(object);
         return result;
     }
 
+    @Override
     public boolean removeAll(Collection<?> coll) {
         boolean result = false;
         for (Object object : coll) {
@@ -178,28 +185,26 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
         return result;
     }
 
-    public boolean retainAll(Collection coll) {
+    @Override
+    public boolean retainAll(@NotNull Collection<?> coll) {
         boolean result = collection.retainAll(coll);
-        if (result == false) {
+        if (!result) {
             return false;
-        } else if (collection.size() == 0) {
+        } else if (collection.isEmpty()) {
             setOrder.clear();
         } else {
-            for (Iterator it = setOrder.iterator(); it.hasNext(); ) {
-                Object object = it.next();
-                if (collection.contains(object) == false) {
-                    it.remove();
-                }
-            }
+            setOrder.removeIf(object -> !collection.contains(object));
         }
-        return result;
+        return true;
     }
 
-    public Object[] toArray() {
+    @Override
+    public Object @NotNull [] toArray() {
         return setOrder.toArray();
     }
 
-    public Object[] toArray(Object a[]) {
+    @Override
+    public Object[] toArray(Object @NotNull [] a) {
         return setOrder.toArray(a);
     }
 
@@ -208,7 +213,7 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
         return setOrder.get(index);
     }
 
-    public int indexOf(Object object) {
+    public int indexOf(E object) {
         return setOrder.indexOf(object);
     }
 
@@ -244,6 +249,7 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
      * any custom toStrings will be ignored.
      */
     // Fortunately List.toString and Set.toString look the same
+    @Override
     public String toString() {
         return setOrder.toString();
     }
@@ -253,7 +259,7 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
     /**
      * Internal iterator handle remove.
      */
-    static class OrderedSetIterator<T> extends AbstractIteratorDecorator<T>{
+    static class OrderedSetIterator<T> extends AbstractIteratorDecorator<T> {
 
         /**
          * Object we iterate on
@@ -269,11 +275,13 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
             this.set = set;
         }
 
+        @Override
         public T next() {
             last = iterator.next();
             return last;
         }
 
+        @Override
         public void remove() {
             set.remove(last);
             iterator.remove();

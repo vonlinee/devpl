@@ -1,7 +1,7 @@
 package org.apache.ddlutils;
 
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.alteration.ModelChange;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.JdbcModelReader;

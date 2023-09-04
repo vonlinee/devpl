@@ -1,6 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-import org.apache.commons.beanutils.DynaProperty;
 import org.apache.ddlutils.model.Column;
 
 /**
@@ -39,7 +38,7 @@ public class SqlDynaProperty extends DynaProperty {
     }
 
     // Helper methods
-    //-------------------------------------------------------------------------                
+    //-------------------------------------------------------------------------
 
     /**
      * Determines whether this property is for a primary key column.

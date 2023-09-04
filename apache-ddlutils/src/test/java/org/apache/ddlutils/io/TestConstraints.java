@@ -1,33 +1,14 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import junit.framework.Test;
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.sybase.SybasePlatform;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.util.List;
 
@@ -47,7 +28,7 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
     /**
      * Tests a nullable column. Basically we're creating the test database
      * and then read it back and compare the original with the read one.
-     * In addition we can also check that DdlUtils does not try to alter the new
+     * In addition, we can also check that DdlUtils does not try to alter the new
      * database when using the <code>alterTables</code>/<code>getAlterTablesSql</code>
      * methods of the {@link DatabasePlatform} with the read-back model.
      * @param modelXml        The model to be tested in XML form
@@ -64,7 +45,7 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
         if (checkAlteration) {
             String alterTablesSql = getAlterTablesSql(modelFromDb).trim();
 
-            assertTrue(alterTablesSql.length() == 0);
+            assertTrue(alterTablesSql.isEmpty());
         }
     }
 
@@ -463,20 +444,20 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals(1, beansTable1.get(0), "pk");
+        assertEquals(5, beansTable2.get(0), "pk");
+        assertEquals(1, beansTable2.get(0), "avalue");
 
         try {
-            deleteRow("roundtrip_1", new Object[]{new Integer(1)});
+            deleteRow("roundtrip_1", new Object[]{(1)});
             fail();
         } catch (DdlUtilsException ex) {
         }
@@ -507,19 +488,19 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
-        deleteRow("roundtrip_1", new Object[]{new Integer(1)});
+        deleteRow("roundtrip_1", new Object[]{(1)});
 
         beansTable1 = getRows("roundtrip_1");
         beansTable2 = getRows("roundtrip_2");
@@ -553,26 +534,26 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
-        deleteRow("roundtrip_1", new Object[]{new Integer(1)});
+        deleteRow("roundtrip_1", new Object[]{(1)});
 
         beansTable1 = getRows("roundtrip_1");
         beansTable2 = getRows("roundtrip_2");
 
         assertEquals(0, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
         assertEquals((Object) null, beansTable2.get(0), "avalue");
     }
 
@@ -601,30 +582,30 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_1", new Object[]{new Integer(2)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_1", new Object[]{(2)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(2, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(2), beansTable1.get(1), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((2), beansTable1.get(1), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
-        deleteRow("roundtrip_1", new Object[]{new Integer(1)});
+        deleteRow("roundtrip_1", new Object[]{(1)});
 
         beansTable1 = getRows("roundtrip_1");
         beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(2), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(2), beansTable2.get(0), "avalue");
+        assertEquals((2), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((2), beansTable2.get(0), "avalue");
     }
 
     /**
@@ -652,20 +633,20 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
         try {
-            updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{new Integer(5)});
+            updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{(5)});
             fail();
         } catch (DdlUtilsException ex) {
         }
@@ -696,28 +677,28 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
-        updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{new Integer(2)});
+        updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{(2)});
 
         beansTable1 = getRows("roundtrip_1");
         beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(2), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(2), beansTable2.get(0), "avalue");
+        assertEquals((2), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((2), beansTable2.get(0), "avalue");
     }
 
     /**
@@ -745,27 +726,27 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(1)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_2", new Object[]{(5), (1)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
 
-        updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{new Integer(2)});
+        updateRow("roundtrip_1", (DynaBean) beansTable1.get(0), new Object[]{(2)});
 
         beansTable1 = getRows("roundtrip_1");
         beansTable2 = getRows("roundtrip_2");
 
         assertEquals(1, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(2), beansTable1.get(0), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
+        assertEquals((2), beansTable1.get(0), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
         assertEquals((Object) null, beansTable2.get(0), "avalue");
     }
 
@@ -794,30 +775,30 @@ public class TestConstraints extends TestAgainstLiveDatabaseBase {
 
         performConstraintsTest(modelXml, true);
 
-        insertRow("roundtrip_1", new Object[]{new Integer(1)});
-        insertRow("roundtrip_1", new Object[]{new Integer(2)});
-        insertRow("roundtrip_2", new Object[]{new Integer(5), new Integer(2)});
+        insertRow("roundtrip_1", new Object[]{(1)});
+        insertRow("roundtrip_1", new Object[]{(2)});
+        insertRow("roundtrip_2", new Object[]{(5), (2)});
 
         List beansTable1 = getRows("roundtrip_1");
         List beansTable2 = getRows("roundtrip_2");
 
         assertEquals(2, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(1), beansTable1.get(0), "pk");
-        assertEquals(new Integer(2), beansTable1.get(1), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(2), beansTable2.get(0), "avalue");
+        assertEquals((1), beansTable1.get(0), "pk");
+        assertEquals((2), beansTable1.get(1), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((2), beansTable2.get(0), "avalue");
 
-        updateRow("roundtrip_1", (DynaBean) beansTable1.get(1), new Object[]{new Integer(0)});
+        updateRow("roundtrip_1", (DynaBean) beansTable1.get(1), new Object[]{(0)});
 
         beansTable1 = getRows("roundtrip_1", "pk");
         beansTable2 = getRows("roundtrip_2", "pk");
 
         assertEquals(2, beansTable1.size());
         assertEquals(1, beansTable2.size());
-        assertEquals(new Integer(0), beansTable1.get(0), "pk");
-        assertEquals(new Integer(1), beansTable1.get(1), "pk");
-        assertEquals(new Integer(5), beansTable2.get(0), "pk");
-        assertEquals(new Integer(1), beansTable2.get(0), "avalue");
+        assertEquals((0), beansTable1.get(0), "pk");
+        assertEquals((1), beansTable1.get(1), "pk");
+        assertEquals((5), beansTable2.get(0), "pk");
+        assertEquals((1), beansTable2.get(0), "avalue");
     }
 }

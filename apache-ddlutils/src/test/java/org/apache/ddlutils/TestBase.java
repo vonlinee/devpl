@@ -41,7 +41,7 @@ public abstract class TestBase extends TestCase {
      * Returns the log.
      * @return The log
      */
-    protected Log getLog() {
+    protected Logger getLog() {
         return _log;
     }
 

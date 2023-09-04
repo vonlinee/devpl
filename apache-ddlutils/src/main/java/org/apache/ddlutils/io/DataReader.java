@@ -1,12 +1,13 @@
 package org.apache.ddlutils.io;
 
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.util.Base64;
+import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.bean.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -18,14 +19,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Reads data XML into dyna beans matching a specified database model. Note that
  * the data sink won't be started or ended by the data reader, this has to be done
  * in the code that uses the data reader.
- * @version $Revision: $
  */
 public class DataReader {
     /**
@@ -238,8 +236,8 @@ public class DataReader {
     private void readBean(XMLStreamReader xmlReader) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
         Location location = xmlReader.getLocation();
-        Map attributes = new HashMap();
-        String tableName = null;
+        ValueMap attributes = new ValueMap();
+        String tableName;
 
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
             QName attrQName = xmlReader.getAttributeName(idx);
@@ -282,7 +280,7 @@ public class DataReader {
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnSubElements(XMLStreamReader xmlReader, Map data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnSubElements(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
         int eventType = XMLStreamReader.START_ELEMENT;
 
         while (eventType != XMLStreamReader.END_ELEMENT) {
@@ -298,9 +296,9 @@ public class DataReader {
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnSubElement(XMLStreamReader xmlReader, Map data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnSubElement(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
-        Map attributes = new HashMap();
+        ValueMap attributes = new ValueMap();
         boolean usesBase64 = false;
 
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
@@ -317,7 +315,7 @@ public class DataReader {
         }
 
         int eventType = XMLStreamReader.START_ELEMENT;
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
 
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
@@ -359,7 +357,7 @@ public class DataReader {
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnDataSubElement(XMLStreamReader xmlReader, Map data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnDataSubElement(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
         boolean usesBase64 = false;
 
@@ -378,7 +376,7 @@ public class DataReader {
         String value = xmlReader.getElementText();
 
         if (value != null) {
-            value = value.toString().trim();
+            value = value.trim();
 
             if (usesBase64) {
                 value = new String(Base64.decodeBase64(value.getBytes()));
@@ -410,9 +408,7 @@ public class DataReader {
             PropertyUtils.setProperty(bean, column.getName(), propValue);
         } catch (NoSuchMethodException ex) {
             throw new DdlUtilsXMLException("Undefined column " + column.getName());
-        } catch (IllegalAccessException ex) {
-            throw new DdlUtilsXMLException("Could not set bean property for column " + column.getName(), ex);
-        } catch (InvocationTargetException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             throw new DdlUtilsXMLException("Could not set bean property for column " + column.getName(), ex);
         }
     }

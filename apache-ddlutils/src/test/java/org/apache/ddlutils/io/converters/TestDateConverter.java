@@ -60,7 +60,7 @@ public class TestDateConverter extends TestCase {
 
         cal.setLenient(false);
         cal.clear();
-        cal.set(2005, 11, 19);
+        cal.set(2005, Calendar.DECEMBER, 19);
 
         Object result = _dateConverter.convertFromString(textRep, Types.DATE);
 
@@ -77,7 +77,7 @@ public class TestDateConverter extends TestCase {
 
         cal.setLenient(false);
         cal.clear();
-        cal.set(2005, 11, 1);
+        cal.set(2005, Calendar.DECEMBER, 1);
 
         Object result = _dateConverter.convertFromString(textRep, Types.DATE);
 
@@ -93,7 +93,7 @@ public class TestDateConverter extends TestCase {
         Calendar cal = Calendar.getInstance();
 
         cal.clear();
-        cal.set(2005, 0, 1);
+        cal.set(2005, Calendar.JANUARY, 1);
 
         Object result = _dateConverter.convertFromString(textRep, Types.DATE);
 
@@ -109,7 +109,7 @@ public class TestDateConverter extends TestCase {
         Calendar cal = Calendar.getInstance();
 
         cal.clear();
-        cal.set(2005, 5, 7);
+        cal.set(2005, Calendar.JUNE, 7);
 
         Object result = _dateConverter.convertFromString(textRep, Types.DATE);
 
@@ -175,7 +175,7 @@ public class TestDateConverter extends TestCase {
 
         cal.setLenient(false);
         cal.clear();
-        cal.set(2005, 11, 19);
+        cal.set(2005, Calendar.DECEMBER, 19);
 
         Date date = new Date(cal.getTimeInMillis());
         String result = _dateConverter.convertToString(date, Types.DATE);

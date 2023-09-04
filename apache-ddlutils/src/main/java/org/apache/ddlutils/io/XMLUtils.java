@@ -19,9 +19,8 @@ package org.apache.ddlutils.io;
  * under the License.
  */
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.ddlutils.util.Base64;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;

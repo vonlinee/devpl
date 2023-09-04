@@ -1,6 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.ddlutils.util.ListOrderedSet;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serializable;
@@ -40,7 +40,7 @@ public class ForeignKey implements Serializable {
     /**
      * The references between local and remote columns.
      */
-    private ListOrderedSet _references = new ListOrderedSet();
+    private ListOrderedSet<Reference> _references = new ListOrderedSet<>();
     /**
      * Whether this foreign key has an associated auto-generated index.
      */
@@ -316,8 +316,7 @@ public class ForeignKey implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ForeignKey) {
-            ForeignKey otherFk = (ForeignKey) obj;
+        if (obj instanceof ForeignKey otherFk) {
 
             // Note that this compares case-sensitive
             // Note also that we can simply compare the references regardless of their order
@@ -337,15 +336,13 @@ public class ForeignKey implements Serializable {
         boolean checkName = (_name != null) && (!_name.isEmpty()) && (otherFk._name != null) && (!otherFk._name.isEmpty());
 
         if ((!checkName || _name.equalsIgnoreCase(otherFk._name)) && _foreignTableName.equalsIgnoreCase(otherFk._foreignTableName)) {
-            HashSet otherRefs = new HashSet();
 
-            otherRefs.addAll(otherFk._references);
-            for (Iterator it = _references.iterator(); it.hasNext(); ) {
-                Reference curLocalRef = (Reference) it.next();
+            HashSet<Reference> otherRefs = new HashSet<>(otherFk._references);
+            for (Reference curLocalRef : _references) {
                 boolean found = false;
 
-                for (Iterator otherIt = otherRefs.iterator(); otherIt.hasNext(); ) {
-                    Reference curOtherRef = (Reference) otherIt.next();
+                for (Iterator<Reference> otherIt = otherRefs.iterator(); otherIt.hasNext(); ) {
+                    Reference curOtherRef = otherIt.next();
 
                     if (curLocalRef.equalsIgnoreCase(curOtherRef)) {
                         otherIt.remove();

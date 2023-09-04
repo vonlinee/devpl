@@ -14,7 +14,7 @@ import java.util.Iterator;
  * written for each implementation.
  * <p>
  * This implementation does not perform any special processing with
- * {@link #iterator()}. Instead it simply returns the value from the
+ * {@link #iterator()}. Instead, it simply returns the value from the
  * wrapped collection. This may be undesirable, for example if you are trying
  * to write an unmodifiable implementation it might provide a loophole.
  * @author Stephen Colebourne
@@ -42,7 +42,7 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
      * @param coll the collection to decorate, must not be null
      * @throws IllegalArgumentException if the collection is null
      */
-    protected AbstractCollectionDecorator(Collection coll) {
+    protected AbstractCollectionDecorator(Collection<E> coll) {
         if (coll == null) {
             throw new IllegalArgumentException("Collection must not be null");
         }
@@ -58,47 +58,58 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
     }
 
     //-----------------------------------------------------------------------
+    @Override
     public boolean add(E object) {
         return collection.add(object);
     }
 
+    @Override
     public boolean addAll(Collection<? extends E> coll) {
         return collection.addAll(coll);
     }
 
+    @Override
     public void clear() {
         collection.clear();
     }
 
+    @Override
     public boolean contains(Object object) {
         return collection.contains(object);
     }
 
+    @Override
     public boolean isEmpty() {
         return collection.isEmpty();
     }
 
-    public Iterator iterator() {
+    @Override
+    public Iterator<E> iterator() {
         return collection.iterator();
     }
 
+    @Override
     public boolean remove(Object object) {
         return collection.remove(object);
     }
 
+    @Override
     public int size() {
         return collection.size();
     }
 
+    @Override
     public Object[] toArray() {
         return collection.toArray();
     }
 
+    @Override
     public Object[] toArray(Object[] object) {
         return collection.toArray(object);
     }
 
-    public boolean containsAll(Collection coll) {
+    @Override
+    public boolean containsAll(Collection<?> coll) {
         return collection.containsAll(coll);
     }
 
@@ -107,10 +118,12 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
         return collection.removeAll(coll);
     }
 
-    public boolean retainAll(Collection coll) {
+    @Override
+    public boolean retainAll(Collection<?> coll) {
         return collection.retainAll(coll);
     }
 
+    @Override
     public boolean equals(Object object) {
         if (object == this) {
             return true;
@@ -118,10 +131,12 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
         return collection.equals(object);
     }
 
+    @Override
     public int hashCode() {
         return collection.hashCode();
     }
 
+    @Override
     public String toString() {
         return collection.toString();
     }

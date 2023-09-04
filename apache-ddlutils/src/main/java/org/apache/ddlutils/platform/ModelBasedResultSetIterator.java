@@ -1,9 +1,7 @@
 package org.apache.ddlutils.platform;
 
-import org.apache.commons.beanutils.*;
 import org.apache.ddlutils.DatabaseOperationException;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
+import org.apache.ddlutils.dynabean.*;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;

@@ -2,7 +2,7 @@ package org.apache.ddlutils.util;
 
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
-import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabasePlatform;

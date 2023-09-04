@@ -20,7 +20,7 @@ package org.apache.ddlutils.io;
  */
 
 import junit.framework.Test;
-import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.platform.interbase.InterbasePlatform;
 import org.apache.ddlutils.platform.mckoi.MckoiPlatform;

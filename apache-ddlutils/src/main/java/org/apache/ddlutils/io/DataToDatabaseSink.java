@@ -19,7 +19,7 @@ package org.apache.ddlutils.io;
  * under the License.
  */
 
-import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.ddlutils.DatabaseOperationException;

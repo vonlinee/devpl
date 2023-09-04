@@ -19,8 +19,8 @@ package org.apache.ddlutils.platform;
  * under the License.
  */
 
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.TestBase;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.io.DatabaseIO;

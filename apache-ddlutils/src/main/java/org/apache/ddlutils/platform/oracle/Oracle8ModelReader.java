@@ -19,7 +19,6 @@ package org.apache.ddlutils.platform.oracle;
  * under the License.
  */
 
-import org.apache.commons.collections.map.ListOrderedMap;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.Column;
@@ -32,7 +31,6 @@ import org.apache.ddlutils.util.ValueMap;
 
 import java.sql.*;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Matcher;

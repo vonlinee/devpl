@@ -1,7 +1,6 @@
 package org.apache.ddlutils.dynabean;
 
 import junit.framework.Test;
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Table;

@@ -2,13 +2,8 @@ package org.apache.ddlutils;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestSuite;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.beanutils.DynaProperty;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
-import org.apache.ddlutils.dynabean.SqlDynaProperty;
+import org.apache.ddlutils.dynabean.*;
 import org.apache.ddlutils.io.BinaryObjectsHelper;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.io.DataToDatabaseSink;
@@ -19,6 +14,7 @@ import org.apache.ddlutils.platform.SqlBuildContext;
 import org.apache.ddlutils.platform.firebird.FirebirdPlatform;
 import org.apache.ddlutils.platform.interbase.InterbasePlatform;
 import org.apache.ddlutils.util.StringUtils;
+import org.apache.ddlutils.util.bean.BeanUtils;
 
 import javax.sql.DataSource;
 import java.io.InputStream;

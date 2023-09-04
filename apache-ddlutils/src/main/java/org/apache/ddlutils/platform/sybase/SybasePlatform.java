@@ -1,10 +1,10 @@
 package org.apache.ddlutils.platform.sybase;
 
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -21,7 +21,6 @@ import java.sql.*;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The platform implementation for Sybase.

@@ -1,18 +1,18 @@
 package org.apache.ddlutils.platform;
 
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 import org.apache.ddlutils.dynabean.SqlDynaProperty;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.JdbcSupport;
 import org.apache.ddlutils.util.SqlTokenizer;
 import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.bean.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

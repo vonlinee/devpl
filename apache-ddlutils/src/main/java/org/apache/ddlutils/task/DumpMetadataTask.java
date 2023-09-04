@@ -1,8 +1,8 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.collections.set.ListOrderedSet;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.io.PrettyPrintingXmlWriter;
+import org.apache.ddlutils.util.ListOrderedSet;
 
 import java.io.File;
 import java.io.FileOutputStream;

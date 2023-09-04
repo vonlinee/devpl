@@ -1,9 +1,7 @@
 package org.apache.ddlutils.dynabean;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.beanutils.DynaClass;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.util.bean.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

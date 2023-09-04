@@ -20,8 +20,8 @@ package org.apache.ddlutils.io;
  */
 
 import junit.framework.TestCase;
-import org.apache.commons.lang.StringUtils;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.StringReader;
 import java.io.StringWriter;

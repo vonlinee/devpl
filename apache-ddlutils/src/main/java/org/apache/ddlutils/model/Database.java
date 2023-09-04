@@ -1,6 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.dynabean.DynaClassCache;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
 
@@ -500,8 +500,7 @@ public class Database implements SchemaObject, Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Database) {
-            Database other = (Database) obj;
+        if (obj instanceof Database other) {
             // Note that this compares case-sensitive
             return Objects.equals(_name, other._name) && Objects.equals(tables, other.tables);
         }

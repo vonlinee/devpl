@@ -19,7 +19,7 @@ package org.apache.ddlutils.io;
  * under the License.
  */
 
-import org.apache.commons.beanutils.DynaBean;
+import org.apache.ddlutils.dynabean.DynaBean;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -1,7 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-import org.apache.commons.beanutils.BasicDynaClass;
-import org.apache.commons.beanutils.DynaProperty;
 import org.apache.ddlutils.model.Table;
 
 import java.util.ArrayList;
@@ -66,7 +64,7 @@ public class SqlDynaClass extends BasicDynaClass {
     }
 
     // Helper methods
-    //-------------------------------------------------------------------------                
+    //-------------------------------------------------------------------------
 
     /**
      * Returns the table name for which this dyna class is defined.
@@ -117,8 +115,8 @@ public class SqlDynaClass extends BasicDynaClass {
         return result;
     }
 
-    // Implementation methods    
-    //-------------------------------------------------------------------------                
+    // Implementation methods
+    //-------------------------------------------------------------------------
 
     /**
      * Initializes the primary key and non-primary key property arrays.

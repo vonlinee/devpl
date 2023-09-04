@@ -1,9 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-import org.apache.commons.beanutils.BasicDynaBean;
-import org.apache.commons.beanutils.DynaClass;
-import org.apache.commons.beanutils.DynaProperty;
-
 /**
  * SqlDynaBean is a DynaBean which can be persisted as a single row in
  * a Database Table.
@@ -58,8 +54,7 @@ public class SqlDynaBean extends BasicDynaBean {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SqlDynaBean) {
-            SqlDynaBean other = (SqlDynaBean) obj;
+        if (obj instanceof SqlDynaBean other) {
             DynaClass dynaClass = getDynaClass();
             if (dynaClass.equals(other.getDynaClass())) {
                 DynaProperty[] props = dynaClass.getDynaProperties();

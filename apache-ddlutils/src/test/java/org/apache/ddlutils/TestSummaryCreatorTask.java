@@ -19,12 +19,12 @@ package org.apache.ddlutils;
  * under the License.
  */
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.task.DirectoryScanner;
 import org.apache.ddlutils.task.FileSet;
 import org.apache.ddlutils.task.Project;
 import org.apache.ddlutils.task.Task;
+import org.apache.ddlutils.util.bean.BeanUtils;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
@@ -233,14 +233,13 @@ public class TestSummaryCreatorTask extends Task {
 
         Properties props = readProperties(jdbcPropertiesFile);
         Connection conn = null;
-        DatabaseMetaData metaData = null;
+        DatabaseMetaData metaData;
 
         try {
             String dataSourceClass = props.getProperty(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX + "class", BasicDataSource.class.getName());
             DataSource dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
 
-            for (Iterator it = props.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) it.next();
+            for (Map.Entry<Object, Object> entry : props.entrySet()) {
                 String propName = (String) entry.getKey();
 
                 if (propName.startsWith(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX) && !propName.equals(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX + "class")) {
