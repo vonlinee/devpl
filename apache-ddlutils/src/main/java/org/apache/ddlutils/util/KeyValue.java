@@ -25,18 +25,18 @@ package org.apache.ddlutils.util;
  * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:42 $
  * @since Commons Collections 3.0
  */
-public interface KeyValue {
+public interface KeyValue<K, V> {
 
     /**
      * Gets the key from the pair.
      * @return the key
      */
-    Object getKey();
+    K getKey();
 
     /**
      * Gets the value from the pair.
      * @return the value
      */
-    Object getValue();
+    V getValue();
 
 }

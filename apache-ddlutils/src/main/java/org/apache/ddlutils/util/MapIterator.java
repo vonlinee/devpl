@@ -42,7 +42,7 @@ import java.util.Iterator;
  * @version $Revision: 1.7 $ $Date: 2004/02/18 01:15:42 $
  * @since Commons Collections 3.0
  */
-public interface MapIterator<K> extends Iterator<K> {
+public interface MapIterator<K, V> extends Iterator<K> {
 
     /**
      * Checks to see if there are more entries still to be iterated.
@@ -100,5 +100,5 @@ public interface MapIterator<K> extends Iterator<K> {
      * @throws IllegalStateException         if <code>remove()</code> has been called since the
      *                                       last call to <code>next()</code>
      */
-    Object setValue(Object value);
+    V setValue(V value);
 }

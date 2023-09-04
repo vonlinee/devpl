@@ -1,5 +1,7 @@
 package org.apache.ddlutils.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -20,50 +22,37 @@ import java.util.*;
  * original position in the iteration.
  * <p>
  * This class is Serializable from Commons Collections 3.1.
- *
- * @since Commons Collections 3.0
- * @version $Revision: 1.16 $ $Date: 2004/06/07 21:51:39 $
- *
  * @author Henri Yandell
  * @author Stephen Colebourne
+ * @version $Revision: 1.16 $ $Date: 2004/06/07 21:51:39 $
+ * @since Commons Collections 3.0
  */
-public class ListOrderedMap
-        extends AbstractMapDecorator
-        implements OrderedMap, Serializable {
-
-    /** Serialization version */
-    private static final long serialVersionUID = 2728177751851003750L;
-
-    /** Internal list to hold the sequence of objects */
-    protected final List insertOrder = new ArrayList();
+public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements OrderedMap<K, V>, Serializable {
 
     /**
-     * Factory method to create an ordered map.
-     * <p>
-     * An <code>ArrayList</code> is used to retain order.
-     *
-     * @param map  the map to decorate, must not be null
-     * @throws IllegalArgumentException if map is null
+     * Serialization version
      */
-    public static OrderedMap decorate(Map map) {
-        return new ListOrderedMap(map);
-    }
+    private static final long serialVersionUID = 2728177751851003750L;
+
+    /**
+     * Internal list to hold the sequence of objects
+     */
+    protected final List<K> insertOrder = new ArrayList<>();
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new empty <code>ListOrderedMap</code> that decorates
      * a <code>HashMap</code>.
-     *
      * @since Commons Collections 3.1
      */
     public ListOrderedMap() {
-        this(new HashMap());
+        this(new HashMap<>());
     }
 
     /**
      * Constructor that wraps (not copies).
-     *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws IllegalArgumentException if map is null
      */
     protected ListOrderedMap(Map map) {
@@ -72,10 +61,10 @@ public class ListOrderedMap
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
-     *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException
      * @since Commons Collections 3.1
      */
@@ -86,10 +75,7 @@ public class ListOrderedMap
 
     /**
      * Read the map in using a custom routine.
-     *
-     * @param in  the input stream
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @param in the input stream
      * @since Commons Collections 3.1
      */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -99,21 +85,23 @@ public class ListOrderedMap
 
     // Implement OrderedMap
     //-----------------------------------------------------------------------
-    public MapIterator mapIterator() {
+    @Override
+    public MapIterator<K, V> mapIterator() {
         return orderedMapIterator();
     }
 
-    public OrderedMapIterator orderedMapIterator() {
-        return new ListOrderedMapIterator(this);
+    @Override
+    public OrderedMapIterator<K, V> orderedMapIterator() {
+        return new ListOrderedMapIterator<>(this);
     }
 
     /**
      * Gets the first key in this map by insert order.
-     *
      * @return the first key currently in this map
      * @throws NoSuchElementException if this map is empty
      */
-    public Object firstKey() {
+    @Override
+    public K firstKey() {
         if (size() == 0) {
             throw new NoSuchElementException("Map is empty");
         }
@@ -122,11 +110,11 @@ public class ListOrderedMap
 
     /**
      * Gets the last key in this map by insert order.
-     *
      * @return the last key currently in this map
      * @throws NoSuchElementException if this map is empty
      */
-    public Object lastKey() {
+    @Override
+    public K lastKey() {
         if (size() == 0) {
             throw new NoSuchElementException("Map is empty");
         }
@@ -136,11 +124,11 @@ public class ListOrderedMap
     /**
      * Gets the next key to the one specified using insert order.
      * This method performs a list search to find the key and is O(n).
-     *
-     * @param key  the key to find previous for
+     * @param key the key to find previous for
      * @return the next key, null if no match or at start
      */
-    public Object nextKey(Object key) {
+    @Override
+    public K nextKey(K key) {
         int index = insertOrder.indexOf(key);
         if (index >= 0 && index < size() - 1) {
             return insertOrder.get(index + 1);
@@ -151,11 +139,10 @@ public class ListOrderedMap
     /**
      * Gets the previous key to the one specified using insert order.
      * This method performs a list search to find the key and is O(n).
-     *
-     * @param key  the key to find previous for
+     * @param key the key to find previous for
      * @return the previous key, null if no match or at start
      */
-    public Object previousKey(Object key) {
+    public K previousKey(K key) {
         int index = insertOrder.indexOf(key);
         if (index > 0) {
             return insertOrder.get(index - 1);
@@ -164,27 +151,29 @@ public class ListOrderedMap
     }
 
     //-----------------------------------------------------------------------
-    public Object put(Object key, Object value) {
+    @Override
+    public V put(K key, V value) {
         if (getMap().containsKey(key)) {
             // re-adding doesn't change order
             return getMap().put(key, value);
         } else {
             // first add, so add to both map and list
-            Object result = getMap().put(key, value);
+            V result = getMap().put(key, value);
             insertOrder.add(key);
             return result;
         }
     }
 
-    public void putAll(Map map) {
-        for (Iterator it = map.entrySet().iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
+    @Override
+    public void putAll(Map<? extends K, ? extends V> map) {
+        for (Entry<? extends K, ? extends V> entry : map.entrySet()) {
             put(entry.getKey(), entry.getValue());
         }
     }
 
-    public Object remove(Object key) {
-        Object result = getMap().remove(key);
+    @Override
+    public V remove(Object key) {
+        V result = getMap().remove(key);
         insertOrder.remove(key);
         return result;
     }
@@ -195,34 +184,35 @@ public class ListOrderedMap
     }
 
     //-----------------------------------------------------------------------
-    public Set keySet() {
+    public Set<K> keySet() {
         return new KeySetView(this);
     }
 
-    public Collection values() {
-        return new ValuesView(this);
+    @Override
+    public @NotNull Collection<V> values() {
+        return new ValuesView<>(this);
     }
 
-    public Set entrySet() {
-        return new EntrySetView(this, this.insertOrder);
+    @Override
+    public Set<Map.Entry<K, V>> entrySet() {
+        return new EntrySetView<>(this, this.insertOrder);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns the Map as a string.
-     *
      * @return the Map as a String
      */
+    @Override
     public String toString() {
         if (isEmpty()) {
             return "{}";
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append('{');
         boolean first = true;
-        Iterator it = entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Entry<K, V> entry : entrySet()) {
             Object key = entry.getKey();
             Object value = entry.getValue();
             if (first) {
@@ -239,10 +229,10 @@ public class ListOrderedMap
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the key at the specified index.
-     *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -252,8 +242,7 @@ public class ListOrderedMap
 
     /**
      * Gets the value at the specified index.
-     *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -263,20 +252,18 @@ public class ListOrderedMap
 
     /**
      * Gets the index of the specified key.
-     *
-     * @param key  the key to find the index of
+     * @param key the key to find the index of
      * @return the index, or -1 if not found
      */
-    public int indexOf(Object key) {
+    public int indexOf(K key) {
         return insertOrder.indexOf(key);
     }
 
     /**
      * Removes the element at the specified index.
-     *
-     * @param index  the index of the object to remove
+     * @param index the index of the object to remove
      * @return the previous value corresponding the <code>key</code>,
-     *  or <code>null</code> if none existed
+     * or <code>null</code> if none existed
      * @throws IndexOutOfBoundsException if the index is invalid
      */
     public Object remove(int index) {
@@ -294,110 +281,121 @@ public class ListOrderedMap
      * mapping is added to the map and thus where it appears in the list.
      * <p>
      * An alternative to this method is to use {@link #keySet()}.
-     *
-     * @see #keySet()
      * @return The ordered list of keys.
+     * @see #keySet()
      */
-    public List asList() {
+    public List<K> asList() {
         return Collections.unmodifiableList(insertOrder);
     }
 
     //-----------------------------------------------------------------------
-    static class ValuesView extends AbstractCollection {
-        private final ListOrderedMap parent;
+    static class ValuesView<K, V> extends AbstractCollection<V> {
+        private final ListOrderedMap<K, V> parent;
 
-        ValuesView(ListOrderedMap parent) {
+        ValuesView(ListOrderedMap<K, V> parent) {
             super();
             this.parent = parent;
         }
 
+        @Override
         public int size() {
             return this.parent.size();
         }
 
+        @Override
         public boolean contains(Object value) {
             return this.parent.containsValue(value);
         }
 
+        @Override
         public void clear() {
             this.parent.clear();
         }
 
-        public Iterator iterator() {
-            return new AbstractIteratorDecorator(parent.entrySet().iterator()) {
+        @Override
+        public Iterator<V> iterator() {
+            Iterator iterator = parent.entrySet().iterator();
+            return new AbstractIteratorDecorator(iterator) {
+                @Override
                 public Object next() {
-                    return ((Map.Entry) iterator.next()).getValue();
+                    return iterator.next();
                 }
             };
         }
     }
 
     //-----------------------------------------------------------------------
-    static class KeySetView extends AbstractSet {
-        private final ListOrderedMap parent;
+    static class KeySetView<K> extends AbstractSet<K> {
+        private final ListOrderedMap<K, ?> parent;
 
-        KeySetView(ListOrderedMap parent) {
+        KeySetView(ListOrderedMap<K, ?> parent) {
             super();
             this.parent = parent;
         }
 
+        @Override
         public int size() {
             return this.parent.size();
         }
 
+        @Override
         public boolean contains(Object value) {
             return this.parent.containsKey(value);
         }
 
+        @Override
         public void clear() {
             this.parent.clear();
         }
 
-        public Iterator iterator() {
-            return new AbstractIteratorDecorator(parent.entrySet().iterator()) {
-                public Object next() {
-                    return ((Map.Entry) super.next()).getKey();
-                }
-            };
+        @Override
+        public Iterator<K> iterator() {
+            return parent.keySet().iterator();
         }
     }
 
     //-----------------------------------------------------------------------
-    static class EntrySetView extends AbstractSet {
-        private final ListOrderedMap parent;
-        private final List insertOrder;
-        private Set entrySet;
+    static class EntrySetView<K, V> extends AbstractSet<Map.Entry<K, V>> {
+        private final ListOrderedMap<K, V> parent;
+        private final List<K> insertOrder;
+        private Set<Map.Entry<K, V>> entrySet;
 
-        public EntrySetView(ListOrderedMap parent, List insertOrder) {
+        public EntrySetView(ListOrderedMap<K, V> parent, List<K> insertOrder) {
             super();
             this.parent = parent;
             this.insertOrder = insertOrder;
         }
 
-        private Set getEntrySet() {
+        private Set<Map.Entry<K, V>> getEntrySet() {
             if (entrySet == null) {
                 entrySet = parent.getMap().entrySet();
             }
             return entrySet;
         }
 
+        @Override
         public int size() {
             return this.parent.size();
         }
+
+        @Override
         public boolean isEmpty() {
             return this.parent.isEmpty();
         }
 
+        @Override
         public boolean contains(Object obj) {
             return getEntrySet().contains(obj);
         }
 
+        @Override
         public boolean containsAll(Collection coll) {
             return getEntrySet().containsAll(coll);
         }
 
+        @Override
         public boolean remove(Object obj) {
-            if (obj instanceof Map.Entry == false) {
+            if (!(obj instanceof Map.Entry)) {
                 return false;
             }
             if (getEntrySet().contains(obj)) {
@@ -408,10 +406,12 @@ public class ListOrderedMap
             return false;
         }
 
+        @Override
         public void clear() {
             this.parent.clear();
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (obj == this) {
                 return true;
@@ -419,14 +419,17 @@ public class ListOrderedMap
             return getEntrySet().equals(obj);
         }
 
+        @Override
         public int hashCode() {
             return getEntrySet().hashCode();
         }
 
+        @Override
         public String toString() {
             return getEntrySet().toString();
         }
 
+        @Override
         public Iterator iterator() {
             return new ListOrderedIterator(parent, insertOrder);
         }
@@ -447,6 +450,7 @@ public class ListOrderedMap
             return new ListOrderedMapEntry(parent, last);
         }
 
+        @Override
         public void remove() {
             super.remove();
             parent.getMap().remove(last);
@@ -454,56 +458,62 @@ public class ListOrderedMap
     }
 
     //-----------------------------------------------------------------------
-    static class ListOrderedMapEntry extends AbstractMapEntry {
-        private final ListOrderedMap parent;
+    static class ListOrderedMapEntry<K, V> extends AbstractMapEntry<K, V> {
+        private final ListOrderedMap<K, V> parent;
 
-        ListOrderedMapEntry(ListOrderedMap parent, Object key) {
+        ListOrderedMapEntry(ListOrderedMap<K, V> parent, K key) {
             super(key, null);
             this.parent = parent;
         }
 
-        public Object getValue() {
+        @Override
+        public V getValue() {
             return parent.get(key);
         }
 
-        public Object setValue(Object value) {
+        public V setValue(V value) {
             return parent.getMap().put(key, value);
         }
     }
 
     //-----------------------------------------------------------------------
-    static class ListOrderedMapIterator implements OrderedMapIterator, ResettableIterator {
-        private final ListOrderedMap parent;
-        private ListIterator iterator;
-        private Object last = null;
+    static class ListOrderedMapIterator<K, V> implements OrderedMapIterator<K, V>, ResettableIterator<K> {
+        private final ListOrderedMap<K, V> parent;
+        private ListIterator<K> iterator;
+        private K last = null;
         private boolean readable = false;
 
-        ListOrderedMapIterator(ListOrderedMap parent) {
+        ListOrderedMapIterator(ListOrderedMap<K, V> parent) {
             super();
             this.parent = parent;
             this.iterator = parent.insertOrder.listIterator();
         }
 
+        @Override
         public boolean hasNext() {
             return iterator.hasNext();
         }
 
-        public Object next() {
+        @Override
+        public K next() {
             last = iterator.next();
             readable = true;
             return last;
         }
 
+        @Override
         public boolean hasPrevious() {
             return iterator.hasPrevious();
         }
 
-        public Object previous() {
+        @Override
+        public K previous() {
             last = iterator.previous();
             readable = true;
             return last;
         }
 
+        @Override
         public void remove() {
             if (!readable) {
                 throw new IllegalStateException("remove() can only be called once after next()");
@@ -513,13 +523,15 @@ public class ListOrderedMap
             readable = false;
         }
 
-        public Object getKey() {
+        @Override
+        public K getKey() {
             if (!readable) {
                 throw new IllegalStateException("getKey() can only be called after next() and before remove()");
             }
             return last;
         }
 
+        @Override
         public Object getValue() {
             if (!readable) {
                 throw new IllegalStateException("getValue() can only be called after next() and before remove()");
@@ -527,19 +539,22 @@ public class ListOrderedMap
             return parent.get(last);
         }
 
-        public Object setValue(Object value) {
+        @Override
+        public V setValue(V value) {
             if (!readable) {
                 throw new IllegalStateException("setValue() can only be called after next() and before remove()");
             }
             return parent.map.put(last, value);
         }
 
+        @Override
         public void reset() {
             iterator = parent.insertOrder.listIterator();
             last = null;
             readable = false;
         }
 
+        @Override
         public String toString() {
             if (readable) {
                 return "Iterator[" + getKey() + "=" + getValue() + "]";

@@ -33,25 +33,19 @@ public class AbstractIteratorDecorator<E> implements Iterator<E> {
         this.iterator = iterator;
     }
 
-    /**
-     * Gets the iterator being decorated.
-     * @return the decorated iterator
-     */
-    protected Iterator<E> getIterator() {
-        return iterator;
-    }
-
     //-----------------------------------------------------------------------
+    @Override
     public boolean hasNext() {
         return iterator.hasNext();
     }
 
+    @Override
     public E next() {
         return iterator.next();
     }
 
+    @Override
     public void remove() {
         iterator.remove();
     }
-
 }

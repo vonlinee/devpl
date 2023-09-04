@@ -6,7 +6,7 @@ package org.apache.ddlutils.util;
  * This iterator allows both forward and reverse iteration through the map.
  * @author Stephen Colebourne
  */
-public interface OrderedMapIterator<K> extends MapIterator<K>, OrderedIterator<K> {
+public interface OrderedMapIterator<K, V> extends MapIterator<K, V>, OrderedIterator<K> {
 
     /**
      * Checks to see if there is a previous entry that can be iterated to.
