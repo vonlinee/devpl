@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.platform.PooledDataSource;
 
@@ -24,8 +23,8 @@ public abstract class TestTaskBase extends TestAgainstLiveDatabaseBase {
         String schema = props.getProperty(DDLUTILS_SCHEMA_PROPERTY);
         DataSource dataSource = getDataSource();
 
-        if (!(dataSource instanceof BasicDataSource)) {
-            fail("Datasource needs to be of type " + BasicDataSource.class.getName());
+        if (!dataSource.getClass().getName().equals("org.apache.commons.dbcp.BasicDataSource")) {
+            fail("Datasource needs to be of type org.apache.commons.dbcp.BasicDataSource");
         }
         task.setProject(new Project());
         task.addConfiguredDatabase((PooledDataSource) getDataSource());
@@ -47,8 +46,8 @@ public abstract class TestTaskBase extends TestAgainstLiveDatabaseBase {
         String schema = props.getProperty(DDLUTILS_SCHEMA_PROPERTY);
         DataSource dataSource = getDataSource();
 
-        if (!(dataSource instanceof BasicDataSource)) {
-            fail("Datasource needs to be of type " + BasicDataSource.class.getName());
+        if (!dataSource.getClass().getName().equals("org.apache.commons.dbcp.BasicDataSource")) {
+            fail("Datasource needs to be of type org.apache.commons.dbcp.BasicDataSource");
         }
         task.setProject(new Project());
         task.addConfiguredDatabase((PooledDataSource) getDataSource());

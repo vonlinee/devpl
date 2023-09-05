@@ -1,14 +1,13 @@
 package org.apache.ddlutils.task;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.io.PrettyPrintingXmlWriter;
+import org.apache.ddlutils.platform.PooledDataSource;
 import org.apache.ddlutils.util.ListOrderedSet;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
@@ -18,6 +17,7 @@ import java.util.*;
  * @version $Revision: 289996 $
  * name="dumpMetadata"
  */
+@SuppressWarnings("unused")
 public class DumpMetadataTask extends Task {
     /**
      * Methods that are filtered when enumerating the properties.
@@ -27,7 +27,7 @@ public class DumpMetadataTask extends Task {
     /**
      * The data source to use for accessing the database.
      */
-    private BasicDataSource _dataSource;
+    private PooledDataSource _dataSource;
     /**
      * The file to write the dump to.
      */
@@ -73,14 +73,13 @@ public class DumpMetadataTask extends Task {
      * Adds the data source to use for accessing the database.
      * @param dataSource The data source
      */
-    public void addConfiguredDatabase(BasicDataSource dataSource) {
+    public void addConfiguredDatabase(PooledDataSource dataSource) {
         _dataSource = dataSource;
     }
 
     /**
      * Specifies the output file to which the database metadata is written to.
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
@@ -146,7 +145,7 @@ public class DumpMetadataTask extends Task {
      *                   By default, all types of tables are read.
      */
     public void setTableTypes(String tableTypes) {
-        ArrayList types = new ArrayList();
+        ArrayList<String> types = new ArrayList<>();
 
         if (tableTypes != null) {
             StringTokenizer tokenizer = new StringTokenizer(tableTypes, ",");
@@ -159,7 +158,7 @@ public class DumpMetadataTask extends Task {
                 }
             }
         }
-        _tableTypes = (String[]) types.toArray(new String[types.size()]);
+        _tableTypes = types.toArray(new String[0]);
     }
 
     /**
@@ -179,7 +178,6 @@ public class DumpMetadataTask extends Task {
     public void setDumpTables(boolean readTables) {
         _dumpTables = readTables;
     }
-
 
     public void execute() throws RuntimeException {
         if (_dataSource == null) {
@@ -215,12 +213,14 @@ public class DumpMetadataTask extends Task {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
+                    ex.printStackTrace();
                 }
             }
             if ((_outputFile != null) && (output != null)) {
                 try {
                     output.close();
                 } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         }
@@ -231,23 +231,17 @@ public class DumpMetadataTask extends Task {
      * @param xmlWriter The XML writer to write to
      * @param metaData  The metadata to write
      */
-    private void dumpMetaData(PrettyPrintingXmlWriter xmlWriter, DatabaseMetaData metaData) throws NoSuchMethodException,
-        IllegalAccessException,
-        InvocationTargetException,
-        SQLException {
+    private void dumpMetaData(PrettyPrintingXmlWriter xmlWriter, DatabaseMetaData metaData) throws SQLException {
         // We rather iterate over the methods because most metadata properties
         // do not follow the bean naming standard
         Method[] methods = metaData.getClass().getMethods();
-        Set filtered = new HashSet(Arrays.asList(IGNORED_PROPERTY_METHODS));
+        Set<String> filtered = new HashSet<>(Arrays.asList(IGNORED_PROPERTY_METHODS));
 
-        for (int idx = 0; idx < methods.length; idx++) {
+        for (Method method : methods) {
             // only no-arg methods that return something and that are not defined in Object
             // we also filter certain methods
-            if ((methods[idx].getParameterTypes().length == 0) &&
-                (methods[idx].getReturnType() != null) &&
-                (Object.class != methods[idx].getDeclaringClass()) &&
-                !filtered.contains(methods[idx].getName())) {
-                dumpProperty(xmlWriter, metaData, methods[idx]);
+            if (method.getParameterTypes().length == 0 && Object.class != method.getDeclaringClass() && !filtered.contains(method.getName())) {
+                dumpProperty(xmlWriter, metaData, method);
             }
         }
         dumpCatalogsAndSchemas(xmlWriter, metaData);
@@ -267,9 +261,9 @@ public class DumpMetadataTask extends Task {
      */
     private void dumpProperty(PrettyPrintingXmlWriter xmlWriter, Object obj, Method propGetter) {
         try {
-            addProperty(xmlWriter, getPropertyName(propGetter.getName()), propGetter.invoke(obj, null));
+            addProperty(xmlWriter, getPropertyName(propGetter.getName()), propGetter.invoke(obj, (Object) null));
         } catch (Throwable ex) {
-            log("Could not dump property " + propGetter.getName() + ": " + ex.getStackTrace(), Project.MSG_ERR);
+            log("Could not dump property " + propGetter.getName() + ": " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
         }
     }
 
@@ -306,8 +300,8 @@ public class DumpMetadataTask extends Task {
         }
 
         xmlWriter.writeElementStart(null, propName + "s");
-        for (int idx = 0; idx < values.length; idx++) {
-            addProperty(xmlWriter, "value", values[idx]);
+        for (Object value : values) {
+            addProperty(xmlWriter, "value", value);
         }
         xmlWriter.writeElementEnd();
     }
@@ -347,7 +341,7 @@ public class DumpMetadataTask extends Task {
                 xmlWriter.writeElementEnd();
             }
         } catch (SQLException ex) {
-            log("Could not read the result set metadata: " + ex.getStackTrace(), Project.MSG_ERR);
+            log("Could not read the result set metadata: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
         }
     }
 
@@ -405,7 +399,7 @@ public class DumpMetadataTask extends Task {
                 try {
                     result.close();
                 } catch (SQLException ex) {
-                    log("Could not close a result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                    log("Could not close a result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                 }
             }
         }
@@ -433,7 +427,7 @@ public class DumpMetadataTask extends Task {
             }
 
             public void handleError(SQLException ex) {
-                log("Could not read the catalogs from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the catalogs from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
         performResultSetXmlOperation(xmlWriter, "schemas", new ResultSetXmlOperation() {
@@ -452,7 +446,7 @@ public class DumpMetadataTask extends Task {
             }
 
             public void handleError(SQLException ex) {
-                log("Could not read the schemas from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the schemas from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -464,13 +458,15 @@ public class DumpMetadataTask extends Task {
      */
     private void dumpTables(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData) {
         // First we need the list of supported table types
-        final ArrayList tableTypeList = new ArrayList();
+        final List<String> tableTypeList = new ArrayList<>();
 
         performResultSetXmlOperation(xmlWriter, "tableTypes", new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getTableTypes();
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
                 String tableType = result.getString("TABLE_TYPE");
 
@@ -480,26 +476,30 @@ public class DumpMetadataTask extends Task {
                 xmlWriter.writeElementEnd();
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the table types from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the table types from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
 
         final String[] tableTypesToRead;
 
         if ((_tableTypes == null) || (_tableTypes.length == 0)) {
-            tableTypesToRead = (String[]) tableTypeList.toArray(new String[tableTypeList.size()]);
+            tableTypesToRead = tableTypeList.toArray(new String[0]);
         } else {
             tableTypesToRead = _tableTypes;
         }
 
         performResultSetXmlOperation(xmlWriter, "tables", new ResultSetXmlOperation() {
+
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getTables(_catalogPattern, _schemaPattern, _tablePattern, tableTypesToRead);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String tableName = result.getString("TABLE_NAME");
 
                 if ((tableName != null) && (tableName.length() > 0)) {
@@ -535,7 +535,7 @@ public class DumpMetadataTask extends Task {
             }
 
             public void handleError(SQLException ex) {
-                log("Could not read the tables from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the tables from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -548,18 +548,17 @@ public class DumpMetadataTask extends Task {
      * @param schemaName  The schema name
      * @param tableName   The table name
      */
-    private void dumpColumns(PrettyPrintingXmlWriter xmlWriter,
-                             final DatabaseMetaData metaData,
-                             final String catalogName,
-                             final String schemaName,
-                             final String tableName) throws SQLException {
+    private void dumpColumns(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String tableName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getColumns(catalogName, schemaName, tableName, _columnPattern);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String columnName = result.getString("COLUMN_NAME");
 
                 if ((columnName != null) && (columnName.length() > 0)) {
@@ -574,18 +573,14 @@ public class DumpMetadataTask extends Task {
                     if (columns.contains("NULLABLE")) {
                         try {
                             switch (result.getInt("NULLABLE")) {
-                                case DatabaseMetaData.columnNoNulls:
+                                case DatabaseMetaData.columnNoNulls ->
                                     xmlWriter.writeAttribute(null, "nullable", "false");
-                                    break;
-                                case DatabaseMetaData.columnNullable:
+                                case DatabaseMetaData.columnNullable ->
                                     xmlWriter.writeAttribute(null, "nullable", "true");
-                                    break;
-                                default:
-                                    xmlWriter.writeAttribute(null, "nullable", "unknown");
-                                    break;
+                                default -> xmlWriter.writeAttribute(null, "nullable", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the NULLABLE value for colum '" + columnName + "' of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the NULLABLE value for colum '" + columnName + "' of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
                     addStringAttribute(xmlWriter, "remarks", result, columns, "REMARKS");
@@ -616,8 +611,9 @@ public class DumpMetadataTask extends Task {
                 }
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the colums for table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the colums for table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -630,18 +626,17 @@ public class DumpMetadataTask extends Task {
      * @param schemaName  The schema name
      * @param tableName   The table name
      */
-    private void dumpPKs(PrettyPrintingXmlWriter xmlWriter,
-                         final DatabaseMetaData metaData,
-                         final String catalogName,
-                         final String schemaName,
-                         final String tableName) throws SQLException {
+    private void dumpPKs(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String tableName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getPrimaryKeys(catalogName, schemaName, tableName);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String columnName = result.getString("COLUMN_NAME");
 
                 if ((columnName != null) && (columnName.length() > 0)) {
@@ -655,8 +650,9 @@ public class DumpMetadataTask extends Task {
                 }
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the primary keys for table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the primary keys for table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -669,18 +665,16 @@ public class DumpMetadataTask extends Task {
      * @param schemaName  The schema name
      * @param tableName   The table name
      */
-    private void dumpVersionColumns(PrettyPrintingXmlWriter xmlWriter,
-                                    final DatabaseMetaData metaData,
-                                    final String catalogName,
-                                    final String schemaName,
-                                    final String tableName) throws SQLException {
+    private void dumpVersionColumns(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String tableName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getVersionColumns(catalogName, schemaName, tableName);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String columnName = result.getString("COLUMN_NAME");
 
                 if ((columnName != null) && (columnName.length() > 0)) {
@@ -695,26 +689,23 @@ public class DumpMetadataTask extends Task {
                     if (columns.contains("PSEUDO_COLUMN")) {
                         try {
                             switch (result.getShort("PSEUDO_COLUMN")) {
-                                case DatabaseMetaData.versionColumnPseudo:
+                                case DatabaseMetaData.versionColumnPseudo ->
                                     xmlWriter.writeAttribute(null, "columnType", "pseudo column");
-                                    break;
-                                case DatabaseMetaData.versionColumnNotPseudo:
+                                case DatabaseMetaData.versionColumnNotPseudo ->
                                     xmlWriter.writeAttribute(null, "columnType", "real column");
-                                    break;
-                                default:
-                                    xmlWriter.writeAttribute(null, "columnType", "unknown");
-                                    break;
+                                default -> xmlWriter.writeAttribute(null, "columnType", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the PSEUDO_COLUMN value for versioned colum '" + columnName + "' of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the PSEUDO_COLUMN value for versioned colum '" + columnName + "' of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
                     xmlWriter.writeElementEnd();
                 }
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the versioned columns for table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the versioned columns for table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -727,18 +718,16 @@ public class DumpMetadataTask extends Task {
      * @param schemaName  The schema name
      * @param tableName   The table name
      */
-    private void dumpFKs(PrettyPrintingXmlWriter xmlWriter,
-                         final DatabaseMetaData metaData,
-                         final String catalogName,
-                         final String schemaName,
-                         final String tableName) throws SQLException {
+    private void dumpFKs(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String tableName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getImportedKeys(catalogName, schemaName, tableName);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
 
                 xmlWriter.writeElementStart(null, "foreignKey");
 
@@ -753,75 +742,58 @@ public class DumpMetadataTask extends Task {
                 if (columns.contains("UPDATE_RULE")) {
                     try {
                         switch (result.getShort("UPDATE_RULE")) {
-                            case DatabaseMetaData.importedKeyNoAction:
+                            case DatabaseMetaData.importedKeyNoAction ->
                                 xmlWriter.writeAttribute(null, "updateRule", "no action");
-                                break;
-                            case DatabaseMetaData.importedKeyCascade:
+                            case DatabaseMetaData.importedKeyCascade ->
                                 xmlWriter.writeAttribute(null, "updateRule", "cascade PK change");
-                                break;
-                            case DatabaseMetaData.importedKeySetNull:
+                            case DatabaseMetaData.importedKeySetNull ->
                                 xmlWriter.writeAttribute(null, "updateRule", "set FK to NULL");
-                                break;
-                            case DatabaseMetaData.importedKeySetDefault:
+                            case DatabaseMetaData.importedKeySetDefault ->
                                 xmlWriter.writeAttribute(null, "updateRule", "set FK to default");
-                                break;
-                            default:
-                                xmlWriter.writeAttribute(null, "updateRule", "unknown");
-                                break;
+                            default -> xmlWriter.writeAttribute(null, "updateRule", "unknown");
                         }
                     } catch (SQLException ex) {
-                        log("Could not read the UPDATE_RULE value for a foreign key of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not read the UPDATE_RULE value for a foreign key of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
                 if (columns.contains("DELETE_RULE")) {
                     try {
                         switch (result.getShort("DELETE_RULE")) {
-                            case DatabaseMetaData.importedKeyNoAction:
-                            case DatabaseMetaData.importedKeyRestrict:
+                            case DatabaseMetaData.importedKeyNoAction, DatabaseMetaData.importedKeyRestrict ->
                                 xmlWriter.writeAttribute(null, "deleteRule", "no action");
-                                break;
-                            case DatabaseMetaData.importedKeyCascade:
+                            case DatabaseMetaData.importedKeyCascade ->
                                 xmlWriter.writeAttribute(null, "deleteRule", "cascade PK change");
-                                break;
-                            case DatabaseMetaData.importedKeySetNull:
+                            case DatabaseMetaData.importedKeySetNull ->
                                 xmlWriter.writeAttribute(null, "deleteRule", "set FK to NULL");
-                                break;
-                            case DatabaseMetaData.importedKeySetDefault:
+                            case DatabaseMetaData.importedKeySetDefault ->
                                 xmlWriter.writeAttribute(null, "deleteRule", "set FK to default");
-                                break;
-                            default:
-                                xmlWriter.writeAttribute(null, "deleteRule", "unknown");
-                                break;
+                            default -> xmlWriter.writeAttribute(null, "deleteRule", "unknown");
                         }
                     } catch (SQLException ex) {
-                        log("Could not read the DELETE_RULE value for a foreign key of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not read the DELETE_RULE value for a foreign key of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
                 if (columns.contains("DEFERRABILITY")) {
                     try {
                         switch (result.getShort("DEFERRABILITY")) {
-                            case DatabaseMetaData.importedKeyInitiallyDeferred:
+                            case DatabaseMetaData.importedKeyInitiallyDeferred ->
                                 xmlWriter.writeAttribute(null, "deferrability", "initially deferred");
-                                break;
-                            case DatabaseMetaData.importedKeyInitiallyImmediate:
+                            case DatabaseMetaData.importedKeyInitiallyImmediate ->
                                 xmlWriter.writeAttribute(null, "deferrability", "immediately deferred");
-                                break;
-                            case DatabaseMetaData.importedKeyNotDeferrable:
+                            case DatabaseMetaData.importedKeyNotDeferrable ->
                                 xmlWriter.writeAttribute(null, "deferrability", "not deferred");
-                                break;
-                            default:
-                                xmlWriter.writeAttribute(null, "deferrability", "unknown");
-                                break;
+                            default -> xmlWriter.writeAttribute(null, "deferrability", "unknown");
                         }
                     } catch (SQLException ex) {
-                        log("Could not read the DEFERRABILITY value for a foreign key of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not read the DEFERRABILITY value for a foreign key of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
                 xmlWriter.writeElementEnd();
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not determine the foreign keys for table '" + tableName + "': " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not determine the foreign keys for table '" + tableName + "': " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -834,18 +806,16 @@ public class DumpMetadataTask extends Task {
      * @param schemaName  The schema name
      * @param tableName   The table name
      */
-    private void dumpIndexes(PrettyPrintingXmlWriter xmlWriter,
-                             final DatabaseMetaData metaData,
-                             final String catalogName,
-                             final String schemaName,
-                             final String tableName) throws SQLException {
+    private void dumpIndexes(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String tableName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getIndexInfo(catalogName, schemaName, tableName, false, false);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
 
                 xmlWriter.writeElementStart(null, "index");
 
@@ -855,24 +825,16 @@ public class DumpMetadataTask extends Task {
                 if (columns.contains("TYPE")) {
                     try {
                         switch (result.getShort("TYPE")) {
-                            case DatabaseMetaData.tableIndexStatistic:
+                            case DatabaseMetaData.tableIndexStatistic ->
                                 xmlWriter.writeAttribute(null, "type", "table statistics");
-                                break;
-                            case DatabaseMetaData.tableIndexClustered:
+                            case DatabaseMetaData.tableIndexClustered ->
                                 xmlWriter.writeAttribute(null, "type", "clustered");
-                                break;
-                            case DatabaseMetaData.tableIndexHashed:
-                                xmlWriter.writeAttribute(null, "type", "hashed");
-                                break;
-                            case DatabaseMetaData.tableIndexOther:
-                                xmlWriter.writeAttribute(null, "type", "other");
-                                break;
-                            default:
-                                xmlWriter.writeAttribute(null, "type", "unknown");
-                                break;
+                            case DatabaseMetaData.tableIndexHashed -> xmlWriter.writeAttribute(null, "type", "hashed");
+                            case DatabaseMetaData.tableIndexOther -> xmlWriter.writeAttribute(null, "type", "other");
+                            default -> xmlWriter.writeAttribute(null, "type", "unknown");
                         }
                     } catch (SQLException ex) {
-                        log("Could not read the TYPE value for an index of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not read the TYPE value for an index of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
                 addStringAttribute(xmlWriter, "column", result, columns, "COLUMN_NAME");
@@ -889,7 +851,7 @@ public class DumpMetadataTask extends Task {
                             xmlWriter.writeAttribute(null, "sortOrder", "unknown");
                         }
                     } catch (SQLException ex) {
-                        log("Could not read the ASC_OR_DESC value for an index of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not read the ASC_OR_DESC value for an index of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
                 addIntAttribute(xmlWriter, "cardinality", result, columns, "CARDINALITY");
@@ -897,8 +859,9 @@ public class DumpMetadataTask extends Task {
                 addStringAttribute(xmlWriter, "filter", result, columns, "FILTER_CONDITION");
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the indexes for table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the indexes for table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -910,12 +873,14 @@ public class DumpMetadataTask extends Task {
      */
     private void dumpProcedures(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData) throws SQLException {
         performResultSetXmlOperation(xmlWriter, "procedures", new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getProcedures(_catalogPattern, _schemaPattern, _procedurePattern);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String procedureName = result.getString("PROCEDURE_NAME");
 
                 if ((procedureName != null) && (procedureName.length() > 0)) {
@@ -936,21 +901,16 @@ public class DumpMetadataTask extends Task {
                     if (columns.contains("PROCEDURE_TYPE")) {
                         try {
                             switch (result.getShort("PROCEDURE_TYPE")) {
-                                case DatabaseMetaData.procedureReturnsResult:
+                                case DatabaseMetaData.procedureReturnsResult ->
                                     xmlWriter.writeAttribute(null, "type", "returns result");
-                                    break;
-                                case DatabaseMetaData.procedureNoResult:
+                                case DatabaseMetaData.procedureNoResult ->
                                     xmlWriter.writeAttribute(null, "type", "doesn't return result");
-                                    break;
-                                case DatabaseMetaData.procedureResultUnknown:
+                                case DatabaseMetaData.procedureResultUnknown ->
                                     xmlWriter.writeAttribute(null, "type", "may return result");
-                                    break;
-                                default:
-                                    xmlWriter.writeAttribute(null, "type", "unknown");
-                                    break;
+                                default -> xmlWriter.writeAttribute(null, "type", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the PROCEDURE_TYPE value for the procedure '" + procedureName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the PROCEDURE_TYPE value for the procedure '" + procedureName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
 
@@ -959,8 +919,9 @@ public class DumpMetadataTask extends Task {
                 }
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the procedures from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the procedures from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -973,18 +934,16 @@ public class DumpMetadataTask extends Task {
      * @param schemaName    The schema name
      * @param procedureName The procedure name
      */
-    private void dumpProcedure(PrettyPrintingXmlWriter xmlWriter,
-                               final DatabaseMetaData metaData,
-                               final String catalogName,
-                               final String schemaName,
-                               final String procedureName) throws SQLException {
+    private void dumpProcedure(PrettyPrintingXmlWriter xmlWriter, final DatabaseMetaData metaData, final String catalogName, final String schemaName, final String procedureName) throws SQLException {
         performResultSetXmlOperation(xmlWriter, null, new ResultSetXmlOperation() {
+            @Override
             public ResultSet getResultSet() throws SQLException {
                 return metaData.getProcedureColumns(catalogName, schemaName, procedureName, _columnPattern);
             }
 
+            @Override
             public void handleRow(PrettyPrintingXmlWriter xmlWriter, ResultSet result) throws SQLException {
-                Set columns = getColumnsInResultSet(result);
+                Set<String> columns = getColumnsInResultSet(result);
                 String columnName = result.getString("COLUMN_NAME");
 
                 if ((columnName != null) && (columnName.length() > 0)) {
@@ -993,27 +952,20 @@ public class DumpMetadataTask extends Task {
                     if (columns.contains("COLUMN_TYPE")) {
                         try {
                             switch (result.getShort("COLUMN_TYPE")) {
-                                case DatabaseMetaData.procedureColumnIn:
+                                case DatabaseMetaData.procedureColumnIn ->
                                     xmlWriter.writeAttribute(null, "type", "in parameter");
-                                    break;
-                                case DatabaseMetaData.procedureColumnInOut:
+                                case DatabaseMetaData.procedureColumnInOut ->
                                     xmlWriter.writeAttribute(null, "type", "in/out parameter");
-                                    break;
-                                case DatabaseMetaData.procedureColumnOut:
+                                case DatabaseMetaData.procedureColumnOut ->
                                     xmlWriter.writeAttribute(null, "type", "out parameter");
-                                    break;
-                                case DatabaseMetaData.procedureColumnReturn:
+                                case DatabaseMetaData.procedureColumnReturn ->
                                     xmlWriter.writeAttribute(null, "type", "return value");
-                                    break;
-                                case DatabaseMetaData.procedureColumnResult:
+                                case DatabaseMetaData.procedureColumnResult ->
                                     xmlWriter.writeAttribute(null, "type", "result column in ResultSet");
-                                    break;
-                                default:
-                                    xmlWriter.writeAttribute(null, "type", "unknown");
-                                    break;
+                                default -> xmlWriter.writeAttribute(null, "type", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the COLUMN_TYPE value for the column '" + columnName + "' of procedure '" + procedureName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the COLUMN_TYPE value for the column '" + columnName + "' of procedure '" + procedureName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
 
@@ -1026,26 +978,23 @@ public class DumpMetadataTask extends Task {
                     if (columns.contains("NULLABLE")) {
                         try {
                             switch (result.getInt("NULLABLE")) {
-                                case DatabaseMetaData.procedureNoNulls:
+                                case DatabaseMetaData.procedureNoNulls ->
                                     xmlWriter.writeAttribute(null, "nullable", "false");
-                                    break;
-                                case DatabaseMetaData.procedureNullable:
+                                case DatabaseMetaData.procedureNullable ->
                                     xmlWriter.writeAttribute(null, "nullable", "true");
-                                    break;
-                                default:
-                                    xmlWriter.writeAttribute(null, "nullable", "unknown");
-                                    break;
+                                default -> xmlWriter.writeAttribute(null, "nullable", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the NULLABLE value for the column '" + columnName + "' of procedure '" + procedureName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the NULLABLE value for the column '" + columnName + "' of procedure '" + procedureName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
                     addStringAttribute(xmlWriter, "remarks", result, columns, "REMARKS");
                 }
             }
 
+            @Override
             public void handleError(SQLException ex) {
-                log("Could not read the columns for procedure '" + procedureName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the columns for procedure '" + procedureName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         });
     }
@@ -1058,12 +1007,12 @@ public class DumpMetadataTask extends Task {
      * @param columns    The columns in the result set
      * @param columnName The name of the column in the result set
      */
-    private void addStringAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set columns, String columnName) throws SQLException {
+    private void addStringAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set<String> columns, String columnName) throws SQLException {
         if (columns.contains(columnName)) {
             try {
                 xmlWriter.writeAttribute(null, attrName, result.getString(columnName));
             } catch (SQLException ex) {
-                log("Could not read the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
+                log("Could not read the value from result set column " + columnName + ":" + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
             }
         }
     }
@@ -1076,7 +1025,7 @@ public class DumpMetadataTask extends Task {
      * @param columns    The columns in the result set
      * @param columnName The name of the column in the result set
      */
-    private void addIntAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set columns, String columnName) throws SQLException {
+    private void addIntAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set<String> columns, String columnName) throws SQLException {
         if (columns.contains(columnName)) {
             try {
                 xmlWriter.writeAttribute(null, attrName, String.valueOf(result.getInt(columnName)));
@@ -1089,7 +1038,7 @@ public class DumpMetadataTask extends Task {
                     try {
                         xmlWriter.writeAttribute(null, attrName, Integer.valueOf(value).toString());
                     } catch (NumberFormatException parseEx) {
-                        log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not parse the value from result set column " + columnName + ":" + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
             }
@@ -1104,7 +1053,7 @@ public class DumpMetadataTask extends Task {
      * @param columns    The columns in the result set
      * @param columnName The name of the column in the result set
      */
-    private void addShortAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set columns, String columnName) throws SQLException {
+    private void addShortAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set<String> columns, String columnName) throws SQLException {
         if (columns.contains(columnName)) {
             try {
                 xmlWriter.writeAttribute(null, attrName, String.valueOf(result.getShort(columnName)));
@@ -1117,7 +1066,7 @@ public class DumpMetadataTask extends Task {
                     try {
                         xmlWriter.writeAttribute(null, attrName, Short.valueOf(value).toString());
                     } catch (NumberFormatException parseEx) {
-                        log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not parse the value from result set column " + columnName + ":" + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
             }
@@ -1132,7 +1081,7 @@ public class DumpMetadataTask extends Task {
      * @param columns    The columns in the result set
      * @param columnName The name of the column in the result set
      */
-    private void addBooleanAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set columns, String columnName) throws SQLException {
+    private void addBooleanAttribute(PrettyPrintingXmlWriter xmlWriter, String attrName, ResultSet result, Set<String> columns, String columnName) throws SQLException {
         if (columns.contains(columnName)) {
             try {
                 xmlWriter.writeAttribute(null, attrName, String.valueOf(result.getBoolean(columnName)));
@@ -1145,7 +1094,7 @@ public class DumpMetadataTask extends Task {
                     try {
                         xmlWriter.writeAttribute(null, attrName, String.valueOf(Boolean.parseBoolean(value)));
                     } catch (NumberFormatException parseEx) {
-                        log("Could not parse the value from result set column " + columnName + ":" + ex.getStackTrace(), Project.MSG_ERR);
+                        log("Could not parse the value from result set column " + columnName + ":" + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                     }
                 }
             }
@@ -1161,14 +1110,13 @@ public class DumpMetadataTask extends Task {
      * @param resultSet The result set
      * @return The columns
      */
-    private Set getColumnsInResultSet(ResultSet resultSet) throws SQLException {
-        ListOrderedSet result = new ListOrderedSet();
+    private Set<String> getColumnsInResultSet(ResultSet resultSet) throws SQLException {
+        ListOrderedSet<String> result = new ListOrderedSet<>();
         ResultSetMetaData metaData = resultSet.getMetaData();
 
         for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
             result.add(metaData.getColumnName(idx).toUpperCase());
         }
-
         return result;
     }
 

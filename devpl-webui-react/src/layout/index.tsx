@@ -7,9 +7,6 @@ const LayoutContainer = () => {
   const LayoutMode = useStateLayout()
   const visible = useStateVisibel()
 
-  console.log("布局模式切换", LayoutMode);
-  
-
   switch (LayoutMode) {
     case ActionTypes.SINGLE_COLUMN:
       return <SingleColumn visible={visible} />;

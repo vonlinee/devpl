@@ -1,25 +1,5 @@
 package org.apache.ddlutils;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.task.DirectoryScanner;
 import org.apache.ddlutils.task.FileSet;
 import org.apache.ddlutils.task.Project;
@@ -39,8 +19,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Creates a test summary snippet that can be put onto the DdlUtils web site.
- * @version $Revision: $
+ * Creates a test summary snippet that can be put onto the DdlUtils website.
  */
 public class TestSummaryCreatorTask extends Task {
     /**
@@ -54,7 +33,7 @@ public class TestSummaryCreatorTask extends Task {
     /**
      * The input files.
      */
-    private ArrayList _fileSets = new ArrayList();
+    private final List<FileSet> _fileSets = new ArrayList<>();
 
     /**
      * Set the DdlUtils version used to run the tests.
@@ -85,11 +64,9 @@ public class TestSummaryCreatorTask extends Task {
      * Note that this does not check that the file is a valid and useful XML file.
      * @return The input files
      */
-    private List getInputFiles() {
-        ArrayList result = new ArrayList();
-
-        for (Iterator it = _fileSets.iterator(); it.hasNext(); ) {
-            FileSet fileSet = (FileSet) it.next();
+    private List<File> getInputFiles() {
+        ArrayList<File> result = new ArrayList<>();
+        for (FileSet fileSet : _fileSets) {
             File fileSetDir = fileSet.getDir(getProject());
             DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
             String[] files = scanner.getIncludedFiles();
@@ -114,8 +91,8 @@ public class TestSummaryCreatorTask extends Task {
 
         summaryDoc.addElement("summary");
 
-        for (Iterator it = getInputFiles().iterator(); it.hasNext(); ) {
-            processInputFile(summaryDoc, (File) it.next());
+        for (File file : getInputFiles()) {
+            processInputFile(summaryDoc, file);
         }
         return summaryDoc;
     }
@@ -188,9 +165,9 @@ public class TestSummaryCreatorTask extends Task {
                 totalNumFailures = Integer.parseInt(generalElement.attributeValue("failures"));
             }
 
-            int numTests = Integer.parseInt(getAttrValue(testDoc, "/testsuite", "tests"));
-            int numErrors = Integer.parseInt(getAttrValue(testDoc, "/testsuite", "errors"));
-            int numFailures = Integer.parseInt(getAttrValue(testDoc, "/testsuite", "failures"));
+            int numTests = Integer.parseInt(Objects.requireNonNull(getAttrValue(testDoc, "/testsuite", "tests")));
+            int numErrors = Integer.parseInt(Objects.requireNonNull(getAttrValue(testDoc, "/testsuite", "errors")));
+            int numFailures = Integer.parseInt(Objects.requireNonNull(getAttrValue(testDoc, "/testsuite", "failures")));
 
             totalNumTests += numTests;
             totalNumErrors += numErrors;
@@ -205,8 +182,8 @@ public class TestSummaryCreatorTask extends Task {
                 String testSuiteName = testSuiteNode.attributeValue("name");
 
                 // since tests have failed, we add it to the summary
-                for (Iterator it = testSuiteNode.selectNodes("testcase[failure or error]").iterator(); it.hasNext(); ) {
-                    Element failedTestElement = (Element) it.next();
+                for (Object o : testSuiteNode.selectNodes("testcase[failure or error]")) {
+                    Element failedTestElement = (Element) o;
                     Element newTestElement = summaryDoc.getRootElement().addElement("failedTest");
 
                     // org.apache.ddlutils.Test setup failure, so the test was not actually run ?
@@ -226,7 +203,7 @@ public class TestSummaryCreatorTask extends Task {
      * @param element            The element to add the relevant database properties to
      * @param jdbcPropertiesFile The path of the properties file
      */
-    protected void addTargetDatabaseInfo(Element element, String jdbcPropertiesFile) throws IOException, RuntimeException {
+    protected void addTargetDatabaseInfo(Element element, String jdbcPropertiesFile) throws RuntimeException {
         if (jdbcPropertiesFile == null) {
             return;
         }
@@ -236,7 +213,7 @@ public class TestSummaryCreatorTask extends Task {
         DatabaseMetaData metaData;
 
         try {
-            String dataSourceClass = props.getProperty(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX + "class", BasicDataSource.class.getName());
+            String dataSourceClass = props.getProperty(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX + "class", "org.apache.commons.dbcp.BasicDataSource");
             DataSource dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
 
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
@@ -351,8 +328,6 @@ public class TestSummaryCreatorTask extends Task {
         }
         return props;
     }
-
-
 
     public void execute() throws RuntimeException {
         try {

@@ -2,7 +2,6 @@ package org.apache.ddlutils;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestSuite;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ddlutils.dynabean.*;
 import org.apache.ddlutils.io.BinaryObjectsHelper;
 import org.apache.ddlutils.io.DataReader;
@@ -172,7 +171,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
             return null;
         }
         try {
-            String dataSourceClass = props.getProperty(DATASOURCE_PROPERTY_PREFIX + "class", BasicDataSource.class.getName());
+            String dataSourceClass = props.getProperty(DATASOURCE_PROPERTY_PREFIX + "class", DataSource.class.getName());
             DataSource dataSource = (DataSource) Class.forName(dataSourceClass).newInstance();
 
             for (Map.Entry<Object, Object> entry : props.entrySet()) {
