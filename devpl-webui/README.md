@@ -18,3 +18,8 @@ npm run dev
 npm run build
 ```
 
+
+
+npm run lint-fix
+
+eslint --fix --ext .js --ext .tsx --ext .jsx --ext .vue ./

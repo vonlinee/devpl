@@ -3,14 +3,8 @@
  * @author Von
  * @date 2023/8/4 11:35
 -->
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
+<template></template>
 
-<template>
-
-</template>
-
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

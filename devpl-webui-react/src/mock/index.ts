@@ -237,7 +237,18 @@ let menu: MenuList = [
     [MENU_KEEPALIVE]: "true",
     order: 10,
   },
+  {
+    menu_id: 33,
+    [MENU_TITLE]: "测试页面",
+    [MENU_PATH]: "/power/test",
+    [MENU_KEY]: "test",
+    [MENU_PARENTKEY]: "",
+    [MENU_ICON]: "icon_list",
+    [MENU_KEEPALIVE]: "false",
+    order: 1,
+  },
 ];
+
 const typeList = [
   {
     type_id: 1,

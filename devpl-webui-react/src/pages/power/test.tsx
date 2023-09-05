@@ -1,10 +1,14 @@
 import ReactMonacoEditor from "@/components/editor/ReactMonacoEditor"
 import { Button } from "antd"
+import { useState } from "react"
 
 const Test = () => {
+
+  const [text, setText] = useState("");
+
   return (<>
-    <Button>111</Button>
-    <ReactMonacoEditor></ReactMonacoEditor>
+    <Button onClick={() => console.log(text)}></Button>
+    <ReactMonacoEditor text={text} ></ReactMonacoEditor>
   </>)
 }
 

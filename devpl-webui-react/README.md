@@ -174,10 +174,7 @@ export const route = {
 
 打包后的产物，开启本地预览。
 
-
-
 ## 创建一个菜单
-
 
 该添加方式适用于 `npm run "start:mock"`启动的项目
 
@@ -220,38 +217,20 @@ let menu = [
 ];
 ```
 
-
 2. 由于菜单会走本地会话存储 `window.sessionStorage`,所以保存代码后需要关闭当前窗口,重新打开地址 `http://localhost:3000/react-ant-admin`
 
 > 打开之后,会发现菜单会多出一个 `test`栏目,点击会打开之前我们创建的 test 页面.这样就完成了菜单和页面的编写.
 
-
-
-
-
-
-
-
-
-
-
-
-
 Github和Gitee版本部分不一样
-
 
 npm run "start:mock"
 
 npm run "dev:mock"
 
-
-
 react-monaco-editor与vite
-
 
 vite使用monaco-editor
 
 https://github.com/vitejs/vite/discussions/1791
-
 
 https://malagege.github.io/blog/posts/monaco-editor-%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%A8%98-%E6%90%AD%E9%85%8D-Vite/

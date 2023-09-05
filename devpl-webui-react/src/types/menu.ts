@@ -28,6 +28,9 @@ export interface MenuState {
 export interface MenuItem {
   menu_id: number
   [MENU_ICON]: string
+  /**
+   * 是否 keepAlive
+   */
   [MENU_KEEPALIVE]: string
   [MENU_KEY]: string | number
   order?: number
@@ -49,7 +52,6 @@ export type MenuMap = {
 }
 
 export type MenuList = MenuItem[]
-
 
 export type MenuResponse = MenuList
 
