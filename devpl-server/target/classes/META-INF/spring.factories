@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=io.devpl.generator.autoconfigure.GeneratorAutoConfiguration
+
+org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.generator.boot.CustomConfigurationFileLoader

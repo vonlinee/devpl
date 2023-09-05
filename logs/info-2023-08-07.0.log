@@ -1,0 +1,20 @@
+2023-08-07 21:44:29.923 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.0.Final
+2023-08-07 21:44:30.023 [main] INFO  io.devpl.generator.DevplMain8088 - Starting DevplMain8088 using Java 17.0.4 with PID 13316 (C:\Users\vonline\Documents\GitHub\devpl-backend\devpl-server\target\classes started by vonline in C:\Users\vonline\Documents\GitHub\devpl-backend)
+2023-08-07 21:44:30.024 [main] INFO  io.devpl.generator.DevplMain8088 - The following 1 profile is active: "dev"
+2023-08-07 21:44:32.329 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8088 (http)
+2023-08-07 21:44:32.345 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8088"]
+2023-08-07 21:44:32.346 [main] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+2023-08-07 21:44:32.347 [main] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.5]
+2023-08-07 21:44:32.480 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/devpl] - Initializing Spring embedded WebApplicationContext
+2023-08-07 21:44:32.481 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2219 ms
+2023-08-07 21:44:34.460 [main] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8088"]
+2023-08-07 21:44:34.488 [main] INFO  o.s.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port(s): 8088 (http) with context path '/devpl'
+2023-08-07 21:44:34.500 [main] INFO  io.devpl.generator.DevplMain8088 - Started DevplMain8088 in 5.226 seconds (process running for 7.816)
+2023-08-07 21:44:45.500 [http-nio-8088-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/devpl] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-07 21:44:45.501 [http-nio-8088-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2023-08-07 21:44:45.502 [http-nio-8088-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2023-08-07 21:44:46.859 [http-nio-8088-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-08-07 21:44:47.632 [http-nio-8088-exec-2] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ee81986
+2023-08-07 21:44:47.637 [http-nio-8088-exec-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-08-07 23:50:29.808 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-08-07 23:50:29.814 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
