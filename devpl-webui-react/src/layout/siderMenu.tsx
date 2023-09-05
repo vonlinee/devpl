@@ -99,6 +99,10 @@ const SiderMenu = () => {
   const selectedKeys = useStateSelectMenuKey();
   const layout = useStateLayout();
   const menuList = useStateMenuList();
+
+  console.log("所有菜单结构")
+  menuList.forEach((item) => console.log(item))
+
   const { styles } = useStyle();
   // 菜单组折叠
   const { stateSetOpenMenuKey: onOpenChange } = useDispatchMenu();
