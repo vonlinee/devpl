@@ -1,2 +1,0 @@
-2023-08-07 21:44:47.078 [http-nio-8088-exec-2] WARN  com.zaxxer.hikari.util.DriverDataSource - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
-2023-08-07 23:29:38.694 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h42m20s939ms230µs600ns).

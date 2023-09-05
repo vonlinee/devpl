@@ -1,5 +1,0 @@
-2023-08-21 22:11:21.006 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'requestMappingHandlerMapping' defined in class path resource [org/springframework/boot/autoconfigure/web/servlet/WebMvcAutoConfiguration$EnableWebMvcConfiguration.class]: Ambiguous mapping. Cannot map 'templateController' method 
-io.devpl.generator.controller.TemplateController#uploadTemplate(TemplateInfo)
-to {POST [/api/codegen/template/save]}: There is already 'templateController' bean method
-io.devpl.generator.controller.TemplateController#addOne(TemplateInfo) mapped.
-2023-08-21 22:14:00.974 [http-nio-8088-exec-2] WARN  com.zaxxer.hikari.util.DriverDataSource - Registered driver with driverClassName=com.mysql.jdbc.Driver was not found, trying direct instantiation.
