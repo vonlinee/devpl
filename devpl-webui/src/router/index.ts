@@ -6,7 +6,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/p/gen',
         meta: {
             title: '代码生成器',
-            icon: 'icon-appstore'
+            icon: 'icon-appstore',
         },
         children: [
             {
@@ -104,13 +104,16 @@ export const menuRoutes: RouteRecordRaw[] = [
         path: '/fields',
         meta: {
             title: '字段管理',
-            icon: 'icon-appstore'
+            icon: 'icon-appstore',
         },
         component: () => import('@/views/fields/index.vue'),
         children: []
     }
 ]
 
+/**
+ * 默认路由
+ */
 export const constantRoutes: RouteRecordRaw[] = [
     {
         path: '/redirect',
