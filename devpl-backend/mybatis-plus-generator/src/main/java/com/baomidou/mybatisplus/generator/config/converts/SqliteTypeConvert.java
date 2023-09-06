@@ -18,7 +18,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert.toDateType;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
@@ -38,7 +38,7 @@ public class SqliteTypeConvert implements ITypeConvert {
      * @see MySqlTypeConvert#toDateType(GlobalConfig, String)
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(contains("bigint").then(LONG))
             .test(containsAny("tinyint(1)", "boolean").then(BOOLEAN))

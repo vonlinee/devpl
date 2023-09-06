@@ -1,7 +1,7 @@
 package com.baomidou.mybatisplus.generator.type;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 
 /**
@@ -17,5 +17,5 @@ public interface TypeConverter {
      * @param metaInfo     字段元数据信息
      * @return 子类类型
      */
-    IColumnType convert(GlobalConfig globalConfig, ColumnMetadata metaInfo);
+    ColumnJavaType convert(GlobalConfig globalConfig, ColumnMetadata metaInfo);
 }

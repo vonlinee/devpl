@@ -2,7 +2,7 @@ package com.baomidou.mybatisplus.generator.type;
 
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class TypeRegistry {
 
-    private static final Map<Integer, IColumnType> typeMap = new HashMap<>();
+    private static final Map<Integer, ColumnJavaType> typeMap = new HashMap<>();
 
     static {
         // byte[]

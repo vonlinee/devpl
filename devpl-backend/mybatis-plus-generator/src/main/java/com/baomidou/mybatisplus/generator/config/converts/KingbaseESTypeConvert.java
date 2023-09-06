@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -39,7 +39,7 @@ public class KingbaseESTypeConvert implements ITypeConvert {
      * @return 返回对应的字段类型
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "text", "json", "enum").then(STRING))
             .test(contains("bigint").then(LONG))
@@ -60,26 +60,20 @@ public class KingbaseESTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    private IColumnType toDateType(GlobalConfig config, String type) {
+    private ColumnJavaType toDateType(GlobalConfig config, String type) {
         DateType dateType = config.getDateType();
         if (dateType == DateType.SQL_PACK) {
-            switch (type) {
-                case "date":
-                    return DATE_SQL;
-                case "time":
-                    return TIME;
-                default:
-                    return TIMESTAMP;
-            }
+            return switch (type) {
+                case "date" -> DATE_SQL;
+                case "time" -> TIME;
+                default -> TIMESTAMP;
+            };
         } else if (dateType == DateType.TIME_PACK) {
-            switch (type) {
-                case "date":
-                    return LOCAL_DATE;
-                case "time":
-                    return LOCAL_TIME;
-                default:
-                    return LOCAL_DATE_TIME;
-            }
+            return switch (type) {
+                case "date" -> LOCAL_DATE;
+                case "time" -> LOCAL_TIME;
+                default -> LOCAL_DATE_TIME;
+            };
         }
         return DbColumnType.DATE;
     }

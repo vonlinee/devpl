@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.converts.select.BranchBuilder;
 import com.baomidou.mybatisplus.generator.config.converts.select.Selector;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 /**
  * 该注册器负责注册并查询类型注册器
@@ -55,7 +55,7 @@ public class TypeConverts {
      * @param param 参数
      * @return 返回选择器
      */
-    static Selector<String, IColumnType> use(String param) {
+    static Selector<String, ColumnJavaType> use(String param) {
         return new Selector<>(param.toLowerCase());
     }
 
@@ -65,14 +65,14 @@ public class TypeConverts {
      * @return 返回分支构建器
      * @see #containsAny(CharSequence...)
      */
-    static BranchBuilder<String, IColumnType> contains(CharSequence value) {
+    static BranchBuilder<String, ColumnJavaType> contains(CharSequence value) {
         return BranchBuilder.of(s -> s.contains(value));
     }
 
     /**
      * @see #contains(CharSequence)
      */
-    static BranchBuilder<String, IColumnType> containsAny(CharSequence... values) {
+    static BranchBuilder<String, ColumnJavaType> containsAny(CharSequence... values) {
         return BranchBuilder.of(s -> {
             for (CharSequence value : values) {
                 if (s.contains(value)) {

@@ -16,19 +16,24 @@ CREATE TABLE gen_datasource
     password    varchar(200) COMMENT '密码',
     create_time datetime COMMENT '创建时间',
     primary key (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='数据源管理';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='数据源管理';
 
 DROP TABLE IF exists gen_field_type;
-CREATE TABLE gen_field_type
+CREATE TABLE `gen_field_type`
 (
-    id           bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-    column_type  varchar(200) COMMENT '字段类型',
-    attr_type    varchar(200) COMMENT '属性类型',
-    package_name varchar(200) COMMENT '属性包名',
-    create_time  datetime COMMENT '创建时间',
-    primary key (id),
-    unique key (column_type)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='字段类型管理';
+    `id`             bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `column_type`    varchar(200) DEFAULT NULL COMMENT '字段类型',
+    `attr_type`      varchar(200) DEFAULT NULL COMMENT '属性类型',
+    `package_name`   varchar(200) DEFAULT NULL COMMENT '属性包名',
+    `create_time`    datetime     DEFAULT NULL COMMENT '创建时间',
+    `json_type`      varchar(100) DEFAULT NULL COMMENT 'JSON数据类型',
+    `mysql_sql_type` varchar(100) DEFAULT NULL COMMENT 'MySQL SQL数据类型',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `column_type` (`column_type`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4 COMMENT ='字段类型管理';
 
 DROP TABLE IF exists gen_base_class;
 CREATE TABLE gen_base_class
@@ -40,7 +45,8 @@ CREATE TABLE gen_base_class
     remark       varchar(200) COMMENT '备注',
     create_time  datetime COMMENT '创建时间',
     primary key (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='基类管理';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='基类管理';
 
 DROP TABLE IF exists gen_table;
 CREATE TABLE gen_table
@@ -64,7 +70,8 @@ CREATE TABLE gen_table
     create_time    datetime COMMENT '创建时间',
     primary key (id),
     unique key (table_name)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表';
 
 DROP TABLE IF exists gen_table_field;
 CREATE TABLE gen_table_field
@@ -79,7 +86,7 @@ CREATE TABLE gen_table_field
     package_name    varchar(200) COMMENT '属性包名',
     sort            int COMMENT '排序',
     auto_fill       varchar(20) COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
-    primary_key      tinyint COMMENT '主键 0：否  1：是',
+    primary_key     tinyint COMMENT '主键 0：否  1：是',
     base_field      tinyint COMMENT '基类字段 0：否  1：是',
     form_item       tinyint COMMENT '表单项 0：否  1：是',
     form_required   tinyint COMMENT '表单必填 0：否  1：是',
@@ -92,7 +99,8 @@ CREATE TABLE gen_table_field
     query_type      varchar(200) COMMENT '查询方式',
     query_form_type varchar(200) COMMENT '查询表单类型',
     primary key (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表字段';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='代码生成表字段';
 
 DROP TABLE IF exists gen_project_modify;
 CREATE TABLE gen_project_modify
@@ -110,7 +118,8 @@ CREATE TABLE gen_project_modify
     modify_tmp_path        varchar(100) COMMENT '变更临时路径',
     create_time            datetime COMMENT '创建时间',
     PRIMARY KEY (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='项目名变更';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='项目名变更';
 
 
 -- 用于测试代码生成器的表结构 --
@@ -129,7 +138,8 @@ CREATE TABLE gen_test_student
     updater     bigint COMMENT '更新者',
     update_time datetime COMMENT '更新时间',
     PRIMARY KEY (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='测试2';
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='测试2';
 
 
 INSERT INTO gen_field_type (column_type, attr_type, package_name, create_time)
@@ -210,58 +220,65 @@ VALUES ('maku-cloud', 'maku', 'net.maku', 'D:/makunet/maku-cloud', 'baba-cloud',
 
 
 DROP TABLE IF exists template_info;
-CREATE TABLE `template_info` (
-     `template_id` bigint(20) AUTO_INCREMENT COMMENT '模板ID主键',
-     `template_name` varchar(100) DEFAULT NULL COMMENT '模板名称',
-     `type` tinyint(4) DEFAULT NULL COMMENT '模板类型',
-     `content` text COMMENT '字符串模板内容',
-     `path` varchar(500) DEFAULT NULL COMMENT '文件模板路径',
-     `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-     `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-     `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
-     `deleted` tinyint(4) DEFAULT NULL COMMENT '逻辑删除状态',
-     PRIMARY KEY (template_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='模板记录表';
+CREATE TABLE `template_info`
+(
+    `template_id`   bigint(20) AUTO_INCREMENT COMMENT '模板ID主键',
+    `template_name` varchar(100) DEFAULT NULL COMMENT '模板名称',
+    `type`          tinyint(4)   DEFAULT NULL COMMENT '模板类型',
+    `content`       text COMMENT '字符串模板内容',
+    `path`          varchar(500) DEFAULT NULL COMMENT '文件模板路径',
+    `create_time`   datetime     DEFAULT NULL COMMENT '创建时间',
+    `update_time`   datetime     DEFAULT NULL COMMENT '更新时间',
+    `remark`        varchar(255) DEFAULT NULL COMMENT '备注信息',
+    `deleted`       tinyint(4)   DEFAULT NULL COMMENT '逻辑删除状态',
+    PRIMARY KEY (template_id)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='模板记录表';
 
 /**
   文件生成表
  */
 DROP TABLE IF EXISTS `template_file_generation`;
-CREATE TABLE `template_file_generation` (
-    `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
-    `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
-    `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
+CREATE TABLE `template_file_generation`
+(
+    `pid`         bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `file_name`   varchar(100) DEFAULT NULL COMMENT '文件名称',
+    `template_id` bigint(20)   DEFAULT NULL COMMENT '模板ID',
+    `save_path`   varchar(100) DEFAULT NULL COMMENT '保存路径',
     PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='模板文件生成关联表';
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8mb4 COMMENT ='模板文件生成关联表';
 
 /**
   表文件生成
  */
 DROP TABLE IF EXISTS `table_file_generation`;
-CREATE TABLE `table_file_generation` (
-     `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-     `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
-     `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
-     `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
-     `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
-     PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表文件生成记录表';
+CREATE TABLE `table_file_generation`
+(
+    `pid`         bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `table_id`    bigint(20)   DEFAULT NULL COMMENT '表ID',
+    `template_id` bigint(20)   DEFAULT NULL COMMENT '模板ID',
+    `file_name`   varchar(100) DEFAULT NULL COMMENT '文件名称',
+    `save_path`   varchar(100) DEFAULT NULL COMMENT '保存路径',
+    PRIMARY KEY (`pid`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='表文件生成记录表';
 
-<<<<<<< Updated upstream
-ALTER TABLE devpl.template_file_generation ADD builtin tinyint(1) NULL COMMENT '是否内置';
-=======
+ALTER TABLE devpl.template_file_generation
+    ADD builtin tinyint(1) NULL COMMENT '是否内置';
 /**
   字段信息表
  */
 DROP TABLE IF EXISTS `field_info`;
-CREATE TABLE `field_info` (
-     `field_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-     `field_key` bigint(20) DEFAULT NULL COMMENT '字段key',
-     `field_name` bigint(20) DEFAULT NULL COMMENT '字段名称',
-     `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型',
-     `remark` varchar(100) DEFAULT NULL COMMENT '保存路径',
-     `order_num` bigint(20) DEFAULT NULL COMMENT '排序号',
-     PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字段信息表';
->>>>>>> Stashed changes
+CREATE TABLE `field_info`
+(
+    `field_id`   bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `field_key`  bigint(20)   DEFAULT NULL COMMENT '字段key',
+    `field_name` bigint(20)   DEFAULT NULL COMMENT '字段名称',
+    `data_type`  varchar(100) DEFAULT NULL COMMENT '数据类型',
+    `remark`     varchar(100) DEFAULT NULL COMMENT '保存路径',
+    `order_num`  bigint(20)   DEFAULT NULL COMMENT '排序号',
+    PRIMARY KEY (`field_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='字段信息表';

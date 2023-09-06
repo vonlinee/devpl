@@ -34,12 +34,12 @@ public final class TableMetadata implements Serializable {
     private String tableType;
 
     /**
-     * String => explanatory comment on the table (may be null)
+     * String => explanatory comment on the table (maybe null)
      */
     private String remarks;
 
     /**
-     * String => the types catalog (may be null)
+     * String => the types catalog (maybe null)
      */
     private String typeCat;
 
@@ -49,7 +49,7 @@ public final class TableMetadata implements Serializable {
     private String typeSchem;
 
     /**
-     * TYPE_NAME String => type name (may be null)
+     * TYPE_NAME String => type name (maybe null)
      */
     private String typeName;
 

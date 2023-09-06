@@ -6,8 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.File;
-
 @EnableScheduling
 @SpringBootApplication
 public class DevplMain8088 {
@@ -19,9 +17,5 @@ public class DevplMain8088 {
             .main(DevplMain8088.class)
             .build();
         app.run(args);
-
-        final String frontEndRootDir = new File("").getAbsolutePath() + "\\devpl-webui";
-        System.out.println("cd " + frontEndRootDir + " && npm run dev");
-        System.out.println("cd " + frontEndRootDir + " ; npm run dev");
     }
 }

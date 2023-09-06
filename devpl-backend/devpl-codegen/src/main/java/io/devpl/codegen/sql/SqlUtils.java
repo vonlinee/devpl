@@ -96,11 +96,23 @@ public class SqlUtils {
                 if (right instanceof SQLExprTableSource sqlExprTableSource) {
                     currTableName = sqlExprTableSource.getTableName();
                 } else if (right instanceof SQLSubqueryTableSource sqlSubqueryTableSource) {
+                    // 子查询
                     currTableName = sqlSubqueryTableSource.getAlias();
 
                     SQLSelect select = sqlSubqueryTableSource.getSelect();
+                    // 获取查询语句
+                    SQLSelectQueryBlock queryBlock = select.getFirstQueryBlock();
 
-                    SQLSelectQuery query = select.getQuery();
+                    // 查询的字段
+                    List<SQLSelectItem> selectList = queryBlock.getSelectList();
+                    for (SQLSelectItem sqlSelectItem : selectList) {
+
+                    }
+                    // FROM 部分
+                    SQLTableSource from1 = queryBlock.getFrom();
+
+                    System.out.println(from1);
+
                 }
 
                 String alias = right.getAlias();

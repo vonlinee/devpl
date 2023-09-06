@@ -1,5 +1,6 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -29,6 +30,19 @@ public class GenFieldType {
      * 属性包名
      */
     private String packageName;
+
+    /**
+     * MySQL数据类型
+     */
+    @TableField(value = "mysql_sql_type")
+    private String mysqlSqlType;
+
+    /**
+     * JSON数据类型
+     */
+    @TableField(value = "json_type")
+    private String jsonType;
+
     /**
      * 创建时间
      */
