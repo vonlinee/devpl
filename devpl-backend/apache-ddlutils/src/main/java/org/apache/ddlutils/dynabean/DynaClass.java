@@ -11,7 +11,6 @@ package org.apache.ddlutils.dynabean;
 
 public interface DynaClass {
 
-
     /**
      * Return the name of this DynaClass (analogous to the
      * <code>getName()</code> method of <code>java.lang.Class</code), which
@@ -20,7 +19,6 @@ public interface DynaClass {
      * @return the name of the DynaClass
      */
     String getName();
-
 
     /**
      * Return a property descriptor for the specified property, if it exists;
@@ -32,7 +30,6 @@ public interface DynaClass {
      */
     DynaProperty getDynaProperty(String name);
 
-
     /**
      * <p>Return an array of <code>ProperyDescriptors</code> for the properties
      * currently defined in this DynaClass.  If no properties are defined, a
@@ -41,7 +38,7 @@ public interface DynaClass {
      * <p><strong>FIXME</strong> - Should we really be implementing
      * <code>getBeanInfo()</code> instead, which returns property descriptors
      * and a bunch of other stuff?</p>
-     * @return the set of properties for this DynaClass
+     * @return the DynaProperties of properties for this DynaClass
      */
     DynaProperty[] getDynaProperties();
 
@@ -56,6 +53,5 @@ public interface DynaClass {
      *                                class, an array class, a primitive type, or void; or if instantiation
      *                                fails for some other reason
      */
-    DynaBean newInstance()
-        throws IllegalAccessException, InstantiationException;
+    DynaBean newInstance() throws IllegalAccessException, InstantiationException;
 }

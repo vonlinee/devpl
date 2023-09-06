@@ -20,7 +20,7 @@ package com.baomidou.mybatisplus.generator.config.rules;
  * @author hubin
  * @since 2017-01-11
  */
-public enum DbColumnType implements IColumnType {
+public enum DbColumnType implements ColumnJavaType {
     // 基本类型
     BASE_BYTE("byte", null),
     BASE_SHORT("short", null),

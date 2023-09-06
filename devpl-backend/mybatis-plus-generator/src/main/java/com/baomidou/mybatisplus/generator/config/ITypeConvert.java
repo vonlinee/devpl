@@ -1,6 +1,6 @@
 package com.baomidou.mybatisplus.generator.config;
 
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 /**
  * 数据库字段类型转换
@@ -16,5 +16,5 @@ public interface ITypeConvert {
      * @param fieldType    字段类型
      * @return ignore
      */
-    IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType);
+    ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType);
 }

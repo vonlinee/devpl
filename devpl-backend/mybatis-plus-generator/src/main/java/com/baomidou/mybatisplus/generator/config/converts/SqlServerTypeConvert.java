@@ -17,7 +17,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -38,7 +38,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
      * @param fieldType 类型
      * @return 返回对应的列类型
      */
-    public static IColumnType toDateType(GlobalConfig config, String fieldType) {
+    public static ColumnJavaType toDateType(GlobalConfig config, String fieldType) {
         switch (config.getDateType()) {
             case SQL_PACK:
                 switch (fieldType) {
@@ -67,7 +67,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "xml", "text").then(STRING))
             .test(contains("bigint").then(LONG))

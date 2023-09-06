@@ -19,7 +19,6 @@ public class SqlDynaBean extends BasicDynaBean {
         super(dynaClass);
     }
 
-
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
@@ -39,12 +38,10 @@ public class SqlDynaBean extends BasicDynaBean {
         return result.toString();
     }
 
-
     @Override
     public int hashCode() {
         return toString().hashCode();
     }
-
 
     @Override
     public boolean equals(Object obj) {

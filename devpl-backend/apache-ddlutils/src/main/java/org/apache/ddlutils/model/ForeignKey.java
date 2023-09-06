@@ -10,7 +10,6 @@ import java.util.Objects;
 
 /**
  * Represents a database foreign key.
- * @version $Revision$
  */
 public class ForeignKey implements Serializable {
     /**

@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.generator.config.builder.Context;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
+import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.type.JavaType;
@@ -303,5 +304,10 @@ public class IntrospectedColumn {
 
     public ColumnMetadata getColumnMetadata() {
         return metadata;
+    }
+
+    public IntrospectedColumn setType(String type) {
+        this.columnType = CommonJavaType.valueOf(type);
+        return this;
     }
 }

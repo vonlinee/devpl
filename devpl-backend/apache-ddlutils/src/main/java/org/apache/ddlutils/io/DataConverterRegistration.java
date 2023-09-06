@@ -1,30 +1,10 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.TypeMap;
 
 /**
  * Represents the registration of a data converter for tasks that work on data files.
- * @version $Revision: 289996 $
  */
 public class DataConverterRegistration {
     /**
@@ -82,7 +62,7 @@ public class DataConverterRegistration {
         if (typeCode == null) {
             throw new RuntimeException("Unknown jdbc type " + jdbcTypeName);
         } else {
-            _typeCode = typeCode.intValue();
+            _typeCode = typeCode;
         }
     }
 
@@ -99,7 +79,7 @@ public class DataConverterRegistration {
      * @param column The column
      */
     public void setColumn(String column) throws RuntimeException {
-        if ((column == null) || (column.length() == 0)) {
+        if ((column == null) || (column.isEmpty())) {
             throw new RuntimeException("Please specify a non-empty column name");
         }
         _column = column;
@@ -118,11 +98,9 @@ public class DataConverterRegistration {
      * @param table The table
      */
     public void setTable(String table) throws RuntimeException {
-        if ((table == null) || (table.length() == 0)) {
+        if ((table == null) || (table.isEmpty())) {
             throw new RuntimeException("Please specify a non-empty table name");
         }
         _table = table;
     }
-
-
 }

@@ -2,7 +2,6 @@ package org.apache.ddlutils.model;
 
 /**
  * Helper class that provides cloning of model elements.
- * @version $Revision: $
  */
 public class CloneHelper {
     /**

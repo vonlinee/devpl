@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 /**
  * Base class for indexes.
- * @version $Revision: $
  */
 public abstract class GenericIndex implements Index {
     /**
@@ -18,36 +17,30 @@ public abstract class GenericIndex implements Index {
      */
     protected ArrayList<IndexColumn> columns = new ArrayList<>();
 
-
     @Override
     public String getName() {
         return name;
     }
-
 
     @Override
     public void setName(String name) {
         this.name = name;
     }
 
-
     @Override
     public int getColumnCount() {
         return columns.size();
     }
-
 
     @Override
     public IndexColumn getColumn(int idx) {
         return columns.get(idx);
     }
 
-
     @Override
     public IndexColumn[] getColumns() {
         return columns.toArray(new IndexColumn[0]);
     }
-
 
     @Override
     public boolean hasColumn(Column column) {
@@ -60,7 +53,6 @@ public abstract class GenericIndex implements Index {
         return false;
     }
 
-
     @Override
     public boolean hasColumn(String columnName, boolean caseSensitive) {
         for (int idx = 0; idx < columns.size(); idx++) {
@@ -72,13 +64,11 @@ public abstract class GenericIndex implements Index {
         return false;
     }
 
-
     @Override
     public void addColumn(IndexColumn column) {
         if (column != null) {
             for (int idx = 0; idx < columns.size(); idx++) {
                 IndexColumn curColumn = getColumn(idx);
-
                 if (curColumn.getOrdinalPosition() > column.getOrdinalPosition()) {
                     columns.add(idx, column);
                     return;
@@ -88,12 +78,10 @@ public abstract class GenericIndex implements Index {
         }
     }
 
-
     @Override
     public void removeColumn(IndexColumn column) {
         columns.remove(column);
     }
-
 
     @Override
     public void removeColumn(int idx) {

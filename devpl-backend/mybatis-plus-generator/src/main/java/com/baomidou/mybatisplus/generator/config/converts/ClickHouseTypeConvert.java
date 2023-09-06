@@ -3,7 +3,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import org.jetbrains.annotations.NotNull;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
@@ -48,7 +48,7 @@ public class ClickHouseTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static IColumnType toDateType(GlobalConfig config, String type) {
+    public static ColumnJavaType toDateType(GlobalConfig config, String type) {
         switch (config.getDateType()) {
             case SQL_PACK:
                 if ("date".equals(type)) {
@@ -66,7 +66,7 @@ public class ClickHouseTypeConvert implements ITypeConvert {
     }
 
     @Override
-    public IColumnType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
+    public ColumnJavaType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny(INTEGER_TYPE).then(INTEGER))
             .test(containsAny(BIGINTEGER_TYPE).then(BIG_INTEGER))

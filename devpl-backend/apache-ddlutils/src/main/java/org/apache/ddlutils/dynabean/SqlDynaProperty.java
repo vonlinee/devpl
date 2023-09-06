@@ -2,6 +2,8 @@ package org.apache.ddlutils.dynabean;
 
 import org.apache.ddlutils.model.Column;
 
+import java.io.Serial;
+
 /**
  * A DynaProperty which maps to a persistent Column in a database.
  * The Column describes additional relational metadata
@@ -13,6 +15,7 @@ public class SqlDynaProperty extends DynaProperty {
     /**
      * Unique ID for serialization purposes.
      */
+    @Serial
     private static final long serialVersionUID = -4491018827449106588L;
 
     /**

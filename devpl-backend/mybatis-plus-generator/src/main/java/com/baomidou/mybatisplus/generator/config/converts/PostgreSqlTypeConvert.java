@@ -18,7 +18,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -38,7 +38,7 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static IColumnType toDateType(GlobalConfig config, String type) {
+    public static ColumnJavaType toDateType(GlobalConfig config, String type) {
         switch (config.getDateType()) {
             case SQL_PACK:
                 switch (type) {
@@ -67,7 +67,7 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
      * @inheritDoc
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "text", "json", "enum").then(STRING))
             .test(contains("bigint").then(LONG))

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <!--弹窗组件-->
 <template>
 	<el-dialog
@@ -5,10 +6,10 @@
 		destroy-on-close
 		:center="center"
 		:modal="show_modal"
-		:show-close="show_close"
+		:show-close="showClose"
 		:close-on-press-escape="closeOnPressEscape"
 		:close-on-click-modal="closeOnClickModal"
-		:class="custom_class"
+		:class="customClass"
 		:fullscreen="fullscreen"
 		:draggable="true"
 		:width="width"
@@ -58,12 +59,12 @@ export default defineComponent({
 			}
 		},
 		// 是否全屏显示
-		max_screen: {
+		maxScreen: {
 			type: Boolean,
 			default: false
 		},
 		// 对话框的ref
-		dlg_ref: {
+		dlgRef: {
 			type: String,
 			default: ''
 		},
@@ -83,9 +84,9 @@ export default defineComponent({
 			default: false
 		},
 		// Dialog 的自定义类名
-		custom_class: {
+		customClass: {
 			type: String,
-			default: ""
+			default: ''
 		},
 		// 是否可以通过点击 modal 关闭 Dialog
 		closeOnClickModal: {
@@ -98,7 +99,7 @@ export default defineComponent({
 			default: true
 		},
 		// 是否显示关闭按钮
-		show_close: {
+		showClose: {
 			type: Boolean,
 			default: true
 		},
@@ -129,10 +130,10 @@ export default defineComponent({
 		const show_modal = ref() // 是否显示遮罩层
 
 		// 最大化与还原设置
-		const { max_screen, modelValue, modal, title } = toRefs(props)
+		const { maxScreen, modelValue, modal, title } = toRefs(props)
 
 		const fullscreen = ref()
-		fullscreen.value = max_screen.value
+		fullscreen.value = maxScreen.value
 		show_modal.value = modal.value
 
 		let titleRef = ref<string>(title.value)

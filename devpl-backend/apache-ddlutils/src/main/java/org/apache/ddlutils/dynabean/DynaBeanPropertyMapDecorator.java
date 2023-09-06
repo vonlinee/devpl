@@ -42,8 +42,6 @@ package org.apache.ddlutils.dynabean;
  *    and <code>values()</code> methods create an <b><i>unmodifiable</i></b>
  *    <code>Set</code> and it does not support the Map's <code>clear()</code>
  *    and <code>remove()</code> operations.</p>
- * @version $Id$
- * @since BeanUtils 1.9.0
  */
 public class DynaBeanPropertyMapDecorator extends BaseDynaBeanMapDecorator<String> {
     /**

@@ -18,7 +18,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -43,7 +43,7 @@ public class OracleTypeConvert implements ITypeConvert {
      * @param typeName 类型名称
      * @return 返回列类型
      */
-    private static IColumnType toNumberType(String typeName) {
+    private static ColumnJavaType toNumberType(String typeName) {
         if (typeName.matches("number\\([0-9]\\)")) {
             return DbColumnType.INTEGER;
         } else if (typeName.matches("number\\(1[0-8]\\)")) {
@@ -58,7 +58,7 @@ public class OracleTypeConvert implements ITypeConvert {
      * @return 时间类型
      * @see GlobalConfig#getDateType()
      */
-    protected static IColumnType toDateType(GlobalConfig config) {
+    protected static ColumnJavaType toDateType(GlobalConfig config) {
         switch (config.getDateType()) {
             case ONLY_DATE:
                 return DbColumnType.DATE;
@@ -78,7 +78,7 @@ public class OracleTypeConvert implements ITypeConvert {
      * @return 返回的对应的列类型
      */
     @Override
-    public IColumnType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(containsAny("char", "clob").then(STRING))
             .test(containsAny("date", "timestamp").then(p -> toDateType(config)))

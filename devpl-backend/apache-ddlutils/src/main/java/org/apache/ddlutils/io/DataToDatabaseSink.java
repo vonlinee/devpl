@@ -201,7 +201,6 @@ public class DataToDatabaseSink implements DataSink {
         this.batchSize = batchSize;
     }
 
-
     @Override
     public void end() throws DataSinkException {
         purgeBatchQueue();
@@ -234,7 +233,6 @@ public class DataToDatabaseSink implements DataSink {
         }
     }
 
-
     @Override
     public void start() throws DataSinkException {
         _fkTables.clear();
@@ -256,7 +254,6 @@ public class DataToDatabaseSink implements DataSink {
             throw new DataSinkException(ex);
         }
     }
-
 
     @Override
     public void addBean(DynaBean bean) throws DataSinkException {
@@ -462,7 +459,7 @@ public class DataToDatabaseSink implements DataSink {
      * @return The name
      */
     private String getFKName(Table owningTable, ForeignKey fk) {
-        if ((fk.getName() != null) && (fk.getName().length() > 0)) {
+        if ((fk.getName() != null) && (!fk.getName().isEmpty())) {
             return fk.getName();
         } else {
             StringBuilder result = new StringBuilder();

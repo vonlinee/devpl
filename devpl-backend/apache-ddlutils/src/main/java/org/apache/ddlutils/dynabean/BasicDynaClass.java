@@ -1,29 +1,9 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
 package org.apache.ddlutils.dynabean;
-
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-
 
 /**
  * <p>Minimal implementation of the <code>DynaClass</code> interface.  Can be
@@ -37,9 +17,7 @@ import java.util.HashMap;
 
 public class BasicDynaClass implements DynaClass, Serializable {
 
-
     // ----------------------------------------------------------- Constructors
-
 
     /**
      * The method signature of the constructor we will use to create
@@ -77,18 +55,14 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * keyed by the property name.  Individual descriptor instances will
      * be the same instances as those in the <code>properties</code> list.
      */
-    protected HashMap<String, DynaProperty> propertiesMap = new HashMap<String, DynaProperty>();
-
+    protected HashMap<String, DynaProperty> propertiesMap = new HashMap<>();
 
     /**
      * Construct a new BasicDynaClass with default parameters.
      */
     public BasicDynaClass() {
-
         this(null, null, null);
-
     }
-
 
     /**
      * Construct a new BasicDynaClass with the specified parameters.
@@ -96,11 +70,8 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * @param dynaBeanClass The implementation class for new instances
      */
     public BasicDynaClass(final String name, final Class<?> dynaBeanClass) {
-
         this(name, dynaBeanClass, null);
-
     }
-
 
     /**
      * Construct a new BasicDynaClass with the specified parameters.
@@ -108,9 +79,7 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * @param dynaBeanClass The implementation class for new intances
      * @param properties    Property descriptors for the supported properties
      */
-    public BasicDynaClass(final String name, Class<?> dynaBeanClass,
-                          final DynaProperty[] properties) {
-
+    public BasicDynaClass(final String name, Class<?> dynaBeanClass, final DynaProperty[] properties) {
         super();
         if (name != null) {
             this.name = name;
@@ -122,9 +91,7 @@ public class BasicDynaClass implements DynaClass, Serializable {
         if (properties != null) {
             setProperties(properties);
         }
-
     }
-
 
     // ------------------------------------------------------ DynaClass Methods
 
@@ -135,12 +102,10 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * different dynamic classes, with different sets of properties.
      * @return the name of the DynaClass
      */
+    @Override
     public String getName() {
-
         return (this.name);
-
     }
-
 
     /**
      * Return a property descriptor for the specified property, if it exists;
@@ -150,16 +115,13 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * @return The descriptor for the specified property
      * @throws IllegalArgumentException if no property name is specified
      */
+    @Override
     public DynaProperty getDynaProperty(final String name) {
-
         if (name == null) {
-            throw new IllegalArgumentException
-                ("No property name specified");
+            throw new IllegalArgumentException("No property name specified");
         }
         return propertiesMap.get(name);
-
     }
-
 
     /**
      * <p>Return an array of <code>ProperyDescriptors</code> for the properties
@@ -169,14 +131,12 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * <p><strong>FIXME</strong> - Should we really be implementing
      * <code>getBeanInfo()</code> instead, which returns property descriptors
      * and a bunch of other stuff?</p>
-     * @return the set of properties for this DynaClass
+     * @return the array of properties for this DynaClass
      */
+    @Override
     public DynaProperty[] getDynaProperties() {
-
         return (properties);
-
     }
-
 
     /**
      * Instantiate and return a new DynaBean instance, associated
@@ -188,9 +148,8 @@ public class BasicDynaClass implements DynaClass, Serializable {
      *                                class, an array class, a primitive type, or void; or if instantiation
      *                                fails for some other reason
      */
-    public DynaBean newInstance()
-        throws IllegalAccessException, InstantiationException {
-
+    @Override
+    public DynaBean newInstance() throws IllegalAccessException, InstantiationException {
         try {
             // Refind the constructor after a deserialization (if needed)
             if (constructor == null) {
@@ -199,15 +158,12 @@ public class BasicDynaClass implements DynaClass, Serializable {
             // Invoke the constructor to create a new bean instance
             return ((DynaBean) constructor.newInstance(constructorValues));
         } catch (final InvocationTargetException e) {
-            throw new InstantiationException
-                (e.getTargetException().getMessage());
+            throw new InstantiationException(e.getTargetException().getMessage());
         }
-
     }
 
 
     // --------------------------------------------------------- Public Methods
-
 
     /**
      * Return the Class object we will use to create new instances in the
@@ -216,14 +172,11 @@ public class BasicDynaClass implements DynaClass, Serializable {
      * @return The class of the {@link DynaBean}
      */
     public Class<?> getDynaBeanClass() {
-
         return (this.dynaBeanClass);
-
     }
 
 
     // ------------------------------------------------------ Protected Methods
-
 
     /**
      * Set the Class object we will use to create new instances in the
@@ -234,45 +187,31 @@ public class BasicDynaClass implements DynaClass, Serializable {
      *                                  implement the <code>DynaBean</code> interface
      */
     protected void setDynaBeanClass(final Class<?> dynaBeanClass) {
-
         // Validate the argument type specified
         if (dynaBeanClass.isInterface()) {
-            throw new IllegalArgumentException
-                ("Class " + dynaBeanClass.getName() +
-                    " is an interface, not a class");
+            throw new IllegalArgumentException("Class " + dynaBeanClass.getName() + " is an interface, not a class");
         }
         if (!DynaBean.class.isAssignableFrom(dynaBeanClass)) {
-            throw new IllegalArgumentException
-                ("Class " + dynaBeanClass.getName() +
-                    " does not implement DynaBean");
+            throw new IllegalArgumentException("Class " + dynaBeanClass.getName() + " does not implement DynaBean");
         }
-
         // Identify the Constructor we will use in newInstance()
         try {
             this.constructor = dynaBeanClass.getConstructor(constructorTypes);
         } catch (final NoSuchMethodException e) {
-            throw new IllegalArgumentException
-                ("Class " + dynaBeanClass.getName() +
-                    " does not have an appropriate constructor");
+            throw new IllegalArgumentException("Class " + dynaBeanClass.getName() + " does not have an appropriate constructor");
         }
         this.dynaBeanClass = dynaBeanClass;
-
     }
-
 
     /**
      * Set the list of dynamic properties supported by this DynaClass.
      * @param properties List of dynamic properties to be supported
      */
     protected void setProperties(final DynaProperty[] properties) {
-
         this.properties = properties;
         propertiesMap.clear();
         for (DynaProperty propertie : properties) {
             propertiesMap.put(propertie.getName(), propertie);
         }
-
     }
-
-
 }

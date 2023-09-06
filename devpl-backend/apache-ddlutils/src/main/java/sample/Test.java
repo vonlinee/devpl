@@ -3,6 +3,9 @@ package sample;
 import org.apache.ddlutils.util.ListOrderedMap;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class Test {
 
@@ -15,10 +18,16 @@ public class Test {
         map.put("k3", 3);
         map.put("k4", 2);
 
+        Set<Map.Entry<String, Integer>> entries = map.entrySet();
 
-        Collection<Integer> values = map.values();
+        System.out.println(entries);
 
-        System.out.println(values);
+        Iterator<Map.Entry<String, Integer>> iterator = entries.iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<String, Integer> next = iterator.next();
+            System.out.println(next);
+        }
 
     }
 }

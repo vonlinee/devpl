@@ -58,7 +58,7 @@ public class AutoGenerator {
     /**
      * 数据源配置
      */
-    private DataSourceConfig dataSourceConfig;
+    private final DataSourceConfig dataSourceConfig;
     /**
      * 数据库表配置
      */

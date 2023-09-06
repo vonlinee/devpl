@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.generator.type.JavaType;
  * @author miemie
  * @since 2018-08-22
  */
-public interface IColumnType extends JavaType {
+public interface ColumnJavaType extends JavaType {
 
     /**
      * 获取字段类型

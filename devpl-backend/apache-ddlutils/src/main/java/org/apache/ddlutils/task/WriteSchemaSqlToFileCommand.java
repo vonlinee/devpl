@@ -55,7 +55,6 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
     /**
      * Specifies the name of the file to write the SQL commands to.
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
@@ -98,7 +97,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
         _doDrops = doDrops;
     }
 
-
+    @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {
             throw new RuntimeException("No output file specified");

@@ -1,22 +1,4 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.apache.ddlutils.dynabean;
-
 
 /**
  * <p>A specialized extension to <code>DynaClass</code> that allows properties
@@ -25,11 +7,8 @@ package org.apache.ddlutils.dynabean;
  * <p><strong>WARNING</strong> - No guarantees that this will be in the final
  * APIs ... it's here primarily to preserve some concepts that were in the
  * original proposal for further discussion.</p>
- * @version $Id$
  */
-
 public interface MutableDynaClass extends DynaClass {
-
 
     /**
      * Add a new dynamic property with no restrictions on data type,
@@ -40,7 +19,6 @@ public interface MutableDynaClass extends DynaClass {
      *                                  restricted, so no new properties can be added
      */
     void add(String name);
-
 
     /**
      * Add a new dynamic property with the specified data type, but with
@@ -53,7 +31,6 @@ public interface MutableDynaClass extends DynaClass {
      *                                  restricted, so no new properties can be added
      */
     void add(String name, Class<?> type);
-
 
     /**
      * Add a new dynamic property with the specified data type, readability,
@@ -69,9 +46,7 @@ public interface MutableDynaClass extends DynaClass {
      * @throws IllegalStateException    if this DynaClass is currently
      *                                  restricted, so no new properties can be added
      */
-    void add(String name, Class<?> type, boolean readable,
-             boolean writeable);
-
+    void add(String name, Class<?> type, boolean readable, boolean writeable);
 
     /**
      * Is this DynaClass currently restricted, if so, no changes to the
@@ -100,6 +75,4 @@ public interface MutableDynaClass extends DynaClass {
      *                                  restricted, so no properties can be removed
      */
     void remove(String name);
-
-
 }

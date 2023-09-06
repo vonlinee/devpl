@@ -149,7 +149,6 @@ public class DdlToDatabaseTask extends DatabaseTaskBase {
         addCommand(command);
     }
 
-
     @Override
     protected Database readModel() {
         DatabaseIO reader = new DatabaseIO();
