@@ -5,7 +5,6 @@ import java.util.*;
 /**
  * Represents the different cascade actions for the <code>onDelete</code> and
  * <code>onUpdate</code> properties of {@link ForeignKey}.
- * @version $Revision: $
  */
 public enum CascadeActionEnum {
 

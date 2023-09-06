@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Represents an index definition for a table which may be either unique or non-unique.
- * @version $Revision$
  */
 public interface Index extends SchemaObject, Serializable {
     /**

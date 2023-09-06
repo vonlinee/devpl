@@ -17,20 +17,19 @@ public class UniqueIndex extends GenericIndex {
      */
     private static final long serialVersionUID = -4097003126550294993L;
 
-
+    @Override
     public boolean isUnique() {
         return true;
     }
 
-
     @Override
+    @SuppressWarnings("unchecked")
     public Index copy() throws ModelException {
         UniqueIndex result = new UniqueIndex();
         result.name = name;
         result.columns = (ArrayList<IndexColumn>) columns.clone();
         return result;
     }
-
 
     @Override
     public boolean equals(Object obj) {
@@ -40,7 +39,6 @@ public class UniqueIndex extends GenericIndex {
             return false;
         }
     }
-
 
     @Override
     public boolean equalsIgnoreCase(Index other) {
@@ -59,12 +57,10 @@ public class UniqueIndex extends GenericIndex {
         return false;
     }
 
-
     @Override
     public int hashCode() {
         return columns.hashCode();
     }
-
 
     @Override
     public String toString() {
@@ -74,7 +70,6 @@ public class UniqueIndex extends GenericIndex {
             getColumnCount() +
             " columns]";
     }
-
 
     @Override
     public String toVerboseString() {

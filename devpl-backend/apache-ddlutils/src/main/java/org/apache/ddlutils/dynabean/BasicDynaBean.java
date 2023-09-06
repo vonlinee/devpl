@@ -1,13 +1,10 @@
 package org.apache.ddlutils.dynabean;
 
-import org.apache.ddlutils.io.converters.ConversionException;
-
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * <p>Minimal implementation of the <code>DynaBean</code> interface.  Can be
@@ -19,27 +16,24 @@ import java.util.Map;
  * <p><strong>IMPLEMENTATION NOTE</strong> - Instances of this class can be
  * successfully serialized and deserialized <strong>ONLY</strong> if all
  * property values are <code>Serializable</code>.</p>
- * @version $Id$
  */
-
 public class BasicDynaBean implements DynaBean, Serializable {
 
-
     // ---------------------------------------------------------- Constructors
-
 
     /**
      * The <code>DynaClass</code> "base class" that this DynaBean
      * is associated with.
      */
-    protected DynaClass dynaClass = null;
+    protected DynaClass dynaClass;
 
 
     // ---------------------------------------------------- Instance Variables
     /**
      * The set of property values for this DynaBean, keyed by property name.
      */
-    protected HashMap<String, Object> values = new HashMap<String, Object>();
+    protected HashMap<String, Object> values = new HashMap<>();
+
     /**
      * Map decorator for this DynaBean
      */
@@ -51,10 +45,8 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @param dynaClass The DynaClass we are associated with
      */
     public BasicDynaBean(final DynaClass dynaClass) {
-
         super();
         this.dynaClass = dynaClass;
-
     }
 
     /**
@@ -67,13 +59,11 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @since 1.8.0
      */
     public Map<String, Object> getMap() {
-
         // cache the Map
         if (mapDecorator == null) {
             mapDecorator = new DynaBeanPropertyMapDecorator(this);
         }
         return mapDecorator;
-
     }
 
     // ------------------------------------------------------ DynaBean Methods
@@ -89,21 +79,19 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws IllegalArgumentException if there is no property
      *                                  of the specified name
      */
+    @Override
     public boolean contains(final String name, final String key) {
 
         final Object value = values.get(name);
         if (value == null) {
-            throw new NullPointerException
-                ("No mapped value for '" + name + "(" + key + ")'");
+            throw new NullPointerException("No mapped value for '" + name + "(" + key + ")'");
         } else if (value instanceof Map) {
             return (((Map<?, ?>) value).containsKey(key));
         } else {
-            throw new IllegalArgumentException
-                ("Non-mapped property for '" + name + "(" + key + ")'");
+            throw new IllegalArgumentException("Non-mapped property for '" + name + "(" + key + ")'");
         }
 
     }
-
 
     /**
      * Return the value of a simple property with the specified name.
@@ -112,6 +100,7 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws IllegalArgumentException if there is no property
      *                                  of the specified name
      */
+    @Override
     public Object get(final String name) {
 
         // Return any non-null value for the specified property
@@ -123,26 +112,26 @@ public class BasicDynaBean implements DynaBean, Serializable {
         // Return a null value for a non-primitive property
         final Class<?> type = getDynaProperty(name).getType();
         if (!type.isPrimitive()) {
-            return (value);
+            return (null);
         }
 
         // Manufacture default values for primitive properties
         if (type == Boolean.TYPE) {
             return (Boolean.FALSE);
         } else if (type == Byte.TYPE) {
-            return (Byte.valueOf((byte) 0));
+            return (byte) 0;
         } else if (type == Character.TYPE) {
-            return (new Character((char) 0));
+            return (char) 0;
         } else if (type == Double.TYPE) {
-            return (new Double(0.0));
+            return 0.0D;
         } else if (type == Float.TYPE) {
-            return (new Float((float) 0.0));
+            return 0.0F;
         } else if (type == Integer.TYPE) {
-            return (Integer.valueOf(0));
+            return 0;
         } else if (type == Long.TYPE) {
-            return (Long.valueOf(0));
+            return 0L;
         } else if (type == Short.TYPE) {
-            return (Short.valueOf((short) 0));
+            return (short) 0;
         } else {
             return (null);
         }
@@ -163,19 +152,18 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws NullPointerException      if no array or List has been
      *                                   initialized for this property
      */
+    @Override
     public Object get(final String name, final int index) {
 
         final Object value = values.get(name);
         if (value == null) {
-            throw new NullPointerException
-                ("No indexed value for '" + name + "[" + index + "]'");
+            throw new NullPointerException("No indexed value for '" + name + "[" + index + "]'");
         } else if (value.getClass().isArray()) {
             return (Array.get(value, index));
         } else if (value instanceof List) {
             return ((List<?>) value).get(index);
         } else {
-            throw new IllegalArgumentException
-                ("Non-indexed property for '" + name + "[" + index + "]'");
+            throw new IllegalArgumentException("Non-indexed property for '" + name + "[" + index + "]'");
         }
 
     }
@@ -192,17 +180,16 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws IllegalArgumentException if the specified property
      *                                  exists, but is not mapped
      */
+    @Override
     public Object get(final String name, final String key) {
 
         final Object value = values.get(name);
         if (value == null) {
-            throw new NullPointerException
-                ("No mapped value for '" + name + "(" + key + ")'");
+            throw new NullPointerException("No mapped value for '" + name + "(" + key + ")'");
         } else if (value instanceof Map) {
             return (((Map<?, ?>) value).get(key));
         } else {
-            throw new IllegalArgumentException
-                ("Non-mapped property for '" + name + "(" + key + ")'");
+            throw new IllegalArgumentException("Non-mapped property for '" + name + "(" + key + ")'");
         }
 
     }
@@ -213,6 +200,7 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * properties available for this DynaBean.
      * @return The associated DynaClass
      */
+    @Override
     public DynaClass getDynaClass() {
 
         return (this.dynaClass);
@@ -229,17 +217,16 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws IllegalArgumentException if there is no property
      *                                  of the specified name
      */
+    @Override
     public void remove(final String name, final String key) {
 
         final Object value = values.get(name);
         if (value == null) {
-            throw new NullPointerException
-                ("No mapped value for '" + name + "(" + key + ")'");
+            throw new NullPointerException("No mapped value for '" + name + "(" + key + ")'");
         } else if (value instanceof Map) {
             ((Map<?, ?>) value).remove(key);
         } else {
-            throw new IllegalArgumentException
-                ("Non-mapped property for '" + name + "(" + key + ")'");
+            throw new IllegalArgumentException("Non-mapped property for '" + name + "(" + key + ")'");
         }
 
     }
@@ -249,27 +236,24 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * Set the value of a simple property with the specified name.
      * @param name  Name of the property whose value is to be set
      * @param value Value to which this property is to be set
-     * @throws ConversionException      if the specified value cannot be
+     * @throws ClassCastException       if the specified value cannot be
      *                                  converted to the type required for this property
      * @throws IllegalArgumentException if there is no property
      *                                  of the specified name
      * @throws NullPointerException     if an attempt is made to set a
      *                                  primitive property to null
      */
+    @Override
     public void set(final String name, final Object value) {
 
         final DynaProperty descriptor = getDynaProperty(name);
         if (value == null) {
             if (descriptor.getType().isPrimitive()) {
-                throw new NullPointerException
-                    ("Primitive value for '" + name + "'");
+                throw new NullPointerException("Primitive value for '" + name + "'");
             }
         } else if (!isAssignable(descriptor.getType(), value.getClass())) {
-            throw new ConversionException
-                ("Cannot assign value of type '" +
-                    value.getClass().getName() +
-                    "' to property '" + name + "' of type '" +
-                    descriptor.getType().getName() + "'");
+            throw new ClassCastException("Cannot assign value of type '" + value.getClass()
+                .getName() + "' to property '" + name + "' of type '" + descriptor.getType().getName() + "'");
         }
         values.put(name, value);
 
@@ -281,7 +265,7 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @param name  Name of the property whose value is to be set
      * @param index Index of the property to be set
      * @param value Value to which this property is to be set
-     * @throws ConversionException       if the specified value cannot be
+     * @throws ClassCastException        if the specified value cannot be
      *                                   converted to the type required for this property
      * @throws IllegalArgumentException  if there is no property
      *                                   of the specified name
@@ -290,68 +274,52 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * @throws IndexOutOfBoundsException if the specified index
      *                                   is outside the range of the underlying property
      */
+    @Override
     public void set(final String name, final int index, final Object value) {
-
         final Object prop = values.get(name);
         if (prop == null) {
-            throw new NullPointerException
-                ("No indexed value for '" + name + "[" + index + "]'");
+            throw new NullPointerException("No indexed value for '" + name + "[" + index + "]'");
         } else if (prop.getClass().isArray()) {
             Array.set(prop, index, value);
         } else if (prop instanceof List) {
-            try {
-                @SuppressWarnings("unchecked")
-                final
-                // This is safe to cast because list properties are always
-                // of type Object
-                List<Object> list = (List<Object>) prop;
-                list.set(index, value);
-            } catch (final ClassCastException e) {
-                throw new ConversionException(e.getMessage());
-            }
+            // This is safe to cast because list properties are always of type Object
+            @SuppressWarnings("unchecked")
+            final List<Object> list = (List<Object>) prop;
+            list.set(index, value);
         } else {
-            throw new IllegalArgumentException
-                ("Non-indexed property for '" + name + "[" + index + "]'");
+            throw new IllegalArgumentException("Non-indexed property for '" + name + "[" + index + "]'");
         }
-
     }
-
 
     /**
      * Set the value of a mapped property with the specified name.
      * @param name  Name of the property whose value is to be set
      * @param key   Key of the property to be set
      * @param value Value to which this property is to be set
-     * @throws ConversionException      if the specified value cannot be
+     * @throws ClassCastException       if the specified value cannot be
      *                                  converted to the type required for this property
      * @throws IllegalArgumentException if there is no property
      *                                  of the specified name
      * @throws IllegalArgumentException if the specified property
      *                                  exists, but is not mapped
      */
+    @Override
     public void set(final String name, final String key, final Object value) {
-
         final Object prop = values.get(name);
         if (prop == null) {
-            throw new NullPointerException
-                ("No mapped value for '" + name + "(" + key + ")'");
+            throw new NullPointerException("No mapped value for '" + name + "(" + key + ")'");
         } else if (prop instanceof Map) {
             @SuppressWarnings("unchecked")
-            final
             // This is safe to cast because mapped properties are always
             // maps of types String -> Object
-            Map<String, Object> map = (Map<String, Object>) prop;
+            final Map<String, Object> map = (Map<String, Object>) prop;
             map.put(key, value);
         } else {
-            throw new IllegalArgumentException
-                ("Non-mapped property for '" + name + "(" + key + ")'");
+            throw new IllegalArgumentException("Non-mapped property for '" + name + "(" + key + ")'");
         }
-
     }
 
-
     // ------------------------------------------------------ Protected Methods
-
 
     /**
      * Return the property descriptor for the specified property name.
@@ -364,13 +332,11 @@ public class BasicDynaBean implements DynaBean, Serializable {
 
         final DynaProperty descriptor = getDynaClass().getDynaProperty(name);
         if (descriptor == null) {
-            throw new IllegalArgumentException
-                ("Invalid property name '" + name + "'");
+            throw new IllegalArgumentException("Invalid property name '" + name + "'");
         }
         return (descriptor);
 
     }
-
 
     /**
      * Is an object of the source class assignable to the destination class?
@@ -380,18 +346,6 @@ public class BasicDynaBean implements DynaBean, Serializable {
      * destination class, otherwise <code>false</code>
      */
     protected boolean isAssignable(final Class<?> dest, final Class<?> source) {
-
-        return dest.isAssignableFrom(source) ||
-                ((dest == Boolean.TYPE) && (source == Boolean.class)) ||
-                ((dest == Byte.TYPE) && (source == Byte.class)) ||
-                ((dest == Character.TYPE) && (source == Character.class)) ||
-                ((dest == Double.TYPE) && (source == Double.class)) ||
-                ((dest == Float.TYPE) && (source == Float.class)) ||
-                ((dest == Integer.TYPE) && (source == Integer.class)) ||
-                ((dest == Long.TYPE) && (source == Long.class)) ||
-                ((dest == Short.TYPE) && (source == Short.class));
-
+        return dest.isAssignableFrom(source) || ((dest == Boolean.TYPE) && (source == Boolean.class)) || ((dest == Byte.TYPE) && (source == Byte.class)) || ((dest == Character.TYPE) && (source == Character.class)) || ((dest == Double.TYPE) && (source == Double.class)) || ((dest == Float.TYPE) && (source == Float.class)) || ((dest == Integer.TYPE) && (source == Integer.class)) || ((dest == Long.TYPE) && (source == Long.class)) || ((dest == Short.TYPE) && (source == Short.class));
     }
-
-
 }

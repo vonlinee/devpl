@@ -1,24 +1,5 @@
 package org.apache.ddlutils.io;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -26,10 +7,10 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Helper class that writes XML data with or without pretty printing.
- * @version $Revision: $
  */
 public class PrettyPrintingXmlWriter {
     /**
@@ -55,7 +36,7 @@ public class PrettyPrintingXmlWriter {
      * @param output The target to write the data XML to
      */
     public PrettyPrintingXmlWriter(OutputStream output) throws DdlUtilsXMLException {
-        this(output, "UTF-8");
+        this(output, StandardCharsets.UTF_8.name());
     }
 
     /**
@@ -71,8 +52,8 @@ public class PrettyPrintingXmlWriter {
         } else {
             bufferedOutput = new BufferedOutputStream(output);
         }
-        if ((encoding == null) || (encoding.length() == 0)) {
-            _encoding = "UTF-8";
+        if ((encoding == null) || (encoding.isEmpty())) {
+            _encoding = StandardCharsets.UTF_8.name();
         } else {
             _encoding = encoding;
         }
@@ -218,7 +199,7 @@ public class PrettyPrintingXmlWriter {
      */
     public void writeNamespace(String prefix, String namespaceUri) throws DdlUtilsXMLException {
         try {
-            if ((prefix == null) || (prefix.length() == 0)) {
+            if ((prefix == null) || (prefix.isEmpty())) {
                 _writer.writeDefaultNamespace(namespaceUri);
             } else {
                 _writer.writeNamespace(prefix, namespaceUri);

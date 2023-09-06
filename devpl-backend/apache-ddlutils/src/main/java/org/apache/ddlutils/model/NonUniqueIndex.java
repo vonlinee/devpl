@@ -12,12 +12,12 @@ public class NonUniqueIndex extends GenericIndex {
      */
     private static final long serialVersionUID = -3591499395114850301L;
 
-
+    @Override
     public boolean isUnique() {
         return false;
     }
 
-
+    @Override
     public Index copy() throws ModelException {
         NonUniqueIndex result = new NonUniqueIndex();
         result.name = name;
@@ -39,12 +39,11 @@ public class NonUniqueIndex extends GenericIndex {
         return super.equals(obj);
     }
 
-
     @Override
     public boolean equalsIgnoreCase(Index other) {
         if (other instanceof NonUniqueIndex otherIndex) {
-            boolean checkName = (name != null) && (name.length() > 0) &&
-                (otherIndex.name != null) && (otherIndex.name.length() > 0);
+            boolean checkName = (name != null) && (!name.isEmpty()) &&
+                                (otherIndex.name != null) && (!otherIndex.name.isEmpty());
             if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) &&
                 (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
@@ -58,7 +57,6 @@ public class NonUniqueIndex extends GenericIndex {
         return false;
     }
 
-
     @Override
     public String toString() {
         return "Index [name=" +
@@ -67,7 +65,6 @@ public class NonUniqueIndex extends GenericIndex {
             getColumnCount() +
             " columns]";
     }
-
 
     @Override
     public String toVerboseString() {

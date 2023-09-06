@@ -17,8 +17,6 @@ import java.util.Map;
  * }
  * </pre>
  * @author Stephen Colebourne
- * @version $Revision: 1.4 $ $Date: 2004/02/18 01:15:43 $
- * @since Commons Collections 3.0
  */
 public interface IterableMap<K, V> extends Map<K, V> {
 
@@ -38,5 +36,5 @@ public interface IterableMap<K, V> extends Map<K, V> {
      * </pre>
      * @return a map iterator
      */
-    MapIterator mapIterator();
+    MapIterator<K, V> mapIterator();
 }

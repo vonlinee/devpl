@@ -223,6 +223,15 @@ public class ValueMap implements Map<String, Object>, Cloneable {
     }
 
     /**
+     * 获取double型属性值
+     * @param key 属性名
+     * @return 属性值
+     */
+    public double getPrimitiveDouble(String key) throws ClassCastException, NullPointerException {
+        return (double) map.get(key);
+    }
+
+    /**
      * 获取byte型属性值
      * @param key 属性名
      * @return 属性值

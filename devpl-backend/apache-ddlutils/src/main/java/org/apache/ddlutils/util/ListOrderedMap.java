@@ -1,5 +1,6 @@
 package org.apache.ddlutils.util;
 
+import org.apache.ddlutils.util.collections.AbstractUntypedIteratorDecorator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -78,9 +79,10 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
      * @param in the input stream
      * @since Commons Collections 3.1
      */
+    @SuppressWarnings("unchecked") // (1) should only fail if input stream is incorrect
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        map = (Map) in.readObject();
+        map = (Map<K, V>) in.readObject();
     }
 
     // Implement OrderedMap
@@ -185,7 +187,7 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
 
     //-----------------------------------------------------------------------
     public Set<K> keySet() {
-        return new KeySetView(this);
+        return new KeySetView<>(this);
     }
 
     @Override
@@ -290,11 +292,12 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
 
     //-----------------------------------------------------------------------
     static class ValuesView<K, V> extends AbstractCollection<V> {
-        private final ListOrderedMap<K, V> parent;
+        private final ListOrderedMap<Object, V> parent;
 
-        ValuesView(ListOrderedMap<K, V> parent) {
+        @SuppressWarnings("unchecked")
+        ValuesView(ListOrderedMap<?, V> parent) {
             super();
-            this.parent = parent;
+            this.parent = (ListOrderedMap<Object, V>) parent;
         }
 
         @Override
@@ -314,11 +317,10 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
 
         @Override
         public Iterator<V> iterator() {
-            Iterator iterator = parent.entrySet().iterator();
-            return new AbstractIteratorDecorator(iterator) {
+            return new AbstractUntypedIteratorDecorator<>(parent.entrySet().iterator()) {
                 @Override
-                public Object next() {
-                    return iterator.next();
+                public V next() {
+                    return getIterator().next().getValue();
                 }
             };
         }
@@ -389,17 +391,18 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
         }
 
         @Override
-        public boolean containsAll(Collection coll) {
+        public boolean containsAll(Collection<?> coll) {
             return getEntrySet().containsAll(coll);
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public boolean remove(Object obj) {
             if (!(obj instanceof Map.Entry)) {
                 return false;
             }
             if (getEntrySet().contains(obj)) {
-                Object key = ((Map.Entry) obj).getKey();
+                Object key = ((Map.Entry<K, V>) obj).getKey();
                 parent.remove(key);
                 return true;
             }
@@ -430,24 +433,25 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
         }
 
         @Override
-        public Iterator iterator() {
-            return new ListOrderedIterator(parent, insertOrder);
+        public Iterator<Map.Entry<K, V>> iterator() {
+            return new ListOrderedIterator<>(parent, insertOrder);
         }
     }
 
     //-----------------------------------------------------------------------
-    static class ListOrderedIterator extends AbstractIteratorDecorator {
-        private final ListOrderedMap parent;
-        private Object last = null;
+    static class ListOrderedIterator<K, V> extends AbstractUntypedIteratorDecorator<K, Map.Entry<K, V>> {
+        private final ListOrderedMap<K, V> parent;
+        private K last = null;
 
-        ListOrderedIterator(ListOrderedMap parent, List insertOrder) {
+        ListOrderedIterator(ListOrderedMap<K, V> parent, List<K> insertOrder) {
             super(insertOrder.iterator());
             this.parent = parent;
         }
 
-        public Object next() {
-            last = super.next();
-            return new ListOrderedMapEntry(parent, last);
+        @Override
+        public Map.Entry<K, V> next() {
+            last = getIterator().next();
+            return new ListOrderedMapEntry<>(parent, last);
         }
 
         @Override
@@ -471,6 +475,7 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
             return parent.get(key);
         }
 
+        @Override
         public V setValue(V value) {
             return parent.getMap().put(key, value);
         }
@@ -563,5 +568,4 @@ public class ListOrderedMap<K, V> extends AbstractMapDecorator<K, V> implements 
             }
         }
     }
-
 }

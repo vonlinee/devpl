@@ -4,8 +4,6 @@ package org.apache.ddlutils.util;
  * Defines a map that maintains order and allows both forward and backward
  * iteration through that order.
  * @author Stephen Colebourne
- * @version $Revision: 1.6 $ $Date: 2004/02/18 01:15:42 $
- * @since Commons Collections 3.0
  */
 public interface OrderedMap<K, V> extends IterableMap<K, V> {
 

@@ -363,33 +363,39 @@ public class Column implements SchemaObject, Serializable {
      * @return The parsed default value
      */
     public Object getParsedDefaultValue() {
-        if ((_defaultValue != null) && (_defaultValue.length() > 0)) {
+        if ((_defaultValue != null) && (!_defaultValue.isEmpty())) {
             try {
                 switch (jdbcTypeCode) {
-                    case Types.TINYINT:
-                    case Types.SMALLINT:
+                    case Types.TINYINT, Types.SMALLINT -> {
                         return Short.parseShort(_defaultValue);
-                    case Types.INTEGER:
+                    }
+                    case Types.INTEGER -> {
                         return Integer.parseInt(_defaultValue);
-                    case Types.BIGINT:
+                    }
+                    case Types.BIGINT -> {
                         return Long.parseLong(_defaultValue);
-                    case Types.DECIMAL:
-                    case Types.NUMERIC:
+                    }
+                    case Types.DECIMAL, Types.NUMERIC -> {
                         return new BigDecimal(_defaultValue);
-                    case Types.REAL:
+                    }
+                    case Types.REAL -> {
                         return Float.parseFloat(_defaultValue);
-                    case Types.DOUBLE:
-                    case Types.FLOAT:
+                    }
+                    case Types.DOUBLE, Types.FLOAT -> {
                         return Double.parseDouble(_defaultValue);
-                    case Types.DATE:
+                    }
+                    case Types.DATE -> {
                         return Date.valueOf(_defaultValue);
-                    case Types.TIME:
+                    }
+                    case Types.TIME -> {
                         return Time.valueOf(_defaultValue);
-                    case Types.TIMESTAMP:
+                    }
+                    case Types.TIMESTAMP -> {
                         return Timestamp.valueOf(_defaultValue);
-                    case Types.BIT:
-                    case Types.BOOLEAN:
+                    }
+                    case Types.BIT, Types.BOOLEAN -> {
                         return Boolean.valueOf(_defaultValue);
+                    }
                 }
             } catch (IllegalArgumentException ex) {
                 return null;
@@ -423,7 +429,7 @@ public class Column implements SchemaObject, Serializable {
         return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, jdbcTypeCode, jdbcTypeName, _size, _sizeAsInt, _scale, _defaultValue);
     }
 
-
+    @Override
     public String toString() {
         return "Column [name=" + getName() + "; type=" + getType() + "]";
     }

@@ -24,7 +24,6 @@ public interface DynaBean {
      */
     boolean contains(String name, String key);
 
-
     /**
      * Return the value of a simple property with the specified name.
      * @param name Name of the property whose value is to be retrieved
@@ -50,7 +49,6 @@ public interface DynaBean {
      */
     Object get(String name, int index);
 
-
     /**
      * Return the value of a mapped property with the specified name,
      * or <code>null</code> if there is no value for the specified key.
@@ -64,14 +62,12 @@ public interface DynaBean {
      */
     Object get(String name, String key);
 
-
     /**
      * Return the <code>DynaClass</code> instance that describes the set of
      * properties available for this DynaBean.
      * @return The associated DynaClass
      */
     DynaClass getDynaClass();
-
 
     /**
      * Remove any existing value for the specified key on the
@@ -83,7 +79,6 @@ public interface DynaBean {
      *                                  of the specified name
      */
     void remove(String name, String key);
-
 
     /**
      * Set the value of a simple property with the specified name.
@@ -97,7 +92,6 @@ public interface DynaBean {
      *                                  primitive property to null
      */
     void set(String name, Object value);
-
 
     /**
      * Set the value of an indexed property with the specified name.
@@ -114,7 +108,6 @@ public interface DynaBean {
      *                                   is outside the range of the underlying property
      */
     void set(String name, int index, Object value);
-
 
     /**
      * Set the value of a mapped property with the specified name.
