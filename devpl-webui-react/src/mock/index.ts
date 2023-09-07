@@ -56,6 +56,9 @@ const userInfoList = [
 ];
 let currentUser = userInfoList[0];
 
+/**
+ * 菜单数据
+ */
 let menu: MenuList = [
   {
     menu_id: 9,
@@ -241,11 +244,11 @@ let menu: MenuList = [
     menu_id: 33,
     [MENU_TITLE]: "测试页面",
     [MENU_PATH]: "/power/test",
-    [MENU_KEY]: "test",
-    [MENU_PARENTKEY]: "",
+    [MENU_KEY]: "powerTest",
+    [MENU_PARENTKEY]: "power",
     [MENU_ICON]: "icon_list",
     [MENU_KEEPALIVE]: "false",
-    order: 1,
+    order: 1594,
   },
 ];
 
