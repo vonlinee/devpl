@@ -34,7 +34,6 @@ public abstract class ForeignKeyChangeImplBase extends TableChangeImplBase
         }
     }
 
-
     public ForeignKey findChangedForeignKey(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

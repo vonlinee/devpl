@@ -11,7 +11,6 @@ import java.util.List;
  * copying the data from the original table into this temporary table, dropping the original table and
  * finally renaming the temporary table to the final table. This change is only created by the model
  * comparator if the table definition change predicate flags a table change as unsupported.
- * @version $Revision: $
  */
 public class RecreateTableChange extends TableChangeImplBase {
     /**
@@ -57,18 +56,16 @@ public class RecreateTableChange extends TableChangeImplBase {
         return _targetTable;
     }
 
-
     @Override
     public void apply(Database database, boolean caseSensitive) {
         // we only need to replace the table in the model, as there can't be a
         // foreign key from or to it when these kind of changes are created
         for (int tableIdx = 0; tableIdx < database.getTableCount(); tableIdx++) {
             Table curTable = database.getTable(tableIdx);
-
             if ((caseSensitive && curTable.getName().equals(getChangedTable())) || (!caseSensitive && curTable.getName()
                 .equalsIgnoreCase(getChangedTable()))) {
                 database.removeTable(tableIdx);
-                database.addTable(tableIdx, new CloneHelper().clone(_targetTable, true, false, database, caseSensitive));
+                database.addTable(tableIdx, CloneHelper.clone(_targetTable, true, false, database, caseSensitive));
                 break;
             }
         }

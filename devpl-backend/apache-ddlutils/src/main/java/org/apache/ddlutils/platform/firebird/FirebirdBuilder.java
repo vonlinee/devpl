@@ -4,7 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -23,9 +23,8 @@ public class FirebirdBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment
@@ -35,7 +34,6 @@ public class FirebirdBuilder extends SqlBuilder {
             writeAutoIncrementCreateStmts(database, table, column);
         }
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -99,11 +97,9 @@ public class FirebirdBuilder extends SqlBuilder {
         return getConstraintName("gen", table, column.getName(), null);
     }
 
-
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using a generator
     }
-
 
     @Override
     public String getSelectLastIdentityValues(Table table) {
@@ -125,7 +121,6 @@ public class FirebirdBuilder extends SqlBuilder {
         }
     }
 
-
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
             return getDefaultValueHelper().convert(column.getDefaultValue(), column.getJdbcTypeCode(), Types.SMALLINT);
@@ -134,14 +129,12 @@ public class FirebirdBuilder extends SqlBuilder {
         }
     }
 
-
     @Override
     public void createForeignKeys(Database database) throws IOException {
         for (int idx = 0; idx < database.getTableCount(); idx++) {
             createForeignKeys(database, database.getTable(idx));
         }
     }
-
 
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
@@ -151,7 +144,6 @@ public class FirebirdBuilder extends SqlBuilder {
         printIdentifier(getIndexName(index));
         printEndOfStatement();
     }
-
 
     @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
@@ -212,7 +204,6 @@ public class FirebirdBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
@@ -220,7 +211,7 @@ public class FirebirdBuilder extends SqlBuilder {
 
         if (sizeChanged || typeChanged) {
             boolean needSubstr = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged &&
-                (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
+                                 (targetColumn.getSize() != null) && (sourceColumn.getSizeAsInt() > targetColumn.getSizeAsInt());
 
             if (needSubstr) {
                 print("SUBSTRING(");

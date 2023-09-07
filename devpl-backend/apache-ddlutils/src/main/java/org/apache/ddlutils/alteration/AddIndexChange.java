@@ -30,7 +30,6 @@ public class AddIndexChange extends TableChangeImplBase {
         return _newIndex;
     }
 
-
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

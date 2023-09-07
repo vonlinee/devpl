@@ -1,12 +1,12 @@
-package samples;
+package io.devpl.codegen.sample;
+
 
 import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
-import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.type.JsonDataType;
 import com.baomidou.mybatisplus.generator.type.StandardJsonDataType;
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import de.marhail.json5.*;
-import de.marhail.json5.comment.Comment;
+import de.marhail.json5.comment.Json5Comment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class JsonEntityConverter {
 
-    static final Map<JsonDataType, JavaType> typeMapping = new HashMap<>();
+    static final Map<StandardJsonDataType, CommonJavaType> typeMapping = new HashMap<StandardJsonDataType, CommonJavaType>();
 
     static {
         typeMapping.put(StandardJsonDataType.NUMBER, CommonJavaType.INTEGER);
@@ -57,7 +57,7 @@ public class JsonEntityConverter {
                 Json5Object json5Object = (Json5Object) jsonElement;
 
                 for (Map.Entry<String, Json5Element> entry : json5Object.entrySet()) {
-                    Comment comment = entry.getValue().getComment();
+                    Json5Comment comment = entry.getValue().getComment();
                     System.out.println(entry.getKey() + " " + getJavaType(entry.getValue()) + " " + StringUtils.trimWrapCharacters(comment.getCommentContent()));
                 }
             }

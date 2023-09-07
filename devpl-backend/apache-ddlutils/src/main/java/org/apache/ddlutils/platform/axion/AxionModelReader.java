@@ -13,7 +13,6 @@ import java.util.Collection;
 
 /**
  * Reads a database model from an Axion database.
- * @version $Revision: $
  */
 public class AxionModelReader extends JdbcModelReader {
     /**

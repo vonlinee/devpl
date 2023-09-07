@@ -114,7 +114,6 @@ public class CallbackClosure {
         return true;
     }
 
-
     public void execute(Object obj) throws DdlUtilsException {
         LinkedList<Class<?>> queue = new LinkedList<>();
         queue.add(obj.getClass());

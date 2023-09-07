@@ -61,9 +61,7 @@ public abstract class BaseDynaBeanMapDecorator<K> implements Map<K, Object> {
         this.readOnly = readOnly;
     }
 
-
     // ------------------- public Methods --------------------------------
-
 
     /**
      * Indicate whether the Map is read only.

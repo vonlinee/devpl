@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

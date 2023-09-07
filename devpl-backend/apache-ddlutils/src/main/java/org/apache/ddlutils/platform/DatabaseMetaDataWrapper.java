@@ -10,6 +10,15 @@ import java.util.regex.Pattern;
  * Wrapper class for database metadata that stores additional info.
  */
 public class DatabaseMetaDataWrapper {
+
+    public DatabaseMetaDataWrapper() {
+
+    }
+
+    public DatabaseMetaDataWrapper(DatabaseMetaData dbmd) {
+        this._metaData = dbmd;
+    }
+
     /**
      * Matches the characters not allowed in search strings.
      */

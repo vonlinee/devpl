@@ -211,7 +211,6 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
         _tableTypes = tableTypes;
     }
 
-
     @Override
     protected Database readModel() {
         if (getDataSource() == null) {

@@ -1,3 +1,8 @@
 @import './variables.scss';
 @import './layout.scss';
 @import './element.scss';
+
+// el-dialog 溢出控制，影响全局
+.el-overlay-dialog {
+	overflow: hidden;
+}

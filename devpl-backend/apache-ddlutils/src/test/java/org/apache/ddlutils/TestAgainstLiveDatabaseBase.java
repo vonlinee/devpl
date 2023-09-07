@@ -645,7 +645,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @return The adjusted model
      */
     protected Database adjustModel(Database sourceModel) {
-        Database model = new CloneHelper().clone(sourceModel);
+        Database model = CloneHelper.clone(sourceModel);
 
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table table = model.getTable(tableIdx);

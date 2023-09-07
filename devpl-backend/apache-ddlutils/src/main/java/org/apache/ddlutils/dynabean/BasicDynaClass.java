@@ -35,7 +35,6 @@ public class BasicDynaClass implements DynaClass, Serializable {
      */
     protected Object[] constructorValues = {this};
 
-
     // ----------------------------------------------------- Instance Variables
     /**
      * The <code>DynaBean</code> implementation class we will use for
@@ -162,7 +161,6 @@ public class BasicDynaClass implements DynaClass, Serializable {
         }
     }
 
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -174,7 +172,6 @@ public class BasicDynaClass implements DynaClass, Serializable {
     public Class<?> getDynaBeanClass() {
         return (this.dynaBeanClass);
     }
-
 
     // ------------------------------------------------------ Protected Methods
 

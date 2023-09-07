@@ -5,7 +5,7 @@
 		ref="dialogRef"
 		destroy-on-close
 		:center="center"
-		:modal="show_modal"
+		:modal="showModal"
 		:show-close="showClose"
 		:close-on-press-escape="closeOnPressEscape"
 		:close-on-click-modal="closeOnClickModal"
@@ -128,17 +128,15 @@ export default defineComponent({
 	},
 	emits: ['updateVisible', 'close', 'closed', 'toggleScreen', 'opened', 'open'],
 	setup(props, ctx) {
-		const dialogRef = ref()
-		const show_modal = ref() // 是否显示遮罩层
+
 
 		// 最大化与还原设置
 		const { maxScreen, modelValue, modal, title } = toRefs(props)
 
-		const fullscreen = ref()
-		fullscreen.value = maxScreen.value
-		show_modal.value = modal.value
-
-		let titleRef = ref<string>(title.value)
+		const dialogRef = ref()
+		const showModal = ref<boolean>(modal.value) // 是否显示遮罩层
+		const fullscreen = ref<boolean>(maxScreen.value)
+		const titleRef = ref<string>(title.value)  // 标题
 
 		// 弹窗是否可见
 		const dialogVisible = computed(() => modelValue.value)
@@ -160,7 +158,7 @@ export default defineComponent({
 
 		// 设置对话框body高度
 		const updateDialogHeight = (): void => {
-			show_modal.value = true
+			showModal.value = true
 		}
 
 		// 弹窗打开后重置dialog body 高度
@@ -174,7 +172,7 @@ export default defineComponent({
 			titleRef,
 			fullscreen,
 			dialogVisible,
-			show_modal,
+			showModal,
 			dlgClosed,
 			close,
 			open,
@@ -184,17 +182,18 @@ export default defineComponent({
 	methods: {
 		setTitle(title: string) {
 			this.titleRef = title
+		},
+		getTitle() {
+			return this.titleRef;
+		},
+		show(x: number, y: number, w: number, h: number) {
+			console.log("show ", x, y , w, h);
 		}
 	}
 })
 </script>
 
 <style scoped lang="scss">
-// 溢出控制，影响全局
-.el-overlay-dialog {
-	overflow: hidden;
-}
-
 .el-dialog__header {
 	padding: 10px 15px 0 !important;
 	position: relative !important;

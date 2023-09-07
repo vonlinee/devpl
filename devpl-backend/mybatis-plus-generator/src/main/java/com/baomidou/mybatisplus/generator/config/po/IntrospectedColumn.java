@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.type.JavaType;
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;

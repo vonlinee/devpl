@@ -89,11 +89,10 @@ public class AddColumnChange extends TableChangeImplBase {
         return nextColumnName == null;
     }
 
-
     @Override
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
-        Column newColumn = new CloneHelper().clone(this.newColumn, true);
+        Column newColumn = CloneHelper.clone(this.newColumn, true);
 
         if (previousColumnName != null) {
             Column prevColumn = table.findColumn(previousColumnName, caseSensitive);

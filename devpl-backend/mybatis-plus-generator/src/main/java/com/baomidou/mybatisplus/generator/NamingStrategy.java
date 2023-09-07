@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator;
 
-import io.devpl.codegen.utils.StringPool;
-import io.devpl.codegen.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -29,7 +28,7 @@ public enum NamingStrategy {
         // 快速检查
         if (StringUtils.isBlank(name)) {
             // 没必要转换
-            return StringPool.EMPTY;
+            return "";
         }
         String tempName = name;
         // 大写数字下划线组成转为小写 , 允许混合模式转为小写
@@ -61,7 +60,7 @@ public enum NamingStrategy {
      */
     public static String removePrefix(String name, Set<String> prefix) {
         if (StringUtils.isBlank(name)) {
-            return StringPool.EMPTY;
+            return "";
         }
         // 判断是否有匹配的前缀，然后截取前缀
         return prefix.stream().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
@@ -86,7 +85,7 @@ public enum NamingStrategy {
      */
     public static String removeSuffix(String name, Set<String> suffix) {
         if (StringUtils.isBlank(name)) {
-            return StringPool.EMPTY;
+            return "";
         }
         // 判断是否有匹配的后缀，然后截取后缀
         return suffix.stream().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
@@ -109,10 +108,10 @@ public enum NamingStrategy {
      * @return 转换后的字符串
      */
     public static String capitalFirst(String name) {
-        if (StringUtils.isNotBlank(name)) {
+        if (!StringUtils.isBlank(name)) {
             return name.substring(0, 1).toUpperCase() + name.substring(1);
         }
-        return StringPool.EMPTY;
+        return "";
     }
 
     /**

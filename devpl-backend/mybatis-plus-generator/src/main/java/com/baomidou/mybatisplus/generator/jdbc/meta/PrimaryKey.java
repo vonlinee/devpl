@@ -1,13 +1,9 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
-import java.io.Serializable;
-
 /**
  * 主键
  */
-public class PrimaryKey implements Serializable {
-
-    private static final long serialVersionUID = 7207765860662369965L;
+public class PrimaryKey {
 
     /**
      * String => table catalog (may be null)
@@ -92,11 +88,11 @@ public class PrimaryKey implements Serializable {
     @Override
     public String toString() {
         return "PrimaryKey{" + "tableCat='" + tableCat + '\'' +
-            ", tableSchem='" + tableSchem + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", columnName='" + columnName + '\'' +
-            ", keySeq=" + keySeq +
-            ", pkName='" + pkName + '\'' +
-            '}';
+               ", tableSchem='" + tableSchem + '\'' +
+               ", tableName='" + tableName + '\'' +
+               ", columnName='" + columnName + '\'' +
+               ", keySeq=" + keySeq +
+               ", pkName='" + pkName + '\'' +
+               '}';
     }
 }

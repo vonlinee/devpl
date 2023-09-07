@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.TemplateConfig;
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.io.File;
 import java.util.HashMap;

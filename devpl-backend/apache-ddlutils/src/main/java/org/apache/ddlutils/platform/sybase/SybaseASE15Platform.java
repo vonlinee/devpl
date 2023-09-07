@@ -36,7 +36,6 @@ public class SybaseASE15Platform extends SybasePlatform {
         super();
     }
 
-
     public String getName() {
         return DATABASENAME;
     }

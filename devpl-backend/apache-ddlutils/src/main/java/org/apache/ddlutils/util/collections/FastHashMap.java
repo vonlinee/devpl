@@ -107,7 +107,6 @@ public class FastHashMap extends HashMap {
         this.map = new HashMap(map);
     }
 
-
     // Property access
     // ----------------------------------------------------------------------
 
@@ -126,7 +125,6 @@ public class FastHashMap extends HashMap {
     public void setFast(boolean fast) {
         this.fast = fast;
     }
-
 
     // Map access
     // ----------------------------------------------------------------------
@@ -446,7 +444,6 @@ public class FastHashMap extends HashMap {
 
         protected abstract Object iteratorNext(Map.Entry entry);
 
-
         public void clear() {
             if (fast) {
                 synchronized (FastHashMap.this) {
@@ -514,7 +511,6 @@ public class FastHashMap extends HashMap {
             }
         }
 
-
         public boolean isEmpty() {
             if (fast) {
                 return get(map).isEmpty();
@@ -565,7 +561,6 @@ public class FastHashMap extends HashMap {
             }
         }
 
-
         public boolean equals(Object o) {
             if (o == this) return true;
             if (fast) {
@@ -601,9 +596,9 @@ public class FastHashMap extends HashMap {
 
         private class CollectionViewIterator implements Iterator {
 
+            private final Iterator iterator;
             private Map expected;
             private Map.Entry lastReturned = null;
-            private final Iterator iterator;
 
             public CollectionViewIterator() {
                 this.expected = map;

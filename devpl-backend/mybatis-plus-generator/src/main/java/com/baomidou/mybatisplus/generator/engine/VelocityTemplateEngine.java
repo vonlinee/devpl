@@ -23,7 +23,7 @@ import java.util.Properties;
  * @since 2018-01-10
  */
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
-    private VelocityEngine velocityEngine;
+    private final VelocityEngine velocityEngine;
 
     static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
 

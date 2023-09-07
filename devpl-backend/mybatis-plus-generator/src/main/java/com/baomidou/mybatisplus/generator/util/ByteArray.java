@@ -1,4 +1,4 @@
-package io.devpl.codegen.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import java.io.IOException;
 import java.io.Serializable;

@@ -23,7 +23,7 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.LikeTable;
-import com.baomidou.mybatisplus.generator.utils.JdbcUtils;
+import com.baomidou.mybatisplus.generator.util.JdbcUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

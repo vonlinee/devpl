@@ -7,7 +7,6 @@ import java.sql.Types;
 
 /**
  * Describes a column in a metadata result set.
- * @version $Revision: $
  */
 public class MetaDataColumnDescriptor {
     /**
@@ -104,7 +103,6 @@ public class MetaDataColumnDescriptor {
      */
     private boolean isColumnInResultSet(ResultSet resultSet) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
-
         for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
             if (columnName.equals(metaData.getColumnName(idx).toUpperCase())) {
                 return true;

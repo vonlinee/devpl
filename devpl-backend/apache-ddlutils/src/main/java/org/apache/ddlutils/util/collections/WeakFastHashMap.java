@@ -89,7 +89,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
         this.map = createMap(map);
     }
 
-
     // Property access
     // ----------------------------------------------------------------------
 
@@ -108,7 +107,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
     public void setFast(final boolean fast) {
         this.fast = fast;
     }
-
 
     // Map access
     // ----------------------------------------------------------------------
@@ -464,7 +462,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
 
         protected abstract E iteratorNext(Map.Entry<K, V> entry);
 
-
         public void clear() {
             if (fast) {
                 synchronized (WeakFastHashMap.this) {
@@ -532,7 +529,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
             }
         }
 
-
         public boolean isEmpty() {
             if (fast) {
                 return get(map).isEmpty();
@@ -582,7 +578,6 @@ class WeakFastHashMap<K, V> extends HashMap<K, V> {
                 }
             }
         }
-
 
         @Override
         public boolean equals(final Object o) {

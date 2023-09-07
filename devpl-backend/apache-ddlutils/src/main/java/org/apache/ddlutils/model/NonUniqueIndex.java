@@ -60,10 +60,10 @@ public class NonUniqueIndex extends GenericIndex {
     @Override
     public String toString() {
         return "Index [name=" +
-            getName() +
-            "; " +
-            getColumnCount() +
-            " columns]";
+               getName() +
+               "; " +
+               getColumnCount() +
+               " columns]";
     }
 
     @Override

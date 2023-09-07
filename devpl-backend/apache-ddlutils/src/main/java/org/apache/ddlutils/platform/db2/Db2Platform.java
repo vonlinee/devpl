@@ -94,12 +94,12 @@ public class Db2Platform extends GenericDatabasePlatform {
         setModelReader(new Db2ModelReader(this));
     }
 
-
+    @Override
     public String getName() {
         return DATABASENAME;
     }
 
-
+    @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -108,9 +108,10 @@ public class Db2Platform extends GenericDatabasePlatform {
         return comparator;
     }
 
-
+    @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
+            @Override
             protected boolean isSupported(Table intermediateTable, TableChange change) {
                 if ((change instanceof RemoveColumnChange) ||
                     (change instanceof PrimaryKeyChange) ||
@@ -120,9 +121,9 @@ public class Db2Platform extends GenericDatabasePlatform {
 
                     // DB2 cannot add IDENTITY columns, and required columns need a default value
                     return (addColumnChange.getNextColumn() == null) &&
-                        !addColumnChange.getNewColumn().isAutoIncrement() &&
-                        (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
-                            .getNewColumn().getDefaultValue()));
+                           !addColumnChange.getNewColumn().isAutoIncrement() &&
+                           (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
+                               .getNewColumn().getDefaultValue()));
                 } else {
                     return false;
                 }

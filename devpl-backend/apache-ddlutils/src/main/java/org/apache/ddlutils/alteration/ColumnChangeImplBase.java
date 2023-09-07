@@ -25,11 +25,9 @@ public abstract class ColumnChangeImplBase extends TableChangeImplBase
         _columnName = columnName;
     }
 
-
     public String getChangedColumn() {
         return _columnName;
     }
-
 
     public Column findChangedColumn(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);

@@ -22,7 +22,7 @@ package org.apache.ddlutils.platform.oracle;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,9 +41,8 @@ public class Oracle10ModelReader extends Oracle8ModelReader {
         super(platform);
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         // Oracle 10 added the recycle bin which contains dropped database objects not yet purged
         // Since we don't want entries from the recycle bin, we filter them out
         final String query = "SELECT * FROM RECYCLEBIN WHERE OBJECT_NAME=?";

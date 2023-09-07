@@ -23,8 +23,6 @@ import java.util.*;
  * This class is Serializable from Commons Collections 3.1.
  * @author Stephen Colebourne
  * @author Henning P. Schmiedehausen
- * @version $Revision: 1.9 $ $Date: 2004/06/07 21:42:12 $
- * @since Commons Collections 3.0
  */
 public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> implements Set<E> {
 
@@ -204,8 +202,9 @@ public class ListOrderedSet<E> extends AbstractSerializableSetDecorator<E> imple
     }
 
     @Override
-    public Object[] toArray(Object @NotNull [] a) {
-        return setOrder.toArray(a);
+    @SuppressWarnings("unchecked")
+    public E @NotNull [] toArray(Object @NotNull [] a) {
+        return (E[]) setOrder.toArray(a);
     }
 
     //-----------------------------------------------------------------------

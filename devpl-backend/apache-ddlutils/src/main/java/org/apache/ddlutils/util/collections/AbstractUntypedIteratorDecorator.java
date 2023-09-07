@@ -23,18 +23,18 @@ import java.util.Iterator;
  * without committing the generic type of the Iterator implementation.
  * <p>
  * All methods are forwarded to the decorated iterator.
- *
  * @since 4.0
  */
 public abstract class AbstractUntypedIteratorDecorator<I, O> implements Iterator<O> {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final Iterator<I> iterator;
 
     /**
      * Create a new AbstractUntypedIteratorDecorator.
-     *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      * @throws NullPointerException if the iterator is null
      */
     protected AbstractUntypedIteratorDecorator(final Iterator<I> iterator) {
@@ -47,7 +47,6 @@ public abstract class AbstractUntypedIteratorDecorator<I, O> implements Iterator
 
     /**
      * Gets the iterator being decorated.
-     *
      * @return the decorated iterator
      */
     protected Iterator<I> getIterator() {

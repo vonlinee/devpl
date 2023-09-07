@@ -13,6 +13,10 @@ import java.util.StringTokenizer;
  */
 public class Parameter {
     /**
+     * The platforms for which this parameter is applicable.
+     */
+    private final Set<String> _platforms = new HashSet<>();
+    /**
      * The name.
      */
     private String _name;
@@ -20,10 +24,6 @@ public class Parameter {
      * The value.
      */
     private String _value;
-    /**
-     * The platforms for which this parameter is applicable.
-     */
-    private final Set<String> _platforms = new HashSet<>();
 
     /**
      * Returns the name.

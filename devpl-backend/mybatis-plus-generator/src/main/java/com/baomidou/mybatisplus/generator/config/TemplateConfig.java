@@ -115,31 +115,22 @@ public class TemplateConfig {
      * @since 3.3.2
      */
     public TemplateConfig disable(@NotNull TemplateType... templateTypes) {
-        if (templateTypes != null && templateTypes.length > 0) {
+        if (templateTypes != null) {
             for (TemplateType templateType : templateTypes) {
                 switch (templateType) {
-                    case ENTITY:
+                    case ENTITY -> {
                         this.entity = null;
                         this.entityKt = null;
                         // 暂时没其他多的需求,使用一个单独的boolean变量进行支持一下.
                         this.disableEntity = true;
-                        break;
-                    case CONTROLLER:
-                        this.controller = null;
-                        break;
-                    case MAPPER:
-                        this.mapper = null;
-                        break;
-                    case XML:
-                        this.xml = null;
-                        break;
-                    case SERVICE:
-                        this.service = null;
-                        break;
-                    case SERVICE_IMPL:
-                        this.serviceImpl = null;
-                        break;
-                    default:
+                    }
+                    case CONTROLLER -> this.controller = null;
+                    case MAPPER -> this.mapper = null;
+                    case XML -> this.xml = null;
+                    case SERVICE -> this.service = null;
+                    case SERVICE_IMPL -> this.serviceImpl = null;
+                    default -> {
+                    }
                 }
             }
         }

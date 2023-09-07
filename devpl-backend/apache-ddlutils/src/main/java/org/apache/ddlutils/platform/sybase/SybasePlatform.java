@@ -96,7 +96,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
         setModelReader(new SybaseModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
@@ -122,7 +121,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
             returnConnection(connection);
         }
     }
-
 
     @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws DatabaseOperationException, SQLException {
@@ -153,14 +151,13 @@ public class SybasePlatform extends GenericDatabasePlatform {
                     return result;
                 } catch (IOException ex) {
                     throw new DatabaseOperationException("Error while extracting the value of column " + columnName + " of type " +
-                        TypeMap.getJdbcTypeName(jdbcType) + " from a result set", ex);
+                                                         TypeMap.getJdbcTypeName(jdbcType) + " from a result set", ex);
                 }
             }
         } else {
             return super.extractColumnValue(resultSet, columnName, columnIdx, jdbcType);
         }
     }
-
 
     @Override
     protected void setStatementParameterValue(PreparedStatement statement, int sqlIndex, int typeCode, Object value) throws SQLException {
@@ -183,13 +180,11 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     public List fetch(Database model, String sql, Collection parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, parameters, queryHints, start, end);
     }
-
 
     @Override
     public List fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
@@ -197,13 +192,11 @@ public class SybasePlatform extends GenericDatabasePlatform {
         return super.fetch(model, sql, queryHints, start, end);
     }
 
-
     @Override
     public Iterator<DynaBean> query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, parameters, queryHints);
     }
-
 
     @Override
     public Iterator<DynaBean> query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
@@ -218,10 +211,9 @@ public class SybasePlatform extends GenericDatabasePlatform {
      */
     private boolean useIdentityOverrideFor(Table table) {
         return isIdentityOverrideOn() &&
-            getPlatformInfo().isIdentityOverrideAllowed() &&
-            (table.getAutoIncrementColumns().length > 0);
+               getPlatformInfo().isIdentityOverrideAllowed() &&
+               (table.getAutoIncrementColumns().length > 0);
     }
-
 
     @Override
     protected void beforeInsert(Connection connection, Table table) throws SQLException {
@@ -239,7 +231,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     protected void afterInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
@@ -256,18 +247,15 @@ public class SybasePlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     protected void beforeUpdate(Connection connection, Table table) throws SQLException {
         beforeInsert(connection, table);
     }
 
-
     @Override
     protected void afterUpdate(Connection connection, Table table) throws SQLException {
         afterInsert(connection, table);
     }
-
 
     @Override
     protected ModelComparator getModelComparator() {
@@ -277,7 +265,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
         comparator.setCanDropPrimaryKeyColumns(false);
         return comparator;
     }
-
 
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
@@ -294,9 +281,9 @@ public class SybasePlatform extends GenericDatabasePlatform {
                     // We also have to force recreation of the table if a required column is added
                     // that is neither IDENTITY nor has a default value
                     return (addColumnChange.getNextColumn() == null) &&
-                        !addColumnChange.getNewColumn().isAutoIncrement() &&
-                        (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
-                            .getNewColumn().getDefaultValue()));
+                           !addColumnChange.getNewColumn().isAutoIncrement() &&
+                           (!addColumnChange.getNewColumn().isRequired() || !StringUtils.isEmpty(addColumnChange
+                               .getNewColumn().getDefaultValue()));
                 } else if (change instanceof ColumnDefinitionChange columnChange) {
                     Column oldColumn = intermediateTable.findColumn(columnChange.getChangedColumn(), isDelimitedIdentifierModeOn());
 
@@ -308,7 +295,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
             }
         };
     }
-
 
     @Override
     protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {
@@ -350,7 +336,6 @@ public class SybasePlatform extends GenericDatabasePlatform {
         ((SybaseBuilder) getSqlBuilder()).dropPrimaryKey(changedTable);
         change.apply(currentModel, isDelimitedIdentifierModeOn());
     }
-
 
     /**
      * Processes the change of a column definition..

@@ -45,7 +45,6 @@ public class DropTablesCommand extends DatabaseCommand {
         _tableNameRegExp = tableNameRegExp;
     }
 
-
     @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         PooledDataSource dataSource = getDataSource();
@@ -58,7 +57,7 @@ public class DropTablesCommand extends DatabaseCommand {
         Database targetModel = new Database();
 
         if ((_tableNames != null) || (_tableNameRegExp != null)) {
-            targetModel = new CloneHelper().clone(model);
+            targetModel = CloneHelper.clone(model);
             targetModel.initialize();
 
             Table[] tables = _tableNames != null ? targetModel.findTables(_tableNames, task.isUseDelimitedSqlIdentifiers())

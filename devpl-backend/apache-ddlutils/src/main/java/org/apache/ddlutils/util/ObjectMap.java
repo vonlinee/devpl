@@ -10,35 +10,43 @@ import java.util.function.Predicate;
  * @since 8
  */
 @SuppressWarnings("unused")
-public class ValueMap implements Map<String, Object>, Cloneable {
+public class ObjectMap implements Map<String, Object>, Cloneable {
 
     private Map<String, Object> map;
 
-    public ValueMap() {
+    public ObjectMap() {
         this(10);
     }
 
-    public ValueMap(int initialCapacity) {
+    public ObjectMap(int initialCapacity) {
         this.map = new HashMap<>();
     }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        ValueMap cloneMap = (ValueMap) super.clone();
+        ObjectMap cloneMap = (ObjectMap) super.clone();
         cloneMap.putAll(this.map);
         return cloneMap;
     }
 
-    public ValueMap copy() {
+    public ObjectMap copy() {
         try {
-            return (ValueMap) clone();
+            return (ObjectMap) clone();
         } catch (CloneNotSupportedException e) {
-            return new ValueMap(0);
+            return new ObjectMap(0);
         }
     }
 
-    public Object set(String key, Object value) {
-        return map.put(key, value);
+    /**
+     * @param key      key
+     * @param newValue newValue
+     * @return oldValue for this key
+     */
+    public Object set(String key, Object newValue, boolean panicIfNotExist) {
+        if (map.containsKey(key)) {
+            return map.put(key, newValue);
+        }
+        return null;
     }
 
     public Map<String, Object> replace(Map<String, Object> newValue) {

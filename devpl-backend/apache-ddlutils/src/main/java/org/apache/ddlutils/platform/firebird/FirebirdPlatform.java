@@ -97,11 +97,9 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
         setModelReader(new FirebirdModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
-
 
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
@@ -109,7 +107,6 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
         comparator.setCanDropPrimaryKeyColumns(false);
         return comparator;
     }
-
 
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -152,11 +149,11 @@ public class FirebirdPlatform extends GenericDatabasePlatform {
 
                     // Firebird does not apply default values or identity status to existing rows when adding a column
                     return !addColumnChange.getNewColumn().isAutoIncrement() &&
-                        ((addColumnChange.getNewColumn().getDefaultValue() == null) && !addColumnChange
-                            .getNewColumn().isRequired());
+                           ((addColumnChange.getNewColumn().getDefaultValue() == null) && !addColumnChange
+                               .getNewColumn().isRequired());
                 } else {
                     return (change instanceof RemoveColumnChange) ||
-                        super.isSupported(intermediateTable, change);
+                           super.isSupported(intermediateTable, change);
                 }
             }
         };

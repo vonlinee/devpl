@@ -72,7 +72,7 @@ public class StringUtils {
      */
     public static boolean areEqual(String string1, String string2, boolean caseMatters) {
         return (caseMatters && string1.equals(string2)) ||
-            (!caseMatters && string1.equalsIgnoreCase(string2));
+               (!caseMatters && string1.equalsIgnoreCase(string2));
     }
 
     /**

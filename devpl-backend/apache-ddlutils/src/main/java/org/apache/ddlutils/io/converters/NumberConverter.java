@@ -31,7 +31,6 @@ public class NumberConverter implements SqlTypeConverter {
         }
     }
 
-
     @Override
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         if (obj == null) {

@@ -27,7 +27,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.*;
 import java.util.Collection;
@@ -74,9 +74,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         String tableName = values.getString("TABLE_NAME");
 
         // system table ?
@@ -93,9 +92,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -243,7 +241,6 @@ public class Oracle8ModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     protected Collection<Index> readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         // Oracle has a bug in the DatabaseMetaData#getIndexInfo method which fails when
@@ -255,8 +252,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
 
         final String query =
             "SELECT a.INDEX_NAME, a.INDEX_TYPE, a.UNIQUENESS, b.COLUMN_NAME, b.COLUMN_POSITION FROM USER_INDEXES a, USER_IND_COLUMNS b WHERE " +
-                "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
-                "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
+            "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
+            "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
         final String queryWithSchema =
             query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
 
@@ -275,7 +272,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
             }
 
             ResultSet rs = stmt.executeQuery();
-            ValueMap values = new ValueMap();
+            ObjectMap values = new ObjectMap();
 
             while (rs.next()) {
                 values.put("INDEX_NAME", rs.getString(1));

@@ -3,9 +3,6 @@ package org.apache.ddlutils.task;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.PooledDataSource;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +16,6 @@ import java.util.Properties;
  */
 public abstract class DatabaseTaskBase extends Task {
     /**
-     * The log.
-     */
-    protected Logger _log;
-
-    /**
      * The platform configuration.
      */
     private final PlatformConfiguration _platformConf = new PlatformConfiguration();
@@ -31,6 +23,10 @@ public abstract class DatabaseTaskBase extends Task {
      * The sub-tasks to execute.
      */
     private final ArrayList<Command> _commands = new ArrayList<>();
+    /**
+     * The log.
+     */
+    protected Logger _log;
     /**
      * Whether to use simple logging (that the Ant task configures itself via the {@link #_verbosity} setting.
      */
@@ -243,7 +239,7 @@ public abstract class DatabaseTaskBase extends Task {
         if (_simpleLogging) {
             // For Ant, we're forcing DdlUtils to do logging via log4j to the console
             Properties props = new Properties();
-            String level = (_verbosity == null ? Level.INFO.toString() : _verbosity.getValue()).toUpperCase();
+            String level = (_verbosity == null ? "INFO" : _verbosity.getValue()).toUpperCase();
 
             props.setProperty("log4j.rootCategory", level + ",A");
             props.setProperty("log4j.appender.A", "org.apache.log4j.ConsoleAppender");
@@ -252,8 +248,6 @@ public abstract class DatabaseTaskBase extends Task {
             // we don't want debug logging from Digester
             props.setProperty("log4j.logger.org.apache.commons", "WARN");
 
-            LogManager.resetConfiguration();
-            PropertyConfigurator.configure(props);
         }
         _log = LoggerFactory.getLogger(getClass());
     }
@@ -274,7 +268,6 @@ public abstract class DatabaseTaskBase extends Task {
             cmd.execute(this, model);
         }
     }
-
 
     public void execute() throws RuntimeException {
         initLogging();

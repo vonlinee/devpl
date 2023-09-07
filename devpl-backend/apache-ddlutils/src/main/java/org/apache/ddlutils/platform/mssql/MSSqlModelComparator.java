@@ -27,7 +27,6 @@ public class MSSqlModelComparator extends ModelComparator {
         setCanDropPrimaryKeyColumns(false);
     }
 
-
     @Override
     protected List<TableChange> checkForPrimaryKeyChanges(Database sourceModel,
                                                           Table sourceTable,
@@ -52,7 +51,6 @@ public class MSSqlModelComparator extends ModelComparator {
         }
         return changes;
     }
-
 
     @Override
     protected List<TableChange> checkForRemovedIndexes(Database sourceModel,
@@ -91,7 +89,6 @@ public class MSSqlModelComparator extends ModelComparator {
         return changes;
     }
 
-
     @Override
     protected List<TableChange> checkForAddedIndexes(Database sourceModel,
                                                      Table sourceTable,
@@ -120,7 +117,6 @@ public class MSSqlModelComparator extends ModelComparator {
         }
         return changes;
     }
-
 
     @Override
     protected List<TableChange> checkForRemovedForeignKeys(Database sourceModel,
@@ -160,7 +156,6 @@ public class MSSqlModelComparator extends ModelComparator {
         changes.addAll(additionalChanges);
         return changes;
     }
-
 
     @Override
     protected List<TableChange> checkForAddedForeignKeys(Database sourceModel,

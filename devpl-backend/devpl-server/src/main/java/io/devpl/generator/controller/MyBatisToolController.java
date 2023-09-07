@@ -10,7 +10,7 @@ import io.devpl.generator.mybatis.ParseResult;
 import io.devpl.generator.mybatis.SqlFormat;
 import io.devpl.generator.mybatis.tree.TreeNode;
 import io.devpl.generator.service.MyBatisService;
-import com.baomidou.mybatisplus.generator.utils.TypeUtils;
+import com.baomidou.mybatisplus.generator.util.TypeUtils;
 import io.devpl.sdk.collection.Lists;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

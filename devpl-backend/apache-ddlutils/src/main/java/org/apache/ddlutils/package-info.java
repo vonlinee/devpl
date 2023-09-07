@@ -16,3 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.ddlutils;
+
+/**
+ * https://www.cnblogs.com/qingwen/p/5553565.html
+ */
+

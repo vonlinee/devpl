@@ -1,7 +1,7 @@
 package com.baomidou.mybatisplus.generator.type;
 
 import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
-import com.baomidou.mybatisplus.generator.utils.JdbcUtils;
+import com.baomidou.mybatisplus.generator.util.JdbcUtils;
 import org.springframework.jdbc.core.SqlTypeValue;
 
 import java.math.BigDecimal;

@@ -23,7 +23,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.SQLException;
 
@@ -40,9 +40,8 @@ public class DerbyModelReader extends JdbcModelReader {
         super(platform);
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
         String defaultValue = column.getDefaultValue();
 
@@ -60,12 +59,10 @@ public class DerbyModelReader extends JdbcModelReader {
         return column;
     }
 
-
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         return isInternalIndex(index);
     }
-
 
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {

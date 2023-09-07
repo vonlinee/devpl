@@ -4,7 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.SQLException;
 
@@ -23,9 +23,8 @@ public class HsqlDbModelReader extends JdbcModelReader {
         setDefaultSchemaPattern(null);
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -40,9 +39,8 @@ public class HsqlDbModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (TypeMap.isTextType(column.getJdbcTypeCode()) &&
@@ -52,14 +50,12 @@ public class HsqlDbModelReader extends JdbcModelReader {
         return column;
     }
 
-
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         String name = index.getName();
 
         return (name != null) && name.startsWith("SYS_IDX_");
     }
-
 
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {

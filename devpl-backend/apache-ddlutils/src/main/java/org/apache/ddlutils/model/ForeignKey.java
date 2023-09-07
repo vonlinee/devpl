@@ -17,6 +17,10 @@ public class ForeignKey implements Serializable {
      */
     private static final long serialVersionUID = 7833254626253719913L;
     /**
+     * The references between local and remote columns.
+     */
+    private final ListOrderedSet<Reference> _references = new ListOrderedSet<>();
+    /**
      * The name of the foreign key, may be <code>null</code>.
      */
     private String _name;
@@ -36,10 +40,6 @@ public class ForeignKey implements Serializable {
      * The action to perform when the referenced row is deleted.
      */
     private CascadeActionEnum _onDelete = CascadeActionEnum.NONE;
-    /**
-     * The references between local and remote columns.
-     */
-    private final ListOrderedSet<Reference> _references = new ListOrderedSet<>();
     /**
      * Whether this foreign key has an associated auto-generated index.
      */
@@ -310,7 +310,6 @@ public class ForeignKey implements Serializable {
         _autoIndexPresent = autoIndexPresent;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof ForeignKey otherFk) {
@@ -357,12 +356,10 @@ public class ForeignKey implements Serializable {
         }
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(_name, _foreignTableName, _references);
     }
-
 
     @Override
     public String toString() {

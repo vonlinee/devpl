@@ -39,7 +39,6 @@ public class Oracle9Platform extends Oracle8Platform {
         getPlatformInfo().addNativeTypeMapping(Types.TIMESTAMP, "TIMESTAMP");
     }
 
-
     public String getName() {
         return DATABASENAME;
     }

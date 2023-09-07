@@ -10,7 +10,6 @@ import java.util.Objects;
 
 /**
  * Represents a column in the database model.
- * @version $Revision$
  */
 public class Column implements SchemaObject, Serializable {
     /**
@@ -21,27 +20,27 @@ public class Column implements SchemaObject, Serializable {
     /**
      * The name of the column.
      */
-    private String _name;
+    private String name;
     /**
      * The java name of the column (optional and unused by DdlUtils, for Torque compatibility).
      */
-    private String _javaName;
+    private String javaName;
     /**
      * The column's description.
      */
-    private String _description;
+    private String description;
     /**
      * Whether the column is a primary key column.
      */
-    private boolean _primaryKey;
+    private boolean primaryKey;
     /**
      * Whether the column is required, i.e. it must not contain <code>NULL</code>.
      */
-    private boolean _required;
+    private boolean required;
     /**
      * Whether the column's value is incremented automatically.
      */
-    private boolean _autoIncrement;
+    private boolean autoIncrement;
     /**
      * The JDBC type code, one of the constants in {@link java.sql.Types}.
      */
@@ -79,7 +78,7 @@ public class Column implements SchemaObject, Serializable {
      */
     @Override
     public String getName() {
-        return _name;
+        return name;
     }
 
     /**
@@ -87,7 +86,7 @@ public class Column implements SchemaObject, Serializable {
      * @param name The name
      */
     public void setName(String name) {
-        _name = name;
+        this.name = name;
     }
 
     /**
@@ -96,7 +95,7 @@ public class Column implements SchemaObject, Serializable {
      * @return The java name
      */
     public String getJavaName() {
-        return _javaName;
+        return javaName;
     }
 
     /**
@@ -105,7 +104,7 @@ public class Column implements SchemaObject, Serializable {
      * @param javaName The java name
      */
     public void setJavaName(String javaName) {
-        _javaName = javaName;
+        this.javaName = javaName;
     }
 
     /**
@@ -113,7 +112,7 @@ public class Column implements SchemaObject, Serializable {
      * @return The description
      */
     public String getDescription() {
-        return _description;
+        return description;
     }
 
     /**
@@ -121,7 +120,7 @@ public class Column implements SchemaObject, Serializable {
      * @param description The description
      */
     public void setDescription(String description) {
-        _description = description;
+        this.description = description;
     }
 
     /**
@@ -129,7 +128,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is a primary key column
      */
     public boolean isPrimaryKey() {
-        return _primaryKey;
+        return primaryKey;
     }
 
     /**
@@ -137,7 +136,7 @@ public class Column implements SchemaObject, Serializable {
      * @param primaryKey <code>true</code> if this column is a primary key column
      */
     public void setPrimaryKey(boolean primaryKey) {
-        _primaryKey = primaryKey;
+        this.primaryKey = primaryKey;
     }
 
     /**
@@ -146,7 +145,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is a required column
      */
     public boolean isRequired() {
-        return _required;
+        return required;
     }
 
     /**
@@ -155,7 +154,7 @@ public class Column implements SchemaObject, Serializable {
      * @param required <code>true</code> if this column is a required column
      */
     public void setRequired(boolean required) {
-        _required = required;
+        this.required = required;
     }
 
     /**
@@ -163,7 +162,7 @@ public class Column implements SchemaObject, Serializable {
      * @return <code>true</code> if this column is an auto-increment column
      */
     public boolean isAutoIncrement() {
-        return _autoIncrement;
+        return autoIncrement;
     }
 
     /**
@@ -171,7 +170,7 @@ public class Column implements SchemaObject, Serializable {
      * @param autoIncrement <code>true</code> if this column is an auto-increment column
      */
     public void setAutoIncrement(boolean autoIncrement) {
-        _autoIncrement = autoIncrement;
+        this.autoIncrement = autoIncrement;
     }
 
     /**
@@ -409,14 +408,14 @@ public class Column implements SchemaObject, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Column column = (Column) o;
-        if (_primaryKey != column._primaryKey) return false;
-        if (_required != column._required) return false;
-        if (_autoIncrement != column._autoIncrement) return false;
+        if (primaryKey != column.primaryKey) return false;
+        if (required != column.required) return false;
+        if (autoIncrement != column.autoIncrement) return false;
         if (jdbcTypeCode != column.jdbcTypeCode) return false;
         if (_scale != column._scale) return false;
-        if (!Objects.equals(_name, column._name)) return false;
-        if (!Objects.equals(_javaName, column._javaName)) return false;
-        if (!Objects.equals(_description, column._description))
+        if (!Objects.equals(name, column.name)) return false;
+        if (!Objects.equals(javaName, column.javaName)) return false;
+        if (!Objects.equals(description, column.description))
             return false;
         if (!Objects.equals(jdbcTypeName, column.jdbcTypeName)) return false;
         if (!Objects.equals(_size, column._size)) return false;
@@ -426,7 +425,7 @@ public class Column implements SchemaObject, Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(_name, _javaName, _description, _primaryKey, _required, _autoIncrement, jdbcTypeCode, jdbcTypeName, _size, _sizeAsInt, _scale, _defaultValue);
+        return Objects.hash(name, javaName, description, primaryKey, required, autoIncrement, jdbcTypeCode, jdbcTypeName, _size, _sizeAsInt, _scale, _defaultValue);
     }
 
     @Override

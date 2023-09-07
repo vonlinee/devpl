@@ -26,7 +26,6 @@ public class DmQuery implements AbstractQuery {
         return sql.toString();
     }
 
-
     @Override
     public String getTableFieldsQuerySql() {
         return

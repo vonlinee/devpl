@@ -105,11 +105,9 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         setModelReader(new InterbaseModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
-
 
     protected void setStatementParameterValue(PreparedStatement statement, int sqlIndex, int typeCode, Object value) throws SQLException {
         if (value != null) {
@@ -127,7 +125,6 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         }
         super.setStatementParameterValue(statement, sqlIndex, typeCode, value);
     }
-
 
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws SQLException {
         boolean useIdx = (columnName == null);
@@ -175,7 +172,6 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         }
     }
 
-
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
 
@@ -183,7 +179,6 @@ public class InterbasePlatform extends GenericDatabasePlatform {
         comparator.setGeneratePrimaryKeyChanges(false);
         return comparator;
     }
-
 
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -231,7 +226,6 @@ public class InterbasePlatform extends GenericDatabasePlatform {
             }
         };
     }
-
 
     /**
      * Processes the addition of a column to a table.

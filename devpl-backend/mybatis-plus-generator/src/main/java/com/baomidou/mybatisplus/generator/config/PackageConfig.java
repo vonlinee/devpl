@@ -15,7 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config;
 
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;

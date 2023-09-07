@@ -56,8 +56,8 @@ public class ColumnXmlWriter extends ModelXmlWriter {
             if (columnName.length() > XMLUtils.MAX_NAME_LENGTH) {
                 columnFormattingMethod = AS_VALUE;
             } else if ("table-name".equals(columnName) ||
-                DatabaseIO.BASE64_ATTR_NAME.equals(columnName) ||
-                !XMLUtils.isWellFormedXMLName(columnName)) {
+                       DatabaseIO.BASE64_ATTR_NAME.equals(columnName) ||
+                       !XMLUtils.isWellFormedXMLName(columnName)) {
                 columnFormattingMethod = AS_COLUMN_ATTRIBUTE;
             } else if (valueBase64Encoded || (value.length() > XMLUtils.MAX_ATTRIBUTE_LENGTH)) {
                 columnFormattingMethod = AS_SUBTAG;

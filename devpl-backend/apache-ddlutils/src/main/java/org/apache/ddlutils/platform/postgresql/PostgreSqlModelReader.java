@@ -4,7 +4,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.SQLException;
 import java.sql.Types;
@@ -26,9 +26,8 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         setDefaultTablePattern(null);
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -59,9 +58,8 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getSize() != null) {
@@ -159,13 +157,11 @@ public class PostgreSqlModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) {
         // PostgreSQL does not return an index for a foreign key
         return false;
     }
-
 
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) {

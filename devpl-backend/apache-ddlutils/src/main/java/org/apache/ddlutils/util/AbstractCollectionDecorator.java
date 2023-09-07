@@ -1,5 +1,7 @@
 package org.apache.ddlutils.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -19,8 +21,6 @@ import java.util.Iterator;
  * to write an unmodifiable implementation it might provide a loophole.
  * @author Stephen Colebourne
  * @author Paul Jack
- * @version $Revision: 1.4 $ $Date: 2004/06/02 21:53:03 $
- * @since Commons Collections 3.0
  */
 public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
 
@@ -104,8 +104,9 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
     }
 
     @Override
-    public Object[] toArray(Object[] object) {
-        return collection.toArray(object);
+    @SuppressWarnings("unchecked")
+    public E @NotNull [] toArray(Object @NotNull [] object) {
+        return (E[]) collection.toArray(object);
     }
 
     @Override

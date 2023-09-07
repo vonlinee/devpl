@@ -1,6 +1,6 @@
 package com.baomidou.mybatisplus.generator.config.rules;
 
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.Set;
 

@@ -15,7 +15,6 @@ import java.util.List;
  * adapt the first model so that it becomes the second one. Neither of the models
  * are changed in the process, however, it is also assumed that the models do not
  * change in between.
- * @version $Revision: $
  */
 public class ModelComparator {
     /**
@@ -27,10 +26,6 @@ public class ModelComparator {
      * The platform information.
      */
     private final PlatformInfo platformInfo;
-    /**
-     * The object clone helper.
-     */
-    private final CloneHelper _cloneHelper = new CloneHelper();
     /**
      * Whether comparison is case-sensitive.
      */
@@ -110,7 +105,7 @@ public class ModelComparator {
      * @return The changes
      */
     public List<ModelChange> compare(Database sourceModel, Database targetModel) {
-        Database intermediateModel = _cloneHelper.clone(sourceModel);
+        Database intermediateModel = CloneHelper.clone(sourceModel);
         return compareModels(sourceModel, intermediateModel, targetModel);
     }
 
@@ -211,7 +206,7 @@ public class ModelComparator {
                         _log.info("Foreign key " + targetFk + " needs to be added to table " + intermediateTable.getName());
                     }
 
-                    intermediateFk = _cloneHelper.clone(targetFk, intermediateTable, intermediateModel, caseSensitive);
+                    intermediateFk = CloneHelper.clone(targetFk, intermediateTable, intermediateModel, caseSensitive);
 
                     AddForeignKeyChange fkChange = new AddForeignKeyChange(intermediateTable.getName(), intermediateFk);
 
@@ -278,7 +273,7 @@ public class ModelComparator {
 
                 // we're using a clone of the target table, and remove all foreign
                 // keys as these will be added later
-                intermediateTable = _cloneHelper.clone(targetTable, true, false, intermediateModel, caseSensitive);
+                intermediateTable = CloneHelper.clone(targetTable, true, false, intermediateModel, caseSensitive);
 
                 AddTableChange tableChange = new AddTableChange(intermediateTable);
 
@@ -310,7 +305,7 @@ public class ModelComparator {
         List<TableChange> changes = new ArrayList<>(checkForRemovedIndexes(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
 
         ArrayList<TableChange> tableDefinitionChanges = new ArrayList<>();
-        Table tmpTable = _cloneHelper.clone(intermediateTable, true, false, intermediateModel, caseSensitive);
+        Table tmpTable = CloneHelper.clone(intermediateTable, true, false, intermediateModel, caseSensitive);
 
         tableDefinitionChanges.addAll(checkForRemovedColumns(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
         tableDefinitionChanges.addAll(checkForChangeOfColumnOrder(sourceModel, sourceTable, intermediateModel, intermediateTable, targetModel, targetTable));
@@ -451,7 +446,7 @@ public class ModelComparator {
                     _log.info("Index " + targetIndex.getName() + " needs to be created for table " + intermediateTable.getName());
                 }
 
-                Index clonedIndex = _cloneHelper.clone(targetIndex, intermediateTable, caseSensitive);
+                Index clonedIndex = CloneHelper.clone(targetIndex, intermediateTable, caseSensitive);
                 AddIndexChange change = new AddIndexChange(intermediateTable.getName(), clonedIndex);
 
                 changes.add(change);
@@ -585,7 +580,7 @@ public class ModelComparator {
                 String prevColumn = (columnIdx > 0 ? intermediateTable.getColumn(columnIdx - 1).getName() : null);
                 String nextColumn = (columnIdx < intermediateTable.getColumnCount() ? intermediateTable
                     .getColumn(columnIdx).getName() : null);
-                Column clonedColumn = _cloneHelper.clone(targetColumn, false);
+                Column clonedColumn = CloneHelper.clone(targetColumn, false);
                 AddColumnChange change = new AddColumnChange(intermediateTable.getName(), clonedColumn, prevColumn, nextColumn);
 
                 changes.add(change);
@@ -720,7 +715,7 @@ public class ModelComparator {
                                                     Table targetTable,
                                                     Column targetColumn) {
         if (ColumnDefinitionChange.isChanged(getPlatformInfo(), sourceColumn, targetColumn)) {
-            Column newColumnDef = _cloneHelper.clone(sourceColumn, true);
+            Column newColumnDef = CloneHelper.clone(sourceColumn, true);
             int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getJdbcTypeCode());
             boolean sizeMatters = platformInfo.hasSize(targetTypeCode);
             boolean scaleMatters = platformInfo.hasPrecisionAndScale(targetTypeCode);

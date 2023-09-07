@@ -8,7 +8,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 /**
  * The SQL Builder for MySQL.
- * @version $Revision$
  */
 public class MySqlBuilder extends SqlBuilder {
     /**
@@ -76,7 +75,7 @@ public class MySqlBuilder extends SqlBuilder {
     }
 
     @Override
-    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ObjectMap parameters) throws IOException {
         if (parameters != null) {
             print(" ");
             // MySql supports additional table creation options which are appended
@@ -103,8 +102,8 @@ public class MySqlBuilder extends SqlBuilder {
     }
 
     @Override
-    protected void writeColumn(Table table, Column column) throws IOException {
-        super.writeColumn(table, column);
+    protected void writeColumn(Table table, Column column, ObjectMap params) throws IOException {
+        super.writeColumn(table, column, params);
         if (!StringUtils.isEmpty(column.getDescription())) {
             print(" COMMENT '" + column.getDescription() + "'");
         }

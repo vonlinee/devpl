@@ -17,7 +17,6 @@ public class RemovePrimaryKeyChange extends TableChangeImplBase {
         super(tableName);
     }
 
-
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
         Column[] pkCols = table.getPrimaryKeyColumns();

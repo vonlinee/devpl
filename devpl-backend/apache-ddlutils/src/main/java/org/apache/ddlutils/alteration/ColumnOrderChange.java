@@ -53,7 +53,6 @@ public class ColumnOrderChange extends TableChangeImplBase {
         return newPos == null ? -1 : newPos.intValue();
     }
 
-
     public void apply(Database database, boolean caseSensitive) {
         Table table = findChangedTable(database, caseSensitive);
         ArrayList newColumns = new ArrayList();

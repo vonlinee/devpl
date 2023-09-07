@@ -13,6 +13,7 @@ open module mybatis.plus.generator {
     exports com.baomidou.mybatisplus.generator.jdbc.meta;
     exports com.baomidou.mybatisplus.generator.jdbc.dialect.mysql;
     exports com.baomidou.mybatisplus.generator.fill;
+    exports com.baomidou.mybatisplus.generator.util;
 
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;
@@ -29,6 +30,5 @@ open module mybatis.plus.generator {
     requires spring.jdbc;
     requires org.hibernate.orm.core;
     requires com.google.common;
-    requires devpl.codegen;
     requires jsonfive.java;
 }

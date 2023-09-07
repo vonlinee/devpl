@@ -57,7 +57,6 @@ public class DateConverter implements SqlTypeConverter {
         _calendar.setLenient(false);
     }
 
-
     public Object convertFromString(String textRep, int sqlTypeCode) throws ConversionException {
         if (sqlTypeCode != Types.DATE) {
             return textRep;
@@ -97,7 +96,6 @@ public class DateConverter implements SqlTypeConverter {
             return null;
         }
     }
-
 
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         String result = null;

@@ -176,7 +176,7 @@ public class DatabaseIO {
      * @param filename The model file name
      * @return The database model
      */
-    public Database read(String filename) throws DdlUtilsXMLException {
+    public Database readFile(String filename) throws DdlUtilsXMLException {
         return read(new File(filename));
     }
 
@@ -206,6 +206,19 @@ public class DatabaseIO {
         } finally {
             IOUtils.closeQuitely(reader);
         }
+    }
+
+    /**
+     * Reads the database model given by the reader. Note that this method does not close the
+     * given reader.
+     * @param schema The string that contains the model XML
+     * @return The database model
+     */
+    public Database readSchema(String schema) {
+        if (schema == null || schema.isEmpty()) {
+            return new Database();
+        }
+        return read(new StringReader(schema));
     }
 
     /**

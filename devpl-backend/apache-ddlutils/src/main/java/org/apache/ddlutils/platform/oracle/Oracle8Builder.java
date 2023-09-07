@@ -6,7 +6,7 @@ import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -48,9 +48,8 @@ public class Oracle8Builder extends SqlBuilder {
         }
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         // lets create any sequences
         Column[] columns = table.getAutoIncrementColumns();
 
@@ -64,7 +63,6 @@ public class Oracle8Builder extends SqlBuilder {
             createAutoIncrementTrigger(table, column);
         }
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -173,24 +171,20 @@ public class Oracle8Builder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
-    protected void createTemporaryTable(Database database, Table table, ValueMap parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, ObjectMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
-
 
     @Override
     protected void dropTemporaryTable(Database database, Table table) throws IOException {
         dropTable(table);
     }
 
-
     @Override
     public void dropForeignKeys(Table table) throws IOException {
         // no need to as we drop the table with CASCASE CONSTRAINTS
     }
-
 
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
@@ -200,7 +194,6 @@ public class Oracle8Builder extends SqlBuilder {
         printIdentifier(getIndexName(index));
         printEndOfStatement();
     }
-
 
     @Override
     protected void printDefaultValue(Object defaultValue, int typeCode) throws IOException {
@@ -218,7 +211,6 @@ public class Oracle8Builder extends SqlBuilder {
             }
         }
     }
-
 
     @Override
     protected String getNativeDefaultValue(Column column) {
@@ -244,12 +236,10 @@ public class Oracle8Builder extends SqlBuilder {
         return super.getNativeDefaultValue(column);
     }
 
-
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using sequences instead
     }
-
 
     @Override
     public String getSelectLastIdentityValues(Table table) {
@@ -272,7 +262,6 @@ public class Oracle8Builder extends SqlBuilder {
             return null;
         }
     }
-
 
     @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
@@ -318,12 +307,11 @@ public class Oracle8Builder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
-            ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
-            !StringUtils.isEmpty(targetColumn.getSize());
+                              ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
+                              !StringUtils.isEmpty(targetColumn.getSize());
 
         if (sizeChanged) {
             print("SUBSTR(");

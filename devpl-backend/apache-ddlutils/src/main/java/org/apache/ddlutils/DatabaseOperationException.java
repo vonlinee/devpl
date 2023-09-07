@@ -2,7 +2,6 @@ package org.apache.ddlutils;
 
 /**
  * This exception is thrown when a database operation failed.
- * @version $Revision: 289996 $
  */
 public class DatabaseOperationException extends DdlUtilsException {
     /**

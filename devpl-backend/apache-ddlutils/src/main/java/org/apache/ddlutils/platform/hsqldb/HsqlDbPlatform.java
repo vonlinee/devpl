@@ -70,11 +70,9 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
         setModelReader(new HsqlDbModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
-
 
     @Override
     public void shutdownDatabase(Connection connection) {
@@ -89,7 +87,6 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
             closeStatement(stmt);
         }
     }
-
 
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
@@ -107,7 +104,7 @@ public class HsqlDbPlatform extends GenericDatabasePlatform {
                     // adding IDENTITY columns is not supported without a table rebuild because they have to
                     // be PK columns, but we add them to the PK later
                     return addColumnChange.isAtEnd() &&
-                        (!addColumnChange.getNewColumn().isRequired() ||
+                           (!addColumnChange.getNewColumn().isRequired() ||
                             (addColumnChange.getNewColumn().getDefaultValue() != null));
                 } else return change instanceof AddPrimaryKeyChange;
             }

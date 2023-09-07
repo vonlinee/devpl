@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -15,16 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>commons-pool</groupId>
-            <artifactId>commons-pool</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -33,95 +23,24 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.8</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>stax</groupId>
-            <artifactId>stax-api</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>woodstox</groupId>
-            <artifactId>wstx-asl</artifactId>
-            <version>3.2.6</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <!--xerces需要此依赖-->
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
-        </dependency>
-
-        <!--
-            <dependency>
-              <groupId>axion</groupId>
-              <artifactId>axion</artifactId>
-              <version>1.0-M3-dev</version>
-              <scope>test</scope>
-            </dependency>
-            <dependency>
-              <groupId>org.apache.derby</groupId>
-              <artifactId>derbyclient</artifactId>
-              <version>10.1.2.1</version>
-              <scope>test</scope>
-            </dependency>
-            <dependency>
-              <groupId>hsqldb</groupId>
-              <artifactId>hsqldb</artifactId>
-              <version>1.8.0.4</version>
-              <scope>test</scope>
-            </dependency>
-            <dependency>
-              <groupId>mckoi</groupId>
-              <artifactId>mckoi</artifactId>
-              <version>1.0.2</version>
-              <scope>test</scope>
-            </dependency>
-            <dependency>
-              <groupId>mysql</groupId>
-              <artifactId>mysql-connector-java</artifactId>
-              <version>3.1.12</version>
-              <scope>test</scope>
-            </dependency>
-            <dependency>
-              <groupId>postgresql</groupId>
-              <artifactId>postgresql</artifactId>
-              <version>8.1-404.jdbc3</version>
-              <scope>test</scope>
-            </dependency>
-         -->
-        <!-- NB: No public driver for DB2, interbase, sapdb, oracle, sqlserver -->
-        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.6</version>
-        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.2.15</version>
+            <version>1.2.16</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
+            <version>8.0.33</version>
         </dependency>
-      <dependency>
-        <groupId>org.jetbrains</groupId>
-        <artifactId>annotations</artifactId>
-        <version>24.0.1</version>
-        <scope>compile</scope>
-      </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

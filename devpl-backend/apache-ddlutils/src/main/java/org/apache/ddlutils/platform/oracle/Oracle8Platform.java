@@ -20,7 +20,6 @@ import java.util.Map;
  * <p>
  * TODO: We might support the {@link DatabasePlatform#createDatabase(String, String, String, String, Map)}
  *       functionality via "CREATE SCHEMA"/"CREATE USER" or "CREATE TABLESPACE" ?
- * @version $Revision: 231306 $
  */
 public class Oracle8Platform extends GenericDatabasePlatform {
     /**
@@ -97,11 +96,9 @@ public class Oracle8Platform extends GenericDatabasePlatform {
         setModelReader(new Oracle8ModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
-
 
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         // While Oracle has an ALTER TABLE MODIFY statement, it is somewhat limited
@@ -121,8 +118,8 @@ public class Oracle8Platform extends GenericDatabasePlatform {
                     // Oracle can only add not insert columns
                     // Also, we cannot add NOT NULL columns unless they have a default value
                     return addColumnChange.isAtEnd() &&
-                        (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
-                            .getDefaultValue() != null));
+                           (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
+                                                                                 .getDefaultValue() != null));
                 } else {
                     return false;
                 }

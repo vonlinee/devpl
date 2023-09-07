@@ -1,19 +1,13 @@
 <template>
-	<el-button size="default" type="primary" @click="showDlg = true">打开对话框</el-button>
-
-	<popup-window
-		ref="windowRef"
-		:model-value="showDlg"
-		title="标题1111"
-		:close-on-click-modal="false"
-		@updateVisible="updateVisible"
-		@close="close"
-		@toggleScreen="toggleScreen"
-	>
+	<el-button size="default" type="primary" @click="showDialog">打开对话框</el-button>
+	<popup-window ref="windowRef" :model-value="showDlg" title="标题1111" :close-on-click-modal="false"
+		@updateVisible="updateVisible" @close="close" @toggleScreen="toggleScreen">
 		<template #content>
-      <div>
-        
-      </div>
+			<div>
+				<el-button @click="getText">getText</el-button>
+				<el-button @click="setText">setText</el-button>
+				<div id="container"></div>
+			</div>
 		</template>
 
 		<template #footer>
@@ -23,44 +17,49 @@
 	</popup-window>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent, ref } from 'vue'
 import PopupWindow from '@/components/dialog/PopupWindow.vue'
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
-export default defineComponent({
-	name: 'App1',
-	components: { MonacoEditor, PopupWindow },
-	setup() {
-		const showDlg = ref()
-		showDlg.value = false
 
-		const windowRef = ref()
+const showDlg = ref<boolean>(false)
+	const windowRef = ref()
 
-		const updateVisible = () => {
-			showDlg.value = false
-		}
+function showDialog() {
+	console.log(windowRef);
+	
+	showDlg.value = true
+}
 
-		const setText = () => {
-			windowRef.value.setTitle('11111111111')
-		}
 
-		const close = (): void => {
-			console.log('dialog closed!')
-		}
+const updateVisible = () => {
+	showDlg.value = false
+}
 
-		const toggleScreen = (is_max: boolean): void => {
-			console.log('dialog is max:', is_max)
-		}
+const setText = () => {
+	windowRef.value.setTitle('1222222222')
+}
 
-		return {
-			setText,
-			showDlg,
-			windowRef,
-			updateVisible,
-			close,
-			toggleScreen
-		}
-	}
-})
+const close = (): void => {
+	console.log('dialog closed!')
+}
+
+const toggleScreen = (is_max: boolean): void => {
+	console.log('dialog is max:', is_max)
+}
+
+const getText = () => {
+	console.log(windowRef.value.getTitle());
+}
+
+const addElement = () => {
+	// let div = document.getElementById('container')
+	// if (div) {
+	// 	let paragraph = document.createElement('p');
+	// 	paragraph.innerText = '11111111';
+	// 	div.appendChild(paragraph);
+	// } else {
+	// 	console.log("容器为null")
+	// }
+}
 </script>

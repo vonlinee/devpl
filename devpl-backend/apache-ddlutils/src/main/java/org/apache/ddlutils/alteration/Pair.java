@@ -2,7 +2,6 @@ package org.apache.ddlutils.alteration;
 
 /**
  * Represents a pair of objects.
- * @version $Revision: $
  */
 public class Pair {
     /**

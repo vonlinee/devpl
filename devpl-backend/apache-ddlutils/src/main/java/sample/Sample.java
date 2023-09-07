@@ -1,37 +1,58 @@
 package sample;
 
 import org.apache.ddlutils.DatabasePlatform;
+import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.platform.SqlBuildContext;
-import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.platform.*;
 import org.apache.ddlutils.platform.mysql.MySql50Platform;
+import org.apache.ddlutils.platform.mysql.MySql57Platform;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Arrays;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Sample {
 
     public static void main(String[] args) throws IOException {
+        test1();
+    }
 
+    public static void test1() {
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/devpl?characterEncoding=UTF-8&useUnicode=true&useSSL=false", "root", "123456");
+
+            MySql57Platform platform = new MySql57Platform();
+
+            JdbcModelReader modelReader = platform.getModelReader();
+
+            Database database = modelReader.getDatabase(connection, "devpl");
+
+            System.out.println(database);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void test2() throws IOException {
         final String schema =
             "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-                "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
-                "  <table name='user'>\n" +
-                "    <column name='name' type='varchar' size='32' primaryKey='true' description='主键'/>\n" +
-                "    <column name='age' type='INTEGER' primaryKey='false'/>\n" +
-                "    <column name='sex' type='BINARY' size='100' required='true'/>\n" +
-                "    <column name='class_name' type='DOUBLE' required='true' default='-2.0'/>\n" +
-                "    <column name='col' type='CHAR' size='4' default='test'/>\n" +
-                "    <column name='slkd' type='BIGINT'/>\n" +
-                "  </table>\n" +
-                "</database>";
+            "<database xmlns='" + DatabaseIO.DDLUTILS_NAMESPACE + "' name='columnconstraintstest'>\n" +
+            "  <table name='user'>\n" +
+            "    <column name='name' type='varchar' size='32' primaryKey='true' description='主键'/>\n" +
+            "    <column name='age' type='INTEGER' primaryKey='false'/>\n" +
+            "    <column name='sex' type='BINARY' size='100' required='true'/>\n" +
+            "    <column name='class_name' type='DOUBLE' required='true' default='-2.0'/>\n" +
+            "    <column name='col' type='CHAR' size='4' default='test'/>\n" +
+            "    <column name='slkd' type='BIGINT'/>\n" +
+            "  </table>\n" +
+            "</database>";
 
         DatabaseIO dbIO = new DatabaseIO();
         dbIO.setValidateXml(false);
-        Database database = dbIO.read(new StringReader(schema));
+        Database database = dbIO.readSchema(schema);
 
         Table table = database.getTable(0);
 
@@ -43,14 +64,14 @@ public class Sample {
 
         // we're turning the comment creation off to make testing easier
         // disable the comment
-        DatabasePlatform platform = new MySql50Platform();
+        MySql57Platform platform = new MySql57Platform();
         platform.setSqlCommentsOn(false);
 
         SqlBuilder sqlBuilder = platform.getSqlBuilder();
 
-        StringWriter sw = new StringWriter();
+        BuildingSql sql = new DefaultBuildingSql();
 
-        sqlBuilder.setWriter(sw);
+        sqlBuilder.setBuildingSql(sql);
 
         SqlBuildContext context = new SqlBuildContext();
 
@@ -59,10 +80,7 @@ public class Sample {
 
         sqlBuilder.createTables(database, context, true);
 
-        System.out.println(sw);
 
-        StringBuilder stringBuilder = new StringBuilder();
-
-
+        System.out.println(sqlBuilder.getCurrentSql());
     }
 }

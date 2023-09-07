@@ -42,7 +42,6 @@ public interface DynaClass {
      */
     DynaProperty[] getDynaProperties();
 
-
     /**
      * Instantiate and return a new DynaBean instance, associated
      * with this DynaClass.

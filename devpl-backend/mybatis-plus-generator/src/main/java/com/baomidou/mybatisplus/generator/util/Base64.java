@@ -1,4 +1,4 @@
-package io.devpl.codegen.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;

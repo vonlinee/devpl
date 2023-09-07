@@ -77,7 +77,6 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         setModelReader(new PostgreSqlModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
@@ -151,7 +150,6 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually
@@ -159,14 +157,12 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, parameters, true);
     }
 
-
     @Override
     public void dropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "DROP DATABASE" in an existing database (usually
         // the template1 database because it usually exists)
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, null, false);
     }
-
 
     @Override
     protected void setObject(PreparedStatement statement, int sqlIndex, DynaBean dynaBean, SqlDynaProperty property) throws SQLException {
@@ -185,7 +181,6 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     protected ModelComparator getModelComparator() {
         ModelComparator comparator = super.getModelComparator();
@@ -193,7 +188,6 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
         comparator.setCanDropPrimaryKeyColumns(false);
         return comparator;
     }
-
 
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
@@ -213,8 +207,8 @@ public class PostgreSqlPlatform extends GenericDatabasePlatform {
                     // * the column is added at the end of the table (PostgreSQL does not support
                     //   insertion of a column)
                     return !addColumnChange.getNewColumn().isRequired() &&
-                        (addColumnChange.getNewColumn().getDefaultValue() == null) &&
-                        (addColumnChange.getNextColumn() == null);
+                           (addColumnChange.getNewColumn().getDefaultValue() == null) &&
+                           (addColumnChange.getNextColumn() == null);
                 } else {
                     // TODO: PK changes ?
                     return false;

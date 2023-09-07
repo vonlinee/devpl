@@ -4,8 +4,8 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.ObjectMap;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,10 +60,13 @@ public abstract class SqlBuilder {
      * The current Writer used to output the SQL to.
      */
     private Writer writer;
+
+    private BuildingSql sql;
+
     /**
      * 配置选项
      */
-    private ValueMap options;
+    private ObjectMap options;
     /**
      * The indentation used to indent commands.
      */
@@ -117,10 +120,20 @@ public abstract class SqlBuilder {
         return writer;
     }
 
+    public void setBuildingSql(BuildingSql sql) {
+        this.sql = sql;
+    }
+
+    public BuildingSql getSql() {
+        return sql;
+    }
+
     /**
      * Sets the writer for printing the DDL to.
      * @param writer The writer
+     * @deprecated 使用BuildingSql存储结果
      */
+    @Deprecated
     public void setWriter(Writer writer) {
         this.writer = writer;
     }
@@ -346,12 +359,12 @@ public abstract class SqlBuilder {
 
     /**
      * Outputs the DDL to create the given temporary table. Per default this is simply
-     * a call to {@link #createTable(Database, Table, ValueMap)}.
+     * a call to {@link #createTable(Database, Table, ObjectMap)}.
      * @param database   The database model
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void createTemporaryTable(Database database, Table table, ValueMap parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, ObjectMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
@@ -436,7 +449,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         writeCreateTableStatement(database, table, parameters);
         writeTableCreationStmtEnding(table, parameters);
 
@@ -1031,7 +1044,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeCreateTableStatement(Database database, Table table, ValueMap parameters) throws IOException {
+    protected void writeCreateTableStatement(Database database, Table table, ObjectMap parameters) throws IOException {
         print("CREATE TABLE ");
         printlnIdentifier(getTableName(table));
         println("(");
@@ -1059,7 +1072,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ObjectMap parameters) throws IOException {
         beforeTableCreationStmtEnding(table, parameters);
         printEndOfStatement();
     }
@@ -1069,16 +1082,16 @@ public abstract class SqlBuilder {
      * @param table      表
      * @param parameters 该表的配置项
      */
-    protected void beforeTableCreationStmtEnding(Table table, ValueMap parameters) {
+    protected void beforeTableCreationStmtEnding(Table table, ObjectMap parameters) {
 
     }
 
     /**
      * Writes the columns of the given table.
-     * @param table      The table
-     * @param parameters 该表的上下文参数
+     * @param table        The table
+     * @param tableContext 该表的上下文参数
      */
-    protected void writeColumns(Table table, ValueMap parameters) throws IOException {
+    protected void writeColumns(Table table, ObjectMap tableContext) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             writeColumn(table, table.getColumn(idx));
@@ -1104,6 +1117,16 @@ public abstract class SqlBuilder {
      * @param column The column
      */
     protected void writeColumn(Table table, Column column) throws IOException {
+        writeColumn(table, column, new ObjectMap());
+    }
+
+    /**
+     * Outputs the DDL for the specified column.
+     * @param table  The table containing the column
+     * @param column The column
+     * @param params context
+     */
+    protected void writeColumn(Table table, Column column, ObjectMap params) throws IOException {
         // see comments in columnsDiffer about null/"" defaults
         printIdentifier(getColumnName(column));
         print(" ");
@@ -1177,7 +1200,6 @@ public abstract class SqlBuilder {
     protected String getBareNativeType(Column column) {
         String nativeType = getNativeType(column);
         int sizePos = nativeType.indexOf(SIZE_PLACEHOLDER);
-
         return sizePos >= 0 ? nativeType.substring(0, sizePos) : nativeType;
     }
 
@@ -1516,7 +1538,6 @@ public abstract class SqlBuilder {
         printEndOfStatement();
     }
 
-
     /**
      * Writes the foreign key constraints inside a creation table () clause.
      * @param database The database model
@@ -1599,7 +1620,7 @@ public abstract class SqlBuilder {
                 case CascadeActionEnum.VALUE_RESTRICT -> print("RESTRICT");
                 case CascadeActionEnum.VALUE_NONE -> print("NO ACTION");
                 default ->
-                        throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
+                    throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
             }
         }
     }
@@ -1686,10 +1707,21 @@ public abstract class SqlBuilder {
      */
     public void print(String text) {
         try {
-            writer.write(text);
+            if (writer != null) {
+                writer.write(text);
+            }
+            sql.append(text);
         } catch (Exception exception) {
             _log.error("error when write", exception);
         }
+    }
+
+    public String getCurrentSql() {
+        return sql.toString();
+    }
+
+    public BuildingSql getBuildingSql() {
+        return sql;
     }
 
     /**

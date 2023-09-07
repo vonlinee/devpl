@@ -17,15 +17,14 @@ public class PrettyPrintingXmlWriter {
      * The indentation string.
      */
     private static final String INDENT_STRING = "  ";
-
-    /**
-     * The xml writer.
-     */
-    private XMLStreamWriter _writer;
     /**
      * The output encoding.
      */
     private final String _encoding;
+    /**
+     * The xml writer.
+     */
+    private XMLStreamWriter _writer;
     /**
      * Whether we're pretty-printing.
      */

@@ -41,7 +41,6 @@ public class AddPrimaryKeyChange extends TableChangeImplBase {
         return result;
     }
 
-
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

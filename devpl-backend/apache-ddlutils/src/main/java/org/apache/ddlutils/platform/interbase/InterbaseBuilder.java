@@ -6,7 +6,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -25,9 +25,8 @@ public class InterbaseBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment
@@ -38,7 +37,6 @@ public class InterbaseBuilder extends SqlBuilder {
         }
     }
 
-
     @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
@@ -47,7 +45,6 @@ public class InterbaseBuilder extends SqlBuilder {
             return super.getNativeDefaultValue(column);
         }
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -59,7 +56,6 @@ public class InterbaseBuilder extends SqlBuilder {
         }
         super.dropTable(table);
     }
-
 
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
@@ -131,12 +127,10 @@ public class InterbaseBuilder extends SqlBuilder {
         return getConstraintName("gen", table, column.getName(), null);
     }
 
-
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         // we're using a generator
     }
-
 
     @Override
     public String getSelectLastIdentityValues(Table table) {

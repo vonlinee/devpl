@@ -103,7 +103,6 @@ public class SapDbPlatform extends GenericDatabasePlatform {
         setModelReader(new SapDbModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
@@ -120,7 +119,6 @@ public class SapDbPlatform extends GenericDatabasePlatform {
         return comparator;
     }
 
-
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
             protected boolean isSupported(Table intermediateTable, TableChange change) {
@@ -134,7 +132,7 @@ public class SapDbPlatform extends GenericDatabasePlatform {
                     // SapDB can only add not insert columns, and required columns have to have
                     // a default value or be IDENTITY
                     return (addColumnChange.getNextColumn() == null) &&
-                        (!addColumnChange.getNewColumn().isRequired() ||
+                           (!addColumnChange.getNewColumn().isRequired() ||
                             !StringUtils.isEmpty(addColumnChange.getNewColumn().getDefaultValue()));
                 } else if (change instanceof ColumnDefinitionChange colChange) {
 
@@ -145,8 +143,8 @@ public class SapDbPlatform extends GenericDatabasePlatform {
 
                     // we can however handle the change if only the default value or the required status was changed
                     return ((curColumn.getJdbcTypeCode() == newColumn.getJdbcTypeCode()) &&
-                        !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), curColumn, newColumn) &&
-                        (curColumn.isAutoIncrement() == newColumn.isAutoIncrement()));
+                            !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), curColumn, newColumn) &&
+                            (curColumn.isAutoIncrement() == newColumn.isAutoIncrement()));
                 } else {
                     return false;
                 }

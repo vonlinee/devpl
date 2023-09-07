@@ -165,13 +165,11 @@ public class ModelBasedResultSetIterator implements Iterator<DynaBean> {
         return result;
     }
 
-
     @Override
     public boolean hasNext() throws DatabaseOperationException {
         advanceIfNecessary();
         return !_isAtEnd;
     }
-
 
     @Override
     public DynaBean next() throws DatabaseOperationException {
@@ -289,7 +287,6 @@ public class ModelBasedResultSetIterator implements Iterator<DynaBean> {
         try {
             Statement stmt = _resultSet.getStatement();
             Connection conn = stmt.getConnection();
-
             return !conn.isClosed();
         } catch (SQLException ex) {
             return false;

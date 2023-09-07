@@ -126,7 +126,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
                 if (getDataSource() == null) {
                     shouldAlter = false;
                     _log.warn("Cannot alter the database because no database connection was specified." +
-                        " SQL for database creation will be generated instead.");
+                              " SQL for database creation will be generated instead.");
                 } else {
                     try {
                         Connection connection = getDataSource().getConnection();
@@ -135,7 +135,7 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
                     } catch (SQLException ex) {
                         shouldAlter = false;
                         _log.warn("Could not establish a connection to the specified database, " +
-                                "so SQL for database creation will be generated instead.",
+                                  "so SQL for database creation will be generated instead.",
                             ex);
                     }
                 }

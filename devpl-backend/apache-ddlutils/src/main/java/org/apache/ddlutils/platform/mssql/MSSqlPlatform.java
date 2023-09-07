@@ -94,7 +94,6 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         setModelReader(new MSSqlModelReader(this));
     }
 
-
     public String getName() {
         return DATABASENAME;
     }
@@ -108,7 +107,6 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         return isIdentityOverrideOn() && getPlatformInfo().isIdentityOverrideAllowed() && (table.getAutoIncrementColumns().length > 0);
     }
 
-
     protected void beforeInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
             MSSqlBuilder builder = (MSSqlBuilder) getSqlBuilder();
@@ -116,7 +114,6 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
             connection.createStatement().execute(builder.getEnableIdentityOverrideSql(table));
         }
     }
-
 
     protected void afterInsert(Connection connection, Table table) throws SQLException {
         if (useIdentityOverrideFor(table)) {
@@ -126,21 +123,17 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
         }
     }
 
-
     protected void beforeUpdate(Connection connection, Table table) throws SQLException {
         beforeInsert(connection, table);
     }
-
 
     protected void afterUpdate(Connection connection, Table table) throws SQLException {
         afterInsert(connection, table);
     }
 
-
     protected ModelComparator getModelComparator() {
         return new MSSqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
     }
-
 
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -153,7 +146,8 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
                     // auto increment or with a DEFAULT value
                     return (addColumnChange.getNextColumn() == null) && (!addColumnChange.getNewColumn()
                         .isRequired() || addColumnChange.getNewColumn()
-                        .isAutoIncrement() || !StringUtils.isEmpty(addColumnChange.getNewColumn()
+                                                                             .isAutoIncrement() || !StringUtils.isEmpty(addColumnChange
+                        .getNewColumn()
                         .getDefaultValue()));
                 } else if (change instanceof ColumnDefinitionChange colDefChange) {
                     Column curColumn = intermediateTable.findColumn(colDefChange.getChangedColumn(), isDelimitedIdentifierModeOn());
@@ -169,7 +163,6 @@ public class MSSqlPlatform extends GenericDatabasePlatform {
             }
         };
     }
-
 
     @Override
     protected Database processChanges(Database model, Collection<ModelChange> changes, SqlBuildContext params) throws IOException, DdlUtilsException {

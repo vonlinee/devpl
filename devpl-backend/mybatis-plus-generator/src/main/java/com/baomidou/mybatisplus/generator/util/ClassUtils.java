@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import java.lang.reflect.Constructor;
 

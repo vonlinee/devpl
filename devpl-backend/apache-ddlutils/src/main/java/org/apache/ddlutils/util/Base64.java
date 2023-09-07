@@ -116,7 +116,6 @@ public class Base64 {
         int nextSeparatorIndex = 76;
         int chunksSoFar = 0;
 
-
         byte val1;
         byte val2;
         byte k;

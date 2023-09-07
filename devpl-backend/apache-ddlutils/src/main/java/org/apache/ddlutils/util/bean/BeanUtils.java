@@ -20,9 +20,7 @@ public class BeanUtils {
     public static void setProperty(final Object bean, final String name, final Object value)
         throws IllegalAccessException, InvocationTargetException {
 
-
     }
-
 
     /**
      * <p>Copy property values from the origin bean to the destination bean

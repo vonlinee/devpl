@@ -55,7 +55,6 @@ public class DerbyPlatform extends CloudscapePlatform {
         setModelReader(new DerbyModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
@@ -96,7 +95,6 @@ public class DerbyPlatform extends CloudscapePlatform {
             throw new UnsupportedOperationException("Unable to create a Derby database via the driver " + jdbcDriverClassName);
         }
     }
-
 
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {

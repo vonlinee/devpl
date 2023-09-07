@@ -8,7 +8,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +54,7 @@ public class Db2ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
 
         for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
@@ -72,9 +72,8 @@ public class Db2ModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -85,15 +84,15 @@ public class Db2ModelReader extends JdbcModelReader {
                 if (matcher.matches()) {
 
                     String newDefault = "'" +
-                        // the hour
-                        matcher.group(1) +
-                        ":" +
-                        // the minute
-                        matcher.group(2) +
-                        ":" +
-                        // the second
-                        matcher.group(3) +
-                        "'";
+                                        // the hour
+                                        matcher.group(1) +
+                                        ":" +
+                                        // the minute
+                                        matcher.group(2) +
+                                        ":" +
+                                        // the second
+                                        matcher.group(3) +
+                                        "'";
 
                     column.setDefaultValue(newDefault);
                 }
@@ -159,7 +158,6 @@ public class Db2ModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         // Db2 uses the form "SQL060205225246220" if the primary key was defined during table creation
@@ -181,7 +179,7 @@ public class Db2ModelReader extends JdbcModelReader {
             try {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(table.getName()));
                 while (pkData.next()) {
-                    ValueMap values = readColumns(pkData, getColumnsForPK());
+                    ObjectMap values = readColumns(pkData, getColumnsForPK());
                     pkNames.add(String.valueOf(values.get("PK_NAME")));
                 }
             } finally {

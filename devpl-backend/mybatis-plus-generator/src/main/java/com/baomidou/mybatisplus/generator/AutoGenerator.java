@@ -16,10 +16,10 @@ import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.query.DatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.type.TypeRegistry;
-import com.baomidou.mybatisplus.generator.utils.FileUtils;
-import com.baomidou.mybatisplus.generator.utils.RuntimeUtils;
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
-import com.baomidou.mybatisplus.generator.utils.Values;
+import com.baomidou.mybatisplus.generator.util.FileUtils;
+import com.baomidou.mybatisplus.generator.util.RuntimeUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
+import com.baomidou.mybatisplus.generator.util.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

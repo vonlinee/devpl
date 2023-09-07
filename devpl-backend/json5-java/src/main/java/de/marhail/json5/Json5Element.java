@@ -17,7 +17,7 @@
 
 package de.marhail.json5;
 
-import de.marhail.json5.comment.Comment;
+import de.marhail.json5.comment.Json5Comment;
 import de.marhail.json5.stream.Json5Writer;
 
 import java.io.IOException;
@@ -36,13 +36,13 @@ import java.util.Objects;
  */
 public abstract class Json5Element {
 
-    Comment comment = new Comment();
+    Json5Comment comment = new Json5Comment();
 
-    public Comment getComment() {
+    public Json5Comment getComment() {
         return comment;
     }
 
-    public void setComment(Comment comment) {
+    public void setComment(Json5Comment comment) {
         this.comment = comment;
     }
 

@@ -26,13 +26,13 @@ import java.util.List;
  */
 public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
     /**
-     * A single data file to insert.
-     */
-    private File _singleDataFile = null;
-    /**
      * The input files.
      */
     private final List<FileSet> _fileSets = new ArrayList<>();
+    /**
+     * A single data file to insert.
+     */
+    private File _singleDataFile = null;
     /**
      * Whether explicit values for identity columns will be used.
      */

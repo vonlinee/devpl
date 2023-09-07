@@ -23,7 +23,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -43,16 +43,14 @@ public class SybaseBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
 
-
     @Override
-    protected void writeTableCreationStmtEnding(Table table, ValueMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ObjectMap parameters) throws IOException {
         if (parameters != null) {
             // We support
             // - 'lock'
@@ -107,9 +105,8 @@ public class SybaseBuilder extends SqlBuilder {
         super.writeTableCreationStmtEnding(table, parameters);
     }
 
-
     @Override
-    protected void writeColumn(Table table, Column column) throws IOException {
+    protected void writeColumn(Table table, Column column, ObjectMap params) throws IOException {
         printIdentifier(getColumnName(column));
         print(" ");
         print(getSqlType(column));
@@ -129,7 +126,6 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-
     @Override
     protected String getNativeDefaultValue(Column column) {
         if ((column.getJdbcTypeCode() == Types.BIT) || (column.getJdbcTypeCode() == Types.BOOLEAN)) {
@@ -138,7 +134,6 @@ public class SybaseBuilder extends SqlBuilder {
             return super.getNativeDefaultValue(column);
         }
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -153,7 +148,6 @@ public class SybaseBuilder extends SqlBuilder {
         print("END");
         printEndOfStatement();
     }
-
 
     @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
@@ -170,7 +164,6 @@ public class SybaseBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
         print("DROP INDEX ");
@@ -180,13 +173,11 @@ public class SybaseBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     public void dropForeignKeys(Table table) throws IOException {
         turnOnQuotation();
         super.dropForeignKeys(table);
     }
-
 
     @Override
     public String getSelectLastIdentityValues(Table table) {
@@ -201,8 +192,8 @@ public class SybaseBuilder extends SqlBuilder {
     protected String getEnableIdentityOverrideSql(Table table) {
 
         return "SET IDENTITY_INSERT " +
-            getDelimitedIdentifier(getTableName(table)) +
-            " ON";
+               getDelimitedIdentifier(getTableName(table)) +
+               " ON";
     }
 
     /**
@@ -213,8 +204,8 @@ public class SybaseBuilder extends SqlBuilder {
     protected String getDisableIdentityOverrideSql(Table table) {
 
         return "SET IDENTITY_INSERT " +
-            getDelimitedIdentifier(getTableName(table)) +
-            " OFF";
+               getDelimitedIdentifier(getTableName(table)) +
+               " OFF";
     }
 
     /**
@@ -270,7 +261,6 @@ public class SybaseBuilder extends SqlBuilder {
         print("'");
     }
 
-
     protected void copyData(Table sourceTable, Table targetTable) throws IOException {
         // We need to turn on identity override except when the identity column was added to the column
         Column[] targetAutoIncrCols = targetTable.getAutoIncrementColumns();
@@ -291,7 +281,6 @@ public class SybaseBuilder extends SqlBuilder {
         }
     }
 
-
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         String sourceNativeType = getBareNativeType(sourceColumn);
         String targetNativeType = getBareNativeType(targetColumn);
@@ -306,7 +295,6 @@ public class SybaseBuilder extends SqlBuilder {
             print(")");
         }
     }
-
 
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         print("ALTER TABLE ");
@@ -393,7 +381,7 @@ public class SybaseBuilder extends SqlBuilder {
         Object newParsedDefault = newColumn.getParsedDefaultValue();
         String newDefault = newColumn.getDefaultValue();
         boolean defaultChanges = ((oldParsedDefault == null) && (newParsedDefault != null)) ||
-            ((oldParsedDefault != null) && !oldParsedDefault.equals(newParsedDefault));
+                                 ((oldParsedDefault != null) && !oldParsedDefault.equals(newParsedDefault));
 
         // Sybase does not like it if there is a default spec in the ALTER TABLE ALTER
         // statement; thus we have to change the default afterwards

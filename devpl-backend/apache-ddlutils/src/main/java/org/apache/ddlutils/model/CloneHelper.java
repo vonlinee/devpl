@@ -3,13 +3,17 @@ package org.apache.ddlutils.model;
 /**
  * Helper class that provides cloning of model elements.
  */
-public class CloneHelper {
+public final class CloneHelper {
+
+    private CloneHelper() {
+    }
+
     /**
      * Returns a deep clone of the given model object, including all tables, foreign keys, indexes etc.
      * @param source The source model
      * @return The clone
      */
-    public Database clone(Database source) {
+    public static Database clone(Database source) {
         Database result = new Database();
 
         result.setName(source.getName());
@@ -18,7 +22,6 @@ public class CloneHelper {
 
         for (int tableIdx = 0; tableIdx < source.getTableCount(); tableIdx++) {
             Table sourceTable = source.getTable(tableIdx);
-
             result.addTable(clone(sourceTable, true, false, result, true));
         }
         for (int tableIdx = 0; tableIdx < source.getTableCount(); tableIdx++) {
@@ -46,7 +49,7 @@ public class CloneHelper {
      * @param caseSensitive    Whether comparison is case-sensitive (for cloning foreign keys)
      * @return The clone
      */
-    public Table clone(Table source, boolean cloneIndexes, boolean cloneForeignKeys, Database targetModel, boolean caseSensitive) {
+    public static Table clone(Table source, boolean cloneIndexes, boolean cloneForeignKeys, Database targetModel, boolean caseSensitive) {
         Table result = new Table();
 
         result.setCatalog(source.getCatalog());
@@ -78,7 +81,7 @@ public class CloneHelper {
      *                              then the clone will not be a primary key column
      * @return The clone
      */
-    public Column clone(Column source, boolean clonePrimaryKeyStatus) {
+    public static Column clone(Column source, boolean clonePrimaryKeyStatus) {
         Column result = new Column();
 
         result.setName(source.getName());
@@ -101,7 +104,7 @@ public class CloneHelper {
      *                      in the target table)
      * @return The clone
      */
-    public Index clone(Index source, Table targetTable, boolean caseSensitive) {
+    public static Index clone(Index source, Table targetTable, boolean caseSensitive) {
         Index result = (source.isUnique() ? new UniqueIndex() : new NonUniqueIndex());
 
         result.setName(source.getName());
@@ -121,7 +124,7 @@ public class CloneHelper {
      *                      in the target table)
      * @return The clone
      */
-    public IndexColumn clone(IndexColumn source, Table targetTable, boolean caseSensitive) {
+    public static IndexColumn clone(IndexColumn source, Table targetTable, boolean caseSensitive) {
         IndexColumn result = new IndexColumn();
 
         result.setColumn(targetTable.findColumn(source.getName(), caseSensitive));
@@ -139,7 +142,7 @@ public class CloneHelper {
      *                      in the target model)
      * @return The clone
      */
-    public ForeignKey clone(ForeignKey source, Table owningTable, Database targetModel, boolean caseSensitive) {
+    public static ForeignKey clone(ForeignKey source, Table owningTable, Database targetModel, boolean caseSensitive) {
         ForeignKey result = new ForeignKey();
         Table foreignTable = targetModel.findTable(source.getForeignTableName(), caseSensitive);
 
@@ -167,7 +170,7 @@ public class CloneHelper {
      *                      in the tables)
      * @return The clone
      */
-    public Reference clone(Reference source, Table localTable, Table foreignTable, boolean caseSensitive) {
+    public static Reference clone(Reference source, Table localTable, Table foreignTable, boolean caseSensitive) {
         Reference result = new Reference();
 
         result.setLocalColumn(localTable.findColumn(source.getLocalColumnName(), caseSensitive));

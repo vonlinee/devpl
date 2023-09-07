@@ -18,7 +18,6 @@ public class RemoveTableChange extends TableChangeImplBase {
         super(tableName);
     }
 
-
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

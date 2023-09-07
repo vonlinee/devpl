@@ -5,7 +5,7 @@ import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -37,7 +37,7 @@ public class MSSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
@@ -256,7 +256,7 @@ public class MSSqlBuilder extends SqlBuilder {
 
         // Sql Server allows only one identity column, so let's take a shortcut here
         boolean needToAllowIdentityInsert = (targetIdentityColumns.length > 0) &&
-            (sourceTable.findColumn(targetIdentityColumns[0].getName(), getPlatform().isDelimitedIdentifierModeOn()) != null);
+                                            (sourceTable.findColumn(targetIdentityColumns[0].getName(), getPlatform().isDelimitedIdentifierModeOn()) != null);
 
         if (needToAllowIdentityInsert) {
             print("SET IDENTITY_INSERT ");

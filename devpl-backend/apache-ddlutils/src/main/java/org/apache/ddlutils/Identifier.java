@@ -99,8 +99,8 @@ public class Identifier implements Comparable<Identifier> {
      */
     public static boolean isQuoted(String name) {
         return (name.startsWith("`") && name.endsWith("`"))
-            || (name.startsWith("[") && name.endsWith("]"))
-            || (name.startsWith("\"") && name.endsWith("\""));
+               || (name.startsWith("[") && name.endsWith("]"))
+               || (name.startsWith("\"") && name.endsWith("\""));
     }
 
     public static boolean areEqual(Identifier id1, Identifier id2) {

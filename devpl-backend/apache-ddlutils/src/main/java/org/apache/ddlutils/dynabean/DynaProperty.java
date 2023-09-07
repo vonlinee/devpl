@@ -38,7 +38,6 @@ public class DynaProperty implements Serializable {
     private static final int LONG_TYPE = 7;
     private static final int SHORT_TYPE = 8;
 
-
     // ----------------------------------------------------------- Constructors
     /**
      * Property name
@@ -142,7 +141,6 @@ public class DynaProperty implements Serializable {
             return (true);
         } else return List.class.isAssignableFrom(type);
     }
-
 
     /**
      * Does this property represent a mapped value (ie a Map)?
@@ -279,7 +277,6 @@ public class DynaProperty implements Serializable {
         // read other values
         in.defaultReadObject();
     }
-
 
     /**
      * Reads a class using safe encoding to workaround java 1.3 serialization bug.

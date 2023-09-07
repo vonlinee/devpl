@@ -3,7 +3,7 @@ package de.marhail.json5.comment;
 /**
  * 注释文本
  */
-public class Comment {
+public class Json5Comment {
 
     private String commentContent;
 

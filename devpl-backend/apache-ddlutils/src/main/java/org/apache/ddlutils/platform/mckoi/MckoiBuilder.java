@@ -5,7 +5,7 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 
@@ -25,9 +25,8 @@ public class MckoiBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "\\'");
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         // we use sequences instead of the UNIQUEKEY function because this way
         // we can read their values back
         Column[] columns = table.getAutoIncrementColumns();
@@ -38,7 +37,6 @@ public class MckoiBuilder extends SqlBuilder {
 
         super.createTable(database, table, parameters);
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -83,7 +81,6 @@ public class MckoiBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeColumnDefaultValue(Table table, Column column) throws IOException {
         if (column.isAutoIncrement()) {
@@ -95,7 +92,6 @@ public class MckoiBuilder extends SqlBuilder {
             super.writeColumnDefaultValue(table, column);
         }
     }
-
 
     @Override
     public String getSelectLastIdentityValues(Table table) {
@@ -125,7 +121,7 @@ public class MckoiBuilder extends SqlBuilder {
      * @param table      The table to recreate
      * @param parameters The table creation parameters
      */
-    protected void writeRecreateTableStmt(Database model, Table table, ValueMap parameters) throws IOException {
+    protected void writeRecreateTableStmt(Database model, Table table, ObjectMap parameters) throws IOException {
         print("ALTER ");
         super.createTable(model, table, parameters);
     }

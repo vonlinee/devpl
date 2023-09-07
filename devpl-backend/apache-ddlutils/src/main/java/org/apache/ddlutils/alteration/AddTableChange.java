@@ -34,10 +34,9 @@ public class AddTableChange implements ModelChange {
         return _newTable;
     }
 
-
+    @Override
     public void apply(Database database, boolean caseSensitive) {
-        Table table = new CloneHelper().clone(_newTable, true, false, database, caseSensitive);
-
+        Table table = CloneHelper.clone(_newTable, true, false, database, caseSensitive);
         database.addTable(table);
     }
 }

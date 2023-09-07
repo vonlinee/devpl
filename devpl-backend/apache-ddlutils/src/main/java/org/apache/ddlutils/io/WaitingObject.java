@@ -87,7 +87,7 @@ public class WaitingObject {
     @Override
     public String toString() {
         return _objIdentity +
-            " waiting for " +
-            _waitedForIdentites;
+               " waiting for " +
+               _waitedForIdentites;
     }
 }

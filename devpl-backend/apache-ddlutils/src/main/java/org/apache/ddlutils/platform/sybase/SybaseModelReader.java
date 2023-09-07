@@ -24,7 +24,7 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -66,9 +66,8 @@ public class SybaseModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -78,9 +77,8 @@ public class SybaseModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if ((column.getJdbcTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
@@ -111,9 +109,8 @@ public class SybaseModelReader extends JdbcModelReader {
         return column;
     }
 
-
     @Override
-    protected void readIndex(DatabaseMetaDataWrapper metaData, ValueMap values, Map<String, Index> knownIndices) throws SQLException {
+    protected void readIndex(DatabaseMetaDataWrapper metaData, ObjectMap values, Map<String, Index> knownIndices) throws SQLException {
         if (getPlatform().isDelimitedIdentifierModeOn()) {
             String indexName = (String) values.get("INDEX_NAME");
 
@@ -131,21 +128,20 @@ public class SybaseModelReader extends JdbcModelReader {
         super.readIndex(metaData, values, knownIndices);
     }
 
-
     @Override
     protected Collection<ForeignKey> readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         // Sybase (or jConnect) does not return the foreign key names, thus we have to
         // read the foreign keys manually from the system tables
         final String colQuery =
             "SELECT refobjs.name, localtables.id, remotetables.name, remotetables.id," +
-                "       refs.fokey1, refs.refkey1, refs.fokey2, refs.refkey2, refs.fokey3, refs.refkey3, refs.fokey4, refs.refkey4," +
-                "       refs.fokey5, refs.refkey5, refs.fokey6, refs.refkey6, refs.fokey7, refs.refkey7, refs.fokey8, refs.refkey8," +
-                "       refs.fokey9, refs.refkey9, refs.fokey10, refs.refkey10, refs.fokey11, refs.refkey11, refs.fokey12, refs.refkey12," +
-                "       refs.fokey13, refs.refkey13, refs.fokey14, refs.refkey14, refs.fokey15, refs.refkey15, refs.fokey16, refs.refkey16," +
-                " FROM sysreferences refs, sysobjects refobjs, sysobjects localtables, sysobjects remotetables" +
-                " WHERE refobjs.type = 'RI' AND refs.constrid = refobjs.id AND" +
-                "       localtables.type = 'U' AND refs.tableid = localtables.id AND localtables.name = ?" +
-                "   AND remotetables.type = 'U' AND refs.reftabid = remotetables.id";
+            "       refs.fokey1, refs.refkey1, refs.fokey2, refs.refkey2, refs.fokey3, refs.refkey3, refs.fokey4, refs.refkey4," +
+            "       refs.fokey5, refs.refkey5, refs.fokey6, refs.refkey6, refs.fokey7, refs.refkey7, refs.fokey8, refs.refkey8," +
+            "       refs.fokey9, refs.refkey9, refs.fokey10, refs.refkey10, refs.fokey11, refs.refkey11, refs.fokey12, refs.refkey12," +
+            "       refs.fokey13, refs.refkey13, refs.fokey14, refs.refkey14, refs.fokey15, refs.refkey15, refs.fokey16, refs.refkey16," +
+            " FROM sysreferences refs, sysobjects refobjs, sysobjects localtables, sysobjects remotetables" +
+            " WHERE refobjs.type = 'RI' AND refs.constrid = refobjs.id AND" +
+            "       localtables.type = 'U' AND refs.tableid = localtables.id AND localtables.name = ?" +
+            "   AND remotetables.type = 'U' AND refs.reftabid = remotetables.id";
         final String refObjQuery =
             "SELECT name FROM syscolumns WHERE id = ? AND colid = ?";
 
@@ -206,12 +202,11 @@ public class SybaseModelReader extends JdbcModelReader {
         return result;
     }
 
-
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         // We can simply check the sysindexes table where a specific flag is set for pk indexes
         final String query = "SELECT name = sysindexes.name FROM sysindexes, sysobjects WHERE sysobjects.name = ? " +
-            "AND sysindexes.name = ? AND sysobjects.id = sysindexes.id AND (sysindexes.status & 2048) > 0";
+                             "AND sysindexes.name = ? AND sysobjects.id = sysindexes.id AND (sysindexes.status & 2048) > 0";
 
         PreparedStatement stmt = null;
 

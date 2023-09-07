@@ -10,7 +10,7 @@ import java.util.Properties;
  * @author Juergen Hoeller
  * @since 2.5.5
  */
-public abstract class AbstractDriverBasedDataSource implements PooledDataSource {
+public abstract class AbstractDriverBasedDataSource {
 
     private String url;
 
@@ -25,6 +25,13 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     private Properties connectionProperties;
 
     /**
+     * Return the JDBC URL to use for connecting through the Driver.
+     */
+    public String getUrl() {
+        return this.url;
+    }
+
+    /**
      * Set the JDBC URL to use for connecting through the Driver.
      * @see java.sql.Driver#connect(String, java.util.Properties)
      */
@@ -33,11 +40,10 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the JDBC URL to use for connecting through the Driver.
+     * Return the JDBC username to use for connecting through the Driver.
      */
-    @Override
-    public String getUrl() {
-        return this.url;
+    public String getUsername() {
+        return this.username;
     }
 
     /**
@@ -49,11 +55,10 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the JDBC username to use for connecting through the Driver.
+     * Return the JDBC password to use for connecting through the Driver.
      */
-    @Override
-    public String getUsername() {
-        return this.username;
+    public String getPassword() {
+        return this.password;
     }
 
     /**
@@ -65,11 +70,11 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the JDBC password to use for connecting through the Driver.
+     * Return the database catalog to be applied to each Connection, if any.
+     * @since 4.3.2
      */
-    @Override
-    public String getPassword() {
-        return this.password;
+    public String getCatalog() {
+        return this.catalog;
     }
 
     /**
@@ -82,11 +87,11 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the database catalog to be applied to each Connection, if any.
+     * Return the database schema to be applied to each Connection, if any.
      * @since 4.3.2
      */
-    public String getCatalog() {
-        return this.catalog;
+    public String getSchema() {
+        return this.schema;
     }
 
     /**
@@ -99,11 +104,10 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the database schema to be applied to each Connection, if any.
-     * @since 4.3.2
+     * Return the connection properties to be passed to the Driver, if any.
      */
-    public String getSchema() {
-        return this.schema;
+    public Properties getConnectionProperties() {
+        return this.connectionProperties;
     }
 
     /**
@@ -119,20 +123,12 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
     }
 
     /**
-     * Return the connection properties to be passed to the Driver, if any.
-     */
-    public Properties getConnectionProperties() {
-        return this.connectionProperties;
-    }
-
-    /**
      * This implementation delegates to {@code getConnectionFromDriver},
      * using the default username and password of this DataSource.
      * @see #getConnectionFromDriver(String, String)
      * @see #setUsername
      * @see #setPassword
      */
-    @Override
     public Connection getConnection() throws SQLException {
         return getConnectionFromDriver(getUsername(), getPassword());
     }
@@ -142,11 +138,9 @@ public abstract class AbstractDriverBasedDataSource implements PooledDataSource 
      * using the given username and password.
      * @see #getConnectionFromDriver(String, String)
      */
-    @Override
     public Connection getConnection(String username, String password) throws SQLException {
         return getConnectionFromDriver(username, password);
     }
-
 
     /**
      * Build properties for the Driver, including the given username and password (if any),

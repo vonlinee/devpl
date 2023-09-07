@@ -31,7 +31,6 @@ public abstract class IndexChangeImplBase extends TableChangeImplBase
         }
     }
 
-
     public Index findChangedIndex(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
 

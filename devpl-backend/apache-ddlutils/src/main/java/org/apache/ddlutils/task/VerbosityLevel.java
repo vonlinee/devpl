@@ -1,26 +1,5 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-import org.apache.log4j.Level;
-
 /**
  * Helper class that defines the possible values for the verbosity attribute.
  * @version $Revision: $
@@ -30,16 +9,16 @@ public class VerbosityLevel {
     /**
      * The possible levels.
      */
-    private static final String[] LEVELS = {Level.FATAL.toString().toUpperCase(),
-        Level.ERROR.toString().toUpperCase(),
-        Level.WARN.toString().toUpperCase(),
-        Level.INFO.toString().toUpperCase(),
-        Level.DEBUG.toString().toUpperCase(),
-        Level.FATAL.toString().toLowerCase(),
-        Level.ERROR.toString().toLowerCase(),
-        Level.WARN.toString().toLowerCase(),
-        Level.INFO.toString().toLowerCase(),
-        Level.DEBUG.toString().toLowerCase()};
+    private static final String[] LEVELS = {"Fatal".toUpperCase(),
+        "ERROR".toUpperCase(),
+        "WARN".toUpperCase(),
+        "INFO".toUpperCase(),
+        "DEBUG".toUpperCase(),
+        "FATAL".toLowerCase(),
+        "ERROR".toLowerCase(),
+        "WARN".toLowerCase(),
+        "INFO".toLowerCase(),
+        "DEBUG".toLowerCase()};
     private String value;
 
     /**
@@ -58,7 +37,6 @@ public class VerbosityLevel {
         setValue(level);
     }
 
-
     public String[] getValues() {
         String[] result = new String[LEVELS.length];
 
@@ -71,7 +49,7 @@ public class VerbosityLevel {
      * @return <code>true</code> if this is the DEBUG level
      */
     public boolean isDebug() {
-        return Level.DEBUG.toString().equalsIgnoreCase(getValue());
+        return "DEBUG".equalsIgnoreCase(getValue());
     }
 
     public String getValue() {

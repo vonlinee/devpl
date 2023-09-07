@@ -1,8 +1,9 @@
 package org.apache.ddlutils.platform.mysql;
 
 import org.apache.ddlutils.DatabasePlatform;
+import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 
@@ -26,7 +27,12 @@ public class MySql50Builder extends MySqlBuilder {
     }
 
     @Override
-    protected void beforeTableCreationStmtEnding(Table table, ValueMap parameters) {
+    protected String getSqlType(Column column, String nativeType) {
+        return super.getSqlType(column, nativeType);
+    }
+
+    @Override
+    protected void beforeTableCreationStmtEnding(Table table, ObjectMap parameters) {
 
     }
 }

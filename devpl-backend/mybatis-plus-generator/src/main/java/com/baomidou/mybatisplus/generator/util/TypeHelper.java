@@ -1,4 +1,4 @@
-package io.devpl.codegen.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import java.util.*;
  * this class is copied from Apache Calcite and was change into something more detailed.
  * type utilities.
  */
-public class TypeUtils {
+public class TypeHelper {
 
     private static final Map<Class<?>, Class<?>> BOX;
 
@@ -43,7 +43,7 @@ public class TypeUtils {
         BOX.put(double.class, Double.class);
     }
 
-    private TypeUtils() {
+    private TypeHelper() {
     }
 
     private static MethodHandle method(Class<?> returnType, Class<?> targetType, String name, Class<?>... argTypes) {

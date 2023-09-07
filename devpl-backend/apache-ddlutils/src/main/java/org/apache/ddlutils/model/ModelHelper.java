@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Contains some utility functions for working with the model classes.
- * @version $Revision: $
  */
 public class ModelHelper {
     /**

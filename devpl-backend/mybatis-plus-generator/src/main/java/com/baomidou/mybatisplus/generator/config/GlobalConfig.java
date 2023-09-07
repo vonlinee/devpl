@@ -104,7 +104,7 @@ public class GlobalConfig {
 
     public boolean isSwagger() {
         // springdoc 设置优先于 swagger
-        return springdoc ? false : swagger;
+        return !springdoc && swagger;
     }
 
     public boolean isSpringdoc() {

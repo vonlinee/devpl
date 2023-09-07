@@ -1,4 +1,4 @@
-package com.baomidou.mybatisplus.generator.utils;
+package com.baomidou.mybatisplus.generator.util;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import org.jetbrains.annotations.NotNull;

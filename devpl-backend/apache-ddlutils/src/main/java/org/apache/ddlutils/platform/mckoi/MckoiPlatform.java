@@ -9,7 +9,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.GenericDatabasePlatform;
 import org.apache.ddlutils.platform.SqlBuildContext;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -66,12 +66,10 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         setModelReader(new MckoiModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
     }
-
 
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map<String, String> parameters) throws DatabaseOperationException, UnsupportedOperationException {
@@ -121,7 +119,6 @@ public class MckoiPlatform extends GenericDatabasePlatform {
         }
     }
 
-
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -134,7 +131,6 @@ public class MckoiPlatform extends GenericDatabasePlatform {
             }
         };
     }
-
 
     @Override
     public void processChange(Database currentModel, SqlBuildContext params, RecreateTableChange change) throws IOException {
@@ -159,7 +155,7 @@ public class MckoiPlatform extends GenericDatabasePlatform {
             }
         }
 
-        ValueMap parameters = (params == null ? null : params.getParametersFor(changedTable));
+        ObjectMap parameters = (params == null ? null : params.getParametersFor(changedTable));
 
         sqlBuilder.writeRecreateTableStmt(currentModel, change.getTargetTable(), parameters);
 

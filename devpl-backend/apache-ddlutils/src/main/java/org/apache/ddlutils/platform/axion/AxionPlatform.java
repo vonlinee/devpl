@@ -50,12 +50,10 @@ public class AxionPlatform extends GenericDatabasePlatform {
         setModelReader(new AxionModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
     }
-
 
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, Map parameters) throws DatabaseOperationException, UnsupportedOperationException {
@@ -77,7 +75,6 @@ public class AxionPlatform extends GenericDatabasePlatform {
             throw new UnsupportedOperationException("Unable to create a Axion database via the driver " + jdbcDriverClassName);
         }
     }
-
 
     @Override
     protected Object extractColumnValue(ResultSet resultSet, String columnName, int columnIdx, int jdbcType) throws SQLException {

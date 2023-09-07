@@ -22,6 +22,8 @@ module devpl.codegen {
     requires spring.core;
     requires tencentcloud.sdk.java;
     requires com.google.common;
+    requires mybatis.plus.generator;
+    requires jsonfive.java;
 
     exports io.devpl.codegen;
 

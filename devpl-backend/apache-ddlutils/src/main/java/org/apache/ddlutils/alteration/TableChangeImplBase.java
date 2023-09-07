@@ -21,12 +21,10 @@ public abstract class TableChangeImplBase implements TableChange {
         this.tableName = tableName;
     }
 
-
     @Override
     public String getChangedTable() {
         return tableName;
     }
-
 
     @Override
     public Table findChangedTable(Database model, boolean caseSensitive) {

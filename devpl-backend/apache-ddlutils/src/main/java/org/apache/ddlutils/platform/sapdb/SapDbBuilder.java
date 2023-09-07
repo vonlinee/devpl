@@ -41,7 +41,6 @@ public class SapDbBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-
     @Override
     public void dropTable(Table table) throws IOException {
         print("DROP TABLE ");
@@ -50,12 +49,10 @@ public class SapDbBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("DEFAULT SERIAL(1)");
     }
-
 
     @Override
     public void createPrimaryKey(Table table, Column[] primaryKeyColumns) throws IOException {
@@ -70,14 +67,12 @@ public class SapDbBuilder extends SqlBuilder {
         }
     }
 
-
     @Override
     protected void writeForeignKeyOnDeleteAction(Table table, ForeignKey foreignKey) throws IOException {
         if (foreignKey.getOnDelete() != CascadeActionEnum.NONE) {
             super.writeForeignKeyOnDeleteAction(table, foreignKey);
         }
     }
-
 
     @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
@@ -87,14 +82,12 @@ public class SapDbBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     public String getSelectLastIdentityValues(Table table) {
         return "SELECT " +
-            getDelimitedIdentifier(getTableName(table)) +
-            ".CURRVAL FROM DUAL";
+               getDelimitedIdentifier(getTableName(table)) +
+               ".CURRVAL FROM DUAL";
     }
-
 
     @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
@@ -181,13 +174,12 @@ public class SapDbBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean charSizeChanged = TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
-            TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
-            ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
-            !StringUtils.isEmpty(targetColumn.getSize());
+                                  TypeMap.isTextType(targetColumn.getJdbcTypeCode()) &&
+                                  ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn) &&
+                                  !StringUtils.isEmpty(targetColumn.getSize());
 
         if (charSizeChanged) {
             print("SUBSTR(");

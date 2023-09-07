@@ -52,7 +52,6 @@ public class AddForeignKeyChange extends TableChangeImplBase {
         return _newForeignKey;
     }
 
-
     public void apply(Database database, boolean caseSensitive) {
         findChangedTable(database, caseSensitive).addForeignKey(_newForeignKey);
     }

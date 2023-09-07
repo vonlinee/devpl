@@ -1,6 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-
 import org.apache.ddlutils.io.converters.ConversionException;
 
 /**

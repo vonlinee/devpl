@@ -15,7 +15,7 @@ public class MySQLGenerator {
                     .commentDatePattern("yyyy-MM-dd hh:mm:ss")   // 注释日期
                     .outputDir("D:/Temp"); // 指定输出目录
             }).strategyConfig(builder -> {
-                builder.addInclude("dbs");
+                builder.addInclude("test");
                 builder.entityBuilder().enableFileOverride();
                 builder.serviceBuilder().enableFileOverride();
                 builder.mapperBuilder().enableFileOverride();

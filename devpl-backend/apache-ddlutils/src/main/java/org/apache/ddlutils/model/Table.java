@@ -669,8 +669,8 @@ public class Table implements SchemaObject, Serializable {
             // Note that this compares case-sensitive
             // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
             return Objects.equals(name, other.name) && Objects.equals(_columns, other._columns)
-                && Objects.equals(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
-                && Objects.equals(new HashSet<>(_indices), new HashSet<>(other._indices));
+                   && Objects.equals(new HashSet<>(_foreignKeys), new HashSet<>(other._foreignKeys))
+                   && Objects.equals(new HashSet<>(_indices), new HashSet<>(other._indices));
         }
         return false;
     }

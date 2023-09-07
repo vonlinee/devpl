@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.sql.Types;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Contains information about the database platform such as supported features and native type mappings.
@@ -27,45 +24,45 @@ public class PlatformInfo {
      * key: JDBC type code
      * value: native type name
      */
-    private final HashMap<Integer, String> nativeTypes = new HashMap<>();
+    private final Map<Integer, String> nativeTypes = new HashMap<>();
     /**
      * Contains the jdbc types corresponding to the native types for non-default mappings.
      */
-    private final HashMap<Integer, Integer> targetJdbcTypes = new HashMap<>();
+    private final Map<Integer, Integer> targetJdbcTypes = new HashMap<>();
 
     // properties influencing the specification of table constraints
     /**
      * Contains those JDBC types whose corresponding native types have a null value as the default value.
      */
-    private final HashSet<Integer> _typesWithNullDefault = new HashSet<>();
+    private final Set<Integer> _typesWithNullDefault = new HashSet<>();
     /**
      * Contains those JDBC types whose corresponding native types are types that have a size on this platform.
      */
-    private final HashSet<Integer> _typesWithSize = new HashSet<>();
+    private final Set<Integer> _typesWithSize = new HashSet<>();
     /**
      * Contains the default sizes for those JDBC types whose corresponding native types require a size.
      */
-    private final HashMap<Integer, Integer> _typesDefaultSizes = new HashMap<>();
+    private final Map<Integer, Integer> _typesDefaultSizes = new HashMap<>();
     /**
      * Contains those JDBC types whose corresponding native types are types that have precision and scale on this platform.
      */
-    private final HashSet<Integer> _typesWithPrecisionAndScale = new HashSet<>();
+    private final Set<Integer> _typesWithPrecisionAndScale = new HashSet<>();
     /**
      * Contains the supported ON UPDATE actions.
      */
-    private final HashSet<CascadeActionEnum> _supportedOnUpdateActions = new HashSet<>();
+    private final Set<CascadeActionEnum> _supportedOnUpdateActions = new HashSet<>();
     /**
      * Contains the supported ON DELETE actions.
      */
-    private final HashSet<CascadeActionEnum> _supportedOnDeleteActions = new HashSet<>();
+    private final Set<CascadeActionEnum> _supportedOnDeleteActions = new HashSet<>();
     /**
      * Contains for each ON UPDATE action the list of equivalent actions.
      */
-    private final HashMap<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnUpdateActions = new HashMap<>();
+    private final Map<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnUpdateActions = new HashMap<>();
     /**
      * Contains for each ON DELETE action the list of equivalent actions.
      */
-    private final HashMap<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnDeleteActions = new HashMap<>();
+    private final Map<CascadeActionEnum, Set<CascadeActionEnum>> _equivalentOnDeleteActions = new HashMap<>();
     /**
      * Whether the database requires the explicit stating of NULL as the default value.
      */

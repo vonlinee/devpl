@@ -1,6 +1,6 @@
-package samples;
+package io.devpl.codegen.sample;
 
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import io.devpl.codegen.ddl.service.DdlBuilder;
 import io.devpl.codegen.meta.ASTFieldParser;
 import io.devpl.codegen.meta.Bean;

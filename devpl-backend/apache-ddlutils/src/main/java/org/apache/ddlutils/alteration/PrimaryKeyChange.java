@@ -6,7 +6,6 @@ import org.apache.ddlutils.model.Table;
 
 /**
  * Represents the change of the primary key of a table.
- * @version $Revision: $
  */
 public class PrimaryKeyChange extends TableChangeImplBase {
     /**
@@ -25,7 +24,6 @@ public class PrimaryKeyChange extends TableChangeImplBase {
             _newPrimaryKeyColumns = new String[0];
         } else {
             _newPrimaryKeyColumns = new String[newPrimaryKeyColumns.length];
-
             System.arraycopy(newPrimaryKeyColumns, 0, _newPrimaryKeyColumns, 0, newPrimaryKeyColumns.length);
         }
     }
@@ -41,7 +39,7 @@ public class PrimaryKeyChange extends TableChangeImplBase {
         return result;
     }
 
-
+    @Override
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
         Column[] pkCols = table.getPrimaryKeyColumns();

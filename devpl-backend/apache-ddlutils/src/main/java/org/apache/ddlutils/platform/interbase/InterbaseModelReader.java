@@ -23,7 +23,7 @@ import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.sql.*;
 import java.util.*;
@@ -45,9 +45,8 @@ public class InterbaseModelReader extends JdbcModelReader {
         setDefaultColumnPattern("%");
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -58,7 +57,6 @@ public class InterbaseModelReader extends JdbcModelReader {
 
         return table;
     }
-
 
     @Override
     protected Collection<Column> readColumns(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
@@ -73,7 +71,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(getDefaultTablePattern(), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ValueMap values = readColumns(columnData, getColumnsForColumn());
+                    ObjectMap values = readColumns(columnData, getColumnsForColumn());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         columns.add(readColumn(metaData, values));
@@ -83,7 +81,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(metaData.escapeForSearch(tableName), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ValueMap values = readColumns(columnData, getColumnsForColumn());
+                    ObjectMap values = readColumns(columnData, getColumnsForColumn());
 
                     columns.add(readColumn(metaData, values));
                 }
@@ -226,7 +224,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 pkData = metaData.getPrimaryKeys(getDefaultTablePattern());
                 while (pkData.next()) {
-                    ValueMap values = readColumns(pkData, getColumnsForPK());
+                    ObjectMap values = readColumns(pkData, getColumnsForPK());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         pks.add(readPrimaryKeyName(metaData, values));
@@ -235,7 +233,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
                 while (pkData.next()) {
-                    ValueMap values = readColumns(pkData, getColumnsForPK());
+                    ObjectMap values = readColumns(pkData, getColumnsForPK());
 
                     pks.add(readPrimaryKeyName(metaData, values));
                 }
@@ -245,7 +243,6 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
         return pks;
     }
-
 
     @Override
     protected Collection<ForeignKey> readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
@@ -258,7 +255,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 fkData = metaData.getForeignKeys(getDefaultTablePattern());
                 while (fkData.next()) {
-                    ValueMap values = readColumns(fkData, getColumnsForFK());
+                    ObjectMap values = readColumns(fkData, getColumnsForFK());
 
                     if (tableName.equals(values.get("FKTABLE_NAME"))) {
                         readForeignKey(metaData, values, fks);
@@ -267,7 +264,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
                 while (fkData.next()) {
-                    ValueMap values = readColumns(fkData, getColumnsForFK());
+                    ObjectMap values = readColumns(fkData, getColumnsForFK());
 
                     readForeignKey(metaData, values, fks);
                 }
@@ -277,7 +274,6 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
         return fks.values();
     }
-
 
     @Override
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
@@ -325,7 +321,6 @@ public class InterbaseModelReader extends JdbcModelReader {
         }
     }
 
-
     @Override
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;
@@ -351,7 +346,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                ValueMap values = readColumns(tableData, getColumnsForTable());
+                ObjectMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = values.getString("TABLE_NAME", "");
 
                 if ((tableName != null) && (!tableName.isEmpty())) {

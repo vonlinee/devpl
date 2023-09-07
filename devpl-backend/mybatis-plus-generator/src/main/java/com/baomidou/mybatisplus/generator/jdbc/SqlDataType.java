@@ -1,8 +1,8 @@
 package com.baomidou.mybatisplus.generator.jdbc;
 
 import com.baomidou.mybatisplus.generator.type.DataType;
-import io.devpl.codegen.utils.ByteArray;
-import io.devpl.codegen.utils.TypeUtils;
+import com.baomidou.mybatisplus.generator.util.ByteArray;
+import com.baomidou.mybatisplus.generator.util.TypeHelper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -471,7 +471,7 @@ public enum SqlDataType implements DataType {
      * Returns the boxed type.
      */
     public Class<?> boxedClass() {
-        return TypeUtils.box(clazz);
+        return TypeHelper.box(clazz);
     }
 
     @Override

@@ -108,4 +108,18 @@ public class ColumnPrivileges {
     public void setIsGrantable(String isGrantable) {
         this.isGrantable = isGrantable;
     }
+
+    @Override
+    public String toString() {
+        return "ColumnPrivileges{" +
+               "tableCat='" + tableCat + '\'' +
+               ", tableSchem='" + tableSchem + '\'' +
+               ", tableName='" + tableName + '\'' +
+               ", columnName='" + columnName + '\'' +
+               ", grantor='" + grantor + '\'' +
+               ", grantee='" + grantee + '\'' +
+               ", privilege='" + privilege + '\'' +
+               ", isGrantable='" + isGrantable + '\'' +
+               '}';
+    }
 }

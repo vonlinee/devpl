@@ -4,7 +4,6 @@ import java.io.File;
 
 public class Project {
 
-
     public static final Object MSG_ERR = null;
     public static final Object MSG_INFO = null;
     public static final Object MSG_WARN = null;

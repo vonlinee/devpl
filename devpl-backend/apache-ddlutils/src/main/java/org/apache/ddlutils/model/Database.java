@@ -3,6 +3,7 @@ package org.apache.ddlutils.model;
 import org.apache.ddlutils.dynabean.DynaBean;
 import org.apache.ddlutils.dynabean.DynaClassCache;
 import org.apache.ddlutils.dynabean.SqlDynaClass;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.sql.Types;
@@ -24,23 +25,22 @@ public class Database implements SchemaObject, Serializable {
      * The tables.
      */
     private final List<Table> tables = new ArrayList<>();
-
     /**
      * The name of the database model.
      */
-    private String _name;
+    private String name;
     /**
      * The method for generating primary keys (currently ignored).
      */
-    private String _idMethod;
+    private String idMethod;
     /**
      * The version of the model.
      */
-    private String _version;
+    private String version;
     /**
      * The dyna class cache for this model.
      */
-    private transient DynaClassCache _dynaClassCache = null;
+    private transient DynaClassCache dynaClassCache = null;
 
     /**
      * Creates an empty model without a name.
@@ -53,7 +53,7 @@ public class Database implements SchemaObject, Serializable {
      * @param name The name
      */
     public Database(String name) {
-        _name = name;
+        this.name = name;
     }
 
     /**
@@ -62,8 +62,6 @@ public class Database implements SchemaObject, Serializable {
      * @param otherDb The other database model
      */
     public void mergeWith(Database otherDb) throws ModelException {
-        CloneHelper cloneHelper = new CloneHelper();
-
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
             Table table = otherDb.getTable(tableIdx);
 
@@ -71,7 +69,7 @@ public class Database implements SchemaObject, Serializable {
                 // TODO: It might make more sense to log a warning and overwrite the table (or merge them) ?
                 throw new ModelException("Cannot merge the models because table " + table.getName() + " already defined in this model");
             } else {
-                addTable(cloneHelper.clone(table, true, false, this, true));
+                addTable(CloneHelper.clone(table, true, false, this, true));
             }
         }
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
@@ -80,8 +78,7 @@ public class Database implements SchemaObject, Serializable {
 
             for (int fkIdx = 0; fkIdx < otherTable.getForeignKeyCount(); fkIdx++) {
                 ForeignKey fk = otherTable.getForeignKey(fkIdx);
-
-                localTable.addForeignKey(cloneHelper.clone(fk, localTable, this, false));
+                localTable.addForeignKey(CloneHelper.clone(fk, localTable, this, false));
             }
         }
     }
@@ -92,7 +89,7 @@ public class Database implements SchemaObject, Serializable {
      */
     @Override
     public String getName() {
-        return _name;
+        return name;
     }
 
     /**
@@ -100,7 +97,7 @@ public class Database implements SchemaObject, Serializable {
      * @param name The name
      */
     public void setName(String name) {
-        _name = name;
+        this.name = name;
     }
 
     /**
@@ -108,7 +105,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The version
      */
     public String getVersion() {
-        return _version;
+        return version;
     }
 
     /**
@@ -116,7 +113,7 @@ public class Database implements SchemaObject, Serializable {
      * @param version The version
      */
     public void setVersion(String version) {
-        _version = version;
+        this.version = version;
     }
 
     /**
@@ -124,7 +121,7 @@ public class Database implements SchemaObject, Serializable {
      * @return The method
      */
     public String getIdMethod() {
-        return _idMethod;
+        return idMethod;
     }
 
     /**
@@ -133,7 +130,7 @@ public class Database implements SchemaObject, Serializable {
      * @param idMethod The method
      */
     public void setIdMethod(String idMethod) {
-        _idMethod = idMethod;
+        this.idMethod = idMethod;
     }
 
     /**
@@ -158,6 +155,9 @@ public class Database implements SchemaObject, Serializable {
      * @return The table
      */
     public Table getTable(int idx) {
+        if (idx < 0 || idx > tables.size() - 1) {
+            return null;
+        }
         return tables.get(idx);
     }
 
@@ -177,7 +177,7 @@ public class Database implements SchemaObject, Serializable {
      * @param table The table to add
      */
     public void addTable(int idx, Table table) {
-        if (table != null) {
+        if (table != null || idx < 0 || idx > tables.size() - 1) {
             tables.add(idx, table);
         }
     }
@@ -450,10 +450,10 @@ public class Database implements SchemaObject, Serializable {
      * @return The dyna class cache
      */
     private DynaClassCache getDynaClassCache() {
-        if (_dynaClassCache == null) {
-            _dynaClassCache = new DynaClassCache();
+        if (dynaClassCache == null) {
+            dynaClassCache = new DynaClassCache();
         }
-        return _dynaClassCache;
+        return dynaClassCache;
     }
 
     /**
@@ -461,7 +461,7 @@ public class Database implements SchemaObject, Serializable {
      * has been added or removed to a table.
      */
     public void resetDynaClassCache() {
-        _dynaClassCache = null;
+        dynaClassCache = null;
     }
 
     /**
@@ -494,22 +494,19 @@ public class Database implements SchemaObject, Serializable {
         return getDynaClassCache().createNewInstance(table);
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Database other) {
             // Note that this compares case-sensitive
-            return Objects.equals(_name, other._name) && Objects.equals(tables, other.tables);
+            return Objects.equals(name, other.name) && Objects.equals(tables, other.tables);
         }
         return false;
     }
-
 
     @Override
     public int hashCode() {
         return Objects.hash(this.tables);
     }
-
 
     @Override
     public String toString() {

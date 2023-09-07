@@ -3,8 +3,9 @@ package org.apache.ddlutils.platform;
 import org.apache.ddlutils.DatabasePlatform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.JdbcUtils;
+import org.apache.ddlutils.util.ObjectMap;
 import org.apache.ddlutils.util.StringUtils;
-import org.apache.ddlutils.util.ValueMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,82 +25,82 @@ public class JdbcModelReader {
     /**
      * The descriptors for the relevant columns in the table metadata.
      */
-    private final List<MetaDataColumnDescriptor> _columnsForTable;
+    private final List<MetaDataColumnDescriptor> columnsForTable;
     /**
      * The descriptors for the relevant columns in the table column metadata.
      */
-    private final List<MetaDataColumnDescriptor> _columnsForColumn;
+    private final List<MetaDataColumnDescriptor> columnsForColumn;
     /**
      * The descriptors for the relevant columns in the primary key metadata.
      */
-    private final List<MetaDataColumnDescriptor> _columnsForPK;
+    private final List<MetaDataColumnDescriptor> columnsForPK;
     /**
      * The descriptors for the relevant columns in the foreign key metadata.
      */
-    private final List<MetaDataColumnDescriptor> _columnsForFK;
+    private final List<MetaDataColumnDescriptor> columnsForFK;
     /**
      * The descriptors for the relevant columns in the index metadata.
      */
-    private final List<MetaDataColumnDescriptor> _columnsForIndex;
+    private final List<MetaDataColumnDescriptor> columnsForIndex;
     /**
      * The platform that this model reader belongs to.
      */
-    private final DatabasePlatform _platform;
+    private final DatabasePlatform platform;
     /**
      * Contains default column sizes (minimum sizes that a JDBC-compliant db must support).
      */
-    private final HashMap<Integer, String> _defaultSizes = new HashMap<>();
+    private final HashMap<Integer, String> defaultSizes = new HashMap<>();
     /**
      * The default database catalog to read.
      */
-    private String _defaultCatalogPattern = "%";
+    private String defaultCatalogPattern = "%";
     /**
-     * The default database schema(s) to read.
+     * The default database schema(s) to read. % indicates all schemas
      */
-    private String _defaultSchemaPattern = "%";
+    private String defaultSchemaPattern = "%";
     /**
      * The default pattern for reading all tables.
      */
-    private String _defaultTablePattern = "%";
+    private String defaultTablePattern = "%";
     /**
      * The default pattern for reading all columns.
      */
-    private String _defaultColumnPattern;
+    private String defaultColumnPattern;
     /**
      * The table types to recognize per default.
      */
-    private String[] _defaultTableTypes = {"TABLE"};
+    private String[] defaultTableTypes = {"TABLE"};
     /**
      * The active connection while reading a database model.
      */
-    private Connection _connection;
+    private Connection connection;
 
     /**
      * Creates a new model reader instance.
      * @param platform The platform this builder belongs to
      */
     public JdbcModelReader(DatabasePlatform platform) {
-        _platform = platform;
+        this.platform = platform;
 
-        _defaultSizes.put(Types.CHAR, "254");
-        _defaultSizes.put(Types.VARCHAR, "254");
-        _defaultSizes.put(Types.LONGVARCHAR, "254");
-        _defaultSizes.put(Types.BINARY, "254");
-        _defaultSizes.put(Types.VARBINARY, "254");
-        _defaultSizes.put(Types.LONGVARBINARY, "254");
-        _defaultSizes.put(Types.INTEGER, "32");
-        _defaultSizes.put(Types.BIGINT, "64");
-        _defaultSizes.put(Types.REAL, "7,0");
-        _defaultSizes.put(Types.FLOAT, "15,0");
-        _defaultSizes.put(Types.DOUBLE, "15,0");
-        _defaultSizes.put(Types.DECIMAL, "15,15");
-        _defaultSizes.put(Types.NUMERIC, "15,15");
+        defaultSizes.put(Types.CHAR, "254");
+        defaultSizes.put(Types.VARCHAR, "254");
+        defaultSizes.put(Types.LONGVARCHAR, "254");
+        defaultSizes.put(Types.BINARY, "254");
+        defaultSizes.put(Types.VARBINARY, "254");
+        defaultSizes.put(Types.LONGVARBINARY, "254");
+        defaultSizes.put(Types.INTEGER, "32");
+        defaultSizes.put(Types.BIGINT, "64");
+        defaultSizes.put(Types.REAL, "7,0");
+        defaultSizes.put(Types.FLOAT, "15,0");
+        defaultSizes.put(Types.DOUBLE, "15,0");
+        defaultSizes.put(Types.DECIMAL, "15,15");
+        defaultSizes.put(Types.NUMERIC, "15,15");
 
-        _columnsForTable = initColumnsForTable();
-        _columnsForColumn = initColumnsForColumn();
-        _columnsForPK = initColumnsForPK();
-        _columnsForFK = initColumnsForFK();
-        _columnsForIndex = initColumnsForIndex();
+        columnsForTable = initColumnsForTable();
+        columnsForColumn = initColumnsForColumn();
+        columnsForPK = initColumnsForPK();
+        columnsForFK = initColumnsForFK();
+        columnsForIndex = initColumnsForIndex();
     }
 
     /**
@@ -107,7 +108,7 @@ public class JdbcModelReader {
      * @return The platform
      */
     public DatabasePlatform getPlatform() {
-        return _platform;
+        return platform;
     }
 
     /**
@@ -115,7 +116,7 @@ public class JdbcModelReader {
      * @return The platform settings
      */
     public PlatformInfo getPlatformInfo() {
-        return _platform.getPlatformInfo();
+        return platform.getPlatformInfo();
     }
 
     /**
@@ -230,7 +231,7 @@ public class JdbcModelReader {
      * @return The default catalog(s)
      */
     public String getDefaultCatalogPattern() {
-        return _defaultCatalogPattern;
+        return defaultCatalogPattern;
     }
 
     /**
@@ -238,7 +239,7 @@ public class JdbcModelReader {
      * @param catalogPattern The catalog(s)
      */
     public void setDefaultCatalogPattern(String catalogPattern) {
-        _defaultCatalogPattern = catalogPattern;
+        defaultCatalogPattern = catalogPattern;
     }
 
     /**
@@ -246,7 +247,7 @@ public class JdbcModelReader {
      * @return The default schema(s)
      */
     public String getDefaultSchemaPattern() {
-        return _defaultSchemaPattern;
+        return defaultSchemaPattern;
     }
 
     /**
@@ -254,7 +255,7 @@ public class JdbcModelReader {
      * @param schemaPattern The schema(s)
      */
     public void setDefaultSchemaPattern(String schemaPattern) {
-        _defaultSchemaPattern = schemaPattern;
+        defaultSchemaPattern = schemaPattern;
     }
 
     /**
@@ -262,7 +263,7 @@ public class JdbcModelReader {
      * @return The table pattern
      */
     public String getDefaultTablePattern() {
-        return _defaultTablePattern;
+        return defaultTablePattern;
     }
 
     /**
@@ -270,7 +271,7 @@ public class JdbcModelReader {
      * @param tablePattern The table pattern
      */
     public void setDefaultTablePattern(String tablePattern) {
-        _defaultTablePattern = tablePattern;
+        defaultTablePattern = tablePattern;
     }
 
     /**
@@ -278,7 +279,7 @@ public class JdbcModelReader {
      * @return The column pattern
      */
     public String getDefaultColumnPattern() {
-        return _defaultColumnPattern;
+        return defaultColumnPattern;
     }
 
     /**
@@ -286,7 +287,7 @@ public class JdbcModelReader {
      * @param columnPattern The column pattern
      */
     public void setDefaultColumnPattern(String columnPattern) {
-        _defaultColumnPattern = columnPattern;
+        defaultColumnPattern = columnPattern;
     }
 
     /**
@@ -294,12 +295,11 @@ public class JdbcModelReader {
      * @return The default table types
      */
     public String[] getDefaultTableTypes() {
-        if (_defaultTableTypes == null) {
+        if (defaultTableTypes == null) {
             return null;
         } else {
-            String[] result = new String[_defaultTableTypes.length];
-
-            System.arraycopy(_defaultTableTypes, 0, result, 0, _defaultTableTypes.length);
+            String[] result = new String[defaultTableTypes.length];
+            System.arraycopy(defaultTableTypes, 0, result, 0, defaultTableTypes.length);
             return result;
         }
     }
@@ -311,9 +311,9 @@ public class JdbcModelReader {
      */
     public void setDefaultTableTypes(String[] types) {
         if (types == null) {
-            _defaultTableTypes = null;
+            defaultTableTypes = null;
         } else {
-            _defaultTableTypes = new String[types.length];
+            defaultTableTypes = new String[types.length];
             System.arraycopy(types, 0, types, 0, types.length);
         }
     }
@@ -323,7 +323,7 @@ public class JdbcModelReader {
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForTable() {
-        return _columnsForTable;
+        return columnsForTable;
     }
 
     /**
@@ -331,7 +331,7 @@ public class JdbcModelReader {
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForColumn() {
-        return _columnsForColumn;
+        return columnsForColumn;
     }
 
     /**
@@ -339,7 +339,7 @@ public class JdbcModelReader {
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForPK() {
-        return _columnsForPK;
+        return columnsForPK;
     }
 
     /**
@@ -347,7 +347,7 @@ public class JdbcModelReader {
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForFK() {
-        return _columnsForFK;
+        return columnsForFK;
     }
 
     /**
@@ -355,7 +355,7 @@ public class JdbcModelReader {
      * @return The column descriptors
      */
     protected List<MetaDataColumnDescriptor> getColumnsForIndex() {
-        return _columnsForIndex;
+        return columnsForIndex;
     }
 
     /**
@@ -364,34 +364,34 @@ public class JdbcModelReader {
      * @return The connection or <code>null</code> if there is no active connection
      */
     protected Connection getConnection() {
-        return _connection;
+        return connection;
     }
 
     /**
      * Reads the database model from the given connection.
-     * @param connection The connection
-     * @param name       The name of the resulting database; <code>null</code> when the default name (the catalog)
-     *                   is desired which might be <code>null</code> itself though
+     * @param connection   The connection
+     * @param databaseName The name of the resulting database; <code>null</code> when the default name (the catalog)
+     *                     is desired which might be <code>null</code> itself though
      * @return The database model
      */
-    public Database getDatabase(Connection connection, String name) throws SQLException {
-        return getDatabase(connection, name, null, null, null);
+    public Database getDatabase(Connection connection, String databaseName) throws SQLException {
+        return getDatabase(connection, databaseName, null, null, null);
     }
 
     /**
      * Reads the database model from the given connection.
-     * @param connection The connection
-     * @param name       The name of the resulting database; <code>null</code> when the default name (the catalog)
-     *                   is desired which might be <code>null</code> itself though
-     * @param catalog    The catalog to acess in the database; use <code>null</code> for the default value
-     * @param schema     The schema to acess in the database; use <code>null</code> for the default value
-     * @param tableTypes The table types to process; use <code>null</code> or an empty list for the default ones
+     * @param connection   The connection
+     * @param databaseName The name of the resulting database; <code>null</code> when the default name (the catalog)
+     *                     is desired which might be <code>null</code> itself though
+     * @param catalog      The catalog to acess in the database; use <code>null</code> for the default value
+     * @param schema       The schema to acess in the database; use <code>null</code> for the default value
+     * @param tableTypes   The table types to process; use <code>null</code> or an empty list for the default ones
      * @return The database model
      */
-    public Database getDatabase(Connection connection, String name, String catalog, String schema, String[] tableTypes) throws SQLException {
+    public Database getDatabase(Connection connection, String databaseName, String catalog, String schema, String[] tableTypes) throws SQLException {
+        Objects.requireNonNull(connection, "connection cannot be null");
         Database db = new Database();
-
-        if (name == null) {
+        if (databaseName == null || databaseName.isEmpty()) {
             try {
                 db.setName(connection.getCatalog());
                 if (catalog == null) {
@@ -401,10 +401,10 @@ public class JdbcModelReader {
                 _log.info("Cannot determine the catalog name from connection.", ex);
             }
         } else {
-            db.setName(name);
+            db.setName(databaseName);
         }
         try {
-            _connection = connection;
+            this.connection = connection;
             db.addTables(readTables(catalog, schema, tableTypes));
             // Note that we do this here instead of in readTable since platforms may redefine the
             // readTable method whereas it is highly unlikely that this method gets redefined
@@ -412,10 +412,31 @@ public class JdbcModelReader {
                 sortForeignKeys(db);
             }
         } finally {
-            _connection = null;
+            JdbcUtils.closeQuitely(this.connection);
+            this.connection = null;
         }
         db.initialize();
         return db;
+    }
+
+    /**
+     * create DatabaseMetaDataWrapper
+     * @param catalog       catalog
+     * @param schemaPattern schemaPattern
+     * @param tableTypes    tableTypes
+     * @return DatabaseMetaDataWrapper
+     */
+    protected DatabaseMetaDataWrapper createDatabaseMetaDataWrapper(Connection connection, String catalog, String schemaPattern, String[] tableTypes) {
+        DatabaseMetaDataWrapper metaData;
+        try {
+            metaData = new DatabaseMetaDataWrapper(connection.getMetaData());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        metaData.setCatalog(catalog == null ? getDefaultCatalogPattern() : catalog);
+        metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);
+        metaData.setTableTypes((tableTypes == null) || (tableTypes.length == 0) ? getDefaultTableTypes() : tableTypes);
+        return metaData;
     }
 
     /**
@@ -427,30 +448,21 @@ public class JdbcModelReader {
      */
     protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
         ResultSet tableData = null;
-
         try {
-            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
-
-            metaData.setMetaData(_connection.getMetaData());
-            metaData.setCatalog(catalog == null ? getDefaultCatalogPattern() : catalog);
-            metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);
-            metaData.setTableTypes((tableTypes == null) || (tableTypes.length == 0) ? getDefaultTableTypes() : tableTypes);
-
+            DatabaseMetaDataWrapper metaData = createDatabaseMetaDataWrapper(this.connection, catalog, schemaPattern, tableTypes);
             tableData = metaData.getTables(getDefaultTablePattern());
 
-            List<Table> tables = new ArrayList<>();
+            final List<Table> tables = new ArrayList<>();
 
             while (tableData.next()) {
-                ValueMap values = readColumns(tableData, getColumnsForTable());
+                ObjectMap values = readColumns(tableData, getColumnsForTable());
                 Table table = readTable(metaData, values);
 
                 if (table != null) {
                     tables.add(table);
                 }
             }
-
             final Collator collator = Collator.getInstance();
-
             tables.sort((obj1, obj2) -> collator.compare(obj1.getName().toUpperCase(), obj2.getName().toUpperCase()));
             return tables;
         } finally {
@@ -464,7 +476,7 @@ public class JdbcModelReader {
      * @param values   The table metadata values as defined by {@link #getColumnsForTable()}
      * @return The table or <code>null</code> if the result set row did not contain a valid table
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
         Table table = null;
 
@@ -493,7 +505,6 @@ public class JdbcModelReader {
         }
         return table;
     }
-
 
     /**
      * Removes system indices (generated by the database for primary and foreign keys)
@@ -629,7 +640,7 @@ public class JdbcModelReader {
             List<Column> columns = new ArrayList<>();
 
             while (columnData.next()) {
-                ValueMap values = readColumns(columnData, getColumnsForColumn());
+                ObjectMap values = readColumns(columnData, getColumnsForColumn());
 
                 columns.add(readColumn(metaData, values));
             }
@@ -645,7 +656,7 @@ public class JdbcModelReader {
      * @param values   The column metadata values as defined by {@link #getColumnsForColumn()}
      * @return The column
      */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = new Column();
 
         column.setName((String) values.get("COLUMN_NAME"));
@@ -661,7 +672,7 @@ public class JdbcModelReader {
         String size = (String) values.get("COLUMN_SIZE");
 
         if (size == null) {
-            size = _defaultSizes.get(column.getJdbcTypeCode());
+            size = defaultSizes.get(column.getJdbcTypeCode());
         }
         // we're setting the size after the precision and radix in case
         // the database prefers to return them in the size value
@@ -693,12 +704,10 @@ public class JdbcModelReader {
     protected Collection<String> readPrimaryKeyNames(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         List<String> pks = new ArrayList<>();
         ResultSet pkData = null;
-
         try {
             pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
             while (pkData.next()) {
-                ValueMap values = readColumns(pkData, getColumnsForPK());
-
+                ObjectMap values = readColumns(pkData, getColumnsForPK());
                 pks.add(readPrimaryKeyName(metaData, values));
             }
         } finally {
@@ -713,7 +722,7 @@ public class JdbcModelReader {
      * @param values   The primary key metadata values as defined by {@link #getColumnsForPK()}
      * @return The primary key name
      */
-    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         return values.getString("COLUMN_NAME");
     }
 
@@ -726,13 +735,10 @@ public class JdbcModelReader {
     protected Collection<ForeignKey> readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         Map<String, ForeignKey> fks = new LinkedHashMap<>();
         ResultSet fkData = null;
-
         try {
             fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
-
             while (fkData.next()) {
-                ValueMap values = readColumns(fkData, getColumnsForFK());
-
+                ObjectMap values = readColumns(fkData, getColumnsForFK());
                 readForeignKey(metaData, values, fks);
             }
         } finally {
@@ -764,7 +770,6 @@ public class JdbcModelReader {
             if (onDeleteAction == null) {
                 onDeleteAction = getPlatformInfo().getDefaultOnDeleteAction();
             }
-
             fk.setOnUpdate(onUpdateAction);
             fk.setOnDelete(onDeleteAction);
             knownFks.put(fkName, fk);
@@ -788,7 +793,6 @@ public class JdbcModelReader {
      */
     protected CascadeActionEnum convertAction(Short jdbcActionValue) {
         CascadeActionEnum action = null;
-
         if (jdbcActionValue != null) {
             switch (jdbcActionValue) {
                 case DatabaseMetaData.importedKeyCascade -> action = CascadeActionEnum.CASCADE;
@@ -809,13 +813,10 @@ public class JdbcModelReader {
     protected Collection<Index> readIndices(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
         Map<String, Index> indices = new LinkedHashMap<>();
         ResultSet indexData = null;
-
         try {
             indexData = metaData.getIndices(metaData.escapeForSearch(tableName), false, false);
-
             while (indexData.next()) {
-                ValueMap values = readColumns(indexData, getColumnsForIndex());
-
+                ObjectMap values = readColumns(indexData, getColumnsForIndex());
                 readIndex(metaData, values, indices);
             }
         } finally {
@@ -830,7 +831,7 @@ public class JdbcModelReader {
      * @param values       The index metadata as defined by {@link #getColumnsForIndex()}
      * @param knownIndices The already read indices for the current table
      */
-    protected void readIndex(DatabaseMetaDataWrapper metaData, ValueMap values, Map<String, Index> knownIndices) throws SQLException {
+    protected void readIndex(DatabaseMetaDataWrapper metaData, ObjectMap values, Map<String, Index> knownIndices) throws SQLException {
         Short indexType = (Short) values.get("TYPE");
 
         // we're ignoring statistic indices
@@ -870,9 +871,8 @@ public class JdbcModelReader {
      * @param columnDescriptors The dscriptors of the columns to read
      * @return The read values keyed by the column name
      */
-    protected ValueMap readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
-        ValueMap values = new ValueMap();
-
+    protected ObjectMap readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
+        ObjectMap values = new ObjectMap();
         for (MetaDataColumnDescriptor descriptor : columnDescriptors) {
             values.put(descriptor.getName(), descriptor.readColumn(resultSet));
         }
@@ -1001,7 +1001,7 @@ public class JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                ValueMap values = readColumns(tableData, getColumnsForTable());
+                ObjectMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = (String) values.get("TABLE_NAME");
 
                 if ((tableName != null) && (!tableName.isEmpty())) {

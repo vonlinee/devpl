@@ -1,7 +1,7 @@
 package org.apache.ddlutils.platform;
 
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,12 +17,12 @@ public final class SqlBuildContext {
     /**
      * The parameter maps keyed by the tables.
      */
-    private final Map<String, ValueMap> parametersPerTable = new HashMap<>();
+    private final Map<String, ObjectMap> parametersPerTable = new HashMap<>();
 
-    public ValueMap getGlobalParameters() {
-        ValueMap valueMap = parametersPerTable.get(null);
+    public ObjectMap getGlobalParameters() {
+        ObjectMap valueMap = parametersPerTable.get(null);
         if (valueMap == null) {
-            valueMap = new ValueMap();
+            valueMap = new ObjectMap();
             parametersPerTable.put(null, valueMap);
         }
         return valueMap;
@@ -37,11 +37,11 @@ public final class SqlBuildContext {
      * @param table The table
      * @return The parameters
      */
-    public ValueMap getParametersFor(Table table) {
-        ValueMap result = new ValueMap();
+    public ObjectMap getParametersFor(Table table) {
+        ObjectMap result = new ObjectMap();
         // the null location of the map contains global param
-        ValueMap globalParams = parametersPerTable.get(null);
-        ValueMap tableParams = parametersPerTable.get(table.getName());
+        ObjectMap globalParams = parametersPerTable.get(null);
+        ObjectMap tableParams = parametersPerTable.get(table.getName());
 
         if (globalParams != null) {
             result.putAll(globalParams);
@@ -62,7 +62,7 @@ public final class SqlBuildContext {
         String key = (table == null ? null : table.getName());
         // we're using a list ordered map to retain the order
         // change: not using an ordered list
-        ValueMap params = parametersPerTable.computeIfAbsent(key, k -> new ValueMap());
+        ObjectMap params = parametersPerTable.computeIfAbsent(key, k -> new ObjectMap());
         params.put(paramName, paramValue);
     }
 }

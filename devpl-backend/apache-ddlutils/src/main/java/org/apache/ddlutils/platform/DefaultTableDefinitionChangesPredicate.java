@@ -32,7 +32,9 @@ public class DefaultTableDefinitionChangesPredicate implements TableDefinitionCh
     protected boolean isSupported(Table intermediateTable, TableChange change) {
         if (change instanceof AddColumnChange addColumnChange) {
             return addColumnChange.isAtEnd() && (!addColumnChange.getNewColumn().isRequired() || (addColumnChange
-                .getNewColumn().getDefaultValue() != null) || addColumnChange.getNewColumn().isAutoIncrement());
+                                                                                                      .getNewColumn()
+                                                                                                      .getDefaultValue() != null) || addColumnChange
+                                                     .getNewColumn().isAutoIncrement());
         } else return change instanceof AddPrimaryKeyChange;
     }
 }

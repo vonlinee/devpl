@@ -19,7 +19,6 @@ public class RemoveForeignKeyChange extends ForeignKeyChangeImplBase {
         super(tableName, foreignKey);
     }
 
-
     public void apply(Database model, boolean caseSensitive) {
         findChangedTable(model, caseSensitive).removeForeignKey(findChangedForeignKey(model, caseSensitive));
     }

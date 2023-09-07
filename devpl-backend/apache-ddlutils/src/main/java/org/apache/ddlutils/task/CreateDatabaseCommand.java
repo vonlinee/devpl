@@ -29,12 +29,10 @@ public class CreateDatabaseCommand extends DatabaseCommand {
         _parameters.add(param);
     }
 
-
     @Override
     public boolean isRequiringModel() {
         return false;
     }
-
 
     @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
@@ -56,7 +54,7 @@ public class CreateDatabaseCommand extends DatabaseCommand {
             _log.info("Created database");
         } catch (UnsupportedOperationException ex) {
             _log.error("Database platform " + platform.getName() + " does not support database creation " +
-                    "via JDBC or there was an error while creating it.",
+                       "via JDBC or there was an error while creating it.",
                 ex);
         } catch (Exception ex) {
             handleException(ex, ex.getMessage());

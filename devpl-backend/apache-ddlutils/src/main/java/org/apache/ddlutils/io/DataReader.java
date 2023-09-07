@@ -6,7 +6,7 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.util.Base64;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 import org.apache.ddlutils.util.bean.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,10 @@ public class DataReader {
      * Our log.
      */
     private final Logger _log = LoggerFactory.getLogger(DataReader.class);
-
+    /**
+     * The converters.
+     */
+    private final ConverterConfiguration _converterConf = new ConverterConfiguration();
     /**
      * The database model.
      */
@@ -39,10 +42,6 @@ public class DataReader {
      * The object to receive the read beans.
      */
     private DataSink _sink;
-    /**
-     * The converters.
-     */
-    private final ConverterConfiguration _converterConf = new ConverterConfiguration();
     /**
      * Whether to be case-sensitive or not.
      */
@@ -95,7 +94,6 @@ public class DataReader {
     public boolean isCaseSensitive() {
         return _caseSensitive;
     }
-
 
     /**
      * Specifies whether this rules object shall match case-sensitively.
@@ -236,7 +234,7 @@ public class DataReader {
     private void readBean(XMLStreamReader xmlReader) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
         Location location = xmlReader.getLocation();
-        ValueMap attributes = new ValueMap();
+        ObjectMap attributes = new ObjectMap();
         String tableName;
 
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
@@ -257,7 +255,7 @@ public class DataReader {
 
         if (table == null) {
             _log.warn("Data XML contains an element " + elemQName + " at location " + location +
-                " but there is no table defined with this name. This element will be ignored.");
+                      " but there is no table defined with this name. This element will be ignored.");
         } else {
             DynaBean bean = _model.createDynaBeanFor(table);
 
@@ -280,7 +278,7 @@ public class DataReader {
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnSubElements(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnSubElements(XMLStreamReader xmlReader, ObjectMap data) throws XMLStreamException, DdlUtilsXMLException {
         int eventType = XMLStreamReader.START_ELEMENT;
 
         while (eventType != XMLStreamReader.END_ELEMENT) {
@@ -296,9 +294,9 @@ public class DataReader {
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnSubElement(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnSubElement(XMLStreamReader xmlReader, ObjectMap data) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
-        ValueMap attributes = new ValueMap();
+        ObjectMap attributes = new ObjectMap();
         boolean usesBase64 = false;
 
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
@@ -322,9 +320,9 @@ public class DataReader {
             if (eventType == XMLStreamReader.START_ELEMENT) {
                 readColumnDataSubElement(xmlReader, attributes);
             } else if ((eventType == XMLStreamReader.CHARACTERS) ||
-                (eventType == XMLStreamReader.CDATA) ||
-                (eventType == XMLStreamReader.SPACE) ||
-                (eventType == XMLStreamReader.ENTITY_REFERENCE)) {
+                       (eventType == XMLStreamReader.CDATA) ||
+                       (eventType == XMLStreamReader.SPACE) ||
+                       (eventType == XMLStreamReader.ENTITY_REFERENCE)) {
                 content.append(xmlReader.getText());
             }
         }
@@ -351,13 +349,12 @@ public class DataReader {
         consumeRestOfElement(xmlReader);
     }
 
-
     /**
      * Reads the next column-name or column-value sub element.
      * @param xmlReader The reader
      * @param data      Where to store the values
      */
-    private void readColumnDataSubElement(XMLStreamReader xmlReader, ValueMap data) throws XMLStreamException, DdlUtilsXMLException {
+    private void readColumnDataSubElement(XMLStreamReader xmlReader, ObjectMap data) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
         boolean usesBase64 = false;
 

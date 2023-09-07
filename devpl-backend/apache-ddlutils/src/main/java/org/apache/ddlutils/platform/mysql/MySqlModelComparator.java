@@ -28,7 +28,6 @@ public class MySqlModelComparator extends ModelComparator {
         super(platformInfo, tableDefChangePredicate, caseSensitive);
     }
 
-
     @Override
     protected List<TableChange> checkForRemovedIndexes(Database sourceModel,
                                                        Table sourceTable,

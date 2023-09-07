@@ -46,11 +46,9 @@ public class WriteSchemaToFileCommand extends Command {
         _outputFile = outputFile;
     }
 
-
     public boolean isRequiringModel() {
         return true;
     }
-
 
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {

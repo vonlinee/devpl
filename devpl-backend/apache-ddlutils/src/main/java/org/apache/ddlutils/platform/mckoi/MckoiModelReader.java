@@ -7,7 +7,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,15 +36,14 @@ public class MckoiModelReader extends JdbcModelReader {
         setDefaultSchemaPattern(null);
     }
 
-
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         // Mckoi does not currently return unique indices in the metadata, so we have to query
         // internal tables to get this info
         final String query =
             "SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name" +
-                " FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo" +
-                " WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?";
+            " FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo" +
+            " WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?";
         final String queryWithSchema =
             query + " AND uniqueInfo.schema = ?";
 
@@ -62,7 +61,7 @@ public class MckoiModelReader extends JdbcModelReader {
                 }
 
                 ResultSet resultSet = stmt.executeQuery();
-                ValueMap indexValues = new ValueMap();
+                ObjectMap indexValues = new ObjectMap();
 
                 indexValues.put("NON_UNIQUE", Boolean.FALSE);
                 while (resultSet.next()) {
@@ -82,9 +81,8 @@ public class MckoiModelReader extends JdbcModelReader {
         return table;
     }
 
-
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ValueMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ObjectMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getSize() != null) {

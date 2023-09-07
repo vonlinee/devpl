@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.jdbc.meta.PrimaryKey;
 import com.baomidou.mybatisplus.generator.jdbc.meta.TableMetadata;
 import com.baomidou.mybatisplus.generator.type.TypeConverter;
-import com.baomidou.mybatisplus.generator.utils.JdbcUtils;
-import com.baomidou.mybatisplus.generator.utils.StringUtils;
+import com.baomidou.mybatisplus.generator.util.JdbcUtils;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

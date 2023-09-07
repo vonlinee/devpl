@@ -92,12 +92,10 @@ public class MySqlPlatform extends GenericDatabasePlatform {
         setModelReader(new MySqlModelReader(this));
     }
 
-
     @Override
     public String getName() {
         return DATABASENAME;
     }
-
 
     @Override
     protected ModelComparator getModelComparator() {
@@ -113,18 +111,18 @@ public class MySqlPlatform extends GenericDatabasePlatform {
                 if (change instanceof AddColumnChange addColumnChange) {
 
                     return !addColumnChange.getNewColumn().isAutoIncrement() &&
-                        (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
-                            .getDefaultValue() != null));
+                           (!addColumnChange.getNewColumn().isRequired() || (addColumnChange.getNewColumn()
+                                                                                 .getDefaultValue() != null));
                 } else if (change instanceof ColumnDefinitionChange colDefChange) {
                     Column sourceColumn = intermediateTable.findColumn(colDefChange.getChangedColumn(), isDelimitedIdentifierModeOn());
 
                     return !ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn()) &&
-                        !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn());
+                           !ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, colDefChange.getNewColumn());
                 } else {
                     return (change instanceof RemoveColumnChange) ||
-                        (change instanceof AddPrimaryKeyChange) ||
-                        (change instanceof PrimaryKeyChange) ||
-                        (change instanceof RemovePrimaryKeyChange);
+                           (change instanceof AddPrimaryKeyChange) ||
+                           (change instanceof PrimaryKeyChange) ||
+                           (change instanceof RemovePrimaryKeyChange);
                 }
             }
         };

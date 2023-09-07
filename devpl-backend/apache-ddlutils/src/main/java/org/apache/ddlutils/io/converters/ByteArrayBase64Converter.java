@@ -16,7 +16,6 @@ public class ByteArrayBase64Converter implements SqlTypeConverter {
         }
     }
 
-
     @Override
     public String convertToString(Object obj, int sqlTypeCode) throws ConversionException {
         try {

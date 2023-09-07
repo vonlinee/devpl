@@ -7,7 +7,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ValueMap;
+import org.apache.ddlutils.util.ObjectMap;
 
 import java.io.IOException;
 
@@ -33,7 +33,6 @@ public class PostgreSqlBuilder extends SqlBuilder {
         addEscapedCharSequence("\t", "\\t");
     }
 
-
     public void dropTable(Table table) throws IOException {
         print("DROP TABLE ");
         printIdentifier(getTableName(table));
@@ -47,16 +46,14 @@ public class PostgreSqlBuilder extends SqlBuilder {
         }
     }
 
-
     public void dropIndex(Table table, Index index) throws IOException {
         print("DROP INDEX ");
         printIdentifier(getIndexName(index));
         printEndOfStatement();
     }
 
-
     @Override
-    public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
+    public void createTable(Database database, Table table, ObjectMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
 
@@ -89,13 +86,11 @@ public class PostgreSqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("UNIQUE DEFAULT nextval('");
         printIdentifier(getConstraintName(null, table, column.getName(), "seq"));
         print("')");
     }
-
 
     public String getSelectLastIdentityValues(Table table) {
         Column[] columns = table.getAutoIncrementColumns();
@@ -118,7 +113,6 @@ public class PostgreSqlBuilder extends SqlBuilder {
             return result.toString();
         }
     }
-
 
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
         if (newColumn.isAutoIncrement()) {
@@ -143,7 +137,6 @@ public class PostgreSqlBuilder extends SqlBuilder {
             dropAutoIncrementSequence(table, column);
         }
     }
-
 
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);

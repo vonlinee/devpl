@@ -1,14 +1,10 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
-import java.io.Serializable;
-
 /**
  * metadata of a column in a database table
  * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
  */
-public class ColumnMetadata implements Serializable {
-
-    private static final long serialVersionUID = 7229302382943046967L;
+public class ColumnMetadata {
 
     /**
      * TABLE_CAT String => table catalog (maybe null)
@@ -370,31 +366,30 @@ public class ColumnMetadata implements Serializable {
 
     @Override
     public String toString() {
-        String sb = "ColumnMetadata{" + "tableCat='" + tableCat + '\'' +
-            ", tableSchem='" + tableSchem + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", columnName='" + columnName + '\'' +
-            ", dataType=" + dataType +
-            ", typeName='" + typeName + '\'' +
-            ", columnSize=" + columnSize +
-            ", bufferLength=" + bufferLength +
-            ", decimalDigits='" + decimalDigits + '\'' +
-            ", numPrecRadix=" + numPrecRadix +
-            ", nullable=" + nullable +
-            ", remarks='" + remarks + '\'' +
-            ", columnDef='" + columnDef + '\'' +
-            ", sqlDataType=" + sqlDataType +
-            ", sqlDatetimeSub=" + sqlDatetimeSub +
-            ", charOctetLength=" + charOctetLength +
-            ", ordinalPosition=" + ordinalPosition +
-            ", isNullable='" + isNullable + '\'' +
-            ", scopeCatalog='" + scopeCatalog + '\'' +
-            ", scopeSchema='" + scopeSchema + '\'' +
-            ", scopeTable='" + scopeTable + '\'' +
-            ", sourceDataType='" + sourceDataType + '\'' +
-            ", isAutoincrement='" + isAutoincrement + '\'' +
-            ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
-            '}';
-        return sb;
+        return "ColumnMetadata{" + "tableCat='" + tableCat + '\'' +
+               ", tableSchem='" + tableSchem + '\'' +
+               ", tableName='" + tableName + '\'' +
+               ", columnName='" + columnName + '\'' +
+               ", dataType=" + dataType +
+               ", typeName='" + typeName + '\'' +
+               ", columnSize=" + columnSize +
+               ", bufferLength=" + bufferLength +
+               ", decimalDigits='" + decimalDigits + '\'' +
+               ", numPrecRadix=" + numPrecRadix +
+               ", nullable=" + nullable +
+               ", remarks='" + remarks + '\'' +
+               ", columnDef='" + columnDef + '\'' +
+               ", sqlDataType=" + sqlDataType +
+               ", sqlDatetimeSub=" + sqlDatetimeSub +
+               ", charOctetLength=" + charOctetLength +
+               ", ordinalPosition=" + ordinalPosition +
+               ", isNullable='" + isNullable + '\'' +
+               ", scopeCatalog='" + scopeCatalog + '\'' +
+               ", scopeSchema='" + scopeSchema + '\'' +
+               ", scopeTable='" + scopeTable + '\'' +
+               ", sourceDataType='" + sourceDataType + '\'' +
+               ", isAutoincrement='" + isAutoincrement + '\'' +
+               ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
+               '}';
     }
 }

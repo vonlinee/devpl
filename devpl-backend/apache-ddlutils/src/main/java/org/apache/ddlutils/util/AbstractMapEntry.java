@@ -8,8 +8,6 @@ import java.util.Map;
  * @author Michael A. Smith
  * @author Neil O'Toole
  * @author Stephen Colebourne
- * @version $Revision: 1.4 $ $Date: 2004/02/18 01:00:08 $
- * @since Commons Collections 3.0
  */
 public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> implements Map.Entry<K, V> {
 
@@ -57,7 +55,7 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
         }
         Map.Entry<K, V> other = (Map.Entry<K, V>) obj;
         return (getKey() == null ? other.getKey() == null : getKey().equals(other.getKey())) &&
-            (getValue() == null ? other.getValue() == null : getValue().equals(other.getValue()));
+               (getValue() == null ? other.getValue() == null : getValue().equals(other.getValue()));
     }
 
     /**
@@ -69,6 +67,6 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
     @Override
     public int hashCode() {
         return (getKey() == null ? 0 : getKey().hashCode()) ^
-            (getValue() == null ? 0 : getValue().hashCode());
+               (getValue() == null ? 0 : getValue().hashCode());
     }
 }
