@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 /**
  * Reads a database model from a MySql 5 database.
- * @version $Revision: $
  */
 public class MySql50ModelReader extends MySqlModelReader {
     /**

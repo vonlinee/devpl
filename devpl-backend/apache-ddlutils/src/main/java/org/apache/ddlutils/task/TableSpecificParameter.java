@@ -1,36 +1,16 @@
 package org.apache.ddlutils.task;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.model.Table;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
  * Specifies a parameter for the creation of the tables. These are usually platform specific.
  * Note that parameters are only applied when creating new tables, not when altering existing ones.
  * Note also that if no table name is specified, the parameter is used for all created tables.
- * @version $Revision: 231306 $
- * @ant.type name="parameter"
  */
 public class TableSpecificParameter extends Parameter {
     // TODO: Some wildcard/regular expression mechanism would be useful
@@ -38,7 +18,7 @@ public class TableSpecificParameter extends Parameter {
     /**
      * The tables for which this parameter is applicable.
      */
-    private final ArrayList _tables = new ArrayList();
+    private final List<String> _tables = new ArrayList<>();
 
     /**
      * Specifies the comma-separated list of table names in whose creation this parameter
@@ -78,9 +58,8 @@ public class TableSpecificParameter extends Parameter {
         if (_tables.isEmpty()) {
             return true;
         }
-        for (Iterator it = _tables.iterator(); it.hasNext(); ) {
-            String tableName = (String) it.next();
-
+        for (Iterator<String> it = _tables.iterator(); it.hasNext(); ) {
+            String tableName = it.next();
             if ((caseSensitive && tableName.equals(table.getName())) ||
                 (!caseSensitive && tableName.equalsIgnoreCase(table.getName()))) {
                 return true;

@@ -4,7 +4,6 @@ import org.apache.ddlutils.PlatformInfo;
 
 /**
  * The platform implementation for MySQL 5 and above.
- * @version $Revision: 231306 $
  */
 public class MySql50Platform extends MySqlPlatform {
     /**

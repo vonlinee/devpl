@@ -740,7 +740,7 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map<String, ?> columnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
 
@@ -900,7 +900,7 @@ public abstract class SqlBuilder {
 
         // TODO: Handle binary types (BINARY, VARBINARY, LONGVARBINARY, BLOB)
         switch (column.getJdbcTypeCode()) {
-            case Types.DATE:
+            case Types.DATE -> {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 if (!(value instanceof String) && (getValueDateFormat() != null)) {
                     // TODO: Can the format method handle java.sql.Date properly ?
@@ -909,8 +909,8 @@ public abstract class SqlBuilder {
                     result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
-                break;
-            case Types.TIME:
+            }
+            case Types.TIME -> {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 if (!(value instanceof String) && (getValueTimeFormat() != null)) {
                     // TODO: Can the format method handle java.sql.Date properly ?
@@ -919,19 +919,15 @@ public abstract class SqlBuilder {
                     result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
-                break;
-            case Types.TIMESTAMP:
+            }
+            case Types.TIMESTAMP -> {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 // TODO: SimpleDateFormat does not support nano seconds so we would
                 //       need a custom date formatter for timestamps
                 result.append(value);
                 result.append(getPlatformInfo().getValueQuoteToken());
-                break;
-            case Types.REAL:
-            case Types.NUMERIC:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-            case Types.DECIMAL:
+            }
+            case Types.REAL, Types.NUMERIC, Types.FLOAT, Types.DOUBLE, Types.DECIMAL -> {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 if (!(value instanceof String) && (getValueNumberFormat() != null)) {
                     result.append(getValueNumberFormat().format(value));
@@ -939,12 +935,12 @@ public abstract class SqlBuilder {
                     result.append(value);
                 }
                 result.append(getPlatformInfo().getValueQuoteToken());
-                break;
-            default:
+            }
+            default -> {
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(escapeStringValue(value.toString()));
                 result.append(getPlatformInfo().getValueQuoteToken());
-                break;
+            }
         }
         return result.toString();
     }
@@ -1597,23 +1593,13 @@ public abstract class SqlBuilder {
         if (action != getPlatformInfo().getDefaultOnDeleteAction()) {
             print(" ON DELETE ");
             switch (action.getValue()) {
-                case CascadeActionEnum.VALUE_CASCADE:
-                    print("CASCADE");
-                    break;
-                case CascadeActionEnum.VALUE_SET_NULL:
-                    print("SET NULL");
-                    break;
-                case CascadeActionEnum.VALUE_SET_DEFAULT:
-                    print("SET DEFAULT");
-                    break;
-                case CascadeActionEnum.VALUE_RESTRICT:
-                    print("RESTRICT");
-                    break;
-                case CascadeActionEnum.VALUE_NONE:
-                    print("NO ACTION");
-                    break;
-                default:
-                    throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
+                case CascadeActionEnum.VALUE_CASCADE -> print("CASCADE");
+                case CascadeActionEnum.VALUE_SET_NULL -> print("SET NULL");
+                case CascadeActionEnum.VALUE_SET_DEFAULT -> print("SET DEFAULT");
+                case CascadeActionEnum.VALUE_RESTRICT -> print("RESTRICT");
+                case CascadeActionEnum.VALUE_NONE -> print("NO ACTION");
+                default ->
+                        throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
             }
         }
     }

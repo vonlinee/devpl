@@ -56,7 +56,6 @@ public class MySqlModelComparator extends ModelComparator {
         return changes;
     }
 
-
     @Override
     protected List<TableChange> compareTables(Database sourceModel,
                                               Table sourceTable,

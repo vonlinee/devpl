@@ -1,24 +1,5 @@
 package org.apache.ddlutils.platform.mysql;
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -34,7 +15,6 @@ import java.sql.Types;
 
 /**
  * The platform implementation for MySQL.
- * @version $Revision: 231306 $
  */
 public class MySqlPlatform extends GenericDatabasePlatform {
     /**
@@ -124,7 +104,6 @@ public class MySqlPlatform extends GenericDatabasePlatform {
         return new MySqlModelComparator(getPlatformInfo(), getTableDefinitionChangesPredicate(), isDelimitedIdentifierModeOn());
     }
 
-
     @Override
     protected TableDefinitionChangesPredicate getTableDefinitionChangesPredicate() {
         return new DefaultTableDefinitionChangesPredicate() {
@@ -158,6 +137,7 @@ public class MySqlPlatform extends GenericDatabasePlatform {
      *                     tables, the parameters won't be applied
      * @param change       The change object
      */
+    @Override
     public void processChange(Database currentModel,
                               SqlBuildContext params,
                               AddColumnChange change) throws IOException {
@@ -182,7 +162,6 @@ public class MySqlPlatform extends GenericDatabasePlatform {
                               SqlBuildContext params,
                               ColumnDefinitionChange change) throws IOException {
         Table changedTable = findChangedTable(currentModel, change);
-
         ((MySqlBuilder) getSqlBuilder()).recreateColumn(changedTable, change.getNewColumn());
     }
 
@@ -236,7 +215,6 @@ public class MySqlPlatform extends GenericDatabasePlatform {
         for (int colIdx = 0; colIdx < newPKColumnNames.length; colIdx++) {
             newPKColumns[colIdx] = changedTable.findColumn(newPKColumnNames[colIdx], isDelimitedIdentifierModeOn());
         }
-
         ((MySqlBuilder) getSqlBuilder()).dropPrimaryKey(changedTable);
         getSqlBuilder().createPrimaryKey(changedTable, newPKColumns);
         change.apply(currentModel, isDelimitedIdentifierModeOn());

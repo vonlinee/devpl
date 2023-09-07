@@ -5,7 +5,6 @@ import java.util.Objects;
 
 /**
  * Represents a column of an index in the database model.
- * @version $Revision$
  */
 public class IndexColumn implements Serializable, Cloneable {
     /**
@@ -118,7 +117,6 @@ public class IndexColumn implements Serializable, Cloneable {
         _size = size;
     }
 
-
     /**
      * Compares this index column to the given one while ignoring the case of identifiers.
      * @param other The other index column
@@ -128,13 +126,9 @@ public class IndexColumn implements Serializable, Cloneable {
         return Objects.equals(_name, other._name) && Objects.equals(_size, other._size);
     }
 
-
+    @Override
     public String toString() {
-        return "Index column [name=" +
-            getName() +
-            "; size=" +
-            getSize() +
-            "]";
+        return "Index column [name=" + getName() + "; size=" + getSize() + "]";
     }
 
     @Override

@@ -14,7 +14,6 @@ import java.util.*;
 
 /**
  * Provides basic live database data <-> XML functionality.
- * @version $Revision: $
  */
 public class DatabaseDataIO {
     /**

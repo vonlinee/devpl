@@ -41,18 +41,17 @@ public class WriteDtdToFileCommand extends Command {
     /**
      * Specifies the name of the file to write the DTD to.
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
     }
 
-
+    @Override
     public boolean isRequiringModel() {
         return true;
     }
 
-
+    @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         if (_outputFile == null) {
             throw new RuntimeException("No output file specified");

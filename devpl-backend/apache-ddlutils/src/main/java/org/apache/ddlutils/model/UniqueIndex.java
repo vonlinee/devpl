@@ -1,7 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.util.StringUtils;
-
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -9,12 +8,12 @@ import java.util.Objects;
  * Provides compatibility with Torque-style xml with separate &lt;index&gt; and
  * &lt;unique&gt; tags, but adds no functionality.  All indexes are treated the
  * same by the Table.
- * @version $Revision$
  */
 public class UniqueIndex extends GenericIndex {
     /**
      * Unique ID for serialization purposes.
      */
+    @Serial
     private static final long serialVersionUID = -4097003126550294993L;
 
     @Override
@@ -43,9 +42,8 @@ public class UniqueIndex extends GenericIndex {
     @Override
     public boolean equalsIgnoreCase(Index other) {
         if (other instanceof UniqueIndex otherIndex) {
-            boolean checkName = StringUtils.hasText(name, otherIndex.name);
-            if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) &&
-                (getColumnCount() == otherIndex.getColumnCount())) {
+            boolean checkName = name != null && !name.isEmpty() && otherIndex.name != null && !otherIndex.name.isEmpty();
+            if ((!checkName || name.equalsIgnoreCase(otherIndex.name)) && (getColumnCount() == otherIndex.getColumnCount())) {
                 for (int idx = 0; idx < getColumnCount(); idx++) {
                     if (!getColumn(idx).equalsIgnoreCase(otherIndex.getColumn(idx))) {
                         return false;
@@ -64,11 +62,7 @@ public class UniqueIndex extends GenericIndex {
 
     @Override
     public String toString() {
-        return "Unique index [name=" +
-            getName() +
-            "; " +
-            getColumnCount() +
-            " columns]";
+        return "Unique index [name=" + getName() + "; " + getColumnCount() + " columns]";
     }
 
     @Override

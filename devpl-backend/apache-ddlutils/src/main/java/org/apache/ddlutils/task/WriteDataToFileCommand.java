@@ -48,7 +48,6 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
     /**
      * Specifies the file to write the data XML to.
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
@@ -73,12 +72,12 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
         _determineSchema = determineSchema;
     }
 
-
+    @Override
     public boolean isRequiringModel() {
         return true;
     }
 
-
+    @Override
     public void execute(DatabaseTaskBase task, Database model) throws RuntimeException {
         try {
             getDataIO().setDetermineSchema(_determineSchema);

@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package org.apache.ddlutils.task;
 
 public abstract class ProjectComponent implements Cloneable {
@@ -60,6 +55,7 @@ public abstract class ProjectComponent implements Cloneable {
 
     }
 
+    @Override
     public Object clone() throws CloneNotSupportedException {
         ProjectComponent pc = (ProjectComponent) super.clone();
         pc.setLocation(this.getLocation());

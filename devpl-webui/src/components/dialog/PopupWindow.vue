@@ -11,7 +11,7 @@
 		:close-on-click-modal="closeOnClickModal"
 		:class="customClass"
 		:fullscreen="fullscreen"
-		:draggable="true"
+		:draggable="false"
 		:width="width"
 		:top="top"
 		:title="titleRef"
@@ -111,12 +111,14 @@ export default defineComponent({
 		// 每次打开弹窗都滚动到头部位置
 		scrollTop: {
 			type: Boolean,
-			default: true
+			default: true,
+      required: false
 		},
 		// 是否显示遮罩层
 		modal: {
 			type: Boolean,
-			default: true
+			default: true,
+      required: false
 		},
 		// Dialog 自身是否插入至 body 元素上。 嵌套的 Dialog 必须指定该属性并赋值为 true
 		appendToBody: {

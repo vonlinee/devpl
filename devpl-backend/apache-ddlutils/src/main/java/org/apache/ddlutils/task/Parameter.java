@@ -10,8 +10,6 @@ import java.util.StringTokenizer;
  * Specifies a parameter for the creation of the database. These are usually platform specific.
  * A parameter consists of a name-value pair and an optional list of platforms for which the
  * parameter shall be used.
- * @version $Revision: 231306 $
- * ant.type name="parameter"
  */
 public class Parameter {
     /**

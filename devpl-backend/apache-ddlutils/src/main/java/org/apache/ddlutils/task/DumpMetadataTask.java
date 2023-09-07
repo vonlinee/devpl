@@ -57,7 +57,7 @@ public class DumpMetadataTask extends Task {
      */
     private String _columnPattern = "%";
     /**
-     * The tables types to read; <code>null</code> or an empty list means that we shall read every type.
+     * The tables type to read; <code>null</code> or an empty list means that we shall read every type.
      */
     private String[] _tableTypes = null;
     /**
@@ -599,7 +599,7 @@ public class DumpMetadataTask extends Task {
                                 xmlWriter.writeAttribute(null, "isNullable", "unknown");
                             }
                         } catch (SQLException ex) {
-                            log("Could not read the IS_NULLABLE value for colum '" + columnName + "' of table '" + tableName + "' from the result set: " + ex.getStackTrace(), Project.MSG_ERR);
+                            log("Could not read the IS_NULLABLE value for colum '" + columnName + "' of table '" + tableName + "' from the result set: " + Arrays.toString(ex.getStackTrace()), Project.MSG_ERR);
                         }
                     }
                     addStringAttribute(xmlWriter, "refCatalog", result, columns, "SCOPE_CATLOG");

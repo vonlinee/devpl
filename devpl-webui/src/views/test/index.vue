@@ -18,6 +18,8 @@ function click() {
 <template>
 	<app3></app3>
 
+  <app1></app1>
+
 	<file-selector ref="fileSelectorRef"></file-selector>
 	<el-button @click="click">显示</el-button>
 </template>

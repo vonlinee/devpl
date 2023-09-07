@@ -11,9 +11,9 @@
 		@toggleScreen="toggleScreen"
 	>
 		<template #content>
-			<div>内容开始</div>
-
-			<div>内容结束</div>
+      <div>
+        
+      </div>
 		</template>
 
 		<template #footer>
@@ -26,10 +26,11 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import PopupWindow from '@/components/dialog/PopupWindow.vue'
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 export default defineComponent({
 	name: 'App1',
-	components: { PopupWindow },
+	components: { MonacoEditor, PopupWindow },
 	setup() {
 		const showDlg = ref()
 		showDlg.value = false

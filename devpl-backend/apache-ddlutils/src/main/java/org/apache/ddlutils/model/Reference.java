@@ -142,7 +142,6 @@ public class Reference implements Serializable {
         _foreignColumnName = foreignColumnName;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Reference other) {
@@ -161,12 +160,10 @@ public class Reference implements Serializable {
         return (otherRef != null) && _localColumnName.equalsIgnoreCase(otherRef._localColumnName) && _foreignColumnName.equalsIgnoreCase(otherRef._foreignColumnName);
     }
 
-
     @Override
     public int hashCode() {
         return Objects.hash(_localColumnName, _foreignColumnName);
     }
-
 
     @Override
     public String toString() {

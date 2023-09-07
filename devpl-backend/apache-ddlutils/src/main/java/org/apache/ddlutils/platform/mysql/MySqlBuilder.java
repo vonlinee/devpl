@@ -194,38 +194,16 @@ public class MySqlBuilder extends SqlBuilder {
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
 
         if (sizeChanged || typeChanged) {
-            String targetNativeType = getNativeType(targetColumn);
-
-            switch (targetColumn.getJdbcTypeCode()) {
-                case Types.BIT:
-                case Types.BOOLEAN:
-                case Types.TINYINT:
-                case Types.SMALLINT:
-                case Types.INTEGER:
-                case Types.BIGINT, Types.FLOAT, Types.REAL, Types.DOUBLE:
-                    targetNativeType = "SIGNED";
-                    break;
-                // ?
-                case Types.DECIMAL:
-                case Types.NUMERIC:
-                    targetNativeType = "DECIMAL";
-                    break;
-                case Types.DATE:
-                    targetNativeType = "DATE";
-                    break;
-                case Types.TIMESTAMP:
-                    targetNativeType = "DATETIME";
-                    break;
-                case Types.CHAR:
-                case Types.VARCHAR:
-                case Types.LONGVARCHAR:
-                case Types.CLOB:
-                    targetNativeType = "CHAR";
-                    break;
-                default:
-                    targetNativeType = "BINARY";
-                    break;
-            }
+            // String targetNativeType = getNativeType(targetColumn);
+            final String targetNativeType = switch (targetColumn.getJdbcTypeCode()) {
+                case Types.BIT, Types.BOOLEAN, Types.TINYINT, Types.SMALLINT, Types.INTEGER, Types.BIGINT, Types.FLOAT, Types.REAL, Types.DOUBLE ->
+                    "SIGNED";
+                case Types.DECIMAL, Types.NUMERIC -> "DECIMAL";
+                case Types.DATE -> "DATE";
+                case Types.TIMESTAMP -> "DATETIME";
+                case Types.CHAR, Types.VARCHAR, Types.LONGVARCHAR, Types.CLOB -> "CHAR";
+                default -> "BINARY";
+            };
 
             print("CAST(");
             if (TypeMap.isTextType(sourceColumn.getJdbcTypeCode()) && TypeMap.isTextType(targetColumn.getJdbcTypeCode()) && sizeChanged) {

@@ -14,7 +14,6 @@ import java.util.regex.PatternSyntaxException;
  * Represents the database model, i.e. the tables in the database. It also
  * contains the corresponding dyna classes for creating dyna beans for the
  * objects stored in the tables.
- * @version $Revision$
  */
 public class Database implements SchemaObject, Serializable {
     /**

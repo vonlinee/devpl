@@ -59,7 +59,7 @@ http.interceptors.request.use(
         config.headers["Authorization"] = sessionStorage.getItem("PsnMgrToken");
 
         // 追加时间戳，防止GET请求缓存
-        if (config.method?.toUpperCase() === 'GET') {
+        if (config.method?.toUpperCase() == 'GET') {
             config.params = {...config.params, t: new Date().getTime()}
         }
         // 表单

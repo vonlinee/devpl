@@ -580,7 +580,6 @@ public class Table implements SchemaObject, Serializable {
     public ForeignKey getSelfReferencingForeignKey() {
         for (int idx = 0; idx < getForeignKeyCount(); idx++) {
             ForeignKey fk = getForeignKey(idx);
-
             if (this.equals(fk.getForeignTable())) {
                 return fk;
             }
@@ -609,11 +608,9 @@ public class Table implements SchemaObject, Serializable {
     public String[] getPrimaryKeyColumnNames() {
         Column[] pkColumns = getPrimaryKeyColumns();
         String[] names = new String[pkColumns.length];
-
         for (int colIdx = 0; colIdx < pkColumns.length; colIdx++) {
             names[colIdx] = pkColumns[colIdx].getName();
         }
-
         return names;
     }
 
@@ -666,7 +663,6 @@ public class Table implements SchemaObject, Serializable {
         }
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Table other) {
@@ -679,13 +675,11 @@ public class Table implements SchemaObject, Serializable {
         return false;
     }
 
-
     @Override
     public int hashCode() {
         // TODO: For now we ignore catalog and schema (type should be irrelevant anyways)
         return Objects.hash(name, _columns, _foreignKeys, _indices);
     }
-
 
     @Override
     public String toString() {

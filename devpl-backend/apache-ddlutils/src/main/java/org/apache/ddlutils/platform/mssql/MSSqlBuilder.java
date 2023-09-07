@@ -36,13 +36,11 @@ public class MSSqlBuilder extends SqlBuilder {
         addEscapedCharSequence("'", "''");
     }
 
-
     @Override
     public void createTable(Database database, Table table, ValueMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
-
 
     @Override
     public void dropTable(Table table) throws IOException {
@@ -76,72 +74,61 @@ public class MSSqlBuilder extends SqlBuilder {
         printEndOfStatement();
     }
 
-
     @Override
     public void dropForeignKeys(Table table) throws IOException {
         turnOnQuotation();
         super.dropForeignKeys(table);
     }
 
-
     @Override
     protected DateFormat getValueDateFormat() {
         return _genericDateFormat;
     }
-
 
     @Override
     protected DateFormat getValueTimeFormat() {
         return _genericTimeFormat;
     }
 
-
     @Override
     protected String getValueAsString(Column column, Object value) {
         if (value == null) {
             return "NULL";
         }
-
-        StringBuffer result = new StringBuffer();
-
+        StringBuilder result = new StringBuilder();
         switch (column.getJdbcTypeCode()) {
-            case Types.REAL:
-            case Types.NUMERIC:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-            case Types.DECIMAL:
+            case Types.REAL, Types.NUMERIC, Types.FLOAT, Types.DOUBLE, Types.DECIMAL -> {
                 // SQL Server does not want quotes around the value
                 if (!(value instanceof String) && (getValueNumberFormat() != null)) {
                     result.append(getValueNumberFormat().format(value));
                 } else {
                     result.append(value);
                 }
-                break;
-            case Types.DATE:
+            }
+            case Types.DATE -> {
                 result.append("CAST(");
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(value instanceof String ? (String) value : getValueDateFormat().format(value));
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(" AS datetime)");
-                break;
-            case Types.TIME:
+            }
+            case Types.TIME -> {
                 result.append("CAST(");
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(value instanceof String ? (String) value : getValueTimeFormat().format(value));
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(" AS datetime)");
-                break;
-            case Types.TIMESTAMP:
+            }
+            case Types.TIMESTAMP -> {
                 result.append("CAST(");
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(value);
                 result.append(getPlatformInfo().getValueQuoteToken());
                 result.append(" AS datetime)");
-                break;
+            }
         }
         return super.getValueAsString(column, value);
     }
-
 
     @Override
     protected String getNativeDefaultValue(Column column) {
@@ -153,12 +140,10 @@ public class MSSqlBuilder extends SqlBuilder {
         }
     }
 
-
     @Override
     protected void writeColumnAutoIncrementStmt(Table table, Column column) throws IOException {
         print("IDENTITY (1,1) ");
     }
-
 
     @Override
     public void dropIndex(Table table, Index index) throws IOException {
@@ -168,7 +153,6 @@ public class MSSqlBuilder extends SqlBuilder {
         printIdentifier(getIndexName(index));
         printEndOfStatement();
     }
-
 
     @Override
     public void dropForeignKey(Table table, ForeignKey foreignKey) throws IOException {
@@ -204,7 +188,6 @@ public class MSSqlBuilder extends SqlBuilder {
         print(getQuotationOnStatement());
     }
 
-
     @Override
     public String getSelectLastIdentityValues(Table table) {
         return "SELECT @@IDENTITY";
@@ -216,14 +199,11 @@ public class MSSqlBuilder extends SqlBuilder {
      * @return The SQL
      */
     protected String getEnableIdentityOverrideSql(Table table) {
-
-        String result = getQuotationOnStatement() +
-            "SET IDENTITY_INSERT " +
-            getDelimitedIdentifier(getTableName(table)) +
-            " ON" +
-            getPlatformInfo().getSqlCommandDelimiter();
-
-        return result;
+        return getQuotationOnStatement() +
+               "SET IDENTITY_INSERT " +
+               getDelimitedIdentifier(getTableName(table)) +
+               " ON" +
+               getPlatformInfo().getSqlCommandDelimiter();
     }
 
     /**
@@ -232,31 +212,25 @@ public class MSSqlBuilder extends SqlBuilder {
      * @return The SQL
      */
     protected String getDisableIdentityOverrideSql(Table table) {
-
-        String result = getQuotationOnStatement() +
-            "SET IDENTITY_INSERT " +
-            getDelimitedIdentifier(getTableName(table)) +
-            " OFF" +
-            getPlatformInfo().getSqlCommandDelimiter();
-
-        return result;
+        return getQuotationOnStatement() +
+               "SET IDENTITY_INSERT " +
+               getDelimitedIdentifier(getTableName(table)) +
+               " OFF" +
+               getPlatformInfo().getSqlCommandDelimiter();
     }
 
-
     @Override
-    public String getDeleteSql(Table table, Map pkValues, boolean genPlaceholders) {
+    public String getDeleteSql(Table table, Map<String, Object> pkValues, boolean genPlaceholders) {
         return getQuotationOnStatement() + super.getDeleteSql(table, pkValues, genPlaceholders);
     }
 
-
     @Override
-    public String getInsertSql(Table table, Map columnValues, boolean genPlaceholders) {
+    public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         return getQuotationOnStatement() + super.getInsertSql(table, columnValues, genPlaceholders);
     }
 
-
     @Override
-    public String getUpdateSql(Table table, Map columnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         return getQuotationOnStatement() + super.getUpdateSql(table, columnValues, genPlaceholders);
     }
 
@@ -270,7 +244,6 @@ public class MSSqlBuilder extends SqlBuilder {
         print(identifier);
         print("'");
     }
-
 
     @Override
     protected void copyData(Table sourceTable, Table targetTable) throws IOException {
@@ -300,7 +273,6 @@ public class MSSqlBuilder extends SqlBuilder {
             printEndOfStatement();
         }
     }
-
 
     @Override
     public void addColumn(Database model, Table table, Column newColumn) throws IOException {
@@ -426,7 +398,6 @@ public class MSSqlBuilder extends SqlBuilder {
         print("END");
         printEndOfStatement();
     }
-
 
     @Override
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {

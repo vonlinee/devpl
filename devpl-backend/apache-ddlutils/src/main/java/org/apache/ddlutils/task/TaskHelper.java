@@ -34,8 +34,8 @@ public class TaskHelper {
      */
     public String[] parseCommaSeparatedStringList(String stringList) {
         String[] tokens = stringList.split(",");
-        ArrayList values = new ArrayList();
-        String last = null;
+        ArrayList<String> values = new ArrayList<>();
+        StringBuilder last = null;
 
         for (int idx = 0; idx < tokens.length; idx++) {
             String str = tokens[idx];
@@ -44,13 +44,13 @@ public class TaskHelper {
                 ((strLen == 1) || (str.charAt(strLen - 2) != '\\'));
 
             if (last != null) {
-                last += "," + str;
+                last.append(",").append(str);
                 if (!endsInSlash) {
-                    values.add(last);
+                    values.add(last.toString());
                     last = null;
                 }
             } else if (endsInSlash) {
-                last = str.substring(0, strLen - 1);
+                last = new StringBuilder(str.substring(0, strLen - 1));
             } else {
                 values.add(str);
             }
@@ -58,6 +58,6 @@ public class TaskHelper {
         if (last != null) {
             values.add(last + ",");
         }
-        return (String[]) values.toArray(new String[values.size()]);
+        return values.toArray(new String[0]);
     }
 }
