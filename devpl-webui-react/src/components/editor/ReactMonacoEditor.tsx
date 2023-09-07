@@ -35,14 +35,15 @@ const editorWillMount = () => {
   });
 };
 
+export interface Ref {
+  ref: any
+}
+
 /**
  * 封装 ReactMoancoEditor
  * https://github.com/react-monaco-editor/react-monaco-editor
  */
-const ReactMoancoEditor: React.ForwardRefRenderFunction<
-  React.Ref<any>,
-  MonacoEditorProps
-> = (props: MonacoEditorProps, ref: React.Ref<any>) => {
+const ReactMoancoEditor = (props: MonacoEditorProps, ref: Ref) => {
   const [text, setText] = useState("hello world");
   const [language, setLanguage] = useState("plain");
 
@@ -64,7 +65,7 @@ const ReactMoancoEditor: React.ForwardRefRenderFunction<
 
   return (
     <>
-      <MonacoEditor
+      <MonacoEditor 
         ref={ref}
         language={language}
         editorWillMount={editorWillMount}
