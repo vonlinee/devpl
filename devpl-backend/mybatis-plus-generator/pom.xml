@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.5.2</version>
+            <version>3.5.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -155,14 +155,6 @@
             <artifactId>annotations</artifactId>
             <version>24.0.1</version>
             <scope>compile</scope>
-        </dependency>
-
-        <!--内部项目依赖-->
-
-        <dependency>
-            <groupId>io.devpl</groupId>
-            <artifactId>apache-ddlutils</artifactId>
-            <version>${version}</version>
         </dependency>
     </dependencies>
 </project>

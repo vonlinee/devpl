@@ -3,6 +3,7 @@ package io.devpl.generator.config;
 import io.devpl.generator.common.utils.Result;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -10,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /**
  * 返回值统一处理
  */
-//@Component
+// @Component
 public class ResultHandlerMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
 
     private final HandlerMethodReturnValueHandler delegate;

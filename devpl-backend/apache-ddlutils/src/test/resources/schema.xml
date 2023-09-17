@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name="testdb">
-  <table name='user' description="用户表" schema="testdb" skipSql="true">
-    <column name='user_id' type='INTEGER' primaryKey='true'/>
-    <column name='user_name' type='VARCHAR' size='128' default='NULL'/>
-    <column name='password' type='VARCHAR' size='128' default='NULL'/>
-    <column name='height' type='FLOAT' size='128' default='NULL'/>
-  </table>
-</database>

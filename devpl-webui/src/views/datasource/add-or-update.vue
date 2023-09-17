@@ -21,7 +21,7 @@
 				<el-input v-model="dataForm.username" placeholder="用户名"></el-input>
 			</el-form-item>
 			<el-form-item label="密码" prop="password">
-				<el-input v-model="dataForm.password" autocomplete="off" type="password" placeholder="密码"></el-input>
+				<el-input v-model="dataForm.password" autocomplete="off" type="password" placeholder="密码" show-password></el-input>
 			</el-form-item>
 		</el-form>
 		<template #footer>
@@ -36,6 +36,7 @@ import { reactive, ref } from 'vue'
 import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
 import { useDataSourceApi, useDataSourceSubmitApi } from '@/api/datasource'
 import { decrypt, encrypt } from '@/utils/tool'
+import { da } from 'element-plus/es/locale'
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -63,6 +64,10 @@ const init = (id?: number) => {
 	// id 存在则为修改
 	if (id) {
 		getDataSource(id)
+	} else {
+		// 新增
+		dataForm.username = "root"
+		dataForm.password = "123456"
 	}
 }
 

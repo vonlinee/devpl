@@ -4,6 +4,7 @@ import FileSelector from '@/components/FileSelector.vue'
 import App1 from '@/views/test/App1.vue'
 import App2 from '@/views/test/App2.vue'
 import App3 from '@/views/test/App3.vue'
+import CodeRunner from "@/views/test/CodeRunner.vue";
 
 let file = ref()
 
@@ -22,6 +23,8 @@ function click() {
 
 	<file-selector ref="fileSelectorRef"></file-selector>
 	<el-button @click="click">显示</el-button>
+
+  <code-runner></code-runner>
 </template>
 
 <style lang="scss"></style>

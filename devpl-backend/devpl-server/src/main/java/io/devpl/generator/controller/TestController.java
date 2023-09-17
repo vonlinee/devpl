@@ -1,6 +1,7 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.Result;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +25,13 @@ public class TestController {
 
     ExtensionLoader<MyPlugin> loader = new ExtensionLoader<>();
 
-    @PostMapping(value = "/jar")
-    public Result<?> test1(Map<String, Object> map) {
+    @PostMapping(value = "/jar", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result<?> test1(MultipartFile jarFile, Map<String, Object> map) {
         //  String jarFilePath, String jarFileSavePath, String classPath, MultipartFile jarFile
 
         String jarFilePath = (String) map.get("jarFilePath");
         String classPath = (String) map.get("classPath");
         String jarFileSavePath = (String) map.get("jarFileSavePath");
-        MultipartFile jarFile = (MultipartFile) map.get("jarFile");
 
         Assert.hasText(jarFileSavePath, "保存路径不能为空");
 

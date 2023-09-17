@@ -28,7 +28,7 @@ public class FileController {
 
     /**
      * 单文件上传
-     * @return 返回文件上传成功的路径
+     * @return 返回文件上传成功的路径 保存目录 ${devpl.file.upload.root}作为根目录，folder/filename
      */
     @ResponseBody
     @PostMapping(value = "/upload/single")

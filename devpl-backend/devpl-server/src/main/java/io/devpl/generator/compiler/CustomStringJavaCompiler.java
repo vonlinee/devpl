@@ -65,7 +65,7 @@ public class CustomStringJavaCompiler {
             long startTime = System.currentTimeMillis();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             PrintStream printStream = new PrintStream(outputStream);
-            // PrintStream printStream = new PrintStream("/Users/andy/Desktop/tem.sql"); //输出到文件
+            // PrintStream ps = new PrintStream("/Users/andy/Desktop/tem.sql"); //输出到文件
             System.setOut(printStream);
 
             StringClassLoader scl = new StringClassLoader();

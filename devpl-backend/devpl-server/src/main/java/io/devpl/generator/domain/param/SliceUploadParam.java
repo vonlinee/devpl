@@ -11,27 +11,31 @@ public class SliceUploadParam extends FileUploadParam {
      * 文件总块数，文件不分块时为1
      */
     @Min(value = 1, message = "文件总块数不能小于1")
-    private int chunks;
+    private Integer chunks = 1;
 
     /**
      * 当前块数，从0开始
      */
     @Min(value = 0, message = "当前块数不能小于0")
-    private int chunk;
+    private Integer chunk = 1;
 
     public int getChunks() {
         return chunks;
     }
 
-    public void setChunks(int chunks) {
-        this.chunks = chunks;
+    public void setChunks(Integer chunks) {
+        if (chunks != null) {
+            this.chunks = chunks;
+        }
     }
 
     public int getChunk() {
         return chunk;
     }
 
-    public void setChunk(int chunk) {
-        this.chunk = chunk;
+    public void setChunk(Integer chunk) {
+        if (chunks != null) {
+            this.chunk = chunk;
+        }
     }
 }

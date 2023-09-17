@@ -22,12 +22,12 @@ import java.util.List;
 public class ProjectModifyController {
     private final ProjectModifyService projectModifyService;
 
-    @GetMapping("page")
+    @GetMapping("/page")
     public Result<PageResult<ProjectModify>> page(@Valid Query query) {
         return Result.ok(projectModifyService.page(query));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Result<ProjectModify> get(@PathVariable("id") Long id) {
         return Result.ok(projectModifyService.getById(id));
     }
