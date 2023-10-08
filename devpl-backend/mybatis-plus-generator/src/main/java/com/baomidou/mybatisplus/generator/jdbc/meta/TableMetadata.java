@@ -1,5 +1,6 @@
 package com.baomidou.mybatisplus.generator.jdbc.meta;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -10,6 +11,7 @@ import java.util.Objects;
  */
 public final class TableMetadata implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 7207765860662369964L;
 
     /**

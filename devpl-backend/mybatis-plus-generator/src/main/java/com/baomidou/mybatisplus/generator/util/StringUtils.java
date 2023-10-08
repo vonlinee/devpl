@@ -281,7 +281,7 @@ public final class StringUtils {
      */
     public static String prefixToLower(String rawString, int index) {
         return rawString.substring(0, index).toLowerCase() +
-            rawString.substring(index);
+               rawString.substring(index);
     }
 
     /**
@@ -402,6 +402,11 @@ public final class StringUtils {
         return true;
     }
 
+    /**
+     * 去除不可见的字符，例如 \t, \n, \r
+     * @param str 原字符串
+     * @return 去掉\t, \n, \r之后的结果
+     */
     public static String trimInvisiableCharacters(String str) {
         if (str == null || str.isEmpty()) {
             return "";

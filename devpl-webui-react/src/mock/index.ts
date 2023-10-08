@@ -461,7 +461,6 @@ function post(url: UrlType, data: any) {
   });
 }
 
-
 const mock = { get, post };
 
 export default mock;

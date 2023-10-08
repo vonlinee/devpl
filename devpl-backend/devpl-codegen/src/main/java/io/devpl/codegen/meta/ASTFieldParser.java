@@ -49,6 +49,8 @@ public class ASTFieldParser implements CompilationUnitVisitor<List<MetaField>> {
         return field.getJavadocComment()
             .map(JavadocComment::parse)
             .map(Javadoc::toText)
-            .orElse("");
+            .orElse("")
+            .replace("\t", "")
+            .replace("\n", "");
     }
 }

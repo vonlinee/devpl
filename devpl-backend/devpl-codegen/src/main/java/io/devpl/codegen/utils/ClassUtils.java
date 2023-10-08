@@ -47,7 +47,7 @@ public final class ClassUtils {
      * @return ignore
      */
     public static String getSimpleName(String className) {
-        return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(StringPool.DOT) + 1);
+        return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(".") + 1);
     }
 
     /**
@@ -79,7 +79,7 @@ public final class ClassUtils {
      * [a-zA-Z]+[0-9a-zA-Z_]*(\.[a-zA-Z]+[0-9a-zA-Z_]*)*\.[a-zA-Z]+[0-9a-zA-Z_]*(\$[a-zA-Z]+[0-9a-zA-Z_]*)*
      * 不能有空格，不能连续两个.
      * 支持内部类，不支持lambda
-     * https://blog.csdn.net/zhanglianyu00/article/details/77499295
+     * <a href="https://blog.csdn.net/zhanglianyu00/article/details/77499295">...</a>
      * @param str 字符串
      * @return 是否是全限定类名
      */
@@ -110,7 +110,7 @@ public final class ClassUtils {
     /**
      * 获取类的包名
      * @param qualifiedClassName 全限定类名
-     * @return
+     * @return 全类名的包名，比如java.util.List，返回java.util
      */
     public static String getPackageName(String qualifiedClassName) {
         if (qualifiedClassName == null || qualifiedClassName.length() == 0) {
@@ -156,7 +156,6 @@ public final class ClassUtils {
         }
         return false;
     }
-
 
     /**
      * <p>

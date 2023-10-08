@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { MenuAction, MenuState } from "@/types"
 
-
 const initGlobalState: MenuState = {
   openedMenu: [], // 保存已经打开的菜单栏 用于顶部导航
   openMenuKey: [], // 打开的菜单栏的key  用于侧边栏

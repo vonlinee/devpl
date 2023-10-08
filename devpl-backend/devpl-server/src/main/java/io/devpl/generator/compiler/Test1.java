@@ -6,13 +6,14 @@ package io.devpl.generator.compiler;
 public class Test1 {
 
     public static void main(String[] args) {
-        String code = "public class HelloWorld {\n" +
-            "    public static void main(String []args) {\n" +
-            "\t\tfor(int i=0; i < 1; i++){\n" +
-            "\t\t\t       System.out.println(\"Hello World!\");\n" +
-            "\t\t}\n" +
-            "    }\n" +
-            "}";
+        String code = """
+                public class HelloWorld {
+                    public static void main(String []args) {
+                        for(int i=0; i < 1; i++){
+                            System.out.println("Hello World!");
+                        }
+                    }
+                }""";
         CustomStringJavaCompiler compiler = new CustomStringJavaCompiler(code);
         boolean res = compiler.compile();
         if (res) {
@@ -32,7 +33,5 @@ public class Test1 {
         }
 
     }
-
-
 }
 

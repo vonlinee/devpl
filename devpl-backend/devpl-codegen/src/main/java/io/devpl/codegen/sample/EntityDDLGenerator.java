@@ -16,7 +16,7 @@ public class EntityDDLGenerator {
         final String root = new File("").getAbsolutePath() + "/devpl-codegen/src/main/java/";
 
         String path = root + Bean.class.getName().replace(".", "/") + ".java";
-
+        System.out.println(path);
         JavaParserUtils.parse(new File(path), new ASTFieldParser()).ifPresent(fieldInfos -> {
             DdlBuilder builder = new DdlBuilder();
             builder.create().tableName("Table");

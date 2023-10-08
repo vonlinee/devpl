@@ -5,6 +5,7 @@ import MyIcon from "@/components/icon";
 import { stopPropagation } from "@/utils";
 import { MenuItem } from "@/types";
 import type { MenuProps } from "antd/es/menu";
+
 type AntdMenuItem = Required<MenuProps>["items"][number];
 
 import * as layoutTypes from "@/store/layout/actionTypes";
@@ -72,6 +73,12 @@ const FlexBox = ({ children }: { children: JSX.Element }) => {
     </Col>
   );
 };
+
+/**
+ * 侧边栏 Sider 组件
+ * @param param0
+ * @returns
+ */
 const SliderContent = ({ children }: { children: JSX.Element }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { styles } = useStyle();
@@ -100,8 +107,8 @@ const SiderMenu = () => {
   const layout = useStateLayout();
   const menuList = useStateMenuList();
 
-  console.log("所有菜单结构")
-  menuList.forEach((item) => console.log(item))
+  console.log("所有菜单结构");
+  menuList.forEach((item) => console.log(item));
 
   const { styles } = useStyle();
   // 菜单组折叠

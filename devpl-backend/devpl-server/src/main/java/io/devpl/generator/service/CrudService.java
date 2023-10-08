@@ -1,4 +1,4 @@
-package io.devpl.generator.dao;
+package io.devpl.generator.service;
 
 /**
  * 增删改查 Mapper

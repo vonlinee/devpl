@@ -1920,11 +1920,10 @@ public final class StringUtils {
      */
     public static String firstToLowerCase(String param) {
         if (isBlank(param)) {
-            return StringPool.EMPTY;
+            return param;
         }
         return param.substring(0, 1).toLowerCase() + param.substring(1);
     }
-
 
     /**
      * 字符串驼峰转下划线格式
@@ -1933,7 +1932,7 @@ public final class StringUtils {
      */
     public static String camelToUnderline(String param) {
         if (isBlank(param)) {
-            return StringPool.EMPTY;
+            return param;
         }
         int len = param.length();
         StringBuilder sb = new StringBuilder(len);
@@ -1947,7 +1946,6 @@ public final class StringUtils {
         return sb.toString();
     }
 
-
     /**
      * 前n个首字母小写,之后字符大小写的不变
      * @param rawString 需要处理的字符串
@@ -1956,9 +1954,8 @@ public final class StringUtils {
      */
     public static String prefixToLower(String rawString, int index) {
         return rawString.substring(0, index).toLowerCase() +
-            rawString.substring(index);
+               rawString.substring(index);
     }
-
 
     /**
      * 删除字符前缀之后,首字母小写,之后字符大小写的不变

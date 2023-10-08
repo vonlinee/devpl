@@ -2,6 +2,7 @@ package io.devpl.codegen.utils;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -21,7 +22,7 @@ public class CollectionUtils {
      * @return V
      * @since 3.4.0
      */
-    public static <K, V> V computeIfAbsent(Map<K, V> concurrentHashMap, K key, Function<? super K, ? extends V> mappingFunction) {
+    public static <K, V> V computeIfAbsent(ConcurrentHashMap<K, V> concurrentHashMap, K key, Function<? super K, ? extends V> mappingFunction) {
         V v = concurrentHashMap.get(key);
         if (v != null) {
             return v;

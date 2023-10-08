@@ -4,6 +4,7 @@ import UserReducer from "./user/reducer";
 import LayoutReducer from "./layout/reducer";
 import VisibleReducer from "./visible/reducer";
 import ThemeReducer from "./theme/reducer"
+
 const reducer = combineReducers({
   menu: MenuReducer,
   user: UserReducer,
@@ -12,6 +13,9 @@ const reducer = combineReducers({
   theme: ThemeReducer
 });
 
+/**
+ * 创建store实例
+ */
 const store = createStore(
   reducer,
   import.meta.env.REACT_APP_MODE === "development" &&
