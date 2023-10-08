@@ -9,11 +9,11 @@ import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.Set;
 
-public class Main extends JFrame {
+public class MainFrame extends JFrame {
 
     JTextArea txaRestult = new JTextArea();
 
-    public Main() {
+    public MainFrame() {
         this.setSize(600, 500);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -21,16 +21,19 @@ public class Main extends JFrame {
 
         this.add(jPanel);
 
-        jPanel.setLayout(new GridLayout());
+        BorderLayout layout = new BorderLayout();
+        layout.setHgap(10);
+        layout.setVgap(10);
+
+        jPanel.setLayout(layout);
 
         JTextArea jTextArea = new JTextArea();
 
-        jTextArea.setSize(400, 400);
 
-        jPanel.add(jTextArea);
-        jPanel.add(txaRestult);
 
         JButton btn = new JButton("解析");
+        btn.setSize(100, 100);
+        jPanel.add(btn, BorderLayout.CENTER);
         btn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -42,12 +45,18 @@ public class Main extends JFrame {
                 txaRestult.setText(String.valueOf(selectColumns));
             }
         });
-        jPanel.add(btn);
+        jPanel.add(btn, BorderLayout.NORTH);
+
+        jTextArea.setSize(400, 400);
+        txaRestult.setSize(400, 400);
+
+        jPanel.add(jTextArea, BorderLayout.EAST);
+        jPanel.add(txaRestult, BorderLayout.WEST);
     }
 
     public static void main(String[] args) {
 
-        Main main = new Main();
+        MainFrame main = new MainFrame();
         main.setVisible(true);
     }
 }
