@@ -44,5 +44,22 @@
             <artifactId>richtextfx</artifactId>
             <version>0.11.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.devpl</groupId>
+            <artifactId>devpl-codegen</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.css</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
