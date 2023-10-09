@@ -58,6 +58,7 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.css</include>
+                    <include>**/*.fxml</include>
                 </includes>
             </resource>
         </resources>

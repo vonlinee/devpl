@@ -5,52 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c82414c3-4f20-4720-a474-64dc489a58db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/copyright.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/App2.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/popup.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/db/mysql.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/db/mysql.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/Getter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/KVPair.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/io/EndianUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/io/EndianUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/MathUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/DevplMain8088.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/DevplMain8088.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/entity/GenFieldType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/entity/GenFieldType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/AutoGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/AutoGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/DataSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/DataSourceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/ITypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/ITypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/ClickHouseTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/ClickHouseTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/DB2TypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/DB2TypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/DmTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/DmTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/FirebirdTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/FirebirdTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/KingbaseESTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/KingbaseESTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/MySqlTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/MySqlTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/OracleTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/OracleTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/OscarTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/OscarTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/PostgreSqlTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/PostgreSqlTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/SqlServerTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/SqlServerTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/SqliteTypeConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/SqliteTypeConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/TypeConverts.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/converts/TypeConverts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/po/IntrospectedColumn.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/po/IntrospectedColumn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/querys/DbQueryDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/querys/DbQueryDecorator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/rules/DbColumnType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/rules/DbColumnType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/rules/IColumnType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/config/rules/ColumnJavaType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/meta/TableMetadata.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/meta/TableMetadata.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/query/SQLQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/query/SQLQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/type/TypeConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/type/TypeConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/type/TypeRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/type/TypeRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/MainApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/TablePane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/TextRegion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/ContentContainer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/LayoutPane.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/MenuContainer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/menu/NavigationMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/menu/RouterView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/log/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/log/LoggerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/FxmlBinder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/FxmlView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/SceneGraphAccessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/View.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/ViewBase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/pages/MainView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/LRUCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/Utils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/WeakValueHashMap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/FieldsView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/IndexView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/TestView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/fields.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/test.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/io/devpl/codegen/utils/ClassUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/io/devpl/codegen/utils/ClassUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/EditorView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/CodeRegion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/module-info.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/index.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/index.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/editor/ReactMonacoEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/editor/ReactMonacoEditor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/power/test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/power/test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/.eslintrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/components/dialog/MyDialog.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/components/dialog/MyDialog.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/components/dialog/PopupWindow.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/components/dialog/PopupWindow.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/field-type/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/field-type/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/test/App1.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/App1.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,9 +68,9 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2V15ufn3R0VEznS0woodW1e8qA5" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -87,6 +79,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "dev",
     "last_opened_file_path": "D:/Develop/Code/Github/devpl-backend/devpl-webui-react",
@@ -95,7 +88,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.General",
     "ts.external.directory.path": "D:\\Develop\\Code\\Github\\devpl-backend\\devpl-webui-react\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -109,6 +102,7 @@
       <option name="presentableId" value="Default" />
       <updated>1684131571551</updated>
       <workItem from="1693990970424" duration="2379000" />
+      <workItem from="1696847302744" duration="165000" />
     </task>
     <servers />
   </component>

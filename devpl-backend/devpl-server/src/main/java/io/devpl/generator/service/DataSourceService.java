@@ -3,8 +3,8 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.config.DataSourceInfo;
-import io.devpl.generator.entity.GenDataSource;
+import io.devpl.generator.config.ConnectionInfo;
+import io.devpl.generator.entity.DataSourceInfo;
 
 import javax.annotation.Nullable;
 import java.sql.Connection;
@@ -13,11 +13,11 @@ import java.util.List;
 /**
  * 数据源管理
  */
-public interface DataSourceService extends BaseService<GenDataSource> {
+public interface DataSourceService extends BaseService<DataSourceInfo> {
 
-    PageResult<GenDataSource> page(Query query);
+    PageResult<DataSourceInfo> page(Query query);
 
-    List<GenDataSource> getList();
+    List<DataSourceInfo> getList();
 
     /**
      * 获取数据库产品名，如：MySQL
@@ -31,7 +31,7 @@ public interface DataSourceService extends BaseService<GenDataSource> {
      * @param datasourceId 数据源ID
      */
     @Nullable
-    DataSourceInfo findById(Long datasourceId);
+    ConnectionInfo findById(Long datasourceId);
 
     /**
      * 获取数据库连接
@@ -40,4 +40,6 @@ public interface DataSourceService extends BaseService<GenDataSource> {
      */
     @Nullable
     Connection getConnection(Long dataSourceId);
+
+    List<String> getDbNames(DataSourceInfo entity);
 }

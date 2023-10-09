@@ -1,6 +1,6 @@
 <template>
   <el-row class="el-row">
-    <el-col :span="16" style="height: 500px">
+    <el-col :span="16">
       <monaco-editor ref="inputRef" language="xml" height="400px"></monaco-editor>
     </el-col>
     <el-col :span="8">
@@ -41,12 +41,10 @@
     </template>
   </el-dialog>
 
-  <monaco-editor ref="sqlRef" language="sql"></monaco-editor>
+  <monaco-editor ref="sqlRef" language="sql" height="400px"></monaco-editor>
 </template>
 
 <script setup lang="ts">
-// Vue Codemirror 文档：https://github.com/surmon-china/vue-codemirror
-// 语言支持
 import { hasText } from "@/utils/tool";
 import { onMounted, reactive, ref } from "vue";
 
@@ -113,7 +111,7 @@ function getSqlOfMapperStatement(real: boolean) {
     return;
   }
   apiGetSql(code.value, mapperParams.value, real).then(res => {
-    sqlRef.value.setText(res.data)
+    sqlRef.value.setText(res.data);
   });
 }
 

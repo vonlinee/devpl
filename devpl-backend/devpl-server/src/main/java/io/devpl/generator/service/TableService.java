@@ -3,7 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
-import io.devpl.generator.config.DataSourceInfo;
+import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 
@@ -32,7 +32,7 @@ public interface TableService extends BaseService<GenTable> {
      * @param datasource 数据源
      * @param tableName  表名
      */
-    GenTable getTable(DataSourceInfo datasource, String tableName);
+    GenTable getTable(ConnectionInfo datasource, String tableName);
 
     /**
      * 同步数据库表
@@ -47,11 +47,11 @@ public interface TableService extends BaseService<GenTable> {
      * @param tableName  表名
      * @return 表的所有字段信息
      */
-    List<GenTableField> getTableFieldList(DataSourceInfo datasource, Long tableId, String tableName);
+    List<GenTableField> getTableFieldList(ConnectionInfo datasource, Long tableId, String tableName);
 
     /**
      * 根据数据源，获取指定数据表
      * @param datasource 数据源
      */
-    List<GenTable> getTableList(DataSourceInfo datasource);
+    List<GenTable> getTableList(ConnectionInfo datasource);
 }

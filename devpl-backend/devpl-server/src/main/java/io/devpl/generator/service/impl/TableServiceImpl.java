@@ -8,7 +8,7 @@ import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
-import io.devpl.generator.config.DataSourceInfo;
+import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
@@ -70,7 +70,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
     @Transactional(rollbackFor = Exception.class)
     public void importTable(Long datasourceId, String tableName) {
         // 初始化配置信息
-        DataSourceInfo dataSource = dataSourceService.findById(datasourceId);
+        ConnectionInfo dataSource = dataSourceService.findById(datasourceId);
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
@@ -142,7 +142,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
      * @param tableName  表名
      */
     @Override
-    public GenTable getTable(DataSourceInfo datasource, String tableName) {
+    public GenTable getTable(ConnectionInfo datasource, String tableName) {
         AbstractQuery query = datasource.getDbQuery();
         String tableQuerySql = query.getTableQuerySql(tableName);
         // 查询数据
@@ -170,7 +170,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
         GenTable table = this.getById(id);
 
         // 初始化配置信息
-        DataSourceInfo datasource = dataSourceService.findById(table.getDatasourceId());
+        ConnectionInfo datasource = dataSourceService.findById(table.getDatasourceId());
 
         // 从数据库获取表字段列表
         List<GenTableField> dbTableFieldList = getTableFieldList(datasource, table.getId(), table.getTableName());
@@ -220,7 +220,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
      * @param tableName  表名
      */
     @Override
-    public List<GenTableField> getTableFieldList(DataSourceInfo datasource, Long tableId, String tableName) {
+    public List<GenTableField> getTableFieldList(ConnectionInfo datasource, Long tableId, String tableName) {
         List<GenTableField> tableFieldList = new ArrayList<>();
 
         AbstractQuery query = datasource.getDbQuery();
@@ -268,7 +268,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implem
      * @param datasource 数据源
      */
     @Override
-    public List<GenTable> getTableList(DataSourceInfo datasource) {
+    public List<GenTable> getTableList(ConnectionInfo datasource) {
         List<GenTable> tableList = new ArrayList<>();
         AbstractQuery query = datasource.getDbQuery();
         String tableQuerySql = query.getTableQuerySql(null);

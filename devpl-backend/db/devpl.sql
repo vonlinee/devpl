@@ -457,10 +457,10 @@ VALUES (1, 'net.maku.framework.mybatis.entity', 'BaseEntity',
         '2023-06-30 10:25:16');
 
 -- ----------------------------
--- Table structure for gen_datasource
+-- Table structure for datasource_info
 -- ----------------------------
-DROP TABLE IF EXISTS `gen_datasource`;
-CREATE TABLE `gen_datasource`
+DROP TABLE IF EXISTS `datasource_info`;
+CREATE TABLE `datasource_info`
 (
     `id`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `db_type`     varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库类型',
@@ -477,9 +477,9 @@ CREATE TABLE `gen_datasource`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of gen_datasource
+-- Records of datasource_info
 -- ----------------------------
-INSERT INTO `gen_datasource`
+INSERT INTO `datasource_info`
 VALUES (1, 'MySQL', 'lancoo',
         'jdbc:mysql://192.168.129.82:3306/lgdb_exam_management?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8',
         'root', 'LancooECP', '2023-08-01 09:34:10');
@@ -8131,3 +8131,8 @@ CREATE TABLE `column_info`
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4 COMMENT ='数据库表列信息记录表'
   ROW_FORMAT = Dynamic;
+
+ALTER TABLE devpl.datasource_info
+    ADD database_name varchar(100) NULL COMMENT '数据库名称';
+ALTER TABLE devpl.datasource_info
+    ADD driver_props json NULL COMMENT '驱动属性';

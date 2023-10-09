@@ -1,6 +1,6 @@
 package io.devpl.generator.utils;
 
-import io.devpl.generator.config.DataSourceInfo;
+import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
 import oracle.jdbc.OracleConnection;
 
@@ -25,7 +25,7 @@ public class DbUtils {
     /**
      * 获得数据库连接
      */
-    public static Connection getConnection(DataSourceInfo dataSource) throws SQLException {
+    public static Connection getConnection(ConnectionInfo dataSource) throws SQLException {
         DriverManager.setLoginTimeout(CONNECTION_TIMEOUTS_SECONDS);
         loadDriver(dataSource.getDbType().getDriverClass());
         Connection connection = DriverManager.getConnection(dataSource.getConnUrl(), dataSource.getUsername(), dataSource.getPassword());

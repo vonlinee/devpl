@@ -1,7 +1,6 @@
 module devpl.codegen {
     requires org.slf4j;
     requires java.sql;
-    requires devpl.sdk.internal;
     requires com.baomidou.mybatis.plus.annotation;
     requires freemarker;
     requires com.alibaba.fastjson2;
@@ -23,7 +22,6 @@ module devpl.codegen {
     requires tencentcloud.sdk.java;
     requires com.google.common;
     requires mybatis.plus.generator;
-    requires jsonfive.java;
 
     exports io.devpl.codegen;
 
@@ -37,4 +35,6 @@ module devpl.codegen {
     exports io.devpl.codegen.ddl.service;
 
     requires java.desktop;
+    requires jsonfive.java;
+    requires devpl.sdk.internal;
 }

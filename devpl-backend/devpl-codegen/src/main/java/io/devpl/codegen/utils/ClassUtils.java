@@ -1,7 +1,5 @@
 package io.devpl.codegen.utils;
 
-import io.devpl.sdk.util.StringUtils;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

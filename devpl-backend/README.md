@@ -4,7 +4,8 @@
 JDK: 17.0.5+
 Maven: 3.6.0+
 
-
+1. element-plus: https://element-plus.gitee.io/zh-CN/component/button.html
+2. vxe-table: https://vxetable.cn/#/table/start/install
 
 
 # 问题记录

@@ -73,8 +73,8 @@ import {decrypt} from '@/utils/tool'
 import DrvierManager from './DrvierManager.vue'
 
 const state: IHooksOptions = reactive({
-	dataListUrl: '/gen/datasource/page',
-	deleteUrl: '/gen/datasource',
+	dataListUrl: '/api/gen/datasource/page',
+	deleteUrl: '/api/gen/datasource',
 	queryForm: {
 		connName: '',
 		dbType: ''

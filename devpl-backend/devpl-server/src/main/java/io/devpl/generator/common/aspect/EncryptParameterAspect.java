@@ -97,8 +97,11 @@ public class EncryptParameterAspect {
                 // 设置private类型允许访问
                 field.setAccessible(Boolean.TRUE);
                 try {
-                    String newFieldValue = isDecrypt ? EncryptUtils.decrypt((String) field.get(item)) : EncryptUtils.encrypt((String) field.get(item));
-                    field.set(item, newFieldValue);
+                    Object val = field.get(item);
+                    if (val instanceof String) {
+                        String newFieldValue = isDecrypt ? EncryptUtils.decrypt((String) val) : EncryptUtils.encrypt((String) field.get(item));
+                        field.set(item, newFieldValue);
+                    }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     throw new RuntimeException(e);

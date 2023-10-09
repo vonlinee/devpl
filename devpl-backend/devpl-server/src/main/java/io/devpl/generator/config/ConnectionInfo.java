@@ -10,7 +10,7 @@ import io.devpl.generator.config.query.MySqlQuery;
 import io.devpl.generator.config.query.OracleQuery;
 import io.devpl.generator.config.query.PostgreSqlQuery;
 import io.devpl.generator.config.query.SQLServerQuery;
-import io.devpl.generator.entity.GenDataSource;
+import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.utils.DbUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Data
 @Slf4j
-public class DataSourceInfo {
+public class ConnectionInfo {
     /**
      * 数据源ID
      */
@@ -46,7 +46,7 @@ public class DataSourceInfo {
 
     private Connection connection;
 
-    public DataSourceInfo(GenDataSource entity) {
+    public ConnectionInfo(DataSourceInfo entity) {
         this.id = entity.getId();
         this.dbType = DbType.getValue(entity.getDbType());
         this.connUrl = entity.getConnUrl();
@@ -68,7 +68,7 @@ public class DataSourceInfo {
         }
     }
 
-    public DataSourceInfo(Connection connection) throws SQLException {
+    public ConnectionInfo(Connection connection) throws SQLException {
         this.id = 0L;
         this.dbType = DbType.getValue(connection.getMetaData().getDatabaseProductName());
         if (dbType == DbType.MySQL) {
