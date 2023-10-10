@@ -1,11 +1,9 @@
 <template>
-  <MyTable
+  <ElPlusDataTable
     ref="tableRef"
     :page="tableData.page"
     :isSelect="true"
     :rowKey="'id'"
-    @changeSize="(size) => changeSize(size)"
-    @changePage="(page) => changePage(page)"
     :header="header"
     :tableData="
       tableData.data.slice(
@@ -13,8 +11,6 @@
         tableData.page.pageIndex * tableData.page.pageSize
       )
     "
-    @onSelectTap="changeSelectTap"
-    @onSelectAll="changeSelectAll"
   >
     <template v-slot:sex="scope">
       {{ scope.row.sex == "0" ? "男" : "女" }}
@@ -23,11 +19,11 @@
       <el-button @click="handelEdit(scope.row)">编辑</el-button>
       <el-button @click="handelDel(scope.row)">删除</el-button>
     </template>
-  </MyTable>
+  </ElPlusDataTable>
 </template>
-​
+
 <script lang="ts" setup>
-import MyTable from "./components/myTable.vue";
+import ElPlusDataTable from "@/components/ElPlusDataTable.vue";
 import { ref, reactive, onMounted } from "vue";
 
 const tableRef = ref();
@@ -65,10 +61,10 @@ const tableData = reactive({
     total: 500
   }
 });
-const handelEdit = (val) => {
+const handelEdit = (val: any) => {
   console.log("编辑");
 };
-const handelDel = (val) => {
+const handelDel = (val: any) => {
   console.log("删除");
 };
 onMounted(() => {

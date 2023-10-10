@@ -4,20 +4,18 @@
 <template>
   <!-- 是否显示表头的全选 -->
   <div :class="{ isSingle: props.isSingle }">
-    <el-table :header-cell-style="props.headerCellStyle" :header-row-style="props.headerRowStyle"
-              :data="props.tableData"
-              :max-height="props.maxHeight" :size="props.size" ref="tableRef" style="width: 100%"
-              :highlight-current-row="props.highlightCurrentRow" @current-change="changeCurrent"
-              @selection-change="changeSelect"
-              @select="changeSelectTap" @select-all="changeSelectAll" :row-key="props.rowKey"
-              :tree-props="props.treeProps || treeProps">
+    <el-table :header-cell-style="props.headerCellStyle" :header-row-style="props.headerRowStyle" :data="props.tableData"
+      :max-height="props.maxHeight" :size="props.size" ref="tableRef" style="width: 100%"
+      :highlight-current-row="props.highlightCurrentRow" @current-change="changeCurrent" @selection-change="changeSelect"
+      @select="changeSelectTap" @select-all="changeSelectAll" :row-key="props.rowKey"
+      :tree-props="props.treeProps || treeProps">
       <!-- 是否开启多选功能 -->
       <el-table-column v-if="props.isSelect" :reserve-selection="true" type="selection" width="50" />
       <!-- 遍历表头数据 -->
       <template v-for="(item, index) in props.header">
         <el-table-column :key="index" :align="item.align || 'center'" :sortable="item.sortable" :width="item.width"
-                         :min-width="item.minWidth" :label="item.label" :prop="item.prop" :fixed="item.fixed"
-                         v-if="item.isShow == false ? false : true" show-overflow-tooltip>
+          :min-width="item.minWidth" :label="item.label" :prop="item.prop" :fixed="item.fixed"
+          v-if="item.isShow == false ? false : true" show-overflow-tooltip>
           <!-- 自定义行slot -->
           <template v-if="item.isCustom" #default="scope">
             <slot :name="item.prop" :row="scope.row" :column="scope.column" :index="scope.$index"></slot>
@@ -28,8 +26,8 @@
     <!-- 分页，传了分页数据就会展示 -->
     <div v-if="page" class="mt15 flex-center">
       <el-pagination :currentPage="props.page?.pageIndex" :page-size="props.page?.pageSize" :page-sizes="[10, 20, 30]"
-                     layout="sizes, prev, pager, next, jumper" :total="props.page?.total" :background="true"
-                     :hide-on-single-page="false" @size-change="changeSize" @current-change="changePage">
+        layout="sizes, prev, pager, next, jumper" :total="props.page?.total" :background="true"
+        :hide-on-single-page="false" @size-change="changeSize" @current-change="changePage">
       </el-pagination>
     </div>
   </div>
@@ -124,7 +122,7 @@ defineExpose({ tableRef });
 //注册事件
 const emit = defineEmits(["changeSize", "changePage", "changeCurrent", "onSelect", "onSelectTap", "onSelectAll"]);
 </script>
-​
+
 <style lang="scss" scoped>
 .isSingle {
   :deep(*) {

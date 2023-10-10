@@ -65,7 +65,6 @@ import { reactive, ref, toRaw } from "vue";
 import { ElButton, ElDialog, ElMessage } from "element-plus/es";
 import { apiGetDatabaseNames, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
 import { decrypt, encrypt } from "@/utils/tool";
-import { da } from "element-plus/es/locale";
 
 const emit = defineEmits(["refreshDataList"]);
 
@@ -132,8 +131,11 @@ function onStartSelect(visiable: boolean) {
 }
 
 function selectBlur(event: FocusEvent) {
-  if (event.target.value !== "") {
-    dataForm.databaseName = event.target.value;
+  if (event.target) {
+    let target = event.target as HTMLInputElement
+    if (target.value !== '') {
+      dataForm.databaseName = target.value;
+    }
   }
 }
 

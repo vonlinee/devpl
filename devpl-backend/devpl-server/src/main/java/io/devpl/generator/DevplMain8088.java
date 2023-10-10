@@ -4,6 +4,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
@@ -16,6 +17,6 @@ public class DevplMain8088 {
             .sources(DevplMain8088.class)
             .main(DevplMain8088.class)
             .build();
-        app.run(args);
+        ConfigurableApplicationContext context = app.run(args);
     }
 }
