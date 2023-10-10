@@ -1,5 +1,7 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -13,12 +15,13 @@ public class District {
     /**
      * ID
      */
-    private int id;
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 父节点ID
      */
-    private int pid;
+    private Integer pid;
 
     /**
      * 名称

@@ -1,6 +1,6 @@
 package io.devpl.generator.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.devpl.generator.common.dao.BaseDao;
 import io.devpl.generator.entity.GenTableField;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * 表字段
  */
 @Mapper
-public interface TableFieldDao extends BaseMapper<GenTableField> {
+public interface TableFieldDao extends BaseDao<GenTableField> {
 
     List<GenTableField> getByTableId(Long tableId);
 

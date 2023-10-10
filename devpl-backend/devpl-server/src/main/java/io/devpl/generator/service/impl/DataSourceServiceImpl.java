@@ -23,9 +23,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 数据源管理
@@ -106,6 +104,9 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
         DbType dbType = DbType.getValue(entity.getDbType());
         if (dbType != null) {
             JDBCDriver jdbcDriver = JDBCDriver.valueOfDriverName(dbType.getDriverClass());
+            if (jdbcDriver == null) {
+                return Collections.emptyList();
+            }
             String connectionUrl = jdbcDriver.getConnectionUrl(entity.getIp(), entity.getPort(), "", null);
             dataSourceInfo.setConnUrl(connectionUrl);
         }

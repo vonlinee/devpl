@@ -95,10 +95,10 @@ VALUES (3, 'ruoyi', '{
 }');
 
 -- ----------------------------
--- Table structure for field_spec
+-- Table structure for field_info
 -- ----------------------------
-DROP TABLE IF EXISTS `field_spec`;
-CREATE TABLE `field_spec`
+DROP TABLE IF EXISTS `field_info`;
+CREATE TABLE `field_info`
 (
     `field_id`    varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '字段ID',
     `field_name`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段名',
@@ -112,287 +112,287 @@ CREATE TABLE `field_spec`
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of field_spec
+-- Records of field_info
 -- ----------------------------
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('042884a4-fc68-11ed-b2ad-0a0027000012', 'name', 'String', '姓名', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04288656-fc68-11ed-b2ad-0a0027000012', 'age', 'int', '年龄', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04698a4a-fc68-11ed-b2ad-0a0027000012', 'Cage', 'String', '年龄', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04698c3c-fc68-11ed-b2ad-0a0027000012', 'D', 'float', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04895075-fc68-11ed-b2ad-0a0027000012', 'description', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0489520a-fc68-11ed-b2ad-0a0027000012', 'Fsdfsf', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04ac5b91-fc68-11ed-b2ad-0a0027000012', 'G', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04ac5d14-fc68-11ed-b2ad-0a0027000012', 'H', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04cc4607-fc68-11ed-b2ad-0a0027000012', 'U', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04cc47e2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04f11933-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('04f11aa8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('050baf17-fc68-11ed-b2ad-0a0027000012', 'A1212', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('050bb0e4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('052ee5c8-fc68-11ed-b2ad-0a0027000012', 'A11111111', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('052ee72e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('054b1ebf-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('054b204c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0567fc80-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0567fe28-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05871fad-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05872179-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05a578c1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05a5a0ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05ca7229-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('05ca73aa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06775c34-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06775db0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('069aac39-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('069aae0a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06bbebdc-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06bbed55-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06dd03c5-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06dd0584-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06faad2f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('06faaeab-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07190862-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07190a1d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0739b6b3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0739b89e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07599c72-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07599df8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0776b8ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0776ba32-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07968a7e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07968c51-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07b536f7-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07b53907-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07d3cefc-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07d3d0e3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07f4b3d5-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('07f4b5b8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('081633c4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0816357d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0838d318-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0838d488-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('085a551d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('085a56f2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0878866f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('087887d9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('089b79a0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('089b7b1e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('08bc6b87-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('08bc6d06-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('08ddc638-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('08ddc7ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09008cc4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09008f37-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09202087-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('092021fa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09405733-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('094058f9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('096432ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0964342c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('098730d8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09873250-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09a5e2c6-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09a5e489-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09c73d0c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09c73ec3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09e4947c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('09e4964d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0aee5282-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0aee5422-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b13214c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b1322e0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b31b6e8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b31b8af-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b559eeb-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b55a0a2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b76b551-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b76b703-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b973c2a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0b973db3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bb9ff04-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bba008f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bdf0e52-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bdf0fcd-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bfc9386-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0bfc94fa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c1ba46c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c1ba654-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c3b0f6f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c3b1124-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c7a6456-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c7a65e1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c9f5dd0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0c9f5f3f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0cbdbef1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0cbdc06a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0ce2d072-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0ce2d1ed-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0cff3732-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0cff3922-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d20b49e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d20b61b-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d4365da-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d436788-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d61f8da-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d61fa54-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d82855a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0d8286f2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0da25ee3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0da26064-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0dc405f9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0dc40779-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0de2745b-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0de275c0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0dff898f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('0dff8b94-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('b3a5bc7d-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('b582e189-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c06c5b9d-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c06c5d5e-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c154d473-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c154d60b-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c1ac190a-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c1ac1a92-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c1cfd4ed-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
-INSERT INTO `field_spec`
+INSERT INTO `field_info`
 VALUES ('c1cfd68c-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
 
 -- ----------------------------
@@ -639,7 +639,7 @@ CREATE TABLE `gen_table`
 -- Records of gen_table
 -- ----------------------------
 INSERT INTO `gen_table`
-VALUES (25, 'field_spec', 'FieldSpec', '字段信息表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend',
+VALUES (25, 'field_info', 'FieldSpec', '字段信息表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend',
         'frontend', 'service', 'spec', 1, 0, NULL, '2023-07-30 20:44:06');
 INSERT INTO `gen_table`
 VALUES (26, 'msg_center_send_history', 'MsgCenterSendHistory', '消息中心发送历史表', 'vonlinee', 'vonlinee@163.com',

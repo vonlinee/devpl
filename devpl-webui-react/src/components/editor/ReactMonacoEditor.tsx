@@ -7,9 +7,10 @@ import * as monaco from "monaco-editor";
  */
 export interface MonacoEditorProps extends React.HTMLAttributes<HTMLElement> {
   lang?: string;
-  text: string;
+  value: string;
   theme?: string;
-  ref: object;
+  width: '100%'
+  height: '100%'
 }
 
 const editorWillMount = () => {
@@ -35,18 +36,20 @@ const editorWillMount = () => {
   });
 };
 
-export interface Ref {
-  ref: any
-}
 
 /**
  * 封装 ReactMoancoEditor
  * https://github.com/react-monaco-editor/react-monaco-editor
  */
-const ReactMoancoEditor = (props: MonacoEditorProps, ref: Ref) => {
+const ReactMoancoEditor = (props: MonacoEditorProps, ref: any) => {
   const [text, setText] = useState("hello world");
   const [language, setLanguage] = useState("plain");
 
+  /**
+   * 实时更新输入的值
+   * @param newValue 输入的值
+   * @param e 
+   */
   const onChangeCallback = (
     newValue: string,
     e: monaco.editor.IModelContentChangedEvent
@@ -56,17 +59,18 @@ const ReactMoancoEditor = (props: MonacoEditorProps, ref: Ref) => {
 
   /**
    * Moanco Editor Options
+   * react-moanco-editor不支持Ref
    * https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html
    */
   let options: monaco.editor.IStandaloneEditorConstructionOptions = {
     language: props.lang ? props.lang : "java",
     value: text,
+    selectOnLineNumbers: true
   };
 
   return (
     <>
-      <MonacoEditor 
-        ref={ref}
+      <MonacoEditor
         language={language}
         editorWillMount={editorWillMount}
         value={text}

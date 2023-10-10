@@ -23,7 +23,6 @@ public class BaseClassServiceImpl extends BaseServiceImpl<BaseClassDao, GenBaseC
         IPage<GenBaseClass> page = baseMapper.selectPage(
             getPage(query), getWrapper(query)
         );
-
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 

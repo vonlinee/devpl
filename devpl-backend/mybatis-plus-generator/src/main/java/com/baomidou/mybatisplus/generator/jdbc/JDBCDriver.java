@@ -56,11 +56,12 @@ public enum JDBCDriver {
         if (driverName == null || driverName.isBlank()) {
             return null;
         }
-        try {
-            return JDBCDriver.valueOf(driverName.toUpperCase());
-        } catch (Exception exception) {
-            return null;
+        for (JDBCDriver driver : values()) {
+            if (driver.getDriverClassName().equalsIgnoreCase(driverName)) {
+                return driver;
+            }
         }
+        return null;
     }
 
     /**

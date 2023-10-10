@@ -17,6 +17,8 @@ that contained an invalid cookie. That cookie will be ignored.
 Note: further occurrences of this error will be logged at DEBUG level.
 ```
 
+springboot3 直接使用@Resource注解进行依赖注入失效
+
 # 参考资料
 
 1. 数据库建表规范

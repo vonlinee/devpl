@@ -5,23 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c82414c3-4f20-4720-a474-64dc489a58db" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/controller/FieldInfoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/dao/FieldInfoMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/entity/FieldInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/db/devpl.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/db/devpl.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/JDBCDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/JDBCDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/devpl-webui-react.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/devpl-webui-react.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/React.md" beforeDir="false" afterPath="$PROJECT_DIR$/React.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layout/siderMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/siderMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mock/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mock/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/power/menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/power/menu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/editor/ComponentRef.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/editor/ReactMonacoEditor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/editor/ReactMonacoEditor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/power/test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/power/test.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/list.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/getter/menu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/getter/menu.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/store/menu/reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/menu/reducer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/menu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/menu.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +80,8 @@
       <workItem from="1693990970424" duration="2379000" />
       <workItem from="1696847302744" duration="165000" />
       <workItem from="1696898781324" duration="6930000" />
-      <workItem from="1696906034447" duration="1315000" />
+      <workItem from="1696906034447" duration="1645000" />
+      <workItem from="1696915376001" duration="5000" />
     </task>
     <servers />
   </component>

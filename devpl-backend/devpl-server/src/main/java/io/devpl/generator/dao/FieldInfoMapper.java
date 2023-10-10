@@ -1,13 +1,9 @@
 package io.devpl.generator.dao;
 
 import io.devpl.generator.common.dao.BaseDao;
-import io.devpl.generator.entity.GenTable;
+import io.devpl.generator.entity.FieldInfo;
 import org.apache.ibatis.annotations.Mapper;
 
-/**
- * 数据表
- */
 @Mapper
-public interface TableDao extends BaseDao<GenTable> {
-
+public interface FieldInfoMapper extends BaseDao<FieldInfo> {
 }

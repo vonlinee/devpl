@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.devpl.generator.common.dao.BaseDao;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.BaseService;
 import org.springframework.util.StringUtils;
@@ -13,7 +14,7 @@ import org.springframework.util.StringUtils;
 /**
  * 基础服务类，所有Service都要继承
  */
-public class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
+public class BaseServiceImpl<M extends BaseDao<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
 
     /**
      * 获取分页对象

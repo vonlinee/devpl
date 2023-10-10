@@ -21,7 +21,6 @@ const Router = () => {
         // 所有菜单
         const userMenus = reduceMenuList(formatList);
 
-        debugger
         // 把请求的数据 和 本地pages页面暴露出的路由列表合并
         let routers = routerList.map((router) => {
 
