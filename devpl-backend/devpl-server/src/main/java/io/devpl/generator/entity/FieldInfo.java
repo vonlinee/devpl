@@ -4,35 +4,45 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 /**
  * 字段信息表
  */
-@Data
+@Getter
+@Setter
 @TableName(value = "field_info")
-public class FieldInfo implements Serializable {
+public class FieldInfo extends DBEntityBase implements Serializable {
 
     /**
-     * 字段ID
+     * 主键ID
      */
-    @TableId(value = "field_id", type = IdType.ASSIGN_ID)
-    private String fieldId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
-     * 字段名
+     * 字段Key
+     */
+    private String fieldKey;
+
+    /**
+     * 字段名，中文名
      */
     private String fieldName;
+
     /**
      * 数据类型
      */
     private String dataType;
+
     /**
      * 描述信息
      */
     private String description;
+
     /**
      * 默认值
      */

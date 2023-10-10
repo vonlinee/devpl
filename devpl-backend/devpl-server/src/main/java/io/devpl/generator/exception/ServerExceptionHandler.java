@@ -19,13 +19,15 @@ public class ServerExceptionHandler {
 
     /**
      * 参数异常
-     * @param e IllegalArgumentException
+     *
+     * @param ex IllegalArgumentException
      * @return Result
      */
     @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseBody
-    public Result<?> exceptionHandler(IllegalArgumentException e) {
-        return Result.exception(e);
+    public Result<?> exceptionHandler(IllegalArgumentException ex) {
+        log.error("", ex);
+        return Result.exception(ex);
     }
 
     /**
@@ -33,6 +35,7 @@ public class ServerExceptionHandler {
      */
     @ExceptionHandler(ServerException.class)
     public Result<String> handleRenException(ServerException ex) {
+        log.error("", ex);
         return Result.error(ex.getCode(), ex.getMsg());
     }
 
@@ -43,16 +46,19 @@ public class ServerExceptionHandler {
     public Result<String> bindException(BindException ex) {
         FieldError fieldError = ex.getFieldError();
         assert fieldError != null;
+        log.error("", ex);
         return Result.error(fieldError.getDefaultMessage());
     }
 
     /**
      * 其他异常
+     *
      * @param ex 异常类
      * @return Result
      */
     @ExceptionHandler(Exception.class)
     public Result<String> handleException(Exception ex) {
+        log.error("", ex);
         Result<String> result = Result.error(StatusCode.INTERNAL_SERVER_ERROR);
         result.setMsg(ex.getMessage());
         return result;

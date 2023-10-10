@@ -1,4 +1,5 @@
 import {IHooksOptions} from '@/hooks/interface'
+import {DataTableOptions, mergeDefaultOptions} from '@/hooks/datatable'
 import service from '@/utils/request'
 import {onMounted} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
@@ -192,4 +193,161 @@ export const useCrud = (options: IHooksOptions) => {
         deleteHandle,
         deleteBatchHandle
     }
+}
+
+
+
+/**
+ * DataTable Hooks
+ * @param options 配置项
+ */
+export function useDataTable(_options: DataTableOptions) {
+	const options = mergeDefaultOptions(_options)
+
+	onMounted(() => {
+		if (options.createdIsNeed) {
+			query()
+		}
+	})
+
+	// 查询
+	const query = () => {
+		if (!options.dataListUrl) {
+			return
+		}
+		options.dataListLoading = true
+		service
+			.get(options.dataListUrl, {
+				params: {
+					order: options.order,
+					asc: options.asc,
+					page: options.pageable ? options.page : null,
+					limit: options.pageable ? options.limit : null,
+					...options.queryForm
+				}
+			})
+			.then((res: any) => {
+				// 分页
+				options.dataList = options.pageable ? res.data.list : res.data
+				options.total = options.pageable ? res.data.total : 0
+			})
+		options.dataListLoading = false
+	}
+
+	/**
+	 * 默认查询回调
+	 */
+	const getDataList = (): void => {
+		options.page = 1
+		query()
+	}
+
+	/**
+	 * 每页大小变化回调，默认查第一页
+	 * @param val
+	 */
+	const sizeChangeCallback = (val: number): void => {
+		options.page = 1
+		options.limit = val
+		query()
+	}
+
+	/**
+	 * 当前页变化回调
+	 * @param val
+	 */
+	const currentChangeCallback = (val: number): void => {
+		options.page = val
+		query()
+	}
+
+	/**
+	 * 多选回调
+	 * @param selections
+	 */
+	const selectionChangeCallback = (selections: any[]): void => {
+		options.dataListSelections = selections.map((item: any) => options.primaryKey && item[options.primaryKey])
+	}
+
+	/**
+	 * 排序回调
+	 * @param data
+	 */
+	const sortChangeCallback = (data: any): void => {
+		const { prop, order } = data
+		if (prop && order) {
+			options.order = prop
+			options.asc = order === 'ascending'
+		} else {
+			options.order = ''
+		}
+		query()
+	}
+
+	/**
+	 * 删除回调
+	 * @param key
+	 */
+	const deleteCallback = (key: number | string): void => {
+		if (!options.deleteUrl) {
+			return
+		}
+		ElMessageBox.confirm('确定进行删除操作?', '提示', {
+			confirmButtonText: '确定',
+			cancelButtonText: '取消',
+			type: 'warning'
+		})
+			.then(() => {
+				service.delete(options.deleteUrl + '/' + key).then(() => {
+					ElMessage.success('删除成功')
+					query()
+				})
+			})
+			.catch(err => {
+				console.error('删除错误', err)
+			})
+	}
+
+	/**
+	 * 批量删除回调
+	 * @param key
+	 */
+	const deleteBatchCallback = (key?: number | string) => {
+		let data: any[] = []
+		if (key) {
+			data = [key]
+		} else {
+			data = options.dataListSelections ? options.dataListSelections : []
+			if (data.length === 0) {
+				ElMessage.warning('请选择删除记录')
+				return
+			}
+		}
+		ElMessageBox.confirm('确定进行删除操作?', '提示', {
+			confirmButtonText: '确定',
+			cancelButtonText: '取消',
+			type: 'warning'
+		})
+			.then(() => {
+				if (options.deleteUrl) {
+					service.delete(options.deleteUrl, { data }).then(() => {
+						ElMessage.success('删除成功')
+						query()
+					})
+				}
+			})
+			.catch(err => {
+				console.error('删除错误', err)
+			})
+	}
+
+	return {
+		getDataList,
+		sizeChangeCallback,
+		currentChangeCallback,
+		selectionChangeCallback,
+		sortChangeCallback,
+		deleteCallback,
+		deleteBatchCallback
+	}
 }

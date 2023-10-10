@@ -24,7 +24,7 @@ public abstract class DBEntityBase {
     /**
      * 是否逻辑删除
      */
-    @TableField(value = "deleted")
+    @TableField(value = "is_deleted")
     private Boolean deleted;
 
     public LocalDateTime getUpdateTime() {

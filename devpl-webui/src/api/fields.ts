@@ -1,9 +1,20 @@
-import service from '@/utils/request'
+import http from '@/utils/http'
 
 /**
- * 获取Mapper中的参数
+ * 查询字段列表
  * @param content
  */
 export const apiListFields = () => {
-  return service.get('/api/field/page')
+	return http.get('/api/field/page')
+}
+
+/**
+ * 保存或更新字段
+ * @param content
+ */
+export const apiSaveOrUpdateField = (field: any) => {
+	if (!field.fieldName) {
+		field.fieldName = field.fieldKey
+	}
+	return http.postJson('/api/field/save', field)
 }
