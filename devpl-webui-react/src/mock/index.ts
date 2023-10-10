@@ -1,7 +1,17 @@
 import dayjs from "dayjs";
-import { message } from "antd";
-import { PowerApi, LoginApi, ResponseData, MenuInfoApi, MessageList, MessageAPi, MenuResponse, MenuList, MenuItem } from "@/types"
-import { formatMenu } from "@/utils";
+import {message} from "antd";
+import {
+  PowerApi,
+  LoginApi,
+  ResponseData,
+  MenuInfoApi,
+  MessageList,
+  MessageAPi,
+  MenuResponse,
+  MenuList,
+  MenuItem
+} from "@/types"
+import {formatMenu} from "@/utils";
 
 type MockDataType = {
   "/getmenu": MenuResponse
@@ -243,7 +253,7 @@ let menu: MenuList = [
   {
     menu_id: 33,
     [MENU_TITLE]: "测试页面",
-    [MENU_PATH]: "/power/test",
+    [MENU_PATH]: "/test",
     [MENU_KEY]: "powerTest",
     [MENU_PARENTKEY]: "power",
     [MENU_ICON]: "icon_list",
@@ -252,23 +262,26 @@ let menu: MenuList = [
   },
 ];
 
+/**
+ * 用户类型列表
+ */
 const typeList = [
   {
     type_id: 1,
     name: "超级管理员",
-    menu_id: "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1",
+    menu_id: "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,1,33",
   },
-  { type_id: 2, name: "用户", menu_id: "1,9,10,11,2,7,6,17,18,16,3,4,5,8" },
-  { type_id: 3, name: "游客", menu_id: "9,1,10,11,2,7,6,17,18,12" },
-  { type_id: 4, name: "低权游客", menu_id: "9,10" },
+  {type_id: 2, name: "用户", menu_id: "1,9,10,11,2,7,6,17,18,16,3,4,5,8"},
+  {type_id: 3, name: "游客", menu_id: "9,1,10,11,2,7,6,17,18,12"},
+  {type_id: 4, name: "低权游客", menu_id: "9,10"},
 ];
 const power = {
   status: 0,
   data: typeList,
   mapKey: [
-    { title: "权限id", dataIndex: "type_id", key: "type_id" },
-    { title: "权限简称", dataIndex: "name", key: "name" },
-    { title: "显示菜单列表id", dataIndex: "menu_id", key: "menu_id" },
+    {title: "权限id", dataIndex: "type_id", key: "type_id"},
+    {title: "权限简称", dataIndex: "name", key: "name"},
+    {title: "显示菜单列表id", dataIndex: "menu_id", key: "menu_id"},
   ],
   menu: formatMenu(menu),
 };
@@ -277,14 +290,14 @@ const userInfo = {
   msg: "登录成功",
   status: 0,
   token: "12323",
-  data: { user_id: 1, username: "超级管理员", account: "admin", type: "0", isLogin: true },
+  data: {user_id: 1, username: "超级管理员", account: "admin", type: "0", isLogin: true},
 };
 
 const addMenu = {
   msg: "添加成功,菜单栏需要关闭页面重新打开即可生效！",
   status: 0,
 };
-const addMsg = { msg: "添加成功", status: 0 };
+const addMsg = {msg: "添加成功", status: 0};
 
 const msgList: MessageList = [
   {
@@ -323,11 +336,11 @@ const msg: MessageAPi = {
   status: 0,
   data: {
     mapKey: [
-      { title: "消息id", dataIndex: "m_id", key: "m_id" },
-      { title: "消息名称", dataIndex: "name", key: "name" },
-      { title: "消息描述词", dataIndex: "description", key: "description" },
-      { title: "创建人", dataIndex: "creator", key: "creator" },
-      { title: "创建时间", dataIndex: "add_time", key: "add_time" },
+      {title: "消息id", dataIndex: "m_id", key: "m_id"},
+      {title: "消息名称", dataIndex: "name", key: "name"},
+      {title: "消息描述词", dataIndex: "description", key: "description"},
+      {title: "创建人", dataIndex: "creator", key: "creator"},
+      {title: "创建时间", dataIndex: "add_time", key: "add_time"},
     ],
     list: msgList,
     total: 4,
@@ -335,7 +348,7 @@ const msg: MessageAPi = {
 
   msg: "",
 };
-const delMenu = { msg: "操作成功", status: 0 };
+const delMenu = {msg: "操作成功", status: 0};
 // const MenuMapKey = [
 //   { title: "菜单id", dataIndex: "menu_id", key: "menu_id" },
 //   { title: "菜单名称", dataIndex: "title", key: "title" },
@@ -354,24 +367,30 @@ const MockData: MockDataType = {
   "/addmessage": addMsg,
   "/getmessage": msg,
   "/delmenu": delMenu,
-  "/getmenuinfo": { status: 0, msg: '', data: null },
-  "/editmenuinfo": { status: 0, msg: "修改成功！" },
-  "/getvisitordata": { status: 1, msg: "暂无" },
+  "/getmenuinfo": {status: 0, msg: '', data: null},
+  "/editmenuinfo": {status: 0, msg: "修改成功！"},
+  "/getvisitordata": {status: 1, msg: "暂无"},
 };
 type UrlType = keyof MockDataType
+
 function get(url: UrlType) {
   return new Promise((res) => {
     setTimeout(() => {
       if (url === "/getmenu") {
+        // 当前用户类型ID
         let typeId = currentUser.t_id;
         if (typeId) {
           let action: string | undefined | number[] = typeList.find((i) => i.type_id === typeId)?.menu_id;
           action = action ? action.split(",").map(Number) : [];
-          let menuList = menu.filter((i) => (action as number[]).includes(i.menu_id));
+          let menuList = menu
+          if (typeId == 1) {
+            // 超级管理所有菜单项
+          } else {
+            menuList = menu.filter((i) => (action as number[]).includes(i.menu_id));
+          }
           MockData[url] = formatMenu(menuList);
         }
         res(MockData[url]);
-
         return;
       }
       res(MockData[url]);
@@ -385,8 +404,6 @@ function get(url: UrlType) {
     }
   });
 }
-
-
 
 function post(url: UrlType, data: any) {
   return new Promise((res, rej) => {
@@ -447,7 +464,7 @@ function post(url: UrlType, data: any) {
           }
           return res(msg);
         default:
-          res({ status: 1, msg: "暂无" });
+          res({status: 1, msg: "暂无"});
           break;
       }
     }, 100);
@@ -461,6 +478,6 @@ function post(url: UrlType, data: any) {
   });
 }
 
-const mock = { get, post };
+const mock = {get, post};
 
 export default mock;

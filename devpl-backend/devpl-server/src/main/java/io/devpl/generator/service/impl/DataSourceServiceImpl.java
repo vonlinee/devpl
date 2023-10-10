@@ -2,6 +2,7 @@ package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.page.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.service.impl.BaseServiceImpl;
@@ -103,12 +104,11 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
         ConnectionInfo dataSourceInfo = new ConnectionInfo(entity);
 
         DbType dbType = DbType.getValue(entity.getDbType());
-
-        // TODO 兼容多种数据库类型
-        // jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-        String connectionUrl = "jdbc:mysql://" + entity.getIp() + ":" + entity.getPort() + "/";
-
-        dataSourceInfo.setConnUrl(connectionUrl);
+        if (dbType != null) {
+            JDBCDriver jdbcDriver = JDBCDriver.valueOfDriverName(dbType.getDriverClass());
+            String connectionUrl = jdbcDriver.getConnectionUrl(entity.getIp(), entity.getPort(), "", null);
+            dataSourceInfo.setConnUrl(connectionUrl);
+        }
 
         List<String> list = new ArrayList<>();
         try (Connection connection = DbUtils.getConnection(dataSourceInfo)) {

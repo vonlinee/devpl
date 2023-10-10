@@ -1,7 +1,12 @@
-import { getLocalMenu, saveLocalMenu } from "../utils";
-import { getMenu } from "@/api";
-import { MenuResponse } from "@/types"
+import {getLocalMenu, saveLocalMenu} from "@/utils";
+import {getMenu} from "@/api";
+import {MenuResponse} from "@/types"
+
 let currentJob: Promise<MenuResponse> | null
+
+/**
+ * 获取所有菜单列表
+ */
 export function getMenus() {
   if (currentJob) {
     return currentJob
@@ -13,7 +18,8 @@ export function getMenus() {
     }
     getMenu()
       .then((result) => {
-        saveLocalMenu(result);
+
+        // saveLocalMenu(result);
         reslove(result);
       })
       .catch((err) => {
@@ -21,6 +27,8 @@ export function getMenus() {
       });
   });
   currentJob = job
-  job.finally(() => { currentJob = null })
+  job.finally(() => {
+    currentJob = null
+  })
   return job
 }

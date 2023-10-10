@@ -9,7 +9,7 @@ export type MenuAction = {
   path: string
 }
 
-// 
+//
 export interface OpenedMenu {
   key: string
   path: string
@@ -35,6 +35,9 @@ export interface MenuItem {
   [MENU_KEY]: string | number
   order?: number
   [MENU_PARENTKEY]: string
+  /**
+   * 菜单路径不需要加上父菜单的路径
+   */
   [MENU_PATH]: string
   [MENU_TITLE]: string
   [MENU_CHILDREN]?: MenuList

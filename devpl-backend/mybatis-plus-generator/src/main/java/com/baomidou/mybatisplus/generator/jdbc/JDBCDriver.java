@@ -6,12 +6,15 @@ import java.util.Properties;
 /**
  * 数据库驱动类型
  * 连接URL格式：jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]...
+ *
  * @see DbType
  */
 public enum JDBCDriver {
 
     MYSQL5("com.mysql.jdbc.Driver", "mysql", "MySQL 5"),
     MYSQL8("com.mysql.cj.jdbc.Driver", "mysql", "MySQL 8"),
+
+    // Oracle Database
     ORACLE("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 11 thin") {
         @Override
         protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
@@ -50,6 +53,9 @@ public enum JDBCDriver {
     }
 
     public static JDBCDriver valueOfDriverName(String driverName) {
+        if (driverName == null || driverName.isBlank()) {
+            return null;
+        }
         try {
             return JDBCDriver.valueOf(driverName.toUpperCase());
         } catch (Exception exception) {
@@ -60,23 +66,38 @@ public enum JDBCDriver {
     /**
      * 协议名//[host name][/database name][username and password]
      * 获取JDBC URL连接字符串
+     *
      * @param hostname     主机IP
      * @param port         端口号
      * @param databaseName 数据库名
      * @return JDBC URL连接字符串
      */
     public String getConnectionUrl(String hostname, String port, String databaseName, Properties props) {
+        return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, parsePortNumber(port), databaseName), props);
+    }
+
+    public String getConnectionUrl(String hostname, Integer port, String databaseName, Properties props) {
+        port = port == null ? 3306 : port;
+        return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, port, databaseName), props);
+    }
+
+    private int parsePortNumber(String port) {
         int portNum;
         if (port == null || port.isEmpty()) {
             portNum = 3306;
         } else {
-            portNum = Integer.parseInt(port);
+            try {
+                portNum = Integer.parseInt(port);
+            } catch (Exception exception) {
+                portNum = 3306;
+            }
         }
-        return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, portNum, databaseName), props);
+        return portNum;
     }
 
     /**
      * 拼接URL的主要部分
+     *
      * @param hostname     主机IP
      * @param port         端口号
      * @param databaseName 数据库名
@@ -92,6 +113,7 @@ public enum JDBCDriver {
 
     /**
      * 追加JDBC URL连接参数
+     *
      * @param url        JDBC URL
      * @param properties 连接参数配置
      * @return 完整的JDBC URL

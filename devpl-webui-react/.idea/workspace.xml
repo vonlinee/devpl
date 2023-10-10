@@ -5,44 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c82414c3-4f20-4720-a474-64dc489a58db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/MainApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/Message.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/TablePane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/TextRegion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/ContentContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/LayoutPane.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/MenuContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/menu/NavigationMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/layout/menu/RouterView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/log/Logger.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/log/LoggerFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/FxmlBinder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/FxmlView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/SceneGraphAccessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/View.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/mvvm/ViewBase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/pages/MainView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/LRUCache.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/WeakValueHashMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/FieldsView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/IndexView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/TestView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/fields.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/test.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/io/devpl/codegen/utils/ClassUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/io/devpl/codegen/utils/ClassUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-codegen/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/EditorView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/CodeRegion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/module-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/index.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/resources/fxml/index.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/JDBCDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/mybatis-plus-generator/src/main/java/com/baomidou/mybatisplus/generator/jdbc/JDBCDriver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/devpl-webui-react.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/devpl-webui-react.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/fields/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/React.md" beforeDir="false" afterPath="$PROJECT_DIR$/React.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/siderMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/siderMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mock/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/mock/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/power/menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/power/menu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/list.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/list.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/getter/menu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/getter/menu.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/menu/reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/menu/reducer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/menu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/menu.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,23 +55,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "dev",
-    "last_opened_file_path": "D:/Develop/Code/Github/devpl-backend/devpl-webui-react",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.General",
-    "ts.external.directory.path": "D:\\Develop\\Code\\Github\\devpl-backend\\devpl-webui-react\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Develop/Code/Github/devpl-backend/devpl-webui-react&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.General&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\Develop\\Code\\Github\\devpl-backend\\devpl-webui-react\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -103,6 +83,8 @@
       <updated>1684131571551</updated>
       <workItem from="1693990970424" duration="2379000" />
       <workItem from="1696847302744" duration="165000" />
+      <workItem from="1696898781324" duration="6930000" />
+      <workItem from="1696906034447" duration="1315000" />
     </task>
     <servers />
   </component>

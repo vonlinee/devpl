@@ -4,11 +4,11 @@ import "./assets/css/global"
 
 import "./monaco"
 
-import { StrictMode } from 'react';
+import {StrictMode} from 'react';
+
 ReactDOM.render(
   <StrictMode>
-    <App />
-  </StrictMode>
-  ,
+    <App/>
+  </StrictMode>,
   document.getElementById('root')
 );

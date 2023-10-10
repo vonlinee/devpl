@@ -1,9 +1,15 @@
 import auto from "./auto";
-import { Navigate } from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import Error from "@/pages/err"
 import loadable from "@loadable/component"
-import { Spin } from "antd";
+import {Spin} from "antd";
+import React from "react";
+
 type LoadingComponent = () => Promise<React.ReactNode>
+
+/**
+ * 单个路由信息
+ */
 export interface RouterInfo {
   components: LoadingComponent | React.ReactNode
   [MENU_PATH]: string
@@ -17,25 +23,25 @@ const defaultArr: RouterInfo[] = [
   {
     [MENU_PATH]: "/",
     [MENU_KEY]: "index",
-    components: <Navigate to="/details/person" replace />,
+    components: <Navigate to="/details/person" replace/>,
   },
   {
     [MENU_PATH]: "/result/404",
-    components: <Error />,
+    components: <Error/>,
   },
   {
     [MENU_PATH]: "/result/403",
-    components: <Error status="403" errTitle="403" subTitle="Sorry, you don't have access to this page." />,
+    components: <Error status="403" errTitle="403" subTitle="Sorry, you don't have access to this page."/>,
   },
   {
     [MENU_PATH]: "/result/500",
-    components: <Error status="500" errTitle="500" subTitle="Sorry, the server is reporting an error." />,
+    components: <Error status="500" errTitle="500" subTitle="Sorry, the server is reporting an error."/>,
   },
   {
     [MENU_PATH]: "*",
     [MENU_TITLE]: "页面不存在",
     [MENU_KEY]: "404",
-    components: <Error />,
+    components: <Error/>,
   },
 ];
 const autoList: RouterInfo[] = []
@@ -47,12 +53,11 @@ const fellbackStyle = {
   fontSize: 24,
 };
 auto.forEach(item => {
-  const { components, ...anyProps } = item
-  const Com = loadable(item.components, { fallback: <Spin style={fellbackStyle} tip="页面加载中...." /> })
-  const info = { ...anyProps, components: <Com /> }
+  const {components, ...anyProps} = item
+  const Com = loadable(item.components, {fallback: <Spin style={fellbackStyle} tip="页面加载中...."/>})
+  const info = {...anyProps, components: <Com/>}
   autoList.push(info)
 })
 const list: RouterInfo[] = [...autoList, ...defaultArr]
-
 
 export default list;
