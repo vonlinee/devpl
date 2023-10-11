@@ -1,50 +1,250 @@
-<!-- 类型映射表 -->
+<!-- 
+  类型映射配置表
+ -->
 <template>
-
-<el-dialog v-model="dialogTableVisible" title="Shipping address">
-    <el-table :data="gridData">
-      <el-table-column property="date" label="Date" width="150" />
-      <el-table-column property="name" label="Name" width="200" />
-      <el-table-column property="address" label="Address" />
-    </el-table>
-  </el-dialog>
-
+  <vxe-modal v-model="modalShowRef" width="70%" title="类型映射配置表">
+    <div>
+      <vxe-grid v-bind="gridOptions">
+        <template #name_edit="{ row }">
+          <vxe-input v-model="row.name"></vxe-input>
+        </template>
+        <template #nickname_edit="{ row }">
+          <vxe-input v-model="row.nickname"></vxe-input>
+        </template>
+        <template #role_edit="{ row }">
+          <vxe-input v-model="row.role"></vxe-input>
+        </template>
+        <template #address_edit="{ row }">
+          <vxe-input v-model="row.address"></vxe-input>
+        </template>
+      </vxe-grid>
+    </div>
+  </vxe-modal>
 </template>
 
 <script setup lang="ts">
+import { reactive, ref } from "vue";
+import { VxeGridProps } from "vxe-table";
 
-import { reactive, ref } from 'vue'
-
-const dialogTableVisible = ref(false)
-const dialogFormVisible = ref(false)
-const formLabelWidth = '140px'
-
-const gridData = [
-  {
-    date: '2016-05-02',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-04',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-01',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-  {
-    date: '2016-05-03',
-    name: 'John Smith',
-    address: 'No.1518,  Jinshajiang Road, Putuo District',
-  },
-]
+const modalShowRef = ref();
 
 defineExpose({
-  show() {
+  show: () => modalShowRef.value = true
+});
 
-  }
-})
+interface RowVO {
+  id: number;
+  name: string;
+  nickname: string;
+  role: string;
+  sex: string;
+  age: number;
+  address: string;
+}
+
+// 模拟后台接口
+const fetchApi = (currentPage: number, pageSize: number) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const list = [
+        {
+          id: 10001,
+          name: "Test1",
+          nickname: "T1",
+          role: "Develop",
+          sex: "Man",
+          age: 28,
+          address: "Shenzhen"
+        },
+        {
+          id: 10002,
+          name: "Test2",
+          nickname: "T2",
+          role: "Test",
+          sex: "Women",
+          age: 22,
+          address: "Guangzhou"
+        },
+        {
+          id: 10003,
+          name: "Test3",
+          nickname: "T3",
+          role: "PM",
+          sex: "Man",
+          age: 32,
+          address: "Shanghai"
+        },
+        {
+          id: 10004,
+          name: "Test4",
+          nickname: "T4",
+          role: "Designer",
+          sex: "Women",
+          age: 23,
+          address: "Shenzhen"
+        },
+        {
+          id: 10005,
+          name: "Test5",
+          nickname: "T5",
+          role: "Develop",
+          sex: "Women",
+          age: 30,
+          address: "Shanghai"
+        },
+        {
+          id: 10006,
+          name: "Test6",
+          nickname: "T6",
+          role: "Designer",
+          sex: "Women",
+          age: 21,
+          address: "Shenzhen"
+        },
+        {
+          id: 10007,
+          name: "Test7",
+          nickname: "T7",
+          role: "Test",
+          sex: "Man",
+          age: 29,
+          address: "test abc"
+        },
+        {
+          id: 10008,
+          name: "Test8",
+          nickname: "T8",
+          role: "Develop",
+          sex: "Man",
+          age: 35,
+          address: "Shenzhen"
+        }
+      ];
+      resolve({
+        page: {
+          total: list.length
+        },
+        result: list.slice(
+          (currentPage - 1) * pageSize,
+          currentPage * pageSize
+        )
+      });
+    }, 100);
+  });
+};
+
+// 模拟后台接口
+const delApi = (removeRecords: RowVO[]) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        result: [],
+        msg: `delete，${removeRecords.length}条`
+      });
+    }, 100);
+  });
+};
+
+// 模拟后台接口
+const saveApi = (insertRecords: RowVO[]) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        result: [],
+        msg: `succcess, ${insertRecords.length}条`
+      });
+    }, 100);
+  });
+};
+
+const gridOptions = reactive<VxeGridProps<RowVO>>({
+  border: true,
+  keepSource: true,
+  height: 500,
+  columnConfig: {
+    resizable: true
+  },
+  pagerConfig: {
+    enabled: true,
+    perfect: true,
+    pageSize: 15
+  },
+  editConfig: {
+    trigger: "click",
+    mode: "cell",
+    showStatus: true
+  },
+  toolbarConfig: {
+    buttons: [
+      {
+        code: "insert_actived",
+        name: "新增",
+        status: "perfect",
+        icon: "vxe-icon-add"
+      },
+      {
+        code: "save",
+        name: "保存",
+        status: "perfect",
+        icon: "vxe-icon-save"
+      }
+    ],
+    perfect: true,
+    refresh: {
+      icon: "vxe-icon-refresh",
+      iconLoading: "vxe-icon-refresh roll"
+    },
+    custom: {
+      icon: "vxe-icon-menu"
+    }
+  },
+  proxyConfig: {
+    props: {
+      result: "result",
+      total: "page.total"
+    },
+    ajax: {
+      // 接收 Promise
+      query: ({ page }) => {
+        return fetchApi(page.currentPage, page.pageSize);
+      },
+      // body 对象： { removeRecords }
+      delete: ({ body }) => {
+        return delApi(body.removeRecords);
+      },
+      // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
+      save: ({ body }) => {
+        return saveApi(body.insertRecords);
+      }
+    }
+  },
+  columns: [
+    { type: "checkbox", width: 50 },
+    {
+      field: "name",
+      title: "Name",
+      editRender: { autofocus: ".vxe-input--inner" },
+      slots: { edit: "name_edit" }
+    },
+    {
+      field: "nickname",
+      title: "Nickname",
+      editRender: {},
+      slots: { edit: "nickname_edit" }
+    },
+    {
+      field: "role",
+      title: "Role",
+      editRender: {},
+      slots: { edit: "role_edit" }
+    },
+    {
+      field: "address",
+      title: "Address",
+      showOverflow: true,
+      editRender: {},
+      slots: { edit: "address_edit" }
+    }
+  ]
+});
 </script>

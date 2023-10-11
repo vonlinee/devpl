@@ -1,4 +1,4 @@
-// src/components/popup/index.vue
+<!-- // src/components/popup/index.vue -->
 <script setup lang="ts">
 // import { Fragment, useAttrs, useSlots } from 'vue'
 

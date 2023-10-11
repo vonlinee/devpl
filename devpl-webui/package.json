@@ -54,7 +54,7 @@
     "prettier": "2.6.2",
     "sass": "1.50.1",
     "typescript": "4.7.4",
-    "vite": "3.2.5",
+    "vite": "3.2.7",
     "vite-plugin-svg-icons": "2.0.1",
     "vue-tsc": "0.40.13"
   },
@@ -67,5 +67,10 @@
     "generator",
     "devpl"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "prettier": {
+    "arrowParens": "always",
+    "eslintIntegration": true,
+    "semi": false
+  }
 }

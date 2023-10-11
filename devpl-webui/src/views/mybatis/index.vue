@@ -50,7 +50,6 @@ import { onMounted, reactive, ref } from "vue";
 
 import { apiGetDataTypes, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElDialog, ElMessage } from "element-plus";
-import CodeEditor from "@/components/CodeEditor.vue";
 import ParamImport from "@/views/mybatis/ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
