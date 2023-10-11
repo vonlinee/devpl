@@ -1,6 +1,6 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.FileDownloadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;

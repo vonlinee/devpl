@@ -1,6 +1,6 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.CodeGenService;

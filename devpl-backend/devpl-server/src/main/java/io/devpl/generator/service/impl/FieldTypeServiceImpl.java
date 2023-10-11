@@ -1,9 +1,9 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.generator.common.page.PageResult;
+import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.service.impl.BaseServiceImpl;
+import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.FieldTypeDao;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.service.FieldTypeService;

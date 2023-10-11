@@ -1,9 +1,9 @@
 package io.devpl.generator.common.aspect;
 
 import io.devpl.generator.common.annotation.Encrypt;
-import io.devpl.generator.common.page.PageResult;
+import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.utils.EncryptUtils;
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

@@ -1,4 +1,4 @@
-package io.devpl.generator.common.service;
+package io.devpl.generator.common.mvc;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 

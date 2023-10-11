@@ -1,7 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import cn.hutool.core.text.NamingCase;
-import io.devpl.generator.common.service.impl.BaseServiceImpl;
+import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.TableFieldDao;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.entity.GenTableField;

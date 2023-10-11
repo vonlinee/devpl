@@ -1,8 +1,8 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.common.page.PageResult;
+import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.service.BaseService;
+import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.entity.DataSourceInfo;
 

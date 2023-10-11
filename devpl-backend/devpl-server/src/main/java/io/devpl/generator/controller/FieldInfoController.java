@@ -1,8 +1,8 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.PageQuery;
-import io.devpl.generator.common.page.PageResult;
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.FieldInfo;
 import io.devpl.generator.service.FieldInfoService;
 import io.devpl.generator.utils.BusinessUtils;

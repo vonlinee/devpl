@@ -1,6 +1,6 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

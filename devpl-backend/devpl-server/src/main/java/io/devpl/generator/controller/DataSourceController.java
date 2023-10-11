@@ -1,8 +1,8 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.page.PageResult;
+import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.utils.Result;
+import io.devpl.generator.common.query.Result;
 import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.entity.GenTable;

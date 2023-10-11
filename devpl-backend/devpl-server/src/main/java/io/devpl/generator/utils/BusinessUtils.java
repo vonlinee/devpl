@@ -1,7 +1,7 @@
 package io.devpl.generator.utils;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.generator.common.page.PageResult;
+import io.devpl.generator.common.query.PageResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

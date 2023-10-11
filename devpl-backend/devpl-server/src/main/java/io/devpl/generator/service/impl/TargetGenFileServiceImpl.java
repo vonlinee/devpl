@@ -1,6 +1,6 @@
 package io.devpl.generator.service.impl;
 
-import io.devpl.generator.common.service.impl.BaseServiceImpl;
+import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.TargetGenFileDao;
 import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.TargetGenFileService;

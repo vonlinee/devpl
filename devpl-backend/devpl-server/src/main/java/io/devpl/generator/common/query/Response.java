@@ -1,4 +1,4 @@
-package io.devpl.generator.common.utils;
+package io.devpl.generator.common.query;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;

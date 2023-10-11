@@ -1,4 +1,4 @@
-package io.devpl.generator.common.page;
+package io.devpl.generator.common.query;
 
 import lombok.Data;
 

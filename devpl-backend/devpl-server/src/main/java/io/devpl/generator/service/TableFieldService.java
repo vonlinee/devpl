@@ -1,6 +1,6 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.common.service.BaseService;
+import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.entity.GenTableField;
 
 import java.util.List;

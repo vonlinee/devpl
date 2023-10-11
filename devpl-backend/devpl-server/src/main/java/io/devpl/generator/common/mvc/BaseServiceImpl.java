@@ -1,14 +1,11 @@
-package io.devpl.generator.common.service.impl;
+package io.devpl.generator.common.mvc;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.devpl.generator.common.dao.BaseDao;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.service.BaseService;
 import org.springframework.util.StringUtils;
 
 /**

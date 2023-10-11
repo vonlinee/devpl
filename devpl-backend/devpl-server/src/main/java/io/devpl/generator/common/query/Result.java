@@ -1,4 +1,4 @@
-package io.devpl.generator.common.utils;
+package io.devpl.generator.common.query;
 
 import io.devpl.generator.common.exception.StatusCode;
 

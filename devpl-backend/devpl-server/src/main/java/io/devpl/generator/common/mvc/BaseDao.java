@@ -1,4 +1,4 @@
-package io.devpl.generator.common.dao;
+package io.devpl.generator.common.mvc;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
