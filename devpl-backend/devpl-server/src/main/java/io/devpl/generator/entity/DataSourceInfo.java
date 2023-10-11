@@ -10,6 +10,8 @@ import io.devpl.generator.common.annotation.Encrypt;
 import io.devpl.generator.config.DbType;
 import lombok.Data;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -56,7 +58,7 @@ public class DataSourceInfo {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 驱动连接属性

@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -77,7 +78,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSo
 
     @Override
     public boolean save(DataSourceInfo entity) {
-        entity.setCreateTime(new Date());
+        entity.setCreateTime(LocalDateTime.now());
         return super.save(entity);
     }
 

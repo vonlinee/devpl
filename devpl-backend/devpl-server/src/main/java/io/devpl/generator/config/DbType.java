@@ -1,6 +1,5 @@
 package io.devpl.generator.config;
 
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 
 /**
@@ -15,15 +14,9 @@ public enum DbType {
     Clickhouse("com.clickhouse.jdbc.ClickHouseDriver");
 
     private final String driverClass;
-    private JDBCDriver driver;
 
     DbType(String driverClass) {
         this.driverClass = driverClass;
-    }
-
-    DbType(String driverClass, JDBCDriver driver) {
-        this.driverClass = driverClass;
-        this.driver = driver;
     }
 
     public static DbType getValue(String dbType) {
