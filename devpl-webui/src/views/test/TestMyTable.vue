@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import ElPlusDataTable from "@/components/ElPlusDataTable.vue";
+import ElPlusDataTable from "@/components/datatable/ElPlusDataTable.vue";
 import { ref, reactive, onMounted } from "vue";
 
 const tableRef = ref();

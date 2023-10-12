@@ -20,7 +20,7 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
-              @selection-change="selectionChangeHandle">
+      @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
       <el-table-column prop="columnType" label="字段类型" header-align="center" align="center"></el-table-column>
       <el-table-column prop="attrType" label="属性类型" header-align="center" align="center"></el-table-column>
@@ -30,12 +30,7 @@
         <template #header="scope">
           <el-text>SQL类型</el-text>
           <el-select style="margin-left: 4px; width: 150px">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </template>
       </el-table-column>
@@ -46,19 +41,29 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="state.page"
-      :page-sizes="state.pageSizes"
-      :page-size="state.limit"
-      :total="state.total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    >
+    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
+      layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle">
     </el-pagination>
 
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
+
+    <vxe-grid v-bind="gridOptions">
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #nickname_edit="{ row }">
+        <vxe-input v-model="row.nickname"></vxe-input>
+      </template>
+      <template #role_edit="{ row }">
+        <vxe-input v-model="row.role"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
+    </vxe-grid>
+
   </el-card>
 </template>
 
@@ -68,6 +73,7 @@ import { IHooksOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
 import { ElButton } from "element-plus";
+import { VDTOptions, useVxeGridTable } from '@/hooks/vxedatatable'
 
 const state: IHooksOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
@@ -80,28 +86,23 @@ const state: IHooksOptions = reactive({
   }
 });
 
-const options = [
-  {
-    value: 'Option1',
-    label: 'MySQL',
-  },
-  {
-    value: 'Option2',
-    label: 'Oracle',
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
-  },
-  {
-    value: 'Option5',
-    label: 'Option5',
-  },
-]
+/**
+ * 数据类型VO
+ */
+interface RowVO {
+  id: number
+  typeKey: string
+
+}
+
+let gridOptions = useVxeGridTable({
+  columns: [{ type: 'checkbox', width: 50 },
+  { type: 'seq', width: 60 },
+  { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
+  { field: 'nickname', title: 'Nickname', editRender: {}, slots: { edit: 'nickname_edit' } },
+  { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } },
+  { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }]
+} as VDTOptions)
 
 const addOrUpdateRef = ref();
 const addOrUpdateHandle = (id?: number) => {

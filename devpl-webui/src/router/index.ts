@@ -28,9 +28,9 @@ export const menuRoutes: RouteRecordRaw[] = [
                 }
             },
             {
-                path: '/gen/field-type',
+                path: '/gen/datatype',
                 name: 'FieldType',
-                component: () => import('../views/field-type/index.vue'),
+                component: () => import('../views/datatype/index.vue'),
                 meta: {
                     title: '字段类型映射',
                     icon: 'icon-menu'

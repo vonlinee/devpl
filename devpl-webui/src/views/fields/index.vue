@@ -259,6 +259,21 @@ onMounted(() => {
                 ></vxe-input>
               </template>
             </vxe-form-item>
+            <vxe-form-item
+              field="description"
+              title="描述信息"
+              :span="24"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-textarea
+                  v-model="data.description"
+                  resize="none"
+                  rows="5"
+                  placeholder="描述信息"
+                ></vxe-textarea>
+              </template>
+            </vxe-form-item>
             <vxe-form-item align="center" title-align="left" :span="24">
               <template #default>
                 <vxe-button type="submit">提交</vxe-button>

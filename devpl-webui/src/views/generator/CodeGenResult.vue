@@ -5,8 +5,8 @@
 		width="80%"
 		:close-on-click-modal="false"
 		destroy-on-close
+		draggable="true"
 		:on-close="dispose"
-		append-to-body
 	>
 		<el-collapse ref="collapseRef" v-model="activeName" accordion>
 			<el-collapse-item v-for="(item, index) in rootDirsRef" :key="index" :title="item" :name="index">
@@ -19,7 +19,6 @@
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue'
 import CodeTreeView from '@/views/generator/CodeTreeView.vue'
-import { ElDialog, ElMessage } from 'element-plus'
 
 const dialogVisiableRef = ref()
 const collapseRef = ref()

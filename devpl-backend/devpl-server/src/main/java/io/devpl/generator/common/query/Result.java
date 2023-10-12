@@ -1,5 +1,6 @@
 package io.devpl.generator.common.query;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.generator.common.exception.StatusCode;
 
 import java.io.PrintWriter;

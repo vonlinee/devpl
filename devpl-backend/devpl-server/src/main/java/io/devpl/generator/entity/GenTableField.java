@@ -1,17 +1,20 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 表字段
  */
-@Data
+@Getter
+@Setter
 @TableName("gen_table_field")
 public class GenTableField {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 表ID

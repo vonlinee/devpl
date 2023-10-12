@@ -1,3 +1,6 @@
+<!-- 
+	封装monaco-editor编辑器
+ -->
 <script lang="ts">
 import * as monaco from 'monaco-editor'
 import { editor } from 'monaco-editor'
@@ -35,7 +38,7 @@ export default defineComponent({
 		options: {
 			type: Object,
 			required: false,
-			default: () => {}
+			default: () => { }
 		},
 		// 是否只读,不可通过界面输入，但是可以通过API设置文本
 		readOnly: {
@@ -52,7 +55,9 @@ export default defineComponent({
 		const editorOptions: IStandaloneEditorConstructionOptions = reactive({
 			value: text.value, // 编辑器初始显示文字
 			language: language.value, // 语言支持
-			minimap: { enabled: false },
+			minimap: { 
+				enabled: false // 关闭编辑区域右侧小地图
+			},
 			fontSize: 15,
 			automaticLayout: true, // 自适应布局
 			theme: 'vs',
@@ -86,7 +91,7 @@ export default defineComponent({
 		})
 
 		/**
-		 * 暴露API
+		 * 暴露组件API
 		 */
 		context.expose({
 			/**
@@ -130,6 +135,7 @@ export default defineComponent({
 				'div',
 				{
 					ref: editorBoxRef,
+					// monaco-editor容器div
 					class: 'monaco-editor-container',
 					style: {
 						width: width.value,

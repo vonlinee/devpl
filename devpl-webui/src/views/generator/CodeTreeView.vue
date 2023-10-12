@@ -2,20 +2,20 @@
     <splitpanes class="default-theme">
         <pane max-size="35" style="overflow: auto">
             <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick"
-                     style="width: 100%; height: 100%; display: inline-block; min-width: 100%;"/>
+                style="width: 100%; height: 100%; display: inline-block; min-width: 100%;" />
         </pane>
-        <pane>
+        <pane style="overflow: auto; height: auto;">
             <monaco-editor ref="editorRef" language="java"></monaco-editor>
         </pane>
     </splitpanes>
 </template>
 
 <script lang="ts">
-import {Pane, Splitpanes} from "splitpanes";
+import { Pane, Splitpanes } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css'
-import {nextTick, onMounted, ref, toRefs} from 'vue';
-import {getLanguage} from "@/components/editor/monaco-editor";
-import {apiGetFileContent, apiGetFileTree} from "@/api/factory";
+import { nextTick, onMounted, ref, toRefs } from 'vue';
+import { getLanguage } from "@/components/editor/monaco-editor";
+import { apiGetFileContent, apiGetFileTree } from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 /**
@@ -48,7 +48,7 @@ function expandAllParentNode(fileNode: FileNode, defaultExpandedKeys: string[]) 
 
 export default {
     name: 'CodeTreeView',
-    components: {MonacoEditor, Splitpanes, Pane},
+    components: { MonacoEditor, Splitpanes, Pane },
     props: {
         // 展示该目录下的所有文件
         dir: {
@@ -58,7 +58,7 @@ export default {
     setup(props: any) {
         const editorRef = ref()
         const treeData = ref<FileNode[]>([])
-        const {dir} = toRefs(props)
+        const { dir } = toRefs(props)
 
         // 返回数据结构取的字段
         const defaultProps = {
@@ -151,7 +151,7 @@ export default {
     overflow-x: auto;
 }
 
-.el-tree > .el-tree-node {
+.el-tree>.el-tree-node {
     min-width: 100%;
     display: inline-block !important;
 }

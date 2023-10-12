@@ -41,17 +41,18 @@ codegen:
 # mybatis-plus配置
 mybatis-plus:
     mapper-locations: classpath:/mapper/*.xml
-    typeAliasesPackage: net.maku.generator.entity
+    typeAliasesPackage: io.devpl.generator.entity
     global-config:
         db-config:
             id-type: AUTO
         banner: false
     configuration:
         map-underscore-to-camel-case: true
-        cache-enabled: false
+        cache-enabled: false # 开启 Mybatis 二级缓存，默认为 true。
         call-setters-on-nulls: true
         jdbc-type-for-null: 'null'
-        log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 不输出日志
+#        log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 不输出日志
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台输出日志
     configuration-properties:
         prefix:
         blobType: BLOB

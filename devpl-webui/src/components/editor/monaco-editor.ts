@@ -1,14 +1,48 @@
 // 可用的语言选项
 const languageOptions: string[] = [
-    "bat", "cpp", "css", "dockerfile", "go", "graphql", "html", "ini",
-    "java", "javascript", "json", "julia", "kotlin", "less", "markdown", "mysql", "objective-c", "pascal", "pascaligo",
-    "perl", "php", "powershell", "python", "r", "redis", "rust", "scala", "scheme", "scss", "shell",
-    "sophia", "sql", "swift", "tcl", "typescript", "xml", "yaml"]
+  "bat",
+  "cpp",
+  "css",
+  "dockerfile",
+  "go",
+  "graphql",
+  "html",
+  "ini",
+  "java",
+  "javascript",
+  "json",
+  "julia",
+  "kotlin",
+  "less",
+  "markdown",
+  "mysql",
+  "objective-c",
+  "pascal",
+  "pascaligo",
+  "perl",
+  "php",
+  "powershell",
+  "python",
+  "r",
+  "redis",
+  "rust",
+  "scala",
+  "scheme",
+  "scss",
+  "shell",
+  "sophia",
+  "sql",
+  "swift",
+  "tcl",
+  "typescript",
+  "xml",
+  "yaml",
+]
 
 /**
  * 支持的语言以及别名
  */
-const languageMap: Map<String, String> = new Map();
+const languageMap: Map<String, String> = new Map()
 
 languageMap.set("bat", "bat")
 languageMap.set("cpp", "cpp")
@@ -52,7 +86,7 @@ languageMap.set("jsx", "javascript")
  * @param lang
  */
 export function isLanguageSupported(lang: string): boolean {
-    return languageMap.get(lang) !== null
+  return languageMap.get(lang) !== null
 }
 
 /**
@@ -60,5 +94,5 @@ export function isLanguageSupported(lang: string): boolean {
  * @param lang
  */
 export function getLanguage(lang: string): string {
-    return <string>languageMap.get(lang)
+  return <string>languageMap.get(lang)
 }

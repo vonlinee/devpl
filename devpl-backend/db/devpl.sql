@@ -1,6 +1,6 @@
 SET NAMES utf8mb4;
 SET
-FOREIGN_KEY_CHECKS = 0;
+    FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for connection_config
@@ -8,7 +8,7 @@ FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `connection_config`;
 CREATE TABLE `connection_config`
 (
-    `id`       varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键ID',
+    `id`       varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL COMMENT '主键ID',
     `name`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '连接名称',
     `host`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '主机地址，IP地址',
     `port`     varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '端口号',
@@ -41,7 +41,7 @@ VALUES ('9c4c93ee-c0d6-4b10-b83d-2702756c6d11', '127.0.0.1-3306-MySQL5', '127.0.
 DROP TABLE IF EXISTS `data_type_mapping`;
 CREATE TABLE `data_type_mapping`
 (
-    `id`       int(11) NOT NULL COMMENT '主键ID',
+    `id`       int(11)                                                       NOT NULL COMMENT '主键ID',
     `sql_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -59,9 +59,9 @@ CREATE TABLE `data_type_mapping`
 DROP TABLE IF EXISTS `dbs`;
 CREATE TABLE `dbs`
 (
-    `id`    bigint(20) NOT NULL AUTO_INCREMENT,
+    `id`    bigint(20)                                                    NOT NULL AUTO_INCREMENT,
     `name`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-    `value` json NULL,
+    `value` json                                                          NULL,
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -75,24 +75,24 @@ CREATE TABLE `dbs`
 INSERT INTO `dbs`
 VALUES (2, 'mysql_learn', '{
     \"host\": \"127.0.0.1\",
-\"name\": \"mysql_learn\",
-\"port\": \"3306\",
-\"dbType\": \"MySQL5\",
-\"schema\": \"mysql_learn\",
-\"encoding\": \"utf8\",
-\"password\": \"123456\",
-\"username\": \"root\"
+    \"name\": \"mysql_learn\",
+    \"port\": \"3306\",
+    \"dbType\": \"MySQL5\",
+    \"schema\": \"mysql_learn\",
+    \"encoding\": \"utf8\",
+    \"password\": \"123456\",
+    \"username\": \"root\"
 }');
 INSERT INTO `dbs`
 VALUES (3, 'ruoyi', '{
     \"host\": \"127.0.0.1\",
-\"name\": \"ruoyi\",
-\"port\": \"3306\",
-\"dbType\": \"MySQL5\",
-\"schema\": \"ruoyi\",
-\"encoding\": \"utf8\",
-\"password\": \"123456\",
-\"username\": \"root\"
+    \"name\": \"ruoyi\",
+    \"port\": \"3306\",
+    \"dbType\": \"MySQL5\",
+    \"schema\": \"ruoyi\",
+    \"encoding\": \"utf8\",
+    \"password\": \"123456\",
+    \"username\": \"root\"
 }');
 
 -- ----------------------------
@@ -102,14 +102,14 @@ DROP TABLE IF EXISTS `field_info`;
 CREATE TABLE `field_info`
 (
     `id`          bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `field_key`   varchar(36) NOT NULL COMMENT '字段Key',
+    `field_key`   varchar(36)         NOT NULL COMMENT '字段Key',
     `field_name`  varchar(100) DEFAULT NULL COMMENT '字段名',
     `data_type`   varchar(100) DEFAULT NULL COMMENT '数据类型',
     `description` varchar(100) DEFAULT NULL COMMENT '描述信息',
     `field_value` varchar(100) DEFAULT NULL COMMENT '默认值',
     `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
     `update_time` datetime     DEFAULT NULL COMMENT '更新时间',
-    `is_deleted`  tinyint(1) DEFAULT NULL COMMENT '是否删除',
+    `is_deleted`  tinyint(1)   DEFAULT NULL COMMENT '是否删除',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -121,7 +121,7 @@ CREATE TABLE `field_info`
 DROP TABLE IF EXISTS `file_gen_group`;
 CREATE TABLE `file_gen_group`
 (
-    `group_id`       bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id, 多个文件生成',
+    `group_id`       bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键id, 多个文件生成',
     `group_name`     varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表名',
     `file_id`        varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '生成文件ID,关联template_file_generatioin表主键ID',
     `table_comment`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '说明',
@@ -129,15 +129,15 @@ CREATE TABLE `file_gen_group`
     `email`          varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
     `package_name`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目包名',
     `version`        varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目版本号',
-    `generator_type` tinyint(4) NULL DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
+    `generator_type` tinyint(4)                                                    NULL DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
     `backend_path`   varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '后端生成路径',
     `frontend_path`  varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端生成路径',
     `module_name`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模块名',
     `function_name`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '功能名',
-    `form_layout`    tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
-    `datasource_id`  bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
-    `baseclass_id`   bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-    `create_time`    datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `form_layout`    tinyint(4)                                                    NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
+    `datasource_id`  bigint(20)                                                    NULL DEFAULT NULL COMMENT '数据源ID',
+    `baseclass_id`   bigint(20)                                                    NULL DEFAULT NULL COMMENT '基类ID',
+    `create_time`    datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`group_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -155,12 +155,12 @@ CREATE TABLE `file_gen_group`
 DROP TABLE IF EXISTS `gen_base_class`;
 CREATE TABLE `gen_base_class`
 (
-    `id`           bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `id`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类包名',
     `code`         varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类编码',
     `fields`       varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
     `remark`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-    `create_time`  datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `create_time`  datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -182,13 +182,13 @@ VALUES (1, 'net.maku.framework.mybatis.entity', 'BaseEntity',
 DROP TABLE IF EXISTS `datasource_info`;
 CREATE TABLE `datasource_info`
 (
-    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `id`          bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `db_type`     varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库类型',
     `conn_name`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '连接名',
     `conn_url`    varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL',
     `username`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
     `password`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
-    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `create_time` datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -210,11 +210,11 @@ VALUES (1, 'MySQL', 'lancoo',
 DROP TABLE IF EXISTS `gen_field_type`;
 CREATE TABLE `gen_field_type`
 (
-    `id`           bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `id`           bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `column_type`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
     `attr_type`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性类型',
     `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性包名',
-    `create_time`  datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `create_time`  datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `column_type` (`column_type`) USING BTREE
 ) ENGINE = InnoDB
@@ -295,7 +295,7 @@ VALUES (31, 'numeric', 'BigDecimal', 'java.math.BigDecimal', '2023-06-30 10:25:1
 DROP TABLE IF EXISTS `gen_project_modify`;
 CREATE TABLE `gen_project_modify`
 (
-    `id`                     bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `id`                     bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `project_name`           varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目名',
     `project_code`           varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目标识',
     `project_package`        varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目包名',
@@ -306,7 +306,7 @@ CREATE TABLE `gen_project_modify`
     `exclusions`             varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '排除文件',
     `modify_suffix`          varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更文件',
     `modify_tmp_path`        varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更临时路径',
-    `create_time`            datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `create_time`            datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -330,7 +330,7 @@ VALUES (2, 'maku-cloud', 'maku', 'net.maku', 'D:/makunet/maku-cloud', 'baba-clou
 DROP TABLE IF EXISTS `gen_table`;
 CREATE TABLE `gen_table`
 (
-    `id`             bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `id`             bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
     `table_name`     varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表名',
     `class_name`     varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类名',
     `table_comment`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '说明',
@@ -338,15 +338,15 @@ CREATE TABLE `gen_table`
     `email`          varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
     `package_name`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目包名',
     `version`        varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目版本号',
-    `generator_type` tinyint(4) NULL DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
+    `generator_type` tinyint(4)                                                    NULL DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
     `backend_path`   varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '后端生成路径',
     `frontend_path`  varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端生成路径',
     `module_name`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模块名',
     `function_name`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '功能名',
-    `form_layout`    tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
-    `datasource_id`  bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
-    `baseclass_id`   bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-    `create_time`    datetime NULL DEFAULT NULL COMMENT '创建时间',
+    `form_layout`    tinyint(4)                                                    NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
+    `datasource_id`  bigint(20)                                                    NULL DEFAULT NULL COMMENT '数据源ID',
+    `baseclass_id`   bigint(20)                                                    NULL DEFAULT NULL COMMENT '基类ID',
+    `create_time`    datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `table_name` (`table_name`) USING BTREE
 ) ENGINE = InnoDB
@@ -380,26 +380,26 @@ VALUES (29, 'table_file_generation', 'TableFileGeneration', '表文件生成记�
 DROP TABLE IF EXISTS `gen_table_field`;
 CREATE TABLE `gen_table_field`
 (
-    `id`              bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-    `table_id`        bigint(20) NULL DEFAULT NULL COMMENT '表ID',
+    `id`              bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `table_id`        bigint(20)                                                    NULL DEFAULT NULL COMMENT '表ID',
     `field_name`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段名称',
     `field_type`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
     `field_comment`   varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段说明',
     `attr_name`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性名',
     `attr_type`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性类型',
     `package_name`    varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性包名',
-    `sort`            int(11) NULL DEFAULT NULL COMMENT '排序',
-    `auto_fill`       varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
-    `primary_key`     tinyint(4) NULL DEFAULT NULL COMMENT '主键 0：否  1：是',
-    `base_field`      tinyint(4) NULL DEFAULT NULL COMMENT '基类字段 0：否  1：是',
-    `form_item`       tinyint(4) NULL DEFAULT NULL COMMENT '表单项 0：否  1：是',
-    `form_required`   tinyint(4) NULL DEFAULT NULL COMMENT '表单必填 0：否  1：是',
+    `sort`            int(11)                                                       NULL DEFAULT NULL COMMENT '排序',
+    `auto_fill`       varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
+    `primary_key`     tinyint(4)                                                    NULL DEFAULT NULL COMMENT '主键 0：否  1：是',
+    `base_field`      tinyint(4)                                                    NULL DEFAULT NULL COMMENT '基类字段 0：否  1：是',
+    `form_item`       tinyint(4)                                                    NULL DEFAULT NULL COMMENT '表单项 0：否  1：是',
+    `form_required`   tinyint(4)                                                    NULL DEFAULT NULL COMMENT '表单必填 0：否  1：是',
     `form_type`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单类型',
     `form_dict`       varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单字典类型',
     `form_validator`  varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表单效验',
-    `grid_item`       tinyint(4) NULL DEFAULT NULL COMMENT '列表项 0：否  1：是',
-    `grid_sort`       tinyint(4) NULL DEFAULT NULL COMMENT '列表排序 0：否  1：是',
-    `query_item`      tinyint(4) NULL DEFAULT NULL COMMENT '查询项 0：否  1：是',
+    `grid_item`       tinyint(4)                                                    NULL DEFAULT NULL COMMENT '列表项 0：否  1：是',
+    `grid_sort`       tinyint(4)                                                    NULL DEFAULT NULL COMMENT '列表排序 0：否  1：是',
+    `query_item`      tinyint(4)                                                    NULL DEFAULT NULL COMMENT '查询项 0：否  1：是',
     `query_type`      varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询方式',
     `query_form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询表单类型',
     PRIMARY KEY (`id`) USING BTREE
@@ -485,17 +485,17 @@ VALUES (90, 29, 'save_path', 'varchar', '保存路径', 'savePath', 'String', NU
 DROP TABLE IF EXISTS `gen_test_student`;
 CREATE TABLE `gen_test_student`
 (
-    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '学生ID',
+    `id`          bigint(20)                                                   NOT NULL AUTO_INCREMENT COMMENT '学生ID',
     `name`        varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '姓名',
-    `gender`      tinyint(4) NULL DEFAULT NULL COMMENT '性别',
-    `age`         int(11) NULL DEFAULT NULL COMMENT '年龄',
+    `gender`      tinyint(4)                                                   NULL DEFAULT NULL COMMENT '性别',
+    `age`         int(11)                                                      NULL DEFAULT NULL COMMENT '年龄',
     `class_name`  varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '班级',
-    `version`     int(11) NULL DEFAULT NULL COMMENT '版本号',
-    `deleted`     tinyint(4) NULL DEFAULT NULL COMMENT '删除标识',
-    `creator`     bigint(20) NULL DEFAULT NULL COMMENT '创建者',
-    `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-    `updater`     bigint(20) NULL DEFAULT NULL COMMENT '更新者',
-    `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+    `version`     int(11)                                                      NULL DEFAULT NULL COMMENT '版本号',
+    `deleted`     tinyint(4)                                                   NULL DEFAULT NULL COMMENT '删除标识',
+    `creator`     bigint(20)                                                   NULL DEFAULT NULL COMMENT '创建者',
+    `create_time` datetime                                                     NULL DEFAULT NULL COMMENT '创建时间',
+    `updater`     bigint(20)                                                   NULL DEFAULT NULL COMMENT '更新者',
+    `update_time` datetime                                                     NULL DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -533,7 +533,7 @@ VALUES ('蓝鸽',
 DROP TABLE IF EXISTS `input_history`;
 CREATE TABLE `input_history`
 (
-    `pid`        bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `pid`        bigint(20) UNSIGNED                                           NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `item_key`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '输入位置',
     `item_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '输入值',
     PRIMARY KEY (`pid`) USING BTREE
@@ -569,8 +569,8 @@ CREATE TABLE `project`
 DROP TABLE IF EXISTS `province_city_district`;
 CREATE TABLE `province_city_district`
 (
-    `id`   int(11) NOT NULL COMMENT '地区代码',
-    `pid`  int(11) NULL DEFAULT NULL COMMENT '当前地区的上一级地区代码',
+    `id`   int(11)                                                NOT NULL COMMENT '地区代码',
+    `pid`  int(11)                                                NULL DEFAULT NULL COMMENT '当前地区的上一级地区代码',
     `name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区名称',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
@@ -7632,9 +7632,9 @@ VALUES (910103, 9101, '澳门特区');
 DROP TABLE IF EXISTS `table_file_generation`;
 CREATE TABLE `table_file_generation`
 (
-    `pid`         bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `table_id`    bigint(20) NULL DEFAULT NULL COMMENT '表ID',
-    `template_id` bigint(20) NULL DEFAULT NULL COMMENT '模板ID',
+    `pid`         bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `table_id`    bigint(20)                                                    NULL DEFAULT NULL COMMENT '表ID',
+    `template_id` bigint(20)                                                    NULL DEFAULT NULL COMMENT '模板ID',
     `file_name`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名称',
     `save_path`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
     PRIMARY KEY (`pid`) USING BTREE
@@ -7654,13 +7654,13 @@ CREATE TABLE `table_file_generation`
 DROP TABLE IF EXISTS `template_file_generation`;
 CREATE TABLE `template_file_generation`
 (
-    `pid`         bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `pid`         bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `task_id`     varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码生成任务ID',
     `file_name`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名称',
-    `template_id` bigint(20) NULL DEFAULT NULL COMMENT '模板ID',
+    `template_id` bigint(20)                                                    NULL DEFAULT NULL COMMENT '模板ID',
     `save_path`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
     `remark`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
-    `builtin`     tinyint(1) NULL DEFAULT NULL COMMENT '是否内置',
+    `builtin`     tinyint(1)                                                    NULL DEFAULT NULL COMMENT '是否内置',
     PRIMARY KEY (`pid`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -7690,16 +7690,16 @@ VALUES (16, NULL, 'Controller.java', 6, NULL, 'wrewerwer', 1);
 DROP TABLE IF EXISTS `template_info`;
 CREATE TABLE `template_info`
 (
-    `template_id`   bigint(20) NOT NULL AUTO_INCREMENT COMMENT '模板ID主键',
+    `template_id`   bigint(20)                                                    NOT NULL AUTO_INCREMENT COMMENT '模板ID主键',
     `template_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板名称',
-    `type`          tinyint(4) NULL DEFAULT NULL COMMENT '模板类型',
-    `provider`      varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '技术提供方',
-    `content`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字符串模板内容',
+    `type`          tinyint(4)                                                    NULL DEFAULT NULL COMMENT '模板类型',
+    `provider`      varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NULL DEFAULT NULL COMMENT '技术提供方',
+    `content`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NULL COMMENT '字符串模板内容',
     `path`          varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件模板路径',
-    `create_time`   datetime NULL DEFAULT NULL COMMENT '创建时间',
-    `update_time`   datetime NULL DEFAULT NULL COMMENT '更新时间',
+    `create_time`   datetime                                                      NULL DEFAULT NULL COMMENT '创建时间',
+    `update_time`   datetime                                                      NULL DEFAULT NULL COMMENT '更新时间',
     `remark`        varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
-    `deleted`       tinyint(4) NULL DEFAULT NULL COMMENT '逻辑删除状态',
+    `deleted`       tinyint(4)                                                    NULL DEFAULT NULL COMMENT '逻辑删除状态',
     PRIMARY KEY (`template_id`) USING BTREE
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -7757,8 +7757,8 @@ VALUES (13, 'index.vue.ftl', 1, NULL, '', 'template\\index.vue.ftl', '2023-08-05
 DROP TABLE IF EXISTS `template_param`;
 CREATE TABLE `template_param`
 (
-    `id`          int(11) NOT NULL COMMENT '主键ID',
-    `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
+    `id`          int(11)                                                       NOT NULL COMMENT '主键ID',
+    `template_id` int(11)                                                       NULL DEFAULT NULL COMMENT '模板ID',
     `param_key`   varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
     `param_name`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名',
     `param_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
@@ -7793,7 +7793,7 @@ CREATE TABLE `user`
 -- ----------------------------
 
 SET
-FOREIGN_KEY_CHECKS = 1;
+    FOREIGN_KEY_CHECKS = 1;
 
 /**
   数据库表信息记录表
@@ -7805,7 +7805,7 @@ CREATE TABLE `table_info`
     `table_cat`                 VARCHAR(255) NULL COMMENT 'table catalog (may be null)',
     `table_schem`               VARCHAR(255) NULL COMMENT 'table schema (maybe null)',
     `table_name`                VARCHAR(255) NULL COMMENT '表名称',
-    `table_type`                VARCHAR(20) NULL COMMENT '表类型. 常见类型包括"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".',
+    `table_type`                VARCHAR(20)  NULL COMMENT '表类型. 常见类型包括"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".',
     `remarks`                   VARCHAR(255) NULL COMMENT '该表的描述文本',
     `type_cat`                  VARCHAR(255) NULL COMMENT 'the types catalog (maybe null)',
     `type_schem`                VARCHAR(255) NULL COMMENT 'the types schema (maybe null)',
@@ -7825,28 +7825,28 @@ CREATE TABLE `column_info`
 (
     `id`                bigint unsigned PRIMARY KEY AUTO_INCREMENT COMMENT '自增主键',
     `table_id`          bigint unsigned COMMENT '所属表的ID',
-    `table_cat`         varchar(255) DEFAULT NULL COMMENT 'table catalog (maybe null)',
-    `table_schem`       varchar(255) DEFAULT NULL COMMENT 'table schema (maybe null)',
-    `table_name`        varchar(255) DEFAULT NULL COMMENT '表名称',
-    `column_name`       varchar(255) DEFAULT NULL COMMENT '列名称',
-    `data_type`         int(11) DEFAULT NULL COMMENT 'SQL type from java.sql.Type',
-    `type_name`         varchar(255) DEFAULT NULL COMMENT '数据源独立的类型名称, for a UDT the type name is fully qualified',
-    `column_size`       int(11) DEFAULT NULL COMMENT 'column size.有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
-    `buffer_length`     int(11) DEFAULT NULL COMMENT 'not used.',
-    `decimal_digits`    int(11) DEFAULT NULL COMMENT '小数位数',
-    `num_prec_radix`    int(11) DEFAULT NULL COMMENT 'NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)',
-    `nullable`          int(11) unsigned DEFAULT NULL COMMENT '是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.',
-    `remarks`           varchar(255) DEFAULT NULL COMMENT '该列的描述信息，可为null',
-    `column_def`        varchar(255) DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)',
-    `sql_data_type`     int(11) DEFAULT NULL COMMENT 'unused',
-    `sql_datetime_sub`  int(11) DEFAULT NULL COMMENT 'unused',
-    `char_octet_length` int(11) DEFAULT NULL COMMENT '字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column',
-    `ordinal_position`  int(11) DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
+    `table_cat`         varchar(255)        DEFAULT NULL COMMENT 'table catalog (maybe null)',
+    `table_schem`       varchar(255)        DEFAULT NULL COMMENT 'table schema (maybe null)',
+    `table_name`        varchar(255)        DEFAULT NULL COMMENT '表名称',
+    `column_name`       varchar(255)        DEFAULT NULL COMMENT '列名称',
+    `data_type`         int(11)             DEFAULT NULL COMMENT 'SQL type from java.sql.Type',
+    `type_name`         varchar(255)        DEFAULT NULL COMMENT '数据源独立的类型名称, for a UDT the type name is fully qualified',
+    `column_size`       int(11)             DEFAULT NULL COMMENT 'column size.有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
+    `buffer_length`     int(11)             DEFAULT NULL COMMENT 'not used.',
+    `decimal_digits`    int(11)             DEFAULT NULL COMMENT '小数位数',
+    `num_prec_radix`    int(11)             DEFAULT NULL COMMENT 'NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)',
+    `nullable`          int(11) unsigned    DEFAULT NULL COMMENT '是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.',
+    `remarks`           varchar(255)        DEFAULT NULL COMMENT '该列的描述信息，可为null',
+    `column_def`        varchar(255)        DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)',
+    `sql_data_type`     int(11)             DEFAULT NULL COMMENT 'unused',
+    `sql_datetime_sub`  int(11)             DEFAULT NULL COMMENT 'unused',
+    `char_octet_length` int(11)             DEFAULT NULL COMMENT '字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column',
+    `ordinal_position`  int(11)             DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
     `is_nullable`       tinyint(1) unsigned DEFAULT NULL COMMENT 'ISO rules are used to determine the nullability for a column. YES --- if the column can include NULLs NO --- if the column cannot include NULLs empty string --- if the nullability for the column is unknown',
-    `scope_catalog`     varchar(255) DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
-    `scope_schema`      varchar(255) DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-    `scope_table`       varchar(255) DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-    `source_data_type`  varchar(255) DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
+    `scope_catalog`     varchar(255)        DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
+    `scope_schema`      varchar(255)        DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+    `scope_table`       varchar(255)        DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+    `source_data_type`  varchar(255)        DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
     `is_autoincrement`  tinyint(1) unsigned DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
     `is_generated`      tinyint(1) unsigned DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column'
 ) ENGINE = InnoDB
@@ -7863,15 +7863,16 @@ DROP TABLE IF EXISTS `data_type_group`;
 CREATE TABLE `data_type_group`
 (
     `id`         bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `group_id`   int(11) DEFAULT NULL COMMENT '分组ID',
+    `group_id`   int(11)      DEFAULT NULL COMMENT '分组ID',
     `group_name` varchar(255) DEFAULT NULL COMMENT '分组名称',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 DROP TABLE IF EXISTS `data_type_item`;
 CREATE TABLE `data_type_item`
 (
-    `id`            bigint(20) unsigned NOT NULL COMMENT '主键ID',
+    `id`            bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `type_group_id` varchar(255) DEFAULT NULL COMMENT '类型分组名称',
     `type_key`      varchar(255) DEFAULT NULL COMMENT '类型ID',
     `type_name`     varchar(255) DEFAULT NULL COMMENT '类型名称',
@@ -7882,14 +7883,17 @@ CREATE TABLE `data_type_item`
     `precision`     varchar(255) DEFAULT NULL COMMENT '精度',
     `create_time`   datetime     DEFAULT NULL COMMENT '创建时间',
     `update_time`   datetime     DEFAULT NULL COMMENT '更新时间',
-    `is_deleted`    tinyint(1) DEFAULT NULL COMMENT '是否删除',
+    `is_deleted`    tinyint(1)   DEFAULT NULL COMMENT '是否删除',
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 DROP TABLE IF EXISTS `data_type_mapping`;
 CREATE TABLE `data_type_mapping`
 (
-    `id`       int(11) NOT NULL COMMENT '主键ID',
+    `id`       bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `type_key` varchar(100) DEFAULT NULL COMMENT 'SQL数据类型',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  ROW_FORMAT = DYNAMIC;
