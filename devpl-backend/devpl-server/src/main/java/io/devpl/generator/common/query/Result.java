@@ -1,6 +1,5 @@
 package io.devpl.generator.common.query;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.generator.common.exception.StatusCode;
 
 import java.io.PrintWriter;
@@ -19,6 +18,9 @@ public class Result<T> implements Serializable {
     // 响应数据
     private T data;
 
+    /**
+     * 堆栈信息，仅在开发时使用，生产环境始为null
+     */
     private String stackTrace;
 
     public static <T> Result<T> ok() {
