@@ -14,6 +14,9 @@ import {
   MenuListResponse
 } from "@/types"
 
+/**
+ * 确定是模拟数据还是请求服务器
+ */
 const request = import.meta.env.REACT_APP_MOCK === "1" ? mock : ajax;
 
 const getMenu = () => request.get("/getmenu") as Promise<MenuResponse>;

@@ -74,6 +74,12 @@ useRef()
 
 
 
+```error
+index.ts:165 Uncaught ReferenceError: Cannot access 'LAYOUT_MODE' before initialization
+    at getLayoutMode (index.ts:165:23)
+    at reducer.ts:5:30
+```
+
 
 
 

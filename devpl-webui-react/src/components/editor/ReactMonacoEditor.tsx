@@ -1,69 +1,11 @@
-import React, { Component, forwardRef, useImperativeHandle, useState, } from "react";
+import React, {
+  Component,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
 import * as monaco from "monaco-editor";
 import MonacoEditor from "react-monaco-editor";
-import { extend } from "dayjs";
-
-/**
- * 暴露的属性和方法
- */
-export interface MonacoEditorRef {
-  getText: () => string
-  setText: (val: string) => void
-}
-
-interface ChildProps<T> {
-  msg: string,
-  ref: React.RefObject<T>
-}
-
-class Child extends React.Component<ChildProps<Child>> {
-
-  sayHello() {
-    console.log(this)
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>{this.props.msg}</h1>
-        <input type="text"></input>
-      </div>
-    )
-  }
-}
-
-class Parent extends React.Component {
-
-  inputRef: React.RefObject<Child>;
-
-  constructor(props: any) {
-    super(props)
-
-    this.inputRef = React.createRef()
-  }
-
-  show() {
-    this.inputRef.current?.sayHello()
-  }
-
-  componentDidMount () {
-    console.log(this.inputRef.current)
-  }
-
-  render() {
-    return (<>
-      <div>
-        <button onClick={() => this.show()}>Show</button>
-        <Child msg="hello" ref={this.inputRef}></Child>
-      </div>
-    </>)
-  }
-}
-
-
-
-
-
 
 /**
  * 编辑器属性
@@ -72,8 +14,8 @@ export interface MonacoEditorProps extends React.HTMLAttributes<HTMLElement> {
   lang?: string;
   value: string;
   theme?: string;
-  width: '100%'
-  height: '100%'
+  width: "100%";
+  height: "100%";
 }
 
 const editorWillMount = () => {
@@ -99,52 +41,83 @@ const editorWillMount = () => {
   });
 };
 
+interface ReactMonacoEditorState {
+  text: string;
+  language?: string;
+}
+
 /**
  * 封装 ReactMoancoEditor
  * https://github.com/react-monaco-editor/react-monaco-editor
  */
-export const ReactMonacoEditor = forwardRef<MonacoEditorRef, MonacoEditorProps>((props, ref) => {
-  const [text, setText] = useState("hello world");
-  const [language, setLanguage] = useState("plain");
+export class ReactMonacoEditor extends React.Component<
+  MonacoEditorProps,
+  ReactMonacoEditorState
+> {
+  // 编辑器实例
+  private editor?: monaco.editor.IStandaloneCodeEditor;
 
-  useImperativeHandle(ref, () => ({
-    getText: () => text,
-    setText: (val) => setText(val)
-  }), [])
+  constructor(props: MonacoEditorProps) {
+    super(props);
+
+    this.state = {
+      text: "",
+      language: "json",
+    };
+
+    /**
+     * Moanco Editor Options
+     * react-moanco-editor不支持Ref
+     * https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html
+     */
+    let options: monaco.editor.IStandaloneEditorConstructionOptions = {
+      language: props.lang ? props.lang : "java",
+      value: "",
+      selectOnLineNumbers: true,
+    };
+  }
 
   /**
    * 实时更新输入的值
    * @param newValue 输入的值
-   * @param e 
+   * @param e
    */
-  const onChangeCallback = (
+  onChangeCallback(
     newValue: string,
     e: monaco.editor.IModelContentChangedEvent
-  ): void => {
-    setText(newValue);
-  };
+  ): void {
+    this.state = {
+      text: newValue,
+    };
+  }
 
-  /**
-   * Moanco Editor Options
-   * react-moanco-editor不支持Ref
-   * https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html
-   */
-  let options: monaco.editor.IStandaloneEditorConstructionOptions = {
-    language: props.lang ? props.lang : "java",
-    value: text,
-    selectOnLineNumbers: true
-  };
+  getText() {
+    const model = this.refs.monaco.editor.getModel();
+    const value = model.getValue();
+    return value;
+  }
 
-  return (
-    <>
-      <Parent></Parent>
-      <MonacoEditor
-        language={language}
-        editorWillMount={editorWillMount}
-        value={text}
-        onChange={onChangeCallback}
-        height={400}
-      />
-    </>
-  );
-})
+  setText(val: string) {
+    this.state = {
+      text: val,
+    };
+  }
+
+  getLanguage() {
+    return this.state.language;
+  }
+
+  render(): React.ReactNode {
+    return (
+      <>
+        <MonacoEditor
+          language={this.state.language}
+          editorWillMount={editorWillMount}
+          value={this.state.text}
+          onChange={this.onChangeCallback}
+          height={400}
+        />
+      </>
+    );
+  }
+}

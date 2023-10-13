@@ -1,12 +1,18 @@
 import { getCompVisible } from "@/utils";
 import { State } from "@/types"
-const visible = getCompVisible() || { footer: true, topMenu: true };
 
-export default function reducer(state = visible, action: {
+
+export default function reducer(state : any, action: {
   type: string
   key: keyof State["componentsVisible"]
   val: boolean
 }) {
+
+  if (state == undefined || state == null) {
+    const visible = getCompVisible() || { footer: true, topMenu: true };
+    state = visible
+  }
+
   const { type, key, val } = action;
   switch (type) {
     case "set": {

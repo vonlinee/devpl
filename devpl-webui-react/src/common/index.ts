@@ -13,6 +13,7 @@ export function getMenus() {
   }
   const job: Promise<MenuResponse> = new Promise((reslove) => {
     let localMenu = getLocalMenu();
+
     if (localMenu) {
       console.log("获取localMenu");
       return reslove(localMenu);

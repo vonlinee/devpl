@@ -373,23 +373,28 @@ const MockData: MockDataType = {
 };
 type UrlType = keyof MockDataType
 
+/**
+ * get请求地址
+ * @param url 请求地址
+ * @returns 
+ */
 function get(url: UrlType) {
   return new Promise((res) => {
-    setTimeout(() => {
+    // setTimeout(() => {
       if (url === "/getmenu") {
         // 当前用户类型ID
         let typeId = currentUser.t_id;
-
-        debugger
+        console.log("当前用户ID", typeId);
+        
         if (typeId) {
           let action: string | undefined | number[] = typeList.find((i) => i.type_id === typeId)?.menu_id;
           action = action ? action.split(",").map(Number) : [];
           let menuList = menu
-
-          debugger
+          console.log("menuList ", menuList);
           // 根据角色过滤菜单列表
           if (typeId == 1) {
             // 超级管理所有菜单项
+            console.log("超级管理所有菜单项");
           } else {
             menuList = menu.filter((i) => (action as number[]).includes(i.menu_id));
           }
@@ -399,7 +404,7 @@ function get(url: UrlType) {
         return;
       }
       res(MockData[url]);
-    }, 500);
+    // }, 500);
   }).then((res) => {
     if (res) {
       return res
