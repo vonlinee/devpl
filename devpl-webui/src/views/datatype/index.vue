@@ -20,7 +20,7 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
-      @selection-change="selectionChangeHandle">
+              @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
       <el-table-column prop="columnType" label="字段类型" header-align="center" align="center"></el-table-column>
       <el-table-column prop="attrType" label="属性类型" header-align="center" align="center"></el-table-column>
@@ -41,9 +41,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
-      layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle">
+    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit"
+                   :total="state.total"
+                   layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+                   @current-change="currentChangeHandle">
     </el-pagination>
 
     <!-- 弹窗, 新增 / 修改 -->
@@ -73,7 +74,8 @@ import { IHooksOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
 import { ElButton } from "element-plus";
-import { VDTOptions, useVxeGridTable } from '@/hooks/vxedatatable'
+import { useVxeGridTable, VDTOptions } from "@/hooks/vxedatatable";
+import { apiListDataTypes } from "@/api/datatype";
 
 const state: IHooksOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
@@ -90,19 +92,24 @@ const state: IHooksOptions = reactive({
  * 数据类型VO
  */
 interface RowVO {
-  id: number
-  typeKey: string
-
+  id: number;
+  typeKey: string;
 }
 
 let gridOptions = useVxeGridTable({
-  columns: [{ type: 'checkbox', width: 50 },
-  { type: 'seq', width: 60 },
-  { field: 'name', title: 'Name', editRender: { autofocus: '.vxe-input--inner' }, slots: { edit: 'name_edit' } },
-  { field: 'nickname', title: 'Nickname', editRender: {}, slots: { edit: 'nickname_edit' } },
-  { field: 'role', title: 'Role', editRender: {}, slots: { edit: 'role_edit' } },
-  { field: 'address', title: 'Address', showOverflow: true, editRender: {}, slots: { edit: 'address_edit' } }]
-} as VDTOptions)
+  columns: [{ type: "checkbox", width: 50 },
+    { type: "seq", width: 60 },
+    {
+      field: "typeGroupId",
+      title: "类型组",
+      editRender: { autofocus: ".vxe-input--inner" },
+      slots: { edit: "name_edit" }
+    },
+    { field: "typeKey", title: "类型Key", slots: { edit: "nickname_edit" } },
+    { field: "typeName", title: "类型名称", editRender: {}, slots: { edit: "role_edit" } },
+    { field: "valueType", title: "值类型", showOverflow: true, editRender: {}, slots: { edit: "address_edit" } }],
+  queryPage: (currentPage, pageSize) => apiListDataTypes(currentPage, pageSize)
+} as VDTOptions);
 
 const addOrUpdateRef = ref();
 const addOrUpdateHandle = (id?: number) => {

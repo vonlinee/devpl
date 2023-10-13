@@ -1,15 +1,20 @@
 package io.devpl.generator.common.query;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * 分页结果
+ * 分页工具类
  */
-public class PageResult<T> extends Result<List<T>> implements Serializable {
-
+@Data
+public class PageResult<T> implements Serializable {
     // 总记录数
     private int total;
+
+    // 列表数据
+    private List<T> list;
 
     /**
      * 分页
@@ -17,15 +22,7 @@ public class PageResult<T> extends Result<List<T>> implements Serializable {
      * @param total 总记录数
      */
     public PageResult(List<T> list, long total) {
-        this.setData(list);
+        this.list = list;
         this.total = (int) total;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
     }
 }

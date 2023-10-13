@@ -16,9 +16,9 @@ const Test = () => {
 
   let text = ''
 
-  let ref = useRef<ReactMonacoEditor>()
+  let ref = React.createRef<ReactMonacoEditor>()
 
-  const showModal = () => {
+  const getText = () => {
     console.log(ref.current?.getText());
   }
 
@@ -28,7 +28,7 @@ const Test = () => {
 
   return (
     <>
-      <Button onClick={showModal}>getText</Button>
+      <Button onClick={getText}>getText</Button>
       <Button onClick={setText}>setText</Button>
       <ReactMonacoEditor
         ref={ref}

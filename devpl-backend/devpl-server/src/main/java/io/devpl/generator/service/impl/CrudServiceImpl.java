@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -33,6 +34,29 @@ public class CrudServiceImpl implements CrudService {
      * 数据为空时返回的结果
      */
     private final boolean resultWhenEmpty = true;
+
+    @Override
+    public <T> boolean saveOrUpdate(T entity) {
+        Class<?> entityType = entity.getClass();
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
+        String keyProperty = tableInfo.getKeyProperty();
+        Object fieldValue = ReflectionKit.getFieldValue(entity, keyProperty);
+        try (SqlSession sqlSession = SqlHelper.sqlSession(entityType)) {
+            int res;
+            if (fieldValue == null) {
+                String insertOneStatement = tableInfo.getCurrentNamespace() + "." + SqlMethod.INSERT_ONE.getMethod();
+                res = sqlSession.insert(insertOneStatement, entity);
+            } else {
+                String updateByIdStatement = tableInfo.getCurrentNamespace() + "." + SqlMethod.UPDATE_BY_ID.getMethod();
+                res = sqlSession.update(updateByIdStatement, entity);
+            }
+            return res > 0;
+        } catch (Exception exception) {
+            log.error("saveOrUpdate", exception);
+        }
+        return false;
+
+    }
 
     @Override
     public <T> boolean saveBatch(Collection<T> entities) {

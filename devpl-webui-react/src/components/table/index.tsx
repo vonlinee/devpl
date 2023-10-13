@@ -148,7 +148,7 @@ function UseTable(columns: Columns, saveKey: MyTableProps["saveKey"]) {
     } else if (!data && columns && columns.length !== col.length) {
       initDefaultCol()
     }
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, [saveKey, columns]);
 
   useEffect(() => {
@@ -296,6 +296,7 @@ function MyTable({
   } = UseTable(columns, saveKey);
   const token = useThemeToken()
   const { styles } = useStyle(token)
+  // @ts-ignore
   return (
     <div className="react-ant-table">
       <Row className={styles.set} justify="end">

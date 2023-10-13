@@ -94,8 +94,8 @@ export const useVxeGridTable = (
         total: "page.total"
       },
       ajax: {
-        // 接收 Promise
-        query: ({ page }) => {
+        // 接收 Promise , vxe-table 调用 then 方法进行填充数据
+        query: ({ page }): Promise<any> => {
           if (options && options.queryPage != undefined) {
             const resolveCallback = (resolve: Function, rejected: Function) => {
               if (options.queryPage) {
@@ -124,13 +124,11 @@ export const useVxeGridTable = (
         // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
         save: ({ body }) => {
           console.log("save");
-
           return new Promise(() => 1);
         }
       }
     },
     columns: options.columns
   };
-
   return reactive<VxeGridProps<RowModel>>(_options);
 };

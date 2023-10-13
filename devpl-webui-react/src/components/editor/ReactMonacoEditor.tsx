@@ -1,45 +1,17 @@
-import React, {
-  Component,
-  forwardRef,
-  useImperativeHandle,
-  useState,
-} from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import * as monaco from "monaco-editor";
-import MonacoEditor from "react-monaco-editor";
+import MonacoEditor, { MonacoEditorProps } from "react-monaco-editor";
 
 /**
  * 编辑器属性
  */
-export interface MonacoEditorProps extends React.HTMLAttributes<HTMLElement> {
+export interface EditorProps extends React.HTMLAttributes<HTMLElement> {
   lang?: string;
   value: string;
   theme?: string;
   width: "100%";
   height: "100%";
 }
-
-const editorWillMount = () => {
-  monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-    validate: true,
-    schemas: [
-      {
-        uri: "http://myserver/foo-schema.json",
-        fileMatch: ["*"],
-        schema: {
-          type: "object",
-          properties: {
-            p1: {
-              enum: ["v1", "v2"],
-            },
-            p2: {
-              $ref: "http://myserver/bar-schema.json",
-            },
-          },
-        },
-      },
-    ],
-  });
-};
 
 interface ReactMonacoEditorState {
   text: string;
@@ -49,15 +21,17 @@ interface ReactMonacoEditorState {
 /**
  * 封装 ReactMoancoEditor
  * https://github.com/react-monaco-editor/react-monaco-editor
+ * 
+ * 文档提到可以使用ref来获取monaco editor实例，但是MonacoEditor是函数式组件
+ * 
  */
 export class ReactMonacoEditor extends React.Component<
-  MonacoEditorProps,
+  EditorProps,
   ReactMonacoEditorState
 > {
-  // 编辑器实例
-  private editor?: monaco.editor.IStandaloneCodeEditor;
+  editor?: monaco.editor.IStandaloneCodeEditor = undefined;
 
-  constructor(props: MonacoEditorProps) {
+  constructor(props: EditorProps) {
     super(props);
 
     this.state = {
@@ -77,30 +51,40 @@ export class ReactMonacoEditor extends React.Component<
     };
   }
 
-  /**
-   * 实时更新输入的值
-   * @param newValue 输入的值
-   * @param e
-   */
-  onChangeCallback(
-    newValue: string,
-    e: monaco.editor.IModelContentChangedEvent
-  ): void {
-    this.state = {
-      text: newValue,
-    };
+  editorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco: any) {
+    editor.focus();
+    this.editor = editor
+  }
+
+  editorWillMount() {
+    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+      validate: true,
+      schemas: [
+        {
+          uri: "http://myserver/foo-schema.json",
+          fileMatch: ["*"],
+          schema: {
+            type: "object",
+            properties: {
+              p1: {
+                enum: ["v1", "v2"],
+              },
+              p2: {
+                $ref: "http://myserver/bar-schema.json",
+              },
+            },
+          },
+        },
+      ],
+    });
   }
 
   getText() {
-    const model = this.refs.monaco.editor.getModel();
-    const value = model.getValue();
-    return value;
+    return this.editor?.getModel()?.getValue()
   }
 
   setText(val: string) {
-    this.state = {
-      text: val,
-    };
+    this.editor?.getModel()?.setValue(val)
   }
 
   getLanguage() {
@@ -108,13 +92,19 @@ export class ReactMonacoEditor extends React.Component<
   }
 
   render(): React.ReactNode {
+
+    const editorDidMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: any) => {
+      // 绑定了this
+      this.editorDidMount(editor, monaco)
+    }
+
     return (
       <>
         <MonacoEditor
           language={this.state.language}
-          editorWillMount={editorWillMount}
+          editorWillMount={this.editorWillMount}
           value={this.state.text}
-          onChange={this.onChangeCallback}
+          editorDidMount={editorDidMount}
           height={400}
         />
       </>

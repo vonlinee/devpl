@@ -1,6 +1,6 @@
-import { UnwrapNestedRefs, reactive } from "vue"
-import { VxeGridProps } from "vxe-table"
-import { VxeTableDefines, VxeTablePropTypes } from "vxe-table/types/table"
+import { reactive, UnwrapNestedRefs } from "vue";
+import { VxeGridProps } from "vxe-table";
+import { VxeTableDefines, VxeTablePropTypes } from "vxe-table/types/table";
 
 /**
  * 行数据模型: 任意普通对象
@@ -12,15 +12,17 @@ export declare type RowModel = Record<string, any>
  */
 export interface VDTOptions {
   // 是否边框
-  border?: boolean
+  border?: boolean;
   // 高度
-  height?: VxeTablePropTypes.Height
+  height?: VxeTablePropTypes.Height;
   // 是否启用分页
-  pageEnabled?: boolean
+  pageEnabled?: boolean;
   // 列配置项
-  columns: VxeTableDefines.ColumnOptions<RowModel>[],
+  columns: VxeTableDefines.ColumnOptions<RowModel>[];
+  // 是否自动加载
+  autoLoad?: boolean;
   // 查询分页数据
-  queryPage?: (currentPage: number, pageSize: number) => any
+  queryPage?: (currentPage: number, pageSize: number) => Promise<any>;
 }
 
 /**
@@ -30,7 +32,6 @@ export interface VDTOptions {
 export const useVxeGridTable = (
   options: VDTOptions
 ): UnwrapNestedRefs<VxeGridProps<RowModel>> => {
-  
   const _options: VxeGridProps<RowModel> = {
     border: options.border ? options.border : true,
     keepSource: true,
@@ -39,11 +40,11 @@ export const useVxeGridTable = (
     importConfig: {},
     exportConfig: {},
     columnConfig: {
-      resizable: true,
+      resizable: true
     },
     pagerConfig: {
       perfect: true,
-      pageSize: 15,
+      pageSize: 10,
       enabled: options.pageEnabled == undefined ? true : options.pageEnabled
     },
     editConfig: {
@@ -59,48 +60,63 @@ export const useVxeGridTable = (
           code: "insert_actived",
           name: "新增",
           status: "perfect",
-          icon: "vxe-icon-add",
+          icon: "vxe-icon-add"
         },
         {
           code: "mark_cancel",
           name: "标记/取消",
           status: "perfect",
-          icon: "vxe-icon-delete",
+          icon: "vxe-icon-delete"
         },
         {
           code: "save",
           name: "保存",
           status: "perfect",
-          icon: "vxe-icon-save",
-        },
+          icon: "vxe-icon-save"
+        }
       ],
       perfect: true,
       refresh: {
         icon: "vxe-icon-refresh",
-        iconLoading: "vxe-icon-refresh roll",
+        iconLoading: "vxe-icon-refresh roll"
       },
       zoom: {
         iconIn: "vxe-icon-fullscreen",
-        iconOut: "vxe-icon-minimize",
+        iconOut: "vxe-icon-minimize"
       },
       custom: {
-        icon: "vxe-icon-menu",
-      },
+        icon: "vxe-icon-menu"
+      }
     },
     proxyConfig: {
-      autoLoad: true,
+      // 是否自动加载数据
+      autoLoad: options.autoLoad == undefined ? true : options.autoLoad,
       props: {
         result: "result",
-        total: "page.total",
+        total: "page.total"
       },
       ajax: {
-        // 接收 Promise
-        query: ({ page }) => {
-          console.log("queryPage");
-          if (options && options.queryPage) {
-            return options.queryPage(page.currentPage, page.pageSize)
+        // 接收 Promise , vxe-table 调用 then 方法进行填充数据
+        query: ({ page }): Promise<any> => {
+          if (options && options.queryPage != undefined) {
+            const resolveCallback = (resolve: Function, rejected: Function): void => {
+              if (options.queryPage) {
+                options.queryPage(page.currentPage, page.pageSize).then((res: any) => {
+                  if (res.code == 200) {
+                    resolve({
+                      page: {
+                        total: res.data.total
+                      },
+                      currentPage: res.data.page,
+                      result: res.data.list
+                    });
+                  }
+                });
+              }
+            };
+            return new Promise(resolveCallback);
           }
-          return new Promise(() => undefined)
+          return new Promise(() => undefined);
         },
         // body 对象： { removeRecords }
         delete: ({ body }) => {
@@ -110,13 +126,12 @@ export const useVxeGridTable = (
         // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
         save: ({ body }) => {
           console.log("save");
-          
-          return new Promise(() => 1);
-        },
-      },
-    },
-    columns: options.columns,
-  }
 
-  return reactive<VxeGridProps<RowModel>>(_options)
-}
+          return new Promise(() => 1);
+        }
+      }
+    },
+    columns: options.columns
+  };
+  return reactive<VxeGridProps<RowModel>>(_options);
+};

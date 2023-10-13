@@ -92,4 +92,10 @@ public class DataTypeItem {
      */
     @TableField(value = "is_deleted")
     private Boolean deleted;
+
+    /**
+     * 类型分组名臣
+     */
+    @TableField(exist = false)
+    private String typeGroupName;
 }
