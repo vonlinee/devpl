@@ -1,11 +1,13 @@
-import React, { forwardRef, useImperativeHandle } from "react";
+import React from "react";
 import * as monaco from "monaco-editor";
-import MonacoEditor, { MonacoEditorProps } from "react-monaco-editor";
+import MonacoEditor from "react-monaco-editor";
+
+type Monaco = typeof monaco
 
 /**
  * 编辑器属性
  */
-export interface EditorProps extends React.HTMLAttributes<HTMLElement> {
+export interface ReactMonacoEditorProps extends React.HTMLAttributes<HTMLElement> {
   lang?: string;
   value: string;
   theme?: string;
@@ -13,6 +15,9 @@ export interface EditorProps extends React.HTMLAttributes<HTMLElement> {
   height: "100%";
 }
 
+/**
+ * 编辑器State
+ */
 interface ReactMonacoEditorState {
   text: string;
   language?: string;
@@ -21,17 +26,23 @@ interface ReactMonacoEditorState {
 /**
  * 封装 ReactMoancoEditor
  * https://github.com/react-monaco-editor/react-monaco-editor
- * 
- * 文档提到可以使用ref来获取monaco editor实例，但是MonacoEditor是函数式组件
- * 
  */
 export class ReactMonacoEditor extends React.Component<
-  EditorProps,
+  ReactMonacoEditorProps,
   ReactMonacoEditorState
 > {
+
+  /**
+   * monaco editor 实例
+   */
   editor?: monaco.editor.IStandaloneCodeEditor = undefined;
 
-  constructor(props: EditorProps) {
+  /**
+   * https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html
+   */
+  options: monaco.editor.IStandaloneEditorConstructionOptions | undefined = undefined;
+
+  constructor(props: ReactMonacoEditorProps) {
     super(props);
 
     this.state = {
@@ -44,19 +55,29 @@ export class ReactMonacoEditor extends React.Component<
      * react-moanco-editor不支持Ref
      * https://microsoft.github.io/monaco-editor/docs.html#interfaces/editor.IStandaloneEditorConstructionOptions.html
      */
-    let options: monaco.editor.IStandaloneEditorConstructionOptions = {
+    this.options = {
       language: props.lang ? props.lang : "java",
       value: "",
       selectOnLineNumbers: true,
     };
   }
 
-  editorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco: any) {
+  /**
+   * 编辑器挂载完成回调
+   * @param editor 
+   * @param monaco 
+   */
+  editorDidMount(editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) {
     editor.focus();
     this.editor = editor
   }
 
-  editorWillMount() {
+  /**
+   * 编辑器挂载前回调
+   * @param editor 
+   * @param monaco 
+   */
+  editorWillMount(monaco: Monaco) {
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [
@@ -79,35 +100,58 @@ export class ReactMonacoEditor extends React.Component<
     });
   }
 
+  editorWillUnmount(editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) {
+    editor.getModel()?.setValue("")
+  }
+
+  /**
+   * 获取编辑器输入的文本
+   * @returns 
+   */
   getText() {
     return this.editor?.getModel()?.getValue()
   }
 
+  /**
+   * 设置编辑器输入的文本
+   * @param val 
+   */
   setText(val: string) {
     this.editor?.getModel()?.setValue(val)
   }
 
   getLanguage() {
-    return this.state.language;
+    return this.editor?.getModel()?.getLanguageId();
   }
 
   render(): React.ReactNode {
-
-    const editorDidMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: any) => {
+    /**
+     * TODO react-monaco-editor文档说可以使用ref，但是MonacoEditor是函数式组件，且未使用
+     * forwardRef包裹，因此使用此方法保存 monaco editor 实例
+     * @param editor 
+     * @param monaco 
+     */
+    const editorDidMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
       // 绑定了this
       this.editorDidMount(editor, monaco)
     }
 
+    const editorWillUnmount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
+      // 绑定了this
+      this.editorWillUnmount(editor, monaco)
+    }
+
     return (
-      <>
-        <MonacoEditor
-          language={this.state.language}
-          editorWillMount={this.editorWillMount}
-          value={this.state.text}
-          editorDidMount={editorDidMount}
-          height={400}
-        />
-      </>
+      <MonacoEditor
+        language={this.props.lang}
+        theme={this.props.theme}
+        options={this.options}
+        editorWillMount={this.editorWillMount}
+        editorWillUnmount={editorWillUnmount}
+        value={this.props.value}
+        editorDidMount={editorDidMount}
+        height={this.props.height}
+        width={this.props.width}></MonacoEditor>
     );
   }
 }
