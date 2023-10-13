@@ -71,7 +71,7 @@ public class EncryptParameterAspect {
         }
         Object data = ((Result<?>) object).getData();
         if (data instanceof List || data instanceof PageResult) {
-            List<?> itemList = data instanceof List ? (List<?>) data : ((PageResult<?>) data).getList();
+            List<?> itemList = data instanceof List ? (List<?>) data : ((PageResult<?>) data).getData();
             itemList.forEach(f -> handleItem(f, false));
         } else {
             handleItem(data, false);

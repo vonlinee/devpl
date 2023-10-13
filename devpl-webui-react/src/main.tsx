@@ -1,14 +1,18 @@
-import ReactDOM from 'react-dom'
-import App from './App'
-import "./assets/css/global"
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./assets/css/global";
 
-import "./monaco"
+import "./monaco";
 
-import {StrictMode} from 'react';
+import React from "react";
 
-ReactDOM.render(
-  <StrictMode>
-    <App/>
-  </StrictMode>,
-  document.getElementById('root')
-);
+let container: HTMLElement | null = document.getElementById("root");
+
+if (container) {
+  const root = ReactDOM.createRoot(container);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  );
+}

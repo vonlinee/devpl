@@ -379,10 +379,15 @@ function get(url: UrlType) {
       if (url === "/getmenu") {
         // 当前用户类型ID
         let typeId = currentUser.t_id;
+
+        debugger
         if (typeId) {
           let action: string | undefined | number[] = typeList.find((i) => i.type_id === typeId)?.menu_id;
           action = action ? action.split(",").map(Number) : [];
           let menuList = menu
+
+          debugger
+          // 根据角色过滤菜单列表
           if (typeId == 1) {
             // 超级管理所有菜单项
           } else {
