@@ -88,5 +88,11 @@ index.ts:165 Uncaught ReferenceError: Cannot access 'LAYOUT_MODE' before initial
 
 
 
+@vitejs/plugin-react
 
+
+
+Provides [React Refresh](https://www.npmjs.com/package/react-refresh) support for Vite.
+
+https://www.npmjs.com/package/@vitejs/plugin-react-refresh
 

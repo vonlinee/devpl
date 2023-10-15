@@ -18,9 +18,8 @@ export function getMenus() {
       console.log("获取localMenu");
       return reslove(localMenu);
     }
-    getMenu()
-      .then((result) => {
-        // saveLocalMenu(result);
+    getMenu().then((result) => {
+        saveLocalMenu(result);
         reslove(result);
       })
       .catch((err) => {

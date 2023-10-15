@@ -11,6 +11,11 @@ type SetLayoutFn = {
 };
 
 export const useStateLayout = () => useSelector(getStateLayout);
+
+/**
+ * 
+ * @returns 
+ */
 export function useDispatchLayout() {
   const dispatch = useDispatch();
   const stateChangeLayout = useCallback<SetLayoutFn>(

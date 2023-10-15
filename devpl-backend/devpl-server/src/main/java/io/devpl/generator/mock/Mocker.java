@@ -1,7 +1,6 @@
 package io.devpl.generator.mock;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,13 +8,22 @@ public class Mocker {
 
     public static void main(String[] args) {
 
-        int[] ints = Mocker.split(8, 648, true);
+        int[] ints = Mocker.split(7, 232);
 
-        System.out.println(Arrays.stream(ints).sum());
+
+        String string = ToString.toString(ints, ToString.Option.builder().start("").build());
+
+        System.out.println(string);
+
+    }
+
+    public static int[] split(int n, int sum) {
+        return split(n, sum, false);
     }
 
     /**
      * 将整数sum拆分成n个正整数之和
+     *
      * @param n    拆分成n个数
      * @param sum  和
      * @param flag 生成的正整数集合中是否允许为0

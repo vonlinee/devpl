@@ -83,21 +83,26 @@ const tailFormItemLayout = {
 function RegistrationForm() {
   const [form] = Form.useForm();
   const [autoCompleteResult, setAutoCompleteResult] = useState<Array<any>>([]);
-  const navigate = useNavigate()
-  const { stateChangeLayout } = useDispatchLayout()
-  useEffect(() => {
-    message.info("此页面使用 MENU_LAYOUT 属性控制页面显示布局")
-    return () => {
-      stateChangeLayout("pop")
-    }
-  }, [])
+  const navigate = useNavigate();
+  const { stateChangeLayout } = useDispatchLayout();
+
+
+  const layoutMode = useState()
+
+  // TODO 会触发无限循环 stateChangeLayout 更新状态，会触发重新渲染 RegistrationForm 组件
+  // useEffect(() => {
+  //   message.info("此页面使用 MENU_LAYOUT 属性控制页面显示布局");
+  //   return () => {
+  //     stateChangeLayout("pop");
+  //   };
+  // }, []);
 
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
   const back = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -312,7 +317,7 @@ function RegistrationForm() {
           <Button type="primary" htmlType="submit">
             Register
           </Button>
-          <Button danger onClick={back} type='link'>
+          <Button danger onClick={back} type="link">
             返回上一页
           </Button>
         </Form.Item>
@@ -325,5 +330,5 @@ export default RegistrationForm;
 
 RegistrationForm.route = {
   [MENU_PATH]: "/form/index",
-  [MENU_LAYOUT]: 'FULLSCREEN'
+  [MENU_LAYOUT]: "FULLSCREEN",
 };

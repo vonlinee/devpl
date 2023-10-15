@@ -49,6 +49,7 @@ export const useVxeGridTable = (
     },
     editConfig: {
       trigger: "click",
+      // 行编辑模式
       mode: "row",
       showStatus: true,
       // 是否显示列头编辑图标

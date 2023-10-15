@@ -163,6 +163,10 @@ function rmKey(isLocal: boolean, key: string) {
   getStorage(isLocal).removeItem(key);
 }
 
+/**
+ * 停止事件传播
+ * @param e 
+ */
 function stopPropagation(e: MouseEvent) {
   e.stopPropagation();
 }

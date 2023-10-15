@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Layout, Menu, Button, Affix, Col } from "antd";
 import MyIcon from "@/components/icon";
 import { stopPropagation } from "@/utils";
-import {LayoutMode, MenuItem} from "@/types";
+import { LayoutMode, MenuItem } from "@/types";
 import type { MenuProps } from "antd/es/menu";
 
 type AntdMenuItem = Required<MenuProps>["items"][number];

@@ -68,6 +68,7 @@ function Intercept({ menuList, components, [MENU_TITLE]: title, [MENU_PATH]: pag
 
   // 切换布局
   useEffect(() => {
+    console.log("切换布局 ", layout);
     layout && stateChangeLayout('push', layout)
   }, [layout])
 
