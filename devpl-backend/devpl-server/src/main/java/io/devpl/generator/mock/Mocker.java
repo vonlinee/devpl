@@ -10,7 +10,6 @@ public class Mocker {
 
         int[] ints = Mocker.split(7, 232);
 
-
         String string = ToString.toString(ints, ToString.Option.builder().start("").build());
 
         System.out.println(string);

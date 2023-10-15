@@ -8,5 +8,9 @@ import javafx.scene.control.TableView;
  */
 public class TablePane<S> extends TableView<S> {
 
+    Class<S> modelClass;
 
+    public TablePane(Class<S> modelClass) {
+        this.modelClass = modelClass;
+    }
 }

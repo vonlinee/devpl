@@ -21,22 +21,6 @@ public class TextRegion extends Region {
         textArea.setWrapText(false);
         textArea.setFont(Font.font(12));
 
-        ContextMenu contextMenu = new ContextMenu();
-
-
-        MenuItem menuItem = new MenuItem("Wrap");
-        menuItem.setOnAction(event -> textArea.setWrapText(!textArea.isWrapText()));
-
-        textArea.wrapTextProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                menuItem.setText("Wrap Text " + newValue);
-            }
-        });
-
-        contextMenu.getItems().add(menuItem);
-
-        textArea.setContextMenu(contextMenu);
-
         getChildren().add(textArea);
     }
 

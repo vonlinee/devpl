@@ -1,6 +1,7 @@
 package io.devpl.fxui.app;
 
 import io.devpl.fxui.components.CodeRegion;
+import io.devpl.fxui.components.StepPane;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
 import io.devpl.fxui.layout.menu.RouterView;
@@ -21,11 +22,12 @@ public class MainApplication extends Application {
 
         Button btn = new Button("AAA");
 
-        NavigationMenu menu = new NavigationMenu("A", btn);
+        NavigationMenu menu = new NavigationMenu("开发工具", btn);
 
-        menu.addChild("A1", RouterView.of(View.load(IndexView.class)));
-        menu.addChild("A2", RouterView.of(View.load(TestView.class)));
-        menu.addChild("A3", RouterView.of(new CodeRegion()));
+//        menu.addChild("代码生成", RouterView.of(View.load(IndexView.class)));
+//        menu.addChild("模板管理", RouterView.of(View.load(TestView.class)));
+//        menu.addChild("模拟数据", RouterView.of(new CodeRegion()));
+        menu.addChild("测试控件", RouterView.of(new StepPane()));
 
         layoutPane.addNavigationMenu(menu);
 

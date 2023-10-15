@@ -13,19 +13,8 @@ public class ContentContainer extends ScrollPane {
         this.setHbarPolicy(ScrollBarPolicy.NEVER);
         this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
-        // 绑定内容元素的宽高
-        widthProperty().addListener((observable, oldValue, newValue) -> {
-            Node content = getContent();
-            if (content instanceof Region region) {
-                region.setPrefWidth(newValue.doubleValue());
-            }
-        });
-        heightProperty().addListener((observable, oldValue, newValue) -> {
-            Node content = getContent();
-            if (content instanceof Region region) {
-                region.setPrefHeight(newValue.doubleValue());
-            }
-        });
+        // 自适应宽度
+        setFitToWidth(true);
     }
 
     public final void switchTo(Node node) {
