@@ -4,6 +4,11 @@ public class Row {
     private String fieldName;
     private String generatorName;
 
+    public Row(String fieldName, String generatorName) {
+        this.fieldName = fieldName;
+        this.generatorName = generatorName;
+    }
+
     public String getFieldName() {
         return fieldName;
     }

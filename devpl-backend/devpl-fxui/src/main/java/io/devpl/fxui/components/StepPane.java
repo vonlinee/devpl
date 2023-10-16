@@ -1,6 +1,5 @@
 package io.devpl.fxui.components;
 
-import io.devpl.fxui.view.ColumnValueGeneratorTable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -29,10 +28,6 @@ public class StepPane extends BorderPane {
         Button btnPrev = new Button("上一步");
 
         buttonBar.getButtons().addAll(btnPrev, btnNext);
-
-        ColumnValueGeneratorTable table = new ColumnValueGeneratorTable();
-
-        addStepView(table);
 
         btnPrev.setOnAction(event -> switchPane(index - 1));
         btnNext.setOnAction(event -> switchPane(index + 1));

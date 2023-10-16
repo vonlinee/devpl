@@ -1,4 +1,4 @@
-package io.devpl.fxui.layout.menu;
+package io.devpl.fxui.components;
 
 import javafx.scene.Node;
 
@@ -7,7 +7,7 @@ import javafx.scene.Node;
  */
 public class RouterView {
 
-    private Node node;
+    private final Node node;
 
     public RouterView(Node node) {
         this.node = node;
@@ -19,5 +19,9 @@ public class RouterView {
 
     public static RouterView of(Node node) {
         return new RouterView(node);
+    }
+
+    public boolean isEmpty() {
+        return node == null;
     }
 }

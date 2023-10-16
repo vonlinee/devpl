@@ -7,7 +7,7 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import Popup from './popup.vue' // 导入弹窗组件
 
 export default {

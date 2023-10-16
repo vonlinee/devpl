@@ -1,5 +1,6 @@
 package io.devpl.fxui.layout.menu;
 
+import io.devpl.fxui.components.RouterView;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
@@ -27,10 +28,6 @@ public final class NavigationMenu extends TreeItem<String> {
 
     public boolean hasChildren() {
         return !getChildren().isEmpty();
-    }
-
-    public void addChild(String text) {
-        addChild(text, null);
     }
 
     public void addChild(String text, RouterView view) {
