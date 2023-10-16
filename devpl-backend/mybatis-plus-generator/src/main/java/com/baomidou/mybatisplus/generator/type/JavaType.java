@@ -6,6 +6,11 @@ package com.baomidou.mybatisplus.generator.type;
  */
 public interface JavaType extends DataType {
 
+    @Override
+    default String id() {
+        return getQualifier();
+    }
+
     /**
      * 类型标识，一般是数字或字符串
      * @return 类型标识

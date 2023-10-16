@@ -13,4 +13,10 @@ public @interface FXTableViewModel {
      * @see javafx.scene.control.TableView#UNCONSTRAINED_RESIZE_POLICY
      */
     int resizePolicy() default 1;
+
+    /**
+     * 是否对字段按order进行排序
+     * @return 默认false
+     */
+    boolean orderFields() default false;
 }

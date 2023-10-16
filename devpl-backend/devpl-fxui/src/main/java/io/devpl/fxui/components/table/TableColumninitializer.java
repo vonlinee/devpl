@@ -11,19 +11,19 @@ import javafx.util.StringConverter;
 import lombok.NonNull;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 初始化表的列
- *
  * @param <R>
  */
 public class TableColumninitializer<R> {
 
-    public <C> List<TableColumn<R, C>> initColumns(Class<R> rowClass) {
+    public <C> List<TableColumn<R, C>> initColumns(Class<R> rowClass, boolean order) {
         Field[] declaredFields = rowClass.getDeclaredFields();
         List<TableColumn<R, C>> columnsToBeAdd = new ArrayList<>();
+
+        Map<String, Integer> tableColumnOrderMap = order ? new HashMap<>() : null;
         for (Field declaredField : declaredFields) {
             FXTableViewColumn tvc = declaredField.getAnnotation(FXTableViewColumn.class);
             if (tvc == null) {
@@ -33,19 +33,29 @@ public class TableColumninitializer<R> {
             String propertyName = declaredField.getName();
             // 根据数据类型推断选择使用什么列
             TableColumn<R, C> column = new TableColumn<>(propertyName);
+
+            column.setId(rowClass.getName() + "." + propertyName);
+
+            if (tableColumnOrderMap != null) {
+                tableColumnOrderMap.put(column.getId(), tvc.order());
+            }
+
             column.setEditable(true);
             // 只支持单层对象
             column.setCellValueFactory(getCellValueFactory(propertyName));
             column.setCellFactory(getCellFactory(rowClass, type, propertyName));
             column.setText(tvc.title());
+
             columnsToBeAdd.add(column);
+        }
+        if (order) {
+            columnsToBeAdd.sort(Comparator.comparingInt(o -> tableColumnOrderMap.get(o.getId())));
         }
         return columnsToBeAdd;
     }
 
     /**
      * 只适合单层对象，不适合嵌套对象
-     *
      * @param propertyName 属性名
      * @param <T>          列数据类型
      * @return 单元格工厂
@@ -57,7 +67,6 @@ public class TableColumninitializer<R> {
 
     /**
      * 针对数据类的字段定制StringConverter
-     *
      * @param rowClass     行数据类
      * @param propertyType 属性字段类型
      * @param propertyName 属性名称
@@ -81,7 +90,6 @@ public class TableColumninitializer<R> {
 
     /**
      * 针对数据类的字段定制单元格工厂
-     *
      * @param rowClass     行数据类
      * @param propertyType 属性字段类型
      * @param propertyName 属性名称

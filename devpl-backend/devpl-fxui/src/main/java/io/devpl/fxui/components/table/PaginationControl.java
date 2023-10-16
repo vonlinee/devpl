@@ -126,6 +126,12 @@ public class PaginationControl extends HBox {
                     public void startEdit() {
                         super.startEdit();
                     }
+
+                    @Override
+                    public void commitEdit(Integer newValue) {
+                        super.commitEdit(newValue);
+                        System.out.println(newValue);
+                    }
                 };
                 cell.setAlignment(Pos.CENTER);
                 return cell;
@@ -191,6 +197,9 @@ public class PaginationControl extends HBox {
 
     public final void setCurrentPageNum(int currentPageNum) {
         this.currentPageNum.set(currentPageNum);
+        if (cmbPage.getValue() == null) {
+            cmbPage.setValue(currentPageNum);
+        }
     }
 
     public final int getCurrentPageNum() {

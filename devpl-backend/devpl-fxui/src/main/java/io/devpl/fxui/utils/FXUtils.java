@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Region;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class FXUtils {
@@ -51,11 +52,11 @@ public class FXUtils {
         } else {
             tableView.setColumnResizePolicy(tableViewModel.resizePolicy() == 1 ? TableView.CONSTRAINED_RESIZE_POLICY : TableView.UNCONSTRAINED_RESIZE_POLICY);
         }
-        tableView.getColumns().addAll(createTableColumns(rowClass));
-    }
 
-    public static <R, C> List<TableColumn<R, C>> createTableColumns(Class<R> rowClass) {
         TableColumninitializer<R> initializer = new TableColumninitializer<>();
-        return initializer.initColumns(rowClass);
+
+        // boolean order = tableViewModel != null && tableViewModel.enableOrder();
+        List<TableColumn<R, Object>> tableColumns = initializer.initColumns(rowClass, false);
+        tableView.getColumns().addAll(tableColumns);
     }
 }

@@ -1,5 +1,7 @@
 package com.baomidou.mybatisplus.generator.jdbc;
 
+import com.baomidou.mybatisplus.generator.type.DataType;
+
 import java.sql.SQLType;
 import java.sql.Types;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ import java.util.Map;
  * @see java.sql.JDBCType 基本上和java.sql.JDBCType一样，增加一些数据长度等信息
  * @see java.sql.Types
  */
-public enum JDBCType implements SQLType {
+public enum JDBCType implements SQLType, DataType {
     /*
      * This is added to enable basic support for the
      * ARRAY data type - but a custom type handler is still required
@@ -94,5 +96,10 @@ public enum JDBCType implements SQLType {
     @Override
     public Integer getVendorTypeNumber() {
         return typeCode;
+    }
+
+    @Override
+    public String getQualifier() {
+        return name();
     }
 }

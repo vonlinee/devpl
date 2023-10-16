@@ -5,7 +5,8 @@ import { VxeColumn, VxeTable, VxeTableProps, VxeTableDataRow, VxeToolbar, VxeBut
 import SaveOrUpdate from "./SaveOrUpdate.vue";
 // 分页组件
 import DataTablePager from "./DataTablePager.vue";
-import DataTableToolBar from "./DataTableToolBar.vue";
+// 工具栏
+import DataTableToolBar, { DataTableToolBarProps } from "./DataTableToolBar.vue";
 /**
  * 属性选项
  */
@@ -39,6 +40,10 @@ export default defineComponent({
     const modalRef = ref()
     const pagerRef = ref()
 
+    /**
+     * 编辑事件
+     * @param row 
+     */
     const editEvent = (row: VxeTableDataRow) => {
       modalRef.value.show()
       Object.assign(formData, row)
@@ -80,7 +85,11 @@ export default defineComponent({
 
       let slotVNodes = []
 
-      const toolbarVNode = h(DataTableToolBar, {}, context.slots)
+      let op : DataTableToolBarProps = {
+        refresh: editEvent
+      }
+
+      const toolbarVNode = h(DataTableToolBar, op, context.slots)
       slotVNodes.push(toolbarVNode)
       // 表格
       const tableVNode = h(VxeTable, vxeTableProps, { default: () => columnsDefs })
