@@ -3,19 +3,26 @@
 
   </vxe-grid>
 
-  <vxe-modal v-model="modalVisiable">
-    <slot name="saveOrUpdate"></slot>
+  <vxe-modal v-model="addRowModalVisiable" destroy-on-close>
+    <slot name="add"></slot>
     <div>
       <vxe-button status="primary">确定</vxe-button>
     </div>
   </vxe-modal>
+
+  <vxe-modal v-model=""></vxe-modal>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { VxeGridProps } from "vxe-table";
 
-const modalVisiable = ref();
+let { options } = defineProps<{
+  options: VxeGridProps,
+}>();
+
+// 新增弹窗
+const addRowModalVisiable = ref();
 
 interface RowVO {
   id: number;
@@ -26,10 +33,6 @@ interface RowVO {
   age: number;
   address: string;
 }
-
-let cancelEvent = () => {
-
-};
 
 // 模拟后台接口
 const fetchApi = (currentPage: number, pageSize: number) => {
@@ -89,14 +92,14 @@ const tableRef = ref();
 const gridOptions = reactive<VxeGridProps<RowVO>>({
   border: true,
   keepSource: true,
-  height: 500,
+  height: 629, // 10 条数据刚好不出现滚动条的高度
   columnConfig: {
     resizable: true
   },
   pagerConfig: {
     enabled: true,
     perfect: true,
-    pageSize: 15
+    pageSize: 10
   },
   editConfig: {
     // 使用弹窗进行编辑，不通过点击单元格进行编辑
@@ -106,7 +109,7 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
     buttons: [
       {
         code: "openModal", name: "新增", status: "perfect", icon: "vxe-icon-add", params: {
-          modalModelValue: modalVisiable
+          modalModelValue: addRowModalVisiable
         }
       }
     ],

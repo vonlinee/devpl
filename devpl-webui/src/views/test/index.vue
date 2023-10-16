@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import DataTable, { DataTableOptions } from "@/components/table/DataTable.vue";
 import { reactive, ref } from "vue";
 import VxeGridTable from "@/components/table/VxeGridTable.vue";
 
@@ -45,7 +44,7 @@ const formData1 = reactive<FormDataVO>({
   </data-table> -->
 
   <vxe-grid-table>
-    <template #saveOrUpdate>
+    <template #add>
       <vxe-form :data="formData1">
         <vxe-form-item title="名称" field="name" :item-render="{}">
           <template #default="{ data }">
