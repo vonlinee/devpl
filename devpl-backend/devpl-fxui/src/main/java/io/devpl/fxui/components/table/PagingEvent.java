@@ -39,7 +39,7 @@ public class PagingEvent extends Event {
         return pageSize;
     }
 
-    public static PagingEvent pageChange(int pageNum, int pageSize) {
+    public static PagingEvent pageChange(Integer pageNum, Integer pageSize) {
         PagingEvent event = new PagingEvent(PagingEvent.CHANGE);
         event.pageNum = pageNum;
         event.pageSize = pageSize;

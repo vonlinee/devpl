@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * 表格数据
+ *
  * @param <T> 表格数据类型
  */
 public class TableData<T> implements Serializable {
@@ -52,5 +53,9 @@ public class TableData<T> implements Serializable {
 
     public boolean hasMoreRows() {
         return moreRows;
+    }
+
+    public static <T> TableData<T> of(List<T> data) {
+        return new TableData<>(data, true, data.size());
     }
 }

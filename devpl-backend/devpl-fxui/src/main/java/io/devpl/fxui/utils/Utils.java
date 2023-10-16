@@ -25,6 +25,10 @@ public class Utils {
         return val;
     }
 
+    public static void println(String msg, Object... args) {
+        System.out.printf((msg) + "%n", args);
+    }
+
     public static void println(Object... args) {
         for (Object arg : args) {
             System.out.print(arg);

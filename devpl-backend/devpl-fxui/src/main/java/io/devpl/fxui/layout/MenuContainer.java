@@ -1,6 +1,7 @@
 package io.devpl.fxui.layout;
 
 import io.devpl.fxui.layout.menu.NavigationMenu;
+import io.devpl.fxui.utils.FXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -47,7 +48,7 @@ public class MenuContainer extends Region {
 
     @Override
     protected void layoutChildren() {
-        layoutInArea(menuTreeView, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
+        FXUtils.layoutInArea(this, menuTreeView);
     }
 
     public final void addNavigationMenu(NavigationMenu menuItem) {

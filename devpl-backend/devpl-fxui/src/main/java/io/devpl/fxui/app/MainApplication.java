@@ -1,24 +1,19 @@
 package io.devpl.fxui.app;
 
-import io.devpl.fxui.components.LazyNode;
 import io.devpl.fxui.components.Modal;
 import io.devpl.fxui.components.RouterPane;
 import io.devpl.fxui.components.RouterView;
-import io.devpl.fxui.components.table.DataTable;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
 import io.devpl.fxui.view.MockGeneratorView;
-import io.devpl.fxui.view.Option;
 import io.devpl.fxui.view.TemplateManageView;
 import io.devpl.fxui.view.TypeMappingTable;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.io.IOException;

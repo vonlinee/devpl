@@ -1,9 +1,10 @@
 package io.devpl.fxui.components.table;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -16,7 +17,9 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 /**
- * 分页控制
+ * 分页控制组件
+ *
+ * @see javafx.scene.control.Pagination
  */
 public class PaginationControl extends HBox {
 
@@ -27,11 +30,21 @@ public class PaginationControl extends HBox {
     private final Button btnPrevPage;
     private final ComboBox<Integer> cmbPage;
 
-    private final IntegerProperty currentPage = new SimpleIntegerProperty();
+    /**
+     * 当前页
+     */
+    private final ObjectProperty<Integer> currentPageNum = new SimpleObjectProperty<>();
 
-    public PaginationControl(DataTable<?> table) {
+    /**
+     * 当前每页显示数据条数
+     */
+    private final IntegerProperty currentPageSize = new SimpleIntegerProperty(10);
+
+    private final IntegerProperty maxPageNum = new SimpleIntegerProperty();
+
+    public PaginationControl() {
         this.setAlignment(Pos.CENTER);
-        btnFirstPage = new Button();
+        btnFirstPage = new Button("<<");
         // btnFirstPage.setGraphic(new Button("First"));
         final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
             @Override
@@ -53,17 +66,17 @@ public class PaginationControl extends HBox {
         btnFirstPage.setFocusTraversable(false);
         btnFirstPage.getStyleClass().addAll("pill-button", "pill-button-left");
 
-        btnPrevPage = new Button();
+        btnPrevPage = new Button("<");
         // btnPrevPage.setGraphic(new Button("Prev"));
         btnPrevPage.setOnAction(paginationHandler);
         btnPrevPage.setFocusTraversable(false);
 
-        btnNextPage = new Button();
+        btnNextPage = new Button(">");
         // btnNextPage.setGraphic(new Button("Next"));
         btnNextPage.setOnAction(paginationHandler);
         btnNextPage.setFocusTraversable(false);
 
-        btnLastPage = new Button();
+        btnLastPage = new Button(">>");
         // btnLastPage.setGraphic(new Button("Last"));
         btnLastPage.setOnAction(paginationHandler);
         btnLastPage.setFocusTraversable(false);
@@ -90,13 +103,20 @@ public class PaginationControl extends HBox {
             }
         });
 
-        currentPage.addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                Event.fireEvent(table, PagingEvent.pageChange(newValue.intValue(), table.getPageSize()));
+        // 页码更新时更新表格数据
+        currentPageNum.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && currentPageChangeHandler != null) {
+                PagingEvent pagingEvent = PagingEvent.pageChange(newValue, getPageSize());
+                currentPageChangeHandler.handle(pagingEvent);
             }
         });
 
-        cmbPage.valueProperty().addListener((observable, oldValue, newValue) -> currentPage.set(newValue));
+        // 更新当前页码
+        cmbPage.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null && newValue != null) {
+                setCurrentPageNum(newValue);
+            }
+        });
 
         cmbPage.setCellFactory(new Callback<>() {
             @Override
@@ -111,14 +131,13 @@ public class PaginationControl extends HBox {
                 return cell;
             }
         });
-
-        table.maxPageNumProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                updatePages(newValue.intValue());
-            }
-        });
-
         this.getChildren().addAll(btnFirstPage, btnPrevPage, cmbPage, btnNextPage, btnLastPage);
+    }
+
+    EventHandler<PagingEvent> currentPageChangeHandler;
+
+    public void setOnCurrentPageChanged(EventHandler<PagingEvent> eventHandler) {
+        this.currentPageChangeHandler = eventHandler;
     }
 
     private void toggleButtons(int startIndex, boolean moreRows) {
@@ -137,17 +156,52 @@ public class PaginationControl extends HBox {
         }
     }
 
-    public void updatePages(int maxPageNum) {
+    public void updatePageNums(int pageSize, long total) {
+        int maxPageNum = calculateMaxPageNum(pageSize, total);
+        if (maxPageNum == getMaxPageNum()) {
+            return;
+        }
+        updatePageNums(maxPageNum);
+    }
+
+    /**
+     * 更新页码
+     *
+     * @param maxPageNum 最大页码
+     */
+    public void updatePageNums(int maxPageNum) {
         cmbPage.getItems().clear();
         for (int i = 1; i <= maxPageNum; i++) {
             cmbPage.getItems().add(i);
         }
-        cmbPage.getSelectionModel().selectFirst();
+        this.maxPageNum.set(maxPageNum);
     }
 
-    public void selectPage(int pageNum) {
-        if (cmbPage.getItems().contains(pageNum)) {
-            currentPage.set(pageNum);
-        }
+    /**
+     * 计算最大页数
+     *
+     * @param pageSize      每页记录条数
+     * @param totalRowCount 总记录数
+     * @return 最大页数
+     */
+    int calculateMaxPageNum(int pageSize, long totalRowCount) {
+        long pages = totalRowCount / (long) pageSize;
+        return pages == 0 ? 1 : (int) pages;
+    }
+
+    public final void setCurrentPageNum(int currentPageNum) {
+        this.currentPageNum.set(currentPageNum);
+    }
+
+    public final int getCurrentPageNum() {
+        return currentPageNum.get();
+    }
+
+    public final int getPageSize() {
+        return currentPageSize.get();
+    }
+
+    public final int getMaxPageNum() {
+        return maxPageNum.get();
     }
 }
