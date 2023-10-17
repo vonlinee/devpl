@@ -5,6 +5,9 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 
+/**
+ * 内容区域
+ */
 public class ContentRegion extends Region {
 
     private final ScrollPane scrollPane;

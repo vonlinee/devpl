@@ -1,10 +1,12 @@
 package com.baomidou.mybatisplus.generator.util;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
+ * <NOTE>this class if copied from the soruce code of Apache Calcite.</NOTE>
  * Collection of bytes.
  * <p>ByteArray is to bytes what {@link String} is to chars: It is immutable,
  * implements equality ({@link #hashCode} and {@link #equals}),
@@ -16,6 +18,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
      * An empty byte string.
      */
     public static final ByteArray EMPTY = new ByteArray(new byte[0], false);
+    @Serial
     private static final long serialVersionUID = -7661788929944453848L;
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private final byte[] bytes;
@@ -45,7 +48,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
         char[] chars;
         int j = 0;
         switch (base) {
-            case 2:
+            case 2 -> {
                 chars = new char[bytes.length * 8];
                 for (byte b : bytes) {
                     chars[j++] = DIGITS[(b & 0x80) >> 7];
@@ -57,16 +60,15 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
                     chars[j++] = DIGITS[(b & 0x02) >> 1];
                     chars[j++] = DIGITS[b & 0x01];
                 }
-                break;
-            case 16:
+            }
+            case 16 -> {
                 chars = new char[bytes.length * 2];
                 for (byte b : bytes) {
                     chars[j++] = DIGITS[(b & 0xF0) >> 4];
                     chars[j++] = DIGITS[b & 0x0F];
                 }
-                break;
-            default:
-                throw new IllegalArgumentException("bad base " + base);
+            }
+            default -> throw new IllegalArgumentException("bad base " + base);
         }
         return new String(chars, 0, j);
     }
@@ -97,7 +99,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
         int j = 0;
         byte b = 0;
         switch (base) {
-            case 2:
+            case 2 -> {
                 bytes = new byte[chars.length / 8];
                 for (char c : chars) {
                     b <<= 1;
@@ -110,8 +112,8 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
                     }
                     ++j;
                 }
-                break;
-            case 16:
+            }
+            case 16 -> {
                 if (chars.length % 2 != 0) {
                     throw new IllegalArgumentException("hex string has odd length");
                 }
@@ -126,9 +128,8 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
                     }
                     ++j;
                 }
-                break;
-            default:
-                throw new IllegalArgumentException("bad base " + base);
+            }
+            default -> throw new IllegalArgumentException("bad base " + base);
         }
         return bytes;
     }
@@ -179,6 +180,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
         return this == obj || obj instanceof ByteArray && Arrays.equals(bytes, ((ByteArray) obj).bytes);
     }
 
+    @Override
     public int compareTo(ByteArray that) {
         final byte[] v1 = bytes;
         final byte[] v2 = that.bytes;
@@ -218,9 +220,13 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
         return Base64.encodeBytes(bytes);
     }
 
-    @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDoesntDeclareCloneNotSupportedException"})
     @Override
     public Object clone() {
+        try {
+            Object clone = super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 
