@@ -1,5 +1,6 @@
 package io.devpl.fxui.components.table;
 
+import java.util.Collections;
 import java.util.List;
 
 public interface TableOperation<R> {
@@ -11,21 +12,25 @@ public interface TableOperation<R> {
      * @param pageSize 每页记录条数
      * @return 分页数据
      */
-    TableData<R> loadPage(int pageNum, int pageSize);
+    default TableData<R> loadPage(int pageNum, int pageSize) {
+        return TableData.of(Collections.emptyList());
+    }
 
     /**
      * 保存单条记录
      *
      * @param record 单条记录
      */
-    void save(R record);
+    default void save(R record) {
+    }
 
     /**
      * 批量保存记录
      *
      * @param records 多条记录
      */
-    void saveBatch(List<R> records);
+    default void saveBatch(List<R> records) {
+    }
 
     /**
      * 创建一个空行

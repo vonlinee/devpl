@@ -106,7 +106,7 @@ public class PaginationControl extends HBox {
         // 页码更新时更新表格数据
         currentPageNum.addListener((observable, oldValue, newValue) -> {
             if (newValue != null && currentPageChangeHandler != null) {
-                PagingEvent pagingEvent = PagingEvent.pageChange(newValue, getPageSize());
+                PagingEvent pagingEvent = PagingEvent.pageChange(newValue, getCurrentPageSize());
                 currentPageChangeHandler.handle(pagingEvent);
             }
         });
@@ -206,7 +206,7 @@ public class PaginationControl extends HBox {
         return currentPageNum.get();
     }
 
-    public final int getPageSize() {
+    public final int getCurrentPageSize() {
         return currentPageSize.get();
     }
 

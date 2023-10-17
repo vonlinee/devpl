@@ -78,26 +78,26 @@ export class ReactMonacoEditor extends React.Component<
    * @param monaco 
    */
   editorWillMount(monaco: Monaco) {
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-      schemas: [
-        {
-          uri: "http://myserver/foo-schema.json",
-          fileMatch: ["*"],
-          schema: {
-            type: "object",
-            properties: {
-              p1: {
-                enum: ["v1", "v2"],
-              },
-              p2: {
-                $ref: "http://myserver/bar-schema.json",
-              },
-            },
-          },
-        },
-      ],
-    });
+    // monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+    //   validate: true,
+    //   schemas: [
+    //     {
+    //       uri: "http://myserver/foo-schema.json",
+    //       fileMatch: ["*"],
+    //       schema: {
+    //         type: "object",
+    //         properties: {
+    //           p1: {
+    //             enum: ["v1", "v2"],
+    //           },
+    //           p2: {
+    //             $ref: "http://myserver/bar-schema.json",
+    //           },
+    //         },
+    //       },
+    //     },
+    //   ],
+    // });
   }
 
   editorWillUnmount(editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) {

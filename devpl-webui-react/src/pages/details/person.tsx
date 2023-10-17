@@ -16,7 +16,7 @@ function getRandomColor() {
   return "#" + Math.random().toString(16).slice(2, 8);
 }
 
-const listData = Array.from({ length: 10 }, (v, k) => ({
+let listData = Array.from({ length: 10 }, (v, k) => ({
   href: "https://ant.design",
   title: `ant design part ${k + 1}`,
   avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
@@ -25,6 +25,8 @@ const listData = Array.from({ length: 10 }, (v, k) => ({
   content:
     "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
 }));
+
+listData = []
 
 const IconText = ({ icon, text }: { icon: ReactNode, text: string }) => (
   <Space>
@@ -100,24 +102,8 @@ export default function Person() {
       <Row>
         <Col span={6}>
           <Card
-            cover={
-              <img
-                alt="example"
-                src="https://avatars.githubusercontent.com/u/56569970?v=4"
-              />
-            }
           >
-            <Meta title="孔乙己拉夫米" description="生死看淡不服就干！" />
             <div className={styles.info}>
-              <p>
-                <MyIcon type="icon_infopersonal" className="icon" />
-                Web前端
-                <span className={styles.font}>123</span>
-              </p>
-              <p>
-                <MyIcon type="icon_address1" className="icon" />
-                广东·深圳
-              </p>
               <p>
                 <MyIcon type="icon_edit" className="icon" />
                 <a
@@ -126,26 +112,6 @@ export default function Person() {
                   rel="noreferrer"
                 >
                   博客地址
-                </a>
-              </p>
-              <p>
-                <MyIcon type="icon_github" className="icon" />
-                <a
-                  href="https://github.com/kongyijilafumi/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  github地址
-                </a>
-              </p>
-              <p>
-                <MyIcon className="icon" type="icon_QQ" />
-                <a
-                  href="https://jq.qq.com/?_wv=1027&k=pzP2acC5"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  qq交流群
                 </a>
               </p>
             </div>

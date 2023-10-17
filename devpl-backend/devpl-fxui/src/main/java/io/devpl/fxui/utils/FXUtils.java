@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Region;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class FXUtils {
@@ -55,8 +54,8 @@ public class FXUtils {
 
         TableColumninitializer<R> initializer = new TableColumninitializer<>();
 
-        // boolean order = tableViewModel != null && tableViewModel.enableOrder();
-        List<TableColumn<R, Object>> tableColumns = initializer.initColumns(rowClass, false);
+        boolean order = tableViewModel != null && tableViewModel.orderFields();
+        List<TableColumn<R, Object>> tableColumns = initializer.initColumns(rowClass, order);
         tableView.getColumns().addAll(tableColumns);
     }
 }

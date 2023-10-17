@@ -25,6 +25,10 @@ public class Utils {
         return val;
     }
 
+    public static boolean hasText(String text) {
+        return text != null && !text.isBlank();
+    }
+
     public static void println(String msg, Object... args) {
         System.out.printf((msg) + "%n", args);
     }

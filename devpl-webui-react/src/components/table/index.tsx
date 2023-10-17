@@ -19,15 +19,15 @@ import MyIcon from "../icon";
 import arrayMove from "array-move";
 import { getKey, setKey, rmKey } from "@/utils";
 import "./index.less";
-import useStyle from "./style"
-import { MyTableProps, Columns, renderArugs, Column } from "./types"
+import useStyle from "./style";
+import { MyTableProps, Columns, renderArugs, Column } from "./types";
 import { useThemeToken } from "@/hooks";
 
 const DragHandle = SortableHandle(() => (
   <MyIcon type="icon_mirrorlightctrl" className="drag-sort" />
 ));
 const SortableItem = SortableElement((props: any) => <tr {...props} />);
-const SortableBody = SortableContainer((props: any) => <tbody  {...props} />);
+const SortableBody = SortableContainer((props: any) => <tbody {...props} />);
 
 const setColTitle: Columns = [
   {
@@ -100,32 +100,33 @@ const defaultCol: Omit<Column, "dataIndex"> = {
   hidden: "auto",
 };
 
-
 function UseTable(columns: Columns, saveKey: MyTableProps["saveKey"]) {
   const [showDrawer, setShowDrawer] = useState(false);
   const [col, setCol] = useState<Columns>([]);
   const [tbTitle, setTitle] = useState<Columns>([]);
-  const token = useThemeToken()
-  const { styles } = useStyle(token)
+  const token = useThemeToken();
+  const { styles } = useStyle(token);
   const DraggableContainer = useMemo(() => {
     return function H(props: any) {
-      return <SortableBody
-        useDragHandle
-        disableAutoscroll
-        helperClass={styles.rowDragging}
-        onSortEnd={onSortEnd}
-        {...props}
-      />
-    }
+      return (
+        <SortableBody
+          useDragHandle
+          disableAutoscroll
+          helperClass={styles.rowDragging}
+          onSortEnd={onSortEnd}
+          {...props}
+        />
+      );
+    };
   }, [styles, onSortEnd]);
   const DraggableBodyRow = useMemo(() => {
     return function H({ className, style, ...restProps }: any) {
       const index = col.findIndex((x) => x.index === restProps["data-row-key"]);
       return <SortableItem index={index} {...restProps} />;
-    }
+    };
   }, [col]);
   useEffect(() => {
-    const data: Columns = getKey(true, saveKey || '');
+    const data: Columns = getKey(true, saveKey || "");
     if (saveKey && data && columns && columns.length === data.length) {
       const columnInfo: any = {},
         dataInfo: any = {};
@@ -146,7 +147,7 @@ function UseTable(columns: Columns, saveKey: MyTableProps["saveKey"]) {
         initDefaultCol();
       }
     } else if (!data && columns && columns.length !== col.length) {
-      initDefaultCol()
+      initDefaultCol();
     }
     // eslint-disable-next-line
   }, [saveKey, columns]);
@@ -217,12 +218,15 @@ function UseTable(columns: Columns, saveKey: MyTableProps["saveKey"]) {
   function show() {
     setShowDrawer(true);
   }
-  function onSortEnd({ oldIndex, newIndex }: {
-    oldIndex: number
-    newIndex: number
+  function onSortEnd({
+    oldIndex,
+    newIndex,
+  }: {
+    oldIndex: number;
+    newIndex: number;
   }) {
     if (oldIndex !== newIndex) {
-      const arr: Array<Columns> = []
+      const arr: Array<Columns> = [];
       const newData = arrayMove(arr.concat(col), oldIndex, newIndex).filter(
         (el) => !!el
       );
@@ -271,7 +275,7 @@ function UseTable(columns: Columns, saveKey: MyTableProps["saveKey"]) {
     DraggableContainer,
     DraggableBodyRow,
     saveTbSet,
-    delTbSet
+    delTbSet,
   };
 }
 
@@ -292,10 +296,10 @@ function MyTable({
     DraggableContainer,
     DraggableBodyRow,
     saveTbSet,
-    delTbSet
+    delTbSet,
   } = UseTable(columns, saveKey);
-  const token = useThemeToken()
-  const { styles } = useStyle(token)
+  const token = useThemeToken();
+  const { styles } = useStyle(token);
   // @ts-ignore
   return (
     <div className="react-ant-table">
@@ -338,7 +342,7 @@ function MyTable({
           <Button type="primary" onClick={saveTbSet}>
             保存此表格设置，下次打开默认启用
           </Button>
-          <Button danger type="ghost" className="del" onClick={delTbSet}>
+          <Button danger type="primary" className="del" onClick={delTbSet}>
             删除已保存的设置
           </Button>
         </Row>

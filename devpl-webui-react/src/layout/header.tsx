@@ -54,7 +54,6 @@ const LayoutHeader = ({ children }: LayoutHeaderProps) => {
     <Header className={styles.header}>
       <div className="logo">
         <img src={logo} alt="logo"></img>
-        <span>react-ant-admin</span>
       </div>
       {children}
       <div className="right">
