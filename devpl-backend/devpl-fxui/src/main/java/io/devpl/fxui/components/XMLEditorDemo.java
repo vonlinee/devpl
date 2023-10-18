@@ -84,7 +84,7 @@ public class XMLEditorDemo extends Application {
 
 		Scene scene = new Scene(new StackPane(new VirtualizedScrollPane<>(codeArea)), 600, 400);
 
-        URL resource = Thread.currentThread().getContextClassLoader().getResource("xml-highlighting.css");
+        URL resource = Thread.currentThread().getContextClassLoader().getResource("style/xml-highlighting.css");
 
         scene.getStylesheets().add(resource.toExternalForm());
         primaryStage.setScene(scene);

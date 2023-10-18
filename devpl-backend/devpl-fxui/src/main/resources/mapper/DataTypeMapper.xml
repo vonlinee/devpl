@@ -8,10 +8,17 @@
         <result property="typeName" column="type_name"/>
         <result property="valueType" column="value_type"/>
     </resultMap>
+    <insert id="insert" parameterType="io.devpl.fxui.view.DataTypeItem">
+        INSERT INTO data_type_item (type_key, type_name) VALUES (#{param.typeKey}, #{param.typeName})
+    </insert>
 
     <select id="selectPage" resultMap="BaseResultMap">
         SELECT *
         FROM data_type_item
         LIMIT #{page}, #{limit}
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM data_type_item
     </select>
 </mapper>

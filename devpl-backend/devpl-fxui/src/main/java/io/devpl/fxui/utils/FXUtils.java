@@ -1,6 +1,7 @@
 package io.devpl.fxui.utils;
 
-import io.devpl.fxui.components.FXTableViewModel;
+import io.devpl.fxui.components.table.FXTableViewModel;
+import io.devpl.fxui.components.table.FXTableViewColumn;
 import io.devpl.fxui.components.table.TableColumninitializer;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -35,7 +36,7 @@ public class FXUtils {
      * @param rowClass 行数据类型
      * @param <R>      行数据类型
      * @return TableView
-     * @see io.devpl.fxui.components.FXTableViewColumn
+     * @see FXTableViewColumn
      * @see FXTableViewModel
      */
     public static <R> TableView<R> createTableView(Class<R> rowClass) {

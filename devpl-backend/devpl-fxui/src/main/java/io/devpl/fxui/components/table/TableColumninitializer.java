@@ -1,6 +1,5 @@
 package io.devpl.fxui.components.table;
 
-import io.devpl.fxui.components.FXTableViewColumn;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;

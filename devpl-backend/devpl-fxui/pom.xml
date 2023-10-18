@@ -56,6 +56,11 @@
             <artifactId>mybatis</artifactId>
             <version>3.5.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.3.2</version>
+        </dependency>
 
         <dependency>
             <groupId>com.dlsc.formsfx</groupId>

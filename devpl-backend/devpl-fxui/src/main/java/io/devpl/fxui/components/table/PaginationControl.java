@@ -192,7 +192,7 @@ public class PaginationControl extends HBox {
      */
     int calculateMaxPageNum(int pageSize, long totalRowCount) {
         long pages = totalRowCount / (long) pageSize;
-        return pages == 0 ? 1 : (int) pages;
+        return pages == 0 ? 1 : (int) pages + 1;
     }
 
     public final void setCurrentPageNum(int currentPageNum) {

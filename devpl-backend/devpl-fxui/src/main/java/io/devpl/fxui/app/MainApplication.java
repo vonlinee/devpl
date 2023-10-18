@@ -5,6 +5,7 @@ import io.devpl.fxui.components.RouterPane;
 import io.devpl.fxui.components.RouterView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
+import io.devpl.fxui.view.DataTypeModel;
 import io.devpl.fxui.view.MockGeneratorView;
 import io.devpl.fxui.view.TemplateManageView;
 import io.devpl.fxui.view.TypeMappingTable;
@@ -50,14 +51,18 @@ public class MainApplication extends Application {
         routerPane.addRouteMapping(2, new Button("222"));
         routerPane.addRouteMapping(3, new Button("333"));
 
+        TypeMappingTable typeMappingTable = new TypeMappingTable();
+
+        Modal modal = Modal.of("数据类型表", typeMappingTable, 600, 500);
+
+
         btn.setOnAction(event -> {
 //            String text = textField.getText();
 //            if (text != null && !text.isBlank()) {
 //                int key = Integer.parseInt(text);
 //                routerPane.setCurrentRoute(key);
 //            }
-
-            Modal.show("hello", new TypeMappingTable(), 600, 500);
+            modal.show();
         });
 
         root.setTop(hBox);

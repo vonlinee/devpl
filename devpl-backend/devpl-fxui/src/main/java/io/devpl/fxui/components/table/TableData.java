@@ -5,10 +5,12 @@ import java.util.List;
 
 /**
  * 表格数据
- *
  * @param <T> 表格数据类型
  */
 public class TableData<T> implements Serializable {
+
+    private int pageIndex;
+    private int pageSize;
 
     /**
      * 数据
@@ -25,10 +27,12 @@ public class TableData<T> implements Serializable {
      */
     private long totalRows;
 
-    public TableData(List<T> rows, boolean moreRows, long totalRows) {
+    public TableData(List<T> rows, long total, int pageIndex, int pageSize) {
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
         this.rows = rows;
-        this.moreRows = moreRows;
-        this.totalRows = totalRows;
+        moreRows = (long) pageIndex * pageSize <= total;
+        this.totalRows = total;
     }
 
     public List<T> getRows() {
@@ -56,6 +60,6 @@ public class TableData<T> implements Serializable {
     }
 
     public static <T> TableData<T> of(List<T> data) {
-        return new TableData<>(data, true, data.size());
+        return new TableData<>(data, data.size(), 1, 10);
     }
 }

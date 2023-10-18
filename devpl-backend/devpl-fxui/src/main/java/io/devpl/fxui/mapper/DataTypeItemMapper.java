@@ -9,5 +9,9 @@ import java.util.List;
 @Mapper
 public interface DataTypeItemMapper {
 
+    long count();
+
     List<DataTypeItem> selectPage(@Param("page") int page, @Param("limit") int limit);
+
+    int insert(@Param("param") DataTypeItem dataTypeItem);
 }

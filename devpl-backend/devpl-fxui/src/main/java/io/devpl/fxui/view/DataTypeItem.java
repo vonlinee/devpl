@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.devpl.fxui.components.FXTableViewColumn;
-import io.devpl.fxui.components.FXTableViewModel;
+import io.devpl.fxui.components.table.FXTableViewColumn;
+import io.devpl.fxui.components.table.FXTableViewModel;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 

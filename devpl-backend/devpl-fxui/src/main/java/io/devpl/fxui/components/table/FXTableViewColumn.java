@@ -1,4 +1,4 @@
-package io.devpl.fxui.components;
+package io.devpl.fxui.components.table;
 
 import java.lang.annotation.*;
 

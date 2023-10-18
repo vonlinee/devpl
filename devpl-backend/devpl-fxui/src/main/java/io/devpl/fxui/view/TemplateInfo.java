@@ -1,7 +1,7 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.components.FXTableViewColumn;
-import io.devpl.fxui.components.FXTableViewModel;
+import io.devpl.fxui.components.table.FXTableViewColumn;
+import io.devpl.fxui.components.table.FXTableViewModel;
 import lombok.Getter;
 import lombok.Setter;
 

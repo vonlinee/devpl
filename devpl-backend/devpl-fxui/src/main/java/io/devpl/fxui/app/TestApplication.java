@@ -1,8 +1,13 @@
 package io.devpl.fxui.app;
 
+import com.dlsc.formsfx.model.structure.Field;
+import com.dlsc.formsfx.model.structure.Form;
+import com.dlsc.formsfx.model.structure.Group;
+import com.dlsc.formsfx.view.renderer.FormRenderer;
 import io.devpl.fxui.components.Loading;
 import io.devpl.fxui.components.pane.HalfPane;
 import io.devpl.fxui.utils.FXControl;
+import io.devpl.fxui.view.DataTypeModel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -38,6 +43,26 @@ public class TestApplication extends Application {
         box.getChildren().add(loading);
 
         box.getChildren().add(FXControl.button("hide", event -> loading.setMaxOpacity(loading.getMaxOpacity())));
+
+        DataTypeModel model = new DataTypeModel();
+
+        Form loginForm = Form.of(
+            Group.of(
+                Field.ofStringType(model.typeNameProperty())
+                    .label("Username"),
+                Field.ofStringType(model.typeKeyProperty())
+                    .label("Password")
+                    .required("This field can’t be empty")
+            )
+        ).title("Login");
+
+        box.getChildren().add(new FormRenderer(loginForm));
+
+        box.getChildren().add(FXControl.button("persist", event -> {
+            System.out.println(model);
+            loginForm.persist();
+            System.out.println(model);
+        }));
 
         stage.setTitle("工具");
         stage.setScene(scene);

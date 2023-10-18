@@ -23,7 +23,8 @@ public class MyBatis {
     }
 
     public static <T> T getMapper(Class<T> mapperClass) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
+        // 自动提交
+        SqlSession sqlSession = sqlSessionFactory.openSession(true);
         return sqlSessionFactory.getConfiguration().getMapper(mapperClass, sqlSession);
     }
 }
