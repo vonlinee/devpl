@@ -24,7 +24,7 @@ public class ContentRegion extends Region {
 
     @Override
     protected void layoutChildren() {
-        FXUtils.layoutInArea(this, scrollPane);
+        FXUtils.layoutInRegion(this, scrollPane);
     }
 
     public final void setContent(Node content) {

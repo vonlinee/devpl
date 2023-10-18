@@ -8,7 +8,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import lombok.NonNull;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -22,7 +21,6 @@ public class TableColumninitializer<R> {
     public <C> List<TableColumn<R, C>> initColumns(Class<R> rowClass, boolean order) {
         Field[] declaredFields = rowClass.getDeclaredFields();
         List<TableColumn<R, C>> columnsToBeAdd = new ArrayList<>();
-
         Map<String, Integer> tableColumnOrderMap = order ? new HashMap<>() : null;
         for (Field declaredField : declaredFields) {
             FXTableViewColumn tvc = declaredField.getAnnotation(FXTableViewColumn.class);
@@ -60,7 +58,6 @@ public class TableColumninitializer<R> {
      * @param <T>          列数据类型
      * @return 单元格工厂
      */
-    @NonNull
     public <T> Callback<TableColumn.CellDataFeatures<R, T>, ObservableValue<T>> getCellValueFactory(String propertyName) {
         return new PropertyValueFactory<>(propertyName);
     }
@@ -73,7 +70,6 @@ public class TableColumninitializer<R> {
      * @param <C>          列数据类型
      * @return StringConverter实例
      */
-    @NonNull
     public <C> StringConverter<C> getStringConverter(Class<R> rowClass, Class<?> propertyType, String propertyName) {
         return new StringConverter<>() {
             @Override
@@ -96,7 +92,6 @@ public class TableColumninitializer<R> {
      * @param <T>          列数据类型
      * @return StringConverter实例
      */
-    @NonNull
     public <T> Callback<TableColumn<R, T>, TableCell<R, T>> getCellFactory(Class<R> rowClass, Class<?> propertyType, String propertyName) {
         return TextFieldTableCell.forTableColumn(getStringConverter(rowClass, propertyType, propertyName));
     }

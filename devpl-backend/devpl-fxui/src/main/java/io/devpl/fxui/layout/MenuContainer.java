@@ -3,8 +3,6 @@ package io.devpl.fxui.layout;
 import io.devpl.fxui.layout.menu.NavigationMenu;
 import io.devpl.fxui.utils.FXUtils;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -48,7 +46,7 @@ public class MenuContainer extends Region {
 
     @Override
     protected void layoutChildren() {
-        FXUtils.layoutInArea(this, menuTreeView);
+        FXUtils.layoutInRegion(this, menuTreeView);
     }
 
     public final void addNavigationMenu(NavigationMenu menuItem) {

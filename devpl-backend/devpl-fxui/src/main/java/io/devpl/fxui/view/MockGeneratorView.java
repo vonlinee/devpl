@@ -32,9 +32,9 @@ public class MockGeneratorView extends BorderPane {
         columnTable.expandAll();
 
         for (GeneratorItem item : generatorItems) {
-            routerPane.addRouteMapping(item.getName(), new LazyNode() {
+            routerPane.addRouteMapping(item.getName(), new LazyNode<DetailTable>() {
                 @Override
-                public Node render() {
+                public DetailTable render() {
                     DetailTable detailTable = new DetailTable();
                     detailTable.setGeneratorName(item);
                     return detailTable;

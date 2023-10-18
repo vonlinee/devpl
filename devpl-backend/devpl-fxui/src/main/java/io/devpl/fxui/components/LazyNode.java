@@ -2,9 +2,9 @@ package io.devpl.fxui.components;
 
 import javafx.scene.Node;
 
-public abstract class LazyNode {
+public abstract class LazyNode<T extends Node> {
 
-    Node node;
+    T node;
 
     public Node getNode() {
         if (node == null) {
@@ -13,5 +13,9 @@ public abstract class LazyNode {
         return node;
     }
 
-    protected abstract Node render();
+    /**
+     * 初始化节点
+     * @return Node
+     */
+    protected abstract T render();
 }

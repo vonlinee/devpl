@@ -29,7 +29,7 @@ public class RouterPane extends ScrollPane {
                 Object target = routeTable.get(newValue);
                 if (target instanceof Node node) {
                     setContent(node);
-                } else if (target instanceof LazyNode renderFunction) {
+                } else if (target instanceof LazyNode<?> renderFunction) {
                     Node node = renderFunction.getNode();
                     if (node != null) {
                         setContent(node);
@@ -43,7 +43,7 @@ public class RouterPane extends ScrollPane {
         routeTable.put(key, routeNode);
     }
 
-    public void addRouteMapping(Object key, LazyNode routeNodeSupplier) {
+    public void addRouteMapping(Object key, LazyNode<?> routeNodeSupplier) {
         routeTable.put(key, routeNodeSupplier);
     }
 
