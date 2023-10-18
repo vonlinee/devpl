@@ -57,7 +57,7 @@ public class MainApplication extends Application {
 //                routerPane.setCurrentRoute(key);
 //            }
 
-            Modal.show("hello", new TypeMappingTable());
+            Modal.show("hello", new TypeMappingTable(), 600, 500);
         });
 
         root.setTop(hBox);

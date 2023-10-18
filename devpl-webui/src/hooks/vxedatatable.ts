@@ -21,6 +21,8 @@ export interface VDTOptions {
   columns: VxeTableDefines.ColumnOptions<RowModel>[];
   // 是否自动加载
   autoLoad?: boolean;
+  // 表格数据
+  data: RowModel[],
   // 查询分页数据
   queryPage?: (currentPage: number, pageSize: number) => Promise<any>;
 }

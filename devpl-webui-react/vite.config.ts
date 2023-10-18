@@ -55,8 +55,7 @@ export default defineConfig({
   ],
   optimizeDeps: {
     esbuildOptions: {
-      plugins: [
-      ],
+      plugins: [],
     },
   },
   resolve: {
@@ -78,17 +77,16 @@ export default defineConfig({
     // 启动时打开浏览器
     open: true,
     host: true,
-    proxy: {
-      "^/api": {
-        target: "https://z3web.cn",
-        changeOrigin: true,
-        rewrite: (path) => {
-          return path.replace("/api", "/api/react-ant-admin");
-        },
-      },
-    },
+    // proxy: {
+    //   "^/devpl": {
+    //     target: "localhost:8088",
+    //     changeOrigin: true,
+    //     rewrite: (path) => {
+    //       console.log(path);
+    //       return path.replace("/api", "/api/react-ant-admin");
+    //     },
+    //   },
+    // },
   },
   envPrefix: "REACT_APP_",
 });
-
-

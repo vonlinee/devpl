@@ -5,8 +5,7 @@ import qs from "qs"
 import store from "@/store";
 import { clearUser } from "@/store/action";
 // 请求地址
-const BASE_URL = import.meta.env.REACT_APP_API_BASEURL || "/api/react-ant-admin";
-
+const BASE_URL = import.meta.env.REACT_APP_API_BASEURL || "/devpl/";
 
 // 错误信息
 const codeMessage: { [key: number]: string } = {

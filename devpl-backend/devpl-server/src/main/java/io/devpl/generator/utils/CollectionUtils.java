@@ -14,6 +14,7 @@ public class CollectionUtils {
     /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.
      * Otherwise, return {@code false}.
+     *
      * @param collection the Collection to check
      * @return whether the given Collection is empty
      */
@@ -24,6 +25,7 @@ public class CollectionUtils {
     /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.
      * Otherwise, return {@code false}.
+     *
      * @param map the Collection to check
      * @return whether the given Collection is empty
      */
@@ -101,5 +103,12 @@ public class CollectionUtils {
             sum += toIntFunction.applyAsLong(list.get(i));
         }
         return sum;
+    }
+
+    public static <V, T> List<T> values(Map<?, V> map, Function<V, T> mapper) {
+        if (isEmpty(map)) {
+            return Collections.emptyList();
+        }
+        return map.values().stream().map(mapper).collect(Collectors.toList());
     }
 }

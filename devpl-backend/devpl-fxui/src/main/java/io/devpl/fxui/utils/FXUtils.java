@@ -58,8 +58,4 @@ public class FXUtils {
     public static String color(Color color) {
         return color.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(color(Color.RED));
-    }
 }

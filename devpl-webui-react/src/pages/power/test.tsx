@@ -1,11 +1,12 @@
+import { useDataSourceTestApi } from "@/api/backend";
+import { apiListDataTypes } from "@/api/datatype";
 import DataTable, {
   DataTableOptions,
   RowDataModel,
 } from "@/components/datatable";
 import { useDataTable } from "@/components/datatable/datatable";
 import { ReactMonacoEditor } from "@/components/editor/ReactMonacoEditor";
-import { Button } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { Button, Checkbox, Form, Input } from "antd";
 import React from "react";
 
 /**
@@ -41,69 +42,132 @@ const Test = () => {
     });
   }
 
+  const onFinish = (values: any) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  type FieldType = {
+    typeKey?: "";
+    typeName?: "";
+    valueType?: "";
+  };
+
+  const TableForm = ({ data }) => {
+    return (
+      <>
+        <Form
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          style={{ maxWidth: 600 }}
+          initialValues={data}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item<FieldType>
+            label="Username"
+            name="typeKey"
+            rules={[{ required: true, message: "Please input your username!" }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            label="Password"
+            name="typeName"
+            rules={[{ required: true, message: "Please input your password!" }]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            name="valueType"
+            valuePropName="checked"
+            wrapperCol={{ offset: 8, span: 16 }}
+          >
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </>
+    );
+  };
+
+  let formData = {
+    typeKey: "",
+    typeName: "",
+    valueType: "",
+  };
+
   const options: DataTableOptions = useDataTable({
     columns: [
       {
-        title: "Full Name",
+        title: "数据类型Key",
         width: 100,
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "typeKey",
+        key: "typeKey",
         fixed: "left",
       },
       {
-        title: "Age",
+        title: "类型名称",
         width: 100,
-        dataIndex: "age",
-        key: "age",
+        dataIndex: "typeName",
+        key: "typeName",
         fixed: "left",
       },
       {
-        title: "Column 1",
-        dataIndex: "address",
-        key: "1",
-        width: 150,
+        title: "值类型",
+        width: 100,
+        dataIndex: "valueType",
+        key: "valueType",
+        fixed: "left",
       },
       {
-        title: "Column 2",
-        dataIndex: "address",
-        key: "2",
-        width: 150,
+        title: "最小长度",
+        width: 100,
+        dataIndex: "minLength",
+        key: "minLength",
+        fixed: "left",
       },
       {
-        title: "Column 3",
-        dataIndex: "address",
-        key: "3",
-        width: 150,
+        title: "最大长度",
+        width: 100,
+        dataIndex: "maxLength",
+        key: "maxLength",
+        fixed: "left",
       },
       {
-        title: "Column 4",
-        dataIndex: "address",
-        key: "4",
-        width: 150,
-      },
-      {
-        title: "Column 5",
-        dataIndex: "address",
-        key: "5",
-        width: 150,
+        title: "类型默认值",
+        width: 100,
+        dataIndex: "defaultValue",
+        key: "defaultValue",
+        fixed: "left",
       },
     ],
     pageable: true,
-    data: data,
+    api: {
+      queryPage: apiListDataTypes,
+    },
+    formData: formData,
+    modalContent: (param) => {
+      console.log(param);
+      return (<TableForm data={param}></TableForm>) 
+    }
   });
 
   return (
     <>
-      <DataTable options={options}></DataTable>
-
-      <Button onClick={getText}>getText</Button>
-      <Button onClick={setText}>setText</Button>
-      <ReactMonacoEditor
-        ref={ref}
-        value={text}
-        width={"100%"}
-        height={"100%"}
-      ></ReactMonacoEditor>
+      <DataTable ref={options.tableRef} options={options}></DataTable>
     </>
   );
 };

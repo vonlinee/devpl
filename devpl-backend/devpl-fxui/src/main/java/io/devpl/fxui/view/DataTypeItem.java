@@ -27,7 +27,7 @@ public class DataTypeItem {
     /**
      * 类型分组名称
      */
-    @FXTableViewColumn(title = "类型分组")
+    @FXTableViewColumn(title = "类型分组", width = 200)
     @TableField(value = "type_group_id")
     private String typeGroupId;
 
@@ -35,21 +35,21 @@ public class DataTypeItem {
      * 类型ID
      */
     @TableField(value = "type_key")
-    @FXTableViewColumn(title = "类型Key")
+    @FXTableViewColumn(title = "类型Key", width = 200)
     private String typeKey;
 
     /**
      * 类型名称
      */
     @TableField(value = "type_name")
-    @FXTableViewColumn(title = "类型名称")
+    @FXTableViewColumn(title = "类型名称", width = 200)
     private String typeName;
 
     /**
      * 该数据类型的值类型
      */
     @TableField(value = "value_type")
-    @FXTableViewColumn(title = "值类型")
+    @FXTableViewColumn(title = "值类型", width = 200)
     private String valueType;
 
     /**

@@ -1,11 +1,6 @@
 <template>
   <vxe-grid ref="tableRef" v-bind="gridOptions" @cell-dblclick="onCellDbClick">
 
-    <vxe-column title="操作" width="160">
-      <template #default="{ row }">
-        <vxe-button @click="onFormSubmit(row)">保存</vxe-button>
-      </template>
-    </vxe-column>
   </vxe-grid>
 
   <vxe-modal v-model="addRowModalVisiable" destroy-on-close>
@@ -167,4 +162,3 @@ const delApi = (removeRecords: []) => {
 
 const gridOptions = buildVxeGridOptions(options);
 </script>
-  

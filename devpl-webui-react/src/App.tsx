@@ -8,6 +8,9 @@ import { useStateThemeToken } from "./store/hooks";
 import { useMemo } from "react";
 const LoadTheme = loadable(() => import("@/components/theme"));
 
+// https://ant.design/components/app-cn
+import { App } from "antd";
+
 function Theme() {
   if (__IS_THEME__) {
     return <LoadTheme />;
@@ -15,7 +18,7 @@ function Theme() {
   return null;
 }
 
-function App() {
+function MyApp() {
   return (
     <Provider store={store}>
       <Cfg />
@@ -28,10 +31,12 @@ function Cfg() {
   const themm = useMemo(() => ({ token }), [token]);
   return (
     <ConfigProvider theme={themm}>
-      <AppRouter />
-      <LayoutSet />
-      <Theme />
+      <App>
+        <AppRouter />
+        <LayoutSet />
+        <Theme />
+      </App>
     </ConfigProvider>
   );
 }
-export default App;
+export default MyApp;

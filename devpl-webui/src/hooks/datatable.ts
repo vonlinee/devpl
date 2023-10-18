@@ -1,7 +1,3 @@
-import service from '@/utils/request'
-import {onMounted} from 'vue'
-import {ElMessage, ElMessageBox} from 'element-plus'
-
 /**
  * 数据表格配置项
  */

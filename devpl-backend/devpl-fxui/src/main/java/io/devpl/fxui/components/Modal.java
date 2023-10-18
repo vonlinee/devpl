@@ -32,12 +32,17 @@ public class Modal extends Stage {
         modal.show();
     }
 
-    public static void show(String title, Region region) {
+    public static void show(String title, Region root, double w, double h) {
         Modal modal = new Modal();
         modal.setTitle(title);
-        modal.setWidth(region.getWidth());
-        modal.setHeight(region.getHeight());
-        modal.setContent(region);
+        modal.setWidth(w == Region.USE_COMPUTED_SIZE ? root.getWidth() : w);
+        modal.setHeight(h == Region.USE_COMPUTED_SIZE ? root.getHeight() : h);
+        modal.setHeight(h);
+        modal.setContent(root);
         modal.show();
+    }
+
+    public static void show(String title, Region region) {
+        show(title, region, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
     }
 }

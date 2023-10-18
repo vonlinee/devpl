@@ -22,11 +22,9 @@ public class TypeMappingTable extends BorderPane {
         TablePane<DataTypeItem> table = new TablePane<>(DataTypeItem.class);
 
         table.setTableOperation(new TableOperation<>() {
-
             @Override
             public TableData<DataTypeItem> loadPage(int pageNum, int pageSize) {
-                TableData<DataTypeItem> tableData = TableData.of(dataTypeItemMapper.selectPage(pageNum, pageSize));
-                return tableData;
+                return TableData.of(dataTypeItemMapper.selectPage(pageNum, pageSize));
             }
         });
 
