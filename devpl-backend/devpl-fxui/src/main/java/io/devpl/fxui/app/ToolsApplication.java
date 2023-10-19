@@ -1,8 +1,8 @@
 package io.devpl.fxui.app;
 
 import io.devpl.fxui.components.Modal;
-import io.devpl.fxui.mvvm.View;
 import io.devpl.fxui.view.FileHelperView;
+import io.devpl.fxui.mvvm.View;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,7 +10,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 

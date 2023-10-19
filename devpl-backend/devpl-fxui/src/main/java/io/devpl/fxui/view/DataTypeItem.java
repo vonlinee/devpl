@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @TableName("data_type_item")
 @FXTableViewModel
 public class DataTypeItem {
+
     /**
      * 主键ID
      */

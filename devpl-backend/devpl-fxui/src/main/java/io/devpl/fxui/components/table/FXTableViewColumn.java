@@ -20,4 +20,6 @@ public @interface FXTableViewColumn {
     double minWidth() default -1;
 
     double maxWidth() default -1;
+
+    boolean editable() default false;
 }

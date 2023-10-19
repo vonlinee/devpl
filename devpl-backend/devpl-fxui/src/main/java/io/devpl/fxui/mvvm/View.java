@@ -1,11 +1,15 @@
 package io.devpl.fxui.mvvm;
 
-import io.devpl.fxui.log.Logger;
-import io.devpl.fxui.log.LoggerFactory;
-import io.devpl.fxui.utils.WeakValueHashMap;
+import io.fxtras.Alerts;
+import io.fxtras.eventbus.JavaFXMainThreadSupport;
+import io.fxtras.utils.WeakValueHashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.PostEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -26,10 +30,20 @@ public abstract class View implements SceneGraphAccessor {
      */
     private Node root;
 
-
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
+    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder().eventInheritance(true)
+            .allowEmptySubscriber(true)   // 是否允许空@Subsciber进行注册
+            .logNoSubscriberMessages(true) // 没有订阅者时记录日志
+            .mainThreadSupport(new JavaFXMainThreadSupport()).build();
+
     public View() {
+        try {
+            GLOBAL_EVENT_BUS.register(this);
+        } catch (Exception exception) {
+            // ignore
+            log.error("failed to register Subscriber[{}]", this, exception);
+        }
     }
 
     protected void setRoot(Node root) {
@@ -44,8 +58,32 @@ public abstract class View implements SceneGraphAccessor {
     }
 
     /**
+     * 发布事件
+     * @param event 事件类型对象
+     */
+    public final void publish(Object event) {
+        try {
+            GLOBAL_EVENT_BUS.post(event);
+        } catch (Exception exception) {
+            Alerts.exception("发布事件异常", exception).showAndWait();
+        }
+    }
+
+    /**
+     * 发布事件
+     * @param eventName 事件名称
+     * @param event     事件类型对象
+     */
+    public final void publish(String eventName, Object event) {
+        try {
+            GLOBAL_EVENT_BUS.post(new PostEvent(eventName, event));
+        } catch (Exception exception) {
+            Alerts.exception("发布事件异常", exception).showAndWait();
+        }
+    }
+
+    /**
      * 加载视图，并进行初始化
-     *
      * @param clazz View impl Class
      * @param <T>   View
      * @return Root Node
@@ -61,7 +99,6 @@ public abstract class View implements SceneGraphAccessor {
 
     /**
      * 加载指定类的根节点
-     *
      * @param clazz view impl
      * @param <T>   view impl
      * @return View实例
@@ -94,27 +131,15 @@ public abstract class View implements SceneGraphAccessor {
                     }
                     return view1;
                 });
-                Node root;
                 try {
-                    root = fxmlLoader.load();
+                    Node root = fxmlLoader.load();
                     if (fxmlInfo.label() != null && !fxmlInfo.label().isEmpty()) {
                         root.getProperties().put("title", fxmlInfo.label());
                     }
+                    viewCache.put(clazz, view = fxmlLoader.getController());
+                    view.setRoot(root);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
-                }
-                Object controller = fxmlLoader.getController();
-                if (controller instanceof View viewController) {
-                    viewCache.put(clazz, view = viewController);
-                    if (root != null) {
-                        view.setRoot(root);
-                    }
-                } else {
-                    if (controller == null) {
-                        throw new IllegalArgumentException(fxmlLocation + " fx:controller 应是" + clazz + "实际为null");
-                    } else {
-                        throw new IllegalArgumentException(fxmlLocation + " " + controller + "controller未继承View");
-                    }
                 }
             }
         }

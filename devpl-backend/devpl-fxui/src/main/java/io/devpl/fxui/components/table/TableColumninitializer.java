@@ -30,14 +30,12 @@ public class TableColumninitializer<R> {
             String propertyName = declaredField.getName();
             // 根据数据类型推断选择使用什么列
             TableColumn<R, C> column = new TableColumn<>(propertyName);
-
+            column.setEditable(tvc.editable());
             column.setId(rowClass.getName() + "." + propertyName);
 
             if (tableColumnOrderMap != null) {
                 tableColumnOrderMap.put(column.getId(), tvc.order());
             }
-
-            column.setEditable(true);
             // 只支持单层对象
             column.setCellValueFactory(getCellValueFactory(propertyName));
             column.setCellFactory(getCellFactory(rowClass, type, propertyName));

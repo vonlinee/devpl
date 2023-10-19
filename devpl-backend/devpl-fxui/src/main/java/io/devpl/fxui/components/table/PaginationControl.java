@@ -1,5 +1,6 @@
 package io.devpl.fxui.components.table;
 
+import io.devpl.fxui.utils.FXControl;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -44,8 +45,7 @@ public class PaginationControl extends HBox {
 
     public PaginationControl() {
         this.setAlignment(Pos.CENTER);
-        btnFirstPage = new Button("<<");
-        // btnFirstPage.setGraphic(new Button("First"));
+
         final EventHandler<ActionEvent> paginationHandler = new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
@@ -62,24 +62,24 @@ public class PaginationControl extends HBox {
                 }
             }
         };
-        btnFirstPage.setOnAction(paginationHandler);
+
+        btnFirstPage = FXControl.button("首页", paginationHandler);
         btnFirstPage.setFocusTraversable(false);
         btnFirstPage.getStyleClass().addAll("pill-button", "pill-button-left");
 
-        btnPrevPage = new Button("<");
-        // btnPrevPage.setGraphic(new Button("Prev"));
-        btnPrevPage.setOnAction(paginationHandler);
+        btnPrevPage = FXControl.button("上一页", paginationHandler);
         btnPrevPage.setFocusTraversable(false);
 
-        btnNextPage = new Button(">");
-        // btnNextPage.setGraphic(new Button("Next"));
-        btnNextPage.setOnAction(paginationHandler);
+        btnNextPage = FXControl.button("下一页", paginationHandler);
         btnNextPage.setFocusTraversable(false);
 
-        btnLastPage = new Button(">>");
-        // btnLastPage.setGraphic(new Button("Last"));
-        btnLastPage.setOnAction(paginationHandler);
+        btnLastPage = FXControl.button("末页", paginationHandler);
         btnLastPage.setFocusTraversable(false);
+
+        btnFirstPage.setPrefWidth(60.0);
+        btnPrevPage.setPrefWidth(80.0);
+        btnNextPage.setPrefWidth(80.0);
+        btnLastPage.setPrefWidth(60.0);
 
         cmbPage = new ComboBox<>();
         cmbPage.setEditable(true);
@@ -212,5 +212,12 @@ public class PaginationControl extends HBox {
 
     public final int getMaxPageNum() {
         return maxPageNum.get();
+    }
+
+    /**
+     * 跳到最后一页
+     */
+    public final void toLastPage() {
+        cmbPage.getSelectionModel().selectLast();
     }
 }

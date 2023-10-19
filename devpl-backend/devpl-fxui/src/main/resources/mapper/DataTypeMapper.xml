@@ -3,22 +3,28 @@
 <mapper namespace="io.devpl.fxui.mapper.DataTypeItemMapper">
 
     <resultMap id="BaseResultMap" type="io.devpl.fxui.view.DataTypeItem">
+        <result property="id" column="id"/>
         <result property="typeGroupId" column="type_group_id"/>
         <result property="typeKey" column="type_key"/>
         <result property="typeName" column="type_name"/>
         <result property="valueType" column="value_type"/>
     </resultMap>
     <insert id="insert" parameterType="io.devpl.fxui.view.DataTypeItem">
-        INSERT INTO data_type_item (type_key, type_name) VALUES (#{param.typeKey}, #{param.typeName})
+        INSERT INTO data_type_item (type_key, type_name)
+        VALUES (#{param.typeKey}, #{param.typeName})
     </insert>
+
+    <update id="updateById">
+
+    </update>
+    <delete id="deleteById">
+        DELETE
+        FROM data_type_item
+        WHERE id = #{id}
+    </delete>
 
     <select id="selectPage" resultMap="BaseResultMap">
         SELECT *
-        FROM data_type_item
-        LIMIT #{page}, #{limit}
-    </select>
-    <select id="count" resultType="java.lang.Long">
-        SELECT count(*)
         FROM data_type_item
     </select>
 </mapper>

@@ -133,4 +133,17 @@ public enum JDBCDriver {
     public String getDriverClassName() {
         return driverClassName;
     }
+
+    public String getSubProtocol() {
+        return subProtocol;
+    }
+
+    public static String[] supportedDbNames() {
+        String[] names = new String[values().length];
+        JDBCDriver[] drivers = values();
+        for (int i = 0; i < drivers.length; i++) {
+            names[i] = drivers[i].name();
+        }
+        return names;
+    }
 }

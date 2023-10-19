@@ -5,9 +5,6 @@ import io.devpl.fxui.mvvm.FxmlView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 @FxmlBinder(location = "fxml/index.fxml")
 public class IndexView extends FxmlView {
 

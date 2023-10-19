@@ -1,17 +1,17 @@
 package io.devpl.fxui.app;
 
-import io.devpl.fxui.components.Modal;
 import io.devpl.fxui.components.RouterPane;
 import io.devpl.fxui.components.RouterView;
+import io.devpl.fxui.controller.fields.FieldsManageView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
-import io.devpl.fxui.view.DataTypeModel;
-import io.devpl.fxui.view.MockGeneratorView;
-import io.devpl.fxui.view.TemplateManageView;
+import io.devpl.fxui.mvvm.View;
+import io.devpl.fxui.view.IndexView;
 import io.devpl.fxui.view.TypeMappingTable;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -35,9 +35,12 @@ public class MainApplication extends Application {
 
         RouterPane routerPane = new RouterPane();
 
-        menu.addChild("模拟数据", RouterView.of(new MockGeneratorView()));
-        menu.addChild("测试控件", RouterView.of(routerPane));
-        menu.addChild("模板管理", RouterView.of(new TemplateManageView()));
+        View.load(IndexView.class);
+
+        // menu.addChild("模拟数据", RouterView.of(new MockGeneratorView()));
+        // menu.addChild("测试控件", RouterView.of(routerPane));
+
+//        menu.addChild("字段管理", RouterView.of(View.load(FieldsManageView.class)));
 
         layoutPane.addNavigationMenu(menu);
 
@@ -51,18 +54,18 @@ public class MainApplication extends Application {
         routerPane.addRouteMapping(2, new Button("222"));
         routerPane.addRouteMapping(3, new Button("333"));
 
-        TypeMappingTable typeMappingTable = new TypeMappingTable();
+        menu.addChild("数据类型", RouterView.of(new TypeMappingTable()));
 
-        Modal modal = Modal.of("数据类型表", typeMappingTable, 600, 500);
+//        Modal modal = Modal.of("数据类型表", typeMappingTable, 700, 500);
 
-
+        Label label = new Label("hello");
+        hBox.getChildren().add(label);
         btn.setOnAction(event -> {
 //            String text = textField.getText();
 //            if (text != null && !text.isBlank()) {
 //                int key = Integer.parseInt(text);
 //                routerPane.setCurrentRoute(key);
 //            }
-            modal.show();
         });
 
         root.setTop(hBox);

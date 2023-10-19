@@ -1,0 +1,19 @@
+
+
+添加事件名称的支持
+
+
+https://blog.csdn.net/unixsymbian/article/details/82121462?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-82121462-blog-45601515.pc_relevant_3mothn_strategy_and_data_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-5-82121462-blog-45601515.pc_relevant_3mothn_strategy_and_data_recovery&utm_relevant_index=6
+
+粘性事件解决的是注册时机晚于发送时机
+基于EventBus 3.3.1版本进行修改
+
+
+1.事件注册：类必须被@Subscriber修饰
+2.
+
+添加事件名称
+事件过滤机制:事件发布者能控制哪些事件订阅者接受事件
+
+事件总线是否可以添加返回值？
+https://github.com/greenrobot/EventBus/issues/482

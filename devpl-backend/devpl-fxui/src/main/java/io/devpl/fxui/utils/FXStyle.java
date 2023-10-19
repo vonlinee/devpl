@@ -26,4 +26,8 @@ public class FXStyle {
     public String build() {
         return style.toString();
     }
+
+    public static String color(Color color) {
+        return color.toString();
+    }
 }

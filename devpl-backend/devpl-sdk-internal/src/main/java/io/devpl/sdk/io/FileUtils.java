@@ -1701,4 +1701,12 @@ public class FileUtils {
         });
         return fileList;
     }
+
+    public static String readToString(File file) {
+        try {
+            return Files.readString(file.toPath(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

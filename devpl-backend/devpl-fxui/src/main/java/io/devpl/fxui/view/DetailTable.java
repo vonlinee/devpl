@@ -23,6 +23,9 @@ public class DetailTable extends BorderPane {
         top.setSpacing(5);
 
         choiceBox = new ChoiceBox<>();
+
+        choiceBox.setPrefWidth(150.0);
+
         Label label = new Label("名称");
         Button resetBtn = new Button("重置");
 
