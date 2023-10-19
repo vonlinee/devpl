@@ -86,14 +86,5 @@ public class TypeMappingTable extends BorderPane {
         });
 
         setCenter(table);
-
-        HBox hBox = new HBox();
-
-        hBox.getChildren().add(FXControl.button("111", event -> {
-            List<Integer> selectedIndeies = table.getSelectedIndeies();
-            System.out.println(selectedIndeies);
-        }));
-
-        setBottom(hBox);
     }
 }

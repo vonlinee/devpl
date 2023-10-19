@@ -7,7 +7,7 @@ import io.devpl.sdk.io.FileUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
 import io.devpl.fxui.utils.FileChooserDialog;
-import io.devpl.tookit.fxui.model.FieldSpec;
+import io.devpl.fxui.model.FieldSpec;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
 import javafx.event.ActionEvent;

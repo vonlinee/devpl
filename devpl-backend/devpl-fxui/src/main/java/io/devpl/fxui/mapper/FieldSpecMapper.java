@@ -1,7 +1,7 @@
 package io.devpl.fxui.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.devpl.tookit.fxui.model.FieldSpec;
+import io.devpl.fxui.model.FieldSpec;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

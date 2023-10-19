@@ -1,10 +1,5 @@
 package io.fxtras.control;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.WeakHashMap;
-
 import io.fxtras.control.skin.SplitPaneSkin;
 import javafx.beans.DefaultProperty;
 import javafx.beans.property.DoubleProperty;
@@ -14,19 +9,17 @@ import javafx.beans.value.WritableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.css.*;
+import javafx.css.converter.EnumConverter;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
-
-import javafx.css.StyleableObjectProperty;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-
-import javafx.css.converter.EnumConverter;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 
-import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.WeakHashMap;
 
 /**
  * <p>A control that has two or more sides, each separated by a divider, which can be
@@ -108,7 +101,7 @@ public class SplitPane extends Control {
 
     /**
      * Sets a node in the SplitPane to be resizable or not when the SplitPane is
-     * resized.  By default all node are resizable.  Setting value to false will
+     * resized.  By default, all node are resizable.  Setting value to false will
      * prevent the node from being resized.
      *
      * @param node  A node in the SplitPane.
@@ -128,7 +121,6 @@ public class SplitPane extends Control {
      *
      * @param node A node in the SplitPane.
      * @return true if the node is resizable false otherwise.
-     * @defaultValue true
      * @since JavaFX 2.1
      */
     public static Boolean isResizableWithParent(Node node) {
@@ -238,8 +230,6 @@ public class SplitPane extends Control {
         orientationProperty().set(value);
     }
 
-    ;
-
     /**
      * The orientation for the SplitPane.
      *
@@ -256,7 +246,7 @@ public class SplitPane extends Control {
      */
     public final ObjectProperty<Orientation> orientationProperty() {
         if (orientation == null) {
-            orientation = new StyleableObjectProperty<Orientation>(Orientation.HORIZONTAL) {
+            orientation = new StyleableObjectProperty<>(Orientation.HORIZONTAL) {
                 @Override
                 public void invalidated() {
                     final boolean isVertical = (get() == Orientation.VERTICAL);
@@ -284,7 +274,6 @@ public class SplitPane extends Control {
     }
 
 
-
     /* *************************************************************************
      *                                                                         *
      * Instance Variables                                                      *
@@ -297,7 +286,7 @@ public class SplitPane extends Control {
     private final ObservableList<Divider> unmodifiableDividers = FXCollections.unmodifiableObservableList(dividers);
 
     // Cache the divider positions if the items have not been created.
-    private final WeakHashMap<Integer, Double> dividerCache = new WeakHashMap<Integer, Double>();
+    private final WeakHashMap<Integer, Double> dividerCache = new WeakHashMap<>();
 
     /* *************************************************************************
      *                                                                         *
@@ -388,32 +377,32 @@ public class SplitPane extends Control {
 
     private static class StyleableProperties {
         private static final CssMetaData<SplitPane, Orientation> ORIENTATION =
-                new CssMetaData<SplitPane, Orientation>("-fx-orientation",
-                        new EnumConverter<Orientation>(Orientation.class),
-                        Orientation.HORIZONTAL) {
+            new CssMetaData<>("-fx-orientation",
+                new EnumConverter<>(Orientation.class),
+                Orientation.HORIZONTAL) {
 
-                    @Override
-                    public Orientation getInitialValue(SplitPane node) {
-                        // A vertical SplitPane should remain vertical
-                        return node.getOrientation();
-                    }
+                @Override
+                public Orientation getInitialValue(SplitPane node) {
+                    // A vertical SplitPane should remain vertical
+                    return node.getOrientation();
+                }
 
-                    @Override
-                    public boolean isSettable(SplitPane n) {
-                        return n.orientation == null || !n.orientation.isBound();
-                    }
+                @Override
+                public boolean isSettable(SplitPane n) {
+                    return n.orientation == null || !n.orientation.isBound();
+                }
 
-                    @Override
-                    public StyleableProperty<Orientation> getStyleableProperty(SplitPane n) {
-                        return (StyleableProperty<Orientation>) (WritableValue<Orientation>) n.orientationProperty();
-                    }
-                };
+                @Override
+                public StyleableProperty<Orientation> getStyleableProperty(SplitPane n) {
+                    return (StyleableProperty<Orientation>) n.orientationProperty();
+                }
+            };
 
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
 
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables =
-                    new ArrayList<CssMetaData<? extends Styleable, ?>>(Control.getClassCssMetaData());
+                new ArrayList<>(Control.getClassCssMetaData());
             styleables.add(ORIENTATION);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
@@ -463,17 +452,8 @@ public class SplitPane extends Control {
 
     /**
      * Represents a single divider in the SplitPane.
-     *
-     * @since JavaFX 2.0
      */
     public static class Divider {
-
-        /**
-         * Creates a default Divider instance.
-         */
-        public Divider() {
-
-        }
 
         /**
          * <p>Represents the location where the divider should ideally be
@@ -485,8 +465,6 @@ public class SplitPane extends Control {
          *
          * <p>As the user drags the SplitPane divider around this property will
          * be updated to always represent its current location.</p>
-         *
-         * @defaultValue 0.5
          */
         private DoubleProperty position;
 

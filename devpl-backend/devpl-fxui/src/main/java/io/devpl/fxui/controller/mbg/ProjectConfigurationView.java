@@ -3,7 +3,7 @@ package io.devpl.fxui.controller.mbg;
 import io.devpl.fxui.common.HBoxBuilder;
 import io.devpl.fxui.common.VBoxBuilder;
 import io.devpl.fxui.event.EventUtils;
-import io.devpl.tookit.fxui.model.ProjectConfiguration;
+import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.fxui.utils.AppConfig;
 import io.devpl.fxui.utils.json.JSONUtils;
 import io.devpl.fxui.mvvm.FxmlBinder;

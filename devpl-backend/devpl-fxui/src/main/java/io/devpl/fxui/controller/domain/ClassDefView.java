@@ -1,11 +1,11 @@
 package io.devpl.fxui.controller.domain;
 
-import io.devpl.tookit.fxui.view.filestructure.TopLevelClassItem;
+import io.devpl.fxui.tools.filestructure.TopLevelClassItem;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
-import io.devpl.tookit.fxui.view.filestructure.FieldItem;
-import io.devpl.tookit.fxui.view.filestructure.JavaFileStrucutreTreeView;
-import io.devpl.tookit.fxui.view.filestructure.MethodItem;
+import io.devpl.fxui.tools.filestructure.FieldItem;
+import io.devpl.fxui.tools.filestructure.JavaFileStrucutreTreeView;
+import io.devpl.fxui.tools.filestructure.MethodItem;
 import io.devpl.fxui.mvvm.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

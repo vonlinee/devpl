@@ -1,7 +1,7 @@
 package io.devpl.fxui.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.devpl.tookit.fxui.model.TemplateInfo;
+import io.devpl.fxui.model.TemplateInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

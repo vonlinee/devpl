@@ -2,7 +2,7 @@ package io.devpl.fxui.controller.dbconn;
 
 import io.devpl.sdk.util.IdUtils;
 import io.devpl.fxui.common.ExceptionDialog;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.utils.AppConfig;
 import io.devpl.fxui.utils.DBUtils;
 

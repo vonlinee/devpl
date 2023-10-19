@@ -41,7 +41,6 @@ public interface TableOperation<F, R> {
         return Collections.emptyList();
     }
 
-
     /**
      * 将表单对象转换为表格行对象
      *
@@ -74,7 +73,7 @@ public interface TableOperation<F, R> {
     }
 
     default void delete(R record) {
-        
+
     }
 
     /**

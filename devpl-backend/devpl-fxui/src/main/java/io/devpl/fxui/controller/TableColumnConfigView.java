@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller;
 
 import io.devpl.fxui.common.Constants;
-import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
+import io.devpl.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.fxtras.Alerts;
 import io.devpl.fxui.mvvm.FxmlBinder;

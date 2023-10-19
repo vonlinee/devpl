@@ -15,10 +15,11 @@ public class Utils {
      *
      * @param obj obj
      * @return obj toString
+     * @see Object#toString()
      */
     public static String objectToString(Object obj) {
         if (obj == null) {
-            return null;
+            return "null";
         }
         return obj.getClass().getName() + "@" + Integer.toHexString(obj.hashCode());
     }
@@ -50,6 +51,7 @@ public class Utils {
      * getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
      * newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
      * 调用默认方法创建对象实例
+     *
      * @param clazz Class对象
      * @return 创建的对象实例
      */
@@ -65,7 +67,6 @@ public class Utils {
         }
     }
 
-
     /**
      * 下划线字符
      */
@@ -76,6 +77,7 @@ public class Utils {
 
     /**
      * convert string from slash style to camel style, such as my_course will convert to MyCourse
+     *
      * @param str 数据库字符串
      * @return
      */
@@ -107,6 +109,7 @@ public class Utils {
 
     /**
      * 字符串下划线转驼峰格式
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */
@@ -132,6 +135,7 @@ public class Utils {
 
     /**
      * 首字母大写(进行字母的ascii编码前移，效率是最高的)
+     *
      * @param fieldName 需要转化的字符串
      */
     public static String upperFirst(String fieldName) {
@@ -142,6 +146,7 @@ public class Utils {
 
     /**
      * 调用notepad编辑器编辑文件
+     *
      * @param file 文件
      */
     public static void edit(File file) {

@@ -2,8 +2,8 @@ package io.devpl.fxui.controller;
 
 import io.devpl.fxui.controller.dbconn.ConnManageView;
 import io.devpl.fxui.event.DeleteConnEvent;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
-import io.devpl.tookit.fxui.mybatis.MyBatisXmlToolPane;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.tools.mybatis.MyBatisXmlToolPane;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
 import io.fxtras.utils.StageManager;

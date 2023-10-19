@@ -1,9 +1,9 @@
 package io.devpl.fxui.controller;
 
-import io.devpl.tookit.fxui.model.ConnectionConfig;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
-import io.devpl.tookit.fxui.model.TableGeneration;
-import io.devpl.tookit.fxui.model.props.ColumnCustomConfiguration;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.model.TableGeneration;
+import io.devpl.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.fxtras.Alerts;
 import io.devpl.fxui.mvvm.FxmlBinder;

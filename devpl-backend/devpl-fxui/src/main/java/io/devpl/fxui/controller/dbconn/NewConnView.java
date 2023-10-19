@@ -2,8 +2,8 @@ package io.devpl.fxui.controller.dbconn;
 
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.event.FillDefaultValueEvent;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionRegistry;
 import io.devpl.fxui.utils.AppConfig;
 import io.devpl.fxui.utils.Validator;
 import io.fxtras.Alerts;

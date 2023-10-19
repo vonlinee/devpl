@@ -3,7 +3,7 @@
 <mapper namespace="io.devpl.fxui.mapper.FieldSpecMapper">
 
   <!-- 通用查询映射结果 -->
-  <resultMap id="BaseResultMap" type="io.devpl.tookit.fxui.model.FieldSpec">
+  <resultMap id="BaseResultMap" type="io.devpl.fxui.model.FieldSpec">
   </resultMap>
 
   <insert id="insertBatch" parameterType="list">

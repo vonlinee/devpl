@@ -1,7 +1,7 @@
 package io.devpl.fxui.app;
 
 import io.devpl.fxui.controller.MainView;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.model.ConnectionRegistry;
 import io.fxtras.JavaFXApplication;
 import io.devpl.fxui.mvvm.View;
 import javafx.scene.Scene;

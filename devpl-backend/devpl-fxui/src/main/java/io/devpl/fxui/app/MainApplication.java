@@ -8,6 +8,7 @@ import io.devpl.fxui.layout.menu.NavigationMenu;
 import io.devpl.fxui.mvvm.View;
 import io.devpl.fxui.view.IndexView;
 import io.devpl.fxui.view.TypeMappingTable;
+import io.fxtras.control.SplitPane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.type.JavaType;
 import io.devpl.codegen.ddl.model.Field;
 import io.devpl.codegen.ddl.utils.DdlFormatUtil;
-import io.devpl.tookit.fxui.model.FieldInfo;
+import io.devpl.fxui.model.FieldInfo;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.StringConverters;
 import io.devpl.fxui.mvvm.FxmlBinder;

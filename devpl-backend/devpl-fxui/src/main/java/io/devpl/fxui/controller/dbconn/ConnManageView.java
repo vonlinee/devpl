@@ -1,8 +1,8 @@
 package io.devpl.fxui.controller.dbconn;
 
 import io.devpl.fxui.event.DeleteConnEvent;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
-import io.devpl.tookit.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionRegistry;
 import io.devpl.fxui.utils.AppConfig;
 import io.fxtras.Alerts;
 import io.devpl.fxui.mvvm.FxmlBinder;

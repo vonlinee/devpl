@@ -1,6 +1,6 @@
 package io.devpl.fxui.controller.dbconn;
 
-import io.devpl.tookit.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionConfig;
 
 public interface ConnectionConfigService {
 

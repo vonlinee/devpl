@@ -1,15 +1,15 @@
 package io.devpl.fxui.controller.mbg;
 
 import com.baomidou.mybatisplus.generator.jdbc.meta.TableMetadata;
+import io.devpl.fxui.model.*;
 import io.devpl.fxui.utils.*;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.fxui.common.ProgressDialog;
 import io.devpl.fxui.controller.TableCustomizationView;
 import io.devpl.fxui.event.EventUtils;
-import io.devpl.tookit.fxui.model.*;
 import io.fxtras.Alerts;
-import io.fxtras.beans.PropertyBinder;
+import io.fxtras.PropertyBinder;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
 import io.devpl.fxui.mvvm.View;

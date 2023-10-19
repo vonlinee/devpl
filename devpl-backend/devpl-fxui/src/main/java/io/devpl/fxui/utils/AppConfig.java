@@ -3,8 +3,8 @@ package io.devpl.fxui.utils;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
-import io.devpl.tookit.fxui.model.ProjectConfiguration;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.fxui.utils.json.JSONUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 

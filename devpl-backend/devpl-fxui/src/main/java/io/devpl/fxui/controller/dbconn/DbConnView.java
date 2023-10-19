@@ -3,7 +3,7 @@ package io.devpl.fxui.controller.dbconn;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.event.FillDefaultValueEvent;
-import io.devpl.tookit.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
 import javafx.collections.FXCollections;

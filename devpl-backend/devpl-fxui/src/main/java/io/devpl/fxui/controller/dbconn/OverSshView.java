@@ -3,7 +3,7 @@ package io.devpl.fxui.controller.dbconn;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.tookit.fxui.model.DatabaseInfo;
+import io.devpl.fxui.model.DatabaseInfo;
 import io.fxtras.Alerts;
 import io.devpl.fxui.mvvm.FxmlView;
 import io.devpl.fxui.mvvm.FxmlBinder;

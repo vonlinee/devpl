@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
-import io.devpl.tookit.fxui.model.*;
+import io.devpl.fxui.model.*;
 import io.devpl.fxui.utils.CollectionUtils;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class MyBatisPlusGenerator {
 
     /**
      * 生成
-     * TODO 不占用UI线程
+     *
      * @param context 待生成的参数
      * @throws Exception 任意异常都会被捕获
      */
@@ -34,7 +34,7 @@ public class MyBatisPlusGenerator {
         ProjectConfiguration projectConfiguration = context.getProjectConfiguration();
 
         Map<String, List<TableGeneration>> targetTables = CollectionUtils.groupingBy(context.getTargetedTables()
-                .values(), TableGeneration::getConnectionName);
+            .values(), TableGeneration::getConnectionName);
 
         VelocityTemplateEngine engine = new VelocityTemplateEngine();
 
@@ -45,7 +45,7 @@ public class MyBatisPlusGenerator {
             String connectionName = entry.getKey();
             // 按数据库名称分组
             Map<String, List<TableGeneration>> groupingByDbName =
-                    CollectionUtils.groupingBy(entry.getValue(), TableGeneration::getDatabaseName);
+                CollectionUtils.groupingBy(entry.getValue(), TableGeneration::getDatabaseName);
             for (Map.Entry<String, List<TableGeneration>> dbEntry : groupingByDbName.entrySet()) {
                 ConnectionConfig connConfig = ConnectionRegistry.get(connectionName);
 
@@ -54,7 +54,6 @@ public class MyBatisPlusGenerator {
 
                 // 一个数据库一个代码生成器
                 FastAutoGenerator autoGenerator = FastAutoGenerator.create(connConfig.getConnectionUrl(dbName), connConfig.getUsername(), connConfig.getPassword());
-
 
                 autoGenerator.globalConfig(builder -> {
                     builder.author(""); // 设置作者名 默认值:作者
