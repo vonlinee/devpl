@@ -2,7 +2,7 @@
 
 import { reactive, ref } from "vue";
 import DataTable, { DataTableOptions } from "@/components/table/DataTable.vue";
-
+import TestTable from "@/components/table/TestTable.vue";
 let modalVisiable = ref();
 
 const click = () => {
@@ -49,7 +49,8 @@ const gridOptions: DataTableOptions = {
 </script>
 
 <template>
-  <data-table :options="gridOptions">
+  <test-table></test-table>
+  <!-- <data-table :options="gridOptions">
     <template #saveOrUpdate>
       <vxe-form :data="formData4" size="mini">
         <vxe-form-item title="名称" field="name" :item-render="{}">
@@ -69,7 +70,7 @@ const gridOptions: DataTableOptions = {
         </vxe-form-item>
       </vxe-form>
     </template>
-  </data-table>
+  </data-table> -->
 </template>
 
 <style lang="scss">

@@ -17,6 +17,7 @@ import javafx.scene.control.Dialog;
 class TablePaneDialog<R, F> extends Dialog<F> {
 
     F formObject;
+    R row;
 
     public TablePaneDialog(FormRenderer formRegion, EventHandler<ActionEvent> saveCallback, EventHandler<ActionEvent> updateCallback) {
         // 可改变大小
@@ -47,11 +48,19 @@ class TablePaneDialog<R, F> extends Dialog<F> {
         } else {
             this.setTitle("修改");
         }
+        this.row = obj;
         super.show();
     }
 
     public final void setPrefSize(double w, double h) {
         setWidth(w);
         setHeight(h);
+    }
+
+    /**
+     * @return 可能为null
+     */
+    public final R getRowObject() {
+        return row;
     }
 }

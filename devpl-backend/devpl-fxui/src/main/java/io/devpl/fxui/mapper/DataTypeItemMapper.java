@@ -13,5 +13,7 @@ public interface DataTypeItemMapper {
 
     int insert(@Param("param") DataTypeItem dataTypeItem);
 
+    int updateById(@Param("param") DataTypeItem dataTypeItem);
+
     int deleteById(@Param("id") Object id);
 }

@@ -53,10 +53,11 @@ public interface TableOperation<F, R> {
     /**
      * 将表单对象转换为表格行对象
      *
+     * @param row        行对象，可能为null，表示新增，不为null表示更新
      * @param formObject 表单对象
      * @return 表格行对象
      */
-    default R convert(F formObject) {
+    default R toRow(R row, F formObject) {
         return null;
     }
 

@@ -14,8 +14,27 @@
         VALUES (#{param.typeKey}, #{param.typeName})
     </insert>
 
-    <update id="updateById">
-
+    <update id="updateById" parameterType="io.devpl.fxui.view.DataTypeItem">
+        UPDATE data_type_item
+        SET type_group_id = #{param.typeGroupId},
+        type_key = #{param.typeKey},
+        type_name = #{param.typeName},
+        value_type = #{param.valueType},
+        <if test="param.minLength != null">
+            min_length = #{param.minLength},
+        </if>
+        <if test="param.maxLength != null">
+            max_length = #{param.maxLength},
+        </if>
+        default_value = #{param.defaultValue},
+        <if test="param.precision != null">
+            precision = #{param.precision},
+        </if>
+        <if test="param.deleted != null">
+            is_deleted = #{param.deleted},
+        </if>
+        update_time = NOW()
+        WHERE id = #{param.id}
     </update>
     <delete id="deleteById">
         DELETE

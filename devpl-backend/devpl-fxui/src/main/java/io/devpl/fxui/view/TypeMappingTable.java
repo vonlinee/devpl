@@ -9,10 +9,10 @@ import io.devpl.fxui.components.table.TablePane;
 import io.devpl.fxui.components.table.TablePaneOption;
 import io.devpl.fxui.mapper.DataTypeItemMapper;
 import io.devpl.fxui.mapper.MyBatis;
-import io.devpl.fxui.utils.FXControl;
 import io.devpl.fxui.utils.FXUtils;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 import java.util.List;
 
@@ -30,6 +30,9 @@ public class TypeMappingTable extends BorderPane {
             .form(new DataTypeModel(), formObject -> {
                 Form loginForm = Form.of(
                     Group.of(
+                        Field.ofSingleSelectionType(new SimpleListProperty<>(FXCollections.observableArrayList(List.of("JSON", "Java", "JDBC"))), formObject.typeGroupProperty())
+                            .label("类型分组")
+                            .select(0),
                         Field.ofStringType(formObject.typeKeyProperty())
                             .placeholder("typeKey")
                             .label("类型Key"),
@@ -53,18 +56,23 @@ public class TypeMappingTable extends BorderPane {
 
             @Override
             public DataTypeModel convert(DataTypeModel oldForm, DataTypeItem row) {
-
                 oldForm.setTypeKey(row.getTypeKey());
                 oldForm.setTypeName(row.getTypeName());
-
+                oldForm.setTypeGroup(row.getTypeGroupId());
                 return oldForm;
             }
 
             @Override
-            public DataTypeItem convert(DataTypeModel formObject) {
-                DataTypeItem dataTypeItem = new DataTypeItem();
-                dataTypeItem.setTypeKey(formObject.getTypeKey());
-                dataTypeItem.setTypeName(formObject.getTypeName());
+            public DataTypeItem toRow(DataTypeItem row, DataTypeModel formObject) {
+                DataTypeItem dataTypeItem;
+                if (row == null) {
+                    dataTypeItem = new DataTypeItem();
+                    dataTypeItem.setTypeKey(formObject.getTypeKey());
+                    dataTypeItem.setTypeName(formObject.getTypeName());
+                    dataTypeItem.setTypeGroupId(formObject.getTypeGroup());
+                } else {
+                    dataTypeItem = row;
+                }
                 return dataTypeItem;
             }
 
@@ -76,6 +84,12 @@ public class TypeMappingTable extends BorderPane {
 
             @Override
             public void update(DataTypeItem record) {
+                if (record.getId() == null) {
+                    System.out.println("ID为null");
+                    return;
+                }
+                int insert = dataTypeItemMapper.updateById(record);
+                System.out.println("更新" + insert + "条");
             }
 
             @Override

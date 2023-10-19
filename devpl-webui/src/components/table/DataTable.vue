@@ -64,23 +64,7 @@ export default defineComponent({
      */
     const editEvent = (row: VxeTableDataRow) => {
       Object.assign(formData, row);
-
       modalRef.value.show();
-    };
-
-    // vxe-table属性
-    const vxeTableProps: VxeTableProps = {
-      ref: tableRef,
-      data: options.tableData,
-      // 高度
-      height: 629,
-      rowConfig: {
-        isHover: true
-      },
-      columnConfig: {
-        resizable: true
-      },
-      border: true
     };
 
     // 创建列
@@ -100,7 +84,9 @@ export default defineComponent({
           type: "text",
           icon: "vxe-icon-edit",
           onClick: editEvent
-        }), h(VxeButton, { type: "text", icon: "vxe-icon-delete", onClick: editEvent })]);
+        }), h(VxeButton, { type: "text", icon: "vxe-icon-delete", onClick: (event) => {
+          console.log("点击删除按钮");
+        }})]);
       }
     }));
 
@@ -118,7 +104,19 @@ export default defineComponent({
       const toolbarVNode = h(DataTableToolBar, op, context.slots);
       slotVNodes.push(toolbarVNode);
       // 表格
-      const tableVNode = h(VxeTable, vxeTableProps, { default: () => columnsDefs });
+      const tableVNode = h(VxeTable, {
+        ref: tableRef,
+        data: options.tableData.slice(0, 10),
+        // 高度
+        height: 629,
+        rowConfig: {
+          isHover: true
+        },
+        columnConfig: {
+          resizable: true
+        },
+        border: true
+      }, { default: () => columnsDefs });
       // 编辑或修改弹窗
       const saveOrUpdateVNode = h(SaveOrUpdate, {
         ref: modalRef

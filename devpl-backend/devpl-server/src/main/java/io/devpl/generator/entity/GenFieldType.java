@@ -34,13 +34,13 @@ public class GenFieldType {
     /**
      * MySQL数据类型
      */
-    @TableField(value = "mysql_sql_type")
+    @TableField(value = "mysql_sql_type", exist = false)
     private String mysqlSqlType;
 
     /**
      * JSON数据类型
      */
-    @TableField(value = "json_type")
+    @TableField(value = "json_type", exist = false)
     private String jsonType;
 
     /**

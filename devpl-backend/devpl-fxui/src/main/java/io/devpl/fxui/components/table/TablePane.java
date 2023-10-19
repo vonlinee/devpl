@@ -41,27 +41,25 @@ public class TablePane<T> extends BorderPane {
                 if (FXUtils.isPrimaryButtonDoubleClicked(event)) {
                     T item = row.getItem();
                     if (item != null) {
-                        Object newFormObject = operation.convert(option.getFormObject(), item);
-                        dialog.show(item);
+                        T newFormObject = operation.toRow(item, option.getFormObject());
+                        dialog.show(newFormObject);
                     }
                 }
             });
             return row;
         });
-        this.tableView = FXUtils.initTableViewColumns(this.tableView, (Class<T>) option.getModelClass());
 
         addCheckStatusColumnForTable(tableView);
+        this.tableView = FXUtils.initTableViewColumns(this.tableView, (Class<T>) option.getModelClass());
 
         if (option.isPaginationEnabled()) {
             this.setBottom(this.pagination = new Pagination());
-            if (this.operation != null) {
-                this.pagination.setOnCurrentPageChanged(event -> {
-                    TableData<T> tableData = this.operation.loadPage(event.getPageNum(), event.getPageSize());
-                    updateTableData(tableData);
-                    // 更新分页信息
-                    pagination.updatePageNums(event.getPageSize(), tableData.getTotalRows());
-                });
-            }
+            this.pagination.setOnCurrentPageChanged(event -> {
+                TableData<T> tableData = this.operation.loadPage(event.getPageNum(), event.getPageSize());
+                updateTableData(tableData);
+                // 更新分页信息
+                pagination.updatePageNums(event.getPageSize(), tableData.getTotalRows());
+            });
         }
         addOperationContextMenu(this.tableView);
         setCenter(this.tableView);
@@ -107,13 +105,14 @@ public class TablePane<T> extends BorderPane {
         // 表单弹窗
         Form form = option.getFormCreator().apply(option.getFormObject());
         this.dialog = new TablePaneDialog<>(new FormRenderer(form), event -> {
-            T record = operation.convert(option.getFormObject());
+            @SuppressWarnings("unchecked")
+            T record = (T) operation.convert(option.getFormObject(), null);
             operation.save(record);
             pagination.toLastPage();
             // 刷新数据
             Event.fireEvent(refreshMenuItem, new ActionEvent());
         }, event -> {
-            T record = operation.convert(option.getFormObject());
+            T record = operation.toRow(dialog.getRowObject(), option.getFormObject());
             operation.update(record);
             // 刷新数据
             Event.fireEvent(refreshMenuItem, new ActionEvent());
@@ -141,24 +140,18 @@ public class TablePane<T> extends BorderPane {
         tableView.getColumns().add(idColumn);
     }
 
-    public void initialize() {
-        if (this.pagination != null) {
-            pagination.setCurrentPageNum(1);
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public <F, R> void setTableOperation(TableOperation<F, R> operation) {
         this.operation = (TableOperation<Object, T>) operation;
         sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                initialize();
+            if (newValue != null && this.pagination != null) {
+                pagination.setCurrentPageNum(1);
             }
         });
     }
 
     /**
-     * 更新一页的数据，先清空在重新插入
+     * 更新一页的数据，先清空再在重新插入
      *
      * @param tableData 表格数据
      */
