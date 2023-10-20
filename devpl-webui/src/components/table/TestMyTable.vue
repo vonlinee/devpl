@@ -1,62 +1,103 @@
 <template>
 	<div class="table_box card">
-		<el-button class="table_btn" @click="setCurrent()">Clear selection</el-button>
-		<data-table class="table_cont" ref="singleTableRef" @current-change="handleCurrentChange" :config="config"
-			:columns="columns" :dataSource="luckList">
-
-			<!-- 单独某列的插槽 -->
-			<template #sex="scope">
-				{{ scope.row.sex == 0 ? '男' : '女' }}
-			</template>
-			<template #operation="scope">
-				<el-button @click="setCurrent(luckList[1])">Select second row</el-button>
-			</template>
-
+		<data-table class="table_cont" ref="singleTableRef" :options="options" :form-object="formObject"
+			:convert-row-to-form="convert"
+			:api-config="apiConfig" :columns="columns" :dataSource="luckList">
 			<template #modal="scope">
-
 				<el-form ref="ruleFormRef" :model="scope.form" status-icon label-width="120px" class="demo-ruleForm">
 					<el-form-item label="ID" prop="id">
 						<el-input v-model="scope.form.id" />
 					</el-form-item>
-					<el-form-item label="Name" prop="name">
-						<el-input v-model="scope.form.name"/>
+					<el-form-item label="字段Key" prop="fieldKey">
+						<el-input v-model="scope.form.fieldKey" />
 					</el-form-item>
-					<el-form-item label="Sex" prop="sex">
-						<el-input v-model="scope.form.sex" />
+					<el-form-item label="字段名称" prop="fieldName">
+						<el-input v-model="scope.form.fieldName" />
+					</el-form-item>
+					<el-form-item label="数据类型" prop="dataType">
+						<el-input v-model="scope.form.dataType" />
+					</el-form-item>
+					<el-form-item label="默认值" prop="defaultValue">
+						<el-input v-model="scope.form.defaultValue" />
+					</el-form-item>
+					<el-form-item label="描述信息" prop="description">
+						<el-input v-model="scope.form.description" />
 					</el-form-item>
 				</el-form>
 			</template>
-
 		</data-table>
+
 	</div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { DataTableColumnProps, DataTableOptions } from './interface'
-import DataTable from "@/components/table/DataTable.vue";
+import DataTable, { DataTableApiConfig } from "@/components/table/DataTable.vue";
+import { apiListFields, apiSaveOrUpdateField } from "@/api/fields"
+
+// 表单对象，绑定表单数据
+const formObject = {
+	id: 1,
+	fieldKey: '',
+	fieldName: '',
+	dataType: '',
+	defaultValue: '',
+	description: ''
+}
+
+const convert = (row: any, form: any) : any => {
+	form.id = row.id
+	form.fieldKey = row.fieldKey
+	form.dataType = row.dataType
+	form.fieldName = row.fieldName
+	form.defaultValue = row.defaultValue
+	form.description = row.description
+	return form
+} 
 
 // 活动列表每一列的配置信息
 const columns: DataTableColumnProps[] = [
 	{
-		prop: 'name',
-		label: '用户',
+		prop: 'id',
+		label: 'ID',
 		align: 'center',
 		width: 100
 	},
 	{
-		slot: 'sex',
-		label: '性别',
+		prop: 'fieldKey',
+		label: '字段Key',
+		align: 'center'
+	},
+	{
+		prop: 'fieldName',
+		label: '字段名称',
+		align: 'center'
+	},
+	{
+		prop: 'dataType',
+		label: '数据类型',
+		align: 'center'
+	},
+	{
+		prop: 'defaultValue',
+		label: '默认值',
+		align: 'center'
+	},
+	{
+		prop: 'description',
+		label: '描述信息',
 		align: 'center'
 	}
 ]
-const config = reactive<DataTableOptions>({
+const options = reactive<DataTableOptions>({
 	stripe: true,
 	border: true,
 	fit: true,
 	'highlight-current-row': true,
 	size: 'large',
-	loading: false
+	loading: false,
+	height: 600
 })
 
 // 福袋列表数据
@@ -72,20 +113,29 @@ const luckList = ref([
 		sex: 1
 	}
 ])
-const currentRow = ref()
+
 const singleTableRef = ref()
 
-const setCurrent = (row?: any) => {
+const apiConfig: DataTableApiConfig = {
+	queryPage: apiListFields,
+	deleteOne: function (row: { [x: string]: any; }): Promise<any> {
 
-	console.log(row);
+		console.log("删除行", row);
 
-	// table实例上方法的调用
-	singleTableRef.value!.setCurrentRow(row)
+		return new Promise((resolve) => {
+			resolve({
+				code: 122
+			})
+		});
+	},
+	update: function (row: { [x: string]: any; }): Promise<any> {
+		console.log("更新行", row);
+		return new Promise((resolve) => {
+
+		});
+	}
 }
-// Table 事件的使用
-const handleCurrentChange = (val: any) => {
-	currentRow.value = val
-}
+
 </script>
 
 <style scoped lang="scss">

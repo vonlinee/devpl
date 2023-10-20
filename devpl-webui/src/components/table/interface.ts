@@ -125,13 +125,23 @@ export interface DataTableOptions {
   "tree-props"?: { hasChildren: string; children: string };
 }
 
+/**
+ * 列配置项
+ */
 export interface DataTableColumnProps {
+  /**
+   * 列自定义内容插槽名称
+   */
   slot?: string;
+  /**
+   * 列自定义标题插槽名称
+   */
   "header-slot"?: string;
   type?: "index" | "selection" | "expand";
   index?: number | ((index: number) => number);
   label?: string;
   "column-key"?: string;
+  // 属性字段
   prop?: string;
   width?: string | number;
   "min-width"?: string | number;
