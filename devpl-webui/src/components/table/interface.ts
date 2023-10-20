@@ -42,11 +42,11 @@ export interface DataTableOptions {
   /**
    * 当前行的 key值
    */
-  "current-row-key"?: string | number;
+  currentRowKey?: string | number;
   /**
    * 是否高亮当前行
    */
-  "highlight-current-row"?: boolean;
+  highlightCurrentRow?: boolean;
   /**
    * 行的className
    */
