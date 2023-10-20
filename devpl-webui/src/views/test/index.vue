@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 import { reactive, ref } from "vue";
-import DataTable, { DataTableOptions } from "@/components/table/DataTable.vue";
-import TestTable from "@/components/table/TestTable.vue";
+import { DataTableOptions } from "@/components/table/DataTable.vue";
+import TestMyTable from "@/components/table/TestMyTable.vue";
 let modalVisiable = ref();
 
 const click = () => {
@@ -49,28 +49,8 @@ const gridOptions: DataTableOptions = {
 </script>
 
 <template>
-  <test-table></test-table>
-  <!-- <data-table :options="gridOptions">
-    <template #saveOrUpdate>
-      <vxe-form :data="formData4" size="mini">
-        <vxe-form-item title="名称" field="name" :item-render="{}">
-          <template #default="{ data }">
-            <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item title="性别" field="nickname" :item-render="{}">
-          <template #default="{ data }">
-            <vxe-input v-model="data.nickname" placeholder="请输入名称" clearable></vxe-input>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item>
-          <template #default>
-            <vxe-button type="submit" status="primary" content="超小尺寸"></vxe-button>
-          </template>
-        </vxe-form-item>
-      </vxe-form>
-    </template>
-  </data-table> -->
+
+  <test-my-table></test-my-table>
 </template>
 
 <style lang="scss">
