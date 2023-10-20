@@ -24,7 +24,6 @@
         </el-form>
       </template>
     </data-table>
-
   </div>
 </template>
 
@@ -40,14 +39,13 @@ const config: DataTableConfig = {
     stripe: true,
     border: true,
     fit: true,
-    "highlight-current-row": true,
+    highlightCurrentRow: true,
     size: "large",
-    loading: false,
-    height: 600
+    loading: false
   }),
   api: {
     queryPage: apiListFields,
-    deleteOne: function(row: { [x: string]: any; }): Promise<any> {
+    deleteOne: function (row: { [x: string]: any; }): Promise<any> {
       console.log("删除行", row);
       return new Promise((resolve) => {
         resolve({
@@ -55,10 +53,12 @@ const config: DataTableConfig = {
         });
       });
     },
-    update: function(row: { [x: string]: any; }): Promise<any> {
+    update: function (row: { [x: string]: any; }): Promise<any> {
       console.log("更新行", row);
       return new Promise((resolve) => {
-
+        resolve({
+          code: 200
+        });
       });
     }
   },
@@ -78,6 +78,15 @@ const config: DataTableConfig = {
       form.fieldName = row.fieldName;
       form.defaultValue = row.defaultValue;
       form.description = row.description;
+      return form;
+    },
+    resetConverter: (form) => {
+      form.id = 2000;
+      form.fieldKey = '';
+      form.dataType = '';
+      form.fieldName = '';
+      form.defaultValue = '';
+      form.description = '';
       return form;
     }
   },
@@ -113,7 +122,16 @@ const config: DataTableConfig = {
       label: "描述信息",
       align: "center"
     }
-  ] as DataTableColumnProps[]
+  ] as DataTableColumnProps[],
+  pageable: false,
+  toolbar: false,
+  tools: [{
+    type: 'primary',
+    label: '新增',
+    onClick: (event) => {
+      console.log(event)
+    }
+  }]
 };
 
 const singleTableRef = ref();
