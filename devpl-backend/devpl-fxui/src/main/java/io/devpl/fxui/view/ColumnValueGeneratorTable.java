@@ -1,6 +1,6 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.components.RouterPane;
+import io.devpl.fxui.components.pane.RouterPane;
 import io.devpl.fxui.components.TreeTableColumnEditEvent;
 import io.devpl.fxui.utils.CellUtils;
 import javafx.beans.property.SimpleObjectProperty;

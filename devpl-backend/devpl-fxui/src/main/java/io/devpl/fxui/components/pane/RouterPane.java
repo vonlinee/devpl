@@ -1,5 +1,6 @@
-package io.devpl.fxui.components;
+package io.devpl.fxui.components.pane;
 
+import io.devpl.fxui.components.NodeRender;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -29,7 +30,7 @@ public class RouterPane extends ScrollPane {
                 Object target = routeTable.get(newValue);
                 if (target instanceof Node node) {
                     setContent(node);
-                } else if (target instanceof LazyNode<?> renderFunction) {
+                } else if (target instanceof NodeRender<?> renderFunction) {
                     Node node = renderFunction.getNode();
                     if (node != null) {
                         setContent(node);
@@ -43,7 +44,7 @@ public class RouterPane extends ScrollPane {
         routeTable.put(key, routeNode);
     }
 
-    public void addRouteMapping(Object key, LazyNode<?> routeNodeSupplier) {
+    public void addRouteMapping(Object key, NodeRender<?> routeNodeSupplier) {
         routeTable.put(key, routeNodeSupplier);
     }
 

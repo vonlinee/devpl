@@ -10,6 +10,9 @@ public class TablePaneOption {
     private boolean enablePagination;
     private boolean enableToolBar;
 
+    /**
+     * 表单对象只有1个
+     */
     private Object formObject;
     private Function<Object, Form> formCreator;
 

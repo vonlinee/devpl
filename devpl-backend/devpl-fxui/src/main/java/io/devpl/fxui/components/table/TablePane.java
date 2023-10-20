@@ -1,7 +1,6 @@
 package io.devpl.fxui.components.table;
 
 import com.dlsc.formsfx.model.structure.Form;
-import com.dlsc.formsfx.view.renderer.FormRenderer;
 import io.devpl.fxui.utils.FXControl;
 import io.devpl.fxui.utils.FXUtils;
 import javafx.application.Platform;
@@ -22,6 +21,7 @@ import java.util.Map;
 public class TablePane<T> extends BorderPane {
 
     TablePaneOption option;
+    Class<T> modelClass;
     TableView<T> tableView;
     Pagination pagination;
     TableOperation<Object, T> operation;
@@ -30,9 +30,9 @@ public class TablePane<T> extends BorderPane {
     // 维护行选中的状态
     Map<Integer, BooleanProperty> rowSelectedStatus = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
-    public TablePane(TablePaneOption option) {
+    public TablePane(Class<T> modelClass, TablePaneOption option) {
         this.option = option;
+        this.modelClass = modelClass;
         this.tableView = new TableView<>();
         // 双击行进行编辑
         this.tableView.setRowFactory(param -> {
@@ -40,9 +40,10 @@ public class TablePane<T> extends BorderPane {
             row.setOnMouseClicked(event -> {
                 if (FXUtils.isPrimaryButtonDoubleClicked(event)) {
                     T item = row.getItem();
+                    row.getIndex();
                     if (item != null) {
-                        T newFormObject = operation.toRow(item, option.getFormObject());
-                        dialog.show(newFormObject);
+                        operation.fillForm(row.getIndex(), item, option.getFormObject());
+                        dialog.edit(row.getIndex(), item);
                     }
                 }
             });
@@ -50,7 +51,7 @@ public class TablePane<T> extends BorderPane {
         });
 
         addCheckStatusColumnForTable(tableView);
-        this.tableView = FXUtils.initTableViewColumns(this.tableView, (Class<T>) option.getModelClass());
+        FXUtils.initTableViewColumns(this.tableView, modelClass);
 
         if (option.isPaginationEnabled()) {
             this.setBottom(this.pagination = new Pagination());
@@ -91,7 +92,7 @@ public class TablePane<T> extends BorderPane {
             }
         }));
 
-        contextMenu.getItems().add(FXControl.menuItem("新增", event -> this.dialog.show(null)));
+        contextMenu.getItems().add(FXControl.menuItem("新增", event -> this.dialog.edit(-1, operation.newItem(modelClass))));
 
         MenuItem refreshMenuItem = FXControl.menuItem("刷新", event -> Platform.runLater(() -> {
             TableData<T> tableData = operation.loadPage(pagination.getCurrentPageNum(), pagination.getCurrentPageSize());
@@ -104,18 +105,29 @@ public class TablePane<T> extends BorderPane {
 
         // 表单弹窗
         Form form = option.getFormCreator().apply(option.getFormObject());
-        this.dialog = new TablePaneDialog<>(new FormRenderer(form), event -> {
-            @SuppressWarnings("unchecked")
-            T record = (T) operation.convert(option.getFormObject(), null);
+        this.dialog = new TablePaneDialog<>(form, event -> {
+            // 新增
+            T record = operation.extractForm(option.getFormObject(), null);
             operation.save(record);
-            pagination.toLastPage();
-            // 刷新数据
-            Event.fireEvent(refreshMenuItem, new ActionEvent());
+
+            if (tableView.getItems().size() < pagination.getCurrentPageSize()) {
+                // 直接添加即可
+                tableView.getItems().add(record);
+            } else {
+                if (pagination.getCurrentPageNum() == pagination.getMaxPageNum()) {
+                    pagination.toLastPage();
+                } else {
+                    // 刷新数据
+                    Event.fireEvent(refreshMenuItem, new ActionEvent());
+                }
+            }
         }, event -> {
-            T record = operation.toRow(dialog.getRowObject(), option.getFormObject());
-            operation.update(record);
-            // 刷新数据
-            Event.fireEvent(refreshMenuItem, new ActionEvent());
+            T row = operation.extractForm(option.getFormObject(), dialog.getEditingItem());
+            operation.update(row);
+            // TODO 刷新当前页的数据，或者只替换某行的数据
+            // 刷新可以通过 tableView.refresh() 或者重新填充表格数据
+            tableView.refresh();
+            // Event.fireEvent(refreshMenuItem, new ActionEvent());
         });
 
         tableView.setContextMenu(contextMenu);

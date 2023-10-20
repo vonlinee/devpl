@@ -1,5 +1,6 @@
 package io.devpl.fxui.components.table;
 
+import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,9 +18,14 @@ import javafx.scene.control.Dialog;
 class TablePaneDialog<R, F> extends Dialog<F> {
 
     F formObject;
-    R row;
+    R editingRow;
+    Form form;
+    int editingIndex;
 
-    public TablePaneDialog(FormRenderer formRegion, EventHandler<ActionEvent> saveCallback, EventHandler<ActionEvent> updateCallback) {
+    public TablePaneDialog(Form form, EventHandler<ActionEvent> saveCallback, EventHandler<ActionEvent> updateCallback) {
+        this.form = form;
+        FormRenderer formRegion = new FormRenderer(form);
+
         // 可改变大小
         this.setResizable(true);
         // 添加按钮
@@ -27,10 +33,13 @@ class TablePaneDialog<R, F> extends Dialog<F> {
         this.getDialogPane().getButtonTypes().add(ButtonType.OK);
 
         formRegion.setPrefSize(600.0, 400.0);
-
         // 事件回调
         Button okBtn = (Button) this.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.setOnAction(event -> {
+            if (!form.isValid()) {
+                event.consume();
+                return;
+            }
             if ("新增".equals(this.getTitle())) {
                 saveCallback.handle(event);
             } else if ("修改".equals(this.getTitle())) {
@@ -39,16 +48,21 @@ class TablePaneDialog<R, F> extends Dialog<F> {
             event.consume();
         });
 
+        this.setOnHidden(event -> {
+            this.editingIndex = -1;
+            this.editingRow = null;
+        });
         this.getDialogPane().setContent(formRegion);
     }
 
-    public final void show(R obj) {
-        if (obj == null) {
+    public final void edit(int index, R rowToBeEdite) {
+        if (rowToBeEdite == null) {
             this.setTitle("新增");
         } else {
+            this.editingIndex = index;
+            this.editingRow = rowToBeEdite;
             this.setTitle("修改");
         }
-        this.row = obj;
         super.show();
     }
 
@@ -58,9 +72,22 @@ class TablePaneDialog<R, F> extends Dialog<F> {
     }
 
     /**
+     * 获取编辑的某行
+     *
      * @return 可能为null
      */
-    public final R getRowObject() {
-        return row;
+    public final R getEditingItem() {
+        return editingRow;
+    }
+
+    public final boolean hasEditingItem() {
+        return editingIndex != -1;
+    }
+
+    /**
+     * @return -1 或者 0, 每页最大长度
+     */
+    public final int getEditingIndex() {
+        return editingIndex;
     }
 }

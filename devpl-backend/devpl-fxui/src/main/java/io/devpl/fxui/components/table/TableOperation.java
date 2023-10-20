@@ -42,22 +42,22 @@ public interface TableOperation<F, R> {
     }
 
     /**
-     * 将表单对象转换为表格行对象
+     * 填充表单数据
+     * 修改row会导致表格数据发生变化，刷新后界面数据会被更新，导致数据库数据和界面数据不一致
      *
-     * @return 表格行对象
+     * @param row        编辑的行对象，可能为null，表示新增(如果newItem返回不为null，则参数row不为null)，不为null表示更新
+     * @param formObject 表单对象
      */
-    default F convert(F oldForm, R row) {
-        return null;
+    default void fillForm(int index, R row, F formObject) {
     }
 
     /**
      * 将表单对象转换为表格行对象
      *
-     * @param row        行对象，可能为null，表示新增，不为null表示更新
-     * @param formObject 表单对象
-     * @return 表格行对象
+     * @param row 行，可能为空
+     * @return 表格行对象，返回不为null
      */
-    default R toRow(R row, F formObject) {
+    default R extractForm(F oldForm, R row) {
         return null;
     }
 
@@ -70,11 +70,9 @@ public interface TableOperation<F, R> {
     }
 
     default void update(R record) {
-
     }
 
     default void delete(R record) {
-
     }
 
     /**

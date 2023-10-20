@@ -1,4 +1,4 @@
-package io.devpl.fxui.components;
+package io.devpl.fxui.components.pane;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;

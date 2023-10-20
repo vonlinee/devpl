@@ -2,7 +2,7 @@ package io.devpl.fxui.components;
 
 import javafx.scene.Node;
 
-public abstract class LazyNode<T extends Node> {
+public abstract class NodeRender<T extends Node> {
 
     T node;
 

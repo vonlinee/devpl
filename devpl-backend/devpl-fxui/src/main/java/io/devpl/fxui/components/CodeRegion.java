@@ -1,12 +1,12 @@
 package io.devpl.fxui.components;
 
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
+import io.devpl.fxui.utils.FXUtils;
 import javafx.scene.layout.Region;
 import org.fxmisc.richtext.CodeArea;
 
 /**
  * 代码区域
+ * 封装 ricthtextfx 的CodeArea
  */
 public final class CodeRegion extends Region {
 
@@ -21,6 +21,6 @@ public final class CodeRegion extends Region {
 
     @Override
     protected void layoutChildren() {
-        layoutInArea(codeArea, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
+        FXUtils.layoutInRegion(this, codeArea);
     }
 }

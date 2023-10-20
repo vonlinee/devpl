@@ -1,18 +1,8 @@
 package io.devpl.fxui.app;
 
-import com.dlsc.formsfx.model.structure.Field;
-import com.dlsc.formsfx.model.structure.Form;
-import com.dlsc.formsfx.model.structure.Group;
-import com.dlsc.formsfx.view.renderer.FormRenderer;
-import io.devpl.fxui.components.Loading;
-import io.devpl.fxui.components.pane.HalfPane;
-import io.devpl.fxui.utils.FXControl;
-import io.devpl.fxui.view.DataTypeModel;
 import io.devpl.fxui.view.TypeMappingTable;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class TestApplication extends Application {

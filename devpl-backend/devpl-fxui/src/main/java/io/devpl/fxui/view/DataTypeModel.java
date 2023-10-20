@@ -10,9 +10,10 @@ import javafx.beans.property.StringProperty;
  */
 public class DataTypeModel {
 
-    private final ObjectProperty<String> typeGroup = new SimpleObjectProperty<>();
-    private final StringProperty typeKey = new SimpleStringProperty();
-    private final StringProperty typeName = new SimpleStringProperty();
+    private final ObjectProperty<String> typeGroup = new SimpleObjectProperty<>("");
+    private final StringProperty typeKey = new SimpleStringProperty("");
+    private final StringProperty typeName = new SimpleStringProperty("");
+    private final StringProperty description = new SimpleStringProperty("");
 
     public String getTypeKey() {
         return typeKey.get();
@@ -48,6 +49,18 @@ public class DataTypeModel {
 
     public void setTypeGroup(String typeGroup) {
         this.typeGroup.set(typeGroup);
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description.set(description);
     }
 
     @Override

@@ -1,8 +1,7 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.components.LazyNode;
-import io.devpl.fxui.components.RouterPane;
-import javafx.scene.Node;
+import io.devpl.fxui.components.NodeRender;
+import io.devpl.fxui.components.pane.RouterPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 
@@ -32,7 +31,7 @@ public class MockGeneratorView extends BorderPane {
         columnTable.expandAll();
 
         for (GeneratorItem item : generatorItems) {
-            routerPane.addRouteMapping(item.getName(), new LazyNode<DetailTable>() {
+            routerPane.addRouteMapping(item.getName(), new NodeRender<DetailTable>() {
                 @Override
                 public DetailTable render() {
                     DetailTable detailTable = new DetailTable();
