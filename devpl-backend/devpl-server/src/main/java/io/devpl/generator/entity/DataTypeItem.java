@@ -1,9 +1,6 @@
 package io.devpl.generator.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
@@ -74,7 +71,7 @@ public class DataTypeItem {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time", jdbcType = JdbcType.TIME)
+    @TableField(value = "create_time", jdbcType = JdbcType.TIME, fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
@@ -84,7 +81,7 @@ public class DataTypeItem {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(value = "update_time", jdbcType = JdbcType.TIME)
+    @TableField(value = "update_time", jdbcType = JdbcType.TIME, fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
     /**

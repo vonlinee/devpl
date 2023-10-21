@@ -14,7 +14,7 @@ import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
-import io.devpl.generator.dao.TableDao;
+import io.devpl.generator.dao.TableMapper;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.enums.FormLayoutEnum;
@@ -40,7 +40,7 @@ import java.util.*;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class TableServiceImpl extends BaseServiceImpl<TableDao, GenTable> implements TableService {
+public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> implements TableService {
     private final TableFieldService tableFieldService;
     private final DataSourceService dataSourceService;
     private final GeneratorConfigService generatorConfigService;

@@ -4,8 +4,9 @@ import http from "@/utils/http"
  * 查询数据类型列表
  * @param pageIndex 当前页
  * @param pageSize 每页大小
+ * @param param
  */
-export const apiListDataTypes = (pageIndex: Number, pageSize: Number, param: any) => {
+export const apiListDataTypes = (pageIndex: Number, pageSize: Number, param: any = null) => {
   return http.get("/api/datatype/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,

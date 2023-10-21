@@ -4,6 +4,7 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
+import io.devpl.generator.domain.param.DataTypeMappingAddParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
@@ -70,5 +71,15 @@ public class DataTypeController {
     @PostMapping("/group/add")
     public Result<Boolean> addDataTypeGroup(@RequestBody DataTypeGroup param) {
         return Result.ok(dataTypeService.saveDataTypeGroup(param));
+    }
+
+    /**
+     * 添加数据类型映射关系
+     *
+     * @return 类型分组信息
+     */
+    @PostMapping("/mapping")
+    public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingAddParam param) {
+        return Result.ok(dataTypeService.addDataTypeMapping(param.getTypeId(), param.getAnotherTypeId()));
     }
 }

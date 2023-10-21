@@ -1,6 +1,6 @@
 package io.devpl.generator.dao;
 
-import io.devpl.generator.common.mvc.BaseDao;
+import io.devpl.generator.common.mvc.EntityMapper;
 import io.devpl.generator.entity.GenFieldType;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,7 +10,7 @@ import java.util.Set;
  * 字段类型管理
  */
 @Mapper
-public interface FieldTypeDao extends BaseDao<GenFieldType> {
+public interface FieldTypeMapper extends EntityMapper<GenFieldType> {
 
     /**
      * 根据tableId，获取包列表

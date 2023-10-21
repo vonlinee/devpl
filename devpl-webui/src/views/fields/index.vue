@@ -13,7 +13,7 @@ import {
   VxeTableEvents,
   VxeTableInstance,
 } from "vxe-table"
-import TypeMappingTable from "@/views/generator/TypeMappingTable.vue"
+import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue"
 
 /**
  * 表格数据模型

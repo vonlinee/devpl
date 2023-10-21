@@ -3,22 +3,20 @@
  -->
 <template>
   <vxe-modal v-model="modalShowRef" width="70%" title="类型映射配置表">
-    <div>
-      <vxe-grid v-bind="gridOptions">
-        <template #name_edit="{ row }">
-          <vxe-input v-model="row.name"></vxe-input>
-        </template>
-        <template #nickname_edit="{ row }">
-          <vxe-input v-model="row.nickname"></vxe-input>
-        </template>
-        <template #role_edit="{ row }">
-          <vxe-input v-model="row.role"></vxe-input>
-        </template>
-        <template #address_edit="{ row }">
-          <vxe-input v-model="row.address"></vxe-input>
-        </template>
-      </vxe-grid>
-    </div>
+    <vxe-grid v-bind="gridOptions">
+      <template #name_edit="{ row }">
+        <vxe-input v-model="row.name"></vxe-input>
+      </template>
+      <template #nickname_edit="{ row }">
+        <vxe-input v-model="row.nickname"></vxe-input>
+      </template>
+      <template #role_edit="{ row }">
+        <vxe-input v-model="row.role"></vxe-input>
+      </template>
+      <template #address_edit="{ row }">
+        <vxe-input v-model="row.address"></vxe-input>
+      </template>
+    </vxe-grid>
   </vxe-modal>
 </template>
 
@@ -27,10 +25,6 @@ import { reactive, ref } from "vue";
 import { VxeGridProps } from "vxe-table";
 
 const modalShowRef = ref();
-
-defineExpose({
-  show: () => modalShowRef.value = true
-});
 
 interface RowVO {
   id: number;
@@ -41,6 +35,10 @@ interface RowVO {
   age: number;
   address: string;
 }
+
+defineExpose({
+  show: () => modalShowRef.value = true
+});
 
 // 模拟后台接口
 const fetchApi = (currentPage: number, pageSize: number) => {

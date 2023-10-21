@@ -8,7 +8,7 @@ import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
-import io.devpl.generator.dao.DataSourceDao;
+import io.devpl.generator.dao.DataSourceMapper;
 import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.utils.DbUtils;
@@ -32,7 +32,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceDao, DataSourceInfo> implements DataSourceService {
+public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceMapper, DataSourceInfo> implements DataSourceService {
 
     /**
      * 程序内部的数据源

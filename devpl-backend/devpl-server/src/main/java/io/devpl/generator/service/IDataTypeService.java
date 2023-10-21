@@ -5,9 +5,11 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
+import org.springframework.util.MultiValueMap;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface IDataTypeService {
 
@@ -22,4 +24,8 @@ public interface IDataTypeService {
     List<DataTypeGroupVO> listDataTypeGroups();
 
     Page<DataTypeItem> selectPage(PageQuery param);
+
+    boolean addDataTypeMapping(Long typeId, Long anotherTypeId);
+
+    void addDataTypeMapping(MultiValueMap<Long, Long> dataTypeIdMapping);
 }

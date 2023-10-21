@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.dao.ProjectModifyDao;
+import io.devpl.generator.dao.ProjectModifyMapper;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
 import io.devpl.generator.utils.Arrays;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyDao, ProjectModify> implements ProjectModifyService {
+public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMapper, ProjectModify> implements ProjectModifyService {
 
     /**
      * 需要变更的文件后缀

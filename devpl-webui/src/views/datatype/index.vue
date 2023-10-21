@@ -18,6 +18,9 @@
       <el-form-item>
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="showTypeMappingTable">类型映射表</el-button>
+      </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
               @selection-change="selectionChangeHandle">
@@ -35,7 +38,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit"
+    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes ? state.pageSizes : []" :page-size="state.limit"
                    :total="state.total"
                    layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
                    @current-change="currentChangeHandle">
@@ -44,16 +47,20 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
 
+    <type-mapping-table ref="typeMappingTableRef"></type-mapping-table>
   </el-card>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref} from "vue";
+import { reactive, ref } from "vue";
 import { IHooksOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
 import { ElButton } from "element-plus";
 import { apiListDataTypes } from "@/api/datatype";
+import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue";
+
+const typeMappingTableRef = ref()
 
 const state: IHooksOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
@@ -66,6 +73,10 @@ const state: IHooksOptions = reactive({
   },
   query: apiListDataTypes
 } as IHooksOptions);
+
+const showTypeMappingTable = () => {
+  typeMappingTableRef.value.show()
+}
 
 const addOrUpdateRef = ref();
 const addOrUpdateHandle = (row?: any) => {

@@ -1,7 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.dao.TargetGenFileDao;
+import io.devpl.generator.dao.TargetGenFileMapper;
 import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.TargetGenFileService;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class TargetGenFileServiceImpl extends BaseServiceImpl<TargetGenFileDao, TargetGenFile> implements TargetGenFileService {
+public class TargetGenFileServiceImpl extends BaseServiceImpl<TargetGenFileMapper, TargetGenFile> implements TargetGenFileService {
 
     @Override
     public List<TargetGenFile> listGeneratedFileTypes() {

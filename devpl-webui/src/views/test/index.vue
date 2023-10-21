@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import { reactive, ref } from "vue";
-import { DataTableOptions } from "@/components/table/DataTable.vue";
-import TestMyTable from "@/components/table/TestMyTable.vue";
+import { ref } from "vue";
+import PopupWindow from "@/components/dialog/PopupForm.vue";
+
 let modalVisiable = ref();
 
 const click = () => {
@@ -14,43 +14,43 @@ interface FormDataVO {
   sex: string;
 }
 
-let tableData = []
+let tableData = [];
 
 for (let i = 0; i < 100; i++) {
   tableData.push({
     name: "name" + i,
     nickname: "nickname" + i
-  })
+  });
 }
 
 const formData4 = {
-  name: '',
-  nickname: '1'
-}
-
-const gridOptions: DataTableOptions = {
-  columns: [
-    { type: "checkbox", width: 50 },
-    { type: "seq", width: 60 },
-    { field: "name", title: "Name", editRender: { autofocus: ".vxe-input--inner" } },
-    { field: "nickname", title: "Nickname", editRender: {} },
-    { field: "role", title: "Role", editRender: {} },
-    { field: "address", title: "Address", showOverflow: true, editRender: {} }
-  ],
-  tableData: tableData,
-  formData: formData4,
-  queryPage: function(currentPage: number, pageSize: number): Promise<any> {
-    throw new Error("Function not implemented.");
-  }
+  name: "",
+  nickname: "1"
 };
 
+let dialogRef = ref();
 
+const show = () => {
+  dialogRef.value.show();
+};
+
+let formData = {
+  name: "Zs",
+  age: 12
+};
+
+const submit = (formData: any, setVisiable: (val: boolean) => void) => {
+  console.log(formData);
+  setVisiable(false)
+};
 
 </script>
 
 <template>
+  <button @click="show">Open</button>
+  <popup-window ref="dialogRef" :form-data="formData" @submit="submit"></popup-window>
 
-  <test-my-table></test-my-table>
+  <!-- <test-my-table></test-my-table> -->
 </template>
 
 <style lang="scss">

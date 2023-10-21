@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 基础Dao
  */
-public interface BaseDao<T> extends BaseMapper<T> {
+public interface EntityMapper<T> extends BaseMapper<T> {
 
     /**
      * 查分页的数据

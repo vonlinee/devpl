@@ -1,6 +1,6 @@
 package io.devpl.generator.dao;
 
-import io.devpl.generator.common.mvc.BaseDao;
+import io.devpl.generator.common.mvc.EntityMapper;
 import io.devpl.generator.entity.TargetGenFile;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0.0 2023-07-14
  */
 @Mapper
-public interface TargetGenFileDao extends BaseDao<TargetGenFile> {
+public interface TargetGenFileMapper extends EntityMapper<TargetGenFile> {
 
     /**
      * 查询可选择的生成文件
