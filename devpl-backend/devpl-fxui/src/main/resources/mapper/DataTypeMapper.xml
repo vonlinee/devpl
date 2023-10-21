@@ -9,7 +9,7 @@
         <result property="typeName" column="type_name"/>
         <result property="valueType" column="value_type"/>
     </resultMap>
-    <insert id="insert" parameterType="io.devpl.fxui.view.DataTypeItem">
+    <insert id="insert" parameterType="io.devpl.fxui.view.DataTypeItem"  useGeneratedKeys="true" keyProperty="id">
         INSERT INTO data_type_item (type_key, type_name)
         VALUES (#{param.typeKey}, #{param.typeName})
     </insert>
@@ -28,10 +28,13 @@
         </if>
         default_value = #{param.defaultValue},
         <if test="param.precision != null">
-            precision = #{param.precision},
+            `precision` = #{param.precision},
         </if>
         <if test="param.deleted != null">
             is_deleted = #{param.deleted},
+        </if>
+        <if test="param.description != null">
+            description = #{param.description},
         </if>
         update_time = NOW()
         WHERE id = #{param.id}

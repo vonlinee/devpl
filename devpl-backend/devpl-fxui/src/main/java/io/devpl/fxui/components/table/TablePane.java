@@ -109,7 +109,6 @@ public class TablePane<T> extends BorderPane {
             // 新增
             T record = operation.extractForm(option.getFormObject(), null);
             operation.save(record);
-
             if (tableView.getItems().size() < pagination.getCurrentPageSize()) {
                 // 直接添加即可
                 tableView.getItems().add(record);
@@ -121,16 +120,24 @@ public class TablePane<T> extends BorderPane {
                     Event.fireEvent(refreshMenuItem, new ActionEvent());
                 }
             }
+            Platform.runLater(this::restForm);
         }, event -> {
             T row = operation.extractForm(option.getFormObject(), dialog.getEditingItem());
             operation.update(row);
             // TODO 刷新当前页的数据，或者只替换某行的数据
             // 刷新可以通过 tableView.refresh() 或者重新填充表格数据
             tableView.refresh();
+
+            Platform.runLater(this::restForm);
             // Event.fireEvent(refreshMenuItem, new ActionEvent());
         });
 
         tableView.setContextMenu(contextMenu);
+    }
+
+    void restForm() {
+        operation.resetForm(option.getFormObject());
+        this.dialog.reset();
     }
 
     /**

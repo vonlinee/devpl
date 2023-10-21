@@ -52,6 +52,14 @@ public interface TableOperation<F, R> {
     }
 
     /**
+     * 重置表单数据
+     *
+     * @param formObject 表单对象
+     */
+    default void resetForm(F formObject) {
+    }
+
+    /**
      * 将表单对象转换为表格行对象
      *
      * @param row 行，可能为空

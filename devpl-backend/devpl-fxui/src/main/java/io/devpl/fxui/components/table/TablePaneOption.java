@@ -62,11 +62,11 @@ public class TablePaneOption {
         return modelClass;
     }
 
-    public boolean isPaginationEnabled() {
+    public final boolean isPaginationEnabled() {
         return enablePagination;
     }
 
-    public boolean isToolBarEnabled() {
+    public final boolean isToolBarEnabled() {
         return enableToolBar;
     }
 }

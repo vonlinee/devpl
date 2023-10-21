@@ -4,12 +4,14 @@ import com.dlsc.formsfx.model.structure.Field;
 import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.model.util.BindingMode;
+import com.dlsc.formsfx.model.validators.CustomValidator;
 import io.devpl.fxui.components.table.TableOperation;
 import io.devpl.fxui.components.table.TablePane;
 import io.devpl.fxui.components.table.TablePaneOption;
 import io.devpl.fxui.mapper.DataTypeItemMapper;
 import io.devpl.fxui.mapper.MyBatis;
 import io.devpl.fxui.utils.FXUtils;
+import io.devpl.fxui.utils.Utils;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.BorderPane;
@@ -40,6 +42,17 @@ public class TypeMappingTable extends BorderPane {
                         Field.ofStringType(formObject.typeNameProperty())
                             .placeholder("Unknown")
                             .label("类型名称"),
+                        Field.ofIntegerType(formObject.minLengthProperty())
+                            .placeholder("-1")
+                            .validate(CustomValidator.forPredicate(val -> val >= -1, ""))
+                            .label("最小长度"),
+                        Field.ofIntegerType(formObject.maxLengthProperty())
+                            .placeholder("-1")
+                            .validate(CustomValidator.forPredicate(val -> val >= -1, ""))
+                            .label("最大长度"),
+                        Field.ofStringType(formObject.defaultValueProperty())
+                            .placeholder("-1")
+                            .label("默认值"),
                         Field.ofStringType(formObject.descriptionProperty())
                             .placeholder("")
                             .label("描述信息")
@@ -65,6 +78,10 @@ public class TypeMappingTable extends BorderPane {
                 row.setTypeKey(oldForm.getTypeKey());
                 row.setTypeName(oldForm.getTypeName());
                 row.setTypeGroupId(oldForm.getTypeGroup());
+                row.setMinLength(oldForm.getMinLength());
+                row.setMaxLength(oldForm.getMaxLength());
+                row.setDefaultValue(oldForm.getDefaultValue());
+                row.setDescription(oldForm.getDescription());
                 return row;
             }
 
@@ -74,11 +91,26 @@ public class TypeMappingTable extends BorderPane {
                     formObject.setTypeGroup(row.getTypeGroupId());
                     formObject.setTypeName(row.getTypeName());
                     formObject.setTypeKey(row.getTypeKey());
+                    formObject.setMinLength(Utils.defaults(row.getMinLength(), -1));
+                    formObject.setMaxLength(Utils.defaults(row.getMaxLength(), -1));
+                    formObject.setDefaultValue(row.getDefaultValue());
                 } else {
                     formObject.setTypeGroup("Java");
                     formObject.setTypeName("typeName");
                     formObject.setTypeKey("typeKey");
+                    formObject.setDescription("");
                 }
+            }
+
+            @Override
+            public void resetForm(DataTypeModel formObject) {
+                formObject.setTypeName("");
+                formObject.setDescription("");
+                formObject.setTypeGroup("");
+                formObject.setTypeKey("");
+                formObject.setMinLength(-1);
+                formObject.setMaxLength(-1);
+                formObject.setDefaultValue("");
             }
 
             @Override
@@ -94,12 +126,12 @@ public class TypeMappingTable extends BorderPane {
                 if (record.getId() == null) {
                     return;
                 }
-                int insert = dataTypeItemMapper.updateById(record);
+                dataTypeItemMapper.updateById(record);
             }
 
             @Override
             public void delete(DataTypeItem record) {
-                int i = dataTypeItemMapper.deleteById(record.getId());
+                dataTypeItemMapper.deleteById(record.getId());
             }
         });
         setCenter(table);

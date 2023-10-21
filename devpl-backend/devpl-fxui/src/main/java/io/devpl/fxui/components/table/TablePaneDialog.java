@@ -17,12 +17,11 @@ import javafx.scene.control.Dialog;
  */
 class TablePaneDialog<R, F> extends Dialog<F> {
 
-    F formObject;
     R editingRow;
     Form form;
     int editingIndex;
 
-    public TablePaneDialog(Form form, EventHandler<ActionEvent> saveCallback, EventHandler<ActionEvent> updateCallback) {
+    public TablePaneDialog(Form form,  EventHandler<ActionEvent> saveCallback, EventHandler<ActionEvent> updateCallback) {
         this.form = form;
         FormRenderer formRegion = new FormRenderer(form);
 
@@ -48,10 +47,6 @@ class TablePaneDialog<R, F> extends Dialog<F> {
             event.consume();
         });
 
-        this.setOnHidden(event -> {
-            this.editingIndex = -1;
-            this.editingRow = null;
-        });
         this.getDialogPane().setContent(formRegion);
     }
 
@@ -64,6 +59,11 @@ class TablePaneDialog<R, F> extends Dialog<F> {
             this.setTitle("修改");
         }
         super.show();
+    }
+
+    public final void reset() {
+        this.editingIndex = -1;
+        this.editingRow = null;
     }
 
     public final void setPrefSize(double w, double h) {

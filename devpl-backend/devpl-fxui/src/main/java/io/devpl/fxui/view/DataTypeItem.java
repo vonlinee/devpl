@@ -103,4 +103,10 @@ public class DataTypeItem {
      */
     @TableField(exist = false)
     private String typeGroupName;
+
+    /**
+     * 描述信息
+     */
+    @FXTableViewColumn(title = "描述信息")
+    private String description;
 }

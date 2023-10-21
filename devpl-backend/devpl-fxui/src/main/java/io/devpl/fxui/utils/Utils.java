@@ -164,4 +164,11 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
+
+    public static int defaults(Integer num, int defaultValue) {
+        if (num == null) {
+            return defaultValue;
+        }
+        return num;
+    }
 }
