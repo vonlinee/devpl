@@ -5,7 +5,7 @@ import http from "@/utils/http"
  * @param pageIndex 当前页
  * @param pageSize 每页大小
  */
-export const apiListDataTypes = (pageIndex: Number, pageSize: Number) => {
+export const apiListDataTypes = (pageIndex: Number, pageSize: Number, param: any) => {
   return http.get("/api/datatype/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
