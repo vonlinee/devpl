@@ -26,7 +26,7 @@
       <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center"></el-table-column>
       <el-table-column prop="typeName" label="类型名称" header-align="center" align="center"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="description" label="描述信息" header-align="center" align="center">
+      <el-table-column prop="remark" label="备注" header-align="center" align="center">
       </el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">

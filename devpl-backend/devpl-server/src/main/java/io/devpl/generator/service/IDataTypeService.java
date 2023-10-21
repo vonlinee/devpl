@@ -13,6 +13,10 @@ public interface IDataTypeService {
 
     boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems);
 
+    boolean save(DataTypeItem dataTypeItem);
+
+    boolean update(DataTypeItem dataTypeItem);
+
     boolean saveDataTypeGroup(DataTypeGroup typeGroup);
 
     List<DataTypeGroupVO> listDataTypeGroups();

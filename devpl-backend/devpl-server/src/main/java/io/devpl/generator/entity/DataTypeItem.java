@@ -98,4 +98,10 @@ public class DataTypeItem {
      */
     @TableField(exist = false)
     private String typeGroupName;
+
+    /**
+     * 备注信息
+     */
+    @TableField(value = "remark")
+    private String remark;
 }

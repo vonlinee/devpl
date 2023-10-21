@@ -4175,3 +4175,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 ALTER TABLE devpl.data_type_group MODIFY COLUMN group_id varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '分组ID';
+ALTER TABLE devpl.data_type_group ADD create_time datetime NULL COMMENT '创建时间';
+ALTER TABLE devpl.data_type_group ADD update_time datetime NULL COMMENT '更新时间';
+ALTER TABLE devpl.data_type_group ADD is_deleted tinyint DEFAULT 0 COMMENT '是否逻辑删除';
+ALTER TABLE devpl.data_type_group ADD internal tinyint DEFAULT 0 COMMENT '是否内置类型分组，内置类型分组不可更改';

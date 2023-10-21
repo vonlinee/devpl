@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DataTypeGroup {
+public class DataTypeGroup extends DBEntityBase {
 
     /**
      * 主键ID
@@ -27,4 +27,10 @@ public class DataTypeGroup {
      */
     @TableField(value = "group_name")
     private String groupName;
+
+    /**
+     * 是否内置类型分组，内置类型分组不可更改
+     */
+    @TableField(value = "internal")
+    private Boolean internal;
 }

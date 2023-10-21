@@ -110,7 +110,7 @@ const getDataSource = (id: number) => {
 };
 
 function onDbNameChange(val: string) {
-  console.log(val);
+  
 }
 
 let flag = ref(false);

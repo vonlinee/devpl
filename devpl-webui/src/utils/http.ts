@@ -155,8 +155,6 @@ const http = {
             headers,
         };
         if (params) config.data = params;
-        console.log(params);
-        
         return service(config);
     },
     formGet(url: string, params?: any, headers = {"Content-Type": "multipart/form-data"}) {

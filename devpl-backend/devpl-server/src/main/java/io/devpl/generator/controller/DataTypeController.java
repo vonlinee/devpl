@@ -33,6 +33,16 @@ public class DataTypeController {
     }
 
     /**
+     * 更新数据类型信息
+     *
+     * @return 数据类型信息
+     */
+    @PostMapping("/update")
+    public Result<Boolean> updateDataType(@RequestBody DataTypeItem param) {
+        return Result.ok(dataTypeService.update(param));
+    }
+
+    /**
      * 查询数据类型信息
      *
      * @return 数据类型信息

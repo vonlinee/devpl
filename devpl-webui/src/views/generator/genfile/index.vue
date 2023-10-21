@@ -29,7 +29,7 @@ function showFileTypeManagerDialog() {
 }
 
 function testButton() {
-    console.log(tableData)
+    
 }
 
 </script>
