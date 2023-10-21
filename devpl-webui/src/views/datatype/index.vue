@@ -27,12 +27,6 @@
       <el-table-column prop="packageName" label="属性包名" header-align="center" align="center"></el-table-column>
       <el-table-column prop="jsonType" label="JSON类型" header-align="center" align="center"></el-table-column>
       <el-table-column prop="mysqlSqlType" label="SQL类型" header-align="center" align="center">
-        <template #header="scope">
-          <el-text>SQL类型</el-text>
-          <el-select style="margin-left: 4px; width: 150px">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
@@ -49,21 +43,6 @@
 
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
-
-    <vxe-grid v-bind="gridOptions">
-      <template #name_edit="{ row }">
-        <vxe-input v-model="row.name"></vxe-input>
-      </template>
-      <template #nickname_edit="{ row }">
-        <vxe-input v-model="row.nickname"></vxe-input>
-      </template>
-      <template #role_edit="{ row }">
-        <vxe-input v-model="row.role"></vxe-input>
-      </template>
-      <template #address_edit="{ row }">
-        <vxe-input v-model="row.address"></vxe-input>
-      </template>
-    </vxe-grid>
 
   </el-card>
 </template>
@@ -87,29 +66,6 @@ const state: IHooksOptions = reactive({
     jsonType: ""
   }
 });
-
-/**
- * 数据类型VO
- */
-interface RowVO {
-  id: number;
-  typeKey: string;
-}
-
-let gridOptions = useVxeGridTable({
-  columns: [{ type: "checkbox", width: 50 },
-    { type: "seq", width: 60 },
-    {
-      field: "typeGroupId",
-      title: "类型组",
-      editRender: { autofocus: ".vxe-input--inner" },
-      slots: { edit: "name_edit" }
-    },
-    { field: "typeKey", title: "类型Key", slots: { edit: "nickname_edit" } },
-    { field: "typeName", title: "类型名称", editRender: {}, slots: { edit: "role_edit" } },
-    { field: "valueType", title: "值类型", showOverflow: true, editRender: {}, slots: { edit: "address_edit" } }],
-  queryPage: (currentPage, pageSize) => apiListDataTypes(currentPage, pageSize)
-} as VDTOptions);
 
 const addOrUpdateRef = ref();
 const addOrUpdateHandle = (id?: number) => {

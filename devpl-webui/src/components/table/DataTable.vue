@@ -12,11 +12,11 @@
         </el-button>
       </template>
     </div>
-
+    <!-- 表格 el-table -->
     <el-table v-loading="options.loading" :element-loading-text="options.elementLoadingText"
       :element-loading-spinner="options.elementLoadingSpinner" :element-loading-svg="options.elementLoadingSvg"
       :element-loading-background="options.elementLoadingBackground" ref="tableRef" class="el-table" :data="tableDataRef"
-      :height="options.height == undefined ? 616 : options.height" :max-height="`${options.maxHeight}px`"
+      :height="options.height == undefined ? 528 : options.height" :max-height="`${options.maxHeight}px`"
       :stripe="options.stripe == undefined ? true : options.stripe"
       :border="options.border == undefined ? true : options.border"
       :size="options.size == undefined ? 'default' : options.size" :fit="options.fit == undefined ? false : options.fit"
@@ -57,8 +57,8 @@
       <el-table-column label="操作" fixed="right" width="140px" :sortable="false" :resizable="false" header-align="center"
         align="center">
         <template #default="scope">
-          <el-button type="primary" @click="handleEditOperation(scope.$index, scope.row)" :icon="Edit" />
-          <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" :icon="Delete" />
+          <el-button type="default" @click="handleEditOperation(scope.$index, scope.row)" :icon="Edit" />
+          <el-button type="default" @click="handleDelete(scope.$index, scope.row)" :icon="Delete" />
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +78,17 @@
     <el-pagination background layout="prev, pager, next, jumper, sizes, total" v-model:current-page="currentPageIndex"
       v-model:page-size="currentPageSize" :page-sizes="pageSizeList" :total="total" @size-change="handleSizeChange"
       @current-change="handleCurrentChange" />
+
+
+    <!-- 右键菜单 -->
+    <!-- <div ref="dataTableContextMenuBoxRef" class="data-table-menu-box">
+      <ul class="data-table-menu-list">
+        <li v-for="(item, index) in contextMenus" :key="index"
+          @click.stop="onContextMenuItemClicked($event, index, item.onClick)">
+          {{ item.label }}
+        </li>
+      </ul>
+    </div> -->
   </div>
 </template>
 
@@ -216,6 +227,33 @@ const tableDataRef = ref<any[]>([]);
 if (config.tableData) {
   tableDataRef.value = config.tableData;
 }
+
+// const dataTableContextMenuBoxRef = ref()
+// // 右键菜单
+// const contextMenus = [
+//   {
+//     label: "新增",
+//     onClick: (event: MouseEvent, index: number) => {
+//       console.log(event, index);
+//     }
+//   }
+// ]
+
+// /**
+//  * @param event PointerEvent
+//  */
+// type MenuItemClickHandler = (event: MouseEvent, index: number) => void
+
+// /**
+//  * 右键菜单点击
+//  * @param event 
+//  * @param index 
+//  * @param onClick 
+//  */
+// const onContextMenuItemClicked = (event: PointerEvent, index: number, onClick: MenuItemClickHandler) => {
+//   onClick(event, index)
+// }
+
 
 /**
  * 展示消息
@@ -390,12 +428,29 @@ const rowClick = (row: any, cell: any, event: any) => {
 };
 
 // 当某一行被鼠标右键点击时会触发该事件
-const rowContextmenu = (row: any, cell: any, event: any) => {
+const rowContextmenu = (row: RowDataModel, cell: any, event: PointerEvent) => {
   emit("row-contextmenu", row, cell, event);
+
+  // 阻止元素发生默认的行为
+  // event.preventDefault();
+  // const menuItem: HTMLDivElement = dataTableContextMenuBoxRef.value
+  // // 根据事件对象中鼠标点击的位置，进行定位
+  // // 定位元素的左部位置
+  // menuItem.style.left = event.clientX + "px";
+  // // 定位元素的上部位置
+  // menuItem.style.top = event.clientY + "px";
+  // // 改变自定义菜单的隐藏与显示
+  // menuItem.style.display = "block";
+  // menuItem.style.zIndex = '1000'
 };
 
-// 当某一行被双击时会触发该事件
-const rowDblclick = (row: any, cell: any, event: any) => {
+/**
+ * 当某一行被双击时会触发该事件
+ * @param row 
+ * @param cell 
+ * @param event 
+ */
+const rowDblclick = (row: RowDataModel, cell: any, event: any) => {
   emit("row-dblclick", row, cell, event);
 };
 
@@ -420,7 +475,7 @@ const filterChange = (filters: any) => {
 };
 
 // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性
-const currentChange = (currentRow: any, oldCurrentRow: any) => {
+const currentChange = (currentRow: RowDataModel, oldCurrentRow: any) => {
   emit("current-change", currentRow, oldCurrentRow);
 };
 
@@ -431,18 +486,20 @@ const headerDragend = (newWidth: any, oldWidth: any, column: any, event: any) =>
 
 // 当用户对某一行展开或者关闭的时候会触发该事件（展开行时，回调的第二个参数为 expandedRows；
 // 树形表格时第二参数为 expanded）
-const expandChange = (row: any, expanded: any) => {
+const expandChange = (row: RowDataModel, expanded: any) => {
   emit("expand-change", row, expanded);
 };
 
-
-// 用于多选表格，清空用户的选择
+/**
+ * 用于多选表格，清空用户的选择
+ */
 const clearSelection = () => {
   tableRef.value.clearSelection();
 };
+
 // 用于多选表格，切换某一行的选中状态， 如果使用了第二个参数，
 // 则是设置这一行选中与否（selected 为 true 则选中）
-const toggleRowSelection = (row: any, selected: any) => {
+const toggleRowSelection = (row: RowDataModel, selected: any) => {
   tableRef.value.toggleRowSelection(row, selected);
 };
 // 用于多选表格，切换全选和全不选
@@ -451,12 +508,12 @@ const toggleAllSelection = () => {
 };
 // 用于可扩展的表格或树表格，如果某行被扩展，则切换。
 // 使用第二个参数，您可以直接设置该行应该被扩展或折叠。
-const toggleRowExpansion = (row: any, expanded: any) => {
+const toggleRowExpansion = (row: RowDataModel, expanded: any) => {
   tableRef.value.toggleRowExpansion(row, expanded);
 };
 // 用在单选表中，设置某一行被选中。
 // 如果不带任何参数调用，它将清除选择。
-const setCurrentRow = (row: any) => {
+const setCurrentRow = (row: RowDataModel) => {
   tableRef.value.setCurrentRow(row);
 };
 // 清除排序，将数据恢复到原来的顺序
@@ -478,7 +535,7 @@ const sort = (prop: string, order: string) => {
  * @param index
  * @param row
  */
-const handleEditOperation = (index: number, row: any) => {
+const handleEditOperation = (index: number, row: RowDataModel) => {
   if (row) {
     modalTitle.value = "修改";
   }
@@ -490,7 +547,7 @@ const handleEditOperation = (index: number, row: any) => {
 };
 
 // 删除操作
-const handleDelete = (index: number, row: any) => {
+const handleDelete = (index: number, row: RowDataModel) => {
   ElMessageBox.confirm(
     "是否删除第" + (index + 1) + "行?",
     "确认删除",
@@ -527,8 +584,39 @@ defineExpose({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-pagination {
   text-align: right;
 }
+
+// .data-table-menu-box {
+//   display: none;
+//   position: absolute;
+
+//   .data-table-menu-list {
+//     height: auto;
+//     width: auto;
+//     font-size: 14px;
+//     text-align: left;
+//     border-radius: 3px;
+//     border: none;
+//     background-color: #c4c4c4;
+//     color: #fff;
+//     list-style: none;
+//     padding: 0 10px;
+
+//     li {
+//       width: 140px;
+//       height: 35px;
+//       line-height: 35px;
+//       cursor: pointer;
+//       border-bottom: 1px solid rgba(255, 255, 255, 0.47);
+
+//       &:hover {
+//         // background-color: rgb(26, 117, 158);
+//         color: rgb(54, 138, 175);
+//       }
+//     }
+//   }
+// }
 </style>

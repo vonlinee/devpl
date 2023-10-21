@@ -37,10 +37,7 @@ const config: DataTableConfig = {
   tableData: [],
   options: reactive<DataTableOptions>({
     stripe: true,
-    border: true,
     fit: true,
-    highlightCurrentRow: true,
-    size: "large",
     loading: false
   }),
   api: {
