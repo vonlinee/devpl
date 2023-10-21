@@ -6,6 +6,7 @@ declare module 'axios' {
         code: number
         msg: string
         data: D
+        list: any[] // 分页结果返回
         stackTrace: string
     }
 

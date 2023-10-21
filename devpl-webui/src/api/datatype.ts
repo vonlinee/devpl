@@ -11,3 +11,22 @@ export const apiListDataTypes = (pageIndex: Number, pageSize: Number) => {
     pageSize: pageSize
   });
 };
+
+/**
+ * @returns 
+ */
+export const apiListAllDataTypeGroups = () => {
+  return http.get("/api/datatype/groups");
+};
+
+/**
+ * @returns 
+ */
+export const apiSaveDataTypeGroup = (group: any) => {
+  console.log(group);
+  
+  return http.postJson("/api/datatype/group/add", {
+    groupId: group.typeGroupId,
+    groupName: group.typeGroupName
+  });
+};

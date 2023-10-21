@@ -55,7 +55,6 @@ public class CrudServiceImpl implements CrudService {
             log.error("saveOrUpdate", exception);
         }
         return false;
-
     }
 
     @Override

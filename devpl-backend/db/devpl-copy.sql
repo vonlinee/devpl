@@ -4172,3 +4172,6 @@ CREATE TABLE `type_mapping`  (
 -- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+ALTER TABLE devpl.data_type_group MODIFY COLUMN group_id varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '分组ID';
