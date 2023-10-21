@@ -22,16 +22,16 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
               @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="typeGroupId" label="类型组" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="typeGroupId" label="类型分组ID" header-align="center" align="center"></el-table-column>
       <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center"></el-table-column>
       <el-table-column prop="typeName" label="类型名称" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="minLength" label="最小长度" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center">
+      <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="description" label="描述信息" header-align="center" align="center">
       </el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
-          <el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+          <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">编辑</el-button>
+          <el-button type="primary" link @click="deleteBatchHandle(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref} from "vue";
 import { IHooksOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
@@ -64,12 +64,12 @@ const state: IHooksOptions = reactive({
     packageName: "",
     jsonType: ""
   },
-  queryPage: apiListDataTypes
+  query: apiListDataTypes
 } as IHooksOptions);
 
 const addOrUpdateRef = ref();
-const addOrUpdateHandle = (id?: number) => {
-  addOrUpdateRef.value.init(id);
+const addOrUpdateHandle = (row?: any) => {
+  addOrUpdateRef.value.init(row);
 };
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);

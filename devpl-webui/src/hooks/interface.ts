@@ -1,3 +1,11 @@
+
+// 查询
+export declare type QueryFunction = (page: number, limit: number, querParam: any) => Promise<any>
+// 删除
+export declare type DeleteFunction = (row: any) => Promise<any>
+// 更新
+export declare type UpdateFunction = (row: any) => Promise<any>
+
 /**
  * 增删改查配置项
  */
@@ -34,6 +42,7 @@ export interface IHooksOptions {
     dataListLoading?: boolean
     // 数据列表，多选项
     dataListSelections?: any[]
-    // 分页查询
-    queryPage?: (page: number, limit: number, queryForm: any) => Promise<any>
+    query?: QueryFunction
+    updateRpw?: UpdateFunction
+    deleteRow?: DeleteFunction
 }

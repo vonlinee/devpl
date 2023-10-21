@@ -32,7 +32,7 @@ export const menuRoutes: RouteRecordRaw[] = [
                 name: 'FieldType',
                 component: () => import('../views/datatype/index.vue'),
                 meta: {
-                    title: '字段类型映射',
+                    title: '类型系统',
                     icon: 'icon-menu'
                 }
             },

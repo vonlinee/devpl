@@ -141,6 +141,13 @@ const http = {
         }
         return service(config);
     },
+    /**
+     * POST请求JSON格式
+     * @param url 
+     * @param params 
+     * @param headers 
+     * @returns 
+     */
     postJson(url: string, params?: any, headers = {"Content-Type": "application/json"}) {
         const config: config = {
             method: "post",
@@ -148,6 +155,8 @@ const http = {
             headers,
         };
         if (params) config.data = params;
+        console.log(params);
+        
         return service(config);
     },
     formGet(url: string, params?: any, headers = {"Content-Type": "multipart/form-data"}) {

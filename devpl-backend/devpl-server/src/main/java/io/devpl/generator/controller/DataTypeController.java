@@ -4,6 +4,7 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
+import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
 import io.devpl.generator.service.IDataTypeService;
@@ -26,7 +27,7 @@ public class DataTypeController {
      *
      * @return 数据类型信息
      */
-    @PostMapping("/add")
+    @PostMapping("/saveOrUpdateBatch")
     public Result<Boolean> addDataTypes(@RequestBody DataTypeAddParam param) {
         return Result.ok(dataTypeService.saveDataTypes(param.getDataTypeItems()));
     }
@@ -39,6 +40,16 @@ public class DataTypeController {
     @GetMapping("/page")
     public Result<PageResult<DataTypeItem>> listDataTypes(PageQuery param) {
         return Result.ok(BusinessUtils.page2List(dataTypeService.selectPage(param)));
+    }
+
+    /**
+     * 保存数据类型分组
+     *
+     * @return 类型分组信息
+     */
+    @GetMapping("/groups")
+    public PageResult<DataTypeGroupVO> addDataTypeGroup() {
+        return PageResult.ok(dataTypeService.listDataTypeGroups());
     }
 
     /**
