@@ -34,4 +34,6 @@ export interface IHooksOptions {
     dataListLoading?: boolean
     // 数据列表，多选项
     dataListSelections?: any[]
+    // 分页查询
+    queryPage?: (page: number, limit: number, queryForm: any) => Promise<any>
 }

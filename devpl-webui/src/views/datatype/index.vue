@@ -22,11 +22,11 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
               @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="columnType" label="字段类型" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="attrType" label="属性类型" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="packageName" label="属性包名" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="jsonType" label="JSON类型" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="mysqlSqlType" label="SQL类型" header-align="center" align="center">
+      <el-table-column prop="typeGroupId" label="类型组" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="typeName" label="类型名称" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="minLength" label="最小长度" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center">
       </el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
@@ -53,7 +53,6 @@ import { IHooksOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
 import { ElButton } from "element-plus";
-import { useVxeGridTable, VDTOptions } from "@/hooks/vxedatatable";
 import { apiListDataTypes } from "@/api/datatype";
 
 const state: IHooksOptions = reactive({
@@ -64,8 +63,9 @@ const state: IHooksOptions = reactive({
     attrType: "",
     packageName: "",
     jsonType: ""
-  }
-});
+  },
+  queryPage: apiListDataTypes
+} as IHooksOptions);
 
 const addOrUpdateRef = ref();
 const addOrUpdateHandle = (id?: number) => {

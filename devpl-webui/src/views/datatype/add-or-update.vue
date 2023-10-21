@@ -1,6 +1,9 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
+			<el-form-item label="类型组" prop="typeGroupId">
+				<el-input v-model="dataForm.typeGroupId" placeholder="类型组"></el-input>
+			</el-form-item>
 			<el-form-item label="字段类型" prop="columnType">
 				<el-input v-model="dataForm.columnType" placeholder="字段类型"></el-input>
 			</el-form-item>
@@ -20,7 +23,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
+import { ElButton, ElDialog, ElMessage } from 'element-plus/es'
 import { useFieldTypeApi, useFieldTypeSubmitApi } from '@/api/fieldType'
 
 const emit = defineEmits(['refreshDataList'])
@@ -30,6 +33,7 @@ const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
+	typeGroupId: '',
 	columnType: '',
 	attrType: '',
 	packageName: '',
