@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { apiListAllDataTypeMappings, apiListAllMappableDataTypes } from "@/api/datatype";
+import { apiAddDataTypeMapping, apiListAllDataTypeMappings, apiListAllMappableDataTypes } from "@/api/datatype";
 import { onMounted, reactive, ref } from "vue";
 import { VxeTableDefines } from "vxe-table/types/table";
 
@@ -113,8 +113,19 @@ const tableRef = ref()
 const getSelectEvent = () => {
   const $table = tableRef.value
   if ($table) {
-    const selectRecords = $table.getCheckboxRecords()
-    console.log(selectRecords);
+    const selectRecords: any[] = $table.getCheckboxRecords()
+
+    const list = []
+    for (let index = 0; index < selectRecords.length; index++) {
+      const element = selectRecords[index];
+      list.push({
+        typeId: element.typeId,
+        anotherTypeId: undefined
+      })
+    }
+    apiAddDataTypeMapping(list).then((res) => {
+      console.log(res);
+    })
   }
 }
 

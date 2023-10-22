@@ -93,7 +93,7 @@ public class DataTypeController {
      */
     @PostMapping("/mapping")
     public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingParam param) {
-        return Result.ok(dataTypeService.addDataTypeMapping(param.getTypeId(), param.getAnotherTypeId()));
+        return Result.ok(dataTypeService.addDataTypeMapping(param.getMappings()));
     }
 
     /**

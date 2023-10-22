@@ -6,6 +6,7 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.dao.DataTypeGroupMapper;
 import io.devpl.generator.dao.DataTypeItemMapper;
 import io.devpl.generator.dao.DataTypeMappingMapper;
+import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.domain.vo.DataTypeMappingListVO;
 import io.devpl.generator.domain.vo.DataTypeMappingVO;
@@ -94,6 +95,13 @@ public class DataTypeServiceImpl implements IDataTypeService {
     public boolean addDataTypeMapping(Long typeId, Long anotherTypeId) {
         DataTypeMapping dataTypeMapping = new DataTypeMapping(typeId, anotherTypeId);
         return SqlHelper.retBool(dataTypeMappingMapper.insert(dataTypeMapping));
+    }
+
+    @Override
+    public boolean addDataTypeMapping(List<DataTypeMappingParam> params) {
+        return crudService.saveBatch(params.stream()
+            .map(i -> new DataTypeMapping(i.getTypeId(), i.getAnotherTypeId()))
+            .toList());
     }
 
     /**
