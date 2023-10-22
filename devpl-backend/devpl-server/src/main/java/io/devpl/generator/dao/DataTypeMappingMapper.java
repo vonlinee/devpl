@@ -3,6 +3,7 @@ package io.devpl.generator.dao;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.devpl.generator.common.mvc.EntityMapper;
 import io.devpl.generator.domain.vo.DataTypeMappingListVO;
+import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeMapping;
 import io.devpl.sdk.validation.Assert;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +26,6 @@ public interface DataTypeMappingMapper extends EntityMapper<DataTypeMapping> {
         qw.in(DataTypeMapping::getId, ids);
         return selectList(qw);
     }
+
+    List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
 }

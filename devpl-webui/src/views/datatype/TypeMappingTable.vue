@@ -2,247 +2,97 @@
   类型映射配置表
  -->
 <template>
-  <vxe-modal v-model="modalShowRef" width="70%" title="类型映射配置表">
-    <vxe-grid v-bind="gridOptions">
-      <template #name_edit="{ row }">
-        <vxe-input v-model="row.name"></vxe-input>
-      </template>
-      <template #nickname_edit="{ row }">
-        <vxe-input v-model="row.nickname"></vxe-input>
-      </template>
-      <template #role_edit="{ row }">
-        <vxe-input v-model="row.role"></vxe-input>
-      </template>
-      <template #address_edit="{ row }">
-        <vxe-input v-model="row.address"></vxe-input>
-      </template>
-    </vxe-grid>
+  <vxe-modal v-model="modalShowRef" title="类型映射表" width="60%">
+
+    <vxe-form :data="formData" >
+      <vxe-form-item title="类型组" field="name" :item-render="{}" span="12">
+        <template #default="{ data }">
+          <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
+        </template>
+      </vxe-form-item>
+      <vxe-form-item title="类型ID" field="name" :item-render="{}" span="12">
+        <template #default="{ data }">
+          <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
+        </template>
+      </vxe-form-item>
+    </vxe-form>
+
+    <vxe-table :border="true" :data="tableData" :edit-config="{trigger: 'click', mode: 'cell'}">
+      <vxe-column title="主类型" width="10%" align="center" field="typeName"></vxe-column>
+      <vxe-column field="name" title="映射类型" align="center" :edit-render="{}">
+        <template #default="{ row }">
+          <span>{{ row.typeId }}</span>
+        </template>
+        <template #edit="{ row }">
+          <vxe-select v-model="row.name" placeholder="配置式自定义模板" :options="opts3" multiple clearable transfer>
+            <template #opt3="{ option }">
+              <span style="color: red">
+                <i class="vxe-icon-question-circle-fill"></i>
+                <span>{{ option.label }}</span>
+              </span>
+            </template>
+            <template #opt4="{ option }">
+              <span style="color: green">
+                <i class="vxe-icon-question-circle-fill"></i>
+                <span>{{ option.label }}</span>
+              </span>
+            </template>
+          </vxe-select>
+        </template>
+      </vxe-column>
+    </vxe-table>
   </vxe-modal>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { VxeGridProps } from "vxe-table";
 
 const modalShowRef = ref();
 
-interface RowVO {
-  id: number;
-  name: string;
-  nickname: string;
-  role: string;
-  sex: string;
-  age: number;
-  address: string;
+interface FormDataVO {
+  name: string
+  nickname: string
+  sex: string
+  age: number
+  status: string
+  date: string
+  active: boolean
+  flagList: string[]
 }
+
+const formData = reactive<FormDataVO>({
+  name: '',
+  nickname: '',
+  sex: '',
+  age: 30,
+  status: '1',
+  date: '',
+  active: false,
+  flagList: []
+})
+
+const opts3 = ref([
+  { label: '1111', value: '1' },
+  { label: '2222', value: '2' }
+])
+
+interface RowVO {
+  typeId: number
+  typeName: string,
+  anotherTypeId: string | undefined,
+}
+
+const tableData = ref<RowVO[]>([
+  {
+    typeId: 1,
+    typeName: "类型1",
+    anotherTypeId: undefined
+  }
+])
 
 defineExpose({
   show: () => modalShowRef.value = true
 });
 
-// 模拟后台接口
-const fetchApi = (currentPage: number, pageSize: number) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const list = [
-        {
-          id: 10001,
-          name: "Test1",
-          nickname: "T1",
-          role: "Develop",
-          sex: "Man",
-          age: 28,
-          address: "Shenzhen"
-        },
-        {
-          id: 10002,
-          name: "Test2",
-          nickname: "T2",
-          role: "Test",
-          sex: "Women",
-          age: 22,
-          address: "Guangzhou"
-        },
-        {
-          id: 10003,
-          name: "Test3",
-          nickname: "T3",
-          role: "PM",
-          sex: "Man",
-          age: 32,
-          address: "Shanghai"
-        },
-        {
-          id: 10004,
-          name: "Test4",
-          nickname: "T4",
-          role: "Designer",
-          sex: "Women",
-          age: 23,
-          address: "Shenzhen"
-        },
-        {
-          id: 10005,
-          name: "Test5",
-          nickname: "T5",
-          role: "Develop",
-          sex: "Women",
-          age: 30,
-          address: "Shanghai"
-        },
-        {
-          id: 10006,
-          name: "Test6",
-          nickname: "T6",
-          role: "Designer",
-          sex: "Women",
-          age: 21,
-          address: "Shenzhen"
-        },
-        {
-          id: 10007,
-          name: "Test7",
-          nickname: "T7",
-          role: "Test",
-          sex: "Man",
-          age: 29,
-          address: "test abc"
-        },
-        {
-          id: 10008,
-          name: "Test8",
-          nickname: "T8",
-          role: "Develop",
-          sex: "Man",
-          age: 35,
-          address: "Shenzhen"
-        }
-      ];
-      resolve({
-        page: {
-          total: list.length
-        },
-        result: list.slice(
-          (currentPage - 1) * pageSize,
-          currentPage * pageSize
-        )
-      });
-    }, 100);
-  });
-};
 
-// 模拟后台接口
-const delApi = (removeRecords: RowVO[]) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        result: [],
-        msg: `delete，${removeRecords.length}条`
-      });
-    }, 100);
-  });
-};
-
-// 模拟后台接口
-const saveApi = (insertRecords: RowVO[]) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        result: [],
-        msg: `succcess, ${insertRecords.length}条`
-      });
-    }, 100);
-  });
-};
-
-const gridOptions = reactive<VxeGridProps<RowVO>>({
-  border: true,
-  keepSource: true,
-  height: 500,
-  columnConfig: {
-    resizable: true
-  },
-  pagerConfig: {
-    enabled: true,
-    perfect: true,
-    pageSize: 15
-  },
-  editConfig: {
-    trigger: "click",
-    mode: "cell",
-    showStatus: true
-  },
-  toolbarConfig: {
-    buttons: [
-      {
-        code: "insert_actived",
-        name: "新增",
-        status: "perfect",
-        icon: "vxe-icon-add"
-      },
-      {
-        code: "save",
-        name: "保存",
-        status: "perfect",
-        icon: "vxe-icon-save"
-      }
-    ],
-    perfect: true,
-    refresh: {
-      icon: "vxe-icon-refresh",
-      iconLoading: "vxe-icon-refresh roll"
-    },
-    custom: {
-      icon: "vxe-icon-menu"
-    }
-  },
-  proxyConfig: {
-    props: {
-      result: "result",
-      total: "page.total"
-    },
-    ajax: {
-      // 接收 Promise
-      query: ({ page }) => {
-        return fetchApi(page.currentPage, page.pageSize);
-      },
-      // body 对象： { removeRecords }
-      delete: ({ body }) => {
-        return delApi(body.removeRecords);
-      },
-      // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-      save: ({ body }) => {
-        return saveApi(body.insertRecords);
-      }
-    }
-  },
-  columns: [
-    { type: "checkbox", width: 50 },
-    {
-      field: "name",
-      title: "Name",
-      editRender: { autofocus: ".vxe-input--inner" },
-      slots: { edit: "name_edit" }
-    },
-    {
-      field: "nickname",
-      title: "Nickname",
-      editRender: {},
-      slots: { edit: "nickname_edit" }
-    },
-    {
-      field: "role",
-      title: "Role",
-      editRender: {},
-      slots: { edit: "role_edit" }
-    },
-    {
-      field: "address",
-      title: "Address",
-      showOverflow: true,
-      editRender: {},
-      slots: { edit: "address_edit" }
-    }
-  ]
-});
 </script>

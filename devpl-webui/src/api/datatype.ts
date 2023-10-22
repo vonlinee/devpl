@@ -45,3 +45,13 @@ export const apiSaveDataTypeItems = (dataTypeItem: any[]) => {
     dataTypeItems: dataTypeItem,
   })
 }
+
+/**
+ * 添加数据类型映射关系
+ * @returns
+ */
+export const apiAddDataTypeMapping = (dataTypeItem: any[]) => {
+  return http.postForm("/api/datatype/mapping", {
+    dataTypeItems: dataTypeItem,
+  })
+}

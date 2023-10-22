@@ -7,6 +7,8 @@ import io.devpl.generator.dao.DataTypeGroupMapper;
 import io.devpl.generator.dao.DataTypeItemMapper;
 import io.devpl.generator.dao.DataTypeMappingMapper;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
+import io.devpl.generator.domain.vo.DataTypeMappingListVO;
+import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
 import io.devpl.generator.entity.DataTypeMapping;
@@ -97,5 +99,21 @@ public class DataTypeServiceImpl implements IDataTypeService {
     public void addDataTypeMapping(MultiValueMap<Long, Long> dataTypeIdMapping) {
         // TODO 待完成
         List<DataTypeMapping> existedTypeMappings = dataTypeMappingMapper.selectListByIds(dataTypeIdMapping.keySet());
+    }
+
+    @Override
+    public List<DataTypeMappingListVO> listDataTypeMappings(Long typeId) {
+        return dataTypeMappingMapper.listDataTypeMappingItems(typeId);
+    }
+
+    /**
+     * 查询某个类型可映射的数据类型
+     *
+     * @param typeId 类型ID
+     * @return 可映射的数据类型列表
+     */
+    @Override
+    public List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId) {
+        return dataTypeMappingMapper.listAllMappableDataTypes(typeId);
     }
 }

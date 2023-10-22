@@ -167,8 +167,9 @@ DROP TABLE IF EXISTS `data_type_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_mapping` (
-  `id` int(11) NOT NULL COMMENT '主键ID',
-  `type_key` varchar(100) DEFAULT NULL COMMENT 'SQL数据类型',
+  `id` bigint(20) NOT NULL COMMENT '主键ID',
+  `type_id` bigint(20) DEFAULT NULL COMMENT '主数据类型ID',
+  `another_type_id` bigint(20) DEFAULT NULL COMMENT '映射数据类型ID',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型映射关系表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -195,7 +196,7 @@ CREATE TABLE `database_backup_history` (
   `backup_time` datetime DEFAULT NULL COMMENT '备份时间',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,7 +205,7 @@ CREATE TABLE `database_backup_history` (
 
 LOCK TABLES `database_backup_history` WRITE;
 /*!40000 ALTER TABLE `database_backup_history` DISABLE KEYS */;
-INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06');
+INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06'),(4,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql','2023-10-22 11:55:34','2023-10-22 11:55:34');
 /*!40000 ALTER TABLE `database_backup_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -837,4 +838,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-22 10:39:06
+-- Dump completed on 2023-10-22 11:55:34

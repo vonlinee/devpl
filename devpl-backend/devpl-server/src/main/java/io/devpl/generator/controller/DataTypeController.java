@@ -6,11 +6,12 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
 import io.devpl.generator.domain.param.DataTypeMappingAddParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
+import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
 import io.devpl.generator.service.IDataTypeService;
 import io.devpl.generator.utils.BusinessUtils;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/datatype")
-@AllArgsConstructor
 public class DataTypeController {
 
+    @Resource
     IDataTypeService dataTypeService;
 
     /**
@@ -81,5 +82,16 @@ public class DataTypeController {
     @PostMapping("/mapping")
     public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingAddParam param) {
         return Result.ok(dataTypeService.addDataTypeMapping(param.getTypeId(), param.getAnotherTypeId()));
+    }
+
+    /**
+     * 查询某个类型可映射的数据类型
+     *
+     * @param typeId 类型ID
+     * @return 数据类型映射关系列表
+     */
+    @GetMapping("/mappable")
+    public PageResult<DataTypeMappingVO> listAllMappableDataTypes(Long typeId) {
+        return PageResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
     }
 }
