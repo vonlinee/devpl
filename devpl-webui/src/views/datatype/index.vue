@@ -34,7 +34,7 @@
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
           <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">编辑</el-button>
-          <el-button type="primary" link @click="deleteBatchHandle(scope.row)">删除</el-button>
+          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +64,7 @@ const typeMappingTableRef = ref()
 
 const state: IHooksOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
-  deleteUrl: "/gen/fieldtype",
+  deleteUrl: "/api/datatype/delete",
   queryForm: {
     columnType: "",
     attrType: "",

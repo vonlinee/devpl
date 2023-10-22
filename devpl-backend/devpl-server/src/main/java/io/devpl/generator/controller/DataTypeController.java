@@ -4,14 +4,16 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
-import io.devpl.generator.domain.param.DataTypeMappingAddParam;
+import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
+import io.devpl.generator.domain.vo.DataTypeMappingListVO;
 import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
 import io.devpl.generator.service.IDataTypeService;
 import io.devpl.generator.utils.BusinessUtils;
 import jakarta.annotation.Resource;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,6 +44,16 @@ public class DataTypeController {
     @PostMapping("/update")
     public Result<Boolean> updateDataType(@RequestBody DataTypeItem param) {
         return Result.ok(dataTypeService.update(param));
+    }
+
+    /**
+     * 更新数据类型信息
+     *
+     * @return 数据类型信息
+     */
+    @DeleteMapping("/delete")
+    public Result<Boolean> deleteDataType(Long typeId) {
+        return Result.ok(dataTypeService.removeById(typeId));
     }
 
     /**
@@ -80,18 +92,29 @@ public class DataTypeController {
      * @return 类型分组信息
      */
     @PostMapping("/mapping")
-    public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingAddParam param) {
+    public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingParam param) {
         return Result.ok(dataTypeService.addDataTypeMapping(param.getTypeId(), param.getAnotherTypeId()));
     }
 
     /**
-     * 查询某个类型可映射的数据类型
+     * 查询所有数据类型之间的映射关系
      *
-     * @param typeId 类型ID
+     * @return 类型分组信息
+     */
+    @GetMapping("/mapping/all")
+    public PageResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingParam param) {
+        return PageResult.ok(dataTypeService.listDataTypeMappings(param.getTypeId()));
+    }
+
+    /**
+     * 查询某个类型可映射的数据类型
+     * 类型映射关系：一对多
+     *
+     * @param typeId 类型ID 如果为空，则查询所有未设置过类型映射的数据类型，不为空这查询从类型
      * @return 数据类型映射关系列表
      */
     @GetMapping("/mappable")
-    public PageResult<DataTypeMappingVO> listAllMappableDataTypes(Long typeId) {
+    public PageResult<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
         return PageResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
     }
 }

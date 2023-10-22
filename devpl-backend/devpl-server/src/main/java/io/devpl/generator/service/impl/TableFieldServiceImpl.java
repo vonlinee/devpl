@@ -1,6 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.text.NamingCase;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.TableFieldDao;
 import io.devpl.generator.entity.GenFieldType;
@@ -8,6 +7,7 @@ import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.enums.AutoFillEnum;
 import io.devpl.generator.service.FieldTypeService;
 import io.devpl.generator.service.TableFieldService;
+import io.devpl.generator.utils.NamingUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTab
         Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
         int index = 0;
         for (GenTableField field : tableFieldList) {
-            field.setAttrName(NamingCase.toCamelCase(field.getFieldName()));
+            field.setAttrName(NamingUtils.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
             GenFieldType fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
             if (fieldTypeMapping == null) {

@@ -27,5 +27,12 @@ public interface DataTypeMappingMapper extends EntityMapper<DataTypeMapping> {
         return selectList(qw);
     }
 
+    /**
+     * 查询所有没有设置过类型映射的数据类型
+     *
+     * @return 数据类型列表
+     */
+    List<DataTypeMappingVO> listAllUnMappedDataTypes();
+
     List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
 }

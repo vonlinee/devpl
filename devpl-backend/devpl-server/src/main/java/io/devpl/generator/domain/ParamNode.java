@@ -1,7 +1,6 @@
 package io.devpl.generator.domain;
 
 import io.devpl.generator.enums.MapperStatementParamValueType;
-import io.devpl.sdk.lang.annotation.Nullable;
 import lombok.Data;
 
 /**
@@ -42,7 +41,6 @@ public class ParamNode {
      */
     private boolean leaf;
 
-    @Nullable
     private MapperStatementParamValueType valueType;
 
     public void setType(String type) {

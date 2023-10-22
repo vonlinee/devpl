@@ -4,25 +4,25 @@
 
     <select id="listDataTypeMappingItems" resultType="io.devpl.generator.domain.vo.DataTypeMappingListVO">
         SELECT A.type_id,
-               B.type_name,
-               B.type_group_id,
-               C.type_name     AS another_type_name,
-               C.type_group_id AS another_group_id
+        B.type_name,
+        B.type_group_id,
+        C.type_name AS another_type_name,
+        C.type_group_id AS another_group_id
         FROM data_type_mapping A
-                 LEFT JOIN (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
-                            FROM data_type_item
-                                     LEFT JOIN data_type_group
-                                               ON data_type_item.type_group_id = data_type_group.group_id) B
-                           ON A.type_id = B.id
-                 LEFT JOIN
-             (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
-              FROM data_type_item
-                       LEFT JOIN data_type_group
-                                 ON data_type_item.type_group_id = data_type_group.group_id) C
-             ON A.another_type_id = C.id
+        LEFT JOIN (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
+        FROM data_type_item
+        LEFT JOIN data_type_group
+        ON data_type_item.type_group_id = data_type_group.group_id) B
+        ON A.type_id = B.id
+        LEFT JOIN
+        (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
+        FROM data_type_item
+        LEFT JOIN data_type_group
+        ON data_type_item.type_group_id = data_type_group.group_id) C
+        ON A.another_type_id = C.id
         <where>
             <if test="typeId != null">
-                A.type_id = #{typeId}
+                AND A.type_id = #{typeId}
             </if>
         </where>
     </select>
@@ -30,5 +30,12 @@
         SELECT *
         FROM data_type_item
         WHERE id != #{typeId}
+    </select>
+
+    <select id="listAllUnMappedDataTypes" resultType="io.devpl.generator.domain.vo.DataTypeMappingVO">
+        SELECT *
+        FROM data_type_item A
+                 LEFT JOIN data_type_mapping B ON A.id = B.type_id
+        WHERE type_id IS NULL
     </select>
 </mapper>

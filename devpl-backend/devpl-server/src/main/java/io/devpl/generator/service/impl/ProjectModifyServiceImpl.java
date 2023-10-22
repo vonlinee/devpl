@@ -121,6 +121,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
 
     /**
      * 拷贝目录文件
+     *
      * @param srcRoot    原文件
      * @param destRoot   目标文件
      * @param exclusions 排除文件
@@ -153,6 +154,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
 
     /**
      * 内容格式化
+     *
      * @param rootFile   文件根目录
      * @param suffixList 需要格式化的文件后缀
      * @param replaceMap 替换规则
@@ -163,7 +165,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
             try {
                 List<String> lines = FileUtils.readLines(dest, StandardCharsets.UTF_8);
                 List<String> newList = lines.stream().map(line -> replaceData(line, replaceMap))
-                        .collect(Collectors.toList());
+                    .collect(Collectors.toList());
                 FileUtils.writeLines(dest, newList);
             } catch (IOException e) {
                 log.error("内容格式化失败", e);
@@ -173,6 +175,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
 
     /**
      * 替换数据
+     *
      * @param str 待替换的字符串
      * @param map 替换的kv集合
      * @return 返回替换后的数据

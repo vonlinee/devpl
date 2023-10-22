@@ -3,7 +3,7 @@ package io.devpl.generator.domain.param;
 import lombok.Data;
 
 @Data
-public class DataTypeMappingAddParam {
+public class DataTypeMappingParam {
 
     private Long typeId;
 

@@ -1,13 +1,12 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.text.NamingCase;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.devpl.generator.common.exception.ServerException;
+import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
@@ -24,6 +23,7 @@ import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
 import io.devpl.generator.utils.CollectionUtils;
+import io.devpl.generator.utils.NamingUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +98,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
         table.setFormLayout(FormLayoutEnum.ONE.getValue());
         table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
-        table.setClassName(NamingCase.toPascalCase(tableName));
+        table.setClassName(NamingUtils.toPascalCase(tableName));
         table.setModuleName(getModuleName(table.getPackageName()));
         table.setFunctionName(getFunctionName(tableName));
         table.setCreateTime(new Date());

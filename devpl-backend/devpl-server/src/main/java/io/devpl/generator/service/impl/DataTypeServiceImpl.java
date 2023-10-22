@@ -15,6 +15,7 @@ import io.devpl.generator.entity.DataTypeMapping;
 import io.devpl.generator.service.CrudService;
 import io.devpl.generator.service.IDataTypeService;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
@@ -30,7 +31,7 @@ public class DataTypeServiceImpl implements IDataTypeService {
 
     CrudService crudService;
     DataTypeGroupMapper dataTypeGroupMapper;
-    DataTypeItemMapper dataTypeItemDao;
+    DataTypeItemMapper dataTypeItemMapper;
     DataTypeMappingMapper dataTypeMappingMapper;
 
     @Override
@@ -40,12 +41,17 @@ public class DataTypeServiceImpl implements IDataTypeService {
 
     @Override
     public boolean save(DataTypeItem dataTypeItem) {
-        return dataTypeItemDao.insert(dataTypeItem) > 0;
+        return dataTypeItemMapper.insert(dataTypeItem) > 0;
     }
 
     @Override
     public boolean update(DataTypeItem dataTypeItem) {
-        return dataTypeItemDao.updateById(dataTypeItem) > 0;
+        return dataTypeItemMapper.updateById(dataTypeItem) > 0;
+    }
+
+    @Override
+    public boolean removeById(Long typeId) {
+        return SqlHelper.retBool(dataTypeItemMapper.deleteById(typeId));
     }
 
     /**
@@ -113,7 +119,10 @@ public class DataTypeServiceImpl implements IDataTypeService {
      * @return 可映射的数据类型列表
      */
     @Override
-    public List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId) {
+    public List<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
+        if (typeId == null) {
+            return dataTypeMappingMapper.listAllUnMappedDataTypes();
+        }
         return dataTypeMappingMapper.listAllMappableDataTypes(typeId);
     }
 }

@@ -6,7 +6,11 @@ import http from "@/utils/http"
  * @param pageSize 每页大小
  * @param param
  */
-export const apiListDataTypes = (pageIndex: Number, pageSize: Number, param: any = null) => {
+export const apiListDataTypes = (
+  pageIndex: Number,
+  pageSize: Number,
+  param: any = null
+) => {
   return http.get("/api/datatype/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
@@ -53,5 +57,30 @@ export const apiSaveDataTypeItems = (dataTypeItem: any[]) => {
 export const apiAddDataTypeMapping = (dataTypeItem: any[]) => {
   return http.postForm("/api/datatype/mapping", {
     dataTypeItems: dataTypeItem,
+  })
+}
+
+/**
+ * 所有可映射的数据类型
+ * @param typeId 如果为空，则查询所有未设置过类型映射的数据类型
+ * @returns
+ */
+export const apiListAllMappableDataTypes = (typeId: number | undefined = undefined) => {
+  return http.get("/api/datatype/mappable", {
+    typeId: typeId,
+  })
+}
+
+/**
+ * 添加数据类型映射关系
+ * @returns
+ */
+export const apiListAllDataTypeMappings = (
+  typeId: number | undefined  = undefined,
+  typeGroupId: number | undefined = undefined
+) => {
+  return http.get("/api/datatype/mapping/all", {
+    typeId: typeId,
+    typeGroupId: typeGroupId,
   })
 }
