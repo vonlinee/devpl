@@ -19,8 +19,17 @@ public final class DateTimeUtils {
     public static final String FORMAT_STRING_TIMESTAMP_WITH_MILLIS_AND_OFFSET = FORMAT_STRING_TIMESTAMP_WITH_MILLIS + "XXX";
     public static final String FORMAT_STRING_TIMESTAMP_WITH_MICROS_AND_OFFSET = FORMAT_STRING_TIMESTAMP_WITH_MICROS + "XXX";
 
+    public static String stringOfNow() {
+        return stringOfNow(FORMAT_STRING_TIMESTAMP);
+    }
+
+    public static String nowForFilename() {
+        return stringOfNow("yyyyMMddHHmmss");
+    }
+
     /**
      * 当前日期时间字符串
+     *
      * @param format 日期时间格式
      * @return 当前日期时间字符串
      */

@@ -55,6 +55,7 @@ public class FileUtils {
      * An exception is thrown if the file does not exist. An exception is thrown if
      * the file object exists but is a directory. An exception is thrown if the file
      * exists but cannot be read.
+     *
      * @param file the file to open for input, must not be <code>null</code>
      * @return a new {@link FileInputStream} for the specified file
      * @throws FileNotFoundException if the file does not exist
@@ -89,6 +90,7 @@ public class FileUtils {
      * <li>A directory does not contain itself: return false</li>
      * <li>A null child file is not contained in any parent: return false</li>
      * </ul>
+     *
      * @param directory the file to consider as the parent.
      * @param child     the file to consider as the child.
      * @return true is the candidate leaf is under by the specified composite. False otherwise.
@@ -111,6 +113,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input.
      * @return the given directory.
@@ -125,6 +128,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @return the given directory.
@@ -141,6 +145,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     *
      * @param file          The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @return the given file.
@@ -169,6 +174,7 @@ public class FileUtils {
      * exists but is a directory. An exception is thrown if the file exists but
      * cannot be written to. An exception is thrown if the parent directory cannot
      * be created.
+     *
      * @param file the file to open for output, must not be <code>null</code>
      * @return a new {@link FileOutputStream} for the specified file
      * @throws IOException if the file object is a directory
@@ -200,6 +206,7 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input represents
      * a specific number of bytes.
+     *
      * @param size the number of bytes
      * @return a human-readable display value (includes units)
      */
@@ -223,6 +230,7 @@ public class FileUtils {
 
     /**
      * TODO 优化内存占用
+     *
      * @param rootPath 根目录
      * @return List
      */
@@ -329,6 +337,7 @@ public class FileUtils {
      * From version 1.1 this method will decode the URL. Syntax such as
      * <code>file:///my%20docs/file.txt</code> will be correctly decoded to
      * <code>/my docs/file.txt</code>.
+     *
      * @param url the file URL to convert, <code>null</code> returns
      *            <code>null</code>
      * @return the equivalent <code>File</code> object, or <code>null</code> if the
@@ -363,6 +372,7 @@ public class FileUtils {
      * This method will decode the URL. Syntax such as
      * <code>file:///my%20docs/file.txt</code> will be correctly decoded to
      * <code>/my docs/file.txt</code>.
+     *
      * @param urls the file URLs to convert, <code>null</code> returns empty array
      * @return a non-<code>null</code> array of Files matching the input, with a
      * <code>null</code> item if there was a <code>null</code> at that index
@@ -392,6 +402,7 @@ public class FileUtils {
      * Converts each of an array of <code>File</code> to a <code>URL</code>.
      * <p>
      * Returns an array of the same size as the input.
+     *
      * @param files the files to convert
      * @return an array of URLs matching the input
      * @throws IOException if a file cannot be converted
@@ -413,6 +424,7 @@ public class FileUtils {
      * same name in the specified destination directory. The destination directory
      * is created if it does not exist. If the destination file exists, then this
      * method will overwrite it.
+     *
      * @param srcFile an existing file to copy, must not be <code>null</code>
      * @param destDir the directory to place the copy in, must not be
      *                <code>null</code>
@@ -432,6 +444,7 @@ public class FileUtils {
      * same name in the specified destination directory. The destination directory
      * is created if it does not exist. If the destination file exists, then this
      * method will overwrite it.
+     *
      * @param srcFile          an existing file to copy, must not be
      *                         <code>null</code>
      * @param destDir          the directory to place the copy in, must not be
@@ -461,6 +474,7 @@ public class FileUtils {
      * destination file. The directory holding the destination file is created if it
      * does not exist. If the destination file exists, then this method will
      * overwrite it.
+     *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile the new file, must not be <code>null</code>
      * @throws NullPointerException if source or destination is <code>null</code>
@@ -479,6 +493,7 @@ public class FileUtils {
      * destination file. The directory holding the destination file is created if it
      * does not exist. If the destination file exists, then this method will
      * overwrite it.
+     *
      * @param srcFile          an existing file to copy, must not be
      *                         <code>null</code>
      * @param destFile         the new file, must not be <code>null</code>
@@ -518,6 +533,7 @@ public class FileUtils {
 
     /**
      * Internal copy file method.
+     *
      * @param srcFile          the validated source file, must not be
      *                         <code>null</code>
      * @param destFile         the validated destination file, must not be
@@ -561,6 +577,7 @@ public class FileUtils {
      * The destination directory is created if it does not exist. If the destination
      * directory did exist, then this method merges the source with the destination,
      * with the source taking precedence.
+     *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir the directory to place the copy in, must not be
      *                <code>null</code>
@@ -595,6 +612,7 @@ public class FileUtils {
      * The destination directory is created if it does not exist. If the destination
      * directory did exist, then this method merges the source with the destination,
      * with the source taking precedence.
+     *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir the new directory, must not be <code>null</code>
      * @throws NullPointerException if source or destination is <code>null</code>
@@ -615,6 +633,7 @@ public class FileUtils {
      * The destination directory is created if it does not exist. If the destination
      * directory did exist, then this method merges the source with the destination,
      * with the source taking precedence.
+     *
      * @param srcDir           an existing directory to copy, must not be
      *                         <code>null</code>
      * @param destDir          the new directory, must not be <code>null</code>
@@ -646,6 +665,7 @@ public class FileUtils {
 
     /**
      * Internal copy directory method.
+     *
      * @param srcDir           the validated source directory, must not be
      *                         <code>null</code>
      * @param destDir          the validated destination directory, must not be
@@ -692,6 +712,7 @@ public class FileUtils {
      * <code>destination</code>. The directories up to <code>destination</code> will
      * be created if they don't already exist. <code>destination</code> will be
      * overwritten if it already exists.
+     *
      * @param source      the <code>URL</code> to copy bytes from, must not be
      *                    <code>null</code>
      * @param destination the non-directory <code>File</code> to write bytes to
@@ -720,6 +741,7 @@ public class FileUtils {
 
     /**
      * Recursively delete a directory.
+     *
      * @param directory directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
@@ -736,6 +758,7 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     *
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
      */
@@ -771,6 +794,7 @@ public class FileUtils {
 
     /**
      * Reads the contents of a file into a String. The file is always closed.
+     *
      * @param file     the file to read, must not be <code>null</code>
      * @param encoding the encoding to use, <code>null</code> means platform default
      * @return the file contents, never <code>null</code>
@@ -791,6 +815,7 @@ public class FileUtils {
     /**
      * Reads the contents of a file into a String using the default encoding for the
      * VM. The file is always closed.
+     *
      * @param file the file to read, must not be <code>null</code>
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
@@ -802,6 +827,7 @@ public class FileUtils {
 
     /**
      * Reads the contents of a file into a byte array. The file is always closed.
+     *
      * @param file the file to read, must not be <code>null</code>
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
@@ -820,6 +846,7 @@ public class FileUtils {
     /**
      * Reads the contents of a file line by line to a List of Strings. The file is
      * always closed.
+     *
      * @param file     the file to read, must not be <code>null</code>
      * @param encoding the encoding to use, <code>null</code> means platform default
      * @return the list of Strings representing each line in the file, never
@@ -846,6 +873,7 @@ public class FileUtils {
     /**
      * Reads the contents of a file line by line to a List of Strings using the
      * default encoding for the VM. The file is always closed.
+     *
      * @param file the file to read, must not be <code>null</code>
      * @return the list of Strings representing each line in the file, never
      * <code>null</code>
@@ -880,6 +908,7 @@ public class FileUtils {
      * <p>
      * If an exception occurs during the creation of the iterator, the underlying
      * stream is closed.
+     *
      * @param file     the file to open for input, must not be <code>null</code>
      * @param encoding the encoding to use, <code>null</code> means platform default
      * @return an Iterator of the lines in the file, never <code>null</code>
@@ -911,6 +940,7 @@ public class FileUtils {
     /**
      * Return an Iterator for the lines in a <code>File</code> using the default
      * encoding for the VM.
+     *
      * @param file the file to open for input, must not be <code>null</code>
      * @return an Iterator of the lines in the file, never <code>null</code>
      * @throws IOException in case of an I/O error (file closed)
@@ -928,6 +958,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created if
      * they do not exist.
+     *
      * @param file     the file to write
      * @param data     the content to write to the file
      * @param encoding the encoding to use, <code>null</code> means platform default
@@ -947,6 +978,7 @@ public class FileUtils {
     /**
      * Writes a String to a file creating the file if it does not exist using the
      * default encoding for the VM.
+     *
      * @param file the file to write
      * @param data the content to write to the file
      * @throws IOException in case of an I/O error
@@ -968,6 +1000,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created if
      * they do not exist.
+     *
      * @param file the file to write to
      * @param data the content to write to the file
      * @throws IOException in case of an I/O error
@@ -990,6 +1023,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created if
      * they do not exist.
+     *
      * @param file     the file to write to
      * @param encoding the encoding to use, <code>null</code> means platform default
      * @param lines    the lines to write, <code>null</code> entries produce blank
@@ -1007,6 +1041,7 @@ public class FileUtils {
      * Writes the <code>toString()</code> value of each item in a collection to the
      * specified <code>File</code> line by line. The default VM encoding and the
      * default line ending will be used.
+     *
      * @param file  the file to write to
      * @param lines the lines to write, <code>null</code> entries produce blank
      *              lines
@@ -1024,6 +1059,7 @@ public class FileUtils {
      * <p>
      * NOTE: As from v1.3, the parent directories of the file will be created if
      * they do not exist.
+     *
      * @param file       the file to write to
      * @param encoding   the encoding to use, <code>null</code> means platform
      *                   default
@@ -1050,6 +1086,7 @@ public class FileUtils {
      * Writes the <code>toString()</code> value of each item in a collection to the
      * specified <code>File</code> line by line. The default VM encoding and the
      * specified line ending will be used.
+     *
      * @param file       the file to write to
      * @param lines      the lines to write, <code>null</code> entries produce blank
      *                   lines
@@ -1073,6 +1110,7 @@ public class FileUtils {
      * <li>You get exceptions when a file or directory cannot be deleted.
      * (java.io.File methods returns a boolean)</li>
      * </ul>
+     *
      * @param file file or directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
      * @throws IOException          in case deletion is unsuccessful
@@ -1094,6 +1132,7 @@ public class FileUtils {
     /**
      * Schedule a file to be deleted when JVM exits. If file is directory delete it
      * and all sub-directories.
+     *
      * @param file file or directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the file is <code>null</code>
      * @throws IOException          in case deletion is unsuccessful
@@ -1108,6 +1147,7 @@ public class FileUtils {
 
     /**
      * Recursively schedule directory for deletion on JVM exit.
+     *
      * @param directory directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
      * @throws IOException          in case deletion is unsuccessful
@@ -1123,6 +1163,7 @@ public class FileUtils {
 
     /**
      * Clean a directory without deleting it.
+     *
      * @param directory directory to clean, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
      * @throws IOException          in case cleaning is unsuccessful
@@ -1162,6 +1203,7 @@ public class FileUtils {
      * Make a directory, including any necessary but nonexistent parent directories.
      * If there already exists a file with specified name or the directory cannot be
      * created then an exception is thrown.
+     *
      * @param directory directory to create, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
      * @throws IOException          if the directory cannot be created
@@ -1184,6 +1226,7 @@ public class FileUtils {
 
     /**
      * Recursively count size of a directory (sum of the length of all files).
+     *
      * @param directory directory to inspect, must not be <code>null</code>
      * @return size of directory in bytes, 0 if directory is security restricted
      * @throws NullPointerException if the directory is <code>null</code>
@@ -1223,6 +1266,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is newer than the reference
      * <code>File</code>.
+     *
      * @param file      the <code>File</code> of which the modification date must be
      *                  compared, must not be <code>null</code>
      * @param reference the <code>File</code> of which the modification date is
@@ -1246,6 +1290,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is newer than the specified
      * <code>Date</code>.
+     *
      * @param file the <code>File</code> of which the modification date must be
      *             compared, must not be <code>null</code>
      * @param date the date reference, must not be <code>null</code>
@@ -1264,6 +1309,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is newer than the specified time
      * reference.
+     *
      * @param file       the <code>File</code> of which the modification date must
      *                   be compared, must not be <code>null</code>
      * @param timeMillis the time reference measured in milliseconds since the epoch
@@ -1287,6 +1333,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is older than the reference
      * <code>File</code>.
+     *
      * @param file      the <code>File</code> of which the modification date must be
      *                  compared, must not be <code>null</code>
      * @param reference the <code>File</code> of which the modification date is
@@ -1310,6 +1357,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is older than the specified
      * <code>Date</code>.
+     *
      * @param file the <code>File</code> of which the modification date must be
      *             compared, must not be <code>null</code>
      * @param date the date reference, must not be <code>null</code>
@@ -1328,6 +1376,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is older than the specified time
      * reference.
+     *
      * @param file       the <code>File</code> of which the modification date must
      *                   be compared, must not be <code>null</code>
      * @param timeMillis the time reference measured in milliseconds since the epoch
@@ -1351,6 +1400,7 @@ public class FileUtils {
     /**
      * Computes the checksum of a file using the CRC32 checksum routine. The value
      * of the checksum is returned.
+     *
      * @param file the file to checksum, must not be <code>null</code>
      * @return the checksum value
      * @throws NullPointerException     if the file or checksum is <code>null</code>
@@ -1372,6 +1422,7 @@ public class FileUtils {
      * <pre>
      * long csum = FileUtils.checksum(file, new CRC32()).getValue();
      * </pre>
+     *
      * @param file     the file to checksum, must not be <code>null</code>
      * @param checksum the checksum object to be used, must not be <code>null</code>
      * @return the checksum specified, updated with the content of the file
@@ -1397,6 +1448,7 @@ public class FileUtils {
     /**
      * 使用相对路径创建的File对象没有父级目录 System.out.println(new File(""));
      * System.out.println(new File("D:/Temp/1.txt").getParentFile());
+     *
      * @param file File
      * @return 返回父目录
      */
@@ -1414,6 +1466,7 @@ public class FileUtils {
      * File("./AAA").isAbsolute()); f System.out.println(new
      * File("D:/1.txt").isAbsolute()); t System.out.println(new
      * File("D:/Temp").isAbsolute()); t
+     *
      * @param file 文件
      * @return 是否是绝对路径
      */
@@ -1424,6 +1477,7 @@ public class FileUtils {
 
     /**
      * 不同平台
+     *
      * @param filepath 文件路径
      * @return 文件是否存在
      */
@@ -1433,6 +1487,7 @@ public class FileUtils {
 
     /**
      * 获取文件名
+     *
      * @param file 文件对象
      * @return 文件名
      */
@@ -1455,6 +1510,7 @@ public class FileUtils {
 
     /**
      * 获取文件扩展名
+     *
      * @param file 文件对象
      * @return 文件扩展名
      */
@@ -1474,6 +1530,7 @@ public class FileUtils {
      * 清空文件夹<br>
      * 注意：清空文件夹时不会判断文件夹是否为空，如果不空则递归删除子文件或文件夹<br>
      * 某个文件删除失败会终止删除操作
+     *
      * @param directory 文件夹
      * @return 成功与否
      * @throws RuntimeException IO异常
@@ -1506,6 +1563,7 @@ public class FileUtils {
      * 从5.7.6开始，删除文件使用{@link Files#delete(Path)}代替 {@link File#delete()}<br>
      * 因为前者遇到文件被占用等原因时，抛出异常，而非返回false，异常会指明具体的失败原因。
      * </p>
+     *
      * @param file 文件对象
      * @return 成功与否
      * @throws RuntimeException IO异常
@@ -1540,6 +1598,7 @@ public class FileUtils {
 
     /**
      * 删除文件或空目录，不追踪软链
+     *
      * @param path 文件对象
      * @throws IOException IO异常
      * @since 5.7.7
@@ -1559,6 +1618,7 @@ public class FileUtils {
      * 删除文件或者文件夹，不追踪软链<br>
      * 注意：删除文件夹时不会判断文件夹是否为空，如果不空则递归删除子文件或文件夹<br>
      * 某个文件删除失败会终止删除操作
+     *
      * @param path 文件对象
      * @return 成功与否
      * @throws RuntimeException IO异常
@@ -1612,6 +1672,7 @@ public class FileUtils {
 
     /**
      * 判断是否为目录，如果file为null，则返回false
+     *
      * @param path          {@link Path}
      * @param isFollowLinks 是否追踪到软链对应的真实地址
      * @return 如果为目录true
@@ -1627,6 +1688,7 @@ public class FileUtils {
 
     /**
      * 遍历指定path下的文件并做处理
+     *
      * @param start    起始路径，必须为目录
      * @param maxDepth 最大遍历深度，-1表示不限制深度
      * @param visitor  {@link FileVisitor} 接口，用于自定义在访问文件时，访问目录前后等节点做的操作
@@ -1648,6 +1710,7 @@ public class FileUtils {
     /**
      * 递归遍历目录以及子目录中的所有文件<br>
      * 如果提供file为文件，直接返回过滤结果
+     *
      * @param file       当前遍历文件或目录
      * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录
      * @return 文件列表
@@ -1659,6 +1722,7 @@ public class FileUtils {
     /**
      * 递归遍历目录以及子目录中的所有文件<br>
      * 如果提供file为文件，直接返回过滤结果
+     *
      * @param file       当前遍历文件或目录
      * @param maxDepth   遍历最大深度，-1表示遍历到没有目录为止
      * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录，null表示接收全部文件
@@ -1672,6 +1736,7 @@ public class FileUtils {
     /**
      * 递归遍历目录以及子目录中的所有文件<br>
      * 如果提供path为文件，直接返回过滤结果
+     *
      * @param path       当前遍历文件或目录
      * @param maxDepth   遍历最大深度，-1表示遍历到没有目录为止
      * @param fileFilter 文件过滤规则对象，选择要保留的文件，只对文件有效，不过滤目录，null表示接收全部文件
@@ -1708,5 +1773,30 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 创建文件，如果文件存在，根据参数决定是否覆盖，不存在则进行创建
+     *
+     * @param path      确保指向一个文件，而不是目录
+     * @param overwrite 是否覆盖
+     */
+    public static Path createFile(Path path, boolean overwrite) {
+        try {
+            if (Files.exists(path)) {
+                if (overwrite) {
+                    // 覆盖
+                    Files.delete(path);
+                }
+            } else {
+                if (!Files.exists(path.getParent())) {
+                    Files.createDirectories(path.getParent());
+                }
+                return Files.createFile(path);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

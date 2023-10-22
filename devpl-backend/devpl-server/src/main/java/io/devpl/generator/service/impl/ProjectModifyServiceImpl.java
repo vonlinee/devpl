@@ -1,16 +1,16 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.ProjectModifyMapper;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
 import io.devpl.generator.utils.Arrays;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -158,7 +158,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
      * @param replaceMap 替换规则
      */
     public static void contentFormat(File rootFile, List<String> suffixList, Map<String, String> replaceMap) {
-        List<File> destList = FileUtils.findFiles(rootFile, file -> suffixList.contains(FileNameUtil.getSuffix(file)));
+        List<File> destList = FileUtils.findFiles(rootFile, file -> suffixList.contains(FilenameUtils.getExtension(rootFile.getAbsolutePath())));
         for (File dest : destList) {
             try {
                 List<String> lines = FileUtils.readLines(dest, StandardCharsets.UTF_8);

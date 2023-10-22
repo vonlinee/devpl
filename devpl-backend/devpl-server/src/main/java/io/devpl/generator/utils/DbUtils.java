@@ -34,4 +34,19 @@ public class DbUtils {
         }
         return connection;
     }
+
+    /**
+     * 从连接url字符串解析数据库名称
+     *
+     * @param url 连接url字符串
+     * @return 数据库名称，可能为空
+     */
+    public static String getDatabaseNameFromConnectionUrl(String url) {
+        int index = url.lastIndexOf("?");
+        int i = index;
+        while (url.charAt(i) != '/') {
+            i--;
+        }
+        return url.substring(i + 1, index);
+    }
 }
