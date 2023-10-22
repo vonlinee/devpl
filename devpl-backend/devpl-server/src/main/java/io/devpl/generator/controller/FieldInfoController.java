@@ -6,7 +6,7 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.FieldInfo;
 import io.devpl.generator.service.FieldInfoService;
 import io.devpl.generator.utils.BusinessUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping(value = "/api/field")
 public class FieldInfoController {
 
-    @Autowired
+    @Resource
     FieldInfoService fieldInfoService;
 
     /**

@@ -5,7 +5,7 @@ import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.GenBaseClass;
 import io.devpl.generator.service.BaseClassService;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -16,12 +16,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/gen/baseclass")
-@AllArgsConstructor
 public class BaseClassController {
-    private final BaseClassService baseClassService;
+
+    @Resource
+    BaseClassService baseClassService;
 
     /**
      * 分页查询
+     *
      * @param query 查询参数
      * @return 基本类型
      */

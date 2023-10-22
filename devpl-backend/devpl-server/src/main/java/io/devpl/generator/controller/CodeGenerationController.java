@@ -6,7 +6,7 @@ import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TargetGenFileService;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,14 +18,18 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/gen/generator")
-@AllArgsConstructor
 public class CodeGenerationController {
-    private final CodeGenService codeGenService;
-    private final TargetGenFileService templateFileGenerationService;
-    private final GeneratorConfigService generatorConfigService;
+
+    @Resource
+    CodeGenService codeGenService;
+    @Resource
+    TargetGenFileService templateFileGenerationService;
+    @Resource
+    GeneratorConfigService generatorConfigService;
 
     /**
      * 生成代码（自定义目录）
+     *
      * @param tableIds 数据库表ID
      * @return 所有生成的根目录
      */
@@ -41,6 +45,7 @@ public class CodeGenerationController {
 
     /**
      * 生成代码（自定义目录）
+     *
      * @return 所有生成的根目录
      */
     @GetMapping("/config")
@@ -50,6 +55,7 @@ public class CodeGenerationController {
 
     /**
      * 生成代码（自定义目录）
+     *
      * @return 所有生成的根目录
      */
     @PostMapping("/config")
@@ -59,6 +65,7 @@ public class CodeGenerationController {
 
     /**
      * 生成的文件类型列表
+     *
      * @return 生成的文件列表
      */
     @GetMapping("/genfiles")
@@ -68,6 +75,7 @@ public class CodeGenerationController {
 
     /**
      * 修改和新增一条生成的文件类型列表
+     *
      * @return 生成的文件列表
      */
     @PostMapping("/genfile")
@@ -78,6 +86,7 @@ public class CodeGenerationController {
     /**
      * 保存或更新生成的文件类型列表
      * 不存在的删除，更新或新增
+     *
      * @return 生成的文件列表
      */
     @PostMapping("/genfiles/replace")
@@ -88,6 +97,7 @@ public class CodeGenerationController {
     /**
      * 保存或更新生成的文件类型列表
      * 不存在的删除，更新或新增
+     *
      * @return 生成的文件列表
      */
     @DeleteMapping("/genfiles/replace")
@@ -97,6 +107,7 @@ public class CodeGenerationController {
 
     /**
      * 获取生成结果的文件树
+     *
      * @param rootPath 根路径
      * @return 该目录下的文件列表，树形结构
      */
@@ -107,6 +118,7 @@ public class CodeGenerationController {
 
     /**
      * 获取文件文本内容
+     *
      * @param path 文件路径
      * @return 文本内容
      */

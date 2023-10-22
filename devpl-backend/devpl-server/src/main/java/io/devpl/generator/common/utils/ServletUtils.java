@@ -6,15 +6,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class ServletUtils {
+import java.io.ByteArrayOutputStream;
 
-    private ServletUtils() {
-    }
+public abstract class ServletUtils {
 
     private static final Logger log = LoggerFactory.getLogger(ServletUtils.class);
 
+    public static void downloadFile(HttpServletResponse response, String filename, ByteArrayOutputStream byteArrayOutputStream) {
+        downloadFile(response, filename, byteArrayOutputStream.toByteArray());
+    }
+
     /**
      * 浏览器直接下载文件
+     *
      * @param response HttpServletResponse
      * @param filename 保存文件名
      * @param data     文件字节

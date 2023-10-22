@@ -5,7 +5,7 @@ import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.service.FieldTypeService;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -16,12 +16,14 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/gen/fieldtype")
-@AllArgsConstructor
 public class FieldTypeController {
-    private final FieldTypeService fieldTypeService;
+
+    @Resource
+    FieldTypeService fieldTypeService;
 
     /**
      * 字段类型
+     *
      * @param query 查询参数
      * @return GenFieldType
      */

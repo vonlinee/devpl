@@ -6,9 +6,9 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.common.utils.ServletUtils;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +18,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/gen/project")
-@AllArgsConstructor
 public class ProjectModifyController {
-    private final ProjectModifyService projectModifyService;
+
+    @Resource
+    ProjectModifyService projectModifyService;
 
     @GetMapping("/page")
     public Result<PageResult<ProjectModify>> page(@Valid Query query) {

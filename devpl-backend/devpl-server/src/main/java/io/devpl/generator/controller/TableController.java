@@ -7,7 +7,7 @@ import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +17,16 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/gen/table")
-@AllArgsConstructor
 public class TableController {
-    private final TableService tableService;
-    private final TableFieldService tableFieldService;
+
+    @Resource
+    TableService tableService;
+    @Resource
+    TableFieldService tableFieldService;
 
     /**
      * 分页
+     *
      * @param query 查询参数
      */
     @GetMapping("page")
@@ -34,6 +37,7 @@ public class TableController {
 
     /**
      * 获取表信息
+     *
      * @param id 表ID
      */
     @GetMapping("{id}")
@@ -46,6 +50,7 @@ public class TableController {
 
     /**
      * 修改
+     *
      * @param table 表信息
      */
     @PutMapping
@@ -55,6 +60,7 @@ public class TableController {
 
     /**
      * 删除
+     *
      * @param ids 表id数组
      */
     @DeleteMapping
@@ -64,6 +70,7 @@ public class TableController {
 
     /**
      * 同步表结构
+     *
      * @param id 表ID
      */
     @PostMapping("sync/{id}")
@@ -74,6 +81,7 @@ public class TableController {
 
     /**
      * 导入数据源中的表到gen_table
+     *
      * @param datasourceId  数据源ID
      * @param tableNameList 表名列表
      */
@@ -87,6 +95,7 @@ public class TableController {
 
     /**
      * 修改表字段数据
+     *
      * @param tableId        表ID
      * @param tableFieldList 字段列表
      */

@@ -34,6 +34,6 @@ public class ExtensionLoader<C> {
             }
         }
         throw new ClassNotFoundException("Class " + classpath
-                                         + " wasn't found in directory " + System.getProperty("user.dir") + directory);
+            + " wasn't found in directory " + System.getProperty("user.dir") + directory);
     }
 }

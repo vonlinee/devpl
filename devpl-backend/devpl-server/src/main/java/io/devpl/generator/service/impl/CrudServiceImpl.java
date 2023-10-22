@@ -1,5 +1,6 @@
 package io.devpl.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -14,8 +15,10 @@ import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * 增删改查 Service
@@ -34,6 +37,31 @@ public class CrudServiceImpl implements CrudService {
      * 数据为空时返回的结果
      */
     private final boolean resultWhenEmpty = true;
+
+    @Override
+    public <T> T selectOne(Class<T> entityType, QueryWrapper<T> qw) {
+        return null;
+    }
+
+    @Override
+    public <T> List<T> list(Class<T> entityType) {
+        return null;
+    }
+
+    @Override
+    public <T> boolean save(T entity) {
+        return false;
+    }
+
+    @Override
+    public <T> boolean updateById(T entity) {
+        return false;
+    }
+
+    @Override
+    public <T> boolean removeById(Class<T> entityType, Serializable id) {
+        return false;
+    }
 
     @Override
     public <T> boolean saveOrUpdate(T entity) {

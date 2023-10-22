@@ -2,6 +2,7 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.utils.ServletUtils;
 import io.devpl.generator.service.CodeGenService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,9 +17,10 @@ import java.util.zip.ZipOutputStream;
  */
 @Controller
 @RequestMapping("/gen/generator")
-@AllArgsConstructor
 public class CodeDownloadController {
-    private final CodeGenService codeGenService;
+
+    @Resource
+    CodeGenService codeGenService;
 
     /**
      * 生成代码（zip压缩包）
@@ -31,7 +33,7 @@ public class CodeDownloadController {
                 codeGenService.downloadCode(Long.parseLong(tableId), zip);
             }
             // zip压缩包数据
-            ServletUtils.downloadFile(response, "devpl.zip", outputStream.toByteArray());
+            ServletUtils.downloadFile(response, "devpl.zip", outputStream);
         }
     }
 }

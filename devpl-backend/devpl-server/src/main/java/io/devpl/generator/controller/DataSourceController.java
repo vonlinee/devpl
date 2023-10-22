@@ -9,7 +9,7 @@ import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
 import io.devpl.generator.utils.DbUtils;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +22,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/gen")
-@AllArgsConstructor
 public class DataSourceController {
-    private final DataSourceService datasourceService;
-    private final TableService tableService;
+
+    @Resource
+    DataSourceService datasourceService;
+    @Resource
+    TableService tableService;
 
     /**
      * 获取数据源列表
