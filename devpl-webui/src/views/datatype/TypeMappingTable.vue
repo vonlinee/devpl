@@ -16,7 +16,7 @@
         </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button status="primary" content="查询"></vxe-button>
+        <vxe-button status="primary" content="查询" @click="queryAllDataTypeMappings"></vxe-button>
       </vxe-form-item>
       <vxe-form-item>
         <vxe-button status="primary" content="新增" @click="showModal"></vxe-button>
@@ -51,6 +51,8 @@
 import { apiAddDataTypeMapping, apiListAllDataTypeMappings, apiListAllMappableDataTypes } from "@/api/datatype";
 import { onMounted, reactive, ref } from "vue";
 import { VxeTableDefines } from "vxe-table/types/table";
+
+import { useMessage } from "@/hooks/useElMessage";
 
 const modalShowRef = ref();
 const modal1ShowRef = ref();
@@ -100,12 +102,16 @@ interface RowVO {
 
 const tableData = ref<RowVO[]>([])
 
-onMounted(() => {
+const queryAllDataTypeMappings = () => {
   apiListAllDataTypeMappings(undefined, undefined).then((res) => {
     if (res.code == 200) {
       tableData.value = res.list
     }
   })
+}
+
+onMounted(() => {
+  queryAllDataTypeMappings()
 })
 
 const tableRef = ref()
@@ -124,7 +130,9 @@ const getSelectEvent = () => {
       })
     }
     apiAddDataTypeMapping(list).then((res) => {
-      console.log(res);
+      if (res.code == 200) {
+        useMessage(modal1ShowRef).info("保存成功")
+      }
     })
   }
 }

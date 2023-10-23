@@ -9,10 +9,10 @@ import lombok.Data;
 public class DataTypeMappingListVO {
 
     private Long typeId;
-    private Long typeGroupId;
+    private String typeGroupId;
     private String typeName;
 
     private Long anotherTypeId;
-    private Long anotherGroupId;
+    private String anotherGroupId;
     private String anotherTypeName;
 }
