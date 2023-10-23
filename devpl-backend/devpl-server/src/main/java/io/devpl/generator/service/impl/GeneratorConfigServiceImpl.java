@@ -6,7 +6,7 @@ import io.devpl.generator.config.GeneratorProperties;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.GeneratorConfigService;
-import io.devpl.generator.utils.Paths;
+import io.devpl.generator.utils.PathUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
@@ -67,7 +67,7 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
     @Override
     public boolean saveGeneratorConfig(String content) {
         JSONUtils.validateJson(content);
-        String path = Paths.of(root, "src/main/resources", properties.getTemplate(), "config.json");
+        String path = PathUtils.of(root, "src/main/resources", properties.getTemplate(), "config.json");
         File file = new File(path);
         if (!file.exists()) {
             throw new RuntimeException(file.getPath() + "文件不存在");

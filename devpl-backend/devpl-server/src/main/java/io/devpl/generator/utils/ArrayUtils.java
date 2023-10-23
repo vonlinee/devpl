@@ -2,7 +2,7 @@ package io.devpl.generator.utils;
 
 import java.util.Objects;
 
-public class Arrays {
+public class ArrayUtils {
 
     /**
      * 数组中元素未找到的下标，值为-1

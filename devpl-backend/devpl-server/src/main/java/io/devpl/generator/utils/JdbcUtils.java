@@ -11,7 +11,7 @@ import java.sql.SQLException;
 /**
  * DB工具类
  */
-public class DbUtils {
+public class JdbcUtils {
     private static final int CONNECTION_TIMEOUTS_SECONDS = 6;
 
     public static void loadDriver(String driverClassName) {

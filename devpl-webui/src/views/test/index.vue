@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
 import { ref } from "vue";
-import PopupWindow from "@/components/dialog/PopupForm.vue";
+import SaveOrUpdate from "@/components/dialog/SaveOrUpdate.vue";
+import CodeMirror from "@/components/editor/CodeMirror.vue";
 
 let modalVisiable = ref();
 
@@ -48,7 +49,13 @@ const submit = (formData: any, setVisiable: (val: boolean) => void) => {
 
 <template>
   <button @click="show">Open</button>
-  <popup-window ref="dialogRef" :form-data="formData" @submit="submit"></popup-window>
+  <save-or-update ref="dialogRef" :form-data="formData" @submit="submit">
+    <template #default="scope">
+      <span>{{ scope}}</span>
+    </template>
+  </save-or-update>
+
+  <code-mirror></code-mirror>
 
   <!-- <test-my-table></test-my-table> -->
 </template>

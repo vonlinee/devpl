@@ -1,40 +1,58 @@
 <template>
-  <el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false" :draggable="true">
+  <vxe-modal width="50%" v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false"
+             :draggable="true"
+             z-index="2000" show-footer>
     <el-form ref="dataFormRef"
-             label-position="left"
+             label-position="right"
              :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
-      <el-form-item label="连接名" prop="connName">
-        <el-col :span="18">
-          <el-input v-model="dataForm.connName" placeholder="连接名"></el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-select placeholder="连接名"></el-select>
-        </el-col>
-      </el-form-item>
-      <el-form-item prop="dbType" label="数据库类型">
-        <el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
-          <el-option value="MySQL" label="MySQL"></el-option>
-          <el-option value="Oracle" label="Oracle"></el-option>
-          <el-option value="PostgreSQL" label="PostgreSQL"></el-option>
-          <el-option value="SQLServer" label="SQLServer"></el-option>
-          <el-option value="DM" label="达梦8"></el-option>
-          <el-option value="Clickhouse" label="Clickhouse"></el-option>
-        </el-select>
-      </el-form-item>
 
-      <el-form-item prop="ip" label="IP">
-        <el-input v-model="dataForm.ip"></el-input>
-      </el-form-item>
-      <el-form-item prop="port" label="端口">
-        <el-input v-model="dataForm.port"></el-input>
-      </el-form-item>
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="dataForm.username" placeholder="用户名"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="dataForm.password" autocomplete="off" type="password" placeholder="密码"
-                  show-password></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="16">
+          <el-form-item label="连接名" prop="connName">
+            <el-input v-model="dataForm.connName" placeholder="连接名"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="dbType" label="数据库类型">
+            <el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
+              <el-option value="MySQL" label="MySQL"></el-option>
+              <el-option value="Oracle" label="Oracle"></el-option>
+              <el-option value="PostgreSQL" label="PostgreSQL"></el-option>
+              <el-option value="SQLServer" label="SQLServer"></el-option>
+              <el-option value="DM" label="达梦8"></el-option>
+              <el-option value="Clickhouse" label="Clickhouse"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="16">
+          <el-form-item prop="ip" label="IP">
+            <el-input v-model="dataForm.ip" placeholder="127.0.0.1"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="port" label="端口" label-width="60">
+            <el-input v-model="dataForm.port" placeholder="3306"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="dataForm.username" placeholder="用户名"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="dataForm.password" autocomplete="off" placeholder="密码"
+                      show-password></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-form-item prop="dbType" label="数据库名称">
         <el-select v-model="dataForm.databaseName" clearable placeholder="数据库名称"
                    @blur="selectBlur"
@@ -57,12 +75,12 @@
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="submitHandle()">确定</el-button>
     </template>
-  </el-dialog>
+  </vxe-modal>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, toRaw } from "vue";
-import { ElButton, ElDialog, ElMessage } from "element-plus/es";
+import { ElButton, ElMessage } from "element-plus/es";
 import { apiGetDatabaseNames, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
 import { decrypt, encrypt } from "@/utils/tool";
 
@@ -110,7 +128,7 @@ const getDataSource = (id: number) => {
 };
 
 function onDbNameChange(val: string) {
-  
+
 }
 
 let flag = ref(false);
@@ -132,8 +150,8 @@ function onStartSelect(visiable: boolean) {
 
 function selectBlur(event: FocusEvent) {
   if (event.target) {
-    let target = event.target as HTMLInputElement
-    if (target.value !== '') {
+    let target = event.target as HTMLInputElement;
+    if (target.value !== "") {
       dataForm.databaseName = target.value;
     }
   }

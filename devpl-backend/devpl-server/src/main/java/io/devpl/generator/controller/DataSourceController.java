@@ -8,7 +8,7 @@ import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
-import io.devpl.generator.utils.DbUtils;
+import io.devpl.generator.utils.JdbcUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +65,7 @@ public class DataSourceController {
     public Result<String> test(@PathVariable("id") Long id) {
         try {
             DataSourceInfo entity = datasourceService.getById(id);
-            DbUtils.getConnection(new ConnectionInfo(entity));
+            JdbcUtils.getConnection(new ConnectionInfo(entity));
             return Result.ok("连接成功");
         } catch (Exception e) {
             log.error(e.getMessage(), e);

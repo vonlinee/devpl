@@ -8,7 +8,7 @@ import io.devpl.generator.common.query.Query;
 import io.devpl.generator.dao.ProjectModifyMapper;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
-import io.devpl.generator.utils.Arrays;
+import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -132,7 +132,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
         destRoot = new File(replaceData(destPath, replaceMap));
 
         // 获取排除后的源文件
-        File[] srcFiles = Arrays.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !Arrays.contains(exclusions, file.getName()));
+        File[] srcFiles = ArrayUtils.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !ArrayUtils.contains(exclusions, file.getName()));
 
         if (srcFiles == null) {
             throw new IOException("没有需要拷贝的文件 " + srcRoot);

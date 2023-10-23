@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="visible" title="导入数据库表" :close-on-click-modal="false" draggable>
+	<vxe-modal height="80%" width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable z-index="2000" show-footer>
 		<el-form ref="dataFormRef" :model="dataForm">
 			<el-form-item label="数据源" prop="datasourceId">
 				<el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源" @change="getTableList">
@@ -7,9 +7,9 @@
 					<el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connName" :value="ds.id"> </el-option>
 				</el-select>
 			</el-form-item>
-			<el-table :data="dataForm.tableList" border style="width: 100%" :max-height="400" @selection-change="selectionChangeHandle">
-				<el-table-column type="selection" header-align="center" align="center" width="60"></el-table-column>
-				<el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
+			<el-table :data="dataForm.tableList" style="width: 100%" border @selection-change="selectionChangeHandle">
+				<el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
+				<el-table-column prop="tableName" label="表名" header-align="center" align="center" width="300"></el-table-column>
 				<el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
 			</el-table>
 		</el-form>
@@ -17,7 +17,7 @@
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
 		</template>
-	</el-dialog>
+	</vxe-modal>
 </template>
 
 <script setup lang="ts">

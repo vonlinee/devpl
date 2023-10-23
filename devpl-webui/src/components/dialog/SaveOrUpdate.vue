@@ -1,20 +1,17 @@
 <!--
-  弹窗式表单组件
-  z-index值比el-select的z-index值小即可，解决
+  保存或更新
+  header和footer固定
+  z-index值比el-select的z-index值小即可，解决vxe-modal和element-plus组件混用元素被弹窗覆盖问题
 -->
 <template>
-  <vxe-modal :title="title" v-model:model-value="dialogVisiable" draggable :z-index="2000" show-footer>
+  <vxe-modal :height="height" :title="title" v-model:model-value="dialogVisiable" draggable :z-index="2000" show-footer>
     <template #default>
-      <slot name="default">
-        <div>
-          11111
-        </div>
-      </slot>
+      <slot name="default" :formData="formData"></slot>
     </template>
     <template #footer>
       <div>
         <el-button @click="cancel">取消</el-button>
-        <el-button @click="onSubmit">确认</el-button>
+        <el-button type="primary" @click="onSubmit">确认</el-button>
       </div>
     </template>
   </vxe-modal>
@@ -29,6 +26,10 @@ interface PopupFormProps {
    */
   title?: string;
   /**
+   * 内容区域高度
+   */
+  height?: string;
+  /**
    * 表单对象
    */
   formData: any;
@@ -40,12 +41,12 @@ interface PopupFormProps {
   submit?: (formData: any, setVisiable: (visiable: boolean) => void) => void;
 }
 
-const { title, formData, submit } = withDefaults(defineProps<PopupFormProps>(), {
-  title: "标题"
+const { title, formData, height, submit } = withDefaults(defineProps<PopupFormProps>(), {
+  title: "标题",
+  height: "400px"
 });
 
 const dialogVisiable = ref(false);
-
 
 /**
  * 事件定义
@@ -54,7 +55,6 @@ const emit = defineEmits([
   "submit",
   "cancel"
 ]);
-
 
 const cancel = () => {
   emit("cancel", formData, (visiable: boolean) => {

@@ -3,7 +3,7 @@ package io.devpl.generator.utils;
 import java.io.File;
 import java.nio.file.Path;
 
-public class Paths {
+public class PathUtils {
 
     public static boolean isDirecotry(String path) {
         return path.endsWith(File.pathSeparator);

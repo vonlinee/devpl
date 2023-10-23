@@ -11,7 +11,7 @@ import io.devpl.generator.config.DbType;
 import io.devpl.generator.dao.DataSourceMapper;
 import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.service.DataSourceService;
-import io.devpl.generator.utils.DbUtils;
+import io.devpl.generator.utils.JdbcUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -91,7 +91,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceMapper, Dat
                 return dataSource.getConnection();
             } else {
                 ConnectionInfo dataSourceInfo = new ConnectionInfo(this.getById(dataSourceId));
-                return DbUtils.getConnection(dataSourceInfo);
+                return JdbcUtils.getConnection(dataSourceInfo);
             }
         } catch (SQLException exception) {
             return null;
@@ -113,7 +113,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceMapper, Dat
         }
 
         List<String> list = new ArrayList<>();
-        try (Connection connection = DbUtils.getConnection(dataSourceInfo)) {
+        try (Connection connection = JdbcUtils.getConnection(dataSourceInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet catalogs = metaData.getCatalogs();
             SingleColumnRowMapper<String> rowMapper = new SingleColumnRowMapper<>();

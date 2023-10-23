@@ -11,6 +11,7 @@
     "@codemirror/lang-cpp": "^6.0.2",
     "@codemirror/lang-java": "^6.0.1",
     "@codemirror/lang-javascript": "^6.1.7",
+    "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lang-python": "^6.1.2",
     "@codemirror/lang-sql": "^6.5.2",
     "@codemirror/lang-xml": "^6.0.2",
@@ -21,6 +22,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@vueuse/core": "9.1.1",
     "axios": "0.27.2",
+    "codemirror": "^6.0.1",
     "crypto-js": "^4.1.1",
     "element-plus": "2.3.4",
     "file-type": "^18.5.0",
@@ -31,7 +33,6 @@
     "splitpanes": "^3.1.5",
     "ulid": "^2.3.0",
     "vue": "3.2.39",
-    "vue-codemirror": "^6.1.1",
     "vue-router": "4.1.5",
     "vxe-table": "^4.5.11",
     "xe-utils": "^3.5.4"

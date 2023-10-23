@@ -23,58 +23,84 @@ public class DataSourceInfo {
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 数据库类型
-     *
-     * @see DbType
      */
+    @TableField(value = "db_type")
     private String dbType;
-
-    /**
-     * 数据库名称
-     */
-    private String databaseName;
-
-    /**
-     * 连接名
-     */
-    private String connName;
-    /**
-     * URL
-     */
-    private String connUrl;
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 密码
-     */
-    // @Encrypt
-    private String password;
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 驱动连接属性
-     */
-    @TableField(value = "driver_props", typeHandler = JacksonTypeHandler.class)
-    private ObjectNode driverProps;
 
     /**
      * IP地址
      */
-    @TableField(exist = false)
+    @TableField(value = "ip")
     private String ip;
 
     /**
      * 端口号
      */
-    @TableField(exist = false)
+    @TableField(value = "port")
     private Integer port;
+
+    /**
+     * 驱动类名
+     */
+    @TableField(value = "driver_class_name")
+    private String driverClassName;
+
+    /**
+     * 数据库名称
+     */
+    @TableField(value = "database_name")
+    private String databaseName;
+
+    /**
+     * 连接名
+     */
+    @TableField(value = "conn_name")
+    private String connName;
+
+    /**
+     * URL
+     */
+    @TableField(value = "conn_url")
+    private String connUrl;
+
+    /**
+     * 用户名
+     */
+    @TableField(value = "username")
+    private String username;
+
+    /**
+     * 密码
+     */
+    @TableField(value = "password")
+    private String password;
+
+    /**
+     * 驱动属性
+     */
+    @TableField(value = "driver_props")
+    private String driverProps;
+
+    /**
+     * 创建时间
+     */
+    @TableField(value = "create_time")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 是否逻辑删除
+     */
+    @TableField(value = "is_deleted")
+    private Boolean deleted;
 }

@@ -9,7 +9,7 @@ import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
-import io.devpl.generator.utils.Arrays;
+import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.DateTimeUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
@@ -189,7 +189,7 @@ public class CodeGenServiceImpl implements CodeGenService {
         String[] fields = baseClass.getFields().split(",");
         // 标注为基类字段
         for (GenTableField field : table.getFieldList()) {
-            if (Arrays.contains(fields, field.getFieldName())) {
+            if (ArrayUtils.contains(fields, field.getFieldName())) {
                 field.setBaseField(true);
             }
         }

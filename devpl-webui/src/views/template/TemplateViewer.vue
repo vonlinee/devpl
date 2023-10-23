@@ -5,16 +5,29 @@
 -->
 <script setup lang="ts">
 
-function init() {
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { nextTick, ref } from "vue";
 
+const templateDialogShowing = ref();
+const titleRef = ref();
+const templateContentEditorRef = ref();
+
+function init(title: string, content: string) {
+  debugger
+  titleRef.value = title;
+  templateDialogShowing.value = true;
+  nextTick(() => templateContentEditorRef.value.setText(content));
 }
 
+defineExpose({
+  init: init
+});
 </script>
 
 <template>
-    <el-dialog>
-
-    </el-dialog>
+  <vxe-modal :title="titleRef" v-model="templateDialogShowing" width="80%" show-zoom resize fullscreen show-footer>
+    <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px" read-only></monaco-editor>
+  </vxe-modal>
 </template>
 
 <style scoped lang="scss">

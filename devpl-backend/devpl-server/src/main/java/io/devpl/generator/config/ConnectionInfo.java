@@ -11,7 +11,7 @@ import io.devpl.generator.config.query.OracleQuery;
 import io.devpl.generator.config.query.PostgreSqlQuery;
 import io.devpl.generator.config.query.SQLServerQuery;
 import io.devpl.generator.entity.DataSourceInfo;
-import io.devpl.generator.utils.DbUtils;
+import io.devpl.generator.utils.JdbcUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -94,7 +94,7 @@ public class ConnectionInfo {
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                return DbUtils.getConnection(this);
+                return JdbcUtils.getConnection(this);
             }
             return connection;
         } catch (Exception e) {

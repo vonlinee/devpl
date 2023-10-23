@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue'
-import PopupWindow from '@/components/dialog/PopupForm.vue'
+import PopupWindow from '@/components/dialog/SaveOrUpdate.vue'
 
 
 const showDlg = ref<boolean>(false)
