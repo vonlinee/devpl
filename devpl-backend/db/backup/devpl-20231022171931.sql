@@ -167,7 +167,7 @@ DROP TABLE IF EXISTS `data_type_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_mapping` (
-  `id` bigint(20) NOT NULL COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `type_id` bigint(20) DEFAULT NULL COMMENT '主数据类型ID',
   `another_type_id` bigint(20) DEFAULT NULL COMMENT '映射数据类型ID',
   PRIMARY KEY (`id`) USING BTREE

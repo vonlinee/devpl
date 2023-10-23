@@ -23,7 +23,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-table :border="true" :data="tableData" @cell-dblclick="cellDbClickHandler">
+    <vxe-table :height="528"  :border="true" :data="tableData" @cell-dblclick="cellDbClickHandler">
       <vxe-column title="主类型" width="10%" align="center" field="typeName"></vxe-column>
       <vxe-column field="name" title="映射类型" align="center" :edit-render="{}">
         <template #default="{ row }">
@@ -36,7 +36,7 @@
   </vxe-modal>
 
   <vxe-modal v-model="modal1ShowRef" title="选择映射的数据类型" :mask="true" :show-footer="true">
-    <vxe-table ref="tableRef" :border="true" :data="mappeableDataTypes">
+    <vxe-table ref="tableRef" :height="400" :border="true" :data="mappeableDataTypes">
       <vxe-column type="checkbox" width="40" align="center"></vxe-column>
       <vxe-column field="typeGroupId" title="数据类型组" align="center"></vxe-column>
       <vxe-column field="typeName" title="数据类型" align="center"></vxe-column>
@@ -71,8 +71,8 @@ interface FormDataVO {
 
 const pageVo = ref({
   currentPage: 1,
-  pageSize: 30,
-  total: 8
+  pageSize: 10,
+  total: 0
 })
 
 const formData = reactive<FormDataVO>({
@@ -106,13 +106,10 @@ const queryAllDataTypeMappings = () => {
   apiListAllDataTypeMappings(undefined, undefined).then((res) => {
     if (res.code == 200) {
       tableData.value = res.list
+      pageVo.value.total = res.total
     }
   })
 }
-
-onMounted(() => {
-  queryAllDataTypeMappings()
-})
 
 const tableRef = ref()
 
@@ -132,6 +129,8 @@ const getSelectEvent = () => {
     apiAddDataTypeMapping(list).then((res) => {
       if (res.code == 200) {
         useMessage(modal1ShowRef).info("保存成功")
+        // 刷新列表
+        queryAllDataTypeMappings()
       }
     })
   }
@@ -177,7 +176,10 @@ const showModal = () => {
 }
 
 defineExpose({
-  show: () => modalShowRef.value = true
+  show: () => {
+    modalShowRef.value = true
+    queryAllDataTypeMappings()
+  }
 });
 
 </script>
