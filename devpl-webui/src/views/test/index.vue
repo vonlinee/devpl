@@ -45,17 +45,33 @@ const submit = (formData: any, setVisiable: (val: boolean) => void) => {
   setVisiable(false)
 };
 
+const editorRef = ref()
+const inputValue = ref()
+const func1 = () => {
+  console.log(editorRef.value.getText());
+}
+
+const func2 = () => {
+  console.log(inputValue.value.value);
+  editorRef.value.setText(inputValue.value.value)
+}
+
 </script>
 
 <template>
   <button @click="show">Open</button>
+  <button @click="func1">getText</button>
+  <input ref="inputValue">
+  <button @click="func2">setText</button>
   <save-or-update ref="dialogRef" :form-data="formData" @submit="submit">
     <template #default="scope">
       <span>{{ scope}}</span>
     </template>
   </save-or-update>
 
-  <code-mirror></code-mirror>
+  <suspense>
+    <code-mirror ref="editorRef" lang="java"></code-mirror>
+  </suspense>
 
   <!-- <test-my-table></test-my-table> -->
 </template>
@@ -64,4 +80,6 @@ const submit = (formData: any, setVisiable: (val: boolean) => void) => {
 .demo-form-inline .el-input {
   --el-input-width: 220px;
 }
+
+
 </style>

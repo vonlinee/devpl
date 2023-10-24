@@ -90,7 +90,7 @@ public class DataSourceInfo {
      * 创建时间
      */
     @TableField(value = "create_time")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
