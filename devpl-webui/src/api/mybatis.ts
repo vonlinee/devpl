@@ -1,21 +1,20 @@
-import service from '@/utils/request'
+import http from '@/utils/http'
 
 /**
  * 获取Mapper中的参数
  * @param content
  */
 export const getMapperStatementParams = (content: string) => {
-    let param: Object = {
-        ms: content
-    }
-    return service.post('/api/tools/mybatis/ms/params', param)
+    return http.postJson('/api/tools/mybatis/ms/params', {
+        mapperStatement: content
+    })
 }
 
 /**
  * 获取Mapper中的参数
  */
 export const apiGetDataTypes = () => {
-    return service.get('/api/tools/mybatis/ms/param/datatypes')
+    return http.get('/api/tools/mybatis/ms/param/datatypes')
 }
 
 /**
@@ -23,7 +22,7 @@ export const apiGetDataTypes = () => {
  * @return SQL 字符串
  */
 export const apiGetSql = (ms: string, params: any[], real: boolean) => {
-    return service.post('/api/tools/mybatis/ms/sql', {
+    return http.postJson('/api/tools/mybatis/ms/sql', {
         mapperStatement: ms,
         msParams: params,
         real: real ? 1 : 0.

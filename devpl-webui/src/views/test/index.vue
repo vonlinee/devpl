@@ -80,6 +80,4 @@ const func2 = () => {
 .demo-form-inline .el-input {
   --el-input-width: 220px;
 }
-
-
 </style>

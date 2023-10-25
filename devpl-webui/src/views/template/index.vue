@@ -23,10 +23,6 @@
                        align="center"></el-table-column>
       <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
                        align="center"></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip header-align="center"
-                       align="center" width="170px"></el-table-column>
-      <el-table-column prop="updateTime" label="更新时间" show-overflow-tooltip header-align="center"
-                       align="center" width="170px"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
                        align="center" width="300px"></el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
@@ -93,7 +89,7 @@ function showTemplateEditDialog(templateInfo: any) {
   } else {
     // 字符串模板
   }
-  templateContentEditorRef.value.init(templateInfo.name, content)
+  templateContentEditorRef.value.init(templateInfo.name, content);
 }
 
 onMounted(() => getDataList());

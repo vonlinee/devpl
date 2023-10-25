@@ -26,6 +26,7 @@
             </if>
         </where>
     </select>
+
     <select id="listAllMappableDataTypes" resultType="io.devpl.generator.domain.vo.DataTypeMappingVO">
         SELECT *
         FROM data_type_item

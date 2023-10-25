@@ -1,5 +1,6 @@
 package io.devpl.generator.mybatis;
 
+import io.devpl.generator.utils.ReflectionUtils;
 import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
@@ -9,16 +10,12 @@ import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
-
-    private final Logger logger = LoggerFactory.getLogger(MyXmlStatemtnBuilder.class);
 
     // 覆盖父类的final属性
     private XNode context;

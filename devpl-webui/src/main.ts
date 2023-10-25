@@ -8,6 +8,8 @@ import VXETable from "vxe-table";
 import SvgIcon from "@/components/svg-icon";
 import "vxe-table/lib/style.css";
 
+import { createPinia, Pinia } from "pinia";
+
 import "./command.ts";
 
 // 使用svg目录下的svg文件
@@ -27,6 +29,11 @@ VXETable.setup({
 // @ts-ignore
 const app: App<Element> = createApp(App);
 
+// 创建 Pinia 实例
+const pinia: Pinia = createPinia();
+
+// 挂载到 Vue 根实例
+app.use(pinia);
 app.use(router);
 app.use(SvgIcon);
 app.use(ElementPlus);

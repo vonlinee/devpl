@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.type.DataType;
  */
 public enum MapperStatementParamValueType implements DataType {
 
+    NULL("Null"),
     BOOLEAN("Boolean"),
     NUMBER("Number"),
     STRING("String"),

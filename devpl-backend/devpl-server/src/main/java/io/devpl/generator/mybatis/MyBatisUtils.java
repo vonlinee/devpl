@@ -1,6 +1,7 @@
 package io.devpl.generator.mybatis;
 
 import io.devpl.generator.mybatis.tree.TreeNode;
+import io.devpl.generator.utils.ReflectionUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.ognl.*;
@@ -15,6 +16,8 @@ public class MyBatisUtils {
 
     /**
      * TODO 解决ResultMap不存在的问题
+     * TODO 根据ognl表达式推断参数值的数据类型(不需要精准推断)
+     *
      * @param xml XML 标签内容
      * @return 解析结果
      */
@@ -39,6 +42,10 @@ public class MyBatisUtils {
         return configuration.getMappedStatements();
     }
 
+    /**
+     * @param ognlVar ognl变量列表
+     * @return 转化成树形结构
+     */
     public static TreeNode<String> tree(Set<String> ognlVar) {
         TreeNode<String> forest = new TreeNode<>("root");
         TreeNode<String> current = forest;
@@ -54,6 +61,7 @@ public class MyBatisUtils {
 
     /**
      * 获取OGNL变量
+     *
      * @param mappedStatement mapper语句标签
      * @return ognl变量列表
      */
@@ -61,7 +69,7 @@ public class MyBatisUtils {
         SqlSource sqlSource = mappedStatement.getSqlSource();
         HashSet<String> result = new HashSet<>();
         if (sqlSource instanceof DynamicSqlSource dss) {
-            SqlNode rootNode = (SqlNode) ReflectionUtils.getValue(dss, "rootSqlNode");
+            SqlNode rootNode = ReflectionUtils.getTypedValue(dss, "rootSqlNode", null);
             searchExpressions(rootNode, result);
         }
         return result;
@@ -69,6 +77,7 @@ public class MyBatisUtils {
 
     /**
      * 查找MyBatis的MappedStatement中所有出现的变量引用，只能出现文本中出现的变量
+     *
      * @param parent      根节点
      * @param expressions 存放结果，未去重
      */
@@ -162,6 +171,7 @@ public class MyBatisUtils {
 
     /**
      * 递归寻找$引用的表达式，对应的SqlNode是 TextSqlNode
+     *
      * @param content     文本，包含${xxx}或者#{xxx}
      * @param expressions 存放结果的容器
      */

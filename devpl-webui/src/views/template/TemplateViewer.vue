@@ -13,7 +13,6 @@ const titleRef = ref();
 const templateContentEditorRef = ref();
 
 function init(title: string, content: string) {
-  debugger
   titleRef.value = title;
   templateDialogShowing.value = true;
   nextTick(() => templateContentEditorRef.value.setText(content));

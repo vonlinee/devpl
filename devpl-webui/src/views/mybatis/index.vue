@@ -1,15 +1,18 @@
 <template>
   <el-row class="el-row">
-    <el-col :span="16">
+    <el-col :span="15">
       <monaco-editor ref="inputRef" language="xml" height="400px"></monaco-editor>
+      <monaco-editor ref="sqlRef" language="sql" height="400px"></monaco-editor>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="9">
       <param-import></param-import>
       <vxe-table
         show-overflow
         ref="msParamTable"
         border
+        height="400px"
         row-key
+        header-align="center"
         :data="mapperParams"
         :checkbox-config="{ checkStrictly: true }"
         :tree-config="{transform: true}"
@@ -17,7 +20,7 @@
       >
         <vxe-column field="name" title="参数名" tree-node></vxe-column>
         <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
-        <vxe-column field="type" title="类型" :edit-render="{}">
+        <vxe-column field="type" title="类型" :edit-render="{}" :width="130" align="center">
           <template #default="{ row }">
             <span>{{ row.type }}</span>
           </template>
@@ -29,42 +32,32 @@
           </template>
         </vxe-column>
       </vxe-table>
+      <el-button type="primary" @click="getParams()">解析参数</el-button>
+      <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
+      <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
     </el-col>
   </el-row>
-  <el-button type="primary" @click="getParams()">解析参数</el-button>
-  <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
-  <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
-
-  <el-dialog v-model="dialogVisiable">
-    <template #default>
-      <code-editor ref="dialogEditorRef"></code-editor>
-    </template>
-  </el-dialog>
-
-  <monaco-editor ref="sqlRef" language="sql" height="400px"></monaco-editor>
 </template>
 
 <script setup lang="ts">
 import { hasText } from "@/utils/tool";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 
 import { apiGetDataTypes, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
-import { ElButton, ElDialog, ElMessage } from "element-plus";
+import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "@/views/mybatis/ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { appStore } from "@/store";
 
 // 数据
 const code = ref("");
-let dialogVisiable = ref(false);
-let dialogEditorRef = ref(null);
-let inputRef = ref(null);
+const inputRef = ref();
+const sqlRef = ref();
 
-let sqlRef = ref();
 
 // 表格实例
-let msParamTable = ref();
-
-let javaDataTypes = ref();
+const msParamTable = ref();
+const javaDataTypes = ref();
 
 const editConfig = reactive({
   trigger: "click",
@@ -81,8 +74,32 @@ onMounted(() => {
   });
 });
 
+const store = appStore();
+
+const ms = computed(() => store.ms);
+
+/**
+ * 参数节点
+ */
+interface MsParamNode {
+  id: number
+  leaf: boolean,
+  name: string,
+  parentId: number | undefined,
+  type: string,
+  value: string,
+  valueType: string
+}
+
+/**
+ * 类型推断规则
+ */
+interface TypeInferenceRule {
+
+}
+
 // mybatis mapper语句参数
-let mapperParams = ref([]);
+let mapperParams = ref<MsParamNode[]>([]);
 
 const expandAll = () => {
   const $table = msParamTable.value;
@@ -94,8 +111,8 @@ const expandAll = () => {
 // 获取参数
 function getParams() {
   let code = inputRef.value.getText();
-  if (hasText(code.value)) {
-    getMapperStatementParams(code.value).then(value => {
+  if (hasText(code)) {
+    getMapperStatementParams(code).then(value => {
       mapperParams.value = value.data;
     }).then(() => expandAll());
   } else {
@@ -105,11 +122,12 @@ function getParams() {
 
 // 获取sql
 function getSqlOfMapperStatement(real: boolean) {
-  if (!hasText(code.value)) {
+  const code = inputRef.value.getText();
+  if (!hasText(code)) {
     ElMessage.warning("输入文本为空!");
     return;
   }
-  apiGetSql(code.value, mapperParams.value, real).then(res => {
+  apiGetSql(code, mapperParams.value, real).then(res => {
     sqlRef.value.setText(res.data);
   });
 }
@@ -117,11 +135,6 @@ function getSqlOfMapperStatement(real: boolean) {
 </script>
 
 <style lang="scss">
-// Code Mirror 字体配置
-.cm-content {
-  font-family: Consolas, serif;
-}
-
 .el-row {
   margin-bottom: 20px;
   display: flex;

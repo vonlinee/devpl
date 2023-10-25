@@ -9,6 +9,13 @@ import org.apache.ibatis.mapping.MappedStatement;
 @AllArgsConstructor
 public class ParseResult {
 
+    /**
+     * 变量表，树形结构
+     */
     private TreeNode<String> root;
+
+    /**
+     * MappedStatement
+     */
     private MappedStatement mappedStatement;
 }

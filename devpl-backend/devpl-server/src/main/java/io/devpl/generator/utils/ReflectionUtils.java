@@ -1,4 +1,4 @@
-package io.devpl.generator.mybatis;
+package io.devpl.generator.utils;
 
 import java.lang.reflect.*;
 import java.util.Objects;
