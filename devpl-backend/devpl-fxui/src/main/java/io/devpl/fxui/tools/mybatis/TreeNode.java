@@ -3,6 +3,11 @@ package io.devpl.fxui.tools.mybatis;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 树节点
+ *
+ * @param <T>
+ */
 public class TreeNode<T> implements Visitable<T> {
     // LinkedHashSet保持插入顺序
     private List<TreeNode<T>> children = new LinkedList<>();

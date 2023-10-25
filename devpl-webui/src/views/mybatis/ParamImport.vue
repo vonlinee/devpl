@@ -36,27 +36,29 @@ function submit() {
 <template>
   <el-button @click="showDialog()">导入</el-button>
 
-  <vxe-modal v-model="showRef">
+  <vxe-modal title="参数导入" v-model="showRef" :mask="false" :show-footer="true" :z-index="2000" :width="800">
     <template #default>
       <selective-import ref="importTabPane"></selective-import>
     </template>
     <template #footer>
-             <span style="display: flex">
-             <el-text class="mx-1">覆盖模式</el-text>
-                <el-select v-model="overrideMode" class="m-2" placeholder="Select" size="large">
-                    <el-option
-                      v-for="item in overrideModeOptions"
-                      :key="item.label"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                </el-select></span>
-      <el-button type="primary" @click="showRef = false">取消</el-button>
-      <el-button type="primary" @click="submit">确定</el-button>
+      <el-row align="middle">
+        <el-col :span="2">
+          <el-text class="mx-1">覆盖模式</el-text>
+        </el-col>
+        <el-col :span="8" :offset="1">
+          <span style="display: flex">
+            <el-select v-model="overrideMode" class="m-2" placeholder="Select" size="large">
+              <el-option v-for="item in overrideModeOptions" :key="item.label" :label="item.label" :value="item.value" />
+            </el-select></span>
+        </el-col>
+
+        <el-col :span="12">
+          <el-button type="primary" @click="showRef = false">取消</el-button>
+          <el-button type="primary" @click="submit">确定</el-button>
+        </el-col>
+      </el-row>
     </template>
   </vxe-modal>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -2,6 +2,7 @@ package io.devpl.fxui.app;
 
 import io.devpl.fxui.components.pane.RouterPane;
 import io.devpl.fxui.components.RouterView;
+import io.devpl.fxui.controller.template.TemplateManageView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
 import io.devpl.fxui.mvvm.View;
@@ -54,6 +55,7 @@ public class MainApplication extends Application {
         routerPane.addRouteMapping(3, new Button("333"));
 
         menu.addChild("数据类型", RouterView.of(new TypeMappingTable()));
+        menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
 
 //        Modal modal = Modal.of("数据类型表", typeMappingTable, 700, 500);
 

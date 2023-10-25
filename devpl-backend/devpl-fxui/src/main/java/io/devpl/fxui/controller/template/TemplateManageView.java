@@ -1,5 +1,6 @@
 package io.devpl.fxui.controller.template;
 
+import io.devpl.fxui.editor.LanguageMode;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.mvvm.FxmlBinder;
@@ -10,17 +11,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 @FxmlBinder(location = "layout/template/template_manage.fxml")
@@ -33,13 +38,31 @@ public class TemplateManageView extends FxmlView {
 
     CodeMirrorEditor codeEditor;
 
+    File file;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         vboxRight.getChildren().add(tbvTemplateInfo);
+
+
+        codeEditor = CodeMirrorEditor.newInstance(LanguageMode.JSON);
+
+        vboxRight.getChildren().add(codeEditor.getView());
     }
 
+    @FXML
     public void parseTemplate(MouseEvent mouseEvent) {
 
+        if (file != null) {
+            Properties p = new Properties();
+            p.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, file.getAbsoluteFile().getParent());
+            Velocity.init(p);
+            Template template = Velocity.getTemplate(file.getName());
+
+            VelocityTemplateAnalyzer analyzer = new VelocityTemplateAnalyzer();
+
+            analyzer.analyze(template);
+        }
     }
 
     public void m1() throws IOException {
@@ -48,6 +71,7 @@ public class TemplateManageView extends FxmlView {
         ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
         ve.init();
+
         final VelocityTemplateAnalyzer analyzer = new VelocityTemplateAnalyzer();
         String text = "";
 
@@ -55,7 +79,7 @@ public class TemplateManageView extends FxmlView {
 
         Files.deleteIfExists(path);
 
-        Path templateFile = Files.write(path, text.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Path templateFile = Files.writeString(path, text, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         // 获取模板文件
         Template t = ve.getTemplate(templateFile.toAbsolutePath().toString());
 
@@ -68,9 +92,8 @@ public class TemplateManageView extends FxmlView {
     public void openFileChooser(ActionEvent actionEvent) {
         chooser.setInitialDirectory(new File("D:/Temp"));
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("仅支持vm文件", "vm"));
-        File file = chooser.showOpenDialog(getStage(actionEvent));
+        file = chooser.showOpenDialog(getStage(actionEvent));
         if (file != null) {
-            System.out.println(file);
             codeEditor.setContent(FileUtils.readToString(file), false);
         }
     }

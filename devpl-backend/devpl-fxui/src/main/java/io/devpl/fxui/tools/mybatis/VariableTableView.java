@@ -13,7 +13,8 @@ import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 
 /**
- * 变量表
+ * 变量表，树形结构，比如
+ * user.name, user.age
  * 包含固定的3列
  * 变量名称 变量值 变量值的数据类型
  */
@@ -179,7 +180,7 @@ public class VariableTableView extends TreeTableView<VarItem> {
         }
     }
 
-    public void clear() {
+    public final void clear() {
         this.root.getChildren().clear();
     }
 }
