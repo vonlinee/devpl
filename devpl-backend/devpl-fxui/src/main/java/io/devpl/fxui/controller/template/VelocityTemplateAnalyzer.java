@@ -20,8 +20,10 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
 
     public static void parseTemplate(Template template) {
         Object data = template.getData();
+        // SimpleNode是所有节点的父类
         if (data instanceof SimpleNode sn) {
-            recursive(sn);
+            VariableExtractor.extract(sn, data);
+            // recursive(sn);
         } else {
             throw new RuntimeException(String.valueOf(data.getClass()));
         }

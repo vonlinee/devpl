@@ -5,10 +5,6 @@ import { ElButton } from "element-plus";
 
 let showRef = ref(false);
 
-function showDialog() {
-  showRef.value = true;
-}
-
 let overrideMode = ref(1);
 
 // 覆盖模式: 1-智能合并, 2-完全覆盖
@@ -37,11 +33,15 @@ function submit() {
   emits('onSubmit', tabName, content)
 }
 
+defineExpose({
+  init: () => {
+    showRef.value = true
+  }
+})
+
 </script>
 
 <template>
-  <el-button @click="showDialog()">导入</el-button>
-
   <vxe-modal size="small" title="参数导入" v-model="showRef" :mask="false" :show-footer="true" :z-index="2000"
              :width="800">
     <template #default>

@@ -5,7 +5,9 @@
       <monaco-editor ref="sqlRef" language="sql" height="400px"></monaco-editor>
     </el-col>
     <el-col :span="9">
-      <param-import></param-import>
+      <el-button @click="fillSampleMapperStatement">填充样例</el-button>
+      <el-button @click="showDialog()">导入</el-button>
+      <param-import ref="importModalRef"></param-import>
       <vxe-table
         show-overflow
         ref="msParamTable"
@@ -35,36 +37,50 @@
       <el-button type="primary" @click="getParams()">解析参数</el-button>
       <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
       <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+
+      <el-card>
+        <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
+      </el-card>
     </el-col>
   </el-row>
 </template>
 
 <script setup lang="ts">
 import { hasText } from "@/utils/tool";
-import { computed, onMounted, reactive, ref } from "vue";
+import { Ref, computed, onMounted, reactive, ref, toRaw } from "vue";
 
-import { apiGetDataTypes, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
+import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "@/views/mybatis/ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import { appStore } from "@/store";
+import { VxeGridConstructor, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeTablePropTypes } from "vxe-table/types/all";
 
 // 数据
 const code = ref("");
 const inputRef = ref();
 const sqlRef = ref();
-
+const importModalRef = ref();
 
 // 表格实例
 const msParamTable = ref();
 const javaDataTypes = ref();
 
-const editConfig = reactive({
+type RowModel = any
+
+const editConfig = reactive<VxeTablePropTypes.EditConfig<RowModel>>({
   trigger: "click",
   mode: "cell",
-  beforeEditMethod: (row: any, rowIndex: number, column: any, columnIndex: number) => {
+  beforeEditMethod: (params: {
+      row: RowModel
+      rowIndex: number
+      column: VxeTableDefines.ColumnInfo<RowModel>
+      columnIndex: number
+      $table: VxeTableConstructor<RowModel> & VxeTablePrivateMethods<RowModel>
+      $grid: VxeGridConstructor<RowModel> | null | undefined
+    }) => {
     // 只有叶子结点可编辑
-    return row.row.leaf != null && row.row.leaf;
+    return params.row.leaf != null && params.row.leaf;
   }
 });
 
@@ -94,12 +110,17 @@ interface MsParamNode {
 /**
  * 类型推断规则
  */
-interface TypeInferenceRule {
-
+interface MyBatisToolOptions {
+  // 开启自动类型推断，不一定准确
+  enableTypeInference: true
 }
 
 // mybatis mapper语句参数
 let mapperParams = ref<MsParamNode[]>([]);
+
+const options = ref<MyBatisToolOptions>({
+  enableTypeInference: true
+})
 
 const expandAll = () => {
   const $table = msParamTable.value;
@@ -112,7 +133,7 @@ const expandAll = () => {
 function getParams() {
   let code = inputRef.value.getText();
   if (hasText(code)) {
-    getMapperStatementParams(code).then(value => {
+    getMapperStatementParams(code, toRaw(options.value)).then(value => {
       mapperParams.value = value.data;
     }).then(() => expandAll());
   } else {
@@ -130,6 +151,18 @@ function getSqlOfMapperStatement(real: boolean) {
   apiGetSql(code, mapperParams.value, real).then(res => {
     sqlRef.value.setText(res.data);
   });
+}
+
+function showDialog() {
+  importModalRef.value.init()
+}
+
+const fillSampleMapperStatement = () => {
+  apiGetSampleXmlText().then((res) => {
+    if (res.code == 200) {
+      inputRef.value.setText(res.data)
+    }
+  })
 }
 
 </script>

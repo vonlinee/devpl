@@ -1,12 +1,22 @@
 import http from '@/utils/http'
 
+
 /**
  * 获取Mapper中的参数
  * @param content
  */
-export const getMapperStatementParams = (content: string) => {
+export const apiGetSampleXmlText = () => {
+    return http.get('/api/tools/mybatis/ms/sample')
+}
+
+/**
+ * 获取Mapper中的参数
+ * @param content
+ */
+export const getMapperStatementParams = (content: string, options: any) => {
     return http.postJson('/api/tools/mybatis/ms/params', {
-        mapperStatement: content
+        mapperStatement: content,
+        ...options
     })
 }
 

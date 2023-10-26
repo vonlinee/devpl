@@ -813,16 +813,29 @@ public class FileUtils {
     }
 
     /**
+     * 不抛异常
+     *
+     * @param file 文件
+     * @return 文本
+     */
+    public static String readStringQuietly(File file) {
+        try {
+            return readString(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Reads the contents of a file into a String using the default encoding for the
      * VM. The file is always closed.
      *
      * @param file the file to read, must not be <code>null</code>
      * @return the file contents, never <code>null</code>
      * @throws IOException in case of an I/O error
-     * @since Commons IO 1.3.1
      */
     public static String readString(File file) throws IOException {
-        return readString(file, (Charset) null);
+        return readString(file, StandardCharsets.UTF_8);
     }
 
     /**

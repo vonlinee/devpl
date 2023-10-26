@@ -2,6 +2,7 @@ package io.devpl.generator.service;
 
 import io.devpl.generator.domain.ParamNode;
 import io.devpl.generator.domain.param.GetSqlParam;
+import io.devpl.generator.mybatis.ParamMeta;
 import io.devpl.generator.mybatis.ParseResult;
 import io.devpl.generator.mybatis.tree.TreeNode;
 import org.apache.ibatis.mapping.BoundSql;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public interface MyBatisService {
 
-    ParseResult paraseMapperStatement(String mapperStatement);
+    ParseResult parseMapperStatement(String mapperStatement, boolean inferType);
 
     /**
      * 获取可执行的SQL
@@ -24,5 +25,11 @@ public interface MyBatisService {
 
     String getPreCompliedSql(GetSqlParam param);
 
-    void recursive(TreeNode<String> parentNode, List<ParamNode> rows, int parentId);
+    MappedStatement parseMappedStatement(String statement);
+
+    List<ParamMeta> getParamMetadata(MappedStatement mappedStatement);
+
+    List<ParamMeta> getParamMetadata(String statement);
+
+    void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId);
 }

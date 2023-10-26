@@ -9,6 +9,14 @@ import java.util.Objects;
  */
 public class ReflectionUtils {
 
+    /**
+     * @param object       对象
+     * @param fieldName    字段名
+     * @param defaultValue 默认值
+     * @param <T>          默认值类型
+     * @return 字段值
+     * @throws ClassCastException 类型转换失败
+     */
     @SuppressWarnings("unchecked")
     public static <T> T getTypedValue(Object object, String fieldName, T defaultValue) {
         return (T) getValue(object, fieldName, defaultValue);
@@ -16,6 +24,7 @@ public class ReflectionUtils {
 
     /**
      * 直接读取对象的属性值, 忽略 private/protected 修饰符, 也不经过 getter
+     *
      * @param object       对象
      * @param fieldName    对象的字段
      * @param defaultValue 当反射操作抛异常时，返回该值，获取的值为null时返回null
@@ -40,6 +49,7 @@ public class ReflectionUtils {
 
     /**
      * 直接读取对象的属性值, 忽略 private/protected 修饰符, 也不经过 getter
+     *
      * @param object    对象
      * @param fieldName 对象的字段
      * @return 字段值
@@ -63,6 +73,7 @@ public class ReflectionUtils {
 
     /**
      * 直接设置对象属性值, 忽略 private/protected 修饰符, 也不经过 setter
+     *
      * @param object    对象
      * @param fieldName 对象的字段
      * @param value     设置的字段值
@@ -86,6 +97,7 @@ public class ReflectionUtils {
     /**
      * 通过反射, 获得定义 Class 时声明的父类的泛型参数的类型
      * 如: public EmployeeDao extends BaseDao<Employee, String>
+     *
      * @param clazz 指定的Class
      * @param index 第几个泛型参数
      * @return 泛型类型
@@ -108,6 +120,7 @@ public class ReflectionUtils {
     /**
      * 通过反射, 获得 Class 定义中声明的父类的泛型参数类型
      * 如: public EmployeeDao extends BaseDao<Employee, String>
+     *
      * @param <T>   泛型
      * @param clazz 目标Class
      * @return 泛型Class
@@ -119,6 +132,7 @@ public class ReflectionUtils {
 
     /**
      * 循环向上转型, 获取对象的 DeclaredMethod
+     *
      * @param object         对象
      * @param methodName     方法名
      * @param parameterTypes 方法的参数类型列表
@@ -139,6 +153,7 @@ public class ReflectionUtils {
 
     /**
      * 使 filed 变为可访问
+     *
      * @param field 字段
      * @see Field#trySetAccessible() 会抛异常，JDK9+
      */
@@ -154,6 +169,7 @@ public class ReflectionUtils {
     /**
      * 循环向上转型, 获取对象的 DeclaredField
      * getDeclaredFiled 仅能获取类本身的属性成员（包括私有、共有、保护）
+     *
      * @param object    对象
      * @param filedName 字段名
      * @return Field实例
@@ -171,6 +187,7 @@ public class ReflectionUtils {
 
     /**
      * 仅能获取类(及其父类)的public属性成员
+     *
      * @param obj       对象
      * @param fieldName 获取的字段名
      * @return Field对象
@@ -181,6 +198,7 @@ public class ReflectionUtils {
 
     /**
      * 直接调用对象方法, 而忽略修饰符(private, protected)
+     *
      * @param object         对象
      * @param methodName     方法名
      * @param parameterTypes 参数类型

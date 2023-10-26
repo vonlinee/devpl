@@ -7,15 +7,17 @@ import com.baomidou.mybatisplus.generator.type.DataType;
  */
 public enum MapperStatementParamValueType implements DataType {
 
-    NULL("Null"),
-    BOOLEAN("Boolean"),
-    NUMBER("Number"),
-    STRING("String"),
-    COLLECTION("Collection");
+    NULL(0, "Null"),
+    BOOLEAN(1, "Boolean"),
+    NUMBER(2, "Number"),
+    STRING(3, "String"),
+    COLLECTION(4, "Collection");
 
+    private final int type;
     private final String typeName;
 
-    MapperStatementParamValueType(String typeName) {
+    MapperStatementParamValueType(int type, String typeName) {
+        this.type = type;
         this.typeName = typeName;
     }
 
@@ -29,6 +31,10 @@ public enum MapperStatementParamValueType implements DataType {
             }
         }
         return null;
+    }
+
+    public int getType() {
+        return type;
     }
 
     @Override

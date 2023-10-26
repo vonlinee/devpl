@@ -25,7 +25,7 @@ public final class Resources {
     /**
      * 项目的根路径，如果嵌套项目，则返回父项目所在路径
      */
-    private static final String PROJECT_ROOT_PATH = new File("/").getAbsolutePath();
+    private static final String PROJECT_ROOT_PATH = new File("").getAbsolutePath();
 
     /**
      * 默认类加载器: Thread.currentThread().getContextClassLoader()

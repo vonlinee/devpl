@@ -12,7 +12,7 @@ public class ParseResult {
     /**
      * 变量表，树形结构
      */
-    private TreeNode<String> root;
+    private TreeNode<ParamMeta> root;
 
     /**
      * MappedStatement
