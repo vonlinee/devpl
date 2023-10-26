@@ -105,13 +105,12 @@ public class MyBatisServiceImpl implements MyBatisService {
     }
 
     @Override
-    public String getPreCompliedSql(GetSqlParam param) {
+    public String getSqlOfMappedStatement(GetSqlParam param) {
         List<TreeNode<ParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
         Map<String, Object> map = new HashMap<>();
         for (TreeNode<ParamNode> treeNode : treeNodes) {
             fillParamMap(treeNode, map);
         }
-        // TODO 缓存解析结果
         ParseResult result = parseMapperStatement(param.getMapperStatement(), true);
         MappedStatement ms = result.getMappedStatement();
         BoundSql boundSql = ms.getBoundSql(map);
@@ -201,7 +200,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             parentRow.setParentId(parentId);
         }
         parentRow.setName(parentNode.getData().getName());
-        parentRow.setType(String.valueOf(parentNode.getData().getType()));
+        parentRow.setType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
         rows.add(parentRow);
         if (parentNode.hasChildren()) {
             for (TreeNode<ParamMeta> node : parentNode.getChildren()) {
@@ -325,6 +324,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 find(sqlText, expressions);
             }
         } else if (parent instanceof ForEachSqlNode fesn) {
+            // 集合类型
             String expression = (String) ReflectionUtils.getValue(fesn, "collectionExpression");
             expressions.add(new ParamMeta(expression));
             SqlNode contents = (SqlNode) ReflectionUtils.getValue(fesn, "contents");

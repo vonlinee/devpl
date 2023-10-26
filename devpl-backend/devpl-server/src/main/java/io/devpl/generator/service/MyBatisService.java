@@ -23,7 +23,7 @@ public interface MyBatisService {
      */
     String getExecutableSql(MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject);
 
-    String getPreCompliedSql(GetSqlParam param);
+    String getSqlOfMappedStatement(GetSqlParam param);
 
     MappedStatement parseMappedStatement(String statement);
 

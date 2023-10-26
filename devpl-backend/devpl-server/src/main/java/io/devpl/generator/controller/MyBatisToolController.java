@@ -74,7 +74,7 @@ public class MyBatisToolController {
     }
 
     /**
-     * 获取Mapper Statemtn的参数值类型列表
+     * 获取Mapper Statement的参数值类型列表
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<DataTypeVO>> getDataTypes() throws Exception {
@@ -91,11 +91,11 @@ public class MyBatisToolController {
     }
 
     /**
-     * 获取Mapper Statemtn结合输入参数获取sql
+     * 获取Mapper Statement结合输入参数获取sql
      */
     @PostMapping("/ms/sql")
-    public Result<String> getPreCompliedSql(@RequestBody GetSqlParam param) {
-        return Result.ok(myBatisService.getPreCompliedSql(param));
+    public Result<String> getSqlOfMappedStatement(@RequestBody GetSqlParam param) {
+        return Result.ok(myBatisService.getSqlOfMappedStatement(param));
     }
 
     /**

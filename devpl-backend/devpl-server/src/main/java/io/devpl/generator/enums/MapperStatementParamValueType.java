@@ -2,12 +2,14 @@ package io.devpl.generator.enums;
 
 import com.baomidou.mybatisplus.generator.type.DataType;
 
+import java.util.Arrays;
+
 /**
  * MyBatis Mapper Statement 参数值类型
  */
 public enum MapperStatementParamValueType implements DataType {
 
-    NULL(0, "Null"),
+    NULL(-1, "Null"),
     BOOLEAN(1, "Boolean"),
     NUMBER(2, "Number"),
     STRING(3, "String"),
@@ -31,6 +33,10 @@ public enum MapperStatementParamValueType implements DataType {
             }
         }
         return null;
+    }
+
+    public static MapperStatementParamValueType valueOfType(int type, MapperStatementParamValueType defaultValue) {
+        return Arrays.stream(values()).filter(i -> i.getType() == type).findFirst().orElse(defaultValue);
     }
 
     public int getType() {
