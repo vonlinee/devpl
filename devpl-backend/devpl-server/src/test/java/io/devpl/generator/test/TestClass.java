@@ -1,6 +1,5 @@
 package io.devpl.generator.test;
 
-import io.devpl.generator.common.utils.JSONUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,9 +10,6 @@ public class TestClass {
     @Test
     public void testAddUser() {
 
-        String jsonString = JSONUtils.toJsonString(prepareObject());
-
-        System.out.println(jsonString);
     }
 
     public Response<Model<Info>> prepareObject() {

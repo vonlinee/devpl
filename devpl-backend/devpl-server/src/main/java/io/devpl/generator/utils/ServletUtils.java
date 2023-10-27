@@ -1,4 +1,4 @@
-package io.devpl.generator.common.utils;
+package io.devpl.generator.utils;
 
 import io.devpl.sdk.io.IOUtils;
 import jakarta.servlet.ServletOutputStream;

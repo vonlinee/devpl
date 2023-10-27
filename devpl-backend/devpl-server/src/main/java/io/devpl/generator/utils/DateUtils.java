@@ -1,4 +1,4 @@
-package io.devpl.generator.common.utils;
+package io.devpl.generator.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

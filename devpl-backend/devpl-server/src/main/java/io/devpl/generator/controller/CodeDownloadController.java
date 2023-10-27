@@ -1,10 +1,9 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.utils.ServletUtils;
+import io.devpl.generator.utils.ServletUtils;
 import io.devpl.generator.service.CodeGenService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

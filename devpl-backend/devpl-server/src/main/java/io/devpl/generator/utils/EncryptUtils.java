@@ -1,4 +1,4 @@
-package io.devpl.generator.common.utils;
+package io.devpl.generator.utils;
 
 import org.apache.commons.codec.binary.Base64;
 

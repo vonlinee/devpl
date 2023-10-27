@@ -1,7 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.exception.ServerException;
-import io.devpl.generator.common.utils.JSONUtils;
+import io.devpl.generator.utils.JSONUtils;
 import io.devpl.generator.config.GeneratorProperties;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.entity.TemplateInfo;
