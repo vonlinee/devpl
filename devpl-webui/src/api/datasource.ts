@@ -43,3 +43,11 @@ export const apiUploadDriverJar = (file: File) => {
     file: file
   });
 };
+
+/**
+ * 所有支持的数据库类型
+ * @returns 所有支持的数据库类型
+ */
+export const apiListSupportedDbTypes = () => {
+  return http.get("/api/gen/datasource/dbtypes")
+}

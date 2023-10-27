@@ -6,6 +6,9 @@ import lombok.Data;
 @Data
 public class ParamMeta {
 
+    /**
+     * 参数名
+     */
     private String name;
 
     /**

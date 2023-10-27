@@ -1,20 +1,26 @@
 <template>
-  <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000"
-             @hide="resetFields" :show-footer="true">
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-      <el-form-item label="类型分组" prop="typeGroupId">
-        <div>
-          <el-select v-model="dataForm.typeGroupId" class="m-2" placeholder="选择类型组">
-            <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
-                       :value="item.typeGroupId">
-              <span style="float: left">{{ item.typeGroupId }}</span>
-              <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{ item.typeGroupName
+  <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000" :width="600"
+    @hide="resetFields" :show-footer="true">
+    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
+
+      <el-row>
+        <el-col :span="20">
+          <el-form-item label="类型分组" prop="typeGroupId">
+            <el-select v-model="dataForm.typeGroupId" placeholder="选择类型组" style="min-width: 400px;;">
+              <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
+                :value="item.typeGroupId">
+                <span style="float: left">{{ item.typeGroupId }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{
+                  item.typeGroupName
                 }}</span>
-            </el-option>
-          </el-select>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
           <el-button :icon="Plus" @click="typeGroupModalVisiable = true"></el-button>
-        </div>
-      </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item label="类型Key" prop="typeKey">
         <el-input v-model="dataForm.typeKey"></el-input>
       </el-form-item>
@@ -40,7 +46,7 @@
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="dataForm.remark" show-word-limit maxlength="30"
-                  :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
+          :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -49,9 +55,10 @@
     </template>
   </vxe-modal>
 
+  <!-- 类型分组弹窗 -->
   <vxe-modal v-model="typeGroupModalVisiable" :draggable="false" :loading="loading">
     <vxe-form :data="formData" size="medium" title-align="right" title-width="100" @submit="submitEvent"
-              :rules="formRules">
+      :rules="formRules">
       <vxe-form-item title="分组ID" field="typeGroupId" span="24">
         <template #default="{ data }">
           <vxe-input v-model="data.typeGroupId" placeholder="请输入类型分组ID" clearable></vxe-input>
@@ -119,7 +126,9 @@ interface FormVO {
   maxLength: number,
   // 精度
   precision: string,
-  remark: string
+  remark: string,
+  // 是否内部定义的数据类型，内部定义的不可删除
+  internal: boolean
 }
 
 const dataForm = reactive<FormVO>({
@@ -131,7 +140,8 @@ const dataForm = reactive<FormVO>({
   minLength: 0,
   maxLength: 0,
   precision: "",
-  remark: ""
+  remark: "",
+  internal: false
 });
 
 /**

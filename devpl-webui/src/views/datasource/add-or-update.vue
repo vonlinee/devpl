@@ -15,12 +15,10 @@
         <el-col :span="8">
           <el-form-item prop="dbType" label="数据库类型">
             <el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
-              <el-option value="MySQL" label="MySQL"></el-option>
-              <el-option value="Oracle" label="Oracle"></el-option>
-              <el-option value="PostgreSQL" label="PostgreSQL"></el-option>
-              <el-option value="SQLServer" label="SQLServer"></el-option>
-              <el-option value="DM" label="达梦8"></el-option>
-              <el-option value="Clickhouse" label="Clickhouse"></el-option>
+              <el-option v-for="dbType in supportedDbTypes" 
+					:key="dbType.id" 
+					:value="dbType.id" 
+					:label="dbType.name"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -79,10 +77,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRaw } from "vue";
+import { onMounted, reactive, ref, toRaw } from "vue";
 import { ElButton, ElMessage } from "element-plus/es";
-import { apiGetDatabaseNames, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
+import { apiGetDatabaseNames, apiListSupportedDbTypes, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
 import { decrypt, encrypt } from "@/utils/tool";
+import { DbType } from "./types";
 
 const emit = defineEmits(["refreshDataList"]);
 
@@ -100,6 +99,14 @@ const dataForm = reactive({
   username: "root",
   password: "123456"
 });
+
+const supportedDbTypes = ref<DbType[]>([])
+
+onMounted(() => {
+	apiListSupportedDbTypes().then((res) => {
+		supportedDbTypes.value = res.data
+	})
+})
 
 const init = (id?: number) => {
   visible.value = true;

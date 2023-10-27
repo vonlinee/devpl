@@ -6,11 +6,10 @@
 			</el-form-item>
 			<el-form-item prop="dbType">
 				<el-select v-model="state.queryForm.dbType" clearable placeholder="数据库类型">
-					<el-option value="MySQL" label="MySQL"></el-option>
-					<el-option value="Oracle" label="Oracle"></el-option>
-					<el-option value="PostgreSQL" label="PostgreSQL"></el-option>
-					<el-option value="SQLServer" label="SQLServer"></el-option>
-					<el-option value="DM" label="达梦8"></el-option>
+					<el-option v-for="dbType in supportedDbTypes" 
+					:key="dbType.id" 
+					:value="dbType.id" 
+					:label="dbType.name"></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item>
@@ -63,14 +62,15 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {IHooksOptions} from '@/hooks/interface'
-import {useDataSourceTestApi} from '@/api/datasource'
+import {apiListSupportedDbTypes, useDataSourceTestApi} from '@/api/datasource'
 import {useCrud} from '@/hooks'
 import {ElButton, ElMessage} from 'element-plus'
 import AddOrUpdate from './add-or-update.vue'
 import {decrypt} from '@/utils/tool'
 import DrvierManager from './DrvierManager.vue'
+import { DbType } from './types'
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/api/gen/datasource/page',
@@ -80,6 +80,15 @@ const state: IHooksOptions = reactive({
 		dbType: ''
 	}
 })
+
+const supportedDbTypes = ref<DbType[]>([])
+
+onMounted(() => {
+	apiListSupportedDbTypes().then((res) => {
+		supportedDbTypes.value = res.data
+	})
+})
+
 
 const datasourceHandle = (id: number) => {
 	useDataSourceTestApi(id).then((res: any) => {

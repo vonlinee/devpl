@@ -4,6 +4,8 @@ import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.config.ConnectionInfo;
+import io.devpl.generator.config.DbType;
+import io.devpl.generator.domain.vo.DbTypeVO;
 import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
@@ -13,6 +15,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,6 +84,7 @@ public class DataSourceController {
      */
     @PostMapping("/datasource")
     public Result<Boolean> save(@RequestBody DataSourceInfo entity) {
+        entity.setDriverClassName(DbType.getValue(entity.getDbType()).getDriverClassName());
         return Result.ok(datasourceService.save(entity));
     }
 
@@ -95,11 +99,37 @@ public class DataSourceController {
         return Result.ok(datasourceService.getDbNames(entity));
     }
 
+    /**
+     * 获取支持的所有数据库类型列表
+     *
+     * @return 数据库类型列表
+     */
+    @GetMapping(value = "/datasource/dbtypes")
+    public Result<List<DbTypeVO>> getSupportedDbTypes() {
+        List<DbTypeVO> result = new ArrayList<>();
+        for (DbType item : DbType.values()) {
+            result.add(new DbTypeVO(item.name(), item.getName()));
+        }
+        return Result.ok(result);
+    }
+
+    /**
+     * 更新数据源信息
+     *
+     * @param entity 数据源信息
+     * @return 是否成功
+     */
     @PutMapping("/datasource")
     public Result<Boolean> update(@RequestBody DataSourceInfo entity) {
         return Result.ok(datasourceService.updateById(entity));
     }
 
+    /**
+     * 批量删除数据源
+     *
+     * @param ids 数据源ID
+     * @return 是否成功
+     */
     @DeleteMapping("/datasource")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(datasourceService.removeBatchByIds(Arrays.asList(ids)));

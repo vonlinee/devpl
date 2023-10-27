@@ -79,6 +79,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceMapper, Dat
     @Override
     public boolean save(DataSourceInfo entity) {
         entity.setCreateTime(LocalDateTime.now());
+        entity.setUpdateTime(entity.getCreateTime());
         return super.save(entity);
     }
 
@@ -104,7 +105,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl<DataSourceMapper, Dat
 
         DbType dbType = DbType.getValue(entity.getDbType());
         if (dbType != null) {
-            JDBCDriver jdbcDriver = JDBCDriver.valueOfDriverName(dbType.getDriverClass());
+            JDBCDriver jdbcDriver = JDBCDriver.valueOfDriverName(dbType.getDriverClassName());
             if (jdbcDriver == null) {
                 return Collections.emptyList();
             }

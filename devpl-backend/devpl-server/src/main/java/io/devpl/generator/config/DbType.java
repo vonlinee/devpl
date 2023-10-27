@@ -6,20 +6,26 @@ import io.devpl.sdk.util.StringUtils;
  * 数据库类型 枚举
  */
 public enum DbType {
-    MySQL("com.mysql.cj.jdbc.Driver"),
-    Oracle("oracle.jdbc.driver.OracleDriver"),
-    PostgreSQL("org.postgresql.Driver"),
-    SQLServer("com.microsoft.sqlserver.jdbc.SQLServerDriver"),
-    DM("dm.jdbc.driver.DmDriver"),
-    Clickhouse("com.clickhouse.jdbc.ClickHouseDriver");
+    MySQL("MySQL", "com.mysql.cj.jdbc.Driver"),
+    Oracle("Oracle", "oracle.jdbc.driver.OracleDriver"),
+    PostgreSQL("PostgreSQL", "org.postgresql.Driver"),
+    SQLServer("SQL Server", "com.microsoft.sqlserver.jdbc.SQLServerDriver"),
+    DM("达梦", "dm.jdbc.driver.DmDriver"),
+    Clickhouse("Clickhouse", "com.clickhouse.jdbc.ClickHouseDriver");
 
-    private final String driverClass;
+    private final String name;
+    private final String driverClassName;
 
-    DbType(String driverClass) {
-        this.driverClass = driverClass;
+    DbType(String name, String driverClass) {
+        this.name = name;
+        this.driverClassName = driverClass;
     }
 
     public static DbType getValue(String dbType) {
+        return getValue(dbType, DbType.MySQL);
+    }
+
+    public static DbType getValue(String dbType, DbType defaultType) {
         if (StringUtils.equalsAny(dbType, "MySQL")) {
             return MySQL;
         }
@@ -38,10 +44,14 @@ public enum DbType {
         if (StringUtils.equalsAny(dbType, "Clickhouse")) {
             return Clickhouse;
         }
-        return null;
+        return defaultType;
     }
 
-    public String getDriverClass() {
-        return driverClass;
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public String getName() {
+        return name;
     }
 }

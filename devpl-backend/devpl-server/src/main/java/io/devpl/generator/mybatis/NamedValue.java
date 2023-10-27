@@ -7,7 +7,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class NamedValue {
 
+    /**
+     * 名称
+     */
     private String name;
 
+    /**
+     * 值
+     */
     private Object value;
 }

@@ -18,8 +18,9 @@ public class YamlParser {
     /**
      * yml文件流转成单层map
      * 转Properties 改变了顺序
-     * @param yamlContent
-     * @return
+     *
+     * @param yamlContent yaml文本
+     * @return Map结构
      */
     public static Map<String, Object> yamlToFlattenedMap(String yamlContent) {
         Yaml yaml = createYaml();
@@ -35,6 +36,7 @@ public class YamlParser {
 
     /**
      * yml文件流转成多次嵌套map
+     *
      * @param yamlContent
      * @return
      */
@@ -51,7 +53,8 @@ public class YamlParser {
 
     /**
      * 多次嵌套map转成yml
-     * @param yamlContent
+     *
+     * @param map
      * @return
      */
     public static String multilayerMapToYaml(Map<String, Object> map) {
@@ -61,7 +64,8 @@ public class YamlParser {
 
     /**
      * 单层map转成yml
-     * @param yamlContent
+     *
+     * @param map
      * @return
      */
     public static String flattenedMapToYaml(Map<String, Object> map) {
@@ -71,12 +75,12 @@ public class YamlParser {
 
     /**
      * 单层map转换多层map
+     *
      * @param map
      * @return
      */
     private static Map<String, Object> flattenedMapToMultilayerMap(Map<String, Object> map) {
-        Map<String, Object> result = getMultilayerMap(map);
-        return result;
+        return getMultilayerMap(map);
     }
 
     private static Yaml createYaml() {
@@ -177,7 +181,7 @@ public class YamlParser {
     private static void buildMultilayerList(List<Object> parent, String path, Object value) {
         String[] keys = StringUtils.split(path, ".");
         String key = keys[0];
-        int index = Integer.valueOf(key.replace("[", "").replace("]", ""));
+        int index = Integer.parseInt(key.replace("[", "").replace("]", ""));
         if (keys.length == 1) {
             parent.add(index, stringToObj(value.toString()));
         } else {

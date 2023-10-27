@@ -69,6 +69,12 @@ public class DataTypeItem {
     private String precision;
 
     /**
+     * 是否内部定义的数据类型，内部定义的不可删除
+     */
+    @TableField(value = "internal", exist = false)
+    private boolean internal;
+
+    /**
      * 创建时间
      */
     @TableField(value = "create_time", jdbcType = JdbcType.TIME, fill = FieldFill.INSERT)
@@ -101,4 +107,12 @@ public class DataTypeItem {
      */
     @TableField(value = "remark")
     private String remark;
+
+    /**
+     * 数据类型操作
+     * 1不可删除
+     * 2不可修改
+     */
+    @TableField(value = "operation", exist = false)
+    private Integer operation;
 }

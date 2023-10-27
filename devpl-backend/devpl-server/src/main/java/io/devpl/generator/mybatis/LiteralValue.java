@@ -8,17 +8,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class LiteralValue {
 
     /**
      * 字符串列表: {'tom','jerry','jack','rose'}
+     *
      * @param literal 字面量
      * @param <T>
      * @return
      */
     public static <T> List<T> get(String literal) {
         try {
-            List result = (List) Ognl.getValue(literal, (Object) new HashMap<>(), List.class);
+            return (List<T>) Ognl.getValue(literal, (Object) new HashMap<>(), List.class);
         } catch (OgnlException e) {
             e.printStackTrace();
         }

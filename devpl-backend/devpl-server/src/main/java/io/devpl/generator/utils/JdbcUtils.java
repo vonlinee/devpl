@@ -27,7 +27,7 @@ public class JdbcUtils {
      */
     public static Connection getConnection(ConnectionInfo dataSource) throws SQLException {
         DriverManager.setLoginTimeout(CONNECTION_TIMEOUTS_SECONDS);
-        loadDriver(dataSource.getDbType().getDriverClass());
+        loadDriver(dataSource.getDbType().getDriverClassName());
         Connection connection = DriverManager.getConnection(dataSource.getConnUrl(), dataSource.getUsername(), dataSource.getPassword());
         if (dataSource.getDbType() == DbType.Oracle) {
             ((OracleConnection) connection).setRemarksReporting(true);

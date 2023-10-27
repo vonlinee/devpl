@@ -561,11 +561,7 @@ public class PoiUtils {
      * @since [产品/模块版本](可选)
      */
     public static boolean checkText(String text) {
-        boolean check = false;
-        if (text.indexOf("$") != -1) {
-            check = true;
-        }
-        return check;
+        return text.contains("$");
     }
 
     /**
