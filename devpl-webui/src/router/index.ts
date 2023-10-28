@@ -131,7 +131,6 @@ export const menuRoutes: RouteRecordRaw[] = [
       title: "Mock工具",
       icon: "icon-appstore",
     },
-    component: () => import("@/views/mocker/index.vue"),
     children: [
       {
         path: "/mocker/database",
@@ -163,7 +162,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: "/",
     component: () => import("../layout/index.vue"),
-    redirect: "/gen/generator",
+    redirect: "/codegen/generator",
     children: [...menuRoutes],
   },
   {

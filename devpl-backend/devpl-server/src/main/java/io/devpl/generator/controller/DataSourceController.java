@@ -3,14 +3,13 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.query.Result;
-import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
+import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DbTypeVO;
-import io.devpl.generator.entity.DataSourceInfo;
 import io.devpl.generator.entity.GenTable;
+import io.devpl.generator.entity.JdbcConnInfo;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
-import io.devpl.generator.utils.JdbcUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +38,7 @@ public class DataSourceController {
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public Result<PageResult<DataSourceInfo>> page(Query query) {
+    public Result<PageResult<JdbcConnInfo>> page(Query query) {
         return Result.ok(datasourceService.page(query));
     }
 
@@ -49,8 +48,18 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list")
-    public Result<List<DataSourceInfo>> list() {
+    public Result<List<JdbcConnInfo>> list() {
         return Result.ok(datasourceService.getList());
+    }
+
+    /**
+     * 数据源ID和名称列表
+     *
+     * @return 数据源列表
+     */
+    @GetMapping("/datasource/list/selectable")
+    public Result<List<DataSourceVO>> listSelectableDataSources() {
+        return Result.ok(datasourceService.listIdAndNames());
     }
 
     /**
@@ -59,17 +68,15 @@ public class DataSourceController {
      * @return 数据源信息
      */
     @GetMapping("/datasource/{id}")
-    public Result<DataSourceInfo> get(@PathVariable("id") Long id) {
-        DataSourceInfo data = datasourceService.getById(id);
+    public Result<JdbcConnInfo> get(@PathVariable("id") Long id) {
+        JdbcConnInfo data = datasourceService.getById(id);
         return Result.ok(data);
     }
 
     @GetMapping("/datasource/test/{id}")
     public Result<String> test(@PathVariable("id") Long id) {
         try {
-            DataSourceInfo entity = datasourceService.getById(id);
-            JdbcUtils.getConnection(new ConnectionInfo(entity));
-            return Result.ok("连接成功");
+            return Result.ok(datasourceService.testJdbcConnection(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return Result.error("连接失败，请检查配置信息");
@@ -83,9 +90,24 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PostMapping("/datasource")
-    public Result<Boolean> save(@RequestBody DataSourceInfo entity) {
+    public Result<Boolean> save(@RequestBody JdbcConnInfo entity) {
         entity.setDriverClassName(DbType.getValue(entity.getDbType()).getDriverClassName());
         return Result.ok(datasourceService.save(entity));
+    }
+
+    /**
+     * 获取连接的所有数据库名称列表
+     *
+     * @param id 数据源ID
+     * @return 数据库名称列表
+     */
+    @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
+    public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
+        JdbcConnInfo connInfo = datasourceService.getById(id);
+        if (connInfo == null) {
+            return Result.error("资源不存在");
+        }
+        return Result.ok(datasourceService.getDbNames(connInfo));
     }
 
     /**
@@ -95,7 +117,7 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public Result<List<String>> getDbNames(@RequestBody DataSourceInfo entity) {
+    public Result<List<String>> getDbNames(@RequestBody JdbcConnInfo entity) {
         return Result.ok(datasourceService.getDbNames(entity));
     }
 
@@ -120,7 +142,7 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PutMapping("/datasource")
-    public Result<Boolean> update(@RequestBody DataSourceInfo entity) {
+    public Result<Boolean> update(@RequestBody JdbcConnInfo entity) {
         return Result.ok(datasourceService.updateById(entity));
     }
 
@@ -143,11 +165,8 @@ public class DataSourceController {
     @GetMapping("/datasource/table/list/{id}")
     public Result<List<GenTable>> tableList(@PathVariable("id") Long id) {
         try {
-            // 获取数据源
-            ConnectionInfo datasource = datasourceService.findById(id);
             // 根据数据源，获取全部数据表
-            List<GenTable> tableList = tableService.getTableList(datasource);
-            return Result.ok(tableList);
+            return Result.ok(tableService.getTableList(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return Result.error("数据源配置错误，请检查数据源配置！");

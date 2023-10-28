@@ -7,7 +7,7 @@ import http from "@/utils/http";
  * @param tableIds
  */
 export const useDownloadApi = (tableIds: any[]): void => {
-    location.href = import.meta.env.VITE_API_URL + '/gen/generator/download?tableIds=' + tableIds.join(',')
+    location.href = import.meta.env.VITE_API_URL + '/api/codegen/download?tableIds=' + tableIds.join(',')
 }
 
 /**
@@ -15,14 +15,14 @@ export const useDownloadApi = (tableIds: any[]): void => {
  * @param tableIds
  */
 export const useGeneratorApi = (tableIds: any[]) => {
-    return service.post('/gen/generator/code', tableIds)
+    return service.post('/api/codegen/code', tableIds)
 }
 
 /**
  * 查询所有生成的文件类型
  */
 export const apiListGenFiles = () => {
-    return http.get('/gen/generator/genfiles')
+    return http.get('/api/codegen/genfiles')
 }
 
 /**
@@ -30,7 +30,7 @@ export const apiListGenFiles = () => {
  * @return boolean
  */
 export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
-    return http.postJson('/gen/generator/genfile', genFile)
+    return http.postJson('/api/codegen/genfile', genFile)
 }
 
 /**
@@ -38,7 +38,7 @@ export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
  * @param genFiles
  */
 export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
-    return http.postJson('/gen/generator/genfiles/replace', genFiles)
+    return http.postJson('/api/codegen/genfiles/replace', genFiles)
 }
 
 /**
@@ -46,7 +46,7 @@ export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
  * @param genFiles
  */
 export const apiDeleteGenFiles = (genFiles: GenFile[]) => {
-    return http.delete('/gen/generator/genfiles/replace', genFiles.map((file: GenFile) => file.pid))
+    return http.delete('/api/codegen/genfiles/replace', genFiles.map((file: GenFile) => file.pid))
 }
 
 /**
@@ -54,7 +54,7 @@ export const apiDeleteGenFiles = (genFiles: GenFile[]) => {
  * @return JSON字符串
  */
 export const apiGetGeneratorConfig = () => {
-    return http.get('/gen/generator/config')
+    return http.get('/api/codegen/config')
 }
 
 /**
@@ -62,7 +62,7 @@ export const apiGetGeneratorConfig = () => {
  * @return JSON字符串
  */
 export const apiSaveGeneratorConfig = (content: string) => {
-    return http.postForm('/gen/generator/config', {
+    return http.postForm('/api/codegen/config', {
         content: content
     })
 }

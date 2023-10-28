@@ -26,5 +26,10 @@ TODO 实现可输入可选择的输入框，其中选择的数据懒加载
 
 https://blog.csdn.net/weixin_49826079/article/details/131982621
 
-
 实现el-dialog自适应居中
+
+
+
+vue splitpanes
+
+https://antoniandre.github.io/splitpanes/

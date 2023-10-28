@@ -17,7 +17,7 @@ import java.util.List;
  * 灵活，针对模板的文件生成
  */
 @RestController
-@RequestMapping("/gen/generator")
+@RequestMapping("/api/codegen")
 public class CodeGenerationController {
 
     @Resource

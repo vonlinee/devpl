@@ -1,7 +1,7 @@
 <template>
   <vxe-modal width="50%" v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false"
              :draggable="true"
-             z-index="2000" show-footer>
+             :z-index="2000" show-footer>
     <el-form ref="dataFormRef"
              label-position="right"
              :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">

@@ -1,13 +1,13 @@
 package io.devpl.generator.dao;
 
 import io.devpl.generator.common.mvc.EntityMapper;
-import io.devpl.generator.entity.DataSourceInfo;
+import io.devpl.generator.entity.JdbcConnInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 数据源管理
  */
 @Mapper
-public interface DataSourceMapper extends EntityMapper<DataSourceInfo> {
+public interface DataSourceMapper extends EntityMapper<JdbcConnInfo> {
 
 }

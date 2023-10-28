@@ -34,6 +34,15 @@ export const apiGetDatabaseNames = (dataForm: any) => {
   return service.post("/api/gen/datasource/dbnames", dataForm);
 };
 
+
+/**
+ * 获取所有数据库名称
+ * @param dataForm
+ */
+export const apiGetDatabaseNamesById = (dataSourceId: number) => {
+  return service.get(`/api/gen/datasource/dbnames/${dataSourceId}`);
+};
+
 /**
  * 上传驱动jar包
  * @param file
@@ -50,4 +59,13 @@ export const apiUploadDriverJar = (file: File) => {
  */
 export const apiListSupportedDbTypes = () => {
   return http.get("/api/gen/datasource/dbtypes")
+}
+
+
+/**
+ * 所有支持的数据库类型
+ * @returns 所有支持的数据库类型
+ */
+export const apiListSelectableDataSources = () => {
+  return http.get("/api/gen/datasource/list/selectable")
 }

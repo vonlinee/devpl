@@ -7,7 +7,6 @@ import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.config.ConnectionInfo;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
@@ -16,6 +15,7 @@ import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.TableMapper;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
+import io.devpl.generator.entity.JdbcConnInfo;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
 import io.devpl.generator.service.DataSourceService;
@@ -69,8 +69,6 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importTable(Long datasourceId, String tableName) {
-        // 初始化配置信息
-        ConnectionInfo dataSource = dataSourceService.findById(datasourceId);
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
@@ -78,8 +76,13 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
             throw new ServerException(tableName + "已存在");
         }
 
+        JdbcConnInfo connInfo = dataSourceService.getById(datasourceId);
+        DbType dbType = DbType.getValue(connInfo.getDbType());
+        Connection connection = dataSourceService.getConnection(connInfo);
+        AbstractQuery query = dataSourceService.getQuery(dbType);
+
         // 从数据库获取表信息
-        table = getTable(dataSource, tableName);
+        table = getTable(connection, query, datasourceId, tableName);
         // 代码生成器信息
         GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
@@ -105,17 +108,16 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         this.save(table);
 
         // 获取原生字段数据
-        List<GenTableField> tableFieldList = getTableFieldList(dataSource, table.getId(), table.getTableName());
+        List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
         // 初始化字段数据
         tableFieldService.initFieldList(tableFieldList);
         // 保存列数据
         tableFieldService.saveBatch(tableFieldList);
-
-        dataSource.closeConnection();
     }
 
     /**
      * 获取功能名
+     *
      * @param tableName 表名
      * @return 功能名
      */
@@ -129,6 +131,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
     /**
      * 获取模块名
+     *
      * @param packageName 包名
      * @return 模块名
      */
@@ -138,24 +141,19 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
     /**
      * 根据数据源，获取指定数据表 GenTable 实体
-     * @param datasource 数据源
-     * @param tableName  表名
      */
     @Override
-    public GenTable getTable(ConnectionInfo datasource, String tableName) {
-        AbstractQuery query = datasource.getDbQuery();
+    public GenTable getTable(Connection connection, AbstractQuery query, Long dataSourceId, String tableName) {
         String tableQuerySql = query.getTableQuerySql(tableName);
         // 查询数据
-        try (Connection connection = datasource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
-                try (ResultSet rs = preparedStatement.executeQuery()) {
-                    if (rs.next()) {
-                        GenTable table = new GenTable();
-                        table.setTableName(rs.getString(query.tableName()));
-                        table.setTableComment(rs.getString(query.tableComment()));
-                        table.setDatasourceId(datasource.getId());
-                        return table;
-                    }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    GenTable table = new GenTable();
+                    table.setTableName(rs.getString(query.tableName()));
+                    table.setTableComment(rs.getString(query.tableComment()));
+                    table.setDatasourceId(dataSourceId);
+                    return table;
                 }
             }
         } catch (Exception e) {
@@ -169,11 +167,18 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     public void sync(Long id) {
         GenTable table = this.getById(id);
 
-        // 初始化配置信息
-        ConnectionInfo datasource = dataSourceService.findById(table.getDatasourceId());
+        JdbcConnInfo connInfo = dataSourceService.getById(table.getDatasourceId());
 
+        DbType dbType = DbType.getValue(connInfo.getDbType());
+        AbstractQuery query = dataSourceService.getQuery(dbType);
+
+        List<GenTableField> dbTableFieldList;
+        try (Connection connection = dataSourceService.getConnection(connInfo)) {
+            dbTableFieldList = getTableFieldList(dbType, connection, query, table.getDatasourceId(), table.getId(), table.getTableName());
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
         // 从数据库获取表字段列表
-        List<GenTableField> dbTableFieldList = getTableFieldList(datasource, table.getId(), table.getTableName());
         if (dbTableFieldList.isEmpty()) {
             throw new ServerException("同步失败，请检查数据库表：" + table.getTableName());
         }
@@ -193,7 +198,6 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
                 tableFieldService.save(field);
                 return;
             }
-
             // 修改字段
             GenTableField updateField = tableFieldMap.get(field.getFieldName());
             updateField.setPrimaryKey(field.isPrimaryKey());
@@ -213,21 +217,21 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         }
     }
 
-    /**
-     * 获取表字段列表
-     * @param datasource 数据源
-     * @param tableId    表ID
-     * @param tableName  表名
-     */
-    @Override
-    public List<GenTableField> getTableFieldList(ConnectionInfo datasource, Long tableId, String tableName) {
-        List<GenTableField> tableFieldList = new ArrayList<>();
 
-        AbstractQuery query = datasource.getDbQuery();
+    /**
+     * 获取表的所有字段
+     *
+     * @param dbType    数据库类型
+     * @param tableId   表ID
+     * @param tableName 表名
+     * @return 表的所有字段信息
+     */
+    public List<GenTableField> getTableFieldList(DbType dbType, Connection connection, AbstractQuery query, Long dataSourceId, Long tableId, String tableName) {
+        List<GenTableField> tableFieldList = new ArrayList<>();
         String tableFieldsSql = query.getTableFieldsQuerySql();
         try {
-            if (datasource.getDbType() == DbType.Oracle) {
-                DatabaseMetaData md = datasource.getConnection().getMetaData();
+            if (dbType == DbType.Oracle) {
+                DatabaseMetaData md = connection.getMetaData();
                 tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
             } else {
                 tableFieldsSql = String.format(tableFieldsSql, tableName);
@@ -235,25 +239,22 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
-        try (Connection connection = dataSourceService.getConnection(datasource.getId())) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
-                try (ResultSet rs = preparedStatement.executeQuery()) {
-                    while (rs.next()) {
-                        GenTableField field = new GenTableField();
-                        field.setTableId(tableId);
-                        field.setFieldName(rs.getString(query.fieldName()));
-                        String fieldType = rs.getString(query.fieldType());
-                        if (fieldType.contains(" ")) {
-                            fieldType = fieldType.substring(0, fieldType.indexOf(" "));
-                        }
-                        field.setFieldType(fieldType);
-                        field.setFieldComment(rs.getString(query.fieldComment()));
-                        String key = rs.getString(query.fieldKey());
-                        field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
-
-                        tableFieldList.add(field);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    GenTableField field = new GenTableField();
+                    field.setTableId(tableId);
+                    field.setFieldName(rs.getString(query.fieldName()));
+                    String fieldType = rs.getString(query.fieldType());
+                    if (fieldType.contains(" ")) {
+                        fieldType = fieldType.substring(0, fieldType.indexOf(" "));
                     }
+                    field.setFieldType(fieldType);
+                    field.setFieldComment(rs.getString(query.fieldComment()));
+                    String key = rs.getString(query.fieldKey());
+                    field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
+
+                    tableFieldList.add(field);
                 }
             }
         } catch (SQLException e) {
@@ -263,26 +264,34 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         return tableFieldList;
     }
 
+    @Override
+    public List<GenTable> getTableList(Long datasourceId) {
+        JdbcConnInfo connInfo = dataSourceService.getById(datasourceId);
+        try (Connection connection = dataSourceService.getConnection(datasourceId)) {
+            DbType dbType = DbType.getValue(connInfo.getDbType());
+            AbstractQuery query = dataSourceService.getQuery(dbType);
+            // 根据数据源，获取全部数据表
+            return getTableList(connection, datasourceId, query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 根据数据源，获取全部数据表
-     * @param datasource 数据源
      */
-    @Override
-    public List<GenTable> getTableList(ConnectionInfo datasource) {
+    private List<GenTable> getTableList(Connection connection, Long datasourceId, AbstractQuery query) {
         List<GenTable> tableList = new ArrayList<>();
-        AbstractQuery query = datasource.getDbQuery();
         String tableQuerySql = query.getTableQuerySql(null);
-        try (Connection connection = datasource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
-                try (ResultSet rs = preparedStatement.executeQuery()) {
-                    // 查询数据
-                    while (rs.next()) {
-                        GenTable table = new GenTable();
-                        table.setTableName(rs.getString(query.tableName()));
-                        table.setTableComment(rs.getString(query.tableComment()));
-                        table.setDatasourceId(datasource.getId());
-                        tableList.add(table);
-                    }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                // 查询数据
+                while (rs.next()) {
+                    GenTable table = new GenTable();
+                    table.setTableName(rs.getString(query.tableName()));
+                    table.setTableComment(rs.getString(query.tableComment()));
+                    table.setDatasourceId(datasourceId);
+                    tableList.add(table);
                 }
             }
         } catch (Exception e) {
