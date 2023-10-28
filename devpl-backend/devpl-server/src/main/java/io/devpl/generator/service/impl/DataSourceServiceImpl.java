@@ -19,6 +19,7 @@ import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.JdbcUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据源管理
@@ -178,8 +180,13 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
         try (Connection connection = JdbcUtils.getConnection(connectionUrl, connInfo.getUsername(), connInfo.getPassword(), dbType)) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = metaData.getTables(databaseName, null, null, null);
+
+            ColumnMapRowMapper mapper = new ColumnMapRowMapper();
+
+            int row = 0;
             while (rs.next()) {
-                list.add(rs.getString("TYPE_NAME"));
+                Map<String, Object> map = mapper.mapRow(rs, row++);
+                list.add(rs.getString("TABLE_NAME"));
             }
         } catch (Exception exception) {
             log.error("", exception);

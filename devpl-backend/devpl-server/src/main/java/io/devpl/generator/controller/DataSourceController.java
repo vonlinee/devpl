@@ -11,7 +11,6 @@ import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
 import io.devpl.sdk.validation.Assert;
-import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -130,8 +129,8 @@ public class DataSourceController {
      * @param dbName 数据库名称
      * @return 数据库名称列表
      */
-    @PostMapping(value = "/datasource/{dataSourceId}/{}/table/names")
-    public Result<List<String>> getTableNames(@PathVariable(value = "dataSourceId") Long id, String dbName) {
+    @GetMapping(value = "/datasource/{dataSourceId}/{dbName}/table/names")
+    public Result<List<String>> getTableNames(@PathVariable(value = "dataSourceId") Long id, @PathVariable(value = "dbName") String dbName) {
         DbConnInfo connInfo = datasourceService.getOne(id);
         return Result.ok(datasourceService.getTableNames(connInfo, dbName));
     }

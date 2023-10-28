@@ -6,7 +6,16 @@
 
   <splitpanes vertical>
     <pane min-size="20">
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
+        <template #default="{ node, data }">
+        <span class="custom-tree-node">
+          <span>{{ node.label }}</span>
+          <span>
+            <a @click="append(node, data)"> Append </a>
+          </span>
+        </span>
+        </template>
+      </el-tree>
     </pane>
     <pane>
 
@@ -32,7 +41,6 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-
 interface DataSourceVO {
   id: number,
   name: string
@@ -43,10 +51,19 @@ const data = ref<TreeNode[]>([]);
 const currentDataSourceId = ref<number>(0);
 const dataSources = ref<DataSourceVO[]>([]);
 
+const append = (node: any, data: TreeNode) => {
+  console.log(node, data);
+};
 
 const handleNodeClick = (data: TreeNode) => {
   apiListTableNames(currentDataSourceId.value, data.label).then((res: AxiosResponse) => {
-
+    let nodes: TreeNode[] = [];
+    for (let i = 0; i < res.data.length; i++) {
+      nodes.push({
+        label: res.data[i]
+      });
+    }
+    data.children = data.children?.concat(nodes)
   });
 };
 

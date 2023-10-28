@@ -75,5 +75,5 @@ export const apiListSelectableDataSources = () => {
  * @returns 所有支持的数据库类型
  */
 export const apiListTableNames = (id: number, dbName: string) => {
-  return http.get(`/api/gen/datasource/{id}/{dbName}/table/names`);
+  return http.get(`/api/gen/datasource/${id}/${dbName}/table/names`);
 };

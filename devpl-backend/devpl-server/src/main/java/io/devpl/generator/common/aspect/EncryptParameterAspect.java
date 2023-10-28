@@ -85,7 +85,7 @@ public class EncryptParameterAspect {
      */
     private void handleItem(Object item, boolean isDecrypt) {
         // 只处理在entity包下面的对象
-        if (Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName().startsWith(entityPackageName)) {
+        if (item == null || Objects.isNull(item.getClass().getPackage()) || !item.getClass().getPackage().getName().startsWith(entityPackageName)) {
             return;
         }
         // 遍历所有字段
