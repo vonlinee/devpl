@@ -89,7 +89,7 @@ function showTemplateEditDialog(templateInfo: any) {
   } else {
     // 字符串模板
   }
-  templateContentEditorRef.value.init(templateInfo.name, content);
+  templateContentEditorRef.value.init(templateInfo.templateName, content);
 }
 
 onMounted(() => getDataList());

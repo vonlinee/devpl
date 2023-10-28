@@ -1,6 +1,6 @@
 <template>
   <vxe-modal v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :mask-closable="false"
-             @closed="onClosed" width="75%" append-to-body z-index="2000" show-footer>
+             @closed="onClosed" width="75%" append-to-body :z-index="2000" show-footer>
     <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
              @keyup.enter="submitHandle()">
       <el-row>
@@ -89,12 +89,12 @@ function templateTypeChange(val: any) {
  * 模板信息
  */
 interface TemplateInfo {
-  templateId?: Number,
-  templateName: String,
-  templatePath: String,
-  content: String,
-  type: Number,  // 模板类型，1-字符串模板 2-文件模板
-  typeName?: String,
+  templateId?: number,
+  templateName: string,
+  templatePath: string,
+  content: string,
+  type: number,  // 模板类型，1-字符串模板 2-文件模板
+  typeName?: string,
   provider: string
 }
 
@@ -108,7 +108,7 @@ const dataForm = reactive<TemplateInfo>({
   content: "",
   type: 1,
   typeName: "字符串模板",
-  provider: "vm"
+  provider: "Velocity"
 });
 
 /**

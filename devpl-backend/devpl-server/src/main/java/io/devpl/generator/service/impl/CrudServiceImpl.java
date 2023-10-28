@@ -1,6 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -10,9 +9,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.generator.service.CrudService;
+import jakarta.annotation.Resource;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -38,13 +41,11 @@ public class CrudServiceImpl implements CrudService {
      */
     private final boolean resultWhenEmpty = true;
 
-    @Override
-    public <T> T selectOne(Class<T> entityType, QueryWrapper<T> qw) {
-        return null;
-    }
+    @Resource
+    SqlSessionFactory sqlSessionFactory;
 
     @Override
-    public <T> List<T> list(Class<T> entityType) {
+    public <T> List<T> listAll(Class<T> entityType) {
         return null;
     }
 
@@ -61,6 +62,16 @@ public class CrudServiceImpl implements CrudService {
     @Override
     public <T> boolean removeById(Class<T> entityType, Serializable id) {
         return false;
+    }
+
+    @Override
+    public <T> boolean removeAll(Class<T> entityType) {
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
+        return false;
+    }
+
+    private SqlSession openSession(ExecutorType executorType) {
+        return SqlSessionUtils.getSqlSession(sqlSessionFactory, executorType, null);
     }
 
     @Override

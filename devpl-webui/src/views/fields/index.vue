@@ -1,19 +1,18 @@
 <!--
  * @ 字段管理列表
- * @author Von
- * @date 2023/8/29 14:23
 -->
 <script setup lang="ts">
 import { apiListFields, apiSaveOrUpdateField } from "@/api/fields"
+import { isBlank } from "@/utils/tool"
 import { onMounted, reactive, ref } from "vue"
 
 import {
   VxeFormPropTypes,
+  VxePagerEvents,
   VXETable,
   VxeTableEvents,
   VxeTableInstance,
 } from "vxe-table"
-import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue"
 
 /**
  * 表格数据模型
@@ -28,8 +27,6 @@ interface RowVO {
 }
 
 const xTable = ref<VxeTableInstance>()
-
-
 
 /**
  * 新增和修改表单
@@ -57,14 +54,16 @@ const sexList = ref([
   { label: "double", value: "1" },
 ])
 
+const tablePage = reactive({
+  total: 0,
+  currentPage: 1,
+  pageSize: 10
+})
+
 /**
  * 表单校验规则
  */
 const formRules = reactive<VxeFormPropTypes.Rules>({
-  description: [
-    { required: true, message: "请输入名称" },
-    { min: 3, max: 5, message: "长度在 3 到 5 个字符" },
-  ],
   fieldKey: [{ required: true, message: "请输入字段Key" }],
   dataType: [{ required: true, message: "请选择字段数据类型" }],
 })
@@ -105,6 +104,13 @@ const removeEvent = async (row: RowVO) => {
  * 表单提交
  */
 const submitEvent = () => {
+
+  // 表单填充默认值
+  if (isBlank(formData.description)) {
+    formData.description = formData.fieldName
+    return
+  }
+
   submitLoading.value = true
   const $table = xTable.value
   if ($table) {
@@ -123,10 +129,19 @@ const submitEvent = () => {
   }
 }
 
-function refreshTableData() {
-  apiListFields().then((res) => {
+/**
+ * 刷新表格数据
+ */
+function refreshTableData(page: number = 1, limit: number = 10) {
+  apiListFields(page, limit).then((res) => {
     tableData.value = res.data.list
   })
+}
+
+const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) => {
+  tablePage.currentPage = currentPage
+  tablePage.pageSize = pageSize
+  refreshTableData(currentPage, pageSize)
 }
 
 onMounted(() => {
@@ -139,10 +154,7 @@ onMounted(() => {
     <div>
       <vxe-toolbar>
         <template #buttons>
-          <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()"
-            >新增</vxe-button
-          >
-          <vxe-button @click="showTypeMappingTable()">类型映射</vxe-button>
+          <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()">新增</vxe-button>
         </template>
       </vxe-toolbar>
 
@@ -170,7 +182,7 @@ onMounted(() => {
           title="描述信息"
           show-overflow
         ></vxe-column>
-        <vxe-column title="操作" width="100" show-overflow>
+        <vxe-column title="操作" width="100" show-overflow header-align="center" align="center">
           <template #default="{ row }">
             <vxe-button
               type="text"
@@ -185,7 +197,14 @@ onMounted(() => {
           </template>
         </vxe-column>
       </vxe-table>
-
+        <!--使用 pager 插槽-->
+        <vxe-pager
+          :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+          v-model:current-page="tablePage.currentPage"
+          v-model:page-size="tablePage.pageSize"
+          :total="tablePage.total"
+          @page-change="handlePageChange">
+        </vxe-pager>
       <vxe-modal
         v-model="showEdit"
         :title="selectRow ? '编辑&保存' : '新增&保存'"
@@ -276,8 +295,8 @@ onMounted(() => {
             </vxe-form-item>
             <vxe-form-item align="center" title-align="left" :span="24">
               <template #default>
-                <vxe-button type="submit">提交</vxe-button>
-                <vxe-button type="reset">重置</vxe-button>
+                <vxe-button status="success" type="submit">提交</vxe-button>
+                <vxe-button status="danger" type="reset">重置</vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -285,9 +304,6 @@ onMounted(() => {
       </vxe-modal>
     </div>
   </el-card>
-
-  <type-mapping-table ref="typeMappingTableRef"></type-mapping-table>
-
 </template>
 
 <style scoped lang="scss"></style>

@@ -24,9 +24,9 @@
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
               @selection-change="selectionChangeHandle">
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="typeGroupId" label="类型分组ID" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center"></el-table-column>
+      <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
+      <el-table-column prop="typeGroupId" label="类型分组ID" header-align="center" align="center" width="180"></el-table-column>
+      <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center" width="180"></el-table-column>
       <el-table-column prop="typeName" label="类型名称" header-align="center" align="center"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" header-align="center" align="center">
@@ -65,6 +65,7 @@ const typeMappingTableRef = ref()
 const state: IHooksOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
   deleteUrl: "/api/datatype/delete",
+  pageSizes: [10, 15, 20],
   queryForm: {
     columnType: "",
     attrType: "",

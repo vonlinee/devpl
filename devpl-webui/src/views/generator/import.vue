@@ -1,5 +1,5 @@
 <template>
-	<vxe-modal height="80%" width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable z-index="2000" show-footer>
+	<vxe-modal height="80%" width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable :z-index="2000" show-footer>
 		<el-form ref="dataFormRef" :model="dataForm">
 			<el-form-item label="数据源" prop="datasourceId">
 				<el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源" @change="getTableList">

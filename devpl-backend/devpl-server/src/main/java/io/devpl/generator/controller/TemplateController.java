@@ -27,8 +27,9 @@ public class TemplateController {
 
     /**
      * 模板上传
+     *
      * @param templateInfo 模板信息
-     * @return
+     * @return 是否成功
      */
     @PostMapping(value = "/upload")
     public Result<Boolean> uploadTemplate(TemplateInfo templateInfo) {
@@ -45,6 +46,7 @@ public class TemplateController {
     /**
      * 新增模板
      * 模板内容以字符串进行传输
+     *
      * @param templateInfo 模板信息
      * @return 是否成功
      */
@@ -57,6 +59,7 @@ public class TemplateController {
 
     /**
      * 根据ID更新
+     *
      * @param templateInfo 模板信息
      * @return 是否成功
      */
@@ -70,6 +73,7 @@ public class TemplateController {
 
     /**
      * 根据ID删除模板
+     *
      * @param id 模板ID
      * @return 是否成功
      */
@@ -80,6 +84,7 @@ public class TemplateController {
 
     /**
      * 根据ID批量删除模板
+     *
      * @param templateIds 模板ID
      * @return 是否成功
      */
@@ -92,6 +97,7 @@ public class TemplateController {
 
     /**
      * 分页查询列表
+     *
      * @return 列表
      */
     @GetMapping(value = "/page")
@@ -101,6 +107,7 @@ public class TemplateController {
 
     /**
      * 可选择的模板列表
+     *
      * @return 列表
      */
     @GetMapping(value = "/list/select")
@@ -110,6 +117,7 @@ public class TemplateController {
 
     /**
      * 根据ID获取模板信息
+     *
      * @return 列表
      */
     @GetMapping(value = "/info/{templateId}")

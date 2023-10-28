@@ -89,3 +89,11 @@ export const isBlank = (content: string | undefined | any): boolean => {
 export function isAllLetter(str: string): boolean {
   return /[a-zA-Z]/.test(str)
 }
+
+export const isWindows = () => {
+  return navigator.userAgent.match(/Windows/i) !== null
+}
+
+export const isMacintosh = () => {
+  navigator.userAgent.match(/Macintosh/i) !== null
+}

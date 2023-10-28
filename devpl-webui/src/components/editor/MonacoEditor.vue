@@ -8,6 +8,13 @@ import { defineComponent, h, onMounted, reactive, ref, toRefs } from "vue";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 import ITextModel = editor.ITextModel;
 
+
+monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+  validate: true,
+  allowComments: true, // 允许JSON注释，json5
+  schemaValidation: 'error'
+});
+
 export default defineComponent({
   name: "MonacoEditor",
   props: {
@@ -90,7 +97,7 @@ export default defineComponent({
       /**
        * 获取编辑器的文本
        */
-      getText: function(): string {
+      getText: function (): string {
         if (monacoEditor) {
           return monacoEditor.getValue();
         }
@@ -100,7 +107,7 @@ export default defineComponent({
        * 设置编辑器的文本
        * @param text
        */
-      setText: function(text: string) {
+      setText: function (text: string) {
         monacoEditor?.setValue(text);
       },
       /**

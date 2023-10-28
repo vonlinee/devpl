@@ -8,8 +8,10 @@
     :mask-closable="false"
     destroy-on-close
     draggable
-    show-zoom resize fullscreen
-    :on-close="dispose">
+    show-zoom
+    resize 
+    fullscreen
+    @close="dispose">
     <div>
       <el-collapse ref="collapseRef" v-model="activeName" accordion>
         <el-collapse-item v-for="(item, index) in rootDirsRef" :key="index" :title="item" :name="index">

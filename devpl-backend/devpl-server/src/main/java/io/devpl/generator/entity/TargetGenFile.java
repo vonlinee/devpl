@@ -1,9 +1,12 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 生成的文件信息，以及使用的模板信息
@@ -12,11 +15,11 @@ import lombok.Data;
  */
 @Data
 @TableName("target_gen_file")
-public class TargetGenFile {
+public class TargetGenFile implements Serializable {
     /**
      * 主键ID
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long pid;
 
     /**
@@ -28,11 +31,13 @@ public class TargetGenFile {
     /**
      * 文件名称
      */
+    @TableField(value = "file_name")
     private String fileName;
 
     /**
      * 模板ID
      */
+    @TableField(value = "template_id")
     private Long templateId;
 
     /**
@@ -44,15 +49,18 @@ public class TargetGenFile {
     /**
      * 保存路径
      */
+    @TableField(value = "save_path")
     private String savePath;
 
     /**
      * 备注信息
      */
+    @TableField(value = "remark")
     private String remark;
 
     /**
      * 是否内置
      */
+    @TableField(value = "builtin")
     private boolean builtin = true;
 }

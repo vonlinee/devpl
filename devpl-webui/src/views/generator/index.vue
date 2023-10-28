@@ -51,7 +51,7 @@
         <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
     </el-card>
 
-    <el-dialog v-model="configDialogRef" draggable>
+    <el-dialog title="代码生成配置" v-model="configDialogRef" draggable>
         <div style="height: 600px">
             <monaco-editor ref="configEditor" language="json"></monaco-editor>
         </div>
@@ -121,8 +121,8 @@ const syncHandle = (row: any) => {
         })
 }
 
-let configEditor = ref()
-let configDialogRef = ref(false)
+const configEditor = ref()
+const configDialogRef = ref(false)
 
 function showConfig() {
     apiGetGeneratorConfig().then((res) => {
@@ -139,11 +139,11 @@ function showConfig() {
 function saveConfig() {
     apiSaveGeneratorConfig(configEditor.value.getText()).then((res) => {
         if (res.data) {
-            ElMessage.success('保存成功')
+            ElMessage.success('保存配置成功')
             configDialogRef.value = false
         }
     }).catch((reason) => {
-        ElMessage.error('保存失败', reason)
+        ElMessage.error('保存配置失败', reason)
     })
 }
 

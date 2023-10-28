@@ -24,7 +24,7 @@ defineExpose({
 </script>
 
 <template>
-  <vxe-modal :title="titleRef" v-model="templateDialogShowing" width="80%" show-zoom resize fullscreen show-footer>
+  <vxe-modal :title="titleRef" v-model="templateDialogShowing" width="80%" show-zoom resize show-footer>
     <monaco-editor ref="templateContentEditorRef" language="freemarker2" height="600px" read-only></monaco-editor>
   </vxe-modal>
 </template>
