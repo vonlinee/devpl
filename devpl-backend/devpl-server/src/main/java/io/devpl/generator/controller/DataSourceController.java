@@ -12,6 +12,7 @@ import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +25,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/gen")
 public class DataSourceController {
 
-    @Resource
-    DataSourceService datasourceService;
-    @Resource
-    TableService tableService;
+    private DataSourceService datasourceService;
+    private TableService tableService;
 
     /**
      * 获取数据源列表

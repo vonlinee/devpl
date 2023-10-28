@@ -1,10 +1,8 @@
 <template>
-  <vxe-modal width="50%" v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false"
-             :draggable="true"
-             :z-index="2000" show-footer>
-    <el-form ref="dataFormRef"
-             label-position="right"
-             :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
+  <vxe-modal width="50%" v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :draggable="true"
+    :z-index="2000" show-footer>
+    <el-form ref="dataFormRef" label-position="right" :model="dataForm" :rules="dataRules" label-width="120px"
+      @keyup.enter="submitHandle()">
 
       <el-row>
         <el-col :span="16">
@@ -15,10 +13,8 @@
         <el-col :span="8">
           <el-form-item prop="dbType" label="数据库类型">
             <el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
-              <el-option v-for="dbType in supportedDbTypes" 
-					:key="dbType.id" 
-					:value="dbType.id" 
-					:label="dbType.name"></el-option>
+              <el-option v-for="dbType in supportedDbTypes" :key="dbType.id" :value="dbType.id"
+                :label="dbType.name"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -45,8 +41,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="密码" prop="password">
-            <el-input v-model="dataForm.password" autocomplete="off" placeholder="密码"
-                      show-password></el-input>
+            <el-input v-model="dataForm.password" autocomplete="off" placeholder="密码" show-password></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -68,6 +63,17 @@
       <el-form-item label="数据库URL" prop="connUrl">
         <el-input v-model="dataForm.connUrl" placeholder="数据库URL"></el-input>
       </el-form-item>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="驱动属性" prop="connUrl">
+            <vxe-table>
+              <vxe-column title="名称" width="300"></vxe-column>
+              <vxe-column title="值" width="50%"></vxe-column>
+            </vxe-table>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
     </el-form>
     <template #footer>
       <el-button @click="visible = false">取消</el-button>
@@ -78,7 +84,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, toRaw } from "vue";
-import { ElButton, ElMessage } from "element-plus/es";
+import { ElButton, ElCol, ElMessage } from "element-plus/es";
 import { apiGetDatabaseNames, apiListSupportedDbTypes, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
 import { decrypt, encrypt } from "@/utils/tool";
 import { DbType } from "./types";
@@ -103,9 +109,9 @@ const dataForm = reactive({
 const supportedDbTypes = ref<DbType[]>([])
 
 onMounted(() => {
-	apiListSupportedDbTypes().then((res) => {
-		supportedDbTypes.value = res.data
-	})
+  apiListSupportedDbTypes().then((res) => {
+    supportedDbTypes.value = res.data
+  })
 })
 
 const init = (id?: number) => {

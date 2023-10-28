@@ -52,7 +52,6 @@ const handleNodeClick = (data: TreeNode) => {
 
 const loadDbTables = (val: number) => {
   apiGetDatabaseNamesById(val).then((res: AxiosResponse) => {
-
     let nodes: TreeNode[] = [];
     for (let i = 0; i < res.data.length; i++) {
       nodes.push({
