@@ -6,19 +6,10 @@
 
   <splitpanes vertical>
     <pane min-size="20">
-      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick">
-        <template #default="{ node, data }">
-        <span class="custom-tree-node">
-          <span>{{ node.label }}</span>
-          <span>
-            <a @click="append(node, data)"> Append </a>
-          </span>
-        </span>
-        </template>
+      <el-tree :data="dataSource" :props="defaultProps" @node-click="handleNodeClick">
       </el-tree>
     </pane>
     <pane>
-
       <vxe-grid></vxe-grid>
     </pane>
   </splitpanes>
@@ -30,6 +21,7 @@ import "splitpanes/dist/splitpanes.css";
 import { onMounted, ref } from "vue";
 import { apiGetDatabaseNamesById, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
 import { AxiosResponse } from "axios";
+import type Node from "element-plus/es/components/tree/src/model/node";
 
 const defaultProps = {
   children: "children",
@@ -37,6 +29,7 @@ const defaultProps = {
 };
 
 interface TreeNode {
+  id?: number;
   label: string;
   children?: TreeNode[];
 }
@@ -46,24 +39,28 @@ interface DataSourceVO {
   name: string
 }
 
-const data = ref<TreeNode[]>([]);
+const dataSource = ref<TreeNode[]>([]);
 
 const currentDataSourceId = ref<number>(0);
 const dataSources = ref<DataSourceVO[]>([]);
 
-const append = (node: any, data: TreeNode) => {
-  console.log(node, data);
-};
-
-const handleNodeClick = (data: TreeNode) => {
+/**
+ * 节点点击事件
+ * @param node
+ * @param data
+ * @param event
+ */
+const handleNodeClick = (node: Node, obj: any, data: TreeNode, event: Event) => {
   apiListTableNames(currentDataSourceId.value, data.label).then((res: AxiosResponse) => {
-    let nodes: TreeNode[] = [];
+    if (!data.children) {
+      data.children = [];
+    }
     for (let i = 0; i < res.data.length; i++) {
-      nodes.push({
+      data.children?.push({
         label: res.data[i]
       });
     }
-    data.children = data.children?.concat(nodes)
+    dataSource.value = [...dataSource.value];
   });
 };
 
@@ -75,7 +72,7 @@ const loadDbTables = (val: number) => {
         label: res.data[i]
       });
     }
-    data.value = nodes;
+    dataSource.value = nodes;
   });
 };
 
@@ -91,5 +88,12 @@ onMounted(() => {
 
 </script>
 <style lang="scss" scoped>
-
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
 </style>

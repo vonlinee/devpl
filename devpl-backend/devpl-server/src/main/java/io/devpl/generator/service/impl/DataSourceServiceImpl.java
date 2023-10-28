@@ -180,12 +180,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
         try (Connection connection = JdbcUtils.getConnection(connectionUrl, connInfo.getUsername(), connInfo.getPassword(), dbType)) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = metaData.getTables(databaseName, null, null, null);
-
-            ColumnMapRowMapper mapper = new ColumnMapRowMapper();
-
-            int row = 0;
             while (rs.next()) {
-                Map<String, Object> map = mapper.mapRow(rs, row++);
                 list.add(rs.getString("TABLE_NAME"));
             }
         } catch (Exception exception) {
