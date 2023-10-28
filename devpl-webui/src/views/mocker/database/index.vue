@@ -1,56 +1,79 @@
 <template>
 
-  <el-select v-model="currentDataSource" clearable @change="loadDbTables">
+  <el-select v-model="currentDataSourceId" clearable @change="loadDbTables">
     <el-option v-for="ds in dataSources" :key="ds.id" :value="ds.id" :label="ds.name"></el-option>
   </el-select>
 
   <splitpanes vertical>
     <pane min-size="20">
-      <database-tree-view></database-tree-view>
+      <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
     </pane>
     <pane>
-        
+
       <vxe-grid></vxe-grid>
     </pane>
   </splitpanes>
 </template>
-<script setup lang='ts'>
+<script setup lang="ts">
 
-import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css'
-import DatabaseTreeView from './DatabaseTreeView.vue'
-import { onMounted, ref } from 'vue';
-import { apiGetDatabaseNamesById, apiListSelectableDataSources } from '@/api/datasource';
-import { AxiosResponse } from 'axios';
+import { Pane, Splitpanes } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
+import { onMounted, ref } from "vue";
+import { apiGetDatabaseNamesById, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
+import { AxiosResponse } from "axios";
+
+const defaultProps = {
+  children: "children",
+  label: "label"
+};
+
+interface TreeNode {
+  label: string;
+  children?: TreeNode[];
+}
+
 
 interface DataSourceVO {
   id: number,
   name: string
 }
 
-const currentDataSource = ref()
-const dataSources = ref<DataSourceVO[]>([])
+const data = ref<TreeNode[]>([]);
+
+const currentDataSourceId = ref<number>(0);
+const dataSources = ref<DataSourceVO[]>([]);
+
+
+const handleNodeClick = (data: TreeNode) => {
+  apiListTableNames(currentDataSourceId.value, data.label).then((res: AxiosResponse) => {
+
+  });
+};
 
 const loadDbTables = (val: number) => {
   apiGetDatabaseNamesById(val).then((res: AxiosResponse) => {
-    console.log(res);
-    
-  })
-}
 
-
+    let nodes: TreeNode[] = [];
+    for (let i = 0; i < res.data.length; i++) {
+      nodes.push({
+        label: res.data[i]
+      });
+    }
+    data.value = nodes;
+  });
+};
 
 
 onMounted(() => {
-  apiListSelectableDataSources().then((res : AxiosResponse<DataSourceVO[]>) => {
-    dataSources.value = res.data
+  apiListSelectableDataSources().then((res: AxiosResponse<DataSourceVO[]>) => {
+    dataSources.value = res.data;
     if (res.data.length > 0) {
-      currentDataSource.value = res.data[0].name
+      currentDataSourceId.value = res.data[0].id;
     }
-  })
-})
+  });
+});
 
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 
 </style>

@@ -58,8 +58,8 @@ export const apiUploadDriverJar = (file: File) => {
  * @returns 所有支持的数据库类型
  */
 export const apiListSupportedDbTypes = () => {
-  return http.get("/api/gen/datasource/dbtypes")
-}
+  return http.get("/api/gen/datasource/dbtypes");
+};
 
 
 /**
@@ -67,5 +67,13 @@ export const apiListSupportedDbTypes = () => {
  * @returns 所有支持的数据库类型
  */
 export const apiListSelectableDataSources = () => {
-  return http.get("/api/gen/datasource/list/selectable")
-}
+  return http.get("/api/gen/datasource/list/selectable");
+};
+
+/**
+ * 所有支持的数据库类型
+ * @returns 所有支持的数据库类型
+ */
+export const apiListTableNames = (id: number, dbName: string) => {
+  return http.get(`/api/gen/datasource/{id}/{dbName}/table/names`);
+};

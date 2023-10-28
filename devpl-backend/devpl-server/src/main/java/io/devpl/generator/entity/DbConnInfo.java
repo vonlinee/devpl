@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
  * 数据源连接信息管理
  */
 @Data
-@TableName("datasource_info")
-public class JdbcConnInfo {
+@TableName("db_conn_info")
+public class DbConnInfo {
     /**
      * id
      */
@@ -29,8 +29,8 @@ public class JdbcConnInfo {
     /**
      * IP地址
      */
-    @TableField(value = "ip")
-    private String ip;
+    @TableField(value = "host")
+    private String host;
 
     /**
      * 端口号
@@ -47,8 +47,8 @@ public class JdbcConnInfo {
     /**
      * 数据库名称
      */
-    @TableField(value = "database_name")
-    private String databaseName;
+    @TableField(value = "db_name")
+    private String dbName;
 
     /**
      * 连接名

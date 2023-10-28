@@ -6,10 +6,11 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DbTypeVO;
+import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
-import io.devpl.generator.entity.JdbcConnInfo;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.TableService;
+import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +39,8 @@ public class DataSourceController {
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public Result<PageResult<JdbcConnInfo>> page(Query query) {
-        return Result.ok(datasourceService.page(query));
+    public Result<PageResult<DbConnInfo>> page(Query query) {
+        return Result.ok(datasourceService.listPage(query));
     }
 
     /**
@@ -48,8 +49,8 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list")
-    public Result<List<JdbcConnInfo>> list() {
-        return Result.ok(datasourceService.getList());
+    public Result<List<DbConnInfo>> list() {
+        return Result.ok(datasourceService.listAll());
     }
 
     /**
@@ -68,8 +69,8 @@ public class DataSourceController {
      * @return 数据源信息
      */
     @GetMapping("/datasource/{id}")
-    public Result<JdbcConnInfo> get(@PathVariable("id") Long id) {
-        JdbcConnInfo data = datasourceService.getById(id);
+    public Result<DbConnInfo> get(@PathVariable("id") Long id) {
+        DbConnInfo data = datasourceService.getById(id);
         return Result.ok(data);
     }
 
@@ -90,9 +91,9 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PostMapping("/datasource")
-    public Result<Boolean> save(@RequestBody JdbcConnInfo entity) {
+    public Result<Boolean> save(@RequestBody DbConnInfo entity) {
         entity.setDriverClassName(DbType.getValue(entity.getDbType()).getDriverClassName());
-        return Result.ok(datasourceService.save(entity));
+        return Result.ok(datasourceService.addOne(entity));
     }
 
     /**
@@ -103,7 +104,8 @@ public class DataSourceController {
      */
     @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
     public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
-        JdbcConnInfo connInfo = datasourceService.getById(id);
+        Assert.notNull(id, "id不能为空");
+        DbConnInfo connInfo = datasourceService.getOne(id);
         if (connInfo == null) {
             return Result.error("资源不存在");
         }
@@ -117,8 +119,21 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public Result<List<String>> getDbNames(@RequestBody JdbcConnInfo entity) {
+    public Result<List<String>> getDbNames(@RequestBody DbConnInfo entity) {
         return Result.ok(datasourceService.getDbNames(entity));
+    }
+
+    /**
+     * 获取连接的所有数据库名称列表
+     *
+     * @param id     数据源ID
+     * @param dbName 数据库名称
+     * @return 数据库名称列表
+     */
+    @PostMapping(value = "/datasource/{dataSourceId}/{}/table/names")
+    public Result<List<String>> getTableNames(@PathVariable(value = "dataSourceId") Long id, String dbName) {
+        DbConnInfo connInfo = datasourceService.getOne(id);
+        return Result.ok(datasourceService.getTableNames(connInfo, dbName));
     }
 
     /**
@@ -142,8 +157,9 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PutMapping("/datasource")
-    public Result<Boolean> update(@RequestBody JdbcConnInfo entity) {
-        return Result.ok(datasourceService.updateById(entity));
+    public Result<Boolean> update(@RequestBody DbConnInfo entity) {
+        datasourceService.updateOne(entity);
+        return Result.ok();
     }
 
     /**

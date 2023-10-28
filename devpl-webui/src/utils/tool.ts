@@ -97,3 +97,16 @@ export const isWindows = () => {
 export const isMacintosh = () => {
   navigator.userAgent.match(/Macintosh/i) !== null
 }
+
+/**
+ * 深拷贝对象
+ * @param obj 
+ * @returns 
+ */
+const deepClone = (obj: Record<string, any>) =>  {
+  const copy = Object.assign({}, obj);
+  Object.keys(copy).forEach(
+    key => (copy[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+  );
+  return Array.isArray(obj) ? (copy.length = obj.length) && Array.from(copy) : copy;
+};

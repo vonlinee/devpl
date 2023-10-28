@@ -6,7 +6,7 @@ import io.devpl.generator.common.query.Query;
 import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.domain.vo.DataSourceVO;
-import io.devpl.generator.entity.JdbcConnInfo;
+import io.devpl.generator.entity.DbConnInfo;
 
 import javax.annotation.Nullable;
 import java.sql.Connection;
@@ -15,11 +15,13 @@ import java.util.List;
 /**
  * 数据源管理
  */
-public interface DataSourceService extends BaseService<JdbcConnInfo> {
+public interface DataSourceService extends BaseService<DbConnInfo> {
 
-    PageResult<JdbcConnInfo> page(Query query);
+    DbConnInfo getOne(long id);
 
-    List<JdbcConnInfo> getList();
+    PageResult<DbConnInfo> listPage(Query query);
+
+    List<DbConnInfo> listAll();
 
     List<DataSourceVO> listIdAndNames();
 
@@ -31,7 +33,9 @@ public interface DataSourceService extends BaseService<JdbcConnInfo> {
      */
     String getDatabaseProductName(Long datasourceId);
 
-    Connection getConnection(JdbcConnInfo connInfo);
+    boolean addOne(DbConnInfo connInfo);
+
+    Connection getConnection(DbConnInfo connInfo);
 
     /**
      * 获取数据库连接
@@ -44,13 +48,19 @@ public interface DataSourceService extends BaseService<JdbcConnInfo> {
 
     AbstractQuery getQuery(DbType dbType);
 
+    String getConnectionUrl(DbConnInfo entity);
+
     /**
      * 获取数据库名称
      *
      * @param entity 数据库连接信息
      * @return 数据库名称
      */
-    List<String> getDbNames(JdbcConnInfo entity);
+    List<String> getDbNames(DbConnInfo entity);
+
+    List<String> getTableNames(DbConnInfo connInfo, String databaseName);
 
     String testJdbcConnection(Long id);
+
+    DbConnInfo updateOne(DbConnInfo entity);
 }

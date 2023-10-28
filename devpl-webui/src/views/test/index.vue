@@ -3,6 +3,8 @@
 import { ref } from "vue";
 import SaveOrUpdate from "@/components/dialog/SaveOrUpdate.vue";
 import CodeMirror from "@/components/editor/CodeMirror.vue";
+import Table from "@/components/db/DbTable.vue";
+import DbTable from "@/components/db/DbTable.vue";
 
 let modalVisiable = ref();
 
@@ -59,19 +61,22 @@ const func2 = () => {
 </script>
 
 <template>
-  <button @click="show">Open</button>
-  <button @click="func1">getText</button>
-  <input ref="inputValue">
-  <button @click="func2">setText</button>
-  <save-or-update ref="dialogRef" :form-data="formData" @submit="submit">
-    <template #default="scope">
-      <span>{{ scope}}</span>
-    </template>
-  </save-or-update>
 
-  <suspense>
-    <code-mirror ref="editorRef" lang="java"></code-mirror>
-  </suspense>
+  <db-table></db-table>
+
+<!--  <button @click="show">Open</button>-->
+<!--  <button @click="func1">getText</button>-->
+<!--  <input ref="inputValue">-->
+<!--  <button @click="func2">setText</button>-->
+<!--  <save-or-update ref="dialogRef" :form-data="formData" @submit="submit">-->
+<!--    <template #default="scope">-->
+<!--      <span>{{ scope}}</span>-->
+<!--    </template>-->
+<!--  </save-or-update>-->
+
+<!--  <suspense>-->
+<!--    <code-mirror ref="editorRef" lang="java"></code-mirror>-->
+<!--  </suspense>-->
 
   <!-- <test-my-table></test-my-table> -->
 </template>

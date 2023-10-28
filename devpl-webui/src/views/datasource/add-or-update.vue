@@ -27,7 +27,7 @@
       <el-row>
         <el-col :span="16">
           <el-form-item prop="ip" label="IP">
-            <el-input v-model="dataForm.ip" placeholder="127.0.0.1"></el-input>
+            <el-input v-model="dataForm.host" placeholder="127.0.0.1"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -52,7 +52,7 @@
       </el-row>
 
       <el-form-item prop="dbType" label="数据库名称">
-        <el-select v-model="dataForm.databaseName" clearable placeholder="数据库名称"
+        <el-select v-model="dataForm.dbName" clearable placeholder="数据库名称"
                    @blur="selectBlur"
                    @change="onDbNameChange"
                    @visibleChange="onStartSelect"
@@ -91,9 +91,9 @@ const dataFormRef = ref();
 const dataForm = reactive({
   id: "",
   dbType: "MySQL",
-  ip: "127.0.0.1",
+  host: "127.0.0.1",
   port: 3306,
-  databaseName: "",
+  dbName: "",
   connName: "",
   connUrl: "",
   username: "root",
@@ -159,17 +159,16 @@ function selectBlur(event: FocusEvent) {
   if (event.target) {
     let target = event.target as HTMLInputElement;
     if (target.value !== "") {
-      dataForm.databaseName = target.value;
+      dataForm.dbName = target.value;
     }
   }
 }
 
 const dataRules = ref({
   dbType: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  ip: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+  host: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   port: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   connName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  // connUrl: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   username: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   password: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
 });

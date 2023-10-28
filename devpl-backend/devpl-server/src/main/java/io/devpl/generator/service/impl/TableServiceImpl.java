@@ -15,7 +15,7 @@ import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.TableMapper;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
-import io.devpl.generator.entity.JdbcConnInfo;
+import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
 import io.devpl.generator.service.DataSourceService;
@@ -76,7 +76,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
             throw new ServerException(tableName + "已存在");
         }
 
-        JdbcConnInfo connInfo = dataSourceService.getById(datasourceId);
+        DbConnInfo connInfo = dataSourceService.getById(datasourceId);
         DbType dbType = DbType.getValue(connInfo.getDbType());
         Connection connection = dataSourceService.getConnection(connInfo);
         AbstractQuery query = dataSourceService.getQuery(dbType);
@@ -167,7 +167,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     public void sync(Long id) {
         GenTable table = this.getById(id);
 
-        JdbcConnInfo connInfo = dataSourceService.getById(table.getDatasourceId());
+        DbConnInfo connInfo = dataSourceService.getById(table.getDatasourceId());
 
         DbType dbType = DbType.getValue(connInfo.getDbType());
         AbstractQuery query = dataSourceService.getQuery(dbType);
@@ -266,7 +266,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
     @Override
     public List<GenTable> getTableList(Long datasourceId) {
-        JdbcConnInfo connInfo = dataSourceService.getById(datasourceId);
+        DbConnInfo connInfo = dataSourceService.getById(datasourceId);
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             DbType dbType = DbType.getValue(connInfo.getDbType());
             AbstractQuery query = dataSourceService.getQuery(dbType);

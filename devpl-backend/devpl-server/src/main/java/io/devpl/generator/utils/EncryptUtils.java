@@ -20,6 +20,7 @@ public class EncryptUtils {
 
     /**
      * 加密
+     *
      * @param content 加密的明文
      * @return 加密后的密文
      */
@@ -35,6 +36,7 @@ public class EncryptUtils {
 
     /**
      * 解密
+     *
      * @param encryptStr 解密的密文
      * @return 解密后的明文
      */
@@ -47,5 +49,13 @@ public class EncryptUtils {
         byte[] encryptBytes = Base64.decodeBase64(encryptStr);
         byte[] decryptBytes = cipher.doFinal(encryptBytes);
         return new String(decryptBytes);
+    }
+
+    public static String tryDecrypt(String source) {
+        try {
+            return decrypt(source);
+        } catch (Exception e) {
+            return source;
+        }
     }
 }
