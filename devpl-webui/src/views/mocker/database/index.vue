@@ -38,9 +38,6 @@ const loadDbTables = (val: number) => {
   })
 }
 
-
-
-
 onMounted(() => {
   apiListSelectableDataSources().then((res : AxiosResponse<DataSourceVO[]>) => {
     dataSources.value = res.data
