@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,6 +37,9 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     @Override
     public boolean isRegisted(String driverClassName) {
+        DriverManager.drivers().forEach(driver -> {
+            System.out.println(driver.getClass());
+        });
         return false;
     }
 
@@ -74,12 +79,20 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
                             try (Stream<Path> jarFileStream = Files.list(versionDir)) {
                                 jarFileStream.filter(file -> Files.isRegularFile(file) && file.toString().endsWith(".jar")).forEach(driverJarFile -> {
                                     // 驱动jar包
+                                    Driver driver;
                                     try (JdbcDriverClassLoader loader = new JdbcDriverClassLoader(FileUtils.toURL(driverJarFile))) {
                                         logger.info("扫描到驱动文件{}，尝试加载驱动类{}", driverJarFile.toAbsolutePath(), dbType.getDriverClassName());
-                                        Driver driver = loader.loadDriver(dbType.getDriverClassName());
-                                        System.out.println(driver);
+                                        driver = loader.loadDriver(dbType.getDriverClassName());
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
+                                    }
+                                    if (driver != null) {
+                                        try {
+                                            DriverManager.registerDriver(driver);
+                                        } catch (SQLException e) {
+                                            logger.info("注册驱动类{}失败, 数据库类型{}", driver, dbType);
+                                            throw new RuntimeException(e);
+                                        }
                                     }
                                 });
                             } catch (IOException exception) {
@@ -94,5 +107,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
         } catch (IOException exception) {
 
         }
+
+        System.out.println(isRegisted(""));
     }
 }

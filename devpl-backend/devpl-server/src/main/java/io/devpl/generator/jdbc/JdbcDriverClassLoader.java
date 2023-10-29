@@ -1,5 +1,8 @@
 package io.devpl.generator.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +21,8 @@ import java.util.jar.Manifest;
  */
 public final class JdbcDriverClassLoader extends URLClassLoader {
 
+    static final Logger logger = LoggerFactory.getLogger(JdbcDriverClassLoader.class);
+
     /**
      * 驱动加载隔离
      *
@@ -33,11 +38,19 @@ public final class JdbcDriverClassLoader extends URLClassLoader {
     }
 
     public Driver loadDriver(String driverClassName) {
+        Class<?> driverClass = null;
         try {
-            Class<?> driverClass = this.loadClass(driverClassName);
+            driverClass = this.loadClass(driverClassName);
+        } catch (ClassNotFoundException e) {
+            logger.error("加载驱动失败{}", driverClassName);
+        }
+        if (driverClass == null) {
+            return null;
+        }
+        try {
             Constructor<?> constructor = driverClass.getConstructor();
             return (Driver) constructor.newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
             throw new RuntimeException(e);
         }
