@@ -1,16 +1,16 @@
 package com.baomidou.mybatisplus.generator.jdbc;
 
+import java.util.Objects;
+
 /**
  * 支持的数据库类型,主要用于分页方言
- * @author hubin
- * @since 2018-06-23
  */
 public enum DbType {
 
     /**
      * MYSQL
      */
-    MYSQL("mysql", "MySql数据库"),
+    MYSQL("mysql", "MySql数据库", JDBCDriver.MYSQL5, JDBCDriver.MYSQL8),
     /**
      * MARIADB
      */
@@ -18,11 +18,11 @@ public enum DbType {
     /**
      * ORACLE
      */
-    ORACLE("oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)"),
+    ORACLE("oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", JDBCDriver.ORACLE),
     /**
      * oracle12c new pagination
      */
-    ORACLE_12C("oracle12c", "Oracle12c+数据库"),
+    ORACLE_12C("oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE),
     /**
      * DB2
      */
@@ -38,11 +38,11 @@ public enum DbType {
     /**
      * SQLITE
      */
-    SQLITE("sqlite", "SQLite数据库"),
+    SQLITE("sqlite", "SQLite数据库", JDBCDriver.SQLITE),
     /**
      * POSTGRE
      */
-    POSTGRE_SQL("postgresql", "Postgre数据库"),
+    POSTGRE_SQL("postgresql", "Postgre数据库", JDBCDriver.POSTGRE_SQL),
     /**
      * SQLSERVER2005
      */
@@ -50,7 +50,7 @@ public enum DbType {
     /**
      * SQLSERVER
      */
-    SQL_SERVER("sqlserver", "SQLServer数据库"),
+    SQL_SERVER("sqlserver", "SQLServer数据库", JDBCDriver.SQL_SERVER),
     /**
      * DM
      */
@@ -85,11 +85,13 @@ public enum DbType {
     GBASE_8S("gbase-8s", "南大通用数据库 GBase 8s"),
     /**
      * use {@link  #GBASE_8S}
+     *
      * @deprecated 2022-05-30
      */
     @Deprecated GBASEDBT("gbasedbt", "南大通用数据库"),
     /**
      * use {@link  #GBASE_8S}
+     *
      * @deprecated 2022-05-30
      */
     @Deprecated GBASE_INFORMIX("gbase 8s", "南大通用数据库 GBase 8s"),
@@ -158,13 +160,21 @@ public enum DbType {
      */
     private final String desc;
 
+    private final JDBCDriver[] drivers;
+
     DbType(String db, String desc) {
+        this(db, desc, (JDBCDriver[]) null);
+    }
+
+    DbType(String db, String desc, JDBCDriver... drivers) {
         this.db = db;
         this.desc = desc;
+        this.drivers = drivers;
     }
 
     /**
      * 获取数据库类型
+     *
      * @param dbType 数据库类型字符串
      */
     public static DbType getDbType(String dbType) {
@@ -174,5 +184,42 @@ public enum DbType {
             }
         }
         return OTHER;
+    }
+
+    public static DbType getValue(String dbType) {
+        return getValue(dbType, DbType.MYSQL);
+    }
+
+    public static DbType getValue(String dbType, DbType defaultType) {
+        if (Objects.equals(dbType, "MySQL")) {
+            return MYSQL;
+        }
+        if (Objects.equals(dbType, "Oracle")) {
+            return ORACLE;
+        }
+        if (Objects.equals(dbType, "PostgreSQL")) {
+            return POSTGRE_SQL;
+        }
+        if (Objects.equals(dbType, "SQLServer") || Objects.equals(dbType, "Microsoft SQL Server")) {
+            return SQL_SERVER;
+        }
+        if (Objects.equals(dbType, "DM") || Objects.equals(dbType, "DM DBMS")) {
+            return DM;
+        }
+        if (Objects.equals(dbType, "Clickhouse")) {
+            return CLICK_HOUSE;
+        }
+        return defaultType;
+    }
+
+    public String getDriverClassName() {
+        if (drivers == null || drivers.length == 0) {
+            return null;
+        }
+        return drivers[0].getDriverClassName();
+    }
+
+    public String getDescription() {
+        return desc;
     }
 }
