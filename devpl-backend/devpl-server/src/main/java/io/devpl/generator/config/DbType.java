@@ -1,7 +1,5 @@
 package io.devpl.generator.config;
 
-import io.devpl.sdk.util.StringUtils;
-
 /**
  * 数据库类型 枚举
  */
@@ -13,7 +11,14 @@ public enum DbType {
     DM("达梦", "dm.jdbc.driver.DmDriver"),
     Clickhouse("Clickhouse", "com.clickhouse.jdbc.ClickHouseDriver");
 
+    /**
+     * 数据库名称
+     */
     private final String name;
+
+    /**
+     * 该数据库使用的驱动
+     */
     private final String driverClassName;
 
     DbType(String name, String driverClass) {
@@ -26,22 +31,25 @@ public enum DbType {
     }
 
     public static DbType getValue(String dbType, DbType defaultType) {
-        if (StringUtils.equalsAny(dbType, "MySQL")) {
+        if (dbType == null || dbType.isBlank()) {
+            return defaultType;
+        }
+        if ("MySQL".equalsIgnoreCase(dbType)) {
             return MySQL;
         }
-        if (StringUtils.equalsAny(dbType, "Oracle")) {
+        if ("Oracle".equalsIgnoreCase(dbType)) {
             return Oracle;
         }
-        if (StringUtils.equalsAny(dbType, "PostgreSQL")) {
+        if ("PostgreSQL".equalsIgnoreCase(dbType)) {
             return PostgreSQL;
         }
-        if (StringUtils.equalsAny(dbType, "SQLServer", "Microsoft SQL Server")) {
+        if ("SQLServer".equalsIgnoreCase(dbType) || "Microsoft SQL Server".equalsIgnoreCase(dbType)) {
             return SQLServer;
         }
-        if (StringUtils.equalsAny(dbType, "DM", "DM DBMS")) {
+        if ("DM".equalsIgnoreCase(dbType) || "DM DBMS".equalsIgnoreCase(dbType)) {
             return DM;
         }
-        if (StringUtils.equalsAny(dbType, "Clickhouse")) {
+        if ("Clickhouse".equalsIgnoreCase(dbType)) {
             return Clickhouse;
         }
         return defaultType;

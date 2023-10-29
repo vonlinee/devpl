@@ -6,7 +6,7 @@ import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
 import io.devpl.generator.domain.vo.FileUploadVO;
 import io.devpl.generator.service.FileInfoService;
-import io.devpl.generator.service.IFileUploadService;
+import io.devpl.generator.service.FileUploadService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import java.io.InputStream;
  */
 @Slf4j
 @Service
-public class FileUploadServiceImpl implements IFileUploadService {
+public class FileUploadServiceImpl implements FileUploadService {
 
     @Resource
     FileStorageStrategy fileStorageStrategy;

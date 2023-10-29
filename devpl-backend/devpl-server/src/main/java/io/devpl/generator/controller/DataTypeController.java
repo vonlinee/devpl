@@ -10,7 +10,7 @@ import io.devpl.generator.domain.vo.DataTypeMappingListVO;
 import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
-import io.devpl.generator.service.IDataTypeService;
+import io.devpl.generator.service.DataTypeService;
 import io.devpl.generator.utils.BusinessUtils;
 import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class DataTypeController {
 
     @Resource
-    IDataTypeService dataTypeService;
+    DataTypeService dataTypeService;
 
     /**
      * 保存数据类型信息

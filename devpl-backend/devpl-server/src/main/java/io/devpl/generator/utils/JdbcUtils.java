@@ -1,7 +1,6 @@
 package io.devpl.generator.utils;
 
 import io.devpl.generator.config.DbType;
-import oracle.jdbc.OracleConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -43,12 +42,12 @@ public class JdbcUtils {
         DriverManager.setLoginTimeout(CONNECTION_TIMEOUTS_SECONDS);
         loadDriver(dbType.getDriverClassName());
         Connection connection = DriverManager.getConnection(url, username, password);
-        if (dbType == DbType.Oracle) {
-            /**
-             * https://docs.oracle.com/database/121/JAJDB/oracle/jdbc/OracleConnection.html#setRemarksReporting_boolean_
-             */
-            ((OracleConnection) connection).setRemarksReporting(true);
-        }
+//        if (dbType == DbType.Oracle) {
+//            /**
+//             * https://docs.oracle.com/database/121/JAJDB/oracle/jdbc/OracleConnection.html#setRemarksReporting_boolean_
+//             */
+//            ((OracleConnection) connection).setRemarksReporting(true);
+//        }
         return connection;
     }
 

@@ -2,6 +2,7 @@ package io.devpl.sdk.io;
 
 import javax.annotation.Nonnull;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -396,6 +397,20 @@ public class FileUtils {
             }
         }
         return files;
+    }
+
+    /**
+     * 将path转换为URL
+     *
+     * @param path 路径
+     * @return URL
+     */
+    public static URL toURL(Path path) {
+        try {
+            return path.toUri().toURL();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

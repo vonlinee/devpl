@@ -14,7 +14,7 @@ logs/
 # Package Files #
 .idea
 *.iml
-*.jar
+# *.jar
 *.war
 *.nar
 *.ear

@@ -1,11 +1,10 @@
 package io.devpl.generator.utils;
 
-import org.apache.commons.codec.binary.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * 加解密工具类
@@ -31,7 +30,7 @@ public class EncryptUtils {
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(ENCRYPT_KEY.getBytes(), "AES"));
         byte[] b = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
         // 采用base64算法进行转码,避免出现中文乱码
-        return Base64.encodeBase64String(b);
+        return new String(Base64.getEncoder().encode(b), StandardCharsets.UTF_8);
     }
 
     /**
@@ -46,7 +45,7 @@ public class EncryptUtils {
         Cipher cipher = Cipher.getInstance(ALGORITHM_STR);
         cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(ENCRYPT_KEY.getBytes(), "AES"));
         // 采用base64算法进行转码,避免出现中文乱码
-        byte[] encryptBytes = Base64.decodeBase64(encryptStr);
+        byte[] encryptBytes = Base64.getDecoder().decode(encryptStr);
         byte[] decryptBytes = cipher.doFinal(encryptBytes);
         return new String(decryptBytes);
     }

@@ -73,6 +73,12 @@ public class DataSourceController {
         return Result.ok(data);
     }
 
+    /**
+     * 测试数据库连接
+     *
+     * @param id 数据源ID
+     * @return 连接信息
+     */
     @GetMapping("/datasource/test/{id}")
     public Result<String> test(@PathVariable("id") Long id) {
         try {

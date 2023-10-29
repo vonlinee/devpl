@@ -5,7 +5,7 @@ import io.devpl.generator.domain.param.FileDownloadParam;
 import io.devpl.generator.domain.param.MultiFileUploadParam;
 import io.devpl.generator.domain.param.SingleFileUploadParam;
 import io.devpl.generator.domain.vo.FileUploadVO;
-import io.devpl.generator.service.IFileUploadService;
+import io.devpl.generator.service.FileUploadService;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class FileController {
 
     @Resource
-    IFileUploadService fileUploadService;
+    FileUploadService fileUploadService;
 
     /**
      * 单文件上传
