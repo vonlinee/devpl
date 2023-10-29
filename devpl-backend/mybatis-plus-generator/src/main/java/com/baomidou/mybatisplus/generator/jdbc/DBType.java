@@ -5,60 +5,60 @@ import java.util.Objects;
 /**
  * 支持的数据库类型,主要用于分页方言
  */
-public enum DbType {
+public enum DBType {
 
     /**
      * MYSQL
      */
-    MYSQL("mysql", "MySql数据库", JDBCDriver.MYSQL5, JDBCDriver.MYSQL8),
+    MYSQL("MySQL", 3306, "MySQL数据库", JDBCDriver.MYSQL5, JDBCDriver.MYSQL8),
     /**
      * MARIADB
      */
-    MARIADB("mariadb", "MariaDB数据库"),
+    MARIADB("MariaDB", "MariaDB数据库"),
     /**
      * ORACLE
      */
-    ORACLE("oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", JDBCDriver.ORACLE),
+    ORACLE("Oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", JDBCDriver.ORACLE),
     /**
      * oracle12c new pagination
      */
-    ORACLE_12C("oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE),
+    ORACLE_12C("Oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE),
     /**
      * DB2
      */
-    DB2("db2", "DB2数据库"),
+    DB2("DB2", "DB2数据库"),
     /**
      * H2
      */
-    H2("h2", "H2数据库"),
+    H2("H2", "H2数据库"),
     /**
      * HSQL
      */
-    HSQL("hsql", "HSQL数据库"),
+    HSQL("Hsql", "HSQL数据库"),
     /**
      * SQLITE
      */
-    SQLITE("sqlite", "SQLite数据库", JDBCDriver.SQLITE),
+    SQLITE("Sqlite", "SQLite数据库", JDBCDriver.SQLITE),
     /**
      * POSTGRE
      */
-    POSTGRE_SQL("postgresql", "Postgre数据库", JDBCDriver.POSTGRE_SQL),
+    POSTGRE_SQL("PostgreSQL", "Postgre数据库", JDBCDriver.POSTGRE_SQL),
     /**
      * SQLSERVER2005
      */
-    SQL_SERVER2005("sqlserver2005", "SQLServer2005数据库"),
+    SQL_SERVER2005("SQL Server2005", "SQLServer2005数据库"),
     /**
      * SQLSERVER
      */
-    SQL_SERVER("sqlserver", "SQLServer数据库", JDBCDriver.SQL_SERVER),
+    SQL_SERVER("SQL Server", "SQLServer数据库", JDBCDriver.SQL_SERVER),
     /**
      * DM
      */
-    DM("dm", "达梦数据库"),
+    DM("达梦数据库", "达梦数据库"),
     /**
      * xugu
      */
-    XU_GU("xugu", "虚谷数据库"),
+    XU_GU("虚谷数据库", "虚谷数据库"),
     /**
      * Kingbase
      */
@@ -84,18 +84,6 @@ public enum DbType {
      */
     GBASE_8S("gbase-8s", "南大通用数据库 GBase 8s"),
     /**
-     * use {@link  #GBASE_8S}
-     *
-     * @deprecated 2022-05-30
-     */
-    @Deprecated GBASEDBT("gbasedbt", "南大通用数据库"),
-    /**
-     * use {@link  #GBASE_8S}
-     *
-     * @deprecated 2022-05-30
-     */
-    @Deprecated GBASE_INFORMIX("gbase 8s", "南大通用数据库 GBase 8s"),
-    /**
      * Oscar
      */
     OSCAR("oscar", "神通数据库"),
@@ -111,7 +99,6 @@ public enum DbType {
      * Firebird
      */
     FIREBIRD("Firebird", "Firebird 数据库"),
-
     /**
      * HighGo
      */
@@ -120,7 +107,6 @@ public enum DbType {
      * CUBRID
      */
     CUBRID("cubrid", "CUBRID数据库"),
-
     /**
      * GOLDILOCKS
      */
@@ -144,31 +130,46 @@ public enum DbType {
     /**
      * xcloud
      */
-    XCloud("xcloud", "行云数据库"),
+    XCloud("行云数据库", "行云数据库"),
     /**
      * UNKONWN DB
      */
     OTHER("other", "其他数据库");
 
     /**
-     * 数据库名称
+     * 数据库名称，不区分版本
      */
-    private final String db;
+    private final String name;
+
+    /**
+     * 默认端口号
+     */
+    private int defaultPort;
 
     /**
      * 描述
      */
-    private final String desc;
+    private final String description;
 
+    /**
+     * 支持的驱动列表
+     */
     private final JDBCDriver[] drivers;
 
-    DbType(String db, String desc) {
-        this(db, desc, (JDBCDriver[]) null);
+    DBType(String name, int port, String desc) {
+        this(name, port, desc, (JDBCDriver[]) null);
     }
 
-    DbType(String db, String desc, JDBCDriver... drivers) {
-        this.db = db;
-        this.desc = desc;
+    DBType(String name, String description, JDBCDriver... drivers) {
+        this.name = name;
+        this.description = description;
+        this.drivers = drivers;
+    }
+
+    DBType(String name, int port, String description, JDBCDriver... drivers) {
+        this.name = name;
+        this.defaultPort = port;
+        this.description = description;
         this.drivers = drivers;
     }
 
@@ -177,20 +178,20 @@ public enum DbType {
      *
      * @param dbType 数据库类型字符串
      */
-    public static DbType getDbType(String dbType) {
-        for (DbType type : DbType.values()) {
-            if (type.db.equalsIgnoreCase(dbType)) {
+    public static DBType getDbType(String dbType) {
+        for (DBType type : DBType.values()) {
+            if (type.name.equalsIgnoreCase(dbType)) {
                 return type;
             }
         }
         return OTHER;
     }
 
-    public static DbType getValue(String dbType) {
-        return getValue(dbType, DbType.MYSQL);
+    public static DBType getValue(String dbType) {
+        return getValue(dbType, DBType.MYSQL);
     }
 
-    public static DbType getValue(String dbType, DbType defaultType) {
+    public static DBType getValue(String dbType, DBType defaultType) {
         if (Objects.equals(dbType, "MySQL")) {
             return MYSQL;
         }
@@ -213,13 +214,37 @@ public enum DbType {
     }
 
     public String getDriverClassName() {
+        return getDriverClassName(0);
+    }
+
+    public String getDriverClassName(int index) {
+        JDBCDriver driver = getDriver(index);
+        return driver == null ? null : driver.getDriverClassName();
+    }
+
+    public JDBCDriver getDriver() {
+        return getDriver(0);
+    }
+
+    public JDBCDriver getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;
         }
-        return drivers[0].getDriverClassName();
+        if (index > drivers.length - 1) {
+            index = 0;
+        }
+        return drivers[index];
     }
 
     public String getDescription() {
-        return desc;
+        return description;
+    }
+
+    public int getDefaultPort() {
+        return defaultPort;
+    }
+
+    public String getName() {
+        return name;
     }
 }

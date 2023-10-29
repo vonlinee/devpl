@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DataSourceMapper;
 import io.devpl.generator.domain.vo.DataSourceVO;
@@ -19,7 +19,6 @@ import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.JdbcUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -33,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 数据源管理
@@ -81,7 +79,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     @Override
     public String getDatabaseProductName(Long dataSourceId) {
         if (dataSourceId.intValue() == 0) {
-            return DbType.MySQL.name();
+            return DBType.MYSQL.name();
         } else {
             return getById(dataSourceId).getDbType();
         }
@@ -101,7 +99,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
                 // 本系统连接的数据源
                 return dataSource.getConnection();
             } else {
-                return JdbcUtils.getConnection(connInfo.getConnUrl(), connInfo.getUsername(), connInfo.getPassword(), DbType.valueOf(connInfo.getDbType()));
+                return JdbcUtils.getConnection(connInfo.getConnUrl(), connInfo.getUsername(), connInfo.getPassword(), DBType.valueOf(connInfo.getDbType()));
             }
         } catch (SQLException exception) {
             return null;
@@ -115,19 +113,19 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     }
 
     @Override
-    public AbstractQuery getQuery(DbType dbType) {
+    public AbstractQuery getQuery(DBType dbType) {
         AbstractQuery dbQuery = null;
-        if (dbType == DbType.MySQL) {
+        if (dbType == DBType.MYSQL) {
             dbQuery = new MySqlQuery();
-        } else if (dbType == DbType.Oracle) {
+        } else if (dbType == DBType.ORACLE) {
             dbQuery = new OracleQuery();
-        } else if (dbType == DbType.PostgreSQL) {
+        } else if (dbType == DBType.POSTGRE_SQL) {
             dbQuery = new PostgreSqlQuery();
-        } else if (dbType == DbType.SQLServer) {
+        } else if (dbType == DBType.SQL_SERVER) {
             dbQuery = new SQLServerQuery();
-        } else if (dbType == DbType.DM) {
+        } else if (dbType == DBType.DM) {
             dbQuery = new DmQuery();
-        } else if (dbType == DbType.Clickhouse) {
+        } else if (dbType == DBType.CLICK_HOUSE) {
             dbQuery = new ClickHouseQuery();
         }
         return dbQuery;
@@ -141,7 +139,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
      */
     @Override
     public String getConnectionUrl(DbConnInfo entity) {
-        JDBCDriver jdbcDriver = JDBCDriver.valueOfDriverName(entity.getDriverClassName());
+        JDBCDriver jdbcDriver = JDBCDriver.findByDriverClassName(entity.getDriverClassName());
         if (jdbcDriver == null) {
             return null;
         }
@@ -150,7 +148,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public List<String> getDbNames(DbConnInfo entity) {
-        DbType dbType = DbType.getValue(entity.getDbType());
+        DBType dbType = DBType.getValue(entity.getDbType());
 
         String connectionUrl = getConnectionUrl(entity);
         if (dbType == null || connectionUrl == null) {
@@ -171,7 +169,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public List<String> getTableNames(DbConnInfo connInfo, String databaseName) {
-        DbType dbType = DbType.getValue(connInfo.getDbType());
+        DBType dbType = DBType.getValue(connInfo.getDbType());
         String connectionUrl = getConnectionUrl(connInfo);
         if (dbType == null || connectionUrl == null) {
             return Collections.emptyList();
@@ -200,7 +198,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     @Override
     public DbConnInfo updateOne(DbConnInfo entity) {
         if (!StringUtils.hasText(entity.getDriverClassName())) {
-            DbType dbType = DbType.getValue(entity.getDbType(), null);
+            DBType dbType = DBType.getValue(entity.getDbType(), null);
             if (dbType != null) {
                 entity.setDriverClassName(dbType.getDriverClassName());
             }

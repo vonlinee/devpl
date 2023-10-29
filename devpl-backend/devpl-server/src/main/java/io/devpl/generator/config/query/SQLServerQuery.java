@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.codegen.utils.StringUtils;
-import io.devpl.generator.config.DbType;
 
 /**
  * SQLServer查询
@@ -9,8 +9,8 @@ import io.devpl.generator.config.DbType;
 public class SQLServerQuery implements AbstractQuery {
 
     @Override
-    public DbType dbType() {
-        return DbType.SQLServer;
+    public DBType dbType() {
+        return DBType.SQL_SERVER;
     }
 
     @Override

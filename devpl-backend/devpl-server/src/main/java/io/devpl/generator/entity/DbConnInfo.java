@@ -33,7 +33,7 @@ public class DbConnInfo {
     private String host;
 
     /**
-     * 端口号
+     * 连接端口号
      */
     @TableField(value = "port")
     private Integer port;

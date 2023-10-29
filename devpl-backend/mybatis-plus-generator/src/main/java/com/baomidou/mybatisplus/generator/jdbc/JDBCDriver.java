@@ -7,7 +7,7 @@ import java.util.Properties;
  * 数据库驱动类型
  * 连接URL格式：jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]...
  *
- * @see DbType
+ * @see DBType
  */
 public enum JDBCDriver {
 
@@ -43,21 +43,12 @@ public enum JDBCDriver {
         this.description = description;
     }
 
-    public static String[] listSupportedDbNames() {
-        String[] names = new String[values().length];
-        JDBCDriver[] drivers = values();
-        for (int i = 0; i < drivers.length; i++) {
-            names[i] = drivers[i].name();
-        }
-        return names;
-    }
-
-    public static JDBCDriver valueOfDriverName(String driverName) {
-        if (driverName == null || driverName.isBlank()) {
+    public static JDBCDriver findByDriverClassName(String driverClassName) {
+        if (driverClassName == null || driverClassName.isBlank()) {
             return null;
         }
         for (JDBCDriver driver : values()) {
-            if (driver.getDriverClassName().equalsIgnoreCase(driverName)) {
+            if (driver.getDriverClassName().equalsIgnoreCase(driverClassName)) {
                 return driver;
             }
         }

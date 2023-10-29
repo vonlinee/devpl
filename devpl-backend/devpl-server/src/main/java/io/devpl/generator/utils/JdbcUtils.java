@@ -1,6 +1,6 @@
 package io.devpl.generator.utils;
 
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
@@ -38,7 +38,7 @@ public class JdbcUtils {
      * @return JDBC链接
      * @throws SQLException 连接失败
      */
-    public static Connection getConnection(String url, String username, String password, DbType dbType) throws SQLException {
+    public static Connection getConnection(String url, String username, String password, DBType dbType) throws SQLException {
         DriverManager.setLoginTimeout(CONNECTION_TIMEOUTS_SECONDS);
         loadDriver(dbType.getDriverClassName());
         Connection connection = DriverManager.getConnection(url, username, password);

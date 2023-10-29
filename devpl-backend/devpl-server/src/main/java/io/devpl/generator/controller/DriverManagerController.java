@@ -1,7 +1,6 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
-import io.devpl.generator.jdbc.URLClassLoaderTest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -92,19 +91,5 @@ public class DriverManagerController {
             classNames.add(clazz.getName());
         }
         return Result.ok(classNames);
-    }
-
-    /**
-     * 已注册的驱动类名
-     * @return 驱动类名列表
-     */
-    @GetMapping(value = "/test")
-    public Result<List<String>> test() {
-        try {
-            URLClassLoaderTest.test();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return Result.ok();
     }
 }

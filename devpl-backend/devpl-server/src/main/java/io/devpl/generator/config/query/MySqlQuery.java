@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.sdk.util.StringUtils;
 
 /**
@@ -9,8 +9,8 @@ import io.devpl.sdk.util.StringUtils;
 public class MySqlQuery implements AbstractQuery {
 
     @Override
-    public DbType dbType() {
-        return DbType.MySQL;
+    public DBType dbType() {
+        return DBType.MYSQL;
     }
 
     @Override

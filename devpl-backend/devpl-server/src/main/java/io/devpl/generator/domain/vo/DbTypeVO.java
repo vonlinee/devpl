@@ -7,10 +7,12 @@ public class DbTypeVO {
 
     private String id;
     private String name;
+    private int defaultPort;
 
-    public DbTypeVO(String id, String name) {
+    public DbTypeVO(String id, String name, int defaultPort) {
         this.id = id;
         this.name = name;
+        this.defaultPort = defaultPort;
     }
 
     public String getId() {
@@ -27,5 +29,13 @@ public class DbTypeVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getDefaultPort() {
+        return defaultPort;
+    }
+
+    public void setDefaultPort(int defaultPort) {
+        this.defaultPort = defaultPort;
     }
 }

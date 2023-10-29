@@ -7,7 +7,5 @@ public interface JdbcDriverManager {
 
     boolean isRegisted(String driverClassName);
 
-    void register(String driverClassName);
-
     void deregister(String driverClassName);
 }

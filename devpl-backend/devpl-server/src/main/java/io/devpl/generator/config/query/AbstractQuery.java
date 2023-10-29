@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 
 /**
  * Query
@@ -10,7 +10,7 @@ public interface AbstractQuery {
     /**
      * 数据库类型
      */
-    DbType dbType();
+    DBType dbType();
 
     /**
      * 表信息查询 SQL

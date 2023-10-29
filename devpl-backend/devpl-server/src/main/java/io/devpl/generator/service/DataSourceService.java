@@ -3,7 +3,7 @@ package io.devpl.generator.service;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.entity.DbConnInfo;
@@ -46,7 +46,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
     @Nullable
     Connection getConnection(Long dataSourceId);
 
-    AbstractQuery getQuery(DbType dbType);
+    AbstractQuery getQuery(DBType dbType);
 
     String getConnectionUrl(DbConnInfo entity);
 

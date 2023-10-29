@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.codegen.utils.StringUtils;
-import io.devpl.generator.config.DbType;
 
 /**
  * ClickHouse 表数据查询
@@ -16,8 +16,8 @@ public class ClickHouseQuery implements AbstractQuery {
     }
 
     @Override
-    public DbType dbType() {
-        return DbType.Clickhouse;
+    public DBType dbType() {
+        return DBType.CLICK_HOUSE;
     }
 
     @Override

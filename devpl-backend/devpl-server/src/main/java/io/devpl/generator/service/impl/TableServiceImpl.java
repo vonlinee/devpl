@@ -3,19 +3,19 @@ package io.devpl.generator.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
-import io.devpl.generator.config.DbType;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.TableMapper;
+import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
-import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
 import io.devpl.generator.service.DataSourceService;
@@ -77,7 +77,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         }
 
         DbConnInfo connInfo = dataSourceService.getById(datasourceId);
-        DbType dbType = DbType.getValue(connInfo.getDbType());
+        DBType dbType = DBType.getValue(connInfo.getDbType());
         Connection connection = dataSourceService.getConnection(connInfo);
         AbstractQuery query = dataSourceService.getQuery(dbType);
 
@@ -169,7 +169,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
         DbConnInfo connInfo = dataSourceService.getById(table.getDatasourceId());
 
-        DbType dbType = DbType.getValue(connInfo.getDbType());
+        DBType dbType = DBType.getValue(connInfo.getDbType());
         AbstractQuery query = dataSourceService.getQuery(dbType);
 
         List<GenTableField> dbTableFieldList;
@@ -226,11 +226,11 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
      * @param tableName 表名
      * @return 表的所有字段信息
      */
-    public List<GenTableField> getTableFieldList(DbType dbType, Connection connection, AbstractQuery query, Long dataSourceId, Long tableId, String tableName) {
+    public List<GenTableField> getTableFieldList(DBType dbType, Connection connection, AbstractQuery query, Long dataSourceId, Long tableId, String tableName) {
         List<GenTableField> tableFieldList = new ArrayList<>();
         String tableFieldsSql = query.getTableFieldsQuerySql();
         try {
-            if (dbType == DbType.Oracle) {
+            if (dbType == DBType.ORACLE) {
                 DatabaseMetaData md = connection.getMetaData();
                 tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
             } else {
@@ -268,7 +268,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     public List<GenTable> getTableList(Long datasourceId) {
         DbConnInfo connInfo = dataSourceService.getById(datasourceId);
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
-            DbType dbType = DbType.getValue(connInfo.getDbType());
+            DBType dbType = DBType.getValue(connInfo.getDbType());
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 根据数据源，获取全部数据表
             return getTableList(connection, datasourceId, query);

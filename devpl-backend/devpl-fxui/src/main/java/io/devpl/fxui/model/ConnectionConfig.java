@@ -37,7 +37,7 @@ public class ConnectionConfig {
     private Properties properties;
 
     public String getConnectionUrl() {
-        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
         String databaseName = schema;
         if (databaseName == null) {
             databaseName = "";
@@ -47,13 +47,13 @@ public class ConnectionConfig {
     }
 
     public String getConnectionUrl(String databaseName) {
-        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 
     public String getConnectionUrl(String databaseName, Properties properties) {
-        JDBCDriver driver = JDBCDriver.valueOfDriverName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
@@ -125,7 +125,7 @@ public class ConnectionConfig {
 
     public JDBCDriver getDriver() {
         if (this.driverInfo == null) {
-            this.driverInfo = JDBCDriver.valueOfDriverName(dbType);
+            this.driverInfo = JDBCDriver.findByDriverClassName(dbType);
         }
         return driverInfo;
     }

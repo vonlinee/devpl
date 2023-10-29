@@ -3,7 +3,7 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.query.PageResult;
 import io.devpl.generator.common.query.Query;
 import io.devpl.generator.common.query.Result;
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DbTypeVO;
 import io.devpl.generator.entity.DbConnInfo;
@@ -97,7 +97,7 @@ public class DataSourceController {
      */
     @PostMapping("/datasource")
     public Result<Boolean> save(@RequestBody DbConnInfo entity) {
-        entity.setDriverClassName(DbType.getValue(entity.getDbType()).getDriverClassName());
+        entity.setDriverClassName(DBType.getValue(entity.getDbType()).getDriverClassName());
         return Result.ok(datasourceService.addOne(entity));
     }
 
@@ -149,8 +149,8 @@ public class DataSourceController {
     @GetMapping(value = "/datasource/dbtypes")
     public Result<List<DbTypeVO>> getSupportedDbTypes() {
         List<DbTypeVO> result = new ArrayList<>();
-        for (DbType item : DbType.values()) {
-            result.add(new DbTypeVO(item.name(), item.getName()));
+        for (DBType item : DBType.values()) {
+            result.add(new DbTypeVO(item.name(), item.getName(), item.getDefaultPort()));
         }
         return Result.ok(result);
     }

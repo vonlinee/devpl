@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
 import io.devpl.codegen.utils.StringUtils;
-import io.devpl.generator.config.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 
 /**
  * Oracle查询
@@ -9,8 +9,8 @@ import io.devpl.generator.config.DbType;
 public class OracleQuery implements AbstractQuery {
 
     @Override
-    public DbType dbType() {
-        return DbType.Oracle;
+    public DBType dbType() {
+        return DBType.ORACLE;
     }
 
     @Override
