@@ -24,6 +24,13 @@ public abstract class JSONUtils {
         return toString(object, false);
     }
 
+    /**
+     * 对象转为字符串
+     *
+     * @param object
+     * @param prettyStyle
+     * @return
+     */
     public static String toString(Object object, boolean prettyStyle) {
         try {
             if (prettyStyle) {

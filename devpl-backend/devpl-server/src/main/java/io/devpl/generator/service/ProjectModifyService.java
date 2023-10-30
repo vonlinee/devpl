@@ -1,7 +1,7 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.entity.ProjectModify;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public interface ProjectModifyService extends BaseService<ProjectModify> {
 
-    PageResult<ProjectModify> page(Query query);
+    ListResult<ProjectModify> page(Query query);
 
     byte[] download(ProjectModify project) throws IOException;
 }

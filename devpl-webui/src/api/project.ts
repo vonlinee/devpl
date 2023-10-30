@@ -1,14 +1,14 @@
-import service from '@/utils/request'
+import http from '@/utils/http'
 
 export const useProjectApi = (id: number) => {
-	return service.get('/gen/project/' + id)
+	return http.get('/gen/project/' + id)
 }
 
 export const useProjectSubmitApi = (dataForm: any) => {
 	if (dataForm.id) {
-		return service.put('/gen/project', dataForm)
+		return http.put('/gen/project', dataForm)
 	} else {
-		return service.post('/gen/project', dataForm)
+		return http.post('/gen/project', dataForm)
 	}
 }
 

@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.PageQuery;
-import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.FieldInfo;
 import io.devpl.generator.service.FieldInfoService;
@@ -27,7 +27,7 @@ public class FieldInfoController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public Result<PageResult<FieldInfo>> list(PageQuery query) {
+    public Result<ListResult<FieldInfo>> list(PageQuery query) {
         return Result.ok(BusinessUtils.page2List(fieldInfoService.pages(query.getPageIndex(), query.getPageSize())));
     }
 

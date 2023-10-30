@@ -3,7 +3,6 @@
     :z-index="2000" show-footer>
     <el-form ref="dataFormRef" label-position="right" :model="dataForm" :rules="dataRules" label-width="120px"
       @keyup.enter="submitHandle()">
-
       <el-row>
         <el-col :span="16">
           <el-form-item label="连接名" prop="connName">
@@ -11,9 +10,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item prop="dbType" label="数据库类型">
-            <el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
-              <el-option v-for="dbType in supportedDbTypes" :key="dbType.id" :value="dbType.id"
+          <el-form-item prop="driverType" label="驱动类型">
+            <el-select v-model="dataForm.driverType" clearable placeholder="驱动类型" style="width: 100%">
+              <el-option v-for="dbType in supportedDriverTypes" :key="dbType.id" :value="dbType.id"
                 :label="dbType.name"></el-option>
             </el-select>
           </el-form-item>
@@ -47,35 +46,18 @@
       </el-row>
 
       <el-form-item prop="dbType" label="数据库名称">
-        <el-select v-model="dataForm.dbName" clearable placeholder="数据库名称"
-                   @blur="selectBlur"
-                   @change="onDbNameChange"
-                   @visibleChange="onStartSelect"
-                   filterable style="width: 100%">
-          <el-option
-            v-for="item in databaseNames"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+        <el-select v-model="dataForm.dbName" clearable placeholder="数据库名称" @blur="selectBlur" @change="onDbNameChange"
+          @visibleChange="onStartSelect" filterable style="width: 100%">
+          <el-option v-for="item in databaseNames" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <el-form-item label="数据库URL" prop="connUrl">
         <el-input v-model="dataForm.connUrl" placeholder="数据库URL"></el-input>
       </el-form-item>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="驱动属性" prop="connUrl">
-            <vxe-table>
-              <vxe-column title="名称" width="300"></vxe-column>
-              <vxe-column title="值" width="50%"></vxe-column>
-            </vxe-table>
-          </el-form-item>
-        </el-col>
-      </el-row>
 
     </el-form>
     <template #footer>
+      <el-button @click="testConnection">测试连接</el-button>
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="submitHandle()">确定</el-button>
     </template>
@@ -85,9 +67,9 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, toRaw } from "vue";
 import { ElButton, ElCol, ElMessage } from "element-plus/es";
-import { apiGetDatabaseNames, apiListSupportedDbTypes, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
+import { apiGetDatabaseNames, apiListSupportedDbTypes, apiTestConnection, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
 import { decrypt, encrypt } from "@/utils/tool";
-import { DbType } from "./types";
+import { DriverTypeVO } from "./types";
 
 const emit = defineEmits(["refreshDataList"]);
 
@@ -96,7 +78,7 @@ const dataFormRef = ref();
 
 const dataForm = reactive({
   id: "",
-  dbType: "MySQL",
+  driverType: "MySQL",
   host: "127.0.0.1",
   port: 3306,
   dbName: "",
@@ -106,11 +88,11 @@ const dataForm = reactive({
   password: "123456"
 });
 
-const supportedDbTypes = ref<DbType[]>([])
+const supportedDriverTypes = ref<DriverTypeVO[]>([])
 
 onMounted(() => {
   apiListSupportedDbTypes().then((res) => {
-    supportedDbTypes.value = res.data
+    supportedDriverTypes.value = res.data
   })
 })
 
@@ -141,7 +123,16 @@ const getDataSource = (id: number) => {
 };
 
 function onDbNameChange(val: string) {
+  
+}
 
+/**
+ * 测试数据库连接
+ */
+const testConnection = () => {
+  apiTestConnection(toRaw(dataForm)).then((res) => {
+    
+  })
 }
 
 let flag = ref(false);

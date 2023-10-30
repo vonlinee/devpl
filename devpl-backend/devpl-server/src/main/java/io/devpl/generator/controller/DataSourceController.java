@@ -1,11 +1,12 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
-import io.devpl.generator.common.query.Result;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.common.query.Result;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.vo.DataSourceVO;
-import io.devpl.generator.domain.vo.DbTypeVO;
+import io.devpl.generator.domain.vo.DriverTypeVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
@@ -38,8 +39,8 @@ public class DataSourceController {
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public Result<PageResult<DbConnInfo>> page(Query query) {
-        return Result.ok(datasourceService.listPage(query));
+    public ListResult<DbConnInfo> page(Query query) {
+        return datasourceService.listPage(query);
     }
 
     /**
@@ -48,8 +49,8 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list")
-    public Result<List<DbConnInfo>> list() {
-        return Result.ok(datasourceService.listAll());
+    public ListResult<DbConnInfo> list() {
+        return ListResult.ok(datasourceService.listAll());
     }
 
     /**
@@ -58,8 +59,8 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list/selectable")
-    public Result<List<DataSourceVO>> listSelectableDataSources() {
-        return Result.ok(datasourceService.listIdAndNames());
+    public ListResult<DataSourceVO> listSelectableDataSources() {
+        return ListResult.ok(datasourceService.listIdAndNames());
     }
 
     /**
@@ -90,15 +91,19 @@ public class DataSourceController {
     }
 
     /**
-     * 保存数据源连接信息
+     * 测试数据库连接
      *
-     * @param entity 数据库连接信息
-     * @return 是否成功
+     * @param connInfo 数据库连接信息
+     * @return 连接成功，返回驱动及数据库信息
      */
-    @PostMapping("/datasource")
-    public Result<Boolean> save(@RequestBody DbConnInfo entity) {
-        entity.setDriverClassName(DBType.getValue(entity.getDbType()).getDriverClassName());
-        return Result.ok(datasourceService.addOne(entity));
+    @PostMapping("/datasource/connection/test")
+    public Result<String> test(@RequestBody DbConnInfo connInfo) {
+        try {
+            return Result.ok(datasourceService.testJdbcConnection(connInfo));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Result.error("连接失败，请检查配置信息");
+        }
     }
 
     /**
@@ -108,13 +113,11 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
-    public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
+    public ListResult<String> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
         Assert.notNull(id, "id不能为空");
         DbConnInfo connInfo = datasourceService.getOne(id);
-        if (connInfo == null) {
-            return Result.error("资源不存在");
-        }
-        return Result.ok(datasourceService.getDbNames(connInfo));
+        Assert.notNull(connInfo, "数据源不存在");
+        return ListResult.ok(datasourceService.getDbNames(connInfo));
     }
 
     /**
@@ -124,8 +127,8 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public Result<List<String>> getDbNames(@RequestBody DbConnInfo entity) {
-        return Result.ok(datasourceService.getDbNames(entity));
+    public ListResult<String> getDbNames(@RequestBody DbConnInfo entity) {
+        return ListResult.ok(datasourceService.getDbNames(entity));
     }
 
     /**
@@ -142,29 +145,38 @@ public class DataSourceController {
     }
 
     /**
-     * 获取支持的所有数据库类型列表
+     * 获取支持的所有驱动类型列表
      *
      * @return 数据库类型列表
      */
-    @GetMapping(value = "/datasource/dbtypes")
-    public Result<List<DbTypeVO>> getSupportedDbTypes() {
-        List<DbTypeVO> result = new ArrayList<>();
-        for (DBType item : DBType.values()) {
-            result.add(new DbTypeVO(item.name(), item.getName(), item.getDefaultPort()));
+    @GetMapping(value = "/datasource/drivers")
+    public Result<List<DriverTypeVO>> getSupportedDbTypes() {
+        List<DriverTypeVO> result = new ArrayList<>();
+        for (DBType dbType : DBType.values()) {
+            JDBCDriver[] drivers = dbType.getDrivers();
+            if (drivers != null) {
+                for (JDBCDriver driver : drivers) {
+                    result.add(new DriverTypeVO(driver.name(), driver.name(), dbType.getDefaultPort()));
+                }
+            }
         }
         return Result.ok(result);
     }
 
     /**
-     * 更新数据源信息
+     * 保存/更新数据源连接信息
      *
-     * @param entity 数据源信息
+     * @param entity 数据库连接信息
      * @return 是否成功
      */
-    @PutMapping("/datasource")
-    public Result<Boolean> update(@RequestBody DbConnInfo entity) {
-        datasourceService.updateOne(entity);
-        return Result.ok();
+    @PostMapping("/datasource")
+    public Result<Boolean> save(@RequestBody DbConnInfo entity) {
+        if (entity.getId() != null) {
+            datasourceService.updateOne(entity);
+            return Result.ok();
+        }
+        entity.setDriverClassName(DBType.getValue(entity.getDbType()).getDriverClassName());
+        return Result.ok(datasourceService.addOne(entity));
     }
 
     /**
@@ -184,13 +196,13 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list/{id}")
-    public Result<List<GenTable>> tableList(@PathVariable("id") Long id) {
+    public ListResult<GenTable> tableList(@PathVariable("id") Long id) {
         try {
             // 根据数据源，获取全部数据表
-            return Result.ok(tableService.getTableList(id));
+            return ListResult.ok(tableService.getTableList(id));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return Result.error("数据源配置错误，请检查数据源配置！");
+            return ListResult.error("数据源配置错误，请检查数据源配置！");
         }
     }
 }

@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.PageQuery;
-import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
@@ -101,8 +101,8 @@ public class TemplateController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public Result<PageResult<TemplateInfo>> list(PageQuery query) {
-        return Result.ok(BusinessUtils.page2List(templateService.pages(query.getPageIndex(), query.getPageSize())));
+    public ListResult<TemplateInfo> list(PageQuery query) {
+        return BusinessUtils.page2List(templateService.pages(query.getPageIndex(), query.getPageSize()));
     }
 
     /**
@@ -111,8 +111,8 @@ public class TemplateController {
      * @return 列表
      */
     @GetMapping(value = "/list/select")
-    public Result<List<TemplateSelectVO>> listSelectableTemplates() {
-        return Result.ok(templateService.listSelectableTemplates());
+    public ListResult<TemplateSelectVO> listSelectableTemplates() {
+        return ListResult.ok(templateService.listSelectable());
     }
 
     /**

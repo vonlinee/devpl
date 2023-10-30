@@ -1,8 +1,8 @@
 package io.devpl.generator.service;
 
 import io.devpl.generator.common.mvc.BaseService;
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.entity.GenTable;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface TableService extends BaseService<GenTable> {
 
-    PageResult<GenTable> page(Query query);
+    ListResult<GenTable> page(Query query);
 
     GenTable getByTableName(String tableName);
 

@@ -1,7 +1,7 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.entity.GenBaseClass;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface BaseClassService extends BaseService<GenBaseClass> {
 
-    PageResult<GenBaseClass> page(Query query);
+    ListResult<GenBaseClass> listPage(Query query);
 
-    List<GenBaseClass> getList();
+    List<GenBaseClass> listAll();
 }

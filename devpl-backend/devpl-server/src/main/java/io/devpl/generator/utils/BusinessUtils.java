@@ -1,7 +1,7 @@
 package io.devpl.generator.utils;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.ListResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -12,8 +12,8 @@ import java.nio.file.StandardCopyOption;
 
 public class BusinessUtils {
 
-    public static <T> PageResult<T> page2List(IPage<T> page) {
-        return new PageResult<>(page.getRecords(), page.getTotal());
+    public static <T> ListResult<T> page2List(IPage<T> page) {
+        return new ListResult<>(page.getRecords(), page.getTotal());
     }
 
     public static void writeMultipartFile(MultipartFile file, File dest) {

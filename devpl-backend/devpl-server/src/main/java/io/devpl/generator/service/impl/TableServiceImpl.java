@@ -6,13 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.exception.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.TableMapper;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
@@ -46,9 +46,9 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     private final GeneratorConfigService generatorConfigService;
 
     @Override
-    public PageResult<GenTable> page(Query query) {
+    public ListResult<GenTable> page(Query query) {
         IPage<GenTable> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-        return new PageResult<>(page.getRecords(), page.getTotal());
+        return ListResult.ok(page.getRecords(), page.getTotal());
     }
 
     @Override
@@ -78,41 +78,44 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
         DbConnInfo connInfo = dataSourceService.getById(datasourceId);
         DBType dbType = DBType.getValue(connInfo.getDbType());
-        Connection connection = dataSourceService.getConnection(connInfo);
-        AbstractQuery query = dataSourceService.getQuery(dbType);
 
-        // 从数据库获取表信息
-        table = getTable(connection, query, datasourceId, tableName);
-        // 代码生成器信息
-        GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
+        try (Connection connection = dataSourceService.getConnection(connInfo)) {
+            AbstractQuery query = dataSourceService.getQuery(dbType);
+            // 从数据库获取表信息
+            table = getTable(connection, query, datasourceId, tableName);
+            // 代码生成器信息
+            GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
-        ProjectInfo project = generator.getProject();
+            ProjectInfo project = generator.getProject();
 
-        DeveloperInfo developer = generator.getDeveloper();
+            DeveloperInfo developer = generator.getDeveloper();
 
-        // 保存表信息
-        table.setPackageName(project.getPackageName());
-        table.setVersion(project.getVersion());
-        table.setBackendPath(project.getBackendPath());
-        table.setFrontendPath(project.getFrontendPath());
+            // 保存表信息
+            table.setPackageName(project.getPackageName());
+            table.setVersion(project.getVersion());
+            table.setBackendPath(project.getBackendPath());
+            table.setFrontendPath(project.getFrontendPath());
 
-        table.setAuthor(developer.getAuthor());
-        table.setEmail(developer.getEmail());
+            table.setAuthor(developer.getAuthor());
+            table.setEmail(developer.getEmail());
 
-        table.setFormLayout(FormLayoutEnum.ONE.getValue());
-        table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
-        table.setClassName(NamingUtils.toPascalCase(tableName));
-        table.setModuleName(getModuleName(table.getPackageName()));
-        table.setFunctionName(getFunctionName(tableName));
-        table.setCreateTime(new Date());
-        this.save(table);
+            table.setFormLayout(FormLayoutEnum.ONE.getValue());
+            table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
+            table.setClassName(NamingUtils.toPascalCase(tableName));
+            table.setModuleName(getModuleName(table.getPackageName()));
+            table.setFunctionName(getFunctionName(tableName));
+            table.setCreateTime(new Date());
+            this.save(table);
 
-        // 获取原生字段数据
-        List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
-        // 初始化字段数据
-        tableFieldService.initFieldList(tableFieldList);
-        // 保存列数据
-        tableFieldService.saveBatch(tableFieldList);
+            // 获取原生字段数据
+            List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
+            // 初始化字段数据
+            tableFieldService.initFieldList(tableFieldList);
+            // 保存列数据
+            tableFieldService.saveBatch(tableFieldList);
+        } catch (SQLException exception) {
+            log.error("导入表失败", exception);
+        }
     }
 
     /**

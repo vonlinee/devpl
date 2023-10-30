@@ -1,8 +1,8 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.FieldTypeMapper;
 import io.devpl.generator.entity.GenFieldType;
@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
 public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeMapper, GenFieldType> implements FieldTypeService {
 
     @Override
-    public PageResult<GenFieldType> page(Query query) {
+    public ListResult<GenFieldType> page(Query query) {
         IPage<GenFieldType> page = baseMapper.selectPage(
             getPage(query),
             getWrapper(query)
         );
-        return new PageResult<>(page.getRecords(), page.getTotal());
+        return ListResult.ok(page);
     }
 
     @Override

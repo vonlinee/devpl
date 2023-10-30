@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.PageQuery;
-import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
@@ -62,8 +62,8 @@ public class DataTypeController {
      * @return 数据类型信息
      */
     @GetMapping("/page")
-    public Result<PageResult<DataTypeItem>> listDataTypes(PageQuery param) {
-        return Result.ok(BusinessUtils.page2List(dataTypeService.selectPage(param)));
+    public ListResult<DataTypeItem> listDataTypes(PageQuery param) {
+        return BusinessUtils.page2List(dataTypeService.selectPage(param));
     }
 
     /**
@@ -72,8 +72,8 @@ public class DataTypeController {
      * @return 类型分组信息
      */
     @GetMapping("/groups")
-    public PageResult<DataTypeGroupVO> addDataTypeGroup() {
-        return PageResult.ok(dataTypeService.listDataTypeGroups());
+    public ListResult<DataTypeGroupVO> addDataTypeGroup() {
+        return ListResult.ok(dataTypeService.listDataTypeGroups());
     }
 
     /**
@@ -102,8 +102,8 @@ public class DataTypeController {
      * @return 类型分组信息
      */
     @GetMapping("/mapping/all")
-    public PageResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingParam param) {
-        return PageResult.ok(dataTypeService.listDataTypeMappings(param.getTypeId()));
+    public ListResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingParam param) {
+        return ListResult.ok(dataTypeService.listDataTypeMappings(param.getTypeId()));
     }
 
     /**
@@ -114,7 +114,7 @@ public class DataTypeController {
      * @return 数据类型映射关系列表
      */
     @GetMapping("/mappable")
-    public PageResult<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
-        return PageResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
+    public ListResult<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
+        return ListResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
     }
 }

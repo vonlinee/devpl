@@ -1,8 +1,8 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.service.TableFieldService;
@@ -30,9 +30,8 @@ public class TableController {
      * @param query 查询参数
      */
     @GetMapping("page")
-    public Result<PageResult<GenTable>> page(Query query) {
-        PageResult<GenTable> page = tableService.page(query);
-        return Result.ok(page);
+    public ListResult<GenTable> page(Query query) {
+        return tableService.page(query);
     }
 
     /**

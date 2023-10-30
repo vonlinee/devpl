@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.utils.ServletUtils;
 import io.devpl.generator.entity.ProjectModify;
@@ -24,8 +24,8 @@ public class ProjectModifyController {
     ProjectModifyService projectModifyService;
 
     @GetMapping("/page")
-    public Result<PageResult<ProjectModify>> page(@Valid Query query) {
-        return Result.ok(projectModifyService.page(query));
+    public ListResult<ProjectModify> page(@Valid Query query) {
+        return projectModifyService.page(query);
     }
 
     @GetMapping("/{id}")

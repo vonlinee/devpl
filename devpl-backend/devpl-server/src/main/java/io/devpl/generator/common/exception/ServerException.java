@@ -1,5 +1,6 @@
 package io.devpl.generator.common.exception;
 
+import io.devpl.generator.common.query.StatusCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

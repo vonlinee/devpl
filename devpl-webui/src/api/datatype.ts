@@ -28,7 +28,7 @@ export const apiListAllDataTypeGroups = () => {
  * @returns
  */
 export const apiSaveDataTypeGroup = (group: any) => {
-  return http.postJson("/api/datatype/group/add", {
+  return http.post("/api/datatype/group/add", {
     groupId: group.typeGroupId,
     groupName: group.typeGroupName,
   })
@@ -38,14 +38,14 @@ export const apiSaveDataTypeGroup = (group: any) => {
  * @returns
  */
 export const apiUpdateDataTypeItem = (dataTypeItem: any) => {
-  return http.postJson("/api/datatype/update", dataTypeItem)
+  return http.post("/api/datatype/update", dataTypeItem)
 }
 
 /**
  * @returns
  */
 export const apiSaveDataTypeItems = (dataTypeItem: any[]) => {
-  return http.postJson("/api/datatype/saveOrUpdateBatch", {
+  return http.post("/api/datatype/saveOrUpdateBatch", {
     dataTypeItems: dataTypeItem,
   })
 }
@@ -60,7 +60,7 @@ export interface DataTypeMappingParam {
  * @returns
  */
 export const apiAddDataTypeMapping = (dataTypeItem: DataTypeMappingParam[]) => {
-  return http.postJson("/api/datatype/mapping", {
+  return http.post("/api/datatype/mapping", {
     mappings: dataTypeItem,
   })
 }

@@ -35,6 +35,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     /**
      * 保存模板
+     *
      * @param templateInfo 模板信息
      * @return 是否成功
      */
@@ -48,6 +49,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     /**
      * 获取模板渲染后的内容
+     *
      * @param content   模板内容
      * @param dataModel 数据模型
      */
@@ -77,7 +79,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     }
 
     @Override
-    public List<TemplateSelectVO> listSelectableTemplates() {
+    public List<TemplateSelectVO> listSelectable() {
         return baseMapper.selectTemplateIdAndNames();
     }
 }

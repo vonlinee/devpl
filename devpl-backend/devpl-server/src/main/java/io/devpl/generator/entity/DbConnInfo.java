@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -97,4 +98,12 @@ public class DbConnInfo {
      */
     @TableField(value = "is_deleted")
     private Boolean deleted;
+
+    /**
+     * 驱动类型
+     *
+     * @see JDBCDriver#name()
+     */
+    @TableField(exist = false)
+    private String driverType;
 }

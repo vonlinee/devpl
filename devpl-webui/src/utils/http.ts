@@ -1,69 +1,142 @@
-import service from "./request"
-import { AxiosPromise, AxiosRequestConfig } from "axios"
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosResponse,
+  CreateAxiosDefaults,
+  InternalAxiosRequestConfig,
+} from "axios"
+import { ElMessage } from "element-plus"
+import qs from "qs"
+import { showException } from "./debug"
 
 /**
- * axios请求配置: https://www.axios-http.cn/docs/req_config
- * @see AxiosRequestConfig
+ * 响应状态枚举
  */
-interface RequestConfig extends AxiosRequestConfig {
-  method: any
-  url: string
-  // headers?: object,
-  // params?: object | string,
-  // responseType?: string,
-  // data?: object | string,
-  // timeout?: number,
-  [key: string]: any
+enum ResponseStatus {
+  TIMEOUT = 20000,
+  OVERDUE = 600, // 登录失效
+  FAIL = 999, // 请求失败
+  SUCCESS = 2000, // 请求成功，不使用200,与HTTP状态码区分开
 }
+
+/**
+ * 后端接口响应数据结构
+ * @param T 响应携带的数据类型，即data的类型
+ */
+export interface Response<T = Record<string, any>> {
+  /**
+   * 接口响应状态码，和HTTP状态码区分开
+   */
+  code: number | string
+  /**
+   * 接口返回消息
+   */
+  msg: string
+  /**
+   * 用于提示的消息，由后端定义
+   */
+  toast: string
+  /**
+   * 总条数，仅当返回数据为列表时有值
+   */
+  total?: number
+  /**
+   * 接口返回的数据
+   */
+  data?: T | T[]
+  /**
+   * 异常调用栈，仅在开发阶段使用，用于调试
+   */
+  stackTrace?: string
+  /**
+   * 时间戳
+   */
+  timestamp: number | string
+}
+
+// 请求数据，可能放在请求体里也可能放在请求参数里
+type RequestData = Record<string, any> | string
+// 请求参数
+type RequestParam = Record<string, any> | string | any[]
 
 /**
  * Http请求头
  */
-interface HttpHeader extends Record<string, string> {
-    'Content-Type': string
+export interface HttpHeader extends Record<string, string> {
+  "Content-Type": string
 }
 
 /**
- * 定义常用的请求方法
+ * 不能写成AxiosPromise<T>，否则调用方的then接收到的类型是AxiosResponse而不是Response
  */
-const http = {
-  getBody(
-    url: string,
-    params?: any,
-    headers: HttpHeader = { "Content-Type": "application/json" }
-  ) {
-    const config: RequestConfig = {
-      method: "get",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
+export type ResponsePromise<T> = Promise<Response<T>>
+
+class Http {
   /**
-   * get请求
+   * Axios实例
+   */
+  instance: AxiosInstance
+
+  constructor(config: CreateAxiosDefaults) {
+    this.instance = axios.create(config)
+
+    // 请求拦截器
+    this.instance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        // GET请求追加时间戳，防止GET请求缓存
+        if (config.method?.toUpperCase() === "GET" && config.params) {
+          config.params.timestamp = new Date().getTime()
+        }
+
+        // 表单
+        if (
+          Object.values(config.headers).includes(
+            "application/x-www-form-urlencoded"
+          )
+        ) {
+          config.data = qs.stringify(config.data)
+        }
+        return config
+      },
+      (error: AxiosError) => {
+        return Promise.reject(error)
+      }
+    )
+
+    // 响应拦截器
+    this.instance.interceptors.response.use(
+      (response : AxiosResponse) => {
+        if (response.status !== 200) {
+          return Promise.reject(new Error(response.statusText || "Error"))
+        }
+        const res = response.data
+        // 响应成功 200
+        if (res.code === ResponseStatus.SUCCESS) {
+          return res
+        }
+        // 错误提示 通过自定义弹窗方式进行显示
+        showException(res.stackTrace)
+        // ElMessage.error(res.msg)
+        return Promise.reject(new Error(res.msg || "Error"))
+      },
+      (error) => {
+        ElMessage.error(error.message)
+        return Promise.reject(error)
+      }
+    )
+  }
+
+  /**
+   * 普通的get请求
    * @param url
    * @param params
    */
-  get<T = any>(url: string, params?: any): AxiosPromise<T> {
-    const config: RequestConfig = {
-      method: "get",
-      url: url,
-    }
-    if (params) config.params = params
-    return service(config)
-  },
-  blob(url: string, params?: any) {
-    const config: RequestConfig = {
-      method: "get",
-      url: url,
-      responseType: "blob",
-    }
-    if (params) config.params = params
-    return service(config)
-  },
+  get<T = any>(url: string, params?: RequestData): ResponsePromise<T> {
+    return this.instance.get(url, { params: params })
+  }
+
   /**
-   * 普通的post请求
+   * POST请求，JSON格式
    * @param url
    * @param params
    * @param headers
@@ -71,201 +144,70 @@ const http = {
    */
   post<T = any>(
     url: string,
-    params?: any,
+    params?: RequestParam,
     headers: HttpHeader = { "Content-Type": "application/json" }
-  ): AxiosPromise<T> {
-    const config: RequestConfig = {
-      method: "post",
-      url: url,
-      headers,
-    }
-    if (params) {
-      config.data = params
-    }
-    return service(config)
-  },
-  postWWW(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "application/x-www-form-urlencoded" }
-  ) {
-    const config: RequestConfig = {
-      method: "post",
-      url: url,
-      headers,
-    }
-    if (params) config.params = params
-    return service(config)
-  },
+  ): ResponsePromise<T> {
+    return this.instance.post(url, params, { headers })
+  }
+
   /**
-   * post请求，json格式
+   * PUT请求，JSON格式
    * @param url
    * @param params
    * @param headers
    * @returns
    */
-  putJson(
+  put<T = any>(
     url: string,
-    params?: any,
-    headers = { "Content-Type": "application/json" }
-  ) {
-    const config: RequestConfig = {
-      method: "put",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
-  putWWW(
+    params?: RequestParam,
+    headers: HttpHeader = { "Content-Type": "application/json" }
+  ): ResponsePromise<T> {
+    return this.instance.put(url, params, { headers })
+  }
+
+  /**
+   * DELETE请求，JSON格式
+   * @param url
+   * @param params
+   * @param headers
+   * @returns
+   */
+  delete<T = any>(
     url: string,
-    params?: any,
-    headers = { "Content-Type": "application/x-www-form-urlencoded" }
-  ) {
-    const config: RequestConfig = {
-      method: "put",
-      url: url,
-      headers,
-    }
-    if (params) config.params = params
-    return service(config)
-  },
-  putQuery(url: string, params?: any) {
-    const config: RequestConfig = {
-      method: "put",
-      url: url,
-    }
-    if (params) config.params = params
-    return service(config)
-  },
-  delete(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "application/json" }
-  ) {
-    const config: RequestConfig = {
-      method: "delete",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
-  deleteForm(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "x-www-form-urlencoded" }
-  ) {
-    const config: RequestConfig = {
-      method: "delete",
-      url: url,
-      headers,
-    }
-    if (params) {
-      config.data = params
-    }
-    return service(config)
-  },
-  deleteQuery(url: string, params?: any) {
-    const config: RequestConfig = {
-      method: "delete",
-      url: url,
-    }
-    if (params) config.params = params
-    return service(config)
-  },
+    params?: RequestParam,
+    headers: HttpHeader = { "Content-Type": "application/json" }
+  ): ResponsePromise<T> {
+    return this.instance.delete(url, { params, headers })
+  }
+
   /**
    * 表单提交 multipart/form-data
    * @param url
    * @param params
    * @param headers
    */
-  postForm(
+  form<T = any>(
     url: string,
-    params?: any,
-    headers = { "Content-Type": "multipart/form-data" }
-  ) {
-    const config: RequestConfig = {
-      method: "post",
-      url: url,
-      headers,
-    }
-    if (params) {
-      config.data = params
-    }
-    return service(config)
-  },
-  /**
-   * POST请求JSON格式
-   * @param url
-   * @param params
-   * @param headers
-   * @returns
-   */
-  postJson(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "application/json" }
-  ) {
-    const config: RequestConfig = {
-      method: "post",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
-  formGet(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "multipart/form-data" }
-  ) {
-    const config: RequestConfig = {
-      method: "get",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
-  formPut(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "multipart/form-data" }
-  ) {
-    const config: RequestConfig = {
-      method: "put",
-      url: url,
-      headers,
-    }
-    if (params) config.data = params
-    return service(config)
-  },
-  /**
-   * 文件上传
-   * @param url
-   * @param params
-   * @param headers
-   * @param timeout
-   * @returns
-   */
-  upload(
-    url: string,
-    params?: any,
-    headers = { "Content-Type": "application/x-www-form-urlencoded" },
-    timeout = 1200000
-  ) {
-    const config: RequestConfig = {
-      method: "post",
-      url: url,
-      headers,
-      timeout,
-    }
-    if (params) {
-      config.data = params
-    }
-    return service(config)
-  },
+    params?: RequestParam,
+    headers: HttpHeader = { "Content-Type": "multipart/form-data" }
+  ): ResponsePromise<T> {
+    return this.instance.post(url, params, { headers })
+  }
 }
 
+/**
+ * 全局请求配置
+ */
+const config: CreateAxiosDefaults = {
+  /**
+   * 接口基础地址
+   */
+  baseURL: import.meta.env.VITE_API_URL,
+  /**
+   * 超时时间，毫秒
+   */
+  timeout: 6000,
+}
+
+const http = new Http(config)
 export default http

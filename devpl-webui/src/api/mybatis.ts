@@ -1,6 +1,5 @@
 import http from '@/utils/http'
 
-
 /**
  * 获取Mapper中的参数
  * @param content
@@ -14,7 +13,7 @@ export const apiGetSampleXmlText = () => {
  * @param content
  */
 export const getMapperStatementParams = (content: string, options: any) => {
-    return http.postJson('/api/tools/mybatis/ms/params', {
+    return http.post('/api/tools/mybatis/ms/params', {
         mapperStatement: content,
         ...options
     })
@@ -32,7 +31,7 @@ export const apiGetDataTypes = () => {
  * @return SQL 字符串
  */
 export const apiGetSql = (ms: string, params: any[], real: boolean) => {
-    return http.postJson('/api/tools/mybatis/ms/sql', {
+    return http.post('/api/tools/mybatis/ms/sql', {
         mapperStatement: ms,
         msParams: params,
         real: real ? 1 : 0.

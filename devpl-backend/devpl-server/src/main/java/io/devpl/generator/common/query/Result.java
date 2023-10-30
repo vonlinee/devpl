@@ -1,27 +1,13 @@
 package io.devpl.generator.common.query;
 
-import io.devpl.generator.common.exception.StatusCode;
-
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
 
 /**
- * 响应数据
+ * 单条结果的响应数据
  */
-public class Result<T> implements Serializable {
-
-    // 编码 0表示成功，其他值表示失败
-    private int code = 0;
-    // 消息内容
-    private String msg = "success";
-    // 响应数据
-    private T data;
-
-    /**
-     * 堆栈信息，仅在开发时使用，生产环境始为null
-     */
-    private String stackTrace;
+public class Result<T> extends AbstractResult<T> implements Serializable {
 
     public static <T> Result<T> ok() {
         return ok(null);
@@ -51,7 +37,7 @@ public class Result<T> implements Serializable {
         Result<T> result = error(throwable.getMessage());
         StringWriter sw = new StringWriter();
         throwable.printStackTrace(new PrintWriter(sw));
-        result.stackTrace = sw.toString();
+        result.setStackTrace(throwable.toString());
         return result;
     }
 
@@ -60,47 +46,5 @@ public class Result<T> implements Serializable {
         result.setCode(code);
         result.setMsg(msg);
         return result;
-    }
-
-    public Result<T> message(String msg) {
-        this.msg = msg;
-        return this;
-    }
-
-    public Result<T> code(int code) {
-        this.code = code;
-        return this;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public String getStackTrace() {
-        return stackTrace;
-    }
-
-    public void setStackTrace(String stackTrace) {
-        this.stackTrace = stackTrace;
     }
 }

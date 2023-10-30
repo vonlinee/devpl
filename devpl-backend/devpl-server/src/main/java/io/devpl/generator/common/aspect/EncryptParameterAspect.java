@@ -1,7 +1,7 @@
 package io.devpl.generator.common.aspect;
 
 import io.devpl.generator.common.annotation.Encrypt;
-import io.devpl.generator.common.query.PageResult;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.common.query.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -70,8 +70,8 @@ public class EncryptParameterAspect {
             return;
         }
         Object data = ((Result<?>) object).getData();
-        if (data instanceof List || data instanceof PageResult) {
-            List<?> itemList = data instanceof List ? (List<?>) data : ((PageResult<?>) data).getList();
+        if (data instanceof List || data instanceof ListResult) {
+            List<?> itemList = data instanceof List ? (List<?>) data : ((ListResult<?>) data).getData();
             itemList.forEach(f -> handleItem(f, false));
         } else {
             handleItem(data, false);

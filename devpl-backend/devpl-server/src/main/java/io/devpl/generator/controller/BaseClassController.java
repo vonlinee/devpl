@@ -1,15 +1,14 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.GenBaseClass;
 import io.devpl.generator.service.BaseClassService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * 基类管理
@@ -28,13 +27,13 @@ public class BaseClassController {
      * @return 基本类型
      */
     @GetMapping("/page")
-    public Result<PageResult<GenBaseClass>> page(Query query) {
-        return Result.ok(baseClassService.page(query));
+    public ListResult<GenBaseClass> page(Query query) {
+        return baseClassService.listPage(query);
     }
 
     @GetMapping("/list")
-    public Result<List<GenBaseClass>> list() {
-        return Result.ok(baseClassService.getList());
+    public ListResult<GenBaseClass> list() {
+        return ListResult.ok(baseClassService.listAll());
     }
 
     @GetMapping("/{id}")

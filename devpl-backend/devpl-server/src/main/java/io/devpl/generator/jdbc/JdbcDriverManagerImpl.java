@@ -2,17 +2,21 @@ package io.devpl.generator.jdbc;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import com.mysql.cj.jdbc.NonRegisteringDriver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -29,16 +33,34 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     private String driverLocation;
 
     @Override
+    public Connection getConnection(String driverClassName, String url, String username, String password, Properties properties) {
+        JDBCDriver driveType = JDBCDriver.findByDriverClassName(driverClassName);
+        if (driveType != null) {
+            DriverInfo driverInfo = drivers.get(driveType);
+            if (driverInfo == null) {
+                // 驱动未注册
+                throw new CannotGetJdbcConnectionException("驱动未注册");
+            }
+            Properties props = properties == null ? new Properties() : properties;
+            props.setProperty("username", username);
+            props.setProperty("password", password);
+            try {
+                return driverInfo.driver.connect(url, props);
+            } catch (SQLException e) {
+                log.error("获取连接失败", e);
+                throw new CannotGetJdbcConnectionException("获取连接失败", e);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public boolean isRegisted(String driverClassName) {
         JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
         if (driver == null) {
             return false;
         }
         return drivers.containsKey(driver);
-    }
-
-    public void register(Driver driver, String version) {
-
     }
 
     @Override
@@ -67,7 +89,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     private void registerDrivers(File rootDir) {
         // 数据库类型 - 版本 - 驱动jar包
         // 例如 mysql - 8.0.18 - mysql-connector-java-8.0.18.jar
-        File[] files = rootDir.listFiles(File::isDirectory);
+        File[] files = rootDir.listFiles(file -> file.isDirectory() && DBType.getValue(file.getName(), null) != null);
         if (files == null || files.length == 0) {
             return;
         }

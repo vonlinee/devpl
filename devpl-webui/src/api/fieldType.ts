@@ -1,17 +1,17 @@
-import service from '@/utils/request'
+import http from '@/utils/http'
 
 export const useFieldTypeApi = (id: Number) => {
-	return service.get('/gen/fieldtype/' + id)
+	return http.get('/gen/fieldtype/' + id)
 }
 
 export const useFieldTypeListApi = () => {
-	return service.get('/gen/fieldtype/list')
+	return http.get('/gen/fieldtype/list')
 }
 
 export const useFieldTypeSubmitApi = (dataForm: any) => {
 	if (dataForm.id) {
-		return service.put('/gen/fieldtype', dataForm)
+		return http.put('/gen/fieldtype', dataForm)
 	} else {
-		return service.post('/gen/fieldtype', dataForm)
+		return http.post('/gen/fieldtype', dataForm)
 	}
 }

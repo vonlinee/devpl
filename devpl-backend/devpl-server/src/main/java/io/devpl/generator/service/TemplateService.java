@@ -15,6 +15,7 @@ public interface TemplateService extends IService<TemplateInfo> {
 
     /**
      * 保存模板
+     *
      * @param templateInfo 模板信息
      * @return 是否成功
      */
@@ -22,6 +23,7 @@ public interface TemplateService extends IService<TemplateInfo> {
 
     /**
      * 渲染模板
+     *
      * @param template  模板内容
      * @param dataModel 数据模型
      * @return 渲染后的模板
@@ -30,11 +32,17 @@ public interface TemplateService extends IService<TemplateInfo> {
 
     /**
      * 分页查询
+     *
      * @param pageIndex 第几页
      * @param pageSize  每页大小
      * @return 分页数据
      */
     IPage<TemplateInfo> pages(int pageIndex, int pageSize);
 
-    List<TemplateSelectVO> listSelectableTemplates();
+    /**
+     * 模板选择列表
+     *
+     * @return 模板选择列表
+     */
+    List<TemplateSelectVO> listSelectable();
 }

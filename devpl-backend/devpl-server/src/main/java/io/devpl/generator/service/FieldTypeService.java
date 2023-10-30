@@ -1,7 +1,7 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.entity.GenFieldType;
 
@@ -12,7 +12,7 @@ import java.util.Set;
  * 字段类型管理
  */
 public interface FieldTypeService extends BaseService<GenFieldType> {
-    PageResult<GenFieldType> page(Query query);
+    ListResult<GenFieldType> page(Query query);
 
     Map<String, GenFieldType> getMap();
 

@@ -13,6 +13,5 @@ public class CodeController {
     @GetMapping(value = "/java/compile")
     public void compile(String code) {
 
-
     }
 }

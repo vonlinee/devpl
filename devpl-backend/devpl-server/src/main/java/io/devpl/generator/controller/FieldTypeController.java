@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.service.FieldTypeService;
@@ -28,8 +28,8 @@ public class FieldTypeController {
      * @return GenFieldType
      */
     @GetMapping("page")
-    public Result<PageResult<GenFieldType>> page(Query query) {
-        return Result.ok(fieldTypeService.page(query));
+    public ListResult<GenFieldType> page(Query query) {
+        return fieldTypeService.page(query);
     }
 
     @GetMapping("{id}")

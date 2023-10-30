@@ -3,8 +3,8 @@ package io.devpl.generator.service.impl;
 import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
+import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.dao.ProjectModifyMapper;
 import io.devpl.generator.entity.ProjectModify;
 import io.devpl.generator.service.ProjectModifyService;
@@ -47,9 +47,9 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
     public final static String SPLIT = ",";
 
     @Override
-    public PageResult<ProjectModify> page(Query query) {
+    public ListResult<ProjectModify> page(Query query) {
         IPage<ProjectModify> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-        return new PageResult<>(page.getRecords(), page.getTotal());
+        return ListResult.ok(page);
     }
 
     @Override

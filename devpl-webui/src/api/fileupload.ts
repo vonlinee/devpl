@@ -6,7 +6,7 @@ import http from '@/utils/http'
  * @param file
  */
 export const apiUploadSingleFile = (folder: string, file: File) => {
-    return http.postForm('/api/file/upload/single', {
+    return http.post('/api/file/upload/single', {
         folder: folder,
         filename: file.name,
         file: file,
@@ -20,5 +20,5 @@ export const apiUploadSingleFile = (folder: string, file: File) => {
  * @param param
  */
 export const apiUploadMultiFiles = (param: FormData) => {
-    return http.postForm('/api/file/upload/single', param)
+    return http.post('/api/file/upload/single', param)
 }

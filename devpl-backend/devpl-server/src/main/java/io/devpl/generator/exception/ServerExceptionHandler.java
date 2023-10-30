@@ -1,7 +1,7 @@
 package io.devpl.generator.exception;
 
 import io.devpl.generator.common.exception.ServerException;
-import io.devpl.generator.common.exception.StatusCode;
+import io.devpl.generator.common.query.StatusCode;
 import io.devpl.generator.common.query.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;

@@ -70,7 +70,7 @@ import {ElButton, ElMessage} from 'element-plus'
 import AddOrUpdate from './add-or-update.vue'
 import {decrypt} from '@/utils/tool'
 import DrvierManager from './DrvierManager.vue'
-import { DbType } from './types'
+import { DriverTypeVO } from './types'
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/api/gen/datasource/page',
@@ -81,7 +81,7 @@ const state: IHooksOptions = reactive({
 	}
 })
 
-const supportedDbTypes = ref<DbType[]>([])
+const supportedDbTypes = ref<DriverTypeVO[]>([])
 
 onMounted(() => {
 	apiListSupportedDbTypes().then((res) => {

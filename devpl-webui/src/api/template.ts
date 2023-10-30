@@ -1,4 +1,3 @@
-import service from '@/utils/request'
 import http from "@/utils/http";
 
 /**
@@ -7,7 +6,7 @@ import http from "@/utils/http";
  * @param pageSize
  */
 export function apiListTemplatesByPage(pageIndex: number | undefined, pageSize: number | undefined) {
-    return service.get('/api/codegen/template/page', {
+    return http.get('/api/codegen/template/page', {
         params: {
             pageIndex: pageIndex,
             pageSize: pageSize
@@ -20,7 +19,7 @@ export function apiListTemplatesByPage(pageIndex: number | undefined, pageSize: 
  * @param params
  */
 export function apiAddTemplate(params: object) {
-    return http.postJson('/api/codegen/template/save', params);
+    return http.post('/api/codegen/template/save', params);
 }
 
 /**
@@ -28,7 +27,7 @@ export function apiAddTemplate(params: object) {
  * @param params
  */
 export function apiUpdateTemplate(params: object) {
-    return http.putJson('/api/codegen/template/update', params);
+    return http.put('/api/codegen/template/update', params);
 }
 
 /**

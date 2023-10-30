@@ -137,4 +137,29 @@ public enum JDBCDriver {
         }
         return names;
     }
+
+    public static JDBCDriver getByName(String name) {
+        return getByName(name, true, null);
+    }
+
+    public static JDBCDriver getByName(String name, JDBCDriver defaultValue) {
+        return getByName(name, true, defaultValue);
+    }
+
+    public static JDBCDriver getByName(String name, boolean caseSensitive, JDBCDriver defaultValue) {
+        if (caseSensitive) {
+            for (JDBCDriver driver : values()) {
+                if (driver.name().equals(name)) {
+                    return driver;
+                }
+            }
+        } else {
+            for (JDBCDriver driver : values()) {
+                if (driver.name().equalsIgnoreCase(name)) {
+                    return driver;
+                }
+            }
+        }
+        return defaultValue;
+    }
 }

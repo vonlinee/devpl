@@ -1,7 +1,5 @@
 package com.baomidou.mybatisplus.generator.jdbc;
 
-import java.util.Objects;
-
 /**
  * 支持的数据库类型,主要用于分页方言
  */
@@ -192,22 +190,22 @@ public enum DBType {
     }
 
     public static DBType getValue(String dbType, DBType defaultType) {
-        if (Objects.equals(dbType, "MySQL")) {
+        if ("MySQL".equalsIgnoreCase(dbType)) {
             return MYSQL;
         }
-        if (Objects.equals(dbType, "Oracle")) {
+        if ("Oracle".equalsIgnoreCase(dbType)) {
             return ORACLE;
         }
-        if (Objects.equals(dbType, "PostgreSQL")) {
+        if ("PostgreSQL".equalsIgnoreCase(dbType)) {
             return POSTGRE_SQL;
         }
-        if (Objects.equals(dbType, "SQLServer") || Objects.equals(dbType, "Microsoft SQL Server")) {
+        if ("SQLServer".equalsIgnoreCase(dbType) || "Microsoft SQL Server".equalsIgnoreCase(dbType)) {
             return SQL_SERVER;
         }
-        if (Objects.equals(dbType, "DM") || Objects.equals(dbType, "DM DBMS")) {
+        if ("DM".equalsIgnoreCase(dbType) || "DM DBMS".equalsIgnoreCase(dbType)) {
             return DM;
         }
-        if (Objects.equals(dbType, "Clickhouse")) {
+        if ("Clickhouse".equalsIgnoreCase(dbType)) {
             return CLICK_HOUSE;
         }
         return defaultType;
@@ -224,6 +222,10 @@ public enum DBType {
 
     public JDBCDriver getDriver() {
         return getDriver(0);
+    }
+
+    public JDBCDriver[] getDrivers() {
+        return drivers;
     }
 
     public JDBCDriver getDriver(int index) {

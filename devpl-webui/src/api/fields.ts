@@ -19,5 +19,5 @@ export const apiSaveOrUpdateField = (field: any) => {
 	if (!field.fieldName) {
 		field.fieldName = field.fieldKey
 	}
-	return http.postJson('/api/field/save', field)
+	return http.post('/api/field/save', field)
 }

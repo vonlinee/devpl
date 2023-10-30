@@ -21,7 +21,7 @@ import "./useMonaco"
 import { isWindows } from "./utils/tool"
 
 VXETable.setup({
-  zIndex: 3000,
+  zIndex: 2000,
   select: {
     transfer: true,
   },

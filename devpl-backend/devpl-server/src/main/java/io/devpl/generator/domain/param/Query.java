@@ -1,4 +1,4 @@
-package io.devpl.generator.common.query;
+package io.devpl.generator.domain.param;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

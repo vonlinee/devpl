@@ -6,14 +6,15 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
-import io.devpl.generator.common.query.PageResult;
-import io.devpl.generator.common.query.Query;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DataSourceMapper;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.entity.DbConnInfo;
+import io.devpl.generator.jdbc.JdbcDriverManager;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.JdbcUtils;
@@ -22,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Nullable;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -45,6 +45,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
      * 程序内部的数据源
      */
     private final DataSource dataSource;
+    private final JdbcDriverManager driverManager;
 
     @Override
     public DbConnInfo getOne(long id) {
@@ -54,14 +55,14 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     }
 
     @Override
-    public PageResult<DbConnInfo> listPage(Query query) {
+    public ListResult<DbConnInfo> listPage(Query query) {
         Page<DbConnInfo> page = new Page<>(query.getPage(), query.getLimit());
         page.addOrder(OrderItem.desc("id"));
         QueryWrapper<DbConnInfo> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.hasText(query.getConnName()), "conn_name", query.getConnName());
         wrapper.eq(StringUtils.hasText(query.getDbType()), "db_type", query.getDbType());
         page = baseMapper.selectPage(page, wrapper);
-        return new PageResult<>(page.getRecords(), page.getTotal());
+        return ListResult.ok(page);
     }
 
     @Override
@@ -87,28 +88,27 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public boolean addOne(DbConnInfo entity) {
-        entity.setCreateTime(LocalDateTime.now());
-        entity.setUpdateTime(entity.getCreateTime());
-        return super.save(entity);
+        return super.save(fixMissingFieldValue(entity));
     }
 
+    /**
+     * 获取数据库连接
+     * 如果id不为空，则使用系统自带的数据源
+     *
+     * @param connInfo 连接信息
+     * @return 数据库连接
+     */
     @Override
-    public Connection getConnection(DbConnInfo connInfo) {
-        try {
-            if (connInfo.getId().intValue() == 0) {
-                // 本系统连接的数据源
-                return dataSource.getConnection();
-            } else {
-                return JdbcUtils.getConnection(connInfo.getConnUrl(), connInfo.getUsername(), connInfo.getPassword(), DBType.valueOf(connInfo.getDbType()));
-            }
-        } catch (SQLException exception) {
-            return null;
+    public Connection getConnection(DbConnInfo connInfo) throws SQLException {
+        if (connInfo.getId() != null && connInfo.getId().intValue() == 0) {
+            // 本系统连接的数据源
+            return dataSource.getConnection();
         }
+        return driverManager.getConnection(connInfo.getDriverClassName(), connInfo.getConnUrl(), connInfo.getUsername(), connInfo.getPassword(), null);
     }
 
     @Override
-    @Nullable
-    public Connection getConnection(Long dataSourceId) {
+    public Connection getConnection(Long dataSourceId) throws SQLException {
         return getConnection(getById(dataSourceId));
     }
 
@@ -189,21 +189,52 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public String testJdbcConnection(Long id) {
-        if (this.getConnection(id) != null) {
-            return "连接成功";
+        try (Connection connection = this.getConnection(id)) {
+            return "连接失败";
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return "连接失败";
+    }
+
+    @Override
+    public String testJdbcConnection(DbConnInfo connInfo) {
+        if (!StringUtils.hasText(connInfo.getConnUrl())) {
+            connInfo.setConnUrl(getConnectionUrl(connInfo));
+        }
+        try (Connection connection = getConnection(connInfo)) {
+            System.out.println(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
     }
 
     @Override
     public DbConnInfo updateOne(DbConnInfo entity) {
-        if (!StringUtils.hasText(entity.getDriverClassName())) {
-            DBType dbType = DBType.getValue(entity.getDbType(), null);
+        updateById(fixMissingFieldValue(entity));
+        return entity;
+    }
+
+    /**
+     * 补齐未填的字段
+     *
+     * @param connInfo 连接信息
+     * @return 连接信息
+     */
+    private DbConnInfo fixMissingFieldValue(DbConnInfo connInfo) {
+        if (!StringUtils.hasText(connInfo.getDriverClassName())) {
+            DBType dbType = DBType.getValue(connInfo.getDbType(), null);
             if (dbType != null) {
-                entity.setDriverClassName(dbType.getDriverClassName());
+                connInfo.setDriverClassName(dbType.getDriverClassName());
             }
         }
-        updateById(entity);
-        return entity;
+        if (connInfo.getCreateTime() == null) {
+            connInfo.setCreateTime(LocalDateTime.now());
+            connInfo.setUpdateTime(connInfo.getCreateTime());
+        }
+        if (connInfo.getUpdateTime() == null) {
+            connInfo.setUpdateTime(LocalDateTime.now());
+        }
+        return connInfo;
     }
 }

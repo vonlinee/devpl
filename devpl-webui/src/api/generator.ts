@@ -1,5 +1,3 @@
-import service from '@/utils/request'
-
 import http from "@/utils/http";
 
 /**
@@ -15,7 +13,7 @@ export const useDownloadApi = (tableIds: any[]): void => {
  * @param tableIds
  */
 export const useGeneratorApi = (tableIds: any[]) => {
-    return service.post('/api/codegen/code', tableIds)
+    return http.post('/api/codegen/code', tableIds)
 }
 
 /**
@@ -30,7 +28,7 @@ export const apiListGenFiles = () => {
  * @return boolean
  */
 export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
-    return http.postJson('/api/codegen/genfile', genFile)
+    return http.post('/api/codegen/genfile', genFile)
 }
 
 /**
@@ -38,7 +36,7 @@ export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
  * @param genFiles
  */
 export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
-    return http.postJson('/api/codegen/genfiles/replace', genFiles)
+    return http.post('/api/codegen/genfiles/replace', genFiles)
 }
 
 /**
@@ -62,7 +60,7 @@ export const apiGetGeneratorConfig = () => {
  * @return JSON字符串
  */
 export const apiSaveGeneratorConfig = (content: string) => {
-    return http.postForm('/api/codegen/config', {
+    return http.post('/api/codegen/config', {
         content: content
-    })
+    }, { "Content-Type": "multipart/form-data" })
 }

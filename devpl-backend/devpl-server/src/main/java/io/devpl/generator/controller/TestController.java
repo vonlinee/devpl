@@ -1,16 +1,23 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.mybatis.ParamMeta;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -61,5 +68,25 @@ public class TestController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping(value = "/http")
+    @ResponseBody
+    public Result<List<ParamMeta>> list(Integer type) {
+        List<ParamMeta> list = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ParamMeta paramMeta = new ParamMeta("Name" + i);
+            paramMeta.setType(i + 3);
+            list.add(paramMeta);
+        }
+        Result<List<ParamMeta>> result = Result.ok(list);
+        try {
+            int i = 1 / 0;
+        } catch (Exception exception) {
+            StringWriter sw = new StringWriter();
+            exception.printStackTrace(new PrintWriter(sw));
+            result.setStackTrace(sw.toString());
+        }
+        return result;
     }
 }
