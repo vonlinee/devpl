@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+
 /**
  * 文件相关控制器，文件上传，下载等
  * 参考实现

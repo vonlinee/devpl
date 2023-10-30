@@ -2,12 +2,13 @@ package io.devpl.generator.common.aspect;
 
 import io.devpl.generator.common.annotation.Encrypt;
 import io.devpl.generator.common.query.ListResult;
-import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.utils.EncryptUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -32,13 +33,19 @@ public class EncryptParameterAspect {
     @Value("${devpl.package.entity}")
     private String entityPackageName;
 
+    @Pointcut("@annotation(io.devpl.generator.common.aspect.EncryptionDecryption)")
+    public void encryptionDecryptionPointCut() {
+    }
+
     /**
      * 切面方法：page、list、get、save、update、tableList
+     *
      * @param proceedingJoinPoint ProceedingJoinPoint
      * @return 切点方法返回值
      * @throws Throwable 切点方法抛异常
      */
-    @Around("execution(* io.devpl.generator.controller.DataSourceController.*(..))")
+    // @Around("execution(* io.devpl.generator.controller.DataSourceController.*(..))")
+    @Around("encryptionDecryptionPointCut()")
     public Object doProcess(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         // 处理请求入参
         List<Object> methodArgs = this.getMethodArgs(proceedingJoinPoint);
@@ -62,6 +69,7 @@ public class EncryptParameterAspect {
 
     /**
      * 加密返回结果中的字段
+     *
      * @param object 待加密的数据
      */
     private void handleObject(Object object) {
@@ -80,6 +88,7 @@ public class EncryptParameterAspect {
 
     /**
      * 加密/解密具体对象下的字段
+     *
      * @param item      需要加解密的对象
      * @param isDecrypt true：解密，false：加密
      */
