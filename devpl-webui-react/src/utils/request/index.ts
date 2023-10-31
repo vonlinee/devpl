@@ -1,13 +1,12 @@
-import {CustomRequestConfig, ServerResponseNormal} from './types'
-import type {AxiosError} from './enhanceAxios'
-import {enhanceAxios} from './enhanceAxios'
+import { CustomRequestConfig, ServerResponseNormal } from './types'
+import type { AxiosError } from './enhanceAxios'
+import { enhanceAxios } from './enhanceAxios'
 import axios from 'axios'
-import {createError, handleError} from './handleError'
-import {BaseURL} from './config'
-import {getResponseData, replaceUrlParams, ResponseValidatorMap} from './utils'
+import { createError, handleError } from './handleError'
+import { getResponseData, replaceUrlParams, ResponseValidatorMap } from './utils'
 
 const request = enhanceAxios<ServerResponseNormal<any>>(axios).create({
-  baseURL: BaseURL,
+  baseURL: 'http://rap2api.taobao.org/app/mock/300643/',
   handleError: true,
   showLoading: true,
   extractResponse: true,
@@ -42,7 +41,9 @@ request.interceptors.response.use(
 
     if (Object.keys(ResponseValidatorMap).includes(response.config.responseType || '')) {
       const errorMsg = ResponseValidatorMap[response.config.responseType || ''](response)
-      if (errorMsg) return handleError(createError(response), errorMsg, !!response.config.handleError)
+      if (errorMsg) {
+        return handleError(createError(response), errorMsg, !!response.config.handleError)
+      }
       return getResponseData(response)
     }
 

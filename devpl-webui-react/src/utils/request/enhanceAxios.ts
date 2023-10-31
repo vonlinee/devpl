@@ -38,7 +38,10 @@ export interface AxiosError<ServerResponse = any, RequestData = any>
   toJSON: () => object;
 }
 
-/** 如果是特殊类型 `Blob | ArrayBuffer | string`，则不进行转换，否则包装到 `ServerResponseNormal<ResponseData>` 中 */
+/** 
+ * 如果是特殊类型 `Blob | ArrayBuffer | string`，则不进行转换，
+ * 否则包装到 `ServerResponseNormal<ResponseData>` 中 
+ **/
 type GetServerResponse<ResponseData> = ResponseData extends
   | Blob
   | ArrayBuffer
@@ -54,9 +57,7 @@ export interface AxiosEnhanced<ServerResponse = any> {
   defaults: AxiosDefaults;
   interceptors: {
     request: AxiosInterceptorManager<CustomRequestConfig<any>>;
-    response: AxiosInterceptorManager<
-      AxiosResponse<ServerResponse | Blob | ArrayBuffer | string, any>
-    >;
+    response: AxiosInterceptorManager<AxiosResponse<ServerResponse | Blob | ArrayBuffer | string, any>>;
   };
   getUri(config?: CustomRequestConfig): string;
   request<

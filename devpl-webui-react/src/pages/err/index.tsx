@@ -11,7 +11,6 @@ interface ErrProps {
   [name: string]: any
 }
 
-
 function ErrorPage(props: ErrProps) {
   const {
     status = "404",

@@ -4,8 +4,6 @@ import MyIcon from "@/components/icon";
 import "./index.less";
 import { useStyle } from "./style";
 
-const { Meta } = Card;
-
 const tagInitVal = [
   { value: "足球", color: "magenta" },
   { value: "跑步", color: "volcano" },

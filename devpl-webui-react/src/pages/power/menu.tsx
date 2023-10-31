@@ -7,7 +7,6 @@ import MyIcon from "@/components/icon";
 import { MenuList, MapKey } from "@/types"
 import "./index.less";
 
-
 export type ModalType = "add" | "addChild" | "edit"
 export type SelectInfo = {
   key?: string

@@ -13,8 +13,6 @@ import React from "react";
  * 测试
  */
 const Test = () => {
-  let text = "";
-
   let ref = React.createRef<ReactMonacoEditor>();
 
   const getText = () => {

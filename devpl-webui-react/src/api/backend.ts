@@ -1,29 +1,27 @@
-import service from "@/utils/request";
-
-import http from "@/utils/http";
+import request from "@/utils/request";
 
 export const useDataSourceTestApi = (id: Number) => {
-  return service.get("/api/gen/datasource/test/" + id);
+  return request.get("/api/gen/datasource/test/" + id);
 };
 
 export const useDataSourceApi = (id: Number) => {
-  return service.get("/api/gen/datasource/" + id);
+  return request.get("/api/gen/datasource/" + id);
 };
 
 export const useDataSourceListApi = () => {
-  return service.get("/api/gen/datasource/list");
+  return request.get("/api/gen/datasource/list");
 };
 
 export const useDataSourceSubmitApi = (dataForm: any) => {
   if (dataForm.id) {
-    return service.put("/api/gen/datasource", dataForm);
+    return request.put("/api/gen/datasource", dataForm);
   } else {
-    return service.post("/api/gen/datasource", dataForm);
+    return request.post("/api/gen/datasource", dataForm);
   }
 };
 
 export const useDataSourceTableListApi = (id: string) => {
-  return service.get("/api/gen/datasource/table/list/" + id);
+  return request.get("/api/gen/datasource/table/list/" + id);
 };
 
 /**
@@ -31,7 +29,7 @@ export const useDataSourceTableListApi = (id: string) => {
  * @param dataForm
  */
 export const apiGetDatabaseNames = (dataForm: any) => {
-  return service.post("/api/gen/datasource/dbnames", dataForm);
+  return request.post("/api/gen/datasource/dbnames", dataForm);
 };
 
 /**

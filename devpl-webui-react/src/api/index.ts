@@ -1,4 +1,4 @@
-import ajax from "@/common/ajax";
+import ajax from "@/utils/request";
 import mock from "../mock/index";
 import {
   MessageAPi,
@@ -19,7 +19,7 @@ import {
  */
 const request = import.meta.env.REACT_APP_MOCK === "1" ? mock : ajax;
 
-const getMenu = () => request.get("/getmenu") as Promise<MenuResponse>;
+const getMenu = () => request.get<MenuResponse>("/getmenu");
 const getMenuList = () => request.get("/getmenulist") as Promise<MenuListResponse>;
 const login = (data: any) => request.post("/login", data) as Promise<LoginApi>;
 const addMenu = (data: any) => request.post("/addmenu", data) as Promise<ResponseData>;

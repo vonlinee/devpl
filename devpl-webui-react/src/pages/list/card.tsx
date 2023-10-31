@@ -10,24 +10,6 @@ const list = [
     description:
       "在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。",
   },
-  {
-    img: "https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png",
-    title: "React",
-    description:
-      "在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。",
-  },
-  {
-    img: "http://www.axios-js.com/logo.svg",
-    title: "axios",
-    description:
-      "在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。",
-  },
-  {
-    img: "https://webpack.docschina.org/icon-square-small.85ba630cf0c5f29ae3e3.svg",
-    title: "Webpack",
-    description:
-      "在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。",
-  },
 ];
 
 const { Meta } = Card;

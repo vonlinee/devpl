@@ -1,15 +1,11 @@
-import type {AxiosResponse} from './enhanceAxios'
-import {CustomRequestConfig, ServerResponseNormal} from "./types"
+import type { AxiosResponse } from './enhanceAxios'
+import { CustomRequestConfig, ServerResponseNormal } from "./types"
 
 /**
  * 替换 url 中的动态路径：
- *
  * `{ url: '/order/{id}', params: { id: 123 } }`
- *
  * `{ url: '/order/{id}', data: { id: 123 } }`
- *
  * ==>
- *
  * `{ url: '/order/123', ... }`
  *
  * @param options
@@ -41,11 +37,14 @@ export function getResponseData(
   }
 }
 
+/**
+ * 校验逻辑
+ */
 export const ResponseValidatorMap: Record<
-  'text' | 'blob' | 'arraybuffer',
+  ResponseType,
   (response: AxiosResponse<ServerResponseNormal<any> | Blob | ArrayBuffer | string, any>) => string | undefined
 > = {
-  text: (response) => (typeof response.data === 'string' ? undefined : '返回数据类型错误'),
-  blob: (response) => (response.data instanceof Blob ? undefined : '返回数据类型错误'),
-  arraybuffer: (response) => (response.data instanceof ArrayBuffer ? undefined : '返回数据类型错误'),
+  text: (response: any) => (typeof response.data === 'string' ? undefined : '返回数据类型错误'),
+  blob: (response: any) => (response.data instanceof Blob ? undefined : '返回数据类型错误'),
+  arraybuffer: (response: any) => (response.data instanceof ArrayBuffer ? undefined : '返回数据类型错误'),
 }

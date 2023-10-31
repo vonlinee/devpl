@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./index.less";
 import {
   Form,
@@ -10,7 +10,6 @@ import {
   Checkbox,
   Button,
   AutoComplete,
-  message,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatchLayout } from "@/store/hooks";
@@ -27,22 +26,6 @@ const residences = [
           {
             value: "xihu",
             label: "West Lake",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: "jiangsu",
-    label: "Jiangsu",
-    children: [
-      {
-        value: "nanjing",
-        label: "Nanjing",
-        children: [
-          {
-            value: "zhonghuamen",
-            label: "Zhong Hua Men",
           },
         ],
       },
