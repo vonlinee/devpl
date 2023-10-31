@@ -51,7 +51,9 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     @Override
     public DbConnInfo getOne(long id) {
         DbConnInfo connInfo = getById(id);
-        connInfo.setPassword(EncryptUtils.tryDecrypt(connInfo.getPassword()));
+        if (connInfo != null) {
+            connInfo.setPassword(EncryptUtils.tryDecrypt(connInfo.getPassword()));
+        }
         return connInfo;
     }
 

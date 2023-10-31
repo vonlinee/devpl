@@ -6,7 +6,7 @@ import java.io.StringWriter;
 /**
  * 抽象结果
  *
- * @param <T>
+ * @param <T> 携带的数据
  */
 abstract class AbstractResult<T> {
 
@@ -23,7 +23,7 @@ abstract class AbstractResult<T> {
      */
     private T data;
     /**
-     * 堆栈信息，仅在开发时使用，生产环境始终为null
+     * 堆栈信息，仅在开发及测试阶段使用
      */
     private String stackTrace;
 

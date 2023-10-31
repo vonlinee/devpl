@@ -31,7 +31,7 @@
     "antd": "^5.10.0",
     "antd-style": "^3.0.0",
     "array-move": "^3.0.1",
-    "axios": "^0.21.1",
+    "axios": "^1.6.0",
     "dayjs": "^1.10.5",
     "echarts": "^5.1.2",
     "echarts-for-react": "^3.0.1",

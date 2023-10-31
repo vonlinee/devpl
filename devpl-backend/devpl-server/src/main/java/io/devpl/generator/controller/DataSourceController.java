@@ -130,9 +130,12 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @GetMapping(value = "/datasource/{dataSourceId}/{dbName}/table/names")
-    public Result<List<String>> getTableNames(@PathVariable(value = "dataSourceId") Long id, @PathVariable(value = "dbName") String dbName) {
+    public ListResult<String> getTableNames(@PathVariable(value = "dataSourceId") Long id, @PathVariable(value = "dbName") String dbName) {
         DbConnInfo connInfo = datasourceService.getOne(id);
-        return Result.ok(datasourceService.getTableNames(connInfo, dbName));
+        if (connInfo == null) {
+            return ListResult.error("资源不存在");
+        }
+        return ListResult.ok(datasourceService.getTableNames(connInfo, dbName));
     }
 
     /**
@@ -141,7 +144,7 @@ public class DataSourceController {
      * @return 数据库类型列表
      */
     @GetMapping(value = "/datasource/drivers")
-    public Result<List<DriverTypeVO>> getSupportedDbTypes() {
+    public ListResult<DriverTypeVO> getSupportedDbTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
         for (DBType dbType : DBType.values()) {
             JDBCDriver[] drivers = dbType.getDrivers();
@@ -151,7 +154,7 @@ public class DataSourceController {
                 }
             }
         }
-        return Result.ok(result);
+        return ListResult.ok(result);
     }
 
     /**

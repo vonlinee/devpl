@@ -5,36 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c82414c3-4f20-4720-a474-64dc489a58db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/Loading.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/FXControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/Launcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/TestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/app/TestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/Modal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/components/Modal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/FXUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/utils/FXUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/DataTypeItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/DataTypeItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/TypeMappingTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-fxui/src/main/java/io/devpl/fxui/view/TypeMappingTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/utils/CollectionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/utils/CollectionUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env-cmdrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/.env-cmdrc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/ajax.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/ajax.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/datatable/datatable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/datatable/datatable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/datatable/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/datatable/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/login/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/power/test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/power/test.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/components/table/DataTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/components/table/DataTable.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/components/table/VxeGridTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/components/table/VxeGridTable.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/hooks/datatable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/hooks/datatable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/hooks/vxedatatable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/hooks/vxedatatable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/assl.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/request/enhanceAxios.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/request/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/common/query/AbstractResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/common/query/AbstractResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/controller/DataSourceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/controller/DataSourceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/axios.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/mocker/database/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/mocker/database/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -99,6 +91,7 @@
       <workItem from="1697197005278" duration="37000" />
       <workItem from="1697200623484" duration="590000" />
       <workItem from="1697628755345" duration="42000" />
+      <workItem from="1698753616115" duration="758000" />
     </task>
     <servers />
   </component>

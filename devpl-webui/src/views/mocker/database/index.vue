@@ -1,12 +1,11 @@
 <template>
-
-  <el-select v-model="currentDataSourceId" clearable @change="loadDbTables">
+  <el-select v-model="currentDataSourceId" clearable @change="loadDatabases">
     <el-option v-for="ds in dataSources" :key="ds.id" :value="ds.id" :label="ds.name"></el-option>
   </el-select>
 
   <splitpanes vertical>
     <pane min-size="20">
-      <el-tree :data="dataSource" :props="defaultProps" @node-click="handleNodeClick">
+      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy show-checkbox>
       </el-tree>
     </pane>
     <pane>
@@ -20,18 +19,31 @@ import { Pane, Splitpanes } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { onMounted, ref } from "vue";
 import { apiGetDatabaseNamesById, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
-import { AxiosResponse } from "axios";
 import type Node from "element-plus/es/components/tree/src/model/node";
 
 const defaultProps = {
-  children: "children",
-  label: "label"
+  label: 'label',
+  children: 'children',
+  isLeaf: 'leaf',
 };
 
-interface TreeNode {
+interface TreeNodeVO {
+  /**
+   * 唯一ID
+   */
   id?: number;
+  /**
+   * 文本
+   */
   label: string;
-  children?: TreeNode[];
+  /**
+   * 是否是叶子结点
+   */
+  leaf: boolean
+  /**
+   * 子节点
+   */
+  children?: TreeNodeVO[];
 }
 
 interface DataSourceVO {
@@ -39,42 +51,41 @@ interface DataSourceVO {
   name: string
 }
 
-const dataSource = ref<TreeNode[]>([]);
+const dataSource = ref<TreeNodeVO[]>([]);
 
 const currentDataSourceId = ref<number>(0);
 const dataSources = ref<DataSourceVO[]>([]);
 
-/**
- * 节点点击事件
- * @param node
- * @param data
- * @param event
- */
-const handleNodeClick = (node: Node, obj: any, data: TreeNode, event: Event) => {
-  apiListTableNames(currentDataSourceId.value, node.label).then((res) => {
-
-    for (let i = 0; i < res.data?.length; i++) {
-      data.children?.push({
-        label: res.data[i]
-      });
-    }
-    dataSource.value = [...dataSource.value];
-    console.log(dataSource.value);
-  });
-};
-
-const loadDbTables = (val: number) => {
+const loadDatabases = (val: number) => {
   apiGetDatabaseNamesById(val).then((res) => {
-    let nodes: TreeNode[] = [];
+    const nodes: TreeNodeVO[] = [];
     for (let i = 0; i < res.data.length; i++) {
       nodes.push({
-        label: res.data[i]
+        label: res.data[i],
+        leaf: false
       });
     }
     dataSource.value = nodes;
   });
 };
 
+/**
+ * 加载数据库表
+ * @param node 
+ * @param resolve 
+ */
+const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
+  apiListTableNames(currentDataSourceId.value, node.label).then((res) => {
+    const tableNodes : TreeNodeVO[] = []
+    for (let i = 0; i < res.data?.length; i++) {
+      tableNodes.push({
+        label: res.data[i],
+        leaf: true
+      });
+    }
+    resolve(tableNodes)
+  });
+}
 
 onMounted(() => {
   apiListSelectableDataSources().then((res) => {
