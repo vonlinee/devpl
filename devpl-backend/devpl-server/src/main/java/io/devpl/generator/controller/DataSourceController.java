@@ -7,6 +7,7 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DriverTypeVO;
+import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
@@ -70,8 +71,7 @@ public class DataSourceController {
      */
     @GetMapping("/datasource/{id}")
     public Result<DbConnInfo> get(@PathVariable("id") Long id) {
-        DbConnInfo data = datasourceService.getById(id);
-        return Result.ok(data);
+        return Result.ok(datasourceService.getById(id));
     }
 
     /**
@@ -81,13 +81,8 @@ public class DataSourceController {
      * @return 连接信息
      */
     @GetMapping("/datasource/test/{id}")
-    public Result<String> test(@PathVariable("id") Long id) {
-        try {
-            return Result.ok(datasourceService.testJdbcConnection(id));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Result.error("连接失败，请检查配置信息");
-        }
+    public Result<TestConnVO> test(@PathVariable("id") Long id) {
+        return Result.ok(datasourceService.testJdbcConnection(id));
     }
 
     /**
@@ -97,13 +92,9 @@ public class DataSourceController {
      * @return 连接成功，返回驱动及数据库信息
      */
     @PostMapping("/datasource/connection/test")
-    public Result<String> test(@RequestBody DbConnInfo connInfo) {
-        try {
-            return Result.ok(datasourceService.testJdbcConnection(connInfo));
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Result.error("连接失败，请检查配置信息");
-        }
+    public Result<TestConnVO> test(@RequestBody DbConnInfo connInfo) {
+        return Result.ok(datasourceService.testJdbcConnection(connInfo));
+
     }
 
     /**
@@ -175,7 +166,6 @@ public class DataSourceController {
             datasourceService.updateOne(entity);
             return Result.ok();
         }
-        entity.setDriverClassName(DBType.getValue(entity.getDbType()).getDriverClassName());
         return Result.ok(datasourceService.addOne(entity));
     }
 

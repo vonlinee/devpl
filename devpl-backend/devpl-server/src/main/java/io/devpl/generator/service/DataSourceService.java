@@ -6,6 +6,7 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.vo.DataSourceVO;
+import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
 
 import java.sql.Connection;
@@ -66,9 +67,9 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
 
     List<String> getTableNames(DbConnInfo connInfo, String databaseName);
 
-    String testJdbcConnection(Long id);
+    TestConnVO testJdbcConnection(Long id);
 
-    String testJdbcConnection(DbConnInfo connInfo);
+    TestConnVO testJdbcConnection(DbConnInfo connInfo);
 
     DbConnInfo updateOne(DbConnInfo entity);
 }

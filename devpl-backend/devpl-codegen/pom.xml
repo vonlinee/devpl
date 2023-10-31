@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.2.15</version>
+            <version>1.2.8</version>
         </dependency>
         <dependency>
             <groupId>commons-dbutils</groupId>
@@ -136,12 +136,13 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.5.10</version>
+            <version>3.5.13</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.5.2</version>
+            <version>3.5.3.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -163,11 +164,7 @@
             <version>4.4</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>io.devpl</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
     </dependencies>
 
     <build>

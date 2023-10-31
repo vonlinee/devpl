@@ -30,9 +30,12 @@ public class EncryptParameterAspect {
     /**
      * 实体类所在包名
      */
-    @Value("${devpl.package.entity}")
+    @Value("${devpl.package.entity:}")
     private String entityPackageName;
 
+    /**
+     * 加密解密切点方法
+     */
     @Pointcut("@annotation(io.devpl.generator.common.aspect.EncryptionDecryption)")
     public void encryptionDecryptionPointCut() {
     }

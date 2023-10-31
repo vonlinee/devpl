@@ -1,7 +1,26 @@
 import http from "@/utils/http"
 
 export const useDataSourceTestApi = (id: Number) => {
-  return http.get("/api/gen/datasource/test/" + id)
+  return http.get<TestConnVO>("/api/gen/datasource/test/" + id)
+}
+
+export interface TestConnVO {
+  /**
+   * 是否失败
+   */
+  failed: boolean
+  /**
+   * 数据库类型
+   */
+  dbmsType: string
+  /**
+   * 是否使用ssl连接
+   */
+  useSsl: boolean
+  /**
+   * 连接失败时的错误信息
+   */
+  errorMsg: string
 }
 
 /**
@@ -10,7 +29,7 @@ export const useDataSourceTestApi = (id: Number) => {
  * @returns
  */
 export const apiTestConnection = (connInfo: any) => {
-  return http.post<string>("/api/gen/datasource/connection/test", connInfo)
+  return http.post<TestConnVO>("/api/gen/datasource/connection/test", connInfo)
 }
 
 export const useDataSourceApi = (id: Number) => {
@@ -50,9 +69,13 @@ export const apiGetDatabaseNamesById = (dataSourceId: number) => {
  * @param file
  */
 export const apiUploadDriverJar = (file: File) => {
-  return http.post("/api/jdbc/driver/upload", {
-    file: file,
-  }, { "Content-Type": "multipart/form-data" })
+  return http.post(
+    "/api/jdbc/driver/upload",
+    {
+      file: file,
+    },
+    { "Content-Type": "multipart/form-data" }
+  )
 }
 
 /**

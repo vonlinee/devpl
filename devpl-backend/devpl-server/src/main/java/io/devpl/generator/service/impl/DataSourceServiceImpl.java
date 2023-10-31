@@ -13,6 +13,7 @@ import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DataSourceMapper;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.vo.DataSourceVO;
+import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.jdbc.JdbcDriverManager;
 import io.devpl.generator.service.DataSourceService;
@@ -109,7 +110,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public Connection getConnection(Long dataSourceId) throws SQLException {
-        return getConnection(getById(dataSourceId));
+        return getConnection(getOne(dataSourceId));
     }
 
     @Override
@@ -188,25 +189,33 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     }
 
     @Override
-    public String testJdbcConnection(Long id) {
+    public TestConnVO testJdbcConnection(Long id) {
+        TestConnVO vo = new TestConnVO();
         try (Connection connection = this.getConnection(id)) {
-            return "连接失败";
+            getTestConnectionInfo(connection);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            vo.setErrorMsg(e.getMessage());
+            vo.setFailed(true);
         }
+        return vo;
+    }
+
+    public String getTestConnectionInfo(Connection connection) {
+        return "";
     }
 
     @Override
-    public String testJdbcConnection(DbConnInfo connInfo) {
+    public TestConnVO testJdbcConnection(DbConnInfo connInfo) {
         if (!StringUtils.hasText(connInfo.getConnUrl())) {
             connInfo.setConnUrl(getConnectionUrl(connInfo));
         }
+        TestConnVO vo = new TestConnVO();
         try (Connection connection = getConnection(connInfo)) {
-            System.out.println(connection);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return "";
+        return vo;
     }
 
     @Override
@@ -226,7 +235,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
             DBType dbType = DBType.getValue(connInfo.getDbType(), null);
             if (dbType != null) {
                 connInfo.setDriverClassName(dbType.getDriverClassName());
+                connInfo.setDbType(dbType.name());
             }
+        }
+        if (!StringUtils.hasText(connInfo.getConnUrl())) {
+            connInfo.setConnUrl(getConnectionUrl(connInfo));
         }
         if (connInfo.getCreateTime() == null) {
             connInfo.setCreateTime(LocalDateTime.now());

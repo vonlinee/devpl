@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("db_conn_info")
-public class DbConnInfo {
+public class DbConnInfo implements Serializable {
     /**
      * id
      */
@@ -104,6 +105,6 @@ public class DbConnInfo {
      *
      * @see JDBCDriver#name()
      */
-    @TableField(exist = false)
+    @TableField(value = "driver_type")
     private String driverType;
 }

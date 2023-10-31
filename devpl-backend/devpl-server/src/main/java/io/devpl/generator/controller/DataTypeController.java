@@ -11,7 +11,6 @@ import io.devpl.generator.domain.vo.DataTypeMappingVO;
 import io.devpl.generator.entity.DataTypeGroup;
 import io.devpl.generator.entity.DataTypeItem;
 import io.devpl.generator.service.DataTypeService;
-import io.devpl.generator.utils.BusinessUtils;
 import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +62,7 @@ public class DataTypeController {
      */
     @GetMapping("/page")
     public ListResult<DataTypeItem> listDataTypes(PageQuery param) {
-        return BusinessUtils.page2List(dataTypeService.selectPage(param));
+        return ListResult.ok(dataTypeService.selectPage(param));
     }
 
     /**

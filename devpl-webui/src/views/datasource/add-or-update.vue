@@ -18,7 +18,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-
       <el-row>
         <el-col :span="16">
           <el-form-item prop="ip" label="IP">
@@ -57,7 +56,14 @@
 
     </el-form>
     <template #footer>
-      <el-button @click="testConnection">测试连接</el-button>
+
+      <el-popover placement="left" :width="400" trigger="click">
+        <template #reference>
+          <el-button @click="testConnection" style="margin-right: 116px">测试连接</el-button>
+        </template>
+        <span>{{ testConnResult.status }}</span>
+      </el-popover>
+
       <el-button @click="visible = false">取消</el-button>
       <el-button type="primary" @click="submitHandle()">确定</el-button>
     </template>
@@ -87,6 +93,15 @@ const dataForm = reactive({
   username: "root",
   password: "123456"
 });
+
+interface TestConnResult {
+  status: string
+}
+
+const testConnResult = ref({
+  status: "",
+  dbmsType: ""
+})
 
 const supportedDriverTypes = ref<DriverTypeVO[]>([])
 
@@ -123,7 +138,7 @@ const getDataSource = (id: number) => {
 };
 
 function onDbNameChange(val: string) {
-  
+
 }
 
 /**
@@ -131,7 +146,10 @@ function onDbNameChange(val: string) {
  */
 const testConnection = () => {
   apiTestConnection(toRaw(dataForm)).then((res) => {
-    
+    if (!res.data?.failed) {
+      testConnResult.value.status = "成功"
+      testConnResult.value.dbmsType = res.data?.dbmsType == undefined ? "" : res.data?.dbmsType
+    }
   })
 }
 

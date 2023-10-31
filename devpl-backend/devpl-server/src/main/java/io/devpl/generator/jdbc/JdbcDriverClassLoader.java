@@ -1,14 +1,18 @@
 package io.devpl.generator.jdbc;
 
+import io.devpl.codegen.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Driver;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 /**
@@ -30,13 +34,16 @@ public final class JdbcDriverClassLoader extends URLClassLoader {
      */
     public JdbcDriverClassLoader(URL url) {
         // 指定父类加载器为null
-        this(new URL[]{url}, null);
+        super(new URL[]{url});
     }
 
-    JdbcDriverClassLoader(URL[] urls, ClassLoader parent) {
-        super(urls, parent);
-    }
-
+    /**
+     * 不仅要加载该驱动类，要加载整个jar包
+     * 使用Driver实例需要使用其他的方法
+     *
+     * @param driverClassName 驱动类名
+     * @return 驱动实例
+     */
     public Driver loadDriver(String driverClassName) {
         Class<?> driverClass = null;
         try {
@@ -47,13 +54,7 @@ public final class JdbcDriverClassLoader extends URLClassLoader {
         if (driverClass == null) {
             return null;
         }
-        try {
-            Constructor<?> constructor = driverClass.getConstructor();
-            return (Driver) constructor.newInstance();
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        return (Driver) ClassUtils.instantiate(driverClass);
     }
 
     @Override
@@ -75,17 +76,13 @@ public final class JdbcDriverClassLoader extends URLClassLoader {
     }
 
     /**
-     * @param name 全限定类名
+     * @param name 全限定类名，例如java.util.List，注意不能以.class结尾
      * @return Class
      * @throws ClassNotFoundException 全限定类名指示的类未找到
      * @see URLClassLoader#findClass(String)
      */
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-        if (name.startsWith("java")) {
-            // JVM启动时已进行加载，直接返回已加载的Class, 否则会在指定的URL中搜索该全限定类名对应的类进行加载
-            return Class.forName(name);
-        }
         return super.findClass(name);
     }
 

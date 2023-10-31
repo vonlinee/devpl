@@ -129,7 +129,7 @@ public enum JDBCDriver {
         return subProtocol;
     }
 
-    public static String[] supportedDbNames() {
+    public static String[] supportedDriverNames() {
         String[] names = new String[values().length];
         JDBCDriver[] drivers = values();
         for (int i = 0; i < drivers.length; i++) {
@@ -146,6 +146,14 @@ public enum JDBCDriver {
         return getByName(name, true, defaultValue);
     }
 
+    /**
+     * 根据名称搜索
+     *
+     * @param name          枚举实例名称
+     * @param caseSensitive 大小写敏感
+     * @param defaultValue  默认值
+     * @return JDBCDriver实例
+     */
     public static JDBCDriver getByName(String name, boolean caseSensitive, JDBCDriver defaultValue) {
         if (caseSensitive) {
             for (JDBCDriver driver : values()) {

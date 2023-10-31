@@ -46,7 +46,7 @@ public class DbConnView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbTypeChoice.setItems(FXCollections.observableArrayList(JDBCDriver.supportedDbNames()));
+        dbTypeChoice.setItems(FXCollections.observableArrayList(JDBCDriver.supportedDriverNames()));
         dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
         encodingChoice.setItems(FXCollections.observableArrayList(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);

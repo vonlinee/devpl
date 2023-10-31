@@ -203,4 +203,17 @@ public final class ClassUtils {
         }
         return cl;
     }
+
+    /**
+     * @param path 例如 com/mysql/cj/conf/ConnectionUrl
+     * @return 以点分隔的类名
+     */
+    public static String toClassName(String path) {
+        String replace = path.replace("/", ".");
+        if (replace.endsWith(".class")) {
+            int index = replace.lastIndexOf(".");
+            replace = replace.substring(0, index);
+        }
+        return replace;
+    }
 }

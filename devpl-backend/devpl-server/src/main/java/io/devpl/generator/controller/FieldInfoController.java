@@ -5,7 +5,6 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.FieldInfo;
 import io.devpl.generator.service.FieldInfoService;
-import io.devpl.generator.utils.BusinessUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +26,8 @@ public class FieldInfoController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public Result<ListResult<FieldInfo>> list(PageQuery query) {
-        return Result.ok(BusinessUtils.page2List(fieldInfoService.pages(query.getPageIndex(), query.getPageSize())));
+    public ListResult<FieldInfo> list(PageQuery query) {
+        return ListResult.ok(fieldInfoService.pages(query.getPageIndex(), query.getPageSize()));
     }
 
     /**

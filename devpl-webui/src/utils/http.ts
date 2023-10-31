@@ -7,7 +7,6 @@ import axios, {
 } from "axios"
 import { ElMessage } from "element-plus"
 import qs from "qs"
-import { showException } from "./debug"
 
 /**
  * 响应状态枚举
@@ -41,9 +40,9 @@ export interface Response<T = Record<string, any>> {
    */
   total?: number
   /**
-   * 接口返回的数据
+   * 接口返回的数据，T或者T[]，需要调用方进行指定
    */
-  data?: T | T[]
+  data?: T
   /**
    * 异常调用栈，仅在开发阶段使用，用于调试
    */
@@ -115,8 +114,8 @@ class Http {
           return res
         }
         // 错误提示 通过自定义弹窗方式进行显示
-        showException(res.stackTrace)
-        // ElMessage.error(res.msg)
+        // showException(res.stackTrace)
+        ElMessage.error(res.msg)
         return Promise.reject(new Error(res.msg || "Error"))
       },
       (error) => {

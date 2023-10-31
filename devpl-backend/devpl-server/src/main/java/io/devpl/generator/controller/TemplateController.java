@@ -6,7 +6,6 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.TemplateService;
-import io.devpl.generator.utils.BusinessUtils;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -102,7 +101,7 @@ public class TemplateController {
      */
     @GetMapping(value = "/page")
     public ListResult<TemplateInfo> list(PageQuery query) {
-        return BusinessUtils.page2List(templateService.pages(query.getPageIndex(), query.getPageSize()));
+        return ListResult.ok(templateService.pages(query.getPageIndex(), query.getPageSize()));
     }
 
     /**

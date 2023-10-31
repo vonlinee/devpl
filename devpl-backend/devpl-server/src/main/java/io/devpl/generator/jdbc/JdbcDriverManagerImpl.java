@@ -2,7 +2,6 @@ package io.devpl.generator.jdbc;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
-import com.mysql.cj.jdbc.NonRegisteringDriver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,13 +41,22 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
                 throw new CannotGetJdbcConnectionException("驱动未注册");
             }
             Properties props = properties == null ? new Properties() : properties;
-            props.setProperty("username", username);
+            // 不填默认使用本机操作系统用户名
+            props.setProperty("user", username);
             props.setProperty("password", password);
             try {
-                return driverInfo.driver.connect(url, props);
-            } catch (SQLException e) {
-                log.error("获取连接失败", e);
-                throw new CannotGetJdbcConnectionException("获取连接失败", e);
+                if (driverInfo.driver != null) {
+                    Connection connection = driverInfo.driver.connect(url, props);
+                    if (connection != null) {
+                        log.info("获取连接成功 驱动文件{} 连接{}", driverInfo.filename, connection);
+                    }
+                    return connection;
+                }
+            } catch (Throwable e) {
+                if (e instanceof SQLException sqlException) {
+                    throw new CannotGetJdbcConnectionException("获取连接失败", sqlException);
+                }
+                log.error("获取连接失败 {}", driverInfo.filename, e);
             }
         }
         return null;

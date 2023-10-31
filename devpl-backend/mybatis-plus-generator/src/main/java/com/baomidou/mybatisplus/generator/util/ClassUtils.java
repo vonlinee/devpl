@@ -1,22 +1,8 @@
 package com.baomidou.mybatisplus.generator.util;
 
-import java.lang.reflect.Constructor;
-
-/**
- * @author nieqiurong 2020/11/9.
- * @since 3.5.0
- */
 public final class ClassUtils {
 
     private ClassUtils() {
-    }
-
-    public static <T> Constructor<T> getDeclaredConstructor(Class<T> clazz, Class<?>... parameterTypes) {
-        try {
-            return clazz.getDeclaredConstructor(parameterTypes);
-        } catch (NoSuchMethodException e) {
-            return null;
-        }
     }
 
     /**

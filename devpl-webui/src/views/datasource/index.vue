@@ -26,7 +26,7 @@
 		          @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 			<el-table-column prop="connName" label="连接名" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="dbType" label="数据库类型" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="driverType" label="驱动类型" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="connUrl" label="数据库URL" show-overflow-tooltip header-align="center"
 			                 align="center"></el-table-column>
 			<el-table-column prop="username" label="用户名" header-align="center" align="center"></el-table-column>

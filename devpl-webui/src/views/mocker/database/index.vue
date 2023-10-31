@@ -51,21 +51,20 @@ const dataSources = ref<DataSourceVO[]>([]);
  * @param event
  */
 const handleNodeClick = (node: Node, obj: any, data: TreeNode, event: Event) => {
-  apiListTableNames(currentDataSourceId.value, data.label).then((res: AxiosResponse) => {
-    if (!data.children) {
-      data.children = [];
-    }
-    for (let i = 0; i < res.data.length; i++) {
+  apiListTableNames(currentDataSourceId.value, node.label).then((res) => {
+
+    for (let i = 0; i < res.data?.length; i++) {
       data.children?.push({
         label: res.data[i]
       });
     }
     dataSource.value = [...dataSource.value];
+    console.log(dataSource.value);
   });
 };
 
 const loadDbTables = (val: number) => {
-  apiGetDatabaseNamesById(val).then((res: AxiosResponse) => {
+  apiGetDatabaseNamesById(val).then((res) => {
     let nodes: TreeNode[] = [];
     for (let i = 0; i < res.data.length; i++) {
       nodes.push({
@@ -78,7 +77,7 @@ const loadDbTables = (val: number) => {
 
 
 onMounted(() => {
-  apiListSelectableDataSources().then((res: AxiosResponse<DataSourceVO[]>) => {
+  apiListSelectableDataSources().then((res) => {
     dataSources.value = res.data;
     if (res.data.length > 0) {
       currentDataSourceId.value = res.data[0].id;

@@ -1,5 +1,8 @@
 package io.devpl.generator.common.query;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * 抽象结果
  *
@@ -16,11 +19,11 @@ abstract class AbstractResult<T> {
      */
     private String msg = StatusCode.OK.getMsg();
     /**
-     * 响应数据
+     * 响应数据，可能是单个对象或者对象数组
      */
     private T data;
     /**
-     * 堆栈信息，仅在开发时使用，生产环境始为null
+     * 堆栈信息，仅在开发时使用，生产环境始终为null
      */
     private String stackTrace;
 
@@ -54,5 +57,21 @@ abstract class AbstractResult<T> {
 
     public final void setStackTrace(String stackTrace) {
         this.stackTrace = stackTrace;
+    }
+
+    public final void setStatus(StatusCode status) {
+        this.code = status.getCode();
+        this.msg = status.getMsg();
+    }
+
+    public final void setCodeAndMsg(int code, String message) {
+        this.code = code;
+        this.msg = message;
+    }
+
+    public final void setStackTrace(Throwable throwable) {
+        StringWriter sw = new StringWriter();
+        throwable.printStackTrace(new PrintWriter(sw));
+        this.setStackTrace(throwable.toString());
     }
 }

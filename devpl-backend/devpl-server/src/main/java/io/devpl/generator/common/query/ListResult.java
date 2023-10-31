@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 分页工具类
+ * 分页数据返回结果
  */
 public class ListResult<T> extends AbstractResult<List<T>> implements Serializable {
 
@@ -22,7 +22,7 @@ public class ListResult<T> extends AbstractResult<List<T>> implements Serializab
      * @param list  列表数据
      * @param total 总记录数
      */
-    public ListResult(List<T> list, long total) {
+    ListResult(List<T> list, long total) {
         this.setData(list);
         this.total = total;
     }
