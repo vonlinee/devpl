@@ -5,11 +5,11 @@
 
   <splitpanes vertical>
     <pane min-size="20">
-      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy show-checkbox>
+      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy>
       </el-tree>
     </pane>
     <pane>
-      <vxe-grid></vxe-grid>
+      <db-table-viewer></db-table-viewer>
     </pane>
   </splitpanes>
 </template>
@@ -18,6 +18,7 @@
 import { Pane, Splitpanes } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { onMounted, ref } from "vue";
+import DbTableViewer from "./DbTableViewer.vue";
 import { apiGetDatabaseNamesById, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
 
