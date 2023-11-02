@@ -4,12 +4,16 @@
   </el-select>
 
   <splitpanes vertical>
-    <pane min-size="20">
-      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
+    <pane>
+      <div>
+        <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
       </el-tree>
+      </div>
     </pane>
     <pane>
-      <result-set-table :headers="tableHeader" :rows="tableData"></result-set-table>
+      <div>
+        <result-set-table :headers="tableHeader" :rows="tableData"></result-set-table>
+      </div>
     </pane>
   </splitpanes>
 </template>
@@ -128,7 +132,7 @@ const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) =
 }
 
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 // .custom-tree-node {
 //   flex: 1;
 //   display: flex;
@@ -138,8 +142,16 @@ const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) =
 //   padding-right: 8px;
 // }
 
-// .splitpanes>.splitpanes__splitter {
-//   background-color: 0, 120, 212;
-//   width: 4px;
+// .splitpanes__splitter {
+//   background-color: red;
+//   width: 20px;
 // }
+
+.splitpanes .splitpanes__splitter {
+  width: 4px;
+}
+
+.splitpanes .splitpanes__splitter:hover {
+  
+}
 </style>
