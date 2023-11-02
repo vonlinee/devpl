@@ -22,7 +22,6 @@
         <module>devpl-codegen</module>
         <module>mybatis-plus-generator</module>
         <module>json5-java</module>
-      <module>devpl-fxui</module>
     </modules>
 
     <properties>
