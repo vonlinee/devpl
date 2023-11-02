@@ -66,8 +66,8 @@ public class JdbcUtils {
             while (resultSet.next()) {
                 result.add(rowMapper.mapRow(resultSet, rowNum++));
             }
-        } catch (SQLException ignored) {
-            logger.error("提取ResultSet失败", ignored);
+        } catch (SQLException e) {
+            logger.error("提取ResultSet失败", e);
         }
         return result;
     }
