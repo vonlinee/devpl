@@ -28,7 +28,7 @@ public class FieldInfoController {
      */
     @GetMapping(value = "/page")
     public ListResult<FieldInfo> list(PageQuery query) {
-        return ListResult.ok(fieldInfoService.pages(query.getPageIndex(), query.getPageSize()));
+        return ListResult.ok(fieldInfoService.selectPage(query.getPageIndex(), query.getPageSize()));
     }
 
     /**

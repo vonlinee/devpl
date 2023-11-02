@@ -31,6 +31,14 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     @Value("${devpl.driver.location}")
     private String driverLocation;
 
+    private Properties prepareConnectionProperties(String username, String password, Properties properties) {
+        properties = properties == null ? new Properties() : properties;
+        // 不填默认使用本机操作系统用户名
+        properties.setProperty("user", username);
+        properties.setProperty("password", password);
+        return properties;
+    }
+
     @Override
     public Connection getConnection(String driverClassName, String url, String username, String password, Properties properties) {
         JDBCDriver driveType = JDBCDriver.findByDriverClassName(driverClassName);
@@ -40,13 +48,9 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
                 // 驱动未注册
                 throw new CannotGetJdbcConnectionException("驱动未注册");
             }
-            Properties props = properties == null ? new Properties() : properties;
-            // 不填默认使用本机操作系统用户名
-            props.setProperty("user", username);
-            props.setProperty("password", password);
             try {
                 if (driverInfo.driver != null) {
-                    Connection connection = driverInfo.driver.connect(url, props);
+                    Connection connection = driverInfo.driver.connect(url, prepareConnectionProperties(username, password, properties));
                     if (connection != null) {
                         log.info("获取连接成功 驱动文件{} 连接{}", driverInfo.filename, connection);
                     }

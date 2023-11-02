@@ -1,4 +1,5 @@
 import http from "@/utils/http"
+import { DBTableDataVO, ParamGetDbTableData } from "@/views/mocker/database/type"
 
 export const useDataSourceTestApi = (id: Number) => {
   return http.get<TestConnVO>("/api/gen/datasource/test/" + id)
@@ -100,4 +101,12 @@ export const apiListSelectableDataSources = () => {
  */
 export const apiListTableNames = (id: number, dbName: string) => {
   return http.get(`/api/gen/datasource/${id}/${dbName}/table/names`)
+}
+
+/**
+ * 所有支持的数据库类型
+ * @returns 所有支持的数据库类型
+ */
+export const apiGetTableData = (param: ParamGetDbTableData) => {
+  return http.post<DBTableDataVO>('/api/gen/datasource/table/data', param)
 }

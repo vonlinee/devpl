@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface FieldInfoService extends BaseService<FieldInfo> {
 
-    IPage<FieldInfo> pages(int pageIndex, int pageSize);
+    IPage<FieldInfo> selectPage(int pageIndex, int pageSize);
 
     List<FieldInfo> parseFields(FieldParseParam param);
 }

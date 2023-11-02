@@ -35,8 +35,6 @@ import java.util.function.Function;
 
 /**
  * 生成文件
- * @author YangHu, tangguo, hubin
- * @since 2016-08-30
  */
 public class AutoGenerator {
 
@@ -79,6 +77,7 @@ public class AutoGenerator {
 
     /**
      * 构造方法
+     *
      * @param dataSourceConfig 数据库配置
      * @since 3.5.0
      */
@@ -89,6 +88,7 @@ public class AutoGenerator {
 
     /**
      * 注入配置
+     *
      * @param injectionConfig 注入配置
      * @return this
      * @since 3.5.0
@@ -100,6 +100,7 @@ public class AutoGenerator {
 
     /**
      * 生成策略
+     *
      * @param strategyConfig 策略配置
      * @return this
      * @since 3.5.0
@@ -111,6 +112,7 @@ public class AutoGenerator {
 
     /**
      * 指定包配置信息
+     *
      * @param packageConfig 包配置
      * @return this
      * @since 3.5.0
@@ -122,6 +124,7 @@ public class AutoGenerator {
 
     /**
      * 指定模板配置
+     *
      * @param templateConfig 模板配置
      * @return this
      * @since 3.5.0
@@ -133,6 +136,7 @@ public class AutoGenerator {
 
     /**
      * 指定全局配置
+     *
      * @param globalConfig 全局配置
      * @return this
      * @see 3.5.0
@@ -144,6 +148,7 @@ public class AutoGenerator {
 
     /**
      * 设置配置汇总
+     *
      * @param configBuilder 配置汇总
      * @return this
      * @since 3.5.0
@@ -162,6 +167,7 @@ public class AutoGenerator {
 
     /**
      * 生成代码
+     *
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
@@ -275,6 +281,7 @@ public class AutoGenerator {
 
     /**
      * 输出自定义模板文件
+     *
      * @param customFiles 自定义模板文件列表
      * @param tableInfo   表信息
      * @param objectMap   渲染数据
@@ -296,6 +303,7 @@ public class AutoGenerator {
 
     /**
      * 输出实体文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -322,6 +330,7 @@ public class AutoGenerator {
 
     /**
      * 输出Mapper文件(含xml)
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -350,6 +359,7 @@ public class AutoGenerator {
 
     /**
      * 输出service文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -378,6 +388,7 @@ public class AutoGenerator {
 
     /**
      * 获取模板路径
+     *
      * @param function function
      * @return 模板路径
      * @since 3.5.0
@@ -394,6 +405,7 @@ public class AutoGenerator {
 
     /**
      * 输出文件
+     *
      * @param file         文件
      * @param objectMap    渲染信息
      * @param templatePath 模板路径
@@ -425,6 +437,7 @@ public class AutoGenerator {
 
     /**
      * 输出controller文件
+     *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
      * @since 3.5.0
@@ -444,6 +457,7 @@ public class AutoGenerator {
 
     /**
      * 检查文件是否创建文件
+     *
      * @param file         文件
      * @param fileOverride 是否覆盖已有文件
      * @return 是否创建文件
@@ -458,6 +472,7 @@ public class AutoGenerator {
 
     /**
      * 渲染对象 MAP 信息
+     *
      * @param context   配置信息
      * @param tableInfo 表信息对象
      * @return ignore

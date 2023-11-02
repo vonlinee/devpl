@@ -106,11 +106,11 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
-    public ListResult<String> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
+    public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
         Assert.notNull(id, "id不能为空");
         DbConnInfo connInfo = datasourceService.getOne(id);
         Assert.notNull(connInfo, "数据源不存在");
-        return ListResult.ok(datasourceService.getDbNames(connInfo));
+        return Result.ok(datasourceService.getDbNames(connInfo));
     }
 
     /**
@@ -120,8 +120,8 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public ListResult<String> getDbNames(@RequestBody DbConnInfo entity) {
-        return ListResult.ok(datasourceService.getDbNames(entity));
+    public Result<List<String>> getDbNames(@RequestBody DbConnInfo entity) {
+        return Result.ok(datasourceService.getDbNames(entity));
     }
 
     /**
@@ -201,13 +201,27 @@ public class DataSourceController {
         }
     }
 
-    @GetMapping("/datasource/table/data")
-    public Result<DBTableDataVO> getTableData(DBTableDataParam param) {
+    /**
+     * 获取数据库表的数据
+     *
+     * @param param 参数
+     * @return 数据库表的数据，包括表头及表格每行的数据
+     */
+    @PostMapping("/datasource/table/data")
+    public Result<DBTableDataVO> getTableData(@RequestBody DBTableDataParam param) {
         try {
+            if (param.getConnInfo() == null) {
+                DbConnInfo connInfo = datasourceService.getOne(param.getDataSourceId());
+                if (connInfo == null) {
+                    return Result.error("数据源不存在");
+                }
+                param.setConnInfo(connInfo);
+            }
             // 根据数据源，获取全部数据表
             return Result.ok(datasourceService.getTableData(param));
         } catch (Exception e) {
-            return Result.error("数据源配置错误，请检查数据源配置！");
+            log.error("获取数据库表数据失败", e);
+            return Result.error("获取数据库表数据失败 " + e.getMessage());
         }
     }
 }

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.generator.common.exception.ServerException;
+import io.devpl.generator.common.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
@@ -31,8 +31,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.*;
-import java.util.Date;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 数据表
@@ -53,8 +56,9 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
 
     @Override
     public GenTable getByTableName(String tableName) {
-        LambdaQueryWrapper<GenTable> queryWrapper = Wrappers.lambdaQuery();
-        return baseMapper.selectOne(queryWrapper.eq(GenTable::getTableName, tableName));
+        LambdaQueryWrapper<GenTable> qw = Wrappers.lambdaQuery();
+        qw.eq(GenTable::getTableName, tableName);
+        return baseMapper.selectOne(qw);
     }
 
     @Override
@@ -104,7 +108,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
             table.setClassName(NamingUtils.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
             table.setFunctionName(getFunctionName(tableName));
-            table.setCreateTime(new Date());
+            table.setCreateTime(LocalDateTime.now());
             this.save(table);
 
             // 获取原生字段数据
@@ -124,7 +128,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
      * @param tableName 表名
      * @return 功能名
      */
-    public static String getFunctionName(String tableName) {
+    public String getFunctionName(String tableName) {
         String functionName = StringUtils.subAfter(tableName, "_", true);
         if (StringUtils.isBlank(functionName)) {
             functionName = tableName;
@@ -138,7 +142,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
      * @param packageName 包名
      * @return 模块名
      */
-    public static String getModuleName(String packageName) {
+    public String getModuleName(String packageName) {
         return StringUtils.subAfter(packageName, ".", true);
     }
 

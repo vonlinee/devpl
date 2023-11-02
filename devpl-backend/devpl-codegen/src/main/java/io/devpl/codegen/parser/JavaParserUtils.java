@@ -1,4 +1,4 @@
-package io.devpl.codegen.parser.java;
+package io.devpl.codegen.parser;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -16,6 +16,7 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ParserCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
+import io.devpl.codegen.parser.java.*;
 import io.devpl.codegen.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -279,13 +281,10 @@ public class JavaParserUtils {
         System.out.println(toString(cu));
     }
 
-    public static List<MetaField> getFieldsDataList(String filePath) {
-        try (FileInputStream in = new FileInputStream(filePath)) {
-            ParseResult<CompilationUnit> cu = JAVA_PARSER_INSTANCE.parse(in);
-            System.out.println(cu);
-        } catch (IOException e) {
-            log.error("failed to parse file {}", filePath, e);
+    public static List<MetaField> parseFields(String content) throws IOException {
+        try (Reader reader = new InputStreamReader(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)))) {
+            ASTFieldParser parser = new ASTFieldParser();
+            return parse(reader, parser).orElse(Collections.emptyList());
         }
-        return null;
     }
 }

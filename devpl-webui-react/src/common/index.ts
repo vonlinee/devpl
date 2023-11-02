@@ -1,6 +1,6 @@
 import { getLocalMenu, saveLocalMenu } from "@/utils";
 import { getMenu } from "@/api";
-import { MenuResponse } from "@/types";
+import { MenuList, MenuResponse } from "@/types";
 
 let currentJob: Promise<MenuResponse> | null;
 
@@ -18,11 +18,11 @@ export function getMenus() {
       console.log("获取localMenu");
       return reslove(localMenu);
     }
-    getMenu().then((result) => {
-        saveLocalMenu(result);
+    getMenu().then((result: MenuList | PromiseLike<MenuList>) => {
+        // saveLocalMenu(result);
         reslove(result);
       })
-      .catch((err) => {
+      .catch((err : any) => {
         reslove([]);
       });
   });

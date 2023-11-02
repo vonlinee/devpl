@@ -32,6 +32,8 @@ module devpl.codegen {
     opens io.devpl.codegen to com.google.gson;
     opens io.devpl.codegen.parser.java to com.google.gson;
     exports io.devpl.codegen.ddl.service;
+    exports io.devpl.codegen.parser;
+    opens io.devpl.codegen.parser to com.google.gson;
 
     requires java.desktop;
     requires devpl.sdk.internal;

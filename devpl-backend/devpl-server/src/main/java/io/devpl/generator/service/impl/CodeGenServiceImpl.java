@@ -1,6 +1,6 @@
 package io.devpl.generator.service.impl;
 
-import io.devpl.generator.common.exception.ServerException;
+import io.devpl.generator.common.ServerException;
 import io.devpl.generator.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;

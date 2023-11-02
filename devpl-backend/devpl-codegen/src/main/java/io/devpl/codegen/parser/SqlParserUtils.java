@@ -1,4 +1,4 @@
-package io.devpl.codegen.parser.sql;
+package io.devpl.codegen.parser;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLExpr;
@@ -12,11 +12,12 @@ import java.util.*;
 /**
  * Druid Sql Parser
  */
-public class SqlUtils {
+public class SqlParserUtils {
 
     /**
      * 获取sql查询的字段，不会进行实际的数据库查询，只解析sql，得到真实的表名，字段名，不包含sql中的自定义别名
      * TODO 如果有子查询，别名，需要得到对应的查询真实的表字段
+     *
      * @param sql 查询SQL语句
      * @return 返回格式：{tableName} -> {columnName} 每张表查询的字段
      */
@@ -32,6 +33,7 @@ public class SqlUtils {
 
     /**
      * 获取SQL中查询的所有列
+     *
      * @param sqlStatement SQLStatement
      * @return 查询的所有列
      */
@@ -70,6 +72,7 @@ public class SqlUtils {
 
     /**
      * 解析SQL中所有表名和别名
+     *
      * @param from 根SQL
      * @return 表.字段
      */
@@ -134,6 +137,7 @@ public class SqlUtils {
 
     /**
      * 使用反单引号进行包裹 '`'
+     *
      * @return ``
      */
     public static String wrapWithBackquote(String columnName) {

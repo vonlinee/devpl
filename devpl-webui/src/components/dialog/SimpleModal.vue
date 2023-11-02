@@ -4,7 +4,7 @@
         <slot></slot>
     </template>
     <template #footer>
-      <vxe-button @click="onOkButtonClicked">确定</vxe-button>
+      <vxe-button status="success" @click="onOkButtonClicked">确定</vxe-button>
     </template>
   </vxe-modal>
 </template>
@@ -26,7 +26,7 @@ const emits = defineEmits([
 ])
 
 const onOkButtonClicked = () => {
-
+  emits('onOkButtonClicked')
 }
 
 defineExpose({

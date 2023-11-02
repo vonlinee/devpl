@@ -5,11 +5,11 @@
 
   <splitpanes vertical>
     <pane min-size="20">
-      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy>
+      <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
       </el-tree>
     </pane>
     <pane>
-      <db-table-viewer></db-table-viewer>
+      <result-set-table :headers="tableHeader" :rows="tableData"></result-set-table>
     </pane>
   </splitpanes>
 </template>
@@ -18,9 +18,10 @@
 import { Pane, Splitpanes } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { onMounted, ref } from "vue";
-import DbTableViewer from "./DbTableViewer.vue";
-import { apiGetDatabaseNamesById, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
+import { apiGetDatabaseNamesById, apiGetTableData, apiListSelectableDataSources, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
+import { ParamGetDbTableData } from "./type";
+import ResultSetTable from "./ResultSetTable.vue";
 
 const defaultProps = {
   label: 'label',
@@ -57,6 +58,10 @@ const dataSource = ref<TreeNodeVO[]>([]);
 const currentDataSourceId = ref<number>(0);
 const dataSources = ref<DataSourceVO[]>([]);
 
+/**
+ * 加载数据库
+ * @param val 
+ */
 const loadDatabases = (val: number) => {
   apiGetDatabaseNamesById(val).then((res) => {
     const nodes: TreeNodeVO[] = [];
@@ -77,7 +82,7 @@ const loadDatabases = (val: number) => {
  */
 const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
   apiListTableNames(currentDataSourceId.value, node.label).then((res) => {
-    const tableNodes : TreeNodeVO[] = []
+    const tableNodes: TreeNodeVO[] = []
     for (let i = 0; i < res.data?.length; i++) {
       tableNodes.push({
         label: res.data[i],
@@ -97,14 +102,44 @@ onMounted(() => {
   });
 });
 
+const tableHeader = ref()
+const tableData = ref()
+
+const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) => {
+
+  if (node.level == 2) {
+
+
+    const apiParam: ParamGetDbTableData = {
+      dataSourceId: currentDataSourceId.value,
+      dbName: node.parent.label,
+      tableName: node.label,
+      pageIndex: 1,
+      pageSize: 100
+    }
+
+    apiGetTableData(apiParam).then((res) => {
+      if (res.data) {
+        tableHeader.value = res.data.headers
+        tableData.value = res.data.rows1
+      }
+    })
+  }
+}
+
 </script>
 <style lang="scss" scoped>
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  padding-right: 8px;
-}
+// .custom-tree-node {
+//   flex: 1;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   font-size: 14px;
+//   padding-right: 8px;
+// }
+
+// .splitpanes>.splitpanes__splitter {
+//   background-color: 0, 120, 212;
+//   width: 4px;
+// }
 </style>

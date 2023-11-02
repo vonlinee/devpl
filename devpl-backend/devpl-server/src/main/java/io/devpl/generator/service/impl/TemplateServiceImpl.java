@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.devpl.codegen.utils.CollectionUtils;
-import io.devpl.generator.common.exception.ServerException;
+import io.devpl.generator.common.ServerException;
 import io.devpl.generator.dao.TemplateInfoMapper;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;

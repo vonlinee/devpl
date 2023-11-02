@@ -1,15 +1,11 @@
-package io.devpl.generator.common.exception;
+package io.devpl.generator.common;
 
 import io.devpl.generator.common.query.StatusCode;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 自定义服务器异常
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ServerException extends RuntimeException {
+public final class ServerException extends RuntimeException {
 
     private int code;
     private String msg;
@@ -34,5 +30,21 @@ public class ServerException extends RuntimeException {
 
     public static ServerException create(String msgTemplate, Object... args) {
         return new ServerException(msgTemplate.formatted(args));
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

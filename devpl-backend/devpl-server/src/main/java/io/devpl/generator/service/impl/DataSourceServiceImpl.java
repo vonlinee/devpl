@@ -18,6 +18,7 @@ import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.jdbc.JdbcDriverManager;
+import io.devpl.generator.jdbc.metadata.ResultSetColumnMetadata;
 import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.JdbcUtils;
@@ -27,17 +28,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据源管理
+ * TODO 结合数据库连接池
  */
 @Slf4j
 @Service
@@ -93,7 +93,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public boolean addOne(DbConnInfo entity) {
-        return super.save(fixMissingFieldValue(entity));
+        return super.save(fixMissingConnectionInfo(entity));
     }
 
     /**
@@ -154,22 +154,20 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     @Override
     public List<String> getDbNames(DbConnInfo entity) {
         DBType dbType = DBType.getValue(entity.getDbType());
-
-        String connectionUrl = getConnectionUrl(entity);
-        if (dbType == null || connectionUrl == null) {
+        if (dbType == null) {
             return Collections.emptyList();
         }
-
-        List<String> list = new ArrayList<>();
-        try (Connection connection = JdbcUtils.getConnection(connectionUrl, entity.getUsername(), entity.getPassword(), dbType)) {
+        entity.setConnUrl(getConnectionUrl(entity));
+        List<String> list = null;
+        try (Connection connection = getConnection(entity)) {
             DatabaseMetaData metaData = connection.getMetaData();
             try (ResultSet catalogs = metaData.getCatalogs()) {
-                JdbcUtils.extractSingleColumn(catalogs, list);
+                list = JdbcUtils.extractSingleColumn(catalogs, String.class);
             }
         } catch (Exception exception) {
             log.error("", exception);
         }
-        return list;
+        return list == null ? Collections.emptyList() : list;
     }
 
     @Override
@@ -180,7 +178,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
             return Collections.emptyList();
         }
         List<String> list = new ArrayList<>();
-        try (Connection connection = JdbcUtils.getConnection(connectionUrl, connInfo.getUsername(), connInfo.getPassword(), dbType)) {
+        try (Connection connection = getConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = metaData.getTables(databaseName, null, null, null);
             while (rs.next()) {
@@ -215,7 +213,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
         }
         TestConnVO vo = new TestConnVO();
         try (Connection connection = getConnection(connInfo)) {
-
+            DatabaseMetaData metaData = connection.getMetaData();
+            String databaseProductName = metaData.getDatabaseProductName();
+            vo.setDbmsType(databaseProductName);
+            vo.setUseSsl(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -224,7 +225,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public DbConnInfo updateOne(DbConnInfo entity) {
-        updateById(fixMissingFieldValue(entity));
+        updateById(fixMissingConnectionInfo(entity));
         return entity;
     }
 
@@ -232,19 +233,59 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
      * 加载数据库表的数据
      *
      * @param param 参数
-     * @return
+     * @return 数据库表数据
      */
     @Override
     public DBTableDataVO getTableData(DBTableDataParam param) {
         DBTableDataVO vo = new DBTableDataVO();
-
-        DbConnInfo connInfo = getOne(param.getDataSourceId());
-        try (Connection connection = getConnection(connInfo)) {
-
+        param.getConnInfo().setDbName(param.getDbName());
+        // 更换连接地址
+        param.getConnInfo().setConnUrl(getConnectionUrl(param.getConnInfo()));
+        try (Connection connection = getConnection(param.getConnInfo())) {
+            String sql = "select * from " + param.getTableName();
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                try (ResultSet resultSet = pstmt.executeQuery()) {
+                    // 表头
+                    List<ResultSetColumnMetadata> columnMetadata = JdbcUtils.getColumnMetadata(resultSet);
+                    // 表数据
+                    vo.setHeaders(columnMetadata);
+                    // vo.setRows(getTableData(resultSet));
+                    vo.setRows1(getTableData1(resultSet));
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return vo;
+    }
+
+    /**
+     * 以对象的形式进行返回，包含表头
+     *
+     * @param resultSet 结果集
+     * @return 每行的数据
+     */
+    private List<Map<String, Object>> getTableData1(ResultSet resultSet) throws SQLException {
+        return JdbcUtils.extractMaps(resultSet);
+    }
+
+    /**
+     * 以字符串的形式进行返回，不包含表头
+     *
+     * @param resultSet 结果集
+     * @return 每行的数据
+     */
+    private List<String[]> getTableData(ResultSet resultSet) throws SQLException {
+        int columnCount = resultSet.getMetaData().getColumnCount();
+        List<String[]> result = new ArrayList<>();
+        while (resultSet.next()) {
+            String[] row = new String[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = String.valueOf(resultSet.getObject(i + 1));
+            }
+            result.add(row);
+        }
+        return result;
     }
 
     /**
@@ -253,7 +294,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
      * @param connInfo 连接信息
      * @return 连接信息
      */
-    private DbConnInfo fixMissingFieldValue(DbConnInfo connInfo) {
+    private DbConnInfo fixMissingConnectionInfo(DbConnInfo connInfo) {
         if (!StringUtils.hasText(connInfo.getDriverClassName())) {
             DBType dbType = DBType.getValue(connInfo.getDbType(), null);
             if (dbType != null) {

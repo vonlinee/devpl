@@ -1,4 +1,4 @@
-package io.devpl.codegen;
+package io.devpl.generator.domain;
 
 import lombok.Data;
 

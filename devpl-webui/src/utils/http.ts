@@ -116,7 +116,7 @@ class Http {
         // 错误提示 通过自定义弹窗方式进行显示
         // showException(res.stackTrace)
         ElMessage.error(res.msg)
-        return Promise.reject(new Error(res.msg || "Error"))
+        return Promise.reject(res.msg || "Error")
       },
       (error) => {
         ElMessage.error(error.message)

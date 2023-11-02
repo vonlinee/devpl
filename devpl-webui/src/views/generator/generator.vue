@@ -23,7 +23,7 @@
                     <el-form-item prop="baseclassId" label="继承">
                         <el-select v-model="dataForm.baseclassId" placeholder="继承" style="width: 100%" clearable>
                             <el-option v-for="item in baseClassList" :key="item.id" :label="item.code"
-                                       :value="item.id"></el-option>
+                                :value="item.id"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -104,11 +104,11 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
-import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
-import {useBaseClassListApi} from '@/api/baseClass'
-import {useDownloadApi, useGeneratorApi} from '@/api/generator'
-import {useTableApi, useTableSubmitApi} from '@/api/table'
+import { reactive, ref } from 'vue'
+import { ElButton, ElDialog, ElMessage } from 'element-plus/es'
+import { useBaseClassListApi } from '@/api/baseClass'
+import { useDownloadApi, useGeneratorApi } from '@/api/generator'
+import { useTableApi, useTableSubmitApi } from '@/api/table'
 import FileTreeView from "@/components/FileTreeView.vue";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 
@@ -124,7 +124,7 @@ const baseClassList = ref<any[]>([])
 const dataForm = reactive({
     id: '',
     baseclassId: '',
-    generatorType: 0,
+    generatorType: 1,
     formLayout: 1,
     backendPath: '',
     frontendPath: '',
@@ -156,24 +156,32 @@ const getBaseClassList = () => {
     })
 }
 
+/**
+ * 获取表信息
+ * @param id 生成的表ID
+ */
 const getTable = (id: number) => {
     useTableApi(id).then(res => {
         Object.assign(dataForm, res.data)
+        // 填充默认值
+        if (dataForm.tableComment == null || dataForm.tableComment == undefined || dataForm.tableComment == '') {
+            dataForm.tableComment = res.data?.tableName == undefined ? "" : res.data?.tableName
+        }
     })
 }
 
 const dataRules = ref({
-    tableName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    tableComment: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    className: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    packageName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    author: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    moduleName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    functionName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    generatorType: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    formLayout: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    backendPath: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-    frontendPath: [{required: true, message: '必填项不能为空', trigger: 'blur'}]
+    tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    className: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    packageName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    author: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    moduleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    functionName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    backendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 保存
