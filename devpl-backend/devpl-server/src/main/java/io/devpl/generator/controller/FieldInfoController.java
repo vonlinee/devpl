@@ -3,6 +3,7 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.domain.param.FieldParseParam;
 import io.devpl.generator.entity.FieldInfo;
 import io.devpl.generator.service.FieldInfoService;
 import jakarta.annotation.Resource;
@@ -48,5 +49,17 @@ public class FieldInfoController {
     @DeleteMapping(value = "/delete")
     public Result<Boolean> delete(@RequestBody List<FieldInfo> fieldInfoList) {
         return Result.ok(fieldInfoService.saveOrUpdateBatch(fieldInfoList));
+    }
+
+    /**
+     * 字段解析
+     *
+     * @return
+     */
+    @PostMapping(value = "/parse")
+    public ListResult<FieldInfo> parseFields(@RequestBody FieldParseParam param) {
+        List<FieldInfo> fieldInfoList = fieldInfoService.parseFields(param);
+
+        return ListResult.ok(fieldInfoList);
     }
 }

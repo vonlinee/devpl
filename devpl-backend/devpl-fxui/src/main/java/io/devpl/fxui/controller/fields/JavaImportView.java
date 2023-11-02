@@ -1,8 +1,8 @@
 package io.devpl.fxui.controller.fields;
 
-import io.devpl.codegen.meta.ASTFieldParser;
-import io.devpl.codegen.meta.JavaParserUtils;
-import io.devpl.codegen.meta.MetaField;
+import io.devpl.codegen.parser.java.ASTFieldParser;
+import io.devpl.codegen.parser.java.JavaParserUtils;
+import io.devpl.codegen.parser.java.MetaField;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;

@@ -1,4 +1,4 @@
-package io.devpl.codegen.sql;
+package io.devpl.codegen.parser.sql;
 
 /**
  * 查询列

@@ -1,6 +1,6 @@
 package io.devpl.fxui.view;
 
-import io.devpl.codegen.sql.SqlUtils;
+import io.devpl.codegen.parser.sql.SqlUtils;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;

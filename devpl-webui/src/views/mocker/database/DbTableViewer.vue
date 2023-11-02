@@ -1,28 +1,11 @@
 <template>
-  <div>
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column :prop="index" :label="item" v-for="(item, index) in tableHeader" :key="index">
-      </el-table-column>
-    </el-table>
-
-    <table>
-      <thead>
-        <template v-for="(item, index) in heads">
-          <th>{{ item }}</th>
-        </template>
-      </thead>
-      <tbody v-for="(item, index) in tableData" :key="index">
-        <tr>
-          <td>{{ item[props[index]] }}</td>
-          <td>222</td>
-          <td>333</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <el-table :data="tableData" style="width: 100%" :border="true" stripe>
+    <el-table-column type="selection" width="35" fixed="left" :resizable="false"/>
+    <el-table-column :prop="index" :label="item" v-for="(item, index) in tableHeader" :key="index" show-overflow-tooltip>
+    </el-table-column>
+  </el-table>
 </template>
 <script setup lang='ts'>
-
 
 interface ColumnDef {
   prop: string
@@ -38,7 +21,6 @@ const tableHeader = {
 
 const heads = Object.values(tableHeader)
 const props = Object.keys(tableHeader)
-
 
 const tableData = [{
   name: '张三',

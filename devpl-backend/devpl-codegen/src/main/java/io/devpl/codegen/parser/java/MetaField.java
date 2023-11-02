@@ -1,4 +1,4 @@
-package io.devpl.codegen.meta;
+package io.devpl.codegen.parser.java;
 
 /**
  * 字段信息: 和Java、数据库都无关的字段

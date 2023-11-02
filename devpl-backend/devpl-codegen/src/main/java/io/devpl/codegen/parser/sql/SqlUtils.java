@@ -1,4 +1,4 @@
-package io.devpl.codegen.sql;
+package io.devpl.codegen.parser.sql;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLExpr;
@@ -107,7 +107,7 @@ public class SqlUtils {
                     List<SQLSelectItem> selectList = queryBlock.getSelectList();
                     for (SQLSelectItem sqlSelectItem : selectList) {
 
-                        
+
                     }
                     // FROM 部分
                     SQLTableSource from1 = queryBlock.getFrom();

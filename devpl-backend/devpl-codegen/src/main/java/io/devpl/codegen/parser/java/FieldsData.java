@@ -1,4 +1,4 @@
-package io.devpl.codegen.utils;
+package io.devpl.codegen.parser.java;
 
 public class FieldsData {
     private String name;

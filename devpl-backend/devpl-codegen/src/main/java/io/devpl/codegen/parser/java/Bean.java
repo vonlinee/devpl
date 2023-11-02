@@ -1,4 +1,4 @@
-package io.devpl.codegen.meta;
+package io.devpl.codegen.parser.java;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

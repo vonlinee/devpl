@@ -24,13 +24,13 @@ module devpl.codegen {
 
     exports io.devpl.codegen;
 
-    exports io.devpl.codegen.sql;
+    exports io.devpl.codegen.parser.sql;
     exports io.devpl.codegen.utils;
 
-    exports io.devpl.codegen.meta;
+    exports io.devpl.codegen.parser.java;
 
     opens io.devpl.codegen to com.google.gson;
-    opens io.devpl.codegen.meta to com.google.gson;
+    opens io.devpl.codegen.parser.java to com.google.gson;
     exports io.devpl.codegen.ddl.service;
 
     requires java.desktop;

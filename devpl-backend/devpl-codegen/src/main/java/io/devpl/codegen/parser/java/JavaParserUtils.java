@@ -1,4 +1,4 @@
-package io.devpl.codegen.meta;
+package io.devpl.codegen.parser.java;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -16,7 +16,6 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ParserCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import io.devpl.codegen.utils.FieldsData;
 import io.devpl.codegen.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -280,7 +279,7 @@ public class JavaParserUtils {
         System.out.println(toString(cu));
     }
 
-    public static List<FieldsData> getFieldsDataList(String filePath) {
+    public static List<MetaField> getFieldsDataList(String filePath) {
         try (FileInputStream in = new FileInputStream(filePath)) {
             ParseResult<CompilationUnit> cu = JAVA_PARSER_INSTANCE.parse(in);
             System.out.println(cu);

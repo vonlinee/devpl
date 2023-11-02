@@ -1,4 +1,4 @@
-package io.devpl.codegen.sql;
+package io.devpl.codegen.parser.sql;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;

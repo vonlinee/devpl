@@ -36,12 +36,10 @@ public class MyBatisToolController {
 
     /**
      * 获取样例XML Statement
-     *
-     * @return
      */
     @GetMapping("/ms/sample")
     public Result<String> getSampleXml() {
-        URL resource = getClass().getResource("/static/sample.ms.xml");
+        URL resource = getClass().getResource("/static/samples/sample.ms.xml");
         if (resource == null) {
             return Result.error("获取示例失败");
         }

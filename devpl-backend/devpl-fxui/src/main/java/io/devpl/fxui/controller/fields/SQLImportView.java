@@ -2,7 +2,7 @@ package io.devpl.fxui.controller.fields;
 
 import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.jdbc.dialect.mysql.InfoSchemaColumn;
-import io.devpl.codegen.sql.SqlUtils;
+import io.devpl.codegen.parser.sql.SqlUtils;
 import io.devpl.fxui.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;

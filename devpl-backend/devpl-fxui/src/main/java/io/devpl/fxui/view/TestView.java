@@ -1,6 +1,6 @@
 package io.devpl.fxui.view;
 
-import io.devpl.codegen.sql.SqlUtils;
+import io.devpl.codegen.parser.sql.SqlUtils;
 import io.devpl.fxui.components.Message;
 import io.devpl.fxui.components.TextRegion;
 import io.devpl.fxui.mvvm.FxmlBinder;

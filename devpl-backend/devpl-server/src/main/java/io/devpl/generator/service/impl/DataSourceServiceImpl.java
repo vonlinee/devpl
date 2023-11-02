@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DataSourceMapper;
+import io.devpl.generator.domain.param.DBTableDataParam;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
@@ -37,9 +39,9 @@ import java.util.List;
 /**
  * 数据源管理
  */
+@Slf4j
 @Service
 @AllArgsConstructor
-@Slf4j
 public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnInfo> implements DataSourceService {
 
     /**
@@ -224,6 +226,25 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     public DbConnInfo updateOne(DbConnInfo entity) {
         updateById(fixMissingFieldValue(entity));
         return entity;
+    }
+
+    /**
+     * 加载数据库表的数据
+     *
+     * @param param 参数
+     * @return
+     */
+    @Override
+    public DBTableDataVO getTableData(DBTableDataParam param) {
+        DBTableDataVO vo = new DBTableDataVO();
+
+        DbConnInfo connInfo = getOne(param.getDataSourceId());
+        try (Connection connection = getConnection(connInfo)) {
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vo;
     }
 
     /**

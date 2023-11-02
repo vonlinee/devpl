@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
+import io.devpl.generator.domain.param.DBTableDataParam;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
@@ -72,4 +74,6 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
     TestConnVO testJdbcConnection(DbConnInfo connInfo);
 
     DbConnInfo updateOne(DbConnInfo entity);
+
+    DBTableDataVO getTableData(DBTableDataParam param);
 }

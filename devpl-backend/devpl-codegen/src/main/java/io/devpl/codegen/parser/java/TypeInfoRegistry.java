@@ -1,4 +1,4 @@
-package io.devpl.codegen.meta;
+package io.devpl.codegen.parser.java;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;

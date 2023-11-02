@@ -104,7 +104,7 @@ export const isMacintosh = () => {
  * @returns 
  */
 const deepClone = (obj: Record<string, any>) =>  {
-  const copy = Object.assign({}, obj);
+  const copy : any = Object.assign({}, obj);
   Object.keys(copy).forEach(
     key => (copy[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
   );

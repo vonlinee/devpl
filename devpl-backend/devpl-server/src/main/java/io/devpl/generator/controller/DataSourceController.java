@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.domain.param.DBTableDataParam;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DriverTypeVO;
 import io.devpl.generator.domain.vo.TestConnVO;
@@ -196,6 +198,16 @@ public class DataSourceController {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ListResult.error("数据源配置错误，请检查数据源配置！");
+        }
+    }
+
+    @GetMapping("/datasource/table/data")
+    public Result<DBTableDataVO> getTableData(DBTableDataParam param) {
+        try {
+            // 根据数据源，获取全部数据表
+            return Result.ok(datasourceService.getTableData(param));
+        } catch (Exception e) {
+            return Result.error("数据源配置错误，请检查数据源配置！");
         }
     }
 }
