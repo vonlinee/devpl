@@ -11,11 +11,15 @@ import java.io.Serializable;
 public class ResultSetColumnMetadata implements Serializable {
 
     /**
+     * 列名
+     *
      * @see java.sql.ResultSetMetaData#getColumnName(int)
      */
     private String columnName;
 
     /**
+     * 列标题，通常是as语句取的别名，如果sql没有as，则结果与columnName相同
+     *
      * @see java.sql.ResultSetMetaData#getColumnLabel(int)
      */
     private String columnLabel;

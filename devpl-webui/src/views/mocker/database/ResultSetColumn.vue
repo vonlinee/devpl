@@ -24,6 +24,7 @@ const { columnName, columnType } = defineProps<ResultSetColumnProps>();
 </script>
 <style lang="scss" scoped>
 .result_set_header {
+  display: flex;
   word-break: break-all;
   // 文字长度超出限定宽度，则隐藏超出的内容
   overflow: hidden;

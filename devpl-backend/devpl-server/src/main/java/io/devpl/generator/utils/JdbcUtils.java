@@ -108,27 +108,12 @@ public class JdbcUtils {
     }
 
     /**
-     * 不关闭 Connection,因为是从事务里获取的,sqlSession会负责关闭
-     *
-     * @param executor Executor
-     * @return DBType
-     */
-    public static DBType DBType(Executor executor) {
-        try {
-            Connection conn = executor.getTransaction().getConnection();
-            return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), JdbcUtils::DBType);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * 根据连接地址判断数据库类型
      *
      * @param jdbcUrl 连接地址
      * @return ignore
      */
-    public static DBType DBType(String jdbcUrl) {
+    public static DBType inferDBType(String jdbcUrl) {
         if (!StringUtils.hasText(jdbcUrl)) {
             throw new RuntimeException("Error: The jdbcUrl is Null, Cannot read database type");
         }
