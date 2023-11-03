@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="rows" :border="true" stripe table-layout="auto" :show-overflow-tooltip="true"
+  <el-table :data="rows" width="100%" :border="true" stripe table-layout="auto" :show-overflow-tooltip="true"
             highlight-current-row>
     <el-table-column type="selection" width="35" fixed="left" :resizable="false" />
     <result-set-column :columnName="item.columnName" :column-type="item.columnType" v-for="(item, index) in headers"

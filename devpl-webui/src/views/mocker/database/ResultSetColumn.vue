@@ -20,7 +20,6 @@ interface ResultSetColumnProps {
 
 const { columnName, columnType } = defineProps<ResultSetColumnProps>();
 
-
 </script>
 <style lang="scss" scoped>
 .result_set_header {
@@ -29,7 +28,7 @@ const { columnName, columnType } = defineProps<ResultSetColumnProps>();
   // 文字长度超出限定宽度，则隐藏超出的内容
   overflow: hidden;
   // 设置文字在一行显示，不能换行
-  // white-space: nowrap;
+  white-space: nowrap;
   // 规定当文本溢出时，显示省略符号来代表被修剪的文本
   // text-overflow: ellipsis;
   display: -webkit-box;

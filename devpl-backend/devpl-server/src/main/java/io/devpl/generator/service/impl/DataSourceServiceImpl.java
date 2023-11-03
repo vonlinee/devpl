@@ -177,6 +177,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
         if (dbType == null || connectionUrl == null) {
             return Collections.emptyList();
         }
+        connInfo.setConnUrl(connectionUrl);
         List<String> list = new ArrayList<>();
         try (Connection connection = getConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
