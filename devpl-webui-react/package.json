@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "allotment": "^1.19.3",
     "magic-string": "^0.30.5",
     "monaco-editor": "^0.39.0",
     "prop-types": "15.5.7",

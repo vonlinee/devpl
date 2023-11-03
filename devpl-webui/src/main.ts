@@ -8,6 +8,9 @@ import VXETable from "vxe-table"
 import SvgIcon from "@/components/svg-icon"
 import "vxe-table/lib/style.css"
 
+import contextmenu from "v-contextmenu";
+import "v-contextmenu/dist/themes/default.css";
+
 import { createPinia, Pinia } from "pinia"
 
 import "./command.ts"
@@ -39,6 +42,9 @@ app.use(router)
 app.use(SvgIcon)
 app.use(ElementPlus)
 app.use(VXETable)
+
+app.use(contextmenu)   
+
 app.mount("#app")
 
 window.addEventListener("keydown", function (e) {

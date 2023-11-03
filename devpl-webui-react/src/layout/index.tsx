@@ -3,9 +3,13 @@ import * as ActionTypes from "../store/layout/actionTypes";
 import "./index.less";
 import { useStateLayout, useStateVisibel } from "@/store/hooks";
 
+/**
+ * 布局容器
+ * @returns
+ */
 const LayoutContainer = () => {
-  const LayoutMode = useStateLayout()
-  const visible = useStateVisibel()
+  const LayoutMode = useStateLayout();
+  const visible = useStateVisibel();
 
   switch (LayoutMode) {
     case ActionTypes.SINGLE_COLUMN:
@@ -15,10 +19,10 @@ const LayoutContainer = () => {
     case ActionTypes.TWO_FLANKS:
       return <TwoFlanks visible={visible} />;
     case ActionTypes.FULL_SCREEN:
-      return <FullScreen />
+      return <FullScreen />;
     default:
       return <TowColumn visible={visible} />;
   }
-}
+};
 
-export default LayoutContainer
+export default LayoutContainer;

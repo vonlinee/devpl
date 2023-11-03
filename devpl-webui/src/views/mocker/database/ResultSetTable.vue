@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="rows" width="100%" :border="true" stripe table-layout="auto" :show-overflow-tooltip="true"
+  <el-table :data="rows" width="100%" :border="true" stripe table-layout="auto" :show-overflow-tooltip="true" :hegiht="600"
             highlight-current-row>
     <el-table-column type="selection" width="35" fixed="left" :resizable="false" />
     <result-set-column :columnName="item.columnName" :column-type="item.columnType" v-for="(item, index) in headers"
@@ -10,12 +10,12 @@
 import { ResultSetColumnMetadata } from "./type";
 import ResultSetColumn from "./ResultSetColumn.vue";
 
-interface Props {
+interface ResultSetTableProps {
   headers: ResultSetColumnMetadata[],
-  rows: []
+  rows: any[]
 }
 
-const props = defineProps<Props>();
+const props = defineProps<ResultSetTableProps>();
 
 </script>
 <style lang="scss" scoped>

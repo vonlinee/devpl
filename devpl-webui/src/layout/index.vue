@@ -23,3 +23,7 @@ import { RouterView } from 'vue-router'
 import Sidebar from '@/layout/components/Sidebar/index.vue'
 import Navbar from '@/layout/components/Navbar/index.vue'
 </script>
+
+<style lang="scss" scoped>
+
+</style>

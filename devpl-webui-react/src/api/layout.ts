@@ -1,6 +1,4 @@
 import { MenuList, MenuResponse } from "@/types/menu";
-import { resolve } from "path";
-
 
 /**
  * 菜单数据
@@ -198,9 +196,8 @@ let menu: MenuList = [
   },
 ];
 
-export const getSideMenus = () : Promise<MenuResponse> => {
-  return new Promise<MenuResponse>((reslove) => {
-      resolve(menu)
-  })
-}
-
+export const getSideMenus = (): Promise<MenuResponse> => {
+  return new Promise<MenuResponse>(function (resolve, reject) {
+    resolve(menu);
+  });
+};

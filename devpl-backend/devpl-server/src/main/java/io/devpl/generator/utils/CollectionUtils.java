@@ -9,7 +9,7 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
-public class CollectionUtils {
+public abstract class CollectionUtils {
 
     /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.

@@ -1,3 +1,8 @@
+export interface DataSourceVO {
+  id: number,
+  name: string
+}
+
 /**
  * Request
  */
@@ -5,23 +10,23 @@ export interface ParamGetDbTableData {
   /**
    * 连接配置
    */
-  connInfo?: DbConnInfo;
+  connInfo?: DbConnInfo
   /**
    * 数据源ID
    */
-  dataSourceId?: number | null;
+  dataSourceId?: number | null
   /**
    * 数据库名称
    */
-  dbName?: null | string;
-  pageIndex?: number | null;
-  pageSize?: number | null;
+  dbName?: null | string
+  pageIndex?: number | null
+  pageSize?: number | null
   /**
    * 表格名称
    */
-  tableName?: null | string;
+  tableName?: null | string
 
-  [property: string]: any;
+  [property: string]: any
 }
 
 /**
@@ -33,65 +38,65 @@ export interface DbConnInfo {
   /**
    * 连接名
    */
-  connName?: null | string;
+  connName?: null | string
   /**
    * URL
    */
-  connUrl?: null | string;
+  connUrl?: null | string
   /**
    * 创建时间
    */
-  createTime?: null | string;
+  createTime?: null | string
   /**
    * 数据库名称
    */
-  dbName?: null | string;
+  dbName?: null | string
   /**
    * 数据库类型
    */
-  dbType?: null | string;
+  dbType?: null | string
   /**
    * 是否逻辑删除
    */
-  deleted?: boolean | null;
+  deleted?: boolean | null
   /**
    * 驱动类名
    */
-  driverClassName?: null | string;
+  driverClassName?: null | string
   /**
    * 驱动属性
    */
-  driverProps?: null | string;
+  driverProps?: null | string
   /**
    * 驱动类型
    */
-  driverType?: string;
+  driverType?: string
   /**
    * IP地址
    */
-  host?: null | string;
+  host?: null | string
   /**
    * id
    */
-  id?: number | null;
+  id?: number | null
   /**
    * 密码
    */
-  password?: null | string;
+  password?: null | string
   /**
    * 连接端口号
    */
-  port?: number | null;
+  port?: number | null
   /**
    * 更新时间
    */
-  updateTime?: null | string;
+  updateTime?: null | string
   /**
    * 用户名
    */
-  username?: null | string;
+  username?: null | string
 
-  [property: string]: any;
+  [property: string]: any
 }
 
 /**
@@ -103,13 +108,15 @@ export interface DBTableDataVO {
   /**
    * 表头
    */
-  headers?: ResultSetColumnMetadata[] | null;
+  headers: ResultSetColumnMetadata[]
   /**
-   * 表行数据列表
+   * 表行数据列表，仅包含数据行
    */
-  rows?: Array<string[]> | null;
-
-  [property: string]: any;
+  rows?: Array<string[]>
+  /**
+   * 表行数据列表格式，包含标题和数据行
+   */
+  rows1?: Array<Record<string, any>[]>
 }
 
 /**
@@ -118,23 +125,27 @@ export interface DBTableDataVO {
  * ResultSetColumnMetadata
  */
 export interface ResultSetColumnMetadata {
-  catalogName?: null | string;
-  columnClassName?: null | string;
-  columnDisplaySize?: number | null;
-  columnLabel?: null | string;
+  catalogName?: null | string
+  columnClassName?: null | string
+  columnDisplaySize?: number | null
+  /**
+   * 用于标题
+   */
+  columnLabel?: null | string
   /**
    * 列名称
    */
-  columnName: string;
+  columnName: string
   /**
    * 列数据类型
    */
-  columnType: number;
-  columnTypeName?: null | string;
-  precision?: number | null;
-  scale?: number | null;
-  schemaName?: null | string;
-  tableName?: null | string;
-
-  [property: string]: any;
+  columnType: number
+  columnTypeName?: null | string
+  precision?: number | null
+  scale?: number | null
+  schemaName?: null | string
+  /**
+   * 表名
+   */
+  tableName?: null | string
 }
