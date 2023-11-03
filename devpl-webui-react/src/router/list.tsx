@@ -1,6 +1,7 @@
 import auto from "./auto";
 import { Navigate } from "react-router-dom";
 import Error from "@/pages/err"
+import Index from "@/pages"
 import loadable from "@loadable/component"
 import { Spin } from "antd";
 import React from "react";
@@ -26,7 +27,12 @@ const defaultArr: RouterInfo[] = [
   {
     [MENU_PATH]: "/",
     [MENU_KEY]: "index",
-    components: <Navigate to="/details/person" replace />,
+    components: <Navigate to="/index" replace />,
+  },
+  {
+    [MENU_PATH]: "/index",
+    [MENU_KEY]: "index",
+    components: <Index />,
   },
   {
     [MENU_PATH]: "/result/404",
