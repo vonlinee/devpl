@@ -1,5 +1,4 @@
 import { Layout, Menu, Dropdown } from "antd";
-import logo from "@/assets/images/logo.svg";
 import MyIcon from "@/components/icon/";
 import {
   setKey,
@@ -52,9 +51,6 @@ const LayoutHeader = ({ children }: LayoutHeaderProps) => {
   );
   return (
     <Header className={styles.header}>
-      <div className="logo">
-        <img src={logo} alt="logo"></img>
-      </div>
       {children}
       <div className="right">
         <Dropdown

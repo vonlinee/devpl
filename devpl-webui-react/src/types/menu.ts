@@ -27,28 +27,31 @@ export interface MenuState {
 // 未处理的菜单列表信息
 export interface MenuItem {
   menu_id: number
-  [MENU_ICON]: string
+  icon: string
   /**
    * 是否 keepAlive
    */
-  [MENU_KEEPALIVE]: string
-  [MENU_KEY]: string | number
+  keepAlive: string
+  key: string | number
   order?: number
-  [MENU_PARENTKEY]: string
+  parentKey: string
   /**
    * 菜单路径不需要加上父菜单的路径
    */
-  [MENU_PATH]: string
-  [MENU_TITLE]: string
-  [MENU_CHILDREN]?: MenuList
-  [MENU_PARENTPATH]?: string
-  [MENU_SHOW]?: boolean | string
+  path: string
+  /**
+   * 标题
+   */
+  title: string
+  children?: MenuList
+  parentPath?: string
+  isShowOnMenu?: boolean | string
   [key: string]: any
 }
 
 export type MenuMap = {
   [key: string]: {
-    [MENU_CHILDREN]: Array<MenuItem>
+    children: MenuItem[]
   } | MenuItem
 } | {
   [key: string]: MenuItem

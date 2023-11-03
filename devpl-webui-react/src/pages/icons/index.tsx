@@ -4,6 +4,9 @@ import MyIcon from "@/components/icon";
 import "./index.less";
 import iconData from "@/assets/json/iconfont.json";
 
+/**
+ * 图标项
+ */
 interface IconItem {
   icon_id: string,
   name: string,

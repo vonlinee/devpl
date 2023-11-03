@@ -6,7 +6,7 @@
  * 开发环境配置
  */
 const dev = {
-  REACT_APP_ROUTERBASE: "/react-ant-admin",
+  REACT_APP_ROUTERBASE: "/devpl",
   REACT_APP_API_BASEURL: "http://localhost:8088/devpl",
   REACT_APP_MODE: "development",
 }
@@ -18,7 +18,7 @@ const REACT_APP_ROUTER_ISHASH = "1"
  * 生产环境
  */
 const pro = {
-  REACT_APP_ROUTERBASE: "/react-ant-admin",
+  REACT_APP_ROUTERBASE: "/devpl",
   REACT_APP_API_BASEURL: "http://localhost:8088/devpl",
   REACT_APP_MODE: "production"
 }

@@ -19,9 +19,9 @@ const customVarLessJson = lessToJs(varLessStr, {
  * https://vitejs.dev/config/
  */
 export default defineConfig({
-  base: "/react-ant-admin/",
+  base: "/devpl/",
   build: {
-    outDir: "react-ant-admin",
+    outDir: "devpl",
     sourcemap: true,
   },
   define: {
@@ -43,7 +43,7 @@ export default defineConfig({
     // 文档参考: https://gitee.com/kong_yiji_and_lavmi/vite-plugin-react-router-generator
     ReactRouterGenerator({
       // 生成路由列表信息的文件路径。
-      outputFile: resolve(".", "./src/router/auto.jsx"),
+      outputFile: resolve(".", "./src/router/auto.tsx"),
       // 导出的组件是否为懒加载
       isLazy: true,
       // 导出路由文件的 key
