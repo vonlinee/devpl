@@ -19,4 +19,4 @@ export default function DatabaseNavigation() {
         </Allotment>
     </>)
 }
-DatabaseNavigation.route = { [MENU_PATH]: "/mocker/database" }
+DatabaseNavigation.route = { path : "/mocker/database" }

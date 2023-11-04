@@ -4,12 +4,12 @@ import routerList, { RouterInfo } from "./list";
 import Intercept from "./intercept";
 import { getMenus } from "@/common";
 import { formatMenu, reduceMenuList } from "@/utils";
-import { MenuList } from "@/types";
+import { MenuItem, MenuList } from "@/types";
 import { useDispatchMenu } from "@/store/hooks";
 
 /**
  * 路由组件
- * @returns 
+ * @returns
  */
 const Router = () => {
   const { stateSetMenuList } = useDispatchMenu();
@@ -19,22 +19,25 @@ const Router = () => {
   useEffect(() => {
     if (stateSetMenuList && typeof stateSetMenuList === "function") {
       // 加载所有菜单路由
-      getMenus().then((list) => {
+      getMenus().then((list: MenuList) => {
         // 所有顶级父菜单
-        const formatList = formatMenu(list);
+        const formatList: MenuList = formatMenu(list);
         // 所有菜单
-        const userMenus = reduceMenuList(formatList);
+        const userMenus: MenuList = reduceMenuList(formatList);
+
+        const isMenuMathcesRouter = (m: MenuItem, r: RouterInfo): boolean => {
+          return (m.parentPath || "") + m.path === r.path;
+        };
 
         // 把请求的数据 和 本地pages页面暴露出的路由列表合并
-        let routers = routerList.map((router) => {
-          let find = userMenus.find(
-            (i) =>
-              (i[MENU_PARENTPATH] || "") + i[MENU_PATH] === router[MENU_PATH]
+        const routers: RouterInfo[] = routerList.map((router: RouterInfo) => {
+          let find = userMenus.find((i: MenuItem) =>
+            isMenuMathcesRouter(i, router)
           );
           if (find) {
             router = { ...find, ...router }; // 本地 优先 接口结果
           } else {
-            router[MENU_KEY] = router[MENU_PATH];
+            router.key = router.path;
           }
           return router;
         });
@@ -49,16 +52,19 @@ const Router = () => {
   }, [stateSetMenuList]);
 
   const routerBody = useMemo(() => {
-    // 监听 本地路由列表   同时存在长度大于1时 渲染路由组件
+    // 监听 本地路由列表 同时存在长度大于1时 渲染路由组件
     if (mergeRouterList.length) {
       return mergeRouterList.map((item) => {
-        let { [MENU_KEY]: key, [MENU_PATH]: path } = item;
         return (
           <Route
-            key={key}
-            path={path}
+            key={item.key}
+            path={item.path}
             element={
-              <Intercept {...item} menuList={ajaxUserMenuList} pageKey={key} />
+              <Intercept
+                {...item}
+                menuList={ajaxUserMenuList}
+                pageKey={item.key}
+              />
             }
           />
         );

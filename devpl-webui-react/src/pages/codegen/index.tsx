@@ -10,5 +10,5 @@ export default function CodeGenerator() {
     TODO
   </>)
 }
-CodeGenerator.route = { [MENU_PATH]: "/codegen" }
+CodeGenerator.route = { path: "/codegen" }
 

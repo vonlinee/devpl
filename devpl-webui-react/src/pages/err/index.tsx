@@ -11,6 +11,11 @@ interface ErrProps {
   [name: string]: any
 }
 
+/**
+ * 错误页
+ * @param props 
+ * @returns 
+ */
 function ErrorPage(props: ErrProps) {
   const {
     status = "404",

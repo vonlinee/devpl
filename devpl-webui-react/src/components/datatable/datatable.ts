@@ -1,7 +1,7 @@
 import { Button, Modal } from "antd";
 import React, { useRef } from "react";
-import { DataTableOptions } from ".";
-
+import { DataTableOptions, DataTableRef } from ".";
+import { AnyObject } from "antd/es/_util/type";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -13,16 +13,16 @@ import {
  * @param options
  * @returns
  */
-export const useDataTable = (options: DataTableOptions): DataTableOptions => {
+export const useDataTable = <R, F = AnyObject>(options: DataTableOptions<R, F>): DataTableOptions<R, F> => {
   if (options.tableRef == undefined) {
-    options.tableRef = useRef(null);
+    options.tableRef = useRef<DataTableRef<R, F>>(null);
   }
 
   const showConfirm = () => {
     Modal.confirm({
-      title: "Do you Want to delete these items?",
+      title: "是否删除?",
       icon: React.createElement(ExclamationCircleFilled),
-      content: "Some descriptions",
+      content: "描述信息",
       onOk() {
         if (options.api?.deleteById) {
           options.api.deleteById(1).then((res) => {
@@ -31,7 +31,7 @@ export const useDataTable = (options: DataTableOptions): DataTableOptions => {
         }
       },
       onCancel() {
-        console.log("Cancel");
+        console.log("点击取消按钮");
       },
     });
   };

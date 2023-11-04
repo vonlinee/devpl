@@ -24,7 +24,7 @@ const initFormItems: FormItemData[] = [
     },
   },
 ];
-export type Info = { name: string, type: string, menu_id: string } | null
+export type Info = { name: string, type: string, id: string } | null
 interface ModalProps {
   info: Info
   isShow: boolean
@@ -76,7 +76,7 @@ export default function TypeModal({ info, isShow, onCancel, onOk, menuList }: Mo
   useEffect(() => {
     if (info && form && reducerList) {
       const parentId: CheckList = [], childId: CheckList = []
-      const checkId = info.menu_id.split(",").map(Number)
+      const checkId = info.id.split(",").map(Number)
       checkId.forEach(id => {
         filterParentId(parentId, reducerList, id)
         if (!parentId.includes(id) && !childId.includes(id)) {
@@ -101,7 +101,7 @@ export default function TypeModal({ info, isShow, onCancel, onOk, menuList }: Mo
         pushParentId(checkMenuId, reducerList, id)
       })
       console.log(checkMenuId);
-      fn({ ...values, menu_id: checkMenuId }).then((res) => {
+      fn({ ...values, id: checkMenuId }).then((res) => {
         if (res.status === 0) {
           message.success(res.msg);
           close();

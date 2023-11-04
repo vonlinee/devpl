@@ -76,6 +76,11 @@ function getMenuParentKey(list: MenuList, key: string): string[] {
   return keys;
 }
 
+/**
+ * 
+ * @param list 
+ * @returns 
+ */
 export function formatMenu(list: MenuList) {
   const newList = list.map((item) => ({ ...item }));
   const menuMap: MenuMap = {};

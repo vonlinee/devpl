@@ -34,7 +34,7 @@ export interface LoginApi extends ResponseData {
 export type PowerList = {
   type_id: number
   name: string
-  menu_id: string
+  id: string
 }[]
 
 export interface PowerApi extends ResponseData {

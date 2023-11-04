@@ -183,7 +183,7 @@ export const route = {
 ```typescript
 let menu = [
   {
-    menu_id: 9,
+    id: 9,
     [MENU_TITLE]: "列表页",
     [MENU_PATH]: "/list",
     [MENU_KEY]: "list",
@@ -193,7 +193,7 @@ let menu = [
     order: 1,
   },
   {
-    menu_id: 10,
+    id: 10,
     [MENU_TITLE]: "卡片列表",
     [MENU_PATH]: "/card",
     [MENU_KEY]: "listCard",
@@ -204,7 +204,7 @@ let menu = [
   },
   // .... 开始添加菜单信息 ....
   {
-    menu_id: 11, // 菜单id 用于关联权限
+    id: 11, // 菜单id 用于关联权限
     [MENU_TITLE]: "test", // 标题
     [MENU_PATH]: "/test", // 访问路径
     [MENU_KEY]: "test", // 唯一key
@@ -234,3 +234,9 @@ vite使用monaco-editor
 https://github.com/vitejs/vite/discussions/1791
 
 https://malagege.github.io/blog/posts/monaco-editor-%E4%BD%BF%E7%94%A8%E5%B0%8F%E8%A8%98-%E6%90%AD%E9%85%8D-Vite/
+
+
+
+
+
+https://gitee.com/kong_yiji_and_lavmi/vite-plugin-react-router-generator

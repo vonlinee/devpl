@@ -3,26 +3,31 @@ import MyIcon from "@/components/icon";
 import MyForm, { FormItemData } from "@/components/form";
 import { Modal, Select, message, FormInstance } from "antd";
 import { addMenu, getMenuInfo, editMenu } from "@/api";
-import { MenuList, MenuItem } from "@/types"
-import { ModalType, SelectInfo } from "@/pages/power/menu"
+import { MenuList, MenuItem } from "@/types";
 import ICON_JSON from "@/assets/json/iconfont.json";
+
+export type ModalType = "add" | "addChild" | "edit"
+export type SelectInfo = {
+  key?: string
+  isParent?: Boolean
+}
 
 import "./index.less";
 interface IconItem {
-  icon_id: string,
-  name: string,
-  font_class: string,
-  unicode: string,
-  unicode_decimal: number
+  icon_id: string;
+  name: string;
+  font_class: string;
+  unicode: string;
+  unicode_decimal: number;
 }
 
 interface MenuModalProps {
-  info: SelectInfo
-  modalType: ModalType
-  isShow: boolean
-  setShow: (s: boolean) => void
-  updateMenu: () => void
-  menus: MenuList
+  info: SelectInfo;
+  modalType: ModalType;
+  isShow: boolean;
+  setShow: (s: boolean) => void;
+  updateMenu: () => void;
+  menus: MenuList;
 }
 
 interface ActiveFn {
@@ -160,7 +165,7 @@ export default function MenuModal({
       let items = [...initFormItems.map((i) => ({ ...i }))];
       items.forEach((i) => {
         if (i.itemProps.name === "parentKey") {
-          i.childProps = { ...i.childProps }
+          i.childProps = { ...i.childProps };
           i.childProps.disabled =
             modalType === "addChild" || (modalType === "edit" && info.isParent);
           i.childProps.children = menus.map((menu) => (
@@ -196,10 +201,11 @@ export default function MenuModal({
   }, [modalType, isShow, info, form]);
   // 提交表单
   const submit = () => {
-    form && form.validateFields().then((values) => {
-      let fn = activeFn[modalType];
-      fn(values);
-    });
+    form &&
+      form.validateFields().then((values) => {
+        let fn = activeFn[modalType];
+        fn(values);
+      });
   };
 
   const onCancel = () => {

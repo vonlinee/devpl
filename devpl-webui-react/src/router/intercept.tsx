@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getMenuParentKey } from "@/utils";
 import Error from "@/pages/err";
 import { useLocation } from "react-router-dom";
-import { MenuItem } from "@/types";
+import { LayoutMode, MenuItem } from "@/types";
 import { useDispatchLayout, useDispatchMenu } from "@/store/hooks";
 
 const scrollPage = () => {
@@ -11,31 +11,53 @@ const scrollPage = () => {
     left: 0,
     behavior: "smooth",
   });
+};
+
+interface RouteInterceptorProps {
+  path?: string;
+  title?: string;
+  pageKey: string;
+  menuList: MenuItem[];
+  layout?: LayoutMode;
+  [key: string]: any;
 }
 
-interface Props {
-  [MENU_PATH]?: string
-  [MENU_TITLE]?: string
-  pageKey: string
-  menuList: Array<MenuItem>
-  [key: string]: any
-}
-
-function Intercept({ menuList, components, [MENU_TITLE]: title, [MENU_PATH]: pagePath, pageKey, [MENU_LAYOUT]: layout }: Props) {
-  const [pageInit, setPageInit] = useState(false)
-  const location = useLocation()
-  const { stateSetOpenMenuKey, stateSetSelectMenuKey, stateAddOpenedMenu, stateSetCurrentPath } = useDispatchMenu()
-  const { stateChangeLayout } = useDispatchLayout()
+/**
+ * 路由拦截器
+ * @param param0
+ * @returns
+ */
+function Intercept({
+  menuList,
+  components,
+  title,
+  path: pagePath,
+  pageKey,
+  layout,
+}: RouteInterceptorProps) {
+  const [pageInit, setPageInit] = useState(false);
+  const location = useLocation();
+  const {
+    stateSetOpenMenuKey,
+    stateSetSelectMenuKey,
+    stateAddOpenedMenu,
+    stateSetCurrentPath,
+  } = useDispatchMenu();
+  const { stateChangeLayout } = useDispatchLayout();
   const currentPath = useMemo(() => {
-    const { pathname, search } = location
-    return pathname + search
-  }, [location])
+    const { pathname, search } = location;
+    return pathname + search;
+  }, [location]);
 
   // 监听 location 改变
   const onPathChange = useCallback(() => {
-    stateSetCurrentPath(currentPath)
-    stateAddOpenedMenu({ key: pageKey, path: currentPath, title: title || "未设置标题信息" });
-  }, [currentPath, pageKey, title, stateSetCurrentPath, stateAddOpenedMenu])
+    stateSetCurrentPath(currentPath);
+    stateAddOpenedMenu({
+      key: pageKey,
+      path: currentPath,
+      title: title || "未设置标题信息",
+    });
+  }, [currentPath, pageKey, title, stateSetCurrentPath, stateAddOpenedMenu]);
 
   const setCurrentPageInfo = useCallback(() => {
     if (!title) {
@@ -46,38 +68,52 @@ function Intercept({ menuList, components, [MENU_TITLE]: title, [MENU_PATH]: pag
     let openkey = getMenuParentKey(menuList, pageKey);
     stateSetOpenMenuKey(openkey);
     stateAddOpenedMenu({ key: pageKey, path: currentPath, title });
-  }, [currentPath, menuList, title, pageKey, stateSetOpenMenuKey, stateSetSelectMenuKey, stateAddOpenedMenu])
+  }, [
+    currentPath,
+    menuList,
+    title,
+    pageKey,
+    stateSetOpenMenuKey,
+    stateSetSelectMenuKey,
+    stateAddOpenedMenu,
+  ]);
 
   const init = useCallback(() => {
-    setCurrentPageInfo()
-    scrollPage()
-  }, [setCurrentPageInfo])
+    setCurrentPageInfo();
+    scrollPage();
+  }, [setCurrentPageInfo]);
 
   useEffect(() => {
     if (init && !pageInit) {
-      init()
-      setPageInit(true)
+      init();
+      setPageInit(true);
     }
-  }, [init, pageInit])
+  }, [init, pageInit]);
 
   useEffect(() => {
     if (pageInit) {
-      onPathChange()
+      onPathChange();
     }
-  }, [onPathChange, pageInit])
+  }, [onPathChange, pageInit]);
 
-  // 切换布局
-  useEffect(() => {
-    console.log("切换布局 ", layout);
-    layout && stateChangeLayout('push', layout)
-  }, [layout])
-
+  if (layout) {
+    // 切换布局
+    useEffect(() => {
+      console.log("切换布局 ", layout);
+      layout && stateChangeLayout("push", layout);
+    }, [layout]);
+  }
 
   const hasPath = !menuList.find(
-    (m) => (m[MENU_PARENTPATH] || "") + m[MENU_PATH] === pagePath
+    (m: MenuItem) => (m.parentPath || "") + m.path === pagePath
   );
 
-  if (hasPath && pagePath !== "/" && pagePath !== "*" && pagePath !== "/power/test") {
+  if (
+    hasPath &&
+    pagePath !== "/" &&
+    pagePath !== "*" &&
+    pagePath !== "/index"
+  ) {
     return (
       <Error
         status="403"
@@ -86,7 +122,6 @@ function Intercept({ menuList, components, [MENU_TITLE]: title, [MENU_PATH]: pag
       />
     );
   }
-
-  return (components);
+  return components;
 }
-export default Intercept
+export default Intercept;

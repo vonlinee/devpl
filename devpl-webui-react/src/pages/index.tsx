@@ -5,9 +5,12 @@
  * @returns 
  */
 const Index = () => {
-  return <></>
+  return <>首页</>
 }
 
 export default Index
 
-Index.route = { path: "/index" };
+Index.route = { 
+  title: "首页",
+  path: "/index" 
+};

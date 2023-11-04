@@ -18,14 +18,6 @@ function Theme() {
   return null;
 }
 
-function MyApp() {
-  return (
-    <Provider store={store}>
-      <Cfg />
-    </Provider>
-  );
-}
-
 function Cfg() {
   const token = useStateThemeToken();
   const themm = useMemo(() => ({ token }), [token]);
@@ -39,4 +31,13 @@ function Cfg() {
     </ConfigProvider>
   );
 }
+
+function MyApp() {
+  return (
+    <Provider store={store}>
+      <Cfg />
+    </Provider>
+  );
+}
+
 export default MyApp;

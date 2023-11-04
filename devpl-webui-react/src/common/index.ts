@@ -13,16 +13,16 @@ export function getMenus() {
   }
   const job: Promise<MenuResponse> = new Promise((reslove) => {
     let localMenu = getLocalMenu();
-
     if (localMenu) {
       console.log("获取localMenu");
       return reslove(localMenu);
     }
-    getMenu().then((result: MenuList | PromiseLike<MenuList>) => {
+    getMenu()
+      .then((result : MenuList) => {
         // saveLocalMenu(result);
         reslove(result);
       })
-      .catch((err : any) => {
+      .catch((err: any) => {
         reslove([]);
       });
   });
