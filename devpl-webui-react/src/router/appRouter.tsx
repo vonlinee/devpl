@@ -28,7 +28,8 @@ function AppRouter() {
     return (
       <Spin size="large" wrapperClassName="loading-page" tip="Loading..." />
     );
-  if (!userInfo) return <Login />;
+
+  // if (!userInfo) return <Login />;
 
   if (isHash) {
     return <HashRouter>

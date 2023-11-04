@@ -9,6 +9,10 @@ import {
 } from "@ant-design/icons";
 
 /**
+
+export function createElement(ExclamationCircleFilled: React.ForwardRefExoticComponent<any>) {
+  throw new Error("Function not implemented.");
+}
  * 表格重复的配置项
  * @param options
  * @returns
@@ -57,6 +61,7 @@ export const useDataTable = <R, F = AnyObject>(options: DataTableOptions<R, F>):
             icon: React.createElement(EditOutlined),
             onClick: () => {
               // 将选中行的数据填充到表单上
+              // antd form
               if (options.formData) {
                 Object.assign(options.formData, record)
               }

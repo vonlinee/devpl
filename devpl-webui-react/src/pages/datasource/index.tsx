@@ -3,6 +3,7 @@ import { apiListDataSourcePage } from "@/api/datasource";
 import { useDataTable } from "@/components/datatable/datatable";
 import DataTable, { DataTableRef } from "@/components/datatable";
 import DataSourceForm from "./DataSourceForm";
+import { Form } from "antd";
 
 interface DataSourceTableItemVO {
   id: number | string;
@@ -19,8 +20,9 @@ interface DataSourceTableItemVO {
  */
 const DataSourceManager = () => {
   const tableRef = useRef<DataTableRef>(null);
+  const [form] = Form.useForm()
 
-  const options = useDataTable({
+  const options = useDataTable<DataSourceTableItemVO>({
     columns: [
       {
         title: "连接名称",
@@ -53,10 +55,11 @@ const DataSourceManager = () => {
         width: 150,
       },
     ],
+    formData: form,
     pageable: false,
     tableRef: tableRef,
     modalRender: (param) => {
-      return <><DataSourceForm></DataSourceForm></>;
+      return <><DataSourceForm form={form}></DataSourceForm></>;
     },
     api: {
       queryPage: apiListDataSourcePage,

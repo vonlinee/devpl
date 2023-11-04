@@ -52,6 +52,16 @@ export interface ApiConfig {
 }
 
 /**
+ * 表单配置
+ */
+export interface FormConfig {
+  /**
+   * 表单数据绑定对象
+   */
+  mode: AnyObject
+}
+
+/**
  * 配置选项
  * @param R 行数据类型
  * @param F 表单数据类型
@@ -64,6 +74,8 @@ export declare interface DataTableOptions<
   columns: ColumnsType<R>;
   // 是否可分页
   pageable: boolean;
+  // 表单配置
+  formConfig?: FormConfig
   // 表单数据
   formData?: F;
   // 数据
@@ -79,7 +91,10 @@ export declare interface DataTableOptions<
 /**
  * DataTable 属性
  */
-export declare interface DataTableProps<R = RowDataModel, F = DataTableFormObject> {
+export declare interface DataTableProps<
+  R = RowDataModel,
+  F = DataTableFormObject
+> {
   // 配置项
   options: DataTableOptions<R, F>;
 }
@@ -147,12 +162,19 @@ const DataTable = React.forwardRef<
   }));
 
   const handleOk = (e: React.MouseEvent<HTMLElement>) => {
-    if (options.api?.updateById) {
-      options.api?.updateById(1).then((res) => {
-        console.log("更新结果", res);
-      });
-    }
-    setOpen(false);
+    console.log("表单数据", options.formData?.getFieldsValue());
+
+    options.formData?.setFieldsValue({
+      connName: "111111112",
+      driverType: "Oracle",
+      host: "12012012"
+    })
+    // if (options.api?.updateById) {
+    //   options.api?.updateById(1).then((res) => {
+    //     console.log("更新结果", res);
+    //   });
+    // }
+    // setOpen(false);
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLElement>) => {
@@ -175,6 +197,7 @@ const DataTable = React.forwardRef<
     },
   };
 
+  // 弹窗表单组件
   const ModalContent: JSX.Element = props.options.modalRender({});
 
   return (
@@ -191,6 +214,8 @@ const DataTable = React.forwardRef<
         destroyOnClose={true}
         centered={true}
         open={open}
+        okText="确定"
+        cancelText="取消"
         onOk={handleOk}
         onCancel={handleCancel}
       >
