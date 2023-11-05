@@ -44,7 +44,12 @@ export const apiListDataSourcePage = () => {
   return http.get("/api/gen/datasource/list")
 }
 
-export const useDataSourceSubmitApi = (dataForm: any) => {
+/**
+ * 保存或更新数据源信息
+ * @param dataForm 
+ * @returns 
+ */
+export const apiSaveOrUpdateDataSource = (dataForm: any) => {
   return http.post("/api/gen/datasource", dataForm)
 }
 

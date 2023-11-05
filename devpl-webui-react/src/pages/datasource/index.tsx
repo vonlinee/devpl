@@ -1,10 +1,14 @@
-import React, { useRef, useState } from "react";
-import { apiListDataSourcePage } from "@/api/datasource";
-import { useDataTable } from "@/components/datatable/datatable";
-import DataTable, { DataTableRef } from "@/components/datatable";
+import React from "react";
+import { apiListDataSourcePage, apiSaveOrUpdateDataSource } from "@/api/datasource";
+import DataTable, {
+  DataTableOptions,
+} from "@/components/datatable";
 import DataSourceForm from "./DataSourceForm";
 import { Form } from "antd";
 
+/**
+ * 数据源
+ */
 interface DataSourceTableItemVO {
   id: number | string;
   key: React.Key;
@@ -19,10 +23,12 @@ interface DataSourceTableItemVO {
  * @returns
  */
 const DataSourceManager = () => {
-  const tableRef = useRef<DataTableRef>(null);
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
-  const options = useDataTable<DataSourceTableItemVO>({
+  const options: DataTableOptions<
+    DataSourceTableItemVO,
+    DataSourceTableItemVO
+  > = {
     columns: [
       {
         title: "连接名称",
@@ -50,27 +56,25 @@ const DataSourceManager = () => {
       },
       {
         title: "用户名",
-        dataIndex: "address",
+        dataIndex: "username",
         key: "3",
         width: 150,
       },
     ],
-    formData: form,
+    formConfig: {
+      instance: Form.useForm()[0],
+    },
     pageable: false,
-    tableRef: tableRef,
-    modalRender: (param) => {
-      return <><DataSourceForm form={form}></DataSourceForm></>;
+    modalRender: (formInstance) => {
+      return <DataSourceForm form={formInstance}></DataSourceForm>;
     },
     api: {
       queryPage: apiListDataSourcePage,
+      update: apiSaveOrUpdateDataSource
     },
-  });
+  };
 
-  return (
-    <>
-      <DataTable ref={tableRef} options={options}></DataTable>
-    </>
-  );
+  return <DataTable options={options}></DataTable>;
 };
 
 export default DataSourceManager;

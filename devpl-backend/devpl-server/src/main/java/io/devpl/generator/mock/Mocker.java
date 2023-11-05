@@ -1,6 +1,7 @@
 package io.devpl.generator.mock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,10 +10,6 @@ public class Mocker {
     public static void main(String[] args) {
 
         int[] ints = Mocker.split(7, 232);
-
-        String string = ToString.toString(ints, ToString.Option.builder().start("").build());
-
-        System.out.println(string);
 
     }
 

@@ -1,14 +1,12 @@
 <template>
-  <div style="height: 600px; display: flex; flex-direction: column; background-color: darkolivegreen;">
-    <el-affix :offset="120">
-      <el-card style="height: 100px;">
+  <div>
+    <el-card >
 
-        <el-select v-model="currentDataSourceId" clearable @change="fireDatabaseChanged">
-          <el-option v-for="ds in dataSources" :key="ds.id" :value="ds.id" :label="ds.name"></el-option>
-        </el-select>
+      <el-select v-model="currentDataSourceId" clearable @change="fireDatabaseChanged">
+        <el-option v-for="ds in dataSources" :key="ds.id" :value="ds.id" :label="ds.name"></el-option>
+      </el-select>
 
-      </el-card>
-    </el-affix>
+    </el-card>
     <splitpanes vertical style="flex:1">
       <pane :max-size="30">
         <database-navigation-view ref="dbNavViewCRef" :data-source-id="currentDataSourceId"

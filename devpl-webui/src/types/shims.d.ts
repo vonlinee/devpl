@@ -13,4 +13,4 @@ declare module '*.vue' {
 }
 
 
-declare module 'v-contextmenu';
+declare module 'vue-simple-context-menu';

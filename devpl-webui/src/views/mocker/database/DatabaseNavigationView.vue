@@ -7,6 +7,9 @@
       </span>
     </template>
   </el-tree>
+
+  <vue-simple-context-menu element-id="myUniqueId" :options="options" ref="vueSimpleContextMenu"
+    @option-clicked="optionClicked" />
 </template>
 
 <script lang="ts" setup>
@@ -14,6 +17,25 @@ import { computed, ref } from "vue";
 import { apiGetDatabaseNamesById, apiGetTableData, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import { DBTableDataVO, ParamGetDbTableData } from "./type";
+
+const vueSimpleContextMenu = ref()
+
+const handleClick = (event: Event, item: any) => {
+  console.log(event, item);
+  console.log(vueSimpleContextMenu.value)
+  // vueSimpleContextMenu.value.showMenu(event, item)
+}
+
+const optionClicked = (event: Event) => {
+  window.alert(JSON.stringify(event))
+}
+
+const options = [
+  {
+    name: "A",
+  }
+]
+
 
 const defaultProps = {
   label: 'label',
