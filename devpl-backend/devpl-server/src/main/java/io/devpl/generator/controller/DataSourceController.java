@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DBTableDataParam;
-import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.DbConnInfoListParam;
 import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.DriverTypeVO;
@@ -42,7 +42,7 @@ public class DataSourceController {
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public ListResult<DbConnInfo> page(Query query) {
+    public ListResult<DbConnInfo> page(DbConnInfoListParam query) {
         return datasourceService.listPage(query);
     }
 
@@ -125,7 +125,7 @@ public class DataSourceController {
     }
 
     /**
-     * 获取连接的所有数据库名称列表
+     * 获取连接的所有数据库表名称列表
      *
      * @param id     数据源ID
      * @param dbName 数据库名称

@@ -1,8 +1,6 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,7 +10,7 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DataSourceMapper;
 import io.devpl.generator.domain.param.DBTableDataParam;
-import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.DbConnInfoListParam;
 import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.TestConnVO;
@@ -60,12 +58,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
     }
 
     @Override
-    public ListResult<DbConnInfo> listPage(Query query) {
-        Page<DbConnInfo> page = new Page<>(query.getPage(), query.getLimit());
-        page.addOrder(OrderItem.desc("id"));
-        QueryWrapper<DbConnInfo> wrapper = new QueryWrapper<>();
-        wrapper.like(StringUtils.hasText(query.getConnName()), "conn_name", query.getConnName());
-        wrapper.eq(StringUtils.hasText(query.getDbType()), "db_type", query.getDbType());
+    public ListResult<DbConnInfo> listPage(DbConnInfoListParam param) {
+        Page<DbConnInfo> page = new Page<>(param.getPage(), param.getLimit());
+        LambdaQueryWrapper<DbConnInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StringUtils.hasText(param.getConnName()), DbConnInfo::getConnName, param.getConnName());
+        wrapper.eq(StringUtils.hasText(param.getDriverType()), DbConnInfo::getDriverType, param.getDriverType());
         page = baseMapper.selectPage(page, wrapper);
         return ListResult.ok(page);
     }
@@ -93,7 +90,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public boolean addOne(DbConnInfo entity) {
-        return super.save(fixMissingConnectionInfo(entity));
+        return super.save(fixMissingConnectionInfo(entity, true));
     }
 
     /**
@@ -226,7 +223,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public DbConnInfo updateOne(DbConnInfo entity) {
-        updateById(fixMissingConnectionInfo(entity));
+        updateById(fixMissingConnectionInfo(entity, false));
         return entity;
     }
 
@@ -295,7 +292,22 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
      * @param connInfo 连接信息
      * @return 连接信息
      */
-    private DbConnInfo fixMissingConnectionInfo(DbConnInfo connInfo) {
+    private DbConnInfo fixMissingConnectionInfo(DbConnInfo connInfo, boolean saveOrUpdate) {
+        if (saveOrUpdate) {
+            if (!StringUtils.hasText(connInfo.getHost())) {
+                connInfo.setHost("localhost");
+            }
+            if (connInfo.getPort() == null) {
+                connInfo.setPort(3306);
+            }
+            if (!StringUtils.hasText(connInfo.getDriverType())) {
+                connInfo.setDriverType(JDBCDriver.MYSQL8.name());
+                connInfo.setDbType(DBType.MYSQL.name());
+            }
+            if (!StringUtils.hasText(connInfo.getConnName())) {
+                connInfo.setConnName(String.join("-", connInfo.getHost(), String.valueOf(connInfo.getPort()), connInfo.getDriverType()));
+            }
+        }
         if (!StringUtils.hasText(connInfo.getDriverClassName())) {
             DBType dbType = DBType.getValue(connInfo.getDbType(), null);
             if (dbType != null) {

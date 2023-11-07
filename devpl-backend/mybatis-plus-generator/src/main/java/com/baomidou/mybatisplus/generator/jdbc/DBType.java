@@ -20,7 +20,7 @@ public enum DBType {
     /**
      * oracle12c new pagination
      */
-    ORACLE_12C("Oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE),
+    ORACLE_12C("Oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE_12C),
     /**
      * DB2
      */

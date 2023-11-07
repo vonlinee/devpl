@@ -97,7 +97,7 @@ public class DataTypeItem {
     private Boolean deleted;
 
     /**
-     * 类型分组名臣
+     * 类型分组名称
      */
     @TableField(exist = false)
     private String typeGroupName;

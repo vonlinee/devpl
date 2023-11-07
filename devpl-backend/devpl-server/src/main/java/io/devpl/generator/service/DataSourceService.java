@@ -5,7 +5,7 @@ import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.domain.param.DBTableDataParam;
-import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.DbConnInfoListParam;
 import io.devpl.generator.domain.vo.DBTableDataVO;
 import io.devpl.generator.domain.vo.DataSourceVO;
 import io.devpl.generator.domain.vo.TestConnVO;
@@ -22,7 +22,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
 
     DbConnInfo getOne(long id);
 
-    ListResult<DbConnInfo> listPage(Query query);
+    ListResult<DbConnInfo> listPage(DbConnInfoListParam param);
 
     List<DbConnInfo> listAll();
 

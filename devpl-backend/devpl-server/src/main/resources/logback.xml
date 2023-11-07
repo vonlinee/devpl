@@ -6,7 +6,7 @@
     <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
 
     <!-- 指定日志输出路径 -->
-    <property name="logging.path" value="logs"/>
+    <property name="logging.path" value="D:/Temp/Devpl/logs"/>
 
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>

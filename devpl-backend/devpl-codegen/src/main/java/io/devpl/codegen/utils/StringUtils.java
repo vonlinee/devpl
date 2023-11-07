@@ -312,7 +312,7 @@ public final class StringUtils {
         if (str == null || str.length() == 0) {
             return "";
         }
-        return Character.toUpperCase(str.toCharArray()[0]) + str.substring(1, str.length());
+        return Character.toUpperCase(str.toCharArray()[0]) + str.substring(1);
     }
 
     public static String wrapQuotation(String str, boolean doubleQutaion) {
@@ -354,7 +354,6 @@ public final class StringUtils {
     }
 
     public static boolean in(String target, String... group) {
-        if (group.length == 0) return false;
         for (String s : group) {
             if (target.equals(s)) return true;
         }

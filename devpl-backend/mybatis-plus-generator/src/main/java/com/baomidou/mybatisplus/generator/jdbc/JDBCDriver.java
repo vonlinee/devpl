@@ -21,6 +21,12 @@ public enum JDBCDriver {
             return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
         }
     },
+    ORACLE_12C("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 12 thin") {
+        @Override
+        protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+            return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
+        }
+    },
     POSTGRE_SQL("org.postgresql.Driver", "postgresql"),
     SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", "sqlserver"),
     SQLITE("org.sqlite.JDBC", "sqlite");
