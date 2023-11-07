@@ -1,6 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.dao.DataTypeGroupMapper;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class DataTypeServiceImpl implements DataTypeService {
+public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTypeItem> implements DataTypeService {
 
     CrudService crudService;
     DataTypeGroupMapper dataTypeGroupMapper;
@@ -37,7 +38,7 @@ public class DataTypeServiceImpl implements DataTypeService {
 
     @Override
     public boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems) {
-        return crudService.saveBatch(dataTypeItems);
+        return crudService.saveOrUpdateBatch(dataTypeItems);
     }
 
     @Override

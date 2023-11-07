@@ -1,6 +1,7 @@
 package io.devpl.generator.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
@@ -13,7 +14,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.Collection;
 import java.util.List;
 
-public interface DataTypeService {
+public interface DataTypeService extends IService<DataTypeItem> {
 
     boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems);
 

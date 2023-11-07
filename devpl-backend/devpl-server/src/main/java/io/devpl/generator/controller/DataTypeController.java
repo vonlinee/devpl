@@ -30,6 +30,16 @@ public class DataTypeController {
      *
      * @return 数据类型信息
      */
+    @PostMapping("/edit")
+    public Result<Boolean> editDataType(@RequestBody DataTypeItem param) {
+        return Result.ok(dataTypeService.saveOrUpdate(param));
+    }
+
+    /**
+     * 保存数据类型信息
+     *
+     * @return 数据类型信息
+     */
     @PostMapping("/saveOrUpdateBatch")
     public Result<Boolean> addDataTypes(@RequestBody DataTypeAddParam param) {
         return Result.ok(dataTypeService.saveDataTypes(param.getDataTypeItems()));

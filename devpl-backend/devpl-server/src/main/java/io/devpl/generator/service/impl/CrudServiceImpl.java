@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.core.toolkit.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.generator.service.CrudService;
 import jakarta.annotation.Resource;
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
@@ -17,6 +17,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -78,6 +79,10 @@ public class CrudServiceImpl implements CrudService {
     public <T> boolean saveOrUpdate(T entity) {
         Class<?> entityType = entity.getClass();
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
+        return saveOrUpdate(entity, entityType, tableInfo);
+    }
+
+    private boolean saveOrUpdate(Object entity, Class<?> entityType, TableInfo tableInfo) {
         String keyProperty = tableInfo.getKeyProperty();
         Object fieldValue = ReflectionKit.getFieldValue(entity, keyProperty);
         try (SqlSession sqlSession = SqlHelper.sqlSession(entityType)) {
@@ -128,6 +133,51 @@ public class CrudServiceImpl implements CrudService {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
         String statement = tableInfo.getCurrentNamespace() + "." + SqlMethod.INSERT_ONE.getMethod();
         return SqlHelper.executeBatch(entityType, log, entities, batchSize, (sqlSession, entity) -> sqlSession.insert(statement, entity));
+    }
+
+    @Override
+    public <T> boolean saveOrUpdateBatch(Collection<T> entities) {
+        Iterator<T> iterator = entities.iterator();
+        T entity = iterator.next();
+        Class<?> entityType = entity.getClass();
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityType);
+        if (!iterator.hasNext()) {
+            // 单条记录不开启批量操作
+            return saveOrUpdate(entity, entityType, tableInfo);
+        }
+        Class<?> mapperClass = getMapperClass(tableInfo.getCurrentNamespace());
+        if (mapperClass == null) {
+            return false;
+        }
+        return SqlHelper.saveOrUpdateBatch(entityType, mapperClass, log, entities, batchSize, (sqlSession, e) -> {
+            Object idVal = tableInfo.getPropertyValue(e, tableInfo.getKeyProperty());
+            return StringUtils.checkValNull(idVal)
+                || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(tableInfo, SqlMethod.SELECT_BY_ID), e));
+        }, (sqlSession, e) -> {
+            MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+            param.put(Constants.ENTITY, e);
+            sqlSession.update(getSqlStatement(tableInfo, SqlMethod.UPDATE_BY_ID), param);
+        });
+    }
+
+
+    /**
+     * 获取mapperStatementId
+     *
+     * @param sqlMethod 方法名
+     * @return 命名id
+     * @since 3.4.0
+     */
+    protected String getSqlStatement(TableInfo tableInfo, SqlMethod sqlMethod) {
+        return tableInfo + "." + sqlMethod.getMethod();
+    }
+
+    private Class<?> getMapperClass(String className) {
+        try {
+            return ClassUtils.forName(className, ClassLoader.getSystemClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     @Override

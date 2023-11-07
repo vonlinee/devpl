@@ -43,5 +43,7 @@ public interface CrudService {
 
     <T> boolean saveBatch(Class<T> entityType, Collection<T> entities);
 
+    <T> boolean saveOrUpdateBatch(Collection<T> entities);
+
     <T> Page<T> selectPage(Class<T> entityType, int pageIndex, int pageSize);
 }
