@@ -3,6 +3,7 @@ package io.devpl.generator.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.generator.common.PageQuery;
+import io.devpl.generator.domain.param.DataTypeListParam;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.domain.vo.DataTypeMappingListVO;
@@ -28,7 +29,7 @@ public interface DataTypeService extends IService<DataTypeItem> {
 
     List<DataTypeGroupVO> listDataTypeGroups();
 
-    Page<DataTypeItem> selectPage(PageQuery param);
+    Page<DataTypeItem> selectPage(DataTypeListParam param);
 
     boolean addDataTypeMapping(Long typeId, Long anotherTypeId);
 

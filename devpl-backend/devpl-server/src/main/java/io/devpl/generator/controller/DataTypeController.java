@@ -4,6 +4,7 @@ import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;
+import io.devpl.generator.domain.param.DataTypeListParam;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.domain.vo.DataTypeMappingListVO;
@@ -71,7 +72,7 @@ public class DataTypeController {
      * @return 数据类型信息
      */
     @GetMapping("/page")
-    public ListResult<DataTypeItem> listDataTypes(PageQuery param) {
+    public ListResult<DataTypeItem> listDataTypes(DataTypeListParam param) {
         return ListResult.ok(dataTypeService.selectPage(param));
     }
 

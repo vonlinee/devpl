@@ -1,12 +1,14 @@
 package io.devpl.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import io.devpl.generator.common.PageQuery;
+import io.devpl.codegen.utils.StringUtils;
 import io.devpl.generator.dao.DataTypeGroupMapper;
 import io.devpl.generator.dao.DataTypeItemMapper;
 import io.devpl.generator.dao.DataTypeMappingMapper;
+import io.devpl.generator.domain.param.DataTypeListParam;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;
 import io.devpl.generator.domain.vo.DataTypeMappingListVO;
@@ -82,8 +84,12 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     }
 
     @Override
-    public Page<DataTypeItem> selectPage(PageQuery param) {
-        return crudService.selectPage(DataTypeItem.class, param.getPageIndex(), param.getPageSize());
+    public Page<DataTypeItem> selectPage(DataTypeListParam param) {
+        LambdaQueryWrapper<DataTypeItem> qw = new LambdaQueryWrapper<>();
+        qw.eq(StringUtils.hasText(param.getTypeGroupId()), DataTypeItem::getTypeGroupId, param.getTypeGroupId());
+        qw.eq(StringUtils.hasText(param.getTypeKey()), DataTypeItem::getTypeKey, param.getTypeKey());
+        qw.like(StringUtils.hasText(param.getTypeName()), DataTypeItem::getTypeName, param.getTypeName());
+        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
 
     /**
