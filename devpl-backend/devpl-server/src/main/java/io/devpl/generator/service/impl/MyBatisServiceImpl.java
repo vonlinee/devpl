@@ -195,16 +195,16 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Override
     public void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId) {
         ParamNode parentRow = new ParamNode();
-        parentRow.setId(rows.size());
+        parentRow.setKey(rows.size());
         if (parentId != -1) {
-            parentRow.setParentId(parentId);
+            parentRow.setParentKey(parentId);
         }
         parentRow.setName(parentNode.getData().getName());
-        parentRow.setType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
+        parentRow.setDataTyoe(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
         rows.add(parentRow);
         if (parentNode.hasChildren()) {
             for (TreeNode<ParamMeta> node : parentNode.getChildren()) {
-                recursive(node, rows, parentRow.getId());
+                recursive(node, rows, parentRow.getKey());
             }
         } else {
             parentRow.setLeaf(true);
@@ -221,9 +221,9 @@ public class MyBatisServiceImpl implements MyBatisService {
         for (ParamNode curNode : params) {
             // 父节点为null则默认为-1
             if (curNode.isLeaf()) {
-                Integer parentId = curNode.getParentId();
+                Integer parentId = curNode.getParentKey();
                 if (parentId == null) {
-                    parentNodeMap.put(curNode.getId(), new TreeNode<>(curNode));
+                    parentNodeMap.put(curNode.getKey(), new TreeNode<>(curNode));
                 } else {
                     if (parentNodeMap.containsKey(parentId)) {
                         parentNodeMap.get(parentId).addChild(curNode);
@@ -233,7 +233,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 }
             } else {
                 // 父节点
-                final Integer nodeId = curNode.getId();
+                final Integer nodeId = curNode.getKey();
                 if (parentNodeMap.containsKey(nodeId)) {
                     TreeNode<ParamNode> treeNode = parentNodeMap.get(nodeId);
                     treeNode.getChildren().add(new TreeNode<>(curNode));
@@ -261,7 +261,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         final String literalValue = String.valueOf(val);
         MapperStatementParamValueType paramValueType = node.getValueType();
         if (paramValueType == null) {
-            paramValueType = MapperStatementParamValueType.valueOfTypeName(node.getType());
+            paramValueType = MapperStatementParamValueType.valueOfTypeName(node.getDataTyoe());
         }
         if (paramValueType == null) {
             // 根据字符串推断类型，结果只能是简单的类型，不会很复杂

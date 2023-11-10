@@ -8,7 +8,6 @@ import { defineComponent, h, onMounted, reactive, ref, toRefs } from "vue";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 import ITextModel = editor.ITextModel;
 
-
 monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
   validate: true,
   allowComments: true, // 允许JSON注释，json5
