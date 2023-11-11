@@ -1,8 +1,10 @@
 package io.devpl.generator.domain.param;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MyBatisParam {
 
     /**

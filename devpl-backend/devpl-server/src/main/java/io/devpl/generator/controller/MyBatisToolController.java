@@ -7,10 +7,8 @@ import io.devpl.generator.domain.param.GetSqlParam;
 import io.devpl.generator.domain.param.MyBatisParam;
 import io.devpl.generator.enums.MapperStatementParamValueType;
 import io.devpl.generator.mybatis.ParamMeta;
-import io.devpl.generator.mybatis.ParseResult;
-import io.devpl.generator.mybatis.tree.TreeNode;
 import io.devpl.generator.service.MyBatisService;
-import io.devpl.sdk.collection.Lists;
+import io.devpl.generator.utils.Vals;
 import io.devpl.sdk.io.FileUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * MyBatis 控制器
@@ -59,16 +58,7 @@ public class MyBatisToolController {
     public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) throws Exception {
         String content = param.getMapperStatement();
         Assert.hasText(content, "文本为空");
-        ParseResult result = myBatisService.parseMapperStatement(content, param.getEnableTypeInference());
-        // 根节点不使用
-        TreeNode<ParamMeta> root = result.getRoot();
-        final List<ParamNode> rows = new LinkedList<>();
-        if (root.hasChildren()) {
-            for (TreeNode<ParamMeta> node : root.getChildren()) {
-                myBatisService.recursive(node, rows, -1);
-            }
-        }
-        return Result.ok(rows);
+        return Result.ok(myBatisService.getMapperStatementParams(content, Vals.nil(param.getEnableTypeInference(), true)));
     }
 
     /**
@@ -76,16 +66,7 @@ public class MyBatisToolController {
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<DataTypeVO>> getDataTypes() throws Exception {
-        List<DataTypeVO> list = Lists.arrayOf();
-        MapperStatementParamValueType[] values = MapperStatementParamValueType.values();
-        for (MapperStatementParamValueType type : values) {
-            DataTypeVO dataTypeVO = new DataTypeVO();
-            dataTypeVO.setName(type.name());
-            dataTypeVO.setValue(type.name());
-            dataTypeVO.setLabel(type.name());
-            list.add(dataTypeVO);
-        }
-        return Result.ok(list);
+        return Result.ok(Arrays.stream(MapperStatementParamValueType.values()).map(i -> new DataTypeVO(i.name())).collect(Collectors.toList()));
     }
 
     /**

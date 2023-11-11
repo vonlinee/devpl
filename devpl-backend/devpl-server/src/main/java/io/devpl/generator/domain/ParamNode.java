@@ -35,12 +35,12 @@ public class ParamNode {
     /**
      * 参数值
      */
-    private Object value;
+    private Object value = "NULL";
 
     /**
      * 参数类型，枚举值
      */
-    private String dataTyoe;
+    private String dataType;
 
     /**
      * 是否叶子结点
@@ -54,8 +54,8 @@ public class ParamNode {
 
     private MapperStatementParamValueType valueType;
 
-    public void setDataTyoe(String dataTyoe) {
-        this.dataTyoe = dataTyoe;
-        this.valueType = MapperStatementParamValueType.valueOfTypeName(dataTyoe);
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
+        this.valueType = MapperStatementParamValueType.valueOfTypeName(dataType);
     }
 }

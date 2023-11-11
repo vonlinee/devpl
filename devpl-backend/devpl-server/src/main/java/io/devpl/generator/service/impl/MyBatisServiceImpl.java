@@ -42,6 +42,20 @@ public class MyBatisServiceImpl implements MyBatisService {
     DataSource dataSource;
 
     @Override
+    public List<ParamNode> getMapperStatementParams(String content, boolean inferType) {
+        ParseResult result = this.parseMapperStatement(content, inferType);
+        // 根节点不使用
+        TreeNode<ParamMeta> root = result.getRoot();
+        final List<ParamNode> rows = new LinkedList<>();
+        if (root.hasChildren()) {
+            for (TreeNode<ParamMeta> node : root.getChildren()) {
+                this.recursive(node, rows, -1);
+            }
+        }
+        return rows;
+    }
+
+    @Override
     public ParseResult parseMapperStatement(String mapperStatement, boolean inferType) {
         // 直接获取XML中的节点
         MappedStatement mappedStatement = parseMappedStatement(mapperStatement);
@@ -111,7 +125,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         for (TreeNode<ParamNode> treeNode : treeNodes) {
             fillParamMap(treeNode, map);
         }
-        ParseResult result = parseMapperStatement(param.getMapperStatement(), true);
+        ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true);
         MappedStatement ms = result.getMappedStatement();
         BoundSql boundSql = ms.getBoundSql(map);
         String resultSql;
@@ -171,7 +185,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param node     参数节点
      * @param paramMap 嵌套Map
      */
-    public void fillParamMap(TreeNode<ParamNode> node, Map<String, Object> paramMap) {
+    private void fillParamMap(TreeNode<ParamNode> node, Map<String, Object> paramMap) {
         if (node.hasChildren()) {
             Map<String, Object> childMap = new HashMap<>();
             for (TreeNode<ParamNode> child : node.getChildren()) {
@@ -200,7 +214,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             parentRow.setParentKey(parentId);
         }
         parentRow.setName(parentNode.getData().getName());
-        parentRow.setDataTyoe(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
+        parentRow.setDataType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
         rows.add(parentRow);
         if (parentNode.hasChildren()) {
             for (TreeNode<ParamMeta> node : parentNode.getChildren()) {
@@ -261,7 +275,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         final String literalValue = String.valueOf(val);
         MapperStatementParamValueType paramValueType = node.getValueType();
         if (paramValueType == null) {
-            paramValueType = MapperStatementParamValueType.valueOfTypeName(node.getDataTyoe());
+            paramValueType = MapperStatementParamValueType.valueOfTypeName(node.getDataType());
         }
         if (paramValueType == null) {
             // 根据字符串推断类型，结果只能是简单的类型，不会很复杂

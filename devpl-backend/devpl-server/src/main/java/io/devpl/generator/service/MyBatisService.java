@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface MyBatisService {
 
+    List<ParamNode> getMapperStatementParams(String content, boolean inferType);
+
     ParseResult parseMapperStatement(String mapperStatement, boolean inferType);
 
     /**
