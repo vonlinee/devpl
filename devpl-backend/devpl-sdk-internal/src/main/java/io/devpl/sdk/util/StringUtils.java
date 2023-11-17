@@ -480,7 +480,7 @@ public final class StringUtils {
      * @return
      */
     public static String join(final String separator, String... items) {
-        return join(java.util.Arrays.asList(items).iterator(), separator);
+        return join(Arrays.asList(items).iterator(), separator);
     }
 
     /**
@@ -936,7 +936,6 @@ public final class StringUtils {
         if (!hasLength(str) || !hasLength(sub)) {
             return 0;
         }
-
         int count = 0;
         int pos = 0;
         int idx;
@@ -1005,7 +1004,6 @@ public final class StringUtils {
         if (!hasLength(inString) || !hasLength(charsToDelete)) {
             return inString;
         }
-
         int lastCharIndex = 0;
         char[] result = new char[inString.length()];
         for (int i = 0; i < inString.length(); i++) {
@@ -1020,17 +1018,12 @@ public final class StringUtils {
         return new String(result, 0, lastCharIndex);
     }
 
-    //---------------------------------------------------------------------
-    // Convenience methods for working with formatted Strings
-    //---------------------------------------------------------------------
-
     /**
      * Quote the given {@code String} with single quotes.
      * @param str the input {@code String} (e.g. "myString")
      * @return the quoted {@code String} (e.g. "'myString'"),
      * or {@code null} if the input was {@code null}
      */
-
     public static String quote(String str) {
         return (str != null ? "'" + str + "'" : null);
     }
@@ -1042,8 +1035,7 @@ public final class StringUtils {
      * @return the quoted {@code String} (e.g. "'myString'"),
      * or the input object as-is if not a {@code String}
      */
-
-    public static Object quoteIfString(Object obj) {
+    public static Object quote(Object obj) {
         return (obj instanceof String ? quote((String) obj) : obj);
     }
 
@@ -1092,7 +1084,6 @@ public final class StringUtils {
         if (!hasLength(str)) {
             return str;
         }
-
         char baseChar = str.charAt(0);
         char updatedChar;
         if (capitalize) {
@@ -1120,7 +1111,6 @@ public final class StringUtils {
         if (path == null) {
             return null;
         }
-
         int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR_CHAR);
         return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
     }
@@ -1131,12 +1121,10 @@ public final class StringUtils {
      * @param path the file path (maybe {@code null})
      * @return the extracted filename extension, or {@code null} if none
      */
-
     public static String getFilenameExtension(String path) {
         if (path == null) {
             return null;
         }
-
         int extIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
         if (extIndex == -1) {
             return null;
@@ -1146,7 +1134,6 @@ public final class StringUtils {
         if (folderIndex > extIndex) {
             return null;
         }
-
         return path.substring(extIndex + 1);
     }
 
@@ -1306,7 +1293,6 @@ public final class StringUtils {
             return source;
         }
         Assert.notNull(charset, "Charset must not be null");
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream(length);
         boolean changed = false;
         for (int i = 0; i < length; i++) {
@@ -1346,7 +1332,6 @@ public final class StringUtils {
      * @see Locale#forLanguageTag
      * @since 5.0.4
      */
-
     public static Locale parseLocale(String localeValue) {
         String[] tokens = tokenizeLocaleSource(localeValue);
         if (tokens.length == 1) {
@@ -1526,7 +1511,6 @@ public final class StringUtils {
      * (with every entry included at most once, even entries within the first array)
      */
     @Deprecated
-
     public static String[] mergeStringArrays(String[] array1, String[] array2) {
         if (ObjectUtils.isEmpty(array1)) {
             return array2;
@@ -1567,7 +1551,6 @@ public final class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-
         String[] result = new String[array.length];
         for (int i = 0; i < array.length; i++) {
             String element = array[i];
@@ -1586,7 +1569,6 @@ public final class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-
         Set<String> set = new LinkedHashSet<>(Arrays.asList(array));
         return toStringArray(set);
     }
@@ -1613,7 +1595,6 @@ public final class StringUtils {
         return new String[]{beforeDelimiter, afterDelimiter};
     }
 
-
     public static boolean containsAny(final CharSequence cs, final CharSequence... searchCharSequences) {
         for (CharSequence searchCharSequence : searchCharSequences) {
             if (cs.toString().contains(searchCharSequence)) {
@@ -1633,7 +1614,6 @@ public final class StringUtils {
      * @return a {@code Properties} instance representing the array contents,
      * or {@code null} if the array to process was {@code null} or empty
      */
-
     public static Properties splitArrayElementsIntoProperties(String[] array, String delimiter) {
         return splitArrayElementsIntoProperties(array, delimiter, null);
     }
@@ -1652,13 +1632,10 @@ public final class StringUtils {
      * @return a {@code Properties} instance representing the array contents,
      * or {@code null} if the array to process was {@code null} or empty
      */
-
     public static Properties splitArrayElementsIntoProperties(String[] array, String delimiter, String charsToDelete) {
-
         if (ObjectUtils.isEmpty(array)) {
             return null;
         }
-
         Properties result = new Properties();
         for (String element : array) {
             if (charsToDelete != null) {
@@ -1713,11 +1690,9 @@ public final class StringUtils {
      * @see #delimitedListToStringArray
      */
     public static String[] tokenizeToStringArray(String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
-
         if (str == null) {
             return EMPTY_STRING_ARRAY;
         }
-
         StringTokenizer st = new StringTokenizer(str, delimiters);
         List<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
@@ -1765,14 +1740,12 @@ public final class StringUtils {
      * @see #tokenizeToStringArray
      */
     public static String[] delimitedListToStringArray(String str, String delimiter, String charsToDelete) {
-
         if (str == null) {
             return EMPTY_STRING_ARRAY;
         }
         if (delimiter == null) {
             return new String[]{str};
         }
-
         List<String> result = new ArrayList<>();
         if (delimiter.isEmpty()) {
             for (int i = 0; i < str.length(); i++) {
@@ -1826,11 +1799,9 @@ public final class StringUtils {
      * @return the delimited {@code String}
      */
     public static String collectionToDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
-
         if (CollectionUtils.isEmpty(coll)) {
             return "";
         }
-
         int totalLength = coll.size() * (prefix.length() + suffix.length()) + (coll.size() - 1) * delim.length();
         for (Object element : coll) {
             totalLength += String.valueOf(element).length();

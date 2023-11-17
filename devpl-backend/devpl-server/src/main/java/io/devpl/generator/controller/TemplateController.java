@@ -49,11 +49,9 @@ public class TemplateController {
      * @param templateInfo 模板信息
      * @return 是否成功
      */
-    @PostMapping(value = "/save")
-    public Result<Boolean> addOne(@RequestBody TemplateInfo templateInfo) {
-        Assert.notNull(templateInfo.getType(), "模板类型为空");
-        Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
-        return Result.ok(templateService.save(templateInfo));
+    @PostMapping(value = "/persist")
+    public Result<Boolean> saveOrUpdateById(@RequestBody TemplateInfo templateInfo) {
+        return Result.ok(templateInfo.getTemplateId() == null ? templateService.save(templateInfo) : templateService.updateById(templateInfo));
     }
 
     /**
