@@ -95,15 +95,15 @@ let mapperParams = ref<ParamItem[]>([{
 const dataTypes = ref<DataTypeItem[]>([
 	{
 		name: "int",
-		value: 1
+		value: "int"
 	},
 	{
-		name: "string",
-		value: 2
+		name: "String",
+		value: "String"
 	},
 	{
-		name: "list",
-		value: 3
+		name: "List",
+		value: "List"
 	}
 ])
 
@@ -113,7 +113,7 @@ const showing = ref()
 
 <template>
 	<button @click="showing = true">showing</button>
-	<vxe-modal :model-value="showing" width="70%">
+	<vxe-modal :model-value="showing" width="70%" @close="showing = false">
 		<ParamTable :rows="mapperParams" :data-types="dataTypes"></ParamTable>
 	</vxe-modal>
 </template>

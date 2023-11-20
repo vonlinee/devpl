@@ -1,63 +1,21 @@
 <template>
-    <el-select>
-
-    </el-select>
-
-    <el-table :data="tableData" style="width: 100%" max-height="250">
-        <el-table-column fixed prop="fileTypeName" label="文件类型" width="150"/>
-        <el-table-column prop="templateName" label="模板"/>
-        <el-table-column fixed="right" label="操作">
-            <template #default="scope">
-                <el-button
-                    link type="primary" @click="openGenFileManager">数据
-                </el-button>
-                <el-button
-                    link
-                    type="primary"
-                    @click.prevent="deleteRow(scope.$index)">删除
-                </el-button>
-            </template>
-        </el-table-column>
-    </el-table>
-    <el-button class="mt-4" style="width: 100%" @click="onAddItem"
-    >Add Item
-    </el-button>
-
-    <template-data-source-manager ref="templateDataSourceManagerRef"></template-data-source-manager>
+    <div>
+        <vxe-table border stripe height="400" :column-config="{ resizable: true }"
+            :row-config="{ isHover: true }" :checkbox-config="{ labelField: 'id', highlight: true, range: true }"
+            :data="tableData">
+            <vxe-column field="file" title="文件名" sortable></vxe-column>
+            <vxe-column field="sex" title="Sex" ></vxe-column>
+            <vxe-column field="age" title="Age" sortable></vxe-column>
+            <vxe-column field="address" title="Address" show-overflow></vxe-column>
+        </vxe-table>
+    </div>
 </template>
-
+  
 <script lang="ts" setup>
-import {ref} from 'vue'
-import TemplateDataSourceManager from "@/views/generator/gen/TemplateDataSourceManager.vue";
+import { ref, onMounted } from 'vue'
+import { VxeColumnPropTypes } from 'vxe-table'
 
-let templateDataSourceManagerRef = ref()
+const tableData = ref<TargetGenFileItem[]>([])
 
-function openGenFileManager() {
-    templateDataSourceManagerRef.value.init()
-}
-
-/**
- * 目标生成文件
- */
-interface TargetGenFile {
-    taskId: string,
-    templateId: number,
-    templateName: string,
-    fileTypeName: string
-}
-
-const now = new Date()
-
-const tableData = ref([
-
-])
-
-const deleteRow = (index: number) => {
-    tableData.value.splice(index, 1)
-}
-
-const onAddItem = () => {
-    now.setDate(now.getDate() + 1)
-    tableData.value.push({})
-}
 </script>
+  
