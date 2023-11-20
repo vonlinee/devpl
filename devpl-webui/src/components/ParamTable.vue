@@ -1,112 +1,104 @@
 <template>
-	<vxe-toolbar ref="toolbarRef">
-		<template #buttons>
-			<vxe-button content="下拉按钮">
-				<template #dropdowns>
-					<vxe-button content="JSON"  @click="val1 = true"></vxe-button>
-					<vxe-button content="JSON Schema"></vxe-button>
-					<vxe-button content="按钮3"></vxe-button>
-				</template>
-			</vxe-button>
-		</template>
-	</vxe-toolbar>
-	<vxe-modal v-model="val1" width="600" show-footer>
-		<template #title>
-			<span >自定义标题</span>
-		</template>
-		<template #default>
-			<vxe-textarea rows="64" resize="none"></vxe-textarea>
-		</template>
-	</vxe-modal>
-	
-	<vxe-table
-		show-overflow
-		ref="msParamTable"
-		border
-		row-key
-		:data="mapperParams"
-		:checkbox-config="{ checkStrictly: true }"
-		:tree-config="{transform: true}"
-		:edit-config="editConfig"
-	>
-		<vxe-column field="name" title="参数名" tree-node></vxe-column>
-		<vxe-column field="value" title="参数值" :edit-render="{name: 'input'}"></vxe-column>
-		<vxe-column field="type" title="类型" :edit-render="{}">
+	<vxe-table height="auto" :min-height="height" :maxHeight="height" show-overflow ref="tableRef" :border="true" row-key
+		:data="rows" :checkbox-config="{ checkStrictly: true }" :column-config="{
+			resizable: true
+		}" :row-config="{
+	height: 40
+}" :scroll-y="{ enabled: true }" :tree-config="{ transform: true }" :edit-config="editConfig">
+		<vxe-column type="checkbox" title="#" width="45" header-align="center" align="center" :resizable="false"></vxe-column>
+		<vxe-column field="name" title="名称" tree-node></vxe-column>
+		<vxe-column field="value" title="值" :edit-render="{ name: 'input' }"></vxe-column>
+		<vxe-column field="type" title="数据类型" :edit-render="{}">
 			<template #default="{ row }">
 				<span>{{ row.type }}</span>
 			</template>
 			<template #edit="{ row }">
-				<vxe-select v-model="row.type" clearable transfer>
+				<vxe-select v-model="row.dataType" clearable transfer>
 					<vxe-option v-for="item in dataTypes" :value="item.value" :label="item.name"></vxe-option>
 				</vxe-select>
+			</template>
+		</vxe-column>
+		<vxe-column title="操作">
+			<template #default="{ row, rowIndex }">
+				<vxe-button type="text" icon="vxe-icon-add" @click="insertNextRow(row, 'current')"></vxe-button>
+				<vxe-button type="text" icon="vxe-icon-minus" @click="removeRow(row)"></vxe-button>
 			</template>
 		</vxe-column>
 	</vxe-table>
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue'
-import {apiGetDataTypes} from '@/api/mybatis'
+import { reactive, ref, onMounted, nextTick } from 'vue'
+import { VxeTablePropTypes } from 'vxe-table/types/all';
 
-const val1 = ref(false)
-const tableData = ref([])
-
-interface DataType {
-	name: string; // 数据类型名称，界面显示的值
-	value: string; // 类型值
+type ParamTableProps = {
+	height?: number,
+	rows: ParamItem[],
+	dataTypes: DataTypeItem[]
 }
 
+const { height, rows } = withDefaults(defineProps<ParamTableProps>(), {
+	height: 400
+})
+
 // 表格实例
-let msParamTable = ref()
+const tableRef = ref()
 
-let mapperParams = ref([{
-	id: 1,
-	parentId: null,
-	name: 'param',
-	value: null,
-	type: null,
-	leaf: false
-}, {
-	id: 11,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	type: 'String',
-	leaf: true
-}])
-
-let dataTypes = ref<DataType[]>([
-	{name: 'String', value: 'String'}
-])
-
-// 编辑配置
-const editConfig = reactive({
+/**
+ * 表格编辑配置
+ */
+const editConfig = reactive<VxeTablePropTypes.EditConfig>({
 	trigger: 'click',
 	mode: 'cell',
-	beforeEditMethod: (row: any, rowIndex: number, column: any, columnIndex: number) => {
+	// row: any, rowIndex: number, column: any, columnIndex: number
+	beforeEditMethod: (params) => {
 		// 只有叶子结点可编辑
-		return row.row.leaf != null && row.row.leaf
+		const row = params.row
+		return row.leaf != null && row.leaf
 	}
 })
 
-onMounted(() => {
-	apiGetDataTypes().then((res) => {
-		dataTypes.value = res.data
-	}).then(() => expandAll())
-})
+const insertNextRow = async (currRow: ParamItem, locat: string) => {
+	const $table = tableRef.value
+	if ($table) {
+		const date = new Date()
+		// 如果 null 则插入到目标节点顶部
+		// 如果 -1 则插入到目标节点底部
+		// 如果 row 则有插入到效的目标节点该行的位置
+		if (locat === 'current') {
+			const record = {
+				name: 'unknown',
+				id: Date.now(),
+				parentId: currRow.parentId, // 父节点必须与当前行一致
+			}
+			const { row: newRow } = await $table.insertNextAt(record, currRow)
+			await $table.setEditRow(newRow) // 插入子节点
+		}
+	}
+}
+
 
 /**
  * 展开所有节点
  */
 const expandAll = () => {
-	console.log("展开所有节点")
-	const $table = msParamTable.value
+	const $table = tableRef.value
 	if ($table) {
 		$table.setAllTreeExpand(true)
 	}
 }
+
+const removeRow = async (row: ParamItem) => {
+	const $table = tableRef.value
+	if ($table) {
+		await $table.remove(row)
+	}
+}
+
+onMounted(() => {
+	//nextTick(() => expandAll())
+})
+
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

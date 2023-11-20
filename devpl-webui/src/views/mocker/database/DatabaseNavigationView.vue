@@ -1,41 +1,70 @@
 <template>
-  <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler" hegiht="100%"
-    @node-contextmenu="onContextMenuRequest">
+  <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler"
+    hegiht="100%">
     <template #default="{ node, data }">
-      <span class="custom-tree-node">
+      <span class="custom-tree-node" @contextmenu="displayContextMenu($event)">
         <span>{{ node.label }}</span>
       </span>
     </template>
   </el-tree>
 
-  <vue-simple-context-menu element-id="myUniqueId" :options="options" ref="vueSimpleContextMenu"
-    @option-clicked="optionClicked" />
+  <ContextMenu ref="contextMenuRef" :model="items">
+    <template #item="{ item, props }">
+      <a v-ripple style="display: flex; align-items: center; height: 30px;" v-bind="props.action">
+        <span :class="item.icon"></span>
+        <span>{{ item.label }}</span>
+        <Badge v-if="item.badge" :value="item.badge" />
+        <span v-if="item.shortcut">{{
+          item.shortcut }}</span>
+        <i v-if="item.items"></i>
+      </a>
+    </template>
+  </ContextMenu>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
-import { apiGetDatabaseNamesById, apiGetTableData, apiListTableNames } from "@/api/datasource";
+import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
-import { DBTableDataVO, ParamGetDbTableData } from "./type";
+import ContextMenu from 'primevue/contextmenu';
 
-const vueSimpleContextMenu = ref()
+const contextMenuRef = ref()
 
-const handleClick = (event: Event, item: any) => {
-  console.log(event, item);
-  console.log(vueSimpleContextMenu.value)
-  // vueSimpleContextMenu.value.showMenu(event, item)
+const displayContextMenu = (event: Event) => {
+  contextMenuRef.value.show(event)
 }
 
-const optionClicked = (event: Event) => {
-  window.alert(JSON.stringify(event))
-}
-
-const options = [
+const items = ref([
   {
-    name: "A",
+    label: 'Favorite',
+    icon: 'pi pi-star',
+    shortcut: '⌘+D',
+  },
+  {
+    label: 'Add',
+    icon: 'pi pi-shopping-cart',
+    shortcut: '⌘+A'
+  },
+  {
+    separator: true
+  },
+  {
+    label: 'Share',
+    icon: 'pi pi-share-alt',
+    items: [
+      {
+        label: 'Whatsapp',
+        icon: 'pi pi-whatsapp',
+        badge: 2
+      },
+      {
+        label: 'Instagram',
+        icon: 'pi pi-instagram',
+        badge: 3
+      }
+    ]
   }
-]
-
+]);
 
 const defaultProps = {
   label: 'label',
@@ -43,28 +72,7 @@ const defaultProps = {
   isLeaf: 'leaf',
 };
 
-interface TreeNodeVO {
-  /**
-   * 唯一ID
-   */
-  id?: number;
-  /**
-   * 文本
-   */
-  label: string;
-  /**
-   * 是否是叶子结点
-   */
-  leaf: boolean
-  /**
-   * 子节点
-   */
-  children?: TreeNodeVO[];
-}
-
 const dataSource = ref<TreeNodeVO[]>([]);
-
-const contextMenuVisiable = ref()
 
 interface DatabaseNavigationViewProps {
   dataSourceId: number,
@@ -104,20 +112,20 @@ const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
  * @param param 
  */
 const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) => {
-  if (node.level == 2) {
-    const apiParam: ParamGetDbTableData = {
-      dataSourceId: dataSourceId.value,
-      dbName: node.parent.label,
-      tableName: node.label,
-      pageIndex: 1,
-      pageSize: 100
-    }
-    apiGetTableData(apiParam).then((res) => {
-      if (res.data) {
-        props.nodeClickCallback(res.data)
-      }
-    })
-  }
+  // if (node.level == 2) {
+  //   const apiParam: ParamGetDbTableData = {
+  //     dataSourceId: dataSourceId.value,
+  //     dbName: node.parent.label,
+  //     tableName: node.label,
+  //     pageIndex: 1,
+  //     pageSize: 100
+  //   }
+  //   apiGetTableData(apiParam).then((res) => {
+  //     if (res.data) {
+  //       props.nodeClickCallback(res.data)
+  //     }
+  //   })
+  // }
 }
 
 /**
@@ -137,10 +145,6 @@ const loadDatabases = (val: number) => {
   });
 };
 
-const onContextMenuRequest = (event: Event, data: any, node: Node, nodeComponent: any) => {
-
-}
-
 defineExpose({
   loadDbSchemas: loadDatabases
 })
@@ -155,5 +159,16 @@ defineExpose({
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+p {
+  line-height: 1.75;
 }
 </style>

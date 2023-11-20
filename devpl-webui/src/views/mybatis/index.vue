@@ -11,7 +11,7 @@
       <vxe-table
         show-overflow
         ref="msParamTable"
-        border
+        :border="true"
         height="400px"
         row-key
         header-align="center"
@@ -159,7 +159,7 @@ function showDialog() {
 
 const fillSampleMapperStatement = () => {
   apiGetSampleXmlText().then((res) => {
-    if (res.code == 200) {
+    if (res.code == 2000) {
       inputRef.value.setText(res.data)
     }
   })

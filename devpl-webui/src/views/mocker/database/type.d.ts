@@ -1,12 +1,12 @@
-export interface DataSourceVO {
-  id: number,
+type DataSourceVO = {
+  id: number
   name: string
 }
 
 /**
  * Request
  */
-export interface ParamGetDbTableData {
+type ParamGetDbTableData = {
   /**
    * 连接配置
    */
@@ -34,7 +34,7 @@ export interface ParamGetDbTableData {
  *
  * DbConnInfo
  */
-export interface DbConnInfo {
+type DbConnInfo = {
   /**
    * 连接名
    */
@@ -104,7 +104,7 @@ export interface DbConnInfo {
  *
  * DBTableDataVO
  */
-export interface DBTableDataVO {
+type DBTableDataVO = {
   /**
    * 表头
    */
@@ -124,7 +124,7 @@ export interface DBTableDataVO {
  *
  * ResultSetColumnMetadata
  */
-export interface ResultSetColumnMetadata {
+type ResultSetColumnMetadata = {
   catalogName?: null | string
   columnClassName?: null | string
   columnDisplaySize?: number | null
@@ -148,4 +148,23 @@ export interface ResultSetColumnMetadata {
    * 表名
    */
   tableName?: null | string
+}
+
+type TreeNodeVO = {
+  /**
+   * 唯一ID
+   */
+  id?: number
+  /**
+   * 文本
+   */
+  label: string
+  /**
+   * 是否是叶子结点
+   */
+  leaf: boolean
+  /**
+   * 子节点
+   */
+  children?: TreeNodeVO[]
 }

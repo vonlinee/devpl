@@ -1,9 +1,6 @@
 package io.devpl.generator.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,7 +14,7 @@ import java.util.List;
 @TableName("gen_table")
 public class GenTable {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     /**
      * 表名

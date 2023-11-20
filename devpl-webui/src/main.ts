@@ -10,8 +10,9 @@ import "vxe-table/lib/style.css"
 
 import { createPinia, Pinia } from "pinia"
 
-import VueSimpleContextMenu from "vue-simple-context-menu"
-import "vue-simple-context-menu/dist/vue-simple-context-menu.css"
+import PrimeVue from "primevue/config"
+import "primeicons/primeicons.css"
+import "primevue/resources/themes/lara-light-teal/theme.css"
 
 import "./command.ts"
 
@@ -30,19 +31,26 @@ VXETable.setup({
   },
 })
 
-// @ts-ignore
-const app: App<Element> = createApp(App)
+const app = createApp(App)
 
 // 创建 Pinia 实例
 const pinia: Pinia = createPinia()
 
-// 挂载到 Vue 根实例
+
+// PrimeVue https://primevue.org/configuration/
+app.use(PrimeVue, {
+  zIndex: {
+    modal: 1100, //dialog, sidebar
+    overlay: 1000, //dropdown, overlaypanel
+    menu: 1000, //overlay menus
+    tooltip: 1100, //tooltip
+  },
+})
 app.use(pinia)
 app.use(router)
 app.use(SvgIcon)
 app.use(ElementPlus)
 app.use(VXETable)
-app.component("vue-simple-context-menu", VueSimpleContextMenu)
 app.mount("#app")
 
 window.addEventListener("keydown", function (e) {
