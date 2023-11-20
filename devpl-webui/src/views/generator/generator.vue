@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
+    <vxe-modal v-model="visible" title="生成代码" :mask-closable="false" draggable width="70%" show-footer>
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
             <el-row>
                 <el-col :span="12">
@@ -94,7 +94,7 @@
             <el-button type="primary" @click="submitHandle()">保存</el-button>
             <el-button type="danger" @click="generatorHandle()">生成代码</el-button>
         </template>
-    </el-dialog>
+    </vxe-modal>
 
     <el-dialog v-model="fileTreeViewDialogRef" draggable>
         <file-tree-view ref="fileTreeViewRef"></file-tree-view>

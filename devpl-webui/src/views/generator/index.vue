@@ -51,14 +51,14 @@
         <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
     </el-card>
 
-    <el-dialog title="代码生成配置" v-model="configDialogRef" draggable>
+    <vxe-modal title="代码生成配置" v-model="configDialogRef" draggable show-footer width="70%">
         <div style="height: 600px">
             <monaco-editor ref="configEditor" language="json"></monaco-editor>
         </div>
         <template #footer>
             <el-button @click="saveConfig()">确认</el-button>
         </template>
-    </el-dialog>
+    </vxe-modal>
 </template>
 
 <script setup lang="ts">
@@ -126,7 +126,7 @@ const configDialogRef = ref(false)
 
 function showConfig() {
     apiGetGeneratorConfig().then((res) => {
-        if (res.code == 200) {
+        if (res.code == 2000) {
             configDialogRef.value = true
             nextTick(() => configEditor.value.setText(res.data))
         }

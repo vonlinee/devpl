@@ -86,19 +86,6 @@ function templateTypeChange(val: any) {
 }
 
 /**
- * 模板信息
- */
-interface TemplateInfo {
-  templateId?: number,
-  templateName: string,
-  templatePath: string,
-  content: string,
-  type: number,  // 模板类型，1-字符串模板 2-文件模板
-  typeName?: string,
-  provider: string
-}
-
-/**
  * 表单数据
  */
 const dataForm = reactive<TemplateInfo>({
@@ -198,7 +185,7 @@ const submitHandle = () => {
       // 编辑
       apiUpdateTemplate(toRaw(dataForm)).then((res) => {
         // @ts-ignore
-        if (res.code === 200) {
+        if (res.code === 2000) {
           ElMessage.info({
             message: "修改成功",
             duration: 500,
