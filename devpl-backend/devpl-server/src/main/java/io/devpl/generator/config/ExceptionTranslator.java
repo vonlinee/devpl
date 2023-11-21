@@ -1,6 +1,6 @@
 package io.devpl.generator.config;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 public class ExceptionTranslator {
 
@@ -10,10 +10,14 @@ public class ExceptionTranslator {
         this.throwable = throwable;
     }
 
-    public void prettyPrint(PrintWriter out) {
+    public void prettyPrint(PrintStream out) {
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         for (int i = 0; i < stackTrace.length; i++) {
-
+            out.println(stackTrace[i]);
         }
+    }
+
+    public static void translate(Throwable throwable, PrintStream out) {
+        new ExceptionTranslator(throwable).prettyPrint(out);
     }
 }
