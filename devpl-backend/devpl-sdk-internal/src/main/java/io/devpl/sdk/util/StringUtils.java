@@ -1,6 +1,5 @@
 package io.devpl.sdk.util;
 
-import com.google.common.base.Preconditions;
 import io.devpl.sdk.collection.CollectionUtils;
 import io.devpl.sdk.lang.Interpolations;
 import io.devpl.sdk.validation.Assert;
@@ -15,7 +14,8 @@ import java.util.regex.Pattern;
 
 /**
  * String工具类
- * @since 15
+ *
+ * @since 17
  */
 public final class StringUtils {
 
@@ -28,16 +28,19 @@ public final class StringUtils {
     public static final String NULL_STRING = "NULL";
     /**
      * A String for a space character.
+     *
      * @since 3.2
      */
     public static final String SPACE = " ";
     /**
      * The empty String {@code ""}.
+     *
      * @since 2.0
      */
     public static final String EMPTY = "";
     /**
      * A String for linefeed LF ("\n").
+     *
      * @see <a href=
      * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">
      * JLF: Escape Sequences for Character and String Literals</a>
@@ -46,6 +49,7 @@ public final class StringUtils {
     public static final String LF = "\n";
     /**
      * A String for carriage return CR ("\r").
+     *
      * @see <a href=
      * "http://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.10.6">JLF:
      * Escape Sequences for Character and String Literals</a>
@@ -54,6 +58,7 @@ public final class StringUtils {
     public static final String CR = "\r";
     /**
      * Represents a failed index search.
+     *
      * @since 2.1
      */
     public static final int INDEX_NOT_FOUND = -1;
@@ -93,6 +98,7 @@ public final class StringUtils {
 
     /**
      * 字符串是否有长度
+     *
      * @param str 字符串
      * @return 字符串是否有长度
      */
@@ -102,6 +108,7 @@ public final class StringUtils {
 
     /**
      * 将字符串转换为同意最长的长度
+     *
      * @param strings 数组
      * @return List<String>
      */
@@ -137,6 +144,7 @@ public final class StringUtils {
      * Utils.isAnyEmpty(new String[]{})   = false
      * Utils.isAnyEmpty(new String[]{""}) = true
      * </pre>
+     *
      * @param css the CharSequences to check, maybe null or empty
      * @return {@code true} if any of the CharSequences are empty or null
      * @since 3.2
@@ -183,6 +191,7 @@ public final class StringUtils {
 
     /**
      * 分割字符串
+     *
      * @param str       字符串
      * @param delimeter 分隔符
      * @return 分割后的字符串数组
@@ -208,6 +217,7 @@ public final class StringUtils {
      * Objects since attributes may e.g. be primitive value objects as well.
      * <p><b>Note: If the object is typed to {@code String} upfront, prefer
      * {@link #hasLength(String)} or {@link #hasText(String)} instead.</b>
+     *
      * @param str the candidate object (possibly a {@code String})
      * @since 3.2.1
      * @deprecated as of 5.3, in favor of {@link #hasLength(String)} and
@@ -235,6 +245,7 @@ public final class StringUtils {
 
     /**
      * 大写首字母
+     *
      * @param str 原字符串
      * @return 大写首字母后的字符串
      */
@@ -248,6 +259,7 @@ public final class StringUtils {
     /**
      * 小写首字母<br>
      * 例如：str = Name, return name
+     *
      * @param str 字符串
      * @return 字符串
      */
@@ -266,6 +278,7 @@ public final class StringUtils {
 
     /**
      * 切割指定位置之后部分的字符串
+     *
      * @param string    字符串
      * @param fromIndex 切割开始的位置（包括）
      * @return 切割后后剩余的后半部分字符串
@@ -285,6 +298,7 @@ public final class StringUtils {
      * 如果经过修正的index中from大于to，则互换from和to example: <br>
      * abcdefgh 2 3 =》 c <br>
      * abcdefgh 2 -3 =》 cde <br>
+     *
      * @param str              String
      * @param fromIndexInclude 开始的index（包括）
      * @param toIndexExclude   结束的index（不包括）
@@ -377,6 +391,7 @@ public final class StringUtils {
      * <p>More specifically, this method returns {@code true} if the
      * {@code String} is not {@code null}, its length is greater than 0,
      * and it contains at least one non-whitespace character.
+     *
      * @param str the {@code String} to check (maybe {@code null})
      * @return {@code true} if the {@code String} is not {@code null}, its
      * length is greater than 0, and it does not contain whitespace only
@@ -400,6 +415,7 @@ public final class StringUtils {
      * StringUtils.hasText("12345") = true
      * StringUtils.hasText(" 12345 ") = true
      * </pre>
+     *
      * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not {@code null},
      * its length is greater than 0, and it does not contain whitespace only
@@ -422,6 +438,7 @@ public final class StringUtils {
      * StringUtils.hasLength(" ") = true
      * StringUtils.hasLength("Hello") = true
      * </pre>
+     *
      * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not {@code null} and has length
      * @see #hasLength(String)
@@ -433,6 +450,7 @@ public final class StringUtils {
 
     /**
      * 字符串是否包含文本，循环所有字符，不为空格
+     *
      * @param str 字符串
      * @return 字符串是否包含文本
      */
@@ -460,6 +478,7 @@ public final class StringUtils {
      * <p>
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
+     *
      * @param iterable  the {@code Iterable} providing the values to join together,
      *                  maybe null
      * @param separator the separator character to use, null treated as ""
@@ -475,6 +494,7 @@ public final class StringUtils {
 
     /**
      * 使用指定分隔符拼接字符串
+     *
      * @param separator
      * @param items
      * @return
@@ -485,6 +505,7 @@ public final class StringUtils {
 
     /**
      * 使用指定分隔符拼接字符串
+     *
      * @param items 字符串列表
      * @return 拼接后的字符串
      */
@@ -506,6 +527,7 @@ public final class StringUtils {
      * <p>
      * See the examples here: {@link # join(Object[], String)}.
      * </p>
+     *
      * @param iterator  the {@code Iterator} of values to join together, maybe null
      * @param separator the separator character to use, null treated as ""
      * @return the joined String, {@code null} if null iterator input
@@ -581,6 +603,7 @@ public final class StringUtils {
 
     /**
      * 是否包含空格
+     *
      * @param sequence CharSequence
      * @return
      */
@@ -590,6 +613,7 @@ public final class StringUtils {
 
     /**
      * 重复字符串指定次数，然后new一个新字符串
+     *
      * @param string 字符串
      * @param count  重复次数
      * @return 字符串
@@ -634,11 +658,12 @@ public final class StringUtils {
      * purpose except to supplant the real information you were trying to provide. These are the cases
      * this method is made for; it instead generates a best-effort string with all supplied argument
      * values present. This method is also useful in environments such as GWT where {@code
-     * String.format} is not available. As an example, method implementations of the {@link
-     * Preconditions} class use this formatter, for both of the reasons just discussed.
+     * String.format} is not available. As an example, method implementations of the
+     * Preconditions class use this formatter, for both of the reasons just discussed.
      *
      * <p><b>Warning:</b> Only the exact two-character placeholder sequence {@code "%s"} is
      * recognized.
+     *
      * @param template a string containing zero or more {@code "%s"} placeholder sequences. {@code
      *                 null} is treated as the four-character string {@code "null"}.
      * @param args     the arguments to be substituted into the message template. The first argument
@@ -687,6 +712,7 @@ public final class StringUtils {
 
     /**
      * 会对输入参数的可能情况进行检测
+     *
      * @param o object
      * @return 字符串
      * @see String#valueOf(Object)
@@ -707,6 +733,7 @@ public final class StringUtils {
 
     /**
      * 判断字符串是否为空字符串
+     *
      * @param str 待校验的字符串
      * @return 字符串是否不为空
      * @see StringUtils#hasText(String)
@@ -717,6 +744,7 @@ public final class StringUtils {
 
     /**
      * 判断字符串是否为空字符串
+     *
      * @param sequence 待校验的字符序列
      * @return 字符串是否不为空
      * @see StringUtils#hasText(CharSequence)
@@ -727,6 +755,7 @@ public final class StringUtils {
 
     /**
      * 通过kv形式进行字符串插值
+     *
      * @param template 模式串
      * @param mappings 参数
      * @return 插值结果
@@ -737,6 +766,7 @@ public final class StringUtils {
 
     /**
      * Check whether the given {@code CharSequence} contains any whitespace characters.
+     *
      * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not empty and
      * contains at least 1 whitespace character
@@ -757,6 +787,7 @@ public final class StringUtils {
 
     /**
      * Check whether the given {@code String} contains any whitespace characters.
+     *
      * @param str the {@code String} to check (maybe {@code null})
      * @return {@code true} if the {@code String} is not empty and
      * contains at least 1 whitespace character
@@ -768,6 +799,7 @@ public final class StringUtils {
 
     /**
      * 去掉头部和尾部的空格
+     *
      * @param str the {@code String} to check
      * @return the trimmed {@code String}
      * @see java.lang.Character#isWhitespace
@@ -789,6 +821,7 @@ public final class StringUtils {
 
     /**
      * 遍历字符数组，去掉字符串中所有的空格，包括头部，尾部以及中间的所有空格
+     *
      * @param str the {@code String} to check
      * @return the trimmed {@code String}
      * @see java.lang.Character#isWhitespace
@@ -810,6 +843,7 @@ public final class StringUtils {
 
     /**
      * 去掉开头的空格
+     *
      * @param str the {@code String} to check
      * @return the trimmed {@code String}
      * @see java.lang.Character#isWhitespace
@@ -827,6 +861,7 @@ public final class StringUtils {
 
     /**
      * Trim trailing whitespace from the given {@code String}.
+     *
      * @param str the {@code String} to check
      * @return the trimmed {@code String}
      * @see java.lang.Character#isWhitespace
@@ -844,6 +879,7 @@ public final class StringUtils {
 
     /**
      * Trim all occurrences of the supplied leading character from the given {@code String}.
+     *
      * @param str              the {@code String} to check
      * @param leadingCharacter the leading character to be trimmed
      * @return the trimmed {@code String}
@@ -861,6 +897,7 @@ public final class StringUtils {
 
     /**
      * Trim all occurrences of the supplied trailing character from the given {@code String}.
+     *
      * @param str               the {@code String} to check
      * @param trailingCharacter the trailing character to be trimmed
      * @return the trimmed {@code String}
@@ -878,6 +915,7 @@ public final class StringUtils {
 
     /**
      * Test if the given {@code String} matches the given single character.
+     *
      * @param str             the {@code String} to check
      * @param singleCharacter the character to compare to
      * @since 5.2.9
@@ -889,6 +927,7 @@ public final class StringUtils {
     /**
      * Test if the given {@code String} starts with the specified prefix,
      * ignoring upper/lower case.
+     *
      * @param str    the {@code String} to check
      * @param prefix the prefix to look for
      * @see java.lang.String#startsWith
@@ -900,6 +939,7 @@ public final class StringUtils {
     /**
      * Test if the given {@code String} ends with the specified suffix,
      * ignoring upper/lower case.
+     *
      * @param str    the {@code String} to check
      * @param suffix the suffix to look for
      * @see java.lang.String#endsWith
@@ -911,6 +951,7 @@ public final class StringUtils {
     /**
      * Test whether the given string matches the given substring
      * at the given index.
+     *
      * @param str       the original string (or StringBuilder)
      * @param index     the index in the original string to start matching against
      * @param substring the substring to match at the given index
@@ -929,6 +970,7 @@ public final class StringUtils {
 
     /**
      * Count the occurrences of the substring {@code sub} in string {@code str}.
+     *
      * @param str string to search in
      * @param sub string to search for
      */
@@ -948,6 +990,7 @@ public final class StringUtils {
 
     /**
      * Replace all occurrences of a substring within a string with another string.
+     *
      * @param inString   {@code String} to examine
      * @param oldPattern {@code String} to replace
      * @param newPattern {@code String} to insert
@@ -985,6 +1028,7 @@ public final class StringUtils {
 
     /**
      * Delete all occurrences of the given substring.
+     *
      * @param inString the original {@code String}
      * @param pattern  the pattern to delete all occurrences of
      * @return the resulting {@code String}
@@ -995,6 +1039,7 @@ public final class StringUtils {
 
     /**
      * Delete any character in a given {@code String}.
+     *
      * @param inString      the original {@code String}
      * @param charsToDelete a set of characters to delete.
      *                      E.g. "az\n" will delete 'a's, 'z's and new lines.
@@ -1020,6 +1065,7 @@ public final class StringUtils {
 
     /**
      * Quote the given {@code String} with single quotes.
+     *
      * @param str the input {@code String} (e.g. "myString")
      * @return the quoted {@code String} (e.g. "'myString'"),
      * or {@code null} if the input was {@code null}
@@ -1031,6 +1077,7 @@ public final class StringUtils {
     /**
      * Turn the given Object into a {@code String} with single quotes
      * if it is a {@code String}; keeping the Object as-is else.
+     *
      * @param obj the input Object (e.g. "myString")
      * @return the quoted {@code String} (e.g. "'myString'"),
      * or the input object as-is if not a {@code String}
@@ -1042,6 +1089,7 @@ public final class StringUtils {
     /**
      * Unqualify a string qualified by a '.' dot character. For example,
      * "this.name.is.qualified", returns "qualified".
+     *
      * @param qualifiedName the qualified name
      */
     public static String unqualify(String qualifiedName) {
@@ -1051,6 +1099,7 @@ public final class StringUtils {
     /**
      * Unqualify a string qualified by a separator character. For example,
      * "this:name:is:qualified" returns "qualified" if using a ':' separator.
+     *
      * @param qualifiedName the qualified name
      * @param separator     the separator
      */
@@ -1062,6 +1111,7 @@ public final class StringUtils {
      * Capitalize a {@code String}, changing the first letter to
      * upper case as per {@link Character#toUpperCase(char)}.
      * No other letters are changed.
+     *
      * @param str the {@code String} to capitalize
      * @return the capitalized {@code String}
      */
@@ -1073,6 +1123,7 @@ public final class StringUtils {
      * Uncapitalize a {@code String}, changing the first letter to
      * lower case as per {@link Character#toLowerCase(char)}.
      * No other letters are changed.
+     *
      * @param str the {@code String} to uncapitalize
      * @return the uncapitalized {@code String}
      */
@@ -1103,6 +1154,7 @@ public final class StringUtils {
     /**
      * Extract the filename from the given Java resource path,
      * e.g. {@code "mypath/myfile.txt" &rarr; "myfile.txt"}.
+     *
      * @param path the file path (maybe {@code null})
      * @return the extracted filename, or {@code null} if none
      */
@@ -1118,6 +1170,7 @@ public final class StringUtils {
     /**
      * Extract the filename extension from the given Java resource path,
      * e.g. "mypath/myfile.txt" &rarr; "txt".
+     *
      * @param path the file path (maybe {@code null})
      * @return the extracted filename extension, or {@code null} if none
      */
@@ -1140,6 +1193,7 @@ public final class StringUtils {
     /**
      * Strip the filename extension from the given Java resource path,
      * e.g. "mypath/myfile.txt" &rarr; "mypath/myfile".
+     *
      * @param path the file path
      * @return the path with stripped filename extension
      */
@@ -1160,6 +1214,7 @@ public final class StringUtils {
     /**
      * Apply the given relative path to the given Java resource path,
      * assuming standard Java folder separation (i.e. "/" separators).
+     *
      * @param path         the path to start from (usually a full file path)
      * @param relativePath the relative path to apply
      *                     (relative to the full file path above)
@@ -1186,6 +1241,7 @@ public final class StringUtils {
      * <p><strong>NOTE</strong> that {@code cleanPath} should not be depended
      * upon in a security context. Other mechanisms should be used to prevent
      * path-traversal issues.
+     *
      * @param path the original path
      * @return the normalized path
      */
@@ -1264,6 +1320,7 @@ public final class StringUtils {
 
     /**
      * Compare two paths after normalization of them.
+     *
      * @param path1 first path for comparison
      * @param path2 second path for comparison
      * @return whether the two paths are equivalent after normalization
@@ -1280,6 +1337,7 @@ public final class StringUtils {
      * <li>Special characters {@code "-"}, {@code "_"}, {@code "."}, and {@code "*"} stay the same.</li>
      * <li>A sequence "{@code %<i>xy</i>}" is interpreted as a hexadecimal representation of the character.</li>
      * </ul>
+     *
      * @param source  the encoded String
      * @param charset the character set
      * @return the decoded value
@@ -1323,6 +1381,7 @@ public final class StringUtils {
      * Parse the given {@code String} value into a {@link Locale}, accepting
      * the {@link Locale#toString} format as well as BCP 47 language tags as
      * specified by {@link Locale#forLanguageTag}.
+     *
      * @param localeValue the locale value: following either {@code Locale's}
      *                    {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
      *                    separators (as an alternative to underscores), or BCP 47 (e.g. "en-UK")
@@ -1352,6 +1411,7 @@ public final class StringUtils {
      * it is rather specifically tailored for typical Spring parsing needs.
      * <p><b>Note: This delegate does not accept the BCP 47 language tag format.
      * Please use {@link #parseLocale} for lenient parsing of both formats.</b>
+     *
      * @param localeString the locale {@code String}: following {@code Locale's}
      *                     {@code toString()} format ("en", "en_UK", etc.), also accepting spaces as
      *                     separators (as an alternative to underscores)
@@ -1406,6 +1466,7 @@ public final class StringUtils {
     /**
      * Determine the RFC 3066 compliant language tag,
      * as used for the HTTP "Accept-Language" header.
+     *
      * @param locale the Locale to transform to a language tag
      * @return the RFC 3066 compliant language tag as {@code String}
      * @deprecated as of 5.0.4, in favor of {@link Locale#toLanguageTag()}
@@ -1417,6 +1478,7 @@ public final class StringUtils {
 
     /**
      * Parse the given {@code timeZoneString} value into a {@link TimeZone}.
+     *
      * @param timeZoneString the time zone {@code String}, following {@link TimeZone#getTimeZone(String)}
      *                       but throwing {@link IllegalArgumentException} in case of an invalid time zone specification
      * @return a corresponding {@link TimeZone} instance
@@ -1438,6 +1500,7 @@ public final class StringUtils {
     /**
      * Copy the given {@link Collection} into a {@code String} array.
      * <p>The {@code Collection} must contain {@code String} elements only.
+     *
      * @param collection the {@code Collection} to copy
      *                   (potentially {@code null} or empty)
      * @return the resulting {@code String} array
@@ -1449,6 +1512,7 @@ public final class StringUtils {
     /**
      * Copy the given {@link Enumeration} into a {@code String} array.
      * <p>The {@code Enumeration} must contain {@code String} elements only.
+     *
      * @param enumeration the {@code Enumeration} to copy
      *                    (potentially {@code null} or empty)
      * @return the resulting {@code String} array
@@ -1461,6 +1525,7 @@ public final class StringUtils {
      * Append the given {@code String} to the given {@code String} array,
      * returning a new array consisting of the input array contents plus
      * the given {@code String}.
+     *
      * @param array the array to append to (can be {@code null})
      * @param str   the {@code String} to append
      * @return the new array (never {@code null})
@@ -1479,6 +1544,7 @@ public final class StringUtils {
      * Concatenate the given {@code String} arrays into one,
      * with overlapping array elements included twice.
      * <p>The order of elements in the original arrays is preserved.
+     *
      * @param array1 the first array (can be {@code null})
      * @param array2 the second array (can be {@code null})
      * @return the new array ({@code null} if both given arrays were {@code null})
@@ -1504,6 +1570,7 @@ public final class StringUtils {
      * <p>The order of elements in the original arrays is preserved
      * (except overlapping elements, which are only
      * included on their first occurrence).
+     *
      * @param array1 the first array (can be {@code null})
      * @param array2 the second array (can be {@code null})
      * @return the new array ({@code null} if both given arrays were {@code null})
@@ -1530,6 +1597,7 @@ public final class StringUtils {
 
     /**
      * Sort the given {@code String} array if necessary.
+     *
      * @param array the original array (potentially empty)
      * @return the array in sorted form (never {@code null})
      */
@@ -1544,6 +1612,7 @@ public final class StringUtils {
     /**
      * Trim the elements of the given {@code String} array, calling
      * {@code String.trim()} on each non-null element.
+     *
      * @param array the original {@code String} array (potentially empty)
      * @return the resulting array (of the same size) with trimmed elements
      */
@@ -1562,6 +1631,7 @@ public final class StringUtils {
     /**
      * Remove duplicate strings from the given array.
      * <p>As of 4.2, it preserves the original order, as it uses a {@link LinkedHashSet}.
+     *
      * @param array the {@code String} array (potentially empty)
      * @return an array without duplicates, in natural sort order
      */
@@ -1576,6 +1646,7 @@ public final class StringUtils {
     /**
      * Split a {@code String} at the first occurrence of the delimiter.
      * Does not include the delimiter in the result.
+     *
      * @param toSplit   the string to split (potentially {@code null} or empty)
      * @param delimiter to split the string up with (potentially {@code null} or empty)
      * @return a two element array with index 0 being before the delimiter, and
@@ -1609,6 +1680,7 @@ public final class StringUtils {
      * A {@code Properties} instance is then generated, with the left of the delimiter
      * providing the key, and the right of the delimiter providing the value.
      * <p>Will trim both the key and value before adding them to the {@code Properties}.
+     *
      * @param array     the array to process
      * @param delimiter to split each element using (typically the equals symbol)
      * @return a {@code Properties} instance representing the array contents,
@@ -1624,6 +1696,7 @@ public final class StringUtils {
      * delimiter providing the key, and the right of the delimiter providing the value.
      * <p>Will trim both the key and value before adding them to the
      * {@code Properties} instance.
+     *
      * @param array         the array to process
      * @param delimiter     to split each element using (typically the equals symbol)
      * @param charsToDelete one or more characters to remove from each element
@@ -1658,6 +1731,7 @@ public final class StringUtils {
      * delimiter characters. Each of those characters can be used to separate
      * tokens. A delimiter is always a single character; for multi-character
      * delimiters, consider using {@link #delimitedListToStringArray}.
+     *
      * @param str        the {@code String} to tokenize (potentially {@code null} or empty)
      * @param delimiters the delimiter characters, assembled as a {@code String}
      *                   (each of the characters is individually considered as a delimiter)
@@ -1677,6 +1751,7 @@ public final class StringUtils {
      * delimiter characters. Each of those characters can be used to separate
      * tokens. A delimiter is always a single character; for multi-character
      * delimiters, consider using {@link #delimitedListToStringArray}.
+     *
      * @param str               the {@code String} to tokenize (potentially {@code null} or empty)
      * @param delimiters        the delimiter characters, assembled as a {@code String}
      *                          (each of the characters is individually considered as a delimiter)
@@ -1714,6 +1789,7 @@ public final class StringUtils {
      * but it will still be considered as a single delimiter string, rather
      * than as a bunch of potential delimiter characters, in contrast to
      * {@link #tokenizeToStringArray}.
+     *
      * @param str       the input {@code String} (potentially {@code null} or empty)
      * @param delimiter the delimiter between elements (this is a single delimiter,
      *                  rather than a bunch individual delimiter characters)
@@ -1731,6 +1807,7 @@ public final class StringUtils {
      * but it will still be considered as a single delimiter string, rather
      * than as a bunch of potential delimiter characters, in contrast to
      * {@link #tokenizeToStringArray}.
+     *
      * @param str           the input {@code String} (potentially {@code null} or empty)
      * @param delimiter     the delimiter between elements (this is a single delimiter,
      *                      rather than a bunch individual delimiter characters)
@@ -1769,6 +1846,7 @@ public final class StringUtils {
     /**
      * Convert a comma delimited list (e.g., a row from a CSV file) into an
      * array of strings.
+     *
      * @param str the input {@code String} (potentially {@code null} or empty)
      * @return an array of strings, or the empty array in case of empty input
      */
@@ -1780,6 +1858,7 @@ public final class StringUtils {
      * Convert a comma delimited list (e.g., a row from a CSV file) into a set.
      * <p>Note that this will suppress duplicates, and as of 4.2, the elements in
      * the returned set will preserve the original order in a {@link LinkedHashSet}.
+     *
      * @param str the input {@code String} (potentially {@code null} or empty)
      * @return a set of {@code String} entries in the list
      * @see #removeDuplicateStrings(String[])
@@ -1792,6 +1871,7 @@ public final class StringUtils {
     /**
      * Convert a {@link Collection} to a delimited {@code String} (e.g. CSV).
      * <p>Useful for {@code toString()} implementations.
+     *
      * @param coll   the {@code Collection} to convert (potentially {@code null} or empty)
      * @param delim  the delimiter to use (typically a ",")
      * @param prefix the {@code String} to start each element with
@@ -1821,6 +1901,7 @@ public final class StringUtils {
     /**
      * Convert a {@code Collection} into a delimited {@code String} (e.g. CSV).
      * <p>Useful for {@code toString()} implementations.
+     *
      * @param coll  the {@code Collection} to convert (potentially {@code null} or empty)
      * @param delim the delimiter to use (typically a ",")
      * @return the delimited {@code String}
@@ -1832,6 +1913,7 @@ public final class StringUtils {
     /**
      * Convert a {@code Collection} into a delimited {@code String} (e.g., CSV).
      * <p>Useful for {@code toString()} implementations.
+     *
      * @param coll the {@code Collection} to convert (potentially {@code null} or empty)
      * @return the delimited {@code String}
      */
@@ -1842,6 +1924,7 @@ public final class StringUtils {
     /**
      * Convert a {@code String} array into a delimited {@code String} (e.g. CSV).
      * <p>Useful for {@code toString()} implementations.
+     *
      * @param arr   the array to display (potentially {@code null} or empty)
      * @param delim the delimiter to use (typically a ",")
      * @return the delimited {@code String}
@@ -1865,6 +1948,7 @@ public final class StringUtils {
      * Convert a {@code String} array into a comma delimited {@code String}
      * (i.e., CSV).
      * <p>Useful for {@code toString()} implementations.
+     *
      * @param arr the array to display (potentially {@code null} or empty)
      * @return the delimited {@code String}
      */
@@ -1874,6 +1958,7 @@ public final class StringUtils {
 
     /**
      * 是否不为空
+     *
      * @param str 字符串
      * @return 是否不为空
      */
@@ -1888,6 +1973,7 @@ public final class StringUtils {
      *     <li>忽略大小写使用{@link String#equalsIgnoreCase(String)}判断相等</li>
      *     <li>不忽略大小写使用{@link String#contentEquals(CharSequence)}判断相等</li>
      * </ul>
+     *
      * @param str1       要比较的字符串1
      * @param str2       要比较的字符串2
      * @param ignoreCase 是否忽略大小写
@@ -1917,6 +2003,7 @@ public final class StringUtils {
     /**
      * 给定字符串是否与提供的中任一字符串相同，相同则返回{@code true}，没有相同的返回{@code false}<br>
      * 如果参与比对的字符串列表为空，返回{@code false}
+     *
      * @param str1       给定需要检查的字符串
      * @param ignoreCase 是否忽略大小写
      * @param strs       需要参与比对的字符串列表
@@ -1939,6 +2026,7 @@ public final class StringUtils {
     /**
      * 大写首字母<br>
      * 例如：str = name, return Name
+     *
      * @param str 字符串
      * @return 字符串
      */
@@ -1967,6 +2055,7 @@ public final class StringUtils {
      * 如果经过修正的index中from大于to，则互换from和to example: <br>
      * abcdefgh 2 3 =》 c <br>
      * abcdefgh 2 -3 =》 cde <br>
+     *
      * @param str              String
      * @param fromIndexInclude 开始的index（包括）
      * @param toIndexExclude   结束的index（不包括）
@@ -2010,6 +2099,7 @@ public final class StringUtils {
 
     /**
      * {@link CharSequence} 转为字符串，null安全
+     *
      * @param cs {@link CharSequence}
      * @return 字符串
      */
@@ -2019,6 +2109,7 @@ public final class StringUtils {
 
     /**
      * 字符串是否以给定字符结尾
+     *
      * @param str 字符串
      * @param c   字符
      * @return 是否结尾
@@ -2045,6 +2136,7 @@ public final class StringUtils {
      * StrUtil.subAfter("abc", "d", false)   = ""
      * StrUtil.subAfter("abc", "", false)    = "abc"
      * </pre>
+     *
      * @param string          被查找的字符串
      * @param separator       分隔字符串（不包括）
      * @param isLastSeparator 是否查找最后一个分隔字符串（多次出现分隔字符串时选取最后一个），true为选取最后一个
@@ -2069,6 +2161,7 @@ public final class StringUtils {
 
     /**
      * 去掉指定前缀
+     *
      * @param str    字符串
      * @param prefix 前缀
      * @return 切掉后的字符串，若前缀不是 preffix， 返回原字符串
@@ -2087,6 +2180,7 @@ public final class StringUtils {
 
     /**
      * 切割指定位置之后部分的字符串
+     *
      * @param string    字符串
      * @param fromIndex 切割开始的位置（包括）
      * @return 切割后后剩余的后半部分字符串
@@ -2101,6 +2195,7 @@ public final class StringUtils {
 
     /**
      * 去掉指定后缀
+     *
      * @param str    字符串
      * @param suffix 后缀
      * @return 切掉后的字符串，若后缀不是 suffix， 返回原字符串
@@ -2119,6 +2214,7 @@ public final class StringUtils {
 
     /**
      * 切割指定位置之前部分的字符串
+     *
      * @param string         字符串
      * @param toIndexExclude 切割到的位置（不包括）
      * @return 切割后的剩余的前半部分字符串

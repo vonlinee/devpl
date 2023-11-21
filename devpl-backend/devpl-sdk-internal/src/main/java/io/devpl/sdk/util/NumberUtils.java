@@ -1,4 +1,4 @@
-package io.devpl.generator.utils;
+package io.devpl.sdk.util;
 
 /**
  * 数字工具类

@@ -1,5 +1,6 @@
 package io.devpl.sdk;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -30,6 +31,7 @@ public final class ULID implements Serializable, Comparable<ULID> {
      * Number of bytes of the random component of a ULID.
      */
     public static final int RANDOM_BYTES = 10;
+    @Serial
     private static final long serialVersionUID = 2625269413446854731L;
     /**
      * Number of characters of a ULID.

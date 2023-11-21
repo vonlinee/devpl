@@ -1,7 +1,6 @@
-package io.devpl.generator.utils;
+package io.devpl.sdk.util;
 
-import org.springframework.lang.Nullable;
-
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;

@@ -34,7 +34,7 @@ export function apiUpdateTemplate(params: object) {
  * 可选择的模板列表
  */
 export function apiListSelectableTemplates() {
-    return http.get('/api/codegen/template/list/select');
+    return http.get('/api/codegen/template/list/selectable');
 }
 
 /**

@@ -14,6 +14,7 @@ public final class IdUtils {
 
     /**
      * 带-的36位的UUID
+     *
      * @return UUID
      */
     public static String simple36UUID() {
@@ -22,6 +23,7 @@ public final class IdUtils {
 
     /**
      * 不带-的32位的UUID
+     *
      * @return UUID
      */
     public static String simple32UUID(boolean upper) {
@@ -31,6 +33,7 @@ public final class IdUtils {
 
     /**
      * 不带-的32位的UUID
+     *
      * @return UUID
      */
     public static String simple32UUID() {
@@ -38,6 +41,11 @@ public final class IdUtils {
         return rawUUID.substring(0, 8) + rawUUID.substring(9, 13) + rawUUID.substring(14, 18) + rawUUID.substring(19, 23) + rawUUID.substring(24);
     }
 
+    /**
+     * 生成ULID
+     *
+     * @return ULID
+     */
     public static String simpleULID() {
         return ULID.randomULID().toString();
     }

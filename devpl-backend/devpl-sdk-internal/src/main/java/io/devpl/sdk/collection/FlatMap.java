@@ -12,7 +12,7 @@ public class FlatMap<V> implements Map<String, V> {
 
     private static final String SEPARATOR = "\\.";
 
-    private transient Map<String, Object> map;
+    private final transient Map<String, Object> map;
 
     public FlatMap(Map<String, Object> map) {
         this.map = map;

@@ -139,8 +139,7 @@ function fillTemplateName(row: GenFile) {
 </script>
 
 <template>
-    <el-dialog v-model="dialogVisiableRef" title="目标生成文件类型管理" draggable destroy-on-close :close-on-click-modal="false"
-        :show-close="false" v-if="dialogVisiableRef">
+    <vxe-modal v-model="dialogVisiableRef" title="目标生成文件类型管理" draggable destroy-on-close :show-footer="true" :mask-closable="false">
         <el-table ref="singleTableRef" :data="tableData" table-layout="auto" highlight-current-row style="width: 100%"
             height="500px" @current-change="handleCurrentChange">
             <el-table-column type="index" />
@@ -192,7 +191,7 @@ function fillTemplateName(row: GenFile) {
             <el-button type="success" @click="submit()">确认</el-button>
             <el-button type="danger" @click="dialogVisiableRef = false">取消</el-button>
         </template>
-    </el-dialog>
+    </vxe-modal>
 </template>
 
 <style scoped lang="scss"></style>

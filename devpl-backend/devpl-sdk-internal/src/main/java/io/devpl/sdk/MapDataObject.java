@@ -2,14 +2,17 @@ package io.devpl.sdk;
 
 import io.devpl.sdk.collection.ArrayMap;
 
+import java.io.Serial;
 import java.util.*;
 import java.util.regex.Pattern;
 
 /**
  * 采用ArrayMap结构实现
+ * 一般kv对只有几十个
  */
 final class MapDataObject implements DataObject {
 
+    @Serial
     private static final long serialVersionUID = 4967941937079805838L;
 
     /**
@@ -52,6 +55,7 @@ final class MapDataObject implements DataObject {
 
     /**
      * 校验name是否合法
+     *
      * @param name 数据项名称
      */
     private void ensureValidName(String name) {
@@ -87,6 +91,7 @@ final class MapDataObject implements DataObject {
 
     /**
      * 数据项的名称需要字母或者数字
+     *
      * @param name 数据项名称
      * @return 数据项名称是否符合规则
      */

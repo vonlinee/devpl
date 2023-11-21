@@ -119,10 +119,10 @@ public class FixedList<E> implements List<E> {
         if (min == max) {
             return Integer.compare(index, min);
         }
-        min = Math.min(min, max);
-        max = Math.max(min, max);
-        if (index < min) return -1;
-        if (index <= max) return 0;
+        int _min = Math.min(min, max);
+        int _max = Math.max(min, max);
+        if (index < _min) return -1;
+        if (index <= _max) return 0;
         return 1;
     }
 

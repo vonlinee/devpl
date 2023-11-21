@@ -22,7 +22,7 @@ import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
-import io.devpl.generator.utils.CollectionUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.generator.utils.NamingUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;

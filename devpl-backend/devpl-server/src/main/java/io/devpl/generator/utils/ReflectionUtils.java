@@ -18,7 +18,7 @@ public class ReflectionUtils {
      * @throws ClassCastException 类型转换失败
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getTypedValue(Object object, String fieldName, T defaultValue) {
+    public static <K extends T, T> T getTypedValue(Object object, String fieldName, K defaultValue) {
         return (T) getValue(object, fieldName, defaultValue);
     }
 
@@ -208,7 +208,7 @@ public class ReflectionUtils {
      * @throws IllegalArgumentException  执行方法出错
      */
     public static Object invokeMethod(Object object, String methodName, Class<?>[] parameterTypes,
-                                      Object[] parameters) throws InvocationTargetException, IllegalAccessException {
+                                      Object[] parameters) throws ReflectiveOperationException {
         Method method = getDeclaredMethod(object, methodName, parameterTypes);
         if (method == null) {
             throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + object + "]");

@@ -12,9 +12,8 @@ abstract class IndexedMap<K, V> {
     ValuesCollection mValues;
 
     public static <K, V> boolean containsAllHelper(Map<K, V> map, Collection<?> collection) {
-        Iterator<?> it = collection.iterator();
-        while (it.hasNext()) {
-            if (!map.containsKey(it.next())) {
+        for (Object o : collection) {
+            if (!map.containsKey(o)) {
                 return false;
             }
         }
@@ -23,21 +22,15 @@ abstract class IndexedMap<K, V> {
 
     public static <K, V> boolean removeAllKeys(Map<K, V> map, Collection<?> collection) {
         int oldSize = map.size();
-        Iterator<?> it = collection.iterator();
-        while (it.hasNext()) {
-            map.remove(it.next());
+        for (Object o : collection) {
+            map.remove(o);
         }
         return oldSize != map.size();
     }
 
     public static <K, V> boolean retainAllKeys(Map<K, V> map, Collection<?> collection) {
         int oldSize = map.size();
-        Iterator<K> it = map.keySet().iterator();
-        while (it.hasNext()) {
-            if (!collection.contains(it.next())) {
-                it.remove();
-            }
-        }
+        map.keySet().removeIf(k -> !collection.contains(k));
         return oldSize != map.size();
     }
 
@@ -45,8 +38,7 @@ abstract class IndexedMap<K, V> {
         if (set == object) {
             return true;
         }
-        if (object instanceof Set) {
-            Set<?> s = (Set<?>) object;
+        if (object instanceof Set<?> s) {
             try {
                 return set.size() == s.size() && set.containsAll(s);
             } catch (NullPointerException | ClassCastException ignored) {
@@ -138,6 +130,7 @@ abstract class IndexedMap<K, V> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public T next() {
             if (!hasNext()) throw new NoSuchElementException();
             Object res = colGetEntry(mIndex, mOffset);
@@ -228,10 +221,9 @@ abstract class IndexedMap<K, V> {
             if (!mEntryValid) {
                 throw new IllegalStateException("This container does not support retaining Map.Entry objects");
             }
-            if (!(o instanceof Map.Entry)) {
+            if (!(o instanceof Map.Entry<?, ?> e)) {
                 return false;
             }
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
             return Objects.equals(e.getKey(), colGetEntry(mIndex, 0)) && Objects.equals(e.getValue(), colGetEntry(mIndex, 1));
         }
 
@@ -273,8 +265,7 @@ abstract class IndexedMap<K, V> {
 
         @Override
         public boolean contains(Object o) {
-            if (!(o instanceof Map.Entry)) return false;
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) o;
+            if (!(o instanceof Map.Entry<?, ?> e)) return false;
             int index = colIndexOfKey(e.getKey());
             if (index < 0) {
                 return false;
@@ -285,9 +276,8 @@ abstract class IndexedMap<K, V> {
 
         @Override
         public boolean containsAll(Collection<?> collection) {
-            Iterator<?> it = collection.iterator();
-            while (it.hasNext()) {
-                if (!contains(it.next())) {
+            for (Object o : collection) {
+                if (!contains(o)) {
                     return false;
                 }
             }
@@ -468,9 +458,8 @@ abstract class IndexedMap<K, V> {
 
         @Override
         public boolean containsAll(Collection<?> collection) {
-            Iterator<?> it = collection.iterator();
-            while (it.hasNext()) {
-                if (!contains(it.next())) {
+            for (Object o : collection) {
+                if (!contains(o)) {
                     return false;
                 }
             }

@@ -1,3 +1,8 @@
+/**
+ * 仅依赖于JDK的基础工具包，包括一些工具类
+ *
+ * @since 17
+ */
 open module devpl.sdk.internal {
     requires com.google.common;
     requires java.sql;

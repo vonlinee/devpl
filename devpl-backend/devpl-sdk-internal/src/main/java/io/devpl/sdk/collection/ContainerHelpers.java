@@ -1,5 +1,7 @@
 package io.devpl.sdk.collection;
 
+import java.util.Objects;
+
 class ContainerHelpers {
     static final int[] EMPTY_INTS = new int[0];
     static final long[] EMPTY_LONGS = new long[0];
@@ -25,7 +27,7 @@ class ContainerHelpers {
     }
 
     public static boolean equal(Object a, Object b) {
-        return a == b || (a != null && a.equals(b));
+        return Objects.equals(a, b);
     }
 
     // This is Arrays.binarySearch(), but doesn't do any argument validation.

@@ -30,6 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * <p>If not explicitly specified, this implementation will use
  * {@linkplain SoftReference soft entry references}.
+ *
  * @param <K> the key type
  * @param <V> the value type
  * @author Phillip Webb
@@ -87,6 +88,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity the initial capacity of the map
      */
     public ConcurrentReferenceHashMap(int initialCapacity) {
@@ -95,6 +97,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity the initial capacity of the map
      * @param loadFactor      the load factor. When the average number of references per table
      *                        exceeds this value resize will be attempted
@@ -105,6 +108,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity  the initial capacity of the map
      * @param concurrencyLevel the expected number of threads that will concurrently
      *                         write to the map
@@ -115,6 +119,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity the initial capacity of the map
      * @param referenceType   the reference type used for entries (soft or weak)
      */
@@ -124,6 +129,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity  the initial capacity of the map
      * @param loadFactor       the load factor. When the average number of references per
      *                         table exceeds this value, resize will be attempted.
@@ -136,6 +142,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * Create a new {@code ConcurrentReferenceHashMap} instance.
+     *
      * @param initialCapacity  the initial capacity of the map
      * @param loadFactor       the load factor. When the average number of references per
      *                         table exceeds this value, resize will be attempted.
@@ -168,6 +175,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     /**
      * Calculate a shift value that can be used to create a power-of-two value between
      * the specified maximum and minimum values.
+     *
      * @param minimumValue the minimum value
      * @param maximumValue the maximum value
      * @return the calculated shift (use {@code 1 << shift} to obtain a value)
@@ -197,6 +205,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     /**
      * Factory method that returns the {@link ReferenceManager}.
      * This method will be called once for each {@link Segment}.
+     *
      * @return a new reference manager
      */
     protected ReferenceManager createReferenceManager() {
@@ -207,6 +216,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
      * Get the hash for a given object, apply an additional hash function to reduce
      * collisions. This implementation uses the same Wang/Jenkins algorithm as
      * {@link ConcurrentHashMap}. Subclasses can override to provide alternative hashing.
+     *
      * @param o the object to hash (may be null)
      * @return the resulting hash code
      */
@@ -247,6 +257,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     /**
      * Return a {@link Reference} to the {@link Entry} for the specified {@code key},
      * or {@code null} if not found.
+     *
      * @param key         the key (can be {@code null})
      * @param restructure types of restructure allowed during this call
      * @return the reference, or {@code null} if not found
@@ -455,6 +466,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     /**
      * A reference to an {@link Entry} contained in the map. Implementations are usually
      * wrappers around specific Java reference implementations (e.g., {@link SoftReference}).
+     *
      * @param <K> the key type
      * @param <V> the value type
      */
@@ -492,6 +504,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         /**
          * Add a new entry with the specified value.
+         *
          * @param value the value to add
          */
         void add(V value);
@@ -499,6 +512,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     /**
      * A single map entry.
+     *
      * @param <K> the key type
      * @param <V> the value type
      */
@@ -546,16 +560,15 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             if (this == other) {
                 return true;
             }
-            if (!(other instanceof Map.Entry)) {
+            if (!(other instanceof Map.Entry otherEntry)) {
                 return false;
             }
-            Map.Entry otherEntry = (Map.Entry) other;
             return (ObjectUtils.nullSafeEquals(getKey(), otherEntry.getKey()) &&
                 ObjectUtils.nullSafeEquals(getValue(), otherEntry.getValue()));
         }
 
         @Override
-        public final int hashCode() {
+        public int hashCode() {
             return (ObjectUtils.nullSafeHashCode(this.key) ^ ObjectUtils.nullSafeHashCode(this.value));
         }
     }
@@ -682,6 +695,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         /**
          * Apply an update operation to this segment.
          * The segment will be locked during the update.
+         *
          * @param hash the hash of the key
          * @param key  the key
          * @param task the update operation
@@ -739,6 +753,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
          * Restructure the underlying data structure when it becomes necessary. This
          * method can increase the size of the references table as well as purge any
          * references that have been garbage collected.
+         *
          * @param allowResize if resizing is permitted
          */
         protected final void restructureIfNecessary(boolean allowResize) {
@@ -868,6 +883,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         /**
          * Execute the task.
+         *
          * @param ref     the found reference (or {@code null})
          * @param entry   the found entry (or {@code null})
          * @param entries access to the underlying entries
@@ -881,6 +897,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         /**
          * Convenience method that can be used for tasks that do not need access to {@link Entries}.
+         *
          * @param ref   the found reference (or {@code null})
          * @param entry the found entry (or {@code null})
          * @return the result of the task
@@ -1029,6 +1046,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         /**
          * Factory method used to create a new {@link Reference}.
+         *
          * @param entry the entry contained in the reference
          * @param hash  the hash
          * @param next  the next reference in the chain, or {@code null} if none
@@ -1046,6 +1064,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
          * underlying structure or {@code null} if no references need purging. This
          * method must be thread safe and ideally should not block when returning
          * {@code null}. References should be returned once and only once.
+         *
          * @return a reference to purge or {@code null}
          */
         @SuppressWarnings("unchecked")

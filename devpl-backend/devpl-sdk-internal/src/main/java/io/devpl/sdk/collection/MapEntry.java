@@ -1,6 +1,7 @@
 package io.devpl.sdk.collection;
 
 import javax.annotation.concurrent.NotThreadSafe;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import java.util.Objects;
 @NotThreadSafe
 public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private K key;
@@ -80,8 +82,7 @@ public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o instanceof MapEntry) {
-            MapEntry<?, ?> pair = (MapEntry<?, ?>) o;
+        if (o instanceof MapEntry<?, ?> pair) {
             return Objects.equals(getKey(), pair.getKey()) &&
                 Objects.equals(getValue(), pair.getValue());
         }

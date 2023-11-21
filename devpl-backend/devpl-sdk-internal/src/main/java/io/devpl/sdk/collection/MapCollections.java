@@ -13,9 +13,8 @@ public abstract class MapCollections<K, V> {
     ValuesCollection mValues;
 
     public static <K, V> boolean containsAllHelper(Map<K, V> map, Collection<?> collection) {
-        Iterator<?> it = collection.iterator();
-        while (it.hasNext()) {
-            if (!map.containsKey(it.next())) {
+        for (Object o : collection) {
+            if (!map.containsKey(o)) {
                 return false;
             }
         }
@@ -24,21 +23,15 @@ public abstract class MapCollections<K, V> {
 
     public static <K, V> boolean removeAllHelper(Map<K, V> map, Collection<?> collection) {
         int oldSize = map.size();
-        Iterator<?> it = collection.iterator();
-        while (it.hasNext()) {
-            map.remove(it.next());
+        for (Object o : collection) {
+            map.remove(o);
         }
         return oldSize != map.size();
     }
 
     public static <K, V> boolean retainAllHelper(Map<K, V> map, Collection<?> collection) {
         int oldSize = map.size();
-        Iterator<K> it = map.keySet().iterator();
-        while (it.hasNext()) {
-            if (!collection.contains(it.next())) {
-                it.remove();
-            }
-        }
+        map.keySet().removeIf(k -> !collection.contains(k));
         return oldSize != map.size();
     }
 
@@ -48,9 +41,7 @@ public abstract class MapCollections<K, V> {
         if (set == object) {
             return true;
         }
-        if (object instanceof Set) {
-            Set<?> s = (Set<?>) object;
-
+        if (object instanceof Set<?> s) {
             try {
                 return set.size() == s.size() && set.containsAll(s);
             } catch (NullPointerException ignored) {

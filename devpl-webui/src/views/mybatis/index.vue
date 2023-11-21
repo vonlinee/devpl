@@ -1,12 +1,12 @@
 <template>
-  <splitpanes>
-    <pane>
+  <el-row>
+    <el-col :span="12">
       <splitpanes horizontal>
         <pane min-size="20"><monaco-editor ref="inputRef" language="xml" height="400px" /></pane>
         <pane min-size="20"><monaco-editor ref="sqlRef" language="sql" height="400px" /></pane>
       </splitpanes>
-    </pane>
-    <pane>
+    </el-col>
+    <el-col :span="12">
       <splitpanes horizontal>
         <pane>
           <el-button @click="fillSampleMapperStatement">填充样例</el-button>
@@ -39,14 +39,15 @@
           </el-card>
         </pane>
       </splitpanes>
-    </pane>
-  </splitpanes>
+    </el-col>
+  </el-row>
 </template>
 
 <script setup lang="ts">
 import { hasText } from "@/utils/tool";
-import { Ref, computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
 import { Splitpanes, Pane } from 'splitpanes'
+
 import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "@/views/mybatis/ParamImport.vue";
@@ -55,7 +56,6 @@ import { appStore } from "@/store";
 import { VxeGridConstructor, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeTablePropTypes } from "vxe-table/types/all";
 
 // 数据
-const code = ref("");
 const inputRef = ref();
 const sqlRef = ref();
 const importModalRef = ref();
