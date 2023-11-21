@@ -12,6 +12,8 @@ import { createPinia, Pinia } from "pinia"
 
 import PrimeVue from "primevue/config"
 import "primeicons/primeicons.css"
+import 'primevue/resources/primevue.min.css';
+// primevue 主题样式
 import "primevue/resources/themes/lara-light-teal/theme.css"
 
 import "./command.ts"
@@ -24,7 +26,7 @@ import "@/styles/index.scss"
 import "./useMonaco"
 import { isWindows } from "./utils/tool"
 
-VXETable.setup({
+VXETable.config({
   zIndex: 2000,
   select: {
     transfer: true,

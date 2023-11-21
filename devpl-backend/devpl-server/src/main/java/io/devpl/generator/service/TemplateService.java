@@ -37,7 +37,7 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @param pageSize  每页大小
      * @return 分页数据
      */
-    IPage<TemplateInfo> pages(int pageIndex, int pageSize);
+    IPage<TemplateInfo> listPageTemplates(int pageIndex, int pageSize);
 
     /**
      * 模板选择列表

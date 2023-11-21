@@ -2,7 +2,8 @@ import http from "@/utils/http"
 
 /**
  * 查询字段列表
- * @param content
+ * @param page
+ * @param limit
  */
 export const apiListFields = (page: number, limit: number) => {
   return http.get("/api/field/page", {
@@ -13,7 +14,7 @@ export const apiListFields = (page: number, limit: number) => {
 
 /**
  * 保存或更新字段
- * @param content
+ * @param field
  */
 export const apiSaveOrUpdateField = (field: any) => {
   if (!field.fieldName) {
@@ -35,7 +36,7 @@ interface FieldParseParam {
 
 /**
  * 保存或更新字段
- * @param content
+ * @param param
  */
 export const apiParseFields = (param: FieldParseParam) => {
   return http.post("/api/field/parse", param)

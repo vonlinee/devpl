@@ -99,7 +99,7 @@ public class TemplateController {
      */
     @GetMapping(value = "/page")
     public ListResult<TemplateInfo> list(PageQuery query) {
-        return ListResult.ok(templateService.pages(query.getPageIndex(), query.getPageSize()));
+        return ListResult.ok(templateService.listPageTemplates(query.getPageIndex(), query.getPageSize()));
     }
 
     /**
@@ -107,7 +107,7 @@ public class TemplateController {
      *
      * @return 列表
      */
-    @GetMapping(value = "/list/select")
+    @GetMapping(value = "/list/selectable")
     public ListResult<TemplateSelectVO> listSelectableTemplates() {
         return ListResult.ok(templateService.listSelectable());
     }

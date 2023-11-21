@@ -1,6 +1,5 @@
 package io.devpl.generator.mybatis;
 
-import io.devpl.generator.utils.ReflectionUtils;
 import org.apache.ibatis.builder.IncompleteElementException;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
@@ -12,7 +11,6 @@ import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
@@ -55,30 +53,33 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
         }
 
         @Override
-        public MappedStatement addMappedStatement(String id, SqlSource sqlSource, StatementType statementType, SqlCommandType sqlCommandType, Integer fetchSize, Integer timeout, String parameterMap, Class<?> parameterType, String resultMap, Class<?> resultType, ResultSetType resultSetType, boolean flushCache, boolean useCache, boolean resultOrdered, KeyGenerator keyGenerator, String keyProperty, String keyColumn, String databaseId, LanguageDriver lang, String resultSets) {
-            this.currentNamespace = (String) ReflectionUtils.getValue(this, "currentNamespace");
-            this.resource = (String) ReflectionUtils.getValue(this, "resource");
-            this.currentCache = (Cache) ReflectionUtils.getValue(this, "currentCache");
-            Boolean unresolvedCacheRefValue = (Boolean) ReflectionUtils.getValue(this, "unresolvedCacheRef", false);
-            if (unresolvedCacheRefValue != null) {
-                this.unresolvedCacheRef = unresolvedCacheRefValue;
-            }
+        public MappedStatement addMappedStatement(String id, SqlSource sqlSource, StatementType statementType,
+                                                  SqlCommandType sqlCommandType, Integer fetchSize, Integer timeout, String parameterMap, Class<?> parameterType,
+                                                  String resultMap, Class<?> resultType, ResultSetType resultSetType, boolean flushCache, boolean useCache,
+                                                  boolean resultOrdered, KeyGenerator keyGenerator, String keyProperty, String keyColumn, String databaseId,
+                                                  LanguageDriver lang, String resultSets, boolean dirtySelect) {
 
             if (unresolvedCacheRef) {
                 throw new IncompleteElementException("Cache-ref not yet resolved");
             }
 
             id = applyCurrentNamespace(id, false);
-            boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
 
-            List<ResultMap> resultMaps;
-            try {
-                resultMaps = getStatementResultMaps(resultMap, resultType, id);
-            } catch (Exception exception) {
-                resultMaps = Collections.emptyList();
-            }
+            List<ResultMap> statementResultMaps = getStatementResultMaps(resultMap, resultType, id);
 
-            MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType).resource(resource).fetchSize(fetchSize).timeout(timeout).statementType(statementType).keyGenerator(keyGenerator).keyProperty(keyProperty).keyColumn(keyColumn).databaseId(databaseId).lang(lang).resultOrdered(resultOrdered).resultSets(resultSets).resultMaps(resultMaps).resultSetType(resultSetType).flushCacheRequired(valueOrDefault(flushCache, !isSelect)).useCache(valueOrDefault(useCache, isSelect)).cache(currentCache);
+            MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration, id, sqlSource, sqlCommandType)
+                .resource(resource)
+                .fetchSize(fetchSize)
+                .timeout(timeout)
+                .statementType(statementType)
+                .keyGenerator(keyGenerator)
+                .keyProperty(keyProperty)
+                .keyColumn(keyColumn)
+                .databaseId(databaseId).lang(lang)
+                .resultOrdered(resultOrdered).resultSets(resultSets)
+                .resultMaps(statementResultMaps)
+                .resultSetType(resultSetType)
+                .flushCacheRequired(flushCache).useCache(useCache).cache(currentCache).dirtySelect(dirtySelect);
 
             ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
             if (statementParameterMap != null) {
@@ -88,10 +89,6 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
             MappedStatement statement = statementBuilder.build();
             configuration.addMappedStatement(statement);
             return statement;
-        }
-
-        private <T> T valueOrDefault(T value, T defaultValue) {
-            return value == null ? defaultValue : value;
         }
 
         private ParameterMap getStatementParameterMap(String parameterMapName, Class<?> parameterTypeClass, String statementId) {
@@ -119,7 +116,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                     try {
                         resultMaps.add(configuration.getResultMap(resultMapName.trim()));
                     } catch (IllegalArgumentException e) {
-                        throw new IncompleteElementException("Could not find result map '" + resultMapName + "' referenced from '" + statementId + "'", e);
+                        // throw new IncompleteElementException("Could not find result map '" + resultMapName + "' referenced from '" + statementId + "'", e);
                     }
                 }
             } else if (resultType != null) {

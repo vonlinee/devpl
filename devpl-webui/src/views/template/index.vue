@@ -35,7 +35,7 @@
     </el-table>
     <el-pagination
       :current-page="state.page"
-      :page-sizes="state.pageSizes"
+      :page-sizes="state.pageSizes || []"
       :page-size="state.limit"
       :total="state.total"
       layout="total, sizes, prev, pager, next, jumper"

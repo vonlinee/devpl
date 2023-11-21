@@ -18,8 +18,21 @@ public class ParamNode {
     /**
      * 这里的ID无意义，只是作为一个唯一的序号
      * 前端树形表格组件使用
+     * vxe-table使用id字段，react使用key字段
      */
     private Integer key;
+
+    /**
+     * 这里的ID无意义，只是作为一个唯一的序号
+     * 前端树形表格组件使用
+     */
+    private Integer id;
+
+    /**
+     * 父节点ID
+     * 前端树形表格组件使用
+     */
+    private Integer parentId;
 
     /**
      * 父节点ID

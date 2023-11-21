@@ -74,7 +74,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     }
 
     @Override
-    public IPage<TemplateInfo> pages(int pageIndex, int pageSize) {
+    public IPage<TemplateInfo> listPageTemplates(int pageIndex, int pageSize) {
         return templateInfoMapper.selectPage(new Page<>(pageIndex, pageSize), new LambdaQueryWrapper<>());
     }
 

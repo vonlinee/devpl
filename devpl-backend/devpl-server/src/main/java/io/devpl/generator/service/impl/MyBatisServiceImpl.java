@@ -35,6 +35,9 @@ import java.util.*;
 @Service
 public class MyBatisServiceImpl implements MyBatisService {
 
+    /**
+     * 本系统自身的SqlSessionFactory
+     */
     @Resource
     SqlSessionFactory sqlSessionFactory;
 
@@ -147,8 +150,9 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Override
     public MappedStatement parseMappedStatement(String statement) {
         XPathParser xPathParser = new XPathParser(statement, false, null, new IgnoreDTDEntityResolver());
+        // TODO 支持所有类型的SQL标签
         XNode selectNode = xPathParser.evalNode("select");
-        Configuration configuration = new Configuration();
+        MyBaticMockConfiguration configuration = new MyBaticMockConfiguration(sqlSessionFactory.getConfiguration());
         MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
@@ -209,9 +213,11 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Override
     public void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId) {
         ParamNode parentRow = new ParamNode();
+        parentRow.setId(rows.size());
         parentRow.setKey(rows.size());
         if (parentId != -1) {
             parentRow.setParentKey(parentId);
+            parentRow.setParentId(parentId);
         }
         parentRow.setName(parentNode.getData().getName());
         parentRow.setDataType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
@@ -439,4 +445,5 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
         }
     }
+
 }

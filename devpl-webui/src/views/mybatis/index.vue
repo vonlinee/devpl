@@ -1,54 +1,52 @@
 <template>
-  <el-row class="el-row">
-    <el-col :span="15">
-      <monaco-editor ref="inputRef" language="xml" height="400px"></monaco-editor>
-      <monaco-editor ref="sqlRef" language="sql" height="400px"></monaco-editor>
-    </el-col>
-    <el-col :span="9">
-      <el-button @click="fillSampleMapperStatement">填充样例</el-button>
-      <el-button @click="showDialog()">导入</el-button>
-      <param-import ref="importModalRef"></param-import>
-      <vxe-table
-        show-overflow
-        ref="msParamTable"
-        :border="true"
-        height="400px"
-        row-key
-        header-align="center"
-        :data="mapperParams"
-        :checkbox-config="{ checkStrictly: true }"
-        :tree-config="{transform: true}"
-        :edit-config="editConfig"
-      >
-        <vxe-column field="name" title="参数名" tree-node></vxe-column>
-        <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
-        <vxe-column field="type" title="类型" :edit-render="{}" :width="130" align="center">
-          <template #default="{ row }">
-            <span>{{ row.type }}</span>
-          </template>
-          <template #edit="{ row }">
-            <vxe-select v-model="row.type" clearable transfer>
-              <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
-                          :label="item.label"></vxe-option>
-            </vxe-select>
-          </template>
-        </vxe-column>
-      </vxe-table>
-      <el-button type="primary" @click="getParams()">解析参数</el-button>
-      <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
-      <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
-
-      <el-card>
-        <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
-      </el-card>
-    </el-col>
-  </el-row>
+  <splitpanes>
+    <pane>
+      <splitpanes horizontal>
+        <pane min-size="20"><monaco-editor ref="inputRef" language="xml" height="400px" /></pane>
+        <pane min-size="20"><monaco-editor ref="sqlRef" language="sql" height="400px" /></pane>
+      </splitpanes>
+    </pane>
+    <pane>
+      <splitpanes horizontal>
+        <pane>
+          <el-button @click="fillSampleMapperStatement">填充样例</el-button>
+          <el-button @click="showDialog()">导入</el-button>
+          <param-import ref="importModalRef"></param-import>
+          <vxe-table show-overflow ref="msParamTable" :border="true" height="400px" row-key header-align="center"
+            :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
+            :edit-config="editConfig">
+            <vxe-column field="name" title="参数名" tree-node></vxe-column>
+            <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
+            <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
+              <template #default="{ row }">
+                <span>{{ row.type }}</span>
+              </template>
+              <template #edit="{ row }">
+                <vxe-select v-model="row.type" clearable transfer>
+                  <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
+                    :label="item.label"></vxe-option>
+                </vxe-select>
+              </template>
+            </vxe-column>
+          </vxe-table>
+          <el-button type="primary" @click="getParams()">解析参数</el-button>
+          <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
+          <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+        </pane>
+        <pane>
+          <el-card>
+            <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
+          </el-card>
+        </pane>
+      </splitpanes>
+    </pane>
+  </splitpanes>
 </template>
 
 <script setup lang="ts">
 import { hasText } from "@/utils/tool";
-import { Ref, computed, onMounted, reactive, ref, toRaw } from "vue";
-
+import { Ref, computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
+import { Splitpanes, Pane } from 'splitpanes'
 import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "@/views/mybatis/ParamImport.vue";
@@ -72,13 +70,13 @@ const editConfig = reactive<VxeTablePropTypes.EditConfig<RowModel>>({
   trigger: "click",
   mode: "cell",
   beforeEditMethod: (params: {
-      row: RowModel
-      rowIndex: number
-      column: VxeTableDefines.ColumnInfo<RowModel>
-      columnIndex: number
-      $table: VxeTableConstructor<RowModel> & VxeTablePrivateMethods<RowModel>
-      $grid: VxeGridConstructor<RowModel> | null | undefined
-    }) => {
+    row: RowModel
+    rowIndex: number
+    column: VxeTableDefines.ColumnInfo<RowModel>
+    columnIndex: number
+    $table: VxeTableConstructor<RowModel> & VxeTablePrivateMethods<RowModel>
+    $grid: VxeGridConstructor<RowModel> | null | undefined
+  }) => {
     // 只有叶子结点可编辑
     return params.row.leaf != null && params.row.leaf;
   }
@@ -116,7 +114,7 @@ interface MyBatisToolOptions {
 }
 
 // mybatis mapper语句参数
-let mapperParams = ref<MsParamNode[]>([]);
+const mapperParams = ref<MsParamNode[]>();
 
 const options = ref<MyBatisToolOptions>({
   enableTypeInference: true
@@ -134,7 +132,10 @@ function getParams() {
   let code = inputRef.value.getText();
   if (hasText(code)) {
     getMapperStatementParams(code, toRaw(options.value)).then(value => {
-      mapperParams.value = value.data;
+      nextTick(() => mapperParams.value = value.data)
+
+      msParamTable.value.loadData(toRaw(value.data));
+
     }).then(() => expandAll());
   } else {
     ElMessage.warning("输入文本为空!");
@@ -148,7 +149,7 @@ function getSqlOfMapperStatement(real: boolean) {
     ElMessage.warning("输入文本为空!");
     return;
   }
-  apiGetSql(code, mapperParams.value, real).then(res => {
+  apiGetSql(code, mapperParams.value || [], real).then(res => {
     sqlRef.value.setText(res.data);
   });
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,7 @@ public class TemplateInfo extends DBEntityBase {
 
     /**
      * 技术提供方，例如Apache Velocity, Apache FreeMarker
+     *
      * @see io.devpl.generator.domain.TemplateProvider
      */
     @TableField(value = "provider")
@@ -64,10 +66,12 @@ public class TemplateInfo extends DBEntityBase {
     @TableField(exist = false)
     private String generatorPath;
 
+    @JsonIgnore
     public boolean isStringTemplate() {
         return this.getType() == 2;
     }
 
+    @JsonIgnore
     public boolean isFileTemplate() {
         return this.getType() == 1;
     }
