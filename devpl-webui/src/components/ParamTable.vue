@@ -3,7 +3,7 @@
 		:data="rows" :checkbox-config="{ checkStrictly: true }" :column-config="{
 			resizable: true
 		}" :row-config="{
-	height: 40
+	height: 20
 }" :scroll-y="{ enabled: true }" :tree-config="{ transform: true }" :edit-config="editConfig">
 		<vxe-column type="checkbox" title="#" width="45" header-align="center" align="center" :resizable="false"></vxe-column>
 		<vxe-column field="name" title="名称" tree-node :edit-render="{ name: 'input' }">
@@ -48,7 +48,7 @@ import { reactive, ref, onMounted, nextTick } from 'vue'
 import { VxeTablePropTypes } from 'vxe-table/types/all';
 
 type ParamTableProps = {
-	
+
 	height?: number,
 	rows: ParamItem[],
 	dataTypes: DataTypeItem[]

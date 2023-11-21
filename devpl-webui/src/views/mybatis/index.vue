@@ -1,9 +1,18 @@
 <template>
-  <el-row>
+  <div>
+    <el-row>
     <el-col :span="12">
       <splitpanes horizontal>
-        <pane min-size="20"><monaco-editor ref="inputRef" language="xml" height="400px" /></pane>
-        <pane min-size="20"><monaco-editor ref="sqlRef" language="sql" height="400px" /></pane>
+        <pane min-size="20">
+          <div>
+            <monaco-editor ref="inputRef" language="xml" height="400px" />
+          </div>
+        </pane>
+        <pane min-size="20">
+          <div>
+            <monaco-editor ref="sqlRef" language="sql" height="400px" />
+          </div>
+        </pane>
       </splitpanes>
     </el-col>
     <el-col :span="12">
@@ -41,6 +50,8 @@
       </splitpanes>
     </el-col>
   </el-row>
+  </div>
+
 </template>
 
 <script setup lang="ts">
@@ -168,7 +179,7 @@ const fillSampleMapperStatement = () => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .el-row {
   margin-bottom: 20px;
   display: flex;
