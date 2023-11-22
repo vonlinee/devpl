@@ -1,57 +1,60 @@
 <template>
   <div>
     <el-row>
-    <el-col :span="12">
-      <splitpanes horizontal>
-        <pane min-size="20">
-          <div>
-            <monaco-editor ref="inputRef" language="xml" height="400px" />
-          </div>
-        </pane>
-        <pane min-size="20">
-          <div>
-            <monaco-editor ref="sqlRef" language="sql" height="400px" />
-          </div>
-        </pane>
-      </splitpanes>
-    </el-col>
-    <el-col :span="12">
-      <splitpanes horizontal>
-        <pane>
-          <el-button @click="fillSampleMapperStatement">填充样例</el-button>
-          <el-button @click="showDialog()">导入</el-button>
-          <param-import ref="importModalRef"></param-import>
-          <vxe-table show-overflow ref="msParamTable" :border="true" height="400px" row-key header-align="center"
-            :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
-            :edit-config="editConfig">
-            <vxe-column field="name" title="参数名" tree-node></vxe-column>
-            <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
-            <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
-              <template #default="{ row }">
-                <span>{{ row.type }}</span>
-              </template>
-              <template #edit="{ row }">
-                <vxe-select v-model="row.type" clearable transfer>
-                  <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
-                    :label="item.label"></vxe-option>
-                </vxe-select>
-              </template>
-            </vxe-column>
-          </vxe-table>
-          <el-button type="primary" @click="getParams()">解析参数</el-button>
-          <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
-          <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
-        </pane>
-        <pane>
-          <el-card>
-            <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
-          </el-card>
-        </pane>
-      </splitpanes>
-    </el-col>
-  </el-row>
+      <el-col :span="12">
+        <splitpanes horizontal>
+          <pane min-size="20">
+            <div>
+              <monaco-editor ref="inputRef" language="xml" height="400px" />
+            </div>
+          </pane>
+          <pane min-size="20">
+            <div>
+              <monaco-editor ref="sqlRef" language="sql" height="400px" />
+            </div>
+          </pane>
+        </splitpanes>
+      </el-col>
+      <el-col :span="12">
+        <splitpanes horizontal>
+          <pane>
+            <el-button @click="fillSampleMapperStatement">填充样例</el-button>
+            <el-button @click="showDialog()">导入</el-button>
+            <param-import ref="importModalRef"></param-import>
+            <vxe-table show-overflow ref="msParamTable" :border="true" height="400px" row-key header-align="center"
+              :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
+              :edit-config="editConfig">
+              <vxe-column field="name" title="参数名" tree-node></vxe-column>
+              <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
+              <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
+                <template #default="{ row }">
+                  <span>{{ row.type }}</span>
+                </template>
+                <template #edit="{ row }">
+                  <vxe-select v-model="row.type" clearable transfer>
+                    <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
+                      :label="item.label"></vxe-option>
+                  </vxe-select>
+                </template>
+              </vxe-column>
+            </vxe-table>
+          </pane>
+          <pane>
+            <div>
+              <el-card>
+                <el-button type="primary" @click="getParams()">解析参数</el-button>
+                <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
+                <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+              </el-card>
+              <el-card>
+                <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
+              </el-card>
+            </div>
+          </pane>
+        </splitpanes>
+      </el-col>
+    </el-row>
   </div>
-
 </template>
 
 <script setup lang="ts">

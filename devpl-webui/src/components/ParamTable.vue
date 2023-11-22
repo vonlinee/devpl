@@ -3,7 +3,7 @@
 		:data="rows" :checkbox-config="{ checkStrictly: true }" :column-config="{
 			resizable: true
 		}" :row-config="{
-	height: 20
+	height: rowHeight
 }" :scroll-y="{ enabled: true }" :tree-config="{ transform: true }" :edit-config="editConfig">
 		<vxe-column type="checkbox" title="#" width="45" header-align="center" align="center" :resizable="false"></vxe-column>
 		<vxe-column field="name" title="名称" tree-node :edit-render="{ name: 'input' }">
@@ -16,15 +16,17 @@
 				<span>{{ row.leaf ? row.value : '' }}</span>
 			</template>
 		</vxe-column>
-		<vxe-column field="dataType" title="数据类型" width="120" min-width="120" :edit-render="{}">
+		<vxe-column field="dataType" title="数据类型" min-width="120" :edit-render="{
+			autofocus: 'data-type-select'
+		}">
 			<template #default="{ row }">
 				<span>{{ row.leaf ? row.dataType : '' }}</span>
 			</template>
-			<template #edit="{ row }">
-				<vxe-select v-model="row.dataType" clearable transfer>
+			<!-- <template #edit="{ row }">
+				<vxe-select class-name="data-type-select" v-model="row.dataType" clearable transfer>
 					<vxe-option v-for="item in dataTypes" :value="item.value" :label="item.name"></vxe-option>
 				</vxe-select>
-			</template>
+			</template> -->
 		</vxe-column>
 		<vxe-column title="操作" header-align="center" align="center" fixed="right" width="150" :resizable="false">
 			<template #default="{ row, rowIndex }">
@@ -44,18 +46,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, nextTick } from 'vue'
+import { reactive, ref } from 'vue'
 import { VxeTablePropTypes } from 'vxe-table/types/all';
 
 type ParamTableProps = {
-
 	height?: number,
+	rowHeight?: number,
 	rows: ParamItem[],
 	dataTypes: DataTypeItem[]
 }
 
 const { height, rows } = withDefaults(defineProps<ParamTableProps>(), {
 	height: 400,
+	rowHeight: 35
 })
 
 // 表格实例

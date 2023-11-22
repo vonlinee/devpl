@@ -22,8 +22,9 @@ import io.devpl.generator.service.DataSourceService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFieldService;
 import io.devpl.generator.service.TableService;
-import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.NamingUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,6 +82,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         }
 
         DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+        connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         DBType dbType = DBType.getValue(connInfo.getDbType());
 
         try (Connection connection = dataSourceService.getConnection(connInfo)) {

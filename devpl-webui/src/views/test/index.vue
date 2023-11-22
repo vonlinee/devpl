@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import ParamTable from '@/components/ParamTable.vue';
 import { ref } from 'vue';
-
+import { Splitpanes, Pane } from 'splitpanes'
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import 'splitpanes/dist/splitpanes.css'
 let mapperParams = ref<ParamItem[]>([{
 	id: 1,
 	parentId: null,
@@ -116,6 +118,7 @@ const showing = ref()
 	<vxe-modal :model-value="showing" width="70%" @close="showing = false">
 		<ParamTable :rows="mapperParams" :data-types="dataTypes"></ParamTable>
 	</vxe-modal>
+
 </template>
 
 <style lang="scss">
