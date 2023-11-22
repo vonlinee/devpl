@@ -14,6 +14,10 @@ monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
   schemaValidation: 'error'
 });
 
+type MonacoEditorProps = {
+  width: number | string
+}
+
 export default defineComponent({
   name: "MonacoEditor",
   props: {

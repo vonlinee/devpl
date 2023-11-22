@@ -9,7 +9,7 @@
     destroy-on-close
     draggable
     show-zoom
-    resize 
+    resize
     fullscreen
     @close="dispose">
     <div>

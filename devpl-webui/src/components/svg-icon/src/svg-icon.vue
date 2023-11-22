@@ -1,13 +1,13 @@
 <template>
     <div class="svg-icon" :style="`display: inline-block; cursor: ${cursor}`">
         <svg :class="`${className}`" :style="`color:${color}; width:${size}; height:${size};`" aria-hidden="true">
-            <use :xlink:href="iconName"/>
+            <use :xlink:href="iconName" />
         </svg>
     </div>
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
     // 图标名称

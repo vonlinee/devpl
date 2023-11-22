@@ -1,35 +1,31 @@
 <template>
   <splitpanes class="default-theme">
-    <pane max-size="35" style="overflow: auto">
-      <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick"
-      />
+    <pane max-size="35">
+      <div class="tree-container">
+        <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick">
+          <template v-slot="{ node, data }">
+            <svg-icon v-if="!data.isLeaf" icon="directory" />
+            <span style="padding-left: 4px;">{{ node.label }}</span>
+          </template>
+        </el-tree>
+      </div>
     </pane>
-    <pane style="overflow: auto; height: auto;">
-      <monaco-editor ref="editorRef" language="java"></monaco-editor>
+    <pane>
+      <div style="height: 600px;">
+        <monaco-editor ref="editorRef" language="java"></monaco-editor>
+      </div>
     </pane>
   </splitpanes>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { Pane, Splitpanes } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 import { nextTick, onMounted, ref, toRefs } from "vue";
 import { getLanguage } from "@/components/editor/monaco-editor";
 import { apiGetFileContent, apiGetFileTree } from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-
-/**
- * 文件节点
- */
-interface FileNode {
-  path: string,
-  key: string,
-  label: string,
-  isLeaf: boolean,
-  selectable: boolean,
-  extension: string, // 文件后缀名
-  children: FileNode[]
-}
+import svgIcon from "@/components/svg-icon";
 
 /**
  * 递归展开所有非叶子节点
@@ -46,113 +42,81 @@ function expandAllParentNode(fileNode: FileNode, defaultExpandedKeys: string[]) 
   }
 }
 
-export default {
-  name: "CodeTreeView",
-  components: { MonacoEditor, Splitpanes, Pane },
-  props: {
-    // 展示该目录下的所有文件
-    dir: {
-      type: String
-    }
-  },
-  setup(props: any) {
-    const editorRef = ref();
-    const treeData = ref<FileNode[]>([]);
-    const { dir } = toRefs(props);
+type Props = {
+  // 展示该目录下的所有文件
+  dir: string
+}
 
-    // 返回数据结构取的字段
-    const defaultProps = {
-      children: "children",
-      label: "label",
-      id: "key"
-    };
+const { dir } = defineProps<Props>()
 
-    /**
-     * 树节点点击事件
-     * 如果是文件节点，调用后台接口获取文件内容
-     * 如果是目录节点，直接展开该目录
-     * @param fileNode
-     * @see FileNode#isLeaf
-     */
-    let handleFileTreeNodeClick = (fileNode: FileNode) => {
-      if (fileNode && fileNode.isLeaf) {
-        const lang = getLanguage(fileNode.extension);
-        apiGetFileContent(fileNode.path).then(res => {
-          editorRef.value.setLanguage(lang);
-          editorRef.value.setText(res.data);
-        });
-      }
-    };
+const editorRef = ref();
+const treeData = ref<FileNode[]>([]);
 
-    /**
-     * 找到第一个文件节点
-     * @param fileNode
-     */
-    let findFirstLeafNode = function(fileNode: FileNode): FileNode | undefined {
-      if (fileNode.isLeaf) {
-        return fileNode;
-      }
-      let firstNode: FileNode | undefined;
-      for (let i = 0; i < fileNode.children.length; i++) {
-        firstNode = findFirstLeafNode(fileNode.children[i]);
-        if (fileNode) {
-          break;
-        }
-      }
-      return firstNode;
-    };
+// 返回数据结构取的字段
+const defaultProps = {
+  children: "children",
+  label: "label",
+  id: "key"
+};
 
-    /**
-     * 手动模拟选中第一个文件
-     * @param fileNodes
-     */
-    let onClickFirstFile = async (fileNodes: FileNode[]) => {
-      let node = findFirstLeafNode(fileNodes[0]);
-      if (node) {
-        handleFileTreeNodeClick(node);
-      }
-    };
-
-    // 加载文件树
-    onMounted(() => {
-      apiGetFileTree(dir.value).then(res => {
-        treeData.value = res.data;
-        nextTick(() => onClickFirstFile(treeData.value));
-      });
+/**
+ * 树节点点击事件
+ * 如果是文件节点，调用后台接口获取文件内容
+ * 如果是目录节点，直接展开该目录
+ * @param fileNode
+ * @see FileNode#isLeaf
+ */
+let handleFileTreeNodeClick = (fileNode: FileNode) => {
+  if (fileNode && fileNode.isLeaf) {
+    const lang = getLanguage(fileNode.extension);
+    apiGetFileContent(fileNode.path).then(res => {
+      editorRef.value.setLanguage(lang);
+      editorRef.value.setText(res.data);
     });
-
-    return {
-      editorRef,
-      treeData,
-      defaultProps,
-      handleFileTreeNodeClick
-    };
   }
 };
 
+/**
+ * 找到第一个文件节点
+ * @param fileNode
+ */
+let findFirstLeafNode = function (fileNode: FileNode): FileNode | undefined {
+  if (fileNode.isLeaf) {
+    return fileNode;
+  }
+  let firstNode: FileNode | undefined;
+  for (let i = 0; i < fileNode.children.length; i++) {
+    firstNode = findFirstLeafNode(fileNode.children[i]);
+    if (fileNode) {
+      break;
+    }
+  }
+  return firstNode;
+};
+
+/**
+ * 手动模拟选中第一个文件
+ * @param fileNodes
+ */
+let onClickFirstFile = async (fileNodes: FileNode[]) => {
+  let node = findFirstLeafNode(fileNodes[0]);
+  if (node) {
+    handleFileTreeNodeClick(node);
+  }
+};
+
+// 加载文件树
+onMounted(() => {
+  apiGetFileTree(dir).then(res => {
+    treeData.value = res.data;
+    nextTick(() => onClickFirstFile(treeData.value));
+  });
+});
 </script>
 
 <style scoped lang="scss">
-.splitpanes__pane {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Helvetica, Arial, sans-serif;
-  color: rgba(85, 91, 82, 0.6);
-  font-size: 5em;
-}
-
-.splitpanes__splitter {
-  width: 200px;
-}
-
-.el-tree {
-  width: 100%;
-  overflow-x: auto;
-}
-
-.el-tree > .el-tree-node {
-  min-width: 100%;
-  display: inline-block !important;
+.tree-container {
+  height: 600px;
+  overflow-y: scroll;
 }
 </style>
