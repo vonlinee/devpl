@@ -1,7 +1,6 @@
 import http from "@/utils/http"
-import { DBTableDataVO, ParamGetDbTableData } from "@/views/mocker/database/type"
 
-export const useDataSourceTestApi = (id: Number) => {
+export const useDataSourceTestApi = (id: number) => {
   return http.get<TestConnVO>("/api/gen/datasource/test/" + id)
 }
 
@@ -29,7 +28,7 @@ export interface TestConnVO {
  * @param connInfo 连接信息
  * @returns
  */
-export const apiTestConnection = (connInfo: any) => {
+export const apiTestConnection = (connInfo: DbConnInfo) => {
   return http.post<TestConnVO>("/api/gen/datasource/connection/test", connInfo)
 }
 
@@ -108,5 +107,5 @@ export const apiListTableNames = (id: number, dbName: string) => {
  * @returns 所有支持的数据库类型
  */
 export const apiGetTableData = (param: ParamGetDbTableData) => {
-  return http.post<DBTableDataVO>('/api/gen/datasource/table/data', param)
+  return http.post<DBTableDataVO>("/api/gen/datasource/table/data", param)
 }

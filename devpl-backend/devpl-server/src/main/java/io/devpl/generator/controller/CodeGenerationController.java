@@ -80,7 +80,8 @@ public class CodeGenerationController {
      */
     @PostMapping("/genfile")
     public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenFile param) {
-        return Result.ok(templateFileGenerationService.saveOrUpdate(param));
+        templateFileGenerationService.saveOrUpdate(param);
+        return Result.ok(true);
     }
 
     /**

@@ -89,10 +89,11 @@ onMounted(() => {
 	})
 })
 
-
 const datasourceHandle = (id: number) => {
-	useDataSourceTestApi(id).then((res: any) => {
-		ElMessage.success(res.data)
+	useDataSourceTestApi(id).then((res) => {
+		if (!res.data?.failed) {
+			ElMessage.success("连接成功")
+		}
 	})
 }
 

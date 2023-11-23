@@ -14,10 +14,9 @@ monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
   schemaValidation: 'error'
 });
 
-type MonacoEditorProps = {
-  width: number | string
-}
-
+/**
+ * 必须给高度才能显示
+ */
 export default defineComponent({
   name: "MonacoEditor",
   props: {
@@ -61,6 +60,8 @@ export default defineComponent({
     const { language, text, width, height, readOnly } = toRefs(props);
     // 初始高度
     let initialHeight: string = height.value;
+
+    console.log("Monaco Editor => h = ", initialHeight);
 
     const editorOptions: IStandaloneEditorConstructionOptions = reactive({
       value: text.value, // 编辑器初始显示文字
@@ -117,7 +118,7 @@ export default defineComponent({
        * 设置语言模式 https://github.com/Microsoft/monaco-editor/issues/539
        * @param lang 如果为null，则会设置为plaintext
        */
-      setLanguage(lang: string): void {
+      setLanguage: function (lang: string): void {
         if (monacoEditor) {
           const textModel: ITextModel | null = monacoEditor.getModel();
           if (textModel) {
@@ -129,7 +130,7 @@ export default defineComponent({
       /**
        * 获取编辑器语言模式
        */
-      getLanguage(): string | undefined {
+      getLanguage: function (): string | undefined {
         return editorOptions.language;
       }
     });

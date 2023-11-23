@@ -24,6 +24,4 @@ import Sidebar from '@/layout/components/Sidebar/index.vue'
 import Navbar from '@/layout/components/Navbar/index.vue'
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -42,5 +42,5 @@ export function apiListSelectableTemplates() {
  * @param templateId 模板ID
  */
 export function apiGetTemplateById(templateId: number) {
-    return http.get(`/api/codegen/template/info/${templateId}`)
+    return http.get<TemplateInfo>(`/api/codegen/template/info/${templateId}`)
 }

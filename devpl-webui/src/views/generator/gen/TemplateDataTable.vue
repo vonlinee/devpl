@@ -1,7 +1,5 @@
 <!--
- * @ 模板数据表
- * @author Von
- * @date 2023/8/17 20:51
+ * @ 模板参数表
 -->
 <script setup lang="ts">
 

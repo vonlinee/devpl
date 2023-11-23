@@ -10,11 +10,8 @@ import "vxe-table/lib/style.css"
 
 import { createPinia, Pinia } from "pinia"
 
-import PrimeVue from "primevue/config"
-import "primeicons/primeicons.css"
-import 'primevue/resources/primevue.min.css';
-// primevue 主题样式
-import "primevue/resources/themes/lara-light-teal/theme.css"
+import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css"
+import ContextMenu from "@imengyu/vue3-context-menu"
 
 import "./command.ts"
 
@@ -38,16 +35,7 @@ const app = createApp(App)
 // 创建 Pinia 实例
 const pinia: Pinia = createPinia()
 
-
-// PrimeVue https://primevue.org/configuration/
-app.use(PrimeVue, {
-  zIndex: {
-    modal: 1100, //dialog, sidebar
-    overlay: 1000, //dropdown, overlaypanel
-    menu: 1000, //overlay menus
-    tooltip: 1100, //tooltip
-  },
-})
+app.use(ContextMenu)
 app.use(pinia)
 app.use(router)
 app.use(SvgIcon)

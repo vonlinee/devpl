@@ -1543,7 +1543,7 @@ public class FileUtils {
      * @return 文件扩展名
      */
     @Nonnull
-    public static String getExtension(File file, String placeholder) {
+    public static String getExtensionName(File file, String placeholder) {
         if (file == null) {
             return placeholder;
         }

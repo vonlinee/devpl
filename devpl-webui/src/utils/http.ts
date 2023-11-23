@@ -7,16 +7,7 @@ import axios, {
 } from "axios"
 import { ElMessage } from "element-plus"
 import qs from "qs"
-
-/**
- * 响应状态枚举
- */
-enum ResponseStatus {
-  TIMEOUT = 20000,
-  OVERDUE = 600, // 登录失效
-  FAIL = 999, // 请求失败
-  SUCCESS = 2000, // 请求成功，不使用200,与HTTP状态码区分开
-}
+import { ResponseStatus, HttpStatus } from "./http/status"
 
 /**
  * 后端接口响应数据结构
@@ -34,7 +25,7 @@ export interface Response<T = Record<string, any>> {
   /**
    * 用于提示的消息，由后端定义
    */
-  toast: string
+  toast?: string
   /**
    * 总条数，仅当返回数据为列表时有值
    */
@@ -104,18 +95,22 @@ class Http {
 
     // 响应拦截器
     this.instance.interceptors.response.use(
-      (response : AxiosResponse) => {
-        if (response.status !== 200) {
+      (response: AxiosResponse) => {
+        if (response.status !== HttpStatus.OK) {
+          // HTTP请求失败
           return Promise.reject(new Error(response.statusText || "Error"))
         }
-        const res = response.data
-        // 响应成功 200
+        const res = response.data as Response
         if (res.code === ResponseStatus.SUCCESS) {
-          return res
+          // 业务响应成功
+          return res as unknown as AxiosResponse
         }
         // 错误提示 通过自定义弹窗方式进行显示
-        // showException(res.stackTrace)
-        ElMessage.error(res.msg)
+        if (res.toast) {
+          ElMessage.error(res.toast)
+        } else {
+          ElMessage.error(res.msg)
+        }
         return Promise.reject(res.msg || "Error")
       },
       (error) => {

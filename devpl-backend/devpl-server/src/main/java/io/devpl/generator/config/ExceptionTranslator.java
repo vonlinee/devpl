@@ -1,10 +1,12 @@
 package io.devpl.generator.config;
 
 import java.io.PrintStream;
+import java.util.function.Predicate;
 
 public class ExceptionTranslator {
 
     private final Throwable throwable;
+    private Predicate<StackTraceElement> filter;
 
     public ExceptionTranslator(Throwable throwable) {
         this.throwable = throwable;
@@ -13,7 +15,9 @@ public class ExceptionTranslator {
     public void prettyPrint(PrintStream out) {
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         for (int i = 0; i < stackTrace.length; i++) {
-            out.println(stackTrace[i]);
+            if (filter != null && filter.test(stackTrace[i])) {
+                out.println(stackTrace[i]);
+            }
         }
     }
 

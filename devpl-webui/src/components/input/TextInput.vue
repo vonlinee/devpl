@@ -1,11 +1,11 @@
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
-import {ElButton, ElDialog} from "element-plus";
+import { defineComponent, ref } from 'vue'
+import { ElButton, ElDialog } from "element-plus";
 import SvgIcon from "@/components/svg-icon/src/svg-icon.vue";
 
 export default defineComponent({
     name: 'TextInput',
-    components: {ElButton, SvgIcon, ElDialog},
+    components: { ElButton, SvgIcon, ElDialog },
     props: {
         text: {
             type: String,
@@ -53,37 +53,31 @@ export default defineComponent({
 
 <template>
     <el-input title="" v-model="inputRef" size="large" type="text" @mouseenter="editIconVisiableRef = true"
-              @input="updateValue" @mouseleave="editIconVisiableRef = false">
+        @input="updateValue" @mouseleave="editIconVisiableRef = false">
         <template #suffix>
             <svg-icon v-show="editIconVisiableRef" icon="icon-expand" @click.stop="showTextInputDialog"
-                      cursor="pointer"></svg-icon>
+                cursor="pointer"></svg-icon>
         </template>
     </el-input>
 
     <!-- 嵌套弹窗需配置append-to-body为true -->
-    <el-dialog v-model="dialogShowing" show-footer
-               append-to-body
-               @confirm="dialogInput"
-               @show="dialogInputText = inputRef">
+    <el-dialog v-model="dialogShowing" show-footer append-to-body @confirm="dialogInput" @show="dialogInputText = inputRef">
         <template #title>
             <span>编辑</span>
         </template>
         <template #default>
             <slot name="editor">
-                <el-input v-model="dialogInputText" type="textarea" rows="20" size="small" resize="none"
-                          show-word-count>
+                <el-input v-model="dialogInputText" type="textarea" rows="20" size="small" resize="none" show-word-count>
                 </el-input>
             </slot>
         </template>
         <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogShowing = false">取消</el-button>
-            <el-button type="primary" @click="dialogInput">确认</el-button>
-          </span>
+            <span class="dialog-footer">
+                <el-button @click="dialogShowing = false">取消</el-button>
+                <el-button type="primary" @click="dialogInput">确认</el-button>
+            </span>
         </template>
     </el-dialog>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

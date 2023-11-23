@@ -1,5 +1,5 @@
 <template>
-    <vxe-modal v-model="visible" title="生成代码" :mask-closable="false" draggable width="70%" show-footer>
+    <vxe-modal v-model="visible" title="生成代码" :mask-closable="false" draggable width="70%" show-footer :z-index="2000">
         <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
             <el-row>
                 <el-col :span="12">
@@ -96,25 +96,18 @@
         </template>
     </vxe-modal>
 
-    <el-dialog v-model="fileTreeViewDialogRef" draggable>
-        <file-tree-view ref="fileTreeViewRef"></file-tree-view>
-    </el-dialog>
-
     <code-gen-result ref="resultDialogRef"></code-gen-result>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElButton, ElDialog, ElMessage } from 'element-plus/es'
+import { ElButton, ElMessage } from 'element-plus/es'
 import { useBaseClassListApi } from '@/api/baseClass'
 import { useDownloadApi, useGeneratorApi } from '@/api/generator'
 import { useTableApi, useTableSubmitApi } from '@/api/table'
-import FileTreeView from "@/components/FileTreeView.vue";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 
-const fileTreeViewDialogRef = ref(false)
 const resultDialogRef = ref()
-const fileTreeViewRef = ref()
 
 const emit = defineEmits(['refreshDataList'])
 

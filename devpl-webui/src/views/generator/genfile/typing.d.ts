@@ -1,7 +1,7 @@
 /**
  * 表格行数据
  */
-interface GenFile {
+type GenFile = {
   pid: number
   fileName: string
   templateId?: number

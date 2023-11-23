@@ -8,14 +8,12 @@
     <el-tab-pane label="XML" name="xml">
       <div class="code-editor-box">
         <monaco-editor ref="xmlEditorRef" language="xml" value=""></monaco-editor>
-      </div
-      >
+      </div>
     </el-tab-pane>
     <el-tab-pane label="JSON Schema" name="jsonSchema">
       <div class="code-editor-box">
         <monaco-editor ref="jsonSchemaEditorRef" language="json" value=""></monaco-editor>
-      </div
-      >
+      </div>
     </el-tab-pane>
     <el-tab-pane label="DDL" name="ddl">
       <div class="code-editor-box">
@@ -42,17 +40,17 @@ editorRefMap.set("jsonSchema", jsonSchemaEditorRef);
 editorRefMap.set("ddl", ddlEditorRef);
 
 defineExpose({
-  getSelectedTab: function() {
+  getSelectedTab: function () {
     return activeName.value;
   },
-  getContent: function() {
+  getContent: function () {
     return editorRefMap.get(activeName.value).value.getText();
   }
 });
 
 </script>
 <style>
-.editor-tabs > .el-tabs__content {
+.editor-tabs>.el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

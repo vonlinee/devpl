@@ -53,7 +53,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
       {
         path: "/gen/files",
-        name: "目标文件管理",
+        name: "目标文件",
         component: () => import("@/views/generator/genfile/index.vue"),
         meta: {
           title: "目标文件管理",
@@ -71,7 +71,6 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-
 
   {
     path: "/scripts",
@@ -118,7 +117,7 @@ export const menuRoutes: RouteRecordRaw[] = [
           icon: "icon-cluster",
         },
       },
-    ]
+    ],
   },
   {
     path: "/devtools",

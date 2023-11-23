@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import ParamTable from '@/components/ParamTable.vue';
 import { ref } from 'vue';
-import { Splitpanes, Pane } from 'splitpanes'
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import 'splitpanes/dist/splitpanes.css'
 let mapperParams = ref<ParamItem[]>([{
 	id: 1,

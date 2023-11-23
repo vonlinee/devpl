@@ -1,9 +1,14 @@
+<!-- 
+  封装一个简单的弹窗，固定的确定和取消按钮
+  通过ref进行操作
+ -->
 <template>
   <vxe-modal :title="title" v-model="modalVisiable" draggable show-footer :z-index="2000" height="80%" width="80%">
     <template #default>
-        <slot></slot>
+      <slot></slot>
     </template>
     <template #footer>
+      <vxe-button status="success" @click="onCancelButtonClicked">取消</vxe-button>
       <vxe-button status="success" @click="onOkButtonClicked">确定</vxe-button>
     </template>
   </vxe-modal>
@@ -22,20 +27,23 @@ defineProps<{
 }>()
 
 const emits = defineEmits([
-  "onOkButtonClicked"
+  "onOkButtonClicked",
+  "onCancelButtonClicked"
 ])
 
 const onOkButtonClicked = () => {
   emits('onOkButtonClicked')
 }
 
+const onCancelButtonClicked = () => {
+  emits('onCancelButtonClicked')
+}
+
 defineExpose({
-  show: () => {
+  show: (params: any) => {
     modalVisiable.value = true
   }
 })
 
 </script>
-<style lang='scss' scoped>
-
-</style>
+<style lang='scss' scoped></style>

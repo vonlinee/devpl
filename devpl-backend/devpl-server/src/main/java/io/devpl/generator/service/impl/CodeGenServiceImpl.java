@@ -245,7 +245,7 @@ public class CodeGenServiceImpl implements CodeGenService {
                 } else {
                     fileNode.setIsLeaf(true);
                     fileNode.setSelectable(true);
-                    fileNode.setExtension(FileUtils.getExtension(file, "txt"));
+                    fileNode.setExtension(FileUtils.getExtensionName(file, "txt"));
                 }
             }
         } else {
