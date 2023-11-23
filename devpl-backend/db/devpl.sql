@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 127.0.0.1-mysql
+ Source Server         : localshots_mysql
  Source Server Type    : MySQL
- Source Server Version : 50740
- Source Host           : 127.0.0.1:3306
+ Source Server Version : 50736
+ Source Host           : localhost:3306
  Source Schema         : devpl
 
  Target Server Type    : MySQL
- Target Server Version : 50740
+ Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 21/10/2023 20:54:07
+ Date: 23/11/2023 23:26:18
 */
 
 SET NAMES utf8mb4;
@@ -49,11 +49,7 @@ CREATE TABLE `column_info`  (
   `is_autoincrement` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
   `is_generated` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of column_info
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表（对应JDBC的ColumnMetadata）' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for connection_config
@@ -89,11 +85,11 @@ CREATE TABLE `data_type_group`  (
   `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组ID',
   `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
   `internal` tinyint(4) NULL DEFAULT 0 COMMENT '是否内置类型分组，内置类型分组不可更改',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型分组' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型分组' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_type_group
@@ -101,6 +97,7 @@ CREATE TABLE `data_type_group`  (
 INSERT INTO `data_type_group` VALUES (1, 'JSON', '标准JSON类型', 1, NULL, NULL, 0);
 INSERT INTO `data_type_group` VALUES (2, 'JDBC', 'JDBC类型', 1, NULL, NULL, 0);
 INSERT INTO `data_type_group` VALUES (3, 'JAVA', 'Java类型', 1, NULL, NULL, 0);
+INSERT INTO `data_type_group` VALUES (11, 'MyBatisMS', 'MyBatis Mapper参数', 0, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for data_type_item
@@ -117,58 +114,96 @@ CREATE TABLE `data_type_item`  (
   `default_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型默认值',
   `precision` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '精度',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '是否删除',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `is_deleted` tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 147 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 148 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_type_item
 -- ----------------------------
-INSERT INTO `data_type_item` VALUES (144, '', 'JsonNumber', 'JSON数字类型', NULL, 10, 50, '0', '3434', 'dfsvssvdsvd', NULL, '2023-10-21 10:20:55', NULL);
-INSERT INTO `data_type_item` VALUES (145, 'Java', '112', '1235', NULL, NULL, NULL, 'sdffd', 'wewe', 'sfwe', NULL, '2023-10-21 10:06:05', NULL);
-INSERT INTO `data_type_item` VALUES (146, '', 'JsonNumber', 'JSON数字类型', NULL, NULL, NULL, '0', '3434', 'sdfwe', NULL, NULL, NULL);
+INSERT INTO `data_type_item` VALUES (144, 'JSON', 'JsonNumber', 'JSON数字类型', '8990', 10, 50, '0', '3434', 'JSON数字类型', NULL, '2023-10-21 10:20:55', NULL);
+INSERT INTO `data_type_item` VALUES (145, 'JSON', 'JsonString', 'JSON字符串', '555', NULL, NULL, '', '', 'JSON字符串', NULL, '2023-10-21 10:06:05', NULL);
+INSERT INTO `data_type_item` VALUES (146, 'JSON', 'JsonNumber', 'JSON数字类型', NULL, NULL, NULL, '0', '3434', 'sdfwe', NULL, NULL, NULL);
+INSERT INTO `data_type_item` VALUES (147, 'JSON', 'JsonNull', 'JSON NULL类型', NULL, 0, 0, '0', '', 'JSON NULL类型', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for data_type_mapping
 -- ----------------------------
 DROP TABLE IF EXISTS `data_type_mapping`;
 CREATE TABLE `data_type_mapping`  (
-  `id` int(11) NOT NULL COMMENT '主键ID',
-  `type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'SQL数据类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `type_id` bigint(20) NULL DEFAULT NULL COMMENT '主数据类型ID',
+  `another_type_id` bigint(20) NULL DEFAULT NULL COMMENT '映射数据类型ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型映射关系表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型映射关系表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of data_type_mapping
 -- ----------------------------
+INSERT INTO `data_type_mapping` VALUES (1, 145, NULL);
+INSERT INTO `data_type_mapping` VALUES (2, 146, NULL);
+INSERT INTO `data_type_mapping` VALUES (3, 147, NULL);
 
 -- ----------------------------
--- Table structure for datasource_info
+-- Table structure for database_backup_history
 -- ----------------------------
-DROP TABLE IF EXISTS `datasource_info`;
-CREATE TABLE `datasource_info`  (
+DROP TABLE IF EXISTS `database_backup_history`;
+CREATE TABLE `database_backup_history`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `save_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存位置',
+  `backup_time` datetime(0) NULL DEFAULT NULL COMMENT '备份时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of database_backup_history
+-- ----------------------------
+INSERT INTO `database_backup_history` VALUES (1, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql', '2023-10-22 10:28:19', '2023-10-22 10:28:18');
+INSERT INTO `database_backup_history` VALUES (2, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql', '2023-10-22 10:38:01', '2023-10-22 10:38:01');
+INSERT INTO `database_backup_history` VALUES (3, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql', '2023-10-22 10:39:06', '2023-10-22 10:39:06');
+INSERT INTO `database_backup_history` VALUES (4, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql', '2023-10-22 11:55:34', '2023-10-22 11:55:34');
+INSERT INTO `database_backup_history` VALUES (5, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153037.sql', '2023-10-22 15:30:38', '2023-10-22 15:30:37');
+INSERT INTO `database_backup_history` VALUES (6, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153202.sql', '2023-10-22 15:32:03', '2023-10-22 15:32:03');
+INSERT INTO `database_backup_history` VALUES (7, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022164904.sql', '2023-10-22 16:49:05', '2023-10-22 16:49:04');
+INSERT INTO `database_backup_history` VALUES (8, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171500.sql', '2023-10-22 17:15:01', '2023-10-22 17:15:01');
+INSERT INTO `database_backup_history` VALUES (9, 'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171931.sql', '2023-10-22 17:19:32', '2023-10-22 17:19:31');
+INSERT INTO `database_backup_history` VALUES (10, 'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029104903.sql', '2023-10-29 10:49:04', '2023-10-29 10:49:04');
+INSERT INTO `database_backup_history` VALUES (11, 'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105536.sql', '2023-10-29 10:55:37', '2023-10-29 10:55:37');
+INSERT INTO `database_backup_history` VALUES (12, 'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105648.sql', '2023-10-29 10:56:49', '2023-10-29 10:56:48');
+INSERT INTO `database_backup_history` VALUES (13, 'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105734.sql', '2023-10-29 10:57:35', '2023-10-29 10:57:35');
+
+-- ----------------------------
+-- Table structure for db_conn_info
+-- ----------------------------
+DROP TABLE IF EXISTS `db_conn_info`;
+CREATE TABLE `db_conn_info`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `db_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库类型',
-  `database_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库名称',
+  `host` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'IP地址',
+  `port` int(5) NULL DEFAULT 3306 COMMENT '端口号',
+  `driver_class_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '驱动类名',
+  `db_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库名称',
   `conn_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '连接名',
   `conn_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL',
   `username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
   `driver_props` json NULL COMMENT '驱动属性',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `is_deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否逻辑删除',
+  `driver_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '驱动类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of datasource_info
+-- Records of db_conn_info
 -- ----------------------------
-INSERT INTO `datasource_info` VALUES (1, 'MySQL', NULL, 'lgdb_campusintelligentportrait', 'jdbc:mysql://192.168.129.82:3306/lgdb_campusintelligentportrait?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8', 'root', 'LancooECP', NULL, '2023-08-01 09:34:10');
-INSERT INTO `datasource_info` VALUES (2, 'MySQL', NULL, 'lgdb_univ_exam_management', 'jdbc:mysql://192.168.129.82:3306/lgdb_univ_exam_management?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8', 'root', 'LancooECP', NULL, '2023-09-22 15:52:53');
-INSERT INTO `datasource_info` VALUES (3, 'MySQL', '', '1212', 'sdff', 'root', '123456', NULL, '2023-10-09 19:32:36');
-INSERT INTO `datasource_info` VALUES (4, 'MySQL', '', 'sdfdfs', '123456', 'root', '123456', NULL, '2023-10-09 19:33:56');
-INSERT INTO `datasource_info` VALUES (5, 'MySQL', '1121212', '12', 'sfds122', 'root', '123456', NULL, '2023-10-09 20:10:54');
+INSERT INTO `db_conn_info` VALUES (2, 'MYSQL', '127.0.0.1', 3306, 'com.mysql.cj.jdbc.Driver', NULL, 'devpl', 'jdbc:mysql://127.0.0.1:3306/devpl?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8', 'root', 'ha1OPkEUX39v7wx2PCXJww==', NULL, '2023-09-22 15:52:53', '2023-11-16 21:44:09', NULL, 'MYSQL5');
+INSERT INTO `db_conn_info` VALUES (9, 'MySQL', '127.0.0.1', 3306, 'com.mysql.cj.jdbc.Driver', 'mysql_learn', 'mysql_learn', 'jdbc:mysql://127.0.0.1:3306/mysql_learn', 'root', 'ha1OPkEUX39v7wx2PCXJww==', NULL, '2023-10-28 22:46:29', '2023-10-28 22:46:29', NULL, 'MYSQL8');
+INSERT INTO `db_conn_info` VALUES (10, 'MySQL', '127.0.0.1', 3306, 'com.mysql.jdbc.Driver', '', 'dsd', 'jdbc:mysql://127.0.0.1:3306', 'admin', 'ant.design', NULL, '2023-10-29 20:48:32', '2023-10-29 20:48:32', NULL, 'ORACLE');
 
 -- ----------------------------
 -- Table structure for dbs
@@ -198,8 +233,8 @@ CREATE TABLE `field_info`  (
   `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
   `field_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = Dynamic;
@@ -208,16 +243,173 @@ CREATE TABLE `field_info`  (
 -- Records of field_info
 -- ----------------------------
 INSERT INTO `field_info` VALUES (1, 'sdfsd', 'sdfsd', 'int', '1212', '1212', NULL, NULL, NULL);
-INSERT INTO `field_info` VALUES (2, 'userName', 'userName', 'int', '', '', NULL, NULL, NULL);
-INSERT INTO `field_info` VALUES (3, 'ewwe', 'ewwe', 'int', '', '', NULL, NULL, NULL);
+INSERT INTO `field_info` VALUES (2, 'userName', 'userName', 'int', 'userName', '', NULL, NULL, NULL);
+INSERT INTO `field_info` VALUES (3, 'ewwe', 'ewwe', 'int', 'ewwe', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (4, 'sdfsdf', 'sdfsdf', 'int', '', '', NULL, NULL, NULL);
-INSERT INTO `field_info` VALUES (5, 'fgdsf', 'fgdsf', 'int', '', '', NULL, NULL, NULL);
+INSERT INTO `field_info` VALUES (5, 'fgdsf', 'fgdsf', 'int', 'fgdsf', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (6, 'sdsd', 'sdsd', 'int', '', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (7, 'dsfsdfd', 'dsfsdfd', 'int', '', '', NULL, NULL, NULL);
-INSERT INTO `field_info` VALUES (8, 'gdfs', 'gdfs', 'int', '', '', NULL, NULL, NULL);
+INSERT INTO `field_info` VALUES (8, 'gdfs', 'gdfs', 'int', 'gdfs', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (9, 'gdfdgf', 'gdfdgf', 'int', '', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (10, '42323', '42323', 'int', '', '', NULL, NULL, NULL);
 INSERT INTO `field_info` VALUES (11, 'hngh', 'hngh', 'int', '', '', NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for field_spec
+-- ----------------------------
+DROP TABLE IF EXISTS `field_spec`;
+CREATE TABLE `field_spec`  (
+  `field_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段ID',
+  `field_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段名',
+  `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型',
+  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
+  `field_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
+  PRIMARY KEY (`field_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of field_spec
+-- ----------------------------
+INSERT INTO `field_spec` VALUES ('042884a4-fc68-11ed-b2ad-0a0027000012', 'name', 'String', '姓名', '字段值');
+INSERT INTO `field_spec` VALUES ('04288656-fc68-11ed-b2ad-0a0027000012', 'age', 'int', '年龄', '字段值');
+INSERT INTO `field_spec` VALUES ('04698a4a-fc68-11ed-b2ad-0a0027000012', 'Cage', 'String', '年龄', '字段值');
+INSERT INTO `field_spec` VALUES ('04698c3c-fc68-11ed-b2ad-0a0027000012', 'D', 'float', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04895075-fc68-11ed-b2ad-0a0027000012', 'description', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0489520a-fc68-11ed-b2ad-0a0027000012', 'Fsdfsf', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04ac5b91-fc68-11ed-b2ad-0a0027000012', 'G', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04ac5d14-fc68-11ed-b2ad-0a0027000012', 'H', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04cc4607-fc68-11ed-b2ad-0a0027000012', 'U', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04cc47e2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04f11933-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('04f11aa8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('050baf17-fc68-11ed-b2ad-0a0027000012', 'A1212', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('050bb0e4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('052ee5c8-fc68-11ed-b2ad-0a0027000012', 'A11111111', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('052ee72e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('054b1ebf-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('054b204c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0567fc80-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0567fe28-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05871fad-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05872179-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05a578c1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05a5a0ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05ca7229-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('05ca73aa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06775c34-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06775db0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('069aac39-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('069aae0a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06bbebdc-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06bbed55-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06dd03c5-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06dd0584-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06faad2f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('06faaeab-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07190862-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07190a1d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0739b6b3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0739b89e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07599c72-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07599df8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0776b8ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0776ba32-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07968a7e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07968c51-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07b536f7-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07b53907-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07d3cefc-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07d3d0e3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07f4b3d5-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('07f4b5b8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('081633c4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0816357d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0838d318-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0838d488-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('085a551d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('085a56f2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0878866f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('087887d9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('089b79a0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('089b7b1e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('08bc6b87-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('08bc6d06-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('08ddc638-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('08ddc7ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09008cc4-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09008f37-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09202087-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('092021fa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09405733-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('094058f9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('096432ae-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0964342c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('098730d8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09873250-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09a5e2c6-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09a5e489-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09c73d0c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09c73ec3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09e4947c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('09e4964d-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0aee5282-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0aee5422-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b13214c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b1322e0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b31b6e8-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b31b8af-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b559eeb-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b55a0a2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b76b551-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b76b703-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b973c2a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0b973db3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bb9ff04-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bba008f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bdf0e52-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bdf0fcd-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bfc9386-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0bfc94fa-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c1ba46c-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c1ba654-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c3b0f6f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c3b1124-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c7a6456-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c7a65e1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c9f5dd0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0c9f5f3f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0cbdbef1-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0cbdc06a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0ce2d072-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0ce2d1ed-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0cff3732-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0cff3922-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d20b49e-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d20b61b-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d4365da-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d436788-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d61f8da-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d61fa54-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d82855a-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0d8286f2-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0da25ee3-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0da26064-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0dc405f9-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0dc40779-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0de2745b-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0de275c0-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0dff898f-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('0dff8b94-fc68-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('b3a5bc7d-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('b582e189-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c06c5b9d-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c06c5d5e-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c154d473-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c154d60b-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c1ac190a-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c1ac1a92-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c1cfd4ed-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
+INSERT INTO `field_spec` VALUES ('c1cfd68c-fc66-11ed-b2ad-0a0027000012', 'A', 'String', '描述信息', '字段值');
 
 -- ----------------------------
 -- Table structure for file_gen_group
@@ -240,13 +432,9 @@ CREATE TABLE `file_gen_group`  (
   `form_layout` tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
   `datasource_id` bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`group_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件生成组记录表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of file_gen_group
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for gen_base_class
@@ -258,7 +446,7 @@ CREATE TABLE `gen_base_class`  (
   `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类编码',
   `fields` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '基类管理' ROW_FORMAT = Dynamic;
 
@@ -266,6 +454,21 @@ CREATE TABLE `gen_base_class`  (
 -- Records of gen_base_class
 -- ----------------------------
 INSERT INTO `gen_base_class` VALUES (1, 'net.maku.framework.mybatis.entity', 'BaseEntity', 'id,creator,create_time,updater,update_time,version,deleted', '使用该基类，则需要表里有这些字段', '2023-06-30 10:25:16');
+
+-- ----------------------------
+-- Table structure for gen_datasource
+-- ----------------------------
+DROP TABLE IF EXISTS `gen_datasource`;
+CREATE TABLE `gen_datasource`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `db_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据库类型',
+  `conn_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '连接名',
+  `conn_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL',
+  `username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
+  `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for gen_field_type
@@ -276,12 +479,12 @@ CREATE TABLE `gen_field_type`  (
   `column_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
   `attr_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性类型',
   `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性包名',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `json_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'JSON数据类型',
   `mysql_sql_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'MySQL SQL数据类型',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `column_type`(`column_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段类型管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段类型管理' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_field_type
@@ -335,7 +538,7 @@ CREATE TABLE `gen_project_modify`  (
   `exclusions` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '排除文件',
   `modify_suffix` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更文件',
   `modify_tmp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更临时路径',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目名变更' ROW_FORMAT = Dynamic;
 
@@ -366,17 +569,17 @@ CREATE TABLE `gen_table`  (
   `form_layout` tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
   `datasource_id` bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `table_name`(`table_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table
 -- ----------------------------
-INSERT INTO `gen_table` VALUES (1, 'data_type_group', 'DataTypeGroup', '数据类型分组', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 0, 'backend', 'frontend', 'devpl', 'group', 1, 0, NULL, '2023-10-12 09:08:50');
-INSERT INTO `gen_table` VALUES (2, 'data_type_item', 'DataTypeItem', '数据类型表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'item', 1, 0, NULL, '2023-10-12 09:08:50');
-INSERT INTO `gen_table` VALUES (3, 'data_type_mapping', 'DataTypeMapping', '数据类型映射关系表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'mapping', 1, 0, NULL, '2023-10-12 09:08:50');
+INSERT INTO `gen_table` VALUES (7, 'session_file_gen', 'SessionFileGen', 'session_file_gen', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'gen', 1, 0, NULL, '2023-10-28 00:16:27');
+INSERT INTO `gen_table` VALUES (8, 'table_file_generation', 'TableFileGeneration', '表文件生成记录表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'generation', 1, 2, NULL, '2023-11-23 22:38:42');
+INSERT INTO `gen_table` VALUES (9, 'connection_config', 'ConnectionConfig', '连接配置表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'config', 1, 2, NULL, '2023-11-23 23:03:45');
 
 -- ----------------------------
 -- Table structure for gen_table_field
@@ -406,28 +609,29 @@ CREATE TABLE `gen_table_field`  (
   `query_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询方式',
   `query_form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询表单类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of gen_table_field
 -- ----------------------------
-INSERT INTO `gen_table_field` VALUES (1, 1, 'id', 'bigint', '主键', 'id', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (2, 1, 'group_id', 'int', '分组ID', 'groupId', 'Integer', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (3, 1, 'group_name', 'varchar', '分组名称', 'groupName', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (4, 2, 'id', 'bigint', '主键ID', 'id', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (5, 2, 'type_group_id', 'varchar', '类型分组名称', 'typeGroupId', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (6, 2, 'type_key', 'varchar', '类型ID', 'typeKey', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (7, 2, 'type_name', 'varchar', '类型名称', 'typeName', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (8, 2, 'value_type', 'varchar', '该数据类型的值类型', 'valueType', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (9, 2, 'min_length', 'double', '最小长度', 'minLength', 'Double', NULL, 5, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (10, 2, 'max_length', 'double', '最大长度', 'maxLength', 'Double', NULL, 6, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (11, 2, 'default_value', 'varchar', '类型默认值', 'defaultValue', 'String', NULL, 7, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (12, 2, 'precision', 'varchar', '精度', 'precision', 'String', NULL, 8, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (13, 2, 'create_time', 'datetime', '创建时间', 'createTime', 'Date', 'java.util.Date', 9, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (14, 2, 'update_time', 'datetime', '更新时间', 'updateTime', 'Date', 'java.util.Date', 10, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (15, 2, 'is_deleted', 'tinyint', '是否删除', 'isDeleted', 'Integer', NULL, 11, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (16, 3, 'id', 'int', '主键ID', 'id', 'Integer', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (17, 3, 'type_key', 'varchar', 'SQL数据类型', 'typeKey', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (46, 7, 'session_id', 'int', '会话ID', 'sessionId', 'Integer', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (47, 7, 'gen_file_id', 'int', '生成文件ID', 'genFileId', 'Integer', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (48, 7, 'template_id', 'int', '模板ID', 'templateId', 'Integer', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (49, 7, 'task_id', 'varchar', '任务ID', 'taskId', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (50, 8, 'pid', 'bigint', '主键ID', 'pid', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (51, 8, 'table_id', 'bigint', '表ID', 'tableId', 'Long', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (52, 8, 'template_id', 'bigint', '模板ID', 'templateId', 'Long', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (53, 8, 'file_name', 'varchar', '文件名称', 'fileName', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (54, 8, 'save_path', 'varchar', '保存路径', 'savePath', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (55, 9, 'id', 'varchar', '主键ID', 'id', 'String', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (56, 9, 'name', 'varchar', '连接名称', 'name', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (57, 9, 'host', 'varchar', '主机地址，IP地址', 'host', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (58, 9, 'port', 'varchar', '端口号', 'port', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (59, 9, 'db_type', 'varchar', '数据库类型', 'dbType', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (60, 9, 'db_name', 'varchar', '数据库名称', 'dbName', 'String', NULL, 5, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (61, 9, 'username', 'varchar', '用户名', 'username', 'String', NULL, 6, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (62, 9, 'password', 'varchar', '密码', 'password', 'String', NULL, 7, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (63, 9, 'encoding', 'varchar', '连接编码', 'encoding', 'String', NULL, 8, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
 
 -- ----------------------------
 -- Table structure for gen_test_student
@@ -442,15 +646,11 @@ CREATE TABLE `gen_test_student`  (
   `version` int(11) NULL DEFAULT NULL COMMENT '版本号',
   `deleted` tinyint(4) NULL DEFAULT NULL COMMENT '删除标识',
   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint(20) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '测试2' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of gen_test_student
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for generator_config
@@ -478,20 +678,12 @@ CREATE TABLE `input_history`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '输入历史' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of input_history
--- ----------------------------
-
--- ----------------------------
 -- Table structure for project
 -- ----------------------------
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project`  (
   `project_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目ID'
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of project
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for province_city_district
@@ -4031,6 +4223,18 @@ INSERT INTO `province_city_district` VALUES (910102, 9101, '市辖区');
 INSERT INTO `province_city_district` VALUES (910103, 9101, '澳门特区');
 
 -- ----------------------------
+-- Table structure for session_file_gen
+-- ----------------------------
+DROP TABLE IF EXISTS `session_file_gen`;
+CREATE TABLE `session_file_gen`  (
+  `session_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会话ID',
+  `gen_file_id` int(11) NOT NULL COMMENT '生成文件ID',
+  `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
+  `task_id` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务ID',
+  PRIMARY KEY (`session_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for table_file_generation
 -- ----------------------------
 DROP TABLE IF EXISTS `table_file_generation`;
@@ -4042,10 +4246,6 @@ CREATE TABLE `table_file_generation`  (
   `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
   PRIMARY KEY (`pid`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '表文件生成记录表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of table_file_generation
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for table_info
@@ -4064,36 +4264,47 @@ CREATE TABLE `table_info`  (
   `self_referencing_col_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'name of the designated \"identifier\" column of a typed table (may be null)',
   `ref_generation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'specifies how values in SELF_REFERENCING_COL_NAME are created. Values are \"SYSTEM\", \"USER\", \"DERIVED\". (may be null)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表信息记录表' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of table_info
--- ----------------------------
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表信息记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for target_gen_file
 -- ----------------------------
 DROP TABLE IF EXISTS `target_gen_file`;
 CREATE TABLE `target_gen_file`  (
-  `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码生成任务ID',
   `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名称',
   `template_id` bigint(20) NULL DEFAULT NULL COMMENT '模板ID',
   `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   `builtin` tinyint(1) NULL DEFAULT NULL COMMENT '是否内置',
-  PRIMARY KEY (`pid`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '目标生成文件类型表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for template_file_generation
+-- ----------------------------
+DROP TABLE IF EXISTS `template_file_generation`;
+CREATE TABLE `template_file_generation`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `task_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '代码生成任务ID',
+  `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名称',
+  `template_id` bigint(20) NULL DEFAULT NULL COMMENT '模板ID',
+  `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
+  `builtin` tinyint(1) NULL DEFAULT NULL COMMENT '是否内置',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板文件生成关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of target_gen_file
+-- Records of template_file_generation
 -- ----------------------------
-INSERT INTO `target_gen_file` VALUES (8, NULL, 'Mapper.java', 1, NULL, 'Mapper文件', 1);
-INSERT INTO `target_gen_file` VALUES (9, NULL, 'Entity.java', 2, NULL, '实体类文件', 1);
-INSERT INTO `target_gen_file` VALUES (10, NULL, 'Service.java', 3, NULL, 'Service文件', 1);
-INSERT INTO `target_gen_file` VALUES (11, NULL, 'ServiceImpl.java', 4, NULL, '34343', 1);
-INSERT INTO `target_gen_file` VALUES (12, NULL, 'VO.java', 5, NULL, '12121212', 1);
-INSERT INTO `target_gen_file` VALUES (16, NULL, 'Controller.java', 6, NULL, 'wrewerwer', 1);
+INSERT INTO `template_file_generation` VALUES (8, NULL, 'Mapper.java', 1, NULL, '12212', 1);
+INSERT INTO `template_file_generation` VALUES (9, NULL, 'Entity.java', 2, NULL, '121212', 1);
+INSERT INTO `template_file_generation` VALUES (10, NULL, 'Service.java', 3, NULL, '232323', 1);
+INSERT INTO `template_file_generation` VALUES (11, NULL, 'ServiceImpl.java', 4, NULL, '34343', 1);
+INSERT INTO `template_file_generation` VALUES (12, NULL, 'VO.java', 5, NULL, '12121212', 1);
+INSERT INTO `template_file_generation` VALUES (16, NULL, 'Controller.java', 6, NULL, 'wrewerwer', 1);
 
 -- ----------------------------
 -- Table structure for template_info
@@ -4106,8 +4317,8 @@ CREATE TABLE `template_info`  (
   `provider` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '技术提供方',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字符串模板内容',
   `path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件模板路径',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   `is_deleted` tinyint(4) NULL DEFAULT NULL COMMENT '逻辑删除状态',
   PRIMARY KEY (`template_id`) USING BTREE
@@ -4118,11 +4329,11 @@ CREATE TABLE `template_info`  (
 -- ----------------------------
 INSERT INTO `template_info` VALUES (1, 'Entity.sql', 2, 'FreeMarker', '<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n', '', '2023-07-11 15:56:30', '2023-07-11 15:56:30', NULL, 0);
 INSERT INTO `template_info` VALUES (2, 'Entity.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\n    import ${i!};\n</#list>\n<#if baseClass??>\n    import ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n    <#if !field.baseField>\n        <#if field.fieldComment!?length gt 0>\n            /**\n            * ${field.fieldComment}\n            */\n        </#if>\n        <#if field.autoFill == \"INSERT\">\n            @TableField(fill = FieldFill.INSERT)\n        </#if>\n        <#if field.autoFill == \"INSERT_UPDATE\">\n            @TableField(fill = FieldFill.INSERT_UPDATE)\n        </#if>\n        <#if field.autoFill == \"UPDATE\">\n            @TableField(fill = FieldFill.UPDATE)\n        </#if>\n        <#if field.primaryKey>\n            @TableId\n        </#if>\n        private ${field.attrType} ${field.attrName};\n    </#if>\n\n</#list>\n}\n', '', '2023-07-20 17:48:43', '2023-07-20 17:48:43', NULL, 0);
-INSERT INTO `template_info` VALUES (3, 'Service.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:30', '2023-07-20 17:52:30', NULL, 0);
-INSERT INTO `template_info` VALUES (4, 'ServiceImpl.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:51', '2023-07-20 17:52:51', NULL, 0);
+INSERT INTO `template_info` VALUES (3, 'Service.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:30', '2023-07-20 17:52:30', NULL, 0);
+INSERT INTO `template_info` VALUES (4, 'ServiceImpl.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n    }\n', '', '2023-07-20 17:52:51', '2023-07-20 17:52:51', NULL, 0);
 INSERT INTO `template_info` VALUES (5, 'VO.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\n    import ${i!};\n</#list>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\nprivate static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n        @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n        @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n\n</#list>\n\n}\n', '', '2023-07-20 17:53:55', '2023-07-20 17:53:55', NULL, 0);
 INSERT INTO `template_info` VALUES (6, 'Controller.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\nprivate final ${ClassName}Service ${className}Service;\n\n@GetMapping(\"page\")\n@Operation(summary = \"分页\")\n@PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\npublic Result\n<PageResult\n<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){\n    PageResult\n    <${ClassName}VO> page = ${className}Service.page(query);\n\n        return Result.ok(page);\n        }\n\n        @GetMapping(\"{id}\")\n        @Operation(summary = \"信息\")\n        @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n        public Result\n        <${ClassName}VO> get(@PathVariable(\"id\") Long id){\n            ${ClassName}Entity entity = ${className}Service.getById(id);\n\n            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n            }\n\n            @PostMapping\n            @Operation(summary = \"保存\")\n            @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n            public Result\n            <String> save(@RequestBody ${ClassName}VO vo){\n                ${className}Service.save(vo);\n\n                return Result.ok();\n                }\n\n                @PutMapping\n                @Operation(summary = \"修改\")\n                @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n                public Result\n                <String> update(@RequestBody @Valid ${ClassName}VO vo){\n                    ${className}Service.update(vo);\n\n                    return Result.ok();\n                    }\n\n                    @DeleteMapping\n                    @Operation(summary = \"删除\")\n                    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n                    public Result\n                    <String> delete(@RequestBody List\n                        <Long> idList){\n                            ${className}Service.delete(idList);\n\n                            return Result.ok();\n                            }\n                            }\n', '', '2023-07-20 17:54:53', '2023-07-20 17:54:53', NULL, 0);
-INSERT INTO `template_info` VALUES (8, 'VO.java.ftl', 1, 'Velocity', '', 'template\\VO.java.ftl', '2023-08-05 19:52:29', '2023-08-05 19:52:29', NULL, 0);
+INSERT INTO `template_info` VALUES (8, 'VO.java.ftl', 1, 'Velocity', 'sddssdsdd', 'template\\VO.java.ftl', '2023-08-05 19:52:29', '2023-08-05 19:52:29', NULL, 0);
 INSERT INTO `template_info` VALUES (9, 'menu.sql.ftl', 1, 'FreeMarker', '', 'template\\menu.sql.ftl', '2023-08-05 20:03:44', '2023-08-05 20:03:44', NULL, 0);
 INSERT INTO `template_info` VALUES (10, 'add-or-update.vue.ftl', 1, 'FreeMarker', '', 'template\\add-or-update.vue.ftl', '2023-08-05 20:04:34', '2023-08-05 20:04:34', NULL, 0);
 INSERT INTO `template_info` VALUES (11, 'api.ts.ftl', 1, 'FreeMarker', '2323', 'template\\api.ts.ftl', '2023-08-05 20:04:43', '2023-08-05 20:04:43', NULL, 0);
@@ -4144,11 +4355,22 @@ CREATE TABLE `template_param`  (
   `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数表，模板实际的参数值' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of template_param
+-- Table structure for template_variable_metadata
 -- ----------------------------
+DROP TABLE IF EXISTS `template_variable_metadata`;
+CREATE TABLE `template_variable_metadata`  (
+  `id` int(11) NOT NULL COMMENT '主键ID',
+  `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
+  `param_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `param_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名',
+  `param_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
+  `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for test
@@ -4161,22 +4383,13 @@ CREATE TABLE `test`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of test
+-- Table structure for user
 -- ----------------------------
-
--- ----------------------------
--- Table structure for type_mapping
--- ----------------------------
-DROP TABLE IF EXISTS `type_mapping`;
-CREATE TABLE `type_mapping`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `java_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `json_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of type_mapping
--- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`  (
+  `user_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户ID',
+  `user_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱'
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '开发者信息表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

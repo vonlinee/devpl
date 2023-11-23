@@ -62,7 +62,7 @@ public class TableController {
      *
      * @param ids 表id数组
      */
-    @DeleteMapping
+    @DeleteMapping("/remove")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(tableService.deleteBatchIds(ids));
     }

@@ -171,7 +171,12 @@ class Http {
     params?: RequestParam,
     headers: HttpHeader = { "Content-Type": "application/json" }
   ): ResponsePromise<T> {
-    return this.instance.delete(url, { params, headers })
+    return this.instance.request({
+      url: url,
+      method: "delete",
+      data: params,
+      headers: headers
+    })
   }
 
   /**

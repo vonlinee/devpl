@@ -19,11 +19,11 @@ public class NamingUtils {
     public static String camelCase(boolean upperFirst, String tableName, String removePrefix, String removeSuffix) {
         String className = tableName;
         // 移除前缀
-        if (StringUtils.isNotBlank(removePrefix)) {
+        if (StringUtils.hasText(removePrefix)) {
             className = StringUtils.removePrefix(tableName, removePrefix);
         }
         // 移除后缀
-        if (StringUtils.isNotBlank(removeSuffix)) {
+        if (StringUtils.hasText(removeSuffix)) {
             className = StringUtils.removeSuffix(className, removeSuffix);
         }
         // 是否首字母大写

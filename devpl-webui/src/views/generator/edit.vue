@@ -3,7 +3,17 @@
 		<el-tabs v-model="activeName" @tab-click="handleClick">
 
 			<el-tab-pane label="生成文件" name="target">
+				<el-card>
+					<el-select>
 
+					</el-select>
+				</el-card>
+				<el-table border>
+					<el-table-column label="文件名"></el-table-column>
+					<el-table-column label="模板"></el-table-column>
+					<el-table-column label="保存路径"></el-table-column>
+					<el-table-column label="操作" align="center"></el-table-column>
+				</el-table>
 			</el-tab-pane>
 
 			<el-tab-pane label="属性设置" name="field">
@@ -16,8 +26,8 @@
 					:checkbox-config="{ checkStrictly: true }"
 					:edit-config="{ trigger: 'click', mode: 'cell' }"
 				>
-					<vxe-column type="seq" width="60"></vxe-column>
-					<vxe-column width="60" title="拖动">
+					<vxe-column type="seq" width="35" align="center"></vxe-column>
+					<vxe-column width="30" title="拖动">
 						<template #default>
 							<span class="drag-btn">
 								<i class="vxe-icon-sort"></i>

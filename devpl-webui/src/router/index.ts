@@ -56,7 +56,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "目标文件",
         component: () => import("@/views/generator/genfile/index.vue"),
         meta: {
-          title: "目标文件管理",
+          title: "文件类型",
           icon: "icon-menu",
         },
       },

@@ -1957,16 +1957,6 @@ public final class StringUtils {
     }
 
     /**
-     * 是否不为空
-     *
-     * @param str 字符串
-     * @return 是否不为空
-     */
-    public static boolean isNotBlank(String str) {
-        return hasText(str);
-    }
-
-    /**
      * 比较两个字符串是否相等，规则如下
      * <ul>
      *     <li>str1和str2都为{@code null}</li>
@@ -2170,7 +2160,6 @@ public final class StringUtils {
         if (isEmpty(str) || isEmpty(prefix)) {
             return str(str);
         }
-
         final String str2 = str.toString();
         if (str2.startsWith(prefix.toString())) {
             return subSuf(str2, prefix.length());// 截取后半段

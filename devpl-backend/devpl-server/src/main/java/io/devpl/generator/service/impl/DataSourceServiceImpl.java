@@ -111,6 +111,9 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
 
     @Override
     public Connection getConnection(Long dataSourceId) throws SQLException {
+        if (dataSourceId != null && dataSourceId == 0) {
+            return dataSource.getConnection();
+        }
         return getConnection(getOne(dataSourceId));
     }
 

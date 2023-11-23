@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 对生成的文件类型进行分类，便于批处理
  */
 @Data
-@TableName("target_gen_file")
+@TableName("template_file_generation")
 public class TargetGenFile implements Serializable {
     /**
      * 主键ID

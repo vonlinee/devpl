@@ -3,7 +3,7 @@
  -->
 <template>
   <vxe-modal ref="modalRef" show-footer v-model="dialogVisiableRef" title="生成结果" width="80%" height="80%" transfer
-    :mask-closable="false" destroy-on-close draggable show-zoom>
+    :mask-closable="false" destroy-on-close draggable show-zoom fullscreen>
     <Splitpanes>
       <Pane min-size="20" >
         <div class="tree-container" :style="{

@@ -61,10 +61,10 @@ export const useCrud = (options: IHooksOptions) => {
     state.dataListLoading = true
     if (state.query) {
       state.query(
-          state.page ? state.page : 1,
-          state.limit ? state.limit : 10,
-          state.queryForm
-        )
+        state.page ? state.page : 1,
+        state.limit ? state.limit : 10,
+        state.queryForm
+      )
         .then((res) => {
           // 分页
           state.dataList = res.data
@@ -72,12 +72,12 @@ export const useCrud = (options: IHooksOptions) => {
         })
     } else {
       http.get(state.dataListUrl, {
-          order: state.order,
-          asc: state.asc,
-          page: state.isPage ? state.page : null,
-          limit: state.isPage ? state.limit : null,
-          ...state.queryForm,
-        })
+        order: state.order,
+        asc: state.asc,
+        page: state.isPage ? state.page : null,
+        limit: state.isPage ? state.limit : null,
+        ...state.queryForm,
+      })
         .then((res) => {
           state.dataList = res.data
           state.total = res.total == undefined ? -1 : res.total
@@ -183,13 +183,13 @@ export const useCrud = (options: IHooksOptions) => {
       cancelButtonText: "取消",
       type: "warning",
     }).then(() => {
-        if (state.deleteUrl) {
-          http.delete(state.deleteUrl, { data }).then(() => {
-            ElMessage.success("删除成功")
-            query()
-          })
-        }
-      })
+      if (state.deleteUrl) {
+        http.delete(state.deleteUrl, data).then(() => {
+          ElMessage.success("删除成功")
+          query()
+        })
+      }
+    })
       .catch((err) => {
         console.error("删除错误", err)
       })

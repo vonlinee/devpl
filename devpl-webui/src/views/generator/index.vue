@@ -20,12 +20,11 @@
                 <el-button type="danger" @click="showConfig()">生成配置</el-button>
             </el-form-item>
         </el-form>
-        <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
-                  @selection-change="selectionChangeHandle">
+        <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
+            @selection-change="selectionChangeHandle">
             <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
             <el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
             <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
-            <el-table-column prop="className" label="类名" header-align="center" align="center"></el-table-column>
             <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
                 <template #default="scope">
                     <el-button type="primary" link @click="editHandle(scope.row.id)">编辑</el-button>
@@ -35,15 +34,9 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination
-            :current-page="state.page"
-            :page-sizes="state.pageSizes"
-            :page-size="state.limit"
-            :total="state.total"
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="sizeChangeHandle"
-            @current-change="currentChangeHandle"
-        >
+        <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit"
+            :total="state.total" layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+            @current-change="currentChangeHandle">
         </el-pagination>
 
         <import ref="importRef" @refresh-data-list="getDataList"></import>
@@ -62,20 +55,20 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, reactive, ref} from 'vue'
-import {IHooksOptions} from '@/hooks/interface'
-import {useCrud} from '@/hooks'
+import { nextTick, reactive, ref } from 'vue'
+import { IHooksOptions } from '@/hooks/interface'
+import { useCrud } from '@/hooks'
 import Import from './import.vue'
 import Edit from './edit.vue'
 import Generator from './generator.vue'
-import {useTableSyncApi} from '@/api/table'
-import {ElButton, ElMessage, ElMessageBox} from 'element-plus'
-import {apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi} from '@/api/generator'
+import { useTableSyncApi } from '@/api/table'
+import { ElButton, ElMessage, ElMessageBox } from 'element-plus'
+import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from '@/api/generator'
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/gen/table/page',
-    deleteUrl: '/gen/table',
+    deleteUrl: '/gen/table/remove',
     queryForm: {
         tableName: ''
     }
@@ -147,5 +140,5 @@ function saveConfig() {
     })
 }
 
-const {getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle} = useCrud(state)
+const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
 </script>
