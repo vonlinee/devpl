@@ -1,6 +1,11 @@
 <template>
 	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false">
 		<el-tabs v-model="activeName" @tab-click="handleClick">
+
+			<el-tab-pane label="生成文件" name="target">
+
+			</el-tab-pane>
+
 			<el-tab-pane label="属性设置" name="field">
 				<vxe-table
 					ref="fieldTable"
@@ -73,7 +78,7 @@
 					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
 					<vxe-column field="formType" title="表单类型">
 						<template #default="{ row }">
-							<vxe-select v-model="row.formType">
+							<vxe-select v-model="row.formType" transfer>
 								<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
 							</vxe-select>
 						</template>
@@ -175,7 +180,7 @@ const sortable = ref() as any
 
 const typeList = ref([]) as any
 const tableId = ref()
-const fieldList = ref([])
+const fieldList = ref<GenTableField[]>([])
 const fillList = reactive([
 	{ label: 'DEFAULT', value: 'DEFAULT' },
 	{ label: 'INSERT', value: 'INSERT' },
@@ -215,7 +220,7 @@ const init = (id: number) => {
 		dataFormRef.value.resetFields()
 	}
 
-	activeName.value = 'field'
+	activeName.value = 'target'
 
 	rowDrop()
 	getTable(id)
@@ -237,8 +242,8 @@ const rowDrop = () => {
 }
 
 const getTable = (id: number) => {
-	useTableApi(id).then(res => {
-		fieldList.value = res.data.fieldList
+	useTableApi(id).then((res) => {
+		fieldList.value = res.data?.fieldList as GenTableField[]
 	})
 }
 

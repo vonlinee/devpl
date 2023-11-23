@@ -1,14 +1,9 @@
 import http from '@/utils/http'
 
-interface GenTableVO {
-	id: number,
-	tableName: string,
-	className: string,
-	tableComment: string
-}
+
 
 export const useTableApi = (id: number) => {
-	return http.get<GenTableVO>('/gen/table/' + id)
+	return http.get<GenTable>('/gen/table/' + id)
 }
 
 export const useTableSubmitApi = (dataForm: any) => {

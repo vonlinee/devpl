@@ -1,70 +1,33 @@
 <template>
-  <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler"
-    hegiht="100%">
-    <template #default="{ node, data }">
-      <span class="custom-tree-node" @contextmenu="displayContextMenu($event)">
-        <span>{{ node.label }}</span>
-      </span>
-    </template>
-  </el-tree>
+  <div style="height: 100%; overflow-y: scroll;">
+    <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler"
+      hegiht="100%">
+      <template #default="{ node, data }">
+        <span class="custom-tree-node" @contextmenu="displayContextMenu($event)">
+          <span v-contextmenu:contextmenu>{{ node.label }}</span>
+        </span>
+      </template>
+    </el-tree>
+  </div>
 
-  <ContextMenu ref="contextMenuRef" :model="items">
-    <template #item="{ item, props }">
-      <a v-ripple style="display: flex; align-items: center; height: 30px;" v-bind="props.action">
-        <span :class="item.icon"></span>
-        <span>{{ item.label }}</span>
-        <Badge v-if="item.badge" :value="item.badge" />
-        <span v-if="item.shortcut">{{
-          item.shortcut }}</span>
-        <i v-if="item.items"></i>
-      </a>
-    </template>
-  </ContextMenu>
+  <Contextmenu ref="contextmenu">
+    <contextmenu-item>数据模拟</contextmenu-item>
+    <contextmenu-item>DDL</contextmenu-item>
+    <contextmenu-item>菜单3</contextmenu-item>
+  </Contextmenu>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
-import ContextMenu from 'primevue/contextmenu';
+import { Contextmenu, ContextmenuItem } from "v-contextmenu";
 
 const contextMenuRef = ref()
 
 const displayContextMenu = (event: Event) => {
   contextMenuRef.value.show(event)
 }
-
-const items = ref([
-  {
-    label: 'Favorite',
-    icon: 'pi pi-star',
-    shortcut: '⌘+D',
-  },
-  {
-    label: 'Add',
-    icon: 'pi pi-shopping-cart',
-    shortcut: '⌘+A'
-  },
-  {
-    separator: true
-  },
-  {
-    label: 'Share',
-    icon: 'pi pi-share-alt',
-    items: [
-      {
-        label: 'Whatsapp',
-        icon: 'pi pi-whatsapp',
-        badge: 2
-      },
-      {
-        label: 'Instagram',
-        icon: 'pi pi-instagram',
-        badge: 3
-      }
-    ]
-  }
-]);
 
 const defaultProps = {
   label: 'label',
@@ -80,7 +43,6 @@ interface DatabaseNavigationViewProps {
 }
 
 const props = defineProps<DatabaseNavigationViewProps>()
-
 
 const dataSourceId = computed(() => {
   return props.dataSourceId

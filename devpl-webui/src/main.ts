@@ -10,9 +10,6 @@ import "vxe-table/lib/style.css"
 
 import { createPinia, Pinia } from "pinia"
 
-import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css"
-import ContextMenu from "@imengyu/vue3-context-menu"
-
 import "./command.ts"
 
 // 使用svg目录下的svg文件
@@ -22,6 +19,11 @@ import "@/styles/index.scss"
 
 import "./useMonaco"
 import { isWindows } from "./utils/tool"
+
+// 全局注册
+
+import contextmenu from "v-contextmenu";
+import "v-contextmenu/dist/themes/default.css";
 
 VXETable.config({
   zIndex: 2000,
@@ -35,7 +37,7 @@ const app = createApp(App)
 // 创建 Pinia 实例
 const pinia: Pinia = createPinia()
 
-app.use(ContextMenu)
+app.use(contextmenu);
 app.use(pinia)
 app.use(router)
 app.use(SvgIcon)

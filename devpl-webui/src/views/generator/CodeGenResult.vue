@@ -5,7 +5,7 @@
   <vxe-modal ref="modalRef" show-footer v-model="dialogVisiableRef" title="生成结果" width="80%" height="80%" transfer
     :mask-closable="false" destroy-on-close draggable show-zoom>
     <Splitpanes>
-      <Pane>
+      <Pane min-size="20" >
         <div class="tree-container" :style="{
           height: '100%',
           overflowY: 'scroll'
@@ -143,4 +143,6 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>

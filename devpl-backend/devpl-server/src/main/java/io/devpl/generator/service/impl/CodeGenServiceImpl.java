@@ -1,7 +1,6 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.ServerException;
-import io.devpl.generator.utils.DateUtils;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.entity.GenBaseClass;
@@ -11,6 +10,7 @@ import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.DateTimeUtils;
+import io.devpl.generator.utils.DateUtils;
 import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.IOUtils;
@@ -23,8 +23,11 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -88,6 +91,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 生成某个表的文件
+     *
      * @param tableId gen_table主键
      * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
      */
@@ -117,6 +121,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取渲染的数据模型
+     *
      * @param tableId 表ID
      */
     @Override
@@ -174,6 +179,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置基类信息
+     *
      * @param dataModel 数据模型
      * @param table     表
      */
@@ -197,6 +203,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 获取文件树
+     *
      * @param workPath 工作路径
      * @return 文件节点列表
      */
@@ -223,13 +230,16 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 递归生成文件树
+     *
      * @param path 目录
      * @param node 保存节点
      */
     private void recursive(File path, List<FileNode> node) {
         if (path.isDirectory()) {
             File[] list = path.listFiles();
-            assert list != null;
+            if (list == null) {
+                return;
+            }
             for (File file : list) {
                 FileNode fileNode = new FileNode();
                 fileNode.setKey(SecurityUtils.base64Encode(file.getAbsolutePath()));
@@ -260,6 +270,7 @@ public class CodeGenServiceImpl implements CodeGenService {
 
     /**
      * 设置字段分类信息
+     *
      * @param dataModel 数据模型
      * @param table     表
      */
