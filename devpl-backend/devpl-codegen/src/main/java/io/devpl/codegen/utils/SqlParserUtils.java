@@ -1,5 +1,6 @@
 package io.devpl.codegen.utils;
 
+import io.devpl.sdk.util.CollectionUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;

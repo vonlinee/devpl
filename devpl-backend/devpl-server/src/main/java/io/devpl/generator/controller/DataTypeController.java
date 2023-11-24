@@ -1,6 +1,5 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.DataTypeAddParam;

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CodeGenProperties {
 
-    @Value("${devpl.codegen.template-location}")
+    private final String templateDirectory = "codegen/templates";
+
+    @Value("${devpl.codegen.template-location:}")
     private String templateLocation;
 }

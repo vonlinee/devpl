@@ -51,15 +51,6 @@ export const menuRoutes: RouteRecordRaw[] = [
           icon: "icon-edit-square",
         },
       },
-      {
-        path: "/filegen",
-        name: "文件生成",
-        component: () => import("@/views/generator/gen/index.vue"),
-        meta: {
-          title: "文件生成",
-          icon: "icon-menu",
-        },
-      },
     ],
   },
 

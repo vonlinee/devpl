@@ -44,4 +44,10 @@ public class TableFileGeneration {
      */
     @TableField(value = "save_path")
     private String savePath;
+
+    /**
+     * 模板名称
+     */
+    @TableField(exist = false)
+    private String templateName;
 }

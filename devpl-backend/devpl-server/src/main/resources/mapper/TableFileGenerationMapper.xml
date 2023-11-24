@@ -10,4 +10,11 @@
         <result property="savePath" column="save_path"/>
     </resultMap>
 
+    <select id="selectListByTableId" resultType="io.devpl.generator.entity.TableFileGeneration">
+        SELECT tfg.*, ti.template_name
+        FROM table_file_generation tfg
+                 LEFT JOIN template_info ti ON tfg.template_id = ti.template_id
+        WHERE tfg.table_id = #{tableId}
+    </select>
+
 </mapper>

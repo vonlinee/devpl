@@ -62,6 +62,14 @@ public class TemplateInfo extends DBEntityBase {
     private String remark;
 
     /**
+     * 是否内置模板
+     */
+    @TableField(value = "is_internal")
+    private Boolean internal;
+
+    //============================================= 非数据库字段 =================================================
+
+    /**
      * 生成代码的路径
      */
     @TableField(exist = false)

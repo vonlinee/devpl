@@ -1520,12 +1520,11 @@ public class FileUtils {
      * @return 文件名
      */
     public static String getFileName(File file) {
-        String filename = file.getName();
-        int index = filename.lastIndexOf(File.separator);
-        if (index > 0) {
-            return filename.substring(index + 1);
-        }
-        return "";
+        return FilenameUtils.getName(file.getName());
+    }
+
+    public static String getFileName(Path file) {
+        return FilenameUtils.getName(String.valueOf(file));
     }
 
     public static File[] listFiles(File directory) {
@@ -1548,6 +1547,23 @@ public class FileUtils {
             return placeholder;
         }
         String extension = FilenameUtils.getExtension(file.getName());
+        if (extension == null || extension.isEmpty()) {
+            extension = placeholder;
+        }
+        return extension;
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @return 文件扩展名
+     */
+    @Nonnull
+    public static String getExtensionName(Path path, String placeholder) {
+        if (path == null) {
+            return placeholder;
+        }
+        String extension = FilenameUtils.getExtension(path.toString());
         if (extension == null || extension.isEmpty()) {
             extension = placeholder;
         }
@@ -1826,5 +1842,30 @@ public class FileUtils {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    /**
+     * 文件大小智能转换
+     * 会将文件大小转换为最大满足单位
+     *
+     * @param size（文件大小，单位为B）
+     * @return 文件大小
+     */
+    public static String formatFileSize(long size) {
+        String sizeName;
+        if (1024 * 1024 > size && size >= 1024) {
+            sizeName = String.format("%.2f", (double) size / 1024) + "KB";
+        } else if (1024 * 1024 * 1024 > size && size >= 1024 * 1024) {
+            sizeName = String.format("%.2f", (double) size / (1024 * 1024)) + "MB";
+        } else if (size >= 1024 * 1024 * 1024) {
+            sizeName = String.format("%.2f", (double) size / (1024 * 1024 * 1024)) + "GB";
+        } else {
+            sizeName = size + "B";
+        }
+        return sizeName;
+    }
+
+    public static String getRelativePathString(Path child, Path ancestor) {
+        return child.toAbsolutePath().toString().replace(ancestor.toString(), "");
     }
 }

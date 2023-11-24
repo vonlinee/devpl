@@ -1,6 +1,6 @@
 package io.devpl.generator.controller;
 
-import io.devpl.generator.common.PageQuery;
+import io.devpl.generator.common.PageParam;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.FieldParseParam;
@@ -27,7 +27,7 @@ public class FieldInfoController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public ListResult<FieldInfo> list(PageQuery query) {
+    public ListResult<FieldInfo> list(PageParam query) {
         return ListResult.ok(fieldInfoService.selectPage(query.getPageIndex(), query.getPageSize()));
     }
 

@@ -110,4 +110,43 @@ public abstract class CollectionUtils {
         }
         return map.values().stream().map(mapper).collect(Collectors.toList());
     }
+
+
+    public static <E> E findFirst(List<E> list, E defaults) {
+        if (isEmpty(list)) {
+            return defaults;
+        }
+        return list.get(0);
+    }
+
+    public static <E, T> T findFirst(List<E> list, Function<E, T> mapper, T defaults) {
+        if (isEmpty(list)) {
+            return defaults;
+        }
+        if (mapper != null) {
+            T val = mapper.apply(list.get(0));
+            return val == null ? defaults : val;
+        }
+        return defaults;
+    }
+
+    public static <E, V> String join(List<E> list, Function<E, V> mapper) {
+        return join(list, mapper, String::valueOf);
+    }
+
+    public static <E, V> String join(List<E> list, Function<E, V> mapper, Function<V, String> toStringMapper) {
+        return join(list, mapper, ",");
+    }
+
+    public static <E, V> String join(List<E> list, Function<E, V> mapper, CharSequence delimiter) {
+        return join(list, mapper, delimiter, String::valueOf);
+    }
+
+    public static <E, V> String join(List<E> list, Function<E, V> mapper, CharSequence delimiter, Function<V, String> toStringMapper) {
+        return list.stream().map(mapper).map(toStringMapper).collect(Collectors.joining(delimiter));
+    }
+
+    public static <K, E, T> T treeify(Collection<E> collection, TreeBuilder<K, E, T> builder) {
+        return builder.apply(collection);
+    }
 }

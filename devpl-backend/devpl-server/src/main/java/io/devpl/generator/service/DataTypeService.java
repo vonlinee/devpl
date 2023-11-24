@@ -2,7 +2,6 @@ package io.devpl.generator.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import io.devpl.generator.common.PageQuery;
 import io.devpl.generator.domain.param.DataTypeListParam;
 import io.devpl.generator.domain.param.DataTypeMappingParam;
 import io.devpl.generator.domain.vo.DataTypeGroupVO;

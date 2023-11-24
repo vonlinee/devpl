@@ -1,10 +1,13 @@
 package io.devpl.generator.common;
 
+import lombok.Data;
+
 /**
  * 分页查询参数父类
  * jackson默认使用setter/getter映射JSON数据
  */
-public class PageQuery {
+@Data
+public class PageParam {
 
     /**
      * 页码，默认0，第一页

@@ -2,15 +2,21 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.FileNode;
+import io.devpl.generator.domain.param.TableFileGenParam;
+import io.devpl.generator.entity.TableFileGeneration;
 import io.devpl.generator.entity.TargetGenFile;
 import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
+import io.devpl.generator.service.TableFileGenerationService;
 import io.devpl.generator.service.TargetGenFileService;
+import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 代码生成控制器
@@ -24,6 +30,8 @@ public class CodeGenerationController {
     CodeGenService codeGenService;
     @Resource
     TargetGenFileService targetGenFileService;
+    @Resource
+    TableFileGenerationService tableFileGenerationService;
     @Resource
     GeneratorConfigService generatorConfigService;
 
@@ -96,6 +104,28 @@ public class CodeGenerationController {
     }
 
     /**
+     * 获取单个表需要生成哪些文件
+     *
+     * @param tableId 需要生活的表ID
+     * @return 文件列表
+     */
+    @GetMapping("/genfiles/list")
+    public Result<List<TableFileGeneration>> listFilesToBeGenerated(@RequestParam(name = "tableId") Long tableId) {
+        return Result.ok(tableFileGenerationService.listByTableId(tableId));
+    }
+
+    /**
+     * 修改单个表需要生成的文件信息
+     *
+     * @param param 单个表需要生成的文件信息
+     * @return 文件列表
+     */
+    @PostMapping("/genfiles/config")
+    public Result<Boolean> updateFilesToBeGenerated(@RequestBody TableFileGenParam param) {
+        return Result.ok(tableFileGenerationService.updateFilesToBeGenerated(param));
+    }
+
+    /**
      * 保存或更新生成的文件类型列表
      * 不存在的删除，更新或新增
      *
@@ -103,6 +133,8 @@ public class CodeGenerationController {
      */
     @DeleteMapping("/genfiles/replace")
     public Result<?> deleteGeneratedFileTypes(@RequestBody List<Integer> ids) {
+        ids.removeIf(Objects::isNull);
+        Assert.notEmpty(ids, "参数为空");
         return Result.ok(targetGenFileService.removeBatchByIds(ids));
     }
 

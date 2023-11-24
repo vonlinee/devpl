@@ -10,9 +10,7 @@ import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.GenTableMapper;
 import io.devpl.generator.domain.param.Query;
-import io.devpl.generator.entity.DbConnInfo;
-import io.devpl.generator.entity.GenTable;
-import io.devpl.generator.entity.GenTableField;
+import io.devpl.generator.entity.*;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
 import io.devpl.generator.service.*;
@@ -82,7 +80,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 从数据库获取表信息
-            table = getTable(connection, query, datasourceId, tableName);
+            table = this.getTable(connection, query, datasourceId, tableName);
             // 代码生成器信息
             GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
@@ -110,6 +108,8 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             table.setCreateTime(LocalDateTime.now());
             this.save(table);
 
+            initGenerationFiles(table);
+
             // 获取原生字段数据
             List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
             // 初始化字段数据
@@ -121,8 +121,23 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         }
     }
 
-    public void saveGenerationFiles() {
-
+    /**
+     * 初始化要生成的文件信息
+     *
+     * @param table 要生成的数据库表
+     */
+    public void initGenerationFiles(GenTable table) {
+        List<TargetGenFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
+        List<TableFileGeneration> list = new ArrayList<>();
+        for (TargetGenFile targetGenFile : targetGenFiles) {
+            TableFileGeneration tfg = new TableFileGeneration();
+            tfg.setTableId(table.getId());
+            // 可能为空
+            tfg.setTemplateId(targetGenFile.getTemplateId());
+            tfg.setFileName(targetGenFile.getFileName());
+            list.add(tfg);
+        }
+        tableFileGenerationService.saveBatch(list);
     }
 
     /**

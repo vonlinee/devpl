@@ -17,4 +17,9 @@ public class TemplateSelectVO {
      * 模板名称
      */
     private String templateName;
+
+    /**
+     * 备注信息
+     */
+    private String remark;
 }

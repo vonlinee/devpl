@@ -40,11 +40,33 @@ export const apiSaveOrUpdateGenFiles = (genFiles: TargetGenFile[]) => {
 }
 
 /**
+ * 保存或更新生成文件类型
+ * @param genFiles
+ */
+export const apiListGenerationFiles = (tableId: number) => {
+    return http.get<TableFileGeneration[]>('/api/codegen/genfiles/list', {
+        tableId: tableId
+    })
+}
+
+/**
+ * 保存或更新生成文件配置
+ * @param genFiles
+ */
+export const apiSaveGenerationFileConfig = (tableId: number, files: TableFileGeneration[]) => {
+    return http.post<boolean>('/api/codegen/genfiles/config', {
+        tableId: tableId,
+        fileInfoList: files
+    })
+}
+
+
+/**
  * 删除生成文件类型
  * @param genFiles
  */
 export const apiDeleteGenFiles = (genFiles: TargetGenFile[]) => {
-    return http.delete('/api/codegen/genfiles/replace', genFiles.map((file: TargetGenFile) => file.pid))
+    return http.delete('/api/codegen/genfiles/replace', genFiles.map((file: TargetGenFile) => file.id))
 }
 
 /**

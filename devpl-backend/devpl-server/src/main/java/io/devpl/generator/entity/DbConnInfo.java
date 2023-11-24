@@ -5,15 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 数据源连接信息管理
+ * 数据库连接信息管理
  */
-@Data
+@Getter
+@Setter
 @TableName("db_conn_info")
 public class DbConnInfo implements Serializable {
     /**

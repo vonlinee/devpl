@@ -45,4 +45,8 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 模板选择列表
      */
     List<TemplateSelectVO> listSelectable();
+
+    boolean migrateTemplates();
+
+    String formatTemplatePath(String templatePath);
 }
