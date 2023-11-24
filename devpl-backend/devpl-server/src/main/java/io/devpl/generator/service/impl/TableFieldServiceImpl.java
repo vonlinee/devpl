@@ -1,12 +1,12 @@
 package io.devpl.generator.service.impl;
 
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.dao.TableFieldDao;
+import io.devpl.generator.dao.GenTableFieldMapper;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.enums.AutoFillEnum;
-import io.devpl.generator.service.FieldTypeService;
-import io.devpl.generator.service.TableFieldService;
+import io.devpl.generator.service.GenFieldTypeService;
+import io.devpl.generator.service.GenTableFieldService;
 import io.devpl.generator.utils.NamingUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ import java.util.Map;
  */
 @Service
 @AllArgsConstructor
-public class TableFieldServiceImpl extends BaseServiceImpl<TableFieldDao, GenTableField> implements TableFieldService {
-    private final FieldTypeService fieldTypeService;
+public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, GenTableField> implements GenTableFieldService {
+    private final GenFieldTypeService fieldTypeService;
 
     @Override
     public List<GenTableField> listByTableId(Long tableId) {

@@ -19,6 +19,9 @@
             <el-form-item>
                 <el-button type="danger" @click="showConfig()">生成配置</el-button>
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="showFileTypeManagerDialog()">文件类型管理</el-button>
+            </el-form-item>
         </el-form>
         <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
             @selection-change="selectionChangeHandle">
@@ -52,6 +55,8 @@
             <el-button @click="saveConfig()">确认</el-button>
         </template>
     </vxe-modal>
+
+    <gen-file-type-dialog ref="fileTypeManagerRef"></gen-file-type-dialog>
 </template>
 
 <script setup lang="ts">
@@ -65,6 +70,7 @@ import { useTableSyncApi } from '@/api/table'
 import { ElButton, ElMessage, ElMessageBox } from 'element-plus'
 import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from '@/api/generator'
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import GenFileTypeDialog from "@/views/generator/genfile/GenFileTypeDialog.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/gen/table/page',
@@ -73,6 +79,12 @@ const state: IHooksOptions = reactive({
         tableName: ''
     }
 })
+
+const fileTypeManagerRef = ref()
+
+function showFileTypeManagerDialog() {
+    fileTypeManagerRef.value.init()
+}
 
 const importRef = ref()
 const editRef = ref()

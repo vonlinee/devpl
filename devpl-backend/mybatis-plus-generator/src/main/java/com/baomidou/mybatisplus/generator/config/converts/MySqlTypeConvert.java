@@ -17,8 +17,8 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -27,6 +27,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 /**
  * MYSQL 数据库字段类型转换
  * bit类型数据转换 bit(1) -> Boolean类型  bit(2->64)  -> Byte类型
+ *
  * @author hubin, hanchunlin, xiaoliang
  * @since 2017-01-20
  */
@@ -35,6 +36,7 @@ public class MySqlTypeConvert implements ITypeConvert {
 
     /**
      * 转换为日期类型
+     *
      * @param config 配置信息
      * @param type   类型
      * @return 返回对应的列类型

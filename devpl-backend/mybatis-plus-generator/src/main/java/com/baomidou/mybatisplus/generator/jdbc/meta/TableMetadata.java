@@ -7,6 +7,7 @@ import java.util.Objects;
 /**
  * 仅包含表的元数据信息，且所有字段和DatabaseMetaData#getTables返回值一致
  * <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/">JDBC specification</a>
+ *
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
 public final class TableMetadata implements Serializable {

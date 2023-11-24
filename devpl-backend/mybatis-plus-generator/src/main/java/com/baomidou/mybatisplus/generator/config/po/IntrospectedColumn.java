@@ -33,6 +33,7 @@ import java.util.Map;
 
 /**
  * 表字段信息
+ *
  * @author YangHu
  * @since 2016-12-03
  */
@@ -90,11 +91,13 @@ public class IntrospectedColumn {
     private String fill;
     /**
      * 是否关键字
+     *
      * @since 3.3.2
      */
     private boolean keyWords;
     /**
      * 数据库字段（关键字含转义符号）
+     *
      * @since 3.3.2
      */
     private String columnName;
@@ -105,6 +108,7 @@ public class IntrospectedColumn {
 
     /**
      * 构造方法
+     *
      * @param configBuilder 配置构建
      * @param metadata      数据库字段元数据
      * @since 3.5.0
@@ -122,6 +126,7 @@ public class IntrospectedColumn {
 
     /**
      * Java字段类型名称
+     *
      * @return 该列的Java字段类型名称
      */
     public String getPropertyType() {
@@ -152,6 +157,7 @@ public class IntrospectedColumn {
 
     /**
      * 获取注解字段名称
+     *
      * @return 字段
      * @since 3.3.2
      */
@@ -166,6 +172,7 @@ public class IntrospectedColumn {
 
     /**
      * 是否为乐观锁字段
+     *
      * @return 是否为乐观锁字段
      * @since 3.5.0
      */
@@ -177,6 +184,7 @@ public class IntrospectedColumn {
 
     /**
      * 是否为逻辑删除字段
+     *
      * @return 是否为逻辑删除字段
      * @since 3.5.0
      */
@@ -188,6 +196,7 @@ public class IntrospectedColumn {
 
     /**
      * 设置主键
+     *
      * @param autoIncrement 自增标识
      * @return this
      * @since 3.5.0
@@ -229,6 +238,7 @@ public class IntrospectedColumn {
 
     /**
      * 设置属性名称
+     *
      * @param propertyName 属性名
      * @return this
      * @since 3.5.0
@@ -290,6 +300,7 @@ public class IntrospectedColumn {
 
     /**
      * 该列是否为主键
+     *
      * @return 该列是否为主键
      */
     public boolean isPrimaryKey() {

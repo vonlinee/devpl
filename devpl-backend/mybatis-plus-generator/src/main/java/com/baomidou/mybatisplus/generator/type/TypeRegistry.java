@@ -1,8 +1,8 @@
 package com.baomidou.mybatisplus.generator.type;
 
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * 类型注册处理类
+ *
  * @author nieqiurong 2022/5/11.
  */
 public class TypeRegistry {
@@ -57,6 +58,7 @@ public class TypeRegistry {
 
     /**
      * 根据字段元数据获取对应的Java类型
+     *
      * @param jdbcType JDBC类型
      * @param length   长度
      * @param dateType 日期类型

@@ -11,6 +11,7 @@ public interface TemplateArguments {
 
     /**
      * 转为Map结构
+     *
      * @return map
      */
     @NotNull Map<String, Object> asMap();

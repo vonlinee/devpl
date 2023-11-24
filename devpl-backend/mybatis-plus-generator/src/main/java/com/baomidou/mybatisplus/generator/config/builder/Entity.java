@@ -20,13 +20,12 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.fill.FieldFillStrategy;
 import com.baomidou.mybatisplus.generator.config.DefaultNameConvert;
 import com.baomidou.mybatisplus.generator.config.NameConverter;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.function.ConverterFileName;
+import com.baomidou.mybatisplus.generator.fill.FieldFillStrategy;
 import com.baomidou.mybatisplus.generator.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,10 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * 实体属性配置
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -51,7 +52,7 @@ public class Entity implements TableInitializer {
     private final Set<String> superEntityColumns = new HashSet<>();
     /**
      * 自定义忽略字段
-     * https://github.com/baomidou/generator/issues/46
+     * <a href="https://github.com/baomidou/generator/issues/46">...</a>
      */
     private final Set<String> ignoreColumns = new HashSet<>();
     /**
@@ -69,7 +70,7 @@ public class Entity implements TableInitializer {
     /**
      * 实体是否生成 serialVersionUID
      */
-    private boolean serialVersionUID = true;
+    private boolean generateSerialVersionUID = true;
 
     /**
      * 【实体】是否生成字段常量（默认 false）<br>
@@ -80,6 +81,7 @@ public class Entity implements TableInitializer {
 
     /**
      * 【实体】是否为链式模型（默认 false）
+     *
      * @since 3.3.2
      */
     private boolean chain;
@@ -103,24 +105,28 @@ public class Entity implements TableInitializer {
 
     /**
      * 乐观锁字段名称(数据库字段)
+     *
      * @since 3.5.0
      */
     private String versionColumnName;
 
     /**
      * 乐观锁属性名称(实体字段)
+     *
      * @since 3.5.0
      */
     private String versionPropertyName;
 
     /**
      * 逻辑删除字段名称(数据库字段)
+     *
      * @since 3.5.0
      */
     private String logicDeleteColumnName;
 
     /**
      * 逻辑删除属性名称(实体字段)
+     *
      * @since 3.5.0
      */
     private String logicDeletePropertyName;
@@ -135,21 +141,25 @@ public class Entity implements TableInitializer {
     private NamingStrategy columnNamingStrategy = NamingStrategy.NO_CHANGE;
     /**
      * 开启 ActiveRecord 模式（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean activeRecord;
     /**
      * 指定生成的主键的ID类型
+     *
      * @since 3.5.0
      */
     private IdType idType;
     /**
      * 转换输出文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterFileName = (entityName -> entityName);
+    private Function<String, String> converterFileName = (entityName -> entityName);
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -161,6 +171,7 @@ public class Entity implements TableInitializer {
      * <p>
      * 父类 Class 反射属性转换为公共字段
      * </p>
+     *
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
@@ -189,6 +200,7 @@ public class Entity implements TableInitializer {
 
     /**
      * 匹配父类字段(忽略大小写)
+     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -200,6 +212,7 @@ public class Entity implements TableInitializer {
 
     /**
      * 匹配忽略字段(忽略大小写)
+     *
      * @param fieldName 字段名
      * @return 是否匹配
      * @since 3.5.0
@@ -223,7 +236,7 @@ public class Entity implements TableInitializer {
     }
 
     public boolean isSerialVersionUID() {
-        return serialVersionUID;
+        return generateSerialVersionUID;
     }
 
     public boolean isColumnConstant() {
@@ -286,7 +299,7 @@ public class Entity implements TableInitializer {
     }
 
     @NotNull
-    public ConverterFileName getConverterFileName() {
+    public Function<String, String> getConverterFileName() {
         return converterFileName;
     }
 
@@ -302,7 +315,7 @@ public class Entity implements TableInitializer {
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
         data.put("versionFieldName", this.versionColumnName);
         data.put("activeRecord", this.activeRecord);
-        data.put("entitySerialVersionUID", this.serialVersionUID);
+        data.put("entitySerialVersionUID", this.generateSerialVersionUID);
         data.put("entityColumnConstant", this.columnConstant);
         data.put("entityBuilderModel", this.chain);
         data.put("chainModel", this.chain);
@@ -323,6 +336,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 名称转换实现
+         *
          * @param nameConvert 名称转换实现
          * @return this
          */
@@ -333,6 +347,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 自定义继承的Entity类全称
+         *
          * @param clazz 类
          * @return this
          */
@@ -342,6 +357,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 自定义继承的Entity类全称，带包名
+         *
          * @param superEntityClass 类全称
          * @return this
          */
@@ -352,16 +368,18 @@ public class Entity implements TableInitializer {
 
         /**
          * 禁用生成serialVersionUID
+         *
          * @return this
          * @since 3.5.0
          */
         public Builder disableSerialVersionUID() {
-            this.entity.serialVersionUID = false;
+            this.entity.generateSerialVersionUID = false;
             return this;
         }
 
         /**
          * 开启生成字段常量
+         *
          * @return this
          * @since 3.5.0
          */
@@ -372,6 +390,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 开启链式模型
+         *
          * @return this
          * @since 3.5.0
          */
@@ -382,6 +401,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 开启lombok模型
+         *
          * @return this
          * @since 3.5.0
          */
@@ -392,6 +412,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 开启Boolean类型字段移除is前缀
+         *
          * @return this
          * @since 3.5.0
          */
@@ -402,6 +423,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 开启生成实体时生成字段注解
+         *
          * @return this
          * @since 3.5.0
          */
@@ -412,6 +434,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 开启 ActiveRecord 模式
+         *
          * @return this
          * @since 3.5.0
          */
@@ -422,6 +445,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 设置乐观锁数据库表字段名称
+         *
          * @param versionColumnName 乐观锁数据库字段名称
          * @return this
          */
@@ -432,6 +456,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 设置乐观锁实体属性字段名称
+         *
          * @param versionPropertyName 乐观锁实体属性字段名称
          * @return this
          */
@@ -442,6 +467,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 逻辑删除数据库字段名称
+         *
          * @param logicDeleteColumnName 逻辑删除字段名称
          * @return this
          */
@@ -452,6 +478,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 逻辑删除实体属性名称
+         *
          * @param logicDeletePropertyName 逻辑删除实体属性名称
          * @return this
          */
@@ -462,6 +489,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 数据库表映射到实体的命名策略
+         *
          * @param namingStrategy 数据库表映射到实体的命名策略
          * @return this
          */
@@ -472,6 +500,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 数据库表字段映射到实体的命名策略
+         *
          * @param namingStrategy 数据库表字段映射到实体的命名策略
          * @return this
          */
@@ -482,6 +511,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 添加父类公共字段
+         *
          * @param superEntityColumns 父类字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -497,6 +527,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 添加忽略字段
+         *
          * @param ignoreColumns 需要忽略的字段(数据库字段列名)
          * @return this
          * @since 3.5.0
@@ -512,6 +543,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 添加表字段填充
+         *
          * @param tableFills 填充字段
          * @return this
          * @since 3.5.0
@@ -522,6 +554,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 添加表字段填充
+         *
          * @param tableFillList 填充字段集合
          * @return this
          * @since 3.5.0
@@ -533,6 +566,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 指定生成的主键的ID类型
+         *
          * @param idType ID类型
          * @return this
          * @since 3.5.0
@@ -544,17 +578,19 @@ public class Entity implements TableInitializer {
 
         /**
          * 转换输出文件名称
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertFileName(@NotNull ConverterFileName converter) {
+        public Builder convertFileName(@NotNull Function<String, String> converter) {
             this.entity.converterFileName = converter;
             return this;
         }
 
         /**
          * 格式化文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -565,6 +601,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated
@@ -576,6 +613,7 @@ public class Entity implements TableInitializer {
 
         /**
          * 覆盖已有文件
+         *
          * @since 3.5.3
          */
         public Builder enableFileOverride() {

@@ -1,8 +1,5 @@
 package io.devpl.generator.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
@@ -11,17 +8,14 @@ import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
-import io.devpl.generator.dao.TableMapper;
+import io.devpl.generator.dao.GenTableMapper;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
-import io.devpl.generator.service.DataSourceService;
-import io.devpl.generator.service.GeneratorConfigService;
-import io.devpl.generator.service.TableFieldService;
-import io.devpl.generator.service.TableService;
+import io.devpl.generator.service.*;
 import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.NamingUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -44,22 +38,21 @@ import java.util.Map;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> implements TableService {
-    private final TableFieldService tableFieldService;
+public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTable> implements GenTableService {
+    private final GenTableFieldService tableFieldService;
     private final DataSourceService dataSourceService;
     private final GeneratorConfigService generatorConfigService;
+    private final TargetGenFileService targetGenFileService;
+    private final TableFileGenerationService tableFileGenerationService;
 
     @Override
     public ListResult<GenTable> page(Query query) {
-        IPage<GenTable> page = baseMapper.selectPage(getPage(query), getWrapper(query));
-        return ListResult.ok(page.getRecords(), page.getTotal());
+        return ListResult.ok(baseMapper.selectPage(getPage(query), getWrapper(query)));
     }
 
     @Override
     public GenTable getByTableName(String tableName) {
-        LambdaQueryWrapper<GenTable> qw = Wrappers.lambdaQuery();
-        qw.eq(GenTable::getTableName, tableName);
-        return baseMapper.selectOne(qw);
+        return baseMapper.selectOneByTableName(tableName);
     }
 
     @Override
@@ -81,35 +74,39 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
             throw new ServerException(tableName + "已存在");
         }
 
-        DbConnInfo connInfo = dataSourceService.getById(datasourceId);
-        connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
-        DBType dbType = DBType.getValue(connInfo.getDbType());
-
-        try (Connection connection = dataSourceService.getConnection(connInfo)) {
+        DBType dbType = DBType.MYSQL;
+        if (datasourceId != 0) {
+            DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+            connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
+        }
+        try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 从数据库获取表信息
             table = getTable(connection, query, datasourceId, tableName);
             // 代码生成器信息
             GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
-            ProjectInfo project = generator.getProject();
-
-            DeveloperInfo developer = generator.getDeveloper();
-
             // 保存表信息
+
+            // 项目信息
+            ProjectInfo project = generator.getProject();
             table.setPackageName(project.getPackageName());
             table.setVersion(project.getVersion());
             table.setBackendPath(project.getBackendPath());
             table.setFrontendPath(project.getFrontendPath());
 
+            DeveloperInfo developer = generator.getDeveloper();
             table.setAuthor(developer.getAuthor());
             table.setEmail(developer.getEmail());
 
-            table.setFormLayout(FormLayoutEnum.ONE.getValue());
-            table.setGeneratorType(GeneratorTypeEnum.ZIP_DOWNLOAD.ordinal());
             table.setClassName(NamingUtils.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
             table.setFunctionName(getFunctionName(tableName));
+
+            // 默认初始值
+            table.setFormLayout(FormLayoutEnum.ONE.getValue());
+            table.setGeneratorType(GeneratorTypeEnum.CUSTOM_DIRECTORY.ordinal());
+
             table.setCreateTime(LocalDateTime.now());
             this.save(table);
 
@@ -122,6 +119,10 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
         } catch (SQLException exception) {
             log.error("导入表失败", exception);
         }
+    }
+
+    public void saveGenerationFiles() {
+
     }
 
     /**
@@ -159,7 +160,7 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     GenTable table = new GenTable();
-                    table.setTableName(rs.getString(query.tableName()));
+                    table.setTableName(rs.getString(query.getTableNameResultSetColumnName()));
                     table.setTableComment(rs.getString(query.tableComment()));
                     table.setDatasourceId(dataSourceId);
                     return table;
@@ -274,13 +275,18 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     }
 
     @Override
-    public List<GenTable> getTableList(Long datasourceId) {
-        DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+    public List<GenTable> getTableList(Long datasourceId, String tableNamePattern) {
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
-            DBType dbType = DBType.getValue(connInfo.getDbType());
+            DBType dbType = DBType.MYSQL;
+            if (datasourceId != 0) {
+                DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+                if (connInfo != null) {
+                    dbType = DBType.getValue(connInfo.getDbType());
+                }
+            }
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 根据数据源，获取全部数据表
-            return getTableList(connection, datasourceId, query);
+            return getTableList(connection, datasourceId, query, tableNamePattern);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -289,15 +295,19 @@ public class TableServiceImpl extends BaseServiceImpl<TableMapper, GenTable> imp
     /**
      * 根据数据源，获取全部数据表
      */
-    private List<GenTable> getTableList(Connection connection, Long datasourceId, AbstractQuery query) {
+    private List<GenTable> getTableList(Connection connection, Long datasourceId, AbstractQuery query, String tableNamePattern) {
         List<GenTable> tableList = new ArrayList<>();
         String tableQuerySql = query.getTableQuerySql(null);
         try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 // 查询数据
                 while (rs.next()) {
+                    String tableName = rs.getString(query.getTableNameResultSetColumnName());
+                    if (StringUtils.hasText(tableNamePattern) && !tableName.contains(tableNamePattern)) {
+                        continue;
+                    }
                     GenTable table = new GenTable();
-                    table.setTableName(rs.getString(query.tableName()));
+                    table.setTableName(tableName);
                     table.setTableComment(rs.getString(query.tableComment()));
                     table.setDatasourceId(datasourceId);
                     tableList.add(table);

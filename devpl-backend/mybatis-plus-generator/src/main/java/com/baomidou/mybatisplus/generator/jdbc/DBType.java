@@ -138,21 +138,18 @@ public enum DBType {
      * 数据库名称，不区分版本
      */
     private final String name;
-
-    /**
-     * 默认端口号
-     */
-    private int defaultPort;
-
     /**
      * 描述
      */
     private final String description;
-
     /**
      * 支持的驱动列表
      */
     private final JDBCDriver[] drivers;
+    /**
+     * 默认端口号
+     */
+    private int defaultPort;
 
     DBType(String name, int port, String desc) {
         this(name, port, desc, (JDBCDriver[]) null);

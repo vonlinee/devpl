@@ -25,6 +25,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * DB2 字段类型转换
+ *
  * @author zhanyao, hanchunlin
  * @since 2018-05-16
  */

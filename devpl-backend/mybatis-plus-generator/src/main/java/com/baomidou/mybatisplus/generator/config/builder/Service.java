@@ -18,7 +18,6 @@ package com.baomidou.mybatisplus.generator.config.builder;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import com.baomidou.mybatisplus.generator.function.ConverterFileName;
 import com.baomidou.mybatisplus.generator.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -26,9 +25,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Service属性配置
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -45,16 +46,19 @@ public class Service implements TableInitializer {
     private String superServiceImplClass = ConstVal.SUPER_SERVICE_IMPL_CLASS;
     /**
      * 转换输出Service文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterServiceFileName = (entityName -> "I" + entityName + ConstVal.SERVICE);
+    private Function<String, String> converterServiceFileName = (entityName -> "I" + entityName + ConstVal.SERVICE);
     /**
      * 转换输出ServiceImpl文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterServiceImplFileName = (entityName -> entityName + ConstVal.SERVICE_IMPL);
+    private Function<String, String> converterServiceImplFileName = (entityName -> entityName + ConstVal.SERVICE_IMPL);
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -73,12 +77,12 @@ public class Service implements TableInitializer {
     }
 
     @NotNull
-    public ConverterFileName getConverterServiceFileName() {
+    public Function<String, String> getConverterServiceFileName() {
         return converterServiceFileName;
     }
 
     @NotNull
-    public ConverterFileName getConverterServiceImplFileName() {
+    public Function<String, String> getConverterServiceImplFileName() {
         return converterServiceImplFileName;
     }
 
@@ -107,6 +111,7 @@ public class Service implements TableInitializer {
 
         /**
          * Service接口父类
+         *
          * @param clazz 类
          * @return this
          */
@@ -116,6 +121,7 @@ public class Service implements TableInitializer {
 
         /**
          * Service接口父类
+         *
          * @param superServiceClass 类名
          * @return this
          */
@@ -126,6 +132,7 @@ public class Service implements TableInitializer {
 
         /**
          * Service实现类父类
+         *
          * @param clazz 类
          * @return this
          */
@@ -135,6 +142,7 @@ public class Service implements TableInitializer {
 
         /**
          * Service实现类父类
+         *
          * @param superServiceImplClass 类名
          * @return this
          */
@@ -145,28 +153,31 @@ public class Service implements TableInitializer {
 
         /**
          * 转换输出service接口文件名称
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertServiceFileName(@NotNull ConverterFileName converter) {
+        public Builder convertServiceFileName(@NotNull Function<String, String> converter) {
             this.service.converterServiceFileName = converter;
             return this;
         }
 
         /**
          * 转换输出service实现类文件名称
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertServiceImplFileName(@NotNull ConverterFileName converter) {
+        public Builder convertServiceImplFileName(@NotNull Function<String, String> converter) {
             this.service.converterServiceImplFileName = converter;
             return this;
         }
 
         /**
          * 格式化service接口文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -177,6 +188,7 @@ public class Service implements TableInitializer {
 
         /**
          * 格式化service实现类文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -187,6 +199,7 @@ public class Service implements TableInitializer {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated

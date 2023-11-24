@@ -93,6 +93,7 @@ public class IntrospectedTable {
 
     /**
      * 构造方法
+     *
      * @param context  配置构建
      * @param metadata 表元数据信息
      * @since 3.5.0
@@ -122,6 +123,7 @@ public class IntrospectedTable {
 
     /**
      * 表名
+     *
      * @return 表名
      */
     public String getTableName() {
@@ -146,6 +148,7 @@ public class IntrospectedTable {
 
     /**
      * 添加字段
+     *
      * @param column 字段
      * @since 3.5.0
      */
@@ -188,6 +191,7 @@ public class IntrospectedTable {
 
     /**
      * 导包处理
+     *
      * @since 3.5.0
      */
     public void importPackage() {
@@ -248,16 +252,17 @@ public class IntrospectedTable {
 
     /**
      * 处理表信息(文件名与导包)
+     *
      * @since 3.5.0
      */
     public void processTable() {
         String entityName = entity.getNameConvert().entityNameConvert(this);
-        this.setEntityName(entity.getConverterFileName().convert(entityName));
-        this.mapperName = strategyConfig.mapper().getConverterMapperFileName().convert(entityName);
-        this.xmlName = strategyConfig.mapper().getConverterXmlFileName().convert(entityName);
-        this.serviceName = strategyConfig.service().getConverterServiceFileName().convert(entityName);
-        this.serviceImplName = strategyConfig.service().getConverterServiceImplFileName().convert(entityName);
-        this.controllerName = strategyConfig.controller().getConverterFileName().convert(entityName);
+        this.setEntityName(entity.getConverterFileName().apply(entityName));
+        this.mapperName = strategyConfig.mapper().getConverterMapperFileName().apply(entityName);
+        this.xmlName = strategyConfig.mapper().getConverterXmlFileName().apply(entityName);
+        this.serviceName = strategyConfig.service().getConverterServiceFileName().apply(entityName);
+        this.serviceImplName = strategyConfig.service().getConverterServiceImplFileName().apply(entityName);
+        this.controllerName = strategyConfig.controller().getConverterFileName().apply(entityName);
     }
 
     public Set<String> getImportPackages() {
@@ -323,6 +328,7 @@ public class IntrospectedTable {
 
     /**
      * 是否有主键
+     *
      * @return 是否有主键
      */
     public boolean hasPrimaryKey() {

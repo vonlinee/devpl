@@ -17,6 +17,7 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * MySql 表数据查询
+ *
  * @author steven ma
  * @since 2020-08-20
  */

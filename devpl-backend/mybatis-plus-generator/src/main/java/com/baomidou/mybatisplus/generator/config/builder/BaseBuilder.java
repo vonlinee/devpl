@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * 配置构建
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */

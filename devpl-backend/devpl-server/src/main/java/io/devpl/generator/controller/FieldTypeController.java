@@ -4,7 +4,7 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.entity.GenFieldType;
-import io.devpl.generator.service.FieldTypeService;
+import io.devpl.generator.service.GenFieldTypeService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ import java.util.Set;
 public class FieldTypeController {
 
     @Resource
-    FieldTypeService fieldTypeService;
+    GenFieldTypeService fieldTypeService;
 
     /**
      * 字段类型

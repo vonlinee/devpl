@@ -51,6 +51,7 @@ public class JDBCTypeAdapter implements TypeAdapter {
 
     /**
      * Derive a default SQL type from the given Java type.
+     *
      * @param javaType the Java type to translate
      * @return the corresponding SQL type, or {@link SqlTypeValue#TYPE_UNKNOWN} if none found
      */

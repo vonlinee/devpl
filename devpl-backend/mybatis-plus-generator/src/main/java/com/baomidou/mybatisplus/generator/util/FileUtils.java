@@ -14,6 +14,7 @@ public class FileUtils {
      * not a directory then an IOException is thrown.
      * If the directory cannot be created (or does not already exist)
      * then an IOException is thrown.
+     *
      * @param directory directory to create, must not be {@code null}
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException          if the directory cannot be created or the file already exists but is not a directory

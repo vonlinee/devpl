@@ -17,6 +17,7 @@
 package io.devpl.sdk.io;
 
 import java.io.*;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.StringTokenizer;
  * <ul>
  * <li>Get the free space on a drive
  * </ul>
+ *
  * @author Frank W. Zammetti
  * @author Stephen Colebourne
  * @author Thomas Ledoux
@@ -134,6 +136,7 @@ public class FileSystemUtils {
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows and 'df' on *nix.
+     *
      * @param path the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume
      * @throws IllegalArgumentException if the path is invalid
@@ -165,6 +168,7 @@ public class FileSystemUtils {
      * some simple tests to compare the command line with the output from this class.
      * If your operating system isn't supported, please raise a JIRA call detailing
      * the exact result from df -k and as much other detail as possible, thanks.
+     *
      * @param path the path to get free space for, not null, not empty on Unix
      * @return the amount of free drive space on the drive or volume in kilobytes
      * @throws IllegalArgumentException if the path is invalid
@@ -187,6 +191,7 @@ public class FileSystemUtils {
      * </pre>
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows and 'df' on *nix.
+     *
      * @param path the path to get free space for, not null, not empty on Unix
      * @param os   the operating system code
      * @param kb   whether to normalize to kilobytes
@@ -218,6 +223,7 @@ public class FileSystemUtils {
 
     /**
      * Find free space on the Windows platform using the 'dir' command.
+     *
      * @param path the path to get free space for, including the colon
      * @return the amount of free drive space on the drive
      * @throws IOException if an error occurs
@@ -252,6 +258,7 @@ public class FileSystemUtils {
 
     /**
      * Parses the Windows dir response last line
+     *
      * @param line the line to parse
      * @param path the path that was sent
      * @return the number of bytes
@@ -307,6 +314,7 @@ public class FileSystemUtils {
 
     /**
      * Find free space on the *nix platform using the 'df' command.
+     *
      * @param path  the path to get free space for
      * @param kb    whether to normalize to kilobytes
      * @param posix whether to use the posix standard format flag
@@ -365,6 +373,7 @@ public class FileSystemUtils {
 
     /**
      * Parses the bytes from a string.
+     *
      * @param freeSpace the free space string
      * @param path      the path
      * @return the number of bytes
@@ -391,6 +400,7 @@ public class FileSystemUtils {
 
     /**
      * Performs the os command.
+     *
      * @param cmdAttribs the command line parameters
      * @param max        The maximum limit for the lines returned
      * @return the parsed data
@@ -456,6 +466,7 @@ public class FileSystemUtils {
 
     /**
      * Opens the process to the operating system.
+     *
      * @param cmdAttribs the command line parameters
      * @return the process
      * @throws IOException if an error occurs
@@ -464,4 +475,20 @@ public class FileSystemUtils {
         return Runtime.getRuntime().exec(cmdAttribs);
     }
 
+    /**
+     * 打开指定输出文件目录
+     *
+     * @param outDir 输出文件目录
+     * @throws IOException 执行命令出错
+     */
+    public static void openDir(String outDir) throws IOException {
+        String osName = System.getProperty("os.name");
+        if (osName != null) {
+            if (osName.contains("Mac")) {
+                Runtime.getRuntime().exec("open " + outDir);
+            } else if (osName.contains("Windows")) {
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
+            }
+        }
+    }
 }

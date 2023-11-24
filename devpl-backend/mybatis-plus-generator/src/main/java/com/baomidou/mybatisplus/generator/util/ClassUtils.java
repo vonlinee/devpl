@@ -7,6 +7,7 @@ public final class ClassUtils {
 
     /**
      * 获取类名
+     *
      * @param className className 全类名
      * @return ignore
      */
@@ -18,6 +19,7 @@ public final class ClassUtils {
      * <p>
      * 请仅在确定类存在的情况下调用该方法
      * </p>
+     *
      * @param name 类名称
      * @return 返回转换后的 Class
      */
@@ -42,6 +44,7 @@ public final class ClassUtils {
      * for example, for class path resource loading (but not necessarily for
      * {@code Class.forName}, which accepts a {@code null} ClassLoader
      * reference as well).
+     *
      * @return the default ClassLoader (only {@code null} if even the system
      * ClassLoader isn't accessible)
      * @see Thread#getContextClassLoader()

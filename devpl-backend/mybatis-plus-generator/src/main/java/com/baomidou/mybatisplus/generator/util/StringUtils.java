@@ -42,6 +42,7 @@ public final class StringUtils {
 
     /**
      * 判断字符串中是否全是空白字符
+     *
      * @param cs 需要判断的字符串
      * @return 如果字符串序列是 null 或者全是空白，返回 true
      */
@@ -59,6 +60,7 @@ public final class StringUtils {
 
     /**
      * 对象转为字符串去除左右空格
+     *
      * @param o 带转换对象
      * @return 去掉开头和末尾的空格
      */
@@ -72,6 +74,7 @@ public final class StringUtils {
 
     /**
      * 判断字符串是否符合数据库字段的命名
+     *
      * @param str 字符串
      * @return 判断结果
      */
@@ -81,6 +84,7 @@ public final class StringUtils {
 
     /**
      * 获取真正的字段名
+     *
      * @param column 字段名
      * @return 字段名
      */
@@ -93,6 +97,7 @@ public final class StringUtils {
 
     /**
      * 字符串驼峰转下划线格式
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */
@@ -114,6 +119,7 @@ public final class StringUtils {
 
     /**
      * 字符串下划线转驼峰格式
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */
@@ -139,6 +145,7 @@ public final class StringUtils {
 
     /**
      * 首字母转换小写
+     *
      * @param param 需要转换的字符串
      * @return 转换好的字符串
      */
@@ -151,6 +158,7 @@ public final class StringUtils {
 
     /**
      * 正则表达式匹配
+     *
      * @param regex 正则表达式字符串
      * @param input 要匹配的字符串
      * @return 如果 input 符合 regex 正则表达式格式, 返回true, 否则返回 false;
@@ -184,6 +192,7 @@ public final class StringUtils {
 
     /**
      * 包含大写字母
+     *
      * @param word 待判断字符串
      * @return ignore
      */
@@ -199,6 +208,7 @@ public final class StringUtils {
 
     /**
      * 是否为大写命名
+     *
      * @param word 待判断字符串
      * @return ignore
      */
@@ -208,6 +218,7 @@ public final class StringUtils {
 
     /**
      * 是否为驼峰下划线混合命名
+     *
      * @param word 待判断字符串
      * @return ignore
      */
@@ -231,6 +242,7 @@ public final class StringUtils {
      * StringUtils.endsWith("def", "ABCDEF") = false
      * </pre>
      * </p>
+     *
      * @param str    the String to check, may be null
      * @param suffix the suffix to find, may be null
      * @return <code>true</code> if the String ends with the suffix, case
@@ -245,6 +257,7 @@ public final class StringUtils {
     /**
      * Check if a String ends with a specified suffix (optionally case
      * insensitive).
+     *
      * @param str        the String to check, may be null
      * @param suffix     the suffix to find, may be null
      * @param ignoreCase inidicates whether the compare should ignore case (case
@@ -266,6 +279,7 @@ public final class StringUtils {
 
     /**
      * 是否为CharSequence类型
+     *
      * @param clazz class
      * @return true 为是 CharSequence 类型
      */
@@ -275,19 +289,21 @@ public final class StringUtils {
 
     /**
      * 前n个首字母小写,之后字符大小写的不变
+     *
      * @param rawString 需要处理的字符串
      * @param index     多少个字符(从左至右)
      * @return ignore
      */
     public static String prefixToLower(String rawString, int index) {
         return rawString.substring(0, index).toLowerCase() +
-               rawString.substring(index);
+            rawString.substring(index);
     }
 
     /**
      * 删除字符前缀之后,首字母小写,之后字符大小写的不变
      * <p>StringUtils.removePrefixAfterPrefixToLower( "isUser", 2 )     = user</p>
      * <p>StringUtils.removePrefixAfterPrefixToLower( "isUserInfo", 2 ) = userInfo</p>
+     *
      * @param rawString 需要处理的字符串
      * @param index     删除多少个字符(从左至右)
      * @return ignore
@@ -299,6 +315,7 @@ public final class StringUtils {
     /**
      * 驼峰转连字符
      * <p>StringUtils.camelToHyphen( "managerAdminUserService" ) = manager-admin-user-service</p>
+     *
      * @param input ignore
      * @return 以'-'分隔
      * @see <a href="https://github.com/krasa/StringManipulation">document</a>
@@ -374,6 +391,7 @@ public final class StringUtils {
      * StringUtils.equals("abc", "abc") = true
      * StringUtils.equals("abc", "ABC") = false
      * </pre>
+     *
      * @param cs1 第一个字符串, 可为 {@code null}
      * @param cs2 第二个字符串, 可为 {@code null}
      * @return {@code true} 如果两个字符串相同, 或者都为 {@code null}
@@ -404,6 +422,7 @@ public final class StringUtils {
 
     /**
      * 去除不可见的字符，例如 \t, \n, \r
+     *
      * @param str 原字符串
      * @return 去掉\t, \n, \r之后的结果
      */
@@ -430,6 +449,7 @@ public final class StringUtils {
 
     /**
      * 去掉首尾换行符
+     *
      * @param str 字符串
      * @return 去掉首尾换行符
      */

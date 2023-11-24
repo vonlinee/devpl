@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
-import io.devpl.generator.dao.FieldTypeMapper;
+import io.devpl.generator.dao.GenFieldTypeMapper;
 import io.devpl.generator.entity.GenFieldType;
-import io.devpl.generator.service.FieldTypeService;
+import io.devpl.generator.service.GenFieldTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * 字段类型管理
  */
 @Service
-public class FieldTypeServiceImpl extends BaseServiceImpl<FieldTypeMapper, GenFieldType> implements FieldTypeService {
+public class GenFieldTypeServiceImpl extends BaseServiceImpl<GenFieldTypeMapper, GenFieldType> implements GenFieldTypeService {
 
     @Override
     public ListResult<GenFieldType> page(Query query) {

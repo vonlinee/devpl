@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 表字段
  */
-public interface TableFieldService extends BaseService<GenTableField> {
+public interface GenTableFieldService extends BaseService<GenTableField> {
 
     /**
      * 查询表的所有字段

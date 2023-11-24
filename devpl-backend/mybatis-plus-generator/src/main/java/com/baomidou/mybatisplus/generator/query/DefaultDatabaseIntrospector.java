@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * 元数据查询数据库信息.
+ *
  * @author nieqiurong 2022/5/11.
  * @see TypeConverter 类型转换器(如果默认逻辑不能满足，可实现此接口重写类型转换)
  * <p>
@@ -44,6 +45,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     /**
      * 查询需要生成的所有表信息
+     *
      * @return 所有表信息
      */
     @Override
@@ -139,6 +141,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     /**
      * 表名匹配
+     *
      * @param matchTableName 匹配表名
      * @param dbTableName    数据库表名
      * @return 是否匹配
@@ -149,6 +152,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
     /**
      * 获取表的列信息
+     *
      * @param dbmd      数据库元数据
      * @param tableInfo 表信息
      * @param catalog   catalog

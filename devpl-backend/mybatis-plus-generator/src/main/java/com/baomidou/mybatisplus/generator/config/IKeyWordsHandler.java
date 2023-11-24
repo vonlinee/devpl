@@ -21,6 +21,7 @@ import java.util.Collection;
 
 /**
  * 关键字处理接口
+ *
  * @author nieqiurong 2020/5/7.
  * @since 3.3.2
  */
@@ -28,6 +29,7 @@ public interface IKeyWordsHandler {
 
     /**
      * 获取关键字
+     *
      * @return 关键字集合
      */
     @NotNull
@@ -35,6 +37,7 @@ public interface IKeyWordsHandler {
 
     /**
      * 格式化关键字格式
+     *
      * @return 格式
      */
     @NotNull
@@ -42,6 +45,7 @@ public interface IKeyWordsHandler {
 
     /**
      * 是否为关键字
+     *
      * @param columnName 字段名称
      * @return 是否为关键字
      */
@@ -49,6 +53,7 @@ public interface IKeyWordsHandler {
 
     /**
      * 格式化字段
+     *
      * @param columnName 字段名称
      * @return 格式化字段
      */

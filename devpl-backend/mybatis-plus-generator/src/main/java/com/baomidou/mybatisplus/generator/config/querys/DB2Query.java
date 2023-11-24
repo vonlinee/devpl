@@ -17,6 +17,7 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * DB2 表数据查询
+ *
  * @author zhanyao
  * @since 2018-05-16
  */

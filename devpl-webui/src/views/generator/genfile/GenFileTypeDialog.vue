@@ -17,7 +17,7 @@ const dialogVisiableRef = ref(false);
 const singleTableRef = ref<InstanceType<typeof ElTable>>();
 
 // 默认的文件生成与模板对应关系
-const tableData = ref<GenFile[]>([]);
+const tableData = ref<TargetGenFile[]>([]);
 
 /**
  * 获取表格数据
@@ -45,7 +45,6 @@ function addNewFileType() {
     fileName: "文件类型名称",
     templateId: undefined,
     remark: "",
-    pid: 0,
     editing: true,
     builtin: false,
     templateName: ""
@@ -56,7 +55,7 @@ defineExpose({
   init
 });
 
-let templateOptions = ref([]);
+let templateOptions = ref<TemplateInfo[]>([]);
 
 function handleCurrentChange() {
 
@@ -84,7 +83,7 @@ function submit() {
  * 编辑行
  * @param row
  */
-function editHandle(row: GenFile) {
+function editHandle(row: TargetGenFile) {
   row.editing = true;
 }
 
@@ -92,7 +91,7 @@ function editHandle(row: GenFile) {
  * 保存行
  * @param row
  */
-function saveHandle(row: GenFile) {
+function saveHandle(row: TargetGenFile) {
   apiSaveOrUpdateGenFile(row).then((res) => {
     if (res.data) {
       ElMessage.info({
@@ -109,8 +108,8 @@ function saveHandle(row: GenFile) {
  * @param rowIndex
  */
 function deleteHandle(rowIndex: number) {
-  let genFile: GenFile = tableData.value[rowIndex];
-  if (genFile.pid) {
+  let genFile: TargetGenFile = tableData.value[rowIndex];
+  if (genFile.id) {
     apiDeleteGenFiles([genFile]).then(res => {
       if (res.data) {
         tableData.value.splice(rowIndex, 1);
@@ -126,11 +125,11 @@ function deleteHandle(rowIndex: number) {
  * 选择框绑定的值是模板ID，但是显示的值是模板名称
  * @param row
  */
-function fillTemplateName(row: GenFile) {
+function fillTemplateName(row: TargetGenFile) {
   if (!hasText(row.templateName)) {
     if (row.templateId) {
       apiGetTemplateById(row.templateId).then((res) => {
-        row.templateName = res.data.templateName;
+        row.templateName = res.data?.templateName || "";
       });
     }
   }

@@ -17,6 +17,7 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * Gauss 表数据查询
+ *
  * @author halower
  * @since 2019-06-27
  */

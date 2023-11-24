@@ -18,9 +18,9 @@ public interface AbstractQuery {
     String getTableQuerySql(String tableName);
 
     /**
-     * 表名称
+     * 表名称 ResultSet 列名
      */
-    String tableName();
+    String getTableNameResultSetColumnName();
 
     /**
      * 表注释

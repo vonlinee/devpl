@@ -28,7 +28,7 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableName() {
+    public String getTableNameResultSetColumnName() {
         return "table_name";
     }
 

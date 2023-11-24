@@ -175,6 +175,7 @@ public class TypeHelper {
      * member called INSTANCE, then calls a public default constructor.
      *
      * <p>If className contains a "#" instead looks for a static field.
+     *
      * @param pluginClass Class (or interface) to instantiate
      * @param className   Name of implementing class
      * @param <T>         Class
@@ -257,6 +258,7 @@ public class TypeHelper {
 
     /**
      * Reads the contents of an input stream and returns a byte array.
+     *
      * @param inputStream the input to read from.
      * @return A byte array whose length is equal to the number of bytes contained.
      */
@@ -412,6 +414,7 @@ public class TypeHelper {
      * Converts an array of {@code long} values to an array of {@code int}
      * values, truncating values outside the legal range for an {@code int}
      * to {@link Integer#MIN_VALUE} or {@link Integer#MAX_VALUE}.
+     *
      * @param longs An array of {@code long}s
      * @return An array of {@code int}s
      */

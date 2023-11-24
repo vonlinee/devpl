@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.generator.config.builder.Context;
 
 /**
  * 数据库查询抽象类
+ *
  * @author nieqiurong
  * @since 3.5.3
  */

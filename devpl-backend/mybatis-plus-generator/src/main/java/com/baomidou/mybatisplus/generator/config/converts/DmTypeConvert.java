@@ -17,8 +17,8 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -26,6 +26,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * DM 字段类型转换
+ *
  * @author halower, hanchunlin, daiby
  * @since 2019-06-27
  */
@@ -54,6 +55,7 @@ public class DmTypeConvert implements ITypeConvert {
      * 日期时间数据类型
      * <p>
      * 多媒体数据类型: TEXT,LONGVARCHAR,CLOB,BLOB,IMAGE
+     *
      * @param config    全局配置
      * @param fieldType 字段类型
      * @return 对应的数据类型

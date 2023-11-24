@@ -46,7 +46,7 @@ public class DmQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableName() {
+    public String getTableNameResultSetColumnName() {
         return "TABLE_NAME";
     }
 

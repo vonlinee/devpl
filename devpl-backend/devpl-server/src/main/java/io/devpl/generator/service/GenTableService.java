@@ -2,8 +2,8 @@ package io.devpl.generator.service;
 
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
-import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.config.query.AbstractQuery;
+import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.GenTable;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 数据表
  */
-public interface TableService extends BaseService<GenTable> {
+public interface GenTableService extends BaseService<GenTable> {
 
     ListResult<GenTable> page(Query query);
 
@@ -31,8 +31,10 @@ public interface TableService extends BaseService<GenTable> {
     /**
      * 根据数据源，获取指定数据表
      *
-     * @param datasource 数据源
-     * @param tableName  表名
+     * @param connection   数据源连接
+     * @param query        查询策略
+     * @param dataSourceId 数据源ID
+     * @param tableName    表名
      */
     GenTable getTable(Connection connection, AbstractQuery query, Long dataSourceId, String tableName);
 
@@ -48,5 +50,5 @@ public interface TableService extends BaseService<GenTable> {
      *
      * @param datasourceId 数据源ID
      */
-    List<GenTable> getTableList(Long datasourceId);
+    List<GenTable> getTableList(Long datasourceId, String tableNamePattern);
 }

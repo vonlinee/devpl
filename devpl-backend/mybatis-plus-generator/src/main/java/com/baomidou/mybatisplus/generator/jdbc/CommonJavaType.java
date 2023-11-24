@@ -122,6 +122,7 @@ public enum CommonJavaType implements JavaType {
 
     /**
      * 判断是否是基本数据类型
+     *
      * @return 是否是基本数据类型
      */
     public boolean isPrimitive() {

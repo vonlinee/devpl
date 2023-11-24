@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 
 /**
  * 名称转换接口类
+ *
  * @author hubin
  * @since 2017-01-20
  */
@@ -26,6 +27,7 @@ public interface NameConverter {
 
     /**
      * 执行实体名称转换
+     *
      * @param tableInfo 表信息对象
      * @return
      */
@@ -33,6 +35,7 @@ public interface NameConverter {
 
     /**
      * 执行属性名称转换
+     *
      * @param fieldName 表字段对象，如果属性表字段命名不一致注意 convert 属性的设置
      * @return
      */

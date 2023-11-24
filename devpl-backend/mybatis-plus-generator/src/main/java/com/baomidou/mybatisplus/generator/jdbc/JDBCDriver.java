@@ -61,6 +61,48 @@ public enum JDBCDriver {
         return null;
     }
 
+    public static String[] supportedDriverNames() {
+        String[] names = new String[values().length];
+        JDBCDriver[] drivers = values();
+        for (int i = 0; i < drivers.length; i++) {
+            names[i] = drivers[i].name();
+        }
+        return names;
+    }
+
+    public static JDBCDriver getByName(String name) {
+        return getByName(name, true, null);
+    }
+
+    public static JDBCDriver getByName(String name, JDBCDriver defaultValue) {
+        return getByName(name, true, defaultValue);
+    }
+
+    /**
+     * 根据名称搜索
+     *
+     * @param name          枚举实例名称
+     * @param caseSensitive 大小写敏感
+     * @param defaultValue  默认值
+     * @return JDBCDriver实例
+     */
+    public static JDBCDriver getByName(String name, boolean caseSensitive, JDBCDriver defaultValue) {
+        if (caseSensitive) {
+            for (JDBCDriver driver : values()) {
+                if (driver.name().equals(name)) {
+                    return driver;
+                }
+            }
+        } else {
+            for (JDBCDriver driver : values()) {
+                if (driver.name().equalsIgnoreCase(name)) {
+                    return driver;
+                }
+            }
+        }
+        return defaultValue;
+    }
+
     /**
      * 协议名//[host name][/database name][username and password]
      * 获取JDBC URL连接字符串
@@ -133,47 +175,5 @@ public enum JDBCDriver {
 
     public String getSubProtocol() {
         return subProtocol;
-    }
-
-    public static String[] supportedDriverNames() {
-        String[] names = new String[values().length];
-        JDBCDriver[] drivers = values();
-        for (int i = 0; i < drivers.length; i++) {
-            names[i] = drivers[i].name();
-        }
-        return names;
-    }
-
-    public static JDBCDriver getByName(String name) {
-        return getByName(name, true, null);
-    }
-
-    public static JDBCDriver getByName(String name, JDBCDriver defaultValue) {
-        return getByName(name, true, defaultValue);
-    }
-
-    /**
-     * 根据名称搜索
-     *
-     * @param name          枚举实例名称
-     * @param caseSensitive 大小写敏感
-     * @param defaultValue  默认值
-     * @return JDBCDriver实例
-     */
-    public static JDBCDriver getByName(String name, boolean caseSensitive, JDBCDriver defaultValue) {
-        if (caseSensitive) {
-            for (JDBCDriver driver : values()) {
-                if (driver.name().equals(name)) {
-                    return driver;
-                }
-            }
-        } else {
-            for (JDBCDriver driver : values()) {
-                if (driver.name().equalsIgnoreCase(name)) {
-                    return driver;
-                }
-            }
-        }
-        return defaultValue;
     }
 }

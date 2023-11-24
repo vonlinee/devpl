@@ -28,6 +28,7 @@ import java.util.function.Supplier;
 
 /**
  * 全局配置
+ *
  * @author hubin
  * @since 2016-12-02
  */
@@ -71,6 +72,7 @@ public class GlobalConfig {
     private DateType dateType = DateType.TIME_PACK;
     /**
      * 获取注释日期
+     *
      * @since 3.5.0
      */
     private Supplier<String> commentDate = () -> new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -123,6 +125,7 @@ public class GlobalConfig {
 
     /**
      * 全局配置构建
+     *
      * @author nieqiurong 2020/10/11.
      * @since 3.5.0
      */
@@ -208,6 +211,7 @@ public class GlobalConfig {
         /**
          * 注释日期获取处理
          * example: () -> LocalDateTime.now().format(DateTimeFormatter.ISO_DATE)
+         *
          * @param commentDate 获取注释日期
          * @return this
          * @since 3.5.0
@@ -219,6 +223,7 @@ public class GlobalConfig {
 
         /**
          * 指定注释日期格式化
+         *
          * @param pattern 格式
          * @return this
          * @since 3.5.0

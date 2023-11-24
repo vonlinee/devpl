@@ -17,10 +17,9 @@ package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * 定义常量
+ *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-31
  */

@@ -1,14 +1,13 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.*;
-import io.devpl.generator.dao.DataSourceMapper;
+import io.devpl.generator.dao.DbConnInfoMapper;
 import io.devpl.generator.domain.param.DBTableDataParam;
 import io.devpl.generator.domain.param.DbConnInfoListParam;
 import io.devpl.generator.domain.vo.DBTableDataVO;
@@ -35,18 +34,18 @@ import java.util.Map;
 
 /**
  * 数据源管理
- * TODO 结合数据库连接池
  */
 @Slf4j
 @Service
 @AllArgsConstructor
-public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnInfo> implements DataSourceService {
+public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnInfo> implements DataSourceService {
 
     /**
      * 程序内部的数据源
      */
     private final DataSource dataSource;
     private final JdbcDriverManager driverManager;
+    private final DbConnInfoMapper dbConnInfoMapper;
 
     @Override
     public DbConnInfo getOne(long id) {
@@ -63,13 +62,13 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DbConnI
         LambdaQueryWrapper<DbConnInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(param.getConnName()), DbConnInfo::getConnName, param.getConnName());
         wrapper.eq(StringUtils.hasText(param.getDriverType()), DbConnInfo::getDriverType, param.getDriverType());
-        page = baseMapper.selectPage(page, wrapper);
+        page = dbConnInfoMapper.selectPage(page, wrapper);
         return ListResult.ok(page);
     }
 
     @Override
     public List<DbConnInfo> listAll() {
-        return baseMapper.selectList(Wrappers.emptyWrapper());
+        return dbConnInfoMapper.selectList();
     }
 
     @Override

@@ -88,11 +88,11 @@ public class PrimaryKey {
     @Override
     public String toString() {
         return "PrimaryKey{" + "tableCat='" + tableCat + '\'' +
-               ", tableSchem='" + tableSchem + '\'' +
-               ", tableName='" + tableName + '\'' +
-               ", columnName='" + columnName + '\'' +
-               ", keySeq=" + keySeq +
-               ", pkName='" + pkName + '\'' +
-               '}';
+            ", tableSchem='" + tableSchem + '\'' +
+            ", tableName='" + tableName + '\'' +
+            ", columnName='" + columnName + '\'' +
+            ", keySeq=" + keySeq +
+            ", pkName='" + pkName + '\'' +
+            '}';
     }
 }

@@ -12,12 +12,12 @@ public class StringTemplateSource implements TemplateSource {
     }
 
     @Override
-    public void setTemplate(String template) {
-        templateContent = template;
+    public String getTemplate() {
+        return templateContent;
     }
 
     @Override
-    public String getTemplate() {
-        return templateContent;
+    public void setTemplate(String template) {
+        templateContent = template;
     }
 }

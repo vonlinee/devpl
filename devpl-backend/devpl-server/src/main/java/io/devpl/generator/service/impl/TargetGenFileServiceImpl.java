@@ -24,7 +24,7 @@ public class TargetGenFileServiceImpl implements TargetGenFileService {
 
     @Override
     public boolean saveOrUpdate(TargetGenFile entity) {
-        if (entity.getPid() == null) {
+        if (entity.getId() == null) {
             return targetGenFileMapper.insert(entity) > 0;
         }
         return targetGenFileMapper.updateById(entity) > 0;

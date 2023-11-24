@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.enums.SqlLike;
 
 /**
  * 表名拼接
+ *
  * @author nieqiuqiu
  * @date 2019-11-26
  * @since 3.3.0
@@ -45,6 +46,7 @@ public class LikeTable {
 
     /**
      * 用%连接like
+     *
      * @return like 的值
      */
     public String getValue() {

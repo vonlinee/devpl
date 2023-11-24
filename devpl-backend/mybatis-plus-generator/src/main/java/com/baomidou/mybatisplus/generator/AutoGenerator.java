@@ -17,9 +17,7 @@ import com.baomidou.mybatisplus.generator.query.DatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.type.JavaType;
 import com.baomidou.mybatisplus.generator.type.TypeRegistry;
 import com.baomidou.mybatisplus.generator.util.FileUtils;
-import com.baomidou.mybatisplus.generator.util.RuntimeUtils;
 import com.baomidou.mybatisplus.generator.util.StringUtils;
-import com.baomidou.mybatisplus.generator.util.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,10 @@ import java.util.function.Function;
 public class AutoGenerator {
 
     private static final Logger logger = LoggerFactory.getLogger(AutoGenerator.class);
-
+    /**
+     * 数据源配置
+     */
+    private final DataSourceConfig dataSourceConfig;
     /**
      * 配置信息
      */
@@ -48,15 +50,10 @@ public class AutoGenerator {
      * 注入配置
      */
     protected InjectionConfig injectionConfig;
-
     /**
      * 模板引擎
      */
     AbstractTemplateEngine templateEngine;
-    /**
-     * 数据源配置
-     */
-    private final DataSourceConfig dataSourceConfig;
     /**
      * 数据库表配置
      */
@@ -220,7 +217,7 @@ public class AutoGenerator {
                 // 设置字段的元数据信息
 
                 JavaType columnType;
-                if (Values.isAnyNull(cmd.getDataType(), cmd.getColumnSize(), cmd.getDecimalDigits())) {
+                if (cmd.getDataType() == null || cmd.getColumnSize() == null || cmd.getDecimalDigits() == null) {
                     columnType = DbColumnType.STRING;
                 } else {
                     columnType = TypeRegistry.getColumnType(cmd.getDataType(), cmd.getColumnSize(), dateType, cmd.getDecimalDigits());
@@ -524,9 +521,26 @@ public class AutoGenerator {
             System.err.println("未找到输出目录：" + outDir);
         } else if (context.getGlobalConfig().isOpen()) {
             try {
-                RuntimeUtils.openDir(outDir);
+                openDir(outDir);
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * 打开指定输出文件目录
+     *
+     * @param outDir 输出文件目录
+     * @throws IOException 执行命令出错
+     */
+    public void openDir(String outDir) throws IOException {
+        String osName = System.getProperty("os.name");
+        if (osName != null) {
+            if (osName.contains("Mac")) {
+                Runtime.getRuntime().exec("open " + outDir);
+            } else if (osName.contains("Windows")) {
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
             }
         }
     }

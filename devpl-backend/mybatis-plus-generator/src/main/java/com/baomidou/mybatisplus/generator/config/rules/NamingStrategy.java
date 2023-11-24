@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * 从数据库表到文件的命名策略
+ *
  * @author YangHu, tangguo
  * @since 2016/8/30
  */
@@ -23,6 +24,7 @@ public enum NamingStrategy {
 
     /**
      * 下划线转驼峰
+     *
      * @param name 待转内容
      */
     public static String underlineToCamel(String name) {
@@ -54,6 +56,7 @@ public enum NamingStrategy {
 
     /**
      * 去掉指定的前缀
+     *
      * @param name   表名
      * @param prefix 前缀
      * @return 转换后的字符串
@@ -69,6 +72,7 @@ public enum NamingStrategy {
 
     /**
      * 去掉下划线前缀并转成驼峰格式
+     *
      * @param name   表名
      * @param prefix 前缀
      * @return 转换后的字符串
@@ -79,6 +83,7 @@ public enum NamingStrategy {
 
     /**
      * 去掉指定的后缀
+     *
      * @param name   表名
      * @param suffix 后缀
      * @return 转换后的字符串
@@ -94,6 +99,7 @@ public enum NamingStrategy {
 
     /**
      * 去掉下划线后缀并转成驼峰格式
+     *
      * @param name   表名
      * @param suffix 后缀
      * @return 转换后的字符串
@@ -104,6 +110,7 @@ public enum NamingStrategy {
 
     /**
      * 实体首字母大写
+     *
      * @param name 待转换的字符串
      * @return 转换后的字符串
      */
@@ -119,6 +126,7 @@ public enum NamingStrategy {
      *
      * <li> 包含 '_' 不算 </li>
      * <li> 首字母大写的不算 </li>
+     *
      * @param str 字符串
      * @return 结果
      */

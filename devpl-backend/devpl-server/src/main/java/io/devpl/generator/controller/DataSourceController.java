@@ -13,7 +13,7 @@ import io.devpl.generator.domain.vo.TestConnVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.service.DataSourceService;
-import io.devpl.generator.service.TableService;
+import io.devpl.generator.service.GenTableService;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ import java.util.List;
 public class DataSourceController {
 
     private DataSourceService datasourceService;
-    private TableService tableService;
+    private GenTableService tableService;
 
     /**
      * 获取数据源列表
@@ -191,10 +191,10 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list/{id}")
-    public ListResult<GenTable> tableList(@PathVariable("id") Long id) {
+    public ListResult<GenTable> tableList(@PathVariable("id") Long id, @RequestParam("tableNamePattern") String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
-            return ListResult.ok(tableService.getTableList(id));
+            return ListResult.ok(tableService.getTableList(id, tableNamePattern));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ListResult.error("数据源配置错误，请检查数据源配置！");

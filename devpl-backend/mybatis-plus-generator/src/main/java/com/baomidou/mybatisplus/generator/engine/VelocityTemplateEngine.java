@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -19,16 +18,12 @@ import java.util.Properties;
 /**
  * Velocity 模板引擎实现文件输出
  * <a href="https://velocity.apache.org/engine/1.7/user-guide.html">Velocity 1.7</a>
+ *
  * @author hubin
  * @since 2018-01-10
  */
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
-    private final VelocityEngine velocityEngine;
-
     static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
-
-    String VM_LOAD_PATH_KEY = "resource.loader.file.class";
-    String VM_LOAD_PATH_VALUE = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
 
     static {
         try {
@@ -38,6 +33,10 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             log.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
         }
     }
+
+    private final VelocityEngine velocityEngine;
+    String VM_LOAD_PATH_KEY = "resource.loader.file.class";
+    String VM_LOAD_PATH_VALUE = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
 
     public VelocityTemplateEngine() {
         velocityEngine = createEngine();

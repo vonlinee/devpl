@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 /**
  * 这是兼容以前旧版本提供的查询方式，需要每个数据库对接适配。
+ *
  * @author nieqiurong 2021/1/6.
  * @see DatabaseDialect 数据库适配
  * @see ITypeConvert 类型适配处理

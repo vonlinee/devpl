@@ -18,6 +18,7 @@ public class TypeUtils {
 
     /**
      * 将输入字符串转换为响应的数据类型
+     *
      * @param input        输入
      * @param requiredType 目标数据类型
      * @return 目标数据类型对应的值
@@ -73,6 +74,7 @@ public class TypeUtils {
 
     /**
      * 判断输入字符串是否为整数或者浮点数，涵盖负数的情况
+     *
      * @param str 字符串
      * @return 是否是数字
      */
@@ -82,6 +84,7 @@ public class TypeUtils {
 
     /**
      * 字符串是否是日期格式
+     *
      * @param str 输入
      * @return 是否是日期格式
      */
@@ -98,6 +101,7 @@ public class TypeUtils {
 
     /**
      * 字符串是否是布尔值
+     *
      * @param input 输入
      * @return 是否是布尔值
      */

@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 /**
  * DbQuery 装饰器
+ *
  * @author nieqiurong 2020/9/17.
  * @author hubin
  * @since 3.5.0
@@ -104,6 +105,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 扩展{@link #tableFieldsSql()}方法
+     *
      * @param tableName 表名
      * @return 查询表字段语句
      */
@@ -188,6 +190,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
     /**
      * 执行 SQL 查询，回调返回结果
+     *
      * @param sql      执行SQL
      * @param consumer 结果处理
      * @throws SQLException SQLException
@@ -256,6 +259,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         /**
          * 获取格式化注释
+         *
          * @param columnLabel 字段列
          * @return 注释
          */
@@ -265,6 +269,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         /**
          * 获取表注释
+         *
          * @return 表注释
          */
         public String getTableComment() {

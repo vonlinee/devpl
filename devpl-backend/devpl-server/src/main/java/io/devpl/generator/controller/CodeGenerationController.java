@@ -23,7 +23,7 @@ public class CodeGenerationController {
     @Resource
     CodeGenService codeGenService;
     @Resource
-    TargetGenFileService templateFileGenerationService;
+    TargetGenFileService targetGenFileService;
     @Resource
     GeneratorConfigService generatorConfigService;
 
@@ -70,7 +70,7 @@ public class CodeGenerationController {
      */
     @GetMapping("/genfiles")
     public Result<List<TargetGenFile>> listGeneratedFileTypes() {
-        return Result.ok(templateFileGenerationService.listGeneratedFileTypes());
+        return Result.ok(targetGenFileService.listGeneratedFileTypes());
     }
 
     /**
@@ -80,7 +80,7 @@ public class CodeGenerationController {
      */
     @PostMapping("/genfile")
     public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenFile param) {
-        templateFileGenerationService.saveOrUpdate(param);
+        targetGenFileService.saveOrUpdate(param);
         return Result.ok(true);
     }
 
@@ -92,7 +92,7 @@ public class CodeGenerationController {
      */
     @PostMapping("/genfiles/replace")
     public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenFile> files) {
-        return Result.ok(templateFileGenerationService.saveOrUpdateBatch(files));
+        return Result.ok(targetGenFileService.saveOrUpdateBatch(files));
     }
 
     /**
@@ -103,7 +103,7 @@ public class CodeGenerationController {
      */
     @DeleteMapping("/genfiles/replace")
     public Result<?> deleteGeneratedFileTypes(@RequestBody List<Integer> ids) {
-        return Result.ok(templateFileGenerationService.removeBatchByIds(ids));
+        return Result.ok(targetGenFileService.removeBatchByIds(ids));
     }
 
     /**

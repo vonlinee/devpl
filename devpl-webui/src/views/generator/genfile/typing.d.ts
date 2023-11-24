@@ -1,15 +1,33 @@
 /**
- * 表格行数据
+ * 目标生成文件
  */
-type GenFile = {
-  pid: number
+type TargetGenFile = {
+  /**
+   * 唯一ID
+   */
+  id?: number
+  /**
+   * 文件名称
+   */
   fileName: string
+  /**
+   * 模板ID
+   */
   templateId?: number
+  /**
+   * 模板名称
+   */
   templateName: string
+  /**
+   * 备注信息
+   */
   remark: string
+  /**
+   * 是否处于编辑状态
+   */
   editing: boolean
   /**
-   * 是否内置的生成文件类型，内置的不可删除
+   * 是否内置的生成文件类型，内置的不可删除，不可修改
    */
   builtin: boolean
   /**

@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 /**
  * mybatis plus FastAutoGenerator
+ *
  * @author L.cm, lanjerry
  * @since 2021-07-22
  */
@@ -74,6 +75,7 @@ public final class FastAutoGenerator {
 
     /**
      * 控制台输入内容读取并打印提示信息
+     *
      * @param message 提示信息
      * @return String
      */
@@ -89,6 +91,7 @@ public final class FastAutoGenerator {
 
     /**
      * 全局配置
+     *
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
@@ -104,6 +107,7 @@ public final class FastAutoGenerator {
 
     /**
      * 全局配置
+     *
      * @param consumer 自定义全局配置
      * @return FastAutoGenerator
      */
@@ -119,6 +123,7 @@ public final class FastAutoGenerator {
 
     /**
      * 包配置
+     *
      * @param consumer 自定义包配置
      * @return FastAutoGenerator
      */
@@ -134,6 +139,7 @@ public final class FastAutoGenerator {
 
     /**
      * 策略配置
+     *
      * @param consumer 自定义策略配置
      * @return FastAutoGenerator
      */
@@ -149,6 +155,7 @@ public final class FastAutoGenerator {
 
     /**
      * 注入配置
+     *
      * @param consumer 自定义注入配置
      * @return FastAutoGenerator
      */
@@ -164,6 +171,7 @@ public final class FastAutoGenerator {
 
     /**
      * 模板配置
+     *
      * @param consumer 自定义模板配置
      * @return FastAutoGenerator
      */
@@ -179,6 +187,7 @@ public final class FastAutoGenerator {
 
     /**
      * 模板引擎配置
+     *
      * @param templateEngine 模板引擎
      * @return FastAutoGenerator
      */

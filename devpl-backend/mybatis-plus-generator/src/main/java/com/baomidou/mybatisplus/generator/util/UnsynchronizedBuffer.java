@@ -25,6 +25,7 @@ public class UnsynchronizedBuffer extends OutputStream {
 
     /**
      * Creates a new writer.
+     *
      * @param initialCapacity initial byte capacity
      */
     public UnsynchronizedBuffer(int initialCapacity) {
@@ -34,6 +35,7 @@ public class UnsynchronizedBuffer extends OutputStream {
 
     /**
      * Determines what next array size should be by rounding up to next power of two.
+     *
      * @param i current array size
      * @return next array size
      * @throws IllegalArgumentException if i is negative
@@ -74,6 +76,7 @@ public class UnsynchronizedBuffer extends OutputStream {
 
     /**
      * Adds bytes to this writer's buffer.
+     *
      * @param bytes  byte array
      * @param off    offset into array to start copying bytes
      * @param length number of bytes to add
@@ -95,6 +98,7 @@ public class UnsynchronizedBuffer extends OutputStream {
 
     /**
      * Gets (a copy of) the contents of this writer's buffer.
+     *
      * @return byte buffer contents
      */
     public byte[] toArray() {

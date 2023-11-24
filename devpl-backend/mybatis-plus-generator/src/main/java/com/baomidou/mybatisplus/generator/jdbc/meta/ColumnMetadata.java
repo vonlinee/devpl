@@ -2,6 +2,7 @@ package com.baomidou.mybatisplus.generator.jdbc.meta;
 
 /**
  * metadata of a column in a database table
+ *
  * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
  */
 public class ColumnMetadata {
@@ -39,6 +40,7 @@ public class ColumnMetadata {
     /**
      * 有符号数长度会减少1，比如bigint(20)，此时columnSize=19
      * COLUMN_SIZE int => column size.
+     *
      * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
      */
     private Integer columnSize;
@@ -64,6 +66,7 @@ public class ColumnMetadata {
      * 0 - Indicates that the column definitely allows NULL values.
      * 1 - Indicates that the column definitely allows NULL values.
      * 2 - Indicates that the nullability of columns is unknown.
+     *
      * @see java.sql.DatabaseMetaData#columnNoNulls
      * @see java.sql.DatabaseMetaData#columnNullable
      * @see java.sql.DatabaseMetaData#columnNullableUnknown
@@ -108,6 +111,7 @@ public class ColumnMetadata {
      * YES --- if the column can include NULLs
      * NO --- if the column cannot include NULLs
      * empty string --- if the nullability for the column is unknown
+     *
      * @see ColumnMetadata#nullable
      */
     private String isNullable;
@@ -238,6 +242,7 @@ public class ColumnMetadata {
 
     /**
      * JDBC使用 setter/getter 方法来确定字段
+     *
      * @param nullable 是否可为null
      */
     public void setNullable(Integer nullable) {
@@ -254,6 +259,7 @@ public class ColumnMetadata {
 
     /**
      * for the api readability
+     *
      * @return the default value of this column
      */
     public String getDefaultValue() {
@@ -342,6 +348,7 @@ public class ColumnMetadata {
 
     /**
      * isAutoincrement cannot be null
+     *
      * @return if this column is autoincrement, true, or else false
      */
     public boolean isAutoIncrement() {
@@ -367,29 +374,29 @@ public class ColumnMetadata {
     @Override
     public String toString() {
         return "ColumnMetadata{" + "tableCat='" + tableCat + '\'' +
-               ", tableSchem='" + tableSchem + '\'' +
-               ", tableName='" + tableName + '\'' +
-               ", columnName='" + columnName + '\'' +
-               ", dataType=" + dataType +
-               ", typeName='" + typeName + '\'' +
-               ", columnSize=" + columnSize +
-               ", bufferLength=" + bufferLength +
-               ", decimalDigits='" + decimalDigits + '\'' +
-               ", numPrecRadix=" + numPrecRadix +
-               ", nullable=" + nullable +
-               ", remarks='" + remarks + '\'' +
-               ", columnDef='" + columnDef + '\'' +
-               ", sqlDataType=" + sqlDataType +
-               ", sqlDatetimeSub=" + sqlDatetimeSub +
-               ", charOctetLength=" + charOctetLength +
-               ", ordinalPosition=" + ordinalPosition +
-               ", isNullable='" + isNullable + '\'' +
-               ", scopeCatalog='" + scopeCatalog + '\'' +
-               ", scopeSchema='" + scopeSchema + '\'' +
-               ", scopeTable='" + scopeTable + '\'' +
-               ", sourceDataType='" + sourceDataType + '\'' +
-               ", isAutoincrement='" + isAutoincrement + '\'' +
-               ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
-               '}';
+            ", tableSchem='" + tableSchem + '\'' +
+            ", tableName='" + tableName + '\'' +
+            ", columnName='" + columnName + '\'' +
+            ", dataType=" + dataType +
+            ", typeName='" + typeName + '\'' +
+            ", columnSize=" + columnSize +
+            ", bufferLength=" + bufferLength +
+            ", decimalDigits='" + decimalDigits + '\'' +
+            ", numPrecRadix=" + numPrecRadix +
+            ", nullable=" + nullable +
+            ", remarks='" + remarks + '\'' +
+            ", columnDef='" + columnDef + '\'' +
+            ", sqlDataType=" + sqlDataType +
+            ", sqlDatetimeSub=" + sqlDatetimeSub +
+            ", charOctetLength=" + charOctetLength +
+            ", ordinalPosition=" + ordinalPosition +
+            ", isNullable='" + isNullable + '\'' +
+            ", scopeCatalog='" + scopeCatalog + '\'' +
+            ", scopeSchema='" + scopeSchema + '\'' +
+            ", scopeTable='" + scopeTable + '\'' +
+            ", sourceDataType='" + sourceDataType + '\'' +
+            ", isAutoincrement='" + isAutoincrement + '\'' +
+            ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
+            '}';
     }
 }

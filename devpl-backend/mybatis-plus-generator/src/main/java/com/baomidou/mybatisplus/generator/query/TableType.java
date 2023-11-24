@@ -4,6 +4,7 @@ import java.sql.DatabaseMetaData;
 
 /**
  * TABLE_TYPE String => table type. Typical types are "TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".
+ *
  * @see DatabaseMetaData#getTableTypes()
  */
 public enum TableType {

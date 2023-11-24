@@ -8,9 +8,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.util.List;
 
 /**
- * 基础Dao
+ * 基础Mapper
  */
 public interface EntityMapper<T> extends BaseMapper<T> {
+
+    default List<T> selectList() {
+        return selectList(Wrappers.emptyWrapper());
+    }
 
     /**
      * 查分页的数据

@@ -19,6 +19,7 @@ package com.baomidou.mybatisplus.generator.config.querys;
  * <p>
  * Xugu 表数据查询
  * </p>
+ *
  * @author unique1319 lanjerry
  * @since 2020-10-26
  */

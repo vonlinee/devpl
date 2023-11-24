@@ -112,14 +112,14 @@ public class ColumnPrivileges {
     @Override
     public String toString() {
         return "ColumnPrivileges{" +
-               "tableCat='" + tableCat + '\'' +
-               ", tableSchem='" + tableSchem + '\'' +
-               ", tableName='" + tableName + '\'' +
-               ", columnName='" + columnName + '\'' +
-               ", grantor='" + grantor + '\'' +
-               ", grantee='" + grantee + '\'' +
-               ", privilege='" + privilege + '\'' +
-               ", isGrantable='" + isGrantable + '\'' +
-               '}';
+            "tableCat='" + tableCat + '\'' +
+            ", tableSchem='" + tableSchem + '\'' +
+            ", tableName='" + tableName + '\'' +
+            ", columnName='" + columnName + '\'' +
+            ", grantor='" + grantor + '\'' +
+            ", grantee='" + grantee + '\'' +
+            ", privilege='" + privilege + '\'' +
+            ", isGrantable='" + isGrantable + '\'' +
+            '}';
     }
 }

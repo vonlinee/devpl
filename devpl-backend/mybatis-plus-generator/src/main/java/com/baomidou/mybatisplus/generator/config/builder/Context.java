@@ -53,12 +53,14 @@ public class Context {
     private InjectionConfig injectionConfig;
     /**
      * 数据查询实例
+     *
      * @since 3.5.3
      */
     private DatabaseIntrospector databaseIntrospector;
 
     /**
      * 在构造器中处理配置
+     *
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
      * @param strategyConfig   表配置
@@ -77,6 +79,7 @@ public class Context {
 
     /**
      * 初始化路径信息
+     *
      * @param outputDir      根路径
      * @param isKotlin       是否使用kotlin
      * @param packageConfig  包配置信息

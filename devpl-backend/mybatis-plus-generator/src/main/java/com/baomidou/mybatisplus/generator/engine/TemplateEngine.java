@@ -8,6 +8,7 @@ public interface TemplateEngine {
 
     /**
      * 渲染并输出到指定位置
+     *
      * @param template     模板
      * @param arguments    模板参数
      * @param outputStream 输出位置

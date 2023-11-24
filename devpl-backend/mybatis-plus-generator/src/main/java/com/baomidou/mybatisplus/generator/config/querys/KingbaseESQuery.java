@@ -17,6 +17,7 @@ package com.baomidou.mybatisplus.generator.config.querys;
 
 /**
  * KingbaseES 表数据查询
+ *
  * @author kingbase
  * @since 2019-10-12
  */

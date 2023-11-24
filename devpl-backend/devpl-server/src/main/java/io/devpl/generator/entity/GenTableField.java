@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 表字段
+ * 生成配置信息-表字段
  */
 @Getter
 @Setter

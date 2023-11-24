@@ -48,7 +48,7 @@ public class SQLServerQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableName() {
+    public String getTableNameResultSetColumnName() {
         return "TABLE_NAME";
     }
 

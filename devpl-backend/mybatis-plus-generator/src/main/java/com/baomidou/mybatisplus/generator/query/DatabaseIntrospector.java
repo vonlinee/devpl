@@ -15,6 +15,7 @@ public interface DatabaseIntrospector {
 
     /**
      * 获取表信息
+     *
      * @param schemaPattern    schema
      * @param tableNamePattern 表名
      * @param tableTypes       表类型

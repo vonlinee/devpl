@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.JdbcType;
 
 /**
  * 模板信息
@@ -35,15 +36,15 @@ public class TemplateInfo extends DBEntityBase {
     private Integer type;
 
     /**
-     * 模板名称
+     * 模板存放路径，相对路径
      */
     @TableField(value = "path")
     private String templatePath;
 
     /**
-     * 模板内容
+     * 模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容
      */
-    @TableField(value = "content")
+    @TableField(value = "content", jdbcType = JdbcType.LONGVARCHAR)
     private String content;
 
     /**

@@ -37,7 +37,7 @@ public class PostgreSqlQuery implements AbstractQuery {
 
 
     @Override
-    public String tableName() {
+    public String getTableNameResultSetColumnName() {
         return "tablename";
     }
 

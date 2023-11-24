@@ -25,6 +25,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * SQLServer 字段类型转换
+ *
  * @author hubin, hanchunlin
  * @since 2017-01-20
  */
@@ -34,6 +35,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
 
     /**
      * 转换为日期类型
+     *
      * @param config    配置信息
      * @param fieldType 类型
      * @return 返回对应的列类型

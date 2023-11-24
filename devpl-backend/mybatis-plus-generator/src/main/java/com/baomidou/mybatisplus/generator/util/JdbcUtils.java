@@ -21,14 +21,13 @@ import java.util.regex.Pattern;
  */
 public class JdbcUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(JdbcUtils.class);
-
     /**
      * Constant that indicates an unknown (or unspecified) SQL type.
+     *
      * @see java.sql.Types
      */
     public static final int TYPE_UNKNOWN = Integer.MIN_VALUE;
-
+    private static final Logger log = LoggerFactory.getLogger(JdbcUtils.class);
     /**
      * 过滤正则
      */
@@ -36,6 +35,7 @@ public class JdbcUtils {
 
     /**
      * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
+     *
      * @param tableName 表名
      * @return 是否正则
      * @since 3.5.0
@@ -46,6 +46,7 @@ public class JdbcUtils {
 
     /**
      * 判断数据库类型
+     *
      * @param str url
      * @return 类型枚举值，如果没找到，则返回 null
      */
@@ -91,6 +92,7 @@ public class JdbcUtils {
 
     /**
      * 提取ResultSet只有单列的结果
+     *
      * @param resultSet    ResultSet
      * @param requiredType 该列的数据类型
      * @param <T>          该列的数据类型
@@ -133,6 +135,7 @@ public class JdbcUtils {
 
     /**
      * 查询
+     *
      * @param resultSetSupplier
      * @param rowType
      * @param <T>

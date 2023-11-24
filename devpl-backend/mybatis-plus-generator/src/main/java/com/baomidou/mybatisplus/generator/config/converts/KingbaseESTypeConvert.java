@@ -17,9 +17,9 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
+import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -27,6 +27,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * KingbaseES 字段类型转换
+ *
  * @author kingbase, hanchunlin
  * @since 2019-10-12
  */
@@ -56,6 +57,7 @@ public class KingbaseESTypeConvert implements ITypeConvert {
 
     /**
      * 转换为日期类型
+     *
      * @param config 配置信息
      * @param type   类型
      * @return 返回对应的列类型

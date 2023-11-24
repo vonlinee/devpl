@@ -17,6 +17,7 @@ package com.baomidou.mybatisplus.generator.config;
 
 /**
  * 输出文件类型
+ *
  * @author hubin
  * @since 2021-06-01
  */

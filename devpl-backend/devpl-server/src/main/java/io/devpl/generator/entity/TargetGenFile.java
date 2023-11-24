@@ -10,17 +10,15 @@ import java.io.Serializable;
 
 /**
  * 生成的文件信息，以及使用的模板信息
- * 模板文件生成
- * 对生成的文件类型进行分类，便于批处理
  */
 @Data
-@TableName("template_file_generation")
+@TableName("target_gen_file")
 public class TargetGenFile implements Serializable {
     /**
      * 主键ID
      */
     @TableId(type = IdType.AUTO)
-    private Long pid;
+    private Long id;
 
     /**
      * 代码生成任务ID

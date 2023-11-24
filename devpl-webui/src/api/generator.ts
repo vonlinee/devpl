@@ -27,7 +27,7 @@ export const apiListGenFiles = () => {
  * 查询所有生成的文件类型
  * @return boolean
  */
-export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
+export const apiSaveOrUpdateGenFile = (genFile: TargetGenFile) => {
     return http.post('/api/codegen/genfile', genFile)
 }
 
@@ -35,7 +35,7 @@ export const apiSaveOrUpdateGenFile = (genFile: GenFile) => {
  * 保存或更新生成文件类型
  * @param genFiles
  */
-export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
+export const apiSaveOrUpdateGenFiles = (genFiles: TargetGenFile[]) => {
     return http.post('/api/codegen/genfiles/replace', genFiles)
 }
 
@@ -43,8 +43,8 @@ export const apiSaveOrUpdateGenFiles = (genFiles: GenFile[]) => {
  * 删除生成文件类型
  * @param genFiles
  */
-export const apiDeleteGenFiles = (genFiles: GenFile[]) => {
-    return http.delete('/api/codegen/genfiles/replace', genFiles.map((file: GenFile) => file.pid))
+export const apiDeleteGenFiles = (genFiles: TargetGenFile[]) => {
+    return http.delete('/api/codegen/genfiles/replace', genFiles.map((file: TargetGenFile) => file.pid))
 }
 
 /**

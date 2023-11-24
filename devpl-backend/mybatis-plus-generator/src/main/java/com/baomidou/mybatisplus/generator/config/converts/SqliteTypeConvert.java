@@ -17,8 +17,8 @@ package com.baomidou.mybatisplus.generator.config.converts;
 
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
-import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert.toDateType;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
@@ -27,6 +27,7 @@ import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * SQLite 字段类型转换
+ *
  * @author chen_wj, hanchunlin
  * @since 2019-05-08
  */

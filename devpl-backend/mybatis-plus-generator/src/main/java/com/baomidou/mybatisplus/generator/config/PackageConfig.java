@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * 包相关的配置项
+ *
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
@@ -31,6 +32,7 @@ public class PackageConfig {
 
     /**
      * 包配置信息
+     *
      * @since 3.5.0
      */
     private final Map<String, String> packageInfo = new HashMap<>();
@@ -95,6 +97,7 @@ public class PackageConfig {
 
     /**
      * 连接父子包名
+     *
      * @param subPackage 子包名
      * @return 连接后的包名
      */
@@ -106,6 +109,7 @@ public class PackageConfig {
 
     /**
      * 获取包配置信息
+     *
      * @return 包配置信息
      * @since 3.5.0
      */
@@ -126,6 +130,7 @@ public class PackageConfig {
 
     /**
      * 获取包配置信息
+     *
      * @param module 模块
      * @return 配置信息
      * @since 3.5.0
@@ -168,6 +173,7 @@ public class PackageConfig {
 
     /**
      * 构建者
+     *
      * @author nieqiurong
      * @since 3.5.0
      */
@@ -187,6 +193,7 @@ public class PackageConfig {
 
         /**
          * 指定父包名
+         *
          * @param parent 父包名
          * @return this
          */
@@ -197,6 +204,7 @@ public class PackageConfig {
 
         /**
          * 指定模块名称
+         *
          * @param moduleName 模块名
          * @return this
          */
@@ -207,6 +215,7 @@ public class PackageConfig {
 
         /**
          * 指定实体包名
+         *
          * @param entity 实体包名
          * @return this
          */
@@ -217,6 +226,7 @@ public class PackageConfig {
 
         /**
          * 指定service接口包名
+         *
          * @param service service包名
          * @return this
          */
@@ -227,6 +237,7 @@ public class PackageConfig {
 
         /**
          * service实现类包名
+         *
          * @param serviceImpl service实现类包名
          * @return this
          */
@@ -237,6 +248,7 @@ public class PackageConfig {
 
         /**
          * 指定mapper接口包名
+         *
          * @param mapper mapper包名
          * @return this
          */
@@ -247,6 +259,7 @@ public class PackageConfig {
 
         /**
          * 指定xml包名
+         *
          * @param xml xml包名
          * @return this
          */
@@ -257,6 +270,7 @@ public class PackageConfig {
 
         /**
          * 指定控制器包名
+         *
          * @param controller 控制器包名
          * @return this
          */
@@ -267,6 +281,7 @@ public class PackageConfig {
 
         /**
          * 路径配置信息
+         *
          * @param pathInfo 路径配置信息
          * @return this
          */
@@ -277,6 +292,7 @@ public class PackageConfig {
 
         /**
          * 连接父子包名
+         *
          * @param subPackage 子包名
          * @return 连接后的包名
          */
@@ -293,6 +309,7 @@ public class PackageConfig {
          * <p>当设置 {@link #parent(String)},那么entity的配置为 {@link #getParent()}.{@link #getEntity()}</p>
          * <p>当设置 {@link #parent(String)}与{@link #moduleName(String)},那么entity的配置为 {@link #getParent()}.{@link #getModuleName()}.{@link #getEntity()} </p>
          * </p>
+         *
          * @return 包配置对象
          */
         @Override

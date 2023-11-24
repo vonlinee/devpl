@@ -10,7 +10,7 @@ import java.util.Set;
  * 字段类型管理
  */
 @Mapper
-public interface FieldTypeMapper extends EntityMapper<GenFieldType> {
+public interface GenFieldTypeMapper extends EntityMapper<GenFieldType> {
 
     /**
      * 根据tableId，获取包列表

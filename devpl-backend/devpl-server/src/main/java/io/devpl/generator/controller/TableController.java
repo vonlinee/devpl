@@ -5,8 +5,8 @@ import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
-import io.devpl.generator.service.TableFieldService;
-import io.devpl.generator.service.TableService;
+import io.devpl.generator.service.GenTableFieldService;
+import io.devpl.generator.service.GenTableService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +20,9 @@ import java.util.List;
 public class TableController {
 
     @Resource
-    TableService tableService;
+    GenTableService tableService;
     @Resource
-    TableFieldService tableFieldService;
+    GenTableFieldService tableFieldService;
 
     /**
      * 分页

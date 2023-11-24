@@ -44,8 +44,14 @@ export const useDataSourceSubmitApi = (dataForm: any) => {
   return http.post("/api/gen/datasource", dataForm)
 }
 
-export const useDataSourceTableListApi = (id: string) => {
-  return http.get("/api/gen/datasource/table/list/" + id)
+/**
+ * 获取数据源的所有表信息
+ * @param id
+ * @param tableNamePattern 
+ * @returns 
+ */
+export const useDataSourceTableListApi = (id: string, tableNamePattern?: string | null) => {
+  return http.get("/api/gen/datasource/table/list/" + id + "?tableNamePattern=" + (tableNamePattern || ''))
 }
 
 /**

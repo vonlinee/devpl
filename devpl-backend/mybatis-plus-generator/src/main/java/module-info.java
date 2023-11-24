@@ -30,5 +30,6 @@ open module mybatis.plus.generator {
     requires spring.jdbc;
     requires org.hibernate.orm.core;
     requires com.google.common;
+    requires devpl.sdk.internal;
 
 }

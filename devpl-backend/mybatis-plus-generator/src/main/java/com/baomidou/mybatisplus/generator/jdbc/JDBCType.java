@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * 遵循JDBC规范定义的类型
  * <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/jdbc_42.html">JDBC4.2 Specification</a>
+ *
  * @see java.sql.SQLType
  * @see java.sql.JDBCType 基本上和java.sql.JDBCType一样，增加一些数据长度等信息
  * @see java.sql.Types

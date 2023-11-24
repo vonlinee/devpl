@@ -22,6 +22,7 @@ import java.util.Properties;
 
 /**
  * 数据库配置
+ *
  * @author YangHu, hcl, hubin
  * @since 2016/8/30
  */
@@ -29,6 +30,7 @@ public class DataSourceConfig {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
     /**
      * 数据库连接属性
+     *
      * @since 3.5.3
      */
     private final Map<String, String> connectionProperties = new HashMap<>();
@@ -49,6 +51,7 @@ public class DataSourceConfig {
 
     /**
      * 关键字处理器
+     *
      * @since 3.3.2
      */
     private IKeyWordsHandler keyWordsHandler;
@@ -70,17 +73,20 @@ public class DataSourceConfig {
 
     /**
      * 数据源实例
+     *
      * @since 3.5.0
      */
     private DataSource dataSource;
 
     /**
      * 数据库连接
+     *
      * @since 3.5.0
      */
     private Connection connection;
     /**
      * 查询方式
+     *
      * @see DefaultDatabaseIntrospector 默认查询方式
      * SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
      * @since 3.5.3
@@ -103,6 +109,7 @@ public class DataSourceConfig {
 
     /**
      * 判断数据库类型
+     *
      * @return 类型枚举值
      */
     @NotNull
@@ -112,6 +119,7 @@ public class DataSourceConfig {
 
     /**
      * 创建数据库连接对象 这方法建议只调用一次，毕竟只是代码生成，用一个连接就行。
+     *
      * @return Connection
      * @see DbQueryDecorator#getConnection()
      */
@@ -158,6 +166,7 @@ public class DataSourceConfig {
 
     /**
      * 获取数据库默认schema
+     *
      * @return 默认schema
      * @since 3.5.0
      */
@@ -213,6 +222,7 @@ public class DataSourceConfig {
 
     /**
      * 数据库配置构建者
+     *
      * @author nieqiurong 2020/10/10.
      * @since 3.5.0
      */
@@ -226,6 +236,7 @@ public class DataSourceConfig {
 
         /**
          * 构造初始化方法
+         *
          * @param url      数据库连接地址
          * @param username 数据库账号
          * @param password 数据库密码
@@ -242,6 +253,7 @@ public class DataSourceConfig {
 
         /**
          * 构造初始化方法
+         *
          * @param dataSource 外部数据源实例
          */
         public Builder(@NotNull DataSource dataSource) {
@@ -264,6 +276,7 @@ public class DataSourceConfig {
 
         /**
          * 设置数据库查询实现
+         *
          * @param dbQuery 数据库查询实现
          * @return this
          */
@@ -274,6 +287,7 @@ public class DataSourceConfig {
 
         /**
          * 设置数据库schema
+         *
          * @param schemaName 数据库schema
          * @return this
          */
@@ -284,6 +298,7 @@ public class DataSourceConfig {
 
         /**
          * 设置类型转换器
+         *
          * @param typeConvert 类型转换器
          * @return this
          */
@@ -294,6 +309,7 @@ public class DataSourceConfig {
 
         /**
          * 设置数据库关键字处理器
+         *
          * @param keyWordsHandler 关键字处理器
          * @return this
          */
@@ -304,6 +320,7 @@ public class DataSourceConfig {
 
         /**
          * 指定数据库查询方式
+         *
          * @param databaseQueryClass 查询类
          * @return this
          * @since 3.5.3
@@ -315,6 +332,7 @@ public class DataSourceConfig {
 
         /**
          * 增加数据库连接属性
+         *
          * @param key   属性名
          * @param value 属性值
          * @return this
@@ -327,6 +345,7 @@ public class DataSourceConfig {
 
         /**
          * 构建数据库配置
+         *
          * @return 数据库配置
          */
         @Override

@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 
 /**
  * 表数据查询抽象类
+ *
  * @author hubin
  * @since 2018-01-16
  */

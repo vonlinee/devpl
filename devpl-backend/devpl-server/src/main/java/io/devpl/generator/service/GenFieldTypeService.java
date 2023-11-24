@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * 字段类型管理
  */
-public interface FieldTypeService extends BaseService<GenFieldType> {
+public interface GenFieldTypeService extends BaseService<GenFieldType> {
     ListResult<GenFieldType> page(Query query);
 
     Map<String, GenFieldType> getMap();

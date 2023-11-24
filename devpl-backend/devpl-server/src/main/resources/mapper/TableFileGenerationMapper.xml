@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.devpl.generator.dao.TableFileGenerationMapper">
+
+    <resultMap type="io.devpl.generator.entity.TableFileGeneration" id="tableFileGenerationMap">
+        <result property="id" column="pid"/>
+        <result property="tableId" column="table_id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="savePath" column="save_path"/>
+    </resultMap>
+
+</mapper>

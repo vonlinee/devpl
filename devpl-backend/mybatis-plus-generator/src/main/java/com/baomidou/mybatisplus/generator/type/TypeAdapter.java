@@ -16,6 +16,7 @@ public interface TypeAdapter {
 
     /**
      * 从SQL类型转为Java类型
+     *
      * @param sqlType SQL类型
      * @return JavaType
      */

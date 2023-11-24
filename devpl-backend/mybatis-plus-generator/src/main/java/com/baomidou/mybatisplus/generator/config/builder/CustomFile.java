@@ -2,6 +2,7 @@ package com.baomidou.mybatisplus.generator.config.builder;
 
 /**
  * 自定义模板文件配置
+ *
  * @author xusimin
  * @since 3.5.3
  */

@@ -39,13 +39,13 @@ public class CodeGenServiceImpl implements CodeGenService {
     @Resource
     private DataSourceService datasourceService;
     @Resource
-    private FieldTypeService fieldTypeService;
+    private GenFieldTypeService fieldTypeService;
     @Resource
     private BaseClassService baseClassService;
     @Resource
-    private TableService tableService;
+    private GenTableService tableService;
     @Resource
-    private TableFieldService tableFieldService;
+    private GenTableFieldService tableFieldService;
     @Resource
     private TemplateService templateService;
     @Resource

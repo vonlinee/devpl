@@ -18,7 +18,6 @@ package com.baomidou.mybatisplus.generator.config.builder;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import com.baomidou.mybatisplus.generator.function.ConverterFileName;
 import com.baomidou.mybatisplus.generator.util.ClassUtils;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
@@ -29,9 +28,11 @@ import org.slf4j.LoggerFactory;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 控制器属性配置
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -44,6 +45,7 @@ public class Mapper implements TableInitializer {
     private String superClass = ConstVal.SUPER_MAPPER_CLASS;
     /**
      * 是否添加 @Mapper 注解（默认 false）
+     *
      * @see #mapperAnnotationClass
      * @since 3.5.1
      * @deprecated 3.5.4
@@ -52,36 +54,43 @@ public class Mapper implements TableInitializer {
     private boolean mapperAnnotation;
     /**
      * Mapper标记注解
+     *
      * @since 3.5.3
      */
     private Class<? extends Annotation> mapperAnnotationClass;
     /**
      * 是否开启BaseResultMap（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean baseResultMap;
     /**
      * 是否开启baseColumnList（默认 false）
+     *
      * @since 3.5.0
      */
     private boolean baseColumnList;
     /**
      * 转换输出Mapper文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
+    private Function<String, String> converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
     /**
      * 转换输出Xml文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
+    private Function<String, String> converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
     /**
      * 设置缓存实现类
+     *
      * @since 3.5.0
      */
     private Class<? extends Cache> cache;
@@ -107,11 +116,11 @@ public class Mapper implements TableInitializer {
         return baseColumnList;
     }
 
-    public ConverterFileName getConverterMapperFileName() {
+    public Function<String, String> getConverterMapperFileName() {
         return converterMapperFileName;
     }
 
-    public ConverterFileName getConverterXmlFileName() {
+    public Function<String, String> getConverterXmlFileName() {
         return converterXmlFileName;
     }
 
@@ -153,6 +162,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 父类Mapper
+         *
          * @param superClass 类名
          * @return this
          */
@@ -163,6 +173,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 父类Mapper
+         *
          * @param superClass 类
          * @return this
          * @since 3.5.0
@@ -173,6 +184,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 开启 @Mapper 注解
+         *
          * @return this
          * @see #mapperAnnotation(Class)
          * @since 3.5.1
@@ -188,6 +200,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 标记 Mapper 注解
+         *
          * @param annotationClass 注解Class
          * @return this
          * @since 3.5.3
@@ -199,6 +212,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 开启baseResultMap
+         *
          * @return this
          * @since 3.5.0
          */
@@ -209,6 +223,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 开启baseColumnList
+         *
          * @return this
          * @since 3.5.0
          */
@@ -219,6 +234,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 设置缓存实现类
+         *
          * @param cache 缓存实现
          * @return this
          * @since 3.5.0
@@ -230,28 +246,31 @@ public class Mapper implements TableInitializer {
 
         /**
          * 输出Mapper文件名称转换
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertMapperFileName(@NotNull ConverterFileName converter) {
+        public Builder convertMapperFileName(@NotNull Function<String, String> converter) {
             this.mapper.converterMapperFileName = converter;
             return this;
         }
 
         /**
          * 转换Xml文件名称处理
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertXmlFileName(@NotNull ConverterFileName converter) {
+        public Builder convertXmlFileName(@NotNull Function<String, String> converter) {
             this.mapper.converterXmlFileName = converter;
             return this;
         }
 
         /**
          * 格式化Mapper文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -262,6 +281,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 格式化Xml文件名称
+         *
          * @param format 格式
          * @return this
          * @since 3.5.0
@@ -272,6 +292,7 @@ public class Mapper implements TableInitializer {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated

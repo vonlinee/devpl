@@ -28,6 +28,7 @@ import java.util.Set;
 
 /**
  * 策略配置项
+ *
  * @author YangHu, tangguo, hubin
  * @since 2016/8/30
  */
@@ -81,6 +82,7 @@ public class StrategyConfig {
     private boolean skipView;
     /**
      * 启用sql过滤，语法不能支持使用sql过滤表的话，可以考虑关闭此开关.
+     *
      * @since 3.3.1
      */
     private boolean enableSqlFilter = true;
@@ -90,11 +92,13 @@ public class StrategyConfig {
     private boolean enableSchema;
     /**
      * 包含表名
+     *
      * @since 3.3.0
      */
     private LikeTable likeTable;
     /**
      * 不包含表名
+     *
      * @since 3.3.0
      */
     private LikeTable notLikeTable;
@@ -112,6 +116,7 @@ public class StrategyConfig {
 
     /**
      * 实体配置构建者
+     *
      * @return 实体配置构建者
      * @since 3.5.0
      */
@@ -122,6 +127,7 @@ public class StrategyConfig {
 
     /**
      * 实体配置
+     *
      * @return 实体配置
      * @since 3.5.0
      */
@@ -135,6 +141,7 @@ public class StrategyConfig {
 
     /**
      * 控制器配置构建者
+     *
      * @return 控制器配置构建者
      * @since 3.5.0
      */
@@ -145,6 +152,7 @@ public class StrategyConfig {
 
     /**
      * 控制器配置
+     *
      * @return 控制器配置
      * @since 3.5.0
      */
@@ -158,6 +166,7 @@ public class StrategyConfig {
 
     /**
      * Mapper配置构建者
+     *
      * @return Mapper配置构建者
      * @since 3.5.0
      */
@@ -168,6 +177,7 @@ public class StrategyConfig {
 
     /**
      * Mapper配置
+     *
      * @return Mapper配置
      * @since 3.5.0
      */
@@ -181,6 +191,7 @@ public class StrategyConfig {
 
     /**
      * Service配置构建者
+     *
      * @return Service配置构建者
      * @since 3.5.0
      */
@@ -191,6 +202,7 @@ public class StrategyConfig {
 
     /**
      * Service配置
+     *
      * @return Service配置
      * @since 3.5.0
      */
@@ -204,6 +216,7 @@ public class StrategyConfig {
 
     /**
      * 大写命名、字段符合大写字母数字下划线命名
+     *
      * @param word 待判断字符串
      */
     public boolean isCapitalModeNaming(@NotNull String word) {
@@ -212,6 +225,7 @@ public class StrategyConfig {
 
     /**
      * 表名称匹配过滤表前缀
+     *
      * @param tableName 表名称
      * @since 3.3.2
      */
@@ -221,6 +235,7 @@ public class StrategyConfig {
 
     /**
      * 验证配置项
+     *
      * @since 3.5.0
      */
     public void validate() {
@@ -236,6 +251,7 @@ public class StrategyConfig {
 
     /**
      * 表名匹配
+     *
      * @param tableName   表名
      * @param matchTables 匹配集合
      * @return 是否匹配
@@ -247,6 +263,7 @@ public class StrategyConfig {
 
     /**
      * 表名匹配
+     *
      * @param matchTableName 匹配表名
      * @param dbTableName    数据库表名
      * @return 是否匹配
@@ -313,6 +330,7 @@ public class StrategyConfig {
 
     /**
      * 策略配置构建者
+     *
      * @author nieqiurong 2020/10/11.
      * @since 3.5.0
      */
@@ -327,6 +345,7 @@ public class StrategyConfig {
 
         /**
          * 开启大写命名
+         *
          * @return this
          * @since 3.5.0
          */
@@ -337,6 +356,7 @@ public class StrategyConfig {
 
         /**
          * 开启跳过视图
+         *
          * @return this
          * @since 3.5.0
          */
@@ -347,6 +367,7 @@ public class StrategyConfig {
 
         /**
          * 禁用sql过滤
+         *
          * @return this
          * @since 3.5.0
          */
@@ -357,6 +378,7 @@ public class StrategyConfig {
 
         /**
          * 启用 schema
+         *
          * @return this
          * @since 3.5.1
          */
@@ -367,6 +389,7 @@ public class StrategyConfig {
 
         /**
          * 增加过滤表前缀
+         *
          * @param tablePrefix 过滤表前缀
          * @return this
          * @since 3.5.0
@@ -382,6 +405,7 @@ public class StrategyConfig {
 
         /**
          * 增加过滤表后缀
+         *
          * @param tableSuffix 过滤表后缀
          * @return this
          * @since 3.5.1
@@ -397,6 +421,7 @@ public class StrategyConfig {
 
         /**
          * 增加过滤字段前缀
+         *
          * @param fieldPrefix 过滤字段前缀
          * @return this
          * @since 3.5.0
@@ -412,6 +437,7 @@ public class StrategyConfig {
 
         /**
          * 增加过滤字段后缀
+         *
          * @param fieldSuffix 过滤字段后缀
          * @return this
          * @since 3.5.1
@@ -427,6 +453,7 @@ public class StrategyConfig {
 
         /**
          * 增加包含的表名
+         *
          * @param include 包含表
          * @return this
          * @since 3.5.0
@@ -448,6 +475,7 @@ public class StrategyConfig {
 
         /**
          * 增加排除表
+         *
          * @param exclude 排除表
          * @return this
          * @since 3.5.0
@@ -463,6 +491,7 @@ public class StrategyConfig {
 
         /**
          * 包含表名
+         *
          * @return this
          */
         public Builder likeTable(@NotNull LikeTable likeTable) {
@@ -472,6 +501,7 @@ public class StrategyConfig {
 
         /**
          * 不包含表名
+         *
          * @return this
          */
         public Builder notLikeTable(@NotNull LikeTable notLikeTable) {

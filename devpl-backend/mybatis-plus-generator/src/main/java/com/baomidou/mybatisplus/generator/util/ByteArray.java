@@ -1,5 +1,7 @@
 package com.baomidou.mybatisplus.generator.util;
 
+import io.devpl.sdk.util.Base64;
+
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Creates a ByteString.
+     *
      * @param bytes Bytes
      */
     public ByteArray(byte[] bytes) {
@@ -40,6 +43,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
      *
      * <p>For example, <code>toString(new byte[] {0xDE, 0xAD})</code>
      * returns {@code "DEAD"}.</p>
+     *
      * @param bytes Array of bytes
      * @param base  Base (2 or 16)
      * @return String
@@ -78,6 +82,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
      *
      * <p>For example, <code>of("DEAD", 16)</code>
      * returns the same as {@code ByteString(new byte[] {0xDE, 0xAD})}.
+     *
      * @param string Array of bytes
      * @param base   Base (2 or 16)
      * @return String
@@ -89,6 +94,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Parses a hexadecimal or binary string to a byte array.
+     *
      * @param string Hexadecimal or binary string
      * @param base   Base (2 or 16)
      * @return Byte array
@@ -149,6 +155,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Creates a byte string from a Base64 string.
+     *
      * @param string Base64 string
      * @return Byte string
      */
@@ -159,6 +166,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Parses a Base64 to a byte array.
+     *
      * @param string Base64 string
      * @return Byte array
      */
@@ -197,6 +205,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns this byte string in hexadecimal format.
+     *
      * @return Hexadecimal string
      */
     @Override
@@ -206,6 +215,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns this byte string in a given base.
+     *
      * @return String in given base
      */
     public String toString(int base) {
@@ -214,6 +224,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns this byte string in Base64 format.
+     *
      * @return Base64 string
      */
     public String toBase64String() {
@@ -232,6 +243,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns the number of bytes in this byte string.
+     *
      * @return Length of this byte string
      */
     public int length() {
@@ -240,6 +252,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns the byte at a given position in the byte string.
+     *
      * @param i Index
      * @return Byte at given position
      * @throws IndexOutOfBoundsException if the <code>index</code> argument is
@@ -251,6 +264,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns a ByteString that consists of a given range.
+     *
      * @param start Start of range
      * @param end   Position after end of range
      * @return Substring
@@ -262,6 +276,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
 
     /**
      * Returns a ByteString that starts at a given position.
+     *
      * @param start Start of range
      * @return Substring
      */
@@ -272,6 +287,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
     /**
      * Returns a ByteString consisting of the concatenation of this and another
      * string.
+     *
      * @param other Byte string to concatenate
      * @return Combined byte string
      */

@@ -18,7 +18,6 @@ package com.baomidou.mybatisplus.generator.config.builder;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
-import com.baomidou.mybatisplus.generator.function.ConverterFileName;
 import com.baomidou.mybatisplus.generator.util.ClassUtils;
 import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -28,9 +27,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 控制器属性配置
+ *
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
@@ -57,11 +58,13 @@ public class Controller implements TableInitializer {
     private String superClass;
     /**
      * 转换输出控制器文件名称
+     *
      * @since 3.5.0
      */
-    private ConverterFileName converterFileName = (entityName -> entityName + ConstVal.CONTROLLER);
+    private Function<String, String> converterFileName = (entityName -> entityName + ConstVal.CONTROLLER);
     /**
      * 是否覆盖已有文件（默认 false）
+     *
      * @since 3.5.2
      */
     private boolean fileOverride;
@@ -83,7 +86,7 @@ public class Controller implements TableInitializer {
     }
 
     @NotNull
-    public ConverterFileName getConverterFileName() {
+    public Function<String, String> getConverterFileName() {
         return converterFileName;
     }
 
@@ -113,6 +116,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 父类控制器
+         *
          * @param clazz 父类控制器
          * @return this
          */
@@ -122,6 +126,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 父类控制器
+         *
          * @param superClass 父类控制器类名
          * @return this
          */
@@ -132,6 +137,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 开启驼峰转连字符
+         *
          * @return this
          * @since 3.5.0
          */
@@ -142,6 +148,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 开启生成@RestController控制器
+         *
          * @return this
          * @since 3.5.0
          */
@@ -152,17 +159,19 @@ public class Controller implements TableInitializer {
 
         /**
          * 转换输出文件名称
+         *
          * @param converter 　转换处理
          * @return this
          * @since 3.5.0
          */
-        public Builder convertFileName(@NotNull ConverterFileName converter) {
+        public Builder convertFileName(@NotNull Function<String, String> converter) {
             this.controller.converterFileName = converter;
             return this;
         }
 
         /**
          * 格式化文件名称
+         *
          * @param format 　格式
          * @return this
          * @since 3.5.0
@@ -173,6 +182,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
+         *
          * @see #enableFileOverride()
          */
         @Deprecated
@@ -184,6 +194,7 @@ public class Controller implements TableInitializer {
 
         /**
          * 覆盖已有文件
+         *
          * @since 3.5.3
          */
         public Builder enableFileOverride() {

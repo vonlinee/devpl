@@ -10,7 +10,7 @@ import java.util.List;
  * 表字段
  */
 @Mapper
-public interface TableFieldDao extends EntityMapper<GenTableField> {
+public interface GenTableFieldMapper extends EntityMapper<GenTableField> {
 
     List<GenTableField> getByTableId(Long tableId);
 

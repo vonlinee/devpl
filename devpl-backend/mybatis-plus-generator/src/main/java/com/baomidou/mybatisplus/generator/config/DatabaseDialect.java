@@ -20,6 +20,7 @@ import java.sql.SQLException;
 
 /**
  * 表数据查询接口
+ *
  * @author hubin
  * @since 2018-01-16
  */
@@ -66,6 +67,7 @@ public interface DatabaseDialect {
 
     /**
      * 判断主键是否为identity
+     *
      * @param results ResultSet
      * @return 主键是否为identity
      * @throws SQLException ignore
