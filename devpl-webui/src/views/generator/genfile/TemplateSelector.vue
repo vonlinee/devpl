@@ -5,10 +5,7 @@
   <el-select v-model="templateId" placeholder="选择模板" filterable @change="onSelectedValueChange">
     <el-option v-for="item in options" :key="item.templateId" :label="item.templateName" :value="item.templateId">
       <div style=" height: 100%;">
-        <el-tooltip class="box-item" effect="dark" :content="item.remark" placement="right-start">
-          <template #content> {{ item.remark }} </template>
-          <span style="float: left">{{ item.templateName }}</span>
-        </el-tooltip>
+        <span style="float: left">{{ item.templateName }}</span>
         <span v-if="previewableFlag" style="float: right;" :link="true" @click="() => onPreview(item)">预览</span>
       </div>
     </el-option>
@@ -18,9 +15,9 @@
 import { ref } from 'vue';
 
 interface TemplateSelectorProps {
-  // 初始选中的模板
+  // 初始选中的模板ID
   current?: number,
-  // 模板列表
+  // 可选择模板列表
   options?: TemplateSelectVO[]
   // 是否显示预览按钮
   previewable?: boolean

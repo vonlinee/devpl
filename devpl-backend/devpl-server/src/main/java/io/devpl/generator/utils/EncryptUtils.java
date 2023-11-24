@@ -48,7 +48,7 @@ public class EncryptUtils {
             throw new RuntimeException("NoSuchAlgorithmException [AES]");
         }
         kgen.init(128);
-        Cipher cipher = null;
+        Cipher cipher;
         try {
             cipher = Cipher.getInstance(ALGORITHM_STR);
         } catch (NoSuchAlgorithmException e) {

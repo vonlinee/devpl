@@ -39,7 +39,7 @@ public class TemplateController {
         } else {
             Assert.hasText(templateInfo.getContent(), "模板内容不能为空");
         }
-        return Result.ok(templateService.save(templateInfo));
+        return Result.ok(templateService.addTemplate(templateInfo));
     }
 
     /**
@@ -51,7 +51,7 @@ public class TemplateController {
      */
     @PostMapping(value = "/persist")
     public Result<Boolean> saveOrUpdateById(@RequestBody TemplateInfo templateInfo) {
-        return Result.ok(templateInfo.getTemplateId() == null ? templateService.save(templateInfo) : templateService.updateById(templateInfo));
+        return Result.ok(templateInfo.getTemplateId() == null ? templateService.addTemplate(templateInfo) : templateService.updateById(templateInfo));
     }
 
     /**

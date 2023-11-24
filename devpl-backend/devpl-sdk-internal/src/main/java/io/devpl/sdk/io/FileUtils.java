@@ -202,8 +202,6 @@ public class FileUtils {
         return new FileOutputStream(file);
     }
 
-    // -----------------------------------------------------------------------
-
     /**
      * Returns a human-readable version of the file size, where the input represents
      * a specific number of bytes.
@@ -211,27 +209,23 @@ public class FileUtils {
      * @param size the number of bytes
      * @return a human-readable display value (includes units)
      */
-    public static String byteCountToDisplaySize(long size) {
-        String displaySize;
-        if (size / ONE_GB > 0) {
-            displaySize = size / ONE_GB + " GB";
-        } else if (size / ONE_MB > 0) {
-            displaySize = size / ONE_MB + " MB";
-        } else if (size / ONE_KB > 0) {
-            displaySize = size / ONE_KB + " KB";
+    public static String byteCountToDisplaySize(long size, String digitFormat) {
+        double displaySize;
+        String unit;
+        if ((displaySize = size * 1.0 / ONE_GB) > 0) {
+            unit = " GB";
+        } else if ((displaySize = size * 1.0 / ONE_MB) > 0) {
+            unit = " MB";
+        } else if ((displaySize = size * 1.0 / ONE_KB) > 0) {
+            unit = " KB";
         } else {
-            displaySize = size + " bytes";
+            displaySize = size;
+            unit = " bytes";
         }
-        return displaySize;
-    }
-
-    public static boolean exists(File file) {
-        return file.exists();
+        return (digitFormat != null ? String.format(digitFormat, displaySize) : String.valueOf(displaySize)) + unit;
     }
 
     /**
-     * TODO 优化内存占用
-     *
      * @param rootPath 根目录
      * @return List
      */
@@ -263,45 +257,6 @@ public class FileUtils {
             }
         }
         return resultList;
-    }
-
-    public static void deleteProjectFiles(String rootDirectory) {
-        FileFilter filter = pathname -> {
-            boolean isFile = pathname.isFile();
-            boolean isDirectory = pathname.isDirectory();
-            boolean exists = pathname.exists();
-            if (!exists) return false;
-            if (isDirectory) {
-                String name = pathname.getName().trim();
-                if (name.equals(".idea") || name.equals(".target") || name.equals("bin") || name.equals(".settings")) {
-                    return true;
-                }
-            }
-            if (isFile) {
-                String name = pathname.getName();
-                return name.endsWith(".classpath") || name.endsWith(".iml") || name.endsWith(".project");
-            }
-            return false;
-        };
-        List<File> files = listFiles(rootDirectory, filter);
-        System.out.println("共找到 " + files.size() + " 个文件");
-        files.forEach(file -> {
-            if (file.isFile()) {
-                boolean delete = file.delete();
-                if (delete) {
-                    System.out.println("删除" + file.getAbsolutePath() + "成功");
-                } else {
-                    System.out.println("删除" + file.getAbsolutePath() + "失败");
-                }
-            } else if (file.isDirectory()) {
-                try {
-                    deleteDirectory(file);
-                    System.out.println("删除" + file.getAbsolutePath() + "成功");
-                } catch (IOException e) {
-                    System.out.println("删除" + file.getAbsolutePath() + "失败," + e.getMessage());
-                }
-            }
-        });
     }
 
     public static String readUTF8String(File file) throws IOException {
@@ -1845,26 +1800,12 @@ public class FileUtils {
     }
 
     /**
-     * 文件大小智能转换
-     * 会将文件大小转换为最大满足单位
+     * 获取子目录的绝对路径相对于父目录的相对路径
      *
-     * @param size（文件大小，单位为B）
-     * @return 文件大小
+     * @param child    子目录
+     * @param ancestor 父目录
+     * @return 例如   /aaa/bbb/ddd/eee  aaa/bbb/ 结果为/ddd/eee
      */
-    public static String formatFileSize(long size) {
-        String sizeName;
-        if (1024 * 1024 > size && size >= 1024) {
-            sizeName = String.format("%.2f", (double) size / 1024) + "KB";
-        } else if (1024 * 1024 * 1024 > size && size >= 1024 * 1024) {
-            sizeName = String.format("%.2f", (double) size / (1024 * 1024)) + "MB";
-        } else if (size >= 1024 * 1024 * 1024) {
-            sizeName = String.format("%.2f", (double) size / (1024 * 1024 * 1024)) + "GB";
-        } else {
-            sizeName = size + "B";
-        }
-        return sizeName;
-    }
-
     public static String getRelativePathString(Path child, Path ancestor) {
         return child.toAbsolutePath().toString().replace(ancestor.toString(), "");
     }

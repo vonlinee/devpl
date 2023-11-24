@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class DataTypeGroup extends DBEntityBase {
+public class DataTypeGroup extends DBEntity {
 
     /**
      * 主键ID

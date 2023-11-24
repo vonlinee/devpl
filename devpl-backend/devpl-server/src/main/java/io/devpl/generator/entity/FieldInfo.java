@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @TableName(value = "field_info")
-public class FieldInfo extends DBEntityBase implements Serializable {
+public class FieldInfo extends DBEntity implements Serializable {
 
     /**
      * 主键ID

@@ -1,7 +1,5 @@
 <!--
  * @ 文件生成类型弹窗
- * @author Von
- * @date 2023/7/20 21:08
 -->
 <script lang="ts" setup>
 import { ref } from "vue";

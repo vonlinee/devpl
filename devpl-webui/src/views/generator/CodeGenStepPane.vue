@@ -1,7 +1,5 @@
 <!--
  * @代码生成步骤面板
- * @author Von
- * @date 2023/7/20 17:20
 -->
 <script setup lang="ts">
 import {ref} from "vue";

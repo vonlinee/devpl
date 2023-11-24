@@ -15,7 +15,7 @@ import org.apache.ibatis.type.JdbcType;
 @Getter
 @Setter
 @TableName(value = "template_info")
-public class TemplateInfo extends DBEntityBase {
+public class TemplateInfo extends DBEntity {
 
     /**
      * 模板ID

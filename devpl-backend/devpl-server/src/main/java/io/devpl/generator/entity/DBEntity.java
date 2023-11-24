@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import java.time.LocalDateTime;
 
 /**
- * 实体类父类
+ * 所有数据库实体类父类
  */
-public abstract class DBEntityBase {
+public abstract class DBEntity {
 
     /**
      * 更新时间

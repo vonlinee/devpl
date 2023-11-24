@@ -22,7 +22,7 @@
 						</template>
 					</el-table-column>
 
-					<el-table-column fixed="right" label="操作" align="center">
+					<el-table-column fixed="right" label="操作" align="center" width="150px">
 						<template #default="scope">
 							<el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
 								删除

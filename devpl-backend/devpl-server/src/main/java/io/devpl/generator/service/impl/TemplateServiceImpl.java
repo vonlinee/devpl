@@ -12,6 +12,7 @@ import io.devpl.generator.dao.TemplateInfoMapper;
 import io.devpl.generator.domain.TemplateProvider;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
+import io.devpl.generator.entity.TemplateVarInfo;
 import io.devpl.generator.service.TemplateService;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -44,7 +45,6 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Resource
     TemplateInfoMapper templateInfoMapper;
-
     @Resource
     CodeGenProperties codeGenProperties;
 
@@ -55,7 +55,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      * @return 是否成功
      */
     @Override
-    public boolean save(TemplateInfo templateInfo) {
+    public boolean addTemplate(TemplateInfo templateInfo) {
         templateInfo.setUpdateTime(LocalDateTime.now());
         templateInfo.setCreateTime(LocalDateTime.now());
         templateInfo.setDeleted(false);
@@ -178,13 +178,12 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     templateInfo.setType(1);
                     templateInfo.setCreateTime(now);
                     templateInfo.setUpdateTime(now);
-                    templateInfo.setRemark(FileUtils.formatFileSize(Files.size(templateFile)));
+                    templateInfo.setRemark(FileUtils.byteCountToDisplaySize(Files.size(templateFile), "%.2f"));
                     try {
                         templateInfo.setContent(FileUtils.readString(templateFile.toFile(), StandardCharsets.UTF_8));
                     } catch (IOException e) {
                         log.error("读取文件失败 {} ", templateFile);
                     }
-
 
                     templateInfos.add(templateInfo);
                 }
@@ -200,5 +199,10 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public String formatTemplatePath(String templatePath) {
         return templatePath.replace("\\", "/").replace("\\\\", "/");
+    }
+
+    @Override
+    public List<TemplateVarInfo> introspect(TemplateInfo templateInfo) {
+        return null;
     }
 }

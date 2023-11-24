@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localshots_mysql
+ Source Server         : 127.0.0.1-mysql
  Source Server Type    : MySQL
- Source Server Version : 50736
- Source Host           : localhost:3306
+ Source Server Version : 50740
+ Source Host           : 127.0.0.1:3306
  Source Schema         : devpl
 
  Target Server Type    : MySQL
- Target Server Version : 50736
+ Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 23/11/2023 23:26:18
+ Date: 24/11/2023 19:46:57
 */
 
 SET NAMES utf8mb4;
@@ -49,7 +49,11 @@ CREATE TABLE `column_info`  (
   `is_autoincrement` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
   `is_generated` tinyint(1) UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表（对应JDBC的ColumnMetadata）' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表（对应JDBC的ColumnMetadata）' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of column_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for connection_config
@@ -68,7 +72,7 @@ CREATE TABLE `connection_config`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unk_conn_name`(`name`) USING BTREE,
   UNIQUE INDEX `unk_ip_port`(`host`, `port`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '连接配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '连接配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of connection_config
@@ -85,11 +89,11 @@ CREATE TABLE `data_type_group`  (
   `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组ID',
   `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分组名称',
   `internal` tinyint(4) NULL DEFAULT 0 COMMENT '是否内置类型分组，内置类型分组不可更改',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型分组' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型分组' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_type_group
@@ -114,11 +118,11 @@ CREATE TABLE `data_type_item`  (
   `default_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '类型默认值',
   `precision` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '精度',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 148 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 148 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_type_item
@@ -137,7 +141,7 @@ CREATE TABLE `data_type_mapping`  (
   `type_id` bigint(20) NULL DEFAULT NULL COMMENT '主数据类型ID',
   `another_type_id` bigint(20) NULL DEFAULT NULL COMMENT '映射数据类型ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型映射关系表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据类型映射关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of data_type_mapping
@@ -153,10 +157,10 @@ DROP TABLE IF EXISTS `database_backup_history`;
 CREATE TABLE `database_backup_history`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `save_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存位置',
-  `backup_time` datetime(0) NULL DEFAULT NULL COMMENT '备份时间',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `backup_time` datetime NULL DEFAULT NULL COMMENT '备份时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of database_backup_history
@@ -191,12 +195,12 @@ CREATE TABLE `db_conn_info`  (
   `username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
   `driver_props` json NULL COMMENT '驱动属性',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否逻辑删除',
   `driver_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '驱动类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of db_conn_info
@@ -214,7 +218,7 @@ CREATE TABLE `dbs`  (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `value` json NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of dbs
@@ -233,11 +237,11 @@ CREATE TABLE `field_info`  (
   `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型',
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
   `field_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of field_info
@@ -265,7 +269,7 @@ CREATE TABLE `field_spec`  (
   `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述信息',
   `field_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '默认值',
   PRIMARY KEY (`field_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段信息表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of field_spec
@@ -432,9 +436,13 @@ CREATE TABLE `file_gen_group`  (
   `form_layout` tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
   `datasource_id` bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`group_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件生成组记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件生成组记录表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of file_gen_group
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for gen_base_class
@@ -446,9 +454,9 @@ CREATE TABLE `gen_base_class`  (
   `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类编码',
   `fields` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '基类管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '基类管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_base_class
@@ -466,9 +474,13 @@ CREATE TABLE `gen_datasource`  (
   `conn_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL',
   `username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据源管理' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of gen_datasource
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for gen_field_type
@@ -479,12 +491,12 @@ CREATE TABLE `gen_field_type`  (
   `column_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字段类型',
   `attr_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性类型',
   `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '属性包名',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `json_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'JSON数据类型',
   `mysql_sql_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'MySQL SQL数据类型',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `column_type`(`column_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段类型管理' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字段类型管理' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_field_type
@@ -538,9 +550,9 @@ CREATE TABLE `gen_project_modify`  (
   `exclusions` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '排除文件',
   `modify_suffix` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更文件',
   `modify_tmp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '变更临时路径',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目名变更' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目名变更' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_project_modify
@@ -569,17 +581,17 @@ CREATE TABLE `gen_table`  (
   `form_layout` tinyint(4) NULL DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
   `datasource_id` bigint(20) NULL DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) NULL DEFAULT NULL COMMENT '基类ID',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `table_name`(`table_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_table
 -- ----------------------------
-INSERT INTO `gen_table` VALUES (7, 'session_file_gen', 'SessionFileGen', 'session_file_gen', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'gen', 1, 0, NULL, '2023-10-28 00:16:27');
-INSERT INTO `gen_table` VALUES (8, 'table_file_generation', 'TableFileGeneration', '表文件生成记录表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'generation', 1, 2, NULL, '2023-11-23 22:38:42');
-INSERT INTO `gen_table` VALUES (9, 'connection_config', 'ConnectionConfig', '连接配置表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'config', 1, 2, NULL, '2023-11-23 23:03:45');
+INSERT INTO `gen_table` VALUES (13, 'dbs', 'Dbs', '数据库信息', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'dbs', 1, 0, NULL, '2023-11-24 15:56:54', NULL);
+INSERT INTO `gen_table` VALUES (14, 'template_variable_metadata', 'TemplateVariableMetadata', '模板参数元数据表', 'vonlinee', 'vonlinee@163.com', 'io.devpl', '1.0.0', 1, 'backend', 'frontend', 'devpl', 'metadata', 1, 0, NULL, '2023-11-24 19:01:45', NULL);
 
 -- ----------------------------
 -- Table structure for gen_table_field
@@ -609,29 +621,21 @@ CREATE TABLE `gen_table_field`  (
   `query_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询方式',
   `query_form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '查询表单类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 93 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成表字段' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_table_field
 -- ----------------------------
-INSERT INTO `gen_table_field` VALUES (46, 7, 'session_id', 'int', '会话ID', 'sessionId', 'Integer', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (47, 7, 'gen_file_id', 'int', '生成文件ID', 'genFileId', 'Integer', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (48, 7, 'template_id', 'int', '模板ID', 'templateId', 'Integer', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (49, 7, 'task_id', 'varchar', '任务ID', 'taskId', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (50, 8, 'pid', 'bigint', '主键ID', 'pid', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (51, 8, 'table_id', 'bigint', '表ID', 'tableId', 'Long', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (52, 8, 'template_id', 'bigint', '模板ID', 'templateId', 'Long', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (53, 8, 'file_name', 'varchar', '文件名称', 'fileName', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (54, 8, 'save_path', 'varchar', '保存路径', 'savePath', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (55, 9, 'id', 'varchar', '主键ID', 'id', 'String', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (56, 9, 'name', 'varchar', '连接名称', 'name', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (57, 9, 'host', 'varchar', '主机地址，IP地址', 'host', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (58, 9, 'port', 'varchar', '端口号', 'port', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (59, 9, 'db_type', 'varchar', '数据库类型', 'dbType', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (60, 9, 'db_name', 'varchar', '数据库名称', 'dbName', 'String', NULL, 5, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (61, 9, 'username', 'varchar', '用户名', 'username', 'String', NULL, 6, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (62, 9, 'password', 'varchar', '密码', 'password', 'String', NULL, 7, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
-INSERT INTO `gen_table_field` VALUES (63, 9, 'encoding', 'varchar', '连接编码', 'encoding', 'String', NULL, 8, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (83, 13, 'id', 'bigint', '', 'id', 'Long', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (84, 13, 'name', 'varchar', '', 'name', 'String', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (85, 13, 'value', 'json', '', 'value', 'Object', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (86, 14, 'id', 'int', '主键ID', 'id', 'Integer', NULL, 0, 'DEFAULT', 1, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (87, 14, 'template_id', 'int', '模板ID', 'templateId', 'Integer', NULL, 1, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (88, 14, 'param_key', 'varchar', '参数key, 一般为出现在模板中的变量名,单个模板内唯一', 'paramKey', 'String', NULL, 2, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (89, 14, 'param_name', 'varchar', '参数名', 'paramName', 'String', NULL, 3, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (90, 14, 'param_value', 'varchar', '参数值,默认参数值, 未提供该参数时使用此值', 'paramValue', 'String', NULL, 4, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (91, 14, 'data_type', 'varchar', '数据类型, 统一所有的数据类型', 'dataType', 'String', NULL, 5, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
+INSERT INTO `gen_table_field` VALUES (92, 14, 'remark', 'varchar', '备注信息', 'remark', 'String', NULL, 6, 'DEFAULT', 0, 0, 1, 0, 'text', NULL, NULL, 1, 0, 0, '=', 'text');
 
 -- ----------------------------
 -- Table structure for gen_test_student
@@ -646,11 +650,15 @@ CREATE TABLE `gen_test_student`  (
   `version` int(11) NULL DEFAULT NULL COMMENT '版本号',
   `deleted` tinyint(4) NULL DEFAULT NULL COMMENT '删除标识',
   `creator` bigint(20) NULL DEFAULT NULL COMMENT '创建者',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `updater` bigint(20) NULL DEFAULT NULL COMMENT '更新者',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '测试2' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '测试2' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of gen_test_student
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for generator_config
@@ -659,7 +667,7 @@ DROP TABLE IF EXISTS `generator_config`;
 CREATE TABLE `generator_config`  (
   `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成配置信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '代码生成配置信息' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of generator_config
@@ -675,7 +683,11 @@ CREATE TABLE `input_history`  (
   `item_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '输入位置',
   `item_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '输入值',
   PRIMARY KEY (`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '输入历史' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '输入历史' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of input_history
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for project
@@ -683,7 +695,11 @@ CREATE TABLE `input_history`  (
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project`  (
   `project_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '项目ID'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '项目信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of project
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for province_city_district
@@ -694,7 +710,7 @@ CREATE TABLE `province_city_district`  (
   `pid` int(11) NULL DEFAULT NULL COMMENT '当前地区的上一级地区代码',
   `name` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '省市县数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '省市县数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of province_city_district
@@ -4232,20 +4248,57 @@ CREATE TABLE `session_file_gen`  (
   `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
   `task_id` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务ID',
   PRIMARY KEY (`session_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of session_file_gen
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for table_file_generation
 -- ----------------------------
 DROP TABLE IF EXISTS `table_file_generation`;
 CREATE TABLE `table_file_generation`  (
-  `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `table_id` bigint(20) NULL DEFAULT NULL COMMENT '表ID',
   `template_id` bigint(20) NULL DEFAULT NULL COMMENT '模板ID',
   `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件名称',
   `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '保存路径',
-  PRIMARY KEY (`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '表文件生成记录表' ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '表文件生成记录表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of table_file_generation
+-- ----------------------------
+INSERT INTO `table_file_generation` VALUES (1, 12, 224, 'Controller.java', NULL);
+INSERT INTO `table_file_generation` VALUES (2, 12, 225, 'Convert.java', NULL);
+INSERT INTO `table_file_generation` VALUES (3, 12, 226, 'Dao.java', NULL);
+INSERT INTO `table_file_generation` VALUES (4, 12, 227, 'Entity.java', NULL);
+INSERT INTO `table_file_generation` VALUES (5, 12, 229, 'Service.java', NULL);
+INSERT INTO `table_file_generation` VALUES (6, 12, 230, 'ServiceImpl.java', NULL);
+INSERT INTO `table_file_generation` VALUES (7, 12, 230, 'ServiceImpl.java', NULL);
+INSERT INTO `table_file_generation` VALUES (8, 12, 234, 'api.ts', NULL);
+INSERT INTO `table_file_generation` VALUES (9, 12, 234, 'api.ts', NULL);
+INSERT INTO `table_file_generation` VALUES (10, 12, 236, 'Mapper.xml', NULL);
+INSERT INTO `table_file_generation` VALUES (11, 12, 231, 'VO.java', NULL);
+INSERT INTO `table_file_generation` VALUES (12, 13, 263, 'Controller.java', NULL);
+INSERT INTO `table_file_generation` VALUES (13, 13, 264, 'Convert.java', 'sdsfwewewe');
+INSERT INTO `table_file_generation` VALUES (14, 13, 265, 'Dao.java', NULL);
+INSERT INTO `table_file_generation` VALUES (15, 13, 266, 'Entity.java', NULL);
+INSERT INTO `table_file_generation` VALUES (16, 13, 268, 'Service.java', NULL);
+INSERT INTO `table_file_generation` VALUES (17, 13, 269, 'ServiceImpl.java', NULL);
+INSERT INTO `table_file_generation` VALUES (18, 13, 273, 'api.ts', NULL);
+INSERT INTO `table_file_generation` VALUES (19, 13, 236, 'Mapper.xml', NULL);
+INSERT INTO `table_file_generation` VALUES (20, 13, 231, 'VO.java', NULL);
+INSERT INTO `table_file_generation` VALUES (21, 14, 263, 'Controller.java', NULL);
+INSERT INTO `table_file_generation` VALUES (22, 14, 264, 'Convert.java', NULL);
+INSERT INTO `table_file_generation` VALUES (23, 14, 265, 'Dao.java', NULL);
+INSERT INTO `table_file_generation` VALUES (24, 14, 266, 'Entity.java', NULL);
+INSERT INTO `table_file_generation` VALUES (25, 14, 268, 'Service.java', NULL);
+INSERT INTO `table_file_generation` VALUES (26, 14, 269, 'ServiceImpl.java', NULL);
+INSERT INTO `table_file_generation` VALUES (27, 14, 273, 'api.ts', NULL);
+INSERT INTO `table_file_generation` VALUES (28, 14, 236, 'Mapper.xml', NULL);
+INSERT INTO `table_file_generation` VALUES (29, 14, 231, 'VO.java', NULL);
 
 -- ----------------------------
 -- Table structure for table_info
@@ -4264,7 +4317,11 @@ CREATE TABLE `table_info`  (
   `self_referencing_col_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'name of the designated \"identifier\" column of a typed table (may be null)',
   `ref_generation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'specifies how values in SELF_REFERENCING_COL_NAME are created. Values are \"SYSTEM\", \"USER\", \"DERIVED\". (may be null)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表信息记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表信息记录表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of table_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for target_gen_file
@@ -4279,7 +4336,20 @@ CREATE TABLE `target_gen_file`  (
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   `builtin` tinyint(1) NULL DEFAULT NULL COMMENT '是否内置',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '目标生成文件类型表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '目标生成文件类型表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of target_gen_file
+-- ----------------------------
+INSERT INTO `target_gen_file` VALUES (1, NULL, 'Controller.java', 263, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (2, NULL, 'Convert.java', 264, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (3, NULL, 'Dao.java', 265, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (4, NULL, 'Entity.java', 266, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (5, NULL, 'Service.java', 268, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (6, NULL, 'ServiceImpl.java', 269, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (8, NULL, 'api.ts', 273, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (10, NULL, 'Mapper.xml', 236, NULL, '', 1);
+INSERT INTO `target_gen_file` VALUES (11, NULL, 'VO.java', 231, NULL, '', 1);
 
 -- ----------------------------
 -- Table structure for template_file_generation
@@ -4294,7 +4364,7 @@ CREATE TABLE `template_file_generation`  (
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   `builtin` tinyint(1) NULL DEFAULT NULL COMMENT '是否内置',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板文件生成关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板文件生成关联表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of template_file_generation
@@ -4316,31 +4386,31 @@ CREATE TABLE `template_info`  (
   `type` tinyint(4) NULL DEFAULT NULL COMMENT '模板类型',
   `provider` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '技术提供方',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '字符串模板内容',
-  `path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '文件模板路径',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模板文件路径',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
-  `is_deleted` tinyint(4) NULL DEFAULT NULL COMMENT '逻辑删除状态',
+  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除状态',
+  `is_internal` tinyint(1) NULL DEFAULT 0 COMMENT '是否系统内置模板，不可删除修改',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`template_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 276 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of template_info
 -- ----------------------------
-INSERT INTO `template_info` VALUES (1, 'Entity.sql', 2, 'FreeMarker', '<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n', '', '2023-07-11 15:56:30', '2023-07-11 15:56:30', NULL, 0);
-INSERT INTO `template_info` VALUES (2, 'Entity.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\n    import ${i!};\n</#list>\n<#if baseClass??>\n    import ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n    <#if !field.baseField>\n        <#if field.fieldComment!?length gt 0>\n            /**\n            * ${field.fieldComment}\n            */\n        </#if>\n        <#if field.autoFill == \"INSERT\">\n            @TableField(fill = FieldFill.INSERT)\n        </#if>\n        <#if field.autoFill == \"INSERT_UPDATE\">\n            @TableField(fill = FieldFill.INSERT_UPDATE)\n        </#if>\n        <#if field.autoFill == \"UPDATE\">\n            @TableField(fill = FieldFill.UPDATE)\n        </#if>\n        <#if field.primaryKey>\n            @TableId\n        </#if>\n        private ${field.attrType} ${field.attrName};\n    </#if>\n\n</#list>\n}\n', '', '2023-07-20 17:48:43', '2023-07-20 17:48:43', NULL, 0);
-INSERT INTO `template_info` VALUES (3, 'Service.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n', '', '2023-07-20 17:52:30', '2023-07-20 17:52:30', NULL, 0);
-INSERT INTO `template_info` VALUES (4, 'ServiceImpl.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n    }\n', '', '2023-07-20 17:52:51', '2023-07-20 17:52:51', NULL, 0);
-INSERT INTO `template_info` VALUES (5, 'VO.java.ftl', 2, 'Velocity', 'package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\n    import ${i!};\n</#list>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\nprivate static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n        @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n        @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n\n</#list>\n\n}\n', '', '2023-07-20 17:53:55', '2023-07-20 17:53:55', NULL, 0);
-INSERT INTO `template_info` VALUES (6, 'Controller.java.ftl', 2, 'FreeMarker', 'package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\nprivate final ${ClassName}Service ${className}Service;\n\n@GetMapping(\"page\")\n@Operation(summary = \"分页\")\n@PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\npublic Result\n<PageResult\n<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){\n    PageResult\n    <${ClassName}VO> page = ${className}Service.page(query);\n\n        return Result.ok(page);\n        }\n\n        @GetMapping(\"{id}\")\n        @Operation(summary = \"信息\")\n        @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n        public Result\n        <${ClassName}VO> get(@PathVariable(\"id\") Long id){\n            ${ClassName}Entity entity = ${className}Service.getById(id);\n\n            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n            }\n\n            @PostMapping\n            @Operation(summary = \"保存\")\n            @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n            public Result\n            <String> save(@RequestBody ${ClassName}VO vo){\n                ${className}Service.save(vo);\n\n                return Result.ok();\n                }\n\n                @PutMapping\n                @Operation(summary = \"修改\")\n                @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n                public Result\n                <String> update(@RequestBody @Valid ${ClassName}VO vo){\n                    ${className}Service.update(vo);\n\n                    return Result.ok();\n                    }\n\n                    @DeleteMapping\n                    @Operation(summary = \"删除\")\n                    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n                    public Result\n                    <String> delete(@RequestBody List\n                        <Long> idList){\n                            ${className}Service.delete(idList);\n\n                            return Result.ok();\n                            }\n                            }\n', '', '2023-07-20 17:54:53', '2023-07-20 17:54:53', NULL, 0);
-INSERT INTO `template_info` VALUES (8, 'VO.java.ftl', 1, 'Velocity', 'sddssdsdd', 'template\\VO.java.ftl', '2023-08-05 19:52:29', '2023-08-05 19:52:29', NULL, 0);
-INSERT INTO `template_info` VALUES (9, 'menu.sql.ftl', 1, 'FreeMarker', '', 'template\\menu.sql.ftl', '2023-08-05 20:03:44', '2023-08-05 20:03:44', NULL, 0);
-INSERT INTO `template_info` VALUES (10, 'add-or-update.vue.ftl', 1, 'FreeMarker', '', 'template\\add-or-update.vue.ftl', '2023-08-05 20:04:34', '2023-08-05 20:04:34', NULL, 0);
-INSERT INTO `template_info` VALUES (11, 'api.ts.ftl', 1, 'FreeMarker', '2323', 'template\\api.ts.ftl', '2023-08-05 20:04:43', '2023-08-05 20:04:43', NULL, 0);
-INSERT INTO `template_info` VALUES (12, 'api.ts.ftl', 1, 'Velocity', '', 'template\\api.ts.ftl', '2023-08-05 20:05:04', '2023-08-05 20:05:04', NULL, 0);
-INSERT INTO `template_info` VALUES (13, 'index.vue.ftl', 1, 'FreeMarker', '', 'template\\index.vue.ftl', '2023-08-05 20:05:22', '2023-08-05 20:05:22', NULL, 0);
-INSERT INTO `template_info` VALUES (14, '1.txt', 1, 'Velocity', '姜慧忻				1001001\r\n司马茂宇				1001002\r\n慕容薇薇				1001003\r\n彭彤					1001004\r\n高芳					1001005\r\n彭乐玮				1001006\r\n林欣茹				1001007\r\n余景轩				1001008\r\n高梅薇				1001009\r\n潘言					1001010\r\n林雅					1002001\r\n孙成					1002002\r\n马梦雪				1002003\r\n慕容麦景				1002004\r\n程欣					1002005\r\n吴磊					1002006\r\n唐羽薇				1002007\r\n宋程					1002008\r\n邓颖欣				1002009\r\n梁翰					1002010\r\n赵安羽				1003001\r\n王宇					1003002\r\n於雅灵				1003003\r\n於程					1003004\r\n百里佳				1003005\r\n范景					1003006\r\n唐艺纾				1003007\r\n田峰飞				1003008\r\n韩桑晴				1003009\r\n姜柏					1003010\r\n曹妍娅				1004001\r\n钟家达				1004002\r\n蒋羽宸				1004003\r\n宋达思				1004004\r\n吕佳					1004005\r\n袁远					1004006\r\n宋彤					1004007\r\n梁恒天				1004008\r\n卢茹					1004009\r\n韩宇					2001002\r\n', '', '2023-08-24 17:08:56', '2023-08-24 17:08:56', NULL, 0);
-INSERT INTO `template_info` VALUES (15, '1.txt', 1, 'Velocity', '姜慧忻				1001001\r\n司马茂宇				1001002\r\n慕容薇薇				1001003\r\n彭彤					1001004\r\n高芳					1001005\r\n彭乐玮				1001006\r\n林欣茹				1001007\r\n余景轩				1001008\r\n高梅薇				1001009\r\n潘言					1001010\r\n林雅					1002001\r\n孙成					1002002\r\n马梦雪				1002003\r\n慕容麦景				1002004\r\n程欣					1002005\r\n吴磊					1002006\r\n唐羽薇				1002007\r\n宋程					1002008\r\n邓颖欣				1002009\r\n梁翰					1002010\r\n赵安羽				1003001\r\n王宇					1003002\r\n於雅灵				1003003\r\n於程					1003004\r\n百里佳				1003005\r\n范景					1003006\r\n唐艺纾				1003007\r\n田峰飞				1003008\r\n韩桑晴				1003009\r\n姜柏					1003010\r\n曹妍娅				1004001\r\n钟家达				1004002\r\n蒋羽宸				1004003\r\n宋达思				1004004\r\n吕佳					1004005\r\n袁远					1004006\r\n宋彤					1004007\r\n梁恒天				1004008\r\n卢茹					1004009\r\n韩宇					2001002\r\n', '', '2023-08-24 19:12:33', '2023-08-24 19:12:33', NULL, 0);
+INSERT INTO `template_info` VALUES (263, 'Controller.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\n    private final ${ClassName}Service ${className}Service;\n\n    @GetMapping(\"page\")\n    @Operation(summary = \"分页\")\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\n    public Result<PageResult<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query) {\n        PageResult <${ClassName}VO> page = ${className}Service.page(query);\n        return Result.ok(page);\n    }\n\n    @GetMapping(\"{id}\")\n    @Operation(summary = \"信息\")\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n    public Result<${ClassName}VO> get(@PathVariable(\"id\") Long id){\n        ${ClassName}Entity entity = ${className}Service.getById(id);\n        return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n    }\n\n    @PostMapping\n    @Operation(summary = \"保存\")\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n    public Result<String> save(@RequestBody ${ClassName}VO vo){\n        ${className}Service.save(vo);\n        return Result.ok();\n    }\n\n    @PutMapping\n    @Operation(summary = \"修改\")\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n    public Result<String> update(@RequestBody @Valid ${ClassName}VO vo){\n        ${className}Service.update(vo);\n        return Result.ok();\n    }\n\n    @DeleteMapping\n    @Operation(summary = \"删除\")\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n    public Result<String> delete(@RequestBody List<Long> idList){\n        ${className}Service.delete(idList);\n        return Result.ok();\n    }\n}\n', '/java/Controller.java.ftl', '2.53KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (264, 'Convert.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.convert;\n\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.mapstruct.Mapper;\nimport org.mapstruct.factory.Mappers;\n\nimport java.util.List;\n\n/**\n * ${tableComment}\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\n@Mapper\npublic interface ${ClassName}Convert {\n    ${ClassName}Convert INSTANCE = Mappers.getMapper(${ClassName}Convert.class);\n\n    ${ClassName}Entity convert(${ClassName}VO vo);\n\n    ${ClassName}VO convert(${ClassName}Entity entity);\n\n    List<${ClassName}VO> convertList(List<${ClassName}Entity> list);\n}\n', '/java/Convert.java.ftl', '643B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (265, 'Dao.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.dao;\n\nimport ${package}.framework.mybatis.dao.BaseDao;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport org.apache.ibatis.annotations.Mapper;\n\n/**\n * ${tableComment}\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\n@Mapper\npublic interface ${ClassName}Dao extends BaseDao<${ClassName}Entity> {\n\n}\n', '/java/Dao.java.ftl', '365B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (266, 'Entity.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.IdType;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\nimport ${i!};\n</#list>\n<#if baseClass??>\nimport ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n<#if !field.baseField>\n    <#if field.fieldComment!?length gt 0>\n    /**\n     * ${field.fieldComment}\n     */\n    </#if>\n    <#if field.autoFill == \"INSERT\">\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.INSERT)\n    <#elseif field.autoFill == \"INSERT_UPDATE\">\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.INSERT_UPDATE)\n    <#elseif field.autoFill == \"UPDATE\">\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.UPDATE)\n    <#elseif field.primaryKey>\n        <#--如果是主键，仅使用@TableId注解-->\n    <#else>\n    @TableField(value = \"${field.fieldName}\")\n    </#if>\n    <#if field.primaryKey>\n    @TableId(value = \"${field.fieldName}\", type = IdType.AUTO)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n</#if>\n\n</#list>\n}\n', '/java/Entity.java.ftl', '1.36KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (267, 'Query.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.query;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport ${package}.framework.common.query.Query;\n\n<#list importList as i>\nimport ${i!};\n</#list>\n\n/**\n * ${tableComment}查询\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\n@Data\n@EqualsAndHashCode(callSuper = false)\n@Schema(description = \"${tableComment}查询\")\npublic class ${ClassName}Query extends Query {\n<#list queryList as field>\n    <#if field.fieldComment!?length gt 0>\n    @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    private ${field.attrType} ${field.attrName};\n</#list>\n}\n', '/java/Query.java.ftl', '667B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (268, 'Service.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n * ${tableComment}\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\npublic interface ${ClassName}Service extends BaseService<${ClassName}Entity> {\n\n    PageResult<${ClassName}VO> page(${ClassName}Query query);\n\n    void save(${ClassName}VO vo);\n\n    void update(${ClassName}VO vo);\n\n    void delete(List<Long> idList);\n}\n', '/java/Service.java.ftl', '688B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (269, 'ServiceImpl.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.service.impl;\n\nimport com.baomidou.mybatisplus.core.toolkit.Wrappers;\nimport com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;\nimport com.baomidou.mybatisplus.core.metadata.IPage;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.impl.BaseServiceImpl;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.dao.${ClassName}Dao;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport org.springframework.stereotype.Service;\nimport org.springframework.transaction.annotation.Transactional;\n\nimport java.util.List;\n\n/**\n * ${tableComment}\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\n@Service\n@AllArgsConstructor\npublic class ${ClassName}ServiceImpl extends BaseServiceImpl<${ClassName}Dao, ${ClassName}Entity> implements ${ClassName}Service {\n\n    @Override\n    public PageResult<${ClassName}VO> page(${ClassName}Query query) {\n        IPage<${ClassName}Entity> page = baseMapper.selectPage(getPage(query), getWrapper(query));\n        return new PageResult<>(${ClassName}Convert.INSTANCE.convertList(page.getRecords()), page.getTotal());\n    }\n\n    private LambdaQueryWrapper<${ClassName}Entity> getWrapper(${ClassName}Query query){\n        LambdaQueryWrapper<${ClassName}Entity> wrapper = Wrappers.lambdaQuery();\n        return wrapper;\n    }\n\n    @Override\n    public void save(${ClassName}VO vo) {\n        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);\n        baseMapper.insert(entity);\n    }\n\n    @Override\n    public void update(${ClassName}VO vo) {\n        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);\n        updateById(entity);\n    }\n\n    @Override\n    @Transactional(rollbackFor = Exception.class)\n    public void delete(List<Long> idList) {\n        removeByIds(idList);\n    }\n}\n', '/java/ServiceImpl.java.ftl', '2.06KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (270, 'VO.java.ftl', 1, 'FreeMarker', 'package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\nimport ${i!};\n</#list>\n\n/**\n * ${tableComment}\n *\n * @author ${author} ${email}\n * @since ${version} ${date}\n **/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\n    private static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n    @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n</#list>\n}\n', '/java/VO.java.ftl', '827B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (271, 'menu.sql.ftl', 1, 'FreeMarker', '<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n', '/sql/menu.sql.ftl', '1.68KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (272, 'add-or-update.vue.ftl', 1, 'FreeMarker', '<template>\n    <el-dialog v-model=\"visible\" :title=\"!dataForm.id ? \'新增\' : \'修改\'\" :close-on-click-modal=\"false\">\n        <el-form ref=\"dataFormRef\" :model=\"dataForm\" :rules=\"dataRules\" label-width=\"100px\"\n                 @keyup.enter=\"submitHandle()\">\n            <#list formList as field>\n                <#if field.formType == \'text\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-input v-model=\"dataForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\"></el-input>\n                    </el-form-item>\n                <#elseif field.formType == \'textarea\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-input type=\"textarea\" v-model=\"dataForm.${field.attrName}\"></el-input>\n                    </el-form-item>\n                <#elseif field.formType == \'editor\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-input type=\"textarea\" v-model=\"dataForm.${field.attrName}\"></el-input>\n                    </el-form-item>\n                <#elseif field.formType == \'select\'>\n                    <#if field.formDict??>\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                            <fast-select v-model=\"dataForm.${field.attrName}\" dict-type=\"${field.formDict}\"\n                                         placeholder=\"${field.fieldComment!}\"></fast-select>\n                        </el-form-item>\n                    <#else>\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                            <el-select v-model=\"dataForm.${field.attrName}\" placeholder=\"请选择\">\n                                <el-option label=\"请选择\" value=\"0\"></el-option>\n                            </el-select>\n                        </el-form-item>\n                    </#if>\n                <#elseif field.formType == \'radio\'>\n                    <#if field.formDict??>\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                            <fast-radio-group v-model=\"dataForm.${field.attrName}\"\n                                              dict-type=\"${field.formDict}\"></fast-radio-group>\n                        </el-form-item>\n                    <#else>\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                            <el-radio-group v-model=\"dataForm.${field.attrName}\">\n                                <el-radio :label=\"0\">启用</el-radio>\n                                <el-radio :label=\"1\">禁用</el-radio>\n                            </el-radio-group>\n                        </el-form-item>\n                    </#if>\n                <#elseif field.formType == \'checkbox\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-checkbox-group v-model=\"dataForm.${field.attrName}\">\n                            <el-checkbox label=\"启用\" name=\"type\"></el-checkbox>\n                            <el-checkbox label=\"禁用\" name=\"type\"></el-checkbox>\n                        </el-checkbox-group>\n                    </el-form-item>\n                <#elseif field.formType == \'date\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-date-picker type=\"date\" placeholder=\"${field.fieldComment!}\"\n                                        v-model=\"dataForm.${field.attrName}\"></el-date-picker>\n                    </el-form-item>\n                <#elseif field.formType == \'datetime\'>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-date-picker type=\"datetime\" placeholder=\"${field.fieldComment!}\"\n                                        v-model=\"dataForm.${field.attrName}\"></el-date-picker>\n                    </el-form-item>\n                <#else>\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\n                        <el-input v-model=\"dataForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\"></el-input>\n                    </el-form-item>\n                </#if>\n            </#list>\n        </el-form>\n        <template #footer>\n            <el-button @click=\"visible = false\">取消</el-button>\n            <el-button type=\"primary\" @click=\"submitHandle()\">确定</el-button>\n        </template>\n    </el-dialog>\n</template>\n\n<script setup lang=\"ts\">\n    import {reactive, ref} from \'vue\'\n    import {ElMessage} from \'element-plus/es\'\n\n    const emit = defineEmits([\'refreshDataList\'])\n\n    const visible = ref(false)\n    const dataFormRef = ref()\n\n    const dataForm = reactive({\n        <#list fieldList as field>\n        ${field.attrName}: \'\'<#sep>,\n        </#list>\n    })\n\n    const init = (id\n    ? : number\n    ) =>\n    {\n        visible.value = true\n        dataForm.id = \'\'\n\n        // 重置表单数据\n        if (dataFormRef.value) {\n            dataFormRef.value.resetFields()\n        }\n\n        if (id) {\n            get${FunctionName}(id)\n        }\n    }\n\n    const get${FunctionName} = (id: number) => {\n        use${FunctionName}Api(id).then(res => {\n            Object.assign(dataForm, res.data)\n        })\n    }\n\n    const dataRules = ref({\n        <#list formList as field>\n        <#if field.formRequired>\n        ${field.attrName}: [{required: true, message: \'必填项不能为空\', trigger: \'blur\'}]<#sep>,\n        </#if>\n        </#list>\n    })\n\n    // 表单提交\n    const submitHandle = () => {\n        dataFormRef.value.validate((valid: boolean) => {\n            if (!valid) {\n                return false\n            }\n\n            use${FunctionName}SubmitApi(dataForm).then(() => {\n                ElMessage.success({\n                    message: \'操作成功\',\n                    duration: 500,\n                    onClose: () => {\n                        visible.value = false\n                        emit(\'refreshDataList\')\n                    }\n                })\n            })\n        })\n    }\n\n    defineExpose({\n        init\n    })\n</script>\n', '/vue/add-or-update.vue.ftl', '6.14KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (273, 'api.ts.ftl', 1, 'FreeMarker', 'import service from \'@/utils/request\'\n\nexport const use${FunctionName}Api = (id: number) => {\nreturn service.get(\'/${moduleName}/${functionName}/\' + id)\n}\n\nexport const use${FunctionName}SubmitApi = (dataForm: any) => {\nif (dataForm.id) {\nreturn service.put(\'/${moduleName}/${functionName}\', dataForm)\n} else {\nreturn service.post(\'/${moduleName}/${functionName}\', dataForm)\n}\n}\n', '/vue/api.ts.ftl', '379B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (274, 'index.vue.ftl', 1, 'FreeMarker', '<template>\n    <el-card>\n        <el-form :inline=\"true\" :model=\"state.queryForm\" @keyup.enter=\"getDataList()\">\n            <#list queryList as field>\n                <el-form-item>\n                    <#if field.formType == \'text\' || field.formType == \'textarea\' || field.formType == \'editor\'>\n                        <el-input v-model=\"state.queryForm.${field.attrName}\"\n                                  placeholder=\"${field.fieldComment!}\"></el-input>\n                    <#elseif field.queryFormType == \'select\'>\n                        <#if field.formDict??>\n                            <fast-select v-model=\"state.queryForm.${field.attrName}\" dict-type=\"${field.formDict}\"\n                                         placeholder=\"${field.fieldComment!}\" clearable></fast-select>\n                        <#else>\n                            <el-select v-model=\"state.queryForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\">\n                                <el-option label=\"选择\" value=\"0\"></el-option>\n                            </el-select>\n                        </#if>\n                    <#elseif field.queryFormType == \'radio\'>\n                        <#if field.formDict??>\n                            <fast-radio-group v-model=\"state.queryForm.${field.attrName}\"\n                                              dict-type=\"${field.formDict}\"></fast-radio-group>\n                        <#else>\n                            <el-radio-group v-model=\"state.queryForm.${field.attrName}\">\n                                <el-radio :label=\"0\">单选</el-radio>\n                            </el-radio-group>\n                        </#if>\n                    <#elseif field.queryFormType == \'date\'>\n                        <el-date-picker\n                            v-model=\"daterange\"\n                            type=\"daterange\"\n                            value-format=\"yyyy-MM-dd\">\n                        </el-date-picker>\n                    <#elseif field.queryFormType == \'datetime\'>\n                        <el-date-picker\n                            v-model=\"datetimerange\"\n                            type=\"datetimerange\"\n                            value-format=\"yyyy-MM-dd HH:mm:ss\">\n                        </el-date-picker>\n                    <#else>\n                        <el-input v-model=\"state.queryForm.${field.attrName}\"\n                                  placeholder=\"${field.fieldComment!}\"></el-input>\n                    </#if>\n                </el-form-item>\n            </#list>\n            <el-form-item>\n                <el-button @click=\"getDataList()\">查询</el-button>\n            </el-form-item>\n            <el-form-item>\n                <el-button v-auth=\"\'${moduleName}:${functionName}:save\'\" type=\"primary\" @click=\"addOrUpdateHandle()\">\n                    新增\n                </el-button>\n            </el-form-item>\n            <el-form-item>\n                <el-button v-auth=\"\'${moduleName}:${functionName}:delete\'\" type=\"danger\" @click=\"deleteBatchHandle()\">\n                    删除\n                </el-button>\n            </el-form-item>\n        </el-form>\n        <el-table v-loading=\"state.dataListLoading\" :data=\"state.dataList\" border style=\"width: 100%\"\n                  @selection-change=\"selectionChangeHandle\">\n            <el-table-column type=\"selection\" header-align=\"center\" align=\"center\" width=\"50\"></el-table-column>\n            <#list gridList as field>\n                <#if field.formDict??>\n                    <fast-table-column prop=\"${field.attrName}\" label=\"${field.fieldComment!}\"\n                                       dict-type=\"${field.formDict}\"></fast-table-column>\n                <#else>\n                    <el-table-column prop=\"${field.attrName}\" label=\"${field.fieldComment!}\" header-align=\"center\"\n                                     align=\"center\"></el-table-column>\n                </#if>\n            </#list>\n            <el-table-column label=\"操作\" fixed=\"right\" header-align=\"center\" align=\"center\" width=\"150\">\n                <template #default=\"scope\">\n                    <el-button v-auth=\"\'${moduleName}:${functionName}:update\'\" type=\"primary\" link\n                               @click=\"addOrUpdateHandle(scope.row.id)\">修改\n                    </el-button>\n                    <el-button v-auth=\"\'${moduleName}:${functionName}:delete\'\" type=\"primary\" link\n                               @click=\"deleteBatchHandle(scope.row.id)\">删除\n                    </el-button>\n                </template>\n            </el-table-column>\n        </el-table>\n        <el-pagination\n            :current-page=\"state.page\"\n            :page-sizes=\"state.pageSizes\"\n            :page-size=\"state.limit\"\n            :total=\"state.total\"\n            layout=\"total, sizes, prev, pager, next, jumper\"\n            @size-change=\"sizeChangeHandle\"\n            @current-change=\"currentChangeHandle\"\n        >\n        </el-pagination>\n\n        <!-- 弹窗, 新增 / 修改 -->\n        <add-or-update ref=\"addOrUpdateRef\" @refreshDataList=\"getDataList\"></add-or-update>\n    </el-card>\n</template>\n\n<script setup lang=\"ts\" name=\"${ModuleName}${FunctionName}Index\">\n    import {useCrud} from \'@/hooks\'\n    import {reactive, ref} from \'vue\'\n    import {IHooksOptions} from \'@/hooks/interface\'\n\n    const state: IHooksOptions = reactive({\n        dataListUrl: \'/${moduleName}/${functionName}/page\',\n        deleteUrl: \'/${moduleName}/${functionName}\',\n        queryForm: {\n            <#list queryList as field>\n            <#if field.formType == \'date\'>\n            startDate: \'\',\n            endDate: \'\'<#sep>, </#sep>\n            <#elseif field.formType == \'datetime\'>\n            startDateTime: \'\',\n            endDateTime: \'\'<#sep>, </#sep>\n            <#else>\n            ${field.attrName}: \'\'<#sep>, </#sep>\n            </#if>\n            </#list>\n        }\n    })\n\n    const addOrUpdateRef = ref()\n    const addOrUpdateHandle = (id\n    ? : number\n    ) =>\n    {\n        addOrUpdateRef.value.init(id)\n    }\n\n    const {\n        getDataList,\n        selectionChangeHandle,\n        sizeChangeHandle,\n        currentChangeHandle,\n        deleteBatchHandle\n    } = useCrud(state)\n</script>\n', '/vue/index.vue.ftl', '6.04KB', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
+INSERT INTO `template_info` VALUES (275, 'Dao.xml.ftl', 1, 'FreeMarker', '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n<mapper namespace=\"${package}.${moduleName}.dao.${ClassName}Dao\">\n\n    <resultMap type=\"${package}.${moduleName}.entity.${ClassName}Entity\" id=\"${className}Map\">\n        <#list fieldList as field>\n        <result property=\"${field.attrName}\" column=\"${field.fieldName}\"/>\n        </#list>\n    </resultMap>\n\n</mapper>\n', '/xml/Dao.xml.ftl', '464B', 0, 1, '2023-11-24 19:18:14', '2023-11-24 19:18:14');
 
 -- ----------------------------
 -- Table structure for template_param
@@ -4355,13 +4425,17 @@ CREATE TABLE `template_param`  (
   `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数表，模板实际的参数值' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数表，模板实际的参数值' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for template_variable_metadata
+-- Records of template_param
 -- ----------------------------
-DROP TABLE IF EXISTS `template_variable_metadata`;
-CREATE TABLE `template_variable_metadata`  (
+
+-- ----------------------------
+-- Table structure for template_variable
+-- ----------------------------
+DROP TABLE IF EXISTS `template_variable`;
+CREATE TABLE `template_variable`  (
   `id` int(11) NOT NULL COMMENT '主键ID',
   `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
   `param_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
@@ -4370,7 +4444,33 @@ CREATE TABLE `template_variable_metadata`  (
   `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
   `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of template_variable
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for template_variable_info
+-- ----------------------------
+DROP TABLE IF EXISTS `template_variable_info`;
+CREATE TABLE `template_variable_info`  (
+  `id` int(11) NOT NULL COMMENT '主键ID',
+  `template_id` int(11) NULL DEFAULT NULL COMMENT '模板ID',
+  `key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数名',
+  `default_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
+  `data_type_id` bigint(20) NULL DEFAULT NULL COMMENT '数据类型ID，关联data_type_item#id字段',
+  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注信息',
+  `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '逻辑删除状态',
+  `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of template_variable_info
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for test
@@ -4380,7 +4480,26 @@ CREATE TABLE `test`  (
   `col_bigint` bigint(255) NULL DEFAULT NULL,
   `col_decimal` decimal(5, 2) NULL DEFAULT NULL,
   `col_timestamp` datetime(6) NULL DEFAULT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of test
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for type_mapping
+-- ----------------------------
+DROP TABLE IF EXISTS `type_mapping`;
+CREATE TABLE `type_mapping`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `java_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `json_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of type_mapping
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -4390,6 +4509,10 @@ CREATE TABLE `user`  (
   `user_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户ID',
   `user_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '开发者信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '开发者信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

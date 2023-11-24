@@ -4,12 +4,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
+import io.devpl.generator.entity.TemplateVarInfo;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 模板服务
+ * 模板 Service
  */
 public interface TemplateService extends IService<TemplateInfo> {
 
@@ -19,7 +20,7 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @param templateInfo 模板信息
      * @return 是否成功
      */
-    boolean save(TemplateInfo templateInfo);
+    boolean addTemplate(TemplateInfo templateInfo);
 
     /**
      * 渲染模板
@@ -46,7 +47,26 @@ public interface TemplateService extends IService<TemplateInfo> {
      */
     List<TemplateSelectVO> listSelectable();
 
+    /**
+     * 模板迁移，包含模板文件迁移及相应的模板信息
+     *
+     * @return 是否成功
+     */
     boolean migrateTemplates();
 
+    /**
+     * 将模板文件路径转换为平台独立的模板存放路径
+     *
+     * @param templatePath 模板路径
+     * @return 平台独立的文件路径
+     */
     String formatTemplatePath(String templatePath);
+
+    /**
+     * 提取模板中的变量信息
+     *
+     * @param templateInfo 模板信息
+     * @return 模板变量列表
+     */
+    List<TemplateVarInfo> introspect(TemplateInfo templateInfo);
 }
