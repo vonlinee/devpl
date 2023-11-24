@@ -1,5 +1,5 @@
 <template>
-	<vxe-modal height="80%" width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable :z-index="2000"
+	<vxe-modal width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable :z-index="2000"
 		show-footer>
 		<el-form ref="dataFormRef" :model="dataForm">
 			<el-form-item label="数据源" prop="datasourceId">
@@ -19,7 +19,7 @@
 				</el-row>
 			</el-form-item>
 		</el-form>
-		<el-table :data="dataForm.tableList" style="width: 100%" border @selection-change="selectionChangeHandle">
+		<el-table :data="dataForm.tableList" height="370px" border @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
 			<el-table-column prop="tableName" label="表名" header-align="center" align="center" width="300"></el-table-column>
 			<el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>

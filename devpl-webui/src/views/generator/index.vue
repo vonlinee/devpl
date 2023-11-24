@@ -70,7 +70,7 @@ import { useTableSyncApi } from '@/api/table'
 import { ElButton, ElMessage, ElMessageBox } from 'element-plus'
 import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from '@/api/generator'
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import GenFileTypeDialog from "@/views/generator/genfile/GenFileTypeDialog.vue";
+import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
 
 const state: IHooksOptions = reactive({
     dataListUrl: '/gen/table/page',

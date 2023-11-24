@@ -77,15 +77,16 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             DbConnInfo connInfo = dataSourceService.getById(datasourceId);
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
+
+        // 代码生成器信息
+        GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
+
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 从数据库获取表信息
             table = this.getTable(connection, query, datasourceId, tableName);
-            // 代码生成器信息
-            GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
             // 保存表信息
-
             // 项目信息
             ProjectInfo project = generator.getProject();
             table.setPackageName(project.getPackageName());

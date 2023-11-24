@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ParamTable from '@/components/ParamTable.vue';
+
+import FileGenDashboard from '@/views/generator/filegen/index.vue';
 import { ref } from 'vue';
 import 'splitpanes/dist/splitpanes.css'
 let mapperParams = ref<ParamItem[]>([{
@@ -116,6 +118,8 @@ const showing = ref()
 	<vxe-modal :model-value="showing" width="70%" @close="showing = false">
 		<ParamTable :rows="mapperParams" :data-types="dataTypes"></ParamTable>
 	</vxe-modal>
+
+	<FileGenDashboard></FileGenDashboard>
 
 </template>
 
