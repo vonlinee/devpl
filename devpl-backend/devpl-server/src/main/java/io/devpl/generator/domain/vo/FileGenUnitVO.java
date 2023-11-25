@@ -16,7 +16,9 @@ public class FileGenUnitVO {
     private String templateName;
 
     /**
-     * 数据填充策略 1-数据库表 2-自定义、
+     * 数据填充策略
+     *
+     * @see io.devpl.generator.domain.TemplateFillStrategy
      */
     private String fillStrategy;
 

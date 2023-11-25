@@ -39,6 +39,18 @@ public class TemplateFileGeneration {
     private Long templateId;
 
     /**
+     * 模板名称
+     */
+    @TableField(value = "template_name")
+    private String templateName;
+
+    /**
+     * 数据填充策略
+     */
+    @TableField(value = "fill_strategy")
+    private String dataFillStrategy;
+
+    /**
      * 保存路径
      */
     @TableField(value = "save_path")
@@ -55,4 +67,16 @@ public class TemplateFileGeneration {
      */
     @TableField(value = "builtin")
     private Integer builtin;
+
+    /**
+     * 配置表记录主键ID
+     */
+    @TableField(value = "config_table_id")
+    private Long configTableId;
+
+    /**
+     * 配置表名称
+     */
+    @TableField(value = "config_table_name")
+    private String configTableName;
 }

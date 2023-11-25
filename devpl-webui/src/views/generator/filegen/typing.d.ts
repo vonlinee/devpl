@@ -20,9 +20,9 @@ type TemplateFileGeneration = {
    */
   templateName?: string
   /**
-   * 数据填充策略 1-数据库表 2-自定义、
+   * 数据填充策略 db_table-数据库表 manual-手动填充、
    */
-  fillStrategy?: number
+  fillStrategy?: string
   /**
    * 数据填充策略名称
    */

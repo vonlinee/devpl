@@ -1,10 +1,10 @@
 <template>
   <vxe-modal width="60%" v-model="visible" title="选择模板" :draggable="false" :mask-closable="false" :z-index="2000"
-    show-footer>
-    <el-table :data="templateOptions" height="500px" border @selection-change="handleSelectionChange">
+             show-footer @onclose="handleModalClose">
+    <el-table ref="tableRef" :data="templateOptions" height="500px" border @selection-change="handleSelectionChange">
       <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
       <el-table-column prop="templateName" label="模板名称" header-align="center" align="center"
-        width="300"></el-table-column>
+                       width="300"></el-table-column>
       <el-table-column prop="remark" label="描述信息" header-align="center" align="center"></el-table-column>
     </el-table>
     <template #footer="scope">
@@ -17,7 +17,9 @@
 import { apiListSelectableTemplates } from "@/api/template";
 import { ElMessage } from "element-plus";
 import { onMounted, ref, toRaw } from "vue";
+
 const visible = ref(false);
+const tableRef = ref();
 const templateOptions = ref<TemplateSelectVO[]>();
 onMounted(() => {
   apiListSelectableTemplates().then((res) => {
@@ -25,7 +27,7 @@ onMounted(() => {
   });
 });
 
-const selectedTemplates = ref<number[]>([])
+const selectedTemplates = ref<number[]>([]);
 
 const handleSelectionChange = (selections: any[]) => {
   selectedTemplates.value = selections;
@@ -33,21 +35,24 @@ const handleSelectionChange = (selections: any[]) => {
 
 defineExpose({
   show: () => {
-    visible.value = true
+    visible.value = true;
   }
-})
+});
 
 const emits = defineEmits([
   "selection-callback"
-])
+]);
 
 const handleSubmit = () => {
   if (selectedTemplates.value.length == 0) {
-    ElMessage.warning("未选择模板")
-    return
+    ElMessage.warning("未选择模板");
+    return;
   }
-  visible.value = false
+  visible.value = false;
+  emits("selection-callback", selectedTemplates.value.map((item) => toRaw(item)));
+};
 
-  emits('selection-callback', selectedTemplates.value.map((item) => toRaw(item)))
-}
+const handleModalClose = () => {
+  tableRef.value.clearSelection();
+};
 </script>

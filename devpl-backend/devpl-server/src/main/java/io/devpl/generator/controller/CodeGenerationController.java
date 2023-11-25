@@ -174,15 +174,25 @@ public class CodeGenerationController {
     }
 
     /**
+     * 新增自定义文件生成单元
+     *
+     * @param param 文件生成单元
+     * @return 是否成功
+     */
+    @PostMapping("/filegen/unit/new")
+    public Result<Boolean> addFileGenUnits(@RequestBody FileGenUnitParam param) {
+        return Result.ok(fileGenerationUnitService.addFileGenUnits(param));
+    }
+
+    /**
      * 新增模板文件生成单元
      *
      * @param param 文件生成单元
      * @return 是否成功
      */
     @PostMapping("/filegen/unit/new/template")
-    public Result<List<TemplateFileGeneration>> addTemplateBasedFileGenUnit(@RequestBody FileGenUnitParam param) {
-        fileGenerationUnitService.addTemplateFileGenUnits(param);
-        return Result.ok(param.getTfgs());
+    public Result<Boolean> addTemplateBasedFileGenUnit(@RequestBody FileGenUnitParam param) {
+        return Result.ok(fileGenerationUnitService.addTemplateFileGenerations(param));
     }
 
     /**

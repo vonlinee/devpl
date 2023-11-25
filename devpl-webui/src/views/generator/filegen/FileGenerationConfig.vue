@@ -1,38 +1,6 @@
 <template>
   <el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-
-      <el-tab-pane label="生成文件" name="target">
-        <el-table border :data="generationFiles" height="550px">
-          <el-table-column label="文件名" prop="fileName">
-            <template #default="scope">
-              <el-input v-model="scope.row.fileName"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column label="模板" prop="templateId">
-            <template #default="scope">
-              <template-selector :current="scope.row.templateName ? scope.row.templateId : null"
-                                 :options="templateOptions"
-                                 :on-handle-value-change="(val: any) => scope.row.templateId = val"></template-selector>
-            </template>
-          </el-table-column>
-          <el-table-column label="保存路径" prop="savePath">
-            <template #default="scope">
-              <el-input v-model="scope.row.savePath"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column fixed="right" label="操作" align="center" width="150px">
-            <template #default="scope">
-              <el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-button class="mt-4" style="width: 100%" @click="onAddItem">新增</el-button>
-      </el-tab-pane>
-
       <el-tab-pane label="属性设置" name="field">
         <vxe-table ref="fieldTable" height="590px" border row-key class="sortable-row-gen" :data="fieldList"
                    :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
@@ -160,16 +128,7 @@
 import { nextTick, onMounted, reactive, ref } from "vue";
 import {
   ElMessage,
-  TabsPaneContext,
-  ElTable,
-  ElTableColumn,
-  ElTabs,
-  ElTabPane,
-  ElCard,
-  ElSelect,
-  ElDrawer,
-  ElButton,
-  ElTooltip
+  TabsPaneContext
 } from "element-plus/es";
 import Sortable from "sortablejs";
 import { useTableFieldSubmitApi } from "@/api/table";
@@ -177,11 +136,9 @@ import { useTableApi } from "@/api/table";
 import { useFieldTypeListApi } from "@/api/fieldType";
 import { VxeTableInstance } from "vxe-table";
 import { apiListGenerationFiles, apiSaveGenerationFileConfig } from "@/api/generator";
-import TemplateSelector from "./TemplateSelector.vue";
 import { apiListSelectableTemplates } from "@/api/template";
 
 const activeName = ref();
-const fieldTable = ref<VxeTableInstance>();
 const formTable = ref<VxeTableInstance>();
 const gridTable = ref<VxeTableInstance>();
 const queryTable = ref<VxeTableInstance>();

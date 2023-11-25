@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.generator.dao.FileGenerationUnitMapper;
 import io.devpl.generator.dao.TemplateFileGenerationMapper;
+import io.devpl.generator.domain.TemplateFillStrategy;
 import io.devpl.generator.domain.param.FileGenUnitParam;
 import io.devpl.generator.domain.vo.FileGenUnitVO;
 import io.devpl.generator.entity.FileGenerationUnit;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class FileGenerationUnitServiceImpl extends ServiceImpl<FileGenerationUnitMapper, FileGenerationUnit> implements FileGenerationUnitService {
@@ -29,9 +30,15 @@ public class FileGenerationUnitServiceImpl extends ServiceImpl<FileGenerationUni
     }
 
     @Override
-    public boolean addTemplateFileGenUnits(FileGenUnitParam param) {
-        for (TemplateFileGeneration tfg : param.getTfgs()) {
+    public boolean addFileGenUnits(List<FileGenerationUnit> units) {
+        return saveBatch(units);
+    }
+
+    @Override
+    public boolean addTemplateFileGenerations(FileGenUnitParam param) {
+        for (TemplateFileGeneration tfg : param.getTempFileGenList()) {
             tfg.setUnitId(param.getId());
+            tfg.setDataFillStrategy(param.getGenStrategy());
             templateFileGenerationMapper.insert(tfg);
         }
         return true;
@@ -40,7 +47,7 @@ public class FileGenerationUnitServiceImpl extends ServiceImpl<FileGenerationUni
     @Override
     public boolean addFileGenUnits(FileGenUnitParam param) {
 
-        param.getTfgs();
+        addFileGenUnits(param.getUnits());
 
         return true;
     }
@@ -51,8 +58,6 @@ public class FileGenerationUnitServiceImpl extends ServiceImpl<FileGenerationUni
         List<TemplateFileGeneration> tfgList = templateFileGenerationMapper.selectList(Wrappers.emptyWrapper());
 
         List<FileGenerationUnit> fgs = this.list();
-
-        Map<Long, FileGenerationUnit> map = CollectionUtils.toMap(fgs, FileGenerationUnit::getId);
 
         List<FileGenUnitVO> result = new ArrayList<>();
 
@@ -65,12 +70,27 @@ public class FileGenerationUnitServiceImpl extends ServiceImpl<FileGenerationUni
                 result.add(vo);
             }
         } else {
-            for (TemplateFileGeneration tfg : tfgList) {
-                FileGenUnitVO vo = new FileGenUnitVO();
-                if (tfg.getUnitId() != null && map.containsKey(tfg.getUnitId())) {
-                    vo.setId(tfg.getId());
-                    vo.setParentId(tfg.getUnitId());
+            for (FileGenerationUnit fgu : fgs) {
+                for (TemplateFileGeneration tfg : tfgList) {
+                    if (Objects.equals(tfg.getUnitId(), fgu.getId())) {
+                        FileGenUnitVO vo = new FileGenUnitVO();
+                        vo.setId(tfg.getId());
+                        vo.setParentId(tfg.getUnitId());
+                        vo.setTemplateId(tfg.getTemplateId());
+                        vo.setTemplateName(tfg.getTemplateName());
+                        vo.setItemName(tfg.getTemplateName());
+                        TemplateFillStrategy item = TemplateFillStrategy.find(tfg.getDataFillStrategy());
+                        if (item != null) {
+                            vo.setFillStrategy(item.getId());
+                            vo.setFillStrategyName(item.getName());
+                        }
+                        result.add(vo);
+                    }
                 }
+                FileGenUnitVO vo = new FileGenUnitVO();
+                vo.setId(fgu.getId());
+                vo.setParentId(null);
+                vo.setItemName(fgu.getUnitName());
                 result.add(vo);
             }
         }

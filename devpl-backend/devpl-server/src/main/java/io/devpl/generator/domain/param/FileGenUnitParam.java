@@ -17,9 +17,14 @@ public class FileGenUnitParam {
     private FileGenerationUnit customUnit;
 
     /**
+     * 文件生成单元
+     */
+    private List<FileGenerationUnit> units;
+
+    /**
      * 模板文件生成参数
      */
-    private List<TemplateFileGeneration> tfgs;
+    private List<TemplateFileGeneration> tempFileGenList;
 
     /**
      * 删除
@@ -27,4 +32,11 @@ public class FileGenUnitParam {
     private Long id;
 
     private Integer type;
+
+    /**
+     * 填充策略
+     *
+     * @see io.devpl.generator.domain.TemplateFillStrategy
+     */
+    private String genStrategy;
 }

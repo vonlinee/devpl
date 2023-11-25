@@ -11,7 +11,9 @@ public interface FileGenerationUnitService extends IService<FileGenerationUnit> 
 
     boolean addCustomFileGenUnit(FileGenerationUnit unit);
 
-    boolean addTemplateFileGenUnits(FileGenUnitParam param);
+    boolean addFileGenUnits(List<FileGenerationUnit> units);
+
+    boolean addTemplateFileGenerations(FileGenUnitParam param);
 
     boolean addFileGenUnits(FileGenUnitParam param);
 

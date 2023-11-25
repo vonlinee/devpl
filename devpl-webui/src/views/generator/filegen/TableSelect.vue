@@ -1,5 +1,6 @@
 <template>
-  <vxe-modal width="60%" v-model="visible" title="选择数据库表" :draggable="false" :mask-closable="false" :z-index="2000" show-footer>
+  <vxe-modal width="60%" v-model="visible" title="选择数据库表" :draggable="false" :mask-closable="false" :z-index="2000"
+             show-footer @close="handleModalClose">
     <el-form ref="dataFormRef" :model="dataForm">
       <el-form-item label="数据源" prop="datasourceId">
         <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源" @change="getTableList">
@@ -18,7 +19,7 @@
         </el-row>
       </el-form-item>
     </el-form>
-    <el-table :data="dataForm.tableList" height="500px" border @selection-change="selectionChangeHandle">
+    <el-table :data="dataForm.tableList" ref="tableRef" height="500px" border @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
       <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="300"></el-table-column>
       <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
@@ -38,6 +39,7 @@ import { useDataSourceTableListApi } from "@/api/datasource";
 
 const visible = ref(false);
 const dataFormRef = ref();
+const tableRef = ref();
 
 const dataForm = reactive({
   id: "",
@@ -72,10 +74,13 @@ const getTableList = () => {
   });
 };
 
+const handleModalClose = () => {
+  tableRef.value.clearSelection()
+}
 
 const emits = defineEmits([
   "selectionCallback"
-])
+]);
 
 // 表单提交
 const handleSubmit = () => {
@@ -86,7 +91,7 @@ const handleSubmit = () => {
   }
 
   visible.value = false;
-  emits('selectionCallback', toRaw(tableNameList))
+  emits("selectionCallback", toRaw(tableNameList));
 
 };
 
