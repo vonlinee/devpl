@@ -9,7 +9,6 @@ import io.devpl.generator.service.CodeGenService;
 import io.devpl.generator.service.GeneratorConfigService;
 import io.devpl.generator.service.TableFileGenerationService;
 import io.devpl.generator.service.TargetGenFileService;
-import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,6 @@ import java.util.Objects;
 
 /**
  * 代码生成控制器
- * 灵活，针对模板的文件生成
  */
 @RestController
 @RequestMapping("/api/codegen")
@@ -158,5 +156,9 @@ public class CodeGenerationController {
     @GetMapping("/file")
     public Result<String> getFileContent(String path) {
         return Result.ok(codeGenService.getFileContent(path));
+    }
+
+    public Result<Boolean> addFileGenItem(Temla) {
+
     }
 }

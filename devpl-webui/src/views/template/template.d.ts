@@ -17,7 +17,7 @@ type TemplateInfo = {
 }
 
 type TemplateSelectVO = {
-  templateId?: number,
+  templateId: number,
   templateName: string,
   remark?: string
 }

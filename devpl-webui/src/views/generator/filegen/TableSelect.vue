@@ -1,6 +1,5 @@
 <template>
-  <vxe-modal width="60%" v-model="visible" title="选择数据库表" :mask-closable="false" draggable :z-index="2000"
-             show-footer>
+  <vxe-modal width="60%" v-model="visible" title="选择数据库表" :draggable="false" :mask-closable="false" :z-index="2000" show-footer>
     <el-form ref="dataFormRef" :model="dataForm">
       <el-form-item label="数据源" prop="datasourceId">
         <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源" @change="getTableList">
@@ -19,23 +18,22 @@
         </el-row>
       </el-form-item>
     </el-form>
-    <el-table :data="dataForm.tableList" height="370px" border @selection-change="selectionChangeHandle">
+    <el-table :data="dataForm.tableList" height="500px" border @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
       <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="300"></el-table-column>
       <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
     </el-table>
     <template #footer="scope">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="submitHandle()">确定</el-button>
+      <el-button type="primary" @click="handleSubmit()">确定</el-button>
     </template>
   </vxe-modal>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import { ElMessage } from "element-plus/es";
 import { useDataSourceListApi } from "@/api/datasource";
-import { useTableImportSubmitApi } from "@/api/table";
 import { useDataSourceTableListApi } from "@/api/datasource";
 
 const visible = ref(false);
@@ -74,23 +72,22 @@ const getTableList = () => {
   });
 };
 
+
+const emits = defineEmits([
+  "selectionCallback"
+])
+
 // 表单提交
-const submitHandle = () => {
+const handleSubmit = () => {
   const tableNameList = dataForm.tableNameListSelections ? dataForm.tableNameListSelections : [];
   if (tableNameList.length === 0) {
     ElMessage.warning("请选择记录");
     return;
   }
 
-  useTableImportSubmitApi(dataForm.datasourceId, tableNameList).then(() => {
-    ElMessage.success({
-      message: "操作成功",
-      duration: 500,
-      onClose: () => {
-        visible.value = false;
-      }
-    });
-  });
+  visible.value = false;
+  emits('selectionCallback', toRaw(tableNameList))
+
 };
 
 defineExpose({
