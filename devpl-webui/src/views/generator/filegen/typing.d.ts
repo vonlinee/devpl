@@ -2,7 +2,7 @@ type TemplateFileGeneration = {
   /**
    * 主键ID
    */
-  id: number
+  id?: number
   /**
    * 父节点ID
    */
@@ -14,21 +14,17 @@ type TemplateFileGeneration = {
   /**
    * 模板ID
    */
-  templateId: number
+  templateId?: number
   /**
    * 模板名称
    */
-  templateName: string
+  templateName?: string
   /**
    * 数据填充策略 1-数据库表 2-自定义、
    */
-  fillStrategy: number
+  fillStrategy?: number
   /**
    * 数据填充策略名称
    */
   fillStrategyName?: string
-  // 是否有子节点
-  hasChildren?: boolean
-  // 子节点
-  children?: TemplateFileGeneration[]
 }

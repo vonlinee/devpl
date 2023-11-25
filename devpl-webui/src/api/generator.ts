@@ -86,3 +86,27 @@ export const apiSaveGeneratorConfig = (content: string) => {
         content: content
     }, { "Content-Type": "multipart/form-data" })
 }
+
+export const apiAddCustomFileGenUnit = (units: any) => {
+    return http.post('/api/codegen/filegen/unit/new/custom', {
+        customUnit: units
+    })
+}
+
+export const apiAddTemplateFileGenUnits = (id: number, units: any) => {
+    return http.post('/api/codegen/filegen/unit/new/template', {
+        id: id,
+        tfgs: units
+    })
+}
+
+export const apiRemoveFileGenUnit = (id: number, type: number) => {
+    return http.delete<boolean>('/api/codegen/filegen/unit/remove', {
+        id: id,
+        type: type
+    })
+}
+
+export const apiListFileGenUnits = () => {
+    return http.get('/api/codegen/filegen/units')
+}

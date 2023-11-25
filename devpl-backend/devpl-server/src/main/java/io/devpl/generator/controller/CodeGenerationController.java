@@ -2,13 +2,14 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.FileNode;
+import io.devpl.generator.domain.param.FileGenUnitParam;
 import io.devpl.generator.domain.param.TableFileGenParam;
+import io.devpl.generator.domain.vo.FileGenUnitVO;
+import io.devpl.generator.entity.FileGenerationUnit;
 import io.devpl.generator.entity.TableFileGeneration;
 import io.devpl.generator.entity.TargetGenFile;
-import io.devpl.generator.service.CodeGenService;
-import io.devpl.generator.service.GeneratorConfigService;
-import io.devpl.generator.service.TableFileGenerationService;
-import io.devpl.generator.service.TargetGenFileService;
+import io.devpl.generator.entity.TemplateFileGeneration;
+import io.devpl.generator.service.*;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ public class CodeGenerationController {
     TargetGenFileService targetGenFileService;
     @Resource
     TableFileGenerationService tableFileGenerationService;
+    @Resource
+    FileGenerationUnitService fileGenerationUnitService;
     @Resource
     GeneratorConfigService generatorConfigService;
 
@@ -158,7 +161,48 @@ public class CodeGenerationController {
         return Result.ok(codeGenService.getFileContent(path));
     }
 
-    public Result<Boolean> addFileGenItem(Temla) {
+    /**
+     * 新增自定义文件生成单元
+     *
+     * @param param 文件生成单元
+     * @return 是否成功
+     */
+    @PostMapping("/filegen/unit/new/custom")
+    public Result<FileGenerationUnit> addCustomFileGenUnit(@RequestBody FileGenUnitParam param) {
+        fileGenerationUnitService.addCustomFileGenUnit(param.getCustomUnit());
+        return Result.ok(param.getCustomUnit());
+    }
 
+    /**
+     * 新增模板文件生成单元
+     *
+     * @param param 文件生成单元
+     * @return 是否成功
+     */
+    @PostMapping("/filegen/unit/new/template")
+    public Result<List<TemplateFileGeneration>> addTemplateBasedFileGenUnit(@RequestBody FileGenUnitParam param) {
+        fileGenerationUnitService.addTemplateFileGenUnits(param);
+        return Result.ok(param.getTfgs());
+    }
+
+    /**
+     * 新增模板文件生成单元
+     *
+     * @param param 文件生成单元
+     * @return 是否成功
+     */
+    @DeleteMapping("/filegen/unit/remove")
+    public Result<Boolean> removeFileGenUnit(@RequestBody FileGenUnitParam param) {
+        return Result.ok(fileGenerationUnitService.removeFileGenUnit(param));
+    }
+
+    /**
+     * 文件生成单元列表
+     *
+     * @return 是否成功
+     */
+    @GetMapping("/filegen/units")
+    public Result<List<FileGenUnitVO>> listFileGenerationUnits() {
+        return Result.ok(fileGenerationUnitService.listFileGenUnits());
     }
 }

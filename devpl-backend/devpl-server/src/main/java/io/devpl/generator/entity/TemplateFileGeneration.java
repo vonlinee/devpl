@@ -22,15 +22,9 @@ public class TemplateFileGeneration {
     private Long id;
 
     /**
-     * 父节点ID
+     * 文件生成单元ID
      */
-    private Long parentId;
-
-    /**
-     * 文件生成项名称
-     */
-    @TableField(value = "item_name")
-    private String itemName;
+    private Long unitId;
 
     /**
      * 文件名称
@@ -61,5 +55,4 @@ public class TemplateFileGeneration {
      */
     @TableField(value = "builtin")
     private Integer builtin;
-
 }

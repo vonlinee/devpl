@@ -15,9 +15,9 @@
 
   <gen-template-select ref="templateSelectRef" @selection-callback="onTemplateSelectionCallback"></gen-template-select>
 
-  <vxe-table :loading="loading" ref="tableRef" :data="tableData" border default-expand-all
+  <vxe-table :loading="loading" ref="tableRef" :data="tableData" border default-expand-all :height="600"
     :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId', expandAll: true }">
-    <vxe-table-column type="checkbox" width="55" />
+    <vxe-table-column type="checkbox" width="55" align="center" />
     <vxe-table-column field="itemName" title="名称" head-align="center" tree-node />
     <vxe-table-column field="fillStrategyName" title="数据填充策略" />
     <vxe-table-column title="操作" align="center">
@@ -35,6 +35,7 @@ import { ref, onMounted } from "vue";
 import { apiListSelectableTemplates } from "@/api/template";
 import TableSelect from "@/views/generator/filegen/TableSelect.vue";
 import GenTemplateSelect from "./GenTemplateSelect.vue";
+import { apiListFileGenUnits, apiAddCustomFileGenUnit, apiRemoveFileGenUnit, apiAddTemplateFileGenUnits } from "@/api/generator";
 
 const tableData = ref<TemplateFileGeneration[]>([]);
 const loading = ref(false)
@@ -50,6 +51,10 @@ onMounted(() => {
   apiListSelectableTemplates().then((res) => {
     templateOptions.value = res.data || [];
   });
+
+  apiListFileGenUnits().then((res) => {
+    tableData.value = res.data
+  })
 });
 
 const handleClick = () => {
@@ -84,7 +89,6 @@ const onSelectionCallback = (tableNames: string[]) => {
       fillStrategy: 1,
       fillStrategyName: "数据库表",
       itemName: tableNames[i],
-      children: []
     });
   }
   loading.value = false
@@ -103,41 +107,54 @@ const onTemplateSelectionCallback = async (templates: TemplateSelectVO[]) => {
   const currentRow = currentFileGenGroupRef.value
 
   const $table = tableRef.value
-  if ($table) {
-    const newRows = templates.map((template) => {
-      const record = {
-        itemName: template.templateName,
-        id: Date.now(),
-        fillStrategy: currentRow?.fillStrategy,
-        fillStrategyName: currentRow?.fillStrategyName,
-        parentId: currentRow?.id, // 需要指定父节点，自动插入该节点中
-      } as TemplateFileGeneration
+  if ($table && currentRow && currentRow.id) {
+    apiAddTemplateFileGenUnits(currentRow?.id, templates).then((res) => {
 
-      return record
+      let index: number = 0
+      const newRows = templates.map((template) => {
+        const record = {
+          itemName: template.templateName,
+          id: res.data[index++],
+          fillStrategy: currentRow?.fillStrategy,
+          fillStrategyName: currentRow?.fillStrategyName,
+          parentId: currentRow?.id, // 需要指定父节点，自动插入该节点中
+        } as TemplateFileGeneration
+        return record
+      })
+      // 如果 null 则插入到目标节点顶部
+      // 如果 -1 则插入到目标节点底部
+      // 如果 row 则有插入到效的目标节点该行的位置
+      $table.insertAt(newRows, -1).then((res: any) => {
+        $table.setTreeExpand(currentRow, true) // 将父节点展开
+      })
     })
-    // 如果 null 则插入到目标节点顶部
-    // 如果 -1 则插入到目标节点底部
-    // 如果 row 则有插入到效的目标节点该行的位置
-    const { row: newRow } = await $table.insertAt(newRows, -1)
-    await $table.setTreeExpand(currentRow, true) // 将父节点展开
   }
 }
 
 const addCustomFileGenerationItem = () => {
-  tableData.value.push({
-    id: getIncrId(),
-    templateId: 0,
-    templateName: "",
-    fillStrategy: 2,
-    fillStrategyName: "自定义",
-    itemName: "自定义生成",
-  });
+  const newFileGenUnit = {
+    unitName: "自定义生成",
+  }
+  apiAddCustomFileGenUnit(newFileGenUnit).then((res) => {
+    tableData.value.push({
+      id: res.data?.id,
+      itemName: res.data?.unitName
+    });
+  })
 }
 
 const removeRow = async (row: TemplateFileGeneration) => {
   const $table = tableRef.value
-  if ($table) {
-    await $table.remove(row)
+  if ($table && row.id) {
+    let type = 1;
+    if (row.parentId) {
+      type = 2
+    }
+    apiRemoveFileGenUnit(row.id, type).then((res) => {
+      if (res) {
+        $table.remove(row)
+      }
+    })
   }
 }
 
