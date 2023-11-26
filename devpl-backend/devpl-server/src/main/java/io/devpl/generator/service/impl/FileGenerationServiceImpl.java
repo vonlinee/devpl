@@ -3,10 +3,7 @@ package io.devpl.generator.service.impl;
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
-import io.devpl.generator.entity.GenBaseClass;
-import io.devpl.generator.entity.GenTable;
-import io.devpl.generator.entity.GenTableField;
-import io.devpl.generator.entity.TemplateInfo;
+import io.devpl.generator.entity.*;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.DateTimeUtils;
@@ -33,7 +30,7 @@ import java.util.zip.ZipOutputStream;
  */
 @Slf4j
 @Service
-public class CodeGenServiceImpl implements FileGenerationService {
+public class FileGenerationServiceImpl implements FileGenerationService {
 
     @Resource
     private DataSourceService datasourceService;
@@ -50,7 +47,11 @@ public class CodeGenServiceImpl implements FileGenerationService {
     @Resource
     private GeneratorConfigService generatorConfigService;
     @Resource
-    FileStorageService fileStorageService;
+    private FileStorageService fileStorageService;
+    @Resource
+    private TableFileGenerationService tableFileGenerationService;
+    @Resource
+    private TemplateFileGenerationService templateFileGenerationService;
 
     /**
      * 代码生成根目录
@@ -96,6 +97,12 @@ public class CodeGenServiceImpl implements FileGenerationService {
     @Override
     public String startCodeGeneration(Long tableId) {
         final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
+
+        List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(tableId);
+
+        for (TableFileGeneration tfg : fileToBeGenerated) {
+            templateFileGenerationService.generate(tfg.getGenerationId());
+        }
 
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);

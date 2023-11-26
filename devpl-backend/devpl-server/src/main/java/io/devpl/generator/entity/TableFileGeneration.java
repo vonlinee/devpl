@@ -45,6 +45,8 @@ public class TableFileGeneration {
     @TableField(value = "save_path")
     private String savePath;
 
+    // ================================= 非数据库字段 =================================
+
     /**
      * 模板ID
      */

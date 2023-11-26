@@ -22,7 +22,7 @@ import java.util.Objects;
 public class CodeGenerationController {
 
     @Resource
-    FileGenerationService codeGenService;
+    FileGenerationService fileGenService;
     @Resource
     TargetGenerationFileService targetGenFileService;
     @Resource
@@ -41,7 +41,7 @@ public class CodeGenerationController {
         // 生成代码
         List<String> rootDirs = new ArrayList<>(tableIds.length);
         for (Long tableId : tableIds) {
-            rootDirs.add(codeGenService.startCodeGeneration(tableId));
+            rootDirs.add(fileGenService.startCodeGeneration(tableId));
         }
         return Result.ok(rootDirs);
     }
@@ -141,7 +141,7 @@ public class CodeGenerationController {
      */
     @GetMapping("/file-tree")
     public Result<List<FileNode>> get(String rootPath) {
-        return Result.ok(codeGenService.getGeneratedFileTree(rootPath));
+        return Result.ok(fileGenService.getGeneratedFileTree(rootPath));
     }
 
     /**
@@ -152,6 +152,6 @@ public class CodeGenerationController {
      */
     @GetMapping("/file")
     public Result<String> getFileContent(String path) {
-        return Result.ok(codeGenService.getFileContent(path));
+        return Result.ok(fileGenService.getFileContent(path));
     }
 }
