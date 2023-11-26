@@ -1,9 +1,9 @@
 package io.devpl.generator.service.impl;
 
-import io.devpl.generator.dao.TargetGenFileMapper;
-import io.devpl.generator.entity.TargetGenFile;
+import io.devpl.generator.dao.TargetGenerationFileMapper;
+import io.devpl.generator.entity.TargetGenerationFile;
 import io.devpl.generator.service.CrudService;
-import io.devpl.generator.service.TargetGenFileService;
+import io.devpl.generator.service.TargetGenerationFileService;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,15 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class TargetGenFileServiceImpl implements TargetGenFileService {
+public class TargetGenerationFileServiceImpl implements TargetGenerationFileService {
 
     @Resource
-    TargetGenFileMapper targetGenFileMapper;
+    TargetGenerationFileMapper targetGenFileMapper;
     @Resource
     CrudService crudService;
 
     @Override
-    public boolean saveOrUpdate(TargetGenFile entity) {
+    public boolean saveOrUpdate(TargetGenerationFile entity) {
         if (entity.getId() == null) {
             return targetGenFileMapper.insert(entity) > 0;
         }
@@ -31,7 +31,7 @@ public class TargetGenFileServiceImpl implements TargetGenFileService {
     }
 
     @Override
-    public List<TargetGenFile> listGeneratedFileTypes() {
+    public List<TargetGenerationFile> listGeneratedFileTypes() {
         return targetGenFileMapper.selectGeneratedFileTypes();
     }
 
@@ -41,7 +41,7 @@ public class TargetGenFileServiceImpl implements TargetGenFileService {
     }
 
     @Override
-    public boolean saveOrUpdateBatch(List<TargetGenFile> files) {
+    public boolean saveOrUpdateBatch(List<TargetGenerationFile> files) {
         return crudService.saveOrUpdateBatch(files);
     }
 }

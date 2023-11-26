@@ -2,7 +2,7 @@
   <el-card>
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
-        <el-input v-model="state.queryForm.projectName" placeholder="项目名"></el-input>
+        <el-input v-model="state.queryForm.templateName" placeholder="项目名"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -56,14 +56,14 @@ import { onMounted, reactive, ref } from "vue";
 import { ElButton } from "element-plus";
 import AddOrUpdate from "./add-or-update.vue";
 import { useCrud } from "@/hooks";
-import { IHooksOptions } from "@/hooks/interface";
+import { DataTableOptions } from "@/hooks/interface";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
 
-const state: IHooksOptions = reactive({
+const state: DataTableOptions = reactive({
   dataListUrl: "/api/codegen/template/page",
   deleteUrl: "/api/codegen/template/delete/batch/ids",
   queryForm: {
-    projectName: ""
+    templateName: ""
   },
   primaryKey: "templateId",
   isPage: true

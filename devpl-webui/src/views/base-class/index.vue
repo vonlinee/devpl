@@ -47,12 +47,12 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { IHooksOptions } from '@/hooks/interface'
+import { DataTableOptions } from '@/hooks/interface'
 import { useCrud } from '@/hooks'
 import AddOrUpdate from './add-or-update.vue'
 import {ElButton} from "element-plus";
 
-const state: IHooksOptions = reactive({
+const state: DataTableOptions = reactive({
 	dataListUrl: '/gen/baseclass/page',
 	deleteUrl: '/gen/baseclass',
 	queryForm: {

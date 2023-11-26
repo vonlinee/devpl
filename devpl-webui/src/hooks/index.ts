@@ -1,4 +1,4 @@
-import { IHooksOptions } from "@/hooks/interface"
+import { DataTableOptions } from "@/hooks/interface"
 import http from "@/utils/http"
 import { onMounted } from "vue"
 import { ElMessage, ElMessageBox } from "element-plus"
@@ -7,11 +7,11 @@ import { ElMessage, ElMessageBox } from "element-plus"
  * CRUD Hooks
  * @param options
  */
-export const useCrud = (options: IHooksOptions) => {
+export const useCrud = (options: DataTableOptions) => {
   /**
    * 默认选项
    */
-  const defaultOptions: IHooksOptions = {
+  const defaultOptions: DataTableOptions = {
     createdIsNeed: true,
     dataListUrl: "",
     isPage: true,
@@ -35,7 +35,7 @@ export const useCrud = (options: IHooksOptions) => {
    * @param options
    * @param props
    */
-  const mergeDefaultOptions = (options: any, props: any): IHooksOptions => {
+  const mergeDefaultOptions = (options: any, props: any): DataTableOptions => {
     for (const key in options) {
       if (!Object.getOwnPropertyDescriptor(props, key)) {
         props[key] = options[key]
@@ -45,7 +45,7 @@ export const useCrud = (options: IHooksOptions) => {
   }
 
   // 覆盖默认值
-  const state: IHooksOptions = mergeDefaultOptions(defaultOptions, options)
+  const state: DataTableOptions = mergeDefaultOptions(defaultOptions, options)
 
   onMounted(() => {
     if (state.createdIsNeed) {

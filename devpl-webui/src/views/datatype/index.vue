@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { IHooksOptions } from "@/hooks/interface";
+import { DataTableOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import AddOrUpdate from "./add-or-update.vue";
 import { ElButton } from "element-plus";
@@ -62,7 +62,7 @@ import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue";
 
 const typeMappingTableRef = ref()
 
-const state: IHooksOptions = reactive({
+const state: DataTableOptions = reactive({
   dataListUrl: "/gen/fieldtype/page",
   deleteUrl: "/api/datatype/delete",
   pageSizes: [10, 15, 20],
@@ -73,7 +73,7 @@ const state: IHooksOptions = reactive({
     jsonType: ""
   },
   query: apiListDataTypes
-} as IHooksOptions);
+} as DataTableOptions);
 
 const showTypeMappingTable = () => {
   typeMappingTableRef.value.show()

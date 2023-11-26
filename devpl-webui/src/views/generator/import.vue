@@ -1,5 +1,5 @@
 <template>
-	<vxe-modal width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" draggable :z-index="2000"
+	<vxe-modal width="60%" v-model="visible" title="导入数据库表" :mask-closable="false" :draggable="false" :z-index="2000"
 		show-footer>
 		<el-form ref="dataFormRef" :model="dataForm">
 			<el-form-item label="数据源" prop="datasourceId">
@@ -35,7 +35,7 @@
 import { reactive, ref } from 'vue'
 import { ElButton, ElInput, ElRow, ElCol, ElMessage, ElForm, ElFormItem, ElSelect, ElOption, ElTable, ElTableColumn } from 'element-plus/es'
 import { useDataSourceListApi } from '@/api/datasource'
-import { useTableImportSubmitApi } from '@/api/table'
+import { apiImportTables } from '@/api/table'
 import { useDataSourceTableListApi } from '@/api/datasource'
 
 const emit = defineEmits(['refreshDataList'])
@@ -46,7 +46,7 @@ const dataFormRef = ref()
 const dataForm = reactive({
 	id: '',
 	tableNameListSelections: [] as any,
-	datasourceId: '',
+	datasourceId: undefined,
 	tableNamePattern: null,
 	datasourceList: [] as any,
 	tableList: [] as any,
@@ -98,16 +98,18 @@ const submitHandle = () => {
 		return
 	}
 
-	useTableImportSubmitApi(dataForm.datasourceId, tableNameList).then(() => {
-		ElMessage.success({
-			message: '操作成功',
-			duration: 500,
-			onClose: () => {
-				visible.value = false
-				emit('refreshDataList')
-			}
-		})
-	})
+  if (dataForm.datasourceId) {
+    apiImportTables(dataForm.datasourceId, tableNameList).then(() => {
+      ElMessage.success({
+        message: '操作成功',
+        duration: 500,
+        onClose: () => {
+          visible.value = false
+          emit('refreshDataList')
+        }
+      })
+    })
+  }
 }
 
 defineExpose({

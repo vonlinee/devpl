@@ -8,6 +8,7 @@ import lombok.Data;
 
 /**
  * 模板文件生成关联表
+ * 通过模板进行文件生成
  *
  * @author vonlinee vonlinee@163.com
  * @since 1.0.0 2023-11-25
@@ -20,11 +21,6 @@ public class TemplateFileGeneration {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
-    /**
-     * 文件生成单元ID
-     */
-    private Long unitId;
 
     /**
      * 文件名称
@@ -66,7 +62,7 @@ public class TemplateFileGeneration {
      * 是否内置
      */
     @TableField(value = "builtin")
-    private Integer builtin;
+    private Boolean builtin;
 
     /**
      * 配置表记录主键ID

@@ -2,13 +2,9 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.FileNode;
-import io.devpl.generator.domain.param.FileGenUnitParam;
 import io.devpl.generator.domain.param.TableFileGenParam;
-import io.devpl.generator.domain.vo.FileGenUnitVO;
-import io.devpl.generator.entity.FileGenerationUnit;
 import io.devpl.generator.entity.TableFileGeneration;
-import io.devpl.generator.entity.TargetGenFile;
-import io.devpl.generator.entity.TemplateFileGeneration;
+import io.devpl.generator.entity.TargetGenerationFile;
 import io.devpl.generator.service.*;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
@@ -28,11 +24,9 @@ public class CodeGenerationController {
     @Resource
     CodeGenService codeGenService;
     @Resource
-    TargetGenFileService targetGenFileService;
+    TargetGenerationFileService targetGenFileService;
     @Resource
     TableFileGenerationService tableFileGenerationService;
-    @Resource
-    FileGenerationUnitService fileGenerationUnitService;
     @Resource
     GeneratorConfigService generatorConfigService;
 
@@ -78,7 +72,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @GetMapping("/genfiles")
-    public Result<List<TargetGenFile>> listGeneratedFileTypes() {
+    public Result<List<TargetGenerationFile>> listGeneratedFileTypes() {
         return Result.ok(targetGenFileService.listGeneratedFileTypes());
     }
 
@@ -88,7 +82,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfile")
-    public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenFile param) {
+    public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenerationFile param) {
         targetGenFileService.saveOrUpdate(param);
         return Result.ok(true);
     }
@@ -100,7 +94,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfiles/replace")
-    public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenFile> files) {
+    public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenerationFile> files) {
         return Result.ok(targetGenFileService.saveOrUpdateBatch(files));
     }
 
@@ -159,60 +153,5 @@ public class CodeGenerationController {
     @GetMapping("/file")
     public Result<String> getFileContent(String path) {
         return Result.ok(codeGenService.getFileContent(path));
-    }
-
-    /**
-     * 新增自定义文件生成单元
-     *
-     * @param param 文件生成单元
-     * @return 是否成功
-     */
-    @PostMapping("/filegen/unit/new/custom")
-    public Result<FileGenerationUnit> addCustomFileGenUnit(@RequestBody FileGenUnitParam param) {
-        fileGenerationUnitService.addCustomFileGenUnit(param.getCustomUnit());
-        return Result.ok(param.getCustomUnit());
-    }
-
-    /**
-     * 新增自定义文件生成单元
-     *
-     * @param param 文件生成单元
-     * @return 是否成功
-     */
-    @PostMapping("/filegen/unit/new")
-    public Result<Boolean> addFileGenUnits(@RequestBody FileGenUnitParam param) {
-        return Result.ok(fileGenerationUnitService.addFileGenUnits(param));
-    }
-
-    /**
-     * 新增模板文件生成单元
-     *
-     * @param param 文件生成单元
-     * @return 是否成功
-     */
-    @PostMapping("/filegen/unit/new/template")
-    public Result<Boolean> addTemplateBasedFileGenUnit(@RequestBody FileGenUnitParam param) {
-        return Result.ok(fileGenerationUnitService.addTemplateFileGenerations(param));
-    }
-
-    /**
-     * 新增模板文件生成单元
-     *
-     * @param param 文件生成单元
-     * @return 是否成功
-     */
-    @DeleteMapping("/filegen/unit/remove")
-    public Result<Boolean> removeFileGenUnit(@RequestBody FileGenUnitParam param) {
-        return Result.ok(fileGenerationUnitService.removeFileGenUnit(param));
-    }
-
-    /**
-     * 文件生成单元列表
-     *
-     * @return 是否成功
-     */
-    @GetMapping("/filegen/units")
-    public Result<List<FileGenUnitVO>> listFileGenerationUnits() {
-        return Result.ok(fileGenerationUnitService.listFileGenUnits());
     }
 }

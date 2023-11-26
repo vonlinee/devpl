@@ -46,6 +46,7 @@ public class GenTableField {
     /**
      * 字段说明
      */
+    @TableField(value = "field_comment")
     private String fieldComment;
 
     /**

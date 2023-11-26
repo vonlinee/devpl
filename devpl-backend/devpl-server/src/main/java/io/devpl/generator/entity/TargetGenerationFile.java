@@ -12,8 +12,8 @@ import java.io.Serializable;
  * 生成的文件信息，以及使用的模板信息
  */
 @Data
-@TableName("target_gen_file")
-public class TargetGenFile implements Serializable {
+@TableName("target_generation_file")
+public class TargetGenerationFile implements Serializable {
     /**
      * 主键ID
      */
@@ -21,16 +21,10 @@ public class TargetGenFile implements Serializable {
     private Long id;
 
     /**
-     * 代码生成任务ID
+     * 类型名称
      */
-    @TableField(value = "task_id")
-    private String taskId;
-
-    /**
-     * 文件名称
-     */
-    @TableField(value = "file_name")
-    private String fileName;
+    @TableField(value = "type_name")
+    private String typeName;
 
     /**
      * 模板ID
@@ -39,10 +33,10 @@ public class TargetGenFile implements Serializable {
     private Long templateId;
 
     /**
-     * 模板名称
+     * 文件名称
      */
-    @TableField(exist = false)
-    private String templateName;
+    @TableField(value = "file_name")
+    private String fileName;
 
     /**
      * 保存路径
@@ -60,5 +54,11 @@ public class TargetGenFile implements Serializable {
      * 是否内置
      */
     @TableField(value = "builtin")
-    private boolean builtin = true;
+    private boolean builtin;
+
+    /**
+     * 模板名称
+     */
+    @TableField(exist = false)
+    private String templateName;
 }

@@ -1,4 +1,3 @@
-
 /**
  * 文件节点
  */
@@ -20,6 +19,10 @@ type TargetGenFile = {
    * 唯一ID
    */
   id?: number
+  /**
+   * 目标生成文件类型名称
+   */
+  typeName: string
   /**
    * 文件名称
    */

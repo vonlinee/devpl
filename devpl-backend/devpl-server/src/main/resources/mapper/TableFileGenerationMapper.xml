@@ -5,15 +5,15 @@
     <resultMap type="io.devpl.generator.entity.TableFileGeneration" id="tableFileGenerationMap">
         <result property="id" column="pid"/>
         <result property="tableId" column="table_id"/>
-        <result property="templateId" column="template_id"/>
+        <result property="generationId" column="generation_id"/>
         <result property="fileName" column="file_name"/>
         <result property="savePath" column="save_path"/>
     </resultMap>
 
     <select id="selectListByTableId" resultType="io.devpl.generator.entity.TableFileGeneration">
-        SELECT tfg.*, ti.template_name
+        SELECT tfg.*, tfg1.template_id, tfg1.template_name
         FROM table_file_generation tfg
-                 LEFT JOIN template_info ti ON tfg.template_id = ti.template_id
+                 LEFT JOIN template_file_generation tfg1 ON tfg.generation_id = tfg1.id
         WHERE tfg.table_id = #{tableId}
     </select>
 

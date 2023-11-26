@@ -30,8 +30,8 @@
       <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
         <template #default="scope">
-          <el-button type="primary" link @click="editHandle(scope.row.id)">编辑</el-button>
-          <el-button type="primary" link @click="generatorHandle(scope.row.id)">生成代码</el-button>
+          <el-button type="primary" link @click="editHandle(scope.row.id)">参数配置</el-button>
+          <el-button type="primary" link @click="generatorHandle(scope.row.id)">生成</el-button>
           <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
           <el-button type="primary" link @click="syncHandle(scope.row)">同步</el-button>
         </template>
@@ -61,18 +61,18 @@
 
 <script setup lang="ts">
 import { nextTick, reactive, ref } from "vue";
-import { IHooksOptions } from "@/hooks/interface";
+import { DataTableOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import Import from "./import.vue";
 import Edit from "./edit.vue";
 import Generator from "./generator.vue";
-import { useTableSyncApi } from "@/api/table";
+import { apiSyncTable } from "@/api/table";
 import { ElButton, ElMessage, ElMessageBox } from "element-plus";
 import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from "@/api/generator";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
 
-const state: IHooksOptions = reactive({
+const state: DataTableOptions = reactive({
   dataListUrl: "/gen/table/page",
   deleteUrl: "/gen/table/remove",
   queryForm: {
@@ -118,7 +118,7 @@ const syncHandle = (row: any) => {
     type: "warning"
   })
     .then(() => {
-      useTableSyncApi(row.id).then(() => {
+      apiSyncTable(row.id).then(() => {
         ElMessage.success("同步成功");
       });
     })

@@ -1,5 +1,6 @@
 package io.devpl.generator.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
@@ -9,6 +10,7 @@ import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.GenTableMapper;
+import io.devpl.generator.domain.TemplateFillStrategy;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.*;
 import io.devpl.generator.enums.FormLayoutEnum;
@@ -25,13 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 数据表
+ * 表生成 Service
  */
 @Slf4j
 @Service
@@ -40,8 +39,19 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     private final GenTableFieldService tableFieldService;
     private final DataSourceService dataSourceService;
     private final GeneratorConfigService generatorConfigService;
-    private final TargetGenFileService targetGenFileService;
+    private final TargetGenerationFileService targetGenFileService;
     private final TableFileGenerationService tableFileGenerationService;
+    private final TemplateFileGenerationService templateFileGenerationService;
+
+    @Override
+    public List<GenTable> listGenTables(Collection<String> tableNames) {
+        if (tableNames == null || tableNames.isEmpty()) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<GenTable> qw = new LambdaQueryWrapper<>();
+        qw.in(GenTable::getTableName, tableNames);
+        return list(qw);
+    }
 
     @Override
     public ListResult<GenTable> page(Query query) {
@@ -64,12 +74,12 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void importTable(Long datasourceId, String tableName) {
+    public void importTable(Long datasourceId, String tableName, int option) {
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
         if (table != null) {
-            throw new ServerException(tableName + "已存在");
+            return;
         }
 
         DBType dbType = DBType.MYSQL;
@@ -109,7 +119,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             table.setCreateTime(LocalDateTime.now());
             this.save(table);
 
-            initGenerationFiles(table);
+            initTargetGenerationFiles(table);
 
             // 获取原生字段数据
             List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
@@ -127,16 +137,26 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
      *
      * @param table 要生成的数据库表
      */
-    public void initGenerationFiles(GenTable table) {
-        List<TargetGenFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
+    @Override
+    public void initTargetGenerationFiles(GenTable table) {
+        List<TargetGenerationFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
-        for (TargetGenFile targetGenFile : targetGenFiles) {
-            TableFileGeneration tfg = new TableFileGeneration();
-            tfg.setTableId(table.getId());
-            // 可能为空
-            tfg.setTemplateId(targetGenFile.getTemplateId());
-            tfg.setFileName(targetGenFile.getFileName());
-            list.add(tfg);
+        for (TargetGenerationFile targetGenFile : targetGenFiles) {
+
+            TemplateFileGeneration templateFileGen = new TemplateFileGeneration();
+            templateFileGen.setTemplateId(targetGenFile.getTemplateId());
+            templateFileGen.setDataFillStrategy(TemplateFillStrategy.DB_TABLE.getId());
+            templateFileGen.setBuiltin(false);
+            templateFileGen.setTemplateName(targetGenFile.getTemplateName());
+            templateFileGenerationService.save(templateFileGen);
+
+            TableFileGeneration tableFileGen = new TableFileGeneration();
+            tableFileGen.setTableId(table.getId());
+            tableFileGen.setGenerationId(templateFileGen.getId());
+            // 需替换参数变量
+            tableFileGen.setFileName(targetGenFile.getFileName());
+            tableFileGen.setSavePath(targetGenFile.getSavePath());
+            list.add(tableFileGen);
         }
         tableFileGenerationService.saveBatch(list);
     }

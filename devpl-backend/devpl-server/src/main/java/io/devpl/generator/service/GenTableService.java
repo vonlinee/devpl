@@ -7,12 +7,15 @@ import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.entity.GenTable;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * 数据表
  */
 public interface GenTableService extends BaseService<GenTable> {
+
+    List<GenTable> listGenTables(Collection<String> tableNames);
 
     ListResult<GenTable> page(Query query);
 
@@ -26,7 +29,9 @@ public interface GenTableService extends BaseService<GenTable> {
      * @param datasourceId 数据源ID
      * @param tableName    表名
      */
-    void importTable(Long datasourceId, String tableName);
+    void importTable(Long datasourceId, String tableName, int option);
+
+    void initTargetGenerationFiles(GenTable table);
 
     /**
      * 根据数据源，获取指定数据表
@@ -48,7 +53,8 @@ public interface GenTableService extends BaseService<GenTable> {
     /**
      * 根据数据源，获取指定数据表
      *
-     * @param datasourceId 数据源ID
+     * @param datasourceId     数据源ID
+     * @param tableNamePattern 表名，模糊匹配
      */
     List<GenTable> getTableList(Long datasourceId, String tableNamePattern);
 }

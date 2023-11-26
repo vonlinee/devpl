@@ -173,7 +173,7 @@ import {
 } from "element-plus/es";
 import Sortable from "sortablejs";
 import { useTableFieldSubmitApi } from "@/api/table";
-import { useTableApi } from "@/api/table";
+import { apiListGenTables } from "@/api/table";
 import { useFieldTypeListApi } from "@/api/fieldType";
 import { VxeTableInstance } from "vxe-table";
 import { apiListGenerationFiles, apiSaveGenerationFileConfig } from "@/api/generator";
@@ -286,7 +286,7 @@ const rowDrop = () => {
 };
 
 const getTable = (id: number) => {
-  useTableApi(id).then((res) => {
+  apiListGenTables(id).then((res) => {
     fieldList.value = res.data?.fieldList as GenTableField[];
   });
 

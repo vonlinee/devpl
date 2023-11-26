@@ -3,16 +3,13 @@
 -->
 <script lang="ts" setup>
 import { ref } from "vue";
-import { ElButton, ElTable } from "element-plus";
+import { ElTable } from "element-plus";
 import { apiGetTemplateById, apiListSelectableTemplates } from "@/api/template";
 import { apiDeleteGenFiles, apiListGenFiles, apiSaveOrUpdateGenFile } from "@/api/generator";
 import { ElMessage } from "element-plus/es";
 import { hasText } from "@/utils/tool";
 
-const dialogVisiableRef = ref(false);
-
-// 表格
-const singleTableRef = ref<InstanceType<typeof ElTable>>();
+const dialogVisibleRef = ref(false);
 
 // 默认的文件生成与模板对应关系
 const tableData = ref<TargetGenFile[]>([]);
@@ -27,7 +24,7 @@ function refreshTableData() {
 }
 
 function init() {
-  dialogVisiableRef.value = true;
+  dialogVisibleRef.value = true;
   templateOptions.value = [];
   apiListSelectableTemplates().then(res => {
     templateOptions.value = res.data;
@@ -45,7 +42,8 @@ function addNewFileType() {
     remark: "",
     editing: true,
     builtin: false,
-    templateName: ""
+    templateName: "",
+    typeName: ""
   });
 }
 
@@ -68,7 +66,7 @@ function submit() {
     }
   }
   if (exit) {
-    dialogVisiableRef.value = false;
+    dialogVisibleRef.value = false;
   } else {
     ElMessage.error({
       message: "有数据行处于编辑状态中，请保存后再试",
@@ -136,19 +134,20 @@ function fillTemplateName(row: TargetGenFile) {
 </script>
 
 <template>
-  <vxe-modal v-model="dialogVisiableRef" title="目标生成文件类型管理" draggable destroy-on-close :show-footer="true"
+  <vxe-modal v-model="dialogVisibleRef" title="目标生成文件类型管理" :draggable="false"
+             destroy-on-close :show-footer="true"
              width="80%"
              :mask-closable="false">
-    <el-table ref="singleTableRef" :data="tableData" table-layout="auto" highlight-current-row style="width: 100%"
+    <el-table ref="singleTableRef" border :data="tableData" table-layout="auto" highlight-current-row
               height="500px" @current-change="handleCurrentChange">
-      <el-table-column type="index" />
-      <el-table-column property="fileName" label="文件类型">
+      <el-table-column type="index" width="40" align="center" />
+      <el-table-column property="fileName" label="文件类型名称">
         <template #default="scope">
-          <el-text v-if="!scope.row.editing">{{ scope.row.fileName }}</el-text>
-          <el-input v-if="scope.row.editing" v-model="scope.row.fileName"></el-input>
+          <el-text v-if="!scope.row.editing">{{ scope.row.typeName }}</el-text>
+          <el-input v-if="scope.row.editing" v-model="scope.row.typeName"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="builtin" align="center" label="是否内置" width="100px" min-width="100px">
+      <el-table-column prop="builtin" align="center" label="是否内置" width="60px" min-width="60px">
         <template #default="scope">
           <el-checkbox v-model="scope.row.builtin" :disabled="!scope.row.editing" size="large" />
         </template>
@@ -166,14 +165,25 @@ function fillTemplateName(row: TargetGenFile) {
           </div>
         </template>
       </el-table-column>
-      <el-table-column property="remark" label="描述信息" width="240">
+      <el-table-column property="fileName" label="文件名称" width="240">
+        <template #default="scope">
+          <el-text v-show="!scope.row.editing" v-text="scope.row.fileName" />
+          <el-input v-show="scope.row.editing" v-model="scope.row.fileName"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column property="savePath" label="保存路径" width="240">
+        <template #default="scope">
+          <el-text v-show="!scope.row.editing" v-text="scope.row.savePath" />
+          <el-input v-show="scope.row.editing" v-model="scope.row.savePath"></el-input>
+        </template>
+      </el-table-column>
+      <el-table-column property="remark" label="描述信息" width="200">
         <template #default="scope">
           <el-text v-show="!scope.row.editing" v-text="scope.row.remark" />
           <el-input v-show="scope.row.editing" v-model="scope.row.remark"></el-input>
         </template>
       </el-table-column>
-
-      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
+      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
           <el-button v-if="!scope.row.editing" type="primary" link @click="editHandle(scope.row)">编辑
           </el-button>
@@ -188,7 +198,7 @@ function fillTemplateName(row: TargetGenFile) {
       <el-button type="primary" @click="refreshTableData()">刷新</el-button>
       <el-button type="info" @click="addNewFileType()">新增</el-button>
       <el-button type="success" @click="submit()">确认</el-button>
-      <el-button type="danger" @click="dialogVisiableRef = false">取消</el-button>
+      <el-button type="danger" @click="dialogVisibleRef = false">取消</el-button>
     </template>
   </vxe-modal>
 </template>

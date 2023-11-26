@@ -94,7 +94,7 @@ import { reactive, ref } from 'vue'
 import { ElButton, ElMessage } from 'element-plus/es'
 import { useBaseClassListApi } from '@/api/baseClass'
 import { useDownloadApi, useGeneratorApi } from '@/api/generator'
-import { useTableApi, useTableSubmitApi } from '@/api/table'
+import { apiListGenTables, useTableSubmitApi } from '@/api/table'
 
 const resultDialogRef = ref()
 
@@ -139,7 +139,7 @@ const getBaseClassList = () => {
 }
 
 const getTable = (id: number) => {
-	useTableApi(id).then(res => {
+	apiListGenTables(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }

@@ -4,7 +4,7 @@ import { ResponsePromise } from "@/utils/http"
 export declare type QueryFunction = <T = any>(
   page: number,
   limit: number,
-  querParams: Record<string, any>
+  queryParams: Record<string, any>
 ) => ResponsePromise<T>
 // 删除
 export declare type DeleteFunction = <T = any>(row: any) => ResponsePromise<T>
@@ -14,7 +14,7 @@ export declare type UpdateFunction = <T = any>(row: any) => ResponsePromise<T>
 /**
  * 增删改查配置项
  */
-export interface IHooksOptions {
+export interface DataTableOptions {
   // 否在创建页面时，调用数据列表接口
   createdIsNeed?: boolean
   // 数据列表 Url
@@ -48,6 +48,6 @@ export interface IHooksOptions {
   // 数据列表，多选项
   dataListSelections?: any[]
   query?: QueryFunction
-  updateRpw?: UpdateFunction
+  updateRow?: UpdateFunction
   deleteRow?: DeleteFunction
 }

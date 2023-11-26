@@ -28,10 +28,10 @@ public class TableFileGeneration {
     private Long tableId;
 
     /**
-     * 模板ID
+     * 文件生成关联ID
      */
-    @TableField(value = "template_id")
-    private Long templateId;
+    @TableField(value = "generation_id")
+    private Long generationId;
 
     /**
      * 文件名称
@@ -44,6 +44,12 @@ public class TableFileGeneration {
      */
     @TableField(value = "save_path")
     private String savePath;
+
+    /**
+     * 模板ID
+     */
+    @TableField(exist = false)
+    private Long templateId;
 
     /**
      * 模板名称
