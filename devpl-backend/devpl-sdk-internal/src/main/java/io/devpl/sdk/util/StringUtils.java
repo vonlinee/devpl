@@ -760,7 +760,7 @@ public final class StringUtils {
      * @param mappings 参数
      * @return 插值结果
      */
-    public static String interpolate(String template, Map<String, String> mappings) {
+    public static String interpolate(String template, Map<String, Object> mappings) {
         return Interpolations.named(template, mappings);
     }
 

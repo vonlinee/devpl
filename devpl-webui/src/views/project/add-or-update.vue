@@ -1,8 +1,10 @@
 <template>
   <vxe-modal v-model="visible"
              :draggable="false"
-             :title="!dataForm.id ? '新增项目信息' : '修改项目信息'" :close-on-click-modal="false" show-footer>
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
+             :title="!dataForm.id ? '新增项目信息' : '修改项目信息'" :mask-closable="false" show-footer>
+    <el-form ref="dataFormRef"
+             label-position="left"
+             :model="dataForm" :rules="dataRules" align="left" label-width="150px" @keyup.enter="submitHandle()">
       <el-form-item label="项目名" prop="projectName">
         <el-input v-model="dataForm.projectName" placeholder="项目名"></el-input>
       </el-form-item>
@@ -14,6 +16,12 @@
       </el-form-item>
       <el-form-item label="项目路径" prop="projectPath">
         <el-input v-model="dataForm.projectPath" placeholder="项目路径"></el-input>
+      </el-form-item>
+      <el-form-item label="项目前端路径" prop="projectPath">
+        <el-input v-model="dataForm.frontendPath" placeholder="项目前端路径"></el-input>
+      </el-form-item>
+      <el-form-item label="项目后端路径" prop="projectPath">
+        <el-input v-model="dataForm.backendPath" placeholder="项目前端路径"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -38,7 +46,9 @@ const dataForm = reactive({
   projectName: "",
   projectCode: "",
   projectPackage: "",
-  projectPath: ""
+  projectPath: "",
+  backendPath: "",
+  frontendPath: ""
 });
 
 const init = (id?: number) => {

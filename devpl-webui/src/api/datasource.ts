@@ -50,7 +50,7 @@ export const useDataSourceSubmitApi = (dataForm: any) => {
  * @param tableNamePattern 
  * @returns 
  */
-export const useDataSourceTableListApi = (id: string, tableNamePattern?: string | null) => {
+export const useDataSourceTableListApi = (id: number, tableNamePattern?: string | null) => {
   return http.get("/api/gen/datasource/table/list/" + id + "?tableNamePattern=" + (tableNamePattern || ''))
 }
 

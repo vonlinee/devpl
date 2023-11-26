@@ -19,7 +19,7 @@ export const useTableSubmitApi = (dataForm: any) => {
  * @param projectId
  */
 export const apiImportTables = (datasourceId: number, tableNameList: string[], projectId?: number) => {
-  return http.post("/gen/table/import/", {
+  return http.post("/gen/table/import", {
     dataSourceId: datasourceId,
     tableNameList: tableNameList,
     projectId: projectId

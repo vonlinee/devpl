@@ -55,6 +55,11 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
+    public String render(String template, Map<String, Object> params) {
+        return null;
+    }
+
+    @Override
     public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
 
     }

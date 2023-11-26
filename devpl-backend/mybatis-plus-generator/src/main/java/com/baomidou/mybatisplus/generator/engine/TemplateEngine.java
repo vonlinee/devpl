@@ -1,8 +1,11 @@
 package com.baomidou.mybatisplus.generator.engine;
 
 import java.io.OutputStream;
+import java.util.Map;
 
 public interface TemplateEngine {
+
+    String render(String template, Map<String, Object> params);
 
     String render(TemplateSource template, TemplateArguments arguments);
 

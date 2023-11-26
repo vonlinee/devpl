@@ -2,14 +2,16 @@ package io.devpl.generator.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 /**
  * 项目名变更
  */
-@Data
+@Getter
+@Setter
 @TableName("project_info")
 public class ProjectInfo {
     /**

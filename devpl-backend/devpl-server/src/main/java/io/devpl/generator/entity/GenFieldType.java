@@ -3,14 +3,16 @@ package io.devpl.generator.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 /**
  * 字段类型管理
  */
-@Data
+@Getter
+@Setter
 @TableName("gen_field_type")
 public class GenFieldType {
     /**

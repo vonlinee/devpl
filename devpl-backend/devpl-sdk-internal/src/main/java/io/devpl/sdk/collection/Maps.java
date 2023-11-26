@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 /**
  * Map相关工具类
+ *
  * @since 0.0.1
  */
 public final class Maps {
@@ -26,6 +27,7 @@ public final class Maps {
 
     /**
      * Map是否为空
+     *
      * @param map 集合
      * @return 是否为空
      */
@@ -35,6 +37,7 @@ public final class Maps {
 
     /**
      * Map是否为非空
+     *
      * @param map 集合
      * @return 是否为非空
      */
@@ -45,6 +48,7 @@ public final class Maps {
     /**
      * 如果提供的集合为{@code null}，返回一个不可变的默认空集合，否则返回原集合<br>
      * 空集合使用{@link Collections#emptyMap()}
+     *
      * @param <K>         键类型
      * @param <V>         值类型
      * @param set         提供的集合，可能为null
@@ -58,6 +62,7 @@ public final class Maps {
 
     /**
      * 如果给定Map为空，返回默认Map
+     *
      * @param <K>      键类型
      * @param <V>      值类型
      * @param map      Map
@@ -71,6 +76,7 @@ public final class Maps {
 
     /**
      * 新建一个HashMap
+     *
      * @param <K> Key类型
      * @param <V> Value类型
      * @return HashMap对象
@@ -81,6 +87,7 @@ public final class Maps {
 
     /**
      * 新建一个Map，默认返回HashMap对象
+     *
      * @param <K> Key类型
      * @param <V> Value类型
      * @return HashMap对象
@@ -91,6 +98,7 @@ public final class Maps {
 
     /**
      * 新建一个HashMap
+     *
      * @param <K>     Key类型
      * @param <V>     Value类型
      * @param size    初始大小，由于默认负载因子0.75，传入的size会实际初始大小为size / 0.75 + 1
@@ -105,6 +113,7 @@ public final class Maps {
 
     /**
      * 新建一个HashMap
+     *
      * @param <K>  Key类型
      * @param <V>  Value类型
      * @param size 初始大小，由于默认负载因子0.75，传入的size会实际初始大小为size / 0.75 + 1
@@ -116,6 +125,7 @@ public final class Maps {
 
     /**
      * 新建一个HashMap
+     *
      * @param <K>     Key类型
      * @param <V>     Value类型
      * @param isOrder Map的Key是否有序，有序返回 {@link LinkedHashMap}，否则返回 {@link HashMap}
@@ -127,6 +137,7 @@ public final class Maps {
 
     /**
      * 新建TreeMap，Key有序的Map
+     *
      * @param <K>        key的类型
      * @param <V>        value的类型
      * @param comparator Key比较器
@@ -139,6 +150,7 @@ public final class Maps {
 
     /**
      * 新建TreeMap，Key有序的Map
+     *
      * @param <K>        key的类型
      * @param <V>        value的类型
      * @param map        Map
@@ -156,6 +168,7 @@ public final class Maps {
 
     /**
      * 创建键不重复Map
+     *
      * @param <K>  key的类型
      * @param <V>  value的类型
      * @param size 初始容量
@@ -168,6 +181,7 @@ public final class Maps {
 
     /**
      * 新建一个初始容量为{@link #DEFAULT_INITIAL_CAPACITY} 的ConcurrentHashMap
+     *
      * @param <K> key的类型
      * @param <V> value的类型
      * @return ConcurrentHashMap
@@ -178,6 +192,7 @@ public final class Maps {
 
     /**
      * 新建一个ConcurrentHashMap
+     *
      * @param size 初始容量，当传入的容量小于等于0时，容量为{@link #DEFAULT_INITIAL_CAPACITY}
      * @param <K>  key的类型
      * @param <V>  value的类型
@@ -190,6 +205,7 @@ public final class Maps {
 
     /**
      * 传入一个Map将其转化为ConcurrentHashMap类型
+     *
      * @param map map
      * @param <K> key的类型
      * @param <V> value的类型
@@ -203,6 +219,7 @@ public final class Maps {
 
     /**
      * 将单一键值对转换为Map
+     *
      * @param <K>   键类型
      * @param <V>   值类型
      * @param key   键
@@ -215,6 +232,7 @@ public final class Maps {
 
     /**
      * 将单一键值对转换为Map
+     *
      * @param <K>     键类型
      * @param <V>     值类型
      * @param key     键
@@ -230,6 +248,7 @@ public final class Maps {
 
     /**
      * 根据给定的Pair数组创建Map对象
+     *
      * @param <K>   键类型
      * @param <V>   值类型
      * @param pairs 键值对
@@ -264,6 +283,7 @@ public final class Maps {
      * </pre>
      * <p>
      * 参考：commons-lang
+     *
      * @param array 数组。元素类型为Map.Entry、数组、Iterable、Iterator
      * @return {@link HashMap}
      * @since 3.0.8
@@ -333,6 +353,7 @@ public final class Maps {
      *   c: [1]
      * }
      * </pre>
+     *
      * @param <K>     键类型
      * @param <V>     值类型
      * @param mapList Map列表
@@ -386,6 +407,7 @@ public final class Maps {
      *  {a: 4}
      * ]
      * </pre>
+     *
      * @param <K>     键类型
      * @param <V>     值类型
      * @param listMap 列表Map
@@ -427,6 +449,7 @@ public final class Maps {
 
     /**
      * 将键值对转换为二维数组，第一维是key，第二纬是value
+     *
      * @param map map
      * @return 数组
      * @since 4.1.9
@@ -452,6 +475,7 @@ public final class Maps {
 
     /**
      * 将map转成字符串
+     *
      * @param <K>               键类型
      * @param <V>               值类型
      * @param map               Map
@@ -467,6 +491,7 @@ public final class Maps {
 
     /**
      * 根据参数排序后拼接为字符串，常用于签名
+     *
      * @param params            参数
      * @param separator         entry之间的连接符
      * @param keyValueSeparator kv之间的连接符
@@ -481,6 +506,7 @@ public final class Maps {
 
     /**
      * 将map转成字符串，忽略null的键和值
+     *
      * @param <K>               键类型
      * @param <V>               值类型
      * @param map               Map
@@ -496,6 +522,7 @@ public final class Maps {
 
     /**
      * 将map转成字符串
+     *
      * @param <K>               键类型
      * @param <V>               值类型
      * @param map               Map，为空返回otherParams拼接
@@ -539,6 +566,7 @@ public final class Maps {
      * 1、过滤出需要的对象，如果返回{@code null}表示这个元素对象抛弃
      * 2、修改元素对象，返回集合中为修改后的对象
      * </pre>
+     *
      * @param <K>    Key类型
      * @param <V>    Value类型
      * @param map    Map
@@ -582,6 +610,7 @@ public final class Maps {
      * <pre>
      * 1、过滤出需要的对象，如果返回null表示这个元素对象抛弃
      * </pre>
+     *
      * @param <K>    Key类型
      * @param <V>    Value类型
      * @param map    Map
@@ -598,6 +627,7 @@ public final class Maps {
 
     /**
      * 过滤Map保留指定键值对，如果键不存在跳过
+     *
      * @param <K>  Key类型
      * @param <V>  Value类型
      * @param map  原始Map
@@ -635,6 +665,7 @@ public final class Maps {
 
     /**
      * 排序已有Map，Key有序的Map，使用默认Key排序方式（字母顺序）
+     *
      * @param <K> key的类型
      * @param <V> value的类型
      * @param map Map
@@ -648,6 +679,7 @@ public final class Maps {
 
     /**
      * 排序已有Map，Key有序的Map
+     *
      * @param <K>        key的类型
      * @param <V>        value的类型
      * @param map        Map，为null返回null
@@ -672,6 +704,7 @@ public final class Maps {
 
     /**
      * 按照值排序，可选是否倒序
+     *
      * @param map    需要对值排序的map
      * @param <K>    键类型
      * @param <V>    值类型
@@ -691,6 +724,7 @@ public final class Maps {
 
     /**
      * 将对应Map转换为不可修改的Map
+     *
      * @param map Map
      * @param <K> 键类型
      * @param <V> 值类型
@@ -705,6 +739,7 @@ public final class Maps {
 
     /**
      * 创建链接调用map
+     *
      * @param <K> Key类型
      * @param <V> Value类型
      * @return map创建类
@@ -713,8 +748,13 @@ public final class Maps {
         return builder(new HashMap<>());
     }
 
+    public static <KT> MapBuilder<KT, Object> builder(Class<KT> keyType) {
+        return builder(new HashMap<>());
+    }
+
     /**
      * 创建链接调用map
+     *
      * @param <K> Key类型
      * @param <V> Value类型
      * @param map 实际使用的map
@@ -726,6 +766,7 @@ public final class Maps {
 
     /**
      * 去掉Map中指定key的键值对，修改原Map
+     *
      * @param <K>  Key类型
      * @param <V>  Value类型
      * @param map  Map
@@ -745,6 +786,7 @@ public final class Maps {
 
     /**
      * 批量为多个key设置同一个值
+     *
      * @param map
      * @param val
      * @param keys
@@ -766,6 +808,7 @@ public final class Maps {
      * 重命名键<br>
      * 实现方式为一处然后重新put，当旧的key不存在直接返回<br>
      * 当新的key存在，抛出{@link IllegalArgumentException} 异常
+     *
      * @param <K>    key的类型
      * @param <V>    value的类型
      * @param map    Map
@@ -788,6 +831,7 @@ public final class Maps {
     /**
      * 去除Map中值为{@code null}的键值对<br>
      * 注意：此方法在传入的Map上直接修改。
+     *
      * @param <K> key的类型
      * @param <V> value的类型
      * @param map Map
@@ -811,6 +855,7 @@ public final class Maps {
 
     /**
      * 返回一个空Map
+     *
      * @param <K> 键类型
      * @param <V> 值类型
      * @return 空Map
@@ -828,6 +873,7 @@ public final class Maps {
      *     2. SortedMap
      *     3. Map
      * </pre>
+     *
      * @param <K>      键类型
      * @param <V>      值类型
      * @param <T>      Map类型
@@ -854,6 +900,7 @@ public final class Maps {
 
     /**
      * 清除一个或多个Map集合内的元素，每个Map调用clear()方法
+     *
      * @param maps 一个或多个Map
      */
     public static void clear(Map<?, ?>... maps) {
@@ -867,6 +914,7 @@ public final class Maps {
     /**
      * 从Map中获取指定键列表对应的值列表<br>
      * 如果key在map中不存在或key对应值为null，则返回值列表对应位置的值也为null
+     *
      * @param <K>  键类型
      * @param <V>  值类型
      * @param map  {@link Map}

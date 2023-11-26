@@ -1,13 +1,12 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.generator.engine.TemplateEngine;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
-import io.devpl.generator.config.template.DeveloperInfo;
-import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.dao.GenTableMapper;
 import io.devpl.generator.domain.TemplateFillStrategy;
 import io.devpl.generator.domain.param.Query;
@@ -38,11 +37,11 @@ import java.util.*;
 public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTable> implements GenTableService {
     private final GenTableFieldService tableFieldService;
     private final DataSourceService dataSourceService;
-    private final GeneratorConfigService generatorConfigService;
     private final TargetGenerationFileService targetGenFileService;
     private final TableFileGenerationService tableFileGenerationService;
     private final ProjectService projectService;
     private final TemplateFileGenerationService templateFileGenerationService;
+    private final TemplateEngine templateEngine;
 
     @Override
     public List<GenTable> listGenTables(Collection<String> tableNames) {
@@ -87,13 +86,10 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         }
 
         DBType dbType = DBType.MYSQL;
-        if (datasourceId != 0) {
+        if (datasourceId != -1) {
             DbConnInfo connInfo = dataSourceService.getById(datasourceId);
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
-
-        // 代码生成器信息
-        GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
         // 项目信息
         ProjectInfo project = projectService.getById(param.getProjectId());
@@ -105,14 +101,16 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
             // 保存表信息
             // 项目信息
-            table.setPackageName(project.getProjectPackage());
-            table.setVersion(project.getVersion());
-            table.setBackendPath(project.getBackendPath());
-            table.setFrontendPath(project.getFrontendPath());
+            if (project != null) {
+                table.setPackageName(project.getProjectPackage());
+                table.setVersion(project.getVersion());
+                table.setBackendPath(project.getBackendPath());
+                table.setFrontendPath(project.getFrontendPath());
+            }
 
-            DeveloperInfo developer = generator.getDeveloper();
-            table.setAuthor(developer.getAuthor());
-            table.setEmail(developer.getEmail());
+            // TODO做成变量
+            table.setAuthor("author");
+            table.setEmail("email");
 
             table.setClassName(NamingUtils.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
@@ -148,6 +146,14 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     public void initTargetGenerationFiles(GenTable table) {
         List<TargetGenerationFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("backendPath", table.getBackendPath());
+        params.put("frontendPath", table.getFrontendPath());
+        params.put("tableName", NamingUtils.toCamelCase(table.getTableName()));
+        params.put("packagePath", table.getPackageName());
+        params.put("ClassName", table.getClassName());
+
         for (TargetGenerationFile targetGenFile : targetGenFiles) {
 
             TemplateFileGeneration templateFileGen = new TemplateFileGeneration();
@@ -161,8 +167,13 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             tableFileGen.setTableId(table.getId());
             tableFileGen.setGenerationId(templateFileGen.getId());
             // 需替换参数变量
-            tableFileGen.setFileName(targetGenFile.getFileName());
-            tableFileGen.setSavePath(targetGenFile.getSavePath());
+
+            if (StringUtils.hasText(targetGenFile.getFileName())) {
+                tableFileGen.setFileName(templateEngine.render(targetGenFile.getFileName(), params));
+            }
+            if (StringUtils.hasText(targetGenFile.getSavePath())) {
+                tableFileGen.setSavePath(templateEngine.render(targetGenFile.getSavePath(), params));
+            }
             list.add(tableFileGen);
         }
         tableFileGenerationService.saveBatch(list);

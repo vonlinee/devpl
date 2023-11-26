@@ -101,7 +101,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
      */
     @Override
     public Connection getConnection(DbConnInfo connInfo) throws SQLException {
-        if (connInfo.getId() != null && connInfo.getId().intValue() == 0) {
+        if (connInfo.getId() != null && connInfo.getId().intValue() == -1) {
             // 本系统连接的数据源
             return dataSource.getConnection();
         }
@@ -110,7 +110,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
 
     @Override
     public Connection getConnection(Long dataSourceId) throws SQLException {
-        if (dataSourceId != null && dataSourceId == 0) {
+        if (dataSourceId != null && dataSourceId == -1) {
             return dataSource.getConnection();
         }
         return getConnection(getOne(dataSourceId));

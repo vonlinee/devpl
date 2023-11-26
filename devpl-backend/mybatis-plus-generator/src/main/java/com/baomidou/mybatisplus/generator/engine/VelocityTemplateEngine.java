@@ -1,7 +1,7 @@
 package com.baomidou.mybatisplus.generator.engine;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
+import com.baomidou.mybatisplus.generator.engine.velocity.CamelCaseDirective;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -40,6 +41,12 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
 
     public VelocityTemplateEngine() {
         velocityEngine = createEngine();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("tableName", "devpl_table_name");
+        String result = this.render("#toCamelCase(${tableName})", map);
+
+        System.out.println(result);
     }
 
     @Override
@@ -50,10 +57,20 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     private VelocityEngine createEngine() {
         Properties p = new Properties();
         p.setProperty(VM_LOAD_PATH_KEY, VM_LOAD_PATH_VALUE);
-        p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, StringPool.EMPTY);
+        p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, "");
         p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());
         p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
         p.setProperty("resource.loader.file.unicode", Boolean.TRUE.toString());
+
+        p.setProperty(Velocity.CUSTOM_DIRECTIVES, CamelCaseDirective.class.getName());
+
+        // 自定义的获取模板实现类
+        p.setProperty("string.resource.loader.repository.class",
+            StringTemplateSource.class.getName());
+
+        p.setProperty("string.resource.loader.class",
+            "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
+
         return new VelocityEngine(p);
     }
 
@@ -77,6 +94,14 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             VelocityContext context = new VelocityContext(arguments.asMap());
             Velocity.evaluate(context, new OutputStreamWriter(outputStream), "mystring", template.getTemplate());
         }
+    }
+
+    @Override
+    public String render(String template, Map<String, Object> params) {
+        VelocityContext context = new VelocityContext(params);
+        StringWriter output = new StringWriter();
+        Velocity.evaluate(context, output, "", template);
+        return output.toString();
     }
 
     @Override

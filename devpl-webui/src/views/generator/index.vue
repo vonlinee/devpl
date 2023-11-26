@@ -167,6 +167,7 @@ function saveConfig() {
 }
 
 const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
+  console.log("import");
   if (dataSourceId) {
     apiImportTables(dataSourceId, tableNames, project.value?.projectId).then(() => {
       ElMessage.success({
