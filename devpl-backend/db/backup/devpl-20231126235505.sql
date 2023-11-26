@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.40, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: devpl
 -- ------------------------------------------------------
--- Server version	5.7.40-log
+-- Server version	5.7.36-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -49,8 +49,8 @@ CREATE TABLE `column_info` (
   `source_data_type` varchar(255) DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
   `is_autoincrement` tinyint(1) unsigned DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
   `is_generated` tinyint(1) unsigned DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库表列信息记录表';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库表列信息记录表（对应JDBC的ColumnMetadata）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,10 +79,10 @@ CREATE TABLE `connection_config` (
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) DEFAULT NULL COMMENT '密码',
   `encoding` varchar(255) DEFAULT NULL COMMENT '连接编码',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unk_conn_name` (`name`),
-  UNIQUE KEY `unk_ip_port` (`host`,`port`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='连接配置表';
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `unk_conn_name` (`name`) USING BTREE,
+  UNIQUE KEY `unk_ip_port` (`host`,`port`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='连接配置表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -110,8 +110,8 @@ CREATE TABLE `data_type_group` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(4) DEFAULT '0' COMMENT '是否逻辑删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='数据类型分组';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型分组';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,9 +144,9 @@ CREATE TABLE `data_type_item` (
   `remark` varchar(255) DEFAULT NULL COMMENT '描述信息',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` tinyint(1) unsigned zerofill DEFAULT NULL COMMENT '是否删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 COMMENT='数据类型表';
+  `is_deleted` tinyint(1) unsigned zerofill DEFAULT '0' COMMENT '是否删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=148 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +155,7 @@ CREATE TABLE `data_type_item` (
 
 LOCK TABLES `data_type_item` WRITE;
 /*!40000 ALTER TABLE `data_type_item` DISABLE KEYS */;
-INSERT INTO `data_type_item` VALUES (144,'JSON','JsonNumber','JSON数字类型',NULL,10,50,'0','3434','JSON数字类型',NULL,'2023-10-21 10:20:55',NULL),(145,'JSON','JsonString','JSON字符串',NULL,NULL,NULL,'','','JSON字符串',NULL,'2023-10-21 10:06:05',NULL),(146,'JSON','JsonNumber','JSON数字类型',NULL,NULL,NULL,'0','3434','sdfwe',NULL,NULL,NULL),(147,'JSON','JsonNull','JSON NULL类型',NULL,0,0,'0','','JSON NULL类型',NULL,NULL,NULL);
+INSERT INTO `data_type_item` VALUES (144,'JSON','JsonNumber','JSON数字类型','8990',10,50,'0','3434','JSON数字类型',NULL,'2023-10-21 10:20:55',NULL),(145,'JSON','JsonString','JSON字符串','555',NULL,NULL,'','','JSON字符串',NULL,'2023-10-21 10:06:05',NULL),(146,'JSON','JsonNumber','JSON数字类型',NULL,NULL,NULL,'0','3434','sdfwe',NULL,NULL,NULL),(147,'JSON','JsonNull','JSON NULL类型',NULL,0,0,'0','','JSON NULL类型',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `data_type_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,8 +196,8 @@ CREATE TABLE `database_backup_history` (
   `save_location` varchar(255) DEFAULT NULL COMMENT '保存位置',
   `backup_time` datetime DEFAULT NULL COMMENT '备份时间',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +206,7 @@ CREATE TABLE `database_backup_history` (
 
 LOCK TABLES `database_backup_history` WRITE;
 /*!40000 ALTER TABLE `database_backup_history` DISABLE KEYS */;
-INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06'),(4,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql','2023-10-22 11:55:34','2023-10-22 11:55:34'),(5,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153037.sql','2023-10-22 15:30:38','2023-10-22 15:30:37'),(6,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153202.sql','2023-10-22 15:32:03','2023-10-22 15:32:03'),(7,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022164904.sql','2023-10-22 16:49:05','2023-10-22 16:49:04'),(8,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171500.sql','2023-10-22 17:15:01','2023-10-22 17:15:01'),(9,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171931.sql','2023-10-22 17:19:32','2023-10-22 17:19:31'),(10,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029104903.sql','2023-10-29 10:49:04','2023-10-29 10:49:04'),(11,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105536.sql','2023-10-29 10:55:37','2023-10-29 10:55:37'),(12,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105648.sql','2023-10-29 10:56:49','2023-10-29 10:56:48'),(13,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105734.sql','2023-10-29 10:57:35','2023-10-29 10:57:35'),(14,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029135514.sql','2023-10-29 13:55:14','2023-10-29 13:55:14'),(15,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029135548.sql','2023-10-29 13:55:49','2023-10-29 13:55:48'),(16,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029135722.sql','2023-10-29 13:57:22','2023-10-29 13:57:22');
+INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06'),(4,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql','2023-10-22 11:55:34','2023-10-22 11:55:34'),(5,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153037.sql','2023-10-22 15:30:38','2023-10-22 15:30:37'),(6,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153202.sql','2023-10-22 15:32:03','2023-10-22 15:32:03'),(7,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022164904.sql','2023-10-22 16:49:05','2023-10-22 16:49:04'),(8,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171500.sql','2023-10-22 17:15:01','2023-10-22 17:15:01'),(9,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171931.sql','2023-10-22 17:19:32','2023-10-22 17:19:31'),(10,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029104903.sql','2023-10-29 10:49:04','2023-10-29 10:49:04'),(11,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105536.sql','2023-10-29 10:55:37','2023-10-29 10:55:37'),(12,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105648.sql','2023-10-29 10:56:49','2023-10-29 10:56:48'),(13,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105734.sql','2023-10-29 10:57:35','2023-10-29 10:57:35'),(14,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231126235505.sql','2023-11-26 23:55:06','2023-11-26 23:55:05');
 /*!40000 ALTER TABLE `database_backup_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,11 +229,12 @@ CREATE TABLE `db_conn_info` (
   `username` varchar(200) DEFAULT NULL COMMENT '用户名',
   `password` varchar(200) DEFAULT NULL COMMENT '密码',
   `driver_props` json DEFAULT NULL COMMENT '驱动属性',
+  `driver_type` varchar(200) DEFAULT NULL COMMENT '驱动类型',
+  `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否逻辑删除',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否逻辑删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COMMENT='数据源管理';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据源管理';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +243,7 @@ CREATE TABLE `db_conn_info` (
 
 LOCK TABLES `db_conn_info` WRITE;
 /*!40000 ALTER TABLE `db_conn_info` DISABLE KEYS */;
-INSERT INTO `db_conn_info` VALUES (2,'MySQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver',NULL,'devpl','jdbc:mysql://127.0.0.1:3306/devpl?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'2023-09-22 15:52:53',NULL,NULL),(9,'MySQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver','mysql_learn','mysql_learn','','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'2023-10-28 22:46:29','2023-10-28 22:46:29',NULL);
+INSERT INTO `db_conn_info` VALUES (2,'MYSQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver',NULL,'devpl','jdbc:mysql://127.0.0.1:3306/devpl?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL5',NULL,'2023-09-22 15:52:53','2023-11-16 21:44:09'),(9,'MySQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver','mysql_learn','mysql_learn','jdbc:mysql://127.0.0.1:3306/mysql_learn','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL8',NULL,'2023-10-28 22:46:29','2023-10-28 22:46:29'),(10,'MySQL','127.0.0.1',3306,'com.mysql.jdbc.Driver','','dsd','jdbc:mysql://127.0.0.1:3306','admin','ant.design',NULL,'ORACLE',NULL,'2023-10-29 20:48:32','2023-10-29 20:48:32');
 /*!40000 ALTER TABLE `db_conn_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,8 +258,8 @@ CREATE TABLE `dbs` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `value` json DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='数据库信息';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -288,8 +289,8 @@ CREATE TABLE `field_info` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='字段信息表';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -298,7 +299,7 @@ CREATE TABLE `field_info` (
 
 LOCK TABLES `field_info` WRITE;
 /*!40000 ALTER TABLE `field_info` DISABLE KEYS */;
-INSERT INTO `field_info` VALUES (1,'sdfsd','sdfsd','int','1212','1212',NULL,NULL,NULL),(2,'userName','userName','int','','',NULL,NULL,NULL),(3,'ewwe','ewwe','int','','',NULL,NULL,NULL),(4,'sdfsdf','sdfsdf','int','','',NULL,NULL,NULL),(5,'fgdsf','fgdsf','int','','',NULL,NULL,NULL),(6,'sdsd','sdsd','int','','',NULL,NULL,NULL),(7,'dsfsdfd','dsfsdfd','int','','',NULL,NULL,NULL),(8,'gdfs','gdfs','int','','',NULL,NULL,NULL),(9,'gdfdgf','gdfdgf','int','','',NULL,NULL,NULL),(10,'42323','42323','int','','',NULL,NULL,NULL),(11,'hngh','hngh','int','','',NULL,NULL,NULL);
+INSERT INTO `field_info` VALUES (1,'sdfsd','sdfsd','int','1212','1212',NULL,NULL,NULL),(2,'userName','userName','int','userName','',NULL,NULL,NULL),(3,'ewwe','ewwe','int','ewwe','',NULL,NULL,NULL),(4,'sdfsdf','sdfsdf','int','','',NULL,NULL,NULL),(5,'fgdsf','fgdsf','int','fgdsf','',NULL,NULL,NULL),(6,'sdsd','sdsd','int','','',NULL,NULL,NULL),(7,'dsfsdfd','dsfsdfd','int','','',NULL,NULL,NULL),(8,'gdfs','gdfs','int','gdfs','',NULL,NULL,NULL),(9,'gdfdgf','gdfdgf','int','','',NULL,NULL,NULL),(10,'42323','42323','int','','',NULL,NULL,NULL),(11,'hngh','hngh','int','','',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `field_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -354,8 +355,8 @@ CREATE TABLE `file_gen_group` (
   `datasource_id` bigint(20) DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) DEFAULT NULL COMMENT '基类ID',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件生成组记录表';
+  PRIMARY KEY (`group_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='文件生成组记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -365,6 +366,31 @@ CREATE TABLE `file_gen_group` (
 LOCK TABLES `file_gen_group` WRITE;
 /*!40000 ALTER TABLE `file_gen_group` DISABLE KEYS */;
 /*!40000 ALTER TABLE `file_gen_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `file_generation_unit`
+--
+
+DROP TABLE IF EXISTS `file_generation_unit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `file_generation_unit` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `unit_name` varchar(100) DEFAULT NULL COMMENT '单元名称',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='文件生成单元记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `file_generation_unit`
+--
+
+LOCK TABLES `file_generation_unit` WRITE;
+/*!40000 ALTER TABLE `file_generation_unit` DISABLE KEYS */;
+INSERT INTO `file_generation_unit` VALUES (1,'自定义生成',NULL),(2,'自定义生成',NULL),(3,'自定义生成',NULL),(4,'自定义生成',NULL);
+/*!40000 ALTER TABLE `file_generation_unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -381,8 +407,8 @@ CREATE TABLE `gen_base_class` (
   `fields` varchar(500) DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
   `remark` varchar(200) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='基类管理';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='基类管理';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,9 +464,9 @@ CREATE TABLE `gen_field_type` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `json_type` varchar(100) DEFAULT NULL COMMENT 'JSON数据类型',
   `mysql_sql_type` varchar(100) DEFAULT NULL COMMENT 'MySQL SQL数据类型',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `column_type` (`column_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COMMENT='字段类型管理';
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `column_type` (`column_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段类型管理';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -451,40 +477,6 @@ LOCK TABLES `gen_field_type` WRITE;
 /*!40000 ALTER TABLE `gen_field_type` DISABLE KEYS */;
 INSERT INTO `gen_field_type` VALUES (1,'datetime','Date','java.util.Date','2023-06-30 10:25:16',NULL,NULL),(2,'date','Date','java.util.Date','2023-06-30 10:25:16',NULL,NULL),(3,'tinyint','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(4,'smallint','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(5,'mediumint','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(6,'int','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(7,'integer','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(8,'bigint','Long',NULL,'2023-06-30 10:25:16',NULL,NULL),(9,'float','Float',NULL,'2023-06-30 10:25:16',NULL,NULL),(10,'double','Double',NULL,'2023-06-30 10:25:16',NULL,NULL),(11,'decimal','BigDecimal','java.math.BigDecimal','2023-06-30 10:25:16',NULL,NULL),(12,'bit','Boolean',NULL,'2023-06-30 10:25:16',NULL,NULL),(13,'char','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(14,'varchar','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(15,'tinytext','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(16,'text','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(17,'mediumtext','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(18,'longtext','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(19,'timestamp','Date','java.util.Date','2023-06-30 10:25:16',NULL,NULL),(20,'NUMBER','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(21,'BINARY_INTEGER','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(22,'BINARY_FLOAT','Float',NULL,'2023-06-30 10:25:16',NULL,NULL),(23,'BINARY_DOUBLE','Double',NULL,'2023-06-30 10:25:16',NULL,NULL),(24,'VARCHAR2','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(25,'NVARCHAR','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(26,'NVARCHAR2','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(27,'CLOB','String',NULL,'2023-06-30 10:25:16',NULL,NULL),(28,'int8','Long',NULL,'2023-06-30 10:25:16',NULL,NULL),(29,'int4','Integer',NULL,'2023-06-30 10:25:16',NULL,NULL),(30,'int2','Integer','11111','2023-06-30 10:25:16',NULL,NULL),(31,'numeric','BigDecimal','java.math.BigDecimal','2023-06-30 10:25:16',NULL,NULL),(32,'',NULL,NULL,'2023-10-21 19:51:34',NULL,NULL);
 /*!40000 ALTER TABLE `gen_field_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `gen_project_modify`
---
-
-DROP TABLE IF EXISTS `gen_project_modify`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `gen_project_modify` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `project_name` varchar(100) DEFAULT NULL COMMENT '项目名',
-  `project_code` varchar(100) DEFAULT NULL COMMENT '项目标识',
-  `project_package` varchar(100) DEFAULT NULL COMMENT '项目包名',
-  `project_path` varchar(200) DEFAULT NULL COMMENT '项目路径',
-  `modify_project_name` varchar(100) DEFAULT NULL COMMENT '变更项目名',
-  `modify_project_code` varchar(100) DEFAULT NULL COMMENT '变更标识',
-  `modify_project_package` varchar(100) DEFAULT NULL COMMENT '变更包名',
-  `exclusions` varchar(200) DEFAULT NULL COMMENT '排除文件',
-  `modify_suffix` varchar(200) DEFAULT NULL COMMENT '变更文件',
-  `modify_tmp_path` varchar(100) DEFAULT NULL COMMENT '变更临时路径',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='项目名变更';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `gen_project_modify`
---
-
-LOCK TABLES `gen_project_modify` WRITE;
-/*!40000 ALTER TABLE `gen_project_modify` DISABLE KEYS */;
-INSERT INTO `gen_project_modify` VALUES (1,'maku-boot','maku','net.maku','D:/makunet/maku-boot','baba-boot','baba','com.baba','.git,.idea,target,logs','java,xml,yml,txt',NULL,'2023-06-30 10:25:16'),(2,'maku-cloud','maku','net.maku','D:/makunet/maku-cloud','baba-cloud','baba','com.baba','.git,.idea,target,logs','java,xml,yml,txt',NULL,'2023-06-30 10:25:16');
-/*!40000 ALTER TABLE `gen_project_modify` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -512,9 +504,10 @@ CREATE TABLE `gen_table` (
   `datasource_id` bigint(20) DEFAULT NULL COMMENT '数据源ID',
   `baseclass_id` bigint(20) DEFAULT NULL COMMENT '基类ID',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `table_name` (`table_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COMMENT='代码生成表';
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `table_name` (`table_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +516,7 @@ CREATE TABLE `gen_table` (
 
 LOCK TABLES `gen_table` WRITE;
 /*!40000 ALTER TABLE `gen_table` DISABLE KEYS */;
-INSERT INTO `gen_table` VALUES (1,'data_type_group','DataTypeGroup','数据类型分组','vonlinee','vonlinee@163.com','io.devpl','1.0.0',0,'backend','frontend','devpl','group',1,0,NULL,'2023-10-12 09:08:50'),(2,'data_type_item','DataTypeItem','数据类型表','vonlinee','vonlinee@163.com','io.devpl','1.0.0',1,'backend','frontend','devpl','item',1,0,NULL,'2023-10-12 09:08:50'),(3,'data_type_mapping','DataTypeMapping','数据类型映射关系表','vonlinee','vonlinee@163.com','io.devpl','1.0.0',1,'backend','frontend','devpl','mapping',1,0,NULL,'2023-10-12 09:08:50'),(4,'template_param','TemplateParam','模板参数元数据表','vonlinee','vonlinee@163.com','io.devpl','1.0.0',1,'backend','frontend','devpl','param',1,0,NULL,'2023-10-23 22:31:28'),(5,'template_variable','TemplateVariable','模板参数元数据表','vonlinee','vonlinee@163.com','io.devpl','1.0.0',1,'backend','frontend','devpl','variable',1,0,NULL,'2023-10-23 22:31:28'),(6,'datasource_info','DatasourceInfo','数据源管理','vonlinee','vonlinee@163.com','io.devpl','1.0.0',1,'backend','frontend','devpl','info',1,0,NULL,'2023-10-23 22:33:46'),(7,'session_file_gen','SessionFileGen','','vonlinee','vonlinee@163.com','io.devpl','1.0.0',0,'backend','frontend','devpl','gen',1,0,NULL,'2023-10-28 00:16:27');
+INSERT INTO `gen_table` VALUES (34,'column_info','ColumnInfo','数据库表列信息记录表（对应JDBC的ColumnMetadata）','author','email','io.devpl','version',1,'backend','fontend','module','info',1,-1,NULL,'2023-11-26 23:17:32','2023-11-26 23:17:32');
 /*!40000 ALTER TABLE `gen_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -539,7 +532,7 @@ CREATE TABLE `gen_table_field` (
   `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
   `field_name` varchar(200) DEFAULT NULL COMMENT '字段名称',
   `field_type` varchar(200) DEFAULT NULL COMMENT '字段类型',
-  `field_comment` varchar(200) DEFAULT NULL COMMENT '字段说明',
+  `field_comment` varchar(512) DEFAULT NULL COMMENT '字段说明',
   `attr_name` varchar(200) DEFAULT NULL COMMENT '属性名',
   `attr_type` varchar(200) DEFAULT NULL COMMENT '属性类型',
   `package_name` varchar(200) DEFAULT NULL COMMENT '属性包名',
@@ -557,8 +550,8 @@ CREATE TABLE `gen_table_field` (
   `query_item` tinyint(4) DEFAULT NULL COMMENT '查询项 0：否  1：是',
   `query_type` varchar(200) DEFAULT NULL COMMENT '查询方式',
   `query_form_type` varchar(200) DEFAULT NULL COMMENT '查询表单类型',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COMMENT='代码生成表字段';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=436 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成表字段';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -567,7 +560,7 @@ CREATE TABLE `gen_table_field` (
 
 LOCK TABLES `gen_table_field` WRITE;
 /*!40000 ALTER TABLE `gen_table_field` DISABLE KEYS */;
-INSERT INTO `gen_table_field` VALUES (1,1,'id','bigint','主键','id','Long',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(2,1,'group_id','int','分组ID','groupId','Integer',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(3,1,'group_name','varchar','分组名称','groupName','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(4,2,'id','bigint','主键ID','id','Long',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(5,2,'type_group_id','varchar','类型分组名称','typeGroupId','String',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(6,2,'type_key','varchar','类型ID','typeKey','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(7,2,'type_name','varchar','类型名称','typeName','String',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(8,2,'value_type','varchar','该数据类型的值类型','valueType','String',NULL,4,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(9,2,'min_length','double','最小长度','minLength','Double',NULL,5,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(10,2,'max_length','double','最大长度','maxLength','Double',NULL,6,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(11,2,'default_value','varchar','类型默认值','defaultValue','String',NULL,7,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(12,2,'precision','varchar','精度','precision','String',NULL,8,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(13,2,'create_time','datetime','创建时间','createTime','Date','java.util.Date',9,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(14,2,'update_time','datetime','更新时间','updateTime','Date','java.util.Date',10,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(15,2,'is_deleted','tinyint','是否删除','isDeleted','Integer',NULL,11,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(16,3,'id','int','主键ID','id','Integer',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(17,3,'type_key','varchar','SQL数据类型','typeKey','String',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(18,4,'id','int','主键ID','id','Integer',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(19,4,'template_id','int','模板ID','templateId','Integer',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(20,4,'param_key','varchar','参数key, 一般为出现在模板中的变量名,单个模板内唯一','paramKey','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(21,4,'param_name','varchar','参数名','paramName','String',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(22,4,'param_value','varchar','参数值,默认参数值, 未提供该参数时使用此值','paramValue','String',NULL,4,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(23,4,'data_type','varchar','数据类型, 统一所有的数据类型','dataType','String',NULL,5,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(24,4,'remark','varchar','备注信息','remark','String',NULL,6,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(25,5,'id','int','主键ID','id','Integer',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(26,5,'template_id','int','模板ID','templateId','Integer',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(27,5,'param_key','varchar','参数key, 一般为出现在模板中的变量名,单个模板内唯一','paramKey','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(28,5,'param_name','varchar','参数名','paramName','String',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(29,5,'param_value','varchar','参数值,默认参数值, 未提供该参数时使用此值','paramValue','String',NULL,4,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(30,5,'data_type','varchar','数据类型, 统一所有的数据类型','dataType','String',NULL,5,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(31,5,'remark','varchar','备注信息','remark','String',NULL,6,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(32,6,'id','bigint','id','id','Long',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(33,6,'db_type','varchar','数据库类型','dbType','String',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(34,6,'ip','varchar','IP地址','ip','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(35,6,'port','int','端口号','port','Integer',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(36,6,'driver_class_name','varchar','驱动类名','driverClassName','String',NULL,4,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(37,6,'database_name','varchar','数据库名称','databaseName','String',NULL,5,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(38,6,'conn_name','varchar','连接名','connName','String',NULL,6,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(39,6,'conn_url','varchar','URL','connUrl','String',NULL,7,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(40,6,'username','varchar','用户名','username','String',NULL,8,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(41,6,'password','varchar','密码','password','String',NULL,9,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(42,6,'driver_props','json','驱动属性','driverProps','Object',NULL,10,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(43,6,'create_time','datetime','创建时间','createTime','Date','java.util.Date',11,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(44,6,'update_time','datetime','更新时间','updateTime','Date','java.util.Date',12,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(45,6,'is_deleted','tinyint','是否逻辑删除','isDeleted','Integer',NULL,13,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(46,7,'session_id','int','会话ID','sessionId','Integer',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(47,7,'gen_file_id','int','生成文件ID','genFileId','Integer',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(48,7,'template_id','int','模板ID','templateId','Integer',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(49,7,'task_id','varchar','任务ID','taskId','String',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text');
+INSERT INTO `gen_table_field` VALUES (410,34,'id','bigint','自增主键','id','Long',NULL,0,'DEFAULT',1,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(411,34,'table_id','bigint','所属表的ID','tableId','Long',NULL,1,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(412,34,'table_cat','varchar','table catalog (maybe null)','tableCat','String',NULL,2,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(413,34,'table_schem','varchar','table schema (maybe null)','tableSchem','String',NULL,3,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(414,34,'table_name','varchar','表名称','tableName','String',NULL,4,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(415,34,'column_name','varchar','列名称','columnName','String',NULL,5,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(416,34,'data_type','int','SQL type from java.sql.Type','dataType','Integer',NULL,6,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(417,34,'type_name','varchar','数据源独立的类型名称, for a UDT the type name is fully qualified','typeName','String',NULL,7,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(418,34,'column_size','int','column size.有符号数长度会减少1，比如bigint(20)，此时columnSize=19','columnSize','Integer',NULL,8,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(419,34,'buffer_length','int','not used.','bufferLength','Integer',NULL,9,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(420,34,'decimal_digits','int','小数位数','decimalDigits','Integer',NULL,10,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(421,34,'num_prec_radix','int','NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)','numPrecRadix','Integer',NULL,11,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(422,34,'nullable','int','是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.','nullable','Integer',NULL,12,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(423,34,'remarks','varchar','该列的描述信息，可为null','remarks','String',NULL,13,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(424,34,'column_def','varchar','该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)','columnDef','String',NULL,14,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(425,34,'sql_data_type','int','unused','sqlDataType','Integer',NULL,15,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(426,34,'sql_datetime_sub','int','unused','sqlDatetimeSub','Integer',NULL,16,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(427,34,'char_octet_length','int','字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column','charOctetLength','Integer',NULL,17,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(428,34,'ordinal_position','int','该列在表中的位置，开始为1','ordinalPosition','Integer',NULL,18,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(429,34,'is_nullable','tinyint','ISO rules are used to determine the nullability for a column. YES --- if the column can include NULLs NO --- if the column cannot include NULLs empty string --- if the nullability for the column is unknown','isNullable','Integer',NULL,19,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(430,34,'scope_catalog','varchar','catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)','scopeCatalog','String',NULL,20,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(431,34,'scope_schema','varchar','schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)','scopeSchema','String',NULL,21,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(432,34,'scope_table','varchar','table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)','scopeTable','String',NULL,22,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(433,34,'source_data_type','varchar','source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)','sourceDataType','String',NULL,23,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(434,34,'is_autoincrement','tinyint','Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented','isAutoincrement','Integer',NULL,24,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text'),(435,34,'is_generated','tinyint','Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column','isGenerated','Integer',NULL,25,'DEFAULT',0,0,1,0,'text',NULL,NULL,1,0,0,'=','text');
 /*!40000 ALTER TABLE `gen_table_field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -590,8 +583,8 @@ CREATE TABLE `gen_test_student` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` bigint(20) DEFAULT NULL COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='测试2';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='测试2';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -613,7 +606,7 @@ DROP TABLE IF EXISTS `generator_config`;
 CREATE TABLE `generator_config` (
   `name` text,
   `value` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='代码生成配置信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成配置信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -627,30 +620,6 @@ INSERT INTO `generator_config` VALUES ('蓝鸽','{\"name\":\"蓝鸽\",\"projectR
 UNLOCK TABLES;
 
 --
--- Table structure for table `input_history`
---
-
-DROP TABLE IF EXISTS `input_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `input_history` (
-  `pid` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `item_key` varchar(100) DEFAULT NULL COMMENT '输入位置',
-  `item_value` varchar(100) DEFAULT NULL COMMENT '输入值',
-  PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='输入历史';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `input_history`
---
-
-LOCK TABLES `input_history` WRITE;
-/*!40000 ALTER TABLE `input_history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `input_history` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `project`
 --
 
@@ -659,7 +628,7 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
   `project_id` varchar(100) DEFAULT NULL COMMENT '项目ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='项目信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -669,6 +638,45 @@ CREATE TABLE `project` (
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `project_info`
+--
+
+DROP TABLE IF EXISTS `project_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `project_name` varchar(100) DEFAULT NULL COMMENT '项目名',
+  `project_code` varchar(100) DEFAULT NULL COMMENT '项目标识',
+  `project_package` varchar(100) DEFAULT NULL COMMENT '项目包名',
+  `project_path` varchar(200) DEFAULT NULL COMMENT '项目路径',
+  `modify_project_name` varchar(100) DEFAULT NULL COMMENT '变更项目名',
+  `modify_project_code` varchar(100) DEFAULT NULL COMMENT '变更标识',
+  `modify_project_package` varchar(100) DEFAULT NULL COMMENT '变更包名',
+  `exclusions` varchar(200) DEFAULT NULL COMMENT '排除文件',
+  `modify_suffix` varchar(200) DEFAULT NULL COMMENT '变更文件',
+  `modify_tmp_path` varchar(100) DEFAULT NULL COMMENT '变更临时路径',
+  `status` tinyint(1) DEFAULT NULL COMMENT '项目状态',
+  `backend_path` varchar(200) DEFAULT NULL COMMENT '后端项目路径',
+  `frontend_path` varchar(200) DEFAULT NULL COMMENT '前端项目路径',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `version` varchar(200) DEFAULT NULL COMMENT '版本',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='项目信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project_info`
+--
+
+LOCK TABLES `project_info` WRITE;
+/*!40000 ALTER TABLE `project_info` DISABLE KEYS */;
+INSERT INTO `project_info` VALUES (3,'devpl','devpl','com.lancoo','D:/Temp',NULL,NULL,NULL,'.git,.idea,target,logs','java,xml,yml,factories,md,txt',NULL,NULL,'frontend','backend','2023-11-26 11:06:29',NULL,NULL);
+/*!40000 ALTER TABLE `project_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -682,8 +690,8 @@ CREATE TABLE `province_city_district` (
   `id` int(11) NOT NULL COMMENT '地区代码',
   `pid` int(11) DEFAULT NULL COMMENT '当前地区的上一级地区代码',
   `name` varchar(10) DEFAULT NULL COMMENT '地区名称',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='省市县数据表';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='省市县数据表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -708,8 +716,8 @@ CREATE TABLE `session_file_gen` (
   `gen_file_id` int(11) NOT NULL COMMENT '生成文件ID',
   `template_id` int(11) DEFAULT NULL COMMENT '模板ID',
   `task_id` varchar(11) DEFAULT NULL COMMENT '任务ID',
-  PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`session_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -729,13 +737,13 @@ DROP TABLE IF EXISTS `table_file_generation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_file_generation` (
-  `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
-  `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `generation_id` bigint(20) DEFAULT NULL COMMENT '文件生成ID',
   `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
   `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
-  PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表文件生成记录表';
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='表文件生成记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -744,6 +752,7 @@ CREATE TABLE `table_file_generation` (
 
 LOCK TABLES `table_file_generation` WRITE;
 /*!40000 ALTER TABLE `table_file_generation` DISABLE KEYS */;
+INSERT INTO `table_file_generation` VALUES (102,23,93,NULL,'${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(103,23,94,NULL,NULL),(104,23,95,'Dao.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Mapper.java'),(105,23,96,NULL,NULL),(106,23,97,NULL,NULL),(107,23,98,NULL,'${backendPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java'),(108,23,99,NULL,NULL),(109,23,100,NULL,NULL),(110,23,101,NULL,NULL),(111,26,105,'column_infoController.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(112,26,106,'column_infoConvert.java',NULL),(113,26,107,'column_infoConvert.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Mapper.java'),(114,26,108,'column_infoEntity.java',NULL),(115,26,109,'column_infoService.java',NULL),(116,26,110,'column_infoServiceImpl.java','frontend/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java'),(117,26,111,NULL,NULL),(118,26,112,NULL,NULL),(119,26,113,NULL,NULL),(120,27,114,'columnInfoController.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(121,27,115,'columnInfoConvert.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(122,27,116,'columnInfoConvert.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Mapper.java'),(123,27,117,'columnInfoEntity.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(124,27,118,'columnInfoService.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(125,27,119,'columnInfoServiceImpl.java','frontend/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java'),(126,27,120,'columnInfoApi.ts','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(127,27,121,'columnInfoMapper.xml','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(128,27,122,'columnInfoVO.java','frontend/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java'),(129,28,123,'columnInfoController.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(130,28,124,'columnInfoConvert.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(131,28,125,'columnInfoConvert.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Mapper.java'),(132,28,126,'columnInfoEntity.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(133,28,127,'columnInfoService.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(134,28,128,'columnInfoServiceImpl.java','frontend/src/main/java/com.lancoo/${moduleName}/service/${ClassName}Service.java'),(135,28,129,'columnInfoApi.ts','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(136,28,130,'columnInfoMapper.xml','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(137,28,131,'columnInfoVO.java','frontend/src/main/java/com.lancoo/${moduleName}/controller/${ClassName}Controller.java'),(138,29,132,'columnInfoController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(139,29,133,'columnInfoConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(140,29,134,'columnInfoMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoMapper.java'),(141,29,135,'columnInfoEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(142,29,136,'columnInfoService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(143,29,137,'columnInfoServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/ColumnInfoService.java'),(144,29,138,'columnInfoApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(145,29,139,'columnInfoMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(146,29,140,'columnInfoVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(147,30,141,'columnInfoController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(148,30,142,'columnInfoConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(149,30,143,'columnInfoMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoMapper.java'),(150,30,144,'columnInfoEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(151,30,145,'columnInfoService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(152,30,146,'columnInfoServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/ColumnInfoService.java'),(153,30,147,'columnInfoApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(154,30,148,'columnInfoMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(155,30,149,'columnInfoVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(156,31,150,'connectionConfigController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(157,31,151,'connectionConfigConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(158,31,152,'connectionConfigMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigMapper.java'),(159,31,153,'connectionConfigEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(160,31,154,'connectionConfigService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(161,31,155,'connectionConfigServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/ConnectionConfigService.java'),(162,31,156,'connectionConfigApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(163,31,157,'connectionConfigMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(164,31,158,'connectionConfigVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ConnectionConfigController.java'),(165,32,159,'templateArgumentController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(166,32,160,'templateArgumentConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(167,32,161,'templateArgumentMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentMapper.java'),(168,32,162,'templateArgumentEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(169,32,163,'templateArgumentService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(170,32,164,'templateArgumentServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/TemplateArgumentService.java'),(171,32,165,'templateArgumentApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(172,32,166,'templateArgumentMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(173,32,167,'templateArgumentVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/TemplateArgumentController.java'),(174,33,168,'columnInfoController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(175,33,169,'columnInfoConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(176,33,170,'columnInfoMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoMapper.java'),(177,33,171,'columnInfoEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(178,33,172,'columnInfoService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(179,33,173,'columnInfoServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/ColumnInfoService.java'),(180,33,174,'columnInfoApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(181,33,175,'columnInfoMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(182,33,176,'columnInfoVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(183,34,177,'columnInfoController.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(184,34,178,'columnInfoConvert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(185,34,179,'columnInfoMappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoMapper.java'),(186,34,180,'columnInfoEntity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(187,34,181,'columnInfoService.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(188,34,182,'columnInfoServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/ColumnInfoService.java'),(189,34,183,'columnInfoApi.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(190,34,184,'columnInfoMapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java'),(191,34,185,'columnInfoVO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/ColumnInfoController.java');
 /*!40000 ALTER TABLE `table_file_generation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -766,7 +775,7 @@ CREATE TABLE `table_info` (
   `type_name` varchar(255) DEFAULT NULL COMMENT '类型名称',
   `self_referencing_col_name` varchar(255) DEFAULT NULL COMMENT 'name of the designated "identifier" column of a typed table (may be null)',
   `ref_generation` varchar(255) DEFAULT NULL COMMENT 'specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (may be null)',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库表信息记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -780,32 +789,62 @@ LOCK TABLES `table_info` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `target_gen_file`
+-- Table structure for table `target_generation_file`
 --
 
-DROP TABLE IF EXISTS `target_gen_file`;
+DROP TABLE IF EXISTS `target_generation_file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `target_gen_file` (
-  `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `task_id` varchar(100) DEFAULT NULL COMMENT '代码生成任务ID',
-  `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
+CREATE TABLE `target_generation_file` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `type_name` varchar(100) DEFAULT NULL COMMENT '文件类型名称',
   `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
-  `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
+  `file_name` varchar(500) DEFAULT NULL COMMENT '文件名称',
+  `save_path` varchar(500) DEFAULT NULL COMMENT '保存路径',
   `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
-  `builtin` tinyint(1) DEFAULT NULL COMMENT '是否内置',
-  PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COMMENT='模板文件生成关联表';
+  `builtin` tinyint(1) DEFAULT '0' COMMENT '是否内置',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='目标生成文件类型表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `target_gen_file`
+-- Dumping data for table `target_generation_file`
 --
 
-LOCK TABLES `target_gen_file` WRITE;
-/*!40000 ALTER TABLE `target_gen_file` DISABLE KEYS */;
-INSERT INTO `target_gen_file` VALUES (8,NULL,'Mapper.java',1,NULL,'Mapper文件',1),(9,NULL,'Entity.java',2,NULL,'实体类文件',1),(10,NULL,'Service.java',3,NULL,'Service文件',1),(11,NULL,'ServiceImpl.java',4,NULL,'34343',1),(12,NULL,'VO.java',5,NULL,'12121212',1),(16,NULL,'Controller.java',6,NULL,'wrewerwer',1);
-/*!40000 ALTER TABLE `target_gen_file` ENABLE KEYS */;
+LOCK TABLES `target_generation_file` WRITE;
+/*!40000 ALTER TABLE `target_generation_file` DISABLE KEYS */;
+INSERT INTO `target_generation_file` VALUES (1,'Controller.java',263,'#toCamelCase(${tableName})Controller.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','Controller文件',1),(2,'Convert.java',264,'#toCamelCase(${tableName})Convert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1),(3,'Dao.java',265,'#toCamelCase(${tableName})Mappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Mapper.java','',1),(4,'Entity.java',266,'#toCamelCase(${tableName})Entity.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1),(5,'Service.java',268,'#toCamelCase(${tableName})Service.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1),(6,'ServiceImpl.java',269,'#toCamelCase(${tableName})ServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java','',1),(8,'api.ts',273,'#toCamelCase(${tableName})Api.ts','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1),(10,'Mapper.xml',275,'#toCamelCase(${tableName})Mapper.xml','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1),(11,'VO.java',270,'#toCamelCase(${tableName})VO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java','',1);
+/*!40000 ALTER TABLE `target_generation_file` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `template_argument`
+--
+
+DROP TABLE IF EXISTS `template_argument`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `template_argument` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `generation_id` bigint(20) DEFAULT NULL COMMENT '模板文件生成ID',
+  `var_key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `value` varchar(500) DEFAULT NULL COMMENT '参数值',
+  `data_type_id` bigint(20) DEFAULT NULL COMMENT '数据类型',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板参数表，模板实际的参数值';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `template_argument`
+--
+
+LOCK TABLES `template_argument` WRITE;
+/*!40000 ALTER TABLE `template_argument` DISABLE KEYS */;
+INSERT INTO `template_argument` VALUES (1,263,177,'date','2023-11-26',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(2,263,177,'ModuleName','Module',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(3,263,177,'primaryList','[io.devpl.generator.entity.GenTableField@73957fd]',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(4,263,177,'moduleName','module',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(5,263,177,'importList','[11111]',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(6,263,177,'className','columnInfo',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(7,263,177,'frontendPath','fontend',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(8,263,177,'queryList','[]',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(9,263,177,'tableName','column_info',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(10,263,177,'FunctionName','Info',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(11,263,177,'datetime','2023-11-26 23:49:55',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(12,263,177,'ClassName','ColumnInfo',NULL,'2023-11-26 23:49:56','2023-11-26 23:49:56'),(13,263,177,'date','2023-11-26',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(14,263,177,'ModuleName','Module',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(15,263,177,'primaryList','[io.devpl.generator.entity.GenTableField@173b13c5]',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(16,263,177,'moduleName','module',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(17,263,177,'importList','[11111]',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(18,263,177,'className','columnInfo',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(19,263,177,'frontendPath','fontend',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(20,263,177,'queryList','[]',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(21,263,177,'tableName','column_info',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(22,263,177,'FunctionName','Info',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(23,263,177,'datetime','2023-11-26 23:50:17',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(24,263,177,'ClassName','ColumnInfo',NULL,'2023-11-26 23:50:18','2023-11-26 23:50:18'),(25,263,177,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(26,263,177,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(27,263,177,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(28,263,177,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(29,263,177,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(30,263,177,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(31,263,177,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(32,263,177,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(33,263,177,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(34,263,177,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(35,263,177,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(36,263,177,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(37,263,177,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(38,263,177,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(39,263,177,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(40,263,177,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(41,263,177,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(42,263,177,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(43,263,177,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(44,263,177,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(45,263,177,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(46,263,177,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(47,263,177,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(48,263,177,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(49,263,177,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(50,264,178,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(51,264,178,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(52,264,178,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(53,264,178,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(54,264,178,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(55,264,178,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(56,264,178,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(57,264,178,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(58,264,178,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(59,264,178,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(60,264,178,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(61,264,178,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(62,264,178,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(63,264,178,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(64,264,178,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(65,264,178,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(66,264,178,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(67,264,178,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(68,264,178,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(69,264,178,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(70,264,178,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(71,264,178,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(72,264,178,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(73,264,178,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(74,264,178,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(75,265,179,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(76,265,179,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(77,265,179,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(78,265,179,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(79,265,179,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(80,265,179,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(81,265,179,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(82,265,179,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(83,265,179,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(84,265,179,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(85,265,179,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(86,265,179,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(87,265,179,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(88,265,179,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(89,265,179,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(90,265,179,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(91,265,179,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(92,265,179,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(93,265,179,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(94,265,179,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(95,265,179,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(96,265,179,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(97,265,179,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(98,265,179,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(99,265,179,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(100,266,180,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(101,266,180,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(102,266,180,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(103,266,180,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(104,266,180,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(105,266,180,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(106,266,180,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(107,266,180,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(108,266,180,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(109,266,180,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(110,266,180,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(111,266,180,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(112,266,180,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(113,266,180,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(114,266,180,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(115,266,180,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(116,266,180,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(117,266,180,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(118,266,180,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(119,266,180,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(120,266,180,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(121,266,180,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(122,266,180,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(123,266,180,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(124,266,180,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(125,268,181,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(126,268,181,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(127,268,181,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(128,268,181,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(129,268,181,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(130,268,181,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(131,268,181,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(132,268,181,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(133,268,181,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(134,268,181,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(135,268,181,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(136,268,181,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(137,268,181,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(138,268,181,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(139,268,181,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(140,268,181,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(141,268,181,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(142,268,181,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(143,268,181,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(144,268,181,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(145,268,181,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(146,268,181,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(147,268,181,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(148,268,181,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(149,268,181,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(150,269,182,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(151,269,182,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(152,269,182,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(153,269,182,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(154,269,182,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(155,269,182,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(156,269,182,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(157,269,182,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(158,269,182,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(159,269,182,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(160,269,182,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(161,269,182,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(162,269,182,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(163,269,182,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(164,269,182,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(165,269,182,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(166,269,182,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(167,269,182,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(168,269,182,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(169,269,182,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(170,269,182,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(171,269,182,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(172,269,182,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(173,269,182,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(174,269,182,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(175,273,183,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(176,273,183,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(177,273,183,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(178,273,183,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(179,273,183,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(180,273,183,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(181,273,183,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(182,273,183,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(183,273,183,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(184,273,183,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(185,273,183,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(186,273,183,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(187,273,183,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(188,273,183,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(189,273,183,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(190,273,183,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(191,273,183,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(192,273,183,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(193,273,183,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(194,273,183,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(195,273,183,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(196,273,183,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(197,273,183,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(198,273,183,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(199,273,183,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(200,275,184,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(201,275,184,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(202,275,184,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(203,275,184,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(204,275,184,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(205,275,184,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(206,275,184,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(207,275,184,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(208,275,184,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(209,275,184,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(210,275,184,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(211,275,184,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(212,275,184,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(213,275,184,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(214,275,184,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(215,275,184,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(216,275,184,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(217,275,184,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(218,275,184,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(219,275,184,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(220,275,184,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(221,275,184,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(222,275,184,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(223,275,184,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(224,275,184,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(225,270,185,'date','2023-11-26',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(226,270,185,'ModuleName','Module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(227,270,185,'primaryList','[io.devpl.generator.entity.GenTableField@2b920aeb]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(228,270,185,'moduleName','module',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(229,270,185,'importList','[11111]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(230,270,185,'className','columnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(231,270,185,'frontendPath','fontend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(232,270,185,'queryList','[]',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(233,270,185,'tableName','column_info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(234,270,185,'FunctionName','Info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(235,270,185,'datetime','2023-11-26 23:51:43',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(236,270,185,'ClassName','ColumnInfo',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(237,270,185,'fieldList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(238,270,185,'email','email',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(239,270,185,'packagePath','io\\devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(240,270,185,'package','io.devpl',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(241,270,185,'functionName','info',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(242,270,185,'author','author',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(243,270,185,'dbType','MYSQL',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(244,270,185,'tableComment','数据库表列信息记录表（对应JDBC的ColumnMetadata）',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(245,270,185,'version','version',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(246,270,185,'formLayout','1',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(247,270,185,'gridList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(248,270,185,'formList','[io.devpl.generator.entity.GenTableField@2b920aeb, io.devpl.generator.entity.GenTableField@58977e68, io.devpl.generator.entity.GenTableField@78d41839, io.devpl.generator.entity.GenTableField@6d237d2, io.devpl.generator.entity.GenTableField@1ad613ea, io.devpl.generator.entity.GenTableField@79514ae6, io.devpl.generator.entity.GenTableField@211c9025, io.devpl.generator.entity.GenTableField@36674f73, io.devpl.generator.entity.GenTableField@1c845316, io.devpl.generator.entity.GenTableField@6ff12c1a,',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44'),(249,270,185,'backendPath','backend',NULL,'2023-11-26 23:51:44','2023-11-26 23:51:44');
+/*!40000 ALTER TABLE `template_argument` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -816,15 +855,18 @@ DROP TABLE IF EXISTS `template_file_generation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_file_generation` (
-  `pid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `task_id` varchar(100) DEFAULT NULL COMMENT '代码生成任务ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
   `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `template_name` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `config_table_id` bigint(20) DEFAULT NULL COMMENT '配置表主键ID',
+  `config_table_name` varchar(100) DEFAULT NULL COMMENT '配置表名称',
+  `fill_strategy` varchar(100) DEFAULT NULL COMMENT '数据填充策略',
   `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
   `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
-  `builtin` tinyint(1) DEFAULT NULL COMMENT '是否内置',
-  PRIMARY KEY (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板文件生成关联表';
+  `builtin` tinyint(1) DEFAULT '0' COMMENT '是否内置',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='基于模板的文件生成记录表(每行对应一个生成的文件)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -833,7 +875,7 @@ CREATE TABLE `template_file_generation` (
 
 LOCK TABLES `template_file_generation` WRITE;
 /*!40000 ALTER TABLE `template_file_generation` DISABLE KEYS */;
-INSERT INTO `template_file_generation` VALUES (8,NULL,'Mapper.java',1,NULL,'12212',1),(9,NULL,'Entity.java',2,NULL,'121212',1),(10,NULL,'Service.java',3,NULL,'232323',1),(11,NULL,'ServiceImpl.java',4,NULL,'34343',1),(12,NULL,'VO.java',5,NULL,'12121212',1),(16,NULL,'Controller.java',6,NULL,'wrewerwer',1);
+INSERT INTO `template_file_generation` VALUES (93,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(94,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(95,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(96,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(97,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(98,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(99,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(100,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(101,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(105,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(106,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(107,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(108,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(109,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(110,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(111,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(112,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(113,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(114,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(115,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(116,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(117,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(118,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(119,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(120,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(121,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(122,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(123,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(124,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(125,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(126,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(127,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(128,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(129,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(130,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(131,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(132,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(133,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(134,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(135,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(136,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(137,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(138,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(139,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(140,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(141,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(142,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(143,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(144,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(145,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(146,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(147,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(148,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(149,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(150,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(151,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(152,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(153,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(154,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(155,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(156,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(157,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(158,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(159,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(160,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(161,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(162,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(163,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(164,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(165,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(166,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(167,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(168,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(169,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(170,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(171,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(172,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(173,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(174,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(175,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(176,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(177,NULL,263,'Controller.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(178,NULL,264,'Convert.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(179,NULL,265,'Dao.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(180,NULL,266,'Entity.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(181,NULL,268,'Service.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(182,NULL,269,'ServiceImpl.java.ftl',NULL,NULL,'db_table',NULL,NULL,0),(183,NULL,273,'api.ts.ftl',NULL,NULL,'db_table',NULL,NULL,0),(184,NULL,275,'Dao.xml.ftl',NULL,NULL,'db_table',NULL,NULL,0),(185,NULL,270,'VO.java.ftl',NULL,NULL,'db_table',NULL,NULL,0);
 /*!40000 ALTER TABLE `template_file_generation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -850,13 +892,14 @@ CREATE TABLE `template_info` (
   `type` tinyint(4) DEFAULT NULL COMMENT '模板类型',
   `provider` varchar(36) DEFAULT NULL COMMENT '技术提供方',
   `content` text COMMENT '字符串模板内容',
-  `path` varchar(500) DEFAULT NULL COMMENT '文件模板路径',
+  `path` varchar(500) DEFAULT NULL COMMENT '模板文件路径',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除状态',
+  `is_internal` tinyint(1) DEFAULT '0' COMMENT '是否系统内置模板，不可删除修改',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
-  `is_deleted` tinyint(4) DEFAULT NULL COMMENT '逻辑删除状态',
-  PRIMARY KEY (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COMMENT='模板记录表';
+  PRIMARY KEY (`template_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -865,87 +908,39 @@ CREATE TABLE `template_info` (
 
 LOCK TABLES `template_info` WRITE;
 /*!40000 ALTER TABLE `template_info` DISABLE KEYS */;
-INSERT INTO `template_info` VALUES (1,'Entity.sql',2,'FreeMarker','<#assign dbTime = \"now()\">\n<#if dbType==\"SQLServer\">\n    <#assign dbTime = \"getDate()\">\n</#if>\n\n-- 初始化菜单\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\n','','2023-07-11 15:56:30','2023-07-11 15:56:30',NULL,0),(2,'Entity.java.ftl',2,'FreeMarker','package ${package}.${moduleName}.entity;\n\nimport lombok.Data;\nimport lombok.EqualsAndHashCode;\nimport com.baomidou.mybatisplus.annotation.*;\n<#list importList as i>\n    import ${i!};\n</#list>\n<#if baseClass??>\n    import ${baseClass.packageName}.${baseClass.code};\n</#if>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\n@Data\n@TableName(\"${tableName}\")\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\n<#list fieldList as field>\n    <#if !field.baseField>\n        <#if field.fieldComment!?length gt 0>\n            /**\n            * ${field.fieldComment}\n            */\n        </#if>\n        <#if field.autoFill == \"INSERT\">\n            @TableField(fill = FieldFill.INSERT)\n        </#if>\n        <#if field.autoFill == \"INSERT_UPDATE\">\n            @TableField(fill = FieldFill.INSERT_UPDATE)\n        </#if>\n        <#if field.autoFill == \"UPDATE\">\n            @TableField(fill = FieldFill.UPDATE)\n        </#if>\n        <#if field.primaryKey>\n            @TableId\n        </#if>\n        private ${field.attrType} ${field.attrName};\n    </#if>\n\n</#list>\n}\n','','2023-07-20 17:48:43','2023-07-20 17:48:43',NULL,0),(3,'Service.java.ftl',2,'FreeMarker','package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n','','2023-07-20 17:52:30','2023-07-20 17:52:30',NULL,0),(4,'ServiceImpl.java.ftl',2,'Velocity','package ${package}.${moduleName}.service;\n\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.mybatis.service.BaseService;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\n\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\npublic interface ${ClassName}Service extends BaseService\n<${ClassName}Entity> {\n\n    PageResult\n    <${ClassName}VO> page(${ClassName}Query query);\n\n        void save(${ClassName}VO vo);\n\n        void update(${ClassName}VO vo);\n\n        void delete(List\n        <Long> idList);\n            }\n','','2023-07-20 17:52:51','2023-07-20 17:52:51',NULL,0),(5,'VO.java.ftl',2,'Velocity','package ${package}.${moduleName}.vo;\n\nimport io.swagger.v3.oas.annotations.media.Schema;\nimport com.fasterxml.jackson.annotation.JsonFormat;\nimport lombok.Data;\nimport java.io.Serializable;\nimport ${package}.framework.common.utils.DateUtils;\n<#list importList as i>\n    import ${i!};\n</#list>\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@Data\n@Schema(description = \"${tableComment}\")\npublic class ${ClassName}VO implements Serializable {\nprivate static final long serialVersionUID = 1L;\n\n<#list fieldList as field>\n    <#if field.fieldComment!?length gt 0>\n        @Schema(description = \"${field.fieldComment}\")\n    </#if>\n    <#if field.attrType == \'Date\'>\n        @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\n    </#if>\n    private ${field.attrType} ${field.attrName};\n\n</#list>\n\n}\n','','2023-07-20 17:53:55','2023-07-20 17:53:55',NULL,0),(6,'Controller.java.ftl',2,'FreeMarker','package ${package}.${moduleName}.controller;\n\nimport io.swagger.v3.oas.annotations.Operation;\nimport io.swagger.v3.oas.annotations.tags.Tag;\nimport lombok.AllArgsConstructor;\nimport ${package}.framework.common.utils.PageResult;\nimport ${package}.framework.common.utils.Result;\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\nimport ${package}.${moduleName}.service.${ClassName}Service;\nimport ${package}.${moduleName}.query.${ClassName}Query;\nimport ${package}.${moduleName}.vo.${ClassName}VO;\nimport org.springdoc.core.annotations.ParameterObject;\nimport org.springframework.security.access.prepost.PreAuthorize;\nimport org.springframework.web.bind.annotation.*;\n\nimport jakarta.validation.Valid;\nimport java.util.List;\n\n/**\n* ${tableComment}\n*\n* @author ${author} ${email}\n* @since ${version} ${date}\n*/\n@RestController\n@RequestMapping(\"${moduleName}/${functionName}\")\n@Tag(name=\"${tableComment}\")\n@AllArgsConstructor\npublic class ${ClassName}Controller {\nprivate final ${ClassName}Service ${className}Service;\n\n@GetMapping(\"page\")\n@Operation(summary = \"分页\")\n@PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\npublic Result\n<PageResult\n<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){\n    PageResult\n    <${ClassName}VO> page = ${className}Service.page(query);\n\n        return Result.ok(page);\n        }\n\n        @GetMapping(\"{id}\")\n        @Operation(summary = \"信息\")\n        @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\n        public Result\n        <${ClassName}VO> get(@PathVariable(\"id\") Long id){\n            ${ClassName}Entity entity = ${className}Service.getById(id);\n\n            return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\n            }\n\n            @PostMapping\n            @Operation(summary = \"保存\")\n            @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\n            public Result\n            <String> save(@RequestBody ${ClassName}VO vo){\n                ${className}Service.save(vo);\n\n                return Result.ok();\n                }\n\n                @PutMapping\n                @Operation(summary = \"修改\")\n                @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\n                public Result\n                <String> update(@RequestBody @Valid ${ClassName}VO vo){\n                    ${className}Service.update(vo);\n\n                    return Result.ok();\n                    }\n\n                    @DeleteMapping\n                    @Operation(summary = \"删除\")\n                    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\n                    public Result\n                    <String> delete(@RequestBody List\n                        <Long> idList){\n                            ${className}Service.delete(idList);\n\n                            return Result.ok();\n                            }\n                            }\n','','2023-07-20 17:54:53','2023-07-20 17:54:53',NULL,0),(8,'VO.java.ftl',1,'vm','sddssdsdd','template\\VO.java.ftl','2023-08-05 19:52:29','2023-08-05 19:52:29',NULL,0),(9,'menu.sql.ftl',1,'FreeMarker','','template\\menu.sql.ftl','2023-08-05 20:03:44','2023-08-05 20:03:44',NULL,0),(10,'add-or-update.vue.ftl',1,'FreeMarker','','template\\add-or-update.vue.ftl','2023-08-05 20:04:34','2023-08-05 20:04:34',NULL,0),(11,'api.ts.ftl',1,'FreeMarker','2323','template\\api.ts.ftl','2023-08-05 20:04:43','2023-08-05 20:04:43',NULL,0),(12,'api.ts.ftl',1,'Velocity','','template\\api.ts.ftl','2023-08-05 20:05:04','2023-08-05 20:05:04',NULL,0),(13,'index.vue.ftl',1,'FreeMarker','','template\\index.vue.ftl','2023-08-05 20:05:22','2023-08-05 20:05:22',NULL,0),(14,'1.txt',1,'Velocity','姜慧忻				1001001\r\n司马茂宇				1001002\r\n慕容薇薇				1001003\r\n彭彤					1001004\r\n高芳					1001005\r\n彭乐玮				1001006\r\n林欣茹				1001007\r\n余景轩				1001008\r\n高梅薇				1001009\r\n潘言					1001010\r\n林雅					1002001\r\n孙成					1002002\r\n马梦雪				1002003\r\n慕容麦景				1002004\r\n程欣					1002005\r\n吴磊					1002006\r\n唐羽薇				1002007\r\n宋程					1002008\r\n邓颖欣				1002009\r\n梁翰					1002010\r\n赵安羽				1003001\r\n王宇					1003002\r\n於雅灵				1003003\r\n於程					1003004\r\n百里佳				1003005\r\n范景					1003006\r\n唐艺纾				1003007\r\n田峰飞				1003008\r\n韩桑晴				1003009\r\n姜柏					1003010\r\n曹妍娅				1004001\r\n钟家达				1004002\r\n蒋羽宸				1004003\r\n宋达思				1004004\r\n吕佳					1004005\r\n袁远					1004006\r\n宋彤					1004007\r\n梁恒天				1004008\r\n卢茹					1004009\r\n韩宇					2001002\r\n','','2023-08-24 17:08:56','2023-08-24 17:08:56',NULL,0),(15,'1.txt',1,'Velocity','姜慧忻				1001001\r\n司马茂宇				1001002\r\n慕容薇薇				1001003\r\n彭彤					1001004\r\n高芳					1001005\r\n彭乐玮				1001006\r\n林欣茹				1001007\r\n余景轩				1001008\r\n高梅薇				1001009\r\n潘言					1001010\r\n林雅					1002001\r\n孙成					1002002\r\n马梦雪				1002003\r\n慕容麦景				1002004\r\n程欣					1002005\r\n吴磊					1002006\r\n唐羽薇				1002007\r\n宋程					1002008\r\n邓颖欣				1002009\r\n梁翰					1002010\r\n赵安羽				1003001\r\n王宇					1003002\r\n於雅灵				1003003\r\n於程					1003004\r\n百里佳				1003005\r\n范景					1003006\r\n唐艺纾				1003007\r\n田峰飞				1003008\r\n韩桑晴				1003009\r\n姜柏					1003010\r\n曹妍娅				1004001\r\n钟家达				1004002\r\n蒋羽宸				1004003\r\n宋达思				1004004\r\n吕佳					1004005\r\n袁远					1004006\r\n宋彤					1004007\r\n梁恒天				1004008\r\n卢茹					1004009\r\n韩宇					2001002\r\n','','2023-08-24 19:12:33','2023-08-24 19:12:33',NULL,0);
+INSERT INTO `template_info` VALUES (263,'Controller.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.controller;\r\n\r\nimport io.swagger.v3.oas.annotations.Operation;\r\nimport io.swagger.v3.oas.annotations.tags.Tag;\r\nimport lombok.AllArgsConstructor;\r\nimport ${package}.framework.common.utils.PageResult;\r\nimport ${package}.framework.common.utils.Result;\r\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\r\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\r\nimport ${package}.${moduleName}.service.${ClassName}Service;\r\nimport ${package}.${moduleName}.query.${ClassName}Query;\r\nimport ${package}.${moduleName}.vo.${ClassName}VO;\r\nimport org.springdoc.core.annotations.ParameterObject;\r\nimport org.springframework.security.access.prepost.PreAuthorize;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport jakarta.validation.Valid;\r\nimport java.util.List;\r\n\r\n/**\r\n* ${tableComment}\r\n*\r\n* @author ${author} ${email}\r\n* @since ${version} ${date}\r\n*/\r\n@RestController\r\n@RequestMapping(\"${moduleName}/${functionName}\")\r\n@Tag(name=\"${tableComment}\")\r\n@AllArgsConstructor\r\npublic class ${ClassName}Controller {\r\n    private final ${ClassName}Service ${className}Service;\r\n\r\n    @GetMapping(\"page\")\r\n    @Operation(summary = \"分页\")\r\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:page\')\")\r\n    public Result<PageResult<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query) {\r\n        PageResult <${ClassName}VO> page = ${className}Service.page(query);\r\n        return Result.ok(page);\r\n    }\r\n\r\n    @GetMapping(\"{id}\")\r\n    @Operation(summary = \"信息\")\r\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:info\')\")\r\n    public Result<${ClassName}VO> get(@PathVariable(\"id\") Long id){\r\n        ${ClassName}Entity entity = ${className}Service.getById(id);\r\n        return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));\r\n    }\r\n\r\n    @PostMapping\r\n    @Operation(summary = \"保存\")\r\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:save\')\")\r\n    public Result<String> save(@RequestBody ${ClassName}VO vo){\r\n        ${className}Service.save(vo);\r\n        return Result.ok();\r\n    }\r\n\r\n    @PutMapping\r\n    @Operation(summary = \"修改\")\r\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:update\')\")\r\n    public Result<String> update(@RequestBody @Valid ${ClassName}VO vo){\r\n        ${className}Service.update(vo);\r\n        return Result.ok();\r\n    }\r\n\r\n    @DeleteMapping\r\n    @Operation(summary = \"删除\")\r\n    @PreAuthorize(\"hasAuthority(\'${moduleName}:${functionName}:delete\')\")\r\n    public Result<String> delete(@RequestBody List<Long> idList){\r\n        ${className}Service.delete(idList);\r\n        return Result.ok();\r\n    }\r\n}\r\n','/java/Controller.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(264,'Convert.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.convert;\r\n\r\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\r\nimport ${package}.${moduleName}.vo.${ClassName}VO;\r\nimport org.mapstruct.Mapper;\r\nimport org.mapstruct.factory.Mappers;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * ${tableComment}\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\n@Mapper\r\npublic interface ${ClassName}Convert {\r\n    ${ClassName}Convert INSTANCE = Mappers.getMapper(${ClassName}Convert.class);\r\n\r\n    ${ClassName}Entity convert(${ClassName}VO vo);\r\n\r\n    ${ClassName}VO convert(${ClassName}Entity entity);\r\n\r\n    List<${ClassName}VO> convertList(List<${ClassName}Entity> list);\r\n}\r\n','/java/Convert.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(265,'Dao.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.dao;\r\n\r\nimport ${package}.framework.mybatis.dao.BaseDao;\r\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\r\nimport org.apache.ibatis.annotations.Mapper;\r\n\r\n/**\r\n * ${tableComment}\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\n@Mapper\r\npublic interface ${ClassName}Dao extends BaseDao<${ClassName}Entity> {\r\n\r\n}\r\n','/java/Dao.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(266,'Entity.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.entity;\r\n\r\nimport lombok.Data;\r\nimport lombok.EqualsAndHashCode;\r\nimport com.baomidou.mybatisplus.annotation.IdType;\r\nimport com.baomidou.mybatisplus.annotation.*;\r\n<#list importList as i>\r\nimport ${i!};\r\n</#list>\r\n<#if baseClass??>\r\nimport ${baseClass.packageName}.${baseClass.code};\r\n</#if>\r\n\r\n/**\r\n* ${tableComment}\r\n*\r\n* @author ${author} ${email}\r\n* @since ${version} ${date}\r\n*/\r\n<#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>\r\n@Data\r\n@TableName(\"${tableName}\")\r\npublic class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {\r\n<#list fieldList as field>\r\n<#if !field.baseField>\r\n    <#if field.fieldComment!?length gt 0>\r\n    /**\r\n     * ${field.fieldComment}\r\n     */\r\n    </#if>\r\n    <#if field.autoFill == \"INSERT\">\r\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.INSERT)\r\n    <#elseif field.autoFill == \"INSERT_UPDATE\">\r\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.INSERT_UPDATE)\r\n    <#elseif field.autoFill == \"UPDATE\">\r\n    @TableField(value = \"${field.fieldName}\", fill = FieldFill.UPDATE)\r\n    <#elseif field.primaryKey>\r\n        <#--如果是主键，仅使用@TableId注解-->\r\n    <#else>\r\n    @TableField(value = \"${field.fieldName}\")\r\n    </#if>\r\n    <#if field.primaryKey>\r\n    @TableId(value = \"${field.fieldName}\", type = IdType.AUTO)\r\n    </#if>\r\n    private ${field.attrType} ${field.attrName};\r\n</#if>\r\n\r\n</#list>\r\n}\r\n','/java/Entity.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(267,'Query.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.query;\r\n\r\nimport io.swagger.v3.oas.annotations.media.Schema;\r\nimport lombok.Data;\r\nimport lombok.EqualsAndHashCode;\r\nimport ${package}.framework.common.query.Query;\r\n\r\n<#list importList as i>\r\nimport ${i!};\r\n</#list>\r\n\r\n/**\r\n * ${tableComment}查询\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\n@Data\r\n@EqualsAndHashCode(callSuper = false)\r\n@Schema(description = \"${tableComment}查询\")\r\npublic class ${ClassName}Query extends Query {\r\n<#list queryList as field>\r\n    <#if field.fieldComment!?length gt 0>\r\n    @Schema(description = \"${field.fieldComment}\")\r\n    </#if>\r\n    private ${field.attrType} ${field.attrName};\r\n</#list>\r\n}\r\n','/java/Query.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(268,'Service.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.service;\r\n\r\nimport ${package}.framework.common.utils.PageResult;\r\nimport ${package}.framework.mybatis.service.BaseService;\r\nimport ${package}.${moduleName}.vo.${ClassName}VO;\r\nimport ${package}.${moduleName}.query.${ClassName}Query;\r\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * ${tableComment}\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\npublic interface ${ClassName}Service extends BaseService<${ClassName}Entity> {\r\n\r\n    PageResult<${ClassName}VO> page(${ClassName}Query query);\r\n\r\n    void save(${ClassName}VO vo);\r\n\r\n    void update(${ClassName}VO vo);\r\n\r\n    void delete(List<Long> idList);\r\n}\r\n','/java/Service.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(269,'ServiceImpl.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.service.impl;\r\n\r\nimport com.baomidou.mybatisplus.core.toolkit.Wrappers;\r\nimport com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;\r\nimport com.baomidou.mybatisplus.core.metadata.IPage;\r\nimport lombok.AllArgsConstructor;\r\nimport ${package}.framework.common.utils.PageResult;\r\nimport ${package}.framework.mybatis.service.impl.BaseServiceImpl;\r\nimport ${package}.${moduleName}.convert.${ClassName}Convert;\r\nimport ${package}.${moduleName}.entity.${ClassName}Entity;\r\nimport ${package}.${moduleName}.query.${ClassName}Query;\r\nimport ${package}.${moduleName}.vo.${ClassName}VO;\r\nimport ${package}.${moduleName}.dao.${ClassName}Dao;\r\nimport ${package}.${moduleName}.service.${ClassName}Service;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.transaction.annotation.Transactional;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * ${tableComment}\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\n@Service\r\n@AllArgsConstructor\r\npublic class ${ClassName}ServiceImpl extends BaseServiceImpl<${ClassName}Dao, ${ClassName}Entity> implements ${ClassName}Service {\r\n\r\n    @Override\r\n    public PageResult<${ClassName}VO> page(${ClassName}Query query) {\r\n        IPage<${ClassName}Entity> page = baseMapper.selectPage(getPage(query), getWrapper(query));\r\n        return new PageResult<>(${ClassName}Convert.INSTANCE.convertList(page.getRecords()), page.getTotal());\r\n    }\r\n\r\n    private LambdaQueryWrapper<${ClassName}Entity> getWrapper(${ClassName}Query query){\r\n        LambdaQueryWrapper<${ClassName}Entity> wrapper = Wrappers.lambdaQuery();\r\n        return wrapper;\r\n    }\r\n\r\n    @Override\r\n    public void save(${ClassName}VO vo) {\r\n        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);\r\n        baseMapper.insert(entity);\r\n    }\r\n\r\n    @Override\r\n    public void update(${ClassName}VO vo) {\r\n        ${ClassName}Entity entity = ${ClassName}Convert.INSTANCE.convert(vo);\r\n        updateById(entity);\r\n    }\r\n\r\n    @Override\r\n    @Transactional(rollbackFor = Exception.class)\r\n    public void delete(List<Long> idList) {\r\n        removeByIds(idList);\r\n    }\r\n}\r\n','/java/ServiceImpl.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(270,'VO.java.ftl',1,'FreeMarker','package ${package}.${moduleName}.vo;\r\n\r\nimport io.swagger.v3.oas.annotations.media.Schema;\r\nimport com.fasterxml.jackson.annotation.JsonFormat;\r\nimport lombok.Data;\r\nimport java.io.Serializable;\r\nimport ${package}.framework.common.utils.DateUtils;\r\n<#list importList as i>\r\nimport ${i!};\r\n</#list>\r\n\r\n/**\r\n * ${tableComment}\r\n *\r\n * @author ${author} ${email}\r\n * @since ${version} ${date}\r\n **/\r\n@Data\r\n@Schema(description = \"${tableComment}\")\r\npublic class ${ClassName}VO implements Serializable {\r\n    private static final long serialVersionUID = 1L;\r\n\r\n<#list fieldList as field>\r\n    <#if field.fieldComment!?length gt 0>\r\n    @Schema(description = \"${field.fieldComment}\")\r\n    </#if>\r\n    <#if field.attrType == \'Date\'>\r\n    @JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)\r\n    </#if>\r\n    private ${field.attrType} ${field.attrName};\r\n</#list>\r\n}\r\n','/java/VO.java.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(271,'menu.sql.ftl',1,'FreeMarker','<#assign dbTime = \"now()\">\r\n<#if dbType==\"SQLServer\">\r\n    <#assign dbTime = \"getDate()\">\r\n</#if>\r\n\r\n-- 初始化菜单\r\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES (1, \'${tableComment!}\', \'${moduleName}/${functionName}/index\', NULL, 0, 0, \'icon-menu\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\r\n\r\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'查看\', \'\', \'${moduleName}:${functionName}:page\', 1, 0, \'\', 0, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\r\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'新增\', \'\', \'${moduleName}:${functionName}:save\', 1, 0, \'\', 1, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\r\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'修改\', \'\', \'${moduleName}:${functionName}:update,${moduleName}:${functionName}:info\', 1, 0, \'\', 2, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\r\nINSERT INTO sys_menu (pid, name, url, authority, type, open_style, icon, sort, version, deleted, creator, create_time, updater, update_time) VALUES ((SELECT max(id) from sys_menu where name = \'${tableComment!}\'), \'删除\', \'\', \'${moduleName}:${functionName}:delete\', 1, 0, \'\', 3, 0, 0, 10000, ${dbTime}, 10000, ${dbTime});\r\n','/sql/menu.sql.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(272,'add-or-update.vue.ftl',1,'FreeMarker','<template>\r\n    <el-dialog v-model=\"visible\" :title=\"!dataForm.id ? \'新增\' : \'修改\'\" :close-on-click-modal=\"false\">\r\n        <el-form ref=\"dataFormRef\" :model=\"dataForm\" :rules=\"dataRules\" label-width=\"100px\"\r\n                 @keyup.enter=\"submitHandle()\">\r\n            <#list formList as field>\r\n                <#if field.formType == \'text\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-input v-model=\"dataForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\"></el-input>\r\n                    </el-form-item>\r\n                <#elseif field.formType == \'textarea\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-input type=\"textarea\" v-model=\"dataForm.${field.attrName}\"></el-input>\r\n                    </el-form-item>\r\n                <#elseif field.formType == \'editor\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-input type=\"textarea\" v-model=\"dataForm.${field.attrName}\"></el-input>\r\n                    </el-form-item>\r\n                <#elseif field.formType == \'select\'>\r\n                    <#if field.formDict??>\r\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                            <fast-select v-model=\"dataForm.${field.attrName}\" dict-type=\"${field.formDict}\"\r\n                                         placeholder=\"${field.fieldComment!}\"></fast-select>\r\n                        </el-form-item>\r\n                    <#else>\r\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                            <el-select v-model=\"dataForm.${field.attrName}\" placeholder=\"请选择\">\r\n                                <el-option label=\"请选择\" value=\"0\"></el-option>\r\n                            </el-select>\r\n                        </el-form-item>\r\n                    </#if>\r\n                <#elseif field.formType == \'radio\'>\r\n                    <#if field.formDict??>\r\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                            <fast-radio-group v-model=\"dataForm.${field.attrName}\"\r\n                                              dict-type=\"${field.formDict}\"></fast-radio-group>\r\n                        </el-form-item>\r\n                    <#else>\r\n                        <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                            <el-radio-group v-model=\"dataForm.${field.attrName}\">\r\n                                <el-radio :label=\"0\">启用</el-radio>\r\n                                <el-radio :label=\"1\">禁用</el-radio>\r\n                            </el-radio-group>\r\n                        </el-form-item>\r\n                    </#if>\r\n                <#elseif field.formType == \'checkbox\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-checkbox-group v-model=\"dataForm.${field.attrName}\">\r\n                            <el-checkbox label=\"启用\" name=\"type\"></el-checkbox>\r\n                            <el-checkbox label=\"禁用\" name=\"type\"></el-checkbox>\r\n                        </el-checkbox-group>\r\n                    </el-form-item>\r\n                <#elseif field.formType == \'date\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-date-picker type=\"date\" placeholder=\"${field.fieldComment!}\"\r\n                                        v-model=\"dataForm.${field.attrName}\"></el-date-picker>\r\n                    </el-form-item>\r\n                <#elseif field.formType == \'datetime\'>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-date-picker type=\"datetime\" placeholder=\"${field.fieldComment!}\"\r\n                                        v-model=\"dataForm.${field.attrName}\"></el-date-picker>\r\n                    </el-form-item>\r\n                <#else>\r\n                    <el-form-item label=\"${field.fieldComment!}\" prop=\"${field.attrName}\">\r\n                        <el-input v-model=\"dataForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\"></el-input>\r\n                    </el-form-item>\r\n                </#if>\r\n            </#list>\r\n        </el-form>\r\n        <template #footer>\r\n            <el-button @click=\"visible = false\">取消</el-button>\r\n            <el-button type=\"primary\" @click=\"submitHandle()\">确定</el-button>\r\n        </template>\r\n    </el-dialog>\r\n</template>\r\n\r\n<script setup lang=\"ts\">\r\n    import {reactive, ref} from \'vue\'\r\n    import {ElMessage} from \'element-plus/es\'\r\n\r\n    const emit = defineEmits([\'refreshDataList\'])\r\n\r\n    const visible = ref(false)\r\n    const dataFormRef = ref()\r\n\r\n    const dataForm = reactive({\r\n        <#list fieldList as field>\r\n        ${field.attrName}: \'\'<#sep>,\r\n        </#list>\r\n    })\r\n\r\n    const init = (id\r\n    ? : number\r\n    ) =>\r\n    {\r\n        visible.value = true\r\n        dataForm.id = \'\'\r\n\r\n        // 重置表单数据\r\n        if (dataFormRef.value) {\r\n            dataFormRef.value.resetFields()\r\n        }\r\n\r\n        if (id) {\r\n            get${FunctionName}(id)\r\n        }\r\n    }\r\n\r\n    const get${FunctionName} = (id: number) => {\r\n        use${FunctionName}Api(id).then(res => {\r\n            Object.assign(dataForm, res.data)\r\n        })\r\n    }\r\n\r\n    const dataRules = ref({\r\n        <#list formList as field>\r\n        <#if field.formRequired>\r\n        ${field.attrName}: [{required: true, message: \'必填项不能为空\', trigger: \'blur\'}]<#sep>,\r\n        </#if>\r\n        </#list>\r\n    })\r\n\r\n    // 表单提交\r\n    const submitHandle = () => {\r\n        dataFormRef.value.validate((valid: boolean) => {\r\n            if (!valid) {\r\n                return false\r\n            }\r\n\r\n            use${FunctionName}SubmitApi(dataForm).then(() => {\r\n                ElMessage.success({\r\n                    message: \'操作成功\',\r\n                    duration: 500,\r\n                    onClose: () => {\r\n                        visible.value = false\r\n                        emit(\'refreshDataList\')\r\n                    }\r\n                })\r\n            })\r\n        })\r\n    }\r\n\r\n    defineExpose({\r\n        init\r\n    })\r\n</script>\r\n','/vue/add-or-update.vue.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(273,'api.ts.ftl',1,'FreeMarker','import service from \'@/utils/request\'\r\n\r\nexport const use${FunctionName}Api = (id: number) => {\r\nreturn service.get(\'/${moduleName}/${functionName}/\' + id)\r\n}\r\n\r\nexport const use${FunctionName}SubmitApi = (dataForm: any) => {\r\nif (dataForm.id) {\r\nreturn service.put(\'/${moduleName}/${functionName}\', dataForm)\r\n} else {\r\nreturn service.post(\'/${moduleName}/${functionName}\', dataForm)\r\n}\r\n}\r\n','/vue/api.ts.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(274,'index.vue.ftl',1,'FreeMarker','<template>\r\n    <el-card>\r\n        <el-form :inline=\"true\" :model=\"state.queryForm\" @keyup.enter=\"getDataList()\">\r\n            <#list queryList as field>\r\n                <el-form-item>\r\n                    <#if field.formType == \'text\' || field.formType == \'textarea\' || field.formType == \'editor\'>\r\n                        <el-input v-model=\"state.queryForm.${field.attrName}\"\r\n                                  placeholder=\"${field.fieldComment!}\"></el-input>\r\n                    <#elseif field.queryFormType == \'select\'>\r\n                        <#if field.formDict??>\r\n                            <fast-select v-model=\"state.queryForm.${field.attrName}\" dict-type=\"${field.formDict}\"\r\n                                         placeholder=\"${field.fieldComment!}\" clearable></fast-select>\r\n                        <#else>\r\n                            <el-select v-model=\"state.queryForm.${field.attrName}\" placeholder=\"${field.fieldComment!}\">\r\n                                <el-option label=\"选择\" value=\"0\"></el-option>\r\n                            </el-select>\r\n                        </#if>\r\n                    <#elseif field.queryFormType == \'radio\'>\r\n                        <#if field.formDict??>\r\n                            <fast-radio-group v-model=\"state.queryForm.${field.attrName}\"\r\n                                              dict-type=\"${field.formDict}\"></fast-radio-group>\r\n                        <#else>\r\n                            <el-radio-group v-model=\"state.queryForm.${field.attrName}\">\r\n                                <el-radio :label=\"0\">单选</el-radio>\r\n                            </el-radio-group>\r\n                        </#if>\r\n                    <#elseif field.queryFormType == \'date\'>\r\n                        <el-date-picker\r\n                            v-model=\"daterange\"\r\n                            type=\"daterange\"\r\n                            value-format=\"yyyy-MM-dd\">\r\n                        </el-date-picker>\r\n                    <#elseif field.queryFormType == \'datetime\'>\r\n                        <el-date-picker\r\n                            v-model=\"datetimerange\"\r\n                            type=\"datetimerange\"\r\n                            value-format=\"yyyy-MM-dd HH:mm:ss\">\r\n                        </el-date-picker>\r\n                    <#else>\r\n                        <el-input v-model=\"state.queryForm.${field.attrName}\"\r\n                                  placeholder=\"${field.fieldComment!}\"></el-input>\r\n                    </#if>\r\n                </el-form-item>\r\n            </#list>\r\n            <el-form-item>\r\n                <el-button @click=\"getDataList()\">查询</el-button>\r\n            </el-form-item>\r\n            <el-form-item>\r\n                <el-button v-auth=\"\'${moduleName}:${functionName}:save\'\" type=\"primary\" @click=\"addOrUpdateHandle()\">\r\n                    新增\r\n                </el-button>\r\n            </el-form-item>\r\n            <el-form-item>\r\n                <el-button v-auth=\"\'${moduleName}:${functionName}:delete\'\" type=\"danger\" @click=\"deleteBatchHandle()\">\r\n                    删除\r\n                </el-button>\r\n            </el-form-item>\r\n        </el-form>\r\n        <el-table v-loading=\"state.dataListLoading\" :data=\"state.dataList\" border style=\"width: 100%\"\r\n                  @selection-change=\"selectionChangeHandle\">\r\n            <el-table-column type=\"selection\" header-align=\"center\" align=\"center\" width=\"50\"></el-table-column>\r\n            <#list gridList as field>\r\n                <#if field.formDict??>\r\n                    <fast-table-column prop=\"${field.attrName}\" label=\"${field.fieldComment!}\"\r\n                                       dict-type=\"${field.formDict}\"></fast-table-column>\r\n                <#else>\r\n                    <el-table-column prop=\"${field.attrName}\" label=\"${field.fieldComment!}\" header-align=\"center\"\r\n                                     align=\"center\"></el-table-column>\r\n                </#if>\r\n            </#list>\r\n            <el-table-column label=\"操作\" fixed=\"right\" header-align=\"center\" align=\"center\" width=\"150\">\r\n                <template #default=\"scope\">\r\n                    <el-button v-auth=\"\'${moduleName}:${functionName}:update\'\" type=\"primary\" link\r\n                               @click=\"addOrUpdateHandle(scope.row.id)\">修改\r\n                    </el-button>\r\n                    <el-button v-auth=\"\'${moduleName}:${functionName}:delete\'\" type=\"primary\" link\r\n                               @click=\"deleteBatchHandle(scope.row.id)\">删除\r\n                    </el-button>\r\n                </template>\r\n            </el-table-column>\r\n        </el-table>\r\n        <el-pagination\r\n            :current-page=\"state.page\"\r\n            :page-sizes=\"state.pageSizes\"\r\n            :page-size=\"state.limit\"\r\n            :total=\"state.total\"\r\n            layout=\"total, sizes, prev, pager, next, jumper\"\r\n            @size-change=\"sizeChangeHandle\"\r\n            @current-change=\"currentChangeHandle\"\r\n        >\r\n        </el-pagination>\r\n\r\n        <!-- 弹窗, 新增 / 修改 -->\r\n        <add-or-update ref=\"addOrUpdateRef\" @refreshDataList=\"getDataList\"></add-or-update>\r\n    </el-card>\r\n</template>\r\n\r\n<script setup lang=\"ts\" name=\"${ModuleName}${FunctionName}Index\">\r\n    import {useCrud} from \'@/hooks\'\r\n    import {reactive, ref} from \'vue\'\r\n    import {IHooksOptions} from \'@/hooks/interface\'\r\n\r\n    const state: IHooksOptions = reactive({\r\n        dataListUrl: \'/${moduleName}/${functionName}/page\',\r\n        deleteUrl: \'/${moduleName}/${functionName}\',\r\n        queryForm: {\r\n            <#list queryList as field>\r\n            <#if field.formType == \'date\'>\r\n            startDate: \'\',\r\n            endDate: \'\'<#sep>, </#sep>\r\n            <#elseif field.formType == \'datetime\'>\r\n            startDateTime: \'\',\r\n            endDateTime: \'\'<#sep>, </#sep>\r\n            <#else>\r\n            ${field.attrName}: \'\'<#sep>, </#sep>\r\n            </#if>\r\n            </#list>\r\n        }\r\n    })\r\n\r\n    const addOrUpdateRef = ref()\r\n    const addOrUpdateHandle = (id\r\n    ? : number\r\n    ) =>\r\n    {\r\n        addOrUpdateRef.value.init(id)\r\n    }\r\n\r\n    const {\r\n        getDataList,\r\n        selectionChangeHandle,\r\n        sizeChangeHandle,\r\n        currentChangeHandle,\r\n        deleteBatchHandle\r\n    } = useCrud(state)\r\n</script>\r\n','/vue/index.vue.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06'),(275,'Dao.xml.ftl',1,'FreeMarker','<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\r\n<mapper namespace=\"${package}.${moduleName}.dao.${ClassName}Dao\">\r\n\r\n    <resultMap type=\"${package}.${moduleName}.entity.${ClassName}Entity\" id=\"${className}Map\">\r\n        <#list fieldList as field>\r\n        <result property=\"${field.attrName}\" column=\"${field.fieldName}\"/>\r\n        </#list>\r\n    </resultMap>\r\n\r\n</mapper>\r\n','/xml/Dao.xml.ftl','0.00 GB',0,1,'2023-11-26 23:55:06','2023-11-26 23:55:06');
 /*!40000 ALTER TABLE `template_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `template_param`
+-- Table structure for table `template_variable_info`
 --
 
-DROP TABLE IF EXISTS `template_param`;
+DROP TABLE IF EXISTS `template_variable_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `template_param` (
+CREATE TABLE `template_variable_info` (
   `id` int(11) NOT NULL COMMENT '主键ID',
   `template_id` int(11) DEFAULT NULL COMMENT '模板ID',
-  `param_key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
-  `param_name` varchar(100) DEFAULT NULL COMMENT '参数名',
-  `param_value` varchar(100) DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
-  `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
+  `key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `name` varchar(100) DEFAULT NULL COMMENT '参数名',
+  `default_value` varchar(100) DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
+  `data_type_id` bigint(20) DEFAULT NULL COMMENT '数据类型ID，关联data_type_item#id字段',
   `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='模板参数元数据表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `template_param`
---
-
-LOCK TABLES `template_param` WRITE;
-/*!40000 ALTER TABLE `template_param` DISABLE KEYS */;
-/*!40000 ALTER TABLE `template_param` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `template_variable`
---
-
-DROP TABLE IF EXISTS `template_variable`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `template_variable` (
-  `id` int(11) NOT NULL COMMENT '主键ID',
-  `template_id` int(11) DEFAULT NULL COMMENT '模板ID',
-  `param_key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
-  `param_name` varchar(100) DEFAULT NULL COMMENT '参数名',
-  `param_value` varchar(100) DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
-  `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型, 统一所有的数据类型',
-  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
+  `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除状态',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板参数元数据表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `template_variable`
+-- Dumping data for table `template_variable_info`
 --
 
-LOCK TABLES `template_variable` WRITE;
-/*!40000 ALTER TABLE `template_variable` DISABLE KEYS */;
-/*!40000 ALTER TABLE `template_variable` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `test`
---
-
-DROP TABLE IF EXISTS `test`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `test` (
-  `col_bigint` bigint(255) DEFAULT NULL,
-  `col_decimal` decimal(5,2) DEFAULT NULL,
-  `col_timestamp` datetime(6) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `test`
---
-
-LOCK TABLES `test` WRITE;
-/*!40000 ALTER TABLE `test` DISABLE KEYS */;
-/*!40000 ALTER TABLE `test` ENABLE KEYS */;
+LOCK TABLES `template_variable_info` WRITE;
+/*!40000 ALTER TABLE `template_variable_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `template_variable_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -959,8 +954,8 @@ CREATE TABLE `type_mapping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `java_type` varchar(255) DEFAULT NULL,
   `json_type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -970,29 +965,6 @@ CREATE TABLE `type_mapping` (
 LOCK TABLES `type_mapping` WRITE;
 /*!40000 ALTER TABLE `type_mapping` DISABLE KEYS */;
 /*!40000 ALTER TABLE `type_mapping` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `user_id` varchar(100) DEFAULT NULL COMMENT '用户ID',
-  `user_name` varchar(100) DEFAULT NULL COMMENT '用户名称',
-  `email` varchar(100) DEFAULT NULL COMMENT '邮箱'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='开发者信息表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1004,4 +976,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-29 13:57:22
+-- Dump completed on 2023-11-26 23:55:07

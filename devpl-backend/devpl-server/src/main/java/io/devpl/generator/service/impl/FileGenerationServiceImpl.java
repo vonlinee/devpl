@@ -3,6 +3,7 @@ package io.devpl.generator.service.impl;
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
+import io.devpl.generator.domain.param.TableImportParam;
 import io.devpl.generator.entity.*;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
@@ -52,6 +53,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     private TableFileGenerationService tableFileGenerationService;
     @Resource
     private TemplateFileGenerationService templateFileGenerationService;
+    @Resource
+    private TemplateArgumentService templateArgumentService;
 
     /**
      * 代码生成根目录
@@ -93,6 +96,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      *
      * @param tableId gen_table主键
      * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
+     * @see GenTableService#importSingleTable(TableImportParam)
      */
     @Override
     public String startCodeGeneration(Long tableId) {
@@ -106,7 +110,12 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
+
         GeneratorInfo generatorInfo = getGeneratorInfo();
+
+        for (TableFileGeneration tfg : fileToBeGenerated) {
+            templateArgumentService.initialize(tfg.getTemplateId(), tfg.getGenerationId(), dataModel);
+        }
 
         // 渲染模板并输出
         for (TemplateInfo template : generatorInfo.getTemplates()) {
