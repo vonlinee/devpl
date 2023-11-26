@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.velocity.VelocityTemplateEngine;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.query.DatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.type.JavaType;

@@ -1,6 +1,7 @@
 package io.devpl.generator.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
 import com.baomidou.mybatisplus.generator.engine.TemplateEngine;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import io.devpl.generator.common.ServerException;
@@ -147,10 +148,10 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         List<TargetGenerationFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
 
-        Map<String, Object> params = new HashMap<>();
+        TemplateArgumentsMap params = new TemplateArgumentsMap();
         params.put("backendPath", table.getBackendPath());
         params.put("frontendPath", table.getFrontendPath());
-        params.put("tableName", NamingUtils.toCamelCase(table.getTableName()));
+        params.put("tableName", table.getTableName());
         params.put("packagePath", table.getPackageName());
         params.put("ClassName", table.getClassName());
 

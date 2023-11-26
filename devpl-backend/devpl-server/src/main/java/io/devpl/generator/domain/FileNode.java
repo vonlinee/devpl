@@ -1,13 +1,15 @@
 package io.devpl.generator.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 /**
  * 文件节点
  */
-@Data
+@Getter
+@Setter
 public class FileNode {
 
     /**

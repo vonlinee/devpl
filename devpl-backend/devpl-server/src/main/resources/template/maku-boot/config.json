@@ -1,10 +1,4 @@
 {
-    "project": {
-        "packageName": "io.devpl",
-        "version": "1.0.0",
-        "backendPath": "backend",
-        "frontendPath": "frontend"
-    },
     "developer": {
         "author": "vonlinee",
         "email": "vonlinee@163.com"

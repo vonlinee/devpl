@@ -14,6 +14,10 @@ open module mybatis.plus.generator {
     exports com.baomidou.mybatisplus.generator.jdbc.dialect.mysql;
     exports com.baomidou.mybatisplus.generator.fill;
     exports com.baomidou.mybatisplus.generator.util;
+    exports com.baomidou.mybatisplus.generator.engine.velocity;
+    exports com.baomidou.mybatisplus.generator.engine.beetl;
+    exports com.baomidou.mybatisplus.generator.engine.freemarker;
+    exports com.baomidou.mybatisplus.generator.engine.enjoy;
 
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;

@@ -1,6 +1,7 @@
-package com.baomidou.mybatisplus.generator.engine;
+package com.baomidou.mybatisplus.generator.engine.enjoy;
 
 import com.baomidou.mybatisplus.generator.config.builder.Context;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import com.jfinal.template.Engine;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,16 +40,6 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     public @NotNull String templateFilePath(@NotNull String filePath) {
         final String dotVm = ".ej";
         return filePath.endsWith(dotVm) ? filePath : filePath + dotVm;
-    }
-
-    @Override
-    public String render(String template, Map<String, Object> params) {
-        return null;
-    }
-
-    @Override
-    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
-
     }
 }
 

@@ -8,7 +8,7 @@ public interface TemplateSource {
     /**
      * @return 可能是字符串模板，或文件路径，或者文件地址URL等
      */
-    String getTemplate();
+    String getContent();
 
-    void setTemplate(String template);
+    void setContent(String content);
 }

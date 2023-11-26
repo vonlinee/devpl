@@ -1,18 +1,33 @@
 package com.baomidou.mybatisplus.generator.engine;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 /**
- * 模板参数集合
+ * 模板参数，使用Map或者对象
  */
 public interface TemplateArguments {
+
+    /**
+     * 根据参数名称获取参数值
+     *
+     * @param name 参数名
+     * @return 参数值
+     */
+    Object getValue(String name);
+
+    /**
+     * 实现类是否是Map
+     *
+     * @return 默认false
+     */
+    default boolean isMap() {
+        return false;
+    }
 
     /**
      * 转为Map结构
      *
      * @return map
      */
-    @NotNull Map<String, Object> asMap();
+    Map<String, Object> asMap();
 }

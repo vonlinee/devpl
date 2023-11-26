@@ -1,5 +1,6 @@
 package com.baomidou.mybatisplus.generator.engine.velocity;
 
+import com.baomidou.mybatisplus.generator.codegen.NamingStrategy;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
@@ -30,8 +31,10 @@ public class CamelCaseDirective extends Directive {
 
     /**
      * 函数类型，可以是行也可以是块函数
+     * BLOCK: 表示该指令会替换其所在位置的所有内容，需要end结束符
+     * LINE: 不要end结束符
      *
-     * @return
+     * @return 指令类型
      * @see DirectiveConstants
      */
     @Override
@@ -40,23 +43,25 @@ public class CamelCaseDirective extends Directive {
     }
 
     /**
-     * 如果需要输出，则使用入参的writer.write("some html")，context是当前velocity的容器，可以存取变量，比如在页面上使用#set($name="bwong")，可以通过context.get("name")取出"bwong"，node里面可以取出调用这个函数时的入参，比如#hellofun("a")，通过node.jjtGetChild(0).value(context)取出"a"
-     *
-     * @param context
-     * @param writer
-     * @param node
-     * @return
-     * @throws IOException
-     * @throws ResourceNotFoundException
-     * @throws ParseErrorException
-     * @throws MethodInvocationException
+     * @param context 上下文 当前velocity的容器，可以存取变量，比如在页面上使用#set($name="bwong")，可以通过context.get("name")取出"bwong"
+     * @param writer  输出位置
+     * @param node    节点 node里面可以取出调用这个函数时的入参，比如#hellofun("a")，通过node.jjtGetChild(0).value(context)取出"a"
+     * @return 是否成功
+     * @throws IOException               IOException
+     * @throws ResourceNotFoundException 模板不存在
+     * @throws ParseErrorException       模板语法错误
+     * @throws MethodInvocationException 反射执行异常
      */
     @Override
     public boolean render(InternalContextAdapter context, Writer writer, Node node) throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
-        // node里面可以取出调用这个函数时的入参
-        Object param = node.jjtGetChild(0).value(context);
+        // 获取指令传参 传参的文字文本或者对象
+        Object value = node.jjtGetChild(0).value(context);
         // 将参数进行转换进行输出
-        writer.write("hello " + node.jjtGetChild(0).value(context));
+        if (value instanceof String) {
+            writer.write(NamingStrategy.underlineToCamel((String) value));
+        } else {
+            writer.write(String.valueOf(value));
+        }
         return true;
     }
 }

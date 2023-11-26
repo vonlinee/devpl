@@ -8,12 +8,12 @@ public class FileTemplateSource implements TemplateSource {
     String templatePath;
 
     @Override
-    public String getTemplate() {
+    public String getContent() {
         return templatePath;
     }
 
     @Override
-    public void setTemplate(String template) {
+    public void setContent(String template) {
         this.templatePath = template;
     }
 }

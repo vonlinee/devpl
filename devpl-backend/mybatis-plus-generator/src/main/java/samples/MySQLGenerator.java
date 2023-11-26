@@ -1,7 +1,7 @@
 package samples;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.velocity.VelocityTemplateEngine;
 
 public class MySQLGenerator {
 

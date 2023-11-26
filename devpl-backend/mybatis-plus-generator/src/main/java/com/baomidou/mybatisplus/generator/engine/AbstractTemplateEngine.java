@@ -44,4 +44,14 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
     public String render(TemplateSource template, TemplateArguments arguments) {
         return null;
     }
+
+    @Override
+    public String render(String template, TemplateArguments arguments) {
+        return null;
+    }
+
+    @Override
+    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
+
+    }
 }

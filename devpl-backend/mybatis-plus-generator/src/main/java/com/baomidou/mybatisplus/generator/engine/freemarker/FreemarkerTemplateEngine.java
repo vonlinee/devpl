@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.baomidou.mybatisplus.generator.engine;
+package com.baomidou.mybatisplus.generator.engine.freemarker;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jetbrains.annotations.NotNull;
@@ -52,15 +53,5 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {
         return filePath + ".ftl";
-    }
-
-    @Override
-    public String render(String template, Map<String, Object> params) {
-        return null;
-    }
-
-    @Override
-    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
-
     }
 }

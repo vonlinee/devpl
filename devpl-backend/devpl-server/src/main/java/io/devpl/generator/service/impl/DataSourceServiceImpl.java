@@ -80,7 +80,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
 
     @Override
     public String getDatabaseProductName(Long dataSourceId) {
-        if (dataSourceId.intValue() == 0) {
+        if (dataSourceId.intValue() == -1) {
             return DBType.MYSQL.name();
         } else {
             return getById(dataSourceId).getDbType();

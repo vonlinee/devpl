@@ -11,7 +11,6 @@ import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.DateTimeUtils;
 import io.devpl.generator.utils.DateUtils;
-import io.devpl.generator.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -34,7 +33,7 @@ import java.util.zip.ZipOutputStream;
  */
 @Slf4j
 @Service
-public class CodeGenServiceImpl implements CodeGenService {
+public class CodeGenServiceImpl implements FileGenerationService {
 
     @Resource
     private DataSourceService datasourceService;
@@ -50,6 +49,8 @@ public class CodeGenServiceImpl implements CodeGenService {
     private TemplateService templateService;
     @Resource
     private GeneratorConfigService generatorConfigService;
+    @Resource
+    FileStorageService fileStorageService;
 
     /**
      * 代码生成根目录
@@ -94,7 +95,6 @@ public class CodeGenServiceImpl implements CodeGenService {
      */
     @Override
     public String startCodeGeneration(Long tableId) {
-
         final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
 
         // 数据模型
@@ -205,11 +205,9 @@ public class CodeGenServiceImpl implements CodeGenService {
      * @return 文件节点列表
      */
     @Override
-    public List<FileNode> getFileTree(String workPath) {
+    public List<FileNode> getGeneratedFileTree(String workPath) {
         File root = new File(codeGenRootDir, workPath);
-        List<FileNode> node = new ArrayList<>();
-        recursive(root, node);
-        return node;
+        return fileStorageService.getFileTree(root.getAbsolutePath());
     }
 
     @Override
@@ -223,46 +221,6 @@ public class CodeGenServiceImpl implements CodeGenService {
             }
         }
         throw ServerException.create("文件%s不存在", path);
-    }
-
-    /**
-     * 递归生成文件树
-     *
-     * @param path 目录
-     * @param node 保存节点
-     */
-    private void recursive(File path, List<FileNode> node) {
-        if (path.isDirectory()) {
-            File[] list = path.listFiles();
-            if (list == null) {
-                return;
-            }
-            for (File file : list) {
-                FileNode fileNode = new FileNode();
-                fileNode.setKey(SecurityUtils.base64Encode(file.getAbsolutePath()));
-                fileNode.setLabel(file.getName());
-                fileNode.setPath(file.getAbsolutePath());
-                node.add(fileNode);
-                if (file.isDirectory()) {
-                    fileNode.setIsLeaf(false);
-                    fileNode.setSelectable(false);
-                    List<FileNode> children = new ArrayList<>();
-                    fileNode.setChildren(children);
-                    recursive(file, children);
-                } else {
-                    fileNode.setIsLeaf(true);
-                    fileNode.setSelectable(true);
-                    fileNode.setExtension(FileUtils.getExtensionName(file, "txt"));
-                }
-            }
-        } else {
-            FileNode fileNode = new FileNode();
-            fileNode.setKey(SecurityUtils.base64Encode(path.getAbsolutePath()));
-            fileNode.setLabel(path.getName());
-            fileNode.setIsLeaf(true);
-            fileNode.setSelectable(true);
-            node.add(fileNode);
-        }
     }
 
     /**

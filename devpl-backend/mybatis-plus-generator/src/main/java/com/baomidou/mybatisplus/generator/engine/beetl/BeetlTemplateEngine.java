@@ -1,6 +1,8 @@
-package com.baomidou.mybatisplus.generator.engine;
+package com.baomidou.mybatisplus.generator.engine.beetl;
 
 import com.baomidou.mybatisplus.generator.config.builder.Context;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.velocity.VelocityTemplateEngine;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -63,15 +65,5 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     @Override
     public @NotNull String templateFilePath(@NotNull String filePath) {
         return filePath + ".btl";
-    }
-
-    @Override
-    public String render(String template, Map<String, Object> params) {
-        return null;
-    }
-
-    @Override
-    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
-
     }
 }

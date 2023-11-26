@@ -1,7 +1,7 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.utils.ServletUtils;
-import io.devpl.generator.service.CodeGenService;
+import io.devpl.generator.service.FileGenerationService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 public class CodeDownloadController {
 
     @Resource
-    CodeGenService codeGenService;
+    FileGenerationService codeGenService;
 
     /**
      * 生成代码（zip压缩包）

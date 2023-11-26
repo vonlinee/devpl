@@ -1,6 +1,7 @@
 <template>
   <vxe-modal v-model="visible"
              :draggable="false"
+             width="50%"
              :title="!dataForm.id ? '新增项目信息' : '修改项目信息'" :mask-closable="false" show-footer>
     <el-form ref="dataFormRef"
              label-position="left"

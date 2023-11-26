@@ -22,7 +22,7 @@ import java.util.Objects;
 public class CodeGenerationController {
 
     @Resource
-    CodeGenService codeGenService;
+    FileGenerationService codeGenService;
     @Resource
     TargetGenerationFileService targetGenFileService;
     @Resource
@@ -141,7 +141,7 @@ public class CodeGenerationController {
      */
     @GetMapping("/file-tree")
     public Result<List<FileNode>> get(String rootPath) {
-        return Result.ok(codeGenService.getFileTree(rootPath));
+        return Result.ok(codeGenService.getGeneratedFileTree(rootPath));
     }
 
     /**

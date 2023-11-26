@@ -83,7 +83,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             log.error(e.getMessage(), e);
             throw new ServerException("渲染模板失败，请检查模板语法", e);
         } catch (TemplateException e) {
-            throw new ServerException("", e);
+            throw new ServerException("模板语法不正确", e);
         }
         return content;
     }

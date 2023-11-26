@@ -1,7 +1,7 @@
 package io.devpl.generator.boot;
 
 import com.baomidou.mybatisplus.generator.engine.TemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.velocity.VelocityTemplateEngine;
 import io.devpl.generator.config.GeneratorProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

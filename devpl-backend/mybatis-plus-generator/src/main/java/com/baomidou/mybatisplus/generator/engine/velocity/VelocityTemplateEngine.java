@@ -1,27 +1,31 @@
-package com.baomidou.mybatisplus.generator.engine;
+package com.baomidou.mybatisplus.generator.engine.velocity;
 
 import com.baomidou.mybatisplus.generator.config.builder.Context;
-import com.baomidou.mybatisplus.generator.engine.velocity.CamelCaseDirective;
+import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import com.baomidou.mybatisplus.generator.engine.StringTemplateSource;
+import com.baomidou.mybatisplus.generator.engine.TemplateArguments;
+import com.baomidou.mybatisplus.generator.engine.TemplateSource;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 /**
  * Velocity 模板引擎实现文件输出
  * <a href="https://velocity.apache.org/engine/1.7/user-guide.html">Velocity 1.7</a>
- *
- * @author hubin
- * @since 2018-01-10
+ * <a href="https://velocity.apache.org/engine/devel/getting-started.html">...</a>
+ * <a href="https://velocity.apache.org/engine/devel/user-guide.html">...</a>
+ * <p>
+ * org/apache/velocity/runtime/defaults/velocity.properties
  */
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
     static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
@@ -35,18 +39,11 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-    private final VelocityEngine velocityEngine;
-    String VM_LOAD_PATH_KEY = "resource.loader.file.class";
-    String VM_LOAD_PATH_VALUE = "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader";
+    private final VelocityEngine engine;
+    private final StringResourceRepository stringTemplates = new VelocityStringResourceRepository();
 
     public VelocityTemplateEngine() {
-        velocityEngine = createEngine();
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("tableName", "devpl_table_name");
-        String result = this.render("#toCamelCase(${tableName})", map);
-
-        System.out.println(result);
+        engine = createEngine();
     }
 
     @Override
@@ -55,28 +52,26 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     private VelocityEngine createEngine() {
-        Properties p = new Properties();
-        p.setProperty(VM_LOAD_PATH_KEY, VM_LOAD_PATH_VALUE);
-        p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, "");
-        p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());
-        p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
-        p.setProperty("resource.loader.file.unicode", Boolean.TRUE.toString());
+        Properties properties = new Properties();
+        try (InputStream is = this.getClass().getResourceAsStream("velocity.properties")) {
+            properties.load(is);
+        } catch (IOException e) {
+            throw new RuntimeException("Can't load custom velocity config file from classpath", e);
+        }
 
-        p.setProperty(Velocity.CUSTOM_DIRECTIVES, CamelCaseDirective.class.getName());
-
-        // 自定义的获取模板实现类
-        p.setProperty("string.resource.loader.repository.class",
-            StringTemplateSource.class.getName());
-
-        p.setProperty("string.resource.loader.class",
-            "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-
-        return new VelocityEngine(p);
+        VelocityEngine engine = new VelocityEngine(properties);
+        /**
+         * 按StringResourceLoader的javadoc文档配置无效，手动添加添加，这里手动添加
+         * 通过下面方式获取:
+         * VelocityStringResourceRepository repository = (VelocityStringResourceRepository) engine.getApplicationAttribute("devpl");
+         */
+        engine.setApplicationAttribute("devpl", stringTemplates);
+        return engine;
     }
 
     @Override
     public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull OutputStream outputStream) throws Exception {
-        Template template = velocityEngine.getTemplate(templatePath, StandardCharsets.UTF_8.name());
+        Template template = engine.getTemplate(templatePath, StandardCharsets.UTF_8.name());
         try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(ow)) {
             template.merge(new VelocityContext(objectMap), writer);
         }
@@ -92,15 +87,25 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
         if (template instanceof StringTemplateSource) {
             VelocityContext context = new VelocityContext(arguments.asMap());
-            Velocity.evaluate(context, new OutputStreamWriter(outputStream), "mystring", template.getTemplate());
+            Velocity.evaluate(context, new OutputStreamWriter(outputStream), "mystring", template.getContent());
         }
     }
 
+    /**
+     * 直接渲染字符串模板
+     * 通过文件模板进行查找，如果找不到则找字符串模板
+     * 使用Velocity.evaluate无法使用自定义指令功能
+     *
+     * @see VelocityStringResourceRepository
+     */
     @Override
-    public String render(String template, Map<String, Object> params) {
-        VelocityContext context = new VelocityContext(params);
+    public String render(String template, TemplateArguments params) {
+        if (template == null) {
+            return "";
+        }
         StringWriter output = new StringWriter();
-        Velocity.evaluate(context, output, "", template);
+        Template vt = engine.getTemplate(template);
+        vt.merge(new VelocityContext(params.asMap()), output);
         return output.toString();
     }
 
