@@ -22,6 +22,12 @@
       <el-form-item>
         <el-button type="primary" @click="showFileTypeManagerDialog()">文件类型管理</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-select v-model="project">
+          <el-option v-for="project in projects" :key="project.projectId" :value="project"
+                     :label="project.projectName"></el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
               @selection-change="selectionChangeHandle">
@@ -42,7 +48,7 @@
                    @current-change="currentChangeHandle">
     </el-pagination>
 
-    <import ref="importRef" @refresh-data-list="getDataList"></import>
+    <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
     <edit ref="editRef" @refresh-data-list="getDataList"></edit>
     <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
   </el-card>
@@ -60,17 +66,18 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref } from "vue";
 import { DataTableOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
-import Import from "./import.vue";
+import GenTableImport from "./GenTableImport.vue";
 import Edit from "./edit.vue";
 import Generator from "./generator.vue";
-import { apiSyncTable } from "@/api/table";
-import { ElButton, ElMessage, ElMessageBox } from "element-plus";
+import { apiImportTables, apiSyncTable } from "@/api/table";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from "@/api/generator";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
+import { apiListSelectableProjects } from "@/api/project";
 
 const state: DataTableOptions = reactive({
   dataListUrl: "/gen/table/page",
@@ -91,7 +98,7 @@ const editRef = ref();
 const generatorRef = ref();
 
 const importHandle = (id?: number) => {
-  importRef.value.init(id);
+  importRef.value.show(id);
 };
 
 const editHandle = (id?: number) => {
@@ -110,6 +117,13 @@ const downloadBatchHandle = () => {
   }
   useDownloadApi(tableIds);
 };
+
+const projects = ref<ProjectSelectVO[]>();
+const project = ref<ProjectSelectVO>();
+onMounted(() => {
+  // 获取可选择的项目列表
+  apiListSelectableProjects().then((res) => projects.value = res.data);
+});
 
 const syncHandle = (row: any) => {
   ElMessageBox.confirm(`确定同步数据表${row.tableName}吗?`, "提示", {
@@ -151,6 +165,21 @@ function saveConfig() {
     ElMessage.error("保存配置失败", reason);
   });
 }
+
+const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
+  if (dataSourceId) {
+    apiImportTables(dataSourceId, tableNames, project.value?.projectId).then(() => {
+      ElMessage.success({
+        message: "操作成功",
+        duration: 500,
+        onClose: () => {
+          getDataList();
+        }
+      });
+    });
+  }
+};
+
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);
 </script>

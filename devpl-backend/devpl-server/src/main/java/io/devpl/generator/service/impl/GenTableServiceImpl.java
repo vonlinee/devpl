@@ -8,10 +8,10 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.config.template.DeveloperInfo;
 import io.devpl.generator.config.template.GeneratorInfo;
-import io.devpl.generator.config.template.ProjectInfo;
 import io.devpl.generator.dao.GenTableMapper;
 import io.devpl.generator.domain.TemplateFillStrategy;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.TableImportParam;
 import io.devpl.generator.entity.*;
 import io.devpl.generator.enums.FormLayoutEnum;
 import io.devpl.generator.enums.GeneratorTypeEnum;
@@ -41,6 +41,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     private final GeneratorConfigService generatorConfigService;
     private final TargetGenerationFileService targetGenFileService;
     private final TableFileGenerationService tableFileGenerationService;
+    private final ProjectService projectService;
     private final TemplateFileGenerationService templateFileGenerationService;
 
     @Override
@@ -74,7 +75,10 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void importTable(Long datasourceId, String tableName, int option) {
+    public void importSingleTable(TableImportParam param) {
+        String tableName = param.getTableName();
+        Long datasourceId = param.getDataSourceId();
+
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
@@ -91,6 +95,9 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         // 代码生成器信息
         GeneratorInfo generator = generatorConfigService.getGeneratorInfo(true);
 
+        // 项目信息
+        ProjectInfo project = projectService.getById(param.getProjectId());
+
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 从数据库获取表信息
@@ -98,8 +105,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
             // 保存表信息
             // 项目信息
-            ProjectInfo project = generator.getProject();
-            table.setPackageName(project.getPackageName());
+            table.setPackageName(project.getProjectPackage());
             table.setVersion(project.getVersion());
             table.setBackendPath(project.getBackendPath());
             table.setFrontendPath(project.getFrontendPath());
@@ -117,12 +123,13 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             table.setGeneratorType(GeneratorTypeEnum.CUSTOM_DIRECTORY.ordinal());
 
             table.setCreateTime(LocalDateTime.now());
+            table.setUpdateTime(table.getCreateTime());
             this.save(table);
 
             initTargetGenerationFiles(table);
 
             // 获取原生字段数据
-            List<GenTableField> tableFieldList = getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
+            List<GenTableField> tableFieldList = this.getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
             // 初始化字段数据
             tableFieldService.initFieldList(tableFieldList);
             // 保存列数据

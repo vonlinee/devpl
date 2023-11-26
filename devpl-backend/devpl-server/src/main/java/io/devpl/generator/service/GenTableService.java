@@ -4,6 +4,7 @@ import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.TableImportParam;
 import io.devpl.generator.entity.GenTable;
 
 import java.sql.Connection;
@@ -24,12 +25,9 @@ public interface GenTableService extends BaseService<GenTable> {
     boolean deleteBatchIds(Long[] ids);
 
     /**
-     * 导入表
-     *
-     * @param datasourceId 数据源ID
-     * @param tableName    表名
+     * 导入单个表
      */
-    void importTable(Long datasourceId, String tableName, int option);
+    void importSingleTable(TableImportParam param);
 
     void initTargetGenerationFiles(GenTable table);
 

@@ -46,7 +46,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "ProjectIndex",
         component: () => import("../views/project/index.vue"),
         meta: {
-          title: "项目名变更",
+          title: "项目管理",
           icon: "icon-edit-square"
         }
       }

@@ -16,12 +16,17 @@ export const useTableSubmitApi = (dataForm: any) => {
  * 导入表
  * @param datasourceId
  * @param tableNameList
+ * @param projectId
  */
-export const apiImportTables = (datasourceId: number, tableNameList: string[]) => {
-  return http.post("/gen/table/import/" + datasourceId, tableNameList);
+export const apiImportTables = (datasourceId: number, tableNameList: string[], projectId?: number) => {
+  return http.post("/gen/table/import/", {
+    dataSourceId: datasourceId,
+    tableNameList: tableNameList,
+    projectId: projectId
+  });
 };
 
-export const useTableFieldSubmitApi = (tableId: number, fieldList: any) => {
+export const apiUpdateGenTableFields = (tableId: number, fieldList: any) => {
   return http.put("/gen/table/field/" + tableId, fieldList);
 };
 

@@ -172,7 +172,7 @@ import {
   ElTooltip
 } from "element-plus/es";
 import Sortable from "sortablejs";
-import { useTableFieldSubmitApi } from "@/api/table";
+import { apiUpdateGenTableFields } from "@/api/table";
 import { apiListGenTables } from "@/api/table";
 import { useFieldTypeListApi } from "@/api/fieldType";
 import { VxeTableInstance } from "vxe-table";
@@ -310,7 +310,7 @@ const getFieldTypeList = async () => {
  * 确定按钮，表单提交
  */
 const submitHandle = () => {
-  useTableFieldSubmitApi(tableId.value, fieldList.value).then(() => {
+  apiUpdateGenTableFields(tableId.value, fieldList.value).then(() => {
     apiSaveGenerationFileConfig(tableId.value, generationFiles.value || []).then((res) => {
       if (res.data) {
         ElMessage.success({

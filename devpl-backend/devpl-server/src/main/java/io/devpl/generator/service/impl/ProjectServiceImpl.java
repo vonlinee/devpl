@@ -1,13 +1,15 @@
 package io.devpl.generator.service.impl;
 
 import cn.hutool.core.util.ZipUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.common.query.ListResult;
+import io.devpl.generator.dao.ProjectInfoMapper;
 import io.devpl.generator.domain.param.Query;
-import io.devpl.generator.dao.ProjectModifyMapper;
-import io.devpl.generator.entity.ProjectModify;
-import io.devpl.generator.service.ProjectModifyService;
+import io.devpl.generator.domain.vo.ProjectSelectVO;
+import io.devpl.generator.entity.ProjectInfo;
+import io.devpl.generator.service.ProjectService;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
@@ -31,7 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMapper, ProjectModify> implements ProjectModifyService {
+public class ProjectServiceImpl extends BaseServiceImpl<ProjectInfoMapper, ProjectInfo> implements ProjectService {
 
     /**
      * 需要变更的文件后缀
@@ -47,13 +49,25 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
     public final static String SPLIT = ",";
 
     @Override
-    public ListResult<ProjectModify> page(Query query) {
-        IPage<ProjectModify> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+    public List<ProjectSelectVO> listSelectableProject() {
+        LambdaQueryWrapper<ProjectInfo> qw = new LambdaQueryWrapper<>();
+        qw.select(ProjectInfo::getId, ProjectInfo::getProjectName);
+        return baseMapper.selectList(qw).stream().map(p -> {
+            ProjectSelectVO vo = new ProjectSelectVO();
+            vo.setProjectId(p.getId());
+            vo.setProjectName(p.getProjectName());
+            return vo;
+        }).toList();
+    }
+
+    @Override
+    public ListResult<ProjectInfo> listProjectInfos(Query query) {
+        IPage<ProjectInfo> page = baseMapper.selectPage(getPage(query), getWrapper(query));
         return ListResult.ok(page);
     }
 
     @Override
-    public byte[] download(ProjectModify project) throws IOException {
+    public byte[] download(ProjectInfo project) throws IOException {
         // 原项目根路径
         File srcRoot = new File(project.getProjectPath());
         // 临时项目根路径
@@ -79,7 +93,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
     /**
      * 获取替换规则
      */
-    private Map<String, String> getReplaceMap(ProjectModify project) {
+    private Map<String, String> getReplaceMap(ProjectInfo project) {
         Map<String, String> map = new LinkedHashMap<>();
 
         // 项目路径替换
@@ -98,7 +112,7 @@ public class ProjectModifyServiceImpl extends BaseServiceImpl<ProjectModifyMappe
     }
 
     @Override
-    public boolean save(ProjectModify entity) {
+    public boolean save(ProjectInfo entity) {
         entity.setExclusions(EXCLUSIONS);
         entity.setModifySuffix(MODIFY_SUFFIX);
         entity.setCreateTime(new Date());

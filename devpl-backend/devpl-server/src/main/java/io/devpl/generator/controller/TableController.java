@@ -3,10 +3,12 @@ package io.devpl.generator.controller;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
 import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.TableImportParam;
 import io.devpl.generator.entity.GenTable;
 import io.devpl.generator.entity.GenTableField;
 import io.devpl.generator.service.GenTableFieldService;
 import io.devpl.generator.service.GenTableService;
+import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,13 +83,17 @@ public class TableController {
     /**
      * 导入数据源中的表到gen_table
      *
-     * @param datasourceId  数据源ID
-     * @param tableNameList 表名列表
+     * @param param 数据源ID
      */
-    @PostMapping("import/{datasourceId}")
-    public Result<String> tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<String> tableNameList) {
-        for (String tableName : tableNameList) {
-            tableService.importTable(datasourceId, tableName, 1);
+    @PostMapping("/import")
+    public Result<String> tableImport(@RequestBody TableImportParam param) {
+        if (!CollectionUtils.isEmpty(param.getTableNameList())) {
+            for (String tableName : param.getTableNameList()) {
+                param.setTableName(tableName);
+                tableService.importSingleTable(param);
+            }
+        } else {
+            tableService.importSingleTable(param);
         }
         return Result.ok();
     }

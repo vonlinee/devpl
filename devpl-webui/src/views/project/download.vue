@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { useProjectApi, useProjectSubmitApi, useSourceDownloadApi } from '@/api/project'
+import { apiGetProjectInfo, apiUpdateProjectInfo, apiDownloadProject } from '@/api/project'
 
 const visible = ref(false)
 const dataFormRef = ref()
@@ -98,7 +98,7 @@ const init = (id?: number) => {
 }
 
 const getProject = (id: number) => {
-	useProjectApi(id).then(res => {
+	apiGetProjectInfo(id).then(res => {
 		Object.assign(dataForm, res.data)
 	})
 }
@@ -119,10 +119,10 @@ const submitHandle = () => {
 		}
 
 		// 先保存
-		await useProjectSubmitApi(dataForm)
+		await apiUpdateProjectInfo(dataForm)
 
 		// 源码下载
-		useSourceDownloadApi(dataForm.id)
+		apiDownloadProject(dataForm.id)
 		visible.value = false
 	})
 }

@@ -12,11 +12,6 @@ import java.util.List;
 public class GeneratorInfo {
 
     /**
-     * 项目信息
-     */
-    private ProjectInfo project;
-
-    /**
      * 开发者信息
      */
     private DeveloperInfo developer;

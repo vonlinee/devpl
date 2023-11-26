@@ -10,8 +10,8 @@ import java.util.Date;
  * 项目名变更
  */
 @Data
-@TableName("gen_project_modify")
-public class ProjectModify {
+@TableName("project_info")
+public class ProjectInfo {
     /**
      * id
      */
@@ -67,4 +67,12 @@ public class ProjectModify {
      * 创建时间
      */
     private Date createTime;
+
+    private String version;
+
+    private String backendPath;
+
+    private String frontendPath;
+
+    private Integer status;
 }
