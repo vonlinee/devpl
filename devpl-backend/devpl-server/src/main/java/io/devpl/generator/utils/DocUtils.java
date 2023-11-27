@@ -1,4 +1,4 @@
-package io.devpl.generator.tools.utils;
+package io.devpl.generator.utils;
 
 import java.util.LinkedList;
 import java.util.List;

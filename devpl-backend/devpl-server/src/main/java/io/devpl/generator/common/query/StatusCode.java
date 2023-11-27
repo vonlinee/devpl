@@ -7,6 +7,7 @@ public enum StatusCode {
 
     OK(2000, "OK"),
     NOT_FOUND(404, "Not Found"),
+    FORBIDDEN(403, "Forbidden"),
     IO_ERROR(6001, "IO异常"),
     FILE_NOT_FOUNT(6002, "文件不存在"),
     INTERNAL_SERVER_ERROR(5000, "服务器异常，请稍后再试");

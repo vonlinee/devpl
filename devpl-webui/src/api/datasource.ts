@@ -47,11 +47,22 @@ export const useDataSourceSubmitApi = (dataForm: any) => {
 /**
  * 获取数据源的所有表信息
  * @param id
- * @param tableNamePattern 
- * @returns 
+ * @param tableNamePattern
+ * @returns
  */
-export const useDataSourceTableListApi = (id: number, tableNamePattern?: string | null) => {
-  return http.get("/api/gen/datasource/table/list/" + id + "?tableNamePattern=" + (tableNamePattern || ''))
+export const useDataSourceTableListApi = (
+  id: number,
+  databaseName?: string,
+  tableNamePattern?: string | null
+) => {
+  return http.get(
+    "/api/gen/datasource/table/list/" +
+      id +
+      "?tableNamePattern=" +
+      (tableNamePattern || "") +
+      "&databaseName" +
+      (databaseName || "")
+  )
 }
 
 /**
@@ -96,8 +107,10 @@ export const apiListSupportedDbTypes = () => {
  * 所有支持的数据库类型
  * @returns 所有支持的数据库类型
  */
-export const apiListSelectableDataSources = () => {
-  return http.get("/api/gen/datasource/list/selectable")
+export const apiListSelectableDataSources = (internal?: boolean) => {
+  return http.get("/api/gen/datasource/list/selectable", {
+    internal: internal,
+  })
 }
 
 /**

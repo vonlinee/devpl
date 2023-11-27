@@ -1,7 +1,5 @@
 <template>
-  <el-card :body-style="{
-    height: '35px'
-  }">
+  <el-card>
     <el-form>
       <el-form-item label="选择项目">
         <el-select v-model="project">
@@ -11,9 +9,7 @@
       </el-form-item>
     </el-form>
   </el-card>
-  <el-card :body-style="{
-    height: '35px'
-  }">
+  <el-card>
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
         <el-input v-model="state.queryForm.tableName" placeholder="表名"></el-input>

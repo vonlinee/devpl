@@ -62,8 +62,13 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list/selectable")
-    public ListResult<DataSourceVO> listSelectableDataSources() {
-        return ListResult.ok(datasourceService.listIdAndNames());
+    public ListResult<DataSourceVO> listSelectableDataSources(String internal) {
+        List<DataSourceVO> dataSourceVOS = datasourceService.listIdAndNames();
+        if ("true".equals(internal)) {
+            dataSourceVOS = new ArrayList<>(dataSourceVOS);
+            dataSourceVOS.add(0, new DataSourceVO(-1L, "内置数据源"));
+        }
+        return ListResult.ok(dataSourceVOS);
     }
 
     /**
@@ -191,7 +196,7 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list/{id}")
-    public ListResult<GenTable> tableList(@PathVariable("id") Long id, @RequestParam("tableNamePattern") String tableNamePattern) {
+    public ListResult<GenTable> tableList(@PathVariable("id") Long id, @RequestParam("databaseName") String databaseName, @RequestParam("tableNamePattern") String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
             return ListResult.ok(tableService.getTableList(id, tableNamePattern));

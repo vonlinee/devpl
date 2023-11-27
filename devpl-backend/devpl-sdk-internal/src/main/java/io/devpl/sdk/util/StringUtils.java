@@ -860,6 +860,19 @@ public final class StringUtils {
     }
 
     /**
+     * 去除字符串首尾的空字符
+     *
+     * @param str 字符串
+     * @return 如果参数为空，原样返回
+     */
+    public static String trim(String str) {
+        if (str != null && str.isEmpty()) {
+            str = str.trim();
+        }
+        return str;
+    }
+
+    /**
      * Trim trailing whitespace from the given {@code String}.
      *
      * @param str the {@code String} to check

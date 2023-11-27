@@ -1,10 +1,17 @@
 package io.devpl.generator.config;
 
+import io.devpl.generator.common.query.Result;
+import io.devpl.generator.common.query.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -13,11 +20,16 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandlerCom
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.function.RequestPredicates;
+import org.springframework.web.servlet.function.RouterFunction;
+import org.springframework.web.servlet.function.RouterFunctions;
+import org.springframework.web.servlet.function.ServerResponse;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -35,6 +47,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return restTemplate;
     }
 
+    /**
+     * 注册请求拦截器
+     *
+     * @param registry 拦截器注册中心
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RequestTracer());
@@ -106,5 +123,38 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
             argumentResolvers.add(_processor);
             requestMappingHandlerAdapter.setArgumentResolvers(argumentResolvers);
         }
+    }
+
+    @Bean
+    public ConfigurableServletWebServerFactory webServerFactory() {
+        TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory();
+        HashSet<ErrorPage> errorPages = new HashSet<>();
+        errorPages.add(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
+        errorPages.add(new ErrorPage(HttpStatus.FORBIDDEN, "/404"));
+        errorPages.add(new ErrorPage(HttpStatus.FORBIDDEN, "/500"));
+        tomcatServletWebServerFactory.setErrorPages(errorPages);
+        return tomcatServletWebServerFactory;
+    }
+
+    /**
+     * 函数式web接口
+     * 给容器中放一个RouterFunction<ServerResponse>的bean，统一路由管理
+     * 核心四大对象
+     * 1.RouterFunction:定义路由信息。发什么请求，由谁来处理
+     * 2.RequestPredicate：定义请求规则：请求方式、请求参数
+     * 3.ServerRequest：封装请求完整数据
+     * 4.ServerResponse：封装响应完整数据
+     *
+     * @return 路由配置
+     */
+    @Bean
+    public RouterFunction<ServerResponse> personRoute() {
+        return RouterFunctions
+            .route()
+            .GET("/403", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.FORBIDDEN)))
+            .GET("/404", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.NOT_FOUND)))
+            .GET("/500", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.INTERNAL_SERVER_ERROR)))
+            .GET("/error", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.NOT_FOUND)))
+            .build();
     }
 }

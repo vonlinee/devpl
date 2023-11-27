@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
-import io.devpl.generator.tools.utils.StringUtils;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * Oracle查询
@@ -19,7 +19,7 @@ public class OracleQuery implements AbstractQuery {
         sql.append("select dt.table_name, dtc.comments from user_tables dt,user_tab_comments dtc ");
         sql.append("where dt.table_name = dtc.table_name ");
         // 表名查询
-        if (StringUtils.isNotBlank(tableName)) {
+        if (StringUtils.hasText(tableName)) {
             sql.append("and dt.table_name = '").append(tableName).append("' ");
         }
         sql.append("order by dt.table_name asc");

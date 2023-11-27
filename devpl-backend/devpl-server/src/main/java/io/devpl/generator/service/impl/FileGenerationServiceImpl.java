@@ -1,30 +1,30 @@
 package io.devpl.generator.service.impl;
 
+import io.devpl.generator.boot.CodeGenProperties;
 import io.devpl.generator.common.ServerException;
-import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 import io.devpl.generator.domain.param.TableImportParam;
-import io.devpl.generator.entity.*;
+import io.devpl.generator.entity.GenBaseClass;
+import io.devpl.generator.entity.GenTable;
+import io.devpl.generator.entity.GenTableField;
+import io.devpl.generator.entity.TableFileGeneration;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.generator.utils.DateTimeUtils;
 import io.devpl.generator.utils.DateUtils;
 import io.devpl.sdk.io.FileUtils;
-import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * 代码生成
@@ -55,41 +55,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     private TemplateFileGenerationService templateFileGenerationService;
     @Resource
     private TemplateArgumentService templateArgumentService;
-
-    /**
-     * 代码生成根目录
-     */
-    @Value("${devpl.file.codegen.root}")
-    private String codeGenRootDir;
-
-    @Override
-    public GeneratorInfo getGeneratorInfo() {
-        return generatorConfigService.getGeneratorInfo(true);
-    }
-
-    @Override
-    public void downloadCode(Long tableId, ZipOutputStream zip) {
-        // 数据模型
-        Map<String, Object> dataModel = prepareDataModel(tableId);
-
-        GeneratorInfo generatorInfo = getGeneratorInfo();
-        // 渲染模板并输出
-        for (TemplateInfo template : generatorInfo.getTemplates()) {
-            dataModel.put("templateName", template.getTemplateName());
-            String content = templateService.render(template.getContent(), dataModel);
-            String path = templateService.render(template.getGeneratorPath(), dataModel);
-            path = tableId + File.separator + path;
-            try {
-                // 添加到zip
-                zip.putNextEntry(new ZipEntry(path));
-                IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
-                zip.flush();
-                zip.closeEntry();
-            } catch (IOException e) {
-                throw new ServerException("模板写入失败：" + path, e);
-            }
-        }
-    }
+    @Resource
+    private CodeGenProperties codeGenProperties;
 
     /**
      * 生成某个表的文件
@@ -103,33 +70,34 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
 
         List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(tableId);
-
-        for (TableFileGeneration tfg : fileToBeGenerated) {
-            templateFileGenerationService.generate(tfg.getGenerationId());
-        }
-
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
 
-        GeneratorInfo generatorInfo = getGeneratorInfo();
-
         for (TableFileGeneration tfg : fileToBeGenerated) {
-            templateArgumentService.initialize(tfg.getTemplateId(), tfg.getGenerationId(), dataModel);
-        }
+            dataModel.put("templateName", tfg.getTemplateName());
 
-        // 渲染模板并输出
-        for (TemplateInfo template : generatorInfo.getTemplates()) {
-            dataModel.put("templateName", template.getTemplateName());
-            String content = templateService.render(template.getContent(), dataModel);
-            // 文件保存路径
-            String path = parentDirectory + "/" + templateService.render(template.getGeneratorPath(), dataModel);
-            try {
-                FileUtils.writeStringToFile(new File(codeGenRootDir, path), content, StandardCharsets.UTF_8.name());
-            } catch (Exception exception) {
-                log.error("写入模板失败{}", template.getTemplateName());
+            try (StringWriter sw = new StringWriter()) {
+                templateService.render(tfg.getTemplateId(), dataModel, sw);
+                String content = sw.toString();
+                // 渲染模板并输出到文件
+                // 文件保存路径
+                String path = parentDirectory + "/" + tfg.getSavePath();
+                log.info("模板:{} 保存路径:{}", tfg.getTemplateName(), tfg.getSavePath());
+                try {
+                    FileUtils.writeStringToFile(new File(codeGenProperties.getCodeGenRootDir(), path), content, StandardCharsets.UTF_8.name());
+                } catch (Exception exception) {
+                    log.error("写入模板失败{}", tfg.getTemplateName());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
         return parentDirectory;
+    }
+
+    @Override
+    public String getAbsolutePath(String path) {
+        return codeGenProperties.getCodeGenRootDir() + "/" + path;
     }
 
     /**
@@ -222,7 +190,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      */
     @Override
     public List<FileNode> getGeneratedFileTree(String workPath) {
-        File root = new File(codeGenRootDir, workPath);
+        File root = new File(codeGenProperties.getCodeGenRootDir(), workPath);
         return fileStorageService.getFileTree(root.getAbsolutePath());
     }
 

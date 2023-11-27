@@ -1,20 +1,20 @@
 <template>
-  <div style="height: 100%; overflow-y: scroll;">
-    <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler"
-      hegiht="100%">
+  <div>
+    <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
       <template #default="{ node, data }">
-        <span class="custom-tree-node" @contextmenu="displayContextMenu($event)">
-          <span v-contextmenu:contextmenu>{{ node.label }}</span>
+        <span class="custom-tree-node" @contextmenu="displayContextMenu($event, node, data)">
+          <span v-contextmenu:contextMenuRef>{{ node.label }}</span>
         </span>
       </template>
     </el-tree>
   </div>
 
-  <Contextmenu ref="contextmenu">
-    <contextmenu-item>数据模拟</contextmenu-item>
+  <Contextmenu ref="contextMenuRef">
+    <contextmenu-item @click="handleMockerMenuItemClicked">数据模拟</contextmenu-item>
     <contextmenu-item>DDL</contextmenu-item>
     <contextmenu-item>菜单3</contextmenu-item>
   </Contextmenu>
+
 </template>
 
 <script lang="ts" setup>
@@ -23,10 +23,25 @@ import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import { Contextmenu, ContextmenuItem } from "v-contextmenu";
 
+const dbMocker = ref()
+
 const contextMenuRef = ref()
 
-const displayContextMenu = (event: Event) => {
+const currentMenuNode = ref()
+
+
+/**
+ * 展示右键菜单
+ * @param event 
+ * @param node 点击的节点
+ * @param data 节点的数据
+ */
+const displayContextMenu = (event: Event, node: Node, data: TreeNodeVO) => {
   contextMenuRef.value.show(event)
+}
+
+function handleMockerMenuItemClicked() {
+  dbMocker.value.show()
 }
 
 const defaultProps = {
@@ -121,16 +136,5 @@ defineExpose({
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
-}
-
-.card {
-  background: var(--surface-card);
-  padding: 2rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-
-p {
-  line-height: 1.75;
 }
 </style>

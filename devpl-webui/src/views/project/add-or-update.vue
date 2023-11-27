@@ -1,11 +1,8 @@
 <template>
-  <vxe-modal v-model="visible"
-             :draggable="false"
-             width="50%"
-             :title="!dataForm.id ? '新增项目信息' : '修改项目信息'" :mask-closable="false" show-footer>
-    <el-form ref="dataFormRef"
-             label-position="left"
-             :model="dataForm" :rules="dataRules" align="left" label-width="150px" @keyup.enter="submitHandle()">
+  <vxe-modal v-model="visible" :draggable="false" width="50%" :title="!dataForm.id ? '新增项目信息' : '修改项目信息'"
+    :mask-closable="false" show-footer>
+    <el-form ref="dataFormRef" label-position="left" :model="dataForm" :rules="dataRules" align="left" label-width="150px"
+      @keyup.enter="submitHandle()">
       <el-form-item label="项目名" prop="projectName">
         <el-input v-model="dataForm.projectName" placeholder="项目名"></el-input>
       </el-form-item>
@@ -21,9 +18,23 @@
       <el-form-item label="项目前端路径" prop="projectPath">
         <el-input v-model="dataForm.frontendPath" placeholder="项目前端路径"></el-input>
       </el-form-item>
-      <el-form-item label="项目后端路径" prop="projectPath">
-        <el-input v-model="dataForm.backendPath" placeholder="项目前端路径"></el-input>
-      </el-form-item>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="项目后端路径" prop="projectPath">
+            <el-input v-model="dataForm.backendPath" placeholder="项目后端路径"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="构建工具" prop="projectPath">
+            <el-select v-model="dataForm.buildTool" placeholder="构建工具">
+              <el-option label="Maven" :value="1"></el-option>
+              <el-option label="Gradle" :value="2"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-form-item label="版本号" prop="version">
         <el-input v-model="dataForm.version" placeholder="版本号"></el-input>
       </el-form-item>
@@ -53,7 +64,8 @@ const dataForm = reactive({
   projectPath: "",
   backendPath: "",
   frontendPath: "",
-  version: ""
+  version: "",
+  buildTool: 'Maven'
 });
 
 const init = (id?: number) => {

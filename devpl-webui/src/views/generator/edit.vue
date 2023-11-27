@@ -1,9 +1,9 @@
 <template>
-  <el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false">
+  <el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">
     <el-tabs v-model="activeName" @tab-click="handleClick">
 
       <el-tab-pane label="生成文件" name="target">
-        <el-table border :data="generationFiles" height="550px">
+        <el-table border :data="generationFiles">
           <el-table-column label="文件名" prop="fileName">
             <template #default="scope">
               <el-input v-model="scope.row.fileName"></el-input>
@@ -12,8 +12,8 @@
           <el-table-column label="模板" prop="templateId">
             <template #default="scope">
               <template-selector :current="scope.row.templateName ? scope.row.templateId : null"
-                                 :options="templateOptions"
-                                 :on-handle-value-change="(val: any) => scope.row.templateId = val"></template-selector>
+                :options="templateOptions"
+                :on-handle-value-change="(val: any) => scope.row.templateId = val"></template-selector>
             </template>
           </el-table-column>
           <el-table-column label="保存路径" prop="savePath">
@@ -35,13 +35,13 @@
 
       <el-tab-pane label="属性设置" name="field">
         <vxe-table ref="fieldTable" height="590px" border row-key class="sortable-row-gen" :data="fieldList"
-                   :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+          :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
           <vxe-column type="seq" width="35" align="center"></vxe-column>
           <vxe-column width="30" title="拖动">
             <template #default>
-							<span class="drag-btn">
-								<i class="vxe-icon-sort"></i>
-							</span>
+              <span class="drag-btn">
+                <i class="vxe-icon-sort"></i>
+              </span>
             </template>
             <template #header>
               <el-tooltip class="item" effect="dark" content="按住后可以上下拖动排序" placement="top-start">
@@ -57,7 +57,7 @@
             <template #default="{ row }">
               <vxe-select v-model="row.attrType" transfer>
                 <vxe-option v-for="item in typeList" :key="item.value" :value="item.value"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -65,7 +65,7 @@
             <template #default="{ row }">
               <vxe-select v-model="row.autoFill" transfer>
                 <vxe-option v-for="item in fillList" :key="item.value" :value="item.value"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -78,7 +78,7 @@
       </el-tab-pane>
       <el-tab-pane label="表单配置" name="form">
         <vxe-table ref="formTable" height="590px" border row-key :data="fieldList"
-                   :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+          :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
           <vxe-column field="attrName" title="属性名"></vxe-column>
           <vxe-column field="fieldComment" title="说明"></vxe-column>
           <vxe-column field="formItem" title="表单显示">
@@ -96,7 +96,7 @@
             <template #default="{ row }">
               <vxe-select v-model="row.formType" transfer>
                 <vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -105,7 +105,7 @@
       </el-tab-pane>
       <el-tab-pane label="列表配置" name="grid">
         <vxe-table ref="gridTable" border height="590px" row-key :data="fieldList"
-                   :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+          :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
           <vxe-column field="attrName" title="属性名"></vxe-column>
           <vxe-column field="fieldComment" title="说明"></vxe-column>
           <vxe-column field="gridItem" title="列表显示">
@@ -122,7 +122,7 @@
       </el-tab-pane>
       <el-tab-pane label="查询配置" name="query">
         <vxe-table ref="queryTable" :border="true" height="590px" row-key :data="fieldList"
-                   :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+          :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
           <vxe-column field="attrName" title="属性名"></vxe-column>
           <vxe-column field="fieldComment" title="说明"></vxe-column>
           <vxe-column field="queryItem" title="查询显示">
@@ -134,7 +134,7 @@
             <template #default="{ row }">
               <vxe-select v-model="row.queryType" transfer>
                 <vxe-option v-for="item in queryList" :key="item.value" :value="item.value"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -142,7 +142,7 @@
             <template #default="{ row }">
               <vxe-select v-model="row.queryFormType" transfer>
                 <vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -194,7 +194,7 @@ const handleClick = (tab: TabsPaneContext) => {
   }
 };
 
-const templateOptions = ref<TemplateInfo[]>();
+const templateOptions = ref<TemplateSelectVO[]>();
 
 onMounted(() => {
   apiListSelectableTemplates().then((res) => templateOptions.value = res.data);

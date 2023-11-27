@@ -1,14 +1,14 @@
 package io.devpl.generator.common.exception;
 
 import io.devpl.generator.common.ServerException;
-import io.devpl.generator.common.query.StatusCode;
 import io.devpl.generator.common.query.Result;
+import io.devpl.generator.common.query.StatusCode;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 异常处理器

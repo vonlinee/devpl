@@ -1,6 +1,6 @@
 package io.devpl.generator.jdbc;
 
-import io.devpl.generator.tools.utils.ClassUtils;
+import io.devpl.generator.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

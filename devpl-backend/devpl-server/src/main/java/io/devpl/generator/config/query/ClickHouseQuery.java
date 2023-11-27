@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.generator.tools.utils.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * ClickHouse 表数据查询
@@ -26,7 +26,7 @@ public class ClickHouseQuery implements AbstractQuery {
         sql.append("SELECT * FROM system.tables WHERE 1=1 ");
 
         // 表名查询
-        if (StringUtils.isNotBlank(tableName)) {
+        if (StringUtils.hasText(tableName)) {
             sql.append("and name = '").append(tableName).append("' ");
         }
         return sql.toString();

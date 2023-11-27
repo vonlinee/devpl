@@ -16,8 +16,8 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ParserCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import io.devpl.generator.tools.utils.JSONUtils;
 import io.devpl.generator.tools.parser.java.*;
+import io.devpl.generator.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

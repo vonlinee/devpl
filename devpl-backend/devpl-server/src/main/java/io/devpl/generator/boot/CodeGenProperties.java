@@ -12,4 +12,10 @@ public class CodeGenProperties {
 
     @Value("${devpl.codegen.template-location:}")
     private String templateLocation;
+
+    /**
+     * 代码生成根目录
+     */
+    @Value("${devpl.file.codegen.root}")
+    private String codeGenRootDir;
 }

@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.generator.tools.utils.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * SQLServer查询
@@ -20,7 +20,7 @@ public class SQLServerQuery implements AbstractQuery {
         sql.append("left JOIN sys.extended_properties sep on sep.major_id=so.id and sep.minor_id=0 where (xtype='U' or xtype='V') ");
 
         // 表名查询
-        if (StringUtils.isNotBlank(tableName)) {
+        if (StringUtils.hasText(tableName)) {
             sql.append("and cast(so.name as varchar(500)) = '").append(tableName).append("' ");
         }
         sql.append(" order by cast(so.name as varchar(500))");

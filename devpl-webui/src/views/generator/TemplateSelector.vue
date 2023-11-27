@@ -3,7 +3,7 @@
  -->
 <template>
   <el-select v-model="templateId" placeholder="选择模板" filterable @change="onSelectedValueChange">
-    <el-option v-for="item in options" :key="item.templateId" :label="item.templateName" :value="item.templateId">
+    <el-option v-for="item in templates" :key="item.templateId" :label="item.templateName" :value="item.templateId">
       <div style=" height: 100%;">
         <span style="float: left">{{ item.templateName }}</span>
         <span v-if="previewableFlag" style="float: right;" :link="true" @click="() => onPreview(item)">预览</span>
@@ -12,7 +12,8 @@
   </el-select>
 </template>
 <script setup lang='ts'>
-import { ref } from 'vue';
+import { apiListSelectableTemplates } from '@/api/template';
+import { onMounted, ref } from 'vue';
 
 interface TemplateSelectorProps {
   // 初始选中的模板ID
@@ -24,7 +25,9 @@ interface TemplateSelectorProps {
 }
 
 const emits = defineEmits([
+  // 点击预览按钮，预览模板
   "handlePreview",
+  // 选择的模板变化
   "handleValueChange"
 ])
 
@@ -42,7 +45,16 @@ const onPreview = (item: TemplateSelectVO) => {
 
 const { current, options, previewable } = defineProps<TemplateSelectorProps>()
 
+const templates = ref(options)
 const templateId = ref(current)
 const previewableFlag = ref(previewable || false)
+
+onMounted(() => {
+  if (options == undefined) {
+    apiListSelectableTemplates().then((res) => {
+      templates.value = res.data
+    })
+  }
+})
 </script>
 <style lang='scss' scoped></style>

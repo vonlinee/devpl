@@ -7,7 +7,6 @@
   </el-table>
 </template>
 <script setup lang="ts">
-import { ResultSetColumnMetadata } from "./type";
 import ResultSetColumn from "./ResultSetColumn.vue";
 
 interface ResultSetTableProps {

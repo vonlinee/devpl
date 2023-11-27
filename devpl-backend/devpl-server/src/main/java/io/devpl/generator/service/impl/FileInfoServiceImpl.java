@@ -1,10 +1,10 @@
 package io.devpl.generator.service.impl;
 
-import io.devpl.generator.tools.utils.StringUtils;
 import io.devpl.generator.dao.FileInfoMapper;
 import io.devpl.generator.entity.FileConfig;
 import io.devpl.generator.entity.FileInfo;
 import io.devpl.generator.service.FileInfoService;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 
     /**
      * 文件上传
+     *
      * @param mpfList   文件信息集
      * @param bizType   业务类型(必传)
      * @param bizId     业务id
@@ -49,17 +50,20 @@ public class FileInfoServiceImpl implements FileInfoService {
         String path = fileConf.getPath();  // 文件存储的目录
         // 获取相对路径，由file_conf、额外路径
         String relativePath = fileConf.getResourceRealm() + "/"
-            + (StringUtils.isEmpty(extraPath) ? "" : extraPath + "/");
+            + (!StringUtils.hasText(extraPath) ? "" : extraPath + "/");
 
         // 验证服务器存储路径是否存在，若不存在，则新建文件夹
         File serFile = new File(path + relativePath);
         if (!serFile.exists()) {
-            serFile.mkdirs();
+            boolean result = serFile.mkdirs();
         }
 
         // 循环上传文件
         for (MultipartFile mpf : mpfList) {
             String originalFileName = mpf.getOriginalFilename(); // 获取源文件名
+            if (originalFileName == null) {
+                continue;
+            }
             // 生成新文件名
             String newFileName = "F" + UUID.randomUUID().toString().replace("-", "").toUpperCase()
                 + originalFileName.substring(originalFileName.lastIndexOf("."));

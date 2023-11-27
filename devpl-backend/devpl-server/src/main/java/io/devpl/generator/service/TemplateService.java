@@ -6,6 +6,7 @@ import io.devpl.generator.domain.vo.TemplateSelectVO;
 import io.devpl.generator.entity.TemplateInfo;
 import io.devpl.generator.entity.TemplateVarInfo;
 
+import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +22,15 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 是否成功
      */
     boolean addTemplate(TemplateInfo templateInfo);
+
+    /**
+     * 渲染模板ID
+     *
+     * @param templateId 模板ID
+     * @param dataModel  模板参数
+     * @param out        输出位置
+     */
+    void render(Long templateId, Map<String, Object> dataModel, Writer out);
 
     /**
      * 渲染模板
@@ -49,10 +59,8 @@ public interface TemplateService extends IService<TemplateInfo> {
 
     /**
      * 模板迁移，包含模板文件迁移及相应的模板信息
-     *
-     * @return 是否成功
      */
-    boolean migrateTemplates();
+    void migrateTemplates();
 
     /**
      * 将模板文件路径转换为平台独立的模板存放路径

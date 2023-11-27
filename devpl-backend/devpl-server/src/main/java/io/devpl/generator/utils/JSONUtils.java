@@ -1,5 +1,6 @@
 package io.devpl.generator.utils;
 
+import com.alibaba.fastjson2.JSONReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * JSON 工具类
@@ -93,5 +95,11 @@ public abstract class JSONUtils {
      */
     public static void validateJson(String text) throws RuntimeException {
         parseObject(text, Object.class);
+    }
+
+    public static Map<String, Object> toMap(String json) {
+        try (JSONReader reader = JSONReader.of(json)) {
+            return reader.readObject();
+        }
     }
 }

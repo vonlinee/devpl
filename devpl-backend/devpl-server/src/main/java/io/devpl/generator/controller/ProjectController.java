@@ -2,16 +2,18 @@ package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.common.query.Result;
-import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.ProjectListParam;
 import io.devpl.generator.domain.vo.ProjectSelectVO;
 import io.devpl.generator.entity.ProjectInfo;
 import io.devpl.generator.service.ProjectService;
 import io.devpl.generator.utils.ServletUtils;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,8 +32,8 @@ public class ProjectController {
     }
 
     @GetMapping("/page")
-    public ListResult<ProjectInfo> page(@Valid Query query) {
-        return projectService.listProjectInfos(query);
+    public ListResult<ProjectInfo> page(ProjectListParam param) {
+        return projectService.listProjectInfos(param);
     }
 
     @GetMapping("/{id}")
@@ -46,6 +48,7 @@ public class ProjectController {
 
     @PutMapping
     public Result<Boolean> update(@RequestBody @Valid ProjectInfo entity) {
+        entity.setUpdateTime(LocalDateTime.now());
         return Result.ok(projectService.updateById(entity));
     }
 

@@ -1,4 +1,4 @@
-package io.devpl.generator.tools.utils;
+package io.devpl.generator.utils;
 
 import io.devpl.sdk.lang.Interpolations;
 

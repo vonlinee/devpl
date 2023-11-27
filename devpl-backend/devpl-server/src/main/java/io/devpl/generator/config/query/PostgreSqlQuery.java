@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.generator.tools.utils.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 /**
  * PostgreSql查询
@@ -19,7 +19,7 @@ public class PostgreSqlQuery implements AbstractQuery {
         sql.append("select t1.tablename, obj_description(relfilenode, 'pg_class') as comments from pg_tables t1, pg_class t2 ");
         sql.append("where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname ");
         // 表名查询
-        if (StringUtils.isNotBlank(tableName)) {
+        if (StringUtils.hasText(tableName)) {
             sql.append("and t1.tablename = '").append(tableName).append("' ");
         }
 

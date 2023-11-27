@@ -1,18 +1,19 @@
 package io.devpl.generator.service.impl;
 
-import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.generator.common.mvc.BaseServiceImpl;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.dao.ProjectInfoMapper;
-import io.devpl.generator.domain.param.Query;
+import io.devpl.generator.domain.param.ProjectListParam;
 import io.devpl.generator.domain.vo.ProjectSelectVO;
 import io.devpl.generator.entity.ProjectInfo;
 import io.devpl.generator.service.ProjectService;
 import io.devpl.generator.utils.ArrayUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
+import io.devpl.sdk.io.ZipUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ProjectServiceImpl extends BaseServiceImpl<ProjectInfoMapper, ProjectInfo> implements ProjectService {
+public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectInfo> implements ProjectService {
 
     /**
      * 需要变更的文件后缀
@@ -52,17 +53,17 @@ public class ProjectServiceImpl extends BaseServiceImpl<ProjectInfoMapper, Proje
     public List<ProjectSelectVO> listSelectableProject() {
         LambdaQueryWrapper<ProjectInfo> qw = new LambdaQueryWrapper<>();
         qw.select(ProjectInfo::getId, ProjectInfo::getProjectName);
-        return baseMapper.selectList(qw).stream().map(p -> {
-            ProjectSelectVO vo = new ProjectSelectVO();
-            vo.setProjectId(p.getId());
-            vo.setProjectName(p.getProjectName());
-            return vo;
-        }).toList();
+        return baseMapper.selectList(qw).stream().map(p -> new ProjectSelectVO(p.getId(), p.getProjectName())).toList();
     }
 
     @Override
-    public ListResult<ProjectInfo> listProjectInfos(Query query) {
-        IPage<ProjectInfo> page = baseMapper.selectPage(getPage(query), getWrapper(query));
+    public ListResult<ProjectInfo> listProjectInfos(ProjectListParam param) {
+        Page<ProjectInfo> page = new Page<>(param.getPageIndex(), param.getPageSize());
+        LambdaQueryWrapper<ProjectInfo> qw = Wrappers.lambdaQuery();
+        if (StringUtils.hasText(param.getProjectName())) {
+            qw.like(ProjectInfo::getProjectName, param.getProjectName());
+        }
+        page = baseMapper.selectPage(page, qw);
         return ListResult.ok(page);
     }
 
@@ -82,8 +83,7 @@ public class ProjectServiceImpl extends BaseServiceImpl<ProjectInfoMapper, Proje
         // 替换文件内容数据
         contentFormat(destRoot, List.of(project.getModifySuffix().split(SPLIT)), replaceMap);
         // 生成zip文件
-        File zipFile = ZipUtil.zip(destRoot);
-
+        File zipFile = ZipUtils.zipDir(destRoot, new File("D:/Temp/", project.getProjectName() + ".zip").getAbsolutePath());
         byte[] data = FileUtils.readFileToByteArray(zipFile);
         // 清空文件
         FileUtils.deleteDirectory(destRoot.getParentFile().getParentFile());
@@ -115,7 +115,8 @@ public class ProjectServiceImpl extends BaseServiceImpl<ProjectInfoMapper, Proje
     public boolean save(ProjectInfo entity) {
         entity.setExclusions(EXCLUSIONS);
         entity.setModifySuffix(MODIFY_SUFFIX);
-        entity.setCreateTime(new Date());
+        entity.setCreateTime(LocalDateTime.now());
+        entity.setUpdateTime(entity.getCreateTime());
         return super.save(entity);
     }
 

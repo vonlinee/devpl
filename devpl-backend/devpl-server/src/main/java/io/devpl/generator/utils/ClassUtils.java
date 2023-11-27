@@ -1,4 +1,6 @@
-package io.devpl.generator.tools.utils;
+package io.devpl.generator.utils;
+
+import io.devpl.sdk.util.StringUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +26,7 @@ public final class ClassUtils {
      * getConstructor 方法入参是可变长参数列表，对应类中构造方法的入参类型，这里使用无参构造。
      * newInstance 返回的是泛型 T，取决于 clazz 的类型 Class<T>。这里直接用 Object 接收了。
      * 调用默认方法创建对象实例
+     *
      * @param clazz Class对象
      * @return 创建的对象实例
      */
@@ -41,21 +44,23 @@ public final class ClassUtils {
 
     /**
      * 获取类名
+     *
      * @param className className 全类名，格式aaa.bbb.ccc.xxx
      * @return ignore
      */
     public static String getSimpleName(String className) {
-        return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(".") + 1);
+        return !StringUtils.hasText(className) ? null : className.substring(className.lastIndexOf(".") + 1);
     }
 
     /**
      * 开头不能是数字，不能包含.
+     *
      * @param identifier 类名
      * @return 是否是合法的Java标识符
      */
     public static boolean isValidJavaIdentifier(String identifier) {
         // 确定是否允许将指定字符作为 Java 标识符中的首字符。
-        if (identifier.length() == 0 || !Character.isJavaIdentifierStart(identifier.charAt(0))) {
+        if (identifier == null || identifier.isEmpty() || !Character.isJavaIdentifierStart(identifier.charAt(0))) {
             return false;
         }
         int len = identifier.length();
@@ -78,6 +83,7 @@ public final class ClassUtils {
      * 不能有空格，不能连续两个.
      * 支持内部类，不支持lambda
      * <a href="https://blog.csdn.net/zhanglianyu00/article/details/77499295">...</a>
+     *
      * @param str 字符串
      * @return 是否是全限定类名
      */
@@ -107,6 +113,7 @@ public final class ClassUtils {
 
     /**
      * 获取类的包名
+     *
      * @param qualifiedClassName 全限定类名
      * @return 全类名的包名，比如java.util.List，返回java.util
      */
@@ -124,6 +131,7 @@ public final class ClassUtils {
      * <p>
      * 请仅在确定类存在的情况下调用该方法
      * </p>
+     *
      * @param name 类名称
      * @return 返回转换后的 Class
      */
@@ -141,6 +149,7 @@ public final class ClassUtils {
 
     /**
      * 判断是否为代理对象
+     *
      * @param clazz 传入 class 对象
      * @return 如果对象class是代理 class，返回 true
      */
@@ -159,6 +168,7 @@ public final class ClassUtils {
      * <p>
      * 获取当前对象的 class
      * </p>
+     *
      * @param clazz 传入
      * @return 如果是代理的class，返回父 class，否则返回自身
      */
@@ -176,6 +186,7 @@ public final class ClassUtils {
      * for example, for class path resource loading (but not necessarily for
      * {@code Class.forName}, which accepts a {@code null} ClassLoader
      * reference as well).
+     *
      * @return the default ClassLoader (only {@code null} if even the system
      * ClassLoader isn't accessible)
      * @see Thread#getContextClassLoader()

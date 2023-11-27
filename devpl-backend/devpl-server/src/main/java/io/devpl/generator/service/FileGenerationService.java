@@ -1,11 +1,9 @@
 package io.devpl.generator.service;
 
-import io.devpl.generator.config.template.GeneratorInfo;
 import io.devpl.generator.domain.FileNode;
 
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipOutputStream;
 
 /**
  * 代码文件生成
@@ -13,27 +11,20 @@ import java.util.zip.ZipOutputStream;
 public interface FileGenerationService {
 
     /**
-     * 获取生成器配置信息
-     *
-     * @return 生成器配置信息
-     */
-    GeneratorInfo getGeneratorInfo();
-
-    /**
-     * 下载代码
-     *
-     * @param tableId 表ID
-     * @param zip     压缩包
-     */
-    void downloadCode(Long tableId, ZipOutputStream zip);
-
-    /**
-     * 生成某个表的文件
+     * 生成某个表的所有文件
      *
      * @param tableId gen_table主键
      * @return 生成文件的根目录
      */
     String startCodeGeneration(Long tableId);
+
+    /**
+     * 获取代码生成绝对路径
+     *
+     * @param path 相对路径
+     * @return 文件绝对路径
+     */
+    String getAbsolutePath(String path);
 
     /**
      * 获取渲染的数据模型

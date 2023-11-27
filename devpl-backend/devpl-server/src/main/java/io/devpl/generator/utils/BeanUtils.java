@@ -1,4 +1,4 @@
-package io.devpl.generator.tools.utils;
+package io.devpl.generator.utils;
 
 import java.lang.reflect.*;
 import java.util.Arrays;

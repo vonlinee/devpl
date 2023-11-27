@@ -1,11 +1,12 @@
 package io.devpl.generator.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 项目名变更
@@ -66,15 +67,40 @@ public class ProjectInfo {
     private String modifySuffix;
 
     /**
-     * 创建时间
+     * 版本号
      */
-    private Date createTime;
-
     private String version;
 
+    /**
+     * 后端路径
+     */
     private String backendPath;
 
+    /**
+     * 前端路径
+     */
     private String frontendPath;
 
+    /**
+     * 项目状态
+     */
     private Integer status;
+
+    /**
+     * 构建工具类型 1-Maven，2-Gradle
+     */
+    @TableField(value = "build_tool")
+    private Integer buildTool;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 创建时间
+     */
+    @TableField(value = "create_time")
+    private LocalDateTime createTime;
 }

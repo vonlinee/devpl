@@ -20,10 +20,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -33,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +58,11 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         templateInfo.setCreateTime(LocalDateTime.now());
         templateInfo.setDeleted(false);
         return templateInfoMapper.insert(templateInfo) == 1;
+    }
+
+    @Override
+    public void render(Long templateId, Map<String, Object> dataModel, Writer out) {
+
     }
 
     /**
@@ -101,11 +104,9 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     /**
      * 模板迁移
      * 启动时进行
-     *
-     * @return 是否成功
      */
     @Override
-    public boolean migrateTemplates() {
+    public void migrateTemplates() {
         String templateLocation = codeGenProperties.getTemplateLocation();
 
         Path rootDir = Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
@@ -114,7 +115,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                 Files.createDirectories(rootDir);
             } catch (IOException e) {
                 log.error("模板迁移至{}失败", rootDir, e);
-                return false;
+                return;
             }
         }
         URL codegenDir = this.getClass().getResource("/codegen");
@@ -187,13 +188,11 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
                     templateInfos.add(templateInfo);
                 }
-
                 saveOrUpdateBatch(templateInfos);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        return true;
     }
 
     @Override
@@ -203,6 +202,6 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Override
     public List<TemplateVarInfo> introspect(TemplateInfo templateInfo) {
-        return null;
+        return Collections.emptyList();
     }
 }

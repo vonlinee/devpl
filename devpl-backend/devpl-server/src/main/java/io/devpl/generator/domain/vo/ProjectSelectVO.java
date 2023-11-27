@@ -13,4 +13,9 @@ public class ProjectSelectVO {
     private Long projectId;
 
     private String projectName;
+
+    public ProjectSelectVO(Long projectId, String projectName) {
+        this.projectId = projectId;
+        this.projectName = projectName;
+    }
 }

@@ -1,5 +1,11 @@
 type DataSourceVO = {
+  /**
+   * 数据源ID
+   */
   id: number
+  /**
+   * 数据源名称
+   */
   name: string
 }
 

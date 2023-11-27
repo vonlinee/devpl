@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card >
+    <el-card>
 
       <el-select v-model="currentDataSourceId" clearable @change="fireDatabaseChanged">
         <el-option v-for="ds in dataSources" :key="ds.id" :value="ds.id" :label="ds.name"></el-option>
@@ -27,7 +27,6 @@ import ResultSetTable from "./ResultSetTable.vue";
 import DatabaseNavigationView from "./DatabaseNavigationView.vue";
 import { nextTick, onMounted, ref } from "vue";
 import { apiListSelectableDataSources } from "@/api/datasource";
-import { DBTableDataVO, DataSourceVO, ResultSetColumnMetadata } from "./type";
 
 const dbNavViewCRef = ref()
 const currentDataSourceId = ref<number>(0);

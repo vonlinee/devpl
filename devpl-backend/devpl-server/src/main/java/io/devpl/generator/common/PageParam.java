@@ -1,12 +1,14 @@
 package io.devpl.generator.common;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 分页查询参数父类
  * jackson默认使用setter/getter映射JSON数据
  */
-@Data
+@Getter
+@Setter
 public class PageParam {
 
     /**

@@ -35,7 +35,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/codegen/file",
         name: "Generator",
-        component: () => import("../views/generator/index.vue"),
+        component: () => import("@/views/generator/index.vue"),
         meta: {
           title: "文件生成",
           icon: "icon-fire"
@@ -44,7 +44,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/codegen/project",
         name: "ProjectIndex",
-        component: () => import("../views/project/index.vue"),
+        component: () => import("@/views/project/index.vue"),
         meta: {
           title: "项目管理",
           icon: "icon-edit-square"
@@ -72,7 +72,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/codegen/datatype",
         name: "FieldType",
-        component: () => import("../views/datatype/index.vue"),
+        component: () => import("@/views/datatype/index.vue"),
         meta: {
           title: "数据类型",
           icon: "icon-menu"
@@ -90,7 +90,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/codegen/base-class",
         name: "BaseClass",
-        component: () => import("../views/base-class/index.vue"),
+        component: () => import("@/views/base-class/index.vue"),
         meta: {
           title: "领域模型",
           icon: "icon-cluster"
@@ -108,7 +108,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/devtools/database",
         name: "数据库",
-        component: () => import("../views/mocker/database/index.vue"),
+        component: () => import("@/views/devtools/database/index.vue"),
         meta: {
           title: "数据库",
           icon: "icon-fire"
@@ -117,9 +117,19 @@ export const menuRoutes: RouteRecordRaw[] = [
       {
         path: "/devtools/mybatis",
         name: "MyBatis 工具",
-        component: () => import("@/views/mybatis/index.vue"),
+        component: () => import("@/views/devtools/mybatis/index.vue"),
         meta: {
           title: "MyBatis 工具",
+          icon: "icon-edit-square",
+          keepAlive: true
+        }
+      },
+      {
+        path: "/devtools/mocker",
+        name: "数据模拟",
+        component: () => import("@/views/devtools/mocker/index.vue"),
+        meta: {
+          title: "数据模拟",
           icon: "icon-edit-square",
           keepAlive: true
         }

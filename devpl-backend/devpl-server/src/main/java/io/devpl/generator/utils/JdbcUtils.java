@@ -1,8 +1,8 @@
 package io.devpl.generator.utils;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.generator.tools.utils.StringUtils;
 import io.devpl.generator.jdbc.metadata.ResultSetColumnMetadata;
+import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -23,17 +22,6 @@ import java.util.regex.Pattern;
 public class JdbcUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcUtils.class);
-    private static final Map<String, DBType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
-
-    private static final int CONNECTION_TIMEOUTS_SECONDS = 6;
-
-    public static void loadDriver(String driverClassName) {
-        try {
-            Class.forName(driverClassName);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("cannot load driver class " + driverClassName + " becauese it does not exist!");
-        }
-    }
 
     /**
      * 从连接url字符串解析数据库名称

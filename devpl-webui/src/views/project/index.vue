@@ -2,7 +2,7 @@
   <el-card>
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
-        <el-input v-model="state.queryForm.projectName" placeholder="项目名"></el-input>
+        <el-input v-model="state.queryForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
