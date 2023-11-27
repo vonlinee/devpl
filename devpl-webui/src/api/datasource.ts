@@ -1,26 +1,26 @@
-import http from "@/utils/http"
+import http from "@/utils/http";
 
 export const useDataSourceTestApi = (id: number) => {
-  return http.get<TestConnVO>("/api/gen/datasource/test/" + id)
-}
+  return http.get<TestConnVO>("/api/gen/datasource/test/" + id);
+};
 
 export interface TestConnVO {
   /**
    * 是否失败
    */
-  failed: boolean
+  failed: boolean;
   /**
    * 数据库类型
    */
-  dbmsType: string
+  dbmsType: string;
   /**
    * 是否使用ssl连接
    */
-  useSsl: boolean
+  useSsl: boolean;
   /**
    * 连接失败时的错误信息
    */
-  errorMsg: string
+  errorMsg: string;
 }
 
 /**
@@ -29,24 +29,25 @@ export interface TestConnVO {
  * @returns
  */
 export const apiTestConnection = (connInfo: DbConnInfo) => {
-  return http.post<TestConnVO>("/api/gen/datasource/connection/test", connInfo)
-}
+  return http.post<TestConnVO>("/api/gen/datasource/connection/test", connInfo);
+};
 
 export const useDataSourceApi = (id: Number) => {
-  return http.get("/api/gen/datasource/" + id)
-}
+  return http.get("/api/gen/datasource/" + id);
+};
 
 export const useDataSourceListApi = () => {
-  return http.get("/api/gen/datasource/list")
-}
+  return http.get("/api/gen/datasource/list");
+};
 
 export const useDataSourceSubmitApi = (dataForm: any) => {
-  return http.post("/api/gen/datasource", dataForm)
-}
+  return http.post("/api/gen/datasource", dataForm);
+};
 
 /**
  * 获取数据源的所有表信息
  * @param id
+ * @param databaseName
  * @param tableNamePattern
  * @returns
  */
@@ -56,30 +57,29 @@ export const useDataSourceTableListApi = (
   tableNamePattern?: string | null
 ) => {
   return http.get(
-    "/api/gen/datasource/table/list/" +
-      id +
-      "?tableNamePattern=" +
-      (tableNamePattern || "") +
-      "&databaseName" +
-      (databaseName || "")
-  )
-}
+    "/api/gen/datasource/table/list/", {
+      dataSourceId: id,
+      databaseName: databaseName,
+      tableNamePattern: tableNamePattern
+    }
+  );
+};
 
 /**
  * 获取所有数据库名称
  * @param dataForm
  */
 export const apiGetDatabaseNames = (dataForm: any) => {
-  return http.post("/api/gen/datasource/dbnames", dataForm)
-}
+  return http.post("/api/gen/datasource/dbnames", dataForm);
+};
 
 /**
  * 获取所有数据库名称
  * @param dataForm
  */
 export const apiGetDatabaseNamesById = (dataSourceId: number) => {
-  return http.get(`/api/gen/datasource/dbnames/${dataSourceId}`)
-}
+  return http.get(`/api/gen/datasource/dbnames/${dataSourceId}`);
+};
 
 /**
  * 上传驱动jar包
@@ -89,19 +89,19 @@ export const apiUploadDriverJar = (file: File) => {
   return http.post(
     "/api/jdbc/driver/upload",
     {
-      file: file,
+      file: file
     },
     { "Content-Type": "multipart/form-data" }
-  )
-}
+  );
+};
 
 /**
  * 所有支持的驱动类型
  * @returns 所有支持的数据库类型
  */
 export const apiListSupportedDbTypes = () => {
-  return http.get("/api/gen/datasource/drivers")
-}
+  return http.get("/api/gen/datasource/drivers");
+};
 
 /**
  * 所有支持的数据库类型
@@ -109,22 +109,22 @@ export const apiListSupportedDbTypes = () => {
  */
 export const apiListSelectableDataSources = (internal?: boolean) => {
   return http.get("/api/gen/datasource/list/selectable", {
-    internal: internal,
-  })
-}
+    internal: internal
+  });
+};
 
 /**
  * 所有支持的数据库类型
  * @returns 所有支持的数据库类型
  */
 export const apiListTableNames = (id: number, dbName: string) => {
-  return http.get(`/api/gen/datasource/${id}/${dbName}/table/names`)
-}
+  return http.get(`/api/gen/datasource/${id}/${dbName}/table/names`);
+};
 
 /**
  * 所有支持的数据库类型
  * @returns 所有支持的数据库类型
  */
 export const apiGetTableData = (param: ParamGetDbTableData) => {
-  return http.post<DBTableDataVO>("/api/gen/datasource/table/data", param)
-}
+  return http.post<DBTableDataVO>("/api/gen/datasource/table/data", param);
+};

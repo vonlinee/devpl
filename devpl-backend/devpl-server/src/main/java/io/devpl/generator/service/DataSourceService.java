@@ -1,6 +1,7 @@
 package io.devpl.generator.service;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
@@ -19,6 +20,8 @@ import java.util.List;
  * 数据源管理
  */
 public interface DataSourceService extends BaseService<DbConnInfo> {
+
+    boolean isSystemDataSource(Long id);
 
     DbConnInfo getOne(long id);
 
@@ -68,6 +71,8 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
     List<String> getDbNames(DbConnInfo entity);
 
     List<String> getTableNames(DbConnInfo connInfo, String databaseName);
+
+    List<ColumnMetadata> getColumns(DbConnInfo connInfo, String databaseName, String tableName);
 
     TestConnVO testJdbcConnection(Long id);
 

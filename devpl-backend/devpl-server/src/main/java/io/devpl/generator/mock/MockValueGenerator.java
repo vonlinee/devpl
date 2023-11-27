@@ -2,5 +2,9 @@ package io.devpl.generator.mock;
 
 public interface MockValueGenerator {
 
-    ValueType getTargetType();
+    String getName();
+
+    String getDescription();
+
+    MockValueType getTargetType();
 }

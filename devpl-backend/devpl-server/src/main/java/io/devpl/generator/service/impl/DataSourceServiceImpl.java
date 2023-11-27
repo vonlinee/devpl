@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.*;
 import io.devpl.generator.dao.DbConnInfoMapper;
@@ -46,6 +47,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
     private final DataSource dataSource;
     private final JdbcDriverManager driverManager;
     private final DbConnInfoMapper dbConnInfoMapper;
+
+    @Override
+    public boolean isSystemDataSource(Long id) {
+        return id == -1;
+    }
 
     @Override
     public DbConnInfo getOne(long id) {
@@ -110,7 +116,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
 
     @Override
     public Connection getConnection(Long dataSourceId) throws SQLException {
-        if (dataSourceId != null && dataSourceId == -1) {
+        if (dataSourceId != null && isSystemDataSource(dataSourceId)) {
+            return dataSource.getConnection();
+        }
+        if (dataSourceId == null) {
             return dataSource.getConnection();
         }
         return getConnection(getOne(dataSourceId));
@@ -188,6 +197,21 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
             log.error("", exception);
         }
         return list;
+    }
+
+    @Override
+    public List<ColumnMetadata> getColumns(DbConnInfo connInfo, String databaseName, String tableName) {
+        List<ColumnMetadata> result = new ArrayList<>();
+        try (Connection connection = getConnection(connInfo)) {
+            DatabaseMetaData dbmd = connection.getMetaData();
+            String catalog = connection.getCatalog();
+            try (ResultSet resultSet = dbmd.getColumns(catalog, databaseName, tableName, "%")) {
+                result.addAll(JdbcUtils.extractRows(resultSet, ColumnMetadata.class));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     @Override

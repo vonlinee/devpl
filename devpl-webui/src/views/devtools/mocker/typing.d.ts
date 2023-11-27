@@ -1,12 +1,12 @@
-type DbMockColumn = {
+type MockField = {
   /**
-   * 数据库字段名
+   * 名称
    */
-  columnName: string
+  fieldName: string
   /**
-   * 列数据类型
+   * 数据类型
    */
-  columnDataType: number
+  dataType: number
   /**
    * 生成器ID
    */

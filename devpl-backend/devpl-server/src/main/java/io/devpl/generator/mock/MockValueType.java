@@ -3,7 +3,7 @@ package io.devpl.generator.mock;
 /**
  * 值类型
  */
-public enum ValueType {
+public enum MockValueType {
 
     NUMERIC,
     NUMBER,

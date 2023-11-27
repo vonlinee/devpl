@@ -5,6 +5,7 @@ import io.devpl.generator.jdbc.metadata.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
@@ -203,5 +204,26 @@ public class JdbcUtils {
             list.add(rscmd);
         }
         return list;
+    }
+
+    /**
+     * @param resultSet 结果集合
+     * @param rowType   行类型
+     * @param <T>       行类型
+     * @return list
+     */
+    public static <T> List<T> extractRows(ResultSet resultSet, Class<T> rowType) {
+        BeanPropertyRowMapper<T> rowMapper = new BeanPropertyRowMapper<>(rowType);
+        int index = 0;
+        List<T> results = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                results.add(rowMapper.mapRow(resultSet, index++));
+            }
+            return results;
+        } catch (Exception exception) {
+            logger.error("cannot extract rows form ResultSet for type[{}]", rowType, exception);
+        }
+        return results;
     }
 }
