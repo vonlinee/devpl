@@ -1,7 +1,7 @@
 package io.devpl.generator.config.query;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.generator.tools.utils.StringUtils;
 
 /**
  * ClickHouse 表数据查询

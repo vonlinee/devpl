@@ -110,7 +110,7 @@ function showFileTypeManagerDialog() {
 const importHandle = (id?: number) => {
   if (project.value == undefined) {
     const message = ElMessage({
-      duration: 500,
+      duration: 3000,
       message: h('p', null, [
         h('span', null, '请先选择项目，如果没有，先'),
         h('a', {
@@ -148,7 +148,13 @@ const projects = ref<ProjectSelectVO[]>();
 const project = ref<ProjectSelectVO>();
 onMounted(() => {
   // 获取可选择的项目列表
-  apiListSelectableProjects().then((res) => projects.value = res.data);
+  apiListSelectableProjects().then((res) => {
+    projects.value = res.data
+    if (res.data && res.data.length > 0) {
+      // 默认选中第一个
+      project.value = res.data[0]
+    }
+  });
 });
 
 const syncHandle = (row: any) => {

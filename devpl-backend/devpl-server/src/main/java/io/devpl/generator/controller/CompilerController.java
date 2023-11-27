@@ -1,13 +1,23 @@
 package io.devpl.generator.controller;
 
 import io.devpl.generator.common.query.Result;
-import io.devpl.generator.compiler.CustomStringJavaCompiler;
+import io.devpl.generator.compiler.CompilationResult;
+import io.devpl.generator.domain.bo.ASTParseResult;
 import io.devpl.generator.domain.param.CompilerParam;
+import io.devpl.generator.service.CompilationService;
+import io.devpl.generator.service.JavaASTService;
+import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/compiler")
 public class CompilerController {
+
+    @Resource
+    CompilationService compilationService;
+    @Resource
+    JavaASTService javaASTService;
 
     /**
      * 获取示例文本
@@ -29,25 +39,12 @@ public class CompilerController {
 
     @PostMapping(value = "/compile")
     public Result<String> compile(@RequestBody CompilerParam param) {
-        CustomStringJavaCompiler compiler = new CustomStringJavaCompiler(param.getCode());
-        boolean res = compiler.compile();
-        StringBuilder result = new StringBuilder();
-        if (res) {
-            result.append("编译成功");
-            result.append("compilerTakeTime：").append(compiler.getCompilerTakeTime());
-            try {
-                compiler.runMainMethod();
-                result.append("runTakeTime：").append(compiler.getRunTakeTime());
-            } catch (Exception e) {
-                result.append(e.getMessage());
-            }
-            result.append(compiler.getRunResult())
-                .append("诊断信息：")
-                .append(compiler.getCompilerMessage());
-        } else {
-            result.append("编译失败")
-                .append(compiler.getCompilerMessage());
-        }
-        return Result.ok(result.toString());
+        CompilationResult result = compilationService.compile(param);
+        return Result.ok(result.prettyPrint());
+    }
+
+    @PostMapping("/parse")
+    public Result<ASTParseResult> parse(@Validated @RequestBody CompilerParam param) {
+        return Result.ok(javaASTService.parse(param.getCode()));
     }
 }

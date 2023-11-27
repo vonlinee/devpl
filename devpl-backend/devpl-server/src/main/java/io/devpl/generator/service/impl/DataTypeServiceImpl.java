@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.generator.tools.utils.StringUtils;
 import io.devpl.generator.dao.DataTypeGroupMapper;
 import io.devpl.generator.dao.DataTypeItemMapper;
 import io.devpl.generator.dao.DataTypeMappingMapper;

@@ -24,6 +24,9 @@
       <el-form-item label="项目后端路径" prop="projectPath">
         <el-input v-model="dataForm.backendPath" placeholder="项目前端路径"></el-input>
       </el-form-item>
+      <el-form-item label="版本号" prop="version">
+        <el-input v-model="dataForm.version" placeholder="版本号"></el-input>
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="visible = false">取消</el-button>
@@ -34,7 +37,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { ElButton, ElDialog, ElMessage } from "element-plus/es";
+import { ElButton, ElMessage } from "element-plus/es";
 import { apiGetProjectInfo, apiUpdateProjectInfo } from "@/api/project";
 
 const emit = defineEmits(["refreshDataList"]);
@@ -49,7 +52,8 @@ const dataForm = reactive({
   projectPackage: "",
   projectPath: "",
   backendPath: "",
-  frontendPath: ""
+  frontendPath: "",
+  version: ""
 });
 
 const init = (id?: number) => {

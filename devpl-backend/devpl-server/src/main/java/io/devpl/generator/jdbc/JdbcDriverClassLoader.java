@@ -1,6 +1,6 @@
 package io.devpl.generator.jdbc;
 
-import io.devpl.codegen.utils.ClassUtils;
+import io.devpl.generator.tools.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,11 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Driver;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 /**

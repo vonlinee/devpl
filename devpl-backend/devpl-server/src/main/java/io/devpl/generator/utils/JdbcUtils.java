@@ -1,15 +1,13 @@
 package io.devpl.generator.utils;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.generator.tools.utils.StringUtils;
 import io.devpl.generator.jdbc.metadata.ResultSetColumnMetadata;
-import org.apache.ibatis.executor.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;

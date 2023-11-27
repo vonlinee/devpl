@@ -1,6 +1,6 @@
 package io.devpl.generator.config.query;
 
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.generator.tools.utils.StringUtils;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 
 /**

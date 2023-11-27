@@ -19,7 +19,6 @@
     <modules>
         <module>devpl-server</module>
         <module>devpl-sdk-internal</module>
-        <module>devpl-codegen</module>
         <module>mybatis-plus-generator</module>
     </modules>
 

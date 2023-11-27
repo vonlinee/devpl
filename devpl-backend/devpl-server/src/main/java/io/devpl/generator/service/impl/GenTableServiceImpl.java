@@ -121,7 +121,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
             table.setCreateTime(LocalDateTime.now());
             table.setUpdateTime(table.getCreateTime());
-            this.save(table);
+
 
             TemplateArgumentsMap params = new TemplateArgumentsMap();
             if (project != null) {
@@ -129,14 +129,18 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
                 table.setVersion(project.getVersion());
                 table.setBackendPath(project.getBackendPath());
                 table.setFrontendPath(project.getFrontendPath());
+                table.setModuleName(project.getProjectName());
+                table.setVersion(project.getVersion());
 
                 params.setValue("backendPath", table.getBackendPath());
                 params.setValue("frontendPath", table.getFrontendPath());
                 params.setValue("tableName", table.getTableName());
-                params.setValue("packagePath", table.getPackageName());
+                params.setValue("packagePath", StringUtils.replace(table.getPackageName(), ".", "/"));
                 params.setValue("ClassName", table.getClassName());
                 params.setValue("moduleName", project.getProjectName());
             }
+
+            this.save(table);
 
             initTargetGenerationFiles(table, params);
 

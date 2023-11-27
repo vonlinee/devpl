@@ -1,6 +1,6 @@
 package io.devpl.generator.service.impl;
 
-import io.devpl.codegen.utils.StringUtils;
+import io.devpl.generator.tools.utils.StringUtils;
 import io.devpl.generator.dao.FileInfoMapper;
 import io.devpl.generator.entity.FileConfig;
 import io.devpl.generator.entity.FileInfo;

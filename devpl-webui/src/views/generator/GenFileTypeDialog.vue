@@ -130,54 +130,49 @@ function fillTemplateName(row: TargetGenFile) {
     }
   }
 }
-
 </script>
 
 <template>
-  <vxe-modal v-model="dialogVisibleRef" title="目标生成文件类型管理" :draggable="false"
-             destroy-on-close :show-footer="true"
-             width="80%"
-             :mask-closable="false">
-    <el-table ref="singleTableRef" border :data="tableData" table-layout="auto" highlight-current-row
-              height="500px" @current-change="handleCurrentChange">
-      <el-table-column type="index" width="40" align="center" />
-      <el-table-column property="fileName" label="文件类型名称">
+  <vxe-modal v-model="dialogVisibleRef" title="目标生成文件类型管理" :draggable="false" destroy-on-close :show-footer="true"
+    width="80%" :mask-closable="false">
+    <el-table ref="singleTableRef" border :data="tableData" table-layout="auto" highlight-current-row height="500px"
+      @current-change="handleCurrentChange">
+      <el-table-column property="fileName" label="文件类型名称" width="100">
         <template #default="scope">
           <el-text v-if="!scope.row.editing">{{ scope.row.typeName }}</el-text>
           <el-input v-if="scope.row.editing" v-model="scope.row.typeName"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="builtin" align="center" label="是否内置" width="60px" min-width="60px">
+      <el-table-column prop="builtin" align="center" label="是否内置" width="80px" min-width="60px">
         <template #default="scope">
           <el-checkbox v-model="scope.row.builtin" :disabled="!scope.row.editing" size="large" />
         </template>
       </el-table-column>
-
-      <el-table-column label="模板">
+      <el-table-column label="模板" width="120px">
         <template #default="scope">
           <div>
             <el-text v-if="!scope.row.editing">{{ scope.row.templateName }}</el-text>
             <el-select v-if="scope.row.editing" v-model="scope.row.templateId" class="m-2" placeholder="选择模板"
-                       @change="fillTemplateName(scope.row)" filterable>
+              @change="fillTemplateName(scope.row)" filterable>
               <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
-                         :value="item.templateId" />
+                :value="item.templateId" />
             </el-select>
           </div>
         </template>
       </el-table-column>
-      <el-table-column property="fileName" label="文件名称" width="240">
+      <el-table-column property="fileName" label="文件名称" width="240" show-overflow-tooltip>
         <template #default="scope">
           <el-text v-show="!scope.row.editing" v-text="scope.row.fileName" />
           <el-input v-show="scope.row.editing" v-model="scope.row.fileName"></el-input>
         </template>
       </el-table-column>
-      <el-table-column property="savePath" label="保存路径" width="240">
+      <el-table-column property="savePath" label="保存路径" show-overflow-tooltip>
         <template #default="scope">
           <el-text v-show="!scope.row.editing" v-text="scope.row.savePath" />
           <el-input v-show="scope.row.editing" v-model="scope.row.savePath"></el-input>
         </template>
       </el-table-column>
-      <el-table-column property="remark" label="描述信息" width="200">
+      <el-table-column property="remark" label="描述信息" width="200" show-overflow-tooltip>
         <template #default="scope">
           <el-text v-show="!scope.row.editing" v-text="scope.row.remark" />
           <el-input v-show="scope.row.editing" v-model="scope.row.remark"></el-input>
