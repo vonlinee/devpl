@@ -76,7 +76,10 @@ public class IntrospectedColumn {
      * 属性名称
      */
     private String propertyName;
-    private ColumnMetadata metadata;
+    /**
+     * 列的元数据信息
+     */
+    private final ColumnMetadata metadata;
     /**
      * 字段类型
      */

@@ -4,7 +4,7 @@ import io.devpl.generator.common.mvc.BaseServiceImpl;
 import io.devpl.generator.dao.GenTableFieldMapper;
 import io.devpl.generator.entity.GenFieldType;
 import io.devpl.generator.entity.GenTableField;
-import io.devpl.generator.enums.AutoFillEnum;
+import io.devpl.generator.domain.enums.AutoFillEnum;
 import io.devpl.generator.service.GenFieldTypeService;
 import io.devpl.generator.service.GenTableFieldService;
 import io.devpl.generator.utils.NamingUtils;

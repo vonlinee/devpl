@@ -8,6 +8,14 @@ import java.util.Map;
 public interface TemplateArguments {
 
     /**
+     * 添加参数
+     *
+     * @param name  参数名
+     * @param value 参数值
+     */
+    void setValue(String name, Object value);
+
+    /**
      * 根据参数名称获取参数值
      *
      * @param name 参数名

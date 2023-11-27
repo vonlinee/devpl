@@ -6,9 +6,6 @@ import java.util.Set;
 
 /**
  * 从数据库表到文件的命名策略
- *
- * @author YangHu, tangguo
- * @since 2016/8/30
  */
 public enum NamingStrategy {
 

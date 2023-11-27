@@ -20,10 +20,6 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * MYSQL 数据库字段类型转换
  *
@@ -41,32 +37,20 @@ public class FirebirdTypeConvert implements ITypeConvert {
      * @return 返回对应的列类型
      */
     public static ColumnJavaType toDateType(GlobalConfig config, String type) {
-        switch (config.getDateType()) {
-            case ONLY_DATE:
-                return DbColumnType.DATE;
-            case SQL_PACK:
-                switch (type) {
-                    case "date":
-                    case "year":
-                        return DbColumnType.DATE_SQL;
-                    case "time":
-                        return DbColumnType.TIME;
-                    default:
-                        return DbColumnType.TIMESTAMP;
-                }
-            case TIME_PACK:
-                switch (type) {
-                    case "date":
-                        return DbColumnType.LOCAL_DATE;
-                    case "time":
-                        return DbColumnType.LOCAL_TIME;
-                    case "year":
-                        return DbColumnType.YEAR;
-                    default:
-                        return DbColumnType.LOCAL_DATE_TIME;
-                }
-        }
-        return STRING;
+        return switch (config.getDateType()) {
+            case ONLY_DATE -> DbColumnType.DATE;
+            case SQL_PACK -> switch (type) {
+                case "date", "year" -> DbColumnType.DATE_SQL;
+                case "time" -> DbColumnType.TIME;
+                default -> DbColumnType.TIMESTAMP;
+            };
+            case TIME_PACK -> switch (type) {
+                case "date" -> DbColumnType.LOCAL_DATE;
+                case "time" -> DbColumnType.LOCAL_TIME;
+                case "year" -> DbColumnType.YEAR;
+                default -> DbColumnType.LOCAL_DATE_TIME;
+            };
+        };
     }
 
     /**
@@ -75,15 +59,14 @@ public class FirebirdTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("cstring", "text").then(STRING))
-            .test(contains("short").then(SHORT))
-            .test(contains("long").then(LONG))
-            .test(contains("float").then(FLOAT))
-            .test(contains("double").then(DOUBLE))
-            .test(contains("blob").then(BLOB))
-            .test(contains("int64").then(LONG))
-            .test(containsAny("date", "time", "year").then(t -> toDateType(config, t)))
-            .or(STRING);
+            .test(TypeConverts.containsAny("cstring", "text").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("short").then(DbColumnType.SHORT))
+            .test(TypeConverts.contains("long").then(DbColumnType.LONG))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
+            .test(TypeConverts.contains("int64").then(DbColumnType.LONG))
+            .test(TypeConverts.containsAny("date", "time", "year").then(t -> toDateType(config, t)))
+            .or(DbColumnType.STRING);
     }
-
 }

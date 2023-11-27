@@ -624,22 +624,13 @@ public class Entity implements TableInitializer {
         public Entity get() {
             String superClass = this.entity.superClass;
             if (StringUtils.isNotBlank(superClass)) {
-                tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);
+                ClassUtils.tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);
             } else {
                 if (!this.entity.superEntityColumns.isEmpty()) {
                     LOGGER.warn("Forgot to set entity supper class ?");
                 }
             }
             return this.entity;
-        }
-
-        private Optional<Class<?>> tryLoadClass(String className) {
-            try {
-                return Optional.of(ClassUtils.toClassConfident(className));
-            } catch (Exception e) {
-                // 当父类实体存在类加载器的时候,识别父类实体字段，不存在的情况就只有通过指定superEntityColumns属性了。
-            }
-            return Optional.empty();
         }
     }
 }

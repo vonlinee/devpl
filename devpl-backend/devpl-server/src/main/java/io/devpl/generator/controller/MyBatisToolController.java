@@ -5,7 +5,7 @@ import io.devpl.generator.domain.DataTypeVO;
 import io.devpl.generator.domain.ParamNode;
 import io.devpl.generator.domain.param.GetSqlParam;
 import io.devpl.generator.domain.param.MyBatisParam;
-import io.devpl.generator.enums.MapperStatementParamValueType;
+import io.devpl.generator.domain.enums.MapperStatementParamValueType;
 import io.devpl.generator.mybatis.ParamMeta;
 import io.devpl.generator.service.MyBatisService;
 import io.devpl.generator.utils.Vals;

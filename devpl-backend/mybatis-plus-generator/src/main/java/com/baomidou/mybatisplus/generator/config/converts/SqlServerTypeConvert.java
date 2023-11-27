@@ -18,6 +18,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
 import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
@@ -41,28 +42,19 @@ public class SqlServerTypeConvert implements ITypeConvert {
      * @return 返回对应的列类型
      */
     public static ColumnJavaType toDateType(GlobalConfig config, String fieldType) {
-        switch (config.getDateType()) {
-            case SQL_PACK:
-                switch (fieldType) {
-                    case "date":
-                        return DATE_SQL;
-                    case "time":
-                        return TIME;
-                    default:
-                        return TIMESTAMP;
-                }
-            case TIME_PACK:
-                switch (fieldType) {
-                    case "date":
-                        return LOCAL_DATE;
-                    case "time":
-                        return LOCAL_TIME;
-                    default:
-                        return LOCAL_DATE_TIME;
-                }
-            default:
-                return DATE;
-        }
+        return switch (config.getDateType()) {
+            case SQL_PACK -> switch (fieldType) {
+                case "date" -> DATE_SQL;
+                case "time" -> TIME;
+                default -> TIMESTAMP;
+            };
+            case TIME_PACK -> switch (fieldType) {
+                case "date" -> LOCAL_DATE;
+                case "time" -> LOCAL_TIME;
+                default -> LOCAL_DATE_TIME;
+            };
+            default -> DATE;
+        };
     }
 
     /**
@@ -71,15 +63,15 @@ public class SqlServerTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "xml", "text").then(STRING))
-            .test(contains("bigint").then(LONG))
-            .test(contains("int").then(INTEGER))
-            .test(containsAny("date", "time").then(t -> toDateType(config, t)))
-            .test(contains("bit").then(BOOLEAN))
-            .test(containsAny("decimal", "numeric").then(DOUBLE))
-            .test(contains("money").then(BIG_DECIMAL))
-            .test(containsAny("binary", "image").then(BYTE_ARRAY))
-            .test(containsAny("float", "real").then(FLOAT))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "xml", "text").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
+            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time").then(t -> toDateType(config, t)))
+            .test(TypeConverts.contains("bit").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.contains("money").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.containsAny("binary", "image").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.containsAny("float", "real").then(DbColumnType.FLOAT))
+            .or(DbColumnType.STRING);
     }
 }

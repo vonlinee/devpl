@@ -1,5 +1,6 @@
 package io.devpl.generator.service;
 
+import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
 import io.devpl.generator.common.mvc.BaseService;
 import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
@@ -18,6 +19,8 @@ public interface GenTableService extends BaseService<GenTable> {
 
     List<GenTable> listGenTables(Collection<String> tableNames);
 
+    List<String> listTableNames(Long dataSourceId);
+
     ListResult<GenTable> page(Query query);
 
     GenTable getByTableName(String tableName);
@@ -29,7 +32,7 @@ public interface GenTableService extends BaseService<GenTable> {
      */
     void importSingleTable(TableImportParam param);
 
-    void initTargetGenerationFiles(GenTable table);
+    void initTargetGenerationFiles(GenTable table, TemplateArgumentsMap params);
 
     /**
      * 根据数据源，获取指定数据表

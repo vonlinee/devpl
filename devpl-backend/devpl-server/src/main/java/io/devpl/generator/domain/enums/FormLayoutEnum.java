@@ -1,4 +1,4 @@
-package io.devpl.generator.enums;
+package io.devpl.generator.domain.enums;
 
 /**
  * 表单布局 枚举

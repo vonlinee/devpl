@@ -21,10 +21,6 @@ import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * KingbaseES 字段类型转换
  *
@@ -42,17 +38,17 @@ public class OscarTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(STRING))
-            .test(containsAny("bigint", "int8").then(LONG))
-            .test(containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(INTEGER))
-            .test(containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfig, p)))
-            .test(containsAny("bit", "boolean").then(BOOLEAN))
-            .test(containsAny("decimal", "numeric", "number").then(BIG_DECIMAL))
-            .test(contains("clob").then(CLOB))
-            .test(contains("blob").then(BYTE_ARRAY))
-            .test(contains("float").then(FLOAT))
-            .test(containsAny("double", "real", "float4", "float8").then(DOUBLE))
-            .or(STRING);
+            .test(TypeConverts.containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("bigint", "int8").then(DbColumnType.LONG))
+            .test(TypeConverts.containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfig, p)))
+            .test(TypeConverts.containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric", "number").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.containsAny("double", "real", "float4", "float8").then(DbColumnType.DOUBLE))
+            .or(DbColumnType.STRING);
     }
 
     /**
@@ -65,23 +61,17 @@ public class OscarTypeConvert implements ITypeConvert {
     private ColumnJavaType toDateType(GlobalConfig config, String type) {
         DateType dateType = config.getDateType();
         if (dateType == DateType.SQL_PACK) {
-            switch (type) {
-                case "date":
-                    return DATE_SQL;
-                case "time":
-                    return TIME;
-                default:
-                    return TIMESTAMP;
-            }
+            return switch (type) {
+                case "date" -> DbColumnType.DATE_SQL;
+                case "time" -> DbColumnType.TIME;
+                default -> DbColumnType.TIMESTAMP;
+            };
         } else if (dateType == DateType.TIME_PACK) {
-            switch (type) {
-                case "date":
-                    return LOCAL_DATE;
-                case "time":
-                    return LOCAL_TIME;
-                default:
-                    return LOCAL_DATE_TIME;
-            }
+            return switch (type) {
+                case "date" -> DbColumnType.LOCAL_DATE;
+                case "time" -> DbColumnType.LOCAL_TIME;
+                default -> DbColumnType.LOCAL_DATE_TIME;
+            };
         }
         return DbColumnType.DATE;
     }

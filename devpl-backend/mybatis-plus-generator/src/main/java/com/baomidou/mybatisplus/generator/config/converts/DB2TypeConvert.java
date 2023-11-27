@@ -18,10 +18,7 @@ package com.baomidou.mybatisplus.generator.config.converts;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
-
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
+import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
 /**
  * DB2 字段类型转换
@@ -38,19 +35,19 @@ public class DB2TypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text", "json", "enum").then(STRING))
-            .test(contains("bigint").then(LONG))
-            .test(contains("smallint").then(BASE_SHORT))
-            .test(contains("int").then(INTEGER))
-            .test(containsAny("date", "time", "year").then(DATE))
-            .test(contains("bit").then(BOOLEAN))
-            .test(contains("decimal").then(BIG_DECIMAL))
-            .test(contains("clob").then(CLOB))
-            .test(contains("blob").then(BLOB))
-            .test(contains("binary").then(BYTE_ARRAY))
-            .test(contains("float").then(FLOAT))
-            .test(contains("double").then(DOUBLE))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
+            .test(TypeConverts.contains("smallint").then(DbColumnType.BASE_SHORT))
+            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time", "year").then(DbColumnType.DATE))
+            .test(TypeConverts.contains("bit").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.contains("decimal").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
+            .test(TypeConverts.contains("binary").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .or(DbColumnType.STRING);
     }
 
 }

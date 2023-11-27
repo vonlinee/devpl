@@ -1,6 +1,6 @@
 package io.devpl.generator.domain;
 
-import io.devpl.generator.enums.MapperStatementParamValueType;
+import io.devpl.generator.domain.enums.MapperStatementParamValueType;
 import lombok.Getter;
 import lombok.Setter;
 

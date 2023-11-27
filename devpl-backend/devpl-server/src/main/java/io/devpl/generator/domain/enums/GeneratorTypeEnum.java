@@ -1,4 +1,4 @@
-package io.devpl.generator.enums;
+package io.devpl.generator.domain.enums;
 
 /**
  * 代码生成方式 枚举

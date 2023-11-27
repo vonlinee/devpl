@@ -1,4 +1,4 @@
-package io.devpl.generator.enums;
+package io.devpl.generator.domain.enums;
 
 /**
  * 字段自动填充 枚举

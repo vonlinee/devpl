@@ -23,6 +23,11 @@ public final class DateTimeUtils {
         return stringOfNow(FORMAT_STRING_TIMESTAMP);
     }
 
+    /**
+     * 取当前时间作为文件名
+     *
+     * @return 年与日时分秒
+     */
     public static String nowForFilename() {
         return stringOfNow("yyyyMMddHHmmss");
     }

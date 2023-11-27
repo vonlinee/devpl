@@ -1,4 +1,4 @@
-package io.devpl.generator.enums;
+package io.devpl.generator.domain.enums;
 
 import com.baomidou.mybatisplus.generator.type.DataType;
 

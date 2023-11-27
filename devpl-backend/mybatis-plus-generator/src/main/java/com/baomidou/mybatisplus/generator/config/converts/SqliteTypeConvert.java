@@ -20,11 +20,6 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert.toDateType;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * SQLite 字段类型转换
  *
@@ -41,17 +36,16 @@ public class SqliteTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(contains("bigint").then(LONG))
-            .test(containsAny("tinyint(1)", "boolean").then(BOOLEAN))
-            .test(contains("int").then(INTEGER))
-            .test(containsAny("text", "char", "enum").then(STRING))
-            .test(containsAny("decimal", "numeric").then(BIG_DECIMAL))
-            .test(contains("clob").then(CLOB))
-            .test(contains("blob").then(BLOB))
-            .test(contains("float").then(FLOAT))
-            .test(contains("double").then(DOUBLE))
-            .test(containsAny("date", "time", "year").then(t -> toDateType(config, t)))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
+            .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("text", "char", "enum").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.containsAny("date", "time", "year").then(t -> MySqlTypeConvert.toDateType(config, t)))
             .or(DbColumnType.STRING);
     }
-
 }

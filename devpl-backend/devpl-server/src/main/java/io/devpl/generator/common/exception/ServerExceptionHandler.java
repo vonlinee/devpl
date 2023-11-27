@@ -1,4 +1,4 @@
-package io.devpl.generator.exception;
+package io.devpl.generator.common.exception;
 
 import io.devpl.generator.common.ServerException;
 import io.devpl.generator.common.query.StatusCode;

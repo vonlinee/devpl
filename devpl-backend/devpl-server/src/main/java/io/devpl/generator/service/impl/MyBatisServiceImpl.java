@@ -3,7 +3,7 @@ package io.devpl.generator.service.impl;
 import com.baomidou.mybatisplus.generator.util.TypeUtils;
 import io.devpl.generator.domain.ParamNode;
 import io.devpl.generator.domain.param.GetSqlParam;
-import io.devpl.generator.enums.MapperStatementParamValueType;
+import io.devpl.generator.domain.enums.MapperStatementParamValueType;
 import io.devpl.generator.mybatis.*;
 import io.devpl.generator.mybatis.tree.TreeNode;
 import io.devpl.generator.service.MyBatisService;

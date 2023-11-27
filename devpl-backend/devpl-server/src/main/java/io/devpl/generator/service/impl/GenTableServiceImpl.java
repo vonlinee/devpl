@@ -10,11 +10,11 @@ import io.devpl.generator.common.query.ListResult;
 import io.devpl.generator.config.query.AbstractQuery;
 import io.devpl.generator.dao.GenTableMapper;
 import io.devpl.generator.domain.TemplateFillStrategy;
+import io.devpl.generator.domain.enums.FormLayoutEnum;
+import io.devpl.generator.domain.enums.GeneratorTypeEnum;
 import io.devpl.generator.domain.param.Query;
 import io.devpl.generator.domain.param.TableImportParam;
 import io.devpl.generator.entity.*;
-import io.devpl.generator.enums.FormLayoutEnum;
-import io.devpl.generator.enums.GeneratorTypeEnum;
 import io.devpl.generator.service.*;
 import io.devpl.generator.utils.EncryptUtils;
 import io.devpl.generator.utils.NamingUtils;
@@ -52,6 +52,11 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         LambdaQueryWrapper<GenTable> qw = new LambdaQueryWrapper<>();
         qw.in(GenTable::getTableName, tableNames);
         return list(qw);
+    }
+
+    @Override
+    public List<String> listTableNames(Long dataSourceId) {
+        return baseMapper.selectTableNames(dataSourceId);
     }
 
     @Override
@@ -102,14 +107,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
             // 保存表信息
             // 项目信息
-            if (project != null) {
-                table.setPackageName(project.getProjectPackage());
-                table.setVersion(project.getVersion());
-                table.setBackendPath(project.getBackendPath());
-                table.setFrontendPath(project.getFrontendPath());
-            }
-
-            // TODO做成变量
+            // TODO 做成变量
             table.setAuthor("author");
             table.setEmail("email");
 
@@ -125,7 +123,22 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             table.setUpdateTime(table.getCreateTime());
             this.save(table);
 
-            initTargetGenerationFiles(table);
+            TemplateArgumentsMap params = new TemplateArgumentsMap();
+            if (project != null) {
+                table.setPackageName(project.getProjectPackage());
+                table.setVersion(project.getVersion());
+                table.setBackendPath(project.getBackendPath());
+                table.setFrontendPath(project.getFrontendPath());
+
+                params.setValue("backendPath", table.getBackendPath());
+                params.setValue("frontendPath", table.getFrontendPath());
+                params.setValue("tableName", table.getTableName());
+                params.setValue("packagePath", table.getPackageName());
+                params.setValue("ClassName", table.getClassName());
+                params.setValue("moduleName", project.getProjectName());
+            }
+
+            initTargetGenerationFiles(table, params);
 
             // 获取原生字段数据
             List<GenTableField> tableFieldList = this.getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
@@ -144,16 +157,9 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
      * @param table 要生成的数据库表
      */
     @Override
-    public void initTargetGenerationFiles(GenTable table) {
+    public void initTargetGenerationFiles(GenTable table, TemplateArgumentsMap params) {
         List<TargetGenerationFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
-
-        TemplateArgumentsMap params = new TemplateArgumentsMap();
-        params.put("backendPath", table.getBackendPath());
-        params.put("frontendPath", table.getFrontendPath());
-        params.put("tableName", table.getTableName());
-        params.put("packagePath", table.getPackageName());
-        params.put("ClassName", table.getClassName());
 
         for (TargetGenerationFile targetGenFile : targetGenFiles) {
 
@@ -324,7 +330,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             }
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            throw ServerException.create("异常", e);
+            throw ServerException.create("获取表字段异常", e);
         }
         return tableFieldList;
     }
@@ -333,7 +339,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     public List<GenTable> getTableList(Long datasourceId, String tableNamePattern) {
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             DBType dbType = DBType.MYSQL;
-            if (datasourceId != 0) {
+            if (datasourceId != -1) {
                 DbConnInfo connInfo = dataSourceService.getById(datasourceId);
                 if (connInfo != null) {
                     dbType = DBType.getValue(connInfo.getDbType());

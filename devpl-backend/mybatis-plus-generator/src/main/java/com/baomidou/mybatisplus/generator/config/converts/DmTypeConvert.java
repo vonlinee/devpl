@@ -20,10 +20,6 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * DM 字段类型转换
  *
@@ -64,19 +60,19 @@ public class DmTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text").then(STRING))
-            .test(contains("number").then(DmTypeConvert::toNumberType))
-            .test(containsAny("numeric", "dec", "money").then(BIG_DECIMAL))
-            .test(containsAny("bit", "bool").then(BOOLEAN))
-            .test(contains("bigint").then(BIG_INTEGER))
-            .test(containsAny("int", "byte").then(INTEGER))
-            .test(contains("binary").then(BYTE_ARRAY))
-            .test(contains("float").then(FLOAT))
-            .test(containsAny("double", "real").then(DOUBLE))
-            .test(containsAny("date", "time").then(DATE))
-            .test(contains("clob").then(CLOB))
-            .test(contains("blob").then(BLOB))
-            .test(contains("image").then(BYTE_ARRAY))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "text").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("number").then(DmTypeConvert::toNumberType))
+            .test(TypeConverts.containsAny("numeric", "dec", "money").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.containsAny("bit", "bool").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.BIG_INTEGER))
+            .test(TypeConverts.containsAny("int", "byte").then(DbColumnType.INTEGER))
+            .test(TypeConverts.contains("binary").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.containsAny("double", "real").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.containsAny("date", "time").then(DbColumnType.DATE))
+            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
+            .test(TypeConverts.contains("image").then(DbColumnType.BYTE_ARRAY))
+            .or(DbColumnType.STRING);
     }
 }

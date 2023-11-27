@@ -87,6 +87,8 @@ public class TableController {
      */
     @PostMapping("/import")
     public Result<String> tableImport(@RequestBody TableImportParam param) {
+        // 已经导入的表名
+        List<String> tableNamesImported = tableService.listTableNames(param.getDataSourceId());
         if (!CollectionUtils.isEmpty(param.getTableNameList())) {
             for (String tableName : param.getTableNameList()) {
                 param.setTableName(tableName);

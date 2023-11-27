@@ -14,6 +14,11 @@ public final class TemplateArgumentsMap extends HashMap<String, Object> implemen
     }
 
     @Override
+    public void setValue(String name, Object value) {
+        put(name, value);
+    }
+
+    @Override
     public Object getValue(String name) {
         return get(name);
     }

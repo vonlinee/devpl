@@ -1,6 +1,6 @@
 package io.devpl.generator.mybatis;
 
-import io.devpl.generator.enums.MapperStatementParamValueType;
+import io.devpl.generator.domain.enums.MapperStatementParamValueType;
 import lombok.Data;
 
 @Data

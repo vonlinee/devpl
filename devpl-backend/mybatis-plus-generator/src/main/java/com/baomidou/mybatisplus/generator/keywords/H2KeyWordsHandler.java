@@ -112,5 +112,4 @@ public class H2KeyWordsHandler extends BaseKeyWordsHandler {
     public @NotNull String formatStyle() {
         return "\"%s\"";
     }
-
 }

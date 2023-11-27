@@ -1,5 +1,7 @@
 package com.baomidou.mybatisplus.generator.util;
 
+import java.util.Optional;
+
 public final class ClassUtils {
 
     private ClassUtils() {
@@ -73,4 +75,12 @@ public final class ClassUtils {
         return cl;
     }
 
+    public static Optional<Class<?>> tryLoadClass(String className) {
+        try {
+            return Optional.of(ClassUtils.toClassConfident(className));
+        } catch (Exception e) {
+            // 当父类实体存在类加载器的时候,识别父类实体字段，不存在的情况就只有通过指定superEntityColumns属性了。
+        }
+        return Optional.empty();
+    }
 }

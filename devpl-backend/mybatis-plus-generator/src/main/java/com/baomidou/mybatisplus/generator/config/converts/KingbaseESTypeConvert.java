@@ -21,10 +21,6 @@ import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * KingbaseES 字段类型转换
  *
@@ -42,17 +38,17 @@ public class KingbaseESTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text", "json", "enum").then(STRING))
-            .test(contains("bigint").then(LONG))
-            .test(contains("int").then(INTEGER))
-            .test(containsAny("date", "time").then(p -> toDateType(globalConfig, p)))
-            .test(containsAny("bit", "boolean").then(BOOLEAN))
-            .test(containsAny("decimal", "numeric").then(BIG_DECIMAL))
-            .test(contains("clob").then(CLOB))
-            .test(contains("blob").then(BYTE_ARRAY))
-            .test(contains("float").then(FLOAT))
-            .test(contains("double").then(DOUBLE))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
+            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time").then(p -> toDateType(globalConfig, p)))
+            .test(TypeConverts.containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .or(DbColumnType.STRING);
     }
 
     /**
@@ -66,15 +62,15 @@ public class KingbaseESTypeConvert implements ITypeConvert {
         DateType dateType = config.getDateType();
         if (dateType == DateType.SQL_PACK) {
             return switch (type) {
-                case "date" -> DATE_SQL;
-                case "time" -> TIME;
-                default -> TIMESTAMP;
+                case "date" -> DbColumnType.DATE_SQL;
+                case "time" -> DbColumnType.TIME;
+                default -> DbColumnType.TIMESTAMP;
             };
         } else if (dateType == DateType.TIME_PACK) {
             return switch (type) {
-                case "date" -> LOCAL_DATE;
-                case "time" -> LOCAL_TIME;
-                default -> LOCAL_DATE_TIME;
+                case "date" -> DbColumnType.LOCAL_DATE;
+                case "time" -> DbColumnType.LOCAL_TIME;
+                default -> DbColumnType.LOCAL_DATE_TIME;
             };
         }
         return DbColumnType.DATE;

@@ -20,10 +20,6 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * PostgreSQL 字段类型转换
  *
@@ -41,28 +37,19 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
      * @return 返回对应的列类型
      */
     public static ColumnJavaType toDateType(GlobalConfig config, String type) {
-        switch (config.getDateType()) {
-            case SQL_PACK:
-                switch (type) {
-                    case "date":
-                        return DbColumnType.DATE_SQL;
-                    case "time":
-                        return DbColumnType.TIME;
-                    default:
-                        return DbColumnType.TIMESTAMP;
-                }
-            case TIME_PACK:
-                switch (type) {
-                    case "date":
-                        return DbColumnType.LOCAL_DATE;
-                    case "time":
-                        return DbColumnType.LOCAL_TIME;
-                    default:
-                        return DbColumnType.LOCAL_DATE_TIME;
-                }
-            default:
-                return DbColumnType.DATE;
-        }
+        return switch (config.getDateType()) {
+            case SQL_PACK -> switch (type) {
+                case "date" -> DbColumnType.DATE_SQL;
+                case "time" -> DbColumnType.TIME;
+                default -> DbColumnType.TIMESTAMP;
+            };
+            case TIME_PACK -> switch (type) {
+                case "date" -> DbColumnType.LOCAL_DATE;
+                case "time" -> DbColumnType.LOCAL_TIME;
+                default -> DbColumnType.LOCAL_DATE_TIME;
+            };
+            default -> DbColumnType.DATE;
+        };
     }
 
     /**
@@ -71,16 +58,16 @@ public class PostgreSqlTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "text", "json", "enum").then(STRING))
-            .test(contains("bigint").then(LONG))
-            .test(contains("int").then(INTEGER))
-            .test(containsAny("date", "time").then(t -> toDateType(config, t)))
-            .test(contains("bit").then(BOOLEAN))
-            .test(containsAny("decimal", "numeric").then(BIG_DECIMAL))
-            .test(contains("bytea").then(BYTE_ARRAY))
-            .test(contains("float").then(FLOAT))
-            .test(contains("double").then(DOUBLE))
-            .test(contains("boolean").then(BOOLEAN))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
+            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
+            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("date", "time").then(t -> toDateType(config, t)))
+            .test(TypeConverts.contains("bit").then(DbColumnType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.contains("bytea").then(DbColumnType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.contains("boolean").then(DbColumnType.BOOLEAN))
+            .or(DbColumnType.STRING);
     }
 }

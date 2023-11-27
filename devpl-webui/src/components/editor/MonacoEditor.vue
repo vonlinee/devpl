@@ -49,6 +49,11 @@ export default defineComponent({
       default: () => {
       }
     },
+    minimap: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
     // 是否只读,不可通过界面输入，但是可以通过API设置文本
     readOnly: {
       type: Boolean,
@@ -57,17 +62,15 @@ export default defineComponent({
     }
   },
   setup(props: any, context) {
-    const { language, text, width, height, readOnly } = toRefs(props);
+    const { language, text, width, height, readOnly, minimap } = toRefs(props);
     // 初始高度
     let initialHeight: string = height.value;
-
-    console.log("Monaco Editor => h = ", initialHeight);
 
     const editorOptions: IStandaloneEditorConstructionOptions = reactive({
       value: text.value, // 编辑器初始显示文字
       language: language.value, // 语言支持
       minimap: {
-        enabled: false // 关闭编辑区域右侧小地图
+        enabled: minimap // 关闭编辑区域右侧小地图
       },
       lineNumbers: "on",
       lineNumbersMinChars: 3,
@@ -83,13 +86,13 @@ export default defineComponent({
       overviewRulerBorder: false // 不要滚动条的边框
     });
 
-    // 编辑器容器引用
-    const editorBoxRef = ref();
+    // 编辑器容器节点
+    const editorBoxRef = ref<HTMLDivElement>();
 
     // 编辑器实例
     let monacoEditor: monaco.editor.IStandaloneCodeEditor | undefined = undefined;
     onMounted(() => {
-      if (!monacoEditor) {
+      if (!monacoEditor && editorBoxRef.value) {
         monacoEditor = monaco.editor.create(editorBoxRef.value, editorOptions);
       }
     });

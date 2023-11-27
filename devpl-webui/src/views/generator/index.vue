@@ -1,5 +1,19 @@
 <template>
-  <el-card>
+  <el-card :body-style="{
+    height: '35px'
+  }">
+    <el-form>
+      <el-form-item label="选择项目">
+        <el-select v-model="project">
+          <el-option v-for="project in projects" :key="project.projectId" :value="project"
+            :label="project.projectName"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
+  </el-card>
+  <el-card :body-style="{
+    height: '35px'
+  }">
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
         <el-input v-model="state.queryForm.tableName" placeholder="表名"></el-input>
@@ -22,36 +36,31 @@
       <el-form-item>
         <el-button type="primary" @click="showFileTypeManagerDialog()">文件类型管理</el-button>
       </el-form-item>
-      <el-form-item>
-        <el-select v-model="project">
-          <el-option v-for="project in projects" :key="project.projectId" :value="project"
-                     :label="project.projectName"></el-option>
-        </el-select>
-      </el-form-item>
     </el-form>
-    <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
-              @selection-change="selectionChangeHandle">
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
-      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
-        <template #default="scope">
-          <el-button type="primary" link @click="editHandle(scope.row.id)">参数配置</el-button>
-          <el-button type="primary" link @click="generatorHandle(scope.row.id)">生成</el-button>
-          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
-          <el-button type="primary" link @click="syncHandle(scope.row)">同步</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit"
-                   :total="state.total" layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
-                   @current-change="currentChangeHandle">
-    </el-pagination>
-
-    <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
-    <edit ref="editRef" @refresh-data-list="getDataList"></edit>
-    <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
   </el-card>
+
+  <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
+    @selection-change="selectionChangeHandle">
+    <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+    <el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
+    <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
+    <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
+      <template #default="scope">
+        <el-button type="primary" link @click="editHandle(scope.row.id)">参数配置</el-button>
+        <el-button type="primary" link @click="generatorHandle(scope.row.id)">生成</el-button>
+        <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+        <el-button type="primary" link @click="syncHandle(scope.row)">同步</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
+    layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+    @current-change="currentChangeHandle">
+  </el-pagination>
+
+  <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
+  <edit ref="editRef" @refresh-data-list="getDataList"></edit>
+  <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
 
   <vxe-modal title="代码生成配置" v-model="configDialogRef" draggable show-footer width="70%">
     <div style="height: 600px">
@@ -66,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, h } from "vue";
 import { DataTableOptions } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import GenTableImport from "./GenTableImport.vue";
@@ -78,6 +87,7 @@ import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from "@
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
 import { apiListSelectableProjects } from "@/api/project";
+import { useRouter } from "vue-router";
 
 const state: DataTableOptions = reactive({
   dataListUrl: "/gen/table/page",
@@ -87,17 +97,33 @@ const state: DataTableOptions = reactive({
   }
 });
 
+const router = useRouter()
 const fileTypeManagerRef = ref();
+const importRef = ref();
+const editRef = ref();
+const generatorRef = ref();
 
 function showFileTypeManagerDialog() {
   fileTypeManagerRef.value.init();
 }
 
-const importRef = ref();
-const editRef = ref();
-const generatorRef = ref();
-
 const importHandle = (id?: number) => {
+  if (project.value == undefined) {
+    const message = ElMessage({
+      duration: 500,
+      message: h('p', null, [
+        h('span', null, '请先选择项目，如果没有，先'),
+        h('a', {
+          style: 'color: blue',
+          onClick: function () {
+            message.close()
+            router.push({ path: '/codegen/project' })
+          }
+        }, '创建项目'),
+      ])
+    })
+    return
+  }
   importRef.value.show(id);
 };
 

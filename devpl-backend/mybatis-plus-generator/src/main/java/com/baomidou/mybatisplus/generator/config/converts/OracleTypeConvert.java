@@ -20,10 +20,6 @@ import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
-
 /**
  * Oracle 数据库生成对应实体类时字段类型转换，跟据 Oracle 中的数据类型，返回对应的 Java 类型
  *
@@ -62,16 +58,11 @@ public class OracleTypeConvert implements ITypeConvert {
      * @see GlobalConfig#getDateType()
      */
     protected static ColumnJavaType toDateType(GlobalConfig config) {
-        switch (config.getDateType()) {
-            case ONLY_DATE:
-                return DbColumnType.DATE;
-            case SQL_PACK:
-                return DbColumnType.TIMESTAMP;
-            case TIME_PACK:
-                return DbColumnType.LOCAL_DATE_TIME;
-            default:
-                return STRING;
-        }
+        return switch (config.getDateType()) {
+            case ONLY_DATE -> DbColumnType.DATE;
+            case SQL_PACK -> DbColumnType.TIMESTAMP;
+            case TIME_PACK -> DbColumnType.LOCAL_DATE_TIME;
+        };
     }
 
     /**
@@ -84,13 +75,13 @@ public class OracleTypeConvert implements ITypeConvert {
     @Override
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny("char", "clob").then(STRING))
-            .test(containsAny("date", "timestamp").then(p -> toDateType(config)))
-            .test(contains("number").then(OracleTypeConvert::toNumberType))
-            .test(contains("float").then(FLOAT))
-            .test(contains("blob").then(BLOB))
-            .test(containsAny("binary", "raw").then(BYTE_ARRAY))
-            .or(STRING);
+            .test(TypeConverts.containsAny("char", "clob").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("date", "timestamp").then(p -> toDateType(config)))
+            .test(TypeConverts.contains("number").then(OracleTypeConvert::toNumberType))
+            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
+            .test(TypeConverts.containsAny("binary", "raw").then(DbColumnType.BYTE_ARRAY))
+            .or(DbColumnType.STRING);
     }
 
 }

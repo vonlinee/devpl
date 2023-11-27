@@ -4,17 +4,11 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import org.jetbrains.annotations.NotNull;
-
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.contains;
-import static com.baomidou.mybatisplus.generator.config.converts.TypeConverts.containsAny;
-import static com.baomidou.mybatisplus.generator.config.rules.DbColumnType.*;
 
 /**
  * ClickHouse 字段类型转换
  *
  * @author urzeye
- * @date 2021年9月12日
  */
 public class ClickHouseTypeConvert implements ITypeConvert {
 
@@ -51,36 +45,36 @@ public class ClickHouseTypeConvert implements ITypeConvert {
      * @return 返回对应的列类型
      */
     public static ColumnJavaType toDateType(GlobalConfig config, String type) {
-        switch (config.getDateType()) {
-            case SQL_PACK:
+        return switch (config.getDateType()) {
+            case SQL_PACK -> {
                 if ("date".equals(type)) {
-                    return DbColumnType.DATE_SQL;
+                    yield DbColumnType.DATE_SQL;
                 }
-                return DbColumnType.TIMESTAMP;
-            case TIME_PACK:
+                yield DbColumnType.TIMESTAMP;
+            }
+            case TIME_PACK -> {
                 if ("date".equals(type)) {
-                    return DbColumnType.LOCAL_DATE;
+                    yield DbColumnType.LOCAL_DATE;
                 }
-                return DbColumnType.LOCAL_DATE_TIME;
-            default:
-                return DbColumnType.DATE;
-        }
+                yield DbColumnType.LOCAL_DATE_TIME;
+            }
+            default -> DbColumnType.DATE;
+        };
     }
 
     @Override
-    public ColumnJavaType processTypeConvert(@NotNull GlobalConfig globalConfig, @NotNull String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(containsAny(INTEGER_TYPE).then(INTEGER))
-            .test(containsAny(BIGINTEGER_TYPE).then(BIG_INTEGER))
-            .test(containsAny(BIGDECIMAL_TYPE).then(BIG_DECIMAL))
-            .test(containsAny(LONG_TYPE).then(LONG))
-            .test(contains("float32").then(FLOAT))
-            .test(contains("float64").then(DOUBLE))
-            .test(contains("map").then(MAP))
-            .test(contains("array").then(OBJECT))
-            .test(containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
-            .test(containsAny(STRING_TYPE).then(STRING))
-            .or(STRING);
+            .test(TypeConverts.containsAny(INTEGER_TYPE).then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny(BIGINTEGER_TYPE).then(DbColumnType.BIG_INTEGER))
+            .test(TypeConverts.containsAny(BIGDECIMAL_TYPE).then(DbColumnType.BIG_DECIMAL))
+            .test(TypeConverts.containsAny(LONG_TYPE).then(DbColumnType.LONG))
+            .test(TypeConverts.contains("float32").then(DbColumnType.FLOAT))
+            .test(TypeConverts.contains("float64").then(DbColumnType.DOUBLE))
+            .test(TypeConverts.contains("map").then(DbColumnType.MAP))
+            .test(TypeConverts.contains("array").then(DbColumnType.OBJECT))
+            .test(TypeConverts.containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
+            .test(TypeConverts.containsAny(STRING_TYPE).then(DbColumnType.STRING))
+            .or(DbColumnType.STRING);
     }
-
 }
