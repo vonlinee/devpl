@@ -102,8 +102,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { ElButton, ElMessage } from "element-plus/es";
-import { useBaseClassListApi } from "@/api/baseClass";
+import { ElMessage } from "element-plus/es";
+import { useBaseClassListApi } from "@/api/model";
 import { useDownloadApi, useGeneratorApi } from "@/api/generator";
 import { apiListGenTables, useTableSubmitApi } from "@/api/table";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";

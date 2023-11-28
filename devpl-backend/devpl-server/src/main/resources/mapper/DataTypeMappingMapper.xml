@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.generator.dao.DataTypeMappingMapper">
+<mapper namespace="io.devpl.backend.dao.DataTypeMappingMapper">
 
-    <select id="listDataTypeMappingItems" resultType="io.devpl.generator.domain.vo.DataTypeMappingListVO">
+    <select id="listDataTypeMappingItems" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
         SELECT A.type_id,
         B.type_name,
         B.type_group_id,
@@ -27,13 +27,13 @@
         </where>
     </select>
 
-    <select id="listAllMappableDataTypes" resultType="io.devpl.generator.domain.vo.DataTypeMappingVO">
+    <select id="listAllMappableDataTypes" resultType="io.devpl.backend.domain.vo.DataTypeMappingVO">
         SELECT *
         FROM data_type_item
         WHERE id != #{typeId}
     </select>
 
-    <select id="listAllUnMappedDataTypes" resultType="io.devpl.generator.domain.vo.DataTypeMappingVO">
+    <select id="listAllUnMappedDataTypes" resultType="io.devpl.backend.domain.vo.DataTypeMappingVO">
         SELECT A.id AS type_id, dtg.group_id AS type_group_id, A.type_key, A.type_name, false as mapped
         FROM data_type_item A
                  LEFT JOIN (SELECT DISTINCT type_id FROM data_type_mapping) B ON A.id = B.type_id

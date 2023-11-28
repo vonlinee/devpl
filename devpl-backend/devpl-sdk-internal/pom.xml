@@ -19,17 +19,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
             <scope>compile</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/net.jodah/typetools -->
         <dependency>
             <groupId>net.jodah</groupId>

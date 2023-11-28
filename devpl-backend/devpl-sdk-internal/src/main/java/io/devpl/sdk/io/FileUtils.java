@@ -1,6 +1,5 @@
 package io.devpl.sdk.io;
 
-import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1496,7 +1495,6 @@ public class FileUtils {
      * @param file 文件对象
      * @return 文件扩展名
      */
-    @Nonnull
     public static String getExtensionName(File file, String placeholder) {
         if (file == null) {
             return placeholder;
@@ -1513,7 +1511,6 @@ public class FileUtils {
      *
      * @return 文件扩展名
      */
-    @Nonnull
     public static String getExtensionName(Path path, String placeholder) {
         if (path == null) {
             return placeholder;

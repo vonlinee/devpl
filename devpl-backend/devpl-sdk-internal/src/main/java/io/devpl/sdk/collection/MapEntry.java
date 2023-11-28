@@ -1,6 +1,5 @@
 package io.devpl.sdk.collection;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
@@ -12,7 +11,6 @@ import java.util.Objects;
  * @param <V> 值类型
  * @since 0.0.1
  */
-@NotThreadSafe
 public class MapEntry<K, V> implements Map.Entry<K, V>, Serializable {
 
     @Serial

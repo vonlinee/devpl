@@ -328,7 +328,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>io.devpl.generator.DevplMain8088</mainClass>
+                    <mainClass>io.devpl.backend.DevplMain8088</mainClass>
                 </configuration>
             </plugin>
         </plugins>

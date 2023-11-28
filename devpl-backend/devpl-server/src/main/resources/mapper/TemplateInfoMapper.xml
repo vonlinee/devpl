@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.generator.dao.TemplateInfoMapper">
+<mapper namespace="io.devpl.backend.dao.TemplateInfoMapper">
 
-    <resultMap type="io.devpl.generator.entity.TargetGenerationFile" id="templateFileGenerationMap">
+    <resultMap type="io.devpl.backend.entity.TargetGenerationFile" id="templateFileGenerationMap">
         <result property="id" column="id"/>
         <result property="fileName" column="file_name"/>
         <result property="templateId" column="template_id"/>
         <result property="savePath" column="save_path"/>
     </resultMap>
 
-    <select id="selectTemplateIdAndNames" resultType="io.devpl.generator.domain.vo.TemplateSelectVO">
+    <select id="selectTemplateIdAndNames" resultType="io.devpl.backend.domain.vo.TemplateSelectVO">
         SELECT template_id, template_name, remark
         FROM template_info
     </select>

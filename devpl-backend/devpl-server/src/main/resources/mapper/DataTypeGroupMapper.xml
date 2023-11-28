@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.generator.dao.DataTypeGroupMapper">
+<mapper namespace="io.devpl.backend.dao.DataTypeGroupMapper">
 
-    <select id="selectAllGroups" resultType="io.devpl.generator.domain.vo.DataTypeGroupVO">
+    <select id="selectAllGroups" resultType="io.devpl.backend.domain.vo.DataTypeGroupVO">
         SELECT group_id AS type_group_id, group_name AS type_group_name
         FROM data_type_group
     </select>

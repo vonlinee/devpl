@@ -1,6 +1,5 @@
 package io.devpl.sdk.util;
 
-import com.google.common.base.Strings;
 import io.devpl.sdk.validation.Validator;
 
 import java.util.ArrayList;
@@ -14,6 +13,7 @@ public class ExceptionUtils {
 
     /**
      * Assemble the detail message for the throwable with all of its cause included (at most 10 causes).
+     *
      * @param ex the exception
      * @return the message along with its causes
      */
@@ -39,12 +39,13 @@ public class ExceptionUtils {
             }
             builder.append(" [Cause: ").append(cause.getMessage());
         }
-        builder.append(Strings.repeat("]", counter));
+        builder.append("]".repeat(counter));
         return builder.toString();
     }
 
     /**
      * 过滤栈帧
+     *
      * @param throwable
      * @param ignorePackagePrefix
      * @return

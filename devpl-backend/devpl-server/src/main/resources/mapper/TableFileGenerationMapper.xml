@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.generator.dao.TableFileGenerationMapper">
+<mapper namespace="io.devpl.backend.dao.TableFileGenerationMapper">
 
-    <resultMap type="io.devpl.generator.entity.TableFileGeneration" id="tableFileGenerationMap">
+    <resultMap type="io.devpl.backend.entity.TableFileGeneration" id="tableFileGenerationMap">
         <result property="id" column="pid"/>
         <result property="tableId" column="table_id"/>
         <result property="generationId" column="generation_id"/>
@@ -10,7 +10,7 @@
         <result property="savePath" column="save_path"/>
     </resultMap>
 
-    <select id="selectListByTableId" resultType="io.devpl.generator.entity.TableFileGeneration">
+    <select id="selectListByTableId" resultType="io.devpl.backend.entity.TableFileGeneration">
         SELECT tfg.*, tfg1.template_id, tfg1.template_name
         FROM table_file_generation tfg
                  LEFT JOIN template_file_generation tfg1 ON tfg.generation_id = tfg1.id

@@ -114,6 +114,6 @@
         <appender-ref ref="ERROR_FILE"/>
     </root>
 
-    <logger name="io.devpl.generator" level="DEBUG"/>
+    <logger name="io.devpl.backend" level="DEBUG"/>
 
 </configuration>

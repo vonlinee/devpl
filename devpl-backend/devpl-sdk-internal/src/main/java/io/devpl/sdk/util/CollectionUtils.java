@@ -1,6 +1,5 @@
 package io.devpl.sdk.util;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -17,7 +16,7 @@ public abstract class CollectionUtils {
      * @param collection the Collection to check
      * @return whether the given Collection is empty
      */
-    public static boolean isEmpty(@Nullable Collection<?> collection) {
+    public static boolean isEmpty(Collection<?> collection) {
         return (collection == null || collection.isEmpty());
     }
 
@@ -28,7 +27,7 @@ public abstract class CollectionUtils {
      * @param map the Collection to check
      * @return whether the given Collection is empty
      */
-    public static boolean isEmpty(@Nullable Map<?, ?> map) {
+    public static boolean isEmpty(Map<?, ?> map) {
         return (map == null || map.isEmpty());
     }
 

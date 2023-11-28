@@ -43,5 +43,4 @@ public enum HttpMethod {
     public boolean matches(String method) {
         return name().equals(method);
     }
-
 }

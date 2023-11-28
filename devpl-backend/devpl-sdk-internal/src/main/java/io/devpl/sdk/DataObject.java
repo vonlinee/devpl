@@ -1,6 +1,5 @@
 package io.devpl.sdk;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
@@ -10,7 +9,6 @@ import java.util.Set;
 /**
  * 用于方法间的数据传输，可以动态地存放数据
  */
-@NotThreadSafe
 public interface DataObject extends Serializable, Cloneable {
 
     static DataObject create() {
