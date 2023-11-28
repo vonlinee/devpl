@@ -73,7 +73,7 @@ public class DbConnInfo implements Serializable {
     private String username;
 
     /**
-     * 密码
+     * 密码,加密存储
      */
     @TableField(value = "password")
     private String password;

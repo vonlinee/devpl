@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
+	<vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" show-footer>
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
 			<el-form-item label="基类编码" prop="code">
 				<el-input v-model="dataForm.code" placeholder="基类编码"></el-input>
@@ -18,13 +18,13 @@
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
 		</template>
-	</el-dialog>
+	</vxe-modal>
 </template>
 
 <script setup lang="ts">
 import {reactive, ref} from 'vue'
-import {ElButton, ElDialog, ElMessage} from 'element-plus/es'
-import {useBaseClassApi, useBaseClassSubmitApi} from '@/api/baseClass'
+import {ElButton, ElMessage} from 'element-plus/es'
+import {useBaseClassApi, useBaseClassSubmitApi} from '@/api/model'
 
 const emit = defineEmits(['refreshDataList'])
 

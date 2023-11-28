@@ -313,6 +313,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--修改后的JSON5，添加解析注释功能-->
+        <dependency>
+            <groupId>de.marhali</groupId>
+            <artifactId>json5-java</artifactId>
+            <version>2.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -29,7 +29,7 @@ import { nextTick, onMounted, ref } from "vue";
 import { apiListSelectableDataSources } from "@/api/datasource";
 
 const dbNavViewCRef = ref()
-const currentDataSourceId = ref<number>(0);
+const currentDataSourceId = ref<number>();
 const tableHeader = ref<ResultSetColumnMetadata[]>([])
 const tableData = ref([])
 const dataSources = ref<DataSourceVO[]>([]);

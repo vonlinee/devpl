@@ -180,6 +180,12 @@
                             </archive>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <!--springboot 3.0.3版本的pom中maven-surefire-plugin版本是2.3，不支持JDK17，执行maven package时报错-->
+                        <version>3.2.2</version>
+                    </plugin>
                 </plugins>
             </build>
             <distributionManagement>

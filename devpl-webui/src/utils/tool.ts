@@ -74,7 +74,7 @@ export const hasText = (content: any): boolean => {
  * 所有字符串都不为空
  * @param contents
  */
-export const allHasText = (...contents: string[]): boolean => {
+export const allHasText = (...contents: (string | undefined)[]): boolean => {
   let res = true;
   for (let i = 0; i < contents.length; i++) {
     if (!hasText(contents[i])) {

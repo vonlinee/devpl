@@ -44,18 +44,18 @@ public class StringAligner {
         return strings;
     }
 
-    public static void main(String[] args) {
-        // 一行最多20个字符，居中显示
-        // 左对齐
-        StringAligner formatter = new StringAligner(20, StringAligner.JUST_LEFT);
-        System.out.println(formatter.format("- i -"));
-        System.out.println(formatter.format(Integer.toString(444)));
-        // 右对齐
-        System.out.println();
-        formatter = new StringAligner(20, StringAligner.JUST_CENTER);
-        System.out.println(formatter.format("- i -"));
-        System.out.println(formatter.format(Integer.toString(444)));
-    }
+//    public static void main(String[] args) {
+//        // 一行最多20个字符，居中显示
+//        // 左对齐
+//        StringAligner formatter = new StringAligner(20, StringAligner.JUST_LEFT);
+//        System.out.println(formatter.format("- i -"));
+//        System.out.println(formatter.format(Integer.toString(444)));
+//        // 右对齐
+//        System.out.println();
+//        formatter = new StringAligner(20, StringAligner.JUST_CENTER);
+//        System.out.println(formatter.format("- i -"));
+//        System.out.println(formatter.format(Integer.toString(444)));
+//    }
 
     public int getJust() {
         return just;
@@ -133,8 +133,6 @@ public class StringAligner {
      * 在to后面append howMany个空格字符
      */
     protected final void pad(StringBuilder to, int howMany) {
-        for (int i = 0; i < howMany; i++) {
-            to.append(" ");
-        }
+        to.append(" ".repeat(Math.max(0, howMany)));
     }
 }

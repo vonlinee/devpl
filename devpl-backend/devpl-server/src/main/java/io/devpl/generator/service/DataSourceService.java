@@ -21,9 +21,22 @@ import java.util.List;
  */
 public interface DataSourceService extends BaseService<DbConnInfo> {
 
+    /**
+     * 数据源ID是否是系统数据源
+     *
+     * @param id 数据源ID
+     * @return 是否是系统数据源
+     */
     boolean isSystemDataSource(Long id);
 
-    DbConnInfo getOne(long id);
+    /**
+     * 获取数据库连接信息
+     * 对一些加密的参数进行解密
+     *
+     * @param id 数据源ID
+     * @return 数据库连接信息
+     */
+    DbConnInfo getConnectionInfo(long id);
 
     ListResult<DbConnInfo> listPage(DbConnInfoListParam param);
 

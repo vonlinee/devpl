@@ -88,9 +88,9 @@ export const menuRoutes: RouteRecordRaw[] = [
         children: []
       },
       {
-        path: "/codegen/base-class",
-        name: "BaseClass",
-        component: () => import("@/views/base-class/index.vue"),
+        path: "/codegen/model",
+        name: "DomainModel",
+        component: () => import("@/views/model/index.vue"),
         meta: {
           title: "领域模型",
           icon: "icon-cluster"

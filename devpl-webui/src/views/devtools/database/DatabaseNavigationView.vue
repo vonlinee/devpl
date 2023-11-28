@@ -14,7 +14,6 @@
     <contextmenu-item>DDL</contextmenu-item>
     <contextmenu-item>菜单3</contextmenu-item>
   </Contextmenu>
-
 </template>
 
 <script lang="ts" setup>
@@ -26,9 +25,6 @@ import { Contextmenu, ContextmenuItem } from "v-contextmenu";
 const dbMocker = ref()
 
 const contextMenuRef = ref()
-
-const currentMenuNode = ref()
-
 
 /**
  * 展示右键菜单
@@ -53,7 +49,7 @@ const defaultProps = {
 const dataSource = ref<TreeNodeVO[]>([]);
 
 interface DatabaseNavigationViewProps {
-  dataSourceId: number,
+  dataSourceId?: number,
   nodeClickCallback: (param: DBTableDataVO) => void,
 }
 
@@ -69,16 +65,22 @@ const dataSourceId = computed(() => {
  * @param resolve 
  */
 const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
-  apiListTableNames(dataSourceId.value, node.label).then((res) => {
-    const tableNodes: TreeNodeVO[] = []
-    for (let i = 0; i < res.data?.length; i++) {
-      tableNodes.push({
-        label: res.data[i],
-        leaf: true
-      });
-    }
-    resolve(tableNodes)
-  });
+  if (dataSourceId.value) {
+    apiListTableNames(dataSourceId.value, node.label).then((res) => {
+      const tableNodes: TreeNodeVO[] = []
+      if (res.data) {
+        for (let i = 0; i < res.data?.length; i++) {
+          tableNodes.push({
+            label: res.data[i],
+            leaf: true
+          });
+        }
+        resolve(tableNodes)
+      } else {
+        resolve([])
+      }
+    });
+  }
 }
 
 /**

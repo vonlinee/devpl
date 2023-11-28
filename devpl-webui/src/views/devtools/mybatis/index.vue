@@ -64,7 +64,7 @@ import { Splitpanes, Pane } from 'splitpanes'
 
 import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
-import ParamImport from "@/views/mybatis/ParamImport.vue";
+import ParamImport from "./ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import { appStore } from "@/store";
 import { VxeGridConstructor, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeTablePropTypes } from "vxe-table/types/all";

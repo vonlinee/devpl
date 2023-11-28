@@ -113,7 +113,7 @@ public class DataSourceController {
     @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
     public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
         Assert.notNull(id, "id不能为空");
-        DbConnInfo connInfo = datasourceService.getOne(id);
+        DbConnInfo connInfo = datasourceService.getConnectionInfo(id);
         Assert.notNull(connInfo, "数据源不存在");
         return Result.ok(datasourceService.getDbNames(connInfo));
     }
@@ -136,13 +136,16 @@ public class DataSourceController {
      * @param dbName 数据库名称
      * @return 数据库名称列表
      */
-    @GetMapping(value = "/datasource/{dataSourceId}/{dbName}/table/names")
-    public ListResult<String> getTableNames(@PathVariable(value = "dataSourceId") Long id, @PathVariable(value = "dbName") String dbName) {
-        DbConnInfo connInfo = datasourceService.getOne(id);
+    @GetMapping(value = "/datasource/table/names")
+    public Result<List<String>> getTableNames(
+        @RequestParam(value = "dataSourceId") Long id,
+        @RequestParam(value = "databaseName", required = false) String dbName,
+        @RequestParam(value = "pattern", required = false) String tableNamePattern) {
+        DbConnInfo connInfo = datasourceService.getConnectionInfo(id);
         if (connInfo == null) {
-            return ListResult.error("资源不存在");
+            return Result.error("资源不存在");
         }
-        return ListResult.ok(datasourceService.getTableNames(connInfo, dbName));
+        return Result.ok(datasourceService.getTableNames(connInfo, dbName));
     }
 
     /**
@@ -216,7 +219,7 @@ public class DataSourceController {
     public Result<DBTableDataVO> getTableData(@RequestBody DBTableDataParam param) {
         try {
             if (param.getConnInfo() == null) {
-                DbConnInfo connInfo = datasourceService.getOne(param.getDataSourceId());
+                DbConnInfo connInfo = datasourceService.getConnectionInfo(param.getDataSourceId());
                 if (connInfo == null) {
                     return Result.error("数据源不存在");
                 }

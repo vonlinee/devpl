@@ -7,6 +7,7 @@ import io.devpl.generator.domain.vo.MockField;
 import io.devpl.generator.domain.vo.MockGeneratorVO;
 import io.devpl.generator.entity.DbConnInfo;
 import io.devpl.generator.service.DataSourceService;
+import io.devpl.generator.service.MockerService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +22,12 @@ public class MockerController {
 
     @Resource
     DataSourceService dataSourceService;
+    @Resource
+    MockerService mockerService;
 
     @GetMapping(value = "/columns")
     public Result<List<MockField>> getMockItems(MockColumnListParam param) {
-        DbConnInfo connInfo = dataSourceService.getOne(param.getDataSourceId());
+        DbConnInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) {
             return Result.error("数据源不存在");
         }
@@ -41,6 +44,6 @@ public class MockerController {
 
     @GetMapping(value = "/generators")
     public Result<List<MockGeneratorVO>> getMockGenerators(MockColumnListParam param) {
-        return Result.ok(new ArrayList<>());
+        return Result.ok(mockerService.listAllMockGenerator());
     }
 }

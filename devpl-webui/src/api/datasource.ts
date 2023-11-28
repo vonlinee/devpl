@@ -108,17 +108,21 @@ export const apiListSupportedDbTypes = () => {
  * @returns 所有支持的数据库类型
  */
 export const apiListSelectableDataSources = (internal?: boolean) => {
-  return http.get("/api/gen/datasource/list/selectable", {
+  return http.get<DataSourceVO[]>("/api/gen/datasource/list/selectable", {
     internal: internal
   });
 };
 
 /**
- * 所有支持的数据库类型
- * @returns 所有支持的数据库类型
+ * 获取数据库下的所有表名称
+ * @returns 单个数据库的所有表
  */
-export const apiListTableNames = (id: number, dbName: string) => {
-  return http.get(`/api/gen/datasource/${id}/${dbName}/table/names`);
+export const apiListTableNames = (id: number, dbName: string, pattern?: string) => {
+  return http.get<string[]>('/api/gen/datasource/table/names', {
+    dataSourceId: id,
+    databaseName: dbName,
+    pattern: pattern
+  });
 };
 
 /**

@@ -9,7 +9,7 @@ import lombok.Data;
 public class FieldParseParam {
 
     /**
-     * 输入类型
+     * 输入类型 JSON/SQL/
      */
     private String type;
 

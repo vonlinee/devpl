@@ -1,7 +1,7 @@
 package io.devpl.generator.common.query;
 
 /**
- * Http状态码 + 自定义业务状态码
+ * 自定义业务状态码
  */
 public enum StatusCode {
 
@@ -9,7 +9,8 @@ public enum StatusCode {
     NOT_FOUND(404, "Not Found"),
     FORBIDDEN(403, "Forbidden"),
     IO_ERROR(6001, "IO异常"),
-    FILE_NOT_FOUNT(6002, "文件不存在"),
+    FILE_NOT_FOUND(6002, "文件不存在"),
+    RESOURCE_NOT_FOUND(4040, "资源不存在"),
     INTERNAL_SERVER_ERROR(5000, "服务器异常，请稍后再试");
 
     private final int code;

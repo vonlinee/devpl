@@ -54,7 +54,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
     }
 
     @Override
-    public DbConnInfo getOne(long id) {
+    public DbConnInfo getConnectionInfo(long id) {
         DbConnInfo connInfo = getById(id);
         if (connInfo != null) {
             connInfo.setPassword(EncryptUtils.tryDecrypt(connInfo.getPassword()));
@@ -122,7 +122,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         if (dataSourceId == null) {
             return dataSource.getConnection();
         }
-        return getConnection(getOne(dataSourceId));
+        return getConnection(getConnectionInfo(dataSourceId));
     }
 
     @Override
@@ -181,7 +181,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
     @Override
     public List<String> getTableNames(DbConnInfo connInfo, String databaseName) {
         DBType dbType = DBType.getValue(connInfo.getDbType());
-        String connectionUrl = getConnectionUrl(connInfo);
+        connInfo.setDbName(databaseName);
+        String connectionUrl = this.getConnectionUrl(connInfo);
         if (dbType == null || connectionUrl == null) {
             return Collections.emptyList();
         }
@@ -189,12 +190,13 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         List<String> list = new ArrayList<>();
         try (Connection connection = getConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
-            ResultSet rs = metaData.getTables(databaseName, null, null, null);
+            String catalog = connection.getCatalog();
+            ResultSet rs = metaData.getTables(catalog, databaseName, null, null);
             while (rs.next()) {
                 list.add(rs.getString("TABLE_NAME"));
             }
         } catch (Exception exception) {
-            log.error("", exception);
+            log.error("获取数据库表名称失败", exception);
         }
         return list;
     }
