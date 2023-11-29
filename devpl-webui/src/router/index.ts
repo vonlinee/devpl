@@ -133,6 +133,16 @@ export const menuRoutes: RouteRecordRaw[] = [
           icon: "icon-edit-square",
           keepAlive: true
         }
+      },
+      {
+        path: "/devtools/designer",
+        name: "设计工具",
+        component: () => import("@/views/devtools/designer/index.vue"),
+        meta: {
+          title: "设计工具",
+          icon: "icon-edit-square",
+          keepAlive: true
+        }
       }
     ]
   },

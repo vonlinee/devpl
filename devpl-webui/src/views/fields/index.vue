@@ -8,6 +8,7 @@ import { onMounted, reactive, ref } from "vue";
 import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
+import FieldSelector from "@/views/fields/FieldSelector.vue";
 
 /**
  * 表格数据模型
@@ -22,7 +23,7 @@ interface RowVO {
   defaultValue: string;
 }
 
-const fieldsTable = ref();
+const fieldSelectModal = ref();
 const fieldImportModalRef = ref();
 const saveOrUpdateFieldModal = ref();
 
@@ -67,10 +68,13 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
           <el-button type="primary" @click="getDataList()">查询</el-button>
           <el-button type="primary" @click="showSaveOrUpdateModal(null)">新增</el-button>
           <el-button type="primary" @click="fieldImportModalRef.init()">导入</el-button>
+          <el-button type="primary" @click="fieldSelectModal.show()">Designer</el-button>
         </el-form-item>
       </div>
     </el-form>
   </el-card>
+
+  <field-selector ref="fieldSelectModal"></field-selector>
 
   <el-table ref="fieldsTable" :border="true" height="525" :data="option.dataList">
     <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
