@@ -11,12 +11,10 @@ type FieldInfo = {
    * 数据类型
    */
   dataType: string
-
   /**
    * 描述信息
    */
   description: string
-
   /**
    * 默认值
    */

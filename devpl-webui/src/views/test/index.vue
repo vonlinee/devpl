@@ -1,122 +1,17 @@
 <script setup lang="ts">
-import ParamTable from '@/components/ParamTable.vue';
 
-import { ref } from 'vue';
-import 'splitpanes/dist/splitpanes.css'
-let mapperParams = ref<ParamItem[]>([{
-	id: 1,
-	parentId: null,
-	name: 'param',
-	value: null,
-	dataType: null,
-	leaf: false
-}, {
-	id: 11,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 11,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 12,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 13,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 14,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 15,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 16,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 17,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}, {
-	id: 18,
-	parentId: 1,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}
+import CodeInput from "@/components/input/CodeInput.vue";
+import { ref } from "vue";
 
-	, {
-	id: 2,
-	parentId: null,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: false
-}
-	, {
-	id: 21,
-	parentId: 2,
-	name: 'userId',
-	value: '102120',
-	dataType: 'String',
-	leaf: true
-}
-])
-
-const dataTypes = ref<DataTypeItem[]>([
-	{
-		name: "int",
-		value: "int"
-	},
-	{
-		name: "String",
-		value: "String"
-	},
-	{
-		name: "List",
-		value: "List"
-	}
-])
-
-const showing = ref()
+const code = ref()
 
 </script>
 
 <template>
-	<button @click="showing = true">showing</button>
-	<vxe-modal :model-value="showing" width="70%" @close="showing = false">
-		<ParamTable :rows="mapperParams" :data-types="dataTypes"></ParamTable>
-	</vxe-modal>
+  <div style="width: 500px; height: 400px">
+    <code-input lang="ts" v-model:code="code"></code-input>
+  </div>
+
 </template>
 
 <style lang="scss">

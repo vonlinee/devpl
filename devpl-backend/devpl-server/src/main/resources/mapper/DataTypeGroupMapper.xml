@@ -3,7 +3,7 @@
 <mapper namespace="io.devpl.backend.dao.DataTypeGroupMapper">
 
     <select id="selectAllGroups" resultType="io.devpl.backend.domain.vo.DataTypeGroupVO">
-        SELECT group_id AS type_group_id, group_name AS type_group_name
+        SELECT id, group_id AS type_group_id, group_name AS type_group_name, remark AS type_group_name, internal
         FROM data_type_group
     </select>
 </mapper>

@@ -15,6 +15,8 @@ import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 数据类型管理
  */
@@ -76,7 +78,7 @@ public class DataTypeController {
     }
 
     /**
-     * 保存数据类型分组
+     * 查询数据类型分组
      *
      * @return 类型分组信息
      */
@@ -93,6 +95,16 @@ public class DataTypeController {
     @PostMapping("/group/add")
     public Result<Boolean> addDataTypeGroup(@RequestBody DataTypeGroup param) {
         return Result.ok(dataTypeService.saveDataTypeGroup(param));
+    }
+
+    /**
+     * 保存数据类型分组
+     *
+     * @return 类型分组信息
+     */
+    @PostMapping("/group/saveupdate/batch")
+    public Result<Boolean> saveOrUpdateTypeGroups(@RequestBody List<DataTypeGroup> groups) {
+        return Result.ok(dataTypeService.saveOrUpdateTypeGroups(groups));
     }
 
     /**

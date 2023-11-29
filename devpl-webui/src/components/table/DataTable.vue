@@ -6,36 +6,40 @@
         <!-- 具名插槽 -->
         <slot v-if="tool.slot" :name="tool.slot" />
         <el-button v-else :key="key" :type="tool.type" :size="tool.size" :plain="tool.plain" :round="tool.round"
-          :circle="tool.circle" :icon="tool.icon" :style="tool.style" :disabled="tool.disabled"
-          @click.native.prevent="tool.onClick">
+                   :circle="tool.circle" :icon="tool.icon" :style="tool.style" :disabled="tool.disabled"
+                   @click.native.prevent="tool.onClick">
           {{ tool.label }}
         </el-button>
       </template>
     </div>
     <!-- 表格 el-table -->
     <el-table v-loading="options.loading" :element-loading-text="options.elementLoadingText"
-      :element-loading-spinner="options.elementLoadingSpinner" :element-loading-svg="options.elementLoadingSvg"
-      :element-loading-background="options.elementLoadingBackground" ref="tableRef" class="el-table" :data="tableDataRef"
-      :height="options.height == undefined ? 528 : options.height" :max-height="`${options.maxHeight}px`"
-      :stripe="options.stripe == undefined ? true : options.stripe"
-      :border="options.border == undefined ? true : options.border"
-      :size="options.size == undefined ? 'default' : options.size" :fit="options.fit == undefined ? false : options.fit"
-      :show-header="options.showHeader == undefined ? true : options.showHeader"
-      :current-row-key="options.currentRowKey == undefined ? '' : options.currentRowKey"
-      :highlight-current-row="options.highlightCurrentRow == undefined ? true : options.highlightCurrentRow"
-      :empty-text="options.emptyText == undefined ? '' : options.emptyText" :row-key="options.rowKey"
-      :row-class-name="options.rowClassName" :cell-class-name="options.cellClassName"
-      :tooltip-effect="options.tooltipEffect == undefined ? 'light' : options.tooltipEffect"
-      :show-summary="options.showSummary == undefined ? false : options.showSummary"
-      :sum-text="options.sumText == undefined ? '' : options.sumText"
-      :select-on-indeterminate="options.selectOnIndeterminate == undefined ? false : options.selectOnIndeterminate"
-      :indent="options.indent == undefined ? 2 : options.indent" :lazy="options.lazy == undefined ? true : options.lazy"
-      :load="options.load" :tree-props="options.treeProps" @select="select" @select-all="selectAll"
-      @selection-change="selectionChange" @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave"
-      @cell-click="cellClick" @cell-dblclick="cellDblclick" @cell-contextmenu="cellContextmenu" @row-click="rowClick"
-      @row-contextmenu="rowContextmenu" @row-dblclick="rowDblclick" @header-click="headerClick"
-      @header-contextmenu="headerContextmenu" @sort-change="sortChange" @filter-change="filterChange"
-      @current-change="currentChange" @header-dragend="headerDragend" @expand-change="expandChange">
+              :element-loading-spinner="options.elementLoadingSpinner" :element-loading-svg="options.elementLoadingSvg"
+              :element-loading-background="options.elementLoadingBackground" ref="tableRef" class="el-table"
+              :data="tableDataRef"
+              :height="options.height === undefined ? 528 : options.height" :max-height="`${options.maxHeight}px`"
+              :stripe="options.stripe === undefined ? true : options.stripe"
+              :border="options.border === undefined ? true : options.border"
+              :size="options.size === undefined ? 'default' : options.size"
+              :fit="options.fit === undefined ? false : options.fit"
+              :show-header="options.showHeader === undefined ? true : options.showHeader"
+              :current-row-key="options.currentRowKey === undefined ? '' : options.currentRowKey"
+              :highlight-current-row="options.highlightCurrentRow === undefined ? true : options.highlightCurrentRow"
+              :empty-text="options.emptyText === undefined ? '' : options.emptyText" :row-key="options.rowKey"
+              :row-class-name="options.rowClassName" :cell-class-name="options.cellClassName"
+              :tooltip-effect="options.tooltipEffect === undefined ? 'light' : options.tooltipEffect"
+              :show-summary="options.showSummary === undefined ? false : options.showSummary"
+              :sum-text="options.sumText === undefined ? '' : options.sumText"
+              :select-on-indeterminate="options.selectOnIndeterminate === undefined ? false : options.selectOnIndeterminate"
+              :indent="options.indent === undefined ? 2 : options.indent"
+              :lazy="options.lazy === undefined ? true : options.lazy"
+              :load="options.load" :tree-props="options.treeProps" @select="select" @select-all="selectAll"
+              @selection-change="selectionChange" @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave"
+              @cell-click="cellClick" @cell-dblclick="cellDblclick" @cell-contextmenu="cellContextmenu"
+              @row-click="rowClick"
+              @row-contextmenu="rowContextmenu" @row-dblclick="rowDblclick" @header-click="headerClick"
+              @header-contextmenu="headerContextmenu" @sort-change="sortChange" @filter-change="filterChange"
+              @current-change="currentChange" @header-dragend="headerDragend" @expand-change="expandChange">
       <template v-for="item in columns">
         <data-table-column :column="item">
           <!-- 当slot-header有值时使用插槽类型 -->
@@ -55,7 +59,7 @@
       </template>
 
       <el-table-column label="操作" fixed="right" width="140px" :sortable="false" :resizable="false" header-align="center"
-        align="center">
+                       align="center">
         <template #default="scope">
           <el-button type="default" @click="handleEditOperation(scope.$index, scope.row)" :icon="Edit" />
           <el-button type="default" @click="handleDelete(scope.$index, scope.row)" :icon="Delete" />
@@ -63,7 +67,7 @@
       </el-table-column>
     </el-table>
 
-    <vxe-modal v-model="modalVisiable" :title="modalTitle" width="800" height="600" show-footer>
+    <vxe-modal v-model="modalVisible" :title="modalTitle" width="800" height="600" show-footer>
       <template #default>
         <slot name="modal" :form="formObject"></slot>
       </template>
@@ -76,19 +80,10 @@
     </vxe-modal>
 
     <el-pagination background layout="prev, pager, next, jumper, sizes, total" v-model:current-page="currentPageIndex"
-      v-model:page-size="currentPageSize" :page-sizes="pageSizeList" :total="total" @size-change="handleSizeChange"
-      @current-change="handleCurrentChange" />
+                   v-model:page-size="currentPageSize" :page-sizes="pageSizeList" :total="total"
+                   @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange" />
 
-
-    <!-- 右键菜单 -->
-    <!-- <div ref="dataTableContextMenuBoxRef" class="data-table-menu-box">
-      <ul class="data-table-menu-list">
-        <li v-for="(item, index) in contextMenus" :key="index"
-          @click.stop="onContextMenuItemClicked($event, index, item.onClick)">
-          {{ item.label }}
-        </li>
-      </ul>
-    </div> -->
   </div>
 </template>
 
@@ -205,7 +200,7 @@ const { config } = defineProps<{
 const { columns, options, api, form, toolbar, pageable } = config;
 
 // 窗口显示状态
-const modalVisiable = ref<boolean>(false);
+const modalVisible = ref<boolean>(false);
 // 当前操作的行数据
 const currentRow: RowDataModel = ref<RowDataModel>();
 // 表单对象 和当前行的数据关联
@@ -264,22 +259,22 @@ const showMessage = (msg: string, failed: boolean) => {
   if (failed) {
     ElMessage({
       message: msg,
-      type: 'error',
+      type: "error",
       center: true,
       duration: 600
     });
   } else {
     ElMessage({
       message: msg,
-      type: 'info',
+      type: "info",
       center: true,
       duration: 600,
       onClose: () => {
-        modalVisiable.value = false;
+        modalVisible.value = false;
       }
     });
   }
-}
+};
 
 /**
  * 更新或者保存
@@ -288,7 +283,7 @@ const showMessage = (msg: string, failed: boolean) => {
  */
 const saveOrUpdate = (showModal: boolean, okOrCancel: boolean) => {
   if (showModal) {
-    modalVisiable.value = showModal;
+    modalVisible.value = showModal;
   } else {
     if (okOrCancel) {
       // 关闭弹窗
@@ -296,9 +291,9 @@ const saveOrUpdate = (showModal: boolean, okOrCancel: boolean) => {
         if (api?.save) {
           api?.save(currentRow.value).then((res: any) => {
             if (res.code == 200) {
-              showMessage("保存成功", false)
+              showMessage("保存成功", false);
             } else {
-              showMessage("保存失败", true)
+              showMessage("保存失败", true);
             }
           });
         }
@@ -306,17 +301,17 @@ const saveOrUpdate = (showModal: boolean, okOrCancel: boolean) => {
         if (api?.update) {
           api?.update(currentRow.value).then((res: any) => {
             if (res.code == 200) {
-              showMessage("修改成功", false)
+              showMessage("修改成功", false);
             } else {
-              showMessage("修改失败", true)
+              showMessage("修改失败", true);
             }
           });
         } else {
-          modalVisiable.value = showModal;
+          modalVisible.value = showModal;
         }
       }
     } else {
-      modalVisiable.value = showModal;
+      modalVisible.value = showModal;
     }
   }
 };
@@ -446,9 +441,9 @@ const rowContextmenu = (row: RowDataModel, cell: any, event: PointerEvent) => {
 
 /**
  * 当某一行被双击时会触发该事件
- * @param row 
- * @param cell 
- * @param event 
+ * @param row
+ * @param cell
+ * @param event
  */
 const rowDblclick = (row: RowDataModel, cell: any, event: any) => {
   emit("row-dblclick", row, cell, event);

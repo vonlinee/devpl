@@ -23,6 +23,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,6 +59,14 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         return SqlHelper.retBool(dataTypeItemMapper.deleteById(typeId));
     }
 
+    @Override
+    public boolean saveOrUpdateTypeGroups(List<DataTypeGroup> dataTypeGroups) {
+        for (DataTypeGroup dataTypeGroup : dataTypeGroups) {
+            saveDataTypeGroup(dataTypeGroup);
+        }
+        return true;
+    }
+
     /**
      * 保存或更新数据类型分组
      *
@@ -68,11 +77,14 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     public boolean saveDataTypeGroup(DataTypeGroup typeGroup) {
         DataTypeGroup dataTypeGroup = dataTypeGroupMapper.selectByGroupId(typeGroup.getGroupId());
         if (dataTypeGroup == null) {
+            typeGroup.setCreateTime(LocalDateTime.now());
+            typeGroup.setUpdateTime(typeGroup.getCreateTime());
             dataTypeGroupMapper.insert(typeGroup);
         } else {
             dataTypeGroup.setGroupId(typeGroup.getGroupId());
             dataTypeGroup.setGroupName(typeGroup.getGroupName());
             dataTypeGroup.setInternal(typeGroup.getInternal());
+            dataTypeGroup.setUpdateTime(LocalDateTime.now());
             dataTypeGroupMapper.updateById(typeGroup);
         }
         return true;
@@ -89,6 +101,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         qw.eq(StringUtils.hasText(param.getTypeGroupId()), DataTypeItem::getTypeGroupId, param.getTypeGroupId());
         qw.eq(StringUtils.hasText(param.getTypeKey()), DataTypeItem::getTypeKey, param.getTypeKey());
         qw.like(StringUtils.hasText(param.getTypeName()), DataTypeItem::getTypeName, param.getTypeName());
+        qw.orderBy(true, true, DataTypeItem::getTypeGroupId);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
 

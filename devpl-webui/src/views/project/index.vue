@@ -54,10 +54,10 @@ import { useCrud } from "@/hooks";
 import { reactive, ref } from "vue";
 import AddOrUpdate from "./add-or-update.vue";
 import Download from "./download.vue";
-import { DataTableOptions } from "@/hooks/interface";
+import { DataTableOption } from "@/hooks/interface";
 import { ElButton } from "element-plus";
 
-const state: DataTableOptions = reactive({
+const state: DataTableOption = reactive({
   dataListUrl: "/api/project/page",
   deleteUrl: "/api/project",
   queryForm: {

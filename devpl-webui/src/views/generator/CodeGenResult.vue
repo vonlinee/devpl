@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
 import { nextTick, ref } from "vue";
-import { getLanguage } from "@/components/editor/monaco-editor";
+import { getLanguage } from "@/components/editor/monaco-editor-wrapper";
 import { apiGetFileContent, apiGetFileTree } from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import SvgIcon from "@/components/svg-icon";

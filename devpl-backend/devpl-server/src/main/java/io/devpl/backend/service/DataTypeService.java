@@ -24,6 +24,8 @@ public interface DataTypeService extends IService<DataTypeItem> {
 
     boolean removeById(Long typeId);
 
+    boolean saveOrUpdateTypeGroups(List<DataTypeGroup> dataTypeGroups);
+
     boolean saveDataTypeGroup(DataTypeGroup typeGroup);
 
     List<DataTypeGroupVO> listDataTypeGroups();

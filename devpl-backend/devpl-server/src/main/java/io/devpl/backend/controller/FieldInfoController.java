@@ -47,8 +47,8 @@ public class FieldInfoController {
      * @return 列表
      */
     @DeleteMapping(value = "/delete")
-    public Result<Boolean> delete(@RequestBody List<FieldInfo> fieldInfoList) {
-        return Result.ok(fieldInfoService.saveOrUpdateBatch(fieldInfoList));
+    public Result<Boolean> delete(@RequestBody List<Long> ids) {
+        return Result.ok(fieldInfoService.removeByIds(ids));
     }
 
     /**

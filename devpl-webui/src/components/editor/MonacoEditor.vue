@@ -8,12 +8,6 @@ import { defineComponent, h, onMounted, reactive, ref, toRefs } from "vue";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 import ITextModel = editor.ITextModel;
 
-monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-  validate: true,
-  allowComments: true, // 允许JSON注释，json5
-  schemaValidation: 'error'
-});
-
 /**
  * 必须给高度才能显示
  */
@@ -66,6 +60,14 @@ export default defineComponent({
     // 初始高度
     let initialHeight: string = height.value;
 
+    if (language.value == "json") {
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true,
+        allowComments: true, // 允许JSON注释，json5
+        schemaValidation: "error"
+      });
+    }
+
     const editorOptions: IStandaloneEditorConstructionOptions = reactive({
       value: text.value, // 编辑器初始显示文字
       language: language.value, // 语言支持
@@ -94,6 +96,10 @@ export default defineComponent({
     onMounted(() => {
       if (!monacoEditor && editorBoxRef.value) {
         monacoEditor = monaco.editor.create(editorBoxRef.value, editorOptions);
+        // 中文拼音输入法时也会触发onDidChangeContent事件，还未输入文本
+        // monacoEditor.getModel()?.onDidChangeContent((event) => {
+        //
+        // });
       }
     });
 
@@ -104,7 +110,7 @@ export default defineComponent({
       /**
        * 获取编辑器的文本
        */
-      getText: function (): string {
+      getText: function(): string {
         if (monacoEditor) {
           return monacoEditor.getValue();
         }
@@ -114,14 +120,14 @@ export default defineComponent({
        * 设置编辑器的文本
        * @param text
        */
-      setText: function (text: string) {
+      setText: function(text: string) {
         monacoEditor?.setValue(text);
       },
       /**
        * 设置语言模式 https://github.com/Microsoft/monaco-editor/issues/539
        * @param lang 如果为null，则会设置为plaintext
        */
-      setLanguage: function (lang: string): void {
+      setLanguage: function(lang: string): void {
         if (monacoEditor) {
           const textModel: ITextModel | null = monacoEditor.getModel();
           if (textModel) {
@@ -133,7 +139,7 @@ export default defineComponent({
       /**
        * 获取编辑器语言模式
        */
-      getLanguage: function (): string | undefined {
+      getLanguage: function(): string | undefined {
         return editorOptions.language;
       }
     });

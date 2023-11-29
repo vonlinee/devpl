@@ -71,7 +71,7 @@ public class DataTypeItem {
     /**
      * 是否内部定义的数据类型，内部定义的不可删除
      */
-    @TableField(value = "internal", exist = false)
+    @TableField(value = "internal")
     private boolean internal;
 
     /**
@@ -113,6 +113,6 @@ public class DataTypeItem {
      * 1不可删除
      * 2不可修改
      */
-    @TableField(value = "operation", exist = false)
+    @TableField(value = "operation")
     private Integer operation;
 }

@@ -33,4 +33,10 @@ public class DataTypeGroup extends DBEntity {
      */
     @TableField(value = "internal")
     private Boolean internal;
+
+    /**
+     * 备注信息
+     */
+    @TableField(value = "remark")
+    private String remark;
 }

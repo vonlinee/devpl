@@ -41,15 +41,16 @@
   </el-table-column>
 </template>
 <script lang="ts" setup>
-import { PropType } from 'vue'
-import { DataTableColumnProps } from './interface'
+import { PropType } from "vue";
+import { DataTableColumnProps } from "./interface";
 
 const props = defineProps({
   column: {
     type: Object as PropType<DataTableColumnProps>,
-    default: () => {},
-  },
-})
+    default: () => {
+    }
+  }
+});
 
 </script>
 

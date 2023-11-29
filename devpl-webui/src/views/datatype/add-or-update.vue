@@ -1,8 +1,7 @@
 <template>
   <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000" :width="600"
-    @hide="resetFields" :show-footer="true">
+    @close="resetFields" :show-footer="true">
     <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
-
       <el-row>
         <el-col :span="20">
           <el-form-item label="类型分组" prop="typeGroupId">
@@ -18,7 +17,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="4">
-          <el-button :icon="Plus" @click="typeGroupModalVisiable = true"></el-button>
+          <el-button :icon="Plus" @click="typeGroupModalVisible = true"></el-button>
         </el-col>
       </el-row>
       <el-form-item label="类型Key" prop="typeKey">
@@ -28,15 +27,8 @@
         <el-input v-model="dataForm.typeName"></el-input>
       </el-form-item>
       <el-form-item label="长度范围">
-        <el-row>
-          <el-col :span="10" style="margin-right: 20px;">
-            <el-input v-model.number="dataForm.minLength"></el-input>
-          </el-col>
-          -
-          <el-col :span="10" style="margin-left: 20px;">
-            <el-input v-model.number="dataForm.maxLength"></el-input>
-          </el-col>
-        </el-row>
+        <range-number v-model:min-value="dataForm.minLength" v-model:max-value="dataForm.maxLength">
+        </range-number>
       </el-form-item>
       <el-form-item label="精度" prop="precision">
         <el-input v-model="dataForm.precision"></el-input>
@@ -45,7 +37,7 @@
         <el-input v-model="dataForm.defaultValue"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input type="textarea" v-model="dataForm.remark" show-word-limit maxlength="30"
+        <el-input type="textarea" v-model="dataForm.remark" show-word-limit maxlength="50"
           :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
       </el-form-item>
     </el-form>
@@ -55,27 +47,6 @@
     </template>
   </vxe-modal>
 
-  <!-- 类型分组弹窗 -->
-  <vxe-modal v-model="typeGroupModalVisiable" :draggable="false" :loading="loading">
-    <vxe-form :data="formData" size="medium" title-align="right" title-width="100" @submit="submitEvent"
-      :rules="formRules">
-      <vxe-form-item title="分组ID" field="typeGroupId" span="24">
-        <template #default="{ data }">
-          <vxe-input v-model="data.typeGroupId" placeholder="请输入类型分组ID" clearable></vxe-input>
-        </template>
-      </vxe-form-item>
-      <vxe-form-item title="分组名称" field="typeGroupName" span="24">
-        <template #default="{ data }">
-          <vxe-input v-model="data.typeGroupName" placeholder="请输入类型分组名称" clearable></vxe-input>
-        </template>
-      </vxe-form-item>
-      <vxe-form-item align="right" :span="24">
-        <template #default>
-          <vxe-button type="submit" status="primary" content="保存"></vxe-button>
-        </template>
-      </vxe-form-item>
-    </vxe-form>
-  </vxe-modal>
 </template>
 
 <script setup lang="ts">
@@ -83,35 +54,25 @@ import { onMounted, reactive, ref, toRaw } from "vue";
 import { ElButton, ElMessage } from "element-plus/es";
 import {
   apiListAllDataTypeGroups,
-  apiSaveDataTypeGroup,
   apiSaveDataTypeItems,
   apiUpdateDataTypeItem
 } from "@/api/datatype";
 import { Plus } from "@element-plus/icons-vue";
-import { VxeFormEvents, VxeFormPropTypes } from "vxe-table";
-import { isAllLetter } from "@/utils/tool";
+import RangeNumber from "@/components/input/RangeNumber.vue"
 
 const emit = defineEmits(["refreshDataList"]);
 
-interface TypeGroupVO {
-  typeGroupId: string;
-  typeGroupName: string;
-}
-
-const typeGroupOptions = ref<TypeGroupVO[]>([]);
+const typeGroupOptions = ref<DataTypeGroup[]>([]);
 
 onMounted(() => {
   apiListAllDataTypeGroups().then((res) => {
-    if (res.code == 200) {
-      typeGroupOptions.value = res.list;
-    }
+    typeGroupOptions.value = res.data || [];
   });
 });
 
 const visible = ref(false);
-const typeGroupModalVisiable = ref(false);
+
 const dataFormRef = ref();
-const loading = ref(false);
 
 /**
  * 表单数据模型
@@ -144,13 +105,7 @@ const dataForm = reactive<FormVO>({
   internal: false
 });
 
-/**
- * 重置表单，将对象置为初始值
- */
-const resetFields = () => {
-
-  emit("refreshDataList");
-
+const resetForm = () => {
   dataForm.id = undefined;
   dataForm.typeGroupId = "";
   dataForm.typeKey = "";
@@ -160,43 +115,15 @@ const resetFields = () => {
   dataForm.maxLength = 0;
   dataForm.precision = "";
   dataForm.remark = "";
+}
+
+/**
+ * 重置表单，将对象置为初始值
+ */
+const resetFields = () => {
+  resetForm()
+  emit("refreshDataList");
 };
-
-const formData = reactive<TypeGroupVO>({
-  typeGroupId: "",
-  typeGroupName: ""
-});
-
-const submitEvent: VxeFormEvents.Submit = () => {
-  loading.value = true;
-  apiSaveDataTypeGroup(toRaw(formData)).then((res) => {
-    if (res.code == 200) {
-      loading.value = false;
-      typeGroupModalVisiable.value = false;
-      apiListAllDataTypeGroups().then((res) => {
-        if (res.code == 200) {
-          typeGroupOptions.value = res.list;
-        }
-      });
-    }
-  });
-};
-
-const formRules = ref<VxeFormPropTypes.Rules>({
-  typeGroupId: [
-    { required: true, message: "请输入类型分组ID" }, {
-      validator({ itemValue }) {
-        // 自定义校验
-        if (!isAllLetter(itemValue)) {
-          return new Error("分组ID为英文字符");
-        }
-      }
-    }
-  ],
-  typeGroupName: [
-    { required: true, message: "请输入类型名称" }
-  ]
-});
 
 /**
  * 初始化
@@ -231,6 +158,11 @@ const dataRules = ref({
   attrType: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
 });
 
+const closeAndRefresh = () => {
+  resetFields()
+  visible.value = false;
+}
+
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
@@ -239,27 +171,19 @@ const submitHandle = () => {
     }
     if (dataForm.id) {
       apiUpdateDataTypeItem(toRaw(dataForm)).then((res) => {
-        if (res.code == 200) {
-          ElMessage({
-            message: "更新成功",
-            duration: 200,
-            onClose: () => {
-              visible.value = false;
-            }
-          });
-        }
+        ElMessage({
+          message: "更新成功",
+          duration: 200,
+          onClose: closeAndRefresh
+        });
       });
     } else {
       apiSaveDataTypeItems([toRaw(dataForm)]).then((res) => {
-        if (res.code == 200) {
-          ElMessage({
-            message: "保存成功",
-            duration: 200,
-            onClose: () => {
-              visible.value = false;
-            }
-          });
-        }
+        ElMessage({
+          message: "保存成功",
+          duration: 200,
+          onClose: closeAndRefresh
+        });
       });
     }
   });

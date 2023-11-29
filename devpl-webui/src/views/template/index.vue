@@ -56,10 +56,10 @@ import { onMounted, reactive, ref } from "vue";
 import { ElButton } from "element-plus";
 import AddOrUpdate from "./add-or-update.vue";
 import { useCrud } from "@/hooks";
-import { DataTableOptions } from "@/hooks/interface";
+import { DataTableOption } from "@/hooks/interface";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
 
-const state: DataTableOptions = reactive({
+const state: DataTableOption = reactive({
   dataListUrl: "/api/codegen/template/page",
   deleteUrl: "/api/codegen/template/delete/batch/ids",
   queryForm: {

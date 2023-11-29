@@ -2,227 +2,106 @@
  * @ 字段管理列表
 -->
 <script setup lang="ts">
-import { apiListFields, apiSaveOrUpdateField } from "@/api/fields"
+import { apiDeleteFieldByIds, apiListFields } from "@/api/fields";
 import FieldImport from "./FieldImport.vue";
-import { isBlank } from "@/utils/tool"
-import { onMounted, reactive, ref } from "vue"
-
-import {
-  VxeFormPropTypes,
-  VxePagerEvents,
-  VXETable,
-  VxeTableEvents,
-  VxeTableInstance,
-} from "vxe-table"
+import { onMounted, reactive, ref } from "vue";
+import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
+import { useCrud } from "@/hooks";
+import { DataTableOption } from "@/hooks/interface";
 
 /**
  * 表格数据模型
  */
 interface RowVO {
-  fieldId: string
-  fieldKey: string
-  fieldName: string
-  dataType: string
-  description: string
-  defaultValue: string
+  id: number;
+  fieldId: string;
+  fieldKey: string;
+  fieldName: string;
+  dataType: string;
+  description: string;
+  defaultValue: string;
 }
 
-const xTable = ref<VxeTableInstance>()
+const fieldsTable = ref();
+const fieldImportModalRef = ref();
+const saveOrUpdateFieldModal = ref();
 
-/**
- * 新增和修改表单
- */
-const formData = reactive({
-  fieldName: "",
-  fieldKey: "",
-  dataType: "int",
-  defaultValue: "",
-  description: "",
-})
-
-const submitLoading = ref(false)
-const showEdit = ref(false)
-const typeMappingTableRef = ref()
-const selectRow = ref<RowVO | null>()
-const tableData = ref<RowVO[]>([])
-const fieldImportModalRef = ref()
-const showTypeMappingTable = () => {
-  typeMappingTableRef.value.show()
-}
-
-const sexList = ref([
-  { label: "int", value: "0" },
-  { label: "double", value: "1" },
-])
-
-const tablePage = reactive({
-  total: 0,
-  currentPage: 1,
-  pageSize: 10
-})
-
-/**
- * 表单校验规则
- */
-const formRules = reactive<VxeFormPropTypes.Rules>({
-  fieldKey: [{ required: true, message: "请输入字段Key" }],
-  dataType: [{ required: true, message: "请选择字段数据类型" }],
-})
-
-const insertEvent = () => {
-  Object.assign(formData, {
-    fieldName: "",
-    fieldKey: "",
-    dataType: "int",
-    defaultValue: "",
-    description: "",
-  })
-  selectRow.value = null
-  showEdit.value = true
-}
-
-const editEvent = (row: RowVO) => {
-  Object.assign(formData, row)
-  selectRow.value = row
-  showEdit.value = true
-}
-
-const cellDBLClickEvent: VxeTableEvents.CellDblclick<RowVO> = ({ row }) => {
-  editEvent(row)
-}
+const showSaveOrUpdateModal = (row?: RowVO) => {
+  saveOrUpdateFieldModal.value.show(row);
+};
 
 const removeEvent = async (row: RowVO) => {
-  const type = await VXETable.modal.confirm("您确定要删除该数据?")
-  if (type === "confirm") {
-    const $table = xTable.value
-    if ($table) {
-      $table.remove(row)
-    }
-  }
-}
-
-/**
- * 新增字段表单提交
- */
-const submitEvent = () => {
-  // 表单填充默认值
-  if (isBlank(formData.description)) {
-    formData.description = formData.fieldName
-    return
-  }
-  submitLoading.value = true
-  const $table = xTable.value
-  if ($table) {
-    apiSaveOrUpdateField(formData)
-      .then((res) => {
-        VXETable.modal.message({ content: "保存成功", status: "success" })
-        submitLoading.value = false
-        showEdit.value = false
-        refreshTableData()
-      })
-      .catch(() => {
-        submitLoading.value = false
-      })
-  }
-}
-
-/**
- * 刷新表格数据
- */
-function refreshTableData(page: number = 1, limit: number = 10) {
-  apiListFields(page, limit).then((res) => {
-    tableData.value = res.data
-  })
-}
-
-const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) => {
-  tablePage.currentPage = currentPage
-  tablePage.pageSize = pageSize
-  refreshTableData(currentPage, pageSize)
-}
+  deleteHandle(row.id);
+};
 
 onMounted(() => {
-  refreshTableData()
-})
+  getDataList();
+});
+
+const state: DataTableOption = reactive({
+  pageSizes: [10, 15, 20],
+  queryForm: {
+    fieldKey: "",
+    fieldName: ""
+  },
+  queryPage: apiListFields,
+  removeByIds: apiDeleteFieldByIds
+} as DataTableOption);
+
+const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = useCrud(state);
+
 </script>
 
 <template>
   <el-card>
-    <div>
-      <vxe-toolbar>
-        <template #buttons>
-          <vxe-button icon="vxe-icon-square-plus" @click="insertEvent()">新增</vxe-button>
-          <vxe-button icon="vxe-icon-square-plus" @click="fieldImportModalRef.init()">导入</vxe-button>
-        </template>
-      </vxe-toolbar>
-
-      <field-import ref="fieldImportModalRef"></field-import>
-
-      <vxe-table ref="xTable" :border="true" show-overflow height="525" :column-config="{ resizable: true }"
-        :row-config="{ isHover: true, isCurrent: true }" :data="tableData" @cell-dblclick="cellDBLClickEvent">
-        <vxe-column type="seq" width="60"></vxe-column>
-        <vxe-column field="fieldKey" title="字段Key"></vxe-column>
-        <vxe-column field="fieldName" title="名称"></vxe-column>
-        <vxe-column field="dataType" title="数据类型"></vxe-column>
-        <vxe-column field="defaultValue" title="默认值" show-overflow></vxe-column>
-        <vxe-column field="description" title="描述信息" show-overflow></vxe-column>
-        <vxe-column title="操作" width="100" show-overflow header-align="center" align="center">
-          <template #default="{ row }">
-            <vxe-button type="text" icon="vxe-icon-edit" @click="editEvent(row)"></vxe-button>
-            <vxe-button type="text" icon="vxe-icon-delete" @click="removeEvent(row)"></vxe-button>
-          </template>
-        </vxe-column>
-      </vxe-table>
-      <!--使用 pager 插槽-->
-      <vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-        v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
-        @page-change="handlePageChange">
-      </vxe-pager>
-      <vxe-modal v-model="showEdit" :title="selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300"
-        :loading="submitLoading" resize destroy-on-close>
-        <template #default>
-          <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
-            <vxe-form-item field="fieldKey" title="字段Key" :span="12" :item-render="{}">
-              <template #default="{ data }">
-                <vxe-input v-model="data.fieldKey"></vxe-input>
-              </template>
-            </vxe-form-item>
-
-            <vxe-form-item field="fieldName" title="字段名称" :span="12" :item-render="{}">
-              <template #default="{ data }">
-                <vxe-input v-model="data.fieldName" placeholder="请输入字段名称"></vxe-input>
-              </template>
-            </vxe-form-item>
-
-            <vxe-form-item field="dataType" title="数据类型" :span="12" :item-render="{}">
-              <template #default="{ data }">
-                <vxe-select v-model="data.dataType" transfer>
-                  <vxe-option v-for="item in sexList" :key="item.value" :value="item.value"
-                    :label="item.label"></vxe-option>
-                </vxe-select>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item field="defaultValue" title="默认值" :span="12" :item-render="{}">
-              <template #default="{ data }">
-                <vxe-input v-model="data.defaultValue" placeholder="默认值"></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item field="description" title="描述信息" :span="24" :item-render="{}">
-              <template #default="{ data }">
-                <vxe-textarea v-model="data.description" resize="none" rows="5" placeholder="描述信息"></vxe-textarea>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item align="center" title-align="left" :span="24">
-              <template #default>
-                <vxe-button status="success" type="submit">提交</vxe-button>
-                <vxe-button status="danger" type="reset">重置</vxe-button>
-              </template>
-            </vxe-form-item>
-          </vxe-form>
-        </template>
-      </vxe-modal>
-    </div>
+    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
+      <div class="query-form">
+        <el-form-item label="字段Key" :show-message="false">
+          <el-input v-model="state.queryForm.fieldKey"></el-input>
+        </el-form-item>
+        <el-form-item label="字段名称" :show-message="false">
+          <el-input v-model="state.queryForm.fieldName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" @click="state.queryForm = {}">重置</el-button>
+          <el-button type="primary" @click="getDataList()">查询</el-button>
+          <el-button type="primary" @click="showSaveOrUpdateModal(undefined)">新增</el-button>
+          <el-button type="primary" @click="fieldImportModalRef.init()">导入</el-button>
+        </el-form-item>
+      </div>
+    </el-form>
   </el-card>
+
+  <el-table ref="fieldsTable" :border="true" height="525" :data="state.dataList">
+    <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
+    <el-table-column prop="fieldKey" label="字段Key"></el-table-column>
+    <el-table-column prop="fieldName" label="名称"></el-table-column>
+    <el-table-column prop="dataType" label="数据类型"></el-table-column>
+    <el-table-column prop="defaultValue" label="默认值" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="description" label="描述信息" show-overflow-tooltip></el-table-column>
+    <el-table-column title="操作" align="center">
+      <template #default="{ row }">
+        <el-button link @click="showSaveOrUpdateModal(row)">编辑</el-button>
+        <el-button link @click="removeEvent(row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-pagination :current-page="state.currentPage" :page-sizes="state.pageSize || []"
+                 :page-size="state.pageSize" :total="state.total"
+                 layout="total, sizes, prev, pager, next, jumper"
+                 @size-change="sizeChangeHandle" @current-change="currentChangeHandle">
+  </el-pagination>
+
+  <save-or-update-field ref="saveOrUpdateFieldModal" @refresh-table="getDataList"></save-or-update-field>
+
+  <field-import ref="fieldImportModalRef"></field-import>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+.query-form {
+  display: flex;
+  align-items: center;
+}
+
+</style>

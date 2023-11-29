@@ -72,7 +72,7 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref, h } from "vue";
-import { DataTableOptions } from "@/hooks/interface";
+import { DataTableOption } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import GenTableImport from "./GenTableImport.vue";
 import Edit from "./edit.vue";
@@ -85,7 +85,7 @@ import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
 import { apiListSelectableProjects } from "@/api/project";
 import { useRouter } from "vue-router";
 
-const state: DataTableOptions = reactive({
+const state: DataTableOption = reactive({
   dataListUrl: "/gen/table/page",
   deleteUrl: "/gen/table/remove",
   queryForm: {

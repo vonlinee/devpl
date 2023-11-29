@@ -1,17 +1,17 @@
-import { DataTableOptions } from "@/hooks/interface"
-import http from "@/utils/http"
-import { onMounted } from "vue"
-import { ElMessage, ElMessageBox } from "element-plus"
+import { DataTableOption } from "@/hooks/interface";
+import http from "@/utils/http";
+import { onMounted } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 /**
  * CRUD Hooks
  * @param options
  */
-export const useCrud = (options: DataTableOptions) => {
+export const useCrud = (options: DataTableOption) => {
   /**
    * 默认选项
    */
-  const defaultOptions: DataTableOptions = {
+  const defaultOptions: DataTableOption = {
     createdIsNeed: true,
     dataListUrl: "",
     isPage: true,
@@ -25,175 +25,206 @@ export const useCrud = (options: DataTableOptions) => {
     page: 1,
     limit: 10,
     total: 0,
+    confirmBeforeDelete: false,
     pageSizes: [10, 20, 50, 100],
     dataListLoading: false,
-    dataListSelections: [],
-  }
+    dataListSelections: []
+  };
 
   /**
    * 合并配置选项与默认选项
    * @param options
    * @param props
    */
-  const mergeDefaultOptions = (options: any, props: any): DataTableOptions => {
+  const mergeDefaultOptions = (options: any, props: any): DataTableOption => {
     for (const key in options) {
       if (!Object.getOwnPropertyDescriptor(props, key)) {
-        props[key] = options[key]
+        props[key] = options[key];
       }
     }
-    return props
-  }
+    return props;
+  };
 
   // 覆盖默认值
-  const state: DataTableOptions = mergeDefaultOptions(defaultOptions, options)
+  const option: DataTableOption = mergeDefaultOptions(defaultOptions, options);
 
   onMounted(() => {
-    if (state.createdIsNeed) {
-      query()
+    if (option.createdIsNeed) {
+      query();
     }
-  })
+  });
 
   // 查询
   const query = () => {
-    if (!state.dataListUrl) {
-      return
+    if (!option.dataListUrl) {
+
+    } else if (!option.queryPage) {
+      return;
     }
-    state.dataListLoading = true
-    if (state.query) {
-      state.query(
-        state.page ? state.page : 1,
-        state.limit ? state.limit : 10,
-        state.queryForm
+    option.dataListLoading = true;
+    if (option.queryPage) {
+      option.queryPage(
+        option.page ? option.page : 1,
+        option.limit ? option.limit : 10,
+        option.queryForm
       )
         .then((res) => {
           // 分页
-          state.dataList = res.data
-          state.total = res.total == undefined ? -1 : res.total
-        })
-    } else {
-      http.get(state.dataListUrl, {
-        order: state.order,
-        asc: state.asc,
-        page: state.isPage ? state.page : null,
-        limit: state.isPage ? state.limit : null,
-        ...state.queryForm,
+          option.dataList = res.data;
+          option.total = res.total == undefined ? -1 : res.total;
+        });
+    } else if (option.dataListUrl) {
+      http.get(option.dataListUrl, {
+        order: option.order,
+        asc: option.asc,
+        page: option.isPage ? option.page : null,
+        limit: option.isPage ? option.limit : null,
+        ...option.queryForm
       })
         .then((res) => {
-          state.dataList = res.data
-          state.total = res.total == undefined ? -1 : res.total
-        })
+          option.dataList = res.data;
+          option.total = res.total == undefined ? -1 : res.total;
+        });
     }
-
-    state.dataListLoading = false
-  }
+    option.dataListLoading = false;
+  };
 
   /**
    * 默认查询回调
    */
   const getDataList = (): void => {
-    state.page = 1
-    query()
-  }
+    option.page = 1;
+    query();
+  };
 
   /**
    * 每页大小变化回调，默认查第一页
    * @param val
    */
   const sizeChangeHandle = (val: number): void => {
-    state.page = 1
-    state.limit = val
-    query()
-  }
+    option.page = 1;
+    option.limit = val;
+    query();
+  };
 
   /**
    * 当前页变化回调
    * @param val
    */
   const currentChangeHandle = (val: number): void => {
-    state.page = val
-    query()
-  }
+    option.page = val;
+    query();
+  };
 
   /**
    * 多选回调
    * @param selections
    */
   const selectionChangeHandle = (selections: any[]): void => {
-    state.dataListSelections = selections.map(
-      (item: any) => state.primaryKey && item[state.primaryKey]
-    )
-  }
+    option.dataListSelections = selections.map(
+      (item: any) => option.primaryKey && item[option.primaryKey]
+    );
+  };
 
   /**
    * 排序回调
    * @param data
    */
   const sortChangeHandle = (data: any): void => {
-    const { prop, order } = data
+    const { prop, order } = data;
     if (prop && order) {
-      state.order = prop
-      state.asc = order === "ascending"
+      option.order = prop;
+      option.asc = order === "ascending";
     } else {
-      state.order = ""
+      option.order = "";
     }
-    query()
-  }
+    query();
+  };
 
   /**
-   * 删除回调
+   * 单行删除回调
    * @param key
    */
   const deleteHandle = (key: number | string): void => {
-    if (!state.deleteUrl) {
-      return
+    if (!option.deleteUrl) {
+      if (!option.removeByIds) {
+        return;
+      }
     }
-    ElMessageBox.confirm("确定进行删除操作?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-      .then(() => {
-        http.delete(state.deleteUrl + "/" + key).then(() => {
-          ElMessage.success("删除成功")
-          query()
+    if (option.confirmBeforeDelete) {
+      ElMessageBox.confirm("确定进行删除操作?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          if (option.removeByIds) {
+            option.removeByIds([key]).then((res) => {
+              ElMessage.success("删除成功");
+              query();
+            });
+          } else {
+            http.delete(option.deleteUrl + "/" + key).then(() => {
+              ElMessage.success("删除成功");
+              query();
+            });
+          }
         })
-      })
-      .catch((err) => {
-        console.error("删除错误", err)
-      })
-  }
+        .catch((err) => {
+          console.error("删除错误", err);
+        });
+    } else {
+      if (option.removeByIds) {
+        option.removeByIds([key]).then((res) => {
+          ElMessage.success("删除成功");
+          query();
+        });
+      } else {
+        http.delete(option.deleteUrl + "/" + key).then(() => {
+          ElMessage.success("删除成功");
+          query();
+        });
+      }
+    }
+  };
 
   /**
    * 批量删除回调
    * @param key
    */
   const deleteBatchHandle = (key?: number | string) => {
-    let data: any[] = []
+    let data: any[] = [];
     if (key) {
-      data = [key]
+      data = [key];
     } else {
-      data = state.dataListSelections ? state.dataListSelections : []
+      data = option.dataListSelections ? option.dataListSelections : [];
       if (data.length === 0) {
-        ElMessage.warning("请选择删除记录")
-        return
+        ElMessage.warning("请选择删除记录");
+        return;
       }
     }
     ElMessageBox.confirm("确定进行删除操作?", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
-      type: "warning",
+      type: "warning"
     }).then(() => {
-      if (state.deleteUrl) {
-        http.delete(state.deleteUrl, data).then(() => {
-          ElMessage.success("删除成功")
-          query()
-        })
+      if (option.deleteUrl) {
+        if (option.removeByIds) {
+          option.removeByIds(data).then((res) => {
+            ElMessage.success("删除成功");
+            query();
+          });
+        } else {
+          http.delete(option.deleteUrl, data).then(() => {
+            ElMessage.success("删除成功");
+            query();
+          });
+        }
       }
-    })
-      .catch((err) => {
-        console.error("删除错误", err)
-      })
-  }
+    }).catch((err) => {
+      console.error("删除错误", err);
+    });
+  };
 
   return {
     getDataList,
@@ -202,6 +233,6 @@ export const useCrud = (options: DataTableOptions) => {
     selectionChangeHandle,
     sortChangeHandle,
     deleteHandle,
-    deleteBatchHandle,
-  }
-}
+    deleteBatchHandle
+  };
+};

@@ -1,61 +1,60 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElTableColumn, type TabsPaneContext } from 'element-plus'
-import MonacoEditor from '@/components/editor/MonacoEditor.vue';
-import { apiParseFields } from '@/api/fields';
-import { isBlank } from '@/utils/tool';
-import { Splitpanes, Pane } from 'splitpanes';
-
-const activeTabName = ref('java')
-const modalVisiable = ref()
+import { ref } from "vue";
+import { ElTableColumn, type TabsPaneContext } from "element-plus";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { apiParseFields } from "@/api/fields";
+import { isBlank } from "@/utils/tool";
+import { Splitpanes, Pane } from "splitpanes";
+import 'splitpanes/dist/splitpanes.css'
+const activeTabName = ref("java");
+const modalVisible = ref();
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
 
-}
+};
 
 const init = () => {
-  modalVisiable.value = true
-}
+  modalVisible.value = true;
+};
 
 defineExpose({
   init: init
-})
+});
 
-const fields = ref<FieldInfo[]>()
+const fields = ref<FieldInfo[]>();
 
-const javaEditorRef = ref<typeof MonacoEditor>()
+const javaEditorRef = ref<typeof MonacoEditor>();
 // 仅支持mysql
-const sqlEditorRef = ref<typeof MonacoEditor>()
+const sqlEditorRef = ref<typeof MonacoEditor>();
 // 支持json5
-const jsonEditorRef = ref<typeof MonacoEditor>()
+const jsonEditorRef = ref<typeof MonacoEditor>();
 const submit = () => {
-  const inputType: string = activeTabName.value
-  let text = ''
+  const inputType: string = activeTabName.value;
+  let text = "";
   switch (inputType) {
-    case 'java':
-      text = javaEditorRef.value?.getText()
+    case "java":
+      text = javaEditorRef.value?.getText();
       break;
-    case 'sql':
-      text = sqlEditorRef.value?.getText()
+    case "sql":
+      text = sqlEditorRef.value?.getText();
       break;
-    case 'json':
-      text = jsonEditorRef.value?.getText()
+    case "json":
+      text = jsonEditorRef.value?.getText();
       break;
     default:
       break;
   }
   if (isBlank(text)) {
-    alert("输入文本为空")
+    alert("输入文本为空");
   }
   apiParseFields({ type: inputType, content: text }).then((res) => {
-    fields.value = res.data
-  })
-}
+    fields.value = res.data;
+  });
+};
 </script>
 
 <template>
-  <vxe-modal v-model="modalVisiable" width="80%" title="导入字段" show-footer :mask-closable="false" :z-index="2000"
-    height="80%">
+  <vxe-modal v-model="modalVisible" width="80%" title="导入字段" show-footer :mask-closable="false" :z-index="2000">
     <template #default>
       <Splitpanes>
         <Pane>
@@ -82,14 +81,14 @@ const submit = () => {
       </Splitpanes>
     </template>
     <template #footer>
-      <vxe-button @click="modalVisiable = false">取消</vxe-button>
+      <vxe-button @click="modalVisible = false">取消</vxe-button>
       <vxe-button status="primary" @click="submit">确定</vxe-button>
     </template>
   </vxe-modal>
 </template>
 
 <style scoped lang="scss">
-.demo-tabs>.el-tabs__content {
+.demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

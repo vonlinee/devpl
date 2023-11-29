@@ -7,13 +7,14 @@ import http from "@/utils/http"
  * @param param
  */
 export const apiListDataTypes = (
-  pageIndex: Number,
-  pageSize: Number,
+  pageIndex: number,
+  pageSize: number,
   param: any = null
 ) => {
   return http.get("/api/datatype/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
+    ...param,
   })
 }
 
@@ -21,7 +22,7 @@ export const apiListDataTypes = (
  * @returns
  */
 export const apiListAllDataTypeGroups = () => {
-  return http.get("/api/datatype/groups")
+  return http.get<DataTypeGroup[]>("/api/datatype/groups")
 }
 
 /**
@@ -70,7 +71,9 @@ export const apiAddDataTypeMapping = (dataTypeItem: DataTypeMappingParam[]) => {
  * @param typeId 如果为空，则查询所有未设置过类型映射的数据类型
  * @returns
  */
-export const apiListAllMappableDataTypes = (typeId: number | undefined = undefined) => {
+export const apiListAllMappableDataTypes = (
+  typeId: number | undefined = undefined
+) => {
   return http.get("/api/datatype/mappable", {
     typeId: typeId,
   })
@@ -81,11 +84,20 @@ export const apiListAllMappableDataTypes = (typeId: number | undefined = undefin
  * @returns
  */
 export const apiListAllDataTypeMappings = (
-  typeId: number | undefined  = undefined,
+  typeId: number | undefined = undefined,
   typeGroupId: number | undefined = undefined
 ) => {
   return http.get("/api/datatype/mapping/all", {
     typeId: typeId,
     typeGroupId: typeGroupId,
+  })
+}
+
+/**
+ * @returns
+ */
+export const apiSaveOrUpdateDataTypeGroups = (groups: any[]) => {
+  return http.post("/api/datatype/group/saveupdate/batch", {
+    groups: groups
   })
 }

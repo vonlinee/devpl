@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import {onMounted, reactive, ref} from 'vue'
-import {DataTableOptions} from '@/hooks/interface'
+import {DataTableOption} from '@/hooks/interface'
 import {apiListSupportedDbTypes, useDataSourceTestApi} from '@/api/datasource'
 import {useCrud} from '@/hooks'
 import {ElButton, ElMessage} from 'element-plus'
@@ -72,7 +72,7 @@ import {decrypt} from '@/utils/tool'
 import DrvierManager from './DrvierManager.vue'
 import { DriverTypeVO } from './types'
 
-const state: DataTableOptions = reactive({
+const state: DataTableOption = reactive({
 	dataListUrl: '/api/gen/datasource/page',
 	deleteUrl: '/api/gen/datasource',
 	queryForm: {
