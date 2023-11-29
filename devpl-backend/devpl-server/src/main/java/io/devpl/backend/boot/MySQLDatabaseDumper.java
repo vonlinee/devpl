@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -15,7 +16,7 @@ import java.nio.file.Path;
 /**
  * MySQL数据备份
  */
-//@Component
+@Component
 public class MySQLDatabaseDumper implements CommandLineRunner {
 
     static final Logger logger = LoggerFactory.getLogger(MySQLDatabaseDumper.class);
