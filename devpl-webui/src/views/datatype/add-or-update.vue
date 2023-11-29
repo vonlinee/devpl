@@ -1,25 +1,18 @@
 <template>
   <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000" :width="600"
-    @close="resetFields" :show-footer="true">
+             @close="resetFields" :show-footer="true">
     <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
-      <el-row>
-        <el-col :span="20">
-          <el-form-item label="类型分组" prop="typeGroupId">
-            <el-select v-model="dataForm.typeGroupId" placeholder="选择类型组" style="min-width: 400px;;">
-              <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
-                :value="item.typeGroupId">
-                <span style="float: left">{{ item.typeGroupId }}</span>
-                <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{
-                  item.typeGroupName
-                }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4">
-          <el-button :icon="Plus" @click="typeGroupModalVisible = true"></el-button>
-        </el-col>
-      </el-row>
+      <el-form-item label="类型分组" prop="typeGroupId">
+        <el-select v-model="dataForm.typeGroupId" placeholder="选择类型组" style="width: 100%">
+          <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
+                     :value="item.typeGroupId">
+            <span style="float: left">{{ item.typeGroupId }}</span>
+            <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{
+                item.typeGroupName
+              }}</span>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="类型Key" prop="typeKey">
         <el-input v-model="dataForm.typeKey"></el-input>
       </el-form-item>
@@ -38,7 +31,7 @@
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="dataForm.remark" show-word-limit maxlength="50"
-          :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
+                  :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -58,7 +51,7 @@ import {
   apiUpdateDataTypeItem
 } from "@/api/datatype";
 import { Plus } from "@element-plus/icons-vue";
-import RangeNumber from "@/components/input/RangeNumber.vue"
+import RangeNumber from "@/components/input/RangeNumber.vue";
 
 const emit = defineEmits(["refreshDataList"]);
 
@@ -115,13 +108,13 @@ const resetForm = () => {
   dataForm.maxLength = 0;
   dataForm.precision = "";
   dataForm.remark = "";
-}
+};
 
 /**
  * 重置表单，将对象置为初始值
  */
 const resetFields = () => {
-  resetForm()
+  resetForm();
   emit("refreshDataList");
 };
 
@@ -135,7 +128,7 @@ const init = (row?: any) => {
     // id 存在则为修改
     if (row.id) {
       dataForm.id = row.id;
-      Object.assign(dataForm, row)
+      Object.assign(dataForm, row);
       // dataForm.typeGroupId = row.typeGroupId;
       // dataForm.typeKey = row.typeKey;
       // dataForm.typeName = row.typeName;
@@ -159,9 +152,9 @@ const dataRules = ref({
 });
 
 const closeAndRefresh = () => {
-  resetFields()
+  resetFields();
   visible.value = false;
-}
+};
 
 // 表单提交
 const submitHandle = () => {

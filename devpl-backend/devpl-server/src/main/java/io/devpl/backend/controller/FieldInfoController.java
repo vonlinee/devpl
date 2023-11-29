@@ -3,6 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.PageParam;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.FieldInfoService;
@@ -27,8 +28,8 @@ public class FieldInfoController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public ListResult<FieldInfo> list(PageParam query) {
-        return ListResult.ok(fieldInfoService.selectPage(query.getPageIndex(), query.getPageSize()));
+    public ListResult<FieldInfo> list(FieldInfoListParam param) {
+        return ListResult.ok(fieldInfoService.selectPage(param));
     }
 
     /**

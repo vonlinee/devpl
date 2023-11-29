@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import de.marhali.json5.*;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.dao.FieldInfoMapper;
+import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.tools.parser.JavaParserUtils;
 import io.devpl.backend.tools.parser.java.MetaField;
+import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,11 @@ public class FieldInfoServiceImpl extends BaseServiceImpl<FieldInfoMapper, Field
     private final Json5 json5 = new Json5(Json5Options.builder().build().remainComment(true));
 
     @Override
-    public IPage<FieldInfo> selectPage(int pageIndex, int pageSize) {
-        return baseMapper.selectPage(new Page<>(pageIndex, pageSize), new LambdaQueryWrapper<>());
+    public IPage<FieldInfo> selectPage(FieldInfoListParam param) {
+        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()),
+            new LambdaQueryWrapper<FieldInfo>()
+                .like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey())
+                .like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
     }
 
     /**

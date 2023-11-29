@@ -264,10 +264,10 @@
   resolved "https://registry.npmmirror.com/@types/qs/-/qs-6.9.7.tgz"
   integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
 
-"@types/sortablejs@^1.10.7":
-  version "1.13.0"
-  resolved "https://registry.npmmirror.com/@types/sortablejs/-/sortablejs-1.13.0.tgz"
-  integrity sha512-C3064MH72iEfeGCYEGCt7FCxXoAXaMPG0QPnstcxvPmbl54erpISu06d++FY37Smja64iWy5L8wOyHHBghWbJQ==
+"@types/sortablejs@^1.15.7":
+  version "1.15.7"
+  resolved "https://registry.yarnpkg.com/@types/sortablejs/-/sortablejs-1.15.7.tgz#11f85e98fce2854708e5c6d6011f7a236d79ae9f"
+  integrity sha512-PvgWCx1Lbgm88FdQ6S7OGvLIjWS66mudKPlfdrWil0TjsO5zmoZmzoKiiwRShs1dwPgrlkr0N4ewuy0/+QUXYQ==
 
 "@types/splitpanes@^2.2.1":
   version "2.2.1"
@@ -1110,6 +1110,11 @@ domhandler@^4.2.0, domhandler@^4.3.1:
   integrity sha512-GrwoxYN+uWlzO8uhUXRl0P+kHE4GtVPfYzVLcUxPL7KNdHKj66vvlhiweIHqYYXWlw+T8iLMp42Lm67ghw4WMQ==
   dependencies:
     domelementtype "^2.2.0"
+
+domhelpers@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/domhelpers/-/domhelpers-0.1.0.tgz"
+  integrity sha512-VZYqemdYgtxO3oI3L9o3Zdf9GmQAiFV9SP3Sccf7cVbEQtMrYBENyWnrW61Ejnsv4KldzzLs0UjHNbemTff8ZA==
 
 domutils@^1.5.1:
   version "1.7.0"
@@ -2075,6 +2080,11 @@ monaco-editor@^0.34.0:
   resolved "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.34.0.tgz"
   integrity sha512-VF+S5zG8wxfinLKLrWcl4WUizMx+LeJrG4PM/M78OhcwocpV0jiyhX/pG6Q9jIOhrb/ckYi6nHnaR5OojlOZCQ==
 
+mout@^0.11.0:
+  version "0.11.1"
+  resolved "https://registry.npmjs.org/mout/-/mout-0.11.1.tgz"
+  integrity sha512-pK9VNiLE3QgGBrC/3ICAscwOLU7oTNeK2l32uqNAioBYtB2tQAfSsGDNChUlk7CP23126mc5lUt6+na9FlN8JA==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmmirror.com/ms/-/ms-2.0.0.tgz"
@@ -2531,6 +2541,14 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
+sortable.js@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/sortable.js/-/sortable.js-0.3.0.tgz#d63c2d4629321bd4bc1d8ad33c83f26077f8031d"
+  integrity sha512-sAtcxX/ff9L334IKcFPnssFt7xVwsLVoaTft3iTyARBfNl42yq6JSJLbgpImO9/TRN51f5QP+6lRUsFjmz1reQ==
+  dependencies:
+    domhelpers "^0.1.0"
+    mout "^0.11.0"
+
 sortablejs@^1.15.0:
   version "1.15.0"
   resolved "https://registry.npmmirror.com/sortablejs/-/sortablejs-1.15.0.tgz"
@@ -2823,7 +2841,7 @@ util-deprecate@^1.0.1:
 
 v-contextmenu@^3.0.0:
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/v-contextmenu/-/v-contextmenu-3.0.0.tgz#d20d3beec9cd0cb18befd231425bce7e650221e4"
+  resolved "https://registry.npmjs.org/v-contextmenu/-/v-contextmenu-3.0.0.tgz"
   integrity sha512-zi38JxmTt66TmljgV1JbfEa9WvoQkpzRuEwZK7Tjb2XoRejbWLozQtkyTWXJa6x6Y3FrVDfgT36w01gpTpo41A==
 
 v8-compile-cache@^2.0.3:

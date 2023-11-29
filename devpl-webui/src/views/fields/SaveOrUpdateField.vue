@@ -1,6 +1,6 @@
 <template>
   <vxe-modal v-model="showEdit" :title="modalTitle" width="800" min-width="600" min-height="300"
-             :loading="submitLoading" resize destroy-on-close @close="resetFields">
+             :loading="submitLoading" @close="resetFields">
     <template #default>
       <vxe-form :data="formData" :rules="formRules" title-align="right" title-width="100" @submit="submitEvent">
         <vxe-form-item field="fieldKey" title="字段Key" :span="12" :item-render="{}">
@@ -62,7 +62,7 @@ const fieldDataTypeOptions = ref([
 /**
  * 新增和修改表单
  */
-const formData = reactive({
+const formData = ref({
   fieldName: "",
   fieldKey: "",
   dataType: "int",
@@ -71,7 +71,13 @@ const formData = reactive({
 });
 
 const resetFields = () => {
-  Object.assign(formData, {});
+  formData.value = {
+    fieldName: "",
+    fieldKey: "",
+    dataType: "int",
+    defaultValue: "",
+    description: ""
+  };
 };
 
 /**
@@ -111,7 +117,7 @@ defineExpose({
   show: (row?: any) => {
     if (row) {
       modalTitle.value = "编辑&保存";
-      Object.assign(formData, row);
+      formData.value = row;
     } else {
       modalTitle.value = "新增&保存";
     }

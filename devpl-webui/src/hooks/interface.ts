@@ -32,7 +32,9 @@ export interface DataTableOption<R = any, F = Record<string, any>> {
   total?: number;
   // 每页页数大小选项，可为空，不能为undefined, el-pagination组件的page-sizes属性不能为undefined
   pageSizes?: number[];
-  // 数据列表，loading状态，loading显示/隐藏根据此值确定
+  /**
+   * 数据列表，loading状态，loading显示/隐藏根据此值确定
+   */
   dataListLoading?: boolean;
   // 数据列表，多选项
   dataListSelections?: any[];

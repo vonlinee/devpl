@@ -8,7 +8,6 @@
 </template>
 <script setup lang="ts">
 import Logo from './components/Logo.vue'
-import SvgIcon from "@/components/svg-icon/src/svg-icon.vue";
 </script>
 
 <style lang="scss" scoped>

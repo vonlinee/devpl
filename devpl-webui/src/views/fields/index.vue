@@ -38,7 +38,7 @@ onMounted(() => {
   getDataList();
 });
 
-const state: DataTableOption = reactive({
+const option: DataTableOption = reactive({
   pageSizes: [10, 15, 20],
   queryForm: {
     fieldKey: "",
@@ -48,31 +48,31 @@ const state: DataTableOption = reactive({
   removeByIds: apiDeleteFieldByIds
 } as DataTableOption);
 
-const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = useCrud(state);
+const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = useCrud(option);
 
 </script>
 
 <template>
   <el-card>
-    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
+    <el-form :inline="true" :model="option.queryForm" @keyup.enter="getDataList()">
       <div class="query-form">
         <el-form-item label="字段Key" :show-message="false">
-          <el-input v-model="state.queryForm.fieldKey"></el-input>
+          <el-input v-model="option.queryForm.fieldKey"></el-input>
         </el-form-item>
         <el-form-item label="字段名称" :show-message="false">
-          <el-input v-model="state.queryForm.fieldName"></el-input>
+          <el-input v-model="option.queryForm.fieldName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="state.queryForm = {}">重置</el-button>
+          <el-button type="danger" @click="option.queryForm = {}">重置</el-button>
           <el-button type="primary" @click="getDataList()">查询</el-button>
-          <el-button type="primary" @click="showSaveOrUpdateModal(undefined)">新增</el-button>
+          <el-button type="primary" @click="showSaveOrUpdateModal(null)">新增</el-button>
           <el-button type="primary" @click="fieldImportModalRef.init()">导入</el-button>
         </el-form-item>
       </div>
     </el-form>
   </el-card>
 
-  <el-table ref="fieldsTable" :border="true" height="525" :data="state.dataList">
+  <el-table ref="fieldsTable" :border="true" height="525" :data="option.dataList">
     <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
     <el-table-column prop="fieldKey" label="字段Key"></el-table-column>
     <el-table-column prop="fieldName" label="名称"></el-table-column>
@@ -86,8 +86,8 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination :current-page="state.currentPage" :page-sizes="state.pageSize || []"
-                 :page-size="state.pageSize" :total="state.total"
+  <el-pagination :current-page="option.currentPage" :page-sizes="option.pageSize || []"
+                 :page-size="option.pageSize" :total="option.total"
                  layout="total, sizes, prev, pager, next, jumper"
                  @size-change="sizeChangeHandle" @current-change="currentChangeHandle">
   </el-pagination>
