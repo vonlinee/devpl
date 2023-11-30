@@ -18,10 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -38,7 +35,11 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
 
     @Override
     public IPage<FieldInfo> selectPage(FieldInfoListParam param) {
-        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), new LambdaQueryWrapper<FieldInfo>().like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
+        String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
+        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()),
+            new LambdaQueryWrapper<FieldInfo>()
+                .notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys))
+                .like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
     }
 
     /**

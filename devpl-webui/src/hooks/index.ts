@@ -171,7 +171,7 @@ export const useCrud = (options: DataTableOption) => {
           }
         })
         .catch((err) => {
-          console.error("删除错误", err);
+          // console.error("删除错误", err);
         });
     } else {
       if (option.removeByIds) {

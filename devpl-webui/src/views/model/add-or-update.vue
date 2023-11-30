@@ -1,6 +1,6 @@
 <template>
   <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" show-footer width="50%">
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" @keyup.enter="submitHandle()">
+    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
       <el-form-item label="名称" prop="code">
         <el-input v-model="dataForm.code" placeholder="名称"></el-input>
       </el-form-item>
@@ -8,9 +8,6 @@
         <el-input v-model="dataForm.packageName" placeholder="基类包名"></el-input>
       </el-form-item>
       <el-form-item label="字段信息" prop="fields">
-        <template #label>
-          <span style="cursor: pointer" @click="showFieldSelectModal">字段信息</span>
-        </template>
         <template #default>
           <el-table height="400" :data="dataForm.fields">
             <el-table-column type="selection"></el-table-column>
@@ -18,6 +15,7 @@
             <el-table-column label="名称" prop="fieldName"></el-table-column>
             <el-table-column label="数据类型" prop="dataType"></el-table-column>
           </el-table>
+          <el-button class="mt-4" style="width: 100%" @click="showFieldSelectModal">选择</el-button>
         </template>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
@@ -30,12 +28,12 @@
     </template>
   </vxe-modal>
 
-  <field-select-modal ref="fieldSelectModal" @handle-selection="handleSelection"></field-select-modal>
+  <field-select-modal ref="fieldSelectModal" @selection-change="handleSelection"></field-select-modal>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { ElButton, ElMessage } from "element-plus/es";
+import { ElMessage } from "element-plus/es";
 import { apiGetModelById, apiSaveOrUpdateModelById } from "@/api/model";
 import FieldSelectModal from "@/views/fields/FieldSelectModal.vue";
 
@@ -53,7 +51,6 @@ type FormDataType = {
   fields: FieldInfo[]
 }
 
-
 const dataForm = reactive<FormDataType>({
   id: "",
   packageName: "",
@@ -63,7 +60,16 @@ const dataForm = reactive<FormDataType>({
 });
 
 const handleSelection = (val: FieldInfo[]) => {
-  const oldValue = dataForm.fields;
+  const oldValue = dataForm.fields || [];
+  if (oldValue.length == 0) {
+    dataForm.fields = oldValue.concat(val);
+  } else {
+    for (let i = 0; i < val.length; i++) {
+      if (!oldValue.find(item => item.fieldKey == val[i].fieldKey)) {
+        oldValue.push(val[i]);
+      }
+    }
+  }
 };
 
 const init = (id?: number) => {
@@ -77,18 +83,18 @@ const init = (id?: number) => {
 
   // id 存在则为修改
   if (id) {
-    getBaseClass(id);
+    getModelClass(id);
   }
 };
 
-const getBaseClass = (id: number) => {
+const getModelClass = (id: number) => {
   apiGetModelById(id).then(res => {
     Object.assign(dataForm, res.data);
   });
 };
 
 const showFieldSelectModal = () => {
-  fieldSelectModal.value.show();
+  fieldSelectModal.value.show(dataForm.fields);
 };
 
 const dataRules = ref({
@@ -102,7 +108,6 @@ const submitHandle = () => {
     if (!valid) {
       return false;
     }
-
     apiSaveOrUpdateModelById(dataForm).then(() => {
       ElMessage.success({
         message: "操作成功",

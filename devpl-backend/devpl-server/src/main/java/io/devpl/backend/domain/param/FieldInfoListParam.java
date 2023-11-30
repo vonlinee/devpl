@@ -10,4 +10,9 @@ public class FieldInfoListParam extends PageParam {
 
     private String fieldKey;
     private String fieldName;
+
+    /**
+     * 逗号拼接
+     */
+    private String excludedKeys;
 }

@@ -15,4 +15,17 @@ import java.util.List;
 public interface ModelInfoMapper extends BaseMapper<ModelInfo> {
 
     List<ModelField> selectModelFields(@Param("modelId") Long modelId);
+
+    List<String> selectModelFieldKeys(@Param("modelId") Long modelId);
+
+    List<Long> selectModelFieldIds(@Param("modelId") Long modelId);
+
+    /**
+     * 新增模型和字段关联
+     *
+     * @param modelId  模型ID
+     * @param fieldIds 字段ID列表
+     * @return 是否成功
+     */
+    int insertModeFieldRelation(@Param("modelId") Long modelId, @Param("fieldIds") List<Long> fieldIds);
 }

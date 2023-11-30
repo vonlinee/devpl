@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.ModelInfoMapper">
+    <insert id="insertModeFieldRelation">
+        INSERT INTO model_field (model_id, field_id)
+        VALUES
+        <foreach collection="fieldIds" item="item" separator=",">
+            (#{modelId}, #{item})
+        </foreach>
+    </insert>
 
     <select id="selectModelFields" resultType="io.devpl.backend.entity.ModelField">
         SELECT *
+        FROM model_field mf
+                 LEFT JOIN field_info f ON mf.field_id = f.id
+        WHERE mf.model_id = #{modelId}
+    </select>
+
+    <select id="selectModelFieldKeys" resultType="java.lang.String">
+        SELECT DISTINCT f.field_key
+        FROM model_field mf
+                 LEFT JOIN field_info f ON mf.field_id = f.id
+        WHERE mf.model_id = #{modelId}
+    </select>
+
+    <select id="selectModelFieldIds" resultType="Long">
+        SELECT DISTINCT mf.field_id
         FROM model_field mf
                  LEFT JOIN field_info f ON mf.field_id = f.id
         WHERE mf.model_id = #{modelId}

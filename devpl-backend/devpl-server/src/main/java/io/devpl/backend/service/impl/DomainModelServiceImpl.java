@@ -9,7 +9,9 @@ import io.devpl.backend.entity.ModelField;
 import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.service.DomainModelService;
 import io.devpl.backend.service.FieldInfoService;
+import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,16 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
 
     @Resource
     FieldInfoService fieldInfoService;
+
+    @Override
+    public ModelInfo getModelInfo(Long modelId) {
+        ModelInfo modelInfo = getById(modelId);
+        if (modelInfo != null) {
+            List<ModelField> modelFields = baseMapper.selectModelFields(modelId);
+            modelInfo.setFields(modelFields);
+        }
+        return modelInfo;
+    }
 
     @Override
     public IPage<ModelInfo> listPage(BaseClassListParam param) {
@@ -39,6 +51,31 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
             modelInfo.setFields(modelFields);
         }
         return modelInfo;
+    }
+
+    @Override
+    public boolean saveModel(ModelInfo modelInfo) {
+
+        return false;
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public boolean updateModel(ModelInfo modelInfo) {
+        updateById(modelInfo);
+        List<Long> fieldIds = baseMapper.selectModelFieldIds(modelInfo.getId());
+        if (!CollectionUtils.isEmpty(modelInfo.getFields())) {
+            modelInfo.getFields().removeIf(f -> fieldIds.contains(f.getFieldId()));
+            if (!CollectionUtils.isEmpty(modelInfo.getFields())) {
+                addModelFields(modelInfo.getId(), CollectionUtils.toList(modelInfo.getFields(), ModelField::getId));
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addModelFields(Long modelId, List<Long> fieldIds) {
+        return baseMapper.insertModeFieldRelation(modelId, fieldIds) > 0;
     }
 
     @Override

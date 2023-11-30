@@ -1668,11 +1668,11 @@ public final class StringUtils {
      */
     public static String[] split(String toSplit, String delimiter) {
         if (!hasLength(toSplit) || !hasLength(delimiter)) {
-            return null;
+            return EMPTY_STRING_ARRAY;
         }
         int offset = toSplit.indexOf(delimiter);
         if (offset < 0) {
-            return null;
+            return EMPTY_STRING_ARRAY;
         }
         String beforeDelimiter = toSplit.substring(0, offset);
         String afterDelimiter = toSplit.substring(offset + delimiter.length());

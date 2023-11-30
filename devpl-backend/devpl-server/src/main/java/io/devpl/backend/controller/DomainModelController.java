@@ -15,10 +15,10 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("/api/model")
-public class BaseClassController {
+public class DomainModelController {
 
     @Resource
-    DomainModelService baseClassService;
+    DomainModelService modelService;
 
     /**
      * 分页查询
@@ -28,27 +28,38 @@ public class BaseClassController {
      */
     @GetMapping("/list/page")
     public ListResult<ModelInfo> list(BaseClassListParam param) {
-        return ListResult.ok(baseClassService.listPage(param));
+        return ListResult.ok(modelService.listPage(param));
     }
 
+    /**
+     * 获取模型信息
+     *
+     * @param id 模型ID
+     * @return 模型信息
+     */
     @GetMapping("/{id}")
     public Result<ModelInfo> get(@PathVariable("id") Long id) {
-        return Result.ok(baseClassService.getById(id));
+        return Result.ok(modelService.getModelInfo(id));
     }
 
+    /**
+     * 保存模型信息
+     *
+     * @param entity 模型信息
+     * @return 是否成功
+     */
     @PostMapping("/save")
     public Result<Boolean> save(@RequestBody ModelInfo entity) {
-        return Result.ok(baseClassService.save(entity));
+        return Result.ok(modelService.saveModel(entity));
     }
 
     @PutMapping("/update")
-    public Result<String> update(@RequestBody ModelInfo entity) {
-        baseClassService.updateById(entity);
-        return Result.ok();
+    public Result<Boolean> update(@RequestBody ModelInfo entity) {
+        return Result.ok(modelService.updateModel(entity));
     }
 
     @DeleteMapping("/remove")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
-        return Result.ok(baseClassService.removeBatchByIds(Arrays.asList(ids)));
+        return Result.ok(modelService.removeBatchByIds(Arrays.asList(ids)));
     }
 }

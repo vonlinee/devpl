@@ -173,3 +173,14 @@ export function getIconName(data: FileNode): string {
   }
   return iconName;
 }
+
+/**
+ * 数组a-数组b
+ * @param a
+ * @param b
+ */
+export const sub = (a: any[], b: any[]) => {
+  return a.filter(function(item) {
+    return b.indexOf(item) < 0;
+  });
+};
