@@ -4,9 +4,9 @@ import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.ServerException;
 import io.devpl.backend.domain.FileNode;
 import io.devpl.backend.domain.param.TableImportParam;
-import io.devpl.backend.entity.GenBaseClass;
 import io.devpl.backend.entity.GenTable;
 import io.devpl.backend.entity.GenTableField;
+import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.ArrayUtils;
@@ -38,7 +38,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private GenFieldTypeService fieldTypeService;
     @Resource
-    private BaseClassService baseClassService;
+    private DomainModelService baseClassService;
     @Resource
     private GenTableService tableService;
     @Resource
@@ -169,11 +169,11 @@ public class FileGenerationServiceImpl implements FileGenerationService {
             return;
         }
         // 基类
-        GenBaseClass baseClass = baseClassService.getById(table.getBaseclassId());
+        ModelInfo baseClass = baseClassService.getById(table.getBaseclassId());
         baseClass.setPackageName(baseClass.getPackageName());
         dataModel.put("baseClass", baseClass);
         // 基类字段
-        String[] fields = baseClass.getFields().split(",");
+        String[] fields = baseClass.getFieldsName().split(",");
         // 标注为基类字段
         for (GenTableField field : table.getFieldList()) {
             if (ArrayUtils.contains(fields, field.getFieldName())) {

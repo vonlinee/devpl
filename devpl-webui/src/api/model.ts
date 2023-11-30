@@ -1,17 +1,26 @@
-import http from '@/utils/http'
+import http from "@/utils/http";
+import { Keys } from "@/api/index";
 
-export const useBaseClassApi = (id: Number) => {
-	return http.get('/gen/baseclass/' + id)
-}
+export const apiGetModelById = (id: Number) => {
+  return http.get("/api/model/" + id);
+};
 
-export const apiListBaseClass = () => {
-	return http.get('/gen/baseclass/list')
-}
+export const apiListBaseClass = (page: number, limit: number, params: any) => {
+  return http.get("/api/model/list/page", {
+    pageIndex: page,
+    pageSize: limit,
+    ...params
+  });
+};
 
-export const useBaseClassSubmitApi = (dataForm: any) => {
-	if (dataForm.id) {
-		return http.put('/gen/baseclass', dataForm)
-	} else {
-		return http.post('/gen/baseclass', dataForm)
-	}
-}
+export const apiBatchRemoveModelById = (ids: Keys) => {
+  return http.delete("/api/model/remove", ids);
+};
+
+export const apiSaveOrUpdateModelById = (dataForm: any) => {
+  if (dataForm.id) {
+    return http.put("/api/model/update", dataForm);
+  } else {
+    return http.post("/api/model/save", dataForm);
+  }
+};

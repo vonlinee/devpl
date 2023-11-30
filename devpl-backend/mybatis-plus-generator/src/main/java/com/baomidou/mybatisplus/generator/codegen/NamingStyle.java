@@ -6,14 +6,33 @@ import java.util.Arrays;
 import java.util.Set;
 
 /**
- * 从数据库表到文件的命名策略
+ * 命名策略
+ *
+ * @see com.google.common.base.CaseFormat
  */
-public enum NamingStrategy {
+public enum NamingStyle {
 
     /**
      * 不做任何改变，原样输出
      */
     NO_CHANGE,
+
+    /**
+     * 首字母大写
+     */
+    CAPITAL_FIRST() {
+        @Override
+        public String normalize(String source) {
+            if (source == null || source.isEmpty()) {
+                return source;
+            }
+            return Character.toUpperCase(source.charAt(0)) + source.substring(1);
+        }
+    },
+
+    LOWER_UNDERSCORE() {
+
+    },
 
     /**
      * 下划线转驼峰命名
@@ -42,7 +61,7 @@ public enum NamingStrategy {
         // 跳过原始字符串中开头、结尾的下换线或双重下划线
         // 处理真正的驼峰片段
         Arrays.stream(camels).filter(camel -> !StringUtils.isBlank(camel)).forEach(camel -> {
-            if (result.length() == 0) {
+            if (result.isEmpty()) {
                 // 第一个驼峰片段，首字母都小写
                 result.append(StringUtils.firstToLowerCase(camel));
             } else {
@@ -137,5 +156,19 @@ public enum NamingStrategy {
             return Character.toUpperCase(name.charAt(0)) + name.substring(1);
         }
         return name;
+    }
+
+    /**
+     * 将目标字符串转换成当前命名风格
+     *
+     * @param source 源字符串
+     * @return 转换结果
+     */
+    public String normalize(String source) {
+        return source;
+    }
+
+    public String to(String source, NamingStyle fromStyle, NamingStyle toStyle) {
+        return source;
     }
 }

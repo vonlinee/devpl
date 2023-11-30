@@ -208,18 +208,18 @@ export const useCrud = (options: DataTableOption) => {
       cancelButtonText: "取消",
       type: "warning"
     }).then(() => {
-      if (option.deleteUrl) {
+      if (!option.deleteUrl) {
         if (option.removeByIds) {
           option.removeByIds(data).then((res) => {
             ElMessage.success("删除成功");
             query();
           });
-        } else {
-          http.delete(option.deleteUrl, data).then(() => {
-            ElMessage.success("删除成功");
-            query();
-          });
         }
+      } else {
+        http.delete(option.deleteUrl, data).then(() => {
+          ElMessage.success("删除成功");
+          query();
+        });
       }
     }).catch((err) => {
       console.error("删除错误", err);

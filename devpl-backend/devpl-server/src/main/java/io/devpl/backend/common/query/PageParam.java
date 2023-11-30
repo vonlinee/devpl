@@ -1,5 +1,7 @@
 package io.devpl.backend.common.query;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,5 +41,9 @@ public class PageParam {
         if (pageSize != null) {
             this.limit = pageSize;
         }
+    }
+
+    public <T> IPage<T> asPage() {
+        return new Page<>(page, limit);
     }
 }

@@ -1,6 +1,6 @@
 package com.baomidou.mybatisplus.generator.engine.velocity;
 
-import com.baomidou.mybatisplus.generator.codegen.NamingStrategy;
+import com.baomidou.mybatisplus.generator.codegen.NamingStyle;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
@@ -58,7 +58,7 @@ public class CamelCaseDirective extends Directive {
         Object value = node.jjtGetChild(0).value(context);
         // 将参数进行转换进行输出
         if (value instanceof String) {
-            writer.write(NamingStrategy.underlineToCamel((String) value));
+            writer.write(NamingStyle.CAPITAL_FIRST.normalize(NamingStyle.underlineToCamel((String) value)));
         } else {
             writer.write(String.valueOf(value));
         }

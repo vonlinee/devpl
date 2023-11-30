@@ -20,4 +20,8 @@ type TableFileGeneration = {
   templateName: number
   fileName: string
   savePath: string
+  /**
+   * 行编辑状态
+   */
+  editing: boolean
 }

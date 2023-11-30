@@ -105,7 +105,7 @@ import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus/es";
 import { apiListBaseClass } from "@/api/model";
 import { useDownloadApi, useGeneratorApi } from "@/api/generator";
-import { apiListGenTables, useTableSubmitApi } from "@/api/table";
+import { apiGetGenTableById, useTableSubmitApi } from "@/api/table";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 
 const resultDialogRef = ref();
@@ -155,10 +155,10 @@ const getBaseClassList = () => {
  * @param id 生成的表ID
  */
 const getTable = (id: number) => {
-  apiListGenTables(id).then(res => {
+  apiGetGenTableById(id).then(res => {
     Object.assign(dataForm, res.data);
     // 填充默认值
-    if (dataForm.tableComment == null || dataForm.tableComment == undefined || dataForm.tableComment == "") {
+    if (dataForm.tableComment == null || dataForm.tableComment == "") {
       dataForm.tableComment = res.data?.tableName == undefined ? "" : res.data?.tableName;
     }
   });

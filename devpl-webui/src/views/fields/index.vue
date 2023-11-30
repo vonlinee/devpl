@@ -8,7 +8,6 @@ import { onMounted, reactive, ref } from "vue";
 import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
-import FieldSelector from "@/views/fields/FieldSelector.vue";
 
 /**
  * 表格数据模型
@@ -73,9 +72,7 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
     </el-form>
   </el-card>
 
-  <field-selector ref="fieldSelectModal"></field-selector>
-
-  <el-table ref="fieldsTable" :border="true" height="525" :data="option.dataList">
+  <el-table :border="true" height="525" :data="option.dataList">
     <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
     <el-table-column prop="fieldKey" label="字段Key"></el-table-column>
     <el-table-column prop="fieldName" label="名称"></el-table-column>

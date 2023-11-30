@@ -2,9 +2,9 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.param.Query;
-import io.devpl.backend.entity.GenBaseClass;
-import io.devpl.backend.service.BaseClassService;
+import io.devpl.backend.domain.param.BaseClassListParam;
+import io.devpl.backend.entity.ModelInfo;
+import io.devpl.backend.service.DomainModelService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,47 +14,41 @@ import java.util.Arrays;
  * 基类管理
  */
 @RestController
-@RequestMapping("/gen/baseclass")
+@RequestMapping("/api/model")
 public class BaseClassController {
 
     @Resource
-    BaseClassService baseClassService;
+    DomainModelService baseClassService;
 
     /**
      * 分页查询
      *
-     * @param query 查询参数
+     * @param param 查询参数
      * @return 基本类型
      */
-    @GetMapping("/page")
-    public ListResult<GenBaseClass> page(Query query) {
-        return baseClassService.listPage(query);
-    }
-
-    @GetMapping("/list")
-    public ListResult<GenBaseClass> list() {
-        return ListResult.ok(baseClassService.listAll());
+    @GetMapping("/list/page")
+    public ListResult<ModelInfo> list(BaseClassListParam param) {
+        return ListResult.ok(baseClassService.listPage(param));
     }
 
     @GetMapping("/{id}")
-    public Result<GenBaseClass> get(@PathVariable("id") Long id) {
+    public Result<ModelInfo> get(@PathVariable("id") Long id) {
         return Result.ok(baseClassService.getById(id));
     }
 
-    @PostMapping
-    public Result<Boolean> save(@RequestBody GenBaseClass entity) {
+    @PostMapping("/save")
+    public Result<Boolean> save(@RequestBody ModelInfo entity) {
         return Result.ok(baseClassService.save(entity));
     }
 
-    @PutMapping
-    public Result<String> update(@RequestBody GenBaseClass entity) {
+    @PutMapping("/update")
+    public Result<String> update(@RequestBody ModelInfo entity) {
         baseClassService.updateById(entity);
         return Result.ok();
     }
 
-    @DeleteMapping
-    public Result<String> delete(@RequestBody Long[] ids) {
-        baseClassService.removeBatchByIds(Arrays.asList(ids));
-        return Result.ok();
+    @DeleteMapping("/remove")
+    public Result<Boolean> delete(@RequestBody Long[] ids) {
+        return Result.ok(baseClassService.removeBatchByIds(Arrays.asList(ids)));
     }
 }
