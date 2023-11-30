@@ -1,6 +1,6 @@
 package io.devpl.backend.controller;
 
-import io.devpl.backend.common.PageParam;
+import io.devpl.backend.common.query.PageParam;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.vo.TemplateSelectVO;

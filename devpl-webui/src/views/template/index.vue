@@ -29,7 +29,9 @@
         <template #default="scope">
           <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>
           <el-button v-if="!scope.row.internal" type="primary" link @click="addOrUpdateHandle(scope.row)">修改</el-button>
-          <el-button v-if="!scope.row.internal" type="primary" link @click="deleteBatchHandle(scope.row.templateId)">删除</el-button>
+          <el-button v-if="!scope.row.internal" type="primary" link @click="deleteBatchHandle(scope.row.templateId)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -58,15 +60,16 @@ import AddOrUpdate from "./add-or-update.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
+import { apiBatchRemoveTemplateByIds, apiListTemplatesByPage } from "@/api/template";
 
 const state: DataTableOption = reactive({
-  dataListUrl: "/api/codegen/template/page",
-  deleteUrl: "/api/codegen/template/delete/batch/ids",
   queryForm: {
     templateName: ""
   },
   primaryKey: "templateId",
-  isPage: true
+  isPage: true,
+  queryPage: apiListTemplatesByPage,
+  removeByIds: apiBatchRemoveTemplateByIds
 });
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);

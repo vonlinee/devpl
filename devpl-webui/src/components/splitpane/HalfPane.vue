@@ -66,7 +66,6 @@ function initWidth() {
 function resizePanel(options: MouseDataType) {
   if (options.id && options.clientX) {
     const index = drapIndex();
-
     const max_width = panelList.value.reduce((prev, curr, i) => {
       if (index === i || index + 1 === i) {
         prev += curr.width;
@@ -155,7 +154,7 @@ function onMouseUp() {
   </div>
 </template>
 <style lang="scss" scoped>
-.split-pane {
+.ha {
   width: 100%;
   // 定义容器高度
   height: calc(100vh - 33px - 30px);

@@ -1,118 +1,101 @@
-<!--
-  https://blog.csdn.net/qq_37130872/article/details/127067677
--->
 <template>
-  <div style="display: flex">
-    <el-table>
-
-    </el-table>
-    <!-- 表格 -->
-    <el-table
-      :data="state.selectedFields"
-      style="width: 100%"
-      :key="state.dictTableKey"
-      border
-      :header-cell-style="{backgroundColor:'#E7F8FF',fontWeight: '500',color:'#000000'}"
-    >
-      <el-table-column type="selection" width="50" align="center" />
-      <el-table-column type="index" label="序号" width="50" align="center" />
-      <el-table-column prop="fieldKey" label="Key" width="150" align="center" />
-      <el-table-column prop="fieldName" label="名称" width="150" align="center" />
-      <el-table-column label="操作" width="100" align="center">
-        <template #default="scope">
-          <el-button :icon="Delete" type="danger"
-                     @click="deleteRow(scope.row)">
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <Splitpanes>
+    <Pane>
+      <el-table border :data="selectableFields" @selection-change="handleSelectionChange" height="800px">
+        <el-table-column type="selection" width="35" align="center"></el-table-column>
+        <el-table-column prop="fieldKey" label="Key"></el-table-column>
+        <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="dataType" label="数据类型"></el-table-column>
+      </el-table>
+    </Pane>
+    <Pane>
+      <el-table ref="fieldTable" border class="sortable-row-gen" row-key="id" :data="selectedFields"
+                highlight-current-row
+                height="800px"
+                row-class-name="field-row">
+        <el-table-column type="selection" width="35" align="center"></el-table-column>
+        <el-table-column prop="fieldKey" label="Key"></el-table-column>
+        <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="dataType" label="数据类型"></el-table-column>
+      </el-table>
+    </Pane>
+  </Splitpanes>
 </template>
 
 <script lang="ts" setup>
-import { Delete } from "@element-plus/icons-vue";
-import { ref, onMounted, nextTick, reactive, watch } from "vue";
-
-const deleteRow = (row: any) => {
-
-};
-
-const modalVisible = ref();
+import { ref, onMounted, nextTick, Ref } from "vue";
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 
 import Sortable from "sortablejs";
+import { apiListAllFields } from "@/api/fields";
 
-const state = reactive<{
-  dictTableKey?: number,
-  selectedFields: any[]
-}>({
-  selectedFields: []
-});
+const selectableFields = ref<FieldInfo[]>([]);
+const selectedFields = ref<FieldInfo[]>([]);
+const fieldList = ref<FieldInfo[]>([]);
+const fieldTable = ref();
 
-onMounted(() => {
+const sortable = ref();
+
+/**
+ * el-table需要指定row-key，否则会导致拖拽顺序混乱
+ */
+const enableRowDragDrop = () => {
   nextTick(() => {
-    dragSort();
-  });
-});
-
-
-//行拖拽
-const dragSort = () => {
-  let that = this;
-  // 首先获取需要拖拽的dom节点
-  const el1 = document.querySelectorAll(".el-table__body-wrapper")[0].querySelectorAll("table > tbody")[0] as HTMLElement;
-  if (el1) {
-    Sortable.create(el1, {
-      disabled: false, // 是否开启拖拽
-      ghostClass: "sortable-ghost", //拖拽样式
-      animation: 150, // 拖拽延时，效果更好看
-      group: { // 是否开启跨表拖拽
-        name: "group_name",
-        pull: false,
-        put: false
-      },
-      onEnd: (event) => { //进行数据的处理，拖拽实际并不会改变绑定数据的顺序
-        const { newIndex, oldIndex } = event;
-        console.log(oldIndex, newIndex);
-        const currRow = state.selectedFields?.splice(oldIndex, 1)[0];
-        state.selectedFields?.splice(newIndex, 0, currRow);
-        sortIndex();
+    // 获取需要拖拽的dom节点
+    if (fieldTable.value) {
+      const elTableBody = fieldTable.value.$refs.tableBody.querySelector("tbody");
+      if (elTableBody) {
+        sortable.value = Sortable.create(elTableBody, {
+          disabled: false, // 是否开启拖拽
+          ghostClass: "sortable-ghost", //拖拽样式
+          animation: 150, // 拖拽延时，效果更好看
+          handle: ".field-row",
+          /**
+           * 进行数据的处理，拖拽实际并不会改变绑定数据的顺序
+           * @param e
+           */
+          onEnd: (e: any) => {
+            // oldIndex为列表元素开始拖拽的索引，newIndex为列表元素结束拖拽的索引
+            const { newIndex, oldIndex } = e;
+            // 拖拽的行
+            const curRow = fieldList.value.splice(oldIndex, 1)[0];
+            // 将拖拽的行插入到拖拽结束的位置
+            fieldList.value.splice(newIndex, 0, curRow);
+            sortIndex(fieldList);
+          }
+        });
       }
-    });
-  }
-};
-
-const sortIndex = () => {
-  const array = [];
-  state.selectedFields.forEach((e, i) => {
-    let obj = {
-      currency_id: e.currency_id,
-      index: i + 1
-    };
-    array.push(obj);
-    if (state.dictTableKey) {
-      state.dictTableKey++;
     }
   });
 };
 
-watch(
-  () => state.dictTableKey,
-  () => {
-    nextTick(() => {
-      dragSort();
-    });
-  }
-);
+const sortIndex = (tableData: Ref<any[]>) => {
+  const array: any[] = [];
+  tableData.value.forEach((e, i) => {
+    const obj = {
+      index: i + 1,
+      ...e
+    };
+    array.push(obj);
+  });
+  tableData.value = array;
+};
 
-defineExpose({
-  show: () => {
-    modalVisible.value = true;
+const handleSelectionChange = (val: FieldInfo[]) => {
+  selectedFields.value = val;
+};
+
+onMounted(() => {
+  apiListAllFields().then((res) => {
+    selectableFields.value = res.data;
+  });
+  if (!sortable.value) {
+    enableRowDragDrop();
   }
 });
-
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 </style>

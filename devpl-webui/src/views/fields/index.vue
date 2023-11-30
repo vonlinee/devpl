@@ -3,7 +3,7 @@
 -->
 <script setup lang="ts">
 import { apiDeleteFieldByIds, apiListFields } from "@/api/fields";
-import FieldImport from "./FieldImport.vue";
+import FieldImportModal from "./FieldImportModal.vue";
 import { onMounted, reactive, ref } from "vue";
 import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
 import { useCrud } from "@/hooks";
@@ -68,7 +68,6 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
           <el-button type="primary" @click="getDataList()">查询</el-button>
           <el-button type="primary" @click="showSaveOrUpdateModal(null)">新增</el-button>
           <el-button type="primary" @click="fieldImportModalRef.init()">导入</el-button>
-          <el-button type="primary" @click="fieldSelectModal.show()">Designer</el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -90,15 +89,16 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination :current-page="option.currentPage" :page-sizes="option.pageSize || []"
-                 :page-size="option.pageSize" :total="option.total"
+  <el-pagination :current-page="option.currentPage"
+                 background
+                 :page-sizes="option.pageSizes" :total="option.total"
                  layout="total, sizes, prev, pager, next, jumper"
                  @size-change="sizeChangeHandle" @current-change="currentChangeHandle">
   </el-pagination>
 
   <save-or-update-field ref="saveOrUpdateFieldModal" @refresh-table="getDataList"></save-or-update-field>
 
-  <field-import ref="fieldImportModalRef"></field-import>
+  <field-import-modal ref="fieldImportModalRef" @modal-close="getDataList"></field-import-modal>
 </template>
 
 <style scoped lang="scss">

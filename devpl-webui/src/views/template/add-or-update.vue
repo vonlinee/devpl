@@ -1,6 +1,6 @@
 <template>
   <vxe-modal v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :mask-closable="false"
-             @closed="onClosed" width="75%" append-to-body :z-index="2000" show-footer>
+             @close="onClosed" width="75%" :z-index="2000" show-footer>
     <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"
              @keyup.enter="submitHandle()">
       <el-row>

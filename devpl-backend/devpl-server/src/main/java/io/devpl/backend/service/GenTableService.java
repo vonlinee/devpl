@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;
-import io.devpl.backend.domain.param.Query;
+import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.GenTable;
 
@@ -21,7 +21,7 @@ public interface GenTableService extends BaseService<GenTable> {
 
     List<String> listTableNames(Long dataSourceId);
 
-    ListResult<GenTable> page(Query query);
+    ListResult<GenTable> selectPage(GenTableListParam param);
 
     GenTable getByTableName(String tableName);
 

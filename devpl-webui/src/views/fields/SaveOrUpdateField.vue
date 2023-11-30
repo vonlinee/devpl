@@ -47,7 +47,7 @@
 <script lang="ts" setup>
 import { apiSaveOrUpdateField } from "@/api/fields";
 import { VxeFormPropTypes } from "vxe-table";
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import { ElMessage } from "element-plus";
 
 const showEdit = ref(false);
@@ -98,7 +98,7 @@ const emits = defineEmits([
 const submitEvent = () => {
   // 表单填充默认值
   submitLoading.value = true;
-  apiSaveOrUpdateField(formData)
+  apiSaveOrUpdateField(toRaw(formData.value))
     .then((res) => {
       ElMessage({
         message: "保存成功",

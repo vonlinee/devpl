@@ -4,7 +4,7 @@
       <el-form-item label="选择项目">
         <el-select v-model="project">
           <el-option v-for="project in projects" :key="project.projectId" :value="project"
-            :label="project.projectName"></el-option>
+                     :label="project.projectName"></el-option>
         </el-select>
       </el-form-item>
     </el-form>
@@ -36,7 +36,7 @@
   </el-card>
 
   <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
-    @selection-change="selectionChangeHandle">
+            @selection-change="selectionChangeHandle">
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
     <el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
     <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
@@ -50,8 +50,8 @@
     </el-table-column>
   </el-table>
   <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
-    layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
-    @current-change="currentChangeHandle">
+                 layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+                 @current-change="currentChangeHandle">
   </el-pagination>
 
   <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
@@ -77,7 +77,7 @@ import { useCrud } from "@/hooks";
 import GenTableImport from "./GenTableImport.vue";
 import Edit from "./edit.vue";
 import Generator from "./generator.vue";
-import { apiImportTables, apiSyncTable } from "@/api/table";
+import { apiImportTables, apiListGenTables, apiRemoveGenTableByIds, apiSyncTable } from "@/api/table";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from "@/api/generator";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
@@ -86,14 +86,14 @@ import { apiListSelectableProjects } from "@/api/project";
 import { useRouter } from "vue-router";
 
 const state: DataTableOption = reactive({
-  dataListUrl: "/gen/table/page",
-  deleteUrl: "/gen/table/remove",
   queryForm: {
     tableName: ""
-  }
-});
+  },
+  queryPage: apiListGenTables,
+  removeByIds: apiRemoveGenTableByIds
+} as DataTableOption);
 
-const router = useRouter()
+const router = useRouter();
 const fileTypeManagerRef = ref();
 const importRef = ref();
 const editRef = ref();
@@ -107,18 +107,18 @@ const importHandle = (id?: number) => {
   if (project.value == undefined) {
     const message = ElMessage({
       duration: 3000,
-      message: h('p', null, [
-        h('span', null, '请先选择项目，如果没有，先'),
-        h('a', {
-          style: 'color: blue',
-          onClick: function () {
-            message.close()
-            router.push({ path: '/codegen/project' })
+      message: h("p", null, [
+        h("span", null, "请先选择项目，如果没有，先"),
+        h("a", {
+          style: "color: blue",
+          onClick: function() {
+            message.close();
+            router.push({ path: "/codegen/project" });
           }
-        }, '创建项目'),
+        }, "创建项目")
       ])
-    })
-    return
+    });
+    return;
   }
   importRef.value.show(id);
 };
@@ -145,10 +145,10 @@ const project = ref<ProjectSelectVO>();
 onMounted(() => {
   // 获取可选择的项目列表
   apiListSelectableProjects().then((res) => {
-    projects.value = res.data
+    projects.value = res.data;
     if (res.data && res.data.length > 0) {
       // 默认选中第一个
-      project.value = res.data[0]
+      project.value = res.data[0];
     }
   });
 });
@@ -195,7 +195,6 @@ function saveConfig() {
 }
 
 const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
-  console.log("import");
   if (dataSourceId) {
     apiImportTables(dataSourceId, tableNames, project.value?.projectId).then(() => {
       ElMessage.success({
@@ -208,7 +207,6 @@ const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
     });
   }
 };
-
 
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);
 </script>

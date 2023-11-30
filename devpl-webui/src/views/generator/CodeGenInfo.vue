@@ -91,8 +91,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElButton, ElMessage } from 'element-plus/es'
-import { useBaseClassListApi } from '@/api/baseClass'
+import { ElMessage } from 'element-plus/es'
+import { apiListBaseClass } from '@/api/model'
 import { useDownloadApi, useGeneratorApi } from '@/api/generator'
 import { apiListGenTables, useTableSubmitApi } from '@/api/table'
 
@@ -133,7 +133,7 @@ const init = (id: number) => {
 }
 
 const getBaseClassList = () => {
-	useBaseClassListApi().then(res => {
+	apiListBaseClass().then(res => {
 		baseClassList.value = res.data
 	})
 }

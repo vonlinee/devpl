@@ -6,14 +6,14 @@
     <el-option v-for="item in templates" :key="item.templateId" :label="item.templateName" :value="item.templateId">
       <div style=" height: 100%;">
         <span style="float: left">{{ item.templateName }}</span>
-        <span v-if="previewableFlag" style="float: right;" :link="true" @click="() => onPreview(item)">预览</span>
+        <span v-if="previewFlag" style="float: right;" :link="true" @click="() => onPreview(item)">预览</span>
       </div>
     </el-option>
   </el-select>
 </template>
-<script setup lang='ts'>
-import { apiListSelectableTemplates } from '@/api/template';
-import { onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { apiListSelectableTemplates } from "@/api/template";
+import { onMounted, ref } from "vue";
 
 interface TemplateSelectorProps {
   // 初始选中的模板ID
@@ -21,7 +21,7 @@ interface TemplateSelectorProps {
   // 可选择模板列表
   options?: TemplateSelectVO[]
   // 是否显示预览按钮
-  previewable?: boolean
+  preview?: boolean
 }
 
 const emits = defineEmits([
@@ -29,10 +29,10 @@ const emits = defineEmits([
   "handlePreview",
   // 选择的模板变化
   "handleValueChange"
-])
+]);
 
 function onSelectedValueChange(value: number) {
-  emits("handleValueChange", value)
+  emits("handleValueChange", value);
 }
 
 /**
@@ -40,21 +40,21 @@ function onSelectedValueChange(value: number) {
  * @param item 模板信息
  */
 const onPreview = (item: TemplateSelectVO) => {
-  emits("handlePreview", item)
-}
+  emits("handlePreview", item);
+};
 
-const { current, options, previewable } = defineProps<TemplateSelectorProps>()
+const { current, options, preview } = defineProps<TemplateSelectorProps>();
 
-const templates = ref(options)
-const templateId = ref(current)
-const previewableFlag = ref(previewable || false)
+const templates = ref(options);
+const templateId = ref(current);
+const previewFlag = ref(preview || false);
 
 onMounted(() => {
   if (options == undefined) {
     apiListSelectableTemplates().then((res) => {
-      templates.value = res.data
-    })
+      templates.value = res.data;
+    });
   }
-})
+});
 </script>
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>

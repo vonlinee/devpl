@@ -1,15 +1,28 @@
 import http from "@/utils/http";
+import { Keys } from "@/api/index";
 
 /**
  * 查询生成表列表
  * @param id
  */
-export const apiListGenTables = (id: number) => {
+export const apiGetGenTableById = (id: number) => {
   return http.get<GenTable>("/gen/table/" + id);
+};
+
+export const apiListGenTables = (page: number, limit: number, params: any) => {
+  return http.get<GenTable>("/gen/table/page", {
+    pageIndex: page,
+    pageSize: limit,
+    ...params
+  });
 };
 
 export const useTableSubmitApi = (dataForm: any) => {
   return http.put("/gen/table", dataForm);
+};
+
+export const apiRemoveGenTableByIds = (ids: Keys) => {
+  return http.delete("/gen/table/remove", ids);
 };
 
 /**

@@ -15,6 +15,22 @@ export const apiListFields = (page: number, limit: number, params: any) => {
 };
 
 /**
+ * 查询字段列表，不分页
+ * @param params
+ */
+export const apiListAllFields = (params?: any) => {
+  return http.get("/api/field/list", params || {});
+};
+
+/**
+ * 批量保存字段信息
+ * @param fields
+ */
+export const apiSaveBatchFields = (fields: FieldInfo[]) => {
+  return http.post("/api/field/save/batch", fields);
+};
+
+/**
  * 保存或更新字段
  * @param field
  */

@@ -2,7 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.param.Query;
+import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.GenTable;
 import io.devpl.backend.entity.GenTableField;
@@ -29,11 +29,11 @@ public class TableController {
     /**
      * 分页
      *
-     * @param query 查询参数
+     * @param param 查询参数
      */
     @GetMapping("page")
-    public ListResult<GenTable> page(Query query) {
-        return tableService.page(query);
+    public ListResult<GenTable> page(GenTableListParam param) {
+        return tableService.selectPage(param);
     }
 
     /**

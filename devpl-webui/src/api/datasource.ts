@@ -57,7 +57,7 @@ export const useDataSourceTableListApi = (
   tableNamePattern?: string | null
 ) => {
   return http.get(
-    "/api/gen/datasource/table/list/", {
+    "/api/gen/datasource/table/list", {
       dataSourceId: id,
       databaseName: databaseName,
       tableNamePattern: tableNamePattern
@@ -75,7 +75,7 @@ export const apiGetDatabaseNames = (dataForm: any) => {
 
 /**
  * 获取所有数据库名称
- * @param dataForm
+ * @param dataSourceId
  */
 export const apiGetDatabaseNamesById = (dataSourceId: number) => {
   return http.get(`/api/gen/datasource/dbnames/${dataSourceId}`);

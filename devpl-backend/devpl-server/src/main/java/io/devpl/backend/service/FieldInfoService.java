@@ -13,7 +13,13 @@ import java.util.List;
  */
 public interface FieldInfoService extends BaseService<FieldInfo> {
 
+    List<FieldInfo> listFields(FieldInfoListParam param);
+
     IPage<FieldInfo> selectPage(FieldInfoListParam param);
 
     List<FieldInfo> parseFields(FieldParseParam param);
+
+    boolean saveFieldsInfos(List<FieldInfo> fieldInfo);
+
+    List<String> listFieldKeys();
 }

@@ -3,7 +3,7 @@ import { ResponsePromise } from "@/utils/http";
 /**
  * 增删改查配置项
  */
-export interface DataTableOption<R = any, F = Record<string, any>> {
+export interface DataTableOption {
   // 否在创建页面时，调用数据列表接口
   createdIsNeed?: boolean;
   // 数据列表 Url
@@ -41,19 +41,19 @@ export interface DataTableOption<R = any, F = Record<string, any>> {
   /**
    * 删除之前确认
    */
-  confirmBeforeDelete: boolean;
+  confirmBeforeDelete?: boolean;
   /**
    * 分页查询
    */
   queryPage?: <T = any>(
-    page: number,
-    limit: number,
-    queryParams?: F
+    page?: number,
+    limit?: number,
+    queryParams?: Record<string, any>
   ) => ResponsePromise<T>;
   /**
    * 根据ID更新
    */
-  updateById?: <T = any>(row: R) => ResponsePromise<T>;
+  updateById?: <T = any>(row: Record<string, any>) => ResponsePromise<T>;
   /**
    * 删除ID批量删除
    */

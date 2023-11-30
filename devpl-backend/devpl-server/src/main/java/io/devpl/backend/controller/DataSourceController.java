@@ -199,7 +199,10 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list")
-    public ListResult<GenTable> tableList(@RequestParam("dataSourceId") Long id, @RequestParam("databaseName") String databaseName, @RequestParam("tableNamePattern") String tableNamePattern) {
+    public ListResult<GenTable> tableList(
+        @RequestParam(value = "dataSourceId") Long id,
+        @RequestParam(value = "databaseName", required = false) String databaseName,
+        @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
             return ListResult.ok(tableService.getTableList(id, tableNamePattern));

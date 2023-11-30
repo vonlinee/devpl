@@ -19,4 +19,8 @@ type FieldInfo = {
    * 默认值
    */
   defaultValue: string
+  /**
+   * 是否选中
+   */
+  selected: boolean
 }

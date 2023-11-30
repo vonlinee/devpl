@@ -6,11 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class DataTypeListParam extends PageParam {
+public class GenTableListParam extends PageParam {
 
-    private String typeGroupId;
-
-    private String typeKey;
-
-    private String typeName;
+    private String tableName;
 }

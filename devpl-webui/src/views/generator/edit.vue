@@ -76,6 +76,7 @@
           </vxe-column>
         </vxe-table>
       </el-tab-pane>
+
       <el-tab-pane label="表单配置" name="form">
         <vxe-table ref="formTable" height="590px" border row-key :data="fieldList"
           :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
@@ -165,15 +166,12 @@ import {
   ElTableColumn,
   ElTabs,
   ElTabPane,
-  ElCard,
-  ElSelect,
   ElDrawer,
   ElButton,
   ElTooltip
 } from "element-plus/es";
 import Sortable from "sortablejs";
-import { apiUpdateGenTableFields } from "@/api/table";
-import { apiListGenTables } from "@/api/table";
+import { apiGetGenTableById, apiUpdateGenTableFields } from "@/api/table";
 import { useFieldTypeListApi } from "@/api/fieldType";
 import { VxeTableInstance } from "vxe-table";
 import { apiListGenerationFiles, apiSaveGenerationFileConfig } from "@/api/generator";
@@ -187,7 +185,7 @@ const gridTable = ref<VxeTableInstance>();
 const queryTable = ref<VxeTableInstance>();
 
 const handleClick = (tab: TabsPaneContext) => {
-  if (tab.paneName !== "field") {
+  if (tab.paneName !== "target") {
     formTable.value?.loadData(fieldList.value);
     gridTable.value?.loadData(fieldList.value);
     queryTable.value?.loadData(fieldList.value);
@@ -286,7 +284,7 @@ const rowDrop = () => {
 };
 
 const getTable = (id: number) => {
-  apiListGenTables(id).then((res) => {
+  apiGetGenTableById(id).then((res) => {
     fieldList.value = res.data?.fieldList as GenTableField[];
   });
 
@@ -297,7 +295,6 @@ const getTable = (id: number) => {
 
 const getFieldTypeList = async () => {
   typeList.value = [];
-
   // 获取数据
   const { data } = await useFieldTypeListApi();
   // 设置属性类型值

@@ -1,6 +1,6 @@
 package io.devpl.backend.domain.param;
 
-import io.devpl.backend.common.PageParam;
+import io.devpl.backend.common.query.PageParam;
 import lombok.Getter;
 import lombok.Setter;
 

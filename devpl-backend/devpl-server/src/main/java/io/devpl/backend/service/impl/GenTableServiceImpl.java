@@ -1,6 +1,7 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
 import com.baomidou.mybatisplus.generator.engine.TemplateEngine;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
@@ -12,7 +13,7 @@ import io.devpl.backend.dao.GenTableMapper;
 import io.devpl.backend.domain.TemplateFillStrategy;
 import io.devpl.backend.domain.enums.FormLayoutEnum;
 import io.devpl.backend.domain.enums.GeneratorTypeEnum;
-import io.devpl.backend.domain.param.Query;
+import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
@@ -60,8 +61,9 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     }
 
     @Override
-    public ListResult<GenTable> page(Query query) {
-        return ListResult.ok(baseMapper.selectPage(getPage(query), getWrapper(query)));
+    public ListResult<GenTable> selectPage(GenTableListParam query) {
+        return ListResult.ok(baseMapper.selectPage(new Page<>(query.getPageIndex(), query.getPageSize()),
+            new LambdaQueryWrapper<GenTable>().eq(StringUtils.hasText(query.getTableName()), GenTable::getTableName, query.getTableName())));
     }
 
     @Override

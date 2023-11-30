@@ -4,7 +4,7 @@ export const useBaseClassApi = (id: Number) => {
 	return http.get('/gen/baseclass/' + id)
 }
 
-export const useBaseClassListApi = () => {
+export const apiListBaseClass = () => {
 	return http.get('/gen/baseclass/list')
 }
 

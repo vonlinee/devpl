@@ -1,4 +1,4 @@
-package io.devpl.backend.common;
+package io.devpl.backend.common.query;
 
 import lombok.Getter;
 import lombok.Setter;
