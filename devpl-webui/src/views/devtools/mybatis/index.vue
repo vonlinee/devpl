@@ -29,11 +29,11 @@
               <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
               <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
                 <template #default="{ row }">
-                  <span>{{ row.type }}</span>
+                  <span>{{ row.dataType }}</span>
                 </template>
                 <template #edit="{ row }">
-                  <vxe-select v-model="row.type" clearable transfer>
-                    <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
+                  <vxe-select v-model="row.dataType" clearable transfer>
+                    <vxe-option v-for="item in msParamValueTypes" :key="item.value" :value="item.name"
                                 :label="item.label"></vxe-option>
                   </vxe-select>
                 </template>
@@ -64,7 +64,7 @@ import { hasText } from "@/utils/tool";
 import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 
-import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
+import { apiGetMapperStatementValueTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "./ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
@@ -84,7 +84,7 @@ const importModalRef = ref();
 
 // 表格实例
 const msParamTable = ref();
-const javaDataTypes = ref();
+const msParamValueTypes = ref();
 
 type RowModel = any
 
@@ -105,8 +105,8 @@ const editConfig = reactive<VxeTablePropTypes.EditConfig<RowModel>>({
 });
 
 onMounted(() => {
-  apiGetDataTypes().then((res) => {
-    javaDataTypes.value = res.data;
+  apiGetMapperStatementValueTypes().then((res) => {
+    msParamValueTypes.value = res.data;
   });
 });
 

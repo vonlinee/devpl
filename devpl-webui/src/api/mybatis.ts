@@ -11,6 +11,7 @@ export const apiGetSampleXmlText = () => {
 /**
  * 获取Mapper中的参数
  * @param content
+ * @param options
  */
 export const getMapperStatementParams = (content: string, options: any) => {
     return http.post('/api/tools/mybatis/ms/params', {
@@ -22,7 +23,7 @@ export const getMapperStatementParams = (content: string, options: any) => {
 /**
  * 获取Mapper中的参数
  */
-export const apiGetDataTypes = () => {
+export const apiGetMapperStatementValueTypes = () => {
     return http.get('/api/tools/mybatis/ms/param/datatypes')
 }
 

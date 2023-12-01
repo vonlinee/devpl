@@ -3,9 +3,9 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.DataTypeVO;
 import io.devpl.backend.domain.ParamNode;
+import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MyBatisParam;
-import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.Vals;
@@ -66,7 +66,11 @@ public class MyBatisToolController {
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<DataTypeVO>> getDataTypes() throws Exception {
-        return Result.ok(Arrays.stream(MapperStatementParamValueType.values()).map(i -> new DataTypeVO(i.name())).collect(Collectors.toList()));
+        return Result.ok(Arrays.stream(MapperStatementParamValueType.values()).map(i -> {
+            DataTypeVO dataTypeVO = new DataTypeVO(i.name());
+            dataTypeVO.setLabel(i.getQualifier());
+            return dataTypeVO;
+        }).collect(Collectors.toList()));
     }
 
     /**
