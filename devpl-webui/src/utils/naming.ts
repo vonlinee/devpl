@@ -19,7 +19,7 @@ export const namingStyles: NamingStrategy[] = [
     label: "小驼峰",
     key: "camelCase",
     transform: (input: string) => {
-      return input.replace(/\_(\w)/g, function (all, letter) {
+      return input.replace(/_(\w)/g, function (all, letter) {
         return letter.toUpperCase()
       })
     },

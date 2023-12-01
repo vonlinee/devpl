@@ -118,7 +118,7 @@ export const isWindows = () => {
 };
 
 export const isMacintosh = () => {
-  navigator.userAgent.match(/Macintosh/i) !== null;
+  return navigator.userAgent.match(/Macintosh/i) !== null;
 };
 
 /**
@@ -126,7 +126,7 @@ export const isMacintosh = () => {
  * @param obj
  * @returns
  */
-const deepClone = (obj: Record<string, any>) => {
+export const deepClone = (obj: Record<string, any>) => {
   const copy: any = Object.assign({}, obj);
   Object.keys(copy).forEach(
     (key) =>

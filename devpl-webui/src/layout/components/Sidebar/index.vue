@@ -7,3 +7,9 @@
 <script setup lang="ts">
 import Menu from './components/Menu.vue'
 </script>
+
+<style lang="scss" scoped>
+.layout-sidebar {
+  height: calc(100vh - var(--theme-header-height));
+}
+</style>
