@@ -16,6 +16,13 @@ export function apiListTemplatesByPage(pageIndex?: number, pageSize?: number, pa
 }
 
 /**
+ * 查询模板类型
+ */
+export function apiListTemplateTypes() {
+  return http.get<TemplateProvider[]>("/api/codegen/template/types");
+}
+
+/**
  * 新增模板
  * @param params
  */

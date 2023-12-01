@@ -1,10 +1,10 @@
 package io.devpl.backend.service;
 
 import io.devpl.backend.domain.ParamNode;
+import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.mybatis.ParseResult;
-import io.devpl.backend.mybatis.tree.TreeNode;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 
@@ -12,12 +12,27 @@ import java.util.List;
 
 public interface MyBatisService {
 
+    /**
+     * 获取MyBatis参数节点
+     *
+     * @param content   MyBatis Mapper Statement
+     * @param inferType 推断参数的类型
+     * @return 参数列表
+     */
     List<ParamNode> getMapperStatementParams(String content, boolean inferType);
 
+    /**
+     * 解析字符串形式的Mapper Statement
+     *
+     * @param mapperStatement mapper statement
+     * @param inferType       是否开启类型推断
+     * @return 解析结果
+     */
     ParseResult parseMapperStatement(String mapperStatement, boolean inferType);
 
     /**
      * 获取可执行的SQL
+     *
      * @param mappedStatement MappedStatement
      * @param boundSql        BoundSql
      * @param parameterObject 参数对象
@@ -33,5 +48,5 @@ public interface MyBatisService {
 
     List<ParamMeta> getParamMetadata(String statement);
 
-    void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId);
+    MapperStatementParamValueType inferType(String paramName);
 }

@@ -3,7 +3,9 @@ package io.devpl.backend.domain;
 public enum TemplateProvider {
 
     Velocity("Velocity", "Velocity", "vm"),
-    FreeMarker("FreeMarker", "Velocity", "ftl");
+    Beetl("Beetl", "Beetl", "btl"),
+    Enjoy("JFinal Enjoy", "Enjoy", "ej"),
+    FreeMarker("FreeMarker", "FreeMarker", "ftl");
 
     private final String providerName;
     private final String provider;

@@ -22,8 +22,9 @@
             <el-button @click="showDialog()">导入</el-button>
             <param-import ref="importModalRef"></param-import>
             <vxe-table show-overflow ref="msParamTable" :border="true" height="400px" row-key header-align="center"
-              :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
-              :edit-config="editConfig">
+                       :data="mapperParams" :checkbox-config="{ checkStrictly: true }"
+                       :tree-config="{ transform: true }"
+                       :edit-config="editConfig">
               <vxe-column field="name" title="参数名" tree-node></vxe-column>
               <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
               <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
@@ -33,7 +34,7 @@
                 <template #edit="{ row }">
                   <vxe-select v-model="row.type" clearable transfer>
                     <vxe-option v-for="item in javaDataTypes" :key="item.value" :value="item.name"
-                      :label="item.label"></vxe-option>
+                                :label="item.label"></vxe-option>
                   </vxe-select>
                 </template>
               </vxe-column>
@@ -48,6 +49,7 @@
               </el-card>
               <el-card>
                 <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
+                <el-checkbox v-model="options.inferByParamName" label="根据名称推断类型" size="large" />
               </el-card>
             </div>
           </pane>
@@ -60,14 +62,20 @@
 <script setup lang="ts">
 import { hasText } from "@/utils/tool";
 import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
-import { Splitpanes, Pane } from 'splitpanes'
+import { Splitpanes, Pane } from "splitpanes";
 
 import { apiGetDataTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "./ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import { appStore } from "@/store";
-import { VxeGridConstructor, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeTablePropTypes } from "vxe-table/types/all";
+import {
+  VxeGridConstructor,
+  VxeTableConstructor,
+  VxeTableDefines,
+  VxeTablePrivateMethods,
+  VxeTablePropTypes
+} from "vxe-table/types/all";
 
 // 数据
 const inputRef = ref();
@@ -124,15 +132,17 @@ interface MsParamNode {
  */
 interface MyBatisToolOptions {
   // 开启自动类型推断，不一定准确
-  enableTypeInference: true
+  enableTypeInference: boolean;
+  inferByParamName: boolean;
 }
 
 // mybatis mapper语句参数
 const mapperParams = ref<MsParamNode[]>();
 
 const options = ref<MyBatisToolOptions>({
-  enableTypeInference: true
-})
+  enableTypeInference: true,
+  inferByParamName: true
+});
 
 const expandAll = () => {
   const $table = msParamTable.value;
@@ -146,7 +156,7 @@ function getParams() {
   let code = inputRef.value.getText();
   if (hasText(code)) {
     getMapperStatementParams(code, toRaw(options.value)).then(value => {
-      nextTick(() => mapperParams.value = value.data)
+      nextTick(() => mapperParams.value = value.data);
 
       msParamTable.value.loadData(toRaw(value.data));
 
@@ -169,16 +179,16 @@ function getSqlOfMapperStatement(real: boolean) {
 }
 
 function showDialog() {
-  importModalRef.value.init()
+  importModalRef.value.init();
 }
 
 const fillSampleMapperStatement = () => {
   apiGetSampleXmlText().then((res) => {
     if (res.code == 2000) {
-      inputRef.value.setText(res.data)
+      inputRef.value.setText(res.data);
     }
-  })
-}
+  });
+};
 
 </script>
 

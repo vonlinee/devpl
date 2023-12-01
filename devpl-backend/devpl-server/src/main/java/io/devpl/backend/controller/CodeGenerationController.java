@@ -41,7 +41,7 @@ public class CodeGenerationController {
         // 生成代码
         List<String> rootDirs = new ArrayList<>(tableIds.length);
         for (Long tableId : tableIds) {
-            rootDirs.add(fileGenService.startCodeGeneration(tableId));
+            rootDirs.add(fileGenService.generateForTable(tableId));
         }
         return Result.ok(rootDirs);
     }

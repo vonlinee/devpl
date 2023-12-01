@@ -22,7 +22,6 @@ interface RowVO {
   defaultValue: string;
 }
 
-const fieldSelectModal = ref();
 const fieldImportModalRef = ref();
 const saveOrUpdateFieldModal = ref();
 

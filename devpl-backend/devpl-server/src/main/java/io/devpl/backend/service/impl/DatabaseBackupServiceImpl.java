@@ -24,7 +24,7 @@ public class DatabaseBackupServiceImpl implements DatabaseBackupService {
     @Override
     public boolean backup(String url, String username, String password, String databaseName, Path path) {
         String baseDir = databaseBackupHistoryMapper.selectMySQLBaseDir();
-        path = FileUtils.createFile(path, true);
+        path = FileUtils.createFileQuietly(path, true);
         if (path == null) {
             return false;
         }

@@ -31,25 +31,11 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
     @Resource
     private GeneratorProperties properties;
 
-    /**
-     * 代码生成器信息
-     */
-    @Nullable
-    private GeneratorInfo generatorInfo;
-
     private String root;
 
     @PostConstruct
     public void initGeneratorConfig() {
         root = new File("").getAbsolutePath() + File.separator + "devpl-server";
-    }
-
-    @Override
-    public GeneratorInfo getGeneratorInfo(boolean refresh) {
-        if (generatorInfo == null || refresh) {
-            generatorInfo = getGeneratorConfig(properties.getTemplate());
-        }
-        return generatorInfo;
     }
 
     @Override
@@ -77,7 +63,6 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        generatorInfo = getGeneratorConfig(properties.getTemplate());
         return true;
     }
 

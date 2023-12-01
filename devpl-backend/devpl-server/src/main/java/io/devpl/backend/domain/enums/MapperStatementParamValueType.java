@@ -11,7 +11,7 @@ public enum MapperStatementParamValueType implements DataType {
 
     NULL(-1, "Null"),
     BOOLEAN(1, "Boolean"),
-    NUMBER(2, "Number"),
+    NUMERIC(2, "Numeric"),
     STRING(3, "String"),
     COLLECTION(4, "Collection");
 

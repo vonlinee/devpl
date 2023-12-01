@@ -2,7 +2,13 @@
   <el-card>
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
-        <el-input v-model="state.queryForm.templateName" placeholder="项目名"></el-input>
+        <el-input v-model="state.queryForm.templateName" placeholder="模板名称"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select v-model="state.queryForm.templateType">
+          <el-option v-for="templateType in templateTypes" :key="templateType.provider" :value="templateType.provider"
+                     :label="templateType.providerName"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -60,11 +66,12 @@ import AddOrUpdate from "./add-or-update.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
-import { apiBatchRemoveTemplateByIds, apiListTemplatesByPage } from "@/api/template";
+import { apiBatchRemoveTemplateByIds, apiListTemplatesByPage, apiListTemplateTypes } from "@/api/template";
 
 const state: DataTableOption = reactive({
   queryForm: {
-    templateName: ""
+    templateName: "",
+    templateType: ""
   },
   primaryKey: "templateId",
   isPage: true,
@@ -80,6 +87,7 @@ const addOrUpdateHandle = (row?: any) => {
 };
 
 const templateContentEditorRef = ref();
+const templateTypes = ref<TemplateProvider[]>();
 
 /**
  * 展示模板内容弹窗
@@ -95,5 +103,11 @@ function showTemplateEditDialog(templateInfo: any) {
   templateContentEditorRef.value.init(templateInfo.templateName, content);
 }
 
-onMounted(() => getDataList());
+onMounted(() => {
+  getDataList();
+
+  apiListTemplateTypes().then((res) => {
+    templateTypes.value = res.data;
+  });
+});
 </script>

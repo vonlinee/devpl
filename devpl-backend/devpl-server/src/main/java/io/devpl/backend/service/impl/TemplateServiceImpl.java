@@ -2,7 +2,6 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -10,12 +9,15 @@ import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.ServerException;
 import io.devpl.backend.dao.TemplateInfoMapper;
 import io.devpl.backend.domain.TemplateProvider;
+import io.devpl.backend.domain.param.TemplateInfoListParam;
+import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateVarInfo;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,10 +31,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 模板服务 实现类
@@ -45,6 +45,21 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     TemplateInfoMapper templateInfoMapper;
     @Resource
     CodeGenProperties codeGenProperties;
+
+    /**
+     * 获取模板类型
+     *
+     * @return 模板类型列表
+     */
+    @Override
+    public List<TemplateProviderVO> listTemplateTypes() {
+        return Arrays.stream(TemplateProvider.values()).map(tp -> {
+            TemplateProviderVO vo = new TemplateProviderVO();
+            vo.setProvider(tp.getProvider());
+            vo.setProviderName(tp.getProviderName());
+            return vo;
+        }).collect(Collectors.toList());
+    }
 
     /**
      * 保存模板
@@ -62,7 +77,25 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Override
     public void render(Long templateId, Map<String, Object> dataModel, Writer out) {
+        TemplateInfo templateInfo = getById(templateId);
+        if (StringUtils.hasText(templateInfo.getContent())) {
+            render(templateInfo.getContent(), dataModel, out);
+        }
+    }
 
+    @Override
+    public void render(String content, Map<String, Object> dataModel, Writer out) {
+        try (StringReader reader = new StringReader(content)) {
+            // 渲染模板
+            String templateName = dataModel.get("templateName").toString();
+            Template template = new Template(templateName, reader, null, "utf-8");
+            template.process(dataModel, out);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw new ServerException("渲染模板失败，请检查模板语法", e);
+        } catch (TemplateException e) {
+            throw new ServerException("模板语法不正确", e);
+        }
     }
 
     /**
@@ -76,7 +109,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         if (CollectionUtils.isEmpty(dataModel)) {
             return content;
         }
-        try (StringReader reader = new StringReader(content); StringWriter sw = new StringWriter();) {
+        try (StringReader reader = new StringReader(content); StringWriter sw = new StringWriter()) {
             // 渲染模板
             String templateName = dataModel.get("templateName").toString();
             Template template = new Template(templateName, reader, null, "utf-8");
@@ -92,13 +125,22 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     }
 
     @Override
-    public IPage<TemplateInfo> listPageTemplates(int pageIndex, int pageSize) {
-        return templateInfoMapper.selectPage(new Page<>(pageIndex, pageSize), new LambdaQueryWrapper<>());
+    public IPage<TemplateInfo> listPageTemplates(TemplateInfoListParam param) {
+        return templateInfoMapper.selectPage(param.asPage(), new LambdaQueryWrapper<TemplateInfo>()
+            .eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType())
+            .like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName()));
     }
 
     @Override
     public List<TemplateSelectVO> listSelectable() {
         return baseMapper.selectTemplateIdAndNames();
+    }
+
+    @Override
+    public List<TemplateInfo> listInternalTemplates() {
+        LambdaQueryWrapper<TemplateInfo> qw = new LambdaQueryWrapper<>();
+        qw.eq(TemplateInfo::getInternal, true);
+        return list(qw);
     }
 
     /**
@@ -108,7 +150,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public void migrateTemplates() {
         String templateLocation = codeGenProperties.getTemplateLocation();
-
+        log.info("开始进行模板迁移");
         Path rootDir = Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
         if (!Files.exists(rootDir)) {
             try {
@@ -129,32 +171,29 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                 List<Path> templateFilePaths = new ArrayList<>();
                 Path start = Files.walkFileTree(templateLocationDir, new FileVisitor<>() {
                     @Override
-                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                         return FileVisitResult.CONTINUE;
                     }
 
                     @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                         templateFilePaths.add(file);
                         return FileVisitResult.CONTINUE;
                     }
 
                     @Override
-                    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    public FileVisitResult visitFileFailed(Path file, IOException exc) {
                         return FileVisitResult.CONTINUE;
                     }
 
                     @Override
-                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
                         return FileVisitResult.CONTINUE;
                     }
                 });
 
-                LambdaQueryWrapper<TemplateInfo> qw = new LambdaQueryWrapper<>();
-                qw.eq(TemplateInfo::getInternal, true);
-                List<TemplateInfo> list = list(qw);
 
-                Map<String, TemplateInfo> map = CollectionUtils.toMap(list, TemplateInfo::getTemplatePath);
+                Map<String, TemplateInfo> map = CollectionUtils.toMap(listInternalTemplates(), TemplateInfo::getTemplatePath);
 
                 LocalDateTime now = LocalDateTime.now();
                 List<TemplateInfo> templateInfos = new ArrayList<>();
@@ -168,7 +207,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     String extName = FileUtils.getExtensionName(templateFile, null);
                     for (TemplateProvider provider : TemplateProvider.values()) {
                         if (provider.getExtension().equals(extName)) {
-                            templateInfo.setProvider(provider.getProviderName());
+                            templateInfo.setProvider(provider.getProvider());
                             break;
                         }
                     }
@@ -179,7 +218,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     templateInfo.setType(1);
                     templateInfo.setCreateTime(now);
                     templateInfo.setUpdateTime(now);
-                    templateInfo.setRemark(FileUtils.byteCountToDisplaySize(Files.size(templateFile), "%.2f"));
+                    templateInfo.setRemark("");
                     try {
                         templateInfo.setContent(FileUtils.readString(templateFile.toFile(), StandardCharsets.UTF_8));
                     } catch (IOException e) {
@@ -190,7 +229,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                 }
                 saveOrUpdateBatch(templateInfos);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error("模板迁移失败", e);
             }
         }
     }
@@ -200,6 +239,12 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         return templatePath.replace("\\", "/").replace("\\\\", "/");
     }
 
+    /**
+     * TODO 解析模板变量
+     *
+     * @param templateInfo 模板信息
+     * @return 模板变量信息
+     */
     @Override
     public List<TemplateVarInfo> introspect(TemplateInfo templateInfo) {
         return Collections.emptyList();

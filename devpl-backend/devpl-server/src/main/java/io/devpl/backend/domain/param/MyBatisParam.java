@@ -16,4 +16,9 @@ public class MyBatisParam {
      * 开启自动类型推断
      */
     private Boolean enableTypeInference;
+
+    /**
+     * 根据参数名称推断类型
+     */
+    private Boolean inferByParamName;
 }

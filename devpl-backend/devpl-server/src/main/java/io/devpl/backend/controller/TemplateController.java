@@ -1,8 +1,9 @@
 package io.devpl.backend.controller;
 
-import io.devpl.backend.common.query.PageParam;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.param.TemplateInfoListParam;
+import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.service.TemplateService;
@@ -55,6 +56,16 @@ public class TemplateController {
     }
 
     /**
+     * 获取模板类型
+     *
+     * @return 是否成功
+     */
+    @GetMapping(value = "/types")
+    public Result<List<TemplateProviderVO>> listTemplateTYpes() {
+        return Result.ok(templateService.listTemplateTypes());
+    }
+
+    /**
      * 根据ID更新
      *
      * @param templateInfo 模板信息
@@ -98,8 +109,8 @@ public class TemplateController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public ListResult<TemplateInfo> list(PageParam query) {
-        return ListResult.ok(templateService.listPageTemplates(query.getPageIndex(), query.getPageSize()));
+    public ListResult<TemplateInfo> list(TemplateInfoListParam param) {
+        return ListResult.ok(templateService.listPageTemplates(param));
     }
 
     /**

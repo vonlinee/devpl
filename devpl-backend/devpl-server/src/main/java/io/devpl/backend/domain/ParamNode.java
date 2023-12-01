@@ -48,7 +48,7 @@ public class ParamNode {
     /**
      * 参数值
      */
-    private Object value = "NULL";
+    private Object value;
 
     /**
      * 参数类型，枚举值

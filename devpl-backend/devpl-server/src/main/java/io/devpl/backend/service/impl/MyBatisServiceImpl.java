@@ -2,12 +2,13 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.generator.util.TypeUtils;
 import io.devpl.backend.domain.ParamNode;
-import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
+import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.*;
 import io.devpl.backend.mybatis.tree.TreeNode;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.ReflectionUtils;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
@@ -72,21 +73,21 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param mappedStatement mapper语句标签
      * @return ognl变量列表
      */
-    public Set<ParamMeta> getOgnlVar(MappedStatement mappedStatement) {
+    private Set<ParamMeta> getOgnlVar(MappedStatement mappedStatement) {
         SqlSource sqlSource = mappedStatement.getSqlSource();
-        HashSet<ParamMeta> result = new HashSet<>();
+        Map<String, ParamMeta> result = new HashMap<>();
         if (sqlSource instanceof DynamicSqlSource dss) {
             SqlNode rootNode = ReflectionUtils.getTypedValue(dss, "rootSqlNode", null);
-            searchExpressions(rootNode, result);
+            searchParams(rootNode, result, null);
         }
-        return result;
+        return new HashSet<>(result.values());
     }
 
     /**
      * @param ognlVar ognl变量列表
      * @return 转化成树形结构
      */
-    public TreeNode<ParamMeta> tree(Set<ParamMeta> ognlVar) {
+    private TreeNode<ParamMeta> tree(Set<ParamMeta> ognlVar) {
         TreeNode<ParamMeta> forest = new TreeNode<>(new ParamMeta("root"));
         TreeNode<ParamMeta> current = forest;
         for (ParamMeta expression : ognlVar) {
@@ -210,8 +211,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param rows       存储转换结果
      * @param parentId   父节点ID
      */
-    @Override
-    public void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId) {
+    private void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId) {
         ParamNode parentRow = new ParamNode();
         parentRow.setId(rows.size());
         parentRow.setKey(rows.size());
@@ -286,9 +286,9 @@ public class MyBatisServiceImpl implements MyBatisService {
         if (paramValueType == null) {
             // 根据字符串推断类型，结果只能是简单的类型，不会很复杂
             if (TypeUtils.isInteger(literalValue)) {
-                paramValueType = MapperStatementParamValueType.NUMBER;
+                paramValueType = MapperStatementParamValueType.NUMERIC;
             } else if (TypeUtils.isDouble(literalValue)) {
-                paramValueType = MapperStatementParamValueType.NUMBER;
+                paramValueType = MapperStatementParamValueType.NUMERIC;
             } else {
                 // 非数字类型的其他类型都可以当做字符串处理
                 // 推断失败
@@ -309,7 +309,7 @@ public class MyBatisServiceImpl implements MyBatisService {
     private Object parseLiteralValue(String literalValue, MapperStatementParamValueType paramValueType) {
         Object val;
         switch (paramValueType) {
-            case NUMBER -> val = Long.parseLong(literalValue);
+            case NUMERIC -> val = Long.parseLong(literalValue);
             case COLLECTION -> val = LocalDateTime.parse(literalValue);
             default -> val = literalValue;
         }
@@ -319,50 +319,65 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     /**
      * 查找MyBatis的MappedStatement中所有出现的变量引用，只能出现文本中出现的变量
-     * MyBatis未提供API来遍历，因此使用反射来获取
+     * MyBatis未提供响应的API来遍历，因此使用反射来获取
+     * 可以考虑通过SqlNode#apply方法来进行解析
      *
-     * @param parent      根节点
-     * @param expressions 存放结果，未去重
+     * @param parent       根节点
+     * @param paramMetaMap 存放结果
+     * @param item         如果父节点是ForEachSqlNode，则item有值，为foreach标签里的 item 值
+     * @see MappedStatement
      */
     @SuppressWarnings("unchecked")
-    private void searchExpressions(SqlNode parent, Set<ParamMeta> expressions) {
+    private void searchParams(SqlNode parent, Map<String, ParamMeta> paramMetaMap, String item) {
         if (parent instanceof MixedSqlNode msn) {
+            // 混合节点类型
             List<SqlNode> contents = (List<SqlNode>) ReflectionUtils.getValue(msn, "contents");
             if (contents != null) {
                 for (SqlNode content : contents) {
-                    searchExpressions(content, expressions);
+                    searchParams(content, paramMetaMap, item);
                 }
             }
         } else if (parent instanceof StaticTextSqlNode stsn) {
+            // 文本类型节点 一般是没有被sql标签包围的文本部分
             String sqlText = (String) ReflectionUtils.getValue(stsn, "text");
             if (sqlText != null && !sqlText.isEmpty()) {
-                find(sqlText, expressions);
+                sqlText = sqlText.trim();
+                findVariableReference(sqlText, paramMetaMap, item);
             }
         } else if (parent instanceof TextSqlNode tsn) {
             String sqlText = (String) ReflectionUtils.getValue(tsn, "text");
             if (sqlText != null && !sqlText.isEmpty()) {
-                find(sqlText, expressions);
+                sqlText = sqlText.trim();
+                findVariableReference(sqlText, paramMetaMap, item);
             }
         } else if (parent instanceof ForEachSqlNode fesn) {
-            // 集合类型
+            /**
+             * 在使用mybatis的foreach遍历查询的时候，item起的名字不能跟后面的字段的参数名一样，否则会影响到查询的结果
+             */
             String expression = (String) ReflectionUtils.getValue(fesn, "collectionExpression");
-            expressions.add(new ParamMeta(expression));
-            SqlNode contents = (SqlNode) ReflectionUtils.getValue(fesn, "contents");
-            searchExpressions(contents, expressions);
+            // 应忽略item参数
+            if (item == null) {
+                item = ReflectionUtils.getTypedValue(fesn, "item", "");
+            }
+            if (!Objects.equals(expression, item)) {
+                paramMetaMap.put(expression, new ParamMeta(expression));
+                SqlNode contents = (SqlNode) ReflectionUtils.getValue(fesn, "contents");
+                searchParams(contents, paramMetaMap, item);
+            }
         } else if (parent instanceof IfSqlNode ifsn) {
             // IfSqlNode会导致解析到的表达式重复
             // test 条件
             String testCondition = (String) ReflectionUtils.getValue(ifsn, "test");
-            parseIfExpression(testCondition, expressions);
+            parseIfExpression(testCondition, paramMetaMap);
             // 解析条件表达式中使用的表达式变量  Ognl表达式
             SqlNode content = (SqlNode) ReflectionUtils.getValue(ifsn, "contents");
-            searchExpressions(content, expressions);
+            searchParams(content, paramMetaMap, item);
         } else if (parent instanceof WhereSqlNode wsn) {
             SqlNode contents = (SqlNode) ReflectionUtils.getValue(wsn, "contents");
-            searchExpressions(contents, expressions);
+            searchParams(contents, paramMetaMap, item);
         } else if (parent instanceof SetSqlNode ssn) {
             SqlNode contents = (SqlNode) ReflectionUtils.getValue(ssn, "contents");
-            searchExpressions(contents, expressions);
+            searchParams(contents, paramMetaMap, item);
         } else if (parent instanceof ChooseSqlNode csn) {
             List<SqlNode> ifSqlNodes = (List<SqlNode>) ReflectionUtils.getValue(csn, "ifSqlNodes");
             if (ifSqlNodes != null) {
@@ -371,26 +386,29 @@ public class MyBatisServiceImpl implements MyBatisService {
                     ifSqlNodes.add(defaultSqlNode);
                 }
                 for (SqlNode sqlNode : ifSqlNodes) {
-                    searchExpressions(sqlNode, expressions);
+                    searchParams(sqlNode, paramMetaMap, item);
                 }
             }
+        } else {
+            log.info("未处理的节点类型 {}", parent.getClass());
         }
     }
 
-    private void parseIfExpression(String testCondition, Set<ParamMeta> expressions) {
+    private void parseIfExpression(String testCondition, Map<String, ParamMeta> expressions) {
         try {
             Object node = Ognl.parseExpression(testCondition);
             if (node instanceof ExpressionNode expressionNode) {
                 searchOgnlExpressionNode(expressionNode, expressions);
             } else if (node instanceof ASTProperty astPropertyNode) {
-                expressions.add(new ParamMeta(astPropertyNode.toString()));
+                ParamMeta meta = new ParamMeta(astPropertyNode.toString());
+                expressions.put(meta.getName(), meta);
             }
         } catch (OgnlException e) {
             // ignore
         }
     }
 
-    private void searchOgnlExpressionNode(SimpleNode expressionNode, Set<ParamMeta> results) {
+    private void searchOgnlExpressionNode(SimpleNode expressionNode, Map<String, ParamMeta> results) {
         if (expressionNode instanceof ExpressionNode) {
             // 比较
             if (expressionNode instanceof ASTNotEq notEq) {
@@ -401,11 +419,12 @@ public class MyBatisServiceImpl implements MyBatisService {
                 searchChildren(eqNode, results);
             }
         } else if (expressionNode instanceof ASTChain chainNode) {
-            results.add(new ParamMeta(chainNode.toString()));
+            ParamMeta meta = new ParamMeta(chainNode.toString());
+            results.put(meta.getName(), meta);
         }
     }
 
-    private void searchChildren(SimpleNode parent, Set<ParamMeta> results) {
+    private void searchChildren(SimpleNode parent, Map<String, ParamMeta> results) {
         int childrenCount = parent.jjtGetNumChildren();
         for (int i = 0; i < childrenCount; i++) {
             Node node = parent.jjtGetChild(i);
@@ -416,10 +435,10 @@ public class MyBatisServiceImpl implements MyBatisService {
     /**
      * 递归寻找$引用的表达式，对应的SqlNode是 TextSqlNode
      *
-     * @param content     文本，包含${xxx}或者#{xxx}
-     * @param expressions 存放结果的容器
+     * @param content      文本，包含${xxx}或者#{xxx}
+     * @param paramMetaMap 存放结果的容器
      */
-    private void find(String content, Set<ParamMeta> expressions) {
+    private void findVariableReference(String content, Map<String, ParamMeta> paramMetaMap, String item) {
         content = content.trim().replace("\n", "");
         if (content.isEmpty()) {
             return;
@@ -429,7 +448,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         for (int i = 0; i < chars.length; i++) {
             // MyBatis要求 $和{之间没有空格才有效
             // 且不能嵌套
-            // Mapper文件语法正确的情况下，一轮遍历即可，不会回头
+            // Mapper语句语法正确的情况下，一轮遍历即可，不会回头
             if ((chars[i] == '$' || chars[i] == '#') && chars[i + 1] == '{') {
                 // 找到}
                 fromIndex = i + 2;
@@ -440,10 +459,34 @@ public class MyBatisServiceImpl implements MyBatisService {
                     }
                     endIndex++;
                 }
-                expressions.add(new ParamMeta(String.valueOf(Arrays.copyOfRange(chars, fromIndex, endIndex))));
+
+                String paramName = StringUtils.toString(chars, fromIndex, endIndex);
+                if (Objects.equals(paramName, item)) {
+                    continue;
+                }
+                ParamMeta meta = new ParamMeta(paramName);
+                meta.setType(inferType(meta.getName()).getType());
+                paramMetaMap.put(meta.getName(), meta);
                 i = endIndex + 1;
             }
         }
     }
 
+    /**
+     * 根据名称推断类型
+     * TODO 可以根据数据库字段来解析类型
+     *
+     * @param paramName 参数名称
+     * @return Mapper参数类型
+     */
+    @Override
+    public MapperStatementParamValueType inferType(String paramName) {
+        MapperStatementParamValueType type = MapperStatementParamValueType.NULL;
+        if (StringUtils.endsWithIgnoreCase(paramName, "name")) {
+            type = MapperStatementParamValueType.STRING;
+        } else if (StringUtils.endsWithIgnoreCase(paramName, "num")) {
+            type = MapperStatementParamValueType.NUMERIC;
+        }
+        return type;
+    }
 }

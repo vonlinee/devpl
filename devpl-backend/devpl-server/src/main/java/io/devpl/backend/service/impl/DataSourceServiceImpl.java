@@ -1,7 +1,6 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
@@ -64,12 +63,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
 
     @Override
     public ListResult<DbConnInfo> listPage(DbConnInfoListParam param) {
-        Page<DbConnInfo> page = new Page<>(param.getPage(), param.getLimit());
         LambdaQueryWrapper<DbConnInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(param.getConnName()), DbConnInfo::getConnName, param.getConnName());
         wrapper.eq(StringUtils.hasText(param.getDriverType()), DbConnInfo::getDriverType, param.getDriverType());
-        page = dbConnInfoMapper.selectPage(page, wrapper);
-        return ListResult.ok(page);
+        return ListResult.ok(dbConnInfoMapper.selectPage(param.asPage(), wrapper));
     }
 
     @Override

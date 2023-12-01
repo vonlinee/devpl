@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 表文件生成记录表
@@ -12,7 +13,8 @@ import lombok.Data;
  * @author vonlinee vonlinee@163.com
  * @since 1.0.0 2023-11-24
  */
-@Data
+@Getter
+@Setter
 @TableName("table_file_generation")
 public class TableFileGeneration {
     /**
@@ -40,7 +42,7 @@ public class TableFileGeneration {
     private String fileName;
 
     /**
-     * 保存路径
+     * 保存路径: 目录
      */
     @TableField(value = "save_path")
     private String savePath;

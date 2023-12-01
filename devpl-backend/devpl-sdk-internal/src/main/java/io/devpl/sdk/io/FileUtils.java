@@ -34,7 +34,7 @@ public class FileUtils {
     /**
      * An empty array of type <code>File</code>.
      */
-    public static final File[] EMPTY_FILE_ARRAY = new File[0];
+    private static final File[] EMPTY_FILE_ARRAY = new File[0];
 
     /**
      * Instances should NOT be constructed in standard programming.
@@ -1420,7 +1420,6 @@ public class FileUtils {
         InputStream in = null;
         try {
             in = new CheckedInputStream(new FileInputStream(file), checksum);
-            // IOUtils.copy(in, new NullOutputStream());
         } finally {
             IOUtils.closeQuietly(in);
         }
@@ -1533,20 +1532,18 @@ public class FileUtils {
      * @since 3.0.6
      */
     public static boolean clean(File directory) throws RuntimeException {
-        if (directory == null || directory.exists() == false || false == directory.isDirectory()) {
+        if (directory == null || !directory.exists() || !directory.isDirectory()) {
             return true;
         }
-
         final File[] files = directory.listFiles();
         if (null != files) {
             for (File childFile : files) {
-                if (false == del(childFile)) {
+                if (!del(childFile)) {
                     // 删除一个出错则本次删除任务失败
                     return false;
                 }
             }
         }
-
         return true;
     }
 
@@ -1566,7 +1563,7 @@ public class FileUtils {
      * @see Files#delete(Path)
      */
     public static boolean del(File file) throws RuntimeException {
-        if (file == null || false == file.exists()) {
+        if (file == null || !file.exists()) {
             // 如果文件不存在或已被删除，此处返回true表示删除成功
             return true;
         }
@@ -1574,7 +1571,7 @@ public class FileUtils {
         if (file.isDirectory()) {
             // 清空目录下所有文件和目录
             boolean isOk = clean(file);
-            if (false == isOk) {
+            if (!isOk) {
                 return false;
             }
         }
@@ -1772,12 +1769,38 @@ public class FileUtils {
     }
 
     /**
+     * 创建文件，不抛任何异常
+     *
+     * @param file      文件
+     * @param overwrite 是否覆盖
+     * @return 原File对象
+     */
+    public static File createFileQuietly(File file, boolean overwrite) {
+        boolean res;
+        try {
+            if (file.exists()) {
+                if (overwrite) {
+                    // 覆盖
+                    res = file.delete();
+                }
+            } else {
+                File parentFile = file.getParentFile();
+                if (!parentFile.exists() && parentFile.createNewFile()) {
+                    res = file.createNewFile();
+                }
+            }
+        } catch (IOException ignore) {
+        }
+        return file;
+    }
+
+    /**
      * 创建文件，如果文件存在，根据参数决定是否覆盖，不存在则进行创建
      *
      * @param path      确保指向一个文件，而不是目录
      * @param overwrite 是否覆盖
      */
-    public static Path createFile(Path path, boolean overwrite) {
+    public static Path createFileQuietly(Path path, boolean overwrite) {
         try {
             if (Files.exists(path)) {
                 if (overwrite) {
@@ -1790,10 +1813,9 @@ public class FileUtils {
                 }
                 return Files.createFile(path);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignore) {
         }
-        return null;
+        return path;
     }
 
     /**

@@ -16,7 +16,7 @@ public interface FileGenerationService {
      * @param tableId gen_table主键
      * @return 生成文件的根目录
      */
-    String startCodeGeneration(Long tableId);
+    String generateForTable(Long tableId);
 
     /**
      * 获取代码生成绝对路径

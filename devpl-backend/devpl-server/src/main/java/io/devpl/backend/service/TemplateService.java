@@ -2,6 +2,8 @@ package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.devpl.backend.domain.param.TemplateInfoListParam;
+import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateVarInfo;
@@ -14,6 +16,13 @@ import java.util.Map;
  * 模板 Service
  */
 public interface TemplateService extends IService<TemplateInfo> {
+
+    /**
+     * 所有模板类型列表
+     *
+     * @return 模板类型列表
+     */
+    List<TemplateProviderVO> listTemplateTypes();
 
     /**
      * 保存模板
@@ -33,6 +42,15 @@ public interface TemplateService extends IService<TemplateInfo> {
     void render(Long templateId, Map<String, Object> dataModel, Writer out);
 
     /**
+     * 模板渲染
+     *
+     * @param content   模板内容
+     * @param dataModel 数据
+     * @param out       输入位置
+     */
+    void render(String content, Map<String, Object> dataModel, Writer out);
+
+    /**
      * 渲染模板
      *
      * @param template  模板内容
@@ -44,11 +62,9 @@ public interface TemplateService extends IService<TemplateInfo> {
     /**
      * 分页查询
      *
-     * @param pageIndex 第几页
-     * @param pageSize  每页大小
      * @return 分页数据
      */
-    IPage<TemplateInfo> listPageTemplates(int pageIndex, int pageSize);
+    IPage<TemplateInfo> listPageTemplates(TemplateInfoListParam param);
 
     /**
      * 模板选择列表
@@ -56,6 +72,8 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 模板选择列表
      */
     List<TemplateSelectVO> listSelectable();
+
+    List<TemplateInfo> listInternalTemplates();
 
     /**
      * 模板迁移，包含模板文件迁移及相应的模板信息

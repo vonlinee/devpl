@@ -130,38 +130,6 @@ public final class StringUtils {
     }
 
     /**
-     * <p>Checks if any of the CharSequences are empty ("") or null.</p>
-     *
-     * <pre>
-     * Utils.isAnyEmpty((String) null)    = true
-     * Utils.isAnyEmpty((String[]) null)  = false
-     * Utils.isAnyEmpty(null, "foo")      = true
-     * Utils.isAnyEmpty("", "bar")        = true
-     * Utils.isAnyEmpty("bob", "")        = true
-     * Utils.isAnyEmpty("  bob  ", null)  = true
-     * Utils.isAnyEmpty(" ", "bar")       = false
-     * Utils.isAnyEmpty("foo", "bar")     = false
-     * Utils.isAnyEmpty(new String[]{})   = false
-     * Utils.isAnyEmpty(new String[]{""}) = true
-     * </pre>
-     *
-     * @param css the CharSequences to check, maybe null or empty
-     * @return {@code true} if any of the CharSequences are empty or null
-     * @since 3.2
-     */
-    public static boolean hasText(final CharSequence... css) {
-        if (css == null) {
-            return false;
-        }
-        for (final CharSequence cs : css) {
-            if (isEmpty(cs)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param sequence
      * @param c
      * @param len      长度
@@ -1018,7 +986,6 @@ public final class StringUtils {
             // no occurrence -> can return input as-is
             return inString;
         }
-
         int capacity = inString.length();
         if (newPattern.length() > oldPattern.length()) {
             capacity += 16;
@@ -2223,5 +2190,17 @@ public final class StringUtils {
      */
     public static String subPre(CharSequence string, int toIndexExclude) {
         return sub(string, 0, toIndexExclude);
+    }
+
+    /**
+     * 将字符串组转为字符串
+     *
+     * @param chars     字符数组
+     * @param fromIndex 开始索引
+     * @param endIndex  结束索引
+     * @return 结果
+     */
+    public static String toString(char[] chars, int fromIndex, int endIndex) {
+        return String.valueOf(Arrays.copyOfRange(chars, fromIndex, endIndex));
     }
 }

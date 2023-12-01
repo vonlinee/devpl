@@ -33,9 +33,8 @@ public class TemplateArgumentServiceImpl extends ServiceImpl<TemplateArgumentMap
             argument.setCreateTime(now);
             argument.setUpdateTime(now);
             arguments.add(argument);
-
-            save(argument);
         }
+        saveBatch(arguments);
     }
 
     @Override

@@ -38,12 +38,12 @@ public class DataSourceController {
     /**
      * 获取数据源列表
      *
-     * @param query 查询参数
+     * @param param 查询参数
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public ListResult<DbConnInfo> page(DbConnInfoListParam query) {
-        return datasourceService.listPage(query);
+    public ListResult<DbConnInfo> page(DbConnInfoListParam param) {
+        return datasourceService.listPage(param);
     }
 
     /**

@@ -1,27 +1,31 @@
 import http from "@/utils/http";
+import { Keys } from "@/api/index";
+
+/**
+ * 分页查询数据源
+ * @param page
+ * @param limit
+ * @param params
+ */
+export const apiListDataSource = (page: number = 1, limit: number = 10, params: any = {}) => {
+  return http.get("/api/gen/datasource/page", {
+    pageIndex: page,
+    pageSize: limit,
+    ...params
+  });
+};
+
+/**
+ * 根据ID列表删除数据源
+ * @param ids
+ */
+export const apiRemoveDataSourceByIds = (ids: Keys) => {
+  return http.delete("/api/gen/datasource", ids);
+};
 
 export const useDataSourceTestApi = (id: number) => {
   return http.get<TestConnVO>("/api/gen/datasource/test/" + id);
 };
-
-export interface TestConnVO {
-  /**
-   * 是否失败
-   */
-  failed: boolean;
-  /**
-   * 数据库类型
-   */
-  dbmsType: string;
-  /**
-   * 是否使用ssl连接
-   */
-  useSsl: boolean;
-  /**
-   * 连接失败时的错误信息
-   */
-  errorMsg: string;
-}
 
 /**
  * 测试数据库连接
@@ -118,7 +122,7 @@ export const apiListSelectableDataSources = (internal?: boolean) => {
  * @returns 单个数据库的所有表
  */
 export const apiListTableNames = (id: number, dbName: string, pattern?: string) => {
-  return http.get<string[]>('/api/gen/datasource/table/names', {
+  return http.get<string[]>("/api/gen/datasource/table/names", {
     dataSourceId: id,
     databaseName: dbName,
     pattern: pattern

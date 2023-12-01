@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -46,8 +46,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private TemplateService templateService;
     @Resource
-    private GeneratorConfigService generatorConfigService;
-    @Resource
     private FileStorageService fileStorageService;
     @Resource
     private TableFileGenerationService tableFileGenerationService;
@@ -66,7 +64,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      * @see GenTableService#importSingleTable(TableImportParam)
      */
     @Override
-    public String startCodeGeneration(Long tableId) {
+    public String generateForTable(Long tableId) {
         final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
 
         List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(tableId);
@@ -76,18 +74,20 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
 
-            try (StringWriter sw = new StringWriter()) {
-                templateService.render(tfg.getTemplateId(), dataModel, sw);
-                String content = sw.toString();
-                // 渲染模板并输出到文件
-                // 文件保存路径
-                String path = parentDirectory + "/" + tfg.getSavePath();
-                log.info("模板:{} 保存路径:{}", tfg.getTemplateName(), tfg.getSavePath());
-                try {
-                    FileUtils.writeStringToFile(new File(codeGenProperties.getCodeGenRootDir(), path), content, StandardCharsets.UTF_8.name());
-                } catch (Exception exception) {
-                    log.error("写入模板失败{}", tfg.getTemplateName());
-                }
+            String saveLocation = parentDirectory + File.separator + tfg.getSavePath() + File.separator + tfg.getFileName();
+
+            saveLocation = getAbsolutePath(saveLocation);
+
+            log.info("保存地址 {}", saveLocation);
+            File file = new File(saveLocation);
+
+            FileUtils.createFileQuietly(file, true);
+            if (file.exists()) {
+                log.info("创建文件成功 {}", file.getAbsolutePath());
+            }
+
+            try (Writer writer = new FileWriter(file)) {
+                templateService.render(tfg.getTemplateId(), dataModel, writer);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

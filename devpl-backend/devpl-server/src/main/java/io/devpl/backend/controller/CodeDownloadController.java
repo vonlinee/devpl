@@ -32,7 +32,7 @@ public class CodeDownloadController {
             // 生成代码
             for (String tableId : tableIds.split(",")) {
 
-                String root = codeGenService.getAbsolutePath(codeGenService.startCodeGeneration(Long.parseLong(tableId)));
+                String root = codeGenService.getAbsolutePath(codeGenService.generateForTable(Long.parseLong(tableId)));
 
                 File file = new File(root);
 
