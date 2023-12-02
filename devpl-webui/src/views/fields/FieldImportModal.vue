@@ -31,6 +31,10 @@ const sqlEditorRef = ref<typeof MonacoEditor>();
 const jsonEditorRef = ref<typeof MonacoEditor>();
 // TS/JS
 const tsOrJsEditorRef = ref<typeof MonacoEditor>();
+
+const html1EditorRef = ref<typeof MonacoEditor>();
+const html2EditorRef = ref<typeof MonacoEditor>();
+
 const submit = () => {
   const inputType: string = activeTabName.value;
   let text = "";
@@ -54,7 +58,6 @@ const submit = () => {
     alert("输入文本为空");
   }
   apiParseFields({ type: inputType, content: text }).then((res) => {
-
     const existed = fields.value || [];
     res.data?.forEach(i => {
       if (!existed.find(f => f.fieldKey == i.fieldKey)) {
@@ -106,6 +109,12 @@ const onModalClose = () => {
             </el-tab-pane>
             <el-tab-pane label="TS/JS" name="ts/js">
               <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
+            </el-tab-pane>
+            <el-tab-pane label="HTML文本" name="html1">
+              <monaco-editor ref="html1EditorRef" language="text" height="480px"></monaco-editor>
+            </el-tab-pane>
+            <el-tab-pane label="HTML Dom" name="html2">
+              <monaco-editor ref="html2EditorRef" language="html" height="480px"></monaco-editor>
             </el-tab-pane>
           </el-tabs>
         </Pane>

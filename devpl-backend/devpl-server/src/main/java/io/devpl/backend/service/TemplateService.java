@@ -8,6 +8,7 @@ import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateVarInfo;
 
+import java.io.File;
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
@@ -46,16 +47,25 @@ public interface TemplateService extends IService<TemplateInfo> {
      *
      * @param content   模板内容
      * @param dataModel 数据
-     * @param out       输入位置
+     * @param out       输出位置
      */
     void render(String content, Map<String, Object> dataModel, Writer out);
 
     /**
-     * 渲染模板
+     * 模板渲染 直接渲染文件模板
+     *
+     * @param template  模板文件
+     * @param dataModel 模板数据
+     * @param out       输出位置
+     */
+    void render(File template, Map<String, Object> dataModel, Writer out);
+
+    /**
+     * 渲染模板，用于模板内容比较短的情况
      *
      * @param template  模板内容
      * @param dataModel 数据模型
-     * @return 渲染后的模板
+     * @return 结果字符串
      */
     String render(String template, Map<String, Object> dataModel);
 
@@ -73,6 +83,11 @@ public interface TemplateService extends IService<TemplateInfo> {
      */
     List<TemplateSelectVO> listSelectable();
 
+    /**
+     * 查询所有系统预设模板信息
+     *
+     * @return 系统预设模板列表
+     */
     List<TemplateInfo> listInternalTemplates();
 
     /**

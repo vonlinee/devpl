@@ -78,6 +78,10 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public void render(Long templateId, Map<String, Object> dataModel, Writer out) {
         TemplateInfo templateInfo = getById(templateId);
+        if (templateInfo == null) {
+            log.error("模板不存在 {}", templateId);
+            return;
+        }
         if (StringUtils.hasText(templateInfo.getContent())) {
             render(templateInfo.getContent(), dataModel, out);
         }
@@ -96,6 +100,11 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         } catch (TemplateException e) {
             throw new ServerException("模板语法不正确", e);
         }
+    }
+
+    @Override
+    public void render(File template, Map<String, Object> dataModel, Writer out) {
+
     }
 
     /**

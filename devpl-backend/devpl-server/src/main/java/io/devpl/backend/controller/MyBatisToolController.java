@@ -55,7 +55,7 @@ public class MyBatisToolController {
      * JSON传参
      */
     @PostMapping("/ms/params")
-    public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) throws Exception {
+    public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
         String content = param.getMapperStatement();
         Assert.hasText(content, "文本为空");
         return Result.ok(myBatisService.getMapperStatementParams(content, Vals.nil(param.getEnableTypeInference(), true)));
@@ -65,7 +65,7 @@ public class MyBatisToolController {
      * 获取Mapper Statement的参数值类型列表
      */
     @GetMapping("/ms/param/datatypes")
-    public Result<List<DataTypeVO>> getDataTypes() throws Exception {
+    public Result<List<DataTypeVO>> getDataTypes() {
         return Result.ok(Arrays.stream(MapperStatementParamValueType.values()).map(i -> {
             DataTypeVO dataTypeVO = new DataTypeVO(i.name());
             dataTypeVO.setLabel(i.getQualifier());

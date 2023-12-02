@@ -1773,25 +1773,30 @@ public class FileUtils {
      *
      * @param file      文件
      * @param overwrite 是否覆盖
-     * @return 原File对象
+     * @return 是否成功，不抛出异常
      */
-    public static File createFileQuietly(File file, boolean overwrite) {
-        boolean res;
+    public static boolean createFileQuietly(File file, boolean overwrite) {
+        boolean res = false;
         try {
             if (file.exists()) {
                 if (overwrite) {
                     // 覆盖
                     res = file.delete();
                 }
-            } else {
+            }
+            if (file.isFile()) {
                 File parentFile = file.getParentFile();
-                if (!parentFile.exists() && parentFile.createNewFile()) {
+                // File#mkdirs创建文件夹连同该文件夹的父文件夹，如果创建成功返回true，创建失败返回false。创建失败没有异常抛出。
+                if (!parentFile.exists() && parentFile.mkdirs()) {
                     res = file.createNewFile();
                 }
+            } else if (file.isDirectory()) {
+                res = file.mkdirs();
             }
         } catch (IOException ignore) {
+            res = false;
         }
-        return file;
+        return res;
     }
 
     /**

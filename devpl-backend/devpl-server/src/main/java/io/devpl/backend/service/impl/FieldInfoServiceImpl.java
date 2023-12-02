@@ -15,6 +15,9 @@ import io.devpl.backend.tools.parser.java.MetaField;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,6 +30,7 @@ import java.util.regex.Pattern;
 public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo> implements FieldInfoService {
 
     private final Json5 json5 = new Json5(Json5Options.builder().build().remainComment(true));
+    Pattern javaIdentifierPattern = Pattern.compile("^([a-zA-Z_$][a-zA-Z\\d_$]*)$");
 
     @Override
     public List<FieldInfo> listFields(FieldInfoListParam param) {
@@ -59,8 +63,6 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         }
         return fieldInfoList;
     }
-
-    Pattern javaIdentifierPattern = Pattern.compile("^([a-zA-Z_$][a-zA-Z\\d_$]*)$");
 
     /**
      * TODO 校验字段名称
@@ -152,5 +154,13 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             log.error("[字段解析 JAVA] 解析失败", e);
         }
         return Collections.emptyList();
+    }
+
+    public void parseHeaderTitle() {
+
+    }
+
+    public static void main(String[] args) {
+
     }
 }
