@@ -41,6 +41,7 @@ export default defineComponent({
       type: Object,
       required: false,
       default: () => {
+        return {};
       }
     },
     minimap: {
@@ -92,7 +93,7 @@ export default defineComponent({
     const editorBoxRef = ref<HTMLDivElement>();
 
     // 编辑器实例
-    let monacoEditor: monaco.editor.IStandaloneCodeEditor | undefined = undefined;
+    let monacoEditor: monaco.editor.IStandaloneCodeEditor;
     onMounted(() => {
       if (!monacoEditor && editorBoxRef.value) {
         monacoEditor = monaco.editor.create(editorBoxRef.value, editorOptions);
@@ -156,7 +157,7 @@ export default defineComponent({
             margin: 0,
             padding: 0,
             textAlign: "left",
-            display: "inline-block"
+            display: "block"
           }
         },
         []

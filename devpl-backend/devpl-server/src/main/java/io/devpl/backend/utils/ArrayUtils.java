@@ -1,5 +1,7 @@
 package io.devpl.backend.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ArrayUtils {
@@ -11,6 +13,7 @@ public class ArrayUtils {
 
     /**
      * 数组中是否包含元素
+     *
      * @param <T>   数组元素类型
      * @param array 数组
      * @param value 被检查的元素
@@ -30,11 +33,20 @@ public class ArrayUtils {
 
     /**
      * 数组是否为空
+     *
      * @param array 数组
      * @param <T>   数组元素类型
      * @return 数组是否为空
      */
     public static <T> boolean isEmpty(T[] array) {
         return array == null || array.length == 0;
+    }
+
+    public static <T> Map<T, Integer> mapValueIndex(T[] array) {
+        Map<T, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < array.length; i++) {
+            indexMap.put(array[i], i);
+        }
+        return indexMap;
     }
 }

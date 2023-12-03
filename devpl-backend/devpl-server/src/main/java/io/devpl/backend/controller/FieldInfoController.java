@@ -77,9 +77,9 @@ public class FieldInfoController {
      * @return
      */
     @PostMapping(value = "/parse")
-    public ListResult<FieldInfo> parseFields(@RequestBody FieldParseParam param) {
+    public Result<List<FieldInfo>> parseFields(@RequestBody FieldParseParam param) {
         List<FieldInfo> fieldInfoList = fieldInfoService.parseFields(param);
 
-        return ListResult.ok(fieldInfoList);
+        return Result.ok(fieldInfoList);
     }
 }

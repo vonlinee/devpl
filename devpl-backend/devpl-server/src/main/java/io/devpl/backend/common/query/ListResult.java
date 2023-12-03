@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 分页数据返回结果
  */
-public class ListResult<T> extends AbstractResult<List<T>> implements Serializable {
+public class ListResult<T> extends RestfulResult<List<T>> implements Serializable {
 
     /**
      * 列表的记录总条数，前端组件自动计算分页

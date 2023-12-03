@@ -9,15 +9,15 @@ import io.devpl.backend.dao.FieldInfoMapper;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.entity.FieldInfo;
+import io.devpl.backend.interfaces.FieldParser;
+import io.devpl.backend.interfaces.impl.HtmlTableContentFieldParser;
+import io.devpl.backend.interfaces.impl.HtmlTableDomFieldParser;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.tools.parser.JavaParserUtils;
 import io.devpl.backend.tools.parser.java.MetaField;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -55,11 +55,40 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public List<FieldInfo> parseFields(FieldParseParam param) {
         String type = param.getType();
+        String content = param.getContent();
         List<FieldInfo> fieldInfoList = new ArrayList<>();
         if ("java".equalsIgnoreCase(type)) {
             fieldInfoList.addAll(parseJavaFields(param.getContent()));
         } else if ("json".equalsIgnoreCase(type)) {
-            fieldInfoList.addAll(parseFieldsFromJson(param.getContent()));
+            fieldInfoList.addAll(parseFieldsFromJson(content));
+        } else if ("html1".equalsIgnoreCase(type)) {
+
+            String[] columnMapping = {
+                param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()
+            };
+
+            HtmlTableContentFieldParser parser = new HtmlTableContentFieldParser();
+            parser.setColumnMapping(columnMapping);
+            List<Map<String, Object>> fields = parser.parse(content);
+            for (Map<String, Object> field : fields) {
+                FieldInfo fieldInfo = new FieldInfo();
+                fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
+                fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
+                fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
+                fieldInfoList.add(fieldInfo);
+            }
+        } else if ("html2".equalsIgnoreCase(type)) {
+            FieldParser parser = new HtmlTableDomFieldParser(new String[]{
+                param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()
+            });
+            List<Map<String, Object>> fields = parser.parse(content);
+            for (Map<String, Object> field : fields) {
+                FieldInfo fieldInfo = new FieldInfo();
+                fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
+                fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
+                fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
+                fieldInfoList.add(fieldInfo);
+            }
         }
         return fieldInfoList;
     }

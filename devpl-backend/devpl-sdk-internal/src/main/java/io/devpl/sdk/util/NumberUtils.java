@@ -58,4 +58,32 @@ public class NumberUtils {
             return defaultValue;
         }
     }
+
+    /**
+     * 正则表达式将判断输入字符串是否为整数或者浮点数，涵盖负数的情况
+     *
+     * @param str 字符串
+     * @return 是否为数值
+     */
+    public static boolean isNumeric(String str) {
+        return str != null && str.matches("-?\\d+(\\.\\d+)?");
+    }
+
+    /**
+     * 判断是否是自然数
+     *
+     * @param str 字符串
+     * @return 是否是自然数
+     */
+    public static boolean isNaturalNumber(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

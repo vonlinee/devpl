@@ -1,12 +1,10 @@
 package io.devpl.backend.interfaces.impl;
 
-import io.devpl.backend.interfaces.FieldParser;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class HtmlTableContentFieldParser implements FieldParser {
+public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
 
     /**
      * @param content 直接复制浏览器页面上的表格内容，复制的结果是纯文本（暂时未发现有什么特定的规则）
@@ -52,15 +50,11 @@ public class HtmlTableContentFieldParser implements FieldParser {
 
         for (int i = 0; i < mergedLines.size(); i++) {
             String line = mergedLines.get(i);
-
             String[] columnsOfRow = getTitleRowsOfTableContent(line);
             rows.add(columnsOfRow);
         }
 
-        for (int i = 1; i < rows.size(); i++) {
-
-        }
-        return null;
+        return convertRowsAsFields(rows);
     }
 
     /**
@@ -86,31 +80,10 @@ public class HtmlTableContentFieldParser implements FieldParser {
                     }
                     end++;
                 }
-                result.add(content.substring(start, end));
+                result.add(content.substring(start, end).replace("\r", ""));
                 start = end;
             }
         }
         return result.toArray(new String[0]);
-    }
-
-    public static void main(String[] args) {
-        String content = """
-            参数名	必选	类型	说明
-            appid	✔	string	发起请求的子系统ID，即分配的SysID的值
-            access_token	✔	string	接口请求通行令牌，即对appid参数的值取MD5值并反序得到；
-            C#环境可使用以下方法生成
-            SchoolID	✔	string	学校id
-            ParentID	✘	string	部门id，指定后返回该部门的下级部门列表
-            不传值或传递空字符串，则返回第一层级的部门
-            PageIndex	✘	int	页码，从1起，传递0则表示不启用分页
-            默认为1
-            PageSize	✘	int	页大小，默认为10
-            """;
-
-        HtmlTableContentFieldParser parser = new HtmlTableContentFieldParser();
-
-        List<Map<String, Object>> fields = parser.parse(content);
-
-        System.out.println(fields);
     }
 }

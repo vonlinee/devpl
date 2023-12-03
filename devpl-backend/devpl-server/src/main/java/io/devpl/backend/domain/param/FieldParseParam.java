@@ -17,4 +17,19 @@ public class FieldParseParam {
      * 待解析的文本
      */
     private String content;
+
+    /**
+     * 列映射: 字段名称
+     */
+    private String fieldNameColumn;
+
+    /**
+     * 列映射: 字段数据类型
+     */
+    private String fieldTypeColumn;
+
+    /**
+     * 列映射: 字段描述信息
+     */
+    private String fieldDescColumn;
 }

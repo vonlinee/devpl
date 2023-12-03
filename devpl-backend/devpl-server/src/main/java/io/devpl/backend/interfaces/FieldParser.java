@@ -8,6 +8,10 @@ import java.util.Map;
  */
 public interface FieldParser {
 
+    String FIELD_NAME = "name";
+    String FIELD_TYPE = "type";
+    String FIELD_DESCRIPTION = "description";
+
     /**
      * 从文本解析字段信息
      *

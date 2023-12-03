@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 单条结果的响应数据
  */
-public class Result<T> extends AbstractResult<T> implements Serializable {
+public class Result<T> extends RestfulResult<T> implements Serializable {
 
     Result(T data) {
         this.setData(data);

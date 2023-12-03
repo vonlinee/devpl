@@ -4,14 +4,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * 抽象结果
- *
  * @param <T> 携带的数据
  */
-abstract class AbstractResult<T> {
-
+abstract class RestfulResult<T> {
     /**
-     * 编码 0表示成功，其他值表示失败
+     * 结果状态码
      */
     private int code = StatusCode.OK.getCode();
     /**

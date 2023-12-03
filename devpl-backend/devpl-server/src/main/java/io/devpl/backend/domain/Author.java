@@ -1,11 +1,13 @@
 package io.devpl.backend.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 作者信息
  */
-@Data
+@Getter
+@Setter
 public class Author {
 
     /**

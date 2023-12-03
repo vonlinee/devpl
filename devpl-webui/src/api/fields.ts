@@ -58,6 +58,10 @@ interface FieldParseParam {
    * 待解析的文本
    */
   content: string;
+  /**
+   * 其他选项
+   */
+  options?: Record<string, any>;
 }
 
 /**
