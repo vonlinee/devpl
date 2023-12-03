@@ -2,7 +2,6 @@ package io.devpl.backend.interfaces.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
 
@@ -11,8 +10,7 @@ public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
      * @return 字段信息
      */
     @Override
-    public List<Map<String, Object>> parse(String content) {
-
+    public List<String[]> parseRows(String content) {
         String[] lines = content.split("\n");
 
         // 第一行为标题
@@ -53,8 +51,7 @@ public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
             String[] columnsOfRow = getTitleRowsOfTableContent(line);
             rows.add(columnsOfRow);
         }
-
-        return convertRowsAsFields(rows);
+        return rows;
     }
 
     /**

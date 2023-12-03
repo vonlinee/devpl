@@ -1,12 +1,10 @@
 package io.devpl.backend.interfaces.impl;
 
 import io.devpl.backend.interfaces.FieldParser;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.NumberUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class MappingFieldParserAdapter implements FieldParser {
 
@@ -18,6 +16,19 @@ public abstract class MappingFieldParserAdapter implements FieldParser {
     public void setColumnMapping(String[] columnMapping) {
         this.columns = columnMapping;
     }
+
+    @Override
+    public List<Map<String, Object>> parse(String content) {
+        List<String[]> rows = parseRows(content);
+
+        if (CollectionUtils.isEmpty(rows)) {
+            return Collections.emptyList();
+        }
+
+        return convertRowsAsFields(rows);
+    }
+
+    public abstract List<String[]> parseRows(String content);
 
     public List<Map<String, Object>> convertRowsAsFields(List<String[]> rows) {
         String[] titleRow = rows.get(0);
