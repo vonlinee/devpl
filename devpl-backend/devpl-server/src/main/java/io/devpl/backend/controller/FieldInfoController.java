@@ -27,7 +27,7 @@ public class FieldInfoController {
      * @return 列表
      */
     @GetMapping(value = "/page")
-    public ListResult<FieldInfo> list(FieldInfoListParam param) {
+    public ListResult<FieldInfo> listPage(FieldInfoListParam param) {
         return ListResult.ok(fieldInfoService.selectPage(param));
     }
 
@@ -74,12 +74,10 @@ public class FieldInfoController {
     /**
      * 字段解析
      *
-     * @return
+     * @return 解析得到的字段信息
      */
     @PostMapping(value = "/parse")
     public Result<List<FieldInfo>> parseFields(@RequestBody FieldParseParam param) {
-        List<FieldInfo> fieldInfoList = fieldInfoService.parseFields(param);
-
-        return Result.ok(fieldInfoList);
+        return Result.ok(fieldInfoService.parseFields(param));
     }
 }

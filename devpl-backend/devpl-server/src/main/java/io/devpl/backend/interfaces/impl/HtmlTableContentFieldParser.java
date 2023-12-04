@@ -54,33 +54,4 @@ public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
         return rows;
     }
 
-    /**
-     * 获取标题列
-     *
-     * @param content 标题行，一行作为一个字符串
-     * @return 标题列
-     */
-    private String[] getTitleRowsOfTableContent(String content) {
-        content = content.replace("\t", " ");
-        int start = 0, end = 0;
-        List<String> result = new ArrayList<>();
-        while (end < content.length()) {
-            char c = content.charAt(start);
-            if (c == ' ' || c == '\t') {
-                start++;
-                end = start + 1;
-            } else {
-                while (end < content.length()) {
-                    c = content.charAt(end);
-                    if (c == ' ' || c == '\t') {
-                        break;
-                    }
-                    end++;
-                }
-                result.add(content.substring(start, end).replace("\r", ""));
-                start = end;
-            }
-        }
-        return result.toArray(new String[0]);
-    }
 }

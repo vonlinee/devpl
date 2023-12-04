@@ -2,12 +2,13 @@
  * @ 字段管理列表
 -->
 <script setup lang="ts">
-import { apiDeleteFieldByIds, apiListFields } from "@/api/fields";
-import FieldImportModal from "./FieldImportModal.vue";
+import { apiDeleteFieldByIds, apiListFields, apiSaveBatchFields } from "@/api/fields";
+import FieldParseToolModal from "./FieldParseToolModal.vue";
 import { onMounted, reactive, ref } from "vue";
 import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
+import { ElMessage } from "element-plus";
 
 /**
  * 表格数据模型
@@ -49,6 +50,24 @@ const option: DataTableOption = reactive({
 
 const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = useCrud(option);
 
+/**
+ * 保存解析的字段
+ * @param parsedFields
+ */
+const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
+  if (parsedFields && parsedFields.length > 0) {
+    apiSaveBatchFields(parsedFields).then((res) => {
+      ElMessage.info({
+        message: "新增成功",
+        duration: 500,
+        onClose: () => {
+          getDataList();
+        }
+      });
+    });
+  }
+};
+
 </script>
 
 <template>
@@ -87,14 +106,15 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = use
   </el-table>
   <el-pagination :current-page="option.currentPage"
                  background
+                 :page-size="option.limit"
                  :page-sizes="option.pageSizes" :total="option.total"
-                 layout="total, sizes, prev, pager, next, jumper"
+                 layout="total, sizes, prev, next, jumper"
                  @size-change="sizeChangeHandle" @current-change="currentChangeHandle">
   </el-pagination>
 
   <save-or-update-field ref="saveOrUpdateFieldModal" @refresh-table="getDataList"></save-or-update-field>
 
-  <field-import-modal ref="fieldImportModalRef" @modal-close="getDataList"></field-import-modal>
+  <field-parse-tool-modal ref="fieldImportModalRef" @finished="handleFieldParseFinished"></field-parse-tool-modal>
 </template>
 
 <style scoped lang="scss">

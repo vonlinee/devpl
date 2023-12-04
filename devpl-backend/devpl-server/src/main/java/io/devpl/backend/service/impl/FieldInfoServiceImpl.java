@@ -30,7 +30,11 @@ import java.util.regex.Pattern;
 public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo> implements FieldInfoService {
 
     private final Json5 json5 = new Json5(Json5Options.builder().build().remainComment(true));
-    Pattern javaIdentifierPattern = Pattern.compile("^([a-zA-Z_$][a-zA-Z\\d_$]*)$");
+
+    /**
+     * Java标识符正则规则
+     */
+    private final Pattern javaIdentifierPattern = Pattern.compile("^([a-zA-Z_$][a-zA-Z\\d_$]*)$");
 
     @Override
     public List<FieldInfo> listFields(FieldInfoListParam param) {
@@ -40,10 +44,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public IPage<FieldInfo> selectPage(FieldInfoListParam param) {
         String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
-        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()),
-            new LambdaQueryWrapper<FieldInfo>()
-                .notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys))
-                .like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
+        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), new LambdaQueryWrapper<FieldInfo>().notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys)).like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
     }
 
     /**
@@ -63,9 +64,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             fieldInfoList.addAll(parseFieldsFromJson(content));
         } else if ("html1".equalsIgnoreCase(type)) {
 
-            String[] columnMapping = {
-                param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()
-            };
+            String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
 
             HtmlTableContentFieldParser parser = new HtmlTableContentFieldParser();
             parser.setColumnMapping(columnMapping);
@@ -78,9 +77,8 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
                 fieldInfoList.add(fieldInfo);
             }
         } else if ("html2".equalsIgnoreCase(type)) {
-            FieldParser parser = new HtmlTableDomFieldParser(new String[]{
-                param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()
-            });
+            String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
+            FieldParser parser = new HtmlTableDomFieldParser(columnMapping);
             List<Map<String, Object>> fields = parser.parse(content);
             for (Map<String, Object> field : fields) {
                 FieldInfo fieldInfo = new FieldInfo();
@@ -183,13 +181,5 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             log.error("[字段解析 JAVA] 解析失败", e);
         }
         return Collections.emptyList();
-    }
-
-    public void parseHeaderTitle() {
-
-    }
-
-    public static void main(String[] args) {
-
     }
 }

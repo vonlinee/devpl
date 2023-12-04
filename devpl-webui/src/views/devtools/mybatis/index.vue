@@ -64,7 +64,12 @@ import { hasText } from "@/utils/tool";
 import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 
-import { apiGetMapperStatementValueTypes, apiGetSampleXmlText, apiGetSql, getMapperStatementParams } from "@/api/mybatis";
+import {
+  apiGetMapperStatementValueTypes,
+  apiGetSampleXmlText,
+  apiGetSql,
+  getMapperStatementParams
+} from "@/api/mybatis";
 import { ElButton, ElMessage } from "element-plus";
 import ParamImport from "./ParamImport.vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
@@ -157,9 +162,7 @@ function getParams() {
   if (hasText(code)) {
     getMapperStatementParams(code, toRaw(options.value)).then(value => {
       nextTick(() => mapperParams.value = value.data);
-
       msParamTable.value.loadData(toRaw(value.data));
-
     }).then(() => expandAll());
   } else {
     ElMessage.warning("输入文本为空!");
@@ -184,9 +187,7 @@ function showDialog() {
 
 const fillSampleMapperStatement = () => {
   apiGetSampleXmlText().then((res) => {
-    if (res.code == 2000) {
-      inputRef.value.setText(res.data);
-    }
+    inputRef.value.setText(res.data);
   });
 };
 

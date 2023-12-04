@@ -2,7 +2,7 @@
 import { reactive, ref, toRaw } from "vue";
 import { ElMessage, ElTableColumn, type TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { apiParseFields, apiSaveBatchFields } from "@/api/fields";
+import { apiParseFields} from "@/api/fields";
 import { isBlank } from "@/utils/tool";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
@@ -10,7 +10,7 @@ import "splitpanes/dist/splitpanes.css";
 const activeTabName = ref("java");
 const modalVisible = ref();
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
+const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
 
 };
 
@@ -38,7 +38,7 @@ const html1EditorRef = ref<MonacoEditorType>();
 // html dom文本解析
 const html2EditorRef = ref<MonacoEditorType>();
 
-const submit = () => {
+const parseFields = () => {
   const inputType: string = activeTabName.value;
   let text = "";
   switch (inputType) {
@@ -81,25 +81,13 @@ const submit = () => {
   });
 };
 
-/**
- * 保存解析的字段
- */
-const saveFields = () => {
-  if (fields.value) {
-    apiSaveBatchFields(fields.value).then((res) => {
-      ElMessage.info({
-        message: "新增成功"
-      });
-    });
-  }
-};
-
 const emits = defineEmits([
-  "modal-close"
+  // 完成
+  "finished"
 ]);
 
 const onModalClose = () => {
-  emits("modal-close");
+  emits("finished", fields.value);
 };
 
 /**
@@ -112,6 +100,7 @@ const removeRow = (row: FieldInfo) => {
 
 /**
  * 字段映射规则
+ * 指定列的索引号(从1开始)或者列名称与字段含义的对应关系
  */
 const columnMappingForm = reactive({
   fieldNameColumn: "1",
@@ -128,7 +117,7 @@ const columnMappingForm = reactive({
     <template #default>
       <Splitpanes>
         <Pane>
-          <el-tabs v-model="activeTabName" class="demo-tabs" @tab-click="handleClick" height="600px">
+          <el-tabs v-model="activeTabName" class="demo-tabs" @tab-click="handleTabClicked" height="600px">
             <el-tab-pane label="Java" name="java">
               <monaco-editor ref="javaEditorRef" language="java" height="480px"></monaco-editor>
             </el-tab-pane>
@@ -191,8 +180,7 @@ const columnMappingForm = reactive({
       </Splitpanes>
     </template>
     <template #footer>
-      <vxe-button status="primary" @click="saveFields">保存</vxe-button>
-      <vxe-button status="primary" @click="submit">确定</vxe-button>
+      <vxe-button status="primary" @click="parseFields">解析</vxe-button>
     </template>
   </vxe-modal>
 </template>

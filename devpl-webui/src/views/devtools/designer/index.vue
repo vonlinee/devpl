@@ -1,25 +1,40 @@
 <template>
-  <Splitpanes>
-    <Pane>
-      <el-table border :data="selectableFields" @selection-change="handleSelectionChange" height="800px">
-        <el-table-column type="selection" width="35" align="center"></el-table-column>
-        <el-table-column prop="fieldKey" label="Key"></el-table-column>
-        <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="dataType" label="数据类型"></el-table-column>
-      </el-table>
-    </Pane>
-    <Pane>
-      <el-table ref="fieldTable" border class="sortable-row-gen" row-key="id" :data="selectedFields"
-                highlight-current-row
-                height="800px"
-                row-class-name="field-row">
-        <el-table-column type="selection" width="35" align="center"></el-table-column>
-        <el-table-column prop="fieldKey" label="Key"></el-table-column>
-        <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="dataType" label="数据类型"></el-table-column>
-      </el-table>
-    </Pane>
-  </Splitpanes>
+  <div>
+    <converter></converter>
+    <el-card>
+      <el-button>导入</el-button>
+      <splitpanes>
+        <pane>
+          <el-table border :data="selectableFields" @selection-change="handleSelectionChange" :height="tableHeight">
+            <el-table-column type="selection" width="35" align="center"></el-table-column>
+            <el-table-column prop="fieldKey" label="Key"></el-table-column>
+            <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="dataType" label="数据类型"></el-table-column>
+          </el-table>
+        </pane>
+        <pane>
+          <el-table ref="fieldTable" border class="sortable-row-gen" row-key="id" :data="selectedFields"
+                    highlight-current-row
+                    :height="tableHeight"
+                    row-class-name="field-row">
+            <el-table-column type="selection" width="35" align="center"></el-table-column>
+            <el-table-column prop="fieldKey" label="Key"></el-table-column>
+            <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="dataType" label="数据类型"></el-table-column>
+          </el-table>
+        </pane>
+      </splitpanes>
+    </el-card>
+
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="模型转换" name="ModelConverter">
+        <model-converter></model-converter>
+      </el-tab-pane>
+      <el-tab-pane label="SQL转换" name="SqlConverter">
+        <sql-converter></sql-converter>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -29,13 +44,18 @@ import "splitpanes/dist/splitpanes.css";
 
 import Sortable from "sortablejs";
 import { apiListAllFields } from "@/api/fields";
+import Converter from "@/views/devtools/designer/SqlConverter.vue";
+import ModelConverter from "@/views/devtools/designer/ModelConverter.vue";
+import SqlConverter from "@/views/devtools/designer/SqlConverter.vue";
 
 const selectableFields = ref<FieldInfo[]>([]);
 const selectedFields = ref<FieldInfo[]>([]);
 const fieldList = ref<FieldInfo[]>([]);
 const fieldTable = ref();
+const activeName = ref("ModelConverter");
 
 const sortable = ref();
+const tableHeight = "600px";
 
 /**
  * el-table需要指定row-key，否则会导致拖拽顺序混乱

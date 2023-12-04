@@ -16,7 +16,7 @@ public class NumberUtils {
      * @return converted {@code Integer} (or null if the input is null)
      * @throws NumberFormatException if the value cannot be converted
      */
-    public static Integer decode(final String str, int defaultValue) {
+    public static Integer decode(String str, int defaultValue) {
         if (str == null) {
             return defaultValue;
         }
