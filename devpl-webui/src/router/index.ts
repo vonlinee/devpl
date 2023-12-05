@@ -143,6 +143,16 @@ export const menuRoutes: RouteRecordRaw[] = [
           icon: "icon-edit-square",
           keepAlive: true
         }
+      },
+      {
+        path: "/devtools/collection",
+        name: "工具箱",
+        component: () => import("@/views/devtools/toolset/index.vue"),
+        meta: {
+          title: "工具箱",
+          icon: "icon-edit-square",
+          keepAlive: true
+        }
       }
     ]
   },

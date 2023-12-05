@@ -9,9 +9,10 @@ public class StringEscaper {
      * <p>
      * 字符串是否需要转义
      * </p>
-     * @param str
-     * @param len
-     * @return
+     *
+     * @param str 原字符串
+     * @param len 长度
+     * @return 是否需要转义
      */
     private static boolean isEscapeNeededForString(String str, int len) {
         boolean needsHexEscape = false;
@@ -27,37 +28,28 @@ public class StringEscaper {
     }
 
     private static boolean isNeedEscaped(char c) {
-        switch (c) {
+        return switch (c) {
             /* Must be escaped for 'mysql' */
-            case 0:
-                return true;
+            case 0 -> true;
             /* Must be escaped for logs */
-            case '\n':
-                return true;
-            case '\r':
-                return true;
-            case '\\':
-                return true;
-            case '\'':
-                return true;
+            case '\n' -> true;
+            case '\r', '\\', '\'' -> true;
             /* Better safe than sorry */
-            case '"':
-                return true;
+            case '"' -> true;
             /* This gives problems on Win32 */
-            case '\032':
-                return true;
-            default:
-                return false;
-        }
+            case '\032' -> true;
+            default -> false;
+        };
     }
 
     /**
      * 转义字符串
-     * @param escapeStr
-     * @return
+     *
+     * @param escapeStr 待转义字符串
+     * @return 字符串
      */
     public static String escapeString(String escapeStr) {
-        if (escapeStr.matches("\'(.+)\'")) {
+        if (escapeStr.matches("'(.+)'")) {
             escapeStr = escapeStr.substring(1, escapeStr.length() - 1);
         }
         String parameterAsString = escapeStr;
@@ -71,13 +63,11 @@ public class StringEscaper {
             for (int i = 0; i < stringLength; ++i) {
                 char c = escapeStr.charAt(i);
                 switch (c) {
-                    /* Must be escaped for 'mysql' */
-                    case 0:
+                    case 0: /* Must be escaped for 'mysql' */
                         buf.append('\\');
                         buf.append('0');
                         break;
-                    /* Must be escaped for logs */
-                    case '\n':
+                    case '\n': /* Must be escaped for logs */
                         buf.append('\\');
                         buf.append('n');
                         break;
@@ -93,13 +83,11 @@ public class StringEscaper {
                         buf.append('\\');
                         buf.append('\'');
                         break;
-                    /* Better safe than sorry */
-                    case '"':
+                    case '"': /* Better safe than sorry */
                         buf.append('\\');
                         buf.append('"');
                         break;
-                    /* This gives problems on Win32 */
-                    case '\032':
+                    case '\032': /* This gives problems on Win32 */
                         buf.append('\\');
                         buf.append('Z');
                         break;

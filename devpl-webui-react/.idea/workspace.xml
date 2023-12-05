@@ -5,16 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c82414c3-4f20-4720-a474-64dc489a58db" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utils/assl.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/request/enhanceAxios.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/request/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/common/query/AbstractResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/common/query/AbstractResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/controller/DataSourceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/controller/DataSourceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/generator/service/impl/DataSourceServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/components/split-pane/index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/components/split-pane/pane.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/components/split-pane/resizer.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/toolset/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/lang/Bindings.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/lang/Bindings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ArrayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ArrayUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ClassUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ClassUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ObjectUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/ObjectUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/StringEscaper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/StringEscaper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-sdk-internal/src/main/java/io/devpl/sdk/util/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/backend/service/impl/GeneratorConfigServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-backend/devpl-server/src/main/java/io/devpl/backend/service/impl/GeneratorConfigServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/axios.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/mocker/database/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/mocker/database/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/api/datasource.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/api/datasource.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/designer/ModelConverter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/toolset/ModelConverter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/designer/SqlConverter.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/toolset/SqlConverter.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/designer/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/devtools/designer/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/generator/DataSourceSelector.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/test/CodeRunner.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../devpl-webui/src/views/test/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,32 +57,19 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
   <component name="ProjectId" id="2V15ufn3R0VEznS0woodW1e8qA5" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Develop/Code/Github/devpl-backend/devpl-webui-react&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.General&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\Develop\\Code\\Github\\devpl-backend\\devpl-webui-react\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  }
-}</component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="ts.external.directory.path" value="D:\Develop\Code\Github\devpl-backend\devpl-webui-react\node_modules\typescript\lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -92,6 +89,8 @@
       <workItem from="1697200623484" duration="590000" />
       <workItem from="1697628755345" duration="42000" />
       <workItem from="1698753616115" duration="758000" />
+      <workItem from="1701761618762" duration="135000" />
+      <workItem from="1701778560100" duration="6000" />
     </task>
     <servers />
   </component>

@@ -1,14 +1,11 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.ServerException;
-import io.devpl.backend.utils.JSONUtils;
 import io.devpl.backend.config.GeneratorProperties;
-import io.devpl.backend.config.template.GeneratorInfo;
-import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.service.GeneratorConfigService;
+import io.devpl.backend.utils.JSONUtils;
 import io.devpl.backend.utils.PathUtils;
 import io.devpl.sdk.util.StringUtils;
-import jakarta.annotation.Nullable;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -77,37 +74,5 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
             throw new ServerException("模板配置文件，config.json不存在");
         }
         return isConfig;
-    }
-
-    public GeneratorInfo getGeneratorConfig(String template) {
-        // 模板路径，如果不是以/结尾，则添加/
-        if (!StringUtils.endWith(template, '/')) {
-            template = template + "/";
-        }
-        // 读取模板配置文件
-        String configContent;
-        try {
-            configContent = StreamUtils.copyToString(loadConfigFile(template), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        GeneratorInfo generator = JSONUtils.parseObject(configContent, GeneratorInfo.class);
-        if (generator == null) {
-            return null;
-        }
-        try {
-            for (TemplateInfo templateInfo : generator.getTemplates()) {
-                // 模板文件
-                InputStream isTemplate = this.getClass().getResourceAsStream(template + templateInfo.getTemplateName());
-                if (isTemplate == null) {
-                    throw new ServerException("模板文件 " + templateInfo.getTemplateName() + " 不存在");
-                }
-                // 读取模板内容
-                templateInfo.setContent(StreamUtils.copyToString(isTemplate, StandardCharsets.UTF_8));
-            }
-            return generator;
-        } catch (IOException e) {
-            throw new ServerException("读取config.json配置文件失败");
-        }
     }
 }

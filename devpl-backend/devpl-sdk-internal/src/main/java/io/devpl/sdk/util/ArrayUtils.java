@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 对java.util.Arrays做一些封装
+ * 数组工具类
  */
-public final class ArrayUtils {
+public abstract class ArrayUtils {
 
-    private ArrayUtils() {
-    }
-
-    public static int[] of(int... nums) {
+    public static int[] intArray(int... nums) {
         if (nums == null) return new int[0];
         return nums;
     }

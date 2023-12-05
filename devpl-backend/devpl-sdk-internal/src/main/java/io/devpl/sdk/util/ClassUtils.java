@@ -231,21 +231,21 @@ public abstract class ClassUtils {
         if (name.endsWith(ARRAY_SUFFIX)) {
             String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
             Class<?> elementClass = forName(elementClassName, classLoader);
-            return Array.newInstance(elementClass, 0).getClass();
+            return java.lang.reflect.Array.newInstance(elementClass, 0).getClass();
         }
 
         // "[Ljava.lang.String;" style arrays
         if (name.startsWith(NON_PRIMITIVE_ARRAY_PREFIX) && name.endsWith(";")) {
             String elementName = name.substring(NON_PRIMITIVE_ARRAY_PREFIX.length(), name.length() - 1);
             Class<?> elementClass = forName(elementName, classLoader);
-            return Array.newInstance(elementClass, 0).getClass();
+            return java.lang.reflect.Array.newInstance(elementClass, 0).getClass();
         }
 
         // "[[I" or "[[Ljava.lang.String;" style arrays
         if (name.startsWith(INTERNAL_ARRAY_PREFIX)) {
             String elementName = name.substring(INTERNAL_ARRAY_PREFIX.length());
             Class<?> elementClass = forName(elementName, classLoader);
-            return Array.newInstance(elementClass, 0).getClass();
+            return java.lang.reflect.Array.newInstance(elementClass, 0).getClass();
         }
 
         ClassLoader clToUse = classLoader;
@@ -629,7 +629,7 @@ public abstract class ClassUtils {
      * @see java.util.AbstractCollection#toString()
      */
     public static String classNamesToString(Class<?>... classes) {
-        return classNamesToString(Arrays.asList(classes));
+        return classNamesToString(ArrayUtils.asList(classes));
     }
 
     /**

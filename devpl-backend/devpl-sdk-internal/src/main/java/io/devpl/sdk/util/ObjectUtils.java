@@ -17,4 +17,17 @@ public class ObjectUtils {
     public static String nullSafeToString(Object o) {
         return String.valueOf(o);
     }
+
+    /**
+     * 忽略对象重写的toString方法
+     *
+     * @param obj 对象
+     * @return 对象.toString方法
+     */
+    public static String toString(Object obj) {
+        if (obj == null) {
+            return "null";
+        }
+        return obj.getClass().getName() + "@" + Integer.toHexString(obj.hashCode());
+    }
 }

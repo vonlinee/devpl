@@ -25,15 +25,6 @@
         </pane>
       </splitpanes>
     </el-card>
-
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="模型转换" name="ModelConverter">
-        <model-converter></model-converter>
-      </el-tab-pane>
-      <el-tab-pane label="SQL转换" name="SqlConverter">
-        <sql-converter></sql-converter>
-      </el-tab-pane>
-    </el-tabs>
   </div>
 </template>
 
@@ -44,15 +35,12 @@ import "splitpanes/dist/splitpanes.css";
 
 import Sortable from "sortablejs";
 import { apiListAllFields } from "@/api/fields";
-import Converter from "@/views/devtools/designer/SqlConverter.vue";
-import ModelConverter from "@/views/devtools/designer/ModelConverter.vue";
-import SqlConverter from "@/views/devtools/designer/SqlConverter.vue";
+import Converter from "@/views/devtools/toolset/SqlConverter.vue";
 
 const selectableFields = ref<FieldInfo[]>([]);
 const selectedFields = ref<FieldInfo[]>([]);
 const fieldList = ref<FieldInfo[]>([]);
 const fieldTable = ref();
-const activeName = ref("ModelConverter");
 
 const sortable = ref();
 const tableHeight = "600px";

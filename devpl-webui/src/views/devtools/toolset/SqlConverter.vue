@@ -3,13 +3,19 @@
 -->
 <template>
   <div>
-    <monaco-editor ref="editorRef" language="ts"></monaco-editor>
+    <el-card>
+      <data-source-selector @selection-change="(val) => dataSourceId = val.id"></data-source-selector>
+    </el-card>
+    <monaco-editor ref="editorRef" language="ts" height="600px"></monaco-editor>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import DataSourceSelector from "@/views/generator/DataSourceSelector.vue";
+
+const dataSourceId = ref();
 
 const options = reactive({
   inputType: "DDL"

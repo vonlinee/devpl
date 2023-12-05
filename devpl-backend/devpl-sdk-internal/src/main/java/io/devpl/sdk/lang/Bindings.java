@@ -1,5 +1,5 @@
 package io.devpl.sdk.lang;
 
-interface Bindings {
+public interface Bindings {
     Object get(String name);
 }

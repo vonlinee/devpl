@@ -108,8 +108,9 @@ export const apiListSupportedDbTypes = () => {
 };
 
 /**
- * 所有支持的数据库类型
- * @returns 所有支持的数据库类型
+ * 所有可选择的数据源
+ * @param internal 是否包含内部数据源
+ * @returns 所有可选择的数据源
  */
 export const apiListSelectableDataSources = (internal?: boolean) => {
   return http.get<DataSourceVO[]>("/api/gen/datasource/list/selectable", {

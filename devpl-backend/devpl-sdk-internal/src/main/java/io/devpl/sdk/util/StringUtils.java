@@ -3,7 +3,6 @@ package io.devpl.sdk.util;
 import io.devpl.sdk.collection.CollectionUtils;
 import io.devpl.sdk.lang.Interpolations;
 import io.devpl.sdk.validation.Assert;
-import io.devpl.sdk.validation.Validator;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
@@ -17,7 +16,8 @@ import java.util.regex.Pattern;
  *
  * @since 17
  */
-public final class StringUtils {
+@SuppressWarnings("unused")
+public abstract class StringUtils {
 
     /**
      * 字符串常量：{@code "null"} <br>
@@ -58,8 +58,6 @@ public final class StringUtils {
     public static final String CR = "\r";
     /**
      * Represents a failed index search.
-     *
-     * @since 2.1
      */
     public static final int INDEX_NOT_FOUND = -1;
     public static final String DEFAULT_SEPARATOR = ",";
@@ -130,11 +128,10 @@ public final class StringUtils {
     }
 
     /**
-     * @param sequence
-     * @param c
+     * @param sequence 源字符串
+     * @param c        追加的字符
      * @param len      长度
      * @return String
-     * @since 11
      */
     public static String append(String sequence, char c, int len) {
         int i = len - sequence.length();
@@ -252,7 +249,7 @@ public final class StringUtils {
      * @return 切割后后剩余的后半部分字符串
      */
     public static String sub(CharSequence string, int fromIndex) {
-        if (isEmpty(string)) {
+        if (!hasLength(string)) {
             return null;
         }
         return sub(string, fromIndex, string.length());
@@ -274,7 +271,7 @@ public final class StringUtils {
      */
     public static String sub(CharSequence str, int fromIndexInclude, int toIndexExclude) {
         if (isEmpty(str)) {
-            return str(str);
+            return toString(str);
         }
         int len = str.length();
 
@@ -338,16 +335,14 @@ public final class StringUtils {
         }
     }
 
-    public static boolean containsAlmostOne(String parent, CharSequence... sequences) {
-        for (CharSequence s : sequences) {
-            if (parent.contains(s)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean in(String target, String... group) {
+    /**
+     * 判断字符串是否在集合中，通过equals进行比较
+     *
+     * @param target 指定字符串
+     * @param group  字符串集合
+     * @return 是否包含
+     */
+    public static boolean contains(String target, String... group) {
         for (String s : group) {
             if (target.equals(s)) return true;
         }
@@ -463,12 +458,12 @@ public final class StringUtils {
     /**
      * 使用指定分隔符拼接字符串
      *
-     * @param separator
-     * @param items
-     * @return
+     * @param separator 分隔符
+     * @param items     带拼接的字符串
+     * @return 拼接后的字符串
      */
     public static String join(final String separator, String... items) {
-        return join(Arrays.asList(items).iterator(), separator);
+        return join(ArrayUtils.asList(items).iterator(), separator);
     }
 
     /**
@@ -478,7 +473,7 @@ public final class StringUtils {
      * @return 拼接后的字符串
      */
     public static String join(String... items) {
-        return join(Arrays.asList(items).iterator(), DEFAULT_SEPARATOR);
+        return join(ArrayUtils.asList(items).iterator(), DEFAULT_SEPARATOR);
     }
 
     /**
@@ -536,7 +531,7 @@ public final class StringUtils {
         int len = 0;
         int j = 0;
         byte[] bytes = str.getBytes(Charset.forName(charset));
-        while (bytes.length > 0) {
+        do {
             short tmpst = (short) (bytes[j] & 0xF0);
             if (tmpst >= 0xB0) {
                 if (tmpst < 0xC0 || ((tmpst == 0xC0) || (tmpst == 0xD0))) {
@@ -562,10 +557,7 @@ public final class StringUtils {
                 j += 1;
                 len += 1;
             }
-            if (j > bytes.length - 1) {
-                break;
-            }
-        }
+        } while (j <= bytes.length - 1);
         return len;
     }
 
@@ -573,7 +565,7 @@ public final class StringUtils {
      * 是否包含空格
      *
      * @param sequence CharSequence
-     * @return
+     * @return 是否包含空格
      */
     public static boolean containWhiteSpace(CharSequence sequence) {
         return sequence == null || sequence.toString().contains(" ");
@@ -587,10 +579,14 @@ public final class StringUtils {
      * @return 字符串
      */
     public static String repeat(String string, int count) {
-        Validator.whenNull(string);
+        if (hasLength(string)) {
+            return null;
+        }
         if (count <= 1) {
-            Validator.whenTrue(count >= 0, "invalid count: %s", count);
-            return (count == 0) ? "" : string;
+            if (count >= 0) {
+                return string;
+            }
+            return string;
         }
         final int len = string.length();
         final long longSize = (long) len * (long) count;
@@ -834,7 +830,7 @@ public final class StringUtils {
      * @return 如果参数为空，原样返回
      */
     public static String trim(String str) {
-        if (str != null && str.isEmpty()) {
+        if (hasLength(str)) {
             str = str.trim();
         }
         return str;
@@ -1063,7 +1059,7 @@ public final class StringUtils {
      * or the input object as-is if not a {@code String}
      */
     public static Object quote(Object obj) {
-        return (obj instanceof String ? quote((String) obj) : obj);
+        return (obj instanceof String str ? quote(str) : obj);
     }
 
     /**
@@ -1125,7 +1121,6 @@ public final class StringUtils {
         if (baseChar == updatedChar) {
             return str;
         }
-
         char[] chars = str.toCharArray();
         chars[0] = updatedChar;
         return new String(chars);
@@ -1138,7 +1133,6 @@ public final class StringUtils {
      * @param path the file path (maybe {@code null})
      * @return the extracted filename, or {@code null} if none
      */
-
     public static String getFilename(String path) {
         if (path == null) {
             return null;
@@ -1162,7 +1156,6 @@ public final class StringUtils {
         if (extIndex == -1) {
             return null;
         }
-
         int folderIndex = path.lastIndexOf(FOLDER_SEPARATOR_CHAR);
         if (folderIndex > extIndex) {
             return null;
@@ -1182,12 +1175,10 @@ public final class StringUtils {
         if (extIndex == -1) {
             return path;
         }
-
         int folderIndex = path.lastIndexOf(FOLDER_SEPARATOR_CHAR);
         if (folderIndex > extIndex) {
             return path;
         }
-
         return path.substring(0, extIndex);
     }
 
@@ -1566,7 +1557,7 @@ public final class StringUtils {
             return array1;
         }
 
-        List<String> result = new ArrayList<>(Arrays.asList(array1));
+        List<String> result = new ArrayList<>(ArrayUtils.asList(array1));
         for (String str : array2) {
             if (!result.contains(str)) {
                 result.add(str);
@@ -1619,7 +1610,7 @@ public final class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-        Set<String> set = new LinkedHashSet<>(Arrays.asList(array));
+        Set<String> set = new LinkedHashSet<>(ArrayUtils.asList(array));
         return toStringArray(set);
     }
 
@@ -1845,7 +1836,7 @@ public final class StringUtils {
      */
     public static Set<String> commaDelimitedListToSet(String str) {
         String[] tokens = commaDelimitedListToStringArray(str);
-        return new LinkedHashSet<>(Arrays.asList(tokens));
+        return new LinkedHashSet<>(ArrayUtils.asList(tokens));
     }
 
     /**
@@ -1914,9 +1905,8 @@ public final class StringUtils {
             return "";
         }
         if (arr.length == 1) {
-            return ObjectUtils.nullSafeToString(arr[0]);
+            return String.valueOf(arr[0]);
         }
-
         StringJoiner sj = new StringJoiner(delim);
         for (Object elem : arr) {
             sj.add(String.valueOf(elem));
@@ -1948,7 +1938,6 @@ public final class StringUtils {
      * @param str2       要比较的字符串2
      * @param ignoreCase 是否忽略大小写
      * @return 如果两个字符串相同，或者都是{@code null}，则返回{@code true}
-     * @since 3.2.0
      */
     public static boolean equals(CharSequence str1, CharSequence str2, boolean ignoreCase) {
         if (null == str1) {
@@ -2032,8 +2021,8 @@ public final class StringUtils {
      * @return 字串
      */
     public static String substring(CharSequence str, int fromIndexInclude, int toIndexExclude) {
-        if (isEmpty(str)) {
-            return str(str);
+        if (!hasLength(str)) {
+            return String.valueOf(str);
         }
         int len = str.length();
 
@@ -2068,13 +2057,19 @@ public final class StringUtils {
     }
 
     /**
-     * {@link CharSequence} 转为字符串，null安全
+     * 转为字符串，null安全
      *
-     * @param cs {@link CharSequence}
-     * @return 字符串
+     * @param obj 对象
+     * @return 字符串，不为null
      */
-    public static String str(CharSequence cs) {
-        return null == cs ? null : cs.toString();
+    public static String toString(Object obj) {
+        if (obj == null) {
+            return EMPTY;
+        }
+        if (obj instanceof CharSequence cs) {
+            return cs.toString();
+        }
+        return obj.toString();
     }
 
     /**
@@ -2085,10 +2080,27 @@ public final class StringUtils {
      * @return 是否结尾
      */
     public static boolean endWith(CharSequence str, char c) {
-        if (isEmpty(str)) {
+        if (!hasLength(str)) {
             return false;
         }
         return c == str.charAt(str.length() - 1);
+    }
+
+    /**
+     * 追加
+     *
+     * @param source 原字符串
+     * @param end    结尾的字符串
+     * @return 拼接后的字符串
+     */
+    public static String appendIfNotEndWith(String source, String end) {
+        if (source == null) {
+            return end;
+        }
+        if (source.endsWith(end)) {
+            return source;
+        }
+        return source + end;
     }
 
     /**
@@ -2138,7 +2150,7 @@ public final class StringUtils {
      */
     public static String removePrefix(CharSequence str, CharSequence prefix) {
         if (isEmpty(str) || isEmpty(prefix)) {
-            return str(str);
+            return toString(str);
         }
         final String str2 = str.toString();
         if (str2.startsWith(prefix.toString())) {
@@ -2171,7 +2183,7 @@ public final class StringUtils {
      */
     public static String removeSuffix(CharSequence str, CharSequence suffix) {
         if (isEmpty(str) || isEmpty(suffix)) {
-            return str(str);
+            return toString(str);
         }
 
         final String str2 = str.toString();
