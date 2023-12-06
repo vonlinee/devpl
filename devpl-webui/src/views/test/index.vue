@@ -1,20 +1,18 @@
 <template>
   <div class="page">
     <SplitPane
-      direction="column"
+      direction="row"
       :min="20"
       :max="80"
-      :triggerLength="20"
-      :paneLengthPercent.sync="paneLengthPercent"
     >
       <template v-slot:one>
-        <div>
+        <div class="container">
           区域一
         </div>
       </template>
 
-      <template v-slot:two>
-        <div>
+      <template v-slot:another>
+        <div class="container">
           区域二
         </div>
       </template>
@@ -27,15 +25,22 @@
 
 import SplitPane from "@/components/split/SplitPane.vue";
 
-const paneLengthPercent = 30;
-
 </script>
 
 <style scoped lang="scss">
 .page {
   height: 600px;
   padding: 10px;
-  background: #000;
+
+  .pane {
+    border: 1px solid black;
+  }
+
+  .container {
+    height: 100%;
+    border: 1px solid black;
+  }
 }
+
 </style>
 

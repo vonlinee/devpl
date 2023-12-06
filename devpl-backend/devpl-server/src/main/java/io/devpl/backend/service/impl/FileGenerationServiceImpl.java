@@ -76,7 +76,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
             String saveLocation = parentDirectory + File.separator + tfg.getSavePath() + File.separator + tfg.getFileName();
 
-            saveLocation = getAbsolutePath(saveLocation);
+            saveLocation = this.getAbsolutePath(saveLocation);
 
             log.info("保存地址 {}", saveLocation);
             File file = new File(saveLocation);
@@ -84,12 +84,11 @@ public class FileGenerationServiceImpl implements FileGenerationService {
             FileUtils.createFileQuietly(file, true);
             if (file.exists()) {
                 log.info("创建文件成功 {}", file.getAbsolutePath());
-            }
-
-            try (Writer writer = new FileWriter(file)) {
-                templateService.render(tfg.getTemplateId(), dataModel, writer);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                try (Writer writer = new FileWriter(file)) {
+                    templateService.render(tfg.getTemplateId(), dataModel, writer);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         return parentDirectory;
@@ -191,6 +190,9 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Override
     public List<FileNode> getGeneratedFileTree(String workPath) {
         File root = new File(codeGenProperties.getCodeGenRootDir(), workPath);
+        if (!root.exists()) {
+            return Collections.emptyList();
+        }
         return fileStorageService.getFileTree(root.getAbsolutePath());
     }
 

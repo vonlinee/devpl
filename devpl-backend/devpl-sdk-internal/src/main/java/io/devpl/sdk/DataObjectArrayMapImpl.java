@@ -7,10 +7,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * 采用ArrayMap结构实现
- * 一般kv对只有几十个
+ * 采用ArrayMap结构实现，适用于小数据量
  */
-final class MapDataObject implements DataObject {
+final class DataObjectArrayMapImpl implements DataObject {
 
     @Serial
     private static final long serialVersionUID = 4967941937079805838L;
@@ -30,20 +29,20 @@ final class MapDataObject implements DataObject {
      */
     private final boolean strict;
 
-    public MapDataObject(int initialCapacity) {
+    public DataObjectArrayMapImpl(int initialCapacity) {
         this(true, initialCapacity);
     }
 
-    public MapDataObject(boolean strict, int initialCapacity) {
+    public DataObjectArrayMapImpl(boolean strict, int initialCapacity) {
         this.data = new ArrayMap<>(initialCapacity);
         this.strict = strict;
     }
 
-    public MapDataObject(Map<String, Object> initialData) {
+    public DataObjectArrayMapImpl(Map<String, Object> initialData) {
         this(true, initialData);
     }
 
-    public MapDataObject(boolean strict, Map<String, Object> initialData) {
+    public DataObjectArrayMapImpl(boolean strict, Map<String, Object> initialData) {
         if (initialData != null) {
             this.data = new ArrayMap<>(initialData.size());
             data.putAll(initialData);
@@ -187,6 +186,6 @@ final class MapDataObject implements DataObject {
 
     @Override
     public DataObject copy() {
-        return new MapDataObject(this.data);
+        return new DataObjectArrayMapImpl(this.data);
     }
 }

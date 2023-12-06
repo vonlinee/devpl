@@ -1,9 +1,9 @@
 import http from "@/utils/http"
 
 // 获取文件目录树形结构
-export function apiGetFileTree(root_path: string) {
+export function apiGetFileTree(rootPath: string) {
   return http.get("/api/codegen/file-tree", {
-    rootPath: root_path,
+    rootPath: rootPath,
   })
 }
 

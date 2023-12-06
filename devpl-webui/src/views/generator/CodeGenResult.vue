@@ -3,7 +3,7 @@
  -->
 <template>
   <vxe-modal ref="modalRef" show-footer v-model="dialogVisiableRef" title="生成结果" width="80%" height="80%" transfer
-    :mask-closable="false" destroy-on-close draggable show-zoom>
+             :mask-closable="false" destroy-on-close draggable show-zoom>
     <Splitpanes>
       <Pane min-size="20" size="35">
         <div class="tree-container" :style="{
@@ -37,10 +37,10 @@ import { getLanguage } from "@/components/editor/monaco-editor-wrapper";
 import { apiGetFileContent, apiGetFileTree } from "@/api/factory";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import SvgIcon from "@/components/svg-icon";
-import { Splitpanes, Pane } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 
-import { getIconName } from '@/utils/tool'
+import { getIconName } from "@/utils/tool";
 
 const dialogVisiableRef = ref();
 const modalRef = ref();
@@ -54,10 +54,10 @@ const rootDirRef = ref<string | undefined>();
  */
 function init(dirs: string[]) {
   if (dirs[0] == undefined) {
-    return
+    return;
   }
   rootDirRef.value = dirs[0] || "";
-  dialogVisiableRef.value = true
+  dialogVisiableRef.value = true;
   // 加载文件树
   apiGetFileTree(rootDirRef.value).then(res => {
     treeData.value = res.data;
@@ -99,13 +99,15 @@ const defaultProps = {
  */
 const handleFileTreeNodeClick = (fileNode: FileNode) => {
   if (fileNode && fileNode.isLeaf) {
-    const lang = getLanguage(fileNode.extension);
-    apiGetFileContent(fileNode.path).then(res => {
-      if (editorRef.value) {
-        editorRef.value.setLanguage(lang);
-        editorRef.value.setText(res.data);
-      }
-    });
+    if (fileNode.path !== "") {
+      const lang = getLanguage(fileNode.extension);
+      apiGetFileContent(fileNode.path).then(res => {
+        if (editorRef.value) {
+          editorRef.value.setLanguage(lang);
+          editorRef.value.setText(res.data);
+        }
+      });
+    }
   }
 };
 
@@ -113,7 +115,7 @@ const handleFileTreeNodeClick = (fileNode: FileNode) => {
  * 找到第一个文件节点
  * @param fileNode
  */
-let findFirstLeafNode = function (fileNode: FileNode): FileNode | undefined {
+let findFirstLeafNode = function(fileNode: FileNode): FileNode | undefined {
   if (fileNode.isLeaf) {
     return fileNode;
   }

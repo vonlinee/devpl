@@ -10,8 +10,8 @@
       @mousedown="handleMouseDown"
     ></div>
 
-    <div class="pane pane-two">
-      <slot name="two"></slot>
+    <div class="pane pane-another">
+      <slot name="another"></slot>
     </div>
   </div>
 </template>
@@ -32,20 +32,13 @@ export default {
     max: {
       type: Number,
       default: 90
-    },
-
-    paneLengthPercent: {
-      type: Number,
-      default: 50
-    },
-
-    triggerLength: {
-      type: Number,
-      default: 10
     }
   },
   data() {
     return {
+      // 滑动条宽度 像素4px
+      triggerLength: 4,
+      paneLengthPercent: 30,
       triggerLeftOffset: 0 // 鼠标距滑动器左(顶)侧偏移量
     };
   },
@@ -95,8 +88,8 @@ export default {
       if (paneLengthPercent > this.max) {
         paneLengthPercent = this.max;
       }
-
-      this.$emit("update:paneLengthPercent", paneLengthPercent);
+      console.log(this.paneLengthValue);
+      this.paneLengthPercent = paneLengthPercent;
     },
 
     // 松开滑动器
@@ -109,7 +102,6 @@ export default {
 
 <style scoped lang="scss">
 .split-pane {
-  background: palegreen;
   height: 100%;
   display: flex;
 
@@ -135,18 +127,17 @@ export default {
     }
   }
 
-  .pane-one {
-    background: palevioletred;
-  }
-
   .pane-trigger {
     user-select: none;
-    background: palegoldenrod;
+    background: white;
   }
 
-  .pane-two {
+  .pane-trigger:hover {
+    background-color: dodgerblue;
+  }
+
+  .pane-another {
     flex: 1;
-    background: turquoise;
   }
 }
 </style>

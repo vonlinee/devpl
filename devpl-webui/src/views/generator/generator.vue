@@ -108,6 +108,9 @@ import { useDownloadApi, useGeneratorApi } from "@/api/generator";
 import { apiGetGenTableById, useTableSubmitApi } from "@/api/table";
 import CodeGenResult from "@/views/generator/CodeGenResult.vue";
 
+/**
+ * 展示生成结果
+ */
 const resultDialogRef = ref();
 
 const emit = defineEmits(["refreshDataList"]);

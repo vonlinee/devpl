@@ -164,7 +164,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         return Collections.emptyList();
     }
 
-    public List<FieldInfo> parseJavaFields(String content) {
+    private List<FieldInfo> parseJavaFields(String content) {
         try {
             List<MetaField> metaFields = JavaParserUtils.parseFields(content);
             List<FieldInfo> res = new ArrayList<>();

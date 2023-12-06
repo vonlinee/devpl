@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 项目名变更
+ * 项目信息Service
  */
 @Slf4j
 @Service

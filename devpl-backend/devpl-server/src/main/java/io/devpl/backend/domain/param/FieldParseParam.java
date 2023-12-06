@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.param;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 字段解析参数
  */
-@Data
+@Getter
+@Setter
 public class FieldParseParam {
 
     /**

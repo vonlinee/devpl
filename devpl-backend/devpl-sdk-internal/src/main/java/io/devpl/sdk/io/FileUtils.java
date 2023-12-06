@@ -1769,7 +1769,7 @@ public class FileUtils {
     }
 
     /**
-     * 创建文件，不抛任何异常
+     * 创建文件或者目录，不抛任何异常
      *
      * @param file      文件
      * @param overwrite 是否覆盖
@@ -1784,14 +1784,10 @@ public class FileUtils {
                     res = file.delete();
                 }
             }
-            if (file.isFile()) {
-                File parentFile = file.getParentFile();
-                // File#mkdirs创建文件夹连同该文件夹的父文件夹，如果创建成功返回true，创建失败返回false。创建失败没有异常抛出。
-                if (!parentFile.exists() && parentFile.mkdirs()) {
-                    res = file.createNewFile();
-                }
-            } else if (file.isDirectory()) {
-                res = file.mkdirs();
+            File parentFile = file.getParentFile();
+            // File#mkdirs创建文件夹连同该文件夹的父文件夹，如果创建成功返回true，创建失败返回false。创建失败没有异常抛出。
+            if (!parentFile.exists() && parentFile.mkdirs()) {
+                res = file.createNewFile();
             }
         } catch (IOException ignore) {
             res = false;

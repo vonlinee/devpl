@@ -19,10 +19,10 @@ import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.backend.utils.JdbcUtils;
+import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.sql.*;
