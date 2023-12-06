@@ -6,7 +6,6 @@
     <el-card>
       <data-source-selector @selection-change="(val) => dataSourceId = val.id"></data-source-selector>
     </el-card>
-    <monaco-editor ref="editorRef" language="ts" height="600px"></monaco-editor>
   </div>
 </template>
 
