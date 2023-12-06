@@ -5,7 +5,7 @@ export const apiGetModelById = (id: Number) => {
   return http.get("/api/model/" + id);
 };
 
-export const apiListBaseClass = (page: number, limit: number, params: any) => {
+export const apiListBaseClass = (page: number = 1, limit: number = 10, params?: any) => {
   return http.get("/api/model/list/page", {
     pageIndex: page,
     pageSize: limit,

@@ -1,6 +1,9 @@
 package io.devpl.backend.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +24,9 @@ public class FieldInfo extends DBEntity implements Serializable {
     private Long id;
 
     /**
-     * 字段Key
+     * 字段Key，区分大小写
      */
-    @TableField(value = "field_key", insertStrategy = FieldStrategy.IGNORED)
+    @TableField(value = "field_key")
     private String fieldKey;
 
     /**

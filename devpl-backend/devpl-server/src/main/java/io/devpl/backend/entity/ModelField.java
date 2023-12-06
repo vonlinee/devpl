@@ -1,5 +1,6 @@
 package io.devpl.backend.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * 模型和字段关联
+ *
  * @see ModelInfo
  * @see FieldInfo
  */
@@ -18,7 +21,7 @@ public class ModelField {
     /**
      * id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**

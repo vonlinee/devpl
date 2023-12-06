@@ -1,12 +1,10 @@
-
-
 # 版本要求
+
 JDK: 17.0.5+
 Maven: 3.6.0+
 
 1. element-plus: https://element-plus.gitee.io/zh-CN/component/button.html
 2. vxe-table: https://vxetable.cn/#/table/start/install
-
 
 # 问题记录
 
@@ -22,27 +20,15 @@ springboot3 直接使用@Resource注解进行依赖注入失效
 # 参考资料
 
 1. 数据库建表规范
-https://github.com/alibaba/p3c/blob/master/p3c-gitbook/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6.md
-
-
-
-
-
-
+   https://github.com/alibaba/p3c/blob/master/p3c-gitbook/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6.md
 
 # TODO
 
-
-
 1.代码生成器自定义模板，尽量做到灵活
-
-
 
 2.mock数据工具
 
 生成对应的代码，数据库表mock等等
-
-
 
 3.
 
@@ -50,18 +36,14 @@ https://github.com/alibaba/p3c/blob/master/p3c-gitbook/MySQL%E6%95%B0%E6%8D%AE%E
 
 sql转实体类等等
 
-
-
-
-
-
-
 Xcheck
 
 https://xcheck.tencent.com/index
 
+模拟数据生成器
 
-
+1. 模型内部数据项之间的关联关系
+2. 模型实例与实例之间的关联关系
 
 
 

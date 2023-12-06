@@ -27,9 +27,6 @@
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="showConfig()">生成配置</el-button>
-      </el-form-item>
-      <el-form-item>
         <el-button type="primary" @click="showFileTypeManagerDialog()">文件类型管理</el-button>
       </el-form-item>
     </el-form>
@@ -58,20 +55,11 @@
   <edit ref="editRef" @refresh-data-list="getDataList"></edit>
   <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
 
-  <vxe-modal title="代码生成配置" v-model="configDialogRef" draggable show-footer width="70%">
-    <div style="height: 600px">
-      <monaco-editor ref="configEditor" language="json"></monaco-editor>
-    </div>
-    <template #footer>
-      <el-button @click="saveConfig()">确认</el-button>
-    </template>
-  </vxe-modal>
-
   <gen-file-type-dialog ref="fileTypeManagerRef"></gen-file-type-dialog>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref, h } from "vue";
+import { onMounted, reactive, ref, h } from "vue";
 import { DataTableOption } from "@/hooks/interface";
 import { useCrud } from "@/hooks";
 import GenTableImport from "./GenTableImport.vue";
@@ -79,8 +67,7 @@ import Edit from "./edit.vue";
 import Generator from "./generator.vue";
 import { apiImportTables, apiListGenTables, apiRemoveGenTableByIds, apiSyncTable } from "@/api/table";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { apiGetGeneratorConfig, apiSaveGeneratorConfig, useDownloadApi } from "@/api/generator";
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { useDownloadApi } from "@/api/generator";
 import GenFileTypeDialog from "@/views/generator/GenFileTypeDialog.vue";
 import { apiListSelectableProjects } from "@/api/project";
 import { useRouter } from "vue-router";
@@ -168,43 +155,14 @@ const syncHandle = (row: any) => {
     });
 };
 
-const configEditor = ref();
-const configDialogRef = ref(false);
-
-function showConfig() {
-  apiGetGeneratorConfig().then((res) => {
-    if (res.code == 2000) {
-      configDialogRef.value = true;
-      nextTick(() => configEditor.value.setText(res.data));
-    }
-  });
-}
-
-/**
- * 保存配置
- */
-function saveConfig() {
-  apiSaveGeneratorConfig(configEditor.value.getText()).then((res) => {
-    if (res.data) {
-      ElMessage.success("保存配置成功");
-      configDialogRef.value = false;
-    }
-  }).catch((reason) => {
-    ElMessage.error("保存配置失败", reason);
-  });
-}
-
 const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
   if (dataSourceId) {
     apiImportTables(dataSourceId, tableNames, project.value?.projectId).then(() => {
       ElMessage.success({
         message: "操作成功",
-        duration: 500,
-        onClose: () => {
-          getDataList();
-        }
+        duration: 500
       });
-    });
+    }).then(() => getDataList());
   }
 };
 
