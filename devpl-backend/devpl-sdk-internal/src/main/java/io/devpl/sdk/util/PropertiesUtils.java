@@ -9,7 +9,7 @@ import java.util.Map.Entry;
  */
 public class PropertiesUtils {
 
-    private static void loadProperties(Properties properties, File file) {
+    public static void loadProperties(Properties properties, File file) {
         try (InputStream stream = new FileInputStream(file)) {
             properties.load(stream);
         } catch (IOException e) {
@@ -32,7 +32,7 @@ public class PropertiesUtils {
             try {
                 is = PropertiesUtils.class.getResourceAsStream(file);
             } catch (Exception ex) {
-                ex.printStackTrace();
+
             }
         }
         if (is != null) {
@@ -85,16 +85,10 @@ public class PropertiesUtils {
     }
 
     public static Map<String, String> asMap(Properties properties) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         for (Entry<Object, Object> entry : properties.entrySet()) {
             map.put(entry.getKey().toString(), entry.getValue().toString());
         }
         return map;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T get(Properties props, String name, T defaultValue) {
-        Object value = props.get(name);
-        return value == null ? defaultValue : (T) value;
     }
 }
