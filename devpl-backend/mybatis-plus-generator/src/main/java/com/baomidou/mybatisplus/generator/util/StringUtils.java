@@ -22,7 +22,7 @@ public final class StringUtils {
     /**
      * 验证字符串是否是数据库字段
      */
-    private static final Pattern P_IS_COLUMN = Pattern.compile("^\\w\\S*[\\w\\d]*$");
+    private static final Pattern P_IS_COLUMN = Pattern.compile("^\\w\\S*\\w*$");
 
     /**
      * 是否为大写命名
@@ -34,7 +34,7 @@ public final class StringUtils {
      *
      * <ul> <li>'"<>&*+=#-; sql注入黑名单</li> <li>\n 回车</li> <li>\t 水平制表符</li> <li>\s 空格</li> <li>\r 换行</li> </ul>
      */
-    private static final Pattern REPLACE_BLANK = Pattern.compile("'|\"|\\<|\\>|&|\\*|\\+|=|#|-|;|\\s*|\t|\r|\n");
+    private static final Pattern REPLACE_BLANK = Pattern.compile("'|\"|<|>|&|\\*|\\+|=|#|-|;|\\s*|\t|\r|\n");
 
     public static boolean hasText(CharSequence cs) {
         return !isBlank(cs);

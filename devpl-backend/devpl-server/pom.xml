@@ -14,7 +14,7 @@
 
     <properties>
         <skipTests>true</skipTests>
-        <mybatisplus.version>3.5.3.1</mybatisplus.version>
+        <mybatisplus.version>3.5.3.2</mybatisplus.version>
         <hutool.version>5.8.11</hutool.version>
         <oracle.version>11.2.0.3</oracle.version>
         <freemarker.version>2.3.31</freemarker.version>
@@ -81,30 +81,6 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
-
-        <!--        <dependency>
-                    <groupId>com.microsoft.sqlserver</groupId>
-                    <artifactId>mssql-jdbc</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>com.oracle</groupId>
-                    <artifactId>ojdbc6</artifactId>
-                    <version>${oracle.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>com.dameng</groupId>
-                    <artifactId>DmJdbcDriver18</artifactId>
-                    <version>${dameng.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>ru.yandex.clickhouse</groupId>
-                    <artifactId>clickhouse-jdbc</artifactId>
-                    <version>${clickhouse.version}</version>
-                </dependency>-->
 
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -175,11 +151,6 @@
                     <artifactId>mysql-connector-j</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <!--https://objenesis.org/-->
@@ -283,15 +254,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.13</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
-            <version>3.5.3.1</version>
+            <version>${mybatisplus.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

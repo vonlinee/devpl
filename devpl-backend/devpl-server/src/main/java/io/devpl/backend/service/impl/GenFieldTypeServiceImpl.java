@@ -1,16 +1,20 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.backend.common.query.ListResult;
-import io.devpl.backend.domain.param.Query;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
+import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.dao.GenFieldTypeMapper;
+import io.devpl.backend.domain.param.Query;
 import io.devpl.backend.entity.GenFieldType;
 import io.devpl.backend.service.GenFieldTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +55,7 @@ public class GenFieldTypeServiceImpl extends BaseServiceImpl<GenFieldTypeMapper,
 
     @Override
     public boolean save(GenFieldType entity) {
-        entity.setCreateTime(new Date());
+        entity.setCreateTime(LocalDateTime.now());
         return super.save(entity);
     }
 }

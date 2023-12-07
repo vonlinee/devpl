@@ -146,12 +146,12 @@ public class AutoGenerator {
     /**
      * 设置配置汇总
      *
-     * @param configBuilder 配置汇总
+     * @param context 配置汇总
      * @return this
      * @since 3.5.0
      */
-    public AutoGenerator config(Context configBuilder) {
-        this.context = configBuilder;
+    public AutoGenerator config(Context context) {
+        this.context = context;
         return this;
     }
 
@@ -210,7 +210,6 @@ public class AutoGenerator {
         for (IntrospectedTable introspectedTable : tableInfoList) {
 
             introspectedTable.initialize();
-
 
             for (IntrospectedColumn column : introspectedTable.getColumns()) {
                 ColumnMetadata cmd = column.getColumnMetadata();

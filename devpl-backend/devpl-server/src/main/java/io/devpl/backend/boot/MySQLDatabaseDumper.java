@@ -16,7 +16,7 @@ import java.nio.file.Path;
 /**
  * MySQL数据备份
  */
-//@Component
+@Component
 public class MySQLDatabaseDumper implements CommandLineRunner {
 
     static final Logger logger = LoggerFactory.getLogger(MySQLDatabaseDumper.class);

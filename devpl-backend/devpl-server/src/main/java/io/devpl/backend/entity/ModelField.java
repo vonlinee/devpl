@@ -19,7 +19,7 @@ import lombok.Setter;
 public class ModelField {
 
     /**
-     * id
+     * 主键id
      */
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -49,7 +49,7 @@ public class ModelField {
     private String fieldName;
 
     /**
-     * 数据类型
+     * 字段数据类型
      */
     @TableField(exist = false)
     private String dataType;

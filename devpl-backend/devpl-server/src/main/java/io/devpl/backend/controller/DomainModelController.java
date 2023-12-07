@@ -2,7 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.param.BaseClassListParam;
+import io.devpl.backend.domain.param.ModelListParam;
 import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.service.DomainModelService;
 import jakarta.annotation.Resource;
@@ -27,7 +27,7 @@ public class DomainModelController {
      * @return 基本类型
      */
     @GetMapping("/list/page")
-    public ListResult<ModelInfo> list(BaseClassListParam param) {
+    public ListResult<ModelInfo> listPage(ModelListParam param) {
         return ListResult.ok(modelService.listPage(param));
     }
 

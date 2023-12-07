@@ -57,7 +57,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                                                   SqlCommandType sqlCommandType, Integer fetchSize, Integer timeout, String parameterMap, Class<?> parameterType,
                                                   String resultMap, Class<?> resultType, ResultSetType resultSetType, boolean flushCache, boolean useCache,
                                                   boolean resultOrdered, KeyGenerator keyGenerator, String keyProperty, String keyColumn, String databaseId,
-                                                  LanguageDriver lang, String resultSets, boolean dirtySelect) {
+                                                  LanguageDriver lang, String resultSets) {
 
             if (unresolvedCacheRef) {
                 throw new IncompleteElementException("Cache-ref not yet resolved");
@@ -79,7 +79,7 @@ public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
                 .resultOrdered(resultOrdered).resultSets(resultSets)
                 .resultMaps(statementResultMaps)
                 .resultSetType(resultSetType)
-                .flushCacheRequired(flushCache).useCache(useCache).cache(currentCache).dirtySelect(dirtySelect);
+                .flushCacheRequired(flushCache).useCache(useCache).cache(currentCache);
 
             ParameterMap statementParameterMap = getStatementParameterMap(parameterMap, parameterType, id);
             if (statementParameterMap != null) {

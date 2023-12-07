@@ -17,9 +17,6 @@ package com.baomidou.mybatisplus.generator.config.rules;
 
 /**
  * 表字段类型
- *
- * @author hubin
- * @since 2017-01-11
  */
 public enum DbColumnType implements ColumnJavaType {
     // 基本类型
@@ -72,13 +69,13 @@ public enum DbColumnType implements ColumnJavaType {
     private final String type;
 
     /**
-     * 包路径
+     * 名称
      */
-    private final String pkg;
+    private final String qualifier;
 
-    DbColumnType(final String type, final String pkg) {
+    DbColumnType(String type, String qualifier) {
         this.type = type;
-        this.pkg = pkg;
+        this.qualifier = qualifier;
     }
 
     @Override
@@ -88,7 +85,7 @@ public enum DbColumnType implements ColumnJavaType {
 
     @Override
     public String getQualifier() {
-        return pkg;
+        return qualifier;
     }
 
     @Override
@@ -98,6 +95,9 @@ public enum DbColumnType implements ColumnJavaType {
 
     @Override
     public String getQualifiedName() {
-        return pkg;
+        if (qualifier == null) {
+            return type;
+        }
+        return qualifier;
     }
 }
