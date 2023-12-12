@@ -9,7 +9,7 @@ import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructi
 import ITextModel = editor.ITextModel;
 
 /**
- * 必须给高度才能显示
+ * 必须给固定宽度和高度才能显示
  */
 export default defineComponent({
   name: "MonacoEditor",

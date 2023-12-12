@@ -105,8 +105,8 @@ const tableData = ref<RowVO[]>([])
 const queryAllDataTypeMappings = () => {
   apiListAllDataTypeMappings(undefined, undefined).then((res) => {
     if (res.code == 200) {
-      tableData.value = res.list
-      pageVo.value.total = res.total
+      tableData.value = res.data
+      pageVo.value.total = res.total || 0
     }
   })
 }
@@ -149,7 +149,7 @@ const getSelctableDataTypes = (id: number | undefined = undefined) => {
   if (f) {
     apiListAllMappableDataTypes(id).then((res) => {
       if (res.code == 200) {
-        mappeableDataTypes.value = res.list
+        mappeableDataTypes.value = res.data
       }
     })
   }

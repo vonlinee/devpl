@@ -2,6 +2,7 @@ package io.devpl.backend.jdbc;
 
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     private final Map<JDBCDriver, DriverInfo> drivers = new ConcurrentHashMap<>();
 
-    @Value("${devpl.driver.location}")
+    @Value("${devpl.driver.location:}")
     private String driverLocation;
 
     private Properties prepareConnectionProperties(String username, String password, Properties properties) {
@@ -82,7 +83,13 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        File driverLocationDir = new File(driverLocation);
+        String absolutePath = new File("").getAbsolutePath();
+        File driverLocationDir;
+        if (!StringUtils.hasText(driverLocation)) {
+            driverLocationDir = new File(absolutePath, "db/drivers");
+        } else {
+            driverLocationDir = new File(driverLocation);
+        }
         if (!driverLocationDir.isDirectory()) {
             log.error("驱动配置错误");
         }
@@ -141,6 +148,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
                 }
                 try {
                     DriverManager.registerDriver(driver);
+                    log.info("注册驱动类{}成功", driver);
                 } catch (SQLException e) {
                     log.error("注册驱动类{}失败", driver);
                 }
