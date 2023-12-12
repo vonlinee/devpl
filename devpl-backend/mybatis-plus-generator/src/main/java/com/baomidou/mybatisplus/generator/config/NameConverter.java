@@ -40,5 +40,4 @@ public interface NameConverter {
      * @return
      */
     String propertyNameConvert(String fieldName);
-
 }
