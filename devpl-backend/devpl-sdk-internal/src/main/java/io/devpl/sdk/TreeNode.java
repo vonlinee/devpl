@@ -1,4 +1,4 @@
-package io.devpl.backend.mybatis.tree;
+package io.devpl.sdk;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,6 +65,17 @@ public class TreeNode<T> implements Visitable<T> {
         return child;
     }
 
+    /**
+     * 如果不是懒加载的话，后端不要设置hasChildren 这个属性，要不然不能树形显示；如果是懒加载，则需要设置hasChildren字段。
+     * @return 是否有子元素
+     */
+    public boolean hasChildren() {
+        if (children == null) {
+            return false;
+        }
+        return !this.children.isEmpty();
+    }
+
     public List<TreeNode<T>> getChildren() {
         return children;
     }
@@ -79,16 +90,5 @@ public class TreeNode<T> implements Visitable<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    /**
-     * 如果不是懒加载的话，后端不要设置hasChildren 这个属性，要不然不能树形显示；如果是懒加载，则需要设置hasChildren字段。
-     * @return 是否有子元素
-     */
-    public boolean hasChildren() {
-        if (children == null) {
-            return false;
-        }
-        return !this.children.isEmpty();
     }
 }

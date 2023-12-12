@@ -15,7 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
-import com.baomidou.mybatisplus.generator.config.Builder;
+import com.baomidou.mybatisplus.generator.config.GenericBuilder;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  * @author nieqiurong 2020/10/11.
  * @since 3.5.0
  */
-public class BaseBuilder implements Builder<StrategyConfig> {
+public class BaseBuilder implements GenericBuilder<StrategyConfig> {
 
     private final StrategyConfig strategyConfig;
 

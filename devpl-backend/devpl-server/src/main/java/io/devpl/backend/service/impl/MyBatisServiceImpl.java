@@ -5,10 +5,9 @@ import io.devpl.backend.domain.ParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.*;
-import io.devpl.backend.mybatis.tree.TreeNode;
+import io.devpl.sdk.TreeNode;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.ReflectionUtils;
-import io.devpl.sdk.util.NumberUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -146,15 +145,15 @@ public class MyBatisServiceImpl implements MyBatisService {
     /**
      * 将字符串的statement解析为MappedStatement对象
      *
-     * @param statement xml
-     * @return MappedStatement
+     * @param statement xml 包含<select/> <delete/> <update/> <insert/> 等标签
+     * @return MappedStatement实例
      */
     @Override
     public MappedStatement parseMappedStatement(String statement) {
         XPathParser xPathParser = new XPathParser(statement, false, null, new IgnoreDTDEntityResolver());
         // TODO 支持所有类型的SQL标签
         XNode selectNode = xPathParser.evalNode("select");
-        MyBaticMockConfiguration configuration = new MyBaticMockConfiguration(sqlSessionFactory.getConfiguration());
+        MyBatisConfiguration configuration = new MyBatisConfiguration(sqlSessionFactory.getConfiguration());
         MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();

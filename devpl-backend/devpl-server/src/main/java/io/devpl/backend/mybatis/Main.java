@@ -1,6 +1,7 @@
-package io.devpl.backend.mybatis.tree;
+package io.devpl.backend.mybatis;
 
 import com.alibaba.fastjson2.JSON;
+import io.devpl.sdk.TreeNode;
 
 import java.util.Arrays;
 

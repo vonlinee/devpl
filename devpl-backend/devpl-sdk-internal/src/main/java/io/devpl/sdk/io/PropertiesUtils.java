@@ -50,8 +50,8 @@ public class PropertiesUtils {
      * Pick the name of a JDBC url. Such as xxx.url, xxx is the name.
      */
     public static List<String> loadNameList(Properties properties, String propertyPrefix) {
-        List<String> nameList = new ArrayList<String>();
-        Set<String> names = new HashSet<String>();
+        List<String> nameList = new ArrayList<>();
+        Set<String> names = new HashSet<>();
         for (String n : properties.stringPropertyNames()) {
             if (propertyPrefix != null && !propertyPrefix.isEmpty() && !n.startsWith(propertyPrefix)) {
                 continue;
@@ -80,7 +80,7 @@ public class PropertiesUtils {
     }
 
     public static Map<String, String> asMap(Properties properties) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         for (Entry<Object, Object> entry : properties.entrySet()) {
             map.put(entry.getKey().toString(), entry.getValue().toString());
         }

@@ -15,11 +15,11 @@
  */
 package com.baomidou.mybatisplus.generator.config.converts;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.converts.select.BranchBuilder;
 import com.baomidou.mybatisplus.generator.config.converts.select.Selector;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 
 /**
  * 该注册器负责注册并查询类型注册器
@@ -35,7 +35,7 @@ public class TypeConverts {
      * @param dbType 数据库类型
      * @return 返回转换器
      */
-    public static ITypeConvert getTypeConvert(DbType dbType) {
+    public static ITypeConvert getTypeConvert(DBType dbType) {
         return switch (dbType) {
             case ORACLE -> OracleTypeConvert.INSTANCE;
             case DB2 -> DB2TypeConvert.INSTANCE;

@@ -1,5 +1,7 @@
 package com.baomidou.mybatisplus.generator.config.builder;
 
+import com.baomidou.mybatisplus.generator.config.GenericBuilder;
+
 /**
  * 自定义模板文件配置
  *
@@ -56,7 +58,7 @@ public class CustomFile {
     /**
      * 构建者
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<CustomFile> {
+    public static class Builder implements GenericBuilder<CustomFile> {
 
         private final CustomFile customFile;
 

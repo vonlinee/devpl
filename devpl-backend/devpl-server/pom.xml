@@ -18,6 +18,7 @@
         <hutool.version>5.8.11</hutool.version>
         <oracle.version>11.2.0.3</oracle.version>
         <freemarker.version>2.3.31</freemarker.version>
+        <velocity.version>2.3</velocity.version>
         <dameng.version>8.1.2.141</dameng.version>
         <clickhouse.version>0.3.2</clickhouse.version>
     </properties>
@@ -205,7 +206,7 @@
         <dependency>
             <groupId>com.tencentcloudapi</groupId>
             <artifactId>tencentcloud-sdk-java</artifactId>
-            <version>3.1.210</version>
+            <version>4.0.11</version>
         </dependency>
 
         <dependency>
@@ -244,13 +245,12 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
-            <version>2.3</version>
+            <version>${velocity.version}</version>
         </dependency>
         <dependency>
             <groupId>io.devpl</groupId>
             <artifactId>devpl-sdk-internal</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -285,7 +285,7 @@
             <version>2.0.0</version>
         </dependency>
 
-        <!--https://jsoup.org/-->
+        <!--https://jsoup.org/ 解析HTML文档-->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
@@ -300,6 +300,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!--配置启动类-->
                     <mainClass>io.devpl.backend.DevplMain8088</mainClass>
                 </configuration>
             </plugin>

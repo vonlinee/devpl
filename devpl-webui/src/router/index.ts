@@ -5,7 +5,10 @@ import {
   RouteRecordRaw
 } from "vue-router";
 
-// 菜单路由
+/**
+ * 菜单路由
+ * https://router.vuejs.org/zh/guide/
+ */
 export const menuRoutes: RouteRecordRaw[] = [
   {
     path: "/datasource",
@@ -116,10 +119,10 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
       {
         path: "/devtools/mybatis",
-        name: "MyBatis 工具",
+        name: "MyBatis",
         component: () => import("@/views/devtools/mybatis/index.vue"),
         meta: {
-          title: "MyBatis 工具",
+          title: "MyBatis",
           icon: "icon-edit-square",
           keepAlive: true
         }

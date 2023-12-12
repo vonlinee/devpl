@@ -1,19 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.devpl.sdk.io;
 
 import java.io.BufferedReader;
@@ -44,6 +28,7 @@ import java.util.NoSuchElementException;
  * 	LineIterator.closeQuietly(iterator);
  * }
  * </pre>
+ *
  * @author Niall Pemberton
  * @author Stephen Colebourne
  * @author Sandy McArthur
@@ -67,6 +52,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Constructs an iterator of the lines for a <code>Reader</code>.
+     *
      * @param reader the <code>Reader</code> to read from, not null
      * @throws IllegalArgumentException if the reader is null
      */
@@ -85,6 +71,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Closes the iterator, handling null and ignoring exceptions.
+     *
      * @param iterator the iterator to close
      */
     public static void closeQuietly(LineIterator iterator) {
@@ -97,9 +84,11 @@ public class LineIterator implements Iterator<String> {
      * Indicates whether the <code>Reader</code> has more lines. If there is an
      * <code>IOException</code> then {@link #close()} will be called on this
      * instance.
+     *
      * @return <code>true</code> if the Reader has more lines
      * @throws IllegalStateException if an IO exception occurs
      */
+    @Override
     public boolean hasNext() {
         if (cachedLine != null) {
             return true;
@@ -126,6 +115,7 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Overridable method to validate each line that is returned.
+     *
      * @param line the line that is to be validated
      * @return true if valid, false to remove from the iterator
      */
@@ -135,15 +125,18 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
+    @Override
     public String next() {
         return nextLine();
     }
 
     /**
      * Returns the next line in the wrapped <code>Reader</code>.
+     *
      * @return the next line from the input
      * @throws NoSuchElementException if there is no line to return
      */
@@ -172,8 +165,10 @@ public class LineIterator implements Iterator<String> {
 
     /**
      * Unsupported.
+     *
      * @throws UnsupportedOperationException always
      */
+    @Override
     public void remove() {
         throw new UnsupportedOperationException("Remove unsupported on LineIterator");
     }

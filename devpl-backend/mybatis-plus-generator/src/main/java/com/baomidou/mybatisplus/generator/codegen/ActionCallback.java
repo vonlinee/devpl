@@ -3,7 +3,7 @@ package com.baomidou.mybatisplus.generator.codegen;
 import java.io.File;
 
 /**
- * 回调
+ * 代码生成过程回调
  */
 public interface ActionCallback {
 

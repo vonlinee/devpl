@@ -9,7 +9,7 @@ import org.springframework.web.filter.CorsFilter;
 /**
  * 跨域过滤器配置
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class CorsFilterConfiguration {
 
     @Bean

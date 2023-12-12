@@ -176,7 +176,7 @@ public class TemplateConfig {
      *
      * @author nieqiurong 3.5.0
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<TemplateConfig> {
+    public static class Builder implements GenericBuilder<TemplateConfig> {
 
         private final TemplateConfig templateConfig;
 

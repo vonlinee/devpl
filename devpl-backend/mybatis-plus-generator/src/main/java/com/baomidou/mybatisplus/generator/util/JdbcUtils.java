@@ -1,6 +1,6 @@
 package com.baomidou.mybatisplus.generator.util;
 
-import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,7 @@ import java.io.StringWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 /**
@@ -51,42 +49,42 @@ public class JdbcUtils {
      * @return 类型枚举值，如果没找到，则返回 null
      */
     @NotNull
-    public static DbType getDbType(@NotNull String str) {
+    public static DBType getDbType(@NotNull String str) {
         str = str.toLowerCase();
         if (str.contains(":mysql:") || str.contains(":cobar:")) {
-            return DbType.MYSQL;
+            return DBType.MYSQL;
         } else if (str.contains(":oracle:")) {
-            return DbType.ORACLE;
+            return DBType.ORACLE;
         } else if (str.contains(":postgresql:")) {
-            return DbType.POSTGRE_SQL;
+            return DBType.POSTGRE_SQL;
         } else if (str.contains(":sqlserver:")) {
-            return DbType.SQL_SERVER;
+            return DBType.SQL_SERVER;
         } else if (str.contains(":db2:")) {
-            return DbType.DB2;
+            return DBType.DB2;
         } else if (str.contains(":mariadb:")) {
-            return DbType.MARIADB;
+            return DBType.MARIADB;
         } else if (str.contains(":sqlite:")) {
-            return DbType.SQLITE;
+            return DBType.SQLITE;
         } else if (str.contains(":h2:")) {
-            return DbType.H2;
+            return DBType.H2;
         } else if (str.contains(":kingbase:") || str.contains(":kingbase8:")) {
-            return DbType.KINGBASE_ES;
+            return DBType.KINGBASE_ES;
         } else if (str.contains(":dm:")) {
-            return DbType.DM;
+            return DBType.DM;
         } else if (str.contains(":zenith:")) {
-            return DbType.GAUSS;
+            return DBType.GAUSS;
         } else if (str.contains(":oscar:")) {
-            return DbType.OSCAR;
+            return DBType.OSCAR;
         } else if (str.contains(":firebird:")) {
-            return DbType.FIREBIRD;
+            return DBType.FIREBIRD;
         } else if (str.contains(":xugu:")) {
-            return DbType.XU_GU;
+            return DBType.XU_GU;
         } else if (str.contains(":clickhouse:")) {
-            return DbType.CLICK_HOUSE;
+            return DBType.CLICK_HOUSE;
         } else if (str.contains(":sybase:")) {
-            return DbType.SYBASE;
+            return DBType.SYBASE;
         } else {
-            return DbType.OTHER;
+            return DBType.OTHER;
         }
     }
 
@@ -131,23 +129,6 @@ public class JdbcUtils {
             log.error("cannot extract rows form ResultSet for type[{}]", rowType, exception);
         }
         return results;
-    }
-
-    /**
-     * 查询
-     *
-     * @param resultSetSupplier
-     * @param rowType
-     * @param <T>
-     * @return
-     */
-    public static <T> List<T> extractRows(Supplier<ResultSet> resultSetSupplier, Class<T> rowType) {
-        try (ResultSet resultSet = resultSetSupplier.get()) {
-            return extractRows(resultSet, rowType);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return Collections.emptyList();
     }
 
     /**

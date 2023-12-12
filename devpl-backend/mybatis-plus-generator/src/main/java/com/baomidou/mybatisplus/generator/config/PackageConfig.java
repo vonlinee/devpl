@@ -177,7 +177,7 @@ public class PackageConfig {
      * @author nieqiurong
      * @since 3.5.0
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<PackageConfig> {
+    public static class Builder implements GenericBuilder<PackageConfig> {
 
         private final PackageConfig packageConfig;
 

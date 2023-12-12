@@ -119,7 +119,7 @@ public class InjectionConfig {
     /**
      * 构建者
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<InjectionConfig> {
+    public static class Builder implements GenericBuilder<InjectionConfig> {
 
         private final InjectionConfig injectionConfig;
 
