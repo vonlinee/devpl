@@ -19,11 +19,15 @@ import java.util.function.Supplier;
 public class GlobalConfig {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
+
+    /**
+     * 回调接口
+     */
     public ActionCallback callback;
     /**
      * 生成文件的输出目录【 windows:D://  linux or mac:/tmp 】
      */
-    private String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D://" : "/tmp";
+    private String outputDir = "/tmp";
 
     /**
      * 是否覆盖已有文件（默认 false）（已迁移到策略配置中，3.5.4版本会删除此方法）

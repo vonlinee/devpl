@@ -34,7 +34,7 @@ public abstract class VelocityTemplateDirective extends Directive implements Tem
      * @param context 上下文 当前velocity的容器，可以存取变量，比如在页面上使用#set($name="bwong")，可以通过context.get("name")取出"bwong"
      * @param writer  输出位置
      * @param node    节点 node里面可以取出调用这个函数时的入参，比如#hellofun("a")，通过node.jjtGetChild(0).value(context)取出"a"
-     * @return 是否成功
+     * @return 是否成功, 如果指令渲染成功，返回true
      * @throws IOException               IOException
      * @throws ResourceNotFoundException 模板不存在
      * @throws ParseErrorException       模板语法错误
@@ -43,12 +43,18 @@ public abstract class VelocityTemplateDirective extends Directive implements Tem
     @Override
     public boolean render(InternalContextAdapter context, Writer writer, Node node) throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
         Class<?>[] parameterTypes = getParameterTypes();
+        // 指令参数
         Object[] directiveArguments = new Object[parameterTypes.length];
         // 获取指令传参 传参的文字文本或者对象
         for (int i = 0; i < parameterTypes.length; i++) {
             directiveArguments[i] = node.jjtGetChild(i).value(context);
         }
-        writer.write(render(directiveArguments));
+        // 渲染结果
+        String renderResult = render(directiveArguments);
+        if (renderResult == null) {
+            return false;
+        }
+        writer.write(renderResult);
         return true;
     }
 }

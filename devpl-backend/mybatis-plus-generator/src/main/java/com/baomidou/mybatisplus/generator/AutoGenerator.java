@@ -53,7 +53,7 @@ public class AutoGenerator {
     /**
      * 模板引擎
      */
-    AbstractTemplateEngine templateEngine;
+    protected AbstractTemplateEngine templateEngine;
     /**
      * 数据库表配置
      */
@@ -186,9 +186,8 @@ public class AutoGenerator {
                 DatabaseIntrospector databaseIntrospector = declaredConstructor.newInstance();
                 context.setDatabaseIntrospector(databaseIntrospector);
             } catch (ReflectiveOperationException exception) {
-                throw new RuntimeException("创建DatabaseIntrospector实例出现错误:", exception);
+                throw new RuntimeException("创建DatabaseIntrospect实例出现错误:", exception);
             }
-
         }
         if (null == templateEngine) {
             // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】

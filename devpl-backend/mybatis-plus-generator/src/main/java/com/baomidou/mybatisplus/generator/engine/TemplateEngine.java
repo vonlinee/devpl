@@ -30,4 +30,12 @@ public interface TemplateEngine {
      * @param outputStream 输出位置
      */
     void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream);
+
+    /**
+     * 注册自定义指令
+     *
+     * @param directive 指令实现
+     * @return 是否成功
+     */
+    boolean registerDirective(TemplateDirective directive);
 }
