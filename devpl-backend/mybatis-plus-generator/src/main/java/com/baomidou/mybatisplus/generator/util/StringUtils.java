@@ -25,11 +25,6 @@ public final class StringUtils {
     private static final Pattern P_IS_COLUMN = Pattern.compile("^\\w\\S*\\w*$");
 
     /**
-     * 是否为大写命名
-     */
-    private static final Pattern CAPITAL_MODE = Pattern.compile("^[0-9A-Z/_]+$");
-
-    /**
      * 字符串去除空白内容
      *
      * <ul> <li>'"<>&*+=#-; sql注入黑名单</li> <li>\n 回车</li> <li>\t 水平制表符</li> <li>\s 空格</li> <li>\r 换行</li> </ul>
@@ -207,26 +202,6 @@ public final class StringUtils {
     }
 
     /**
-     * 是否为大写命名
-     *
-     * @param word 待判断字符串
-     * @return ignore
-     */
-    public static boolean isCapitalMode(String word) {
-        return null != word && CAPITAL_MODE.matcher(word).matches();
-    }
-
-    /**
-     * 是否为驼峰下划线混合命名
-     *
-     * @param word 待判断字符串
-     * @return ignore
-     */
-    public static boolean isMixedMode(String word) {
-        return matches(".*[A-Z]+.*", word) && matches(".*[/_]+.*", word);
-    }
-
-    /**
      * 判断是否以某个字符串结尾（区分大小写）
      * Check if a String ends with a specified suffix.
      * <p>
@@ -255,13 +230,11 @@ public final class StringUtils {
     }
 
     /**
-     * Check if a String ends with a specified suffix (optionally case
-     * insensitive).
+     * Check if a String ends with a specified suffix (optionally case-insensitive).
      *
      * @param str        the String to check, may be null
      * @param suffix     the suffix to find, may be null
-     * @param ignoreCase inidicates whether the compare should ignore case (case
-     *                   insensitive) or not.
+     * @param ignoreCase indicates whether the compare should ignore case (case-insensitive) or not.
      * @return <code>true</code> if the String starts with the prefix or both
      * <code>null</code>
      * @see String#endsWith(String)

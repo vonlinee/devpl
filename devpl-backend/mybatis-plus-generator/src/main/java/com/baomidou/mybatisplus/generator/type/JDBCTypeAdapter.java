@@ -2,7 +2,6 @@ package com.baomidou.mybatisplus.generator.type;
 
 import com.baomidou.mybatisplus.generator.jdbc.CommonJavaType;
 import com.baomidou.mybatisplus.generator.util.JdbcUtils;
-import org.springframework.jdbc.core.SqlTypeValue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -48,16 +47,15 @@ public class JDBCTypeAdapter implements TypeAdapter {
         javaTypeToSqlTypeMap.put(Clob.class, Types.CLOB);
     }
 
-
     /**
      * Derive a default SQL type from the given Java type.
      *
      * @param javaType the Java type to translate
-     * @return the corresponding SQL type, or {@link SqlTypeValue#TYPE_UNKNOWN} if none found
+     * @return the corresponding SQL type, or Integer.MIN_VALUE if none found
      */
     public static int javaTypeToSqlParameterType(Class<?> javaType) {
         if (javaType == null) {
-            return SqlTypeValue.TYPE_UNKNOWN;
+            return Integer.MIN_VALUE;
         }
         Integer sqlType = javaTypeToSqlTypeMap.get(javaType);
         if (sqlType != null) {
@@ -100,8 +98,7 @@ public class JDBCTypeAdapter implements TypeAdapter {
             int jdbcType = javaTypeToSqlParameterType(clazz);
             return JDBCType.valueOf(jdbcType);
         } catch (Exception exception) {
-
+            throw new RuntimeException(exception);
         }
-        return JDBCType.VARCHAR;
     }
 }

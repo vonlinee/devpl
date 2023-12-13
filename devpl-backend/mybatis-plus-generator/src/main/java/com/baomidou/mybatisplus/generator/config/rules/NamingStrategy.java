@@ -1,5 +1,6 @@
 package com.baomidou.mybatisplus.generator.config.rules;
 
+import com.baomidou.mybatisplus.generator.codegen.CaseFormat;
 import com.baomidou.mybatisplus.generator.util.StringUtils;
 
 import java.util.Set;
@@ -31,7 +32,7 @@ public enum NamingStrategy {
             return name;
         }
         // 大写数字下划线组成转为小写 , 允许混合模式转为小写
-        if (StringUtils.isCapitalMode(name) || StringUtils.isMixedMode(name)) {
+        if (CaseFormat.CAPITAL_FIRST.matches(name) || CaseFormat.CAMEL_UNDERLINE_MIXED.matches(name)) {
             name = name.toLowerCase();
         }
         StringBuilder result = new StringBuilder();

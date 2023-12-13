@@ -1,6 +1,6 @@
 package com.baomidou.mybatisplus.generator.engine.velocity;
 
-import com.baomidou.mybatisplus.generator.codegen.NamingStyle;
+import com.baomidou.mybatisplus.generator.codegen.CaseFormat;
 
 /**
  * userdirective=com.baomidou.mybatisplus.generator.engine.velocity.CamelCaseDirective
@@ -26,6 +26,6 @@ public class CamelCaseDirective extends VelocityTemplateDirective {
 
     @Override
     public String render(Object[] params) {
-        return NamingStyle.CAPITAL_FIRST.normalize(NamingStyle.underlineToCamel((String) params[0]));
+        return CaseFormat.CAPITAL_FIRST.normalize(CaseFormat.underlineToCamel((String) params[0]));
     }
 }

@@ -29,7 +29,7 @@ open module mybatis.plus.generator {
     requires java.sql;
     requires org.mybatis;
     requires lombok;
-    requires spring.jdbc;
     requires org.hibernate.orm.core;
     requires com.google.common;
+    requires devpl.sdk.internal;
 }

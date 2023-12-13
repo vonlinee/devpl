@@ -96,6 +96,11 @@ public class Context {
         return templateConfig;
     }
 
+    /**
+     * 获取表信息
+     *
+     * @return 表信息
+     */
     public List<IntrospectedTable> introspectTables() {
         if (introspectedTables.isEmpty()) {
             // 获取表过滤
