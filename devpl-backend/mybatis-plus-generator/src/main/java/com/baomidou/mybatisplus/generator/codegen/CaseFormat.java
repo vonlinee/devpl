@@ -2,7 +2,6 @@ package com.baomidou.mybatisplus.generator.codegen;
 
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -24,7 +23,14 @@ public enum CaseFormat implements NamingStrategy {
          */
         @Override
         public String normalize(String source) {
-            return null;
+            if (source == null) {
+                return "";
+            }
+            char[] charArray = source.toCharArray();
+            for (int i = 0; i < charArray.length; i++) {
+                charArray[i] = Character.toUpperCase(charArray[i]);
+            }
+            return String.valueOf(charArray);
         }
 
         @Override
@@ -69,24 +75,39 @@ public enum CaseFormat implements NamingStrategy {
             return source;
         }
 
+        /**
+         * 所有字母全小写，非字母不变
+         * @param source 字符串
+         * @return 是否所有字母全小写
+         */
         @Override
         public boolean matches(String source) {
-            return false;
+            if (source == null) {
+                return false;
+            }
+            char[] charArray = source.toCharArray();
+            for (char c : charArray) {
+                if (!Character.isLowerCase(c)) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
 
     /**
+     * 连字符形式
      * Hyphenated variable naming convention, e.g., "lower-hyphen".
      */
     LOWER_HYPHEN() {
         @Override
         public String normalize(String source) {
-            return null;
+            return toDashCase(source);
         }
 
         @Override
         public boolean matches(String source) {
-            return false;
+            return isDashCase(source);
         }
 
         @Override
@@ -134,14 +155,29 @@ public enum CaseFormat implements NamingStrategy {
     CAPITAL_FIRST_ONLY() {
         @Override
         public String normalize(String source) {
-            return source.isEmpty()
-                ? source
-                : Character.toUpperCase(source.charAt(0)) + LOWER.normalize(source.substring(1));
+            if (source == null || source.isBlank()) {
+                return "";
+            }
+            return Character.toUpperCase(source.charAt(0)) + LOWER.normalize(source.substring(1));
         }
 
         @Override
         public boolean matches(String source) {
-            return false;
+            // 判断字符串是否为空或者长度为0
+            if (source == null || source.length() == 0) {
+                return false;
+            }
+            // 判断首字母是否大写
+            if (!Character.isUpperCase(source.charAt(0))) {
+                return false;
+            }
+            // 判断其余字母是否全部小写
+            for (int i = 1; i < source.length(); i++) {
+                if (!Character.isLowerCase(source.charAt(i))) {
+                    return false;
+                }
+            }
+            return true;
         }
     },
 
@@ -152,9 +188,14 @@ public enum CaseFormat implements NamingStrategy {
 
         final Pattern CAMEL_CASE = Pattern.compile(".*[A-Z]+.*");
 
+        /**
+         * 首字母大写，则为大驼峰，首字母小写则为小驼峰
+         * @param source 源字符串
+         * @return 驼峰形式的字符串
+         */
         @Override
         public String normalize(String source) {
-            return null;
+            return toCamelCase(source);
         }
 
         @Override
@@ -169,7 +210,7 @@ public enum CaseFormat implements NamingStrategy {
     CAMEL_UNDERLINE_MIXED() {
         @Override
         public String normalize(String source) {
-            return null;
+            return toCamelSnakeCase(source);
         }
 
         /**
@@ -179,7 +220,7 @@ public enum CaseFormat implements NamingStrategy {
          */
         @Override
         public boolean matches(String source) {
-            return CAMEL.matches(source) && UNDER_LINE.matches(source);
+            return CAMEL.matches(source) && UNDERSCORE.matches(source);
         }
     },
 
@@ -207,18 +248,18 @@ public enum CaseFormat implements NamingStrategy {
     /**
      * 下划线，不管大小写
      */
-    UNDER_LINE() {
-
-        final Pattern UNDER_LINE_CASE = Pattern.compile(".*[/_]+.*");
-
+    UNDERSCORE(Pattern.compile(".*[/_]+.*")) {
         @Override
         public String normalize(String source) {
-            return null;
+            return toUnderscore(source);
         }
 
         @Override
         public boolean matches(String source) {
-            return UNDER_LINE_CASE.matcher(source).matches();
+            if (this.pattern == null) {
+                return false;
+            }
+            return this.pattern.matcher(source).matches();
         }
     },
 
@@ -242,13 +283,12 @@ public enum CaseFormat implements NamingStrategy {
         }
 
         /**
-         * TODO
          * @param source 字符串
          * @return 字符串是否符合小写下划线风格
          */
         @Override
         public boolean matches(String source) {
-            return false;
+            return isLowerCaseUnderscore(source);
         }
     },
 
@@ -263,7 +303,7 @@ public enum CaseFormat implements NamingStrategy {
 
         @Override
         public boolean matches(String source) {
-            return false;
+            return isUpperCaseUnderscore(source);
         }
     };
 
@@ -271,7 +311,6 @@ public enum CaseFormat implements NamingStrategy {
      * A bit mask which selects the bit encoding ASCII character case.
      */
     private static final char CASE_MASK = 0x20;
-
 
     /**
      * 将目标字符串转换成当前命名风格
@@ -289,48 +328,30 @@ public enum CaseFormat implements NamingStrategy {
      */
     public abstract boolean matches(String source);
 
+    final Pattern pattern;
+
+    CaseFormat() {
+        this.pattern = null;
+    }
+
+    CaseFormat(Pattern pattern) {
+        this.pattern = pattern;
+    }
+
     /**
      * 将字符串转换为指定的命名风格 由于性能原因，其他枚举值可以重写此方法
      *
-     * @param s      原字符串
+     * @param source 原字符串
      * @param format 目标格式
      * @return 转换结果
      */
-    public String convert(CaseFormat format, String s) {
-        // deal with camel conversion
-        StringBuilder out = null;
-        int i = 0;
-        int j = -1;
-        while ((j = wordBoundary.indexIn(s, ++j)) != -1) {
-            if (i == 0) {
-                // include some extra space for separators
-                out = new StringBuilder(s.length() + 4 * format.wordSeparator.length());
-                out.append(format.normalize(s.substring(i, j)));
-            } else {
-                Objects.requireNonNull(out).append(format.normalize(s.substring(i, j)));
-            }
-            out.append(format.wordSeparator);
-            i = j + wordSeparator.length();
-        }
-        return (i == 0) ? format.normalize(s) : Objects.requireNonNull(out).append(format.normalize(s.substring(i))).toString();
+    public String convert(CaseFormat format, String source) {
+        return format.normalize(source);
     }
 
     @Override
     public String apply(String source) {
         return normalize(source);
-    }
-
-    private String wordSeparator;
-    private Matcher wordBoundary;
-
-    /**
-     * 字符匹配
-     */
-    private static class Matcher {
-
-        public int indexIn(CharSequence sequence, int start) {
-            return -1;
-        }
     }
 
     // ================================ 静态工具方法 ===============================================
@@ -350,9 +371,7 @@ public enum CaseFormat implements NamingStrategy {
      * @param name 待转内容
      */
     public static String underlineToCamel(String name) {
-        // 快速检查
         if (name == null || name.isBlank()) {
-            // 没必要转换
             return "";
         }
         String tempName = name;
@@ -365,7 +384,7 @@ public enum CaseFormat implements NamingStrategy {
         String[] camels = tempName.split("_");
         // 跳过原始字符串中开头、结尾的下换线或双重下划线
         // 处理真正的驼峰片段
-        Arrays.stream(camels).filter(camel -> !isBlank(camel)).forEach(camel -> {
+        Arrays.stream(camels).filter(camel -> !name.isBlank()).forEach(camel -> {
             if (result.isEmpty()) {
                 // 第一个驼峰片段，首字母都小写
                 result.append(LOWER_FIRST.normalize(camel));
@@ -385,7 +404,7 @@ public enum CaseFormat implements NamingStrategy {
      * @return 转换后的字符串
      */
     public static String removePrefix(String name, Set<String> prefix) {
-        if (isBlank(name)) {
+        if (name == null || name.isBlank()) {
             return "";
         }
         // 判断是否有匹配的前缀，然后截取前缀
@@ -411,7 +430,7 @@ public enum CaseFormat implements NamingStrategy {
      * @return 转换后的字符串
      */
     public static String removeSuffix(String name, Set<String> suffix) {
-        if (isBlank(name)) {
+        if (name == null || name.isBlank()) {
             return "";
         }
         // 判断是否有匹配的后缀，然后截取后缀
@@ -430,52 +449,246 @@ public enum CaseFormat implements NamingStrategy {
     }
 
     /**
-     * 实体首字母大写
+     * 首字母大写
      *
      * @param name 待转换的字符串
      * @return 转换后的字符串
      */
     public static String capitalFirst(String name) {
-        if (!isBlank(name)) {
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
+        if (name == null || name.isBlank()) {
+            return "";
         }
-        return "";
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     /**
-     * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称
-     * 需要处理一下特殊情况：
-     * <p>
-     * 1、如果只有一位，转换为大写形式
-     * 2、如果多于 1 位，只有在第二位是小写的情况下，才会把第一位转为小写
-     * <p>
-     * 我们并不建议在数据库对应的对象中使用基本类型，因此这里不会考虑基本类型的情况
-     */
-    public static String getCapitalName(String name) {
-        if (name.length() == 1) {
-            return name.toUpperCase();
-        }
-        if (Character.isLowerCase(name.charAt(1))) {
-            return Character.toUpperCase(name.charAt(0)) + name.substring(1);
-        }
-        return name;
-    }
-
-    /**
-     * 判断字符串中是否全是空白字符
+     * 转换成驼峰形式
      *
-     * @param cs 需要判断的字符串
-     * @return 如果字符串序列是 null 或者全是空白，返回 true
+     * @param str 字符串
+     * @return 驼峰形式字符串
      */
-    public static boolean isBlank(CharSequence cs) {
-        if (cs != null) {
-            int length = cs.length();
-            for (int i = 0; i < length; i++) {
-                if (!Character.isWhitespace(cs.charAt(i))) {
-                    return false;
-                }
+    public static String toCamelCase(String str) {
+        StringBuilder result = new StringBuilder();
+        boolean capitalize = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isWhitespace(ch) || ch == '_' || ch == '-') {
+                capitalize = true;
+            } else if (capitalize) {
+                result.append(Character.toUpperCase(ch));
+                capitalize = false;
+            } else {
+                result.append(Character.toLowerCase(ch));
             }
         }
+        return result.toString();
+    }
+
+    /**
+     * 转换成驼峰下划线形式
+     *
+     * @param str 字符串
+     * @return 驼峰下划线形式混合字符串
+     */
+    public static String toCamelSnakeCase(String str) {
+        StringBuilder result = new StringBuilder();
+        boolean capitalize = false;
+        boolean addUnderscore = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isWhitespace(ch)) {
+                capitalize = true;
+                addUnderscore = true;
+            } else if (ch == '_') {
+                addUnderscore = true;
+            } else if (addUnderscore) {
+                result.append("_");
+                result.append(Character.toUpperCase(ch));
+                capitalize = false;
+                addUnderscore = false;
+            } else if (capitalize) {
+                result.append(Character.toUpperCase(ch));
+                capitalize = false;
+            } else {
+                result.append(Character.toLowerCase(ch));
+            }
+        }
+        if (addUnderscore) {
+            result.deleteCharAt(result.length() - 1); // 删除最后一个多余的下划线
+        }
+        return result.toString();
+    }
+
+    /**
+     * 判断字符串是否为大写字母下划线形式
+     * 函数遍历字符串的每个字符，如果遇到大写字母，则检查之前是否已经出现过下划线，如果出现过，则返回false。
+     * 如果遇到下划线，则检查之前是否已经出现过下划线，如果出现过，则返回false。如果遇到其他字符，则返回false。
+     * 最后，如果字符串没有返回false，则返回true，表示字符串为大写字母下划线形式。
+     *
+     * @param str 字符串
+     * @return 是否为大写字母下划线形式
+     */
+    public static boolean isUpperCaseUnderscore(String str) {
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+        boolean hasUnderscore = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                if (hasUnderscore) {
+                    return false;
+                }
+            } else if (ch == '_') {
+                if (hasUnderscore) {
+                    return false;
+                }
+                hasUnderscore = true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 这个函数接受一个字符串参数str，并返回一个布尔值，表示该字符串是否为小写字母下划线形式。如果字符串为空或长度为0，则返回false。
+     * 然后，函数遍历字符串的每个字符，如果遇到小写字母，则检查之前是否已经出现过下划线，如果出现过，则返回false。
+     * 如果遇到下划线，则检查之前是否已经出现过下划线，如果出现过，则返回false。如果遇到其他字符，则返回false。
+     * 最后，如果字符串没有返回false，则返回true，表示字符串为小写字母下划线形式。
+     *
+     * @param str 字符串
+     * @return 是否小写下划线形式
+     */
+    public static boolean isLowerCaseUnderscore(String str) {
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+        boolean hasUnderscore = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isLowerCase(ch)) {
+                if (hasUnderscore) {
+                    return false;
+                }
+            } else if (ch == '_') {
+                if (hasUnderscore) {
+                    return false;
+                }
+                hasUnderscore = true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 这个函数接受一个字符串参数str，并返回一个下划线形式的字符串。如果输入字符串为空或长度为0，则返回空字符串。
+     * 然后，函数遍历输入字符串的每个字符，如果遇到大写字母，则将其转换为小写字母，并在其前面添加一个下划线。
+     * 最后，将所有字符连接起来并返回结果字符串。
+     *
+     * @param str 源字符串
+     * @return 下划线形式字符串
+     */
+    public static String toUnderscore(String str) {
+        if (str == null || str.length() == 0) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+        boolean capitalize = false;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            if (Character.isUpperCase(ch)) {
+                capitalize = true;
+            } else if (capitalize) {
+                result.append("_");
+                capitalize = false;
+            }
+
+            result.append(ch);
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * 这个函数接受一个字符串参数str，并返回一个连字符形式的字符串。如果输入字符串为空或长度为0，则返回空字符串。
+     * 然后，函数遍历输入字符串的每个字符，如果遇到大写字母，则将其转换为小写字母，并在其前面添加一个连字符。
+     * 如果遇到小写字母或空格，则不进行任何操作。如果遇到其他字符，则将其添加到结果字符串中。最后，返回结果字符串。
+     *
+     * @param str 源字符串
+     * @return 连字符形式字符串
+     */
+    public static String toDashCase(String str) {
+        if (str == null || str.length() == 0) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        boolean capitalize = false;
+        boolean isFirstLetter = true;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                if (!isFirstLetter) {
+                    result.append("-");
+                }
+                isFirstLetter = false;
+                capitalize = true;
+            } else if (Character.isLowerCase(ch)) {
+                if (capitalize) {
+                    result.append("-");
+                }
+                capitalize = false;
+            } else {
+                if (isFirstLetter) {
+                    result.append("-");
+                }
+                isFirstLetter = false;
+            }
+            result.append(ch);
+        }
+        return result.toString();
+    }
+
+    /**
+     * 这个函数接受一个字符串参数str，并返回一个布尔值，表示该字符串是否为连字符形式。
+     * 如果输入字符串为空或长度为0，则返回false。然后，函数遍历输入字符串的每个字符，如果遇到连字符，
+     * 则检查之前是否已经出现过字母，如果出现过，则返回false。如果遇到字母，则检查之前是否已经出现过连字符，
+     * 如果出现过，则返回false。如果遇到其他字符，则返回false。
+     * 最后，如果字符串没有返回false，则返回true，表示字符串为连字符形式。
+     *
+     * @param str 字符串
+     * @return 是否为连字符形式
+     */
+    public static boolean isDashCase(String str) {
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+
+        boolean hasDash = false;
+        boolean hasLetter = false;
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+
+            if (ch == '-') {
+                if (hasLetter) {
+                    return false;
+                }
+                hasDash = true;
+            } else if (Character.isLetter(ch)) {
+                if (hasDash) {
+                    return false;
+                }
+                hasLetter = true;
+            } else {
+                return false;
+            }
+        }
+
         return true;
     }
 }
