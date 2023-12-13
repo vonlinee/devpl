@@ -45,6 +45,7 @@ https://xcheck.tencent.com/index
 1. 模型内部数据项之间的关联关系
 2. 模型实例与实例之间的关联关系
 
-
+数据模拟参考文章：
+https://www.jianshu.com/p/533adbc1d37f
 
 

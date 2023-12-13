@@ -24,7 +24,7 @@ public class ZipUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return new File(target);
     }
 
     /**
