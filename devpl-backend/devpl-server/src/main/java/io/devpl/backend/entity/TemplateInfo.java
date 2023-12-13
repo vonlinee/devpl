@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.devpl.backend.domain.TemplateType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
@@ -50,7 +51,7 @@ public class TemplateInfo extends DBEntity {
     /**
      * 技术提供方，例如Apache Velocity, Apache FreeMarker
      *
-     * @see io.devpl.backend.domain.TemplateProvider
+     * @see TemplateType
      */
     @TableField(value = "provider")
     private String provider;

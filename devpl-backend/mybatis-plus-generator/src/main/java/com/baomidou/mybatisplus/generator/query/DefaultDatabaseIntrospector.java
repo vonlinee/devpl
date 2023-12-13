@@ -128,10 +128,10 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                 }
             }
             // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
-            for (IntrospectedTable tableInfo : tableList) {
-                introspecteTableColumns(dbmd, tableInfo, catalog, schemaPattern);
-                tableInfo.processTable();
-                tableInfo.importPackage();
+            for (IntrospectedTable table : tableList) {
+                introspecteTableColumns(dbmd, table, catalog, schemaPattern);
+                table.processTable();
+                table.importPackage();
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

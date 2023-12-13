@@ -171,7 +171,6 @@ public class AutoGenerator {
         logger.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == context) {
-            // TODO 前面已经确定不为null，去掉此处的初始化
             this.strategyConfig = Optional.ofNullable(strategyConfig).orElse(new StrategyConfig.Builder().build());
             this.globalConfig = Optional.ofNullable(globalConfig).orElse(new GlobalConfig.Builder().build());
             this.templateConfig = Optional.ofNullable(templateConfig).orElse(new TemplateConfig.Builder().build());
@@ -184,9 +183,9 @@ public class AutoGenerator {
             try {
                 Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor();
                 DatabaseIntrospector databaseIntrospector = declaredConstructor.newInstance();
-                context.setDatabaseIntrospector(databaseIntrospector);
+                context.setDatabaseIntrospection(databaseIntrospector);
             } catch (ReflectiveOperationException exception) {
-                throw new RuntimeException("创建DatabaseIntrospect实例出现错误:", exception);
+                throw new RuntimeException("创建DatabaseIntrospector实例出现错误:", exception);
             }
         }
         if (null == templateEngine) {
@@ -199,7 +198,7 @@ public class AutoGenerator {
         DateType dateType = globalConfig.getDateType();
 
         // 获取所有的表信息
-        List<IntrospectedTable> tableInfoList = context.introspecteTables();
+        List<IntrospectedTable> tableInfoList = context.introspectTables();
         // 模板引擎初始化执行文件输出
         templateEngine.init(context);
 

@@ -8,7 +8,7 @@ import freemarker.template.TemplateException;
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.ServerException;
 import io.devpl.backend.dao.TemplateInfoMapper;
-import io.devpl.backend.domain.TemplateProvider;
+import io.devpl.backend.domain.TemplateType;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
@@ -53,7 +53,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      */
     @Override
     public List<TemplateProviderVO> listTemplateTypes() {
-        return Arrays.stream(TemplateProvider.values()).map(tp -> {
+        return Arrays.stream(TemplateType.values()).map(tp -> {
             TemplateProviderVO vo = new TemplateProviderVO();
             vo.setProvider(tp.getProvider());
             vo.setProviderName(tp.getProviderName());
@@ -214,7 +214,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                         templateInfo = new TemplateInfo();
                     }
                     String extName = FileUtils.getExtensionName(templateFile, null);
-                    for (TemplateProvider provider : TemplateProvider.values()) {
+                    for (TemplateType provider : TemplateType.values()) {
                         if (provider.getExtension().equals(extName)) {
                             templateInfo.setProvider(provider.getProvider());
                             break;

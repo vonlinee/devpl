@@ -12,12 +12,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * mybatis plus FastAutoGenerator
- *
- * @author L.cm, lanjerry
- * @since 2021-07-22
- */
 public final class FastAutoGenerator {
 
     /**

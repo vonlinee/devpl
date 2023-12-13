@@ -1,7 +1,6 @@
 package com.baomidou.mybatisplus.generator.query;
 
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
@@ -25,14 +24,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 这是兼容以前旧版本提供的查询方式，需要每个数据库对接适配。
- *
- * @author nieqiurong 2021/1/6.
- * @see DatabaseDialect 数据库适配
- * @see ITypeConvert 类型适配处理
- * @since 3.5.0
- */
 public class SQLQuery extends AbstractDatabaseIntrospector {
 
     static final Logger log = LoggerFactory.getLogger(SQLQuery.class);

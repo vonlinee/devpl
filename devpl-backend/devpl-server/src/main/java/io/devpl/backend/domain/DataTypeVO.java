@@ -1,8 +1,10 @@
 package io.devpl.backend.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DataTypeVO {
 
     private String name;

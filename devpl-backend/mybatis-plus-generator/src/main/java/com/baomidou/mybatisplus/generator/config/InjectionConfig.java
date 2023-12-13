@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
@@ -31,9 +16,6 @@ import java.util.stream.Collectors;
 
 /**
  * 注入配置
- *
- * @author hubin
- * @since 2016-12-07
  */
 public class InjectionConfig {
 
@@ -53,14 +35,14 @@ public class InjectionConfig {
      * 自定义模板文件，key为文件名称，value为模板路径（已弃用，换成了customFiles，3.5.4版本会删除此方法）
      */
     @Deprecated
-    private Map<String, String> customFile = new HashMap<>();
+    private final Map<String, String> customFile = new HashMap<>();
 
     /**
      * 自定义模板文件列表
      *
      * @since 3.5.3
      */
-    private List<CustomFile> customFiles = new ArrayList<>();
+    private final List<CustomFile> customFiles = new ArrayList<>();
 
     /**
      * 是否覆盖已有文件（默认 false）（已弃用，已放到自定义文件类CustomFile中，3.5.4版本会删除此方法）
@@ -73,7 +55,6 @@ public class InjectionConfig {
     /**
      * 输出文件前
      */
-    @NotNull
     public void beforeOutputFile(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         if (!customMap.isEmpty()) {
             objectMap.putAll(customMap);
