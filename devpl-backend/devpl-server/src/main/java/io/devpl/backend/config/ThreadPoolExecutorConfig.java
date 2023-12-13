@@ -9,11 +9,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * 线程池配置。可与@EnableAsync、@Async结合使用
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ThreadPoolExecutorConfig {
 
     @Bean(value = "common-pool")
-    public ThreadPoolTaskExecutor commandCenterThreadPool() {
+    public ThreadPoolTaskExecutor commonThreadPool() {
         // CPU核心数
         int cpuCount = Runtime.getRuntime().availableProcessors();
 

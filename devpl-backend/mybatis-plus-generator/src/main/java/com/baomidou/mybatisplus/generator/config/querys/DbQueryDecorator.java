@@ -23,6 +23,7 @@ import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.po.LikeTable;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.util.JdbcUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ import java.util.stream.Collectors;
 public class DbQueryDecorator extends AbstractDbQuery {
     private final DatabaseDialect dbQuery;
     private final Connection connection;
-    private final DbType dbType;
+    private final DBType dbType;
     private final StrategyConfig strategyConfig;
     private final String schema;
     private final Logger logger;
@@ -57,10 +58,10 @@ public class DbQueryDecorator extends AbstractDbQuery {
     public DbQueryDecorator(@NotNull DataSourceConfig dataSourceConfig, @NotNull StrategyConfig strategyConfig) {
         DatabaseDialect iDbQuery = dataSourceConfig.getDbQuery();
         if (null == iDbQuery) {
-            DbType dbType = JdbcUtils.getDbType(dataSourceConfig.getUrl());
+            DBType dbType = JdbcUtils.getDbType(dataSourceConfig.getUrl());
             // 默认 MYSQL
             iDbQuery = Optional.ofNullable(DbQueryRegistry.getDbQuery(dbType))
-                .orElseGet(() -> DbQueryRegistry.getDbQuery(DbType.MYSQL));
+                .orElseGet(() -> DbQueryRegistry.getDbQuery(DBType.MYSQL));
         }
         this.dbQuery = iDbQuery;
         this.connection = dataSourceConfig.getConnection();
@@ -73,7 +74,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     @Override
     public String tablesSql() {
         String tablesSql = dbQuery.tablesSql();
-        if (DbType.POSTGRE_SQL == dbType || DbType.KINGBASE_ES == dbType || DbType.DB2 == dbType || DbType.ORACLE == dbType) {
+        if (DBType.POSTGRE_SQL == dbType || DBType.KINGBASE_ES == dbType || DBType.DB2 == dbType || DBType.ORACLE == dbType) {
             tablesSql = String.format(tablesSql, this.schema);
         }
         if (strategyConfig.isEnableSqlFilter()) {
@@ -111,14 +112,14 @@ public class DbQueryDecorator extends AbstractDbQuery {
      */
     public String tableFieldsSql(String tableName) {
         String tableFieldsSql = this.tableFieldsSql();
-        if (DbType.KINGBASE_ES == dbType || DbType.DB2 == dbType) {
+        if (DBType.KINGBASE_ES == dbType || DBType.DB2 == dbType) {
             tableFieldsSql = String.format(tableFieldsSql, this.schema, tableName);
-        } else if (DbType.ORACLE == dbType) {
+        } else if (DBType.ORACLE == dbType) {
             tableFieldsSql = String.format(tableFieldsSql.replace("#schema", this.schema), tableName, tableName.toUpperCase());
-        } else if (DbType.DM == dbType) {
+        } else if (DBType.DM == dbType) {
             tableName = tableName.toUpperCase();
             tableFieldsSql = String.format(tableFieldsSql, tableName);
-        } else if (DbType.POSTGRE_SQL == dbType) {
+        } else if (DBType.POSTGRE_SQL == dbType) {
             tableFieldsSql = String.format(tableFieldsSql, tableName, tableName, tableName);
         } else {
             tableFieldsSql = String.format(tableFieldsSql, tableName);
@@ -215,13 +216,13 @@ public class DbQueryDecorator extends AbstractDbQuery {
     }
 
     public void closeConnection() {
-        Optional.ofNullable(connection).ifPresent((con) -> {
+        if (connection != null) {
             try {
-                con.close();
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        });
+        }
     }
 
     public static class ResultSetWrapper {
@@ -230,9 +231,9 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         private final ResultSet resultSet;
 
-        private final DbType dbType;
+        private final DBType dbType;
 
-        ResultSetWrapper(ResultSet resultSet, DatabaseDialect dbQuery, DbType dbType) {
+        ResultSetWrapper(ResultSet resultSet, DatabaseDialect dbQuery, DBType dbType) {
             this.resultSet = resultSet;
             this.dbQuery = dbQuery;
             this.dbType = dbType;
@@ -289,7 +290,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
          */
         public boolean isPrimaryKey() {
             String key = this.getStringResult(dbQuery.fieldKey());
-            if (DbType.DB2 == dbType || DbType.SQLITE == dbType || DbType.CLICK_HOUSE == dbType) {
+            if (DBType.DB2 == dbType || DBType.SQLITE == dbType || DBType.CLICK_HOUSE == dbType) {
                 return StringUtils.isNotBlank(key) && "1".equals(key);
             } else {
                 return StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key);

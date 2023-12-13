@@ -5,7 +5,7 @@ import io.devpl.backend.domain.ParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.*;
-import io.devpl.backend.mybatis.tree.TreeNode;
+import io.devpl.sdk.TreeNode;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -145,15 +145,15 @@ public class MyBatisServiceImpl implements MyBatisService {
     /**
      * 将字符串的statement解析为MappedStatement对象
      *
-     * @param statement xml
-     * @return MappedStatement
+     * @param statement xml 包含<select/> <delete/> <update/> <insert/> 等标签
+     * @return MappedStatement实例
      */
     @Override
     public MappedStatement parseMappedStatement(String statement) {
         XPathParser xPathParser = new XPathParser(statement, false, null, new IgnoreDTDEntityResolver());
         // TODO 支持所有类型的SQL标签
         XNode selectNode = xPathParser.evalNode("select");
-        MyBaticMockConfiguration configuration = new MyBaticMockConfiguration(sqlSessionFactory.getConfiguration());
+        MyBatisConfiguration configuration = new MyBatisConfiguration(sqlSessionFactory.getConfiguration());
         MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
@@ -446,9 +446,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         final char[] chars = content.toCharArray();
         int fromIndex, endIndex;
         for (int i = 0; i < chars.length; i++) {
-            // MyBatis要求 $和{之间没有空格才有效
-            // 且不能嵌套
-            // Mapper语句语法正确的情况下，一轮遍历即可，不会回头
+            // MyBatis要求 $和{之间没有空格才有效 且不能嵌套
             if ((chars[i] == '$' || chars[i] == '#') && chars[i + 1] == '{') {
                 // 找到}
                 fromIndex = i + 2;
@@ -459,7 +457,6 @@ public class MyBatisServiceImpl implements MyBatisService {
                     }
                     endIndex++;
                 }
-
                 String paramName = StringUtils.toString(chars, fromIndex, endIndex);
                 if (Objects.equals(paramName, item)) {
                     continue;

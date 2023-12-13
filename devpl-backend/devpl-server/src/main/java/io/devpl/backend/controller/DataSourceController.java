@@ -101,7 +101,6 @@ public class DataSourceController {
     @PostMapping("/datasource/connection/test")
     public Result<TestConnVO> test(@RequestBody DbConnInfo connInfo) {
         return Result.ok(datasourceService.testJdbcConnection(connInfo));
-
     }
 
     /**

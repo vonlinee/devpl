@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.generator.codegen.ActionCallback;
@@ -25,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.function.Supplier;
 
-
 /**
  * 全局配置
  *
@@ -35,11 +19,15 @@ import java.util.function.Supplier;
 public class GlobalConfig {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
+
+    /**
+     * 回调接口
+     */
     public ActionCallback callback;
     /**
      * 生成文件的输出目录【 windows:D://  linux or mac:/tmp 】
      */
-    private String outputDir = System.getProperty("os.name").toLowerCase().contains("windows") ? "D://" : "/tmp";
+    private String outputDir = "/tmp";
 
     /**
      * 是否覆盖已有文件（默认 false）（已迁移到策略配置中，3.5.4版本会删除此方法）
@@ -129,7 +117,7 @@ public class GlobalConfig {
      * @author nieqiurong 2020/10/11.
      * @since 3.5.0
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<GlobalConfig> {
+    public static class Builder implements GenericBuilder<GlobalConfig> {
 
         private final GlobalConfig globalConfig;
 

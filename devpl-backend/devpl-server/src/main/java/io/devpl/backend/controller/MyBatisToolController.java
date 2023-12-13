@@ -10,6 +10,7 @@ import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.Vals;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -57,7 +58,9 @@ public class MyBatisToolController {
     @PostMapping("/ms/params")
     public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
         String content = param.getMapperStatement();
-        Assert.hasText(content, "文本为空");
+        if (StringUtils.isBlank(content)) {
+            return Result.error("文本为空");
+        }
         return Result.ok(myBatisService.getMapperStatementParams(content, Vals.nil(param.getEnableTypeInference(), true)));
     }
 

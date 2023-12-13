@@ -14,6 +14,7 @@ import io.devpl.backend.interfaces.impl.HtmlTableContentFieldParser;
 import io.devpl.backend.interfaces.impl.HtmlTableDomFieldParser;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.tools.parser.JavaParserUtils;
+import io.devpl.backend.tools.parser.java.JavaASTUtils;
 import io.devpl.backend.tools.parser.java.MetaField;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -166,7 +167,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
 
     private List<FieldInfo> parseJavaFields(String content) {
         try {
-            List<MetaField> metaFields = JavaParserUtils.parseFields(content);
+            List<MetaField> metaFields = JavaASTUtils.parseFields(content);
             List<FieldInfo> res = new ArrayList<>();
             for (MetaField metaField : metaFields) {
                 FieldInfo fieldInfo = new FieldInfo();

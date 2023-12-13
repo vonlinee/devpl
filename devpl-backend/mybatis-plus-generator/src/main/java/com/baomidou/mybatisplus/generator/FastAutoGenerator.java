@@ -1,21 +1,17 @@
 package com.baomidou.mybatisplus.generator;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.engine.AbstractTemplateEngine;
+import com.baomidou.mybatisplus.generator.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.*;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * mybatis plus FastAutoGenerator
- *
- * @author L.cm, lanjerry
- * @since 2021-07-22
- */
 public final class FastAutoGenerator {
 
     /**
@@ -63,6 +59,25 @@ public final class FastAutoGenerator {
         this.strategyConfigBuilder = new StrategyConfig.Builder();
         this.injectionConfigBuilder = new InjectionConfig.Builder();
         this.templateConfigBuilder = new TemplateConfig.Builder();
+    }
+
+    /**
+     * 从本地.properties文件进行加载
+     *
+     * @param propsFile .properties文件
+     * @return FastAutoGenerator
+     */
+    public static FastAutoGenerator create(File propsFile) {
+        Properties properties = new Properties();
+        try (FileReader fr = new FileReader(propsFile)) {
+            properties.load(fr);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        String url = (String) properties.get("url");
+        String username = (String) properties.get("username");
+        String password = (String) properties.get("password");
+        return new FastAutoGenerator(new DataSourceConfig.Builder(url, username, password));
     }
 
     public static FastAutoGenerator create(@NotNull String url, String username, String password) {

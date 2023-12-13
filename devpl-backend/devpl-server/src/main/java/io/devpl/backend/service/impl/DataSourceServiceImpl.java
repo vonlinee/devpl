@@ -49,7 +49,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
 
     @Override
     public boolean isSystemDataSource(Long id) {
-        return id == -1;
+        return id != null && id == -1;
     }
 
     @Override
@@ -104,7 +104,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
      */
     @Override
     public Connection getConnection(DbConnInfo connInfo) throws SQLException {
-        if (connInfo.getId() != null && connInfo.getId().intValue() == -1) {
+
+        if (connInfo.getId() != null && isSystemDataSource(connInfo.getId())) {
             // 本系统连接的数据源
             return dataSource.getConnection();
         }
@@ -237,8 +238,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         TestConnVO vo = new TestConnVO();
         try (Connection connection = getConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
-            String databaseProductName = metaData.getDatabaseProductName();
-            vo.setDbmsType(databaseProductName);
+            vo.setDbmsType(metaData.getDatabaseProductName());
             vo.setUseSsl(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);

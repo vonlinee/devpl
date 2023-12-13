@@ -96,7 +96,12 @@ public class Context {
         return templateConfig;
     }
 
-    public List<IntrospectedTable> introspecteTables() {
+    /**
+     * 获取表信息
+     *
+     * @return 表信息
+     */
+    public List<IntrospectedTable> introspectTables() {
         if (introspectedTables.isEmpty()) {
             // 获取表过滤
             String tableNamePattern = null;
@@ -156,7 +161,7 @@ public class Context {
         return dataSourceConfig;
     }
 
-    public void setDatabaseIntrospector(DatabaseIntrospector databaseIntrospector) {
+    public void setDatabaseIntrospection(DatabaseIntrospector databaseIntrospector) {
         this.databaseIntrospector = databaseIntrospector;
         if (databaseIntrospector != null) {
             databaseIntrospector.setContext(this);

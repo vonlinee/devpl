@@ -2,6 +2,7 @@ package com.baomidou.mybatisplus.generator.jdbc;
 
 /**
  * 支持的数据库类型,主要用于分页方言
+ * 抄自com.baomidou.mybatisplus.annotation.DbType
  */
 public enum DBType {
 

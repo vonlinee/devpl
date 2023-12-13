@@ -54,4 +54,9 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
     public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
 
     }
+
+    @Override
+    public boolean registerDirective(TemplateDirective directive) {
+        return false;
+    }
 }

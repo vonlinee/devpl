@@ -53,8 +53,10 @@ public class ZipUtils {
             }
             //遍历文件夹子目录，进行递归的zipFile
             File[] children = fileToZip.listFiles();
-            for (File childFile : children) {
-                zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+            if (children != null) {
+                for (File childFile : children) {
+                    zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+                }
             }
             //如果当前递归对象是文件夹，加入ZipEntry之后就返回
             return;

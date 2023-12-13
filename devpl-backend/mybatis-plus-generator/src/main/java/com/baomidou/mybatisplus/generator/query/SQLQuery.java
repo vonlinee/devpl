@@ -1,8 +1,6 @@
 package com.baomidou.mybatisplus.generator.query;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
 import com.baomidou.mybatisplus.generator.config.ITypeConvert;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.Context;
@@ -14,6 +12,7 @@ import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
 import com.baomidou.mybatisplus.generator.config.querys.DbQueryDecorator;
 import com.baomidou.mybatisplus.generator.config.querys.H2Query;
 import com.baomidou.mybatisplus.generator.config.rules.ColumnJavaType;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
 import com.baomidou.mybatisplus.generator.util.JdbcUtils;
 import com.baomidou.mybatisplus.generator.util.StringUtils;
@@ -25,14 +24,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 这是兼容以前旧版本提供的查询方式，需要每个数据库对接适配。
- *
- * @author nieqiurong 2021/1/6.
- * @see DatabaseDialect 数据库适配
- * @see ITypeConvert 类型适配处理
- * @since 3.5.0
- */
 public class SQLQuery extends AbstractDatabaseIntrospector {
 
     static final Logger log = LoggerFactory.getLogger(SQLQuery.class);
@@ -49,8 +40,8 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         final Set<String> excludeTables = strategyConfig.getExclude();
         final Set<String> includeTables = strategyConfig.getInclude();
-        boolean isInclude = excludeTables.size() > 0;
-        boolean isExclude = includeTables.size() > 0;
+        boolean isInclude = !excludeTables.isEmpty();
+        boolean isExclude = !includeTables.isEmpty();
         // 所有的表信息
         List<IntrospectedTable> tableList = new ArrayList<>();
 
@@ -92,8 +83,8 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
 
     protected void filter(List<IntrospectedTable> tableList, List<IntrospectedTable> includeTableList, List<IntrospectedTable> excludeTableList) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
-        boolean isInclude = strategyConfig.getInclude().size() > 0;
-        boolean isExclude = strategyConfig.getExclude().size() > 0;
+        boolean isInclude = !strategyConfig.getInclude().isEmpty();
+        boolean isExclude = !strategyConfig.getExclude().isEmpty();
         if (isExclude || isInclude) {
             Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
                 .stream()
@@ -107,7 +98,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                 // 解决可能大小写不敏感的情况导致无法移除掉
                 notExistTables.remove(tabInfo.getName().toLowerCase());
             }
-            if (notExistTables.size() > 0) {
+            if (!notExistTables.isEmpty()) {
                 log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
             }
             // 需要反向生成的表信息
@@ -125,7 +116,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         DataSourceConfig dataSourceConfig = context.getDataSourceConfig();
 
-        DbType dbType = dataSourceConfig.getDbType();
+        DBType dbType = dataSourceConfig.getDbType();
         String tableName = tableInfo.getName();
         try {
             // TODO 重构
@@ -133,7 +124,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
             Map<String, ColumnMetadata> columnsInfoMap = new HashMap<>();
             String tableFieldsSql = dbQuery.tableFieldsSql(tableName);
             Set<String> h2PkColumns = new HashSet<>();
-            if (DbType.H2 == dbType) {
+            if (DBType.H2 == dbType) {
                 dbQuery.execute(String.format(H2Query.PK_QUERY_SQL, tableName), result -> {
                     String primaryKey = result.getStringResult(dbQuery.fieldKey());
                     if (Boolean.parseBoolean(primaryKey)) {
@@ -150,7 +141,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                 // 设置字段的元数据信息
                 // TODO 测试
                 // 避免多重主键设置，目前只取第一个找到ID，并放到list中的索引为0的位置
-                boolean isId = DbType.H2 == dbType ? h2PkColumns.contains(columnName) : result.isPrimaryKey();
+                boolean isId = DBType.H2 == dbType ? h2PkColumns.contains(columnName) : result.isPrimaryKey();
                 // 处理ID
                 if (isId) {
                     field.setPrimaryKeyFlag(dbQuery.isKeyIdentity(result.getResultSet()));
@@ -167,7 +158,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
 
                 ITypeConvert typeConvert = dataSourceConfig.getTypeConvert();
                 if (typeConvert == null) {
-                    DbType dbType1 = JdbcUtils.getDbType(dataSourceConfig.getUrl());
+                    DBType dbType1 = JdbcUtils.getDbType(dataSourceConfig.getUrl());
                     // 默认 MYSQL
                     typeConvert = TypeConverts.getTypeConvert(dbType1);
                     if (null == typeConvert) {
@@ -188,6 +179,11 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
 
     @Override
     public List<IntrospectedTable> getTables(String schemaPattern, String tableNamePattern, String[] tableTypes) {
+        return null;
+    }
+
+    @Override
+    public List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
         return null;
     }
 }

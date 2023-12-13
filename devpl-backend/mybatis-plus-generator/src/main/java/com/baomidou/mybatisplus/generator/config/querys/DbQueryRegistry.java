@@ -1,56 +1,40 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.baomidou.mybatisplus.generator.config.querys;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.config.DatabaseDialect;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 /**
  * @author nieqiuqiu
- * @date 2020-01-09
  * @since 3.3.1
  */
 public class DbQueryRegistry {
 
-    private static final Map<DbType, DatabaseDialect> db_query_enum_map = new EnumMap<>(DbType.class);
+    private static final Map<DBType, DatabaseDialect> db_query_enum_map = new EnumMap<>(DBType.class);
 
     static {
-        db_query_enum_map.put(DbType.ORACLE, new OracleQuery());
-        db_query_enum_map.put(DbType.SQL_SERVER, new SqlServerQuery());
-        db_query_enum_map.put(DbType.POSTGRE_SQL, new PostgreSqlQuery());
-        db_query_enum_map.put(DbType.DB2, new DB2Query());
-        db_query_enum_map.put(DbType.MARIADB, new MariadbQuery());
-        db_query_enum_map.put(DbType.H2, new H2Query());
-        db_query_enum_map.put(DbType.SQLITE, new SqliteQuery());
-        db_query_enum_map.put(DbType.DM, new DMQuery());
-        db_query_enum_map.put(DbType.KINGBASE_ES, new KingbaseESQuery());
-        db_query_enum_map.put(DbType.MYSQL, new MySqlQuery());
-        db_query_enum_map.put(DbType.GAUSS, new GaussQuery());
-        db_query_enum_map.put(DbType.OSCAR, new OscarQuery());
-        db_query_enum_map.put(DbType.FIREBIRD, new FirebirdQuery());
-        db_query_enum_map.put(DbType.XU_GU, new XuguQuery());
-        db_query_enum_map.put(DbType.CLICK_HOUSE, new ClickHouseQuery());
-        db_query_enum_map.put(DbType.GBASE, new GbaseQuery());
-        db_query_enum_map.put(DbType.SYBASE, new SybaseQuery());
+        db_query_enum_map.put(DBType.ORACLE, new OracleQuery());
+        db_query_enum_map.put(DBType.SQL_SERVER, new SqlServerQuery());
+        db_query_enum_map.put(DBType.POSTGRE_SQL, new PostgreSqlQuery());
+        db_query_enum_map.put(DBType.DB2, new DB2Query());
+        db_query_enum_map.put(DBType.MARIADB, new MariadbQuery());
+        db_query_enum_map.put(DBType.H2, new H2Query());
+        db_query_enum_map.put(DBType.SQLITE, new SqliteQuery());
+        db_query_enum_map.put(DBType.DM, new DMQuery());
+        db_query_enum_map.put(DBType.KINGBASE_ES, new KingbaseESQuery());
+        db_query_enum_map.put(DBType.MYSQL, new MySqlQuery());
+        db_query_enum_map.put(DBType.GAUSS, new GaussQuery());
+        db_query_enum_map.put(DBType.OSCAR, new OscarQuery());
+        db_query_enum_map.put(DBType.FIREBIRD, new FirebirdQuery());
+        db_query_enum_map.put(DBType.XU_GU, new XuguQuery());
+        db_query_enum_map.put(DBType.CLICK_HOUSE, new ClickHouseQuery());
+        db_query_enum_map.put(DBType.GBASE, new GbaseQuery());
+        db_query_enum_map.put(DBType.SYBASE, new SybaseQuery());
     }
 
-    public static DatabaseDialect getDbQuery(DbType dbType) {
-        return db_query_enum_map.get(dbType);
+    public static DatabaseDialect getDbQuery(DBType dBType) {
+        return db_query_enum_map.get(dBType);
     }
 }

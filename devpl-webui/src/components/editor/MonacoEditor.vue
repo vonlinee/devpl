@@ -9,7 +9,7 @@ import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructi
 import ITextModel = editor.ITextModel;
 
 /**
- * 必须给高度才能显示
+ * 必须给固定宽度和高度才能显示
  */
 export default defineComponent({
   name: "MonacoEditor",
@@ -111,7 +111,7 @@ export default defineComponent({
       /**
        * 获取编辑器的文本
        */
-      getText: function(): string {
+      getText: function (): string {
         if (monacoEditor) {
           return monacoEditor.getValue();
         }
@@ -121,14 +121,14 @@ export default defineComponent({
        * 设置编辑器的文本
        * @param text
        */
-      setText: function(text: string) {
+      setText: function (text: string) {
         monacoEditor?.setValue(text);
       },
       /**
        * 设置语言模式 https://github.com/Microsoft/monaco-editor/issues/539
        * @param lang 如果为null，则会设置为plaintext
        */
-      setLanguage: function(lang: string): void {
+      setLanguage: function (lang: string): void {
         if (monacoEditor) {
           const textModel: ITextModel | null = monacoEditor.getModel();
           if (textModel) {
@@ -140,7 +140,7 @@ export default defineComponent({
       /**
        * 获取编辑器语言模式
        */
-      getLanguage: function(): string | undefined {
+      getLanguage: function (): string | undefined {
         return editorOptions.language;
       }
     });

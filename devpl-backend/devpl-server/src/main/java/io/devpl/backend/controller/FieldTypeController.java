@@ -27,7 +27,7 @@ public class FieldTypeController {
      * @param query 查询参数
      * @return GenFieldType
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     public ListResult<GenFieldType> page(Query query) {
         return fieldTypeService.page(query);
     }

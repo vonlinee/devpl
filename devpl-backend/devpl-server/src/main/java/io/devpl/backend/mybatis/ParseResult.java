@@ -1,11 +1,14 @@
 package io.devpl.backend.mybatis;
 
-import io.devpl.backend.mybatis.tree.TreeNode;
+import io.devpl.sdk.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.mapping.MappedStatement;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class ParseResult {
 

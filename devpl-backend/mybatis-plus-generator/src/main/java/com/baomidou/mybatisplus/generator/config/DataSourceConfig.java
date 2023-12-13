@@ -1,8 +1,8 @@
 package com.baomidou.mybatisplus.generator.config;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.querys.DbQueryDecorator;
+import com.baomidou.mybatisplus.generator.jdbc.DBType;
 import com.baomidou.mybatisplus.generator.query.AbstractDatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.query.DatabaseIntrospector;
 import com.baomidou.mybatisplus.generator.query.DefaultDatabaseIntrospector;
@@ -113,7 +113,7 @@ public class DataSourceConfig {
      * @return 类型枚举值
      */
     @NotNull
-    public DbType getDbType() {
+    public DBType getDbType() {
         return JdbcUtils.getDbType(this.url);
     }
 
@@ -172,18 +172,18 @@ public class DataSourceConfig {
      */
     @Nullable
     protected String getDefaultSchema() {
-        DbType dbType = getDbType();
+        DBType dbType = getDbType();
         String schema = null;
-        if (DbType.POSTGRE_SQL == dbType) {
+        if (DBType.POSTGRE_SQL == dbType) {
             // pg 默认 schema=public
             schema = "public";
-        } else if (DbType.KINGBASE_ES == dbType) {
-            // kingbase 默认 schema=PUBLIC
+        } else if (DBType.KINGBASE_ES == dbType) {
+            // king base 默认 schema=PUBLIC
             schema = "PUBLIC";
-        } else if (DbType.DB2 == dbType) {
+        } else if (DBType.DB2 == dbType) {
             // db2 默认 schema=current schema
             schema = "current schema";
-        } else if (DbType.ORACLE == dbType) {
+        } else if (DBType.ORACLE == dbType) {
             // oracle 默认 schema=username
             schema = this.username.toUpperCase();
         }
@@ -226,7 +226,7 @@ public class DataSourceConfig {
      * @author nieqiurong 2020/10/10.
      * @since 3.5.0
      */
-    public static class Builder implements com.baomidou.mybatisplus.generator.config.Builder<DataSourceConfig> {
+    public static class Builder implements GenericBuilder<DataSourceConfig> {
 
         private final DataSourceConfig dataSourceConfig;
 

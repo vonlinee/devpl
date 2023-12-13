@@ -20,7 +20,6 @@ open module mybatis.plus.generator {
 
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;
-    requires com.baomidou.mybatis.plus.extension;
     requires org.jetbrains.annotations;
     requires org.slf4j;
     requires beetl;
@@ -30,7 +29,6 @@ open module mybatis.plus.generator {
     requires java.sql;
     requires org.mybatis;
     requires lombok;
-    requires spring.jdbc;
     requires org.hibernate.orm.core;
     requires com.google.common;
     requires devpl.sdk.internal;

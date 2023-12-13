@@ -87,10 +87,10 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
      */
     public void filter(Class<?> clazz, String include, String filter) {
         if (clazz == null) return;
-        if (include != null && include.length() > 0) {
+        if (include != null && !include.isEmpty()) {
             mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_INCLUDE, SimpleBeanPropertyFilter.filterOutAllExcept(include.split(","))));
             mapper.addMixIn(clazz, DynamicInclude.class);
-        } else if (filter != null && filter.length() > 0) {
+        } else if (filter != null && !filter.isEmpty()) {
             mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_FILTER, SimpleBeanPropertyFilter.serializeAllExcept(filter.split(","))));
             mapper.addMixIn(clazz, DynamicFilter.class);
         }

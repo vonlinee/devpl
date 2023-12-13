@@ -17,11 +17,10 @@ import java.util.Vector;
  * In an environment with multiple class loaders (a servlet container, for
  * example), you should consider stopping the background thread if it is no
  * longer needed. This is done by invoking the method {@link #exitWhenFinished},
- * typically in {@link javax.servlet.ServletContextListener#contextDestroyed} or
+ * typically in javax.servlet.ServletContextListener#contextDestroyed or
  * similar.
  * @author Noel Bergman
  * @author Martin Cooper
- * @version $Id: FileCleaner.java 490987 2006-12-29 12:11:48Z scolebourne $
  */
 public class FileCleaningTracker {
     /**
@@ -146,8 +145,7 @@ public class FileCleaningTracker {
      * memory leak.
      * <p>
      * This method allows the thread to be terminated. Simply call this method in
-     * the resource cleanup code, such as
-     * {@link javax.servlet.ServletContextListener#contextDestroyed}. One called, no
+     * the resource cleanup code, such as javax.servlet.ServletContextListener#contextDestroyed. One called, no
      * new objects can be tracked by the file cleaner.
      */
     public synchronized void exitWhenFinished() {
@@ -201,8 +199,6 @@ public class FileCleaningTracker {
         }
     }
 
-    // -----------------------------------------------------------------------
-
     /**
      * The reaper thread.
      */
@@ -220,10 +216,11 @@ public class FileCleaningTracker {
          * Run the reaper thread that will delete files as their associated marker
          * objects are reclaimed by the garbage collector.
          */
+        @Override
         public void run() {
             // thread exits when exitWhenFinished is true and there are no more tracked
             // objects
-            while (exitWhenFinished == false || trackers.size() > 0) {
+            while (!exitWhenFinished || !trackers.isEmpty()) {
                 Tracker tracker = null;
                 try {
                     // Wait for a tracker to remove.

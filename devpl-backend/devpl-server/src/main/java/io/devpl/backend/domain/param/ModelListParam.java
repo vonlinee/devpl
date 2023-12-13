@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BaseClassListParam extends PageParam {
+public class ModelListParam extends PageParam {
 
     private Long id;
 

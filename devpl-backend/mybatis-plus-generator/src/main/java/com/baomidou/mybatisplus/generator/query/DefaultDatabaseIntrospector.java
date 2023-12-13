@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
-    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /**
      * 查询需要生成的所有表信息
@@ -57,8 +57,8 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
         final Set<String> excludeTables = strategyConfig.getExclude();
         final Set<String> includeTables = strategyConfig.getInclude();
-        boolean isInclude = includeTables.size() > 0;
-        boolean isExclude = excludeTables.size() > 0;
+        boolean isInclude = !includeTables.isEmpty();
+        boolean isExclude = !excludeTables.isEmpty();
 
         // 所有的表信息
         final List<IntrospectedTable> tableList = new ArrayList<>();
@@ -67,11 +67,12 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
             final DatabaseMetaData dbmd = connection.getMetaData();
             // 数据库支持的表类型
-            List<String> supportedTableTypes = JdbcUtils.extractSingleColumn(dbmd.getTableTypes(), String.class);
+            List<String> supportedTableTypes = getSupportedTableTypes(dbmd);
 
+            log.info("支持的表类型 {}", supportedTableTypes);
             // 获取表的元数据信息（不包含表的字段）
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);
-            List<TableMetadata> tableMetadataList = JdbcUtils.extractRows(resultSet, TableMetadata.class);
+            List<TableMetadata> tableMetadataList = JdbcUtils.toBeans(resultSet, TableMetadata::new);
 
             // 需要反向生成或排除的表信息
             List<IntrospectedTable> includeTableList = new ArrayList<>();
@@ -79,7 +80,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
 
             for (TableMetadata tableMetadataItem : tableMetadataList) {
                 String tableName = tableMetadataItem.getTableName();
-                if (null == tableName || tableName.length() == 0) {
+                if (null == tableName || tableName.isEmpty()) {
                     continue; // 表名一般不会为空
                 }
                 IntrospectedTable table = new IntrospectedTable(this.context, tableMetadataItem);
@@ -116,8 +117,8 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                         notExistTables.remove(tabInfo.getName().toLowerCase());
                     }
                 }
-                if (notExistTables.size() > 0) {
-                    LOGGER.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
+                if (!notExistTables.isEmpty()) {
+                    log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
                 }
                 // 需要反向生成的表信息
                 if (isExclude) {
@@ -128,15 +129,33 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                 }
             }
             // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
-            for (IntrospectedTable tableInfo : tableList) {
-                introspecteTableColumns(dbmd, tableInfo, catalog, schemaPattern);
-                tableInfo.processTable();
-                tableInfo.importPackage();
+            for (IntrospectedTable table : tableList) {
+                introspectTableColumns(dbmd, table, catalog, schemaPattern);
+                table.processTable();
+                table.importPackage();
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
         return tableList;
+    }
+
+    @Override
+    public List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
+        return null;
+    }
+
+    public List<String> getSupportedTableTypes(DatabaseMetaData dbmd) {
+        List<String> tableTypes = new ArrayList<>();
+        try {
+            ResultSet tableTypesResultSet = dbmd.getTableTypes();
+            while (tableTypesResultSet.next()) {
+                tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
+            }
+        } catch (SQLException e) {
+            throw new SQLRuntimeException(e);
+        }
+        return tableTypes;
     }
 
     /**
@@ -158,12 +177,12 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
      * @param catalog   catalog
      * @param schema    schema
      */
-    protected void introspecteTableColumns(DatabaseMetaData dbmd, IntrospectedTable tableInfo, String catalog, String schema) {
+    protected void introspectTableColumns(DatabaseMetaData dbmd, IntrospectedTable tableInfo, String catalog, String schema) {
         String tableName = tableInfo.getName();
         // 主键信息
         final List<PrimaryKey> primaryKeys;
         try (ResultSet rs = dbmd.getPrimaryKeys(catalog, schema, tableName)) {
-            primaryKeys = JdbcUtils.extractRows(rs, PrimaryKey.class);
+            primaryKeys = JdbcUtils.toBeans(rs, PrimaryKey::new);
         } catch (SQLException e) {
             throw new RuntimeException("读取表主键信息:" + tableName + "错误:", e);
         }
@@ -172,7 +191,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         // 列信息
         List<ColumnMetadata> columnMetadataList;
         try (ResultSet resultSet = dbmd.getColumns(catalog, schema, tableName, "%")) {
-            columnMetadataList = JdbcUtils.extractRows(resultSet, ColumnMetadata.class);
+            columnMetadataList = JdbcUtils.toBeans(resultSet, ColumnMetadata::new);
         } catch (SQLException e) {
             throw new RuntimeException("读取表字段信息:" + tableName + "错误:", e);
         }
@@ -184,7 +203,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             if (column.isPrimaryKey()) {
                 column.setPrimaryKeyFlag(columnMetadata.isAutoIncrement());
                 if (column.isKeyIdentityFlag()) {
-                    LOGGER.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
+                    log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
             column.setColumnName(columnName);

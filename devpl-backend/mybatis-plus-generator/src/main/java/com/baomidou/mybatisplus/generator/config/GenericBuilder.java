@@ -5,7 +5,7 @@ package com.baomidou.mybatisplus.generator.config;
  *
  * @param <T>
  */
-public interface Builder<T> {
+public interface GenericBuilder<T> {
 
     T build();
 }

@@ -22,7 +22,7 @@ import java.util.List;
 public interface DataSourceService extends BaseService<DbConnInfo> {
 
     /**
-     * 数据源ID是否是系统数据源
+     * 数据源ID是否是系统自身数据源
      *
      * @param id 数据源ID
      * @return 是否是系统数据源

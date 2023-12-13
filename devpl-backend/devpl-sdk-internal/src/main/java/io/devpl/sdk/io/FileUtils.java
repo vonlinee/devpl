@@ -848,6 +848,14 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 读取文本文件的所有行
+     *
+     * @param file     文件
+     * @param encoding 编码
+     * @return 文件的所有行
+     * @throws IOException IO异常
+     */
     public static List<String> readLines(File file, Charset encoding) throws IOException {
         return readLines(file, encoding.name());
     }

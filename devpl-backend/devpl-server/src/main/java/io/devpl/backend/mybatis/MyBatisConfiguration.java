@@ -5,11 +5,11 @@ import org.apache.ibatis.session.Configuration;
 /**
  * 模拟MyBatis的配置项
  */
-public class MyBaticMockConfiguration extends Configuration {
+public class MyBatisConfiguration extends Configuration {
 
     Configuration configuration;
 
-    public MyBaticMockConfiguration(Configuration configuration) {
+    public MyBatisConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
 }

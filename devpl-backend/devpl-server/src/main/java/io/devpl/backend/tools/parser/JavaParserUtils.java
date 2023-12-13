@@ -16,22 +16,28 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.ParserCollectionStrategy;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import io.devpl.backend.tools.parser.java.*;
+import io.devpl.backend.tools.parser.java.CompilationUnitVisitor;
+import io.devpl.backend.tools.parser.java.ImportInfo;
+import io.devpl.backend.tools.parser.java.TypeInfo;
+import io.devpl.backend.tools.parser.java.TypeInfoRegistry;
 import io.devpl.backend.utils.JSONUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * <a href="https://houbb.github.io/2020/05/29/java-ast-06-comments">...</a>
+ *
  * @author wangliang
  * Created On 2022-12-29 10:11:33
  */
@@ -63,6 +69,7 @@ public class JavaParserUtils {
 
     /**
      * 解析工程下的所有Java文件
+     *
      * @param path 工程根目录
      */
     public static void parseProject(String path) {
@@ -190,6 +197,7 @@ public class JavaParserUtils {
 
     /**
      * 处理类型,方法,成员
+     *
      * @param node
      */
     public static void processNode(Node node) {
@@ -237,6 +245,16 @@ public class JavaParserUtils {
         return new Name(new Name(typeName.substring(0, i)), typeName.substring(i + 1));
     }
 
+    /**
+     * 解析字符串
+     *
+     * @param sourceCode 源代码
+     * @return 解析结果
+     */
+    public static ParseResult<CompilationUnit> parseString(String sourceCode) {
+        return JAVA_PARSER_INSTANCE.parse(sourceCode);
+    }
+
     public static void json2ObjectSchema(String jsonStr, String packageName, String className) {
         final Map<String, Object> map = JSONUtils.toMap(jsonStr);
         final Name annoJsonAlias = newTypeName("com.fasterxml.jackson.annotation.JsonAlias");
@@ -279,12 +297,5 @@ public class JavaParserUtils {
             });
         }
         System.out.println(toString(cu));
-    }
-
-    public static List<MetaField> parseFields(String content) throws IOException {
-        try (Reader reader = new InputStreamReader(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)))) {
-            ASTFieldParser parser = new ASTFieldParser();
-            return parse(reader, parser).orElse(Collections.emptyList());
-        }
     }
 }

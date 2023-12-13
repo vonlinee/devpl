@@ -25,7 +25,7 @@ public class SqlFormat {
      * pgsql格式化
      * @param sql sql语句
      */
-    public static void PgSql(String sql) {
+    public static void pgSql(String sql) {
         System.out.println("postgreSql格式化：" + SQLUtils.format(sql, DbType.postgresql));
     }
 

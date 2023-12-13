@@ -35,11 +35,11 @@ public class DefaultNameConvert implements NameConverter {
     private String processName(String name, NamingStrategy strategy, Set<String> prefix, Set<String> suffix) {
         String propertyName = name;
         // 删除前缀
-        if (prefix.size() > 0) {
+        if (!prefix.isEmpty()) {
             propertyName = NamingStrategy.removePrefix(propertyName, prefix);
         }
         // 删除后缀
-        if (suffix.size() > 0) {
+        if (!suffix.isEmpty()) {
             propertyName = NamingStrategy.removeSuffix(propertyName, suffix);
         }
         if (!StringUtils.hasText(propertyName)) {

@@ -2,27 +2,16 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <splitpanes horizontal>
-          <pane min-size="20">
-            <div>
-              <monaco-editor ref="inputRef" language="xml" height="400px" />
-            </div>
-          </pane>
-          <pane min-size="20">
-            <div>
-              <monaco-editor ref="sqlRef" language="sql" height="400px" />
-            </div>
-          </pane>
-        </splitpanes>
+        <monaco-editor ref="inputRef" language="xml" height="400px" />
+        <monaco-editor ref="sqlRef" language="sql" height="400px" />
       </el-col>
       <el-col :span="12">
         <el-button @click="fillSampleMapperStatement">填充样例</el-button>
         <el-button @click="showDialog()">导入</el-button>
         <param-import ref="importModalRef"></param-import>
         <vxe-table show-overflow ref="msParamTable" :border="true" height="400px" row-key header-align="center"
-                   :data="mapperParams" :checkbox-config="{ checkStrictly: true }"
-                   :tree-config="{ transform: true }"
-                   :edit-config="editConfig">
+          :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
+          :edit-config="editConfig">
           <vxe-column field="name" title="参数名" tree-node></vxe-column>
           <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
           <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
@@ -32,7 +21,7 @@
             <template #edit="{ row }">
               <vxe-select v-model="row.dataType" clearable transfer>
                 <vxe-option v-for="item in msParamValueTypes" :key="item.value" :value="item.name"
-                            :label="item.label"></vxe-option>
+                  :label="item.label"></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>

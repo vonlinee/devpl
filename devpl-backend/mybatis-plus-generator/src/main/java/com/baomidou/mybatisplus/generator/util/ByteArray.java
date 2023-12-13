@@ -1,14 +1,13 @@
 package com.baomidou.mybatisplus.generator.util;
 
-import io.devpl.sdk.util.Base64;
-
-import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 
 /**
- * <NOTE>this class if copied from the soruce code of Apache Calcite.</NOTE>
+ * <NOTE>this class if copied from the source code of Apache Calcite.</NOTE>
  * Collection of bytes.
  * <p>ByteArray is to bytes what {@link String} is to chars: It is immutable,
  * implements equality ({@link #hashCode} and {@link #equals}),
@@ -127,7 +126,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
                 for (char c : chars) {
                     b <<= 4;
                     byte i = decodeHex(c);
-                    b |= i & 0x0F;
+                    b |= (byte) (i & 0x0F);
                     if (j % 2 == 1) {
                         bytes[j / 2] = b;
                         b = 0;
@@ -171,11 +170,7 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
      * @return Byte array
      */
     public static byte[] parseBase64(String string) {
-        try {
-            return Base64.decode(string);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("bad base64 string", e);
-        }
+        return Base64.getDecoder().decode(string.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -220,15 +215,6 @@ public class ByteArray implements Comparable<ByteArray>, Serializable {
      */
     public String toString(int base) {
         return toString(bytes, base);
-    }
-
-    /**
-     * Returns this byte string in Base64 format.
-     *
-     * @return Base64 string
-     */
-    public String toBase64String() {
-        return Base64.encodeBytes(bytes);
     }
 
     @Override

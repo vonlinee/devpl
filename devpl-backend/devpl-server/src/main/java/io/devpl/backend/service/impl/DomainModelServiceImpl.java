@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.backend.dao.ModelInfoMapper;
-import io.devpl.backend.domain.param.BaseClassListParam;
+import io.devpl.backend.domain.param.ModelListParam;
 import io.devpl.backend.entity.ModelField;
 import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.service.DomainModelService;
@@ -37,14 +37,14 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
     }
 
     @Override
-    public IPage<ModelInfo> listPage(BaseClassListParam param) {
+    public IPage<ModelInfo> listPage(ModelListParam param) {
         LambdaQueryWrapper<ModelInfo> qw = new LambdaQueryWrapper<>();
         qw.like(ModelInfo::getCode, param.getCode());
         return baseMapper.selectPage(param.asPage(), qw);
     }
 
     @Override
-    public ModelInfo getById(BaseClassListParam param) {
+    public ModelInfo getById(ModelListParam param) {
         ModelInfo modelInfo = getById(param.getId());
         if (modelInfo != null) {
             List<ModelField> modelFields = baseMapper.selectModelFields(modelInfo.getId());
@@ -67,14 +67,14 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
         if (!CollectionUtils.isEmpty(modelInfo.getFields())) {
             modelInfo.getFields().removeIf(f -> fieldIds.contains(f.getFieldId()));
             if (!CollectionUtils.isEmpty(modelInfo.getFields())) {
-                addModelFields(modelInfo.getId(), CollectionUtils.toList(modelInfo.getFields(), ModelField::getId));
+                addFieldsForModel(modelInfo.getId(), CollectionUtils.toList(modelInfo.getFields(), ModelField::getId));
             }
         }
         return true;
     }
 
     @Override
-    public boolean addModelFields(Long modelId, List<Long> fieldIds) {
+    public boolean addFieldsForModel(Long modelId, List<Long> fieldIds) {
         return baseMapper.insertModeFieldRelation(modelId, fieldIds) > 0;
     }
 

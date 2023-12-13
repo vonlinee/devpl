@@ -1,6 +1,7 @@
 package io.devpl.backend.domain.enums;
 
 import com.baomidou.mybatisplus.generator.type.DataType;
+import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -15,6 +16,7 @@ public enum MapperStatementParamValueType implements DataType {
     STRING(3, "String"),
     COLLECTION(4, "Collection");
 
+    @Getter
     private final int type;
     private final String typeName;
 
@@ -37,10 +39,6 @@ public enum MapperStatementParamValueType implements DataType {
 
     public static MapperStatementParamValueType valueOfType(int type, MapperStatementParamValueType defaultValue) {
         return Arrays.stream(values()).filter(i -> i.getType() == type).findFirst().orElse(defaultValue);
-    }
-
-    public int getType() {
-        return type;
     }
 
     @Override
