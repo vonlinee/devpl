@@ -133,7 +133,7 @@ public final class Ascii {
     public static final byte CR = 13;
     /**
      * Shift Out: A control character indicating that the code combinations which
-     * follow shall be interpreted as outside of the character set of the standard
+     * follow shall be interpreted as outside the character set of the standard
      * code table until a Shift In character is reached.
      *
      * @since 8.0
@@ -215,7 +215,7 @@ public final class Ascii {
     /**
      * Synchronous Idle: A communication control character used by a synchronous
      * transmission system in the absence of any other character to provide a signal
-     * from which synchronism may be achieved or retained.
+     * from which synchronize may be achieved or retained.
      *
      * @since 8.0
      */
@@ -237,7 +237,7 @@ public final class Ascii {
      */
     public static final byte CAN = 24;
     /**
-     * End of Medium: A control character associated with the sent data which may be
+     * End of Medium: A control character associated with the scent data which may be
      * used to identify the physical end of the medium, or the end of the used, or
      * wanted, portion of information recorded on a medium. (The position of this
      * character does not necessarily correspond to the physical end of the medium.)
@@ -381,7 +381,7 @@ public final class Ascii {
 
     /**
      * If the argument is an {@linkplain #isUpperCase(char) uppercase ASCII
-     * character}, returns the lowercase equivalent. Otherwise returns the argument.
+     * character}, returns the lowercase equivalent. Otherwise, returns the argument.
      */
     public static char toLowerCase(char c) {
         return isUpperCase(c) ? (char) (c ^ CASE_MASK) : c;
@@ -429,7 +429,7 @@ public final class Ascii {
 
     /**
      * If the argument is a {@linkplain #isLowerCase(char) lowercase ASCII
-     * character}, returns the uppercase equivalent. Otherwise returns the argument.
+     * character}, returns the uppercase equivalent. Otherwise, returns the argument.
      */
     public static char toUpperCase(char c) {
         return isLowerCase(c) ? (char) (c ^ CASE_MASK) : c;
@@ -520,7 +520,6 @@ public final class Ascii {
 
     private static void checkArgument(boolean b, String string, int maxLength, int length) {
         // TODO Auto-generated method stub
-
     }
 
     /**
@@ -541,7 +540,7 @@ public final class Ascii {
      * </ul>
      * <p>
      * due to case-folding of some non-ASCII characters (which does not occur in
-     * {@link String#equalsIgnoreCase}). However in almost all cases that ASCII
+     * {@link String#equalsIgnoreCase}). However, in almost all cases that ASCII
      * strings are used, the author probably wanted the behavior provided by this
      * method rather than the subtle and sometimes surprising behavior of
      * {@code toUpperCase()} and {@code toLowerCase()}.

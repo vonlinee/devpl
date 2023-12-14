@@ -35,7 +35,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <V> the value type
  * @author Phillip Webb
  * @author Juergen Hoeller
- * @since 3.2
  */
 public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implements ConcurrentMap<K, V> {
 
@@ -452,7 +451,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         RESIZE
     }
 
-
     /**
      * The types of restructuring that can be performed.
      */
@@ -461,7 +459,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         WHEN_NECESSARY,
         NEVER
     }
-
 
     /**
      * A reference to an {@link Entry} contained in the map. Implementations are usually
@@ -1073,5 +1070,4 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             return (Reference<K, V>) this.queue.poll();
         }
     }
-
 }
