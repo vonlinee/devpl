@@ -23,22 +23,22 @@ public interface DatabaseIntrospector {
     /**
      * 获取表信息
      *
-     * @param schemaPattern    schema
-     * @param tableNamePattern 表名
+     * @param catalog          目录名。可以传入空字符串("")来获取所有的表，或者传入特定的目录名来获取该目录下的表。
+     * @param schemaPattern    模式名模式。可以传入空字符串("")来获取所有的模式，或者传入特定的模式名模式来获取该模式下的表。
+     * @param tableNamePattern 表名模式。可以传入特定的表名来获取该表，或者传入空字符串("")来获取所有的表。 %表示所有表
      * @param tableTypes       表类型
      * @return 表信息
      */
-    List<IntrospectedTable> getTables(String schemaPattern, String tableNamePattern, String[] tableTypes);
+    List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes);
 
     /**
      * 获取列信息
      *
-     * @param catalog           catalog
+     * @param catalog           目录名。可以传入空字符串("")来获取所有的表，或者传入特定的目录名来获取该目录下的表。
      * @param schemaPattern     数据库名称
      * @param tableNamePattern  表名称
      * @param columnNamePattern 列名称pattern
      * @return 列信息
      */
-    List<IntrospectedColumn> getColumns(String catalog, String schemaPattern,
-                                        String tableNamePattern, String columnNamePattern);
+    List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern);
 }

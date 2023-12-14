@@ -2,6 +2,7 @@ package com.baomidou.mybatisplus.generator.util;
 
 import com.baomidou.mybatisplus.generator.codegen.CaseFormat;
 import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import com.baomidou.mybatisplus.generator.query.SQLRuntimeException;
 import io.devpl.sdk.util.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.*;
 import java.util.function.Supplier;
@@ -18,8 +18,6 @@ import java.util.regex.Pattern;
 
 /**
  * JDBC工具类
- *
- * @see org.springframework.jdbc.support.JdbcUtils
  */
 public class JdbcUtils {
 
@@ -114,35 +112,63 @@ public class JdbcUtils {
             }
             // 遍历每列
             resultSet.next();
-            for (int index = 1; index <= columnCount; index++) {
-                // 列名称
-                String column = lookupColumnName(rsmd, index);
-                String property = replace(column).toLowerCase(Locale.US);
-
-                Field field = fieldMap.get(property);
-                field.setAccessible(true);
-                Object value = getResultSetValue(resultSet, index, field.getType());
-                field.set(firstRow, value);
-            }
-            results.add(firstRow);
+            results.add(populateBean(resultSet, rsmd, columnCount, fieldMap, firstRow));
             while (resultSet.next()) {
-                T row = constructor.get();
-                for (int index = 1; index <= columnCount; index++) {
-                    // 列名称
-                    String column = lookupColumnName(rsmd, index);
-                    String property = replace(column).toLowerCase(Locale.US);
-
-                    Field field = fieldMap.get(property);
-                    Object value = getResultSetValue(resultSet, index, field.getType());
-                    field.set(row, value);
-                }
-                results.add(firstRow);
+                results.add(populateBean(resultSet, rsmd, columnCount, fieldMap, constructor.get()));
             }
             return results;
         } catch (Exception exception) {
             log.error("cannot extract rows form ResultSet for type[{}]", rowType, exception);
         }
         return results;
+    }
+
+    /**
+     * 填充对象的字段
+     *
+     * @param resultSet   结果集
+     * @param rsmd        结果集元数据
+     * @param columnCount 总列数
+     * @param fieldMap    对象的字段列表
+     * @param bean        对象
+     * @param <T>         对象类型
+     * @return 填充后的对象
+     */
+    private static <T> T populateBean(ResultSet resultSet, ResultSetMetaData rsmd, int columnCount, Map<String, Field> fieldMap, T bean) {
+        try {
+            for (int index = 1; index <= columnCount; index++) {
+                // 列名称
+                String column = lookupColumnName(rsmd, index);
+                String property = replace(column).toLowerCase(Locale.US);
+                Field field = fieldMap.get(property);
+                if (!field.canAccess(bean)) {
+                    field.setAccessible(true);
+                }
+                field.set(bean, getResultSetValue(resultSet, index, field.getType()));
+            }
+        } catch (SQLException | IllegalAccessException exception) {
+            throw new RuntimeException("cannot populate bean [" + bean.getClass() + "]");
+        }
+        return bean;
+    }
+
+    /**
+     * 获取数据库支持的表类型
+     *
+     * @param dbmd 数据库元数据
+     * @return 表类型
+     */
+    public static List<String> getSupportedTableTypes(DatabaseMetaData dbmd) {
+        List<String> tableTypes = new ArrayList<>();
+        try {
+            ResultSet tableTypesResultSet = dbmd.getTableTypes();
+            while (tableTypesResultSet.next()) {
+                tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
+            }
+        } catch (SQLException e) {
+            throw new SQLRuntimeException(e);
+        }
+        return tableTypes;
     }
 
     /**
@@ -313,7 +339,7 @@ public class JdbcUtils {
                 default ->
                     // Fall back to getObject without type specification, again
                     // left up to the caller to convert the value if necessary.
-                        getResultSetValue(rs, index);
+                    getResultSetValue(rs, index);
             };
         }
         // Perform was-null check if necessary (for results that the JDBC driver returns as primitives).

@@ -35,7 +35,7 @@ public interface NamingStrategy {
 
         @Override
         public String apply(String source) {
-            return source;
+            return source == null ? "" : source;
         }
     };
 }

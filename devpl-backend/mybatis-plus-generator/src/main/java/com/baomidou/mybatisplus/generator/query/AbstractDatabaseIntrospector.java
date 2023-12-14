@@ -1,6 +1,9 @@
 package com.baomidou.mybatisplus.generator.query;
 
 import com.baomidou.mybatisplus.generator.config.builder.Context;
+import com.baomidou.mybatisplus.generator.config.po.IntrospectedTable;
+
+import java.util.List;
 
 /**
  * 数据库查询抽象类
@@ -16,4 +19,5 @@ public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospect
     public void setContext(Context context) {
         this.context = context;
     }
+
 }

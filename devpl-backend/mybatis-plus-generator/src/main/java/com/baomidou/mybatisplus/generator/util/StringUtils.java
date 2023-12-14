@@ -78,41 +78,6 @@ public final class StringUtils {
     }
 
     /**
-     * 获取真正的字段名
-     *
-     * @param column 字段名
-     * @return 字段名
-     */
-    public static String getTargetColumn(String column) {
-        if (isNotColumnName(column)) {
-            return column.substring(1, column.length() - 1);
-        }
-        return column;
-    }
-
-    /**
-     * 字符串驼峰转下划线格式
-     *
-     * @param param 需要转换的字符串
-     * @return 转换好的字符串
-     */
-    public static String camelToUnderline(String param) {
-        if (!hasText(param)) {
-            return "_";
-        }
-        int len = param.length();
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++) {
-            char c = param.charAt(i);
-            if (Character.isUpperCase(c) && i > 0) {
-                sb.append(UNDERLINE);
-            }
-            sb.append(Character.toLowerCase(c));
-        }
-        return sb.toString();
-    }
-
-    /**
      * 字符串下划线转驼峰格式
      *
      * @param param 需要转换的字符串
@@ -220,8 +185,7 @@ public final class StringUtils {
      *
      * @param str    the String to check, may be null
      * @param suffix the suffix to find, may be null
-     * @return <code>true</code> if the String ends with the suffix, case
-     * sensitive, or both <code>null</code>
+     * @return <code>true</code> if the String ends with the suffix, case-sensitive, or both <code>null</code>
      * @see String#endsWith(String)
      * @since 2.4
      */
@@ -399,7 +363,7 @@ public final class StringUtils {
      * @param str 原字符串
      * @return 去掉\t, \n, \r之后的结果
      */
-    public static String trimInvisiableCharacters(String str) {
+    public static String trimInvisibleCharacters(String str) {
         if (str == null || str.isEmpty()) {
             return "";
         }

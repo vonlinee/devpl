@@ -178,7 +178,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
     }
 
     @Override
-    public List<IntrospectedTable> getTables(String schemaPattern, String tableNamePattern, String[] tableTypes) {
+    public List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
         return null;
     }
 

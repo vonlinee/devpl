@@ -113,7 +113,7 @@ public class Context {
             // 查询的表类型
             String[] tableTypes = skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"};
             String schemaPattern = dataSourceConfig.getSchemaName();
-            List<IntrospectedTable> tableInfos = this.databaseIntrospector.getTables(schemaPattern, tableNamePattern, tableTypes);
+            List<IntrospectedTable> tableInfos = this.databaseIntrospector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
             if (!tableInfos.isEmpty()) {
                 this.introspectedTables.addAll(tableInfos);
             }

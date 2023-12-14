@@ -76,14 +76,18 @@ public class NumberUtils {
      * 判断是否是自然数
      *
      * @param str 字符串
-     * @return 是否是自然数
+     * @return 是否是自然数，整数 >= 0
      */
     public static boolean isNaturalNumber(String str) {
         if (str == null || str.isEmpty()) {
             return false;
         }
         for (int i = 0; i < str.length(); i++) {
-            if (!Character.isDigit(str.charAt(i))) {
+            char c = str.charAt(i);
+            if (c == ' ') {
+                return false;
+            }
+            if (!Character.isDigit(c)) {
                 return false;
             }
         }

@@ -195,12 +195,13 @@ public class AutoGenerator {
         this.templateEngine = templateEngine;
         this.callback = globalConfig.callback;
 
-        DateType dateType = globalConfig.getDateType();
 
         // 获取所有的表信息
         List<IntrospectedTable> tableInfoList = context.introspectTables();
         // 模板引擎初始化执行文件输出
         templateEngine.init(context);
+
+        DateType dateType = globalConfig.getDateType();
 
         // 初始化字段属性名
         final Entity entity = strategyConfig.entity();
@@ -247,7 +248,6 @@ public class AutoGenerator {
             }
 
             // 数据初始化完毕
-
             try {
                 // 填充模板参数
                 Map<String, Object> objectMap = this.getObjectMap(context, introspectedTable);
@@ -387,7 +387,6 @@ public class AutoGenerator {
      * @return 模板路径
      * @since 3.5.0
      */
-
     protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
         TemplateConfig templateConfig = context.getTemplateConfig();
         String filePath = function.apply(templateConfig);
@@ -427,7 +426,6 @@ public class AutoGenerator {
             }
         }
     }
-
 
     /**
      * 输出controller文件

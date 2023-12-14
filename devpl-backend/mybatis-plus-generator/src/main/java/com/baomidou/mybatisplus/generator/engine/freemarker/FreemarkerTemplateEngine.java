@@ -37,7 +37,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     private Configuration configuration;
 
     @Override
-    public @NotNull FreemarkerTemplateEngine init(@NotNull Context configBuilder) {
+    public @NotNull FreemarkerTemplateEngine init(@NotNull Context context) {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
         configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, StringPool.SLASH);

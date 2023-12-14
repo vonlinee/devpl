@@ -49,8 +49,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
      * @return 所有表信息
      */
     @Override
-    public List<IntrospectedTable> getTables(String schemaPattern, String tableNamePattern, String[] tableTypes) {
-
+    public List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
         StrategyConfig strategyConfig = this.context.getStrategyConfig();
         DataSourceConfig dataSourceConfig = this.context.getDataSourceConfig();
         GlobalConfig globalConfig = this.context.getGlobalConfig();
@@ -63,12 +62,11 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         // 所有的表信息
         final List<IntrospectedTable> tableList = new ArrayList<>();
         try (Connection connection = dataSourceConfig.getConnection()) {
-            final String catalog = connection.getCatalog();
+            catalog = catalog == null ? connection.getCatalog() : catalog;
 
             final DatabaseMetaData dbmd = connection.getMetaData();
             // 数据库支持的表类型
-            List<String> supportedTableTypes = getSupportedTableTypes(dbmd);
-
+            List<String> supportedTableTypes = JdbcUtils.getSupportedTableTypes(dbmd);
             log.info("支持的表类型 {}", supportedTableTypes);
             // 获取表的元数据信息（不包含表的字段）
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);
@@ -143,19 +141,6 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
     @Override
     public List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
         return null;
-    }
-
-    public List<String> getSupportedTableTypes(DatabaseMetaData dbmd) {
-        List<String> tableTypes = new ArrayList<>();
-        try {
-            ResultSet tableTypesResultSet = dbmd.getTableTypes();
-            while (tableTypesResultSet.next()) {
-                tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
-            }
-        } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
-        }
-        return tableTypes;
     }
 
     /**

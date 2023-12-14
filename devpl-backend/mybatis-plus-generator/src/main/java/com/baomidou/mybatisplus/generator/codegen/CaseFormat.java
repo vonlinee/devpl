@@ -164,7 +164,7 @@ public enum CaseFormat implements NamingStrategy {
         @Override
         public boolean matches(String source) {
             // 判断字符串是否为空或者长度为0
-            if (source == null || source.length() == 0) {
+            if (source == null || source.isEmpty()) {
                 return false;
             }
             // 判断首字母是否大写
@@ -184,10 +184,7 @@ public enum CaseFormat implements NamingStrategy {
     /**
      * 驼峰形式(不管大小写)
      */
-    CAMEL() {
-
-        final Pattern CAMEL_CASE = Pattern.compile(".*[A-Z]+.*");
-
+    CAMEL(Pattern.compile(".*[A-Z]+.*")) {
         /**
          * 首字母大写，则为大驼峰，首字母小写则为小驼峰
          * @param source 源字符串
@@ -200,7 +197,10 @@ public enum CaseFormat implements NamingStrategy {
 
         @Override
         public boolean matches(String source) {
-            return CAMEL_CASE.matcher(source).matches();
+            if (this.pattern == null) {
+                return false;
+            }
+            return this.pattern.matcher(source).matches();
         }
     },
 
@@ -328,6 +328,9 @@ public enum CaseFormat implements NamingStrategy {
      */
     public abstract boolean matches(String source);
 
+    /**
+     * 正则匹配，可为null
+     */
     final Pattern pattern;
 
     CaseFormat() {
@@ -529,7 +532,7 @@ public enum CaseFormat implements NamingStrategy {
      * @return 是否为大写字母下划线形式
      */
     public static boolean isUpperCaseUnderscore(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return false;
         }
         boolean hasUnderscore = false;
@@ -561,7 +564,7 @@ public enum CaseFormat implements NamingStrategy {
      * @return 是否小写下划线形式
      */
     public static boolean isLowerCaseUnderscore(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return false;
         }
         boolean hasUnderscore = false;
@@ -592,25 +595,21 @@ public enum CaseFormat implements NamingStrategy {
      * @return 下划线形式字符串
      */
     public static String toUnderscore(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return "";
         }
-
         StringBuilder result = new StringBuilder();
         boolean capitalize = false;
         for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
-
             if (Character.isUpperCase(ch)) {
                 capitalize = true;
             } else if (capitalize) {
                 result.append("_");
                 capitalize = false;
             }
-
             result.append(ch);
         }
-
         return result.toString();
     }
 
@@ -623,7 +622,7 @@ public enum CaseFormat implements NamingStrategy {
      * @return 连字符形式字符串
      */
     public static String toDashCase(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return "";
         }
         StringBuilder result = new StringBuilder();
@@ -664,13 +663,11 @@ public enum CaseFormat implements NamingStrategy {
      * @return 是否为连字符形式
      */
     public static boolean isDashCase(String str) {
-        if (str == null || str.length() == 0) {
+        if (str == null || str.isEmpty()) {
             return false;
         }
-
         boolean hasDash = false;
         boolean hasLetter = false;
-
         for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
 
@@ -688,7 +685,28 @@ public enum CaseFormat implements NamingStrategy {
                 return false;
             }
         }
-
         return true;
+    }
+
+    /**
+     * 字符串驼峰转下划线格式
+     *
+     * @param source 需要转换的字符串
+     * @return 转换好的字符串
+     */
+    public static String camelToUnderline(String source) {
+        if (source == null || source.isBlank()) {
+            return "_";
+        }
+        int len = source.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = source.charAt(i);
+            if (Character.isUpperCase(c) && i > 0) {
+                sb.append("_");
+            }
+            sb.append(Character.toLowerCase(c));
+        }
+        return sb.toString();
     }
 }
