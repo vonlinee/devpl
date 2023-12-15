@@ -1,29 +1,10 @@
 <template>
-  <div class="page">
-    <SplitPane
-      direction="row"
-      :min="20"
-      :max="80"
-    >
-      <template v-slot:one>
-        <div class="container">
-          区域一
-        </div>
-      </template>
-
-      <template v-slot:another>
-        <div class="container">
-          区域二
-        </div>
-      </template>
-
-    </SplitPane>
-  </div>
+  <FieldTreeTable selectable></FieldTreeTable>
 </template>
 
 <script setup lang="ts">
 
-import SplitPane from "@/components/split/SplitPane.vue";
+import FieldTreeTable from "@/components/fields/FieldTreeTable.vue";
 
 </script>
 
