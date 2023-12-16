@@ -3,7 +3,7 @@ package io.devpl.backend.domain;
 /**
  * 模板引擎类型
  */
-public enum TemplateType {
+public enum TemplateEngineType {
 
     /**
      * <a href="https://velocity.apache.org/">Velocity</a>
@@ -29,7 +29,7 @@ public enum TemplateType {
     private final String provider;
     private final String extension;
 
-    TemplateType(String providerName, String provider, String extension) {
+    TemplateEngineType(String providerName, String provider, String extension) {
         this.providerName = providerName;
         this.provider = provider;
         this.extension = extension;
@@ -47,8 +47,8 @@ public enum TemplateType {
         return extension;
     }
 
-    public static TemplateType findByName(String providerName) {
-        for (TemplateType provider : values()) {
+    public static TemplateEngineType findByName(String providerName) {
+        for (TemplateEngineType provider : values()) {
             if (provider.providerName.equalsIgnoreCase(providerName)) {
                 return provider;
             }

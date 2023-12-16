@@ -1,7 +1,5 @@
 package io.devpl.codegen.template;
 
-import io.devpl.codegen.config.Context;
-
 import java.io.OutputStream;
 import java.util.Map;
 
@@ -9,11 +7,6 @@ import java.util.Map;
  * 模板引擎抽象类
  */
 public abstract class AbstractTemplateEngine implements TemplateEngine {
-
-    /**
-     * 模板引擎初始化
-     */
-    public abstract AbstractTemplateEngine init(Context context);
 
     /**
      * 将模板转化成为文件
@@ -25,14 +18,6 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
      * @since 3.5.0
      */
     public abstract void merge(Map<String, Object> objectMap, String templatePath, OutputStream outputStream) throws Exception;
-
-    /**
-     * 模板真实文件路径
-     *
-     * @param filePath 文件路径
-     * @return ignore
-     */
-    public abstract String templateFilePath(String filePath);
 
     @Override
     public String render(TemplateSource template, TemplateArguments arguments) {

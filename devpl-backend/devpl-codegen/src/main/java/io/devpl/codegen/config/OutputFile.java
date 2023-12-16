@@ -1,14 +1,19 @@
 package io.devpl.codegen.config;
 
 /**
- * 输出文件类型
+ * 内置的输出文件类型
  */
 public enum OutputFile {
-    entity,
-    service,
-    serviceImpl,
-    mapper,
-    xml,
-    controller,
-    parent;
+    ENTITY,
+    SERVICE,
+    SERVICE_IMPL,
+    MAPPER,
+    MAPPER_XML,
+    CONTROLLER,
+
+    /**
+     * 自定义文件类型
+     */
+    CUSTOM,
+    PARENT;
 }

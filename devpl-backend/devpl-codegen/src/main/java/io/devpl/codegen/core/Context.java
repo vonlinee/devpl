@@ -1,8 +1,12 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.core;
 
+import io.devpl.codegen.config.*;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
+import io.devpl.codegen.strategy.ProjectFileLocator;
+import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,20 +17,18 @@ import java.util.Map;
  * 大多数类都依赖此类
  * 单个数据库实例对应一个Context
  */
-public class Context {
-
+public class Context extends ConfigurationHolder {
     /**
      * 模板路径配置信息
      */
     private final TemplateConfig templateConfig;
-
     /**
      * 数据库表信息
      */
     private final List<IntrospectedTable> introspectedTables = new ArrayList<>();
-
     /**
      * 路径配置信息
+     * 路径信息，各类型的文件放在哪个目录
      */
     private final Map<OutputFile, String> pathInfo = new HashMap<>();
     /**
@@ -57,6 +59,11 @@ public class Context {
     private DatabaseIntrospector databaseIntrospector;
 
     /**
+     * 用于定位文件位置
+     */
+    private ProjectFileLocator fileLocator;
+
+    /**
      * 在构造器中处理配置
      *
      * @param packageConfig    包配置
@@ -72,7 +79,7 @@ public class Context {
         this.templateConfig = templateConfig;
         this.packageConfig = packageConfig;
         this.injectionConfig = injectionConfig;
-        this.pathInfo.putAll(initOutputPathInfo(globalConfig.getOutputDir(), globalConfig.isKotlin(), packageConfig, templateConfig));
+        initOutputPathInfo(globalConfig.getOutputDir(), globalConfig.isKotlin(), packageConfig, templateConfig);
     }
 
     /**
@@ -82,12 +89,50 @@ public class Context {
      * @param isKotlin       是否使用kotlin
      * @param packageConfig  包配置信息
      * @param templateConfig 模板配置信息
-     * @return 路径信息，各类型的文件放在哪个目录
      */
-    private Map<OutputFile, String> initOutputPathInfo(String outputDir, boolean isKotlin, PackageConfig packageConfig, TemplateConfig templateConfig) {
-        PathInfoHandler pathInfoHandler = new PathInfoHandler(outputDir, packageConfig);
-        pathInfoHandler.setDefaultPathInfo(isKotlin, templateConfig);
-        return pathInfoHandler.getPathInfo();
+    private void initOutputPathInfo(String outputDir, boolean isKotlin, PackageConfig packageConfig, TemplateConfig templateConfig) {
+        // 输出文件Map
+        Map<OutputFile, String> pathInfo = new HashMap<>();
+        putPathInfo(pathInfo, outputDir, templateConfig.getEntityTemplatePath(isKotlin), OutputFile.ENTITY, ConstVal.ENTITY);
+        putPathInfo(pathInfo, outputDir, templateConfig.getMapper(), OutputFile.MAPPER, ConstVal.MAPPER);
+        putPathInfo(pathInfo, outputDir, templateConfig.getXml(), OutputFile.MAPPER_XML, ConstVal.XML);
+        putPathInfo(pathInfo, outputDir, templateConfig.getService(), OutputFile.SERVICE, ConstVal.SERVICE);
+        putPathInfo(pathInfo, outputDir, templateConfig.getServiceImpl(), OutputFile.SERVICE_IMPL, ConstVal.SERVICE_IMPL);
+        putPathInfo(pathInfo, outputDir, templateConfig.getController(), OutputFile.CONTROLLER, ConstVal.CONTROLLER);
+        pathInfo.putIfAbsent(OutputFile.PARENT, joinPath(outputDir, packageConfig.getPackageInfo(ConstVal.PARENT)));
+        // 如果配置了包路径，则覆盖自定义路径
+        if (!pathInfo.isEmpty()) {
+            this.pathInfo.putAll(pathInfo);
+        }
+    }
+
+    /**
+     * @param template   模板路径
+     * @param outputFile 输出文件类型
+     * @param module     模块名称
+     */
+    private void putPathInfo(Map<OutputFile, String> pathInfo, String outputDir, String template, OutputFile outputFile, String module) {
+        if (StringUtils.hasText(template)) {
+            pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(module)));
+        }
+    }
+
+    /**
+     * 连接路径字符串
+     *
+     * @param parentDir   路径常量字符串
+     * @param packageName 包名
+     * @return 连接后的路径
+     */
+    private String joinPath(String parentDir, String packageName) {
+        if (!StringUtils.hasText(parentDir)) {
+            parentDir = System.getProperty(ConstVal.JAVA_TMPDIR);
+        }
+        if (!StringUtils.endsWith(parentDir, File.separator)) {
+            parentDir += File.separator;
+        }
+        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
+        return parentDir + packageName;
     }
 
     public TemplateConfig getTemplateConfig() {
@@ -119,8 +164,8 @@ public class Context {
         return introspectedTables;
     }
 
-    public Map<OutputFile, String> getPathInfo() {
-        return pathInfo;
+    public String getPathInfo(OutputFile outputFile) {
+        return pathInfo.get(outputFile);
     }
 
     public StrategyConfig getStrategyConfig() {

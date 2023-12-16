@@ -12,7 +12,7 @@ import java.util.function.Function;
 /**
  * Service属性配置
  */
-public class Service implements TableInitializer {
+public class Service extends TemplateArgumentsForJavaClass implements TableInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Service.class);
     /**

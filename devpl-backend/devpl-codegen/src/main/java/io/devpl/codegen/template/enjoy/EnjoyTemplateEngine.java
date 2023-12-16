@@ -1,8 +1,7 @@
 package io.devpl.codegen.template.enjoy;
 
-import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.config.Context;
 import com.jfinal.template.Engine;
+import io.devpl.codegen.template.AbstractTemplateEngine;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
@@ -19,12 +18,10 @@ import java.util.Map;
  */
 public class EnjoyTemplateEngine extends AbstractTemplateEngine {
 
-    private Engine engine;
+    private final Engine engine;
 
-    @Override
-    public @NotNull AbstractTemplateEngine init(@NotNull Context configBuilder) {
-        engine = Engine.createIfAbsent("mybatis-plus-generator", Engine::setToClassPathSourceFactory);
-        return this;
+    public EnjoyTemplateEngine() {
+        engine = Engine.createIfAbsent("codegen", Engine::setToClassPathSourceFactory);
     }
 
     @Override
@@ -37,9 +34,8 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull String templateFilePath(@NotNull String filePath) {
-        final String dotVm = ".ej";
-        return filePath.endsWith(dotVm) ? filePath : filePath + dotVm;
+    public String getTemplateFileExtension() {
+        return ".ej";
     }
 }
 

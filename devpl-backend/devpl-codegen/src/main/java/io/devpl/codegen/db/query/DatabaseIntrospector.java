@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.config.Context;
+import io.devpl.codegen.core.Context;
 import io.devpl.codegen.config.IntrospectedTable;
 import io.devpl.codegen.core.IntrospectedColumn;
 

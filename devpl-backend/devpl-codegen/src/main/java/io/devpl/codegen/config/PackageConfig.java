@@ -1,6 +1,5 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.config.OutputFile;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +21,7 @@ public class PackageConfig {
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    private String parent = "com.baomidou";
+    private String parent = "io.devpl";
 
     /**
      * 父包模块名
@@ -152,6 +151,10 @@ public class PackageConfig {
 
     public Map<OutputFile, String> getPathInfo() {
         return pathInfo;
+    }
+
+    public static PackageConfig.Builder builder() {
+        return new Builder();
     }
 
     /**

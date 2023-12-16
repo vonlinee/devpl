@@ -1,8 +1,41 @@
 package io.devpl.codegen.core;
 
-import java.io.Writer;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Writer;
+import java.nio.charset.Charset;
+
+/**
+ * 包含文件生成信息
+ */
+@Setter
+@Getter
 public abstract class GeneratedFile {
 
-    public abstract void write(Writer writer);
+    /**
+     * 扩展名
+     */
+    private String extension;
+
+    /**
+     * 文件名
+     */
+    private String name;
+
+    /**
+     * 初始化文件信息
+     *
+     * @param context 代码生成上下文
+     */
+    public void initialize(Context context) {
+    }
+
+    /**
+     * 输出文件内容到指定Writer
+     *
+     * @param writer  输出位置
+     * @param charset 输出编码
+     */
+    public abstract void write(Writer writer, Charset charset);
 }

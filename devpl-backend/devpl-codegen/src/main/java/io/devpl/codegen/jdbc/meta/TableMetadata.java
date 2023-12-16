@@ -8,7 +8,7 @@ import java.util.Objects;
  *
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
-public final class TableMetadata {
+public class TableMetadata {
 
     /**
      * TABLE_CAT String => table catalog (may be null)

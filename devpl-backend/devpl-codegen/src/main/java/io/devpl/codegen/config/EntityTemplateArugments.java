@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 /**
  * 实体属性配置
  */
-public class Entity implements TableInitializer {
+public class EntityTemplateArugments extends TemplateArgumentsForJavaClass implements TableInitializer {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Entity.class);
+    private final static Logger log = LoggerFactory.getLogger(EntityTemplateArugments.class);
     /**
      * 自定义基础的Entity类，公共字段
      */
@@ -142,7 +142,7 @@ public class Entity implements TableInitializer {
      */
     private boolean fileOverride;
 
-    private Entity() {
+    private EntityTemplateArugments() {
     }
 
     /**
@@ -304,7 +304,7 @@ public class Entity implements TableInitializer {
 
     public static class Builder extends BaseBuilder {
 
-        private final Entity entity = new Entity();
+        private final EntityTemplateArugments entity = new EntityTemplateArugments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -577,18 +577,6 @@ public class Entity implements TableInitializer {
         }
 
         /**
-         * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
-         * @see #enableFileOverride()
-         */
-        @Deprecated
-        public Builder fileOverride() {
-            LOGGER.warn("fileOverride方法后续会删除，替代方法为enableFileOverride方法");
-            this.entity.fileOverride = true;
-            return this;
-        }
-
-        /**
          * 覆盖已有文件
          *
          * @since 3.5.3
@@ -598,13 +586,13 @@ public class Entity implements TableInitializer {
             return this;
         }
 
-        public Entity get() {
+        public EntityTemplateArugments get() {
             String superClass = this.entity.superClass;
             if (StringUtils.hasText(superClass)) {
                 ClassUtils.tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);
             } else {
                 if (!this.entity.superEntityColumns.isEmpty()) {
-                    LOGGER.warn("Forgot to set entity supper class ?");
+                    log.warn("Forgot to set entity supper class ?");
                 }
             }
             return this.entity;

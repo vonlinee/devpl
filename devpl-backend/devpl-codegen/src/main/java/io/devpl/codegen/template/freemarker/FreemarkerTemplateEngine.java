@@ -1,10 +1,8 @@
 package io.devpl.codegen.template.freemarker;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.config.Context;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import io.devpl.codegen.template.AbstractTemplateEngine;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.OutputStream;
@@ -14,19 +12,14 @@ import java.util.Map;
 
 /**
  * Freemarker 模板引擎实现文件输出
- *
- * @author nieqiurong
- * @since 2018-01-11
  */
 public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
-    private Configuration configuration;
+    private final Configuration configuration;
 
-    @Override
-    public @NotNull FreemarkerTemplateEngine init(@NotNull Context context) {
+    public FreemarkerTemplateEngine() {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, StringPool.SLASH);
-        return this;
+        configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, "/");
     }
 
     @Override
@@ -36,7 +29,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull String templateFilePath(@NotNull String filePath) {
-        return filePath + ".ftl";
+    public String getTemplateFileExtension() {
+        return ".ftl";
     }
 }

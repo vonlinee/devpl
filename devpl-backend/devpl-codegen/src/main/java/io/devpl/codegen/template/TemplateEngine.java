@@ -2,6 +2,11 @@ package io.devpl.codegen.template;
 
 import java.io.OutputStream;
 
+/**
+ * 模板引擎
+ *
+ * @see TemplateSource
+ */
 public interface TemplateEngine {
 
     /**
@@ -38,4 +43,11 @@ public interface TemplateEngine {
      * @return 是否成功
      */
     boolean registerDirective(TemplateDirective directive);
+
+    /**
+     * 获取模板文件后缀名
+     *
+     * @return 模板文件后缀名
+     */
+    String getTemplateFileExtension();
 }

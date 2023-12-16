@@ -2,9 +2,6 @@ package io.devpl.codegen.config;
 
 /**
  * 自定义模板文件配置
- *
- * @author xusimin
- * @since 3.5.3
  */
 public class CustomFile {
 

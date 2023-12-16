@@ -71,15 +71,6 @@ public class InjectionConfig {
     }
 
     /**
-     * 已弃用，换成了customFiles，3.5.4版本会删除此方法
-     */
-    @NotNull
-    @Deprecated
-    public Map<String, String> getCustomFile() {
-        return customFile;
-    }
-
-    /**
      * 获取自定义模板文件列表
      */
     @NotNull
@@ -93,6 +84,10 @@ public class InjectionConfig {
     @Deprecated
     public boolean isFileOverride() {
         return fileOverride;
+    }
+
+    public static InjectionConfig.Builder builder() {
+        return new InjectionConfig.Builder();
     }
 
     /**

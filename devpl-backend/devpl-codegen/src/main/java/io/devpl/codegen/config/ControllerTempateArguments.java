@@ -14,9 +14,9 @@ import java.util.function.Function;
 /**
  * 控制器属性配置
  */
-public class Controller implements TableInitializer {
+public class ControllerTempateArguments extends TemplateArgumentsForJavaClass implements TableInitializer {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTempateArguments.class);
     /**
      * 生成 <code>@RestController</code> 控制器（默认 false）
      * <pre>
@@ -48,7 +48,7 @@ public class Controller implements TableInitializer {
      */
     private boolean fileOverride;
 
-    private Controller() {
+    private ControllerTempateArguments() {
     }
 
     public boolean isRestStyle() {
@@ -87,7 +87,7 @@ public class Controller implements TableInitializer {
 
     public static class Builder extends BaseBuilder {
 
-        private final Controller controller = new Controller();
+        private final ControllerTempateArguments controller = new ControllerTempateArguments();
 
         public Builder(@NotNull StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -182,7 +182,7 @@ public class Controller implements TableInitializer {
         }
 
         @NotNull
-        public Controller get() {
+        public ControllerTempateArguments get() {
             return this.controller;
         }
     }

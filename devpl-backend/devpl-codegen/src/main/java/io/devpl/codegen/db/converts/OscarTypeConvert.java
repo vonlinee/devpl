@@ -3,7 +3,7 @@ package io.devpl.codegen.db.converts;
 import io.devpl.codegen.config.GlobalConfig;
 import io.devpl.codegen.config.ITypeConvert;
 import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.core.DateType;
+import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.db.DbColumnType;
 
 /**

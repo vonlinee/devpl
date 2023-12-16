@@ -1,35 +1,12 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.config.TemplateType;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 模板路径配置项
- *
- * @author tzg hubin
- * @since 2017-06-17
  */
 public class TemplateConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateConfig.class);
 
     /**
      * 设置实体模板路径
@@ -85,24 +62,12 @@ public class TemplateConfig {
     }
 
     /**
-     * 当模板赋值为空时进行日志提示打印
-     *
-     * @param value        模板值
-     * @param templateType 模板类型
-     */
-    private void logger(String value, TemplateType templateType) {
-        if (StringUtils.isBlank(value)) {
-            LOGGER.warn("推荐使用disable(TemplateType.{})方法进行默认模板禁用.", templateType.name());
-        }
-    }
-
-    /**
      * 获取实体模板路径
      *
      * @param kotlin 是否kotlin
      * @return 模板路径
      */
-    public String getEntity(boolean kotlin) {
+    public String getEntityTemplatePath(boolean kotlin) {
         if (!this.disableEntity) {
             if (kotlin) {
                 return StringUtils.isBlank(this.entityKt) ? ConstVal.TEMPLATE_ENTITY_KT : this.entityKt;

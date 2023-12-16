@@ -1,8 +1,8 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.core.IntrospectedColumn;
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.devpl.codegen.config.Entity;
+import io.devpl.codegen.core.Context;
+import io.devpl.codegen.core.IntrospectedColumn;
 import io.devpl.codegen.jdbc.meta.PrimaryKey;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.type.JavaType;
@@ -32,7 +32,7 @@ public class IntrospectedTable {
     /**
      * 实体
      */
-    private final Entity entity;
+    private final EntityTemplateArugments entity;
     /**
      * 是否转换
      */
@@ -180,7 +180,6 @@ public class IntrospectedTable {
      * 转换filed实体为 xml mapper 中的 base column 字符串信息
      */
     public String getFieldNames() {
-        // TODO 感觉这个也啥必要,不打算公开set方法了
         if (StringUtils.isBlank(fieldNames)) {
             this.fieldNames = this.columns.stream().map(IntrospectedColumn::getColumnName)
                 .collect(Collectors.joining(", "));
@@ -300,7 +299,6 @@ public class IntrospectedTable {
      */
     public IntrospectedTable setEntityName(String entityName) {
         this.entityName = entityName;
-        // TODO 先放置在这里
         setConvert();
         return this;
     }
@@ -332,12 +330,5 @@ public class IntrospectedTable {
      */
     public boolean hasPrimaryKey() {
         return this.primaryKeys != null && !this.primaryKeys.isEmpty();
-    }
-
-    /**
-     * 初始化操作
-     */
-    public void initialize() {
-
     }
 }

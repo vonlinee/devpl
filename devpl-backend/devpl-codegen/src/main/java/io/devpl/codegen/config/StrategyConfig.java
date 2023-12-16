@@ -1,21 +1,16 @@
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.util.StringUtils;
+import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 策略配置项
- *
- * @author YangHu, tangguo, hubin
- * @since 2016/8/30
  */
-public class StrategyConfig {
+public class StrategyConfig extends ConfigurationHolder {
 
     /**
      * 过滤表前缀
@@ -51,8 +46,8 @@ public class StrategyConfig {
      * 当{@link #enableSqlFilter}为true时，正则表达式无效.
      */
     private final Set<String> exclude = new HashSet<>();
-    private final Entity.Builder entityBuilder = new Entity.Builder(this);
-    private final Controller.Builder controllerBuilder = new Controller.Builder(this);
+    private final EntityTemplateArugments.Builder entityBuilder = new EntityTemplateArugments.Builder(this);
+    private final ControllerTempateArguments.Builder controllerBuilder = new ControllerTempateArguments.Builder(this);
     private final Mapper.Builder mapperBuilder = new Mapper.Builder(this);
     private final Service.Builder serviceBuilder = new Service.Builder(this);
     /**
@@ -85,8 +80,8 @@ public class StrategyConfig {
      * @since 3.3.0
      */
     private LikeTable notLikeTable;
-    private Entity entity;
-    private Controller controller;
+    private EntityTemplateArugments entity;
+    private ControllerTempateArguments controller;
     private Mapper mapper;
     private Service service;
 
@@ -104,7 +99,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Entity.Builder entityBuilder() {
+    public EntityTemplateArugments.Builder entityBuilder() {
         return entityBuilder;
     }
 
@@ -115,7 +110,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Entity entity() {
+    public EntityTemplateArugments entity() {
         if (entity == null) {
             this.entity = entityBuilder.get();
         }
@@ -129,7 +124,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Controller.Builder controllerBuilder() {
+    public ControllerTempateArguments.Builder controllerBuilder() {
         return controllerBuilder;
     }
 
@@ -140,7 +135,7 @@ public class StrategyConfig {
      * @since 3.5.0
      */
     @NotNull
-    public Controller controller() {
+    public ControllerTempateArguments controller() {
         if (controller == null) {
             this.controller = controllerBuilder.get();
         }
@@ -195,15 +190,6 @@ public class StrategyConfig {
             this.service = serviceBuilder.get();
         }
         return service;
-    }
-
-    /**
-     * 大写命名、字段符合大写字母数字下划线命名
-     *
-     * @param word 待判断字符串
-     */
-    public boolean isCapitalModeNaming(@NotNull String word) {
-        return isCapitalMode && word.matches("^[0-9A-Z/_]+$");
     }
 
     /**
@@ -309,6 +295,14 @@ public class StrategyConfig {
     @Nullable
     public LikeTable getNotLikeTable() {
         return notLikeTable;
+    }
+
+    public void addIncludedTables(String... tableNames) {
+        this.include.addAll(Arrays.asList(tableNames));
+    }
+
+    public void addIncludedTables(Collection<String> tableNames) {
+        this.include.addAll(tableNames);
     }
 
     /**
@@ -439,20 +433,37 @@ public class StrategyConfig {
          *
          * @param include 包含表
          * @return this
-         * @since 3.5.0
          */
         public Builder addInclude(@NotNull String... include) {
-            this.strategyConfig.include.addAll(Arrays.asList(include));
+            addInclude(Arrays.asList(include));
             return this;
         }
 
-        public Builder addInclude(@NotNull List<String> includes) {
-            this.strategyConfig.include.addAll(includes);
+        /**
+         * 增加包含的表名
+         *
+         * @param includes 包含表
+         * @return this
+         */
+        public Builder addInclude(List<String> includes) {
+            Utils.notEmpty(includes, "表名为空");
+            this.strategyConfig.addIncludedTables(includes);
             return this;
         }
 
-        public Builder addInclude(@NotNull String include) {
-            this.strategyConfig.include.addAll(Arrays.asList(include.split(",")));
+        /**
+         * 增加包含的表名
+         *
+         * @param includes 包含表
+         * @return this
+         */
+        public Builder addInclude(String includes) {
+            Utils.notBlank(includes, "表名[%s]为空", includes);
+            if (includes.contains(",")) {
+                this.strategyConfig.addIncludedTables(includes.split(","));
+            } else {
+                this.strategyConfig.addIncludedTables(includes);
+            }
             return this;
         }
 

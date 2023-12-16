@@ -1,6 +1,5 @@
 package io.devpl.codegen.template.beetl;
 
-import io.devpl.codegen.config.Context;
 import io.devpl.codegen.template.AbstractTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import org.beetl.core.Configuration;
@@ -41,10 +40,9 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-    private GroupTemplate groupTemplate;
+    private final GroupTemplate groupTemplate;
 
-    @Override
-    public @NotNull AbstractTemplateEngine init(@NotNull Context configBuilder) {
+    public BeetlTemplateEngine() {
         try {
             Configuration cfg = Configuration.defaultConfiguration();
             groupTemplate = new GroupTemplate(new ClasspathResourceLoader("/"), cfg);
@@ -52,7 +50,6 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             log.error("初始化模板引擎失败:", e);
             throw new RuntimeException(e);
         }
-        return this;
     }
 
     @Override
@@ -63,7 +60,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull String templateFilePath(@NotNull String filePath) {
-        return filePath + ".btl";
+    public String getTemplateFileExtension() {
+        return ".btl";
     }
 }

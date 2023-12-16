@@ -1,7 +1,5 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.config.Entity;
-
 /**
  * 配置构建
  */
@@ -13,11 +11,11 @@ public class BaseBuilder implements GenericBuilder<StrategyConfig> {
         this.strategyConfig = strategyConfig;
     }
 
-    public Entity.Builder entityBuilder() {
+    public EntityTemplateArugments.Builder entityBuilder() {
         return strategyConfig.entityBuilder();
     }
 
-    public Controller.Builder controllerBuilder() {
+    public ControllerTempateArguments.Builder controllerBuilder() {
         return strategyConfig.controllerBuilder();
     }
 

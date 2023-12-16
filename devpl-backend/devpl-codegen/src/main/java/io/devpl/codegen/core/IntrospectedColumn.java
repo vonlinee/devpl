@@ -26,7 +26,7 @@ public class IntrospectedColumn {
     /**
      * 实体属性配置
      */
-    private final Entity entity;
+    private final EntityTemplateArugments entity;
     /**
      * 数据库配置
      */

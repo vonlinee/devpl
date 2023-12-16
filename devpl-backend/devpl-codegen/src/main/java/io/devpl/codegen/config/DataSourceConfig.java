@@ -1,10 +1,10 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.db.query.DefaultDatabaseIntrospector;
+import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.util.JdbcUtils;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ import java.util.Properties;
  * @author YangHu, hcl, hubin
  * @since 2016/8/30
  */
-public class DataSourceConfig {
+public class DataSourceConfig extends ConfigurationHolder {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
     /**
      * 数据库连接属性

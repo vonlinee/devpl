@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 模板参数Map
+ * 模板参数Map, 等同于Map<String, Object>
  */
 public final class TemplateArgumentsMap extends HashMap<String, Object> implements TemplateArguments {
 
@@ -15,12 +15,12 @@ public final class TemplateArgumentsMap extends HashMap<String, Object> implemen
 
     @Override
     public void setValue(String name, Object value) {
-        put(name, value);
+        super.put(name, value);
     }
 
     @Override
     public Object getValue(String name) {
-        return get(name);
+        return super.get(name);
     }
 
     @Override

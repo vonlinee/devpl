@@ -3,9 +3,10 @@ package io.devpl.codegen.core;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.AbstractTemplateEngine;
 import io.devpl.codegen.util.StringUtils;
+import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
@@ -55,9 +56,9 @@ public final class FastAutoGenerator {
     private FastAutoGenerator(DataSourceConfig.Builder dataSourceConfigBuilder) {
         this.dataSourceConfigBuilder = dataSourceConfigBuilder;
         this.globalConfigBuilder = new GlobalConfig.Builder();
-        this.packageConfigBuilder = new PackageConfig.Builder();
-        this.strategyConfigBuilder = new StrategyConfig.Builder();
-        this.injectionConfigBuilder = new InjectionConfig.Builder();
+        this.packageConfigBuilder = PackageConfig.builder();
+        this.strategyConfigBuilder = StrategyConfig.builder();
+        this.injectionConfigBuilder = InjectionConfig.builder();
         this.templateConfigBuilder = new TemplateConfig.Builder();
     }
 
@@ -68,12 +69,7 @@ public final class FastAutoGenerator {
      * @return FastAutoGenerator
      */
     public static FastAutoGenerator create(File propsFile) {
-        Properties properties = new Properties();
-        try (FileReader fr = new FileReader(propsFile)) {
-            properties.load(fr);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Properties properties = Utils.loadProperties(propsFile);
         String url = (String) properties.get("url");
         String username = (String) properties.get("username");
         String password = (String) properties.get("password");

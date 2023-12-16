@@ -2,10 +2,10 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.query.DatabaseIntrospector;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.template.AbstractTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
 import io.devpl.codegen.util.FileUtils;
@@ -18,10 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -29,7 +26,7 @@ import java.util.function.Function;
  */
 public class AutoGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(AutoGenerator.class);
+    private static final Logger log = LoggerFactory.getLogger(AutoGenerator.class);
     /**
      * 数据源配置
      */
@@ -160,109 +157,133 @@ public class AutoGenerator {
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
-        logger.debug("==========================准备生成文件...==========================");
+        log.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == context) {
-            this.strategyConfig = Optional.ofNullable(strategyConfig).orElse(new StrategyConfig.Builder().build());
-            this.globalConfig = Optional.ofNullable(globalConfig).orElse(new GlobalConfig.Builder().build());
-            this.templateConfig = Optional.ofNullable(templateConfig).orElse(new TemplateConfig.Builder().build());
-            this.packageConfig = Optional.ofNullable(packageConfig).orElse(new PackageConfig.Builder().build());
-            this.injectionConfig = Optional.ofNullable(injectionConfig).orElse(new InjectionConfig.Builder().build());
-            context = new Context(packageConfig, dataSourceConfig, strategyConfig, templateConfig, globalConfig, injectionConfig);
-
-            // 初始化Context组件
-            Class<? extends DatabaseIntrospector> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
-            try {
-                Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor();
-                DatabaseIntrospector databaseIntrospector = declaredConstructor.newInstance();
-                context.setDatabaseIntrospection(databaseIntrospector);
-            } catch (ReflectiveOperationException exception) {
-                throw new RuntimeException("创建DatabaseIntrospector实例出现错误:", exception);
-            }
+            initContext();
         }
-        if (null == templateEngine) {
-            // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
-            templateEngine = new VelocityTemplateEngine();
-        }
-        this.templateEngine = templateEngine;
+        // 为了兼容之前逻辑，默认采用 Velocity 引擎
+        this.templateEngine = templateEngine == null ? new VelocityTemplateEngine() : templateEngine;
         this.callback = globalConfig.callback;
-
-
         // 获取所有的表信息
         List<IntrospectedTable> tableInfoList = context.introspectTables();
-        // 模板引擎初始化执行文件输出
-        templateEngine.init(context);
+        for (IntrospectedTable introspectedTable : tableInfoList) {
+            initColumns(introspectedTable);
+            generateFiles(introspectedTable);
+        }
+        open();
+    }
 
+    void initContext() {
+        if (this.strategyConfig == null) {
+            this.strategyConfig = StrategyConfig.builder().build();
+        }
+
+        this.globalConfig = Optional.ofNullable(globalConfig).orElse(new GlobalConfig.Builder().build());
+        this.templateConfig = Optional.ofNullable(templateConfig).orElse(new TemplateConfig.Builder().build());
+        this.packageConfig = Optional.ofNullable(packageConfig).orElse(new PackageConfig.Builder().build());
+        this.injectionConfig = Optional.ofNullable(injectionConfig).orElse(new InjectionConfig.Builder().build());
+        context = new Context(packageConfig, dataSourceConfig, strategyConfig, templateConfig, globalConfig, injectionConfig);
+
+        // 初始化Context组件
+        Class<? extends DatabaseIntrospector> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
+        try {
+            Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor();
+            DatabaseIntrospector databaseIntrospector = declaredConstructor.newInstance();
+            context.setDatabaseIntrospection(databaseIntrospector);
+        } catch (ReflectiveOperationException exception) {
+            throw new RuntimeException("创建DatabaseIntrospector实例出现错误:", exception);
+        }
+    }
+
+    void initColumns(IntrospectedTable introspectedTable) {
         DateType dateType = globalConfig.getDateType();
 
         // 初始化字段属性名
-        final Entity entity = strategyConfig.entity();
+        final EntityTemplateArugments entity = strategyConfig.entity();
+        for (IntrospectedColumn column : introspectedTable.getColumns()) {
+            ColumnMetadata cmd = column.getColumnMetadata();
+            // 设置字段的元数据信息
 
-        for (IntrospectedTable introspectedTable : tableInfoList) {
-
-            introspectedTable.initialize();
-
-            for (IntrospectedColumn column : introspectedTable.getColumns()) {
-                ColumnMetadata cmd = column.getColumnMetadata();
-                // 设置字段的元数据信息
-
-                JavaType columnType;
-                if (cmd.getDataType() == null || cmd.getColumnSize() == null || cmd.getDecimalDigits() == null) {
-                    columnType = DbColumnType.STRING;
-                } else {
-                    columnType = TypeRegistry.getColumnType(cmd.getDataType(), cmd.getColumnSize(), dateType, cmd.getDecimalDigits());
-                }
-                column.setColumnType(columnType);
-                // 数据库字段名 -> Java属性字段名
-                String propertyName = entity.getNameConvert().propertyNameConvert(column.getName());
-
-                // 字段类型
-
-                // boolean类型字段
-                if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(column.getPropertyType()) && propertyName.startsWith("is")) {
-                    column.setConvert(true);
-                    // 前两个字符小写，后面的不变
-                    String rawString = propertyName.substring(2);
-                    column.setPropertyName(rawString.substring(0, 2).toLowerCase() + rawString.substring(2));
-                }
-                // 下划线转驼峰策略
-                if (NamingStrategy.UNDERLINE_TO_CAMEL.equals(entity.getColumnNamingStrategy())) {
-                    column.setConvert(!propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(column.getColumnName())));
-                }
-                // 原样输出策略
-                if (NamingStrategy.NO_CHANGE.equals(entity.getColumnNamingStrategy())) {
-                    column.setConvert(!propertyName.equalsIgnoreCase(column.getColumnName()));
-                }
-                if (entity.isTableFieldAnnotationEnable()) {
-                    column.setConvert(true);
-                }
-                column.setPropertyName(propertyName);
+            JavaType columnType;
+            if (cmd.getDataType() == null || cmd.getColumnSize() == null || cmd.getDecimalDigits() == null) {
+                columnType = DbColumnType.STRING;
+            } else {
+                columnType = TypeRegistry.getColumnType(cmd.getDataType(), cmd.getColumnSize(), dateType, cmd.getDecimalDigits());
             }
+            column.setColumnType(columnType);
+            // 数据库字段名 -> Java属性字段名
+            String propertyName = entity.getNameConvert().propertyNameConvert(column.getName());
 
-            // 数据初始化完毕
-            try {
-                // 填充模板参数
-                Map<String, Object> objectMap = this.getObjectMap(context, introspectedTable);
-                InjectionConfig injectionConfig = context.getInjectionConfig();
-                if (injectionConfig != null) {
-                    // 添加自定义属性
-                    injectionConfig.beforeOutputFile(introspectedTable, objectMap);
-                    // 输出自定义文件
-                    outputCustomFile(injectionConfig.getCustomFiles(), introspectedTable, objectMap);
-                }
-                // entity
-                outputEntity(introspectedTable, objectMap);
-                // mapper and xml
-                outputMapper(introspectedTable, objectMap);
-                // service
-                outputService(introspectedTable, objectMap);
-                // controller
-                outputController(introspectedTable, objectMap);
-            } catch (Exception e) {
-                throw new RuntimeException("无法创建文件，请检查配置信息！", e);
+            // 字段类型
+
+            // boolean类型字段
+            if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(column.getPropertyType()) && propertyName.startsWith("is")) {
+                column.setConvert(true);
+                // 前两个字符小写，后面的不变
+                String rawString = propertyName.substring(2);
+                column.setPropertyName(rawString.substring(0, 2).toLowerCase() + rawString.substring(2));
             }
+            // 下划线转驼峰策略
+            if (NamingStrategy.UNDERLINE_TO_CAMEL.equals(entity.getColumnNamingStrategy())) {
+                column.setConvert(!propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(column.getColumnName())));
+            }
+            // 原样输出策略
+            if (NamingStrategy.NO_CHANGE.equals(entity.getColumnNamingStrategy())) {
+                column.setConvert(!propertyName.equalsIgnoreCase(column.getColumnName()));
+            }
+            if (entity.isTableFieldAnnotationEnable()) {
+                column.setConvert(true);
+            }
+            column.setPropertyName(propertyName);
         }
-        open();
+    }
+
+    /**
+     * 准备生成的文件
+     *
+     * @param introspectedTable 表信息
+     * @return 生成的文件列表
+     */
+    public List<GeneratedFile> prepareGeneratedFiles(IntrospectedTable introspectedTable) {
+
+        return Collections.emptyList();
+    }
+
+    /**
+     * 生成文件
+     *
+     * @param introspectedTable 表信息
+     */
+    void generateFiles(IntrospectedTable introspectedTable) {
+
+        List<GeneratedFile> generatedFiles = prepareGeneratedFiles(introspectedTable);
+
+        log.info("文件个数{}", generatedFiles.size());
+
+        // 数据初始化完毕
+        try {
+            // 填充模板参数
+            log.info("填充模板参数");
+            Map<String, Object> templateArgumentsMap = this.prepareTemplateArguments(context, introspectedTable);
+            InjectionConfig injectionConfig = context.getInjectionConfig();
+            if (injectionConfig != null) {
+                // 添加自定义属性
+                injectionConfig.beforeOutputFile(introspectedTable, templateArgumentsMap);
+                // 输出自定义文件
+                outputCustomFile(injectionConfig.getCustomFiles(), introspectedTable, templateArgumentsMap);
+            }
+            // entity
+            outputEntity(introspectedTable, templateArgumentsMap);
+            // mapper and xml
+            outputMapper(introspectedTable, templateArgumentsMap);
+            // service
+            outputService(introspectedTable, templateArgumentsMap);
+            // controller
+            outputController(introspectedTable, templateArgumentsMap);
+        } catch (Exception e) {
+            throw new RuntimeException("无法创建文件，请检查配置信息！", e);
+        }
     }
 
     /**
@@ -275,7 +296,7 @@ public class AutoGenerator {
      */
     public void outputCustomFile(List<CustomFile> customFiles, IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
-        String parentPath = context.getPathInfo().get(OutputFile.parent);
+        String parentPath = context.getPathInfo(OutputFile.PARENT);
         customFiles.forEach(file -> {
             String filePath = StringUtils.hasText(file.getFilePath()) ? file.getFilePath() : parentPath;
             if (StringUtils.hasText(file.getPackageName())) {
@@ -292,13 +313,12 @@ public class AutoGenerator {
      *
      * @param tableInfo 表信息
      * @param objectMap 渲染数据
-     * @since 3.5.0
      */
     public void outputEntity(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         String entityName = tableInfo.getEntityName();
-        String entityPath = context.getPathInfo().get(OutputFile.entity);
+        String entityPath = context.getPathInfo(OutputFile.ENTITY);
         if (StringUtils.hasText(entityName) && StringUtils.hasText(entityPath)) {
-            getTemplateFilePath(template -> template.getEntity(context.getGlobalConfig()
+            getTemplateFilePath(template -> template.getEntityTemplatePath(context.getGlobalConfig()
                 .isKotlin())).ifPresent((entity) -> {
                 String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
                 outputFile(new File(entityFile), objectMap, entity, context.getStrategyConfig().entity()
@@ -324,7 +344,7 @@ public class AutoGenerator {
     public void outputMapper(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         // MpMapper.java
         String entityName = tableInfo.getEntityName();
-        String mapperPath = context.getPathInfo().get(OutputFile.mapper);
+        String mapperPath = context.getPathInfo(OutputFile.MAPPER);
         if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.hasText(mapperPath)) {
             getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
                 String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
@@ -333,7 +353,7 @@ public class AutoGenerator {
             });
         }
         // MpMapper.xml
-        String xmlPath = context.getPathInfo().get(OutputFile.xml);
+        String xmlPath = context.getPathInfo(OutputFile.MAPPER_XML);
         if (StringUtils.hasText(tableInfo.getXmlName()) && StringUtils.hasText(xmlPath)) {
             getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
                 String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
@@ -353,7 +373,7 @@ public class AutoGenerator {
     public void outputService(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         // IMpService.java
         String entityName = tableInfo.getEntityName();
-        String servicePath = context.getPathInfo().get(OutputFile.service);
+        String servicePath = context.getPathInfo(OutputFile.SERVICE);
         if (StringUtils.hasText(tableInfo.getServiceName()) && StringUtils.hasText(servicePath)) {
             getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
                 String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
@@ -362,7 +382,7 @@ public class AutoGenerator {
             });
         }
         // MpServiceImpl.java
-        String serviceImplPath = context.getPathInfo().get(OutputFile.serviceImpl);
+        String serviceImplPath = context.getPathInfo(OutputFile.SERVICE_IMPL);
         if (StringUtils.hasText(tableInfo.getServiceImplName()) && StringUtils.hasText(serviceImplPath)) {
             getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
                 String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
@@ -380,12 +400,15 @@ public class AutoGenerator {
      * @since 3.5.0
      */
     protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
-        TemplateConfig templateConfig = context.getTemplateConfig();
-        String filePath = function.apply(templateConfig);
+        String filePath = function.apply(context.getTemplateConfig());
         if (StringUtils.hasText(filePath)) {
-            return Optional.of(templateEngine.templateFilePath(filePath));
+            return Optional.of(getPathOfTemplateFile(filePath, templateEngine.getTemplateFileExtension()));
         }
         return Optional.empty();
+    }
+
+    public String getPathOfTemplateFile(String filePath, String templateFileExtension) {
+        return filePath.endsWith(templateFileExtension) ? filePath : filePath + templateFileExtension;
     }
 
     /**
@@ -411,7 +434,7 @@ public class AutoGenerator {
                 }
                 try (FileOutputStream fos = new FileOutputStream(file)) {
                     templateEngine.merge(objectMap, templatePath, fos);
-                    logger.debug("模板:" + templatePath + ";  文件:" + file);
+                    log.debug("模板:" + templatePath + ";  文件:" + file);
                 }
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
@@ -428,7 +451,7 @@ public class AutoGenerator {
      */
     public void outputController(IntrospectedTable tableInfo, Map<String, Object> objectMap) {
         // MpController.java
-        String controllerPath = context.getPathInfo().get(OutputFile.controller);
+        String controllerPath = context.getPathInfo(OutputFile.CONTROLLER);
         if (StringUtils.hasText(tableInfo.getControllerName()) && StringUtils.hasText(controllerPath)) {
             getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
                 String entityName = tableInfo.getEntityName();
@@ -449,23 +472,26 @@ public class AutoGenerator {
      */
     protected boolean isCreate(File file, boolean fileOverride) {
         if (file.exists() && !fileOverride) {
-            logger.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
+            log.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
         }
         return !file.exists() || fileOverride;
     }
 
     /**
      * 渲染对象 MAP 信息
+     * TODO 每个模板使用单独的参数集合，全局参数
      *
      * @param context   配置信息
      * @param tableInfo 表信息对象
      * @return ignore
      */
-    public Map<String, Object> getObjectMap(Context context, IntrospectedTable tableInfo) {
+    public Map<String, Object> prepareTemplateArguments(Context context, IntrospectedTable tableInfo) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
+        Map<String, Object> objectMap = new HashMap<>(100);
+
         // Controller
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
-        Map<String, Object> objectMap = new HashMap<>(controllerData);
+        objectMap.putAll(controllerData);
         // Mapper
         Map<String, Object> mapperData = strategyConfig.mapper().renderData(tableInfo);
         objectMap.putAll(mapperData);
@@ -477,6 +503,8 @@ public class AutoGenerator {
         objectMap.putAll(entityData);
         objectMap.put("context", context);
         objectMap.put("package", context.getPackageConfig().getPackageInfo());
+
+        // 全局配置信息
         GlobalConfig globalConfig = context.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
         objectMap.put("kotlin", globalConfig.isKotlin());
@@ -510,7 +538,7 @@ public class AutoGenerator {
             try {
                 openDir(outDir);
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }

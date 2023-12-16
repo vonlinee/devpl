@@ -1,32 +1,11 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.config;
-
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 
 /**
  * 定义常量
- *
- * @author YangHu, tangguo, hubin
- * @since 2016-08-31
  */
 public interface ConstVal {
 
     String MODULE_NAME = "ModuleName";
-
     String ENTITY = "Entity";
     String SERVICE = "Service";
     String SERVICE_IMPL = "ServiceImpl";
@@ -37,7 +16,7 @@ public interface ConstVal {
 
     String JAVA_TMPDIR = "java.io.tmpdir";
 
-    String JAVA_SUFFIX = StringPool.DOT_JAVA;
+    String JAVA_SUFFIX = ".java";
     String KT_SUFFIX = ".kt";
     String XML_SUFFIX = ".xml";
 
@@ -75,7 +54,6 @@ public interface ConstVal {
      * ServiceImpl模板路径
      */
     String TEMPLATE_SERVICE_IMPL = "/templates/serviceImpl.java";
-
 
     String SUPER_MAPPER_CLASS = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
     String SUPER_SERVICE_CLASS = "com.baomidou.mybatisplus.extension.service.IService";

@@ -1,6 +1,6 @@
 package io.devpl.codegen.jdbc;
 
-import io.devpl.codegen.config.Context;
+import io.devpl.codegen.core.Context;
 import io.devpl.codegen.core.IntrospectedColumn;
 import io.devpl.codegen.db.DbColumnType;
 

@@ -1,4 +1,4 @@
-package io.devpl.codegen.core;
+package io.devpl.codegen.config;
 
 /**
  * 数据库时间类型 到 实体类时间类型 对应策略

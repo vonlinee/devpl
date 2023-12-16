@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.config.Context;
+import io.devpl.codegen.core.Context;
 
 /**
  * 数据库查询抽象类

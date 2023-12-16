@@ -1,4 +1,4 @@
-open module mybatis.plus.generator {
+open module codegen {
     exports io.devpl.codegen.core;
     exports io.devpl.codegen.db.query;
     exports io.devpl.codegen.db.querys;
@@ -13,6 +13,7 @@ open module mybatis.plus.generator {
     exports io.devpl.codegen.db;
     exports io.devpl.codegen.strategy;
     exports io.devpl.codegen.config;
+    exports io.devpl.codegen.type;
 
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;
@@ -26,6 +27,5 @@ open module mybatis.plus.generator {
     requires org.mybatis;
     requires lombok;
     requires org.hibernate.orm.core;
-    requires com.google.common;
     requires devpl.sdk.internal;
 }

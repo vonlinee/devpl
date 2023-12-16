@@ -1,10 +1,9 @@
 package io.devpl.codegen.template.velocity;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.TemplateSource;
-import io.devpl.codegen.config.Context;
 import io.devpl.codegen.template.StringTemplateSource;
 import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.TemplateSource;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -46,11 +45,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         engine = createEngine();
     }
 
-    @Override
-    public @NotNull VelocityTemplateEngine init(@NotNull Context context) {
-        return this;
-    }
-
     private VelocityEngine createEngine() {
         Properties properties = new Properties();
         try (InputStream is = this.getClass().getResourceAsStream("velocity.properties")) {
@@ -75,12 +69,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(ow)) {
             template.merge(new VelocityContext(objectMap), writer);
         }
-    }
-
-    @Override
-    public @NotNull String templateFilePath(@NotNull String filePath) {
-        final String dotVm = ".vm";
-        return filePath.endsWith(dotVm) ? filePath : filePath + dotVm;
     }
 
     @Override
@@ -119,5 +107,10 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    @Override
+    public String getTemplateFileExtension() {
+        return ".vm";
     }
 }

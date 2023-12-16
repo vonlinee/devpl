@@ -1,26 +1,9 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.util.ClassUtils;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -29,26 +12,13 @@ import java.util.function.Function;
 
 /**
  * 控制器属性配置
- *
- * @author nieqiurong 2020/10/11.
- * @since 3.5.0
  */
-public class Mapper implements TableInitializer {
+public class Mapper extends TemplateArgumentsForJavaClass implements TableInitializer {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Mapper.class);
     /**
      * 自定义继承的Mapper类全称，带包名
      */
     private String superClass = ConstVal.SUPER_MAPPER_CLASS;
-    /**
-     * 是否添加 @Mapper 注解（默认 false）
-     *
-     * @see #mapperAnnotationClass
-     * @since 3.5.1
-     * @deprecated 3.5.4
-     */
-    @Deprecated
-    private boolean mapperAnnotation;
     /**
      * Mapper标记注解
      *
@@ -180,22 +150,6 @@ public class Mapper implements TableInitializer {
         }
 
         /**
-         * 开启 @Mapper 注解
-         *
-         * @return this
-         * @see #mapperAnnotation(Class)
-         * @since 3.5.1
-         * @deprecated 3.5.4
-         */
-        @Deprecated
-        public Builder enableMapperAnnotation() {
-            this.mapper.mapperAnnotation = true;
-            // TODO 因为现在mybatis-plus传递mybatis-spring依赖，这里是没问题的，但后面如果考虑脱离mybatis-spring的时候就需要把这里处理掉，建议使用mapperAnnotation方法来标记自己的注解。
-            this.mapper.mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
-            return this;
-        }
-
-        /**
          * 标记 Mapper 注解
          *
          * @param annotationClass 注解Class
@@ -285,18 +239,6 @@ public class Mapper implements TableInitializer {
          */
         public Builder formatXmlFileName(@NotNull String format) {
             return convertXmlFileName((entityName) -> String.format(format, entityName));
-        }
-
-        /**
-         * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
-         * @see #enableFileOverride()
-         */
-        @Deprecated
-        public Builder fileOverride() {
-            LOGGER.warn("fileOverride方法后续会删除，替代方法为enableFileOverride方法");
-            this.mapper.fileOverride = true;
-            return this;
         }
 
         /**
