@@ -144,7 +144,7 @@
 
         <dependency>
             <groupId>io.devpl</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
+            <artifactId>devpl-codegen</artifactId>
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>

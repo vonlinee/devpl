@@ -2,9 +2,9 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
-import com.baomidou.mybatisplus.generator.engine.TemplateEngine;
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import io.devpl.codegen.template.TemplateArgumentsMap;
+import com.baomidou.mybatisplus.test.core.template.engine.TemplateEngine;
+import io.devpl.codegen.jdbc.DBType;
 import io.devpl.backend.common.ServerException;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.common.query.ListResult;

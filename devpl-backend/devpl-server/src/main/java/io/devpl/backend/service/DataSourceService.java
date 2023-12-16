@@ -1,7 +1,7 @@
 package io.devpl.backend.service;
 
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;

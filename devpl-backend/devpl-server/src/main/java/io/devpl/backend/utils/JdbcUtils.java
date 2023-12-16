@@ -1,6 +1,6 @@
 package io.devpl.backend.utils;
 
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import io.devpl.codegen.jdbc.DBType;
 import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;

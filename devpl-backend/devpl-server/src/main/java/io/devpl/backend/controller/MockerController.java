@@ -1,6 +1,6 @@
 package io.devpl.backend.controller;
 
-import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.MockColumnListParam;
 import io.devpl.backend.domain.vo.MockField;

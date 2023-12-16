@@ -1,6 +1,6 @@
 package io.devpl.backend.service.impl;
 
-import com.baomidou.mybatisplus.generator.util.TypeUtils;
+import io.devpl.codegen.util.TypeUtils;
 import io.devpl.backend.domain.ParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;

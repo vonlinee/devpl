@@ -1,6 +1,6 @@
 package io.devpl.backend.jdbc;
 
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.codegen.jdbc.JDBCDriver;
 
 import java.sql.Driver;
 

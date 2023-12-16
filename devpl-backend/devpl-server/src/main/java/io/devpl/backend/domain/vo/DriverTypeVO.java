@@ -1,6 +1,6 @@
 package io.devpl.backend.domain.vo;
 
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.codegen.jdbc.JDBCDriver;
 import lombok.Getter;
 import lombok.Setter;
 

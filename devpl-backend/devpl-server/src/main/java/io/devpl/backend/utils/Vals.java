@@ -1,6 +1,6 @@
 package io.devpl.backend.utils;
 
-import com.baomidou.mybatisplus.generator.util.StringUtils;
+import io.devpl.codegen.util.StringUtils;
 
 /**
  * 简化一些代码

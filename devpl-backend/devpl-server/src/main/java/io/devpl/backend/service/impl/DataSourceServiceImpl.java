@@ -2,9 +2,9 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
-import com.baomidou.mybatisplus.generator.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.*;
 import io.devpl.backend.dao.DbConnInfoMapper;

@@ -1,7 +1,7 @@
 package io.devpl.backend.jdbc;
 
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
-import com.baomidou.mybatisplus.generator.jdbc.JDBCDriver;
+import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.jdbc.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;

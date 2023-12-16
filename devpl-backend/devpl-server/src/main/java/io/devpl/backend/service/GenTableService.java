@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import com.baomidou.mybatisplus.generator.engine.TemplateArgumentsMap;
+import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;

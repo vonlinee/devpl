@@ -1,6 +1,6 @@
 package io.devpl.backend.config.query;
 
-import com.baomidou.mybatisplus.generator.jdbc.DBType;
+import io.devpl.codegen.jdbc.DBType;
 
 /**
  * Query
