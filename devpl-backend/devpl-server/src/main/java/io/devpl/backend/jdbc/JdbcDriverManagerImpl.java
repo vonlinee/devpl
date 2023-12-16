@@ -1,7 +1,7 @@
 package io.devpl.backend.jdbc;
 
-import io.devpl.codegen.jdbc.DBType;
-import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;

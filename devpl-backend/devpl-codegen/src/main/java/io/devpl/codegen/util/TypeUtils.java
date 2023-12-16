@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class TypeUtils {
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
-    private static final Pattern PATTERN_INTEGER = Pattern.compile("^[-+]?[\\d]*$");
+    private static final Pattern PATTERN_INTEGER = Pattern.compile("^[-+]?\\d*$");
     private static final Pattern PATTERN_DOUBLE = Pattern.compile("^[-+]?[.\\d]*$");
     private static final String[] parsePatterns = {"yyyy-MM-dd", "yyyy年MM月dd日", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyyMMdd"};
 

@@ -4,7 +4,7 @@ import io.devpl.codegen.config.DataSourceConfig;
 import io.devpl.codegen.config.DatabaseDialect;
 import io.devpl.codegen.config.LikeTable;
 import io.devpl.codegen.config.StrategyConfig;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.util.JdbcUtils;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;

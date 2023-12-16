@@ -4,7 +4,7 @@ import io.devpl.codegen.config.ITypeConvert;
 import io.devpl.codegen.util.select.BranchBuilder;
 import io.devpl.codegen.util.select.Selector;
 import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 
 /**
  * 该注册器负责注册并查询类型注册器

@@ -1,6 +1,5 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.config.OutputFile;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import org.jetbrains.annotations.Nullable;
 

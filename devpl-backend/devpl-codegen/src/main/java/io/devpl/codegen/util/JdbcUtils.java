@@ -1,7 +1,7 @@
 package io.devpl.codegen.util;
 
 import io.devpl.codegen.core.CaseFormat;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.SQLRuntimeException;
 import io.devpl.sdk.util.NumberUtils;
 import org.jetbrains.annotations.NotNull;

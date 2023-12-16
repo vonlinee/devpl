@@ -1,7 +1,7 @@
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.db.querys.DbQueryDecorator;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.db.query.DefaultDatabaseIntrospector;

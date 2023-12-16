@@ -1,6 +1,6 @@
 package io.devpl.backend.config.query;
 
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
 /**

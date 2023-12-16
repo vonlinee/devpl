@@ -1,4 +1,4 @@
-package io.devpl.codegen.jdbc;
+package io.devpl.codegen.db;
 
 /**
  * 支持的数据库类型,主要用于分页方言

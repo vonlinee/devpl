@@ -1,6 +1,6 @@
 package io.devpl.backend.domain.vo;
 
-import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.db.JDBCDriver;
 import lombok.Getter;
 import lombok.Setter;
 

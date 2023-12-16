@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 import com.baomidou.mybatisplus.test.core.template.engine.TemplateEngine;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.backend.common.ServerException;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.common.query.ListResult;

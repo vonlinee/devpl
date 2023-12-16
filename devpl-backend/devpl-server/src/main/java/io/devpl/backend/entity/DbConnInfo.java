@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.db.JDBCDriver;
 import lombok.Getter;
 import lombok.Setter;
 

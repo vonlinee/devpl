@@ -7,7 +7,7 @@ import io.devpl.codegen.core.IntrospectedColumn;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.db.querys.H2Query;
 import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.util.JdbcUtils;
 import io.devpl.codegen.util.StringUtils;

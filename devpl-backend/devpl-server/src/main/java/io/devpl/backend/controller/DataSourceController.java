@@ -1,7 +1,7 @@
 package io.devpl.backend.controller;
 
-import io.devpl.codegen.jdbc.DBType;
-import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DBTableDataParam;

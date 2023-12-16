@@ -1,6 +1,6 @@
 package io.devpl.backend.jdbc;
 
-import io.devpl.codegen.jdbc.JDBCDriver;
+import io.devpl.codegen.db.JDBCDriver;
 
 import java.sql.Driver;
 

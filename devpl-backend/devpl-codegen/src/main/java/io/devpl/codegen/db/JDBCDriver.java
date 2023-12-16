@@ -1,4 +1,4 @@
-package io.devpl.codegen.jdbc;
+package io.devpl.codegen.db;
 
 import java.util.Map;
 import java.util.Properties;

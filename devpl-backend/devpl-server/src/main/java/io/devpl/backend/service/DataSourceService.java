@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import io.devpl.codegen.jdbc.DBType;
+import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
