@@ -1,12 +1,15 @@
 package io.devpl.backend.config;
 
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.LocalDateTimeTypeHandler;
 import org.apache.ibatis.type.TypeHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,10 +22,16 @@ import java.time.LocalDateTime;
 /**
  * mybatis-plus 配置
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MyBatisPlusConfiguration {
 
+    /**
+     * 拦截器配置
+     *
+     * @return 拦截器
+     */
     @Bean
+    @ConditionalOnMissingBean(value = {MybatisPlusInterceptor.class})
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         // 分页插件
@@ -33,6 +42,8 @@ public class MyBatisPlusConfiguration {
     }
 
     /**
+     * LocalDateTime类型处理器
+     *
      * @return LocalDateTimeTypeHandler
      * @see LocalDateTimeTypeHandler
      */
@@ -41,8 +52,7 @@ public class MyBatisPlusConfiguration {
         return new BaseTypeHandler<>() {
 
             @Override
-            public void setNonNullParameter(PreparedStatement ps, int i, LocalDateTime parameter, JdbcType jdbcType)
-                    throws SQLException {
+            public void setNonNullParameter(PreparedStatement ps, int i, LocalDateTime parameter, JdbcType jdbcType) throws SQLException {
                 ps.setString(i, parameter.toString());
             }
 
@@ -59,6 +69,35 @@ public class MyBatisPlusConfiguration {
             @Override
             public LocalDateTime getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
                 return cs.getObject(columnIndex, LocalDateTime.class);
+            }
+        };
+    }
+
+    @Bean
+    public MetaObjectHandler commonFieldFillHandler() {
+        return new MetaObjectHandler() {
+            /**
+             * 新增时填充
+             * @param metaObject 元对象
+             */
+            @Override
+            public void insertFill(MetaObject metaObject) {
+                if (metaObject.hasGetter("update_time") && metaObject.hasGetter("create_time")) {
+                    LocalDateTime nowTime = LocalDateTime.now();
+                    setFieldValByName("update_time", nowTime, metaObject);
+                    setFieldValByName("create_time", nowTime, metaObject);
+                }
+            }
+
+            /**
+             * 更新时填充
+             * @param metaObject 元对象
+             */
+            @Override
+            public void updateFill(MetaObject metaObject) {
+                if (metaObject.hasGetter("et.update_time")) {
+                    setFieldValByName("update_time", LocalDateTime.now(), metaObject);
+                }
             }
         };
     }

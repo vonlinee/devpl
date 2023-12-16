@@ -66,9 +66,9 @@ export const menuRoutes: RouteRecordRaw[] = [
   },
   {
     path: "/model",
-    name: "数据模型",
+    name: "领域模型",
     meta: {
-      title: "数据模型",
+      title: "领域模型",
       icon: "icon-appstore"
     },
     children: [
@@ -77,14 +77,14 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "FieldType",
         component: () => import("@/views/datatype/index.vue"),
         meta: {
-          title: "数据类型",
+          title: "类型系统",
           icon: "icon-menu"
         }
       },
       {
         path: "/fields",
         meta: {
-          title: "数据字段",
+          title: "字段信息",
           icon: "icon-appstore"
         },
         component: () => import("@/views/fields/index.vue"),
@@ -95,7 +95,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "DomainModel",
         component: () => import("@/views/model/index.vue"),
         meta: {
-          title: "领域模型",
+          title: "模型管理",
           icon: "icon-cluster"
         }
       }

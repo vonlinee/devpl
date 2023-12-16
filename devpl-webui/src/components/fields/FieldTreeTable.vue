@@ -1,13 +1,15 @@
 <template>
     <div class="field-tree-container" :style="containerStyle">
-        <el-tree :data="dataSource" :show-checkbox="selectable" default-expand-all :expand-on-click-node="false" draggable
+        <el-tree :data="dataSource" 
+            height="100%"
+            :show-checkbox="selectable" default-expand-all :expand-on-click-node="false" draggable
             node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
             @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
             @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
             <template #default="{ node, data }">
                 <span class="field-tree-node">
                     <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ node.label }}</span>
-                    <input ref="inputRef" v-if="data.editing || false" :value="data.label" @blur="data.editing = false"
+                    <input ref="currentInputRef" v-if="data.editing || false" :value="data.label" @blur="data.editing = false"
                         @change="(event) => onInputChange(event, data)"
                         @keyup.enter="(event) => onInputChange(event, data)" />
                     <span>
@@ -30,8 +32,7 @@ import type {
 } from 'element-plus/es/components/tree/src/tree.type'
 import { Minus, Plus } from '@element-plus/icons';
 
-
-const inputRef = ref()
+const currentInputRef = ref()
 
 const onInputChange = (event: Event, data: FieldTreeNode) => {
     data.label = (event.target as HTMLInputElement).value
@@ -40,7 +41,7 @@ const onInputChange = (event: Event, data: FieldTreeNode) => {
 
 const fireInput = (data: FieldTreeNode) => {
     data.editing = true
-    nextTick(() => inputRef.value.focus())
+    nextTick(() => currentInputRef.value.focus())
 }
 
 /**
