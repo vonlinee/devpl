@@ -45,4 +45,15 @@ abstract class CompositePlugin implements Plugin {
             plugin.setProperties(properties);
         }
     }
+
+    @Override
+    public List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> generatedFiles) {
+        for (Plugin plugin : plugins) {
+            List<GeneratedFile> currentFiles = plugin.generateFiles(unit, generatedFiles);
+            if (currentFiles != generatedFiles && currentFiles != null && !currentFiles.isEmpty()) {
+                generatedFiles.addAll(currentFiles);
+            }
+        }
+        return generatedFiles;
+    }
 }

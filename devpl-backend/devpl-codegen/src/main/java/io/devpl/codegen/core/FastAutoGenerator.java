@@ -207,8 +207,8 @@ public final class FastAutoGenerator {
         return this;
     }
 
-    public void execute() {
-        new AutoGenerator(this.dataSourceConfigBuilder.build())
+    public AutoGenerator execute() {
+        return new AutoGenerator(this.dataSourceConfigBuilder.build())
             // 全局配置
             .global(this.globalConfigBuilder.build())
             // 包配置

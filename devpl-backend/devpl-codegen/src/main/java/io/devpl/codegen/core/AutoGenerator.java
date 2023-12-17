@@ -4,7 +4,9 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
+import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.FileUtils;
 import io.devpl.codegen.util.StringUtils;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -39,7 +42,7 @@ public class AutoGenerator {
     /**
      * 模板引擎
      */
-    protected AbstractTemplateEngine templateEngine;
+    protected TemplateEngine templateEngine;
     /**
      * 数据库表配置
      */
@@ -56,6 +59,7 @@ public class AutoGenerator {
      * 全局 相关配置
      */
     private GlobalConfig globalConfig;
+
     private ActionCallback callback;
 
     /**
@@ -85,8 +89,6 @@ public class AutoGenerator {
      * 生成策略
      *
      * @param strategyConfig 策略配置
-     * @return this
-     * @since 3.5.0
      */
     public AutoGenerator strategy(StrategyConfig strategyConfig) {
         this.strategyConfig = strategyConfig;
@@ -153,14 +155,19 @@ public class AutoGenerator {
      *
      * @param templateEngine 模板引擎
      */
-    public void execute(AbstractTemplateEngine templateEngine) {
+    public AutoGenerator execute(TemplateEngine templateEngine) {
         log.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == context) {
             initContext();
         }
         // 为了兼容之前逻辑，默认采用 Velocity 引擎
-        this.templateEngine = templateEngine == null ? new VelocityTemplateEngine() : templateEngine;
+        if (templateEngine == null) {
+            this.templateEngine = ClassUtils.newInstance(context.getTemplateEngineImpl(), TemplateEngine.class);
+        } else {
+            this.templateEngine = templateEngine;
+        }
+
         this.callback = globalConfig.callback;
 
         // 获取表过滤
@@ -171,10 +178,11 @@ public class AutoGenerator {
 
         // 获取所有的表信息
         List<TableGeneration> tableInfoList = context.introspectTables(tableNamePattern);
+
         for (TableGeneration introspectedTable : tableInfoList) {
             generateFiles(introspectedTable);
         }
-        open();
+        return this;
     }
 
     void initContext() {
@@ -207,7 +215,9 @@ public class AutoGenerator {
      * @return 生成的文件列表
      */
     public List<GeneratedFile> prepareGeneratedFiles(TableGeneration introspectedTable) {
-        return Collections.emptyList();
+        List<GeneratedFile> files = new ArrayList<>();
+        context.generateFiles(files);
+        return files;
     }
 
     /**
@@ -218,7 +228,6 @@ public class AutoGenerator {
     void generateFiles(TableGeneration introspectedTable) {
 
         List<GeneratedFile> generatedFiles = prepareGeneratedFiles(introspectedTable);
-
         log.info("文件个数{}", generatedFiles.size());
 
         // 数据初始化完毕
@@ -234,13 +243,18 @@ public class AutoGenerator {
                 outputCustomFile(injectionConfig.getCustomFiles(), introspectedTable, templateArgumentsMap);
             }
             // entity
-            outputEntity(introspectedTable, templateArgumentsMap);
+            outputFile(OutputFile.ENTITY, introspectedTable.getEntityName(), templateArgumentsMap, context.getStrategyConfig().entity().isFileOverride());
+
             // mapper and xml
-            outputMapper(introspectedTable, templateArgumentsMap);
+            outputFile(OutputFile.MAPPER, introspectedTable.getMapperName(), templateArgumentsMap, context.getStrategyConfig().mapper().isFileOverride());
+            outputFile(OutputFile.MAPPER_XML, introspectedTable.getXmlName(), templateArgumentsMap, context.getStrategyConfig().mapper().isFileOverride());
+
             // service
-            outputService(introspectedTable, templateArgumentsMap);
+            outputFile(OutputFile.SERVICE, introspectedTable.getServiceName(), templateArgumentsMap, context.getStrategyConfig().service().isFileOverride());
+            outputFile(OutputFile.SERVICE_IMPL, introspectedTable.getServiceImplName(), templateArgumentsMap, context.getStrategyConfig().service().isFileOverride());
+
             // controller
-            outputController(introspectedTable, templateArgumentsMap);
+            outputFile(OutputFile.CONTROLLER, introspectedTable.getControllerName(), templateArgumentsMap, context.getStrategyConfig().controller().isFileOverride());
         } catch (Exception e) {
             throw new RuntimeException("无法创建文件，请检查配置信息！", e);
         }
@@ -268,21 +282,12 @@ public class AutoGenerator {
         });
     }
 
-    /**
-     * 输出实体文件
-     *
-     * @param tableInfo 表信息
-     * @param objectMap 渲染数据
-     */
-    public void outputEntity(TableGeneration tableInfo, Map<String, Object> objectMap) {
-        String entityName = tableInfo.getEntityName();
-        String entityPath = context.getPathInfo(OutputFile.ENTITY);
-        if (StringUtils.hasText(entityName) && StringUtils.hasText(entityPath)) {
-            getTemplateFilePath(template -> template.getEntityTemplatePath(context.getGlobalConfig()
-                .isKotlin())).ifPresent((entity) -> {
-                String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
-                outputFile(new File(entityFile), objectMap, entity, context.getStrategyConfig().entity()
-                    .isFileOverride());
+    public void outputFile(OutputFile fileType, String fileName, Map<String, Object> arguments, boolean override) {
+        String path = context.getPathInfo(fileType);
+        if (StringUtils.hasText(fileName) && StringUtils.hasText(path)) {
+            getTemplateFilePath(template -> template.getEntityTemplatePath(context.useKotlin())).ifPresent((entity) -> {
+                String entityFile = String.format((path + File.separator + "%s" + suffixJavaOrKt()), fileName);
+                outputFile(new File(entityFile), arguments, entity, override);
             });
         }
     }
@@ -291,65 +296,7 @@ public class AutoGenerator {
      * 文件后缀
      */
     protected String suffixJavaOrKt() {
-        return context.getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
-    }
-
-    /**
-     * 输出Mapper文件(含xml)
-     *
-     * @param tableInfo 表信息
-     * @param objectMap 渲染数据
-     * @since 3.5.0
-     */
-    public void outputMapper(TableGeneration tableInfo, Map<String, Object> objectMap) {
-        // MpMapper.java
-        String entityName = tableInfo.getEntityName();
-        String mapperPath = context.getPathInfo(OutputFile.MAPPER);
-        if (StringUtils.hasText(tableInfo.getMapperName()) && StringUtils.hasText(mapperPath)) {
-            getTemplateFilePath(TemplateConfig::getMapper).ifPresent(mapper -> {
-                String mapperFile = String.format((mapperPath + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(mapperFile), objectMap, mapper, context.getStrategyConfig().mapper()
-                    .isFileOverride());
-            });
-        }
-        // MpMapper.xml
-        String xmlPath = context.getPathInfo(OutputFile.MAPPER_XML);
-        if (StringUtils.hasText(tableInfo.getXmlName()) && StringUtils.hasText(xmlPath)) {
-            getTemplateFilePath(TemplateConfig::getXml).ifPresent(xml -> {
-                String xmlFile = String.format((xmlPath + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX), entityName);
-                outputFile(new File(xmlFile), objectMap, xml, context.getStrategyConfig().mapper()
-                    .isFileOverride());
-            });
-        }
-    }
-
-    /**
-     * 输出service文件
-     *
-     * @param tableInfo 表信息
-     * @param objectMap 渲染数据
-     * @since 3.5.0
-     */
-    public void outputService(TableGeneration tableInfo, Map<String, Object> objectMap) {
-        // IMpService.java
-        String entityName = tableInfo.getEntityName();
-        String servicePath = context.getPathInfo(OutputFile.SERVICE);
-        if (StringUtils.hasText(tableInfo.getServiceName()) && StringUtils.hasText(servicePath)) {
-            getTemplateFilePath(TemplateConfig::getService).ifPresent(service -> {
-                String serviceFile = String.format((servicePath + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(serviceFile), objectMap, service, context.getStrategyConfig().service()
-                    .isFileOverride());
-            });
-        }
-        // MpServiceImpl.java
-        String serviceImplPath = context.getPathInfo(OutputFile.SERVICE_IMPL);
-        if (StringUtils.hasText(tableInfo.getServiceImplName()) && StringUtils.hasText(serviceImplPath)) {
-            getTemplateFilePath(TemplateConfig::getServiceImpl).ifPresent(serviceImpl -> {
-                String implFile = String.format((serviceImplPath + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(implFile), objectMap, serviceImpl, context.getStrategyConfig().service()
-                    .isFileOverride());
-            });
-        }
+        return context.useKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 
     /**
@@ -399,26 +346,6 @@ public class AutoGenerator {
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
-        }
-    }
-
-    /**
-     * 输出controller文件
-     *
-     * @param tableInfo 表信息
-     * @param objectMap 渲染数据
-     * @since 3.5.0
-     */
-    public void outputController(TableGeneration tableInfo, Map<String, Object> objectMap) {
-        // MpController.java
-        String controllerPath = context.getPathInfo(OutputFile.CONTROLLER);
-        if (StringUtils.hasText(tableInfo.getControllerName()) && StringUtils.hasText(controllerPath)) {
-            getTemplateFilePath(TemplateConfig::getController).ifPresent(controller -> {
-                String entityName = tableInfo.getEntityName();
-                String controllerFile = String.format((controllerPath + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
-                outputFile(new File(controllerFile), objectMap, controller, context.getStrategyConfig()
-                    .controller().isFileOverride());
-            });
         }
     }
 
@@ -491,13 +418,23 @@ public class AutoGenerator {
      * 打开输出目录
      */
     public void open() {
+        show(dir -> {
+            try {
+                openDir(dir);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void show(Consumer<String> consumer) {
         String outDir = context.getGlobalConfig().getOutputDir();
         if (!StringUtils.hasText(outDir) || !new File(outDir).exists()) {
             System.err.println("未找到输出目录：" + outDir);
         } else if (context.getGlobalConfig().isOpen()) {
             try {
-                openDir(outDir);
-            } catch (IOException e) {
+                consumer.accept(outDir);
+            } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }

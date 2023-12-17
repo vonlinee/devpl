@@ -4,10 +4,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-public interface Plugin {
+public interface Plugin extends ContextAware {
 
-    void setContext(Context context);
+    /**
+     * 插件名称
+     *
+     * @return 插件名称
+     */
+    default String getName() {
+        return toString();
+    }
 
+    /**
+     * 注入配置属性
+     *
+     * @param properties 配置属性
+     */
     void setProperties(Properties properties);
 
     /**
@@ -29,11 +41,11 @@ public interface Plugin {
     }
 
     /**
-     * @param unit     生成单元
-     * @param previous 前一个Plugin生成的文件信息
+     * @param unit  生成单元
+     * @param files 总的文件信息
      * @return 由当前Plugin处理后的文件信息
      */
-    default List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> previous) {
+    default List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> files) {
         return Collections.emptyList();
     }
 

@@ -1,5 +1,6 @@
 package io.devpl.codegen.core;
 
+import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,11 @@ public class TemplateGeneratedFile extends GeneratedFile {
      * 使用的模板引擎
      */
     private TemplateEngine templateEngine;
+
+    /**
+     * 模板用到的参数
+     */
+    private TemplateArguments templateArguments;
 
     @Override
     public void write(Writer writer, Charset charset) {

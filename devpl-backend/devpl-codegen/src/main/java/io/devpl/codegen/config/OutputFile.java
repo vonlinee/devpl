@@ -18,10 +18,12 @@ public enum OutputFile {
      * Controller文件
      */
     CONTROLLER,
-
+    /**
+     * 父文件夹
+     */
+    PARENT,
     /**
      * 自定义文件类型
      */
-    CUSTOM,
-    PARENT
+    CUSTOM;
 }

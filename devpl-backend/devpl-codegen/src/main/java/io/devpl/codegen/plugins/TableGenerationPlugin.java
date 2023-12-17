@@ -1,20 +1,21 @@
 package io.devpl.codegen.plugins;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.config.args.EntityTemplateArugments;
 import io.devpl.codegen.core.*;
 import io.devpl.codegen.db.DbColumnType;
 import io.devpl.codegen.db.IKeyWordsHandler;
+import io.devpl.codegen.db.IdType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
 import io.devpl.codegen.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.File;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * 优先级最高
@@ -49,6 +50,17 @@ public class TableGenerationPlugin extends PluginAdapter {
 
             importPackage(tg);
 
+            // 启用 schema 处理逻辑
+            String schemaName = "";
+            if (strategyConfig.isEnableSchema()) {
+                // 存在 schemaName 设置拼接 . 组合表名
+                schemaName = context.getDataSourceConfig().getSchemaName();
+                if (StringUtils.hasText(schemaName)) {
+                    schemaName += ".";
+                    tg.setConvert(true);
+                }
+            }
+            tg.setSchemaName(schemaName);
 
             initializeColumns(tg);
         }
@@ -236,5 +248,93 @@ public class TableGenerationPlugin extends PluginAdapter {
     @Override
     public int getPriority() {
         return Integer.MIN_VALUE;
+    }
+
+    @Override
+    public List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> files) {
+        if (!(unit instanceof TableGeneration tg)) {
+            return Collections.emptyList();
+        }
+        StrategyConfig strategyConfig = context.getStrategyConfig();
+
+        // Controller
+        Map<String, Object> objectMap = strategyConfig.controller().renderData(tg);
+        TemplateGeneratedFile controllerJavaFile = new TemplateGeneratedFile();
+        files.add(controllerJavaFile);
+
+        // Mapper
+        TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile();
+        Map<String, Object> mapperData = strategyConfig.mapper().renderData(tg);
+        objectMap.putAll(mapperData);
+        files.add(mapperJavaFile);
+
+        // Service
+        TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile();
+        Map<String, Object> serviceData = strategyConfig.service().renderData(tg);
+        objectMap.putAll(serviceData);
+        files.add(serviceJavaFile);
+
+        // Entity
+        TemplateGeneratedFile entityJavaFile = new TemplateGeneratedFile();
+        Map<String, Object> entityData = strategyConfig.entity().renderData(tg);
+        objectMap.putAll(entityData);
+        files.add(entityJavaFile);
+
+        objectMap.put("context", context);
+        objectMap.put("package", context.getPackageConfig().getPackageInfo());
+
+        // 全局配置信息
+        GlobalConfig globalConfig = context.getGlobalConfig();
+        objectMap.put("author", globalConfig.getAuthor());
+        objectMap.put("kotlin", globalConfig.isKotlin());
+        objectMap.put("swagger", globalConfig.isSwagger());
+        objectMap.put("springdoc", globalConfig.isSpringdoc());
+        objectMap.put("date", globalConfig.getCommentDate());
+
+        objectMap.put("schemaName", tg.getSchemaName());
+        objectMap.put("table", tg);
+        objectMap.put("entity", tg.getEntityName());
+
+        return files;
+    }
+
+    public GeneratedFile createGeneratedFile(TableGeneration tg) {
+        String entityName = tg.getEntityName();
+        String entityPath = context.getPathInfo(OutputFile.ENTITY);
+        if (StringUtils.hasText(entityName) && StringUtils.hasText(entityPath)) {
+            getTemplateFilePath(template -> template.getEntityTemplatePath(context.useKotlin())).ifPresent((entity) -> {
+                // 保存位置
+                String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
+
+            });
+        }
+
+        return new TemplateGeneratedFile();
+    }
+
+    /**
+     * 获取模板路径
+     *
+     * @param function function
+     * @return 模板路径
+     * @since 3.5.0
+     */
+    protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
+        String filePath = function.apply(context.getTemplateConfig());
+        if (StringUtils.hasText(filePath)) {
+            return Optional.of(getPathOfTemplateFile(filePath, ".vm"));
+        }
+        return Optional.empty();
+    }
+
+    public String getPathOfTemplateFile(String filePath, String templateFileExtension) {
+        return filePath.endsWith(templateFileExtension) ? filePath : filePath + templateFileExtension;
+    }
+
+    /**
+     * 文件后缀
+     */
+    protected String suffixJavaOrKt() {
+        return context.useKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 }

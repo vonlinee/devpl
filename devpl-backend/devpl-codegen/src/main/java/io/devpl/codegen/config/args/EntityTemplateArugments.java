@@ -1,12 +1,12 @@
 package io.devpl.codegen.config.args;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.db.IdType;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.StringUtils;

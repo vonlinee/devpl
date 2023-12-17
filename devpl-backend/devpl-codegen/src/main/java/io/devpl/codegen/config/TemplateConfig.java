@@ -71,9 +71,9 @@ public class TemplateConfig {
     public String getEntityTemplatePath(boolean kotlin) {
         if (!this.disableEntity) {
             if (kotlin) {
-                return StringUtils.isBlank(this.entityKt) ? ConstVal.TEMPLATE_ENTITY_KT : this.entityKt;
+                return StringUtils.whenBlank(this.entityKt, ConstVal.TEMPLATE_ENTITY_KT);
             }
-            return StringUtils.isBlank(this.entity) ? ConstVal.TEMPLATE_ENTITY_JAVA : this.entity;
+            return StringUtils.whenBlank(this.entity, ConstVal.TEMPLATE_ENTITY_JAVA);
         }
         return null;
     }
@@ -112,7 +112,6 @@ public class TemplateConfig {
      * 禁用全部模板
      *
      * @return this
-     * @since 3.5.0
      */
     public TemplateConfig disable() {
         return disable(TargetFileType.values());

@@ -1,5 +1,7 @@
 package io.devpl.codegen.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 public final class ClassUtils {
@@ -82,5 +84,24 @@ public final class ClassUtils {
             // 当父类实体存在类加载器的时候,识别父类实体字段，不存在的情况就只有通过指定superEntityColumns属性了。
         }
         return Optional.empty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T newInstance(String className, Class<T> superType) throws RuntimeException {
+        return (T) tryLoadClass(className).map(clazz -> {
+            if (!superType.isAssignableFrom(clazz)) {
+                throw new RuntimeException("创建对象失败, 类型" + clazz + "与类型" + superType + "不兼容");
+            }
+            T instance;
+            try {
+                Constructor<?> constructor = clazz.getConstructor();
+                instance = (T) constructor.newInstance();
+            } catch (NoSuchMethodException e) {
+                return new RuntimeException("不存在默认构造函数");
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException("创建对象失败", e);
+            }
+            return instance;
+        }).orElse(null);
     }
 }

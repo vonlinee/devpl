@@ -31,6 +31,13 @@ public final class StringUtils {
      */
     private static final Pattern REPLACE_BLANK = Pattern.compile("'|\"|<|>|&|\\*|\\+|=|#|-|;|\\s*|\t|\r|\n");
 
+    public static String whenBlank(String str, String elseStr) {
+        if (isBlank(str)) {
+            return elseStr;
+        }
+        return str;
+    }
+
     public static boolean hasText(CharSequence cs) {
         return !isBlank(cs);
     }

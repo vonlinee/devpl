@@ -10,5 +10,7 @@ public enum TargetFileType {
     SERVICE_IMPL,
     CONTROLLER,
     MAPPER,
-    MAPPER_XML
+    MAPPER_XML;
+
+    private String templateName;
 }

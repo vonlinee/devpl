@@ -71,7 +71,7 @@ public interface TemplateArguments {
     }
 
     /**
-     * 转为Map结构
+     * 转为Map结构，延迟初始化
      *
      * @return map
      */
@@ -88,6 +88,15 @@ public interface TemplateArguments {
         if (arguments != null) {
             arguments.addAll(this);
         }
+    }
+
+    /**
+     * 是否为空
+     *
+     * @return 模板参数集合是否为空
+     */
+    default boolean isEmpty() {
+        return true;
     }
 
     /**

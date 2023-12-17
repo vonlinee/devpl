@@ -1,6 +1,8 @@
 package io.devpl.codegen.template;
 
+import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * 模板引擎
@@ -50,4 +52,6 @@ public interface TemplateEngine {
      * @return 模板文件后缀名
      */
     String getTemplateFileExtension();
+
+    void merge(Map<String, Object> objectMap, String templatePath, OutputStream fos) throws Exception;
 }

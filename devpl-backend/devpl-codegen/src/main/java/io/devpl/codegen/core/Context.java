@@ -2,9 +2,9 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.config.args.EntityTemplateArugments;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.plugins.TableGenerationPlugin;
+import io.devpl.codegen.strategy.MavenProjectFileLocator;
 import io.devpl.codegen.strategy.ProjectFileLocator;
 import io.devpl.codegen.util.StringUtils;
 import lombok.Getter;
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Setter
 @Getter
-public class Context extends ConfigurationHolder {
+public class Context {
     /**
      * 模板路径配置信息
      */
@@ -31,7 +31,7 @@ public class Context extends ConfigurationHolder {
     /**
      * 数据库表信息
      */
-    private final List<TableGeneration> introspectedTables = new ArrayList<>();
+    private final List<TableGeneration> targetTables = new ArrayList<>();
     /**
      * 路径配置信息
      * 路径信息，各类型的文件放在哪个目录
@@ -65,14 +65,19 @@ public class Context extends ConfigurationHolder {
     private DatabaseIntrospector databaseIntrospector;
 
     /**
-     * 用于定位文件位置
-     */
-    private ProjectFileLocator fileLocator;
-
-    /**
      * 插件
      */
     private PluginManager plugin;
+
+    /**
+     * 模板引擎实现类
+     */
+    private String templateEngineImpl;
+
+    /**
+     * 用于定位文件位置
+     */
+    private ProjectFileLocator fileLocator = new MavenProjectFileLocator();
 
     /**
      * 在构造器中处理配置
@@ -90,7 +95,6 @@ public class Context extends ConfigurationHolder {
         this.templateConfig = templateConfig;
         this.packageConfig = packageConfig;
         this.injectionConfig = injectionConfig;
-        initOutputPathInfo(globalConfig.getOutputDir(), globalConfig.isKotlin(), packageConfig, templateConfig);
     }
 
     /**
@@ -152,6 +156,9 @@ public class Context extends ConfigurationHolder {
     public void initialize() {
         this.plugin = new PluginManager();
         addPlugin(new TableGenerationPlugin());
+
+        // 初始化输出路径信息
+        initOutputPathInfo(globalConfig.getOutputDir(), globalConfig.isKotlin(), packageConfig, templateConfig);
     }
 
     public final void addPlugin(Plugin plugin) {
@@ -167,7 +174,7 @@ public class Context extends ConfigurationHolder {
      * @return 表信息
      */
     public List<TableGeneration> introspectTables(String tableNamePattern) {
-        if (introspectedTables.isEmpty()) {
+        if (targetTables.isEmpty()) {
             // 是否跳过视图
             boolean skipView = strategyConfig.isSkipView();
             // 查询的表类型
@@ -176,14 +183,15 @@ public class Context extends ConfigurationHolder {
 
             List<TableGeneration> tableInfos = this.databaseIntrospector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
             if (!tableInfos.isEmpty()) {
-                this.introspectedTables.addAll(tableInfos);
-            }
-
-            for (TableGeneration tableGeneration : tableInfos) {
-                plugin.initialize(tableGeneration);
+                this.targetTables.addAll(tableInfos);
             }
         }
-        return introspectedTables;
+
+        for (TableGeneration tableGeneration : targetTables) {
+            plugin.initialize(tableGeneration);
+        }
+
+        return targetTables;
     }
 
     public String getPathInfo(OutputFile outputFile) {
@@ -195,5 +203,20 @@ public class Context extends ConfigurationHolder {
         if (databaseIntrospector != null) {
             databaseIntrospector.setContext(this);
         }
+    }
+
+    /**
+     * 得到要生成的文件信息
+     *
+     * @param files 存放结果
+     */
+    public void generateFiles(List<GeneratedFile> files) {
+        for (TableGeneration tableGeneration : targetTables) {
+            plugin.generateFiles(tableGeneration, files);
+        }
+    }
+
+    public boolean useKotlin() {
+        return globalConfig.isKotlin();
     }
 }

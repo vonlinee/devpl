@@ -52,6 +52,10 @@ public class TableGeneration implements GenerationUnit {
      */
     private String xmlName;
     /**
+     * Schema Name
+     */
+    private String schemaName;
+    /**
      * service名称
      */
     private String serviceName;
@@ -209,5 +213,13 @@ public class TableGeneration implements GenerationUnit {
      */
     public boolean hasPrimaryKey() {
         return this.primaryKeys != null && !this.primaryKeys.isEmpty();
+    }
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
     }
 }
