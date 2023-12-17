@@ -1,5 +1,8 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.config.args;
 
+import io.devpl.codegen.ConstVal;
+import io.devpl.codegen.config.*;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +78,7 @@ public class ControllerTempateArguments extends TemplateArgumentsForJavaClass im
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
         Map<String, Object> data = new HashMap<>(5);
         data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);

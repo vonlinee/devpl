@@ -6,18 +6,18 @@ import io.devpl.codegen.strategy.FieldFillStrategy;
 /**
  * 属性填充
  */
-public class Property implements FieldFillStrategy {
+public class PropertyFill implements FieldFillStrategy {
 
     private final String propertyName;
 
     private final FieldFill fieldFill;
 
-    public Property(String propertyName, FieldFill fieldFill) {
+    public PropertyFill(String propertyName, FieldFill fieldFill) {
         this.propertyName = propertyName;
         this.fieldFill = fieldFill;
     }
 
-    public Property(String propertyName) {
+    public PropertyFill(String propertyName) {
         this.propertyName = propertyName;
         this.fieldFill = FieldFill.DEFAULT;
     }

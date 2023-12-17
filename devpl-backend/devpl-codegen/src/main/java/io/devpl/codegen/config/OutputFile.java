@@ -8,12 +8,20 @@ public enum OutputFile {
     SERVICE,
     SERVICE_IMPL,
     MAPPER,
+
+    /**
+     * MyBatis Xml Mapper文件
+     */
     MAPPER_XML,
+
+    /**
+     * Controller文件
+     */
     CONTROLLER,
 
     /**
      * 自定义文件类型
      */
     CUSTOM,
-    PARENT;
+    PARENT
 }

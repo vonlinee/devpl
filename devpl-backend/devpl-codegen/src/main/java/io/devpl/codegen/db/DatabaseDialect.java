@@ -1,4 +1,4 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

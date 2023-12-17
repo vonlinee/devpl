@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.keywords;
 
-import io.devpl.codegen.config.IKeyWordsHandler;
+import io.devpl.codegen.db.IKeyWordsHandler;
 
 import java.util.*;
 

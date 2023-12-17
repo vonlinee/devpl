@@ -2,9 +2,9 @@ package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.config.DataSourceConfig;
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.IntrospectedTable;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.config.StrategyConfig;
-import io.devpl.codegen.core.IntrospectedColumn;
+import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.PrimaryKey;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 /**
  * 元数据查询数据库信息.
  *
- * @author nieqiurong 2022/5/11.
  * @see TypeConverter 类型转换器(如果默认逻辑不能满足，可实现此接口重写类型转换)
  * <p>
  * 测试通过的数据库：H2、Mysql-5.7.37、Mysql-8.0.25、PostgreSQL-11.15、PostgreSQL-14.1、Oracle-11.2.0.1.0、DM8
@@ -49,7 +48,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
      * @return 所有表信息
      */
     @Override
-    public List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
+    public List<TableGeneration> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
         StrategyConfig strategyConfig = this.context.getStrategyConfig();
         DataSourceConfig dataSourceConfig = this.context.getDataSourceConfig();
         GlobalConfig globalConfig = this.context.getGlobalConfig();
@@ -60,7 +59,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         boolean isExclude = !excludeTables.isEmpty();
 
         // 所有的表信息
-        final List<IntrospectedTable> tableList = new ArrayList<>();
+        final List<TableGeneration> tableList = new ArrayList<>();
         try (Connection connection = dataSourceConfig.getConnection()) {
             catalog = catalog == null ? connection.getCatalog() : catalog;
 
@@ -73,15 +72,15 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             List<TableMetadata> tableMetadataList = JdbcUtils.toBeans(resultSet, TableMetadata::new);
 
             // 需要反向生成或排除的表信息
-            List<IntrospectedTable> includeTableList = new ArrayList<>();
-            List<IntrospectedTable> excludeTableList = new ArrayList<>();
+            List<TableGeneration> includeTableList = new ArrayList<>();
+            List<TableGeneration> excludeTableList = new ArrayList<>();
 
             for (TableMetadata tableMetadataItem : tableMetadataList) {
                 String tableName = tableMetadataItem.getTableName();
                 if (null == tableName || tableName.isEmpty()) {
                     continue; // 表名一般不会为空
                 }
-                IntrospectedTable table = new IntrospectedTable(this.context, tableMetadataItem);
+                TableGeneration table = new TableGeneration(tableMetadataItem);
                 if (globalConfig.isSwagger() && StringUtils.hasText(tableMetadataItem.getRemarks())) {
                     table.setComment(tableMetadataItem.getRemarks().replace("\"", "\\\""));
                 } else {
@@ -97,7 +96,6 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
             // 过滤表
 
             if (isExclude || isInclude) {
-
                 Set<String> tableNames;
                 if (isExclude) {
                     tableNames = strategyConfig.getExclude();
@@ -110,7 +108,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n)); // 表名小写
                 // 将已经存在的表移除，获取配置中数据库不存在的表
                 if (!notExistTables.isEmpty()) {
-                    for (IntrospectedTable tabInfo : tableList) {
+                    for (TableGeneration tabInfo : tableList) {
                         // 解决可能大小写不敏感的情况导致无法移除掉
                         notExistTables.remove(tabInfo.getName().toLowerCase());
                     }
@@ -127,10 +125,8 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                 }
             }
             // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
-            for (IntrospectedTable table : tableList) {
+            for (TableGeneration table : tableList) {
                 introspectTableColumns(dbmd, table, catalog, schemaPattern);
-                table.processTable();
-                table.importPackage();
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
@@ -139,7 +135,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
     }
 
     @Override
-    public List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
+    public List<ColumnGeneration> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
         return null;
     }
 
@@ -162,7 +158,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
      * @param catalog   catalog
      * @param schema    schema
      */
-    protected void introspectTableColumns(DatabaseMetaData dbmd, IntrospectedTable tableInfo, String catalog, String schema) {
+    protected void introspectTableColumns(DatabaseMetaData dbmd, TableGeneration tableInfo, String catalog, String schema) {
         String tableName = tableInfo.getName();
         // 主键信息
         final List<PrimaryKey> primaryKeys;
@@ -182,8 +178,10 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
         }
 
         for (ColumnMetadata columnMetadata : columnMetadataList) {
-            String columnName = columnMetadata.getColumnName();
-            IntrospectedColumn column = new IntrospectedColumn(tableInfo, this.context, columnMetadata);
+            ColumnGeneration column = new ColumnGeneration(tableInfo, columnMetadata);
+
+            tableInfo.addColumn(column);
+
             // 处理ID
             if (column.isPrimaryKey()) {
                 column.setPrimaryKeyFlag(columnMetadata.isAutoIncrement());
@@ -191,7 +189,7 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
                     log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
-            column.setColumnName(columnName);
+            column.setColumnName(columnMetadata.getColumnName());
             column.setComment(columnMetadata.getRemarks());
         }
     }

@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.querys;
 
-import io.devpl.codegen.config.DatabaseDialect;
+import io.devpl.codegen.db.DatabaseDialect;
 
 /**
  * 表数据查询抽象类

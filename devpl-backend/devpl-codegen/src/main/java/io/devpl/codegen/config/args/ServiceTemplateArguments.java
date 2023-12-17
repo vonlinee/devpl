@@ -1,9 +1,10 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.config.args;
 
+import io.devpl.codegen.ConstVal;
+import io.devpl.codegen.config.*;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,8 @@ import java.util.function.Function;
 /**
  * Service属性配置
  */
-public class Service extends TemplateArgumentsForJavaClass implements TableInitializer {
+public class ServiceTemplateArguments extends TemplateArgumentsForJavaClass implements TableInitializer {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Service.class);
     /**
      * 自定义继承的Service类全称，带包名
      */
@@ -42,7 +42,7 @@ public class Service extends TemplateArgumentsForJavaClass implements TableIniti
      */
     private boolean fileOverride;
 
-    private Service() {
+    private ServiceTemplateArguments() {
     }
 
     @NotNull
@@ -71,7 +71,7 @@ public class Service extends TemplateArgumentsForJavaClass implements TableIniti
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("superServiceClassPackage", this.superServiceClass);
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));
@@ -82,7 +82,7 @@ public class Service extends TemplateArgumentsForJavaClass implements TableIniti
 
     public static class Builder extends BaseBuilder {
 
-        private final Service service = new Service();
+        private final ServiceTemplateArguments service = new ServiceTemplateArguments();
 
         public Builder(@NotNull StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -177,18 +177,6 @@ public class Service extends TemplateArgumentsForJavaClass implements TableIniti
         }
 
         /**
-         * 覆盖已有文件（该方法后续会删除，替代方法为enableFileOverride方法）
-         *
-         * @see #enableFileOverride()
-         */
-        @Deprecated
-        public Builder fileOverride() {
-            LOGGER.warn("fileOverride方法后续会删除，替代方法为enableFileOverride方法");
-            this.service.fileOverride = true;
-            return this;
-        }
-
-        /**
          * 覆盖已有文件
          */
         public Builder enableFileOverride() {
@@ -197,7 +185,7 @@ public class Service extends TemplateArgumentsForJavaClass implements TableIniti
         }
 
         @NotNull
-        public Service get() {
+        public ServiceTemplateArguments get() {
             return this.service;
         }
     }

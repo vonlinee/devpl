@@ -1,4 +1,4 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen;
 
 /**
  * 定义常量

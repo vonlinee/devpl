@@ -84,6 +84,12 @@ public class Utils {
         return name;
     }
 
+    /**
+     * 加载properties文件
+     *
+     * @param file properties文件
+     * @return properties
+     */
     public static Properties loadProperties(File file) {
         if (!file.exists()) {
             throw new RuntimeException(String.format("数据库连接配置文件%s不存在", file));

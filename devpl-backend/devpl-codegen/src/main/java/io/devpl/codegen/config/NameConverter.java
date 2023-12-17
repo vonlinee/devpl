@@ -1,5 +1,7 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.core.TableGeneration;
+
 /**
  * 名称转换接口类
  *
@@ -14,7 +16,7 @@ public interface NameConverter {
      * @param tableInfo 表信息对象
      * @return
      */
-    String entityNameConvert(IntrospectedTable tableInfo);
+    String entityNameConvert(TableGeneration tableInfo);
 
     /**
      * 执行属性名称转换

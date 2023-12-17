@@ -1,9 +1,14 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.config.args.ControllerTempateArguments;
+import io.devpl.codegen.config.args.EntityTemplateArugments;
+import io.devpl.codegen.config.args.MapperTemplateArguments;
+import io.devpl.codegen.config.args.ServiceTemplateArguments;
+
 /**
  * 配置构建
  */
-public class BaseBuilder implements GenericBuilder<StrategyConfig> {
+public class BaseBuilder {
 
     private final StrategyConfig strategyConfig;
 
@@ -19,15 +24,14 @@ public class BaseBuilder implements GenericBuilder<StrategyConfig> {
         return strategyConfig.controllerBuilder();
     }
 
-    public Mapper.Builder mapperBuilder() {
+    public MapperTemplateArguments.Builder mapperBuilder() {
         return strategyConfig.mapperBuilder();
     }
 
-    public Service.Builder serviceBuilder() {
+    public ServiceTemplateArguments.Builder serviceBuilder() {
         return strategyConfig.serviceBuilder();
     }
 
-    @Override
     public StrategyConfig build() {
         this.strategyConfig.validate();
         return this.strategyConfig;

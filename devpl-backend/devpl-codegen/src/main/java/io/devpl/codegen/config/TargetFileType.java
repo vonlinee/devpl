@@ -1,14 +1,14 @@
 package io.devpl.codegen.config;
 
 /**
- * 模板类型
+ * 目标文件类型
  */
-public enum TemplateType {
+public enum TargetFileType {
 
     ENTITY,
     SERVICE,
     SERVICE_IMPL,
     CONTROLLER,
     MAPPER,
-    XML
+    MAPPER_XML
 }

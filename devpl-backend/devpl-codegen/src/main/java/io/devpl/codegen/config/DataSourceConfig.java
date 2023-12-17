@@ -1,6 +1,8 @@
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DatabaseDialect;
+import io.devpl.codegen.db.IKeyWordsHandler;
 import io.devpl.codegen.db.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.db.query.DefaultDatabaseIntrospector;
@@ -22,9 +24,6 @@ import java.util.Properties;
 
 /**
  * 数据库配置
- *
- * @author YangHu, hcl, hubin
- * @since 2016/8/30
  */
 public class DataSourceConfig extends ConfigurationHolder {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
@@ -171,7 +170,7 @@ public class DataSourceConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @Nullable
-    protected String getDefaultSchema() {
+    protected String getDefaultSchemaName() {
         DBType dbType = getDbType();
         String schema = null;
         if (DBType.POSTGRE_SQL == dbType) {
@@ -226,7 +225,7 @@ public class DataSourceConfig extends ConfigurationHolder {
      * @author nieqiurong 2020/10/10.
      * @since 3.5.0
      */
-    public static class Builder implements GenericBuilder<DataSourceConfig> {
+    public static class Builder {
 
         private final DataSourceConfig dataSourceConfig;
 
@@ -348,7 +347,6 @@ public class DataSourceConfig extends ConfigurationHolder {
          *
          * @return 数据库配置
          */
-        @Override
         public DataSourceConfig build() {
             return this.dataSourceConfig;
         }

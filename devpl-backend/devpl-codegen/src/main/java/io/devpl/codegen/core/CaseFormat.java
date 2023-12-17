@@ -1,5 +1,7 @@
 package io.devpl.codegen.core;
 
+import io.devpl.codegen.strategy.NamingChangeStrategy;
+
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Set;

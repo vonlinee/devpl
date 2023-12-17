@@ -53,7 +53,7 @@ public class CustomFile {
     /**
      * 构建者
      */
-    public static class Builder implements GenericBuilder<CustomFile> {
+    public static class Builder {
 
         private final CustomFile customFile;
 
@@ -101,7 +101,6 @@ public class CustomFile {
             return this;
         }
 
-        @Override
         public CustomFile build() {
             return this.customFile;
         }

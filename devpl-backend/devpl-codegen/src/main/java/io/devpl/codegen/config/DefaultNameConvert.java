@@ -1,5 +1,6 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.StringUtils;
 
 import java.util.Set;
@@ -19,7 +20,7 @@ public class DefaultNameConvert implements NameConverter {
     }
 
     @Override
-    public String entityNameConvert(IntrospectedTable tableInfo) {
+    public String entityNameConvert(TableGeneration tableInfo) {
         return NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategyConfig.entity()
             .getNamingStrategy(), strategyConfig.getTablePrefix(), strategyConfig.getTableSuffix()));
     }

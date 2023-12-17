@@ -15,7 +15,7 @@ public class MySQLGenerator {
             .globalConfig(builder -> {
                 builder.author("author") // 设置作者
                     .commentDatePattern("yyyy-MM-dd hh:mm:ss")   // 注释日期
-                    .outputDir("D://Temp"); // 指定输出目录
+                    .outputDir("E://Temp"); // 指定输出目录
             }).strategyConfig(builder -> {
                 builder.addInclude("data_type_group");
                 builder.entityBuilder().enableFileOverride();

@@ -103,7 +103,7 @@ public class GlobalConfig {
      * @author nieqiurong 2020/10/11.
      * @since 3.5.0
      */
-    public static class Builder implements GenericBuilder<GlobalConfig> {
+    public static class Builder {
 
         private final GlobalConfig globalConfig;
 
@@ -196,7 +196,6 @@ public class GlobalConfig {
             return commentDatePattern(() -> new SimpleDateFormat(pattern).format(new Date()));
         }
 
-        @Override
         public GlobalConfig build() {
             return this.globalConfig;
         }

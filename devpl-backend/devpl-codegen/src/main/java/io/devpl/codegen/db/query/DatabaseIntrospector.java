@@ -1,8 +1,8 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.core.Context;
-import io.devpl.codegen.config.IntrospectedTable;
-import io.devpl.codegen.core.IntrospectedColumn;
+import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.core.ColumnGeneration;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public interface DatabaseIntrospector {
      * @param tableTypes       表类型
      * @return 表信息
      */
-    List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes);
+    List<TableGeneration> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes);
 
     /**
      * 获取列信息
@@ -38,5 +38,5 @@ public interface DatabaseIntrospector {
      * @param columnNamePattern 列名称pattern
      * @return 列信息
      */
-    List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern);
+    List<ColumnGeneration> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern);
 }

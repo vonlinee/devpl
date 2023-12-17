@@ -1,4 +1,6 @@
-package io.devpl.codegen.core;
+package io.devpl.codegen.strategy;
+
+import io.devpl.codegen.core.CaseFormat;
 
 /**
  * 命名转换策略

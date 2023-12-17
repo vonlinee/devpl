@@ -14,6 +14,8 @@ open module codegen {
     exports io.devpl.codegen.strategy;
     exports io.devpl.codegen.config;
     exports io.devpl.codegen.type;
+    exports io.devpl.codegen;
+    exports io.devpl.codegen.config.args;
 
     requires com.baomidou.mybatis.plus.core;
     requires com.baomidou.mybatis.plus.annotation;
@@ -28,4 +30,5 @@ open module codegen {
     requires lombok;
     requires org.hibernate.orm.core;
     requires devpl.sdk.internal;
+    requires org.mybatis.generator;
 }

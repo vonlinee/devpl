@@ -1,7 +1,7 @@
 package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.core.Context;
-import io.devpl.codegen.core.IntrospectedColumn;
+import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.db.DbColumnType;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public interface JavaTypeResolver {
      * is returned, we will set the type to Object and issue a
      * warning unless the column is ignored or otherwise overridden
      */
-    DbColumnType calculateJavaType(IntrospectedColumn introspectedColumn);
+    DbColumnType calculateJavaType(ColumnGeneration introspectedColumn);
 
     /**
      * Calculates and returns the JDBC type name that should be associated with
@@ -61,5 +61,5 @@ public interface JavaTypeResolver {
      * null is returned, we will set the type to OTHER and issue a
      * warning unless the column is ignored or otherwise overridden
      */
-    String calculateJdbcTypeName(IntrospectedColumn introspectedColumn);
+    String calculateJdbcTypeName(ColumnGeneration introspectedColumn);
 }

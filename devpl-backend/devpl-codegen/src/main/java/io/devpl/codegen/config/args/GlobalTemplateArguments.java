@@ -1,4 +1,4 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.config.args;
 
 import io.devpl.codegen.template.TemplateArguments;
 import lombok.Getter;

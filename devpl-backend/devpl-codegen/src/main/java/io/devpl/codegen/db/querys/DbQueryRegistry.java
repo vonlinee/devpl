@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.querys;
 
-import io.devpl.codegen.config.DatabaseDialect;
+import io.devpl.codegen.db.DatabaseDialect;
 import io.devpl.codegen.db.DBType;
 
 import java.util.EnumMap;

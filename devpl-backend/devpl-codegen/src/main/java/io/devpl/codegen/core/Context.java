@@ -1,10 +1,14 @@
 package io.devpl.codegen.core;
 
+import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
+import io.devpl.codegen.config.args.EntityTemplateArugments;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
+import io.devpl.codegen.plugins.TableGenerationPlugin;
 import io.devpl.codegen.strategy.ProjectFileLocator;
 import io.devpl.codegen.util.StringUtils;
-import org.jetbrains.annotations.Nullable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ import java.util.Map;
  * 大多数类都依赖此类
  * 单个数据库实例对应一个Context
  */
+@Setter
+@Getter
 public class Context extends ConfigurationHolder {
     /**
      * 模板路径配置信息
@@ -25,7 +31,7 @@ public class Context extends ConfigurationHolder {
     /**
      * 数据库表信息
      */
-    private final List<IntrospectedTable> introspectedTables = new ArrayList<>();
+    private final List<TableGeneration> introspectedTables = new ArrayList<>();
     /**
      * 路径配置信息
      * 路径信息，各类型的文件放在哪个目录
@@ -62,6 +68,11 @@ public class Context extends ConfigurationHolder {
      * 用于定位文件位置
      */
     private ProjectFileLocator fileLocator;
+
+    /**
+     * 插件
+     */
+    private PluginManager plugin;
 
     /**
      * 在构造器中处理配置
@@ -135,8 +146,19 @@ public class Context extends ConfigurationHolder {
         return parentDir + packageName;
     }
 
-    public TemplateConfig getTemplateConfig() {
-        return templateConfig;
+    /**
+     * 初始化插件
+     */
+    public void initialize() {
+        this.plugin = new PluginManager();
+        addPlugin(new TableGenerationPlugin());
+    }
+
+    public final void addPlugin(Plugin plugin) {
+        // 注入上下文
+        plugin.setContext(this);
+        // 表生成插件
+        this.plugin.addPlugin(plugin);
     }
 
     /**
@@ -144,21 +166,21 @@ public class Context extends ConfigurationHolder {
      *
      * @return 表信息
      */
-    public List<IntrospectedTable> introspectTables() {
+    public List<TableGeneration> introspectTables(String tableNamePattern) {
         if (introspectedTables.isEmpty()) {
-            // 获取表过滤
-            String tableNamePattern = null;
-            if (strategyConfig.getLikeTable() != null) {
-                tableNamePattern = strategyConfig.getLikeTable().getValue();
-            }
             // 是否跳过视图
             boolean skipView = strategyConfig.isSkipView();
             // 查询的表类型
             String[] tableTypes = skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"};
             String schemaPattern = dataSourceConfig.getSchemaName();
-            List<IntrospectedTable> tableInfos = this.databaseIntrospector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
+
+            List<TableGeneration> tableInfos = this.databaseIntrospector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
             if (!tableInfos.isEmpty()) {
                 this.introspectedTables.addAll(tableInfos);
+            }
+
+            for (TableGeneration tableGeneration : tableInfos) {
+                plugin.initialize(tableGeneration);
             }
         }
         return introspectedTables;
@@ -166,42 +188,6 @@ public class Context extends ConfigurationHolder {
 
     public String getPathInfo(OutputFile outputFile) {
         return pathInfo.get(outputFile);
-    }
-
-    public StrategyConfig getStrategyConfig() {
-        return strategyConfig;
-    }
-
-    public Context setStrategyConfig(StrategyConfig strategyConfig) {
-        this.strategyConfig = strategyConfig;
-        return this;
-    }
-
-    public GlobalConfig getGlobalConfig() {
-        return globalConfig;
-    }
-
-    public Context setGlobalConfig(GlobalConfig globalConfig) {
-        this.globalConfig = globalConfig;
-        return this;
-    }
-
-    @Nullable
-    public InjectionConfig getInjectionConfig() {
-        return injectionConfig;
-    }
-
-    public Context setInjectionConfig(InjectionConfig injectionConfig) {
-        this.injectionConfig = injectionConfig;
-        return this;
-    }
-
-    public PackageConfig getPackageConfig() {
-        return packageConfig;
-    }
-
-    public DataSourceConfig getDataSourceConfig() {
-        return dataSourceConfig;
     }
 
     public void setDatabaseIntrospection(DatabaseIntrospector databaseIntrospector) {

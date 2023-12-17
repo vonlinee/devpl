@@ -1,5 +1,8 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.config.args;
 
+import io.devpl.codegen.ConstVal;
+import io.devpl.codegen.config.*;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
@@ -13,7 +16,7 @@ import java.util.function.Function;
 /**
  * 控制器属性配置
  */
-public class Mapper extends TemplateArgumentsForJavaClass implements TableInitializer {
+public class MapperTemplateArguments extends TemplateArgumentsForJavaClass implements TableInitializer {
 
     /**
      * 自定义继承的Mapper类全称，带包名
@@ -62,7 +65,7 @@ public class Mapper extends TemplateArgumentsForJavaClass implements TableInitia
      */
     private Class<? extends Cache> cache;
 
-    private Mapper() {
+    private MapperTemplateArguments() {
     }
 
     @NotNull
@@ -101,16 +104,15 @@ public class Mapper extends TemplateArgumentsForJavaClass implements TableInitia
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
         Map<String, Object> data = new HashMap<>();
-        boolean enableCache = this.cache != null;
-        data.put("enableCache", enableCache);
+        data.put("enableCache", this.cache != null);
         data.put("mapperAnnotation", mapperAnnotationClass != null);
         data.put("mapperAnnotationClass", mapperAnnotationClass);
         data.put("baseResultMap", this.baseResultMap);
         data.put("baseColumnList", this.baseColumnList);
         data.put("superMapperClassPackage", this.superClass);
-        if (enableCache) {
+        if (this.cache != null) {
             Class<? extends Cache> cacheClass = this.getCache();
             data.put("cache", cacheClass);
             data.put("cacheClassName", cacheClass.getName());
@@ -121,7 +123,7 @@ public class Mapper extends TemplateArgumentsForJavaClass implements TableInitia
 
     public static class Builder extends BaseBuilder {
 
-        private final Mapper mapper = new Mapper();
+        private final MapperTemplateArguments mapper = new MapperTemplateArguments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -250,7 +252,7 @@ public class Mapper extends TemplateArgumentsForJavaClass implements TableInitia
         }
 
         @NotNull
-        public Mapper get() {
+        public MapperTemplateArguments get() {
             return this.mapper;
         }
     }

@@ -1,5 +1,9 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.config.args.ControllerTempateArguments;
+import io.devpl.codegen.config.args.EntityTemplateArugments;
+import io.devpl.codegen.config.args.MapperTemplateArguments;
+import io.devpl.codegen.config.args.ServiceTemplateArguments;
 import io.devpl.codegen.util.StringUtils;
 import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -48,8 +52,8 @@ public class StrategyConfig extends ConfigurationHolder {
     private final Set<String> exclude = new HashSet<>();
     private final EntityTemplateArugments.Builder entityBuilder = new EntityTemplateArugments.Builder(this);
     private final ControllerTempateArguments.Builder controllerBuilder = new ControllerTempateArguments.Builder(this);
-    private final Mapper.Builder mapperBuilder = new Mapper.Builder(this);
-    private final Service.Builder serviceBuilder = new Service.Builder(this);
+    private final MapperTemplateArguments.Builder mapperBuilder = new MapperTemplateArguments.Builder(this);
+    private final ServiceTemplateArguments.Builder serviceBuilder = new ServiceTemplateArguments.Builder(this);
     /**
      * 是否大写命名（默认 false）
      */
@@ -82,8 +86,8 @@ public class StrategyConfig extends ConfigurationHolder {
     private LikeTable notLikeTable;
     private EntityTemplateArugments entity;
     private ControllerTempateArguments controller;
-    private Mapper mapper;
-    private Service service;
+    private MapperTemplateArguments mapper;
+    private ServiceTemplateArguments service;
 
     private StrategyConfig() {
     }
@@ -149,7 +153,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public Mapper.Builder mapperBuilder() {
+    public MapperTemplateArguments.Builder mapperBuilder() {
         return mapperBuilder;
     }
 
@@ -160,7 +164,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public Mapper mapper() {
+    public MapperTemplateArguments mapper() {
         if (mapper == null) {
             this.mapper = mapperBuilder.get();
         }
@@ -174,7 +178,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public Service.Builder serviceBuilder() {
+    public ServiceTemplateArguments.Builder serviceBuilder() {
         return serviceBuilder;
     }
 
@@ -185,7 +189,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public Service service() {
+    public ServiceTemplateArguments service() {
         if (service == null) {
             this.service = serviceBuilder.get();
         }
@@ -501,13 +505,6 @@ public class StrategyConfig extends ConfigurationHolder {
         public Builder notLikeTable(@NotNull LikeTable notLikeTable) {
             this.strategyConfig.notLikeTable = notLikeTable;
             return this;
-        }
-
-        @Override
-        @NotNull
-        public StrategyConfig build() {
-            this.strategyConfig.validate();
-            return strategyConfig;
         }
     }
 }

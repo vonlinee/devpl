@@ -1,19 +1,18 @@
 package io.devpl.codegen.core;
 
-import io.devpl.codegen.config.*;
 import io.devpl.codegen.jdbc.CommonJavaType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.PrimaryKey;
 import io.devpl.codegen.type.JavaType;
-import io.devpl.codegen.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 表字段信息
  */
-public class IntrospectedColumn {
+public class ColumnGeneration {
 
     /**
      * 字段名称
@@ -22,19 +21,7 @@ public class IntrospectedColumn {
     /**
      * 该字段属于哪个表
      */
-    private final IntrospectedTable belongTable;
-    /**
-     * 实体属性配置
-     */
-    private final EntityTemplateArugments entity;
-    /**
-     * 数据库配置
-     */
-    private final DataSourceConfig dataSourceConfig;
-    /**
-     * 全局配置
-     */
-    private final GlobalConfig globalConfig;
+    private final TableGeneration belongTable;
     /**
      * 是否做注解转换，模板参数
      * 添加@TableName注解
@@ -52,6 +39,12 @@ public class IntrospectedColumn {
      * 属性名称
      */
     private String propertyName;
+
+    /**
+     * 是否为乐观锁字段
+     */
+    private boolean isVersionField;
+
     /**
      * 列的元数据信息
      */
@@ -88,19 +81,14 @@ public class IntrospectedColumn {
     /**
      * 构造方法
      *
-     * @param configBuilder 配置构建
-     * @param metadata      数据库字段元数据
+     * @param metadata 数据库字段元数据
      * @since 3.5.0
      */
-    public IntrospectedColumn(IntrospectedTable table, Context configBuilder, ColumnMetadata metadata) {
+    public ColumnGeneration(TableGeneration table, ColumnMetadata metadata) {
         this.metadata = metadata;
         this.name = metadata.getColumnName();
         this.columnName = name;
         this.belongTable = table;
-        table.addColumn(this);
-        this.entity = configBuilder.getStrategyConfig().entity();
-        this.dataSourceConfig = configBuilder.getDataSourceConfig();
-        this.globalConfig = configBuilder.getGlobalConfig();
     }
 
     /**
@@ -149,6 +137,10 @@ public class IntrospectedColumn {
         return columnName;
     }
 
+    public void setVersionField(boolean isVersionField) {
+        this.isVersionField = isVersionField;
+    }
+
     /**
      * 是否为乐观锁字段
      *
@@ -156,9 +148,17 @@ public class IntrospectedColumn {
      * @since 3.5.0
      */
     public boolean isVersionField() {
-        String propertyName = entity.getVersionPropertyName();
-        String columnName = entity.getVersionColumnName();
-        return StringUtils.hasText(propertyName) && this.propertyName.equals(propertyName) || StringUtils.hasText(columnName) && this.name.equalsIgnoreCase(columnName);
+        return isVersionField;
+    }
+
+    private boolean isLogicDeleteField;
+
+    public void setLogicDeleteField(boolean logicDelete) {
+        this.isLogicDeleteField = logicDelete;
+    }
+
+    public void setKeyWords(boolean keyWords) {
+        this.keyWords = keyWords;
     }
 
     /**
@@ -168,9 +168,7 @@ public class IntrospectedColumn {
      * @since 3.5.0
      */
     public boolean isLogicDeleteField() {
-        String propertyName = entity.getLogicDeletePropertyName();
-        String columnName = entity.getLogicDeleteColumnName();
-        return StringUtils.hasText(propertyName) && this.propertyName.equals(propertyName) || StringUtils.hasText(columnName) && this.name.equalsIgnoreCase(columnName);
+        return isLogicDeleteField;
     }
 
     /**
@@ -180,13 +178,13 @@ public class IntrospectedColumn {
      * @return this
      * @since 3.5.0
      */
-    public IntrospectedColumn setPrimaryKeyFlag(boolean autoIncrement) {
+    public ColumnGeneration setPrimaryKeyFlag(boolean autoIncrement) {
         this.keyFlag = true;
         this.keyIdentityFlag = autoIncrement;
         return this;
     }
 
-    public IntrospectedColumn setCustomMap(Map<String, Object> customMap) {
+    public ColumnGeneration setCustomMap(Map<String, Object> customMap) {
         this.customMap = customMap;
         return this;
     }
@@ -222,7 +220,7 @@ public class IntrospectedColumn {
      * @return this
      * @since 3.5.0
      */
-    public IntrospectedColumn setPropertyName(String propertyName) {
+    public ColumnGeneration setPropertyName(String propertyName) {
         this.propertyName = propertyName;
         return this;
     }
@@ -242,21 +240,17 @@ public class IntrospectedColumn {
         return comment;
     }
 
-    public IntrospectedColumn setComment(String comment) {
-        // TODO 暂时挪动到这
-        this.comment = this.globalConfig.isSwagger() && StringUtils.hasText(comment) ? comment.replace("\"", "\\\"") : comment;
+    public ColumnGeneration setComment(String comment) {
+        this.comment = comment;
         return this;
     }
 
     public String getFill() {
-        if (StringUtils.isBlank(fill)) {
-            entity.getTableFillList().stream()
-                // 忽略大写字段问题
-                .filter(tf -> tf instanceof ColumnFill && tf.getName()
-                    .equalsIgnoreCase(name) || tf instanceof Property && tf.getName().equals(propertyName)).findFirst()
-                .ifPresent(tf -> this.fill = tf.getFieldFill().name());
-        }
         return fill;
+    }
+
+    public void setFill(String fill) {
+        this.fill = fill;
     }
 
     public boolean isKeyWords() {
@@ -267,13 +261,8 @@ public class IntrospectedColumn {
         return columnName;
     }
 
-    public IntrospectedColumn setColumnName(String columnName) {
+    public ColumnGeneration setColumnName(String columnName) {
         this.columnName = columnName;
-        IKeyWordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
-        if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
-            this.keyWords = true;
-            this.columnName = keyWordsHandler.formatColumn(columnName);
-        }
         return this;
     }
 
@@ -296,8 +285,16 @@ public class IntrospectedColumn {
         return metadata;
     }
 
-    public IntrospectedColumn setType(String type) {
+    public ColumnGeneration setType(String type) {
         this.columnType = CommonJavaType.valueOf(type);
         return this;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ColumnGeneration cg) {
+            return Objects.equals(this.name, cg.name);
+        }
+        return false;
     }
 }

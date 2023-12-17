@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.querys;
 
 import io.devpl.codegen.config.DataSourceConfig;
-import io.devpl.codegen.config.DatabaseDialect;
+import io.devpl.codegen.db.DatabaseDialect;
 import io.devpl.codegen.config.LikeTable;
 import io.devpl.codegen.config.StrategyConfig;
 import io.devpl.codegen.db.DBType;

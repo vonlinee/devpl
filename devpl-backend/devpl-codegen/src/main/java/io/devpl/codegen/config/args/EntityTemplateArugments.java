@@ -1,10 +1,12 @@
-package io.devpl.codegen.config;
+package io.devpl.codegen.config.args;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import io.devpl.codegen.config.*;
 import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.StringUtils;
@@ -286,7 +288,7 @@ public class EntityTemplateArugments extends TemplateArgumentsForJavaClass imple
 
     @Override
     @NotNull
-    public Map<String, Object> renderData(@NotNull IntrospectedTable tableInfo) {
+    public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);

@@ -1,6 +1,6 @@
 package io.devpl.backend.domain.enums;
 
-import com.baomidou.mybatisplus.test.type.DataType;
+import io.devpl.codegen.type.DataType;
 import lombok.Getter;
 
 import java.util.Arrays;

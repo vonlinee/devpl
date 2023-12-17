@@ -1,10 +1,12 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.config.*;
+import io.devpl.codegen.config.args.EntityTemplateArugments;
 import io.devpl.codegen.core.Context;
+import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.converts.MySqlTypeConvert;
 import io.devpl.codegen.db.converts.TypeConverts;
-import io.devpl.codegen.core.IntrospectedColumn;
+import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.db.querys.H2Query;
 import io.devpl.codegen.db.ColumnJavaType;
@@ -20,6 +22,10 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 使用SQL查询的尝试来获取元数据信息
+ */
+@Deprecated
 public class SQLQuery extends AbstractDatabaseIntrospector {
 
     static final Logger log = LoggerFactory.getLogger(SQLQuery.class);
@@ -32,23 +38,23 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
     }
 
     @NotNull
-    public List<IntrospectedTable> queryTables() {
+    public List<TableGeneration> queryTables() {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         final Set<String> excludeTables = strategyConfig.getExclude();
         final Set<String> includeTables = strategyConfig.getInclude();
         boolean isInclude = !excludeTables.isEmpty();
         boolean isExclude = !includeTables.isEmpty();
         // 所有的表信息
-        List<IntrospectedTable> tableList = new ArrayList<>();
+        List<TableGeneration> tableList = new ArrayList<>();
 
         // 需要反向生成或排除的表信息
-        List<IntrospectedTable> includeTableList = new ArrayList<>();
-        List<IntrospectedTable> excludeTableList = new ArrayList<>();
+        List<TableGeneration> includeTableList = new ArrayList<>();
+        List<TableGeneration> excludeTableList = new ArrayList<>();
         try {
             dbQuery.execute(dbQuery.tablesSql(), result -> {
                 String tableName = result.getStringResult(dbQuery.tableName());
                 if (StringUtils.hasText(tableName)) {
-                    IntrospectedTable tableInfo = new IntrospectedTable(this.context, null);
+                    TableGeneration tableInfo = new TableGeneration(null);
                     String tableComment = result.getTableComment();
                     // 跳过视图
                     if (!(strategyConfig.isSkipView() && tableComment.toUpperCase().contains("VIEW"))) {
@@ -77,7 +83,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
     }
 
 
-    protected void filter(List<IntrospectedTable> tableList, List<IntrospectedTable> includeTableList, List<IntrospectedTable> excludeTableList) {
+    protected void filter(List<TableGeneration> tableList, List<TableGeneration> includeTableList, List<TableGeneration> excludeTableList) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         boolean isInclude = !strategyConfig.getInclude().isEmpty();
         boolean isExclude = !strategyConfig.getExclude().isEmpty();
@@ -87,7 +93,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                 .filter(s -> !JdbcUtils.matcherRegTable(s))
                 .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
             // 将已经存在的表移除，获取配置中数据库不存在的表
-            for (IntrospectedTable tabInfo : tableList) {
+            for (TableGeneration tabInfo : tableList) {
                 if (notExistTables.isEmpty()) {
                     break;
                 }
@@ -107,7 +113,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         }
     }
 
-    protected void convertTableFields(@NotNull IntrospectedTable tableInfo) {
+    protected void convertTableFields(@NotNull TableGeneration tableInfo) {
 
         StrategyConfig strategyConfig = context.getStrategyConfig();
         DataSourceConfig dataSourceConfig = context.getDataSourceConfig();
@@ -132,7 +138,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
             dbQuery.execute(tableFieldsSql, result -> {
                 String columnName = result.getStringResult(dbQuery.fieldName());
                 // TODO 修改
-                IntrospectedColumn field = new IntrospectedColumn(null, this.context, null);
+                ColumnGeneration field = new ColumnGeneration(null, null);
                 ColumnMetadata columnInfo = columnsInfoMap.get(columnName.toLowerCase());
                 // 设置字段的元数据信息
                 // TODO 测试
@@ -170,16 +176,15 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        tableInfo.processTable();
     }
 
     @Override
-    public List<IntrospectedTable> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
+    public List<TableGeneration> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] tableTypes) {
         return null;
     }
 
     @Override
-    public List<IntrospectedColumn> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
+    public List<ColumnGeneration> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
         return null;
     }
 }

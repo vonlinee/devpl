@@ -1,5 +1,6 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -163,7 +164,7 @@ public class PackageConfig {
      * @author nieqiurong
      * @since 3.5.0
      */
-    public static class Builder implements GenericBuilder<PackageConfig> {
+    public static class Builder {
 
         private final PackageConfig packageConfig;
 
@@ -298,7 +299,6 @@ public class PackageConfig {
          *
          * @return 包配置对象
          */
-        @Override
         public PackageConfig build() {
             return this.packageConfig;
         }

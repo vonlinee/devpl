@@ -9,5 +9,17 @@ import java.util.Properties;
  * must perform validation.
  */
 public abstract class PluginAdapter implements Plugin {
-    protected final Properties properties = new Properties();
+
+    protected Context context;
+    protected Properties properties;
+
+    @Override
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 }

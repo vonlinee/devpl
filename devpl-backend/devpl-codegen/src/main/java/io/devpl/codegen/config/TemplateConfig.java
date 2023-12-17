@@ -1,5 +1,6 @@
 package io.devpl.codegen.config;
 
+import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,9 +85,9 @@ public class TemplateConfig {
      * @return this
      * @since 3.3.2
      */
-    public TemplateConfig disable(@NotNull TemplateType... templateTypes) {
+    public TemplateConfig disable(@NotNull TargetFileType... templateTypes) {
         if (templateTypes != null) {
-            for (TemplateType templateType : templateTypes) {
+            for (TargetFileType templateType : templateTypes) {
                 switch (templateType) {
                     case ENTITY -> {
                         this.entity = null;
@@ -96,7 +97,7 @@ public class TemplateConfig {
                     }
                     case CONTROLLER -> this.controller = null;
                     case MAPPER -> this.mapper = null;
-                    case XML -> this.xml = null;
+                    case MAPPER_XML -> this.xml = null;
                     case SERVICE -> this.service = null;
                     case SERVICE_IMPL -> this.serviceImpl = null;
                     default -> {
@@ -114,7 +115,7 @@ public class TemplateConfig {
      * @since 3.5.0
      */
     public TemplateConfig disable() {
-        return disable(TemplateType.values());
+        return disable(TargetFileType.values());
     }
 
     public String getService() {
@@ -142,7 +143,7 @@ public class TemplateConfig {
      *
      * @author nieqiurong 3.5.0
      */
-    public static class Builder implements GenericBuilder<TemplateConfig> {
+    public static class Builder {
 
         private final TemplateConfig templateConfig;
 
@@ -168,7 +169,7 @@ public class TemplateConfig {
          *
          * @return this
          */
-        public Builder disable(@NotNull TemplateType... templateTypes) {
+        public Builder disable(@NotNull TargetFileType... templateTypes) {
             this.templateConfig.disable(templateTypes);
             return this;
         }
@@ -257,7 +258,6 @@ public class TemplateConfig {
          *
          * @return 模板配置对象
          */
-        @Override
         public TemplateConfig build() {
             return this.templateConfig;
         }

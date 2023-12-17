@@ -11,7 +11,7 @@ import java.util.Properties;
  * <p>This class does not follow the normal plugin lifecycle and should not be
  * subclassed by clients.
  */
-public final class PluginAggregator extends CompositePlugin {
+final class PluginManager extends CompositePlugin {
 
     @Override
     public void setContext(Context context) {
