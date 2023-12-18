@@ -58,20 +58,16 @@ public class DateTimes {
 
     public static LocalDateTime plusDateTime(LocalDateTime dt, Unit timeUnit, int count) {
         switch (timeUnit) {
-            case DAY: // 日
+            case DAY -> // 日
                 dt = dt.plusDays(count);
-                break;
-            case WEEK: // 周
+            case WEEK -> // 周
                 dt = dt.plusWeeks(count);
-                break;
-            case MONTH: // 月
+            case MONTH -> // 月
                 dt = dt.plusMonths(count);
-                break;
-            case YEAR: // 年
+            case YEAR -> // 年
                 dt = dt.plusYears(count);
-                break;
-            default:
-                break;
+            default -> {
+            }
         }
         return dt;
     }
@@ -179,6 +175,7 @@ public class DateTimes {
 
     /**
      * 日期时间单位
+     * @see java.time.temporal.ChronoUnit
      */
     public enum Unit {
         YEAR,

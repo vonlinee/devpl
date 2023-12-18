@@ -43,3 +43,5 @@ https://github.com/dbeaver/dbeaver/wiki/Mock-Data-Generation-in-DBeaver
 一些vue相关的轮子
 
 https://github.com/vuejs/awesome-vue
+
+https://alfred-skyblue.github.io/vue-draggable-plus/guide/

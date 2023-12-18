@@ -30,7 +30,6 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, nextTick, Ref } from "vue";
-import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 
 import Sortable from "sortablejs";
