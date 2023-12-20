@@ -2,6 +2,7 @@ package io.devpl.codegen.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 import java.util.Optional;
 
 public final class ClassUtils {
@@ -86,8 +87,19 @@ public final class ClassUtils {
         return Optional.empty();
     }
 
+    /**
+     * 根据类名创建对象
+     *
+     * @param className 全限定类名
+     * @param superType 类的父类型
+     * @param <T>       父类型对象
+     * @return 类名表示的对象
+     * @throws RuntimeException 包装反射异常
+     */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(String className, Class<T> superType) throws RuntimeException {
+        Utils.notBlank(className, "类名为空");
+        Objects.requireNonNull(superType, "父类型为空");
         return (T) tryLoadClass(className).map(clazz -> {
             if (!superType.isAssignableFrom(clazz)) {
                 throw new RuntimeException("创建对象失败, 类型" + clazz + "与类型" + superType + "不兼容");
@@ -102,6 +114,6 @@ public final class ClassUtils {
                 throw new RuntimeException("创建对象失败", e);
             }
             return instance;
-        }).orElse(null);
+        }).orElseThrow(() -> new RuntimeException("创建对象" + className + "失败"));
     }
 }

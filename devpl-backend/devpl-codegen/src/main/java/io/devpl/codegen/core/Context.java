@@ -72,7 +72,7 @@ public class Context {
     /**
      * 模板引擎实现类
      */
-    private String templateEngineImpl;
+    private String templateEngineImpl = "io.devpl.codegen.template.velocity.VelocityTemplateEngine";
 
     /**
      * 用于定位文件位置

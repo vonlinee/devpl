@@ -1,7 +1,6 @@
 package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
@@ -24,7 +22,7 @@ import java.util.Map;
  */
 public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
-    static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
+    static final Logger log = LoggerFactory.getLogger(BeetlTemplateEngine.class);
 
     private static Method method;
 
