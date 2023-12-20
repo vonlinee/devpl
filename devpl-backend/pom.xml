@@ -20,6 +20,7 @@
         <module>devpl-server</module>
         <module>devpl-sdk-internal</module>
         <module>devpl-codegen</module>
+        <module>devpl-fxui</module>
     </modules>
 
     <properties>
