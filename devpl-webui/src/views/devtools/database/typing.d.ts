@@ -84,7 +84,7 @@ type DbConnInfo = {
   /**
    * id
    */
-  id?: number | null
+  id?: number | string | null
   /**
    * 密码
    */

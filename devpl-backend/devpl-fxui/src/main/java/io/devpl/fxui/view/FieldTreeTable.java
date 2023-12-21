@@ -1,8 +1,8 @@
 package io.devpl.fxui.view;
 
+import io.devpl.fxui.controls.TextFieldTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -16,6 +16,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
     TreeItem<FieldNode> rootNode;
 
     public FieldTreeTable() {
+
         setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
         setEditable(true);
 
@@ -27,11 +28,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         dataTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("dataType"));
         descCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
 
-        nameCol.setCellFactory(ttc -> {
-            TextFieldTreeTableCell<FieldNode, String> cell = new TextFieldTreeTableCell<>(new DefaultStringConverter());
-            cell.setEditable(true);
-            return cell;
-        });
+        nameCol.setCellFactory(ttc -> new TextFieldTreeTableCell<>(new DefaultStringConverter()));
 
         this.getColumns().add(nameCol);
         this.getColumns().add(dataTypeCol);
@@ -42,7 +39,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         MenuItem addMenuItem = new MenuItem("新增");
         addMenuItem.setMnemonicParsing(true);
         addMenuItem.setOnAction(e -> {
-            FieldNode newNode = new FieldNode();
+            FieldNode newNode = new FieldNode("A");
             newNode.setName("New Field");
             newNode.setName("New Field");
             newNode.setName("String");
@@ -57,8 +54,10 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         setRoot(rootNode = new TreeItem<>(null));
 
         this.setRowFactory(ttv -> {
-
             TreeTableRow<FieldNode> row = new TreeTableRow<>();
+
+            row.setDisclosureNode(new Button("+"));
+
             // 给行添加右键菜单
             row.setOnContextMenuRequested(event -> {
                 ContextMenu menu = new ContextMenu();
@@ -78,59 +77,8 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
                 row.setContextMenu(menu);
             });
 
-            // 拖拽-检测
-            row.setOnDragDetected(event -> {
-                if (!row.isEmpty()) {
-                    Integer index = row.getIndex();
-                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                    db.setDragView(row.snapshot(null, null));
-                    ClipboardContent cc = new ClipboardContent();
-                    cc.put(SERIALIZED_MIME_TYPE, index);
-                    db.setContent(cc);
-                    event.consume();
-                }
-            });
-            //释放-验证
-            row.setOnDragOver(event -> {
-                // 拖拽到的行
-                @SuppressWarnings("unchecked")
-                TreeTableRow<FieldNode> toRow = (TreeTableRow<FieldNode>) event.getSource();
-                Dragboard db = event.getDragboard();
-                // check if same table view
-                @SuppressWarnings("unchecked")
-                TreeTableRow<FieldNode> sourceRow = (TreeTableRow<FieldNode>) event.getGestureSource();
-                if (sourceRow.getTreeTableView() != row.getTreeTableView()) {
-                    // 不能跨表拖拽
-                    return;
-                }
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
-                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                        event.consume();
-                    }
-                }
-            });
-            //释放-执行
-            row.setOnDragDropped(event -> {
-                Dragboard db = event.getDragboard();
-                if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                    int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    TreeItem<FieldNode> removed = rootNode.getChildren().remove(draggedIndex);
+            enableDrag(row);
 
-                    int dropIndex;
-                    if (row.isEmpty()) {
-                        dropIndex = rootNode.getChildren().size();
-                    } else {
-                        dropIndex = row.getIndex();
-                    }
-
-                    rootNode.getChildren().add(dropIndex, removed);
-
-                    event.setDropCompleted(true);
-                    ttv.getSelectionModel().select(dropIndex);
-                    event.consume();
-                }
-            });
             return row;
         });
 
@@ -143,5 +91,86 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         rootNode.getChildren().add(new TreeItem<>(f2));
         rootNode.getChildren().add(new TreeItem<>(f3));
         rootNode.getChildren().add(new TreeItem<>(f4));
+    }
+
+    private void enableDrag(TreeTableRow<FieldNode> row) {
+        // 拖拽-检测
+        row.setOnDragDetected(event -> {
+            if (!row.isEmpty()) {
+                Integer index = row.getIndex();
+                // 开始拖拽
+                Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                db.setDragView(row.snapshot(null, null));
+                ClipboardContent cc = new ClipboardContent();
+                // 记录拖拽开始时的位置
+                cc.put(SERIALIZED_MIME_TYPE, index);
+                db.setContent(cc);
+                event.consume();
+            }
+        });
+        // 释放-验证 当你拖动到目标上方的时候，会不停的执行
+        row.setOnDragOver(event -> {
+
+            Dragboard db = event.getDragboard();
+            @SuppressWarnings("unchecked")
+            TreeTableRow<FieldNode> sourceRow = (TreeTableRow<FieldNode>) event.getGestureSource();
+            if (sourceRow.getTreeTableView() != row.getTreeTableView()) {
+                // 检查是否是同一个表，不能跨表拖拽
+                return;
+            }
+            if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    event.consume();
+                }
+            }
+        });
+        // 拖动到目标并松开鼠标的时候，执行这个DragDropped事件。
+        row.setOnDragDropped(event -> {
+            // DRAG_DROPPED只能在setOnDragDropped方法里调用
+
+            @SuppressWarnings("unchecked")
+            TreeTableRow<FieldNode> draggedRow = (TreeTableRow<FieldNode>) event.getSource();
+            Dragboard db = event.getDragboard();
+            if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
+
+                int dropIndex;
+                if (row.isEmpty()) {
+                    dropIndex = rootNode.getChildren().size();
+                } else {
+                    dropIndex = row.getIndex();
+                }
+
+                // 拖拽到的行
+                @SuppressWarnings("unchecked")
+                TreeTableRow<FieldNode> toRow = (TreeTableRow<FieldNode>) event.getSource();
+
+                if (toRow == null) {
+                    System.out.println("目标为空");
+                    return;
+                }
+                // 添加到子节点
+
+                // 移除拖拽节点
+                TreeItem<FieldNode> removed = rootNode.getChildren().remove(draggedIndex);
+
+
+                System.out.println(dropIndex);
+
+                toRow.getTreeItem().getChildren().add(removed);
+                toRow.getTreeItem().setExpanded(true);
+
+                // rootNode.getChildren().add(dropIndex, removed);
+
+                System.out.println("放在" + dropIndex);
+
+                event.consume();
+            }
+        });
+
+        row.setOnDragDone(event -> {
+
+        });
     }
 }

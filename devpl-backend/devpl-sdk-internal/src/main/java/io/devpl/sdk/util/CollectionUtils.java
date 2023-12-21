@@ -5,6 +5,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public abstract class CollectionUtils {
@@ -147,5 +148,76 @@ public abstract class CollectionUtils {
 
     public static <K, E, T> T treeify(Collection<E> collection, TreeBuilder<K, E, T> builder) {
         return builder.apply(collection);
+    }
+
+
+    public static <E, T, U extends Comparable<? super U>> T min(Collection<E> collection, Function<E, T> key, Function<? super T, ? extends U> keyExtractor) {
+        if (collection == null) {
+            return null;
+        }
+        return collection.stream().map(key).min(Comparator.comparing(keyExtractor)).orElse(null);
+    }
+
+    public static <E, T, U extends Comparable<? super U>> T min(Collection<E> collection, Function<E, T> key, Function<? super T, ? extends U> keyExtractor, T defaults) {
+        if (collection == null) {
+            return defaults;
+        }
+        return collection.stream().map(key).min(Comparator.comparing(keyExtractor)).orElse(defaults);
+    }
+
+    public static <E, T, U extends Comparable<? super U>> T max(Collection<E> collection, Function<E, T> key, Function<? super T, ? extends U> keyExtractor) {
+        if (collection == null) {
+            return null;
+        }
+        return collection.stream().map(key).max(Comparator.comparing(keyExtractor)).orElse(null);
+    }
+
+    public static <E, T, U extends Comparable<? super U>> T max(Collection<E> collection, Function<E, T> key, Function<? super T, ? extends U> keyExtractor, T defaults) {
+        if (collection == null) {
+            return defaults;
+        }
+        return collection.stream().map(key).max(Comparator.comparing(keyExtractor)).orElse(defaults);
+    }
+
+    public static <E> void addAll(Collection<E> coll, E[] arr) {
+        if (coll == null || arr == null || arr.length == 0) {
+            return;
+        }
+        coll.addAll(Arrays.asList(arr));
+    }
+
+    public static void addAll(Collection<Integer> intColl, int[] ints) {
+        if (intColl == null || ints == null || ints.length == 0) {
+            return;
+        }
+        for (int i = 0; i < ints.length; i++) {
+            intColl.add(ints[i]);
+        }
+    }
+
+    public static <E, T> long count(Collection<E> collection, Function<E, T> key, Predicate<T> condition) {
+        return collection.stream().map(key).filter(condition).count();
+    }
+
+    public static <E, T> long count(Collection<E> collection, Predicate<E> condition) {
+        return collection.stream().filter(condition).count();
+    }
+
+    public static <E, R extends Collection<E>> List<E> flatten(Collection<? extends Collection<E>> collection, Collector<E, ?, R> collector) {
+        return collection.stream()
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+    }
+
+    public static <E> boolean anyMatch(List<E> patrolTeams, Predicate<E> condition) {
+        if (isEmpty(patrolTeams)) {
+            return false;
+        }
+        for (E team : patrolTeams) {
+            if (condition.test(team)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

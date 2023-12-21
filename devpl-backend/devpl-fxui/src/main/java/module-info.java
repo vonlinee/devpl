@@ -7,4 +7,6 @@ module devpl.fxui {
     exports io.devpl.fxui.model;
 
     opens io.devpl.fxui.model;
+
+    requires com.jfoenix;
 }

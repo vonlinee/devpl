@@ -9,6 +9,11 @@ public class FieldNode {
     public FieldNode() {
     }
 
+    public FieldNode(String name) {
+        this.name = name;
+        this.description = name;
+    }
+
     public FieldNode(String name, String description, String dataType) {
         this.name = name;
         this.description = description;

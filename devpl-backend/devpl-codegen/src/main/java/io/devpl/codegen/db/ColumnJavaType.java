@@ -12,6 +12,7 @@ public interface ColumnJavaType extends JavaType {
      *
      * @return 字段类型
      */
+    @Override
     String getType();
 
     /**
