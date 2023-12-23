@@ -224,7 +224,6 @@ function changeData(sourceObj: any, targetObj: any) {
   } else {
     func(data, null)
   }
-
   selectedFields.value = []
   // 重新渲染表格，用doLayout不生效，所以重新装了一遍
   nextTick(() => {
@@ -232,10 +231,8 @@ function changeData(sourceObj: any, targetObj: any) {
   })
 }
 
-
 const rowDrop = () => {
   const elTableBody = fieldTable.value.$refs.tableBody.querySelector("tbody");
-  const self = this
   Sortable.create(elTableBody, {
     onEnd({ newIndex, oldIndex }) {
       getDealData()
@@ -248,8 +245,6 @@ const rowDrop = () => {
     }
   })
 }
-
-
 
 /**
  * 排序
