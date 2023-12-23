@@ -4,6 +4,10 @@ type FieldInfo = {
    */
   id: string | number
   /**
+   * 父节点ID
+   */
+  parentId?: string | number
+  /**
    * 字段Key
    */
   fieldKey: string
