@@ -1,5 +1,9 @@
 type FieldInfo = {
   /**
+   * ID
+   */
+  id: string | number
+  /**
    * 字段Key
    */
   fieldKey: string
@@ -10,17 +14,21 @@ type FieldInfo = {
   /**
    * 数据类型
    */
-  dataType: string
+  dataType?: string
   /**
    * 描述信息
    */
-  description: string
+  description?: string
   /**
    * 默认值
    */
-  defaultValue: string
+  defaultValue?: string
   /**
    * 是否选中
    */
-  selected: boolean
+  selected?: boolean,
+  /**
+   * 子节点
+   */
+  children?: FieldInfo[]
 }

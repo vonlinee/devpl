@@ -1,5 +1,6 @@
 package io.devpl.fxui.view;
 
+import io.devpl.fxui.controls.DisclosureNode;
 import io.devpl.fxui.controls.TextFieldTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
 import javafx.scene.control.*;
@@ -56,7 +57,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         this.setRowFactory(ttv -> {
             TreeTableRow<FieldNode> row = new TreeTableRow<>();
 
-            row.setDisclosureNode(new Button("+"));
+            row.setDisclosureNode(new DisclosureNode());
 
             // 给行添加右键菜单
             row.setOnContextMenuRequested(event -> {
@@ -91,6 +92,11 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         rootNode.getChildren().add(new TreeItem<>(f2));
         rootNode.getChildren().add(new TreeItem<>(f3));
         rootNode.getChildren().add(new TreeItem<>(f4));
+
+        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B1")));
+        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B2")));
+        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B3")));
+        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B4")));
     }
 
     private void enableDrag(TreeTableRow<FieldNode> row) {
@@ -133,6 +139,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
             TreeTableRow<FieldNode> draggedRow = (TreeTableRow<FieldNode>) event.getSource();
             Dragboard db = event.getDragboard();
             if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                // 拖拽开始的索引位置
                 int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
 
                 int dropIndex;
@@ -152,9 +159,10 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
                 }
                 // 添加到子节点
 
+                System.out.println(draggedIndex);
+
                 // 移除拖拽节点
                 TreeItem<FieldNode> removed = rootNode.getChildren().remove(draggedIndex);
-
 
                 System.out.println(dropIndex);
 
@@ -162,8 +170,6 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
                 toRow.getTreeItem().setExpanded(true);
 
                 // rootNode.getChildren().add(dropIndex, removed);
-
-                System.out.println("放在" + dropIndex);
 
                 event.consume();
             }

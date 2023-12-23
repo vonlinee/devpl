@@ -111,7 +111,7 @@ const columnMappingForm = reactive({
 </script>
 
 <template>
-  <vxe-modal v-model="modalVisible" width="80%" height="80%" title="字段解析" show-footer :mask-closable="false"
+  <vxe-modal v-model="modalVisible" fullscreen title="字段解析" :draggable="false" show-footer :mask-closable="false"
              :z-index="2000"
              @close="onModalClose">
     <template #default>

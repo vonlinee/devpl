@@ -15,8 +15,8 @@ import javafx.util.StringConverter;
 public class TextFieldTreeTableCell<S, T> extends TreeTableCellBase<S, T> {
 
     private TextField textField;
-    private Node disclosureNode;
     private final StringConverter<T> converter;
+    private Node node;
 
     public TextFieldTreeTableCell(StringConverter<T> converter) {
         this.converter = converter;
@@ -27,13 +27,11 @@ public class TextFieldTreeTableCell<S, T> extends TreeTableCellBase<S, T> {
 
     @Override
     public void startEdit() {
-        if (!isEditable()
-            || !getTreeTableView().isEditable()
-            || !getTableColumn().isEditable()) {
+        if (!isEditable() || !getTreeTableView().isEditable() || !getTableColumn().isEditable()) {
             return;
         }
-        fill();
         super.startEdit();
+        setDisclosureNodeVisiable(false);
         if (isEditing()) {
             if (textField == null) {
                 textField = new TextField();
@@ -42,11 +40,11 @@ public class TextFieldTreeTableCell<S, T> extends TreeTableCellBase<S, T> {
         }
     }
 
-    private void fill() {
+    private void setDisclosureNodeVisiable(boolean flag) {
         TreeTableRow<S> row = getTableRow();
         if (row != null) {
-            disclosureNode = row.getDisclosureNode();
-            row.setDisclosureNode(null);
+            DisclosureNode disclosureNode = (DisclosureNode) row.getDisclosureNode();
+            disclosureNode.setShowing(flag);
         }
     }
 
@@ -54,10 +52,8 @@ public class TextFieldTreeTableCell<S, T> extends TreeTableCellBase<S, T> {
     public void cancelEdit() {
         super.cancelEdit();
         CellUtils.cancelEdit(this, this.converter, null);
-        TreeTableRow<S> row = getTableRow();
-        if (row != null && disclosureNode != null) {
-            row.setDisclosureNode(disclosureNode);
-        }
+        System.out.println("取消编辑");
+        setDisclosureNodeVisiable(true);
     }
 
     @Override
