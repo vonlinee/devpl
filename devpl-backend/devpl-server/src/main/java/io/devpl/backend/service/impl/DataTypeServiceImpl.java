@@ -75,7 +75,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      */
     @Override
     public boolean saveDataTypeGroup(DataTypeGroup typeGroup) {
-        DataTypeGroup dataTypeGroup = dataTypeGroupMapper.selectByGroupId(typeGroup.getGroupId());
+        DataTypeGroup dataTypeGroup = dataTypeGroupMapper.selectById(typeGroup.getId());
         if (dataTypeGroup == null) {
             typeGroup.setCreateTime(LocalDateTime.now());
             typeGroup.setUpdateTime(typeGroup.getCreateTime());

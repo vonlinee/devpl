@@ -1,14 +1,14 @@
 <template>
   <FieldTreeTable></FieldTreeTable>
 
-  <FieldTreee></FieldTreee>
+  <FieldTree selectable></FieldTree>
 </template>
 
 <script setup lang="ts">
 
 import FieldTreeTable from "@/components/fields/FieldTreeTable.vue";
 
-import FieldTreee from "@/components/fields/FieldTree.vue";
+import FieldTree from "@/components/fields/FieldTree.vue";
 </script>
 
 <style scoped lang="scss">

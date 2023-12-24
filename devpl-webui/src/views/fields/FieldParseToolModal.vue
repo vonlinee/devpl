@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref, toRaw } from "vue";
-import { ElMessage, ElTableColumn, type TabsPaneContext } from "element-plus";
+import { ElMessage, ElTableColumn, TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { apiParseFields} from "@/api/fields";
+import { apiParseFields } from "@/api/fields";
 import { isBlank } from "@/utils/tool";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
@@ -111,7 +111,9 @@ const columnMappingForm = reactive({
 </script>
 
 <template>
-  <vxe-modal v-model="modalVisible" fullscreen title="字段解析" :draggable="false" show-footer :mask-closable="false"
+  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false"
+             width="80%"
+             height="80%"
              :z-index="2000"
              @close="onModalClose">
     <template #default>

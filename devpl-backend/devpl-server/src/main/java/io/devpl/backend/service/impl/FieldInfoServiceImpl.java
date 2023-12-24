@@ -12,8 +12,8 @@ import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.interfaces.FieldParser;
 import io.devpl.backend.interfaces.impl.HtmlTableContentFieldParser;
 import io.devpl.backend.interfaces.impl.HtmlTableDomFieldParser;
+import io.devpl.backend.interfaces.impl.SqlFieldParser;
 import io.devpl.backend.service.FieldInfoService;
-import io.devpl.backend.tools.parser.JavaParserUtils;
 import io.devpl.backend.tools.parser.java.JavaASTUtils;
 import io.devpl.backend.tools.parser.java.MetaField;
 import io.devpl.sdk.util.CollectionUtils;
@@ -64,30 +64,29 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         } else if ("json".equalsIgnoreCase(type)) {
             fieldInfoList.addAll(parseFieldsFromJson(content));
         } else if ("html1".equalsIgnoreCase(type)) {
-
             String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
-
             HtmlTableContentFieldParser parser = new HtmlTableContentFieldParser();
             parser.setColumnMapping(columnMapping);
-            List<Map<String, Object>> fields = parser.parse(content);
-            for (Map<String, Object> field : fields) {
-                FieldInfo fieldInfo = new FieldInfo();
-                fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
-                fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
-                fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
-                fieldInfoList.add(fieldInfo);
-            }
+            fieldInfoList = convertParseResultToFields(parser.parse(content));
         } else if ("html2".equalsIgnoreCase(type)) {
             String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
             FieldParser parser = new HtmlTableDomFieldParser(columnMapping);
-            List<Map<String, Object>> fields = parser.parse(content);
-            for (Map<String, Object> field : fields) {
-                FieldInfo fieldInfo = new FieldInfo();
-                fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
-                fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
-                fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
-                fieldInfoList.add(fieldInfo);
-            }
+            fieldInfoList = convertParseResultToFields(parser.parse(content));
+        } else if ("sql".equalsIgnoreCase(type)) {
+            SqlFieldParser fieldParser = new SqlFieldParser();
+            fieldInfoList = convertParseResultToFields(fieldParser.parse(content));
+        }
+        return fieldInfoList;
+    }
+
+    private List<FieldInfo> convertParseResultToFields(List<Map<String, Object>> fields) {
+        List<FieldInfo> fieldInfoList = new ArrayList<>();
+        for (Map<String, Object> field : fields) {
+            FieldInfo fieldInfo = new FieldInfo();
+            fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
+            fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
+            fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
+            fieldInfoList.add(fieldInfo);
         }
         return fieldInfoList;
     }
@@ -110,6 +109,10 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         }
         fieldInfoList.removeIf(f -> !javaIdentifierPattern.matcher(f.getFieldKey()).matches());
         return saveBatch(fieldInfoList);
+    }
+
+    private void parseFieldsFromSql() {
+
     }
 
     /**

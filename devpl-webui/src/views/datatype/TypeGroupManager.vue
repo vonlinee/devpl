@@ -38,15 +38,16 @@
     </template>
   </vxe-modal>
 </template>
-<script setup lang='ts'>
-import { apiListAllDataTypeGroups, apiSaveDataTypeGroup, apiSaveOrUpdateDataTypeGroups } from '@/api/datatype';
-import { onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { apiListAllDataTypeGroups, apiSaveDataTypeGroup, apiSaveOrUpdateDataTypeGroups } from "@/api/datatype";
+import { onMounted, ref } from "vue";
+
 const loading = ref(false);
 
 const typeGroups = ref<DataTypeGroup[]>([]);
 
 const insertRow = () => {
-  const groups = typeGroups.value
+  const groups = typeGroups.value;
   groups.push({
     id: undefined,
     typeGroupId: "",
@@ -54,34 +55,35 @@ const insertRow = () => {
     remark: "",
     editing: true,
     internal: false
-  })
-  typeGroups.value = groups
-}
+  });
+  typeGroups.value = groups;
+};
 
 const refreshTable = () => {
   apiListAllDataTypeGroups().then((res) => {
     typeGroups.value = res.data || [];
   });
-}
+};
 
 onMounted(() => {
-  refreshTable()
+  refreshTable();
 });
 
 const typeGroupModalVisible = ref(false);
 
 const saveRow = (row: DataTypeGroup) => {
   apiSaveDataTypeGroup(row).then((res) => {
-    row.editing = false
-  })
-}
+    row.editing = false;
+  });
+};
 
 const submitEvent = () => {
   loading.value = true;
   apiSaveOrUpdateDataTypeGroups(typeGroups.value).then((res) => {
     typeGroups.value.forEach((item) => {
-      item.editing = false
-    })
+      item.editing = false;
+    });
+    loading.value = false;
   });
 };
 
@@ -94,4 +96,4 @@ defineExpose({
 });
 
 </script>
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>
