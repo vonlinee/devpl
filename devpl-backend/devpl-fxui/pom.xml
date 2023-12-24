@@ -47,6 +47,10 @@
                 <version>${javafx.maven.plugin.version}</version>
                 <configuration>
                     <mainClass>devpl.fxui/io.devpl.fxui.MainApplication</mainClass>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

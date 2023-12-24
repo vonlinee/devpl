@@ -1,6 +1,6 @@
 package io.devpl.fxui;
 
-import io.devpl.fxui.view.FieldTreeTable;
+import io.devpl.fxui.view.FieldParseToolView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,7 +16,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Scene scene = new Scene(new FieldTreeTable(), 500, 600);
+        Scene scene = new Scene(new FieldParseToolView(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

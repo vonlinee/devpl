@@ -1,7 +1,6 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.controls.DisclosureNode;
-import io.devpl.fxui.controls.TextFieldTreeTableCell;
+import io.devpl.fxui.controls.TextInputTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
@@ -10,6 +9,8 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.util.converter.DefaultStringConverter;
+
+import java.util.List;
 
 public class FieldTreeTable extends TreeTableView<FieldNode> {
 
@@ -29,8 +30,8 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         dataTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("dataType"));
         descCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
 
-        nameCol.setCellFactory(ttc -> new TextFieldTreeTableCell<>(new DefaultStringConverter()));
-
+        nameCol.setCellFactory(ttc -> new TextInputTreeTableCell<>(new DefaultStringConverter()));
+        descCol.setCellFactory(ttc -> new TextInputTreeTableCell<>(new DefaultStringConverter()));
         this.getColumns().add(nameCol);
         this.getColumns().add(dataTypeCol);
         this.getColumns().add(descCol);
@@ -57,8 +58,6 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         this.setRowFactory(ttv -> {
             TreeTableRow<FieldNode> row = new TreeTableRow<>();
 
-            row.setDisclosureNode(new DisclosureNode());
-
             // 给行添加右键菜单
             row.setOnContextMenuRequested(event -> {
                 ContextMenu menu = new ContextMenu();
@@ -82,94 +81,119 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
 
             return row;
         });
-
-        FieldNode f1 = new FieldNode("A", "A", "A");
-        FieldNode f2 = new FieldNode("B", "B", "B");
-        FieldNode f3 = new FieldNode("C", "C", "C");
-        FieldNode f4 = new FieldNode("D", "D", "D");
-
-        rootNode.getChildren().add(new TreeItem<>(f1));
-        rootNode.getChildren().add(new TreeItem<>(f2));
-        rootNode.getChildren().add(new TreeItem<>(f3));
-        rootNode.getChildren().add(new TreeItem<>(f4));
-
-        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B1")));
-        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B2")));
-        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B3")));
-        rootNode.getChildren().get(1).getChildren().add(new TreeItem<>(new FieldNode("B4")));
+        expandAll();
     }
 
     private void enableDrag(TreeTableRow<FieldNode> row) {
         // 拖拽-检测
         row.setOnDragDetected(event -> {
-            if (!row.isEmpty()) {
-                Integer index = row.getIndex();
+            TreeTableRow<?> draggedRow = (TreeTableRow<?>) event.getSource();
+            if (!draggedRow.isEmpty()) {
                 // 开始拖拽
-                Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
-                db.setDragView(row.snapshot(null, null));
+                Dragboard db = draggedRow.startDragAndDrop(TransferMode.MOVE);
+                db.setDragView(draggedRow.snapshot(null, null));
                 ClipboardContent cc = new ClipboardContent();
-                // 记录拖拽开始时的位置
-                cc.put(SERIALIZED_MIME_TYPE, index);
+                // 记录拖拽开始时的位置 区分展开
+                cc.put(SERIALIZED_MIME_TYPE, draggedRow.getIndex());
+
                 db.setContent(cc);
                 event.consume();
             }
         });
         // 释放-验证 当你拖动到目标上方的时候，会不停的执行
         row.setOnDragOver(event -> {
-
             Dragboard db = event.getDragboard();
             @SuppressWarnings("unchecked")
             TreeTableRow<FieldNode> sourceRow = (TreeTableRow<FieldNode>) event.getGestureSource();
-            if (sourceRow.getTreeTableView() != row.getTreeTableView()) {
+            @SuppressWarnings("unchecked")
+            TreeTableRow<FieldNode> toRow = (TreeTableRow<FieldNode>) event.getSource();
+            if (sourceRow.getTreeTableView() != toRow.getTreeTableView()) {
                 // 检查是否是同一个表，不能跨表拖拽
                 return;
             }
             if (db.hasContent(SERIALIZED_MIME_TYPE)) {
-                if (row.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
+                // 拖拽到的行不是拖拽起始行
+                if (toRow.getIndex() != (Integer) db.getContent(SERIALIZED_MIME_TYPE)) {
                     event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    markDroppedTargetRow(toRow);
                     event.consume();
                 }
             }
         });
-        // 拖动到目标并松开鼠标的时候，执行这个DragDropped事件。
+        /**
+         * 拖动到目标并松开鼠标的时候，执行这个DragDropped事件。
+         * DRAG_DROPPED只能在setOnDragDropped方法里调用
+         */
         row.setOnDragDropped(event -> {
-            // DRAG_DROPPED只能在setOnDragDropped方法里调用
-
-            @SuppressWarnings("unchecked")
-            TreeTableRow<FieldNode> draggedRow = (TreeTableRow<FieldNode>) event.getSource();
             Dragboard db = event.getDragboard();
             if (db.hasContent(SERIALIZED_MIME_TYPE)) {
+                // 开始拖拽时的行
+                @SuppressWarnings("unchecked")
+                TreeTableRow<FieldNode> fromRow = (TreeTableRow<FieldNode>) event.getGestureSource();
                 // 拖拽开始的索引位置
-                int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-
-                int dropIndex;
-                if (row.isEmpty()) {
-                    dropIndex = rootNode.getChildren().size();
-                } else {
-                    dropIndex = row.getIndex();
-                }
-
+                // int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
                 // 拖拽到的行
                 @SuppressWarnings("unchecked")
                 TreeTableRow<FieldNode> toRow = (TreeTableRow<FieldNode>) event.getSource();
 
-                if (toRow == null) {
-                    System.out.println("目标为空");
+                final TreeTableView<FieldNode> tableView = fromRow.getTreeTableView();
+
+                if (toRow == null || toRow.isEmpty()) {
+                    // 添加到最外层(根节点)
+                    TreeItem<FieldNode> parentNode = fromRow.getTreeItem().getParent();
+                    TreeItem<FieldNode> removedItem = parentNode.getChildren().remove(calculateItemIndex(fromRow.getTreeItem()));
+                    if (parentNode != rootNode) {
+                        // 如果父节点不是根节点，移动到空白区域时视为移到最外层
+                        rootNode.getChildren().add(removedItem);
+                    } else {
+                        // 移到最后
+                        parentNode.getChildren().add(removedItem);
+                    }
                     return;
                 }
+                // 位置不变 目标位置为原位置的父级节点
+                if (toRow.getTreeItem() == fromRow.getTreeItem().getParent()) {
+                    return;
+                }
+
+                // 拖拽位置没发生变化不会触发  不会有 fromRow == toRow 的情况
+                if (fromRow.getTreeItem().getParent() == toRow.getTreeItem().getParent()) {
+                    // 父级相同
+                } else {
+
+                    int fromLevel = tableView.getTreeItemLevel(fromRow.getTreeItem());
+                    int toLevel = tableView.getTreeItemLevel(toRow.getTreeItem());
+                    System.out.println("层级" + fromLevel + " -> " + toLevel);
+                    if (toLevel > fromLevel) {
+                        // 判断是否父节点拖到其子孙节点
+                        TreeItem<FieldNode> parent = toRow.getTreeItem().getParent();
+                        for (int i = toLevel; i > fromLevel; i--) {
+                            if (parent == fromRow.getTreeItem()) {
+                                System.out.println("父节点拖到其子孙节点");
+                                return;
+                            }
+                            parent = parent.getParent();
+                        }
+                    }
+
+
+                }
+
+                System.out.println("从" + fromRow.getIndex() + "拖到" + toRow.getIndex());
+
+                // 连同所有子节点一起移动
+                TreeItem<FieldNode> removedItem = remove(fromRow.getTreeItem());
+                if (removedItem != null) {
+                    toRow.getTreeItem().getChildren().add(removedItem);
+                }
+
                 // 添加到子节点
 
-                System.out.println(draggedIndex);
+                // 表格如果展开，则索引为所有行的索引位置
 
                 // 移除拖拽节点
-                TreeItem<FieldNode> removed = rootNode.getChildren().remove(draggedIndex);
 
-                System.out.println(dropIndex);
-
-                toRow.getTreeItem().getChildren().add(removed);
                 toRow.getTreeItem().setExpanded(true);
-
-                // rootNode.getChildren().add(dropIndex, removed);
 
                 event.consume();
             }
@@ -178,5 +202,64 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         row.setOnDragDone(event -> {
 
         });
+    }
+
+    public final void expandAll() {
+        setExpandStatusRecursively(rootNode);
+    }
+
+    private void setExpandStatusRecursively(TreeItem<?> parent) {
+        if (!parent.isLeaf() && !parent.getChildren().isEmpty()) {
+            parent.setExpanded(true);
+            for (TreeItem<?> child : parent.getChildren()) {
+                setExpandStatusRecursively(child);
+            }
+        }
+    }
+
+    private void markDroppedTargetRow(TreeTableRow<?> row) {
+
+    }
+
+    public void addFields(List<FieldNode> nodeList) {
+        for (FieldNode fieldNode : nodeList) {
+            TreeItem<FieldNode> item = new TreeItem<>(fieldNode);
+            rootNode.getChildren().add(item);
+            add(item, fieldNode);
+        }
+    }
+
+    private void add(TreeItem<FieldNode> parent, FieldNode parentItem) {
+        if (parentItem.hasChildren()) {
+            for (FieldNode child : parentItem.getChildren()) {
+                TreeItem<FieldNode> cur = new TreeItem<>(child);
+                parent.getChildren().add(cur);
+                add(cur, child);
+            }
+        }
+    }
+
+    /**
+     * 删除子节点
+     *
+     * @param item 子节点
+     * @return 被删除的子节点，如果为null表示未删除
+     */
+    private <T> TreeItem<T> remove(TreeItem<T> item) {
+        int index = item.getParent().getChildren().indexOf(item);
+        if (index >= 0) {
+            return item.getParent().getChildren().remove(index);
+        }
+        return null;
+    }
+
+    /**
+     * 计算在父节点中的位置
+     *
+     * @param item 节点
+     * @return 在父节点中的位置
+     */
+    private int calculateItemIndex(TreeItem<?> item) {
+        return item.getParent().getChildren().indexOf(item);
     }
 }

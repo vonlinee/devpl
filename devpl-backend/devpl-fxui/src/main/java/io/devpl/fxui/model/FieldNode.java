@@ -1,10 +1,15 @@
 package io.devpl.fxui.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FieldNode {
 
     private String name;
     private String description;
     private String dataType;
+
+    private List<FieldNode> children;
 
     public FieldNode() {
     }
@@ -44,6 +49,14 @@ public class FieldNode {
         this.dataType = dataType;
     }
 
+    public List<FieldNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<FieldNode> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
         return "FieldNode{" +
@@ -51,5 +64,16 @@ public class FieldNode {
             ", description='" + description + '\'' +
             ", dataType='" + dataType + '\'' +
             '}';
+    }
+
+    public void addChild(FieldNode child) {
+        if (children == null) {
+            children = new ArrayList<>();
+        }
+        children.add(child);
+    }
+
+    public boolean hasChildren() {
+        return children != null && !children.isEmpty();
     }
 }

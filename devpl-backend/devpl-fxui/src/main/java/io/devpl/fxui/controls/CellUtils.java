@@ -20,12 +20,6 @@ public class CellUtils {
         } else {
             cell.setGraphic(textField);
         }
-
-        textField.selectAll();
-
-        // requesting focus so that key input can immediately go into the
-        // TextField (see RT-28132)
-        textField.requestFocus();
     }
 
     static <T> void cancelEdit(Cell<T> cell, final StringConverter<T> converter, Node graphic) {
@@ -33,6 +27,14 @@ public class CellUtils {
         cell.setGraphic(graphic);
     }
 
+    /**
+     * 获取单元格的文本
+     *
+     * @param cell      单元格
+     * @param converter 转换
+     * @param <T>       单元格数据类型
+     * @return 单元格的文本文本
+     */
     private static <T> String getItemText(Cell<T> cell, StringConverter<T> converter) {
         return converter == null ? cell.getItem() == null ? "" : cell.getItem().toString() : converter.toString(cell.getItem());
     }
@@ -47,7 +49,6 @@ public class CellUtils {
                     textField.setText(getItemText(cell, converter));
                 }
                 cell.setText(null);
-
                 if (graphic != null) {
                     hbox.getChildren().setAll(graphic, textField);
                     cell.setGraphic(hbox);

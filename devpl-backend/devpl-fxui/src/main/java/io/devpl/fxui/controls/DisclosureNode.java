@@ -20,11 +20,9 @@ public class DisclosureNode extends Region {
         if (showing) {
             layoutInArea(node, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
         }
-        System.out.println(showing);
     }
 
     public final void setShowing(boolean showing) {
-        System.out.println("设为 " + showing);
         this.showing = showing;
     }
 }
