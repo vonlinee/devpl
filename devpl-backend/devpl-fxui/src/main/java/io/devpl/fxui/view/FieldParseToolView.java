@@ -13,18 +13,16 @@ import java.util.List;
 public class FieldParseToolView extends BorderPane {
 
     FieldTreeTable treeTable;
+    TabPane tabPane;
 
     public FieldParseToolView() {
-
         SplitPane root = new SplitPane();
-
-        TabPane tabPane = new TabPane();
-
+        tabPane = new TabPane();
         treeTable = new FieldTreeTable();
 
-        Tab sqlTab = new Tab("SQL", new SqlParseView());
-        sqlTab.setClosable(false);
-        tabPane.getTabs().add(sqlTab);
+
+        addTab(new SqlParseView());
+        addTab(new MyBatisParseView());
 
         root.getItems().addAll(tabPane, treeTable);
 
@@ -52,5 +50,11 @@ public class FieldParseToolView extends BorderPane {
         bottom.getChildren().add(btnGetSample);
         setCenter(root);
         setBottom(bottom);
+    }
+
+    void addTab(FieldParseView view) {
+        Tab tab = new Tab(view.getName(), view);
+        tab.setClosable(false);
+        tabPane.getTabs().add(tab);
     }
 }

@@ -258,10 +258,25 @@ public class FileUtils {
         return resultList;
     }
 
+    /**
+     * 以UTF8编码读取文件内容为字符串
+     *
+     * @param file 文件对象
+     * @return 文件内容
+     * @throws IOException IOException
+     */
     public static String readUTF8String(File file) throws IOException {
         return readString(file, StandardCharsets.UTF_8);
     }
 
+    /**
+     * 以指定编码读取文件内容为字符串
+     *
+     * @param file    文件对象
+     * @param charset 文件编码
+     * @return 文件内容
+     * @throws IOException IOException
+     */
     public static String readString(File file, Charset charset) throws IOException {
         Path path = file.toPath();
         // 一个文本文件如果已经大于int最大值，这种文件一般来说很少见有可能是log文件
@@ -283,8 +298,6 @@ public class FileUtils {
         }
         return msg.toString();
     }
-
-    // -----------------------------------------------------------------------
 
     /**
      * Convert from a <code>URL</code> to a <code>File</code>.

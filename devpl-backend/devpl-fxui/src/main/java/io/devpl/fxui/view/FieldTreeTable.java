@@ -2,23 +2,26 @@ package io.devpl.fxui.view;
 
 import io.devpl.fxui.controls.TextInputTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
+import javafx.collections.ObservableList;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.util.converter.DefaultStringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 字段表
+ */
 public class FieldTreeTable extends TreeTableView<FieldNode> {
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
-    TreeItem<FieldNode> rootNode;
+    private TreeItem<FieldNode> rootNode;
 
     public FieldTreeTable() {
-
+        // 自动拉伸长度撑满整个表格
         setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
         setEditable(true);
 
@@ -37,7 +40,6 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         this.getColumns().add(descCol);
 
         ContextMenu contextMenu = new ContextMenu();
-
         MenuItem addMenuItem = new MenuItem("新增");
         addMenuItem.setMnemonicParsing(true);
         addMenuItem.setOnAction(e -> {
@@ -50,7 +52,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         contextMenu.getItems().add(addMenuItem);
         contextMenu.setWidth(300);
         contextMenu.setPrefWidth(300);
-        // setContextMenu(contextMenu);
+        setContextMenu(contextMenu);
 
         setShowRoot(false);
         setRoot(rootNode = new TreeItem<>(null));
@@ -58,30 +60,49 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         this.setRowFactory(ttv -> {
             TreeTableRow<FieldNode> row = new TreeTableRow<>();
 
+            if (rowContextMenu == null) {
+                rowContextMenu = new RowContextMenu();
+            }
             // 给行添加右键菜单
             row.setOnContextMenuRequested(event -> {
-                ContextMenu menu = new ContextMenu();
-
                 @SuppressWarnings("unchecked")
                 TreeTableRow<FieldNode> curRow = (TreeTableRow<FieldNode>) event.getSource();
-                MenuItem menuItem1 = new MenuItem("添加子节点");
-                menuItem1.setOnAction(e -> {
-                    curRow.getTreeItem().getChildren().add(new TreeItem<>(new FieldNode("Unknown", "", "")));
-                    curRow.getTreeItem().setExpanded(true);
-                });
-                MenuItem menuItem2 = new MenuItem("Menu Item 2");
-                menuItem2.setOnAction(e -> {
-                    // 处理菜单项点击事件
-                });
-                menu.getItems().addAll(menuItem1, menuItem2);
-                row.setContextMenu(menu);
+                if (curRow.isEmpty()) {
+                    return;
+                }
+                rowContextMenu.curRow = curRow;
+                // 阻止 ContextMenuRequested 事件冒泡
+                event.consume();
             });
-
+            row.setContextMenu(rowContextMenu);
             enableDrag(row);
-
             return row;
         });
         expandAll();
+    }
+
+    RowContextMenu rowContextMenu;
+
+    static class RowContextMenu extends ContextMenu {
+
+        TreeTableRow<FieldNode> curRow;
+
+        public RowContextMenu() {
+            MenuItem menuItem1 = new MenuItem("添加子节点");
+            menuItem1.setOnAction(e -> {
+                if (!curRow.isEmpty()) {
+                    curRow.getTreeItem().getChildren().add(new TreeItem<>(new FieldNode("Unknown", "", "")));
+                    curRow.getTreeItem().setExpanded(true);
+                }
+            });
+            MenuItem menuItem2 = new MenuItem("添加同级节点");
+            menuItem2.setOnAction(e -> {
+                if (!curRow.isEmpty()) {
+                    curRow.getTreeItem().getParent().getChildren().add(new TreeItem<>(new FieldNode("Unknown")));
+                }
+            });
+            this.getItems().addAll(menuItem1, menuItem2);
+        }
     }
 
     private void enableDrag(TreeTableRow<FieldNode> row) {
@@ -261,5 +282,25 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
      */
     private int calculateItemIndex(TreeItem<?> item) {
         return item.getParent().getChildren().indexOf(item);
+    }
+
+    public final List<FieldNode> getFields() {
+        // 根节点不存放数据
+        List<FieldNode> nodes = new ArrayList<>();
+        ObservableList<TreeItem<FieldNode>> children = rootNode.getChildren();
+        for (TreeItem<FieldNode> child : children) {
+            nodes.add(child.getValue());
+            getChildrenField(child.getValue(), child);
+        }
+        return nodes;
+    }
+
+    private void getChildrenField(FieldNode parent, TreeItem<FieldNode> parentItem) {
+        List<FieldNode> fields = new ArrayList<>();
+        for (TreeItem<FieldNode> child : parentItem.getChildren()) {
+            getChildrenField(child.getValue(), child);
+            fields.add(child.getValue());
+        }
+        parent.setChildren(fields);
     }
 }

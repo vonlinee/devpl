@@ -52,5 +52,13 @@ public interface TemplateEngine {
      */
     String getTemplateFileExtension();
 
+    /**
+     * 同render方法
+     *
+     * @param objectMap    模板参数
+     * @param templatePath 模板路径
+     * @param fos          输出位置
+     * @throws Exception 渲染出错
+     */
     void merge(Map<String, Object> objectMap, String templatePath, OutputStream fos) throws Exception;
 }

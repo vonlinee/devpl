@@ -14,6 +14,11 @@ public class SqlParseView extends FieldParseView {
     TextArea textArea;
 
     @Override
+    String getName() {
+        return "SQL";
+    }
+
+    @Override
     Node createRootNode() {
         textArea = new TextArea();
         textArea.prefHeightProperty().bind(this.heightProperty());

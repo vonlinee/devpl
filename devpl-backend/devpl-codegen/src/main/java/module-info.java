@@ -1,4 +1,4 @@
-open module codegen {
+open module devpl.codegen {
     exports io.devpl.codegen.core;
     exports io.devpl.codegen.db.query;
     exports io.devpl.codegen.db.querys;

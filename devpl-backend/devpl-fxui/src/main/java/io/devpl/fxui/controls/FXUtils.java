@@ -1,11 +1,16 @@
 package io.devpl.fxui.controls;
 
+import javafx.event.Event;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.jetbrains.annotations.Nullable;
 
 public class FXUtils {
 
@@ -39,5 +44,26 @@ public class FXUtils {
      */
     public static boolean isFalse(Boolean bool) {
         return bool != null && !bool;
+    }
+
+    /**
+     * 获取Stage
+     *
+     * @param event 事件对象
+     * @return Stage
+     */
+    @Nullable
+    public static Stage getStage(Event event) {
+        Object eventSource = event.getSource();
+        if (eventSource instanceof Node node) {
+            Scene scene = node.getScene();
+            if (scene != null) {
+                Window window = scene.getWindow();
+                if (window instanceof Stage stage) {
+                    return stage;
+                }
+            }
+        }
+        return null;
     }
 }

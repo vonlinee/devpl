@@ -20,21 +20,22 @@ public class DruidSqlParser {
 
     private final String rawSql;
     private final DbType dbType;
-    private final List<SQLStatement> statemens;
+    private final List<SQLStatement> statements;
 
     /**
      * 解析单条sql
+     *
      * @param sql    sql
      * @param dbType 数据库类型
      */
     public DruidSqlParser(String sql, DbType dbType) {
         this.rawSql = sql;
         this.dbType = dbType;
-        this.statemens = SQLUtils.parseStatements(rawSql, dbType);
+        this.statements = SQLUtils.parseStatements(rawSql, dbType);
     }
 
     public void parseCreate() {
-        for (SQLStatement sqlStatement : statemens) {
+        for (SQLStatement sqlStatement : statements) {
             MySqlCreateTableStatement ddlCreate = (MySqlCreateTableStatement) sqlStatement;
             SQLColumnDefinition newColDef = new SQLColumnDefinition();
             newColDef.setName("create_time");
@@ -50,6 +51,7 @@ public class DruidSqlParser {
 
     /**
      * 新增一列的定义信息
+     *
      * @return SQLColumnDefinition
      */
     public SQLColumnDefinition newColumnDefinition(String columnName) {

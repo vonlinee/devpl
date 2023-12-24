@@ -17,8 +17,12 @@ abstract class FieldParseView extends Region {
 
     public FieldParseView() {
         this.root = createRootNode();
-        getChildren().add(root);
+        if (this.root != null)
+            getChildren().add(root);
     }
+
+    abstract String getName();
+
 
     /**
      * 创建UI部分
