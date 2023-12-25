@@ -23,7 +23,6 @@ abstract class FieldParseView extends Region {
 
     abstract String getName();
 
-
     /**
      * 创建UI部分
      *

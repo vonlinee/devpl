@@ -1,6 +1,5 @@
 package io.devpl.fxui;
 
-import io.devpl.fxui.view.FieldParseToolView;
 import io.devpl.fxui.view.TemplateRenderView;
 import javafx.application.Application;
 import javafx.scene.Scene;

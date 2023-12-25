@@ -12,4 +12,5 @@ module devpl.fxui {
     opens io.devpl.fxui.model;
 
     requires com.jfoenix;
+    requires org.slf4j;
 }

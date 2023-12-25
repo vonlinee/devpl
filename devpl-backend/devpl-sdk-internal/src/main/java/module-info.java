@@ -14,4 +14,5 @@ open module devpl.sdk.internal {
     exports io.devpl.sdk.lang;
     exports io.devpl.sdk.io;
     exports io.devpl.sdk.validation;
+    exports io.devpl.sdk.collection;
 }
