@@ -1,11 +1,8 @@
 package io.devpl.fxui.utils;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,14 +109,6 @@ public class FileUtils {
             throw new IOException("Cannot create directory '" + directory + "'.");
         }
         return directory;
-    }
-
-    /**
-     * 删除目录
-     * @param file
-     */
-    public static void delete(File file) {
-        org.apache.commons.io.FileUtils.deleteQuietly(file);
     }
 
     private static File[] listFiles(final File directory, final FileFilter fileFilter) throws IOException {

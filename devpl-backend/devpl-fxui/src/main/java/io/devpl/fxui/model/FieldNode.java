@@ -1,4 +1,4 @@
-package io.devpl.fxui1.model;
+package io.devpl.fxui.model;
 
 import java.util.ArrayList;
 import java.util.List;

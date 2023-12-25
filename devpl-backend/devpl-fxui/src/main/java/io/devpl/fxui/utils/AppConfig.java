@@ -35,7 +35,7 @@ public class AppConfig {
         dds.setUrl(URL);
         dds.setUsername(USERNAME);
         dds.setPassword(PASSWORD);
-        dds.setDriverClassName("com.mysql.jdbc.Driver");
+        dds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         DruidDataSourceStatLoggerImpl logger = new DruidDataSourceStatLoggerImpl();
 

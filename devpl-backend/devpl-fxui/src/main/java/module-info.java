@@ -5,11 +5,15 @@ module devpl.fxui {
     requires org.jetbrains.annotations;
     requires devpl.sdk.internal;
     requires devpl.codegen;
+    requires java.naming;
+    requires java.management;
 
-    exports io.devpl.fxui1 to javafx.graphics;
-    exports io.devpl.fxui1.model;
-
-    opens io.devpl.fxui1.model;
+    exports io.devpl.fxui.controller.template;
+    exports io.devpl.fxui to javafx.graphics, javafx.fxml;
+    opens io.devpl.fxui;
+    opens io.devpl.fxui.app;
+    exports io.devpl.fxui.model;
+    opens io.devpl.fxui.model;
 
     requires com.jfoenix;
     requires org.slf4j;
@@ -49,4 +53,8 @@ module devpl.fxui {
     requires com.squareup.javapoet;
     requires java.compiler;
     requires jsonfive.java;
+    requires ST4;
+    requires dom4j;
+    requires xmlbeans;
+    requires velocity.engine.core;
 }

@@ -2,8 +2,8 @@ package io.devpl.fxui.utils.office;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import com.baomidou.mybatisplus.generator.jdbc.dialect.mysql.InfoSchemaColumn;
-import com.baomidou.mybatisplus.generator.jdbc.dialect.mysql.InfoSchemaTable;
+import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
+import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.DBUtils;
 import lombok.Data;

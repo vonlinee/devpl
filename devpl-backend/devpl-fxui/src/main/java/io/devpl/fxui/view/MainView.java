@@ -1,6 +1,5 @@
 package io.devpl.fxui.view;
 
-import io.devpl.codegen.parser.sql.SqlUtils;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -10,9 +9,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-
-import java.util.Map;
-import java.util.Set;
 
 public class MainView extends Application {
     @Override
@@ -45,9 +41,7 @@ public class MainView extends Application {
         btn.setOnAction(event -> {
             String text = codeArea.getText();
             if (text != null && !text.isBlank()) {
-                Map<String, Set<String>> selectColumns = SqlUtils.getSelectColumns(text);
                 codeAreaRight.clear();
-                codeAreaRight.appendText(String.valueOf(selectColumns));
             }
         });
 

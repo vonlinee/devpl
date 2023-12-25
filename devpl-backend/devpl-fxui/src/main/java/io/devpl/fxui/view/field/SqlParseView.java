@@ -1,6 +1,6 @@
-package io.devpl.fxui1.view;
+package io.devpl.fxui.view.field;
 
-import io.devpl.fxui1.model.FieldNode;
+import io.devpl.fxui.model.FieldNode;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 

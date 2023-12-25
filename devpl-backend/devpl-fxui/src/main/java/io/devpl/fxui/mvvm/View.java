@@ -1,5 +1,6 @@
 package io.devpl.fxui.mvvm;
 
+import io.devpl.fxui.utils.ResourceLoader;
 import io.fxtras.Alerts;
 import io.fxtras.eventbus.JavaFXMainThreadSupport;
 import io.fxtras.utils.WeakValueHashMap;
@@ -11,8 +12,10 @@ import org.greenrobot.eventbus.PostEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -32,10 +35,9 @@ public abstract class View implements SceneGraphAccessor {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder().eventInheritance(true)
-            .allowEmptySubscriber(true)   // 是否允许空@Subsciber进行注册
-            .logNoSubscriberMessages(true) // 没有订阅者时记录日志
-            .mainThreadSupport(new JavaFXMainThreadSupport()).build();
+    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder().eventInheritance(true).allowEmptySubscriber(true)   // 是否允许空@Subsciber进行注册
+        .logNoSubscriberMessages(true) // 没有订阅者时记录日志
+        .mainThreadSupport(new JavaFXMainThreadSupport()).build();
 
     public View() {
         try {
@@ -59,6 +61,7 @@ public abstract class View implements SceneGraphAccessor {
 
     /**
      * 发布事件
+     *
      * @param event 事件类型对象
      */
     public final void publish(Object event) {
@@ -71,6 +74,7 @@ public abstract class View implements SceneGraphAccessor {
 
     /**
      * 发布事件
+     *
      * @param eventName 事件名称
      * @param event     事件类型对象
      */
@@ -84,6 +88,7 @@ public abstract class View implements SceneGraphAccessor {
 
     /**
      * 加载视图，并进行初始化
+     *
      * @param clazz View impl Class
      * @param <T>   View
      * @return Root Node
@@ -99,6 +104,7 @@ public abstract class View implements SceneGraphAccessor {
 
     /**
      * 加载指定类的根节点
+     *
      * @param clazz view impl
      * @param <T>   view impl
      * @return View实例
@@ -117,7 +123,7 @@ public abstract class View implements SceneGraphAccessor {
                     String packageName = clazz.getPackageName();
                     fxmlLocation = packageName.replace(".", "/") + "/" + clazz.getSimpleName() + ".fxml";
                 }
-                URL resource = Thread.currentThread().getContextClassLoader().getResource(fxmlLocation);
+                URL resource = ResourceLoader.load(fxmlLocation);
                 FXMLLoader fxmlLoader = new FXMLLoader(resource);
                 fxmlLoader.setControllerFactory(param -> {
                     Object view1 = viewCache.get(param);

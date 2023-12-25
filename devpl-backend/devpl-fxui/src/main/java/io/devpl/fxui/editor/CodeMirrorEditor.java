@@ -1,5 +1,6 @@
 package io.devpl.fxui.editor;
 
+import io.devpl.fxui.utils.ResourceLoader;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.web.WebView;
@@ -37,17 +38,14 @@ public class CodeMirrorEditor implements CodeEditor {
     public static CodeMirrorEditor newInstance(LanguageMode languageMode) {
         CodeMirrorEditor codeEditor = new CodeMirrorEditor();
         codeEditor.init(() -> codeEditor.setMode(languageMode),
-                () -> codeEditor.setTheme("xq-light"));
+            () -> codeEditor.setTheme("xq-light"));
         return codeEditor;
     }
 
     @Override
     public void init(Runnable... runAfterLoading) {
         try {
-            URL resource = Thread.currentThread().getContextClassLoader().getResource("codemirror/index.html");
-            if (resource == null) {
-                throw new RuntimeException("Editor初始化失败");
-            }
+            URL resource = ResourceLoader.load("codemirror/index.html");
             queue.addAll(Arrays.asList(runAfterLoading));
             webView.getEngine().load(resource.toExternalForm());
             webView.getEngine().setOnError(event -> {

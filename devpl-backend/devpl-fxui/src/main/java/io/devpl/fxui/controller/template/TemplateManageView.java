@@ -1,17 +1,16 @@
 package io.devpl.fxui.controller.template;
 
-import io.devpl.fxui.editor.LanguageMode;
-import io.devpl.sdk.io.FileUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
+import io.devpl.fxui.editor.LanguageMode;
 import io.devpl.fxui.mvvm.FxmlBinder;
 import io.devpl.fxui.mvvm.FxmlView;
+import io.devpl.sdk.io.FileUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -19,9 +18,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -52,7 +49,6 @@ public class TemplateManageView extends FxmlView {
 
     @FXML
     public void parseTemplate(MouseEvent mouseEvent) {
-
         if (file != null) {
             Properties p = new Properties();
             p.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, file.getAbsoluteFile().getParent());

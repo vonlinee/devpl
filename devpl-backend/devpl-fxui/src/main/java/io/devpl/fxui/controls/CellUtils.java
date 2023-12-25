@@ -1,4 +1,4 @@
-package io.devpl.fxui1.controls;
+package io.devpl.fxui.controls;
 
 import javafx.scene.Node;
 import javafx.scene.control.Cell;

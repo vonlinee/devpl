@@ -1,4 +1,4 @@
-package io.devpl.fxui1.controls;
+package io.devpl.fxui.controls;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.cell.TextFieldTreeTableCell;

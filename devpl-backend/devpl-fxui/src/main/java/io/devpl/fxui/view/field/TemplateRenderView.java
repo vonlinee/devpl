@@ -1,9 +1,9 @@
-package io.devpl.fxui1.view;
+package io.devpl.fxui.view.field;
 
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
-import io.devpl.fxui1.controls.FXUtils;
-import io.devpl.fxui1.model.FieldNode;
+import io.devpl.fxui.controls.FXUtils;
+import io.devpl.fxui.model.FieldNode;
 import io.devpl.sdk.io.FileUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
