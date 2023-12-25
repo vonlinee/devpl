@@ -45,7 +45,12 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public IPage<FieldInfo> selectPage(FieldInfoListParam param) {
         String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
-        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), new LambdaQueryWrapper<FieldInfo>().notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys)).like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
+        LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
+        qw.notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys));
+        qw.like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey());
+        qw.like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName());
+        qw.orderBy(true, false, FieldInfo::getCreateTime);
+        return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
 
     /**

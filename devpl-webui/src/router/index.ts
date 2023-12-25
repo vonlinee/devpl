@@ -91,6 +91,15 @@ export const menuRoutes: RouteRecordRaw[] = [
         children: []
       },
       {
+        path: "/field/group",
+        meta: {
+          title: "字段分组",
+          icon: "icon-appstore"
+        },
+        component: () => import("@/views/fields/group/index.vue"),
+        children: []
+      },
+      {
         path: "/codegen/model",
         name: "DomainModel",
         component: () => import("@/views/model/index.vue"),

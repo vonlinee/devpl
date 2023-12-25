@@ -58,8 +58,6 @@ const fieldTable = ref();
 // 平铺数组
 const flattArray = ref<any[]>([]);
 
-const expandedRowKeys = ref([]);
-
 /**
  * 处理展开行变化
  * @param row
@@ -87,7 +85,6 @@ const dragData = {
   endX: 0,
   endY: 0
 };
-
 
 const cellMouseEnterHandler = (row: any, column: any, cell: any, event: any) => {
 

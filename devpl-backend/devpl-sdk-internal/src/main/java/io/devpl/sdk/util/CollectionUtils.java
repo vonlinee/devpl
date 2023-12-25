@@ -32,7 +32,16 @@ public abstract class CollectionUtils {
         return (map == null || map.isEmpty());
     }
 
-    public static <K, E> Map<K, List<E>> groupingBy(List<E> list, Function<? super E, ? extends K> classifier) {
+    /**
+     * 分组
+     *
+     * @param list       列表
+     * @param classifier 分组的key
+     * @param <K>        分组Key类型
+     * @param <E>        列表元素
+     * @return 分组Map
+     */
+    public static <K, E> Map<K, List<E>> groupingBy(Collection<E> list, Function<? super E, ? extends K> classifier) {
         return list.stream().collect(Collectors.groupingBy(classifier));
     }
 
@@ -203,10 +212,19 @@ public abstract class CollectionUtils {
         return collection.stream().filter(condition).count();
     }
 
-    public static <E, R extends Collection<E>> List<E> flatten(Collection<? extends Collection<E>> collection, Collector<E, ?, R> collector) {
+    /**
+     * 将集合平铺
+     *
+     * @param collection 集合，元素也为集合
+     * @param collector  Collector
+     * @param <E>        集合元素类型
+     * @param <R>        平铺后的集合类型
+     * @return 平铺后的集合
+     */
+    public static <E, R extends Collection<E>> R flatten(Collection<? extends Collection<E>> collection, Collector<E, ?, R> collector) {
         return collection.stream()
             .flatMap(Collection::stream)
-            .collect(Collectors.toList());
+            .collect(collector);
     }
 
     public static <E> boolean anyMatch(List<E> patrolTeams, Predicate<E> condition) {

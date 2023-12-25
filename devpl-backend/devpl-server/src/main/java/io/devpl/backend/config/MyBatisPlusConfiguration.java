@@ -82,10 +82,12 @@ public class MyBatisPlusConfiguration {
              */
             @Override
             public void insertFill(MetaObject metaObject) {
-                if (metaObject.hasGetter("update_time") && metaObject.hasGetter("create_time")) {
-                    LocalDateTime nowTime = LocalDateTime.now();
-                    setFieldValByName("update_time", nowTime, metaObject);
-                    setFieldValByName("create_time", nowTime, metaObject);
+                LocalDateTime nowTime = LocalDateTime.now();
+                if (metaObject.hasGetter("updateTime")) {
+                    setFieldValByName("updateTime", nowTime, metaObject);
+                }
+                if (metaObject.hasGetter("createTime")) {
+                    setFieldValByName("createTime", nowTime, metaObject);
                 }
             }
 
@@ -95,8 +97,8 @@ public class MyBatisPlusConfiguration {
              */
             @Override
             public void updateFill(MetaObject metaObject) {
-                if (metaObject.hasGetter("et.update_time")) {
-                    setFieldValByName("update_time", LocalDateTime.now(), metaObject);
+                if (metaObject.hasGetter("updateTime")) {
+                    setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
                 }
             }
         };

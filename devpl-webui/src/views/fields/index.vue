@@ -97,14 +97,14 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
     <el-table-column prop="defaultValue" label="默认值" show-overflow-tooltip></el-table-column>
     <el-table-column prop="description" label="描述信息" show-overflow-tooltip></el-table-column>
-    <el-table-column title="操作" align="center">
+    <el-table-column label="操作" align="center" fixed="right" width="130">
       <template #default="{ row }">
         <el-button link @click="showSaveOrUpdateModal(row)">编辑</el-button>
         <el-button link @click="removeEvent(row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination :current-page="option.currentPage"
+  <el-pagination :current-page="option.page"
                  background
                  :page-size="option.limit"
                  :page-sizes="option.pageSizes" :total="option.total"
