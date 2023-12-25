@@ -367,6 +367,24 @@ public abstract class StringUtils {
     }
 
     /**
+     * 判断是否所有字符串同时满足不为空条件
+     *
+     * @param strings 字符串数组
+     * @return 是否所有字符串同时满足不为空
+     */
+    public static boolean allHasText(String... strings) {
+        if (strings == null) {
+            return false;
+        }
+        for (String string : strings) {
+            if (!hasText(string)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Check whether the given {@code CharSequence} contains actual <em>text</em>.
      * <p>More specifically, this method returns {@code true} if the
      * {@code CharSequence} is not {@code null}, its length is greater than
