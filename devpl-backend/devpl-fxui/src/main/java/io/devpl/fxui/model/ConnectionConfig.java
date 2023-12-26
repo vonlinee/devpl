@@ -2,7 +2,8 @@ package io.devpl.fxui.model;
 
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.utils.DBUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +14,8 @@ import java.util.Properties;
  * 数据库连接配置
  * 注意：连接配置不一定需要数据库，因此此处不存储数据库名称信息
  */
-@Data
+@Getter
+@Setter
 public class ConnectionConfig {
 
     private String id;
@@ -42,7 +44,9 @@ public class ConnectionConfig {
         if (databaseName == null) {
             databaseName = "";
         }
-        assert driver != null;
+        if (driver == null) {
+            return null;
+        }
         return driver.getConnectionUrl(host, port, databaseName, null);
     }
 

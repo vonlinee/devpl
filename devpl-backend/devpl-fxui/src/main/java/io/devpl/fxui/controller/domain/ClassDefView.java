@@ -5,7 +5,7 @@ import io.devpl.fxui.tools.filestructure.FieldItem;
 import io.devpl.fxui.tools.filestructure.JavaFileStrucutreTreeView;
 import io.devpl.fxui.tools.filestructure.MethodItem;
 import io.devpl.fxui.tools.filestructure.TopLevelClassItem;
-import io.devpl.fxui.view.field.FieldParseToolView;
+import io.devpl.fxui.controller.fields.FieldParseToolView;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
 import io.fxtras.mvvm.View;

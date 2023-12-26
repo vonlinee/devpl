@@ -83,6 +83,7 @@ public class MyBatisXmlToolPane extends SplitPane {
         btn1.setOnAction(event -> {
             if (result == null) {
                 Event.fireEvent(btn, new ActionEvent());
+                return;
             }
             TreeItem<VarItem> root = table.getRoot();
             Map<String, Object> parameterObject = new HashMap<>();

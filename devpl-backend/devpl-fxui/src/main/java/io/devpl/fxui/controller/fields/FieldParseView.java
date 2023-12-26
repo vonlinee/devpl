@@ -1,4 +1,4 @@
-package io.devpl.fxui.view.field;
+package io.devpl.fxui.controller.fields;
 
 import io.devpl.fxui.controls.FXUtils;
 import io.devpl.fxui.model.FieldNode;

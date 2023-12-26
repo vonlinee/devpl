@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -29,6 +30,8 @@ public class FieldsManageView extends FxmlView {
     public CheckBox chbAllowDuplicateFieldName;
     @FXML
     public VBox vbox;
+
+    FieldTreeTable fieldTreeTable = new FieldTreeTable();
 
     @FXML
     public void addNewField(ActionEvent actionEvent) {
@@ -63,6 +66,8 @@ public class FieldsManageView extends FxmlView {
             tab.setClosable(false);
             tbpImportContent.getTabs().add(tab);
         }
+
+        vbox.getChildren().add(fieldTreeTable);
     }
 
     /**

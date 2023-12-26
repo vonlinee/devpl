@@ -1,4 +1,4 @@
-package io.devpl.fxui.view.field;
+package io.devpl.fxui.controller.fields;
 
 import io.devpl.fxui.model.FieldNode;
 import javafx.scene.Node;

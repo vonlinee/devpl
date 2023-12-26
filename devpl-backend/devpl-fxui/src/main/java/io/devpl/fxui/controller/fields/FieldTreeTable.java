@@ -1,4 +1,4 @@
-package io.devpl.fxui.view.field;
+package io.devpl.fxui.controller.fields;
 
 import io.devpl.fxui.controls.TextInputTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
@@ -96,7 +96,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
             });
             MenuItem menuItem2 = new MenuItem("添加同级节点");
             menuItem2.setOnAction(e -> {
-                if (!curRow.isEmpty()) {
+                if (curRow != null && !curRow.isEmpty()) {
                     curRow.getTreeItem().getParent().getChildren().add(new TreeItem<>(new FieldNode("Unknown")));
                 }
             });

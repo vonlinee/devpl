@@ -1,7 +1,8 @@
-package io.devpl.fxui.view.field;
+package io.devpl.fxui.controller.template;
 
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
+import io.devpl.fxui.controller.fields.FieldTreeTable;
 import io.devpl.fxui.controls.FXUtils;
 import io.devpl.fxui.model.FieldNode;
 import io.devpl.sdk.io.FileUtils;

@@ -12,9 +12,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-/**
- * @author Yuhi Ishikura
- */
 public class Loading extends StackPane {
 
     public static Loading wrap(Scene scene) {

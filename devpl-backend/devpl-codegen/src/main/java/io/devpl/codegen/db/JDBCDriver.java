@@ -17,14 +17,14 @@ public enum JDBCDriver {
     // Oracle Database
     ORACLE("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 11 thin") {
         @Override
-        protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+        public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
             return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
         }
     },
     ORACLE_12C("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 12 thin") {
         @Override
-        protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
-            return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
+        public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+            return ORACLE.getConnectionUrlPrefix(hostname, port, databaseName);
         }
     },
     POSTGRE_SQL("org.postgresql.Driver", "postgresql"),
@@ -143,7 +143,7 @@ public enum JDBCDriver {
      * @param databaseName 数据库名
      * @return URL的主要部分
      */
-    protected String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+    public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
         String connectionUrl = JDBC_PROTOCOL + ":" + subProtocol + "://" + hostname + ":" + port;
         if (databaseName != null && !databaseName.isEmpty()) {
             connectionUrl += "/" + databaseName;

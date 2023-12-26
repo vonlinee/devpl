@@ -152,10 +152,6 @@ public enum DBType {
      */
     private int defaultPort;
 
-    DBType(String name, int port, String desc) {
-        this(name, port, desc, (JDBCDriver[]) null);
-    }
-
     DBType(String name, String description, JDBCDriver... drivers) {
         this.name = name;
         this.description = description;

@@ -5,8 +5,19 @@ import java.util.List;
 
 public class FieldNode {
 
+    /**
+     * 名称
+     */
     private String name;
+
+    /**
+     * 描述信息
+     */
     private String description;
+
+    /**
+     * 数据类型
+     */
     private String dataType;
 
     private List<FieldNode> children;
@@ -59,11 +70,7 @@ public class FieldNode {
 
     @Override
     public String toString() {
-        return "FieldNode{" +
-            "name='" + name + '\'' +
-            ", description='" + description + '\'' +
-            ", dataType='" + dataType + '\'' +
-            '}';
+        return "FieldNode{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", dataType='" + dataType + '\'' + '}';
     }
 
     public void addChild(FieldNode child) {
