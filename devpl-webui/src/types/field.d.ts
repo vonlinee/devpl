@@ -1,3 +1,6 @@
+/**
+ * 字段信息
+ */
 type FieldInfo = {
   /**
    * ID

@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public interface FieldParser {
 
+    String FIELD_KEY = "key";
     String FIELD_NAME = "name";
     String FIELD_TYPE = "type";
     String FIELD_DESCRIPTION = "description";
@@ -19,4 +20,6 @@ public interface FieldParser {
      * @return 字段列表，每个Map代表一个字段信息，包括3个字段：name, type, description
      */
     List<Map<String, Object>> parse(String content);
+
+    FieldParser EMPTY = content -> List.of();
 }

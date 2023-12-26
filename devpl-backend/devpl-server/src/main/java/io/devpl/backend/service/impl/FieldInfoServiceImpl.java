@@ -4,25 +4,25 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import de.marhali.json5.*;
 import io.devpl.backend.dao.FieldInfoMapper;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.interfaces.FieldParser;
-import io.devpl.backend.interfaces.impl.HtmlTableContentFieldParser;
-import io.devpl.backend.interfaces.impl.HtmlTableDomFieldParser;
-import io.devpl.backend.interfaces.impl.SqlFieldParser;
+import io.devpl.backend.interfaces.impl.*;
+import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.FieldInfoService;
-import io.devpl.codegen.parser.java.JavaASTUtils;
-import io.devpl.codegen.parser.java.MetaField;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -30,7 +30,8 @@ import java.util.regex.Pattern;
 @Service
 public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo> implements FieldInfoService {
 
-    private final Json5 json5 = new Json5(Json5Options.builder().build().remainComment(true));
+    @Resource
+    CrudService crudService;
 
     /**
      * Java标识符正则规则
@@ -63,25 +64,21 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     public List<FieldInfo> parseFields(FieldParseParam param) {
         String type = param.getType();
         String content = param.getContent();
-        List<FieldInfo> fieldInfoList = new ArrayList<>();
+        FieldParser parser = FieldParser.EMPTY;
         if ("java".equalsIgnoreCase(type)) {
-            fieldInfoList.addAll(parseJavaFields(param.getContent()));
+            parser = new JavaFieldParser();
         } else if ("json".equalsIgnoreCase(type)) {
-            fieldInfoList.addAll(parseFieldsFromJson(content));
+            parser = new JsonFieldParser();
         } else if ("html1".equalsIgnoreCase(type)) {
             String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
-            HtmlTableContentFieldParser parser = new HtmlTableContentFieldParser();
-            parser.setColumnMapping(columnMapping);
-            fieldInfoList = convertParseResultToFields(parser.parse(content));
+            parser = new HtmlTableContentFieldParser(columnMapping);
         } else if ("html2".equalsIgnoreCase(type)) {
             String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
-            FieldParser parser = new HtmlTableDomFieldParser(columnMapping);
-            fieldInfoList = convertParseResultToFields(parser.parse(content));
+            parser = new HtmlTableDomFieldParser(columnMapping);
         } else if ("sql".equalsIgnoreCase(type)) {
-            SqlFieldParser fieldParser = new SqlFieldParser();
-            fieldInfoList = convertParseResultToFields(fieldParser.parse(content));
+            parser = new SqlFieldParser();
         }
-        return fieldInfoList;
+        return convertParseResultToFields(parser.parse(content));
     }
 
     private List<FieldInfo> convertParseResultToFields(List<Map<String, Object>> fields) {
@@ -116,10 +113,6 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         return saveBatch(fieldInfoList);
     }
 
-    private void parseFieldsFromSql() {
-
-    }
-
     /**
      * 查询所有的字段Key标识符
      *
@@ -130,65 +123,8 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         return baseMapper.selectFieldKeys();
     }
 
-    /**
-     * 仅支持单层JSON对象
-     *
-     * @param json JSON字符串，支持JSON5格式
-     * @return 字段列表
-     */
-    public List<FieldInfo> parseFieldsFromJson(String json) {
-        try {
-            List<FieldInfo> res = new ArrayList<>();
-            Json5Element root = json5.parse(json);
-            if (root.isJson5Object()) {
-                Json5Object obj = root.getAsJson5Object();
-                for (Map.Entry<String, Json5Element> entry : obj.entrySet()) {
-                    FieldInfo fieldInfo = new FieldInfo();
-                    fieldInfo.setFieldKey(entry.getKey());
-
-                    Json5Element value = entry.getValue();
-
-                    if (value.isJson5Primitive()) {
-                        Json5Primitive primitive = value.getAsJson5Primitive();
-                        if (primitive.isBoolean()) {
-                            fieldInfo.setDataType("Boolean");
-                        } else if (primitive.isString()) {
-                            fieldInfo.setDataType("String");
-                        } else if (primitive.isNumber()) {
-                            fieldInfo.setDataType("Number");
-                        }
-                    }
-                    fieldInfo.setDefaultValue(value.toString());
-                    Json5Comment comment = obj.getComment(entry.getKey());
-                    if (comment != null) {
-                        fieldInfo.setDescription(comment.getText());
-                    }
-                    res.add(fieldInfo);
-                }
-            }
-            return res;
-        } catch (Exception exception) {
-            log.error("[字段解析 JSON] 解析失败", exception);
-        }
-        return Collections.emptyList();
-    }
-
-    private List<FieldInfo> parseJavaFields(String content) {
-        try {
-            List<MetaField> metaFields = JavaASTUtils.parseFields(content);
-            List<FieldInfo> res = new ArrayList<>();
-            for (MetaField metaField : metaFields) {
-                FieldInfo fieldInfo = new FieldInfo();
-                fieldInfo.setFieldKey(metaField.getIdentifier());
-                fieldInfo.setFieldName(metaField.getName());
-                fieldInfo.setDescription(metaField.getDescription());
-                fieldInfo.setDataType(metaField.getDataType());
-                res.add(fieldInfo);
-            }
-            return res;
-        } catch (IOException e) {
-            log.error("[字段解析 JAVA] 解析失败", e);
-        }
-        return Collections.emptyList();
+    @Override
+    public boolean addFieldGroup(List<FieldGroup> groups) {
+        return crudService.saveBatch(groups);
     }
 }

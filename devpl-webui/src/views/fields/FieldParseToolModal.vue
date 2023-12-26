@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { reactive, ref, toRaw } from "vue";
-import { ElMessage, ElTableColumn, TabsPaneContext } from "element-plus";
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { ElMessage, ElTableColumn } from "element-plus";
 import { apiParseFields } from "@/api/fields";
 import { isBlank } from "@/utils/tool";
 import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
+import FieldParserInput from "./FieldParserInput.vue";
 
-const activeTabName = ref("java");
 const modalVisible = ref();
-
-const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
-
-};
 
 const init = () => {
   modalVisible.value = true;
@@ -24,45 +19,11 @@ defineExpose({
 
 const fields = ref<FieldInfo[]>();
 
-type MonacoEditorType = typeof MonacoEditor;
-
-const javaEditorRef = ref<MonacoEditorType>();
-// 仅支持mysql
-const sqlEditorRef = ref<MonacoEditorType>();
-// 支持json5
-const jsonEditorRef = ref<MonacoEditorType>();
-// TS/JS
-const tsOrJsEditorRef = ref<MonacoEditorType>();
-// html文本解析
-const html1EditorRef = ref<MonacoEditorType>();
-// html dom文本解析
-const html2EditorRef = ref<MonacoEditorType>();
+const fieldParserInputRef = ref()
 
 const parseFields = () => {
-  const inputType: string = activeTabName.value;
-  let text = "";
-  switch (inputType) {
-    case "java":
-      text = javaEditorRef.value?.getText();
-      break;
-    case "sql":
-      text = sqlEditorRef.value?.getText();
-      break;
-    case "json":
-      text = jsonEditorRef.value?.getText();
-      break;
-    case "ts/js":
-      text = tsOrJsEditorRef.value?.getText();
-      break;
-    case "html1":
-      text = html1EditorRef.value?.getText();
-      break;
-    case "html2":
-      text = html2EditorRef.value?.getText();
-      break;
-    default:
-      break;
-  }
+  const inputType: string = fieldParserInputRef.value.getInputType()
+  let text = fieldParserInputRef.value.getParseableText()
   if (isBlank(text)) {
     ElMessage("输入文本为空");
     return;
@@ -111,60 +72,12 @@ const columnMappingForm = reactive({
 </script>
 
 <template>
-  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false"
-             width="80%"
-             height="80%"
-             :z-index="2000"
-             @close="onModalClose">
+  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false" width="80%"
+    height="80%" :z-index="2000" @close="onModalClose">
     <template #default>
       <Splitpanes>
         <Pane>
-          <el-tabs v-model="activeTabName" class="demo-tabs" @tab-click="handleTabClicked" height="600px">
-            <el-tab-pane label="Java" name="java">
-              <monaco-editor ref="javaEditorRef" language="java" height="480px"></monaco-editor>
-            </el-tab-pane>
-            <el-tab-pane label="SQL" name="sql">
-              <monaco-editor ref="sqlEditorRef" language="sql" height="480px"></monaco-editor>
-            </el-tab-pane>
-            <el-tab-pane label="JSON" name="json">
-              <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
-            </el-tab-pane>
-            <el-tab-pane label="TS/JS" name="ts/js">
-              <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
-            </el-tab-pane>
-            <el-tab-pane label="HTML文本" name="html1">
-              <monaco-editor ref="html1EditorRef" language="text" height="480px"></monaco-editor>
-              <el-card>
-                <el-form :form="columnMappingForm" label-width="150" label-position="left">
-                  <el-form-item label="字段名称列">
-                    <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
-                  </el-form-item>
-                  <el-form-item label="字段数据类型列">
-                    <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
-                  </el-form-item>
-                  <el-form-item label="字段描述信息列">
-                    <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
-                  </el-form-item>
-                </el-form>
-              </el-card>
-            </el-tab-pane>
-            <el-tab-pane label="HTML Dom" name="html2">
-              <monaco-editor ref="html2EditorRef" language="html" height="480px"></monaco-editor>
-              <el-card>
-                <el-form :form="columnMappingForm" label-width="150" label-position="left">
-                  <el-form-item label="字段名称列">
-                    <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
-                  </el-form-item>
-                  <el-form-item label="字段数据类型列">
-                    <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
-                  </el-form-item>
-                  <el-form-item label="字段描述信息列">
-                    <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
-                  </el-form-item>
-                </el-form>
-              </el-card>
-            </el-tab-pane>
-          </el-tabs>
+          <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
         </Pane>
         <Pane>
           <el-table :data="fields" border height="100%">
@@ -188,7 +101,7 @@ const columnMappingForm = reactive({
 </template>
 
 <style scoped lang="scss">
-.demo-tabs > .el-tabs__content {
+.demo-tabs>.el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

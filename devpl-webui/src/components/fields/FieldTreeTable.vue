@@ -1,17 +1,13 @@
 <template>
-  <el-table ref="fieldTable" border
-            row-key="id" :data="tableData"
-            @cell-mouse-enter="cellMouseEnterHandler"
-            @expand-change="handleExpandChange"
-            default-expand-all>
+  <el-table ref="fieldTable" border row-key="id" :data="tableData" @expand-change="handleExpandChange" default-expand-all>
     <el-table-column type="selection" width="35" align="center"></el-table-column>
     <el-table-column prop="fieldKey" label="Key"></el-table-column>
     <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
+    <template #empty>
+      <el-text @click="insertEmptyRow">暂无数据</el-text>
+    </template>
   </el-table>
-  <el-button @click="() => {
-    console.log(fieldTable)
-  }"></el-button>
 </template>
 
 <script lang="ts" setup>
@@ -21,42 +17,21 @@ import Sortable from "sortablejs";
 const children = "children";
 const rowKey = "id";
 
-const tableData = ref<FieldInfo[]>([
-  {
-    id: 1,
-    fieldKey: "param",
-    fieldName: "param",
-    children: [{
-      id: 11,
-      parentId: 1,
-      fieldKey: "name",
-      fieldName: "name"
-    }, {
-      id: 12,
-      parentId: 1,
-      fieldKey: "value",
-      fieldName: "value"
-    }]
-  }, {
-    id: 2,
-    fieldKey: "param1",
-    fieldName: "param1",
-    children: [{
-      id: 21,
-      parentId: 2,
-      fieldKey: "name1",
-      fieldName: "name1"
-    }, {
-      id: 22,
-      parentId: 2,
-      fieldKey: "value1",
-      fieldName: "value1"
-    }]
-  }
-]);
+const tableData = ref<FieldInfo[]>([]);
 const fieldTable = ref();
 // 平铺数组
 const flattArray = ref<any[]>([]);
+
+/**
+ * 插入空行
+ */
+const insertEmptyRow = () => {
+  tableData.value.push({
+    id: "",
+    fieldKey: "",
+    fieldName: ""
+  })
+}
 
 /**
  * 处理展开行变化
@@ -69,12 +44,13 @@ function handleExpandChange(row: any, expandedRows: any[]) {
 
 /**
  * 记录拖拽开始和结束时的位置
+ * TODO 拖拽在弹窗中使用不生效
  */
 const dragData = {
   status: false,
   rowHeight: 0,
   /**
-   * 开始拖拽时鼠标
+   * 开始拖拽时鼠标top距离
    */
   startTop: 0,
   startBottom: 0,
@@ -86,16 +62,12 @@ const dragData = {
   endY: 0
 };
 
-const cellMouseEnterHandler = (row: any, column: any, cell: any, event: any) => {
-
-};
-
 /**
- * 处理数据
+ * 处理数据，给所有数据加上id字段及parentIds字段
  */
 function getDealData() {
   const result: any[] = [];
-  const func = function(arr: any[], parent: any) {
+  const func = function (arr: any[], parent: any) {
     arr.forEach(item => {
       const obj = Object.assign(item);
       if (parent) {
@@ -141,7 +113,7 @@ function changeData(sourceObj: any, targetObj: any, oldIndex: number, newIndex: 
   // 将表格拖动之前的数据复制一份
   const data = Object.assign(tableData.value);
 
-  const func = function(arr: any, parent: any) {
+  const func = function (arr: any, parent: any) {
     for (let i = arr.length - 1; i >= 0; i--) {
       const item = arr[i];
       // 判断是否是原来拖动的节点，如果是，则删除
@@ -179,6 +151,7 @@ function changeData(sourceObj: any, targetObj: any, oldIndex: number, newIndex: 
     }
   };
 
+  debugger
   console.log("目标位置的父节点", targetObj.parentIds);
 
   // 检测是否是将父级拖到子级下面，如果是则数据不变，界面重新回到原数据
@@ -242,7 +215,7 @@ const rowDrop = () => {
      *
      * @param e Sortable.SortableEvent
      */
-    onStart: function(e: Sortable.SortableEvent) {
+    onStart: function (e: Sortable.SortableEvent) {
       // element index within parent
       // 记录开始时的鼠标的位置
       const _e = e as any;
@@ -303,8 +276,31 @@ onMounted(() => {
   rowDrop();
 });
 
+defineExpose({
+  /**
+   * 获取所有字段信息
+   */
+  getFields() {
+    return tableData.value
+  },
+  /**
+   * 新增字段信息
+   * @param fields 字段信息列表 
+   */
+  addFields(fields: FieldInfo[]) {
+    let newFields = [...tableData.value]
+    fields.forEach(f => newFields.push(f))
+    tableData.value = newFields
+  },
+  /**
+   * 覆盖所有字段信息
+   * @param fields 字段信息列表 
+   */
+  setFields(newFields: FieldInfo[]) {
+    tableData.value = newFields
+  }
+})
+
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

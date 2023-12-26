@@ -24,7 +24,6 @@ public abstract class MappingFieldParserAdapter implements FieldParser {
         if (CollectionUtils.isEmpty(rows)) {
             return Collections.emptyList();
         }
-
         return convertRowsAsFields(rows);
     }
 

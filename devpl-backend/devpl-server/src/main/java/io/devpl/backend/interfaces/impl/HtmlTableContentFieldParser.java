@@ -5,6 +5,10 @@ import java.util.List;
 
 public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
 
+    public HtmlTableContentFieldParser(String[] columnMapping) {
+        setColumnMapping(columnMapping);
+    }
+
     /**
      * @param content 直接复制浏览器页面上的表格内容，复制的结果是纯文本（暂时未发现有什么特定的规则）
      * @return 字段信息

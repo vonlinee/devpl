@@ -1,5 +1,5 @@
 /**
- * 字段节点
+ * 字段表树节点
  */
 type FieldTreeNode = {
   /**

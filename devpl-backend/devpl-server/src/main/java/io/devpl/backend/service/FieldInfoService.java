@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
     boolean saveFieldsInfos(List<FieldInfo> fieldInfo);
 
     List<String> listFieldKeys();
+
+    boolean addFieldGroup(List<FieldGroup> groups);
 }

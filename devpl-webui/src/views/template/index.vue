@@ -7,7 +7,7 @@
       <el-form-item>
         <el-select v-model="state.queryForm.templateType">
           <el-option v-for="templateType in templateTypes" :key="templateType.provider" :value="templateType.provider"
-                     :label="templateType.providerName"></el-option>
+            :label="templateType.providerName"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -21,19 +21,21 @@
       </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
-              @selection-change="selectionChangeHandle">
+      @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="templateId" label="模板ID" header-align="center" align="center"
-                       width="80px"></el-table-column>
-      <el-table-column prop="templateName" label="模板名称" header-align="center"
-                       align="center"></el-table-column>
-      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
-                       align="center"></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
-                       align="center" width="300px"></el-table-column>
+      <el-table-column prop="templateId" label="模板ID" header-align="center" align="center" width="80px"></el-table-column>
+      <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
+        <template #default="scope">
+          <el-text class="mx-1" type="primary" @click="showTemplateEditDialog(scope.row)" style="cursor: pointer;">{{ scope.row.templateName
+          }}</el-text>
+        </template>
+      </el-table-column>
+      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px" align="center"></el-table-column>
+      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
+        width="300px"></el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
         <template #default="scope">
-          <el-button type="primary" link @click="showTemplateEditDialog(scope.row)">模板</el-button>
+          <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">参数表</el-button>
           <el-button v-if="!scope.row.internal" type="primary" link @click="addOrUpdateHandle(scope.row)">修改</el-button>
           <el-button v-if="!scope.row.internal" type="primary" link @click="deleteBatchHandle(scope.row.templateId)">
             删除
@@ -41,15 +43,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="state.page"
-      :page-sizes="state.pageSizes || []"
-      :page-size="state.limit"
-      :total="state.total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    >
+    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes || []" :page-size="state.limit"
+      :total="state.total" layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle">
     </el-pagination>
 
     <template-viewer ref="templateContentEditorRef"></template-viewer>
