@@ -2,7 +2,7 @@ package io.devpl.fxui.app;
 
 import io.devpl.fxui.components.Modal;
 import io.devpl.fxui.view.FileHelperView;
-import io.devpl.fxui.mvvm.View;
+import io.fxtras.mvvm.View;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

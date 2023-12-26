@@ -1,12 +1,14 @@
 package io.devpl.fxui.controller.domain;
 
-import io.devpl.fxui.tools.filestructure.TopLevelClassItem;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.devpl.fxui.controls.Modal;
 import io.devpl.fxui.tools.filestructure.FieldItem;
 import io.devpl.fxui.tools.filestructure.JavaFileStrucutreTreeView;
 import io.devpl.fxui.tools.filestructure.MethodItem;
-import io.devpl.fxui.mvvm.View;
+import io.devpl.fxui.tools.filestructure.TopLevelClassItem;
+import io.devpl.fxui.view.field.FieldParseToolView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
+import io.fxtras.mvvm.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
@@ -28,6 +30,8 @@ public class ClassDefView extends FxmlView {
 
     private JavaFileStrucutreTreeView jfsTreeView;
 
+    FieldParseToolView fieldParseToolView = new FieldParseToolView();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         jfsTreeView = new JavaFileStrucutreTreeView();
@@ -45,5 +49,12 @@ public class ClassDefView extends FxmlView {
         fieldItem.setValue("name");
         classItem.addField(fieldItem);
         jfsTreeView.addClass(classItem);
+    }
+
+    @FXML
+    public void showFieldImportModal(ActionEvent actionEvent) {
+        Modal.show(actionEvent, fieldParseToolView, event -> {
+            System.out.println(fieldParseToolView.getFields());
+        });
     }
 }

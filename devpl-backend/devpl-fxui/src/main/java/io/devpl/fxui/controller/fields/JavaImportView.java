@@ -6,14 +6,13 @@ import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
 import io.devpl.fxui.utils.FileChooserDialog;
 import io.devpl.fxui.model.FieldSpec;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

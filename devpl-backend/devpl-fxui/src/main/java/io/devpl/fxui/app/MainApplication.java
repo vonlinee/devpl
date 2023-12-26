@@ -5,7 +5,7 @@ import io.devpl.fxui.components.RouterView;
 import io.devpl.fxui.controller.template.TemplateManageView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
-import io.devpl.fxui.mvvm.View;
+import io.fxtras.mvvm.View;
 import io.devpl.fxui.view.IndexView;
 import io.devpl.fxui.view.TypeMappingTable;
 import javafx.application.Application;

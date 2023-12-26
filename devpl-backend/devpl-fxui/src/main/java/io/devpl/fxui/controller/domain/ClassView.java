@@ -1,12 +1,10 @@
 package io.devpl.fxui.controller.domain;
 
 import io.devpl.codegen.jdbc.CommonJavaType;
-import io.devpl.codegen.type.JavaType;
 import io.devpl.fxui.model.FieldInfo;
-import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.StringConverters;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,10 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.converter.DefaultStringConverter;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 
 @FxmlBinder(location = "layout/class.fxml")
 public class ClassView extends FxmlView {

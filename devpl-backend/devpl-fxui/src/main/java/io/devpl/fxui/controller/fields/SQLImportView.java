@@ -2,7 +2,6 @@ package io.devpl.fxui.controller.fields;
 
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.jdbc.CommonJavaType;
-import io.devpl.codegen.parser.SqlParserUtils;
 import io.devpl.fxui.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
@@ -11,8 +10,8 @@ import io.devpl.fxui.model.ConnectionRegistry;
 import io.devpl.fxui.model.FieldInfo;
 import io.devpl.fxui.utils.DBUtils;
 import io.fxtras.Alerts;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;

@@ -2,8 +2,8 @@ package io.devpl.fxui.controller.template;
 
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 import io.devpl.sdk.io.FileUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

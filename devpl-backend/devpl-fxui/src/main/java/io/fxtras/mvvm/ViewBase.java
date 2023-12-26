@@ -1,4 +1,4 @@
-package io.devpl.fxui.mvvm;
+package io.fxtras.mvvm;
 
 /**
  * 基于Java代码的视图控制器

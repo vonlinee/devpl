@@ -10,8 +10,16 @@ module devpl.fxui {
 
     exports io.devpl.fxui.controller.template;
     exports io.devpl.fxui to javafx.graphics, javafx.fxml;
+
+    /* 开放反射权限 */
     opens io.devpl.fxui;
     opens io.devpl.fxui.app;
+    opens io.devpl.fxui.controller;
+    opens io.devpl.fxui.controller.mbg;
+    opens io.devpl.fxui.controller.domain;
+    opens io.devpl.fxui.controller.fields;
+    opens io.devpl.fxui.controller.dbconn;
+
     exports io.devpl.fxui.model;
     opens io.devpl.fxui.model;
 

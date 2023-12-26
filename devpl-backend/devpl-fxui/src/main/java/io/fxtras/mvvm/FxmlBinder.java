@@ -1,4 +1,4 @@
-package io.devpl.fxui.mvvm;
+package io.fxtras.mvvm;
 
 import java.lang.annotation.*;
 

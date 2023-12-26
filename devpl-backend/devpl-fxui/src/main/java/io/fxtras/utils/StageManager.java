@@ -1,6 +1,6 @@
 package io.fxtras.utils;
 
-import io.devpl.fxui.mvvm.View;
+import io.fxtras.mvvm.View;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;

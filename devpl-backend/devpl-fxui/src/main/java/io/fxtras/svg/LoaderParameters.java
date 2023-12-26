@@ -33,7 +33,7 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
 package io.fxtras.svg;
 
 /**
- * The parameters used for loading a SVG file or URL. By default:
+ * The parameters used for loading a SVG file or URL. By default,
  * <ul>
  * <li>No styleSheets is used</li>
  * <li>No scaling is applied</li>

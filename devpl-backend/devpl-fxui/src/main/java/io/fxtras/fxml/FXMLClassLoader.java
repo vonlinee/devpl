@@ -1,5 +1,7 @@
 package io.fxtras.fxml;
 
+import io.devpl.fxui.utils.ResourceLoader;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -15,8 +17,10 @@ public class FXMLClassLoader extends ClassLoader {
     private final Map<String, Class<?>> classes = new HashMap<>();
     private final ClassLoader parent;
 
-    // new MyClassLoader(FXMLLoader.getDefaultClassLoader());
     public FXMLClassLoader(ClassLoader parent) {
+        if (parent == null) {
+            parent = ClassLoader.getSystemClassLoader();
+        }
         this.parent = parent;
     }
 
@@ -45,9 +49,13 @@ public class FXMLClassLoader extends ClassLoader {
         }
     }
 
-    // ========= delegating methods =============
     @Override
     public URL getResource(String name) {
+        if (name.endsWith("fxml")) {
+            // FXMLLoader如果未设置ClassLoader，使用AppClassLoader进行加载FXML文件
+            // ClassLoader#getResource(name) 返回为null
+            return ResourceLoader.load(name);
+        }
         return parent.getResource(name);
     }
 

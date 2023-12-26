@@ -10,9 +10,9 @@ import io.devpl.fxui.controller.TableCustomizationView;
 import io.devpl.fxui.event.EventUtils;
 import io.fxtras.Alerts;
 import io.fxtras.PropertyBinder;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
-import io.devpl.fxui.mvvm.View;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
+import io.fxtras.mvvm.View;
 import io.fxtras.utils.StageManager;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -287,7 +287,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
                 sb.append(dir).append("\n");
             }
         }
-        if (sb.length() > 0) {
+        if (!sb.isEmpty()) {
             Alerts.confirm("以下目录不存在, 是否创建?\n" + sb).showAndWait().ifPresent(buttonType -> {
                 if (ButtonType.OK == buttonType) {
                     try {

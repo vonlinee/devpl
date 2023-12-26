@@ -1,4 +1,4 @@
-package io.devpl.fxui.mvvm;
+package io.fxtras.mvvm;
 
 import javafx.event.Event;
 import javafx.scene.Node;

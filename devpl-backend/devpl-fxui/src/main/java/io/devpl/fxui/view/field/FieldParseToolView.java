@@ -20,7 +20,6 @@ public class FieldParseToolView extends BorderPane {
         tabPane = new TabPane();
         treeTable = new FieldTreeTable();
 
-
         addTab(new SqlParseView());
         addTab(new MyBatisParseView());
 
@@ -56,5 +55,9 @@ public class FieldParseToolView extends BorderPane {
         Tab tab = new Tab(view.getName(), view);
         tab.setClosable(false);
         tabPane.getTabs().add(tab);
+    }
+
+    public final List<FieldNode> getFields() {
+        return treeTable.getFields();
     }
 }

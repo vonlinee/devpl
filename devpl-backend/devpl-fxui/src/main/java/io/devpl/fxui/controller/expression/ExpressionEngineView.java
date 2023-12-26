@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller.expression;
 
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 
 import java.net.URL;
 import java.util.ResourceBundle;

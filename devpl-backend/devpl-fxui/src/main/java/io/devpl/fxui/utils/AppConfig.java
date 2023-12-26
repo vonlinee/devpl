@@ -27,6 +27,7 @@ public class AppConfig {
 
     /**
      * TODO
+     *
      * @return JdbcTemplate
      */
     public static JdbcTemplate initJdbcTemplate() {
@@ -62,8 +63,8 @@ public class AppConfig {
     }
 
     public static List<ConnectionConfig> listConnectionInfo() {
-        try (Connection conn = getConnection();) {
-            String sql = "select * from connection_config";
+        try (Connection conn = getConnection()) {
+            String sql = "select * from db_conn_info";
             ResultSet rs = DBUtils.executeQuery(conn, sql);
             List<ConnectionConfig> results = new ArrayList<>();
             while (rs.next()) {
@@ -71,7 +72,7 @@ public class AppConfig {
                 item.setId(rs.getString("id"));
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
-                item.setConnectionName(rs.getString("name"));
+                item.setConnectionName(rs.getString("conn_name"));
                 item.setHost(rs.getString("host"));
                 item.setDbType(rs.getString("db_type"));
                 item.setUsername(rs.getString("username"));
@@ -87,6 +88,7 @@ public class AppConfig {
 
     /**
      * 根据ID删除连接信息
+     *
      * @param connectionInfos 连接信息列表
      * @return 删除条数
      */

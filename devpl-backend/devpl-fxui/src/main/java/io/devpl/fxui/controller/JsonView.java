@@ -2,8 +2,8 @@ package io.devpl.fxui.controller;
 
 import com.squareup.javapoet.*;
 import de.marhali.json5.*;
-import io.devpl.fxui.mvvm.FxmlBinder;
-import io.devpl.fxui.mvvm.FxmlView;
+import io.fxtras.mvvm.FxmlBinder;
+import io.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

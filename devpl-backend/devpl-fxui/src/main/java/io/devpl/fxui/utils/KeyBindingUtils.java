@@ -1,12 +1,9 @@
-package io.devpl.fxui.common.console;
+package io.devpl.fxui.utils;
 
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-/**
- * @author Yuhi Ishikura
- */
 public class KeyBindingUtils {
 
     static void installEmacsKeyBinding(TextInputControl textInputControl) {

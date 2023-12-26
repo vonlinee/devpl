@@ -1,8 +1,9 @@
-package io.devpl.fxui.mvvm;
+package io.fxtras.mvvm;
 
 import io.devpl.fxui.utils.ResourceLoader;
 import io.fxtras.Alerts;
 import io.fxtras.eventbus.JavaFXMainThreadSupport;
+import io.fxtras.fxml.FXMLClassLoader;
 import io.fxtras.utils.WeakValueHashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,10 +13,8 @@ import org.greenrobot.eventbus.PostEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -125,6 +124,7 @@ public abstract class View implements SceneGraphAccessor {
                 }
                 URL resource = ResourceLoader.load(fxmlLocation);
                 FXMLLoader fxmlLoader = new FXMLLoader(resource);
+                fxmlLoader.setClassLoader(new FXMLClassLoader(null));
                 fxmlLoader.setControllerFactory(param -> {
                     Object view1 = viewCache.get(param);
                     if (view1 == null) {
