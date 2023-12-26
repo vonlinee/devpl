@@ -127,4 +127,9 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     public boolean addFieldGroup(List<FieldGroup> groups) {
         return crudService.saveBatch(groups);
     }
+
+    @Override
+    public String getSampleText(String type) {
+        return null;
+    }
 }

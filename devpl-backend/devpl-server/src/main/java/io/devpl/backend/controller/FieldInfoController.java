@@ -2,9 +2,12 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.param.FieldGroupListParam;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
+import io.devpl.backend.service.FieldGroupService;
 import io.devpl.backend.service.FieldInfoService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,8 @@ public class FieldInfoController {
 
     @Resource
     FieldInfoService fieldInfoService;
+    @Resource
+    FieldGroupService fieldGroupService;
 
     /**
      * 分页查询列表
@@ -79,5 +84,24 @@ public class FieldInfoController {
     @PostMapping(value = "/parse")
     public Result<List<FieldInfo>> parseFields(@RequestBody FieldParseParam param) {
         return Result.ok(fieldInfoService.parseFields(param));
+    }
+
+    /**
+     * 字段解析 - 获取示例文本
+     *
+     * @param type 输入类型
+     * @return 解析得到的字段信息
+     */
+    @GetMapping(value = "/parse/sample")
+    public Result<String> getFieldParseSampleText(String type) {
+        return Result.ok(fieldInfoService.getSampleText(type));
+    }
+
+    /**
+     * @return 字段组列表
+     */
+    @GetMapping(value = "/group/page")
+    public ListResult<FieldGroup> pageFieldGroups(FieldGroupListParam param) {
+        return ListResult.ok(fieldGroupService.listPage(param));
     }
 }

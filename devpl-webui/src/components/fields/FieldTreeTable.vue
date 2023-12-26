@@ -1,5 +1,6 @@
 <template>
-  <el-table ref="fieldTable" border row-key="id" :data="tableData" @expand-change="handleExpandChange" default-expand-all>
+  <el-table ref="fieldTable" border row-key="id" :data="tableData" @expand-change="handleExpandChange"
+            default-expand-all>
     <el-table-column type="selection" width="35" align="center"></el-table-column>
     <el-table-column prop="fieldKey" label="Key"></el-table-column>
     <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
@@ -30,8 +31,8 @@ const insertEmptyRow = () => {
     id: "",
     fieldKey: "",
     fieldName: ""
-  })
-}
+  });
+};
 
 /**
  * 处理展开行变化
@@ -44,7 +45,6 @@ function handleExpandChange(row: any, expandedRows: any[]) {
 
 /**
  * 记录拖拽开始和结束时的位置
- * TODO 拖拽在弹窗中使用不生效
  */
 const dragData = {
   status: false,
@@ -66,8 +66,12 @@ const dragData = {
  * 处理数据，给所有数据加上id字段及parentIds字段
  */
 function getDealData() {
+  // 先给id赋值，保证唯一性
+  for (let i = 0; i < tableData.value.length; i++) {
+    tableData.value[i].id = i;
+  }
   const result: any[] = [];
-  const func = function (arr: any[], parent: any) {
+  const func = function(arr: any[], parent: any) {
     arr.forEach(item => {
       const obj = Object.assign(item);
       if (parent) {
@@ -113,12 +117,12 @@ function changeData(sourceObj: any, targetObj: any, oldIndex: number, newIndex: 
   // 将表格拖动之前的数据复制一份
   const data = Object.assign(tableData.value);
 
-  const func = function (arr: any, parent: any) {
+  const func = function(arr: any, parent: any) {
     for (let i = arr.length - 1; i >= 0; i--) {
       const item = arr[i];
       // 判断是否是原来拖动的节点，如果是，则删除
       if (item[rowKey] === sourceObj[rowKey] && (!parent || parent && parent[rowKey] !== targetObj[rowKey])) {
-        console.log("移除第" + i + "个元素");
+        // console.log("移除第" + i + "个元素");
         arr.splice(i, 1);
         flag++;
       }
@@ -151,8 +155,7 @@ function changeData(sourceObj: any, targetObj: any, oldIndex: number, newIndex: 
     }
   };
 
-  debugger
-  console.log("目标位置的父节点", targetObj.parentIds);
+  // console.log("目标位置的父节点", targetObj.parentIds);
 
   // 检测是否是将父级拖到子级下面，如果是则数据不变，界面重新回到原数据
   if (targetObj.parentIds) {
@@ -160,7 +163,7 @@ function changeData(sourceObj: any, targetObj: any, oldIndex: number, newIndex: 
     if (targetObj.parentIds.findIndex((_: any) => _ === sourceObj["id"]) === -1) {
       func(data, null);
     } else {
-      console.log("不能将父级拖到子级下面");
+      // console.log("不能将父级拖到子级下面");
     }
   } else {
     func(data, null);
@@ -215,7 +218,7 @@ const rowDrop = () => {
      *
      * @param e Sortable.SortableEvent
      */
-    onStart: function (e: Sortable.SortableEvent) {
+    onStart: function(e: Sortable.SortableEvent) {
       // element index within parent
       // 记录开始时的鼠标的位置
       const _e = e as any;
@@ -281,25 +284,27 @@ defineExpose({
    * 获取所有字段信息
    */
   getFields() {
-    return tableData.value
+    return tableData.value;
   },
   /**
    * 新增字段信息
-   * @param fields 字段信息列表 
+   * @param fields 字段信息列表
    */
   addFields(fields: FieldInfo[]) {
-    let newFields = [...tableData.value]
-    fields.forEach(f => newFields.push(f))
-    tableData.value = newFields
+    let newFields = [...tableData.value];
+    fields.forEach(f => newFields.push(f));
+    tableData.value = newFields;
   },
   /**
    * 覆盖所有字段信息
-   * @param fields 字段信息列表 
+   * @param newFields
    */
-  setFields(newFields: FieldInfo[]) {
-    tableData.value = newFields
+  setFields(newFields?: FieldInfo[]) {
+    if (newFields !== undefined) {
+      tableData.value = newFields;
+    }
   }
-})
+});
 
 </script>
 

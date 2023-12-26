@@ -54,9 +54,7 @@ public abstract class CollectionUtils {
     }
 
     public static <E, T extends Comparable<T>> List<E> sortBy(List<E> list, Function<E, T> keyExtractor, boolean asc) {
-        return list.stream()
-            .sorted(asc ? Comparator.comparing(keyExtractor) : Comparator.comparing(keyExtractor).reversed())
-            .collect(Collectors.toList());
+        return list.stream().sorted(asc ? Comparator.comparing(keyExtractor) : Comparator.comparing(keyExtractor).reversed()).collect(Collectors.toList());
     }
 
     public static <E> List<E> filter(Collection<E> list, Predicate<? super E> filter) {
@@ -208,7 +206,33 @@ public abstract class CollectionUtils {
         return collection.stream().map(key).filter(condition).count();
     }
 
-    public static <E, T> long count(Collection<E> collection, Predicate<E> condition) {
+    /**
+     * 按条件统计某个字段
+     *
+     * @param collection 集合
+     * @param condition  条件
+     * @param <E>        集合元素类型
+     * @return 统计数量，返回Int
+     */
+    public static <E> int counti(Collection<E> collection, Predicate<E> condition) {
+        if (isEmpty(collection)) {
+            return 0;
+        }
+        return (int) collection.stream().filter(condition).count();
+    }
+
+    /**
+     * 按条件统计某个字段
+     *
+     * @param collection 集合
+     * @param condition  条件
+     * @param <E>        集合元素类型
+     * @return 统计数量，返回long
+     */
+    public static <E> long countl(Collection<E> collection, Predicate<E> condition) {
+        if (isEmpty(collection)) {
+            return 0;
+        }
         return collection.stream().filter(condition).count();
     }
 
@@ -222,9 +246,7 @@ public abstract class CollectionUtils {
      * @return 平铺后的集合
      */
     public static <E, R extends Collection<E>> R flatten(Collection<? extends Collection<E>> collection, Collector<E, ?, R> collector) {
-        return collection.stream()
-            .flatMap(Collection::stream)
-            .collect(collector);
+        return collection.stream().flatMap(Collection::stream).collect(collector);
     }
 
     public static <E> boolean anyMatch(List<E> patrolTeams, Predicate<E> condition) {

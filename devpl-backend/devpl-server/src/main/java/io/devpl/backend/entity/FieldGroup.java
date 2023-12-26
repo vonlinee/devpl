@@ -26,6 +26,6 @@ public class FieldGroup implements Serializable {
     /**
      * 字段组名称
      */
-    @TableField(value = "groupName")
+    @TableField(value = "group_name")
     private String groupName;
 }

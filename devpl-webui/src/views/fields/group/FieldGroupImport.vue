@@ -1,5 +1,5 @@
 <template>
-  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="80%" height="80%">
+  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="90%" height="90%">
     <el-row>
       <el-col :span="12">
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
@@ -27,23 +27,22 @@ import { apiParseFields } from "@/api/fields";
 
 const visible = ref();
 
-const fieldParserInputRef = ref()
-const fieldTableRef = ref()
+const fieldParserInputRef = ref();
+const fieldTableRef = ref();
 
 /**
  * 字段映射规则
  * 指定列的索引号(从1开始)或者列名称与字段含义的对应关系
  */
- const columnMappingForm = reactive({
+const columnMappingForm = reactive({
   fieldNameColumn: "1",
   fieldTypeColumn: "2",
   fieldDescColumn: "3"
 });
 
-
 const parseFields = () => {
-  const inputType: string = fieldParserInputRef.value.getInputType()
-  let text = fieldParserInputRef.value.getParseableText()
+  const inputType: string = fieldParserInputRef.value.getInputType();
+  let text = fieldParserInputRef.value.getParseableText();
   if (isBlank(text)) {
     ElMessage("输入文本为空");
     return;
@@ -52,9 +51,10 @@ const parseFields = () => {
     type: inputType, content: text,
     ...toRaw(columnMappingForm)
   }).then((res) => {
-    fieldTableRef.value.setFields(res.data)
+    fieldTableRef.value.setFields(res.data);
   });
 };
+
 
 defineExpose({
   show() {

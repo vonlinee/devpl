@@ -71,3 +71,24 @@ interface FieldParseParam {
 export const apiParseFields = (param: FieldParseParam) => {
   return http.post<FieldInfo[]>("/api/field/parse", param);
 };
+
+/**
+ * 字段组
+ */
+type FiledGroup = {
+  groupName: string
+}
+
+/**
+ * 保存或更新字段
+ * @param pageIndex
+ * @param pageSize
+ * @param param
+ */
+export const apiPageFieldGroup = (pageIndex?: number, pageSize?: number, param?: any) => {
+  return http.get("/api/field/group/page", {
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+    ...param
+  });
+};

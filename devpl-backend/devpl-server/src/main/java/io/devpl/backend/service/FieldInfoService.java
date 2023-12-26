@@ -25,4 +25,12 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
     List<String> listFieldKeys();
 
     boolean addFieldGroup(List<FieldGroup> groups);
+
+    /**
+     * 获取示例文本
+     *
+     * @param type 输入类型
+     * @return 示例文本
+     */
+    String getSampleText(String type);
 }
