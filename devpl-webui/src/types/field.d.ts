@@ -17,7 +17,7 @@ type FieldInfo = {
   /**
    * 字段名，中文名
    */
-  fieldName: string
+  fieldName?: string
   /**
    * 数据类型
    */
@@ -37,39 +37,9 @@ type FieldInfo = {
   /**
    * 子节点
    */
-  children?: FieldInfo[]
-}
-
-/**
- * 字段表树节点
- */
-type FieldTreeNode = {
+  children?: FieldInfo[],
   /**
-   * 唯一ID
-   */
-  id: number
-  /**
-   * 字段名称
-   */
-  label?: string
-  /**
-   * 字段注释
-   */
-  comment?: string
-  /**
-   * 是否正处于编辑状态
+   * 是否处于编辑状态
    */
   editing?: boolean
-  /**
-   * 数据类型
-   */
-  dataType?: string
-  /**
-   * 是否有子节点
-   */
-  hasChildren?: boolean
-  /**
-   * 子节点
-   */
-  children?: FieldTreeNode[]
 }

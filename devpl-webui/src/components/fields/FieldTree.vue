@@ -3,31 +3,33 @@
  -->
 <template>
   <div class="field-tree-container" :style="containerStyle">
-    <el-tree :data="dataSource" height="100%" :show-checkbox="selectable" default-expand-all :expand-on-click-node="false"
-      draggable node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
-      @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
-      @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
+    <el-tree :data="dataSource" height="100%" :show-checkbox="selectable" default-expand-all
+             :expand-on-click-node="false"
+             draggable node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
+             @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
+             @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
       <template #default="{ node, data }">
         <span class="field-tree-node">
           <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ node.label }}</span>
-          <input ref="currentInputRef" v-if="data.editing || false" :value="data.label" @blur="data.editing = false"
-            @change="(event) => onInputChange(event, data)" @keyup.enter="(event) => onInputChange(event, data)" />
+          <input ref="currentInputRef" v-if="data.editing || false" :value="data.fieldKey" @blur="data.editing = false"
+                 @change="(event) => onInputChange(event, data)" @keyup.enter="(event) => onInputChange(event, data)" />
           <span>
             <el-button link :icon="Plus" @click="append(data)"></el-button>
-            <el-button v-if="node.label !== 'Root'" link :icon="Minus" @click="remove(node, data)"></el-button>
+            <el-button v-if="node.fieldKey !== 'Root'" link :icon="Minus" @click="remove(node, data)"></el-button>
           </span>
         </span>
       </template>
 
       <template #empty>
-        没有字段 <el-button link @click="addIfEmpty">添加</el-button>
+        没有字段
+        <el-button link @click="addIfEmpty">添加</el-button>
       </template>
     </el-tree>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { StyleValue, nextTick, reactive, ref } from "vue";
+import { StyleValue, nextTick, reactive, ref, onMounted, computed } from "vue";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import type { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 import type {
@@ -35,15 +37,16 @@ import type {
   NodeDropType
 } from "element-plus/es/components/tree/src/tree.type";
 import { Minus, Plus } from "@element-plus/icons";
+import { watch } from "vue";
 
 const currentInputRef = ref();
 
-const onInputChange = (event: Event, data: FieldTreeNode) => {
-  data.label = (event.target as HTMLInputElement).value;
+const onInputChange = (event: Event, data: FieldInfo) => {
+  data.fieldKey = (event.target as HTMLInputElement).value;
   data.editing = false;
 };
 
-const fireInput = (data: FieldTreeNode) => {
+const fireInput = (data: FieldInfo) => {
   data.editing = true;
   nextTick(() => currentInputRef.value.focus());
 };
@@ -51,24 +54,28 @@ const fireInput = (data: FieldTreeNode) => {
 /**
  * 组件属性
  */
-type Props = {
-  selectable: boolean,
-  height?: string
+type FieldTreeProps = {
+  selectable?: boolean,
+  height?: string,
+  // 字段
+  fields: FieldInfo[]
 }
 
-const { selectable, height } = withDefaults(defineProps<Props>(), {
+const { selectable, height, fields } = withDefaults(defineProps<FieldTreeProps>(), {
   selectable: false,
   height: "500px"
 });
+const dataSource = ref<FieldInfo[]>(fields);
 
 const addIfEmpty = () => {
   if (dataSource.value.length == 0) {
     dataSource.value.push({
       id: 0,
-      editing: true
-    })
+      editing: true,
+      fieldKey: ""
+    });
   }
-}
+};
 
 /**
  * 容器样式
@@ -85,8 +92,8 @@ let id = 1000;
  * 追加节点
  * @param data 节点数据
  */
-const append = (data: FieldTreeNode) => {
-  const newChild = { id: id++, label: "New Item", children: [] };
+const append = (data: FieldInfo) => {
+  const newChild = { id: id++, fieldKey: "New Item", children: [] } as FieldInfo;
   if (!data.children) {
     data.children = [];
   }
@@ -99,12 +106,12 @@ const append = (data: FieldTreeNode) => {
  * @param node
  * @param data
  */
-const remove = (node: Node, data: FieldTreeNode) => {
+const remove = (node: Node, data: FieldInfo) => {
   if (node.label === "Root") {
     return;
   }
   const parent = node.parent;
-  const children: FieldTreeNode[] = parent.data.children || parent.data;
+  const children: FieldInfo[] = parent.data.children || parent.data;
   const index = children.findIndex((d) => d.id === data.id);
   children.splice(index, 1);
   dataSource.value = [...dataSource.value];
@@ -117,7 +124,7 @@ const remove = (node: Node, data: FieldTreeNode) => {
  * @param type
  */
 const allowDrop = (draggingNode: Node, dropNode: Node, type: AllowDropType) => {
-  if (dropNode.data.label === "Level two 3-1") {
+  if (dropNode.data.fieldKey === "Level two 3-1") {
     return type !== "inner";
   } else {
     return true;
@@ -129,11 +136,7 @@ const allowDrop = (draggingNode: Node, dropNode: Node, type: AllowDropType) => {
  * @param draggingNode
  */
 const allowDrag = (draggingNode: Node) => {
-  if (draggingNode.data.editing === true) {
-    return false;
-  }
-  // return !draggingNode.data.label.includes('Level three 3-1-1')
-  return true;
+  return draggingNode.data.editing !== true;
 };
 
 const handleDragStart = (node: Node, ev: DragEvents) => {
@@ -145,17 +148,17 @@ const handleDragEnter = (
   dropNode: Node,
   ev: DragEvents
 ) => {
-  console.log("tree drag enter:", dropNode.label);
+
 };
 const handleDragLeave = (
   draggingNode: Node,
   dropNode: Node,
   ev: DragEvents
 ) => {
-  console.log("tree drag leave:", dropNode.label);
+
 };
 const handleDragOver = (draggingNode: Node, dropNode: Node, ev: DragEvents) => {
-  console.log("tree drag over:", dropNode.label);
+
 };
 const handleDragEnd = (
   draggingNode: Node,
@@ -163,7 +166,7 @@ const handleDragEnd = (
   dropType: NodeDropType,
   ev: DragEvents
 ) => {
-  console.log("tree drag end:", dropNode && dropNode.label, dropType);
+
 };
 const handleDrop = (
   draggingNode: Node,
@@ -171,10 +174,14 @@ const handleDrop = (
   dropType: NodeDropType,
   ev: DragEvents
 ) => {
-  console.log("tree drop:", dropNode.label, dropType);
+
 };
 
-const dataSource = ref<FieldTreeNode[]>([]);
+watch(() => fields, (newValue, oldValue) => {
+  console.log(newValue, oldValue);
+}, {
+  deep: true
+});
 </script>
 
 <style>

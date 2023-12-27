@@ -4,7 +4,8 @@
 
     <select id="selectGroupFieldsById" resultType="io.devpl.backend.entity.GroupField">
         SELECT gf.*,
-               f.field_key   AS field_name,
+               f.field_key,
+               f.field_name,
                f.description AS comment
         FROM group_field gf
                  LEFT JOIN field_info f ON gf.field_id = f.id

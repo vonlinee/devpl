@@ -96,9 +96,7 @@ export const apiPageFieldGroup = (pageIndex?: number, pageSize?: number, param?:
 
 /**
  * 查询字段组的字段列表
- * @param pageIndex
- * @param pageSize
- * @param param
+ * @param groupId 字段组ID
  */
 export const apiListGroupFieldsById = (groupId: number) => {
   return http.get("/api/field/group/field-list", {
@@ -109,9 +107,6 @@ export const apiListGroupFieldsById = (groupId: number) => {
 
 /**
  * 查询字段组的字段列表
- * @param pageIndex
- * @param pageSize
- * @param param
  */
 export const apiNewFieldGroup = () => {
   return http.post("/api/field/group/new");
@@ -120,10 +115,8 @@ export const apiNewFieldGroup = () => {
 
 /**
  * 查询字段组的字段列表
- * @param pageIndex
- * @param pageSize
- * @param param
+ * @param groupId 字段组ID
  */
-export const apiDeleteFieldGroup = (id: number) => {
-  return http.delete(`/api/field/group?id=${id}`);
+export const apiDeleteFieldGroup = (groupId: number) => {
+  return http.delete(`/api/field/group?id=${groupId}`);
 };
