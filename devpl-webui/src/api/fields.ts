@@ -80,7 +80,7 @@ type FiledGroup = {
 }
 
 /**
- * 保存或更新字段
+ * 查询字段组列表
  * @param pageIndex
  * @param pageSize
  * @param param
@@ -91,4 +91,39 @@ export const apiPageFieldGroup = (pageIndex?: number, pageSize?: number, param?:
     pageSize: pageSize,
     ...param
   });
+};
+
+
+/**
+ * 查询字段组的字段列表
+ * @param pageIndex
+ * @param pageSize
+ * @param param
+ */
+export const apiListGroupFieldsById = (groupId: number) => {
+  return http.get("/api/field/group/field-list", {
+    groupId: groupId
+  });
+};
+
+
+/**
+ * 查询字段组的字段列表
+ * @param pageIndex
+ * @param pageSize
+ * @param param
+ */
+export const apiNewFieldGroup = () => {
+  return http.post("/api/field/group/new");
+};
+
+
+/**
+ * 查询字段组的字段列表
+ * @param pageIndex
+ * @param pageSize
+ * @param param
+ */
+export const apiDeleteFieldGroup = (id: number) => {
+  return http.delete(`/api/field/group?id=${id}`);
 };

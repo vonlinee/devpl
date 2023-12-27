@@ -2,8 +2,11 @@ package io.devpl.backend.mybatis;
 
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class ParamMeta {
 
     /**

@@ -32,9 +32,9 @@ const importTabPane = ref();
  * 提交更改
  */
 function submit() {
-  const tabName = importTabPane.value.getSelectedTab();
-  const content = importTabPane.value.getContent();
-  console.log(tabName, content);
+  const tabName = activeName.value
+  
+
 }
 
 const jsonEditorRef = ref();
@@ -49,7 +49,7 @@ defineExpose({
 </script>
 
 <template>
-  <vxe-modal size="small" title="参数导入" v-model="showRef" :mask="false" :show-footer="true" :z-index="2000" :width="800">
+  <vxe-modal size="small" title="参数导入" v-model="showRef" :show-footer="true" :z-index="2000" :width="800">
     <template #default>
       <el-tabs v-model="activeName" class="editor-tabs">
         <el-tab-pane label="JSON" name="json">

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.devpl.backend.dao.FieldGroupMapper">
+
+    <select id="selectGroupFieldsById" resultType="io.devpl.backend.entity.GroupField">
+        SELECT gf.*,
+               f.field_key   AS field_name,
+               f.description AS comment
+        FROM group_field gf
+                 LEFT JOIN field_info f ON gf.field_id = f.id
+        WHERE gf.group_id = #{groupId}
+    </select>
+</mapper>

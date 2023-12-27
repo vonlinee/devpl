@@ -21,4 +21,8 @@ public class MyBatisParam {
      * 根据参数名称推断类型
      */
     private Boolean inferByParamName;
+
+    public boolean isTypeInferEnabled() {
+        return enableTypeInference == null || enableTypeInference;
+    }
 }

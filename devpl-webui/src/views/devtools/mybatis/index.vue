@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="12">
         <monaco-editor ref="inputRef" language="xml" height="400px" />
-        <monaco-editor ref="sqlRef" language="sql" height="400px" />
+        <monaco-editor ref="outputRef" language="sql" height="400px" />
       </el-col>
       <el-col :span="12">
         <el-button @click="fillSampleMapperStatement">填充样例</el-button>
@@ -28,9 +28,23 @@
         </vxe-table>
         <div>
           <el-card>
-            <el-button type="primary" @click="getParams()">解析参数</el-button>
-            <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
-            <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+            <el-button-group class="ml-4">
+              <el-button type="primary" @click="getParams()">解析参数</el-button>
+              <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
+              <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+            </el-button-group>
+
+            <el-dropdown>
+              <el-button type="primary">
+                Mapper Snippet<el-icon class="el-icon--right"><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="handleMsForeach">Foreach</el-dropdown-item>
+                  <el-dropdown-item @click="handleMsStringNotEmpty">Test字符串不为空</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </el-card>
           <el-card>
             <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
@@ -43,9 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { hasText } from "@/utils/tool";
+import { getSubStrings, hasText, isBlank } from "@/utils/tool";
 import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue";
-import { Splitpanes, Pane } from "splitpanes";
 
 import {
   apiGetMapperStatementValueTypes,
@@ -64,10 +77,11 @@ import {
   VxeTablePrivateMethods,
   VxeTablePropTypes
 } from "vxe-table/types/all";
+import { foreachSnippet, stringSnippet } from "@/utils/mybatis";
 
 // 数据
 const inputRef = ref();
-const sqlRef = ref();
+const outputRef = ref();
 const importModalRef = ref();
 
 // 表格实例
@@ -99,6 +113,30 @@ onMounted(() => {
 });
 
 const store = appStore();
+
+
+function output(handler: (input: string) => string) {
+  const input = inputRef.value.getText()
+  if (!isBlank(input)) {
+    const result = handler(input)
+    outputRef.value.setText(result)
+  }
+}
+
+
+const handleMsForeach = () => {
+  output((input: string) => {
+    const result = getSubStrings(input)
+    return foreachSnippet(result[0], result[1] || "列名")
+  })
+}
+
+const handleMsStringNotEmpty = () => {
+  output((input: string) => {
+    const result = getSubStrings(input)
+    return stringSnippet(result[0], result[1] || "列名")
+  })
+}
 
 const ms = computed(() => store.ms);
 
@@ -160,7 +198,7 @@ function getSqlOfMapperStatement(real: boolean) {
     return;
   }
   apiGetSql(code, mapperParams.value || [], real).then(res => {
-    sqlRef.value.setText(res.data);
+    outputRef.value.setText(res.data);
   });
 }
 

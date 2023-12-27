@@ -1,24 +1,26 @@
+<!-- 
+  字段树结构
+ -->
 <template>
   <div class="field-tree-container" :style="containerStyle">
-    <el-tree :data="dataSource"
-             height="100%"
-             :show-checkbox="selectable" default-expand-all :expand-on-click-node="false" draggable
-             node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
-             @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
-             @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
+    <el-tree :data="dataSource" height="100%" :show-checkbox="selectable" default-expand-all :expand-on-click-node="false"
+      draggable node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
+      @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
+      @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
       <template #default="{ node, data }">
-                <span class="field-tree-node">
-                    <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ node.label }}</span>
-                    <input ref="currentInputRef" v-if="data.editing || false" :value="data.label"
-                           @blur="data.editing = false"
-                           @change="(event) => onInputChange(event, data)"
-                           @keyup.enter="(event) => onInputChange(event, data)" />
-                    <span>
-                        <el-button link :icon="Plus" @click="append(data)"></el-button>
-                        <el-button v-if="node.label !== 'Root'" link :icon="Minus"
-                                   @click="remove(node, data)"></el-button>
-                    </span>
-                </span>
+        <span class="field-tree-node">
+          <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ node.label }}</span>
+          <input ref="currentInputRef" v-if="data.editing || false" :value="data.label" @blur="data.editing = false"
+            @change="(event) => onInputChange(event, data)" @keyup.enter="(event) => onInputChange(event, data)" />
+          <span>
+            <el-button link :icon="Plus" @click="append(data)"></el-button>
+            <el-button v-if="node.label !== 'Root'" link :icon="Minus" @click="remove(node, data)"></el-button>
+          </span>
+        </span>
+      </template>
+
+      <template #empty>
+        没有字段 <el-button link @click="addIfEmpty">添加</el-button>
       </template>
     </el-tree>
   </div>
@@ -59,6 +61,15 @@ const { selectable, height } = withDefaults(defineProps<Props>(), {
   height: "500px"
 });
 
+const addIfEmpty = () => {
+  if (dataSource.value.length == 0) {
+    dataSource.value.push({
+      id: 0,
+      editing: true
+    })
+  }
+}
+
 /**
  * 容器样式
  */
@@ -70,6 +81,10 @@ const containerStyle = reactive({
 
 let id = 1000;
 
+/**
+ * 追加节点
+ * @param data 节点数据
+ */
 const append = (data: FieldTreeNode) => {
   const newChild = { id: id++, label: "New Item", children: [] };
   if (!data.children) {
@@ -159,12 +174,7 @@ const handleDrop = (
   console.log("tree drop:", dropNode.label, dropType);
 };
 
-const dataSource = ref<FieldTreeNode[]>([
-  {
-    id: 1,
-    label: "Root"
-  }
-]);
+const dataSource = ref<FieldTreeNode[]>([]);
 </script>
 
 <style>

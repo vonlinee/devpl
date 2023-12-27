@@ -32,4 +32,18 @@ public class GroupField {
      */
     @TableField(value = "field_id")
     private Long fieldId;
+
+    // 非数据库字段
+
+    @TableField(exist = false)
+    private String fieldKey;
+
+    @TableField(exist = false)
+    private String fieldName;
+
+    @TableField(exist = false)
+    private String dataType;
+
+    @TableField(exist = false)
+    private String comment;
 }

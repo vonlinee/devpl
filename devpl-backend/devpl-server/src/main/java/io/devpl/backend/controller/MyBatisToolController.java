@@ -8,16 +8,13 @@ import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MyBatisParam;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
-import io.devpl.backend.utils.Vals;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -43,17 +40,11 @@ public class MyBatisToolController {
         if (resource == null) {
             return Result.error("获取示例失败");
         }
-        File file = new File(resource.getFile());
-        try {
-            return Result.ok(FileUtils.readString(file));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Result.ok(FileUtils.readStringQuietly(new File(resource.getFile())));
     }
 
     /**
-     * 获取Mapper Statement的参数列表
-     * JSON传参
+     * 获取Mapper Statement的所有参数名及推断参数类型
      */
     @PostMapping("/ms/params")
     public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
@@ -61,11 +52,11 @@ public class MyBatisToolController {
         if (StringUtils.isBlank(content)) {
             return Result.error("文本为空");
         }
-        return Result.ok(myBatisService.getMapperStatementParams(content, Vals.nil(param.getEnableTypeInference(), true)));
+        return Result.ok(myBatisService.getMapperStatementParams(content, param.isTypeInferEnabled()));
     }
 
     /**
-     * 获取Mapper Statement的参数值类型列表
+     * 获取Mapper Statement的可选的参数值类型枚举
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<DataTypeVO>> getDataTypes() {

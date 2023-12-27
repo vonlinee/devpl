@@ -130,8 +130,8 @@ export const deepClone = (obj: Record<string, any>) => {
   const copy: any = Object.assign({}, obj);
   Object.keys(copy).forEach(
     (key) =>
-      (copy[key] =
-        typeof obj[key] === "object" ? deepClone(obj[key]) : obj[key])
+    (copy[key] =
+      typeof obj[key] === "object" ? deepClone(obj[key]) : obj[key])
   );
   return Array.isArray(obj)
     ? (copy.length = obj.length) && Array.from(copy)
@@ -180,7 +180,24 @@ export function getIconName(data: FileNode): string {
  * @param b
  */
 export const sub = (a: any[], b: any[]) => {
-  return a.filter(function(item) {
+  return a.filter(function (item) {
     return b.indexOf(item) < 0;
   });
 };
+
+/**
+ * 从至少一个空格分割的字符串中提取出所有子串
+ * 例如 let str = "子串1    子串2              子串3";  
+ * 结果: ["子串1", "子串2", "子串3"]
+ * @param input 
+ */
+export const getSubStrings = (input: string) => {
+  let substrings: string[] = input.split(" ");
+  let result = []
+  for (let i = 0; i < substrings.length; i++) {
+    if (!isBlank(substrings[i])) {
+      result.push(substrings[i])
+    }
+  }
+  return result
+}

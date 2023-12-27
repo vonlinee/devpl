@@ -7,4 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FieldGroupListParam extends PageParam {
+
+    /**
+     * 字段组ID
+     */
+    private Long groupId;
 }

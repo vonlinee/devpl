@@ -795,17 +795,34 @@ public class FileUtils {
     }
 
     /**
+     * 由参数决定是否抛异常
+     *
+     * @param file 文件
+     * @return 文本
+     * @throws RuntimeException 将IOException转成RuntimeException
+     */
+    public static String readStringQuietly(File file, boolean throwException) {
+        if (file == null) {
+            return "";
+        }
+        try {
+            return readString(file, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            if (throwException) {
+                throw new RuntimeException(e);
+            }
+            return "";
+        }
+    }
+
+    /**
      * 不抛异常
      *
      * @param file 文件
      * @return 文本
      */
     public static String readStringQuietly(File file) {
-        try {
-            return readString(file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return readStringQuietly(file, false);
     }
 
     /**

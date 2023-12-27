@@ -3,14 +3,17 @@ package io.devpl.backend.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 模板参数元数据表
+ *
  * @author 111 222
  * @since 1.0.0 2023-07-29
  */
-@Data
+@Getter
+@Setter
 @TableName("template_param")
 public class TemplateParamEntity {
 

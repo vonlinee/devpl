@@ -7,6 +7,7 @@ import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
+import io.devpl.backend.entity.GroupField;
 import io.devpl.backend.service.FieldGroupService;
 import io.devpl.backend.service.FieldInfoService;
 import jakarta.annotation.Resource;
@@ -103,5 +104,35 @@ public class FieldInfoController {
     @GetMapping(value = "/group/page")
     public ListResult<FieldGroup> pageFieldGroups(FieldGroupListParam param) {
         return ListResult.ok(fieldGroupService.listPage(param));
+    }
+
+    /**
+     * 新增字段组
+     *
+     * @return 字段组信息
+     */
+    @PostMapping(value = "/group/new")
+    public Result<FieldGroup> pageFieldGroups() {
+        return Result.ok(fieldGroupService.newGroup());
+    }
+
+    /**
+     * 删除字段组
+     *
+     * @return 字段组信息
+     */
+    @DeleteMapping(value = "/group")
+    public Result<Boolean> removeGroup(Long id) {
+        return Result.ok(fieldGroupService.removeFieldGroupById(id));
+    }
+
+    /**
+     * 查询字段组包含的字段信息
+     *
+     * @return 字段组的字段列表
+     */
+    @GetMapping(value = "/group/field-list")
+    public ListResult<GroupField> listGroupFields(FieldGroupListParam param) {
+        return ListResult.ok(fieldGroupService.listGroupFieldsById(param.getGroupId()));
     }
 }

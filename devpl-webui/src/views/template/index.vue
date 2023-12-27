@@ -5,10 +5,13 @@
         <el-input v-model="state.queryForm.templateName" placeholder="模板名称"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-select v-model="state.queryForm.templateType">
+        <el-select v-model="state.queryForm.templateType" clearable>
           <el-option v-for="templateType in templateTypes" :key="templateType.provider" :value="templateType.provider"
             :label="templateType.providerName"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="resetForm">重置</el-button>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -23,10 +26,10 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="templateId" label="模板ID" header-align="center" align="center" width="80px"></el-table-column>
       <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
         <template #default="scope">
-          <el-text class="mx-1" type="primary" @click="showTemplateEditDialog(scope.row)" style="cursor: pointer;">{{ scope.row.templateName
+          <el-text class="mx-1" type="primary" @click="showTemplateEditDialog(scope.row)" style="cursor: pointer;">{{
+            scope.row.templateName
           }}</el-text>
         </template>
       </el-table-column>
@@ -84,6 +87,14 @@ const addOrUpdateHandle = (row?: any) => {
 
 const templateContentEditorRef = ref();
 const templateTypes = ref<TemplateProvider[]>();
+
+const resetForm = () => {
+  state.queryForm = {
+    templateName: "",
+    templateType: ""
+  }
+  getDataList()
+}
 
 /**
  * 展示模板内容弹窗

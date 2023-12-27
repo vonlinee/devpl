@@ -16,8 +16,20 @@ type TemplateInfo = {
   internal: boolean
 }
 
+/**
+ * 模板选择项VO
+ */
 type TemplateSelectVO = {
+  /**
+   * 模板ID
+   */
   templateId: number,
+  /**
+   * 模板名称
+   */
   templateName: string,
+  /**
+   * 备注信息
+   */
   remark?: string
 }
