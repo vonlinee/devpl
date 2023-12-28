@@ -1,13 +1,12 @@
 package io.devpl.codegen.template.velocity;
 
-import io.devpl.codegen.template.TemplateArguments;
-import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateSource;
 import org.apache.velocity.Template;
-
-import java.io.OutputStream;
+import org.jetbrains.annotations.NotNull;
 
 /**
+ * 针对Velocity模板的包装
+ *
  * @see org.apache.velocity.Template
  */
 public class VelocityTemplateSource implements TemplateSource {
@@ -19,17 +18,17 @@ public class VelocityTemplateSource implements TemplateSource {
     }
 
     @Override
+    public @NotNull String getName() {
+        return template.getName();
+    }
+
+    @Override
     public String getContent() {
-        return null;
+        return template == null ? "" : template.getName();
     }
 
     @Override
     public void setContent(String content) {
 
-    }
-
-    @Override
-    public void render(TemplateEngine engine, TemplateArguments arguments, OutputStream output) {
-        engine.render(this, arguments, output);
     }
 }

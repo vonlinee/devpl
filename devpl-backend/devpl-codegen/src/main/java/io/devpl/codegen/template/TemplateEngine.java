@@ -2,7 +2,11 @@ package io.devpl.codegen.template;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -26,7 +30,35 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @return 渲染结果
      */
-    String render(String template, TemplateArguments arguments);
+    default String render(String template, TemplateArguments arguments) throws TemplateException {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            render(new StringTemplateSource(template, null), arguments, outputStream);
+            return outputStream.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new TemplateException(e);
+        }
+    }
+
+    /**
+     * 渲染并输出到指定位置
+     *
+     * @param templateSource 模板
+     * @param arguments      模板参数
+     * @param outputStream   输出位置
+     */
+    void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) throws TemplateException;
+
+    /**
+     * 同render方法
+     *
+     * @param arguments 模板参数
+     * @param name      模板名称
+     * @param fos       输出位置
+     * @throws TemplateException 渲染出错
+     */
+    default void render(String name, Map<String, Object> arguments, OutputStream fos) throws TemplateException {
+        render(new StringTemplateSource(name, null), new TemplateArgumentsMap(arguments), fos);
+    }
 
     /**
      * 渲染模板
@@ -35,26 +67,14 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @return 渲染结果
      */
-    String render(TemplateSource template, TemplateArguments arguments);
-
-    /**
-     * 渲染并输出到指定位置
-     *
-     * @param template     模板
-     * @param arguments    模板参数
-     * @param outputStream 输出位置
-     */
-    void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream);
-
-    /**
-     * 同render方法
-     *
-     * @param arguments 模板参数
-     * @param name      模板名称
-     * @param fos       输出位置
-     * @throws Exception 渲染出错
-     */
-    void render(String name, Map<String, Object> arguments, OutputStream fos) throws Exception;
+    default String render(TemplateSource template, TemplateArguments arguments) throws TemplateException {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            render(template, arguments, baos);
+            return baos.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 注册自定义指令
@@ -76,11 +96,12 @@ public interface TemplateEngine {
     /**
      * 获取模板
      *
-     * @param name 模板名称
+     * @param nameOrTemplate 模板名称或者字符串模板
+     * @param st             是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
      * @return 模板实例
      */
     @NotNull
-    default TemplateSource getTemplate(String name) {
+    default TemplateSource getTemplate(String nameOrTemplate, boolean st) {
         return TemplateSource.UNKNOWN;
     }
 }

@@ -4,9 +4,9 @@ import org.apache.velocity.runtime.resource.util.StringResource;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Velocity要求所有模板需要预先定义好，然后通过指定的ResourceLoader进行加载
@@ -14,7 +14,7 @@ import java.util.WeakHashMap;
  */
 public class VelocityStringResourceRepository implements StringResourceRepository {
 
-    private final Map<String, StringResource> resourceMap = new HashMap<>();
+    private final Map<String, StringResource> resourceMap = new ConcurrentHashMap<>();
     private final Map<Integer, StringResource> cachedStringResourceMap = new WeakHashMap<>();
 
     /**

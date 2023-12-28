@@ -6,20 +6,15 @@ public class TestRender {
 
     public static void main(String[] args) {
 
-        TemplateEngine engine = new VelocityTemplateEngine();
+        VelocityTemplateEngine engine = new VelocityTemplateEngine();
 
-        TemplateSource templateSource = engine.getTemplate("""
-            ##logical NOT
-            #if( !$foo )
-              <strong>NOT that</strong>
-            #end
-            """);
-
+        TemplateSource templateSource = engine.getTemplate("Hello, ${foo}", false);
 
         TemplateArgumentsMap argumentsMap = new TemplateArgumentsMap();
-        argumentsMap.setValue("foo", "bar");
+        argumentsMap.setValue("foo", "xxxxxxxxxxx");
 
-        templateSource.render(engine, argumentsMap, System.out);
+        String result = engine.render(templateSource, argumentsMap);
 
+        System.out.println(result);
     }
 }

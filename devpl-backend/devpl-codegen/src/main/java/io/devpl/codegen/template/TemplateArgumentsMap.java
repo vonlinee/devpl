@@ -6,21 +6,31 @@ import java.util.Map;
 /**
  * 模板参数Map, 等同于Map<String, Object>
  */
-public final class TemplateArgumentsMap extends HashMap<String, Object> implements TemplateArguments {
+public final class TemplateArgumentsMap implements TemplateArguments {
+
+    private final Map<String, Object> argumentsMap;
+
+    public TemplateArgumentsMap() {
+        this.argumentsMap = new HashMap<>();
+    }
+
+    public TemplateArgumentsMap(Map<? extends String, ?> m) {
+        this.argumentsMap = new HashMap<>(m);
+    }
 
     @Override
     public Map<String, Object> asMap() {
-        return this;
+        return argumentsMap;
     }
 
     @Override
     public void setValue(String name, Object value) {
-        super.put(name, value);
+        argumentsMap.put(name, value);
     }
 
     @Override
     public Object getValue(String name) {
-        return super.get(name);
+        return argumentsMap.get(name);
     }
 
     @Override

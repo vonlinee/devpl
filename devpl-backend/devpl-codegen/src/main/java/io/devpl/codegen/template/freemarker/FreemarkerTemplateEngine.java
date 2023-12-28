@@ -2,7 +2,9 @@ package io.devpl.codegen.template.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateSource;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -30,13 +32,22 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) throws Exception {
-        Template template = configuration.getTemplate(name);
-        template.process(arguments, new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+        try {
+            Template template = configuration.getTemplate(templateSource.getName());
+            template.process(arguments, new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+        } catch (IOException | TemplateException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public @NotNull TemplateSource getTemplate(String name) {
+    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) {
+
+    }
+
+    @Override
+    public @NotNull TemplateSource getTemplate(String name, boolean stringTemplate) {
         try {
             Template template = configuration.getTemplate(name);
             return new FreeMarkerTemplateSource(template);

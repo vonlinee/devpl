@@ -1,19 +1,42 @@
 package io.devpl.codegen.template;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 /**
  * 文件模板
  */
 public class FileTemplateSource implements TemplateSource {
 
-    String templatePath;
+    File file;
+
+    public FileTemplateSource(File file) {
+        this.file = file;
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return file.getAbsolutePath();
+    }
 
     @Override
     public String getContent() {
-        return templatePath;
+        try {
+            return Files.readString(file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void setContent(String template) {
-        this.templatePath = template;
+        try {
+            Files.writeString(file.toPath(), template);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

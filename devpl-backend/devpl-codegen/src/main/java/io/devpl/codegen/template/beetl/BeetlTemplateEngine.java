@@ -1,6 +1,7 @@
 package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateSource;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -52,10 +53,8 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, OutputStream outputStream) throws Exception {
-        Template template = (Template) method.invoke(groupTemplate, name);
-        template.binding(arguments);
-        template.renderTo(outputStream);
+    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+
     }
 
     @Override
@@ -64,12 +63,12 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull TemplateSource getTemplate(String name) {
+    public @NotNull TemplateSource getTemplate(String name, boolean stringTemplate) {
         try {
             Template template = (Template) method.invoke(groupTemplate, name);
             return new BeetlTemplateSource(template);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            return super.getTemplate(name);
+            return super.getTemplate(name, stringTemplate);
         }
     }
 }

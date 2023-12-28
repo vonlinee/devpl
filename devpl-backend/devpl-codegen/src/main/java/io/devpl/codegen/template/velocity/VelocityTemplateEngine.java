@@ -1,12 +1,14 @@
 package io.devpl.codegen.template.velocity;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.StringTemplateSource;
 import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateSource;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -30,12 +31,15 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
 
     static {
         try {
+            // VelocityEngineVersion.VERSION;
             Class.forName("org.apache.velocity.util.DuckType");
         } catch (ClassNotFoundException e) {
             // velocity1.x的生成格式错乱 https://github.com/baomidou/generator/issues/5
             log.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
         }
     }
+
+    static final String ST = "StringTemplate";
 
     private final VelocityEngine engine;
     private final StringResourceRepository stringTemplates = new VelocityStringResourceRepository();
@@ -51,7 +55,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         } catch (IOException e) {
             throw new RuntimeException("Can't load custom velocity config file from classpath", e);
         }
-
         VelocityEngine engine = new VelocityEngine(properties);
         /**
          * 按StringResourceLoader的javadoc文档配置无效，手动添加添加，这里手动添加
@@ -62,50 +65,33 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         return engine;
     }
 
-    @Override
-    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) throws Exception {
-        Template template = engine.getTemplate(name, StandardCharsets.UTF_8.name());
-        try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(ow)) {
-            template.merge(new VelocityContext(arguments), writer);
-        }
-    }
-
-    @Override
-    public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
-        if (template instanceof VelocityTemplateSource) {
-            VelocityContext context = new VelocityContext(arguments.asMap());
-            Velocity.evaluate(context, new OutputStreamWriter(outputStream), "mystring", template.getContent());
-        }
-    }
-
     /**
-     * 直接渲染字符串模板
+     * 渲染模板
      * 通过文件模板进行查找，如果找不到则找字符串模板
      * 使用Velocity.evaluate无法使用自定义指令功能
      *
+     * @param templateSource 模板类型
+     * @param arguments      模板参数
+     * @param outputStream   输出位置，不会关闭流
      * @see VelocityStringResourceRepository
      */
     @Override
-    public String render(String template, TemplateArguments params) {
-        if (template == null) {
-            return "";
+    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+        // 渲染字符串模板
+        if (templateSource.isStringTemplate()) {
+            VelocityContext context = new VelocityContext(arguments.asMap());
+            Velocity.evaluate(context, new OutputStreamWriter(outputStream), ST, templateSource.getContent());
+            return;
         }
-        StringWriter output = new StringWriter();
-        Template vt = engine.getTemplate(template);
-        vt.merge(new VelocityContext(params.asMap()), output);
-        return output.toString();
-    }
-
-    @Override
-    public String render(TemplateSource template, TemplateArguments arguments) {
-        String result;
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            render(template, arguments, baos);
-            result = baos.toString(StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        templateSource = templateSource.getSource();
+        if (templateSource instanceof VelocityTemplateSource) {
+            Template vt = engine.getTemplate(templateSource.getName());
+            try (Writer writer = new OutputStreamWriter(outputStream)) {
+                vt.merge(new VelocityContext(arguments.asMap()), writer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        return result;
     }
 
     @Override
@@ -113,9 +99,19 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         return ".vm";
     }
 
+    /**
+     * @param nameOrTemplate 模板名称或者字符串模板
+     * @param stringTemplate 是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
+     * @return 模板
+     * @see TemplateSource#getName()
+     * @see VelocityEngine#getTemplate(String, String)
+     */
     @Override
-    public @NotNull TemplateSource getTemplate(String name) {
-        Template template = engine.getTemplate(name);
+    public @NotNull TemplateSource getTemplate(String nameOrTemplate, boolean stringTemplate) {
+        if (stringTemplate) {
+            return new StringTemplateSource(nameOrTemplate, null);
+        }
+        Template template = engine.getTemplate(nameOrTemplate, StandardCharsets.UTF_8.name());
         return new VelocityTemplateSource(template);
     }
 }
