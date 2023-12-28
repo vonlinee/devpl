@@ -1,4 +1,4 @@
-package io.devpl.codegen.config.args;
+package io.devpl.codegen.template.model;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

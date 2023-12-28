@@ -13,8 +13,23 @@ public interface TreeBuilder<K, E, T> {
 
     T apply(Collection<E> collection);
 
+    /**
+     * 计算每个元素的key值
+     *
+     * @param element 元素
+     * @param level   层级
+     * @return key值
+     */
     K getKey(E element, int level);
 
+    /**
+     * 将平铺列表的元素的每一行映射成树节点
+     *
+     * @param level   层级，根节点默认为-1
+     * @param key     每层的唯一key
+     * @param element 平铺列表的元素
+     * @return 树节点
+     */
     T map(int level, K key, E element);
 
     void next(int level, K parentLevelKey, E element, T parentNode);

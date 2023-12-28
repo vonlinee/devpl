@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.config.args.EntityTemplateArugments;
+import io.devpl.codegen.template.model.EntityTemplateArugments;
 import io.devpl.codegen.core.Context;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.converts.MySqlTypeConvert;

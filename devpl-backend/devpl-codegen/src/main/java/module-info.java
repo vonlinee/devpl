@@ -15,7 +15,7 @@ open module devpl.codegen {
     exports io.devpl.codegen.config;
     exports io.devpl.codegen.type;
     exports io.devpl.codegen;
-    exports io.devpl.codegen.config.args;
+    exports io.devpl.codegen.template.model;
     exports io.devpl.codegen.parser;
     exports io.devpl.codegen.parser.java;
 

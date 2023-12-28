@@ -2,6 +2,7 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.util.StringUtils;
 import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +52,7 @@ public final class FastAutoGenerator {
     /**
      * 模板引擎
      */
-    private AbstractTemplateEngine templateEngine;
+    private TemplateEngine templateEngine;
 
     private FastAutoGenerator(DataSourceConfig.Builder dataSourceConfigBuilder) {
         this.dataSourceConfigBuilder = dataSourceConfigBuilder;
@@ -202,7 +203,7 @@ public final class FastAutoGenerator {
      * @param templateEngine 模板引擎
      * @return FastAutoGenerator
      */
-    public FastAutoGenerator templateEngine(AbstractTemplateEngine templateEngine) {
+    public FastAutoGenerator templateEngine(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
         return this;
     }

@@ -2,6 +2,7 @@ package io.devpl.codegen.template.enjoy;
 
 import com.jfinal.template.Engine;
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedWriter;
@@ -25,12 +26,16 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull OutputStream outputStream) throws Exception {
-        String str = engine.getTemplate(templatePath).renderToString(objectMap);
-        try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
-             BufferedWriter writer = new BufferedWriter(ow)) {
+    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) throws Exception {
+        String str = engine.getTemplate(name).renderToString(arguments);
+        try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(ow)) {
             writer.append(str);
         }
+    }
+
+    @Override
+    public @NotNull TemplateSource getTemplate(String name) {
+        return new EnjoyTemplateSource(engine.getTemplate(name));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package io.devpl.sdk.collection;
 
-import io.devpl.sdk.util.ArrayUtils;
+import io.devpl.sdk.util.Arrays;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -24,7 +24,7 @@ public final class Lists {
 
     @SafeVarargs
     public static <E> ArrayList<E> arrayOf(E... elements) {
-        return new ArrayList<>(ArrayUtils.asList(elements));
+        return new ArrayList<>(Arrays.asArrayList(elements));
     }
 
     /**
@@ -59,7 +59,7 @@ public final class Lists {
     @SafeVarargs
     public static <E> LinkedList<E> linkOf(E... elements) {
         if (elements == null) return new LinkedList<>();
-        return new LinkedList<>(ArrayUtils.asList(elements));
+        return new LinkedList<>(Arrays.asArrayList(elements));
     }
 
     /**
@@ -73,7 +73,7 @@ public final class Lists {
         if (elements == null) {
             return Collections.unmodifiableList(new ArrayList<>());
         }
-        return Collections.unmodifiableList(ArrayUtils.asList(elements));
+        return Collections.unmodifiableList(Arrays.asArrayList(elements));
     }
 
     public static ArrayList<Integer> arrayOf(int[] arr) {

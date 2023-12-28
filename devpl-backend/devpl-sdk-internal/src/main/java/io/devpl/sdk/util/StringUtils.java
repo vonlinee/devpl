@@ -71,6 +71,8 @@ public abstract class StringUtils {
     private static final Pattern ALL_EN_WORDS = Pattern.compile("[a-zA-Z]+");
     private static final Pattern CONTAIN_EN_WORDS = Pattern.compile(".*[a-zA-z].*");
     private static final int STRING_BUILDER_SIZE = 256;
+    private static final int DEFAULT_TRUNCATION_THRESHOLD = 100;
+    private static final String TRUNCATION_SUFFIX = " (truncated)...";
     /**
      * <p>
      * The maximum size to which the padding(填充) constant(s) can expand.
@@ -92,6 +94,38 @@ public abstract class StringUtils {
 
     public static <T> String substring(String src, Function<T, Integer> startIndexSupplier, T startIndex) {
         return src.substring(startIndexSupplier.apply(startIndex));
+    }
+
+    /**
+     * 截取开头到从右往左数第count个字符的位置
+     *
+     * @param sequence 字符串
+     * @param count    从右往左数第count个字符，>= 0
+     * @return 字符串
+     */
+    public static String lastSubstring(CharSequence sequence, int count) {
+        if (sequence == null) {
+            return EMPTY;
+        }
+        if (count <= 0) {
+            return sequence.toString();
+        }
+        return sequence.subSequence(0, sequence.length() - count).toString();
+    }
+
+    /**
+     * 字符串截取
+     *
+     * @param sb    StringBuilder
+     * @param start 开始位置
+     * @param end   结束位置
+     * @return 截取后的子串
+     */
+    public static String substring(StringBuilder sb, int start, int end) {
+        if (sb == null || start < 0 || end > sb.length()) {
+            return EMPTY;
+        }
+        return sb.substring(start, end);
     }
 
     /**
@@ -306,6 +340,13 @@ public abstract class StringUtils {
         return str.toString().substring(fromIndexInclude, toIndexExclude);
     }
 
+    /**
+     * 使用引号包裹
+     *
+     * @param str           字符串
+     * @param doubleQutaion 是否使用双引号
+     * @return 引号包裹的字符串
+     */
     public static String wrapQuotation(String str, boolean doubleQutaion) {
         if (doubleQutaion) {
             if (!str.contains("\"")) {
@@ -481,7 +522,7 @@ public abstract class StringUtils {
      * @return 拼接后的字符串
      */
     public static String join(final String separator, String... items) {
-        return join(ArrayUtils.asList(items).iterator(), separator);
+        return join(Arrays.asArrayList(items).iterator(), separator);
     }
 
     /**
@@ -491,7 +532,7 @@ public abstract class StringUtils {
      * @return 拼接后的字符串
      */
     public static String join(String... items) {
-        return join(ArrayUtils.asList(items).iterator(), DEFAULT_SEPARATOR);
+        return join(Arrays.asArrayList(items).iterator(), DEFAULT_SEPARATOR);
     }
 
     /**
@@ -1575,7 +1616,7 @@ public abstract class StringUtils {
             return array1;
         }
 
-        List<String> result = new ArrayList<>(ArrayUtils.asList(array1));
+        List<String> result = new ArrayList<>(Arrays.asArrayList(array1));
         for (String str : array2) {
             if (!result.contains(str)) {
                 result.add(str);
@@ -1594,7 +1635,7 @@ public abstract class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-        Arrays.sort(array);
+        java.util.Arrays.sort(array);
         return array;
     }
 
@@ -1628,7 +1669,7 @@ public abstract class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-        Set<String> set = new LinkedHashSet<>(ArrayUtils.asList(array));
+        Set<String> set = new LinkedHashSet<>(Arrays.asArrayList(array));
         return toStringArray(set);
     }
 
@@ -1854,7 +1895,7 @@ public abstract class StringUtils {
      */
     public static Set<String> commaDelimitedListToSet(String str) {
         String[] tokens = commaDelimitedListToStringArray(str);
-        return new LinkedHashSet<>(ArrayUtils.asList(tokens));
+        return new LinkedHashSet<>(Arrays.asArrayList(tokens));
     }
 
     /**
@@ -2040,7 +2081,7 @@ public abstract class StringUtils {
      */
     public static String substring(CharSequence str, int fromIndexInclude, int toIndexExclude) {
         if (!hasLength(str)) {
-            return String.valueOf(str);
+            return EMPTY;
         }
         int len = str.length();
 
@@ -2223,6 +2264,17 @@ public abstract class StringUtils {
     }
 
     /**
+     * 切割指定位置之前部分的字符串
+     *
+     * @param sb             字符串 StringBuilder
+     * @param toIndexExclude 切割到的位置（不包括）
+     * @return 切割后的剩余的前半部分字符串
+     */
+    public static String subPre(StringBuilder sb, int toIndexExclude) {
+        return subPre(sb.toString(), toIndexExclude);
+    }
+
+    /**
      * 将字符串组转为字符串
      *
      * @param chars     字符数组
@@ -2231,6 +2283,44 @@ public abstract class StringUtils {
      * @return 结果
      */
     public static String toString(char[] chars, int fromIndex, int endIndex) {
-        return String.valueOf(Arrays.copyOfRange(chars, fromIndex, endIndex));
+        return String.valueOf(java.util.Arrays.copyOfRange(chars, fromIndex, endIndex));
+    }
+
+    /**
+     * Truncate the supplied {@link CharSequence}.
+     * <p>Delegates to {@link #truncate(CharSequence, int)}, supplying {@code 100}
+     * as the threshold.
+     *
+     * @param charSequence the {@code CharSequence} to truncate
+     * @return a truncated string, or a string representation of the original
+     * {@code CharSequence} if its length does not exceed the threshold
+     * @since 5.3.27
+     */
+    public static String truncate(CharSequence charSequence) {
+        return truncate(charSequence, DEFAULT_TRUNCATION_THRESHOLD);
+    }
+
+    /**
+     * Truncate the supplied {@link CharSequence}.
+     * <p>If the length of the {@code CharSequence} is greater than the threshold,
+     * this method returns a {@linkplain CharSequence#subSequence(int, int)
+     * subsequence} of the {@code CharSequence} (up to the threshold) appended
+     * with the suffix {@code " (truncated)..."}. Otherwise, this method returns
+     * {@code charSequence.toString()}.
+     *
+     * @param charSequence the {@code CharSequence} to truncate
+     * @param threshold    the maximum length after which to truncate; must be a
+     *                     positive number
+     * @return a truncated string, or a string representation of the original
+     * {@code CharSequence} if its length does not exceed the threshold
+     * @since 5.3.27
+     */
+    public static String truncate(CharSequence charSequence, int threshold) {
+        Assert.isTrue(threshold > 0,
+            () -> "Truncation threshold must be a positive number: " + threshold);
+        if (charSequence.length() > threshold) {
+            return charSequence.subSequence(0, threshold) + TRUNCATION_SUFFIX;
+        }
+        return charSequence.toString();
     }
 }

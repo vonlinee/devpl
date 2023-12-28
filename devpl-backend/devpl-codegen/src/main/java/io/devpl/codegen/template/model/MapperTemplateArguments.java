@@ -1,4 +1,4 @@
-package io.devpl.codegen.config.args;
+package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;

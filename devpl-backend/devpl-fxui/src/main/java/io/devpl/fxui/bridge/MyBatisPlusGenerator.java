@@ -2,10 +2,10 @@ package io.devpl.fxui.bridge;
 
 import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.config.OutputFile;
-import io.devpl.codegen.config.args.ControllerTempateArguments;
-import io.devpl.codegen.config.args.EntityTemplateArugments;
-import io.devpl.codegen.config.args.MapperTemplateArguments;
-import io.devpl.codegen.config.args.ServiceTemplateArguments;
+import io.devpl.codegen.template.model.ControllerTempateArguments;
+import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.MapperTemplateArguments;
+import io.devpl.codegen.template.model.ServiceTemplateArguments;
 import io.devpl.codegen.core.ActionCallback;
 import io.devpl.codegen.core.FastAutoGenerator;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;

@@ -1,6 +1,7 @@
 package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.TemplateSource;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -11,14 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
  * Beetl 模板引擎实现文件输出
- *
- * @author yandixuan
- * @since 2018-12-16
+ * <a href="http://ibeetl.com/guide/#/beetl/basic?id=%e5%ae%89%e8%a3%85">...</a>
  */
 public class BeetlTemplateEngine extends AbstractTemplateEngine {
 
@@ -52,14 +52,24 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, OutputStream outputStream) throws Exception {
-        Template template = (Template) method.invoke(groupTemplate, templatePath);
-        template.binding(objectMap);
+    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, OutputStream outputStream) throws Exception {
+        Template template = (Template) method.invoke(groupTemplate, name);
+        template.binding(arguments);
         template.renderTo(outputStream);
     }
 
     @Override
     public String getTemplateFileExtension() {
         return ".btl";
+    }
+
+    @Override
+    public @NotNull TemplateSource getTemplate(String name) {
+        try {
+            Template template = (Template) method.invoke(groupTemplate, name);
+            return new BeetlTemplateSource(template);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            return super.getTemplate(name);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package io.devpl.backend.config;
+package io.devpl.backend.common;
 
 import java.io.PrintStream;
 import java.util.function.Predicate;

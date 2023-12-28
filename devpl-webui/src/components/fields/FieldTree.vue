@@ -7,10 +7,11 @@
              :expand-on-click-node="false"
              draggable node-key="id" @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter"
              @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd"
+             @node-click="handleNodeClicked"
              @node-drop="handleDrop" :allow-drop="allowDrop" :allow-drag="allowDrag">
       <template #default="{ node, data }">
         <span class="field-tree-node">
-          <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ node.label }}</span>
+          <span v-if="!(data.editing || false)" @click="fireInput(data)">{{ data.fieldKey }}</span>
           <input ref="currentInputRef" v-if="data.editing || false" :value="data.fieldKey" @blur="data.editing = false"
                  @change="(event) => onInputChange(event, data)" @keyup.enter="(event) => onInputChange(event, data)" />
           <span>
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StyleValue, nextTick, reactive, ref, onMounted, computed } from "vue";
+import { StyleValue, nextTick, reactive, ref } from "vue";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import type { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 import type {
@@ -99,6 +100,10 @@ const append = (data: FieldInfo) => {
   }
   data.children.push(newChild);
   dataSource.value = [...dataSource.value];
+};
+
+const handleNodeClicked = (data: any, node: any, item: any) => {
+
 };
 
 /**
@@ -178,7 +183,7 @@ const handleDrop = (
 };
 
 watch(() => fields, (newValue, oldValue) => {
-  console.log(newValue, oldValue);
+
 }, {
   deep: true
 });

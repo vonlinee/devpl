@@ -186,6 +186,13 @@ public abstract class CollectionUtils {
         return collection.stream().map(key).max(Comparator.comparing(keyExtractor)).orElse(defaults);
     }
 
+    /**
+     * 集合添加多个元素，支持数组和可变参数
+     *
+     * @param coll 集合
+     * @param arr  新加的元素
+     * @param <E>  元素类型
+     */
     public static <E> void addAll(Collection<E> coll, E[] arr) {
         if (coll == null || arr == null || arr.length == 0) {
             return;

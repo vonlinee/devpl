@@ -2,7 +2,7 @@ package io.devpl.codegen.plugins;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.config.args.EntityTemplateArugments;
+import io.devpl.codegen.template.model.EntityTemplateArugments;
 import io.devpl.codegen.core.*;
 import io.devpl.codegen.db.DbColumnType;
 import io.devpl.codegen.db.IKeyWordsHandler;

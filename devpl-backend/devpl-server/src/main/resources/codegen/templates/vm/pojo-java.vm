@@ -1,0 +1,5 @@
+package ${packageName};
+
+#foreach($importItem in ${importItems})
+import ${importItem};
+#end

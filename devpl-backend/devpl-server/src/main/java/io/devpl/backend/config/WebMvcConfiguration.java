@@ -1,5 +1,6 @@
 package io.devpl.backend.config;
 
+import io.devpl.backend.common.RequestTracer;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
 import org.slf4j.Logger;

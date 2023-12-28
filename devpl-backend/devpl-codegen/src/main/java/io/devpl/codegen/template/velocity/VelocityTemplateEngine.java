@@ -1,7 +1,6 @@
 package io.devpl.codegen.template.velocity;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.StringTemplateSource;
 import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateSource;
 import org.apache.velocity.Template;
@@ -64,16 +63,16 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void merge(@NotNull Map<String, Object> objectMap, @NotNull String templatePath, @NotNull OutputStream outputStream) throws Exception {
-        Template template = engine.getTemplate(templatePath, StandardCharsets.UTF_8.name());
+    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) throws Exception {
+        Template template = engine.getTemplate(name, StandardCharsets.UTF_8.name());
         try (OutputStreamWriter ow = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8); BufferedWriter writer = new BufferedWriter(ow)) {
-            template.merge(new VelocityContext(objectMap), writer);
+            template.merge(new VelocityContext(arguments), writer);
         }
     }
 
     @Override
     public void render(TemplateSource template, TemplateArguments arguments, OutputStream outputStream) {
-        if (template instanceof StringTemplateSource) {
+        if (template instanceof VelocityTemplateSource) {
             VelocityContext context = new VelocityContext(arguments.asMap());
             Velocity.evaluate(context, new OutputStreamWriter(outputStream), "mystring", template.getContent());
         }
@@ -112,5 +111,11 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     @Override
     public String getTemplateFileExtension() {
         return ".vm";
+    }
+
+    @Override
+    public @NotNull TemplateSource getTemplate(String name) {
+        Template template = engine.getTemplate(name);
+        return new VelocityTemplateSource(template);
     }
 }

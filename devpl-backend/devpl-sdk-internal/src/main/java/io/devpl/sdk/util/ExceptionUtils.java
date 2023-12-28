@@ -46,8 +46,8 @@ public class ExceptionUtils {
     /**
      * 过滤栈帧
      *
-     * @param throwable
-     * @param ignorePackagePrefix
+     * @param throwable           Throwable
+     * @param ignorePackagePrefix 忽略栈帧的包名前缀
      * @return
      */
     public static StackTraceElement[] getStackTrace(Throwable throwable, String ignorePackagePrefix) {

@@ -1,9 +1,9 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.config.args.ControllerTempateArguments;
-import io.devpl.codegen.config.args.EntityTemplateArugments;
-import io.devpl.codegen.config.args.MapperTemplateArguments;
-import io.devpl.codegen.config.args.ServiceTemplateArguments;
+import io.devpl.codegen.template.model.ControllerTempateArguments;
+import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.MapperTemplateArguments;
+import io.devpl.codegen.template.model.ServiceTemplateArguments;
 
 /**
  * 配置构建

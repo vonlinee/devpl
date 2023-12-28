@@ -91,7 +91,7 @@ public interface TemplateArguments {
     }
 
     /**
-     * 是否为空
+     * 参数是否为空
      *
      * @return 模板参数集合是否为空
      */

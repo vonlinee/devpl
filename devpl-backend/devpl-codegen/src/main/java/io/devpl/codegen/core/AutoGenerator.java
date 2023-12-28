@@ -338,7 +338,7 @@ public class AutoGenerator {
                     callback.writeFile(file);
                 }
                 try (FileOutputStream fos = new FileOutputStream(file)) {
-                    templateEngine.merge(objectMap, templatePath, fos);
+                    templateEngine.render(templatePath, objectMap, fos);
                     log.debug("模板:" + templatePath + ";  文件:" + file);
                 }
             } catch (Exception exception) {
