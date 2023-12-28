@@ -2,6 +2,7 @@ package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.backend.domain.param.FieldGroupListParam;
+import io.devpl.backend.domain.param.FieldGroupParam;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.GroupField;
 
@@ -18,4 +19,6 @@ public interface FieldGroupService {
     FieldGroup newGroup();
 
     boolean removeFieldGroupById(Long id);
+
+    boolean updateFieldGroup(FieldGroupParam param);
 }

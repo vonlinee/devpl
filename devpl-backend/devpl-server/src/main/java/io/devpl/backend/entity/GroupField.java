@@ -46,4 +46,9 @@ public class GroupField {
 
     @TableField(exist = false)
     private String comment;
+
+    public GroupField(Long groupId, Long fieldId) {
+        this.groupId = groupId;
+        this.fieldId = fieldId;
+    }
 }

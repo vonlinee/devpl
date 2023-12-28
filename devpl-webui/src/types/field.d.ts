@@ -43,3 +43,8 @@ type FieldInfo = {
    */
   editing?: boolean
 }
+
+type FieldGroup = {
+  id: number,
+  groupName: string
+}

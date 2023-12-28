@@ -22,6 +22,27 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * 所有都为空时返回true
+     *
+     * @param collections 多个集合
+     * @return 所有都为空时返回true
+     */
+    public static boolean isEmpty(Collection<?>... collections) {
+        if (collections == null) {
+            return true;
+        }
+        if (collections.length == 1) {
+            return isEmpty(collections[0]);
+        }
+        for (Collection<?> collection : collections) {
+            if (!isEmpty(collection)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Return {@code true} if the supplied Collection is {@code null} or empty.
      * Otherwise, return {@code false}.
      *
@@ -266,5 +287,19 @@ public abstract class CollectionUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * nullsafe版本removeAll
+     *
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @param <E>   集合元素类型
+     */
+    public static <E> void removeAll(Collection<E> coll1, List<E> coll2) {
+        if (isEmpty(coll1) || isEmpty(coll2)) {
+            return;
+        }
+        coll1.removeAll(coll2);
     }
 }

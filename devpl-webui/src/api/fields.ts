@@ -112,6 +112,18 @@ export const apiNewFieldGroup = () => {
   return http.post("/api/field/group/new");
 };
 
+/**
+ * 查询字段组的字段列表
+ */
+export const apiUpdateFieldGroup = (group: {
+  id: number,
+  groupName: string
+}, fields: FieldInfo[]) => {
+  return http.post("/api/field/group", {
+    group: group,
+    fields: fields
+  });
+};
 
 /**
  * 查询字段组的字段列表

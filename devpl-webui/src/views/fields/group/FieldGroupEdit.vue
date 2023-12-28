@@ -1,8 +1,9 @@
 <template>
-  <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" show-footer width="50%">
+  <vxe-modal v-model="visible" :title="!dataForm.group?.id ? '新增' : '修改'" :mask-closable="false" show-footer
+             width="50%">
     <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
-      <el-form-item label="组名称" prop="code">
-        <el-input v-model="dataForm.code" placeholder="组名称"></el-input>
+      <el-form-item label="组名称" prop="groupName">
+        <el-input v-model="dataForm.group.groupName" placeholder="组名称"></el-input>
       </el-form-item>
       <el-form-item label="字段信息" prop="fields">
         <template #default>
@@ -14,9 +15,6 @@
           </el-table>
           <el-button class="mt-4" style="width: 100%" @click="showFieldSelectModal">选择</el-button>
         </template>
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="dataForm.remark" placeholder="备注"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -33,6 +31,7 @@ import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus/es";
 import { apiGetModelById, apiSaveOrUpdateModelById } from "@/api/model";
 import FieldSelectModal from "@/views/fields/FieldSelectModal.vue";
+import { apiListGroupFieldsById, apiUpdateFieldGroup } from "@/api/fields";
 
 const emit = defineEmits(["refreshDataList"]);
 
@@ -40,19 +39,14 @@ const visible = ref(false);
 const dataFormRef = ref();
 const fieldSelectModal = ref();
 
-type FormDataType = {
-  id?: number | string,
-  packageName: string,
-  code: string,
-  remark: string,
+const dataForm = reactive<{
+  group?: FieldGroup,
   fields: FieldInfo[]
-}
-
-const dataForm = reactive<FormDataType>({
-  id: undefined,
-  packageName: "",
-  code: "",
-  remark: "",
+}>({
+  group: {
+    id: -1,
+    groupName: ""
+  },
   fields: []
 });
 
@@ -87,10 +81,10 @@ const dataRules = ref({
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
-    if (!valid) {
+    if (!valid || dataForm.group == undefined) {
       return false;
     }
-    apiSaveOrUpdateModelById(dataForm).then(() => {
+    apiUpdateFieldGroup(dataForm.group, dataForm.fields).then(() => {
       ElMessage.success({
         message: "操作成功",
         duration: 500,
@@ -104,17 +98,20 @@ const submitHandle = () => {
 };
 
 defineExpose({
-  show: (id?: number) => {
+  show: (group?: FieldGroup) => {
     visible.value = true;
-    dataForm.id = "";
-
     // 重置表单数据
     if (dataFormRef.value) {
       dataFormRef.value.resetFields();
     }
     // id 存在则为修改
-    if (id) {
-      getModelClass(id);
+    if (group) {
+
+      dataForm.group = group;
+
+      apiListGroupFieldsById(group.id).then((res) => {
+        dataForm.fields = res.data;
+      });
     }
   }
 });

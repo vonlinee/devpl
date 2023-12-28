@@ -3,6 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.FieldGroupListParam;
+import io.devpl.backend.domain.param.FieldGroupParam;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.entity.FieldGroup;
@@ -124,6 +125,16 @@ public class FieldInfoController {
     @DeleteMapping(value = "/group")
     public Result<Boolean> removeGroup(Long id) {
         return Result.ok(fieldGroupService.removeFieldGroupById(id));
+    }
+
+    /**
+     * 编辑字段组
+     *
+     * @return 字段组信息
+     */
+    @PostMapping(value = "/group")
+    public Result<Boolean> updateGroup(@RequestBody FieldGroupParam param) {
+        return Result.ok(fieldGroupService.updateFieldGroup(param));
     }
 
     /**

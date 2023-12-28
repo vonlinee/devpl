@@ -13,7 +13,7 @@
         <el-button link @click="javaPojoGenModal.show(scope.row.id)">Java</el-button>
         <el-button link>SQL</el-button>
         <el-button link>转为模型</el-button>
-        <el-button link @click="showFieldGroupEditModal">编辑</el-button>
+        <el-button link @click="showFieldGroupEditModal(scope.row)">编辑</el-button>
         <el-button link @click="removeFieldGroup(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
@@ -36,7 +36,7 @@ import { Message } from "@/hooks/message";
 import FieldGroupEdit from "@/views/fields/group/FieldGroupEdit.vue";
 
 const importFieldGroupModal = ref();
-const tableData = ref();
+const tableData = ref<FieldGroup[]>([]);
 const javaPojoGenModal = ref();
 const fieldGroupEditModalRef = ref();
 
@@ -44,8 +44,8 @@ const showFieldImportModal = () => {
   importFieldGroupModal.value.show();
 };
 
-const showFieldGroupEditModal = () => {
-  fieldGroupEditModalRef.value.show();
+const showFieldGroupEditModal = (group?: FieldGroup) => {
+  fieldGroupEditModalRef.value.show(group);
 };
 
 const refreshTableData = () => {
