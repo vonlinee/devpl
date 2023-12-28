@@ -40,7 +40,11 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
 
     @Override
     public List<FieldInfo> listFields(FieldInfoListParam param) {
-        return baseMapper.selectList(new LambdaQueryWrapper<FieldInfo>().like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey()).like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName()));
+        LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldKey, param.getKeyword());
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldName, param.getKeyword());
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getDescription, param.getKeyword());
+        return baseMapper.selectList(qw);
     }
 
     @Override
@@ -48,8 +52,9 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
         LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
         qw.notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys));
-        qw.like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey());
-        qw.like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName());
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldKey, param.getKeyword());
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getDescription, param.getKeyword());
+        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldName, param.getKeyword());
         qw.orderBy(true, false, FieldInfo::getCreateTime);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }

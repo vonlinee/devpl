@@ -8,11 +8,18 @@ import lombok.Setter;
 @Setter
 public class FieldInfoListParam extends PageParam {
 
-    private String fieldKey;
-    private String fieldName;
-
     /**
-     * 逗号拼接
+     * 根据fieldKey过滤，多个逗号拼接
      */
     private String excludedKeys;
+
+    /**
+     * 通过字段key，字段名称或者字段描述信息查找
+     */
+    private String keyword;
+
+    /**
+     * 数据类型ID
+     */
+    private String dataType;
 }

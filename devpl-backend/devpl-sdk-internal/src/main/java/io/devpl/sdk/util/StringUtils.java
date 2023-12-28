@@ -1687,13 +1687,7 @@ public abstract class StringUtils {
         if (!hasLength(toSplit) || !hasLength(delimiter)) {
             return EMPTY_STRING_ARRAY;
         }
-        int offset = toSplit.indexOf(delimiter);
-        if (offset < 0) {
-            return EMPTY_STRING_ARRAY;
-        }
-        String beforeDelimiter = toSplit.substring(0, offset);
-        String afterDelimiter = toSplit.substring(offset + delimiter.length());
-        return new String[]{beforeDelimiter, afterDelimiter};
+        return toSplit.split(delimiter, 0);
     }
 
     public static boolean containsAny(final CharSequence cs, final CharSequence... searchCharSequences) {

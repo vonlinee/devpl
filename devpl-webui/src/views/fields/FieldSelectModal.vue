@@ -1,5 +1,22 @@
+<!--
+  字段选择弹窗
+-->
 <template>
-  <vxe-modal title="字段选择" width="50%" v-model="visible" @close="handleClose" destroy-on-close :mask="false">
+  <vxe-modal title="字段选择" width="50%" v-model="visible" @close="handleClose" destroy-on-close>
+    <el-form v-model="option.queryForm" :inline="true" class="demo-form-inline">
+      <el-form-item label="关键词" prop="keyword">
+        <el-input v-model="option.queryForm.keyword" placeholder="通过字段key，字段名称或者字段描述信息查找"></el-input>
+      </el-form-item>
+      <el-form-item label="数据类型" prop="region">
+        <el-select v-model="option.queryForm.dataType">
+          <el-option label="String" value="String" />
+          <el-option label="int" value="Int" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="getDataList">搜索</el-button>
+      </el-form-item>
+    </el-form>
     <el-table :border="true" height="525" :data="option.dataList" @selection-change="handleSelection">
       <el-table-column type="selection" width="40" header-align="center" align="center"></el-table-column>
       <el-table-column prop="fieldKey" label="Key"></el-table-column>
@@ -18,7 +35,6 @@ import { DataTableOption } from "@/hooks/interface";
 import { reactive, ref } from "vue";
 import { apiDeleteFieldByIds, apiListFields } from "@/api/fields";
 import { useCrud } from "@/hooks";
-import { sub } from "@/utils/tool";
 
 const visible = ref();
 
@@ -26,28 +42,27 @@ const emits = defineEmits([
   "selection-change"
 ]);
 
+/**
+ * 选中回调
+ * @param val
+ */
 const handleSelection = (val: FieldInfo[]) => {
   emits("selection-change", val);
-  // 删除选中的元素
-
-  if (option.dataList) {
-    option.dataList = sub(option.dataList, val)
-  }
 };
 
 const handleClose = () => {
   option.queryForm = {
-    fieldKey: "",
-    fieldName: "",
+    keyword: "",
+    dataType: "String",
     excludedKeys: ""
   };
 };
 
 const option: DataTableOption = reactive({
   queryForm: {
-    fieldKey: "",
-    fieldName: "",
-    excludedKeys: ""
+    excludedKeys: "",
+    keyword: "",
+    dataType: "String"
   },
   queryPage: apiListFields,
   removeByIds: apiDeleteFieldByIds
@@ -66,4 +81,8 @@ defineExpose({
 });
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.demo-form-inline .el-input {
+  --el-input-width: 420px;
+}
+</style>
