@@ -61,7 +61,6 @@ export const apiSaveGenerationFileConfig = (tableId: number, files: TableFileGen
   });
 };
 
-
 /**
  * 删除生成文件类型
  * @param genFiles
@@ -86,4 +85,12 @@ export const apiSaveGeneratorConfig = (content: string) => {
   return http.post("/api/codegen/config", {
     content: content
   }, { "Content-Type": "multipart/form-data" });
+};
+
+/**
+ * 生成JavaPojo类
+ * @param param
+ */
+export const apiCodeGenJavaPojo = (param: any) => {
+  return http.post<string>("/api/codegen/java/pojo", param);
 };

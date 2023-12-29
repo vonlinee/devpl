@@ -11,8 +11,8 @@ import io.devpl.backend.service.DomainModelService;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +60,7 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateModel(ModelInfo modelInfo) {
         updateById(modelInfo);
         List<Long> fieldIds = baseMapper.selectModelFieldIds(modelInfo.getId());

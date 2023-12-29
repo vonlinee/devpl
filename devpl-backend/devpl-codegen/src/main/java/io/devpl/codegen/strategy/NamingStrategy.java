@@ -7,7 +7,7 @@ import io.devpl.codegen.core.CaseFormat;
  *
  * @see CaseFormat
  */
-public interface NamingChangeStrategy {
+public interface NamingStrategy {
 
     /**
      * 命名策略实现类的唯一ID
@@ -29,7 +29,7 @@ public interface NamingChangeStrategy {
     /**
      * 不做改变
      */
-    NamingChangeStrategy NO_CHANGE = new NamingChangeStrategy() {
+    NamingStrategy NO_CHANGE = new NamingStrategy() {
         @Override
         public String getId() {
             return "NO_CHANGE";

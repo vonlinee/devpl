@@ -1,5 +1,6 @@
 package io.devpl.codegen.template;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -96,7 +97,11 @@ public interface TemplateArguments {
      * @return 模板参数集合是否为空
      */
     default boolean isEmpty() {
-        return true;
+        if (this instanceof Map<?, ?> map) {
+            return map.isEmpty();
+        }
+        // 如果模板参数是POJO类，则默认不为空
+        return false;
     }
 
     /**
@@ -108,5 +113,23 @@ public interface TemplateArguments {
         if (arguments != null) {
             arguments.putAll(this.asMap());
         }
+    }
+
+    /**
+     * 返回数据模型对象
+     *
+     * @return 数据模型对象，有些模板引擎支持POJO类和Map，有些只支持Map作为参数，具体使用什么对象作为容器类根据不同的模板引擎实现决定
+     * @see TemplateSource
+     * @see TemplateEngine
+     */
+    @NotNull
+    default Object getDataModel() {
+        return this;
+    }
+
+    /**
+     * 模板视图与逻辑分离，即模板中不包含过多的逻辑
+     */
+    default void preprocess() {
     }
 }

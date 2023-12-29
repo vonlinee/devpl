@@ -2,28 +2,25 @@ package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
 import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.TemplateException;
 import io.devpl.codegen.template.TemplateSource;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * Beetl 模板引擎实现文件输出
  * <a href="http://ibeetl.com/guide/#/beetl/basic?id=%e5%ae%89%e8%a3%85">...</a>
  */
 public class BeetlTemplateEngine extends AbstractTemplateEngine {
-
-    static final Logger log = LoggerFactory.getLogger(BeetlTemplateEngine.class);
 
     private static Method method;
 
@@ -50,6 +47,11 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
             log.error("初始化模板引擎失败:", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+
     }
 
     @Override

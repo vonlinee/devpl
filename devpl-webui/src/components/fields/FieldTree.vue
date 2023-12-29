@@ -66,6 +66,7 @@ const { selectable, height, fields } = withDefaults(defineProps<FieldTreeProps>(
   selectable: false,
   height: "500px"
 });
+
 const dataSource = ref<FieldInfo[]>(fields);
 
 const addIfEmpty = () => {
@@ -183,7 +184,8 @@ const handleDrop = (
 };
 
 watch(() => fields, (newValue, oldValue) => {
-
+  console.log("newValue => ", newValue);
+  console.log("oldValue => ", oldValue);
 }, {
   deep: true
 });

@@ -1042,7 +1042,7 @@ public class ObjectUtils {
      * @param removeNull 是否移除null  nullToZero和removeNull同时为true，nullToZero优先
      * @return 基本类型数组
      */
-    public static int @NotNull [] nullsafeToPrimitiveInt(Integer[] arr, boolean nullToZero, boolean removeNull) {
+    public static int @NotNull [] nullSafeToPrimitiveInt(Integer[] arr, boolean nullToZero, boolean removeNull) {
         if (isEmpty(arr)) {
             return new int[0];
         }
@@ -1053,5 +1053,41 @@ public class ObjectUtils {
             }
         }
         return nums;
+    }
+
+    /**
+     * 所有对象都不为null
+     *
+     * @param objects 对象列表
+     * @return 是否所有对象都不为null
+     */
+    public static boolean nonNull(Object... objects) {
+        if (objects == null) {
+            return false;
+        }
+        for (Object object : objects) {
+            if (!Objects.nonNull(object)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 至少一个对象为null返回true
+     *
+     * @param objects 对象列表
+     * @return 是否所有对象都不为null
+     */
+    public static boolean anyNull(Object... objects) {
+        if (objects == null) {
+            return true;
+        }
+        for (Object object : objects) {
+            if (!Objects.nonNull(object)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

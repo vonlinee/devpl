@@ -6,6 +6,7 @@ import io.devpl.backend.common.query.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
@@ -41,6 +42,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
+    @Value(value = "${server.servlet.context-path:}")
+    private String contextPath;
+
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
@@ -55,7 +59,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RequestTracer());
+        RequestTracer requestTracer = new RequestTracer();
+        requestTracer.setServletContextPath(this.contextPath);
+        registry.addInterceptor(requestTracer);
     }
 
     /**

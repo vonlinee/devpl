@@ -2,10 +2,7 @@ package io.devpl.codegen.template.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.TemplateArguments;
-import io.devpl.codegen.template.TemplateSource;
+import io.devpl.codegen.template.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +19,17 @@ import java.util.Map;
  */
 public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
-    final Logger log = LoggerFactory.getLogger(FreemarkerTemplateEngine.class);
-
     private final Configuration configuration;
 
     public FreemarkerTemplateEngine() {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
         configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, "/");
+    }
+
+    @Override
+    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+
     }
 
     @Override

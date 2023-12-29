@@ -1,5 +1,7 @@
 package io.devpl.codegen.template;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,5 +47,10 @@ public final class TemplateArgumentsMap implements TemplateArguments {
     @Override
     public boolean isMap() {
         return true;
+    }
+
+    @Override
+    public @NotNull Object getDataModel() {
+        return argumentsMap;
     }
 }

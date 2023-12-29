@@ -1,10 +1,6 @@
 package io.devpl.codegen.template.model;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.IdType;
 import io.devpl.codegen.strategy.FieldFillStrategy;
@@ -15,15 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * 实体属性配置
  */
-public class EntityTemplateArugments extends TemplateArgumentsForJavaClass implements TableInitializer {
+public class EntityTemplateArugments extends TypeData implements TableInitializer {
 
     private final static Logger log = LoggerFactory.getLogger(EntityTemplateArugments.class);
     /**
@@ -155,21 +149,21 @@ public class EntityTemplateArugments extends TemplateArgumentsForJavaClass imple
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
-        List<Field> fields = TableInfoHelper.getAllFields(clazz);
-        this.superEntityColumns.addAll(fields.stream().map(field -> {
-            TableId tableId = field.getAnnotation(TableId.class);
-            if (tableId != null && StringUtils.hasText(tableId.value())) {
-                return tableId.value();
-            }
-            TableField tableField = field.getAnnotation(TableField.class);
-            if (tableField != null && StringUtils.hasText(tableField.value())) {
-                return tableField.value();
-            }
-            if (null == columnNamingStrategy || columnNamingStrategy == NamingStrategy.NO_CHANGE) {
-                return field.getName();
-            }
-            return CaseFormat.camelToUnderline(field.getName());
-        }).collect(Collectors.toSet()));
+//        List<Field> fields = TableInfoHelper.getAllFields(clazz);
+//        this.superEntityColumns.addAll(fields.stream().map(field -> {
+//            TableId tableId = field.getAnnotation(TableId.class);
+//            if (tableId != null && StringUtils.hasText(tableId.value())) {
+//                return tableId.value();
+//            }
+//            TableField tableField = field.getAnnotation(TableField.class);
+//            if (tableField != null && StringUtils.hasText(tableField.value())) {
+//                return tableField.value();
+//            }
+//            if (null == columnNamingStrategy || columnNamingStrategy == NamingStrategy.NO_CHANGE) {
+//                return field.getName();
+//            }
+//            return CaseFormat.camelToUnderline(field.getName());
+//        }).collect(Collectors.toSet()));
     }
 
     public NamingStrategy getColumnNamingStrategy() {

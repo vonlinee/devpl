@@ -18,9 +18,8 @@ open module devpl.codegen {
     exports io.devpl.codegen.template.model;
     exports io.devpl.codegen.parser;
     exports io.devpl.codegen.parser.java;
+    exports io.devpl.codegen.lang;
 
-    requires com.baomidou.mybatis.plus.core;
-    requires com.baomidou.mybatis.plus.annotation;
     requires org.jetbrains.annotations;
     requires org.slf4j;
     requires beetl;
@@ -28,12 +27,10 @@ open module devpl.codegen {
     requires velocity.engine.core;
     requires freemarker;
     requires java.sql;
-    requires org.mybatis;
     requires lombok;
-    requires org.hibernate.orm.core;
     requires devpl.sdk.internal;
     requires org.mybatis.generator;
-    requires jsqlparser;
     requires com.github.javaparser.core;
     requires druid;
+    requires jsqlparser;
 }

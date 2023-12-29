@@ -2,12 +2,13 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.FileNode;
+import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.domain.param.TableFileGenParam;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.entity.TargetGenerationFile;
 import io.devpl.backend.service.*;
 import io.devpl.sdk.validation.Assert;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,16 +20,14 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/api/codegen")
+@AllArgsConstructor
 public class CodeGenerationController {
 
-    @Resource
     FileGenerationService fileGenService;
-    @Resource
     TargetGenerationFileService targetGenFileService;
-    @Resource
     TableFileGenerationService tableFileGenerationService;
-    @Resource
     GeneratorConfigService generatorConfigService;
+    CodeGenerationService codeGenerationService;
 
     /**
      * 生成代码（自定义目录）
@@ -153,5 +152,16 @@ public class CodeGenerationController {
     @GetMapping("/file")
     public Result<String> getFileContent(String path) {
         return Result.ok(fileGenService.getFileContent(path));
+    }
+
+    /**
+     * 生成JavaPojo
+     *
+     * @param param 参数
+     * @return 生成结果
+     */
+    @PostMapping("/java/pojo")
+    public Result<String> generateJavaPojoClass(@RequestBody JavaPojoCodeGenParam param) {
+        return Result.ok(codeGenerationService.generatedDtoClass(param));
     }
 }

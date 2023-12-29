@@ -2,9 +2,7 @@ package io.devpl.codegen.template;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
@@ -30,13 +28,22 @@ public interface TemplateEngine {
      * @return 渲染结果
      */
     default String evaluate(String template, TemplateArguments arguments) throws TemplateException {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            render(getTemplate(template, true), arguments, outputStream);
-            return outputStream.toString(StandardCharsets.UTF_8);
+        try (Writer writer = new StringWriter()) {
+            evaluate(template, arguments, writer);
+            return writer.toString();
         } catch (IOException e) {
-            throw new TemplateException(e);
+            throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 渲染字符串模板
+     *
+     * @param template  模板内容，不能为null或者空
+     * @param arguments 模板参数
+     * @param writer    渲染结果
+     */
+    void evaluate(String template, TemplateArguments arguments, Writer writer);
 
     /**
      * 渲染并输出到指定位置
@@ -74,7 +81,6 @@ public interface TemplateEngine {
             throw new TemplateException(e);
         }
     }
-
     /**
      * 注册自定义指令
      *

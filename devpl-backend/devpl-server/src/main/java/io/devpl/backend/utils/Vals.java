@@ -35,24 +35,6 @@ public abstract class Vals {
         return false;
     }
 
-    /**
-     * 所有值都不为null
-     *
-     * @param args
-     * @return
-     */
-    public static boolean allNotNull(Object... args) {
-        if (args == null) {
-            return false;
-        }
-        for (Object arg : args) {
-            if (arg == null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static <T> T whenNull(T value, T placeholder) {
         return value == null ? placeholder : value;
     }

@@ -4,8 +4,6 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
-import org.apache.ibatis.cache.Cache;
-import org.apache.ibatis.cache.decorators.LoggingCache;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Annotation;
@@ -16,7 +14,7 @@ import java.util.function.Function;
 /**
  * 控制器属性配置
  */
-public class MapperTemplateArguments extends TemplateArgumentsForJavaClass implements TableInitializer {
+public class MapperTemplateArguments extends TypeData implements TableInitializer {
 
     /**
      * 自定义继承的Mapper类全称，带包名
@@ -60,10 +58,12 @@ public class MapperTemplateArguments extends TemplateArgumentsForJavaClass imple
     private boolean fileOverride;
     /**
      * 设置缓存实现类
+     * org.apache.ibatis.cache.Cache;
+     * org.apache.ibatis.cache.decorators.LoggingCache;
      *
      * @since 3.5.0
      */
-    private Class<? extends Cache> cache;
+    private Class<?> cache;
 
     private MapperTemplateArguments() {
     }
@@ -94,9 +94,9 @@ public class MapperTemplateArguments extends TemplateArgumentsForJavaClass imple
         return converterXmlFileName;
     }
 
-    public Class<? extends Cache> getCache() {
-        return this.cache == null ? LoggingCache.class : this.cache;
-    }
+//    public Class<? extends Cache> getCache() {
+//        return this.cache == null ? LoggingCache.class : this.cache;
+//    }
 
     public boolean isFileOverride() {
         return fileOverride;
@@ -113,9 +113,9 @@ public class MapperTemplateArguments extends TemplateArgumentsForJavaClass imple
         data.put("baseColumnList", this.baseColumnList);
         data.put("superMapperClassPackage", this.superClass);
         if (this.cache != null) {
-            Class<? extends Cache> cacheClass = this.getCache();
-            data.put("cache", cacheClass);
-            data.put("cacheClassName", cacheClass.getName());
+//            Class<? extends Cache> cacheClass = this.getCache();
+//            data.put("cache", cacheClass);
+//            data.put("cacheClassName", cacheClass.getName());
         }
         data.put("superMapperClass", ClassUtils.getSimpleName(this.superClass));
         return data;
@@ -192,7 +192,7 @@ public class MapperTemplateArguments extends TemplateArgumentsForJavaClass imple
          * @return this
          * @since 3.5.0
          */
-        public Builder cache(@NotNull Class<? extends Cache> cache) {
+        public Builder cache(@NotNull Class<?> cache) {
             this.mapper.cache = cache;
             return this;
         }

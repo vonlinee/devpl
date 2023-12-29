@@ -1,6 +1,6 @@
 package io.devpl.codegen.core;
 
-import io.devpl.codegen.strategy.NamingChangeStrategy;
+import io.devpl.codegen.strategy.NamingStrategy;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -9,10 +9,8 @@ import java.util.regex.Pattern;
 
 /**
  * 命名风格枚举
- *
- * @see com.google.common.base.CaseFormat
  */
-public enum CaseFormat implements NamingChangeStrategy {
+public enum CaseFormat implements NamingStrategy {
 
     /**
      * 大写：所有字母全大写，非字母不变

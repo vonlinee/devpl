@@ -7,8 +7,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,18 +20,7 @@ import java.util.Properties;
  * <p>
  * org/apache/velocity/runtime/defaults/velocity.properties
  */
-public class VelocityTemplateEngine extends AbstractTemplateEngine {
-    static final Logger log = LoggerFactory.getLogger(VelocityTemplateEngine.class);
-
-    static {
-        try {
-            // VelocityEngineVersion.VERSION;
-            Class.forName("org.apache.velocity.util.DuckType");
-        } catch (ClassNotFoundException e) {
-            // velocity1.x的生成格式错乱 https://github.com/baomidou/generator/issues/5
-            log.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
-        }
-    }
+public class VelocityTemplateEngine implements TemplateEngine {
 
     /**
      * 字符串模板日志tag
@@ -65,15 +52,9 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public String evaluate(String template, TemplateArguments arguments) throws TemplateException {
+    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
         VelocityContext context = new VelocityContext(arguments.asMap());
-        try (StringWriter sw = new StringWriter()) {
-            RuntimeSingleton.getRuntimeServices().evaluate(context, sw, ST_LOG_TAG, new StringReader(template));
-            return sw.toString();
-            // false表示失败，需要查看Velocity的运行日志
-        } catch (IOException e) {
-            throw new TemplateException(e);
-        }
+        RuntimeSingleton.getRuntimeServices().evaluate(context, writer, ST_LOG_TAG, new StringReader(template));
     }
 
     /**

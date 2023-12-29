@@ -52,6 +52,7 @@ public final class Arrays {
      * @return ArrayList
      * @see java.util.Arrays#asList(Object[])
      */
+    @SafeVarargs
     public static <T> List<T> asList(T... elements) {
         if (elements == null) {
             return Collections.emptyList();

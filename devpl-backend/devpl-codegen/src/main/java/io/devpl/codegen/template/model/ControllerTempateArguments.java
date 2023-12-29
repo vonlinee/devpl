@@ -17,7 +17,7 @@ import java.util.function.Function;
 /**
  * 控制器属性配置
  */
-public class ControllerTempateArguments extends TemplateArgumentsForJavaClass implements TableInitializer {
+public class ControllerTempateArguments extends TypeData implements TableInitializer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ControllerTempateArguments.class);
     /**

@@ -1,16 +1,10 @@
 package io.devpl.codegen.template.enjoy;
 
 import com.jfinal.template.Engine;
-import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.TemplateArguments;
-import io.devpl.codegen.template.TemplateException;
-import io.devpl.codegen.template.TemplateSource;
+import io.devpl.codegen.template.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -23,6 +17,11 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
 
     public EnjoyTemplateEngine() {
         engine = Engine.createIfAbsent("codegen", Engine::setToClassPathSourceFactory);
+    }
+
+    @Override
+    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+
     }
 
     @Override

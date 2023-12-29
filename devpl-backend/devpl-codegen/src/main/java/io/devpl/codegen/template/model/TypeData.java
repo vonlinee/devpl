@@ -4,6 +4,8 @@ import io.devpl.codegen.template.TemplateArguments;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class TemplateArgumentsForJavaClass implements TemplateArguments {
+public class TypeData implements TemplateArguments {
 
     /**
      * 包名
@@ -47,6 +49,16 @@ public class TemplateArgumentsForJavaClass implements TemplateArguments {
      */
     private List<String> superInterfaces;
 
+    /**
+     * 字段列表
+     */
+    private List<FieldData> fields;
+
+    /**
+     * 方法列表
+     */
+    private List<MethodData> methods;
+
     @Override
     public void fill(Map<String, Object> arguments) {
         arguments.put("packageName", this.packageName);
@@ -57,5 +69,30 @@ public class TemplateArgumentsForJavaClass implements TemplateArguments {
         arguments.put("staticImportItem", this.staticImportItem);
         arguments.put("superClass", this.superClass);
         arguments.put("superInterfaces", this.superInterfaces);
+        arguments.put("fields", this.fields);
+        arguments.put("methods", this.methods);
+    }
+
+    public final void addImport(String... importTypes) {
+        if (importItems == null) {
+            importItems = new ArrayList<>(Arrays.asList(importTypes));
+        } else {
+            importItems.addAll(Arrays.asList(importTypes));
+        }
+    }
+
+    public final void addSuperInterfaces(String... superInterfaces) {
+        if (this.superInterfaces == null) {
+            this.superInterfaces = new ArrayList<>(Arrays.asList(superInterfaces));
+        } else {
+            this.superInterfaces.addAll(Arrays.asList(superInterfaces));
+        }
+    }
+
+    public final void addField(FieldData fieldData) {
+        if (this.fields == null) {
+            this.fields = new ArrayList<>();
+        }
+        this.fields.add(fieldData);
     }
 }

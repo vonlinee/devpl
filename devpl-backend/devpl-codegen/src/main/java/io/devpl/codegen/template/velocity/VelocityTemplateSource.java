@@ -35,7 +35,6 @@ class VelocityTemplateSource implements TemplateSource {
 
     @Override
     public void setContent(String content) {
-
     }
 
     @Override
