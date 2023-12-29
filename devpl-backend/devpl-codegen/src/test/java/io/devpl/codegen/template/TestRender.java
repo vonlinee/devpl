@@ -7,13 +7,9 @@ public class TestRender {
     public static void main(String[] args) {
 
         VelocityTemplateEngine engine = new VelocityTemplateEngine();
-
-        TemplateSource templateSource = engine.getTemplate("Hello, ${foo}", false);
-
         TemplateArgumentsMap argumentsMap = new TemplateArgumentsMap();
-        argumentsMap.setValue("foo", "xxxxxxxxxxx");
-
-        String result = engine.render(templateSource, argumentsMap);
+        argumentsMap.setValue("name", "zs");
+        String result = engine.evaluate("Hello, ${name}", argumentsMap);
 
         System.out.println(result);
     }

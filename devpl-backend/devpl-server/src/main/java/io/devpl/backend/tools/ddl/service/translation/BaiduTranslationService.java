@@ -5,7 +5,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import io.devpl.backend.tools.ddl.model.TranslationVO;
-import io.devpl.backend.tools.ddl.utils.MD5Utils;
+import io.devpl.backend.utils.MD5Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 

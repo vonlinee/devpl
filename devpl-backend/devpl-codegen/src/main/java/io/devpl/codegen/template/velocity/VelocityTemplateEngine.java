@@ -1,14 +1,10 @@
 package io.devpl.codegen.template.velocity;
 
-import io.devpl.codegen.template.AbstractTemplateEngine;
-import io.devpl.codegen.template.StringTemplateSource;
-import io.devpl.codegen.template.TemplateArguments;
-import io.devpl.codegen.template.TemplateSource;
+import io.devpl.codegen.template.*;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -39,7 +35,10 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-    static final String ST = "StringTemplate";
+    /**
+     * 字符串模板日志tag
+     */
+    static final String ST_LOG_TAG = "StringTemplate";
 
     private final VelocityEngine engine;
     private final StringResourceRepository stringTemplates = new VelocityStringResourceRepository();
@@ -65,6 +64,18 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         return engine;
     }
 
+    @Override
+    public String evaluate(String template, TemplateArguments arguments) throws TemplateException {
+        VelocityContext context = new VelocityContext(arguments.asMap());
+        try (StringWriter sw = new StringWriter()) {
+            RuntimeSingleton.getRuntimeServices().evaluate(context, sw, ST_LOG_TAG, new StringReader(template));
+            return sw.toString();
+            // false表示失败，需要查看Velocity的运行日志
+        } catch (IOException e) {
+            throw new TemplateException(e);
+        }
+    }
+
     /**
      * 渲染模板
      * 通过文件模板进行查找，如果找不到则找字符串模板
@@ -76,20 +87,23 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
      * @see VelocityStringResourceRepository
      */
     @Override
-    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) throws TemplateException {
         // 渲染字符串模板
-        if (templateSource.isStringTemplate()) {
-            VelocityContext context = new VelocityContext(arguments.asMap());
-            Velocity.evaluate(context, new OutputStreamWriter(outputStream), ST, templateSource.getContent());
+        if (templateSource.isStringTemplate() || templateSource instanceof StringTemplateSource) {
+            String result = evaluate(templateSource.getContent(), arguments);
+            try {
+                outputStream.write(result.getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new TemplateException(e);
+            }
             return;
         }
         templateSource = templateSource.getSource();
         if (templateSource instanceof VelocityTemplateSource) {
-            Template vt = engine.getTemplate(templateSource.getName());
             try (Writer writer = new OutputStreamWriter(outputStream)) {
-                vt.merge(new VelocityContext(arguments.asMap()), writer);
+                templateSource.render(this, arguments, writer);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new TemplateException(e);
             }
         }
     }
@@ -101,7 +115,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
 
     /**
      * @param nameOrTemplate 模板名称或者字符串模板
-     * @param stringTemplate 是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
+     * @param stringTemplate nameOrTemplate参数是否是模板内容, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
      * @return 模板
      * @see TemplateSource#getName()
      * @see VelocityEngine#getTemplate(String, String)
@@ -109,7 +123,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
     @Override
     public @NotNull TemplateSource getTemplate(String nameOrTemplate, boolean stringTemplate) {
         if (stringTemplate) {
-            return new StringTemplateSource(nameOrTemplate, null);
+            return new StringTemplateSource(nameOrTemplate);
         }
         Template template = engine.getTemplate(nameOrTemplate, StandardCharsets.UTF_8.name());
         return new VelocityTemplateSource(template);

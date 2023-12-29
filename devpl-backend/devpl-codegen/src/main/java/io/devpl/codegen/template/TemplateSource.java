@@ -1,7 +1,8 @@
 package io.devpl.codegen.template;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.io.Writer;
 
 /**
  * 为了统一不同的模板引擎的实现，将各个模板引擎的类进行包装
@@ -26,13 +27,12 @@ public interface TemplateSource {
      * @see StringTemplateSource
      * @see FileTemplateSource
      */
-    @NotNull
     default TemplateSource getSource() {
         return this;
     }
 
     /**
-     * @return 可能是字符串模板，或文件路径，或者文件地址URL等
+     * @return 模板内容
      */
     default String getContent() {
         return "";
@@ -66,6 +66,14 @@ public interface TemplateSource {
     }
 
     /**
+     * 渲染模板
+     *
+     * @param arguments 本次渲染的参数
+     * @param writer    输出位置
+     */
+    void render(TemplateEngine engine, TemplateArguments arguments, Writer writer);
+
+    /**
      * 模板未找到时返回此值
      */
     TemplateSource UNKNOWN = new TemplateSource() {
@@ -77,6 +85,11 @@ public interface TemplateSource {
         @Override
         public boolean exists() {
             return false;
+        }
+
+        @Override
+        public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+
         }
     };
 }

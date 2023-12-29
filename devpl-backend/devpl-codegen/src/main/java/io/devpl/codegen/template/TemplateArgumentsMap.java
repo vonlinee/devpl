@@ -15,7 +15,16 @@ public final class TemplateArgumentsMap implements TemplateArguments {
     }
 
     public TemplateArgumentsMap(Map<? extends String, ?> m) {
-        this.argumentsMap = new HashMap<>(m);
+        this(m, false);
+    }
+
+    /**
+     * @param m      参数Map
+     * @param create 是否创建一个新Map
+     */
+    @SuppressWarnings("unchecked")
+    public TemplateArgumentsMap(Map<? extends String, ?> m, boolean create) {
+        this.argumentsMap = create ? new HashMap<>(m) : (Map<String, Object>) m;
     }
 
     @Override

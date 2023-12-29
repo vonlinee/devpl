@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -33,17 +34,13 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
     @Override
     public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
-        try {
-            Template template = configuration.getTemplate(templateSource.getName());
-            template.process(arguments, new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
-        } catch (IOException | TemplateException e) {
-            throw new RuntimeException(e);
+        if (templateSource instanceof FreeMarkerTemplateSource) {
+            try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+                templateSource.render(this, arguments, writer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
-
-    @Override
-    public void render(@NotNull String name, @NotNull Map<String, Object> arguments, @NotNull OutputStream outputStream) {
-
     }
 
     @Override

@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
@@ -24,15 +23,15 @@ public interface TemplateEngine {
     }
 
     /**
-     * 渲染字符串模板，适用于模板内容少的情况，直接渲染成字符串
+     * 渲染字符串模板
      *
      * @param template  模板内容，不能为null或者空
      * @param arguments 模板参数
      * @return 渲染结果
      */
-    default String render(String template, TemplateArguments arguments) throws TemplateException {
+    default String evaluate(String template, TemplateArguments arguments) throws TemplateException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            render(new StringTemplateSource(template, null), arguments, outputStream);
+            render(getTemplate(template, true), arguments, outputStream);
             return outputStream.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new TemplateException(e);
@@ -51,28 +50,28 @@ public interface TemplateEngine {
     /**
      * 同render方法
      *
+     * @param name      模板名称，通过模板名称加载模板
      * @param arguments 模板参数
-     * @param name      模板名称
      * @param fos       输出位置
      * @throws TemplateException 渲染出错
      */
     default void render(String name, Map<String, Object> arguments, OutputStream fos) throws TemplateException {
-        render(new StringTemplateSource(name, null), new TemplateArgumentsMap(arguments), fos);
+        render(getTemplate(name, false), new TemplateArgumentsMap(arguments, false), fos);
     }
 
     /**
-     * 渲染模板
+     * 渲染模板，输出为字符串
      *
      * @param template  模板
      * @param arguments 模板参数
      * @return 渲染结果
      */
     default String render(TemplateSource template, TemplateArguments arguments) throws TemplateException {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            render(template, arguments, baos);
-            return baos.toString(StandardCharsets.UTF_8);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            render(template, arguments, os);
+            return os.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TemplateException(e);
         }
     }
 

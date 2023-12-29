@@ -2,7 +2,6 @@ package io.devpl.backend.tools.ddl.utils;
 
 import io.devpl.backend.tools.ddl.setting.MainSetting;
 import io.devpl.backend.tools.ddl.setting.MySettingProperties;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -49,33 +48,6 @@ public class SqlTypeMapUtil {
     }
 
     public ConvertBean typeConvert(String javaType) {
-        StringUtils.isBlank(javaType);
         return null;
-    }
-
-    public static class ConvertBean {
-        private String sqlType;
-        private String sqlTypeLength;
-
-        public ConvertBean(String sqlType, String sqlTypeLength) {
-            this.sqlType = sqlType;
-            this.sqlTypeLength = sqlTypeLength;
-        }
-
-        public String getSqlType() {
-            return sqlType;
-        }
-
-        public void setSqlType(String sqlType) {
-            this.sqlType = sqlType;
-        }
-
-        public String getSqlTypeLength() {
-            return sqlTypeLength;
-        }
-
-        public void setSqlTypeLength(String sqlTypeLength) {
-            this.sqlTypeLength = sqlTypeLength;
-        }
     }
 }

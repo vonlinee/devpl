@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 
 /**
@@ -38,5 +39,10 @@ public class FileTemplateSource implements TemplateSource {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+        throw new UnsupportedOperationException("file template is not supported currently");
     }
 }

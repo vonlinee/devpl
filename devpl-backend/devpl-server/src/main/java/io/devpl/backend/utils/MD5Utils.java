@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.utils;
+package io.devpl.backend.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +18,9 @@ public class MD5Utils {
 
     /**
      * 获得一个字符串的MD5值
+     * MessageDigest 不是线程安全的，因为它将其状态存储在它的对象中。
+     * 从 getInstance() 返回的所有实例都是不同的。他们需要，因为他们维护单独的摘要
+     *
      * @param input 输入的字符串
      * @return 输入字符串的MD5值
      */
@@ -36,15 +39,15 @@ public class MD5Utils {
             // 字符数组转换成字符串返回
             return byteArrayToHex(resultByteArray);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             return null;
         }
     }
 
     /**
      * 获取文件的MD5值
-     * @param file
-     * @return
+     *
+     * @param file 文件
+     * @return 文件md5
      */
     public static String md5(File file) {
         try {
@@ -56,7 +59,7 @@ public class MD5Utils {
             in.close();
             return result;
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
         return null;
     }

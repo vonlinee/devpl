@@ -23,6 +23,9 @@ public class VelocityStringResourceRepository implements StringResourceRepositor
      */
     @Override
     public StringResource getStringResource(String name) {
+        if ("velocimacros.vtl".equals(name)) {
+            return null;
+        }
         StringResource resource = resourceMap.get(name);
         if (resource == null) {
             final int hashCode = name.hashCode();

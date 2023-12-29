@@ -2,6 +2,7 @@ package io.devpl.backend.tools.ddl.model;
 
 import com.google.common.base.CaseFormat;
 import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
+import io.devpl.backend.tools.ddl.utils.ConvertBean;
 import io.devpl.backend.tools.ddl.utils.SqlTypeMapUtil;
 
 import java.util.Objects;
@@ -58,7 +59,7 @@ public class Field {
     }
 
     public String getSqlType() {
-        SqlTypeMapUtil.ConvertBean convertBean = SqlTypeMapUtil.getInstance().typeConvert(this.type);
+        ConvertBean convertBean = SqlTypeMapUtil.getInstance().typeConvert(this.type);
         if (null != convertBean) {
             return convertBean.getSqlType() + convertBean.getSqlTypeLength();
         }

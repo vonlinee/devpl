@@ -182,10 +182,10 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             // 需替换参数变量
 
             if (StringUtils.hasText(targetGenFile.getFileName())) {
-                tableFileGen.setFileName(templateEngine.render(targetGenFile.getFileName(), params));
+                tableFileGen.setFileName(templateEngine.evaluate(targetGenFile.getFileName(), params));
             }
             if (StringUtils.hasText(targetGenFile.getSavePath())) {
-                tableFileGen.setSavePath(templateEngine.render(targetGenFile.getSavePath(), params));
+                tableFileGen.setSavePath(templateEngine.evaluate(targetGenFile.getSavePath(), params));
             }
             list.add(tableFileGen);
         }
