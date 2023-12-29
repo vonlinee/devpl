@@ -37,6 +37,7 @@ public final class Resources {
 
     /**
      * Returns the default classloader (may be null).
+     *
      * @return The default classloader
      */
     public static ClassLoader getDefaultClassLoader() {
@@ -45,6 +46,7 @@ public final class Resources {
 
     /**
      * Sets the default classloader
+     *
      * @param defaultClassLoader - the new default ClassLoader
      */
     public static void setDefaultClassLoader(ClassLoader defaultClassLoader) {
@@ -53,6 +55,7 @@ public final class Resources {
 
     /**
      * Loads a class
+     *
      * @param className - the class to load
      * @return The loaded class
      * @throws ClassNotFoundException If the class cannot be found (duh!)
@@ -85,6 +88,7 @@ public final class Resources {
 
     /**
      * 获取类路径下的资源
+     *
      * @param name 相对路径
      * @return URL
      */
@@ -128,6 +132,7 @@ public final class Resources {
     /**
      * Add a package name prefix if the name is not absolute Remove leading "/"
      * if name is absolute
+     *
      * @see
      */
     private static String resolveName(String name) {

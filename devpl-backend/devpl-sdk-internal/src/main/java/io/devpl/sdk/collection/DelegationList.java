@@ -9,12 +9,14 @@ import java.util.stream.Stream;
 
 /**
  * the delegated list
+ *
  * @param <E> the type of element
  */
 public interface DelegationList<E> {
 
     /**
      * return the list to be delegated
+     *
      * @return not null
      */
     List<E> delegator();

@@ -4,6 +4,7 @@ public interface Visitor<T> {
 
     /**
      * 访问当前节点作为根节点的子树
+     *
      * @param tree 当前节点
      * @return Visitor实例
      */

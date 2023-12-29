@@ -11,6 +11,7 @@ import java.io.StringWriter;
  * Controller负责调度View层和Model层，主要接收请求，然后转发到Model处理，处
  * <p>
  * 三层架构：实际上将Controller-Model层细分成三层
+ *
  * @since 0.0.1
  */
 public abstract class RestfulResultTemplate extends ResultTemplate {
@@ -68,6 +69,7 @@ public abstract class RestfulResultTemplate extends ResultTemplate {
 
     /**
      * RESTful返回JSON字符串
+     *
      * @return 标准JSON字符串
      */
     public String toJSONString() {
@@ -86,12 +88,14 @@ public abstract class RestfulResultTemplate extends ResultTemplate {
 
     /**
      * 补充额外的字段信息
+     *
      * @param result 返回JSON字符串片段，不包含开头的{和}，如果包含双引号或者单引号需要进行转义
      */
     protected abstract void toJSONString(final StringBuilder result);
 
     /**
      * 获取 Throwable 的异常调用栈
+     *
      * @param throwable
      * @return
      */

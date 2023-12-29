@@ -1,4 +1,4 @@
-package io.devpl.fxui.text;
+package io.devpl.fxui.tools.text;
 
 /**
  * 文本处理策略

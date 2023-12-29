@@ -57,6 +57,7 @@ public class ArrayMap<K, V> extends AbstractArrayMap<K, V> implements Map<K, V> 
 
     /**
      * writing standard Java collection interfaces to a data structure like {@link ArrayMap}
+     *
      * @return IndexedMap
      */
     private IndexedMap<K, V> getCollection() {
@@ -113,6 +114,7 @@ public class ArrayMap<K, V> extends AbstractArrayMap<K, V> implements Map<K, V> 
 
     /**
      * Determine if the array map contains all the keys in the given collection.
+     *
      * @param collection The collection whose contents are to be checked against.
      * @return Returns true if this array map contains a key for every entry
      * in <var>collection</var>, else returns false.
@@ -123,6 +125,7 @@ public class ArrayMap<K, V> extends AbstractArrayMap<K, V> implements Map<K, V> 
 
     /**
      * Perform a {@link #put(Object, Object)} of all key/value pairs in <var>map</var>
+     *
      * @param map The map whose contents are to be retrieved.
      */
     @Override
@@ -135,6 +138,7 @@ public class ArrayMap<K, V> extends AbstractArrayMap<K, V> implements Map<K, V> 
 
     /**
      * Remove all keys in the array map that exist in the given collection.
+     *
      * @param collection The collection whose contents are to be used to remove keys.
      * @return Returns true if any keys were removed from the array map, else false.
      */
@@ -144,6 +148,7 @@ public class ArrayMap<K, V> extends AbstractArrayMap<K, V> implements Map<K, V> 
 
     /**
      * Remove all keys in the array map that do <b>not</b> exist in the given collection.
+     *
      * @param collection The collection whose contents are to be used to determine which
      *                   keys to keep.
      * @return Returns true if any keys were removed from the array map, else false.

@@ -1,15 +1,18 @@
 <template>
   <FieldTreeTable></FieldTreeTable>
 
-  <FieldTree selectable></FieldTree>
   <Pagination></Pagination>
+
+  <CodeRegion lang="java"></CodeRegion>
+
 </template>
 
 <script setup lang="ts">
 import FieldTreeTable from "@/components/fields/FieldTreeTable.vue"
 
-import FieldTree from "@/components/fields/FieldTree.vue"
 import Pagination from "@/components/Pagination.vue"
+
+import CodeRegion from "@/components/CodeRegion.vue"
 </script>
 
 <style scoped lang="scss">

@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * 树节点
  * LinkedHashSet保持插入顺序
+ *
  * @param <T> 树节点的数据类型
  */
 public class TreeNode<T> implements Visitable<T> {
@@ -67,6 +68,7 @@ public class TreeNode<T> implements Visitable<T> {
 
     /**
      * 如果不是懒加载的话，后端不要设置hasChildren 这个属性，要不然不能树形显示；如果是懒加载，则需要设置hasChildren字段。
+     *
      * @return 是否有子元素
      */
     public boolean hasChildren() {

@@ -36,6 +36,7 @@ public final class Validator {
     private static final String DEFAULT_VALID_STATE_EX_MESSAGE = "The validated state is false";
     private static final String DEFAULT_IS_ASSIGNABLE_EX_MESSAGE = "Cannot assign a %s to a %s";
     private static final String DEFAULT_IS_INSTANCE_OF_EX_MESSAGE = "Expected type: %s, actual: %s";
+
     private Validator() {
     }
 
@@ -67,6 +68,7 @@ public final class Validator {
 
     /**
      * 断言失败，则提供默认值，默认值为空，则报空指针；断言成功，则直接返回该值，即使是NULL
+     *
      * @param value        校验的值
      * @param condition    条件，测试对象为value
      * @param defaultValue 默认值，不可为空，确保这个值是预期的值
@@ -124,6 +126,7 @@ public final class Validator {
 
     /**
      * 对Object的任意类型做值检查
+     *
      * @param obj     对象
      * @param message 异常信息
      */
@@ -150,6 +153,7 @@ public final class Validator {
 
     /**
      * 不包含null元素
+     *
      * @param iterable 可迭代类型
      * @param <T>      <T extends Iterable<?>>
      * @return Iterable
@@ -165,6 +169,7 @@ public final class Validator {
     /**
      * 非空元素
      * 数组没有NULL元素
+     *
      * @param array   数组
      * @param message 消息
      * @param values  值
@@ -249,6 +254,7 @@ public final class Validator {
     /**
      * 不存在关键
      * 不包含指定的key
+     *
      * @param map 地图
      * @param key 关键
      */
@@ -263,6 +269,7 @@ public final class Validator {
     /**
      * 非空值
      * map has null value for the specificied key
+     *
      * @param message void
      * @param map     地图
      * @param key     关键
@@ -326,6 +333,7 @@ public final class Validator {
 
     /**
      * 获取字符序列的长度，null check
+     *
      * @param cs
      * @return int
      */
@@ -626,6 +634,7 @@ public final class Validator {
 
     /**
      * 针对字符串的特别校验
+     *
      * @param sequence
      * @return
      */
@@ -643,6 +652,7 @@ public final class Validator {
 
     /**
      * 针对Map定制
+     *
      * @param map
      * @param key
      * @param message
@@ -683,6 +693,7 @@ public final class Validator {
 
     /**
      * 非空值
+     *
      * @param key       key
      * @param valueType 目标类型
      * @param map       地图
@@ -712,6 +723,7 @@ public final class Validator {
 
     /**
      * 判断字符序列是否为空
+     *
      * @param cs CharSequence
      * @return boolean
      */

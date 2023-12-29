@@ -28,6 +28,7 @@ import java.util.Objects;
  * The starting point of any operation is {@link #getCurrent()} which gets you the enum for the file system that matches
  * the OS hosting the running JVM.
  * </p>
+ *
  * @since 2.7
  */
 public enum FileSystem {
@@ -69,6 +70,7 @@ public enum FileSystem {
      * <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
      * (microsoft.com)</a>.
      * </p>
+     *
      * @see <a href="https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file">Naming Conventions
      * (microsoft.com)</a>
      */
@@ -128,8 +130,10 @@ public enum FileSystem {
     private final int maxPathLength;
     private final String[] reservedFileNames;
     private final boolean supportsDriveLetter;
+
     /**
      * Constructs a new instance.
+     *
      * @param caseSensitive        Whether this file system is case-sensitive.
      * @param casePreserving       Whether this file system is case preserving.
      * @param maxFileLength        The maximum length for file names. The file name does not include folders.
@@ -152,6 +156,7 @@ public enum FileSystem {
 
     /**
      * Gets the current file system.
+     *
      * @return the current file system
      */
     public static FileSystem getCurrent() {
@@ -169,6 +174,7 @@ public enum FileSystem {
 
     /**
      * Decides if the operating system matches.
+     *
      * @param osNamePrefix the prefix for the os name
      * @return true if matches, or false if not or can't determine
      */
@@ -184,6 +190,7 @@ public enum FileSystem {
      * If a {@code SecurityException} is caught, the return value is {@code null} and a message is written to
      * {@code System.err}.
      * </p>
+     *
      * @param property the system property name
      * @return the system property value or {@code null} if a security problem occurs
      */
@@ -203,6 +210,7 @@ public enum FileSystem {
      * <p>
      * This method is package private instead of private to support unit test invocation.
      * </p>
+     *
      * @param osName       the actual OS name
      * @param osNamePrefix the prefix for the expected OS name
      * @return true if matches, or false if not or can't determine
@@ -216,6 +224,7 @@ public enum FileSystem {
 
     /**
      * Gets a cloned copy of the illegal characters for this file system.
+     *
      * @return the illegal characters for this file system.
      */
     public char[] getIllegalFileNameChars() {
@@ -224,6 +233,7 @@ public enum FileSystem {
 
     /**
      * Gets the maximum length for file names. The file name does not include folders.
+     *
      * @return the maximum length for file names.
      */
     public int getMaxFileNameLength() {
@@ -232,6 +242,7 @@ public enum FileSystem {
 
     /**
      * Gets the maximum length of the path to a file. This can include folders.
+     *
      * @return the maximum length of the path to a file.
      */
     public int getMaxPathLength() {
@@ -240,6 +251,7 @@ public enum FileSystem {
 
     /**
      * Gets a cloned copy of the reserved file names.
+     *
      * @return the reserved file names.
      */
     public String[] getReservedFileNames() {
@@ -248,6 +260,7 @@ public enum FileSystem {
 
     /**
      * Whether this file system preserves case.
+     *
      * @return Whether this file system preserves case.
      */
     public boolean isCasePreserving() {
@@ -256,6 +269,7 @@ public enum FileSystem {
 
     /**
      * Whether this file system is case-sensitive.
+     *
      * @return Whether this file system is case-sensitive.
      */
     public boolean isCaseSensitive() {
@@ -264,6 +278,7 @@ public enum FileSystem {
 
     /**
      * Returns {@code true} if the given character is illegal in a file name, {@code false} otherwise.
+     *
      * @param c the character to test
      * @return {@code true} if the given character is illegal in a file name, {@code false} otherwise.
      */
@@ -275,6 +290,7 @@ public enum FileSystem {
      * Checks if a candidate file name (without a path) such as {@code "filename.ext"} or {@code "filename"} is a
      * potentially legal file name. If the file name length exceeds {@link #getMaxFileNameLength()}, or if it contains
      * an illegal character then the check fails.
+     *
      * @param candidate a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
      * @return {@code true} if the candidate name is legal
      */
@@ -295,6 +311,7 @@ public enum FileSystem {
 
     /**
      * Returns whether the given string is a reserved file name.
+     *
      * @param candidate the string to test
      * @return {@code true} if the given string is a reserved file name.
      */
@@ -308,6 +325,7 @@ public enum FileSystem {
      * Windows supports driver letters as do other operating systems. Whether these other OS's still support Java like
      * OS/2, is a different matter.
      * </p>
+     *
      * @return whether this file system support driver letters.
      * @see <a href="https://en.wikipedia.org/wiki/Drive_letter_assignment">Operating systems that use drive letter
      * assignment</a>
@@ -322,6 +340,7 @@ public enum FileSystem {
      * name. Illegal characters in the candidate name are replaced by the {@code replacement} character. If the file
      * name length exceeds {@link #getMaxFileNameLength()}, then the name is truncated to
      * {@link #getMaxFileNameLength()}.
+     *
      * @param candidate   a candidate file name (without a path) like {@code "filename.ext"} or {@code "filename"}
      * @param replacement Illegal characters in the candidate name are replaced by this character
      * @return a String without illegal characters

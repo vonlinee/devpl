@@ -16,6 +16,7 @@ import java.io.OutputStream;
  * This class helps you solve this incompatability.
  * <p>
  * Origin of code: Excalibur
+ *
  * @author <a href="mailto:peter@apache.org">Peter Donald</a>
  * org.apache.commons.io.input.SwappedDataInputStream
  */
@@ -32,22 +33,24 @@ public class EndianUtils {
 
     /**
      * Converts a "short" value between endian systems.
+     *
      * @param value value to convert
      * @return the converted value
      */
     public static short swapShort(short value) {
         return (short) ((((value) & 0xff) << 8) +
-                        (((value >> 8) & 0xff)));
+            (((value >> 8) & 0xff)));
     }
 
     /**
      * Converts a "int" value between endian systems.
+     *
      * @param value value to convert
      * @return the converted value
      */
     public static int swapInteger(int value) {
         return
-                (((value) & 0xff) << 24) +
+            (((value) & 0xff) << 24) +
                 (((value >> 8) & 0xff) << 16) +
                 (((value >> 16) & 0xff) << 8) +
                 (((value >> 24) & 0xff));
@@ -55,12 +58,13 @@ public class EndianUtils {
 
     /**
      * Converts a "long" value between endian systems.
+     *
      * @param value value to convert
      * @return the converted value
      */
     public static long swapLong(long value) {
         return
-                (((value) & 0xff) << 56) +
+            (((value) & 0xff) << 56) +
                 (((value >> 8) & 0xff) << 48) +
                 (((value >> 16) & 0xff) << 40) +
                 (((value >> 24) & 0xff) << 32) +
@@ -72,6 +76,7 @@ public class EndianUtils {
 
     /**
      * Converts a "float" value between endian systems.
+     *
      * @param value value to convert
      * @return the converted value
      */
@@ -81,6 +86,7 @@ public class EndianUtils {
 
     /**
      * Converts a "double" value between endian systems.
+     *
      * @param value value to convert
      * @return the converted value
      */
@@ -93,6 +99,7 @@ public class EndianUtils {
     /**
      * Writes a "short" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param data   target byte array
      * @param offset starting offset in the byte array
      * @param value  value to write
@@ -105,31 +112,34 @@ public class EndianUtils {
     /**
      * Reads a "short" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
      */
     public static short readSwappedShort(byte[] data, int offset) {
         return (short) (((data[offset] & 0xff)) +
-                        ((data[offset + 1] & 0xff) << 8));
+            ((data[offset + 1] & 0xff) << 8));
     }
 
     /**
      * Reads an unsigned short (16-bit) value from a byte array at a given
      * offset. The value is converted to the opposed endian system while
      * reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
      */
     public static int readSwappedUnsignedShort(byte[] data, int offset) {
         return (((data[offset] & 0xff)) +
-                ((data[offset + 1] & 0xff) << 8));
+            ((data[offset + 1] & 0xff) << 8));
     }
 
     /**
      * Writes a "int" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param data   target byte array
      * @param offset starting offset in the byte array
      * @param value  value to write
@@ -144,29 +154,31 @@ public class EndianUtils {
     /**
      * Reads a "int" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
      */
     public static int readSwappedInteger(byte[] data, int offset) {
         return (((data[offset] & 0xff)) +
-                ((data[offset + 1] & 0xff) << 8) +
-                ((data[offset + 2] & 0xff) << 16) +
-                ((data[offset + 3] & 0xff) << 24));
+            ((data[offset + 1] & 0xff) << 8) +
+            ((data[offset + 2] & 0xff) << 16) +
+            ((data[offset + 3] & 0xff) << 24));
     }
 
     /**
      * Reads an unsigned integer (32-bit) value from a byte array at a given
      * offset. The value is converted to the opposed endian system while
      * reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
      */
     public static long readSwappedUnsignedInteger(byte[] data, int offset) {
         long low = (((data[offset] & 0xff)) +
-                    ((data[offset + 1] & 0xff) << 8) +
-                    ((data[offset + 2] & 0xff) << 16));
+            ((data[offset + 1] & 0xff) << 8) +
+            ((data[offset + 2] & 0xff) << 16));
 
         long high = data[offset + 3] & 0xff;
 
@@ -176,6 +188,7 @@ public class EndianUtils {
     /**
      * Writes a "long" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param data   target byte array
      * @param offset starting offset in the byte array
      * @param value  value to write
@@ -194,18 +207,19 @@ public class EndianUtils {
     /**
      * Reads a "long" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
      */
     public static long readSwappedLong(byte[] data, int offset) {
         long low =
-                ((data[offset] & 0xff)) +
+            ((data[offset] & 0xff)) +
                 ((data[offset + 1] & 0xff) << 8) +
                 ((data[offset + 2] & 0xff) << 16) +
                 ((long) (data[offset + 3] & 0xff) << 24);
         long high =
-                ((data[offset + 4] & 0xff)) +
+            ((data[offset + 4] & 0xff)) +
                 ((data[offset + 5] & 0xff) << 8) +
                 ((data[offset + 6] & 0xff) << 16) +
                 ((long) (data[offset + 7] & 0xff) << 24);
@@ -215,6 +229,7 @@ public class EndianUtils {
     /**
      * Writes a "float" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param data   target byte array
      * @param offset starting offset in the byte array
      * @param value  value to write
@@ -226,6 +241,7 @@ public class EndianUtils {
     /**
      * Reads a "float" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
@@ -237,6 +253,7 @@ public class EndianUtils {
     /**
      * Writes a "double" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param data   target byte array
      * @param offset starting offset in the byte array
      * @param value  value to write
@@ -248,6 +265,7 @@ public class EndianUtils {
     /**
      * Reads a "double" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param data   source byte array
      * @param offset starting offset in the byte array
      * @return the value read
@@ -259,6 +277,7 @@ public class EndianUtils {
     /**
      * Writes a "short" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param output target OutputStream
      * @param value  value to write
      * @throws IOException in case of an I/O problem
@@ -272,6 +291,7 @@ public class EndianUtils {
     /**
      * Reads a "short" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -279,12 +299,13 @@ public class EndianUtils {
     public static short readSwappedShort(InputStream input)
         throws IOException {
         return (short) (((read(input) & 0xff)) +
-                        ((read(input) & 0xff) << 8));
+            ((read(input) & 0xff) << 8));
     }
 
     /**
      * Reads a unsigned short (16-bit) from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -295,12 +316,13 @@ public class EndianUtils {
         int value2 = read(input);
 
         return (((value1 & 0xff)) +
-                ((value2 & 0xff) << 8));
+            ((value2 & 0xff) << 8));
     }
 
     /**
      * Writes a "int" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param output target OutputStream
      * @param value  value to write
      * @throws IOException in case of an I/O problem
@@ -316,6 +338,7 @@ public class EndianUtils {
     /**
      * Reads a "int" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -328,14 +351,15 @@ public class EndianUtils {
         int value4 = read(input);
 
         return ((value1 & 0xff)) +
-               ((value2 & 0xff) << 8) +
-               ((value3 & 0xff) << 16) +
-               ((value4 & 0xff) << 24);
+            ((value2 & 0xff) << 8) +
+            ((value3 & 0xff) << 16) +
+            ((value4 & 0xff) << 24);
     }
 
     /**
      * Reads an unsigned integer (32-bit) from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -348,8 +372,8 @@ public class EndianUtils {
         int value4 = read(input);
 
         long low = (((value1 & 0xff)) +
-                    ((value2 & 0xff) << 8) +
-                    ((value3 & 0xff) << 16));
+            ((value2 & 0xff) << 8) +
+            ((value3 & 0xff) << 16));
 
         long high = value4 & 0xff;
 
@@ -359,6 +383,7 @@ public class EndianUtils {
     /**
      * Writes a "long" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param output target OutputStream
      * @param value  value to write
      * @throws IOException in case of an I/O problem
@@ -378,6 +403,7 @@ public class EndianUtils {
     /**
      * Reads a "long" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -394,6 +420,7 @@ public class EndianUtils {
     /**
      * Writes a "float" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param output target OutputStream
      * @param value  value to write
      * @throws IOException in case of an I/O problem
@@ -406,6 +433,7 @@ public class EndianUtils {
     /**
      * Reads a "float" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -418,6 +446,7 @@ public class EndianUtils {
     /**
      * Writes a "double" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
+     *
      * @param output target OutputStream
      * @param value  value to write
      * @throws IOException in case of an I/O problem
@@ -430,6 +459,7 @@ public class EndianUtils {
     /**
      * Reads a "double" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
+     *
      * @param input source InputStream
      * @return the value just read
      * @throws IOException in case of an I/O problem
@@ -441,6 +471,7 @@ public class EndianUtils {
 
     /**
      * Reads the next byte from the input stream.
+     *
      * @param input the stream
      * @return the byte
      * @throws IOException if the end of file is reached

@@ -101,6 +101,7 @@ public final class ResourceUtils {
     /**
      * Return whether the given resource location is a URL:
      * either a special "classpath" pseudo URL or a standard URL.
+     *
      * @param resourceLocation the location String to check
      * @return whether the location qualifies as a URL
      * @see #CLASSPATH_URL_PREFIX
@@ -125,6 +126,7 @@ public final class ResourceUtils {
      * Resolve the given resource location to a {@code java.net.URL}.
      * <p>Does not check whether the URL actually exists; simply returns
      * the URL that the given location would correspond to.
+     *
      * @param resourceLocation the resource location to resolve: either a
      *                         "classpath:" pseudo URL, a "file:" URL, or a plain file path
      * @return a corresponding URL object
@@ -161,6 +163,7 @@ public final class ResourceUtils {
      * i.e. to a file in the file system.
      * <p>Does not check whether the file actually exists; simply returns
      * the File that the given location would correspond to.
+     *
      * @param resourceLocation the resource location to resolve: either a
      *                         "classpath:" pseudo URL, a "file:" URL, or a plain file path
      * @return a corresponding File object
@@ -191,6 +194,7 @@ public final class ResourceUtils {
     /**
      * Resolve the given resource URL to a {@code java.io.File},
      * i.e. to a file in the file system.
+     *
      * @param resourceUrl the resource URL to resolve
      * @return a corresponding File object
      * @throws FileNotFoundException if the URL cannot be resolved to
@@ -203,6 +207,7 @@ public final class ResourceUtils {
     /**
      * Resolve the given resource URL to a {@code java.io.File},
      * i.e. to a file in the file system.
+     *
      * @param resourceUrl the resource URL to resolve
      * @param description a description of the original resource that
      *                    the URL was created for (for example, a class path location)
@@ -226,6 +231,7 @@ public final class ResourceUtils {
     /**
      * Resolve the given resource URI to a {@code java.io.File},
      * i.e. to a file in the file system.
+     *
      * @param resourceUri the resource URI to resolve
      * @return a corresponding File object
      * @throws FileNotFoundException if the URL cannot be resolved to
@@ -239,6 +245,7 @@ public final class ResourceUtils {
     /**
      * Resolve the given resource URI to a {@code java.io.File},
      * i.e. to a file in the file system.
+     *
      * @param resourceUri the resource URI to resolve
      * @param description a description of the original resource that
      *                    the URI was created for (for example, a class path location)
@@ -258,6 +265,7 @@ public final class ResourceUtils {
     /**
      * Determine whether the given URL points to a resource in the file system,
      * i.e. has protocol "file", "vfsfile" or "vfs".
+     *
      * @param url the URL to check
      * @return whether the URL has been identified as a file system URL
      */
@@ -269,6 +277,7 @@ public final class ResourceUtils {
     /**
      * Determine whether the given URL points to a resource in a jar file.
      * i.e. has protocol "jar", "war, ""zip", "vfszip" or "wsjar".
+     *
      * @param url the URL to check
      * @return whether the URL has been identified as a JAR URL
      */
@@ -280,6 +289,7 @@ public final class ResourceUtils {
     /**
      * Determine whether the given URL points to a jar file itself,
      * that is, has protocol "file" and ends with the ".jar" extension.
+     *
      * @param url the URL to check
      * @return whether the URL has been identified as a JAR file URL
      * @since 4.1
@@ -293,6 +303,7 @@ public final class ResourceUtils {
     /**
      * Extract the URL for the actual jar file from the given URL
      * (which may point to a resource in a jar file or to a jar file itself).
+     *
      * @param jarUrl the original URL
      * @return the URL for the actual jar file
      * @throws MalformedURLException if no valid jar file URL could be extracted
@@ -322,6 +333,7 @@ public final class ResourceUtils {
      * (which may point to a resource in a jar file or to a jar file itself).
      * <p>In the case of a jar file nested within a war file, this will return
      * a URL to the war file since that is the one resolvable in the file system.
+     *
      * @param jarUrl the original URL
      * @return the URL for the actual jar file
      * @throws MalformedURLException if no valid jar file URL could be extracted
@@ -351,6 +363,7 @@ public final class ResourceUtils {
     /**
      * Create a URI instance for the given URL,
      * replacing spaces with "%20" URI encoding first.
+     *
      * @param url the URL to convert into a URI instance
      * @return the URI instance
      * @throws URISyntaxException if the URL wasn't a valid URI
@@ -363,6 +376,7 @@ public final class ResourceUtils {
     /**
      * Create a URI instance for the given location String,
      * replacing spaces with "%20" URI encoding first.
+     *
      * @param location the location String to convert into a URI instance
      * @return the URI instance
      * @throws URISyntaxException if the location wasn't a valid URI
@@ -375,6 +389,7 @@ public final class ResourceUtils {
      * Set the {@link URLConnection#setUseCaches "useCaches"} flag on the
      * given connection, preferring {@code false} but leaving the
      * flag at {@code true} for JNLP based resources.
+     *
      * @param con the URLConnection to set the flag on
      */
     public static void useCachesIfNecessary(URLConnection con) {
@@ -397,6 +412,7 @@ public final class ResourceUtils {
 
     /**
      * 不抛异常，直接返回null
+     *
      * @param context context
      * @param spec    spec
      * @return URL
@@ -415,6 +431,7 @@ public final class ResourceUtils {
 
     /**
      * 获取项目类路径
+     *
      * @return 类路径
      */
     public static URL getProjectClasspath() {

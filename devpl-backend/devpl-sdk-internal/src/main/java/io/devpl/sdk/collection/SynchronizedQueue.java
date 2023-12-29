@@ -6,6 +6,7 @@ package io.devpl.sdk.collection;
  * create an unbounded queue(无界队列) with no requirement to shrink the queue(不需要收缩队列). The aim is
  * to provide the bare minimum of required functionality as quickly as possible
  * with minimum garbage.(其目的是以最小的垃圾同时尽可能地提供最低限度的所需功能，也就是说，满足必须的功能情况下，产生最少的垃圾)
+ *
  * @param <T> The type of object managed by this queue
  */
 public class SynchronizedQueue<T> {

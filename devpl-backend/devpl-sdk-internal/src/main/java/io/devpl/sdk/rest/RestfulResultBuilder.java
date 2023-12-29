@@ -4,6 +4,7 @@ import io.devpl.sdk.ExtendedBuilder;
 
 /**
  * 提供构建RestfulResult的常用方法
+ *
  * @param <R>  Builder要构造的Result类型
  * @param <RB> RestfulResultBuilder的子类型
  */

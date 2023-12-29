@@ -7,7 +7,6 @@ import io.devpl.backend.domain.param.TableFileGenParam;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.entity.TargetGenerationFile;
 import io.devpl.backend.service.*;
-import io.devpl.backend.utils.Vals;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -165,7 +164,9 @@ public class CodeGenerationController {
     public Result<String> generateJavaPojoClass(@RequestBody JavaPojoCodeGenParam param) {
         if (param.getType() == 3) {
             return Result.ok(codeGenerationService.generatePoiPojo(param));
+        } else if (param.getType() == 2) {
+            return Result.ok(codeGenerationService.generatedDtoClass(param));
         }
-        return Result.ok(codeGenerationService.generatedDtoClass(param));
+        return Result.ok(codeGenerationService.generateJavaPojoClass(param));
     }
 }

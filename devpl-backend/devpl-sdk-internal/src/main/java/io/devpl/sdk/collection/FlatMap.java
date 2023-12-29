@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * 针对嵌套Map变成一层Map
+ *
  * @param <V>
  */
 public class FlatMap<V> implements Map<String, V> {

@@ -1,7 +1,7 @@
 package io.devpl.fxui.tools.navigation.impl;
 
 import io.devpl.codegen.jdbc.meta.TableMetadata;
-import io.devpl.fxui.event.EventUtils;
+import io.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ConnectionRegistry;
 import io.devpl.fxui.utils.DBUtils;

@@ -34,7 +34,7 @@ public class JsonView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        packageNameTextField.setText("com.lancoo.campusportrait.domain.external");
+        packageNameTextField.setText("");
     }
 
     Json5 json5 = new Json5();

@@ -27,6 +27,7 @@ import java.io.IOException;
  * directories if they are empty, or maybe to force deletion.
  * <p>
  * This class captures the strategy to use and is designed for user subclassing.
+ *
  * @author Stephen Colebourne
  * @version $Id: FileDeleteStrategy.java 453903 2006-10-07 13:47:06Z scolebourne $
  * @since Commons IO 1.3
@@ -53,6 +54,7 @@ public class FileDeleteStrategy {
 
     /**
      * Restricted constructor.
+     *
      * @param name the name by which the strategy is known
      */
     protected FileDeleteStrategy(String name) {
@@ -67,6 +69,7 @@ public class FileDeleteStrategy {
      * If the file does not exist or is null, true is returned.
      * <p>
      * Subclass writers should override {@link #doDelete(File)}, not this method.
+     *
      * @param fileToDelete the file to delete, null returns true
      * @return true if the file was deleted, or there was no such file
      */
@@ -86,6 +89,7 @@ public class FileDeleteStrategy {
      * If the file does not exist, the method just returns.
      * <p>
      * Subclass writers should override {@link #doDelete(File)}, not this method.
+     *
      * @param fileToDelete the file to delete, not null
      * @throws NullPointerException if the file is null
      * @throws IOException          if an error occurs during file deletion
@@ -106,6 +110,7 @@ public class FileDeleteStrategy {
      * A check has been made to ensure that the file will exist.
      * <p>
      * This implementation uses {@link File#delete()}.
+     *
      * @param fileToDelete the file to delete, exists, not null
      * @return true if the file was deleteds
      * @throws NullPointerException if the file is null
@@ -119,6 +124,7 @@ public class FileDeleteStrategy {
 
     /**
      * Gets a string describing the delete strategy.
+     *
      * @return a string describing the delete strategy
      */
     public String toString() {
@@ -143,6 +149,7 @@ public class FileDeleteStrategy {
          * <p>
          * This implementation uses <code>FileUtils.forceDelete() <code>
          * if the file exists.
+         *
          * @param fileToDelete the file to delete, not null
          * @return Always returns <code>true</code>
          * @throws NullPointerException if the file is null

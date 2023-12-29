@@ -17,6 +17,7 @@ import java.util.Objects;
  * Wherever possible, you should use the {@code check} methods in this
  * class to compare file names.
  * </p>
+ *
  * @since 1.3
  */
 public enum IOCase {
@@ -62,6 +63,7 @@ public enum IOCase {
 
     /**
      * Constructs a new instance.
+     *
      * @param name      the name
      * @param sensitive the sensitivity
      */
@@ -72,6 +74,7 @@ public enum IOCase {
 
     /**
      * Tests for cases sensitivity in a null-safe manner.
+     *
      * @param caseSensitivity an IOCase.
      * @return true if the input is non-null and {@link #isCaseSensitive()}.
      * @since 2.10.0
@@ -82,6 +85,7 @@ public enum IOCase {
 
     /**
      * Factory method to create an IOCase from a name.
+     *
      * @param name the name to find
      * @return the IOCase object
      * @throws IllegalArgumentException if the name is invalid
@@ -98,6 +102,7 @@ public enum IOCase {
     /**
      * Replaces the enumeration from the stream with a real one.
      * This ensures that the correct flag is set for SYSTEM.
+     *
      * @return the resolved object
      */
     private Object readResolve() {
@@ -106,6 +111,7 @@ public enum IOCase {
 
     /**
      * Gets the name of the constant.
+     *
      * @return the name of the constant
      */
     public String getName() {
@@ -114,6 +120,7 @@ public enum IOCase {
 
     /**
      * Does the object represent case-sensitive comparison.
+     *
      * @return true if case-sensitive
      */
     public boolean isCaseSensitive() {
@@ -126,6 +133,7 @@ public enum IOCase {
      * This method mimics {@link String#compareTo} but takes case-sensitivity
      * into account.
      * </p>
+     *
      * @param str1 the first string to compare, not null
      * @param str2 the second string to compare, not null
      * @return true if equal using the case rules
@@ -143,6 +151,7 @@ public enum IOCase {
      * This method mimics {@link String#equals} but takes case-sensitivity
      * into account.
      * </p>
+     *
      * @param str1 the first string to compare, not null
      * @param str2 the second string to compare, not null
      * @return true if equal using the case rules
@@ -160,6 +169,7 @@ public enum IOCase {
      * This method mimics {@link String#startsWith(String)} but takes case-sensitivity
      * into account.
      * </p>
+     *
      * @param str   the string to check
      * @param start the start to compare against
      * @return true if equal using the case rules, false if either input is null
@@ -174,6 +184,7 @@ public enum IOCase {
      * This method mimics {@link String#endsWith} but takes case-sensitivity
      * into account.
      * </p>
+     *
      * @param str the string to check
      * @param end the end to compare against
      * @return true if equal using the case rules, false if either input is null
@@ -193,6 +204,7 @@ public enum IOCase {
      * This method mimics parts of {@link String#indexOf(String, int)}
      * but takes case-sensitivity into account.
      * </p>
+     *
      * @param str           the string to check, not null
      * @param strStartIndex the index to start at in str
      * @param search        the start to search for, not null
@@ -219,6 +231,7 @@ public enum IOCase {
      * This method mimics parts of {@link String#regionMatches(boolean, int, String, int, int)}
      * but takes case-sensitivity into account.
      * </p>
+     *
      * @param str           the string to check, not null
      * @param strStartIndex the index to start at in str
      * @param search        the start to search for, not null
@@ -231,6 +244,7 @@ public enum IOCase {
 
     /**
      * Gets a string describing the sensitivity.
+     *
      * @return a string describing the sensitivity
      */
     @Override

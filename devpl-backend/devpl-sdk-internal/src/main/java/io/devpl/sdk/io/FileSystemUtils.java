@@ -183,6 +183,25 @@ public class FileSystemUtils {
     //-----------------------------------------------------------------------
 
     /**
+     * 打开指定输出文件目录
+     *
+     * @param outDir 输出文件目录
+     * @throws IOException 执行命令出错
+     */
+    public static void openDir(String outDir) throws IOException {
+        String osName = System.getProperty("os.name");
+        if (osName != null) {
+            if (osName.contains("Mac")) {
+                Runtime.getRuntime().exec("open " + outDir);
+            } else if (osName.contains("Windows")) {
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------
+
+    /**
      * Returns the free space on a drive or volume in a cross-platform manner.
      * Note that some OS's are NOT currently supported, including OS/390.
      * <pre>
@@ -219,8 +238,6 @@ public class FileSystemUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Find free space on the Windows platform using the 'dir' command.
      *
@@ -255,6 +272,8 @@ public class FileSystemUtils {
             "Command line 'dir /-c' did not return any info " +
                 "for path '" + path + "'");
     }
+
+    //-----------------------------------------------------------------------
 
     /**
      * Parses the Windows dir response last line
@@ -396,8 +415,6 @@ public class FileSystemUtils {
         }
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Performs the os command.
      *
@@ -473,22 +490,5 @@ public class FileSystemUtils {
      */
     Process openProcess(String[] cmdAttribs) throws IOException {
         return Runtime.getRuntime().exec(cmdAttribs);
-    }
-
-    /**
-     * 打开指定输出文件目录
-     *
-     * @param outDir 输出文件目录
-     * @throws IOException 执行命令出错
-     */
-    public static void openDir(String outDir) throws IOException {
-        String osName = System.getProperty("os.name");
-        if (osName != null) {
-            if (osName.contains("Mac")) {
-                Runtime.getRuntime().exec("open " + outDir);
-            } else if (osName.contains("Windows")) {
-                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
-            }
-        }
     }
 }

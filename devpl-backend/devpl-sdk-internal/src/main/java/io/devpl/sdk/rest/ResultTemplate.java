@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 通用结果模板，附带一个时间戳以及一个异常基类 Throwable
+ *
  * @since 0.0.1
  */
 public abstract class ResultTemplate implements Serializable {

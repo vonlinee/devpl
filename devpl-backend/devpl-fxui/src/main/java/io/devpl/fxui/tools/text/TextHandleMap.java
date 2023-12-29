@@ -1,4 +1,4 @@
-package io.devpl.fxui.text;
+package io.devpl.fxui.tools.text;
 
 import io.devpl.sdk.util.StringUtils;
 import javafx.scene.control.TextArea;

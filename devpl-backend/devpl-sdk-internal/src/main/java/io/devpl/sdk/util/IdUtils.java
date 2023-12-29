@@ -1,7 +1,5 @@
 package io.devpl.sdk.util;
 
-import io.devpl.sdk.ULID;
-
 import java.util.UUID;
 
 /**
@@ -24,6 +22,7 @@ public final class IdUtils {
     /**
      * 不带-的32位的UUID
      *
+     * @param upper 是否大写
      * @return UUID
      */
     public static String simple32UUID(boolean upper) {
@@ -47,6 +46,6 @@ public final class IdUtils {
      * @return ULID
      */
     public static String simpleULID() {
-        return ULID.randomULID().toString();
+        throw new UnsupportedOperationException("TODO");
     }
 }

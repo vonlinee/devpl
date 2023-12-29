@@ -62,6 +62,10 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
         return new MapBuilder<>(map);
     }
 
+    public static <KT> MapBuilder<KT, Object> builder(Class<KT> keyType) {
+        return MapBuilder.create();
+    }
+
     /**
      * 链式Map创建
      *
@@ -117,7 +121,6 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
         return this;
     }
 
-
     /**
      * 创建后的map
      *
@@ -161,9 +164,5 @@ public class MapBuilder<K, V> implements Builder<Map<K, V>> {
      */
     public String join(String separator, final String keyValueSeparator, boolean isIgnoreNull) {
         return Maps.join(this.map, separator, keyValueSeparator, isIgnoreNull);
-    }
-
-    public static <KT> MapBuilder<KT, Object> builder(Class<KT> keyType) {
-        return MapBuilder.create();
     }
 }

@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
  * 响应状态编码
  * 1.全部返回200: 不管对错，一律返回200，在返回的JSON中再具体指明错误的原因
  * 2.按照规范：使用规范的HTTP状态码。如果是没有登录，就返回401，如果是没权限就返回403。
+ *
  * @since 0.0.1
  */
 public final class Status {
@@ -50,6 +51,7 @@ public final class Status {
      * 描述信息
      */
     private String message;
+
     private Status(int code, String message) {
         this.code = code;
         this.message = message;
@@ -67,6 +69,7 @@ public final class Status {
 
     /**
      * 默认不存在时会创建并放入常量池
+     *
      * @param code    响应状态码
      * @param message 响应信息
      * @return Status
@@ -77,6 +80,7 @@ public final class Status {
 
     /**
      * 默认不存在时会创建并放入常量池
+     *
      * @param code 响应状态码
      * @return Status
      */
@@ -86,6 +90,7 @@ public final class Status {
 
     /**
      * 更新状态码定义
+     *
      * @param code           响应状态码
      * @param message        携带的信息
      * @param putIfNotExists 不存在时是否新增

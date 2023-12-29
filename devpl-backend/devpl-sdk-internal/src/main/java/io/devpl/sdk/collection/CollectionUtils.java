@@ -1,6 +1,7 @@
 package io.devpl.sdk.collection;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 public abstract class CollectionUtils {
 

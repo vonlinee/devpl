@@ -3,6 +3,7 @@ package io.devpl.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.backend.dao.FieldGroupMapper;
+import io.devpl.backend.domain.enums.CrudMode;
 import io.devpl.backend.domain.param.FieldGroupListParam;
 import io.devpl.backend.domain.param.FieldGroupParam;
 import io.devpl.backend.entity.FieldGroup;
@@ -63,7 +64,7 @@ public class FieldGroupServiceImpl implements FieldGroupService {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateFieldGroup(FieldGroupParam param) {
         fieldGroupMapper.updateById(param.getGroup());
-        groupFieldService.addGroupFieldRelation(param.getGroup().getId(), CollectionUtils.toSet(param.getFields(), FieldInfo::getId));
+        groupFieldService.updateGroupFieldRelation(param.getGroup().getId(), CollectionUtils.toSet(param.getFields(), FieldInfo::getId), CrudMode.OVERWRITE);
         return false;
     }
 }

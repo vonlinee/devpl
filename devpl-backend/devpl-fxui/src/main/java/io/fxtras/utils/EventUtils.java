@@ -1,4 +1,4 @@
-package io.devpl.fxui.event;
+package io.fxtras.utils;
 
 import javafx.event.Event;
 import javafx.scene.input.MouseButton;

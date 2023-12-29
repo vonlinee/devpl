@@ -1,6 +1,7 @@
 package io.devpl.sdk.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +22,7 @@ public final class Arrays {
      *
      * @param nums 元素列表
      */
-    public static int @NotNull [] intArray(int... nums) {
+    public static int @NotNull [] intArray(int @Nullable ... nums) {
         if (nums == null) return new int[0];
         return nums;
     }

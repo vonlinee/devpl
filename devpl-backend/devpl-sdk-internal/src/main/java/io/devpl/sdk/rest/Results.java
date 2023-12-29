@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * 工具类方法
+ *
  * @since 0.0.1
  */
 public final class Results {

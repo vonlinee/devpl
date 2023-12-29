@@ -1,6 +1,5 @@
 package io.devpl.backend.service.impl;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.CodeGenerationService;
@@ -9,7 +8,6 @@ import io.devpl.codegen.lang.LanguageMode;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.FieldData;
 import io.devpl.codegen.template.model.TypeData;
-import io.devpl.sdk.util.Arrays;
 import jakarta.annotation.Resource;
 import org.springframework.javapoet.*;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -69,37 +69,30 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
 
     @Override
     public String generatedDtoClass(JavaPojoCodeGenParam param) {
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(Vals.whenBlank(param.getClassName(), "DTO"))
-            .addModifiers(Modifier.PUBLIC);
+        TypeData model = new TypeData();
 
-        for (FieldInfo fieldInfo : param.getFields()) {
-            FieldSpec.Builder fb = FieldSpec.builder(TypeName.get(String.class), fieldInfo.getFieldName(), Modifier.PRIVATE)
-                .addJavadoc(Vals.whenBlank(fieldInfo.getDescription(), fieldInfo.getFieldName()));
+        model.setPackageName(param.getPackageName());
+        model.setClassName(param.getClassName());
 
-            AnnotationSpec annotationSpec = AnnotationSpec.builder(JsonAlias.class)
-                .addMember("value", "\"%s\"", fieldInfo.getFieldKey())
-                .build();
+        List<FieldData> fieldDataList = new ArrayList<>();
 
-            fb.addAnnotation(annotationSpec);
-
-            FieldSpec fieldSpec = fb.build();
-
-            typeSpecBuilder.addField(fieldSpec);
+        for (FieldInfo field : param.getFields()) {
+            FieldData fieldData = new FieldData();
+            fieldData.setName(field.getFieldName());
+            fieldData.setDataType("String");
+            fieldData.setComment(field.getComment());
+            fieldData.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
+            fieldDataList.add(fieldData);
         }
+        model.setFields(fieldDataList);
 
-        // lombok注解支持
-        if (param.useLombok()) {
-            typeSpecBuilder.addAnnotation(AnnotationSpec.builder(ClassName.bestGuess("lombok.Getter")).build());
-            typeSpecBuilder.addAnnotation(AnnotationSpec.builder(ClassName.bestGuess("lombok.Setter")).build());
-        }
+        // 字段信息
+        Map<String, Object> args = new HashMap<>();
+        model.fill(args);
 
-        JavaFile javaFile = JavaFile.builder(param.getPackageName(), typeSpecBuilder.build())
-            .build();
-
-        try {
-            StringWriter sw = new StringWriter();
-            javaFile.writeTo(sw);
-            return sw.toString();
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", args, baos);
+            return baos.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -107,36 +100,32 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
 
     @Override
     public String generatePoiPojo(JavaPojoCodeGenParam param) {
-        return test();
+        return test(param);
     }
 
-    private String test() {
+    private String test(JavaPojoCodeGenParam param) {
         TypeData model = new TypeData();
 
-        model.setPackageName("io.devpl.main");
-        model.addImport("java.util.List");
-        model.addImport("java.util.Map");
+        model.setPackageName(param.getPackageName());
 
         model.setSuperClass(Serializable.class.getName());
         model.setSuperClass(HashMap.class.getName());
         model.addSuperInterfaces(Serializable.class.getName());
-        model.setClassName("Main");
+        model.setClassName(param.getClassName());
+
+        List<FieldData> fieldDataList = new ArrayList<>();
+
+        for (FieldInfo field : param.getFields()) {
+            FieldData fieldData = new FieldData();
+            fieldData.setName(field.getFieldName());
+            fieldData.setDataType("String");
+            fieldData.setComment(field.getComment());
+            fieldData.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
+            fieldDataList.add(fieldData);
+        }
+        model.setFields(fieldDataList);
 
         // 字段信息
-        FieldData nameField = new FieldData();
-        nameField.setName("name");
-        nameField.setDataType("String");
-        nameField.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
-
-        FieldData ageField = new FieldData();
-        ageField.setName("age");
-        ageField.setDataType("String");
-        ageField.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
-
-        model.setFields(Arrays.asArrayList(nameField, ageField));
-
-        model.addField(nameField);
-
         Map<String, Object> args = new HashMap<>();
         model.fill(args);
 

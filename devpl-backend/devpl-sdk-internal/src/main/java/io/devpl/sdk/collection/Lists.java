@@ -29,6 +29,7 @@ public final class Lists {
 
     /**
      * 从Map构造一个List
+     *
      * @param map         数据Map
      * @param constructor 构造函数，接受Map的Key和Value对象
      * @param <K>         Map的key类型
@@ -64,6 +65,7 @@ public final class Lists {
 
     /**
      * 不可变的List
+     *
      * @param elements
      * @param <E>
      * @return

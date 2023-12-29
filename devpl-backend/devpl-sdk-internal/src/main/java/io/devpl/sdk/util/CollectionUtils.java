@@ -1,5 +1,7 @@
 package io.devpl.sdk.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -8,6 +10,9 @@ import java.util.function.ToLongFunction;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/**
+ * 集合操作工具类
+ */
 public abstract class CollectionUtils {
 
     /**
@@ -291,15 +296,41 @@ public abstract class CollectionUtils {
 
     /**
      * nullsafe版本removeAll
+     * 注意：直接在参数的集合上进行修改元素
      *
      * @param coll1 集合1
      * @param coll2 集合2
      * @param <E>   集合元素类型
+     * @return 如果参数为空，则返回原参数
      */
-    public static <E> void removeAll(Collection<E> coll1, List<E> coll2) {
+    @Nullable
+    public static <C extends Collection<E>, E> C removeAll(C coll1, Collection<E> coll2) {
         if (isEmpty(coll1) || isEmpty(coll2)) {
-            return;
+            return coll1;
         }
         coll1.removeAll(coll2);
+        return coll1;
+    }
+
+    /**
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @param <E>   集合元素类型
+     */
+    public static <E> List<E> differ(Collection<E> coll1, Collection<E> coll2) {
+        if (isEmpty(coll1)) {
+            return new ArrayList<>(coll2);
+        }
+        if (isEmpty(coll2)) {
+            return new ArrayList<>(coll1);
+        }
+        // 创建两个集合
+        List<E> list = new ArrayList<>();
+        for (E e : coll1) {
+            if (!coll2.contains(e)) {
+                list.add(e);
+            }
+        }
+        return list;
     }
 }

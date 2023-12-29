@@ -3,6 +3,7 @@ package io.devpl.sdk;
 /**
  * Key which can be used to access {@link Attribute} out of the {@link AttributeMap}. Be aware that it is not
  * possible to have multiple keys with the same name.
+ *
  * @param <T> the type of the {@link Attribute} which can be accessed via this {@link AttributeKey}.
  */
 @SuppressWarnings("UnusedDeclaration") // 'T' is used only at compile time

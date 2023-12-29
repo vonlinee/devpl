@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller;
 
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.fxui.text.TextHandleMap;
+import io.devpl.fxui.tools.text.TextHandleMap;
 import io.fxtras.mvvm.FxmlView;
 import io.devpl.fxui.utils.xml.XMLUtils;
 import javafx.event.ActionEvent;

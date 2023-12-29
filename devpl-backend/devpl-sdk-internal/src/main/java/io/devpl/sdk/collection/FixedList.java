@@ -4,6 +4,7 @@ import java.util.*;
 
 /**
  * 固定容量大小的列表
+ *
  * @param <E>
  */
 public class FixedList<E> implements List<E> {

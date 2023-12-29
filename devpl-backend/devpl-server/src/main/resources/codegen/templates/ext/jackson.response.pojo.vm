@@ -13,17 +13,17 @@ public class ${className} #if($!superClass.length() > 0) extends ${superClass} #
 #foreach( $field in $fields)
     #if(${field.commentOn})
     /**
-    * ${field.comment}
-    **/
+     * ${field.comment}
+     **/
     #end
-    @JsonAlias("${field.name}")
+    @JsonAlias(value = "${field.name}")
     ${field.modifier} ${field.dataType} ${field.name};
 #end
 
 #foreach( $method in $methods)
     /**
-    * ${field.comment}
-    **/
-    ${method.modifier} ${method.name} ;
+     * ${field.comment}
+     **/
+    ${method.modifier} ${method.name};
 #end
 }

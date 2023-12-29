@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class NamedInterpolationEngine extends PatternInterpolationEngine {
     private static final Pattern PATTERN = Pattern
-        .compile("\\{([_a-zA-Z0-9]+)\\}");
+        .compile("\\{([_a-zA-Z0-9]+)}");
 
     public NamedInterpolationEngine() {
         super(PATTERN);

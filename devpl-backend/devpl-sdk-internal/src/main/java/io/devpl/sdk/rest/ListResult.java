@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 携带多条数据的列表
+ *
  * @param <E>
  */
 public class ListResult<E> extends RestfulResultTemplate implements ListResultBuilder<E>, DelegationList<E> {

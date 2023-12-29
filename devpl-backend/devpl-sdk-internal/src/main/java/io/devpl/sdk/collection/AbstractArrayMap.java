@@ -147,6 +147,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * 查找key及其hashcode是否存在
+     *
      * @param key  key
      * @param hash key的hashcode
      * @return key是否存在
@@ -289,6 +290,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Check whether a key exists in the array.
+     *
      * @param key The key to search for.
      * @return Returns true if the key exists, else false.
      */
@@ -298,6 +300,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Returns the index of a key in the set.
+     *
      * @param key The key to search for.
      * @return Returns the index of the key if it exists, else a negative integer.
      */
@@ -327,6 +330,7 @@ public abstract class AbstractArrayMap<K, V> {
     /**
      * Check whether a value exists in the array.  This requires a linear search
      * through the entire array.
+     *
      * @param value The value to search for.
      * @return Returns true if the value exists, else false.
      */
@@ -336,6 +340,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array.
+     *
      * @param key The key of the value to retrieve.
      * @return Returns the value associated with the given key,
      * or null if there is no such key.
@@ -352,6 +357,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Retrieve a value from the array, or {@code defaultValue} if there is no mapping for the key.
+     *
      * @param key          The key of the value to retrieve.
      * @param defaultValue The default mapping of the key
      * @return Returns the value associated with the given key,
@@ -365,6 +371,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Return the key at the given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the key stored at the given index.
      */
@@ -375,6 +382,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Return the value at the given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value stored at the given index.
      */
@@ -385,6 +393,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Set the value at a given index in the array.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @param value The new value to store at this index.
      * @return Returns the previous value at the given index.
@@ -406,6 +415,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Add a new value to the array map.
+     *
      * @param key   The key under which to store the value.  <b>Must not be null.</b>  If
      *              this key already exists in the array, its value will be replaced.
      * @param value The value to store for the given key.
@@ -426,8 +436,7 @@ public abstract class AbstractArrayMap<K, V> {
         if (index >= 0) {
             // 存在该key，直接赋值即可
             index = (index << 1) + 1;
-            @SuppressWarnings("unchecked")
-            final V old = (V) mArray[index];
+            @SuppressWarnings("unchecked") final V old = (V) mArray[index];
             mArray[index] = value;
             return old;
         }
@@ -466,6 +475,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Perform a {@link #put(Object, Object)} of all key/value pairs in <var>array</var>
+     *
      * @param array The array whose contents are to be retrieved.
      */
     public void putAll(AbstractArrayMap<? extends K, ? extends V> array) {
@@ -487,6 +497,7 @@ public abstract class AbstractArrayMap<K, V> {
     /**
      * Add a new value to the array map only if the key does not already have a value, or it is
      * mapped to {@code null}.
+     *
      * @param key   The key under which to store the value.
      * @param value The value to store for the given key.
      * @return Returns the value that was stored for the given key, or null if there
@@ -502,6 +513,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map.
+     *
      * @param key The key of the mapping to remove.
      * @return Returns the value that was stored under the key, or null if there
      * was no such key.
@@ -516,6 +528,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Remove an existing key from the array map only if it is currently mapped to {@code value}.
+     *
      * @param key   The key of the mapping to remove.
      * @param value The value expected to be mapped to the key.
      * @return Returns true if the mapping was removed.
@@ -534,6 +547,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Remove the key/value mapping at the given index.
+     *
      * @param index The desired index, must be between 0 and {@link #size()}-1.
      * @return Returns the value that was stored at this index.
      */
@@ -582,13 +596,13 @@ public abstract class AbstractArrayMap<K, V> {
             throw new ConcurrentModificationException();
         }
         mSize = nsize;
-        @SuppressWarnings("unchecked")
-        final V value = (V) old;
+        @SuppressWarnings("unchecked") final V value = (V) old;
         return value;
     }
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
+     *
      * @param key   The key of the mapping to replace.
      * @param value The value to store for the given key.
      * @return Returns the previous mapped value or null.
@@ -603,6 +617,7 @@ public abstract class AbstractArrayMap<K, V> {
 
     /**
      * Replace the mapping for {@code key} only if it is already mapped to a value.
+     *
      * @param key      The key of the mapping to replace.
      * @param oldValue The value expected to be mapped to the key.
      * @param newValue The value to store for the given key.

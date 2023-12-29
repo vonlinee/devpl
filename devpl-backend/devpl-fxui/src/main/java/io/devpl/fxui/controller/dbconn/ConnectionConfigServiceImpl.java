@@ -16,7 +16,7 @@ public class ConnectionConfigServiceImpl implements ConnectionConfigService {
     @Override
     public boolean save(ConnectionConfig connectionConfig) {
         String sql = "insert into connection_config values ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-        sql = sql.formatted(IdUtils.simpleULID(), connectionConfig.getConnectionName(), connectionConfig.getConnectionUrl(), connectionConfig.getHost(), connectionConfig.getPort(), connectionConfig.getDbType()
+        sql = sql.formatted(IdUtils.simple32UUID(), connectionConfig.getConnectionName(), connectionConfig.getConnectionUrl(), connectionConfig.getHost(), connectionConfig.getPort(), connectionConfig.getDbType()
                 , connectionConfig.getDbName(), connectionConfig.getUsername(), connectionConfig.getPassword(), connectionConfig.getEncoding());
         try (Connection connection = AppConfig.getConnection()) {
             return DBUtils.insert(connection, sql) > 0;

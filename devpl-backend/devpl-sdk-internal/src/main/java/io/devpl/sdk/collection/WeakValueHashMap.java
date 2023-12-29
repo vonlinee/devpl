@@ -1,15 +1,8 @@
 package io.devpl.sdk.collection;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.*;
 
 /**
  * Note: this class if copied from <a href="https://github.com/sialcasa/mvvmFX">MvvmFX</a>
@@ -24,6 +17,7 @@ import java.lang.ref.WeakReference;
  * This implementation of a Map uses a {@link WeakReference} to the value objects. Once the
  * garbage collector decides it wants to finalize a value object, it will be removed from the
  * map automatically.
+ *
  * @param <K> - the type of the key object
  * @param <V> - the type of the value object
  */
@@ -41,6 +35,7 @@ public class WeakValueHashMap<K, V> extends AbstractMap<K, V> {
 
     /**
      * Creates a WeakValueHashMap with a desired initial capacity
+     *
      * @param capacity - the initial capacity
      */
     public WeakValueHashMap(int capacity) {
@@ -57,6 +52,7 @@ public class WeakValueHashMap<K, V> extends AbstractMap<K, V> {
 
     /**
      * Creates a WeakValueHashMap and copies the content from an existing map
+     *
      * @param map - the map to copy from
      */
     public WeakValueHashMap(Map<? extends K, ? extends V> map) {

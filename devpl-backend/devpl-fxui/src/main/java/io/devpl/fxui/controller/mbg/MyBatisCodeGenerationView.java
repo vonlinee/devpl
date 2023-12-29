@@ -7,7 +7,7 @@ import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.fxui.common.ProgressDialog;
 import io.devpl.fxui.controller.TableCustomizationView;
-import io.devpl.fxui.event.EventUtils;
+import io.fxtras.utils.EventUtils;
 import io.fxtras.Alerts;
 import io.fxtras.PropertyBinder;
 import io.fxtras.mvvm.FxmlBinder;
