@@ -1,5 +1,11 @@
 <template>
-  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="90%" height="90%">
+  <vxe-modal
+    v-model="visible"
+    title="导入字段分组"
+    show-footer
+    width="90%"
+    height="90%"
+  >
     <el-row>
       <el-col :span="12">
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
@@ -17,18 +23,17 @@
 </template>
 
 <script lang="ts" setup>
+import FieldTreeTable from "@/components/fields/FieldTreeTable.vue"
+import FieldParserInput from "../FieldParserInput.vue"
+import { reactive, ref, toRaw } from "vue"
+import { isBlank } from "@/utils/tool"
+import { ElMessage } from "element-plus"
+import { apiParseFields } from "@/api/fields"
 
-import FieldTreeTable from "@/components/fields/FieldTreeTable.vue";
-import FieldParserInput from "../FieldParserInput.vue";
-import { reactive, ref, toRaw } from "vue";
-import { isBlank } from "@/utils/tool";
-import { ElMessage } from "element-plus";
-import { apiParseFields } from "@/api/fields";
+const visible = ref()
 
-const visible = ref();
-
-const fieldParserInputRef = ref();
-const fieldTableRef = ref();
+const fieldParserInputRef = ref()
+const fieldTableRef = ref()
 
 /**
  * 字段映射规则
@@ -37,33 +42,30 @@ const fieldTableRef = ref();
 const columnMappingForm = reactive({
   fieldNameColumn: "1",
   fieldTypeColumn: "2",
-  fieldDescColumn: "3"
-});
+  fieldDescColumn: "3",
+})
 
 const parseFields = () => {
-  const inputType: string = fieldParserInputRef.value.getInputType();
-  let text = fieldParserInputRef.value.getParseableText();
+  const inputType: string = fieldParserInputRef.value.getInputType()
+  let text = fieldParserInputRef.value.getParseableText()
   if (isBlank(text)) {
-    ElMessage("输入文本为空");
-    return;
+    ElMessage("输入文本为空")
+    return
   }
   apiParseFields({
-    type: inputType, content: text,
-    ...toRaw(columnMappingForm)
+    type: inputType,
+    content: text,
+    ...toRaw(columnMappingForm),
   }).then((res) => {
-    fieldTableRef.value.setFields(res.data);
-  });
-};
-
+    fieldTableRef.value.setFields(res.data)
+  })
+}
 
 defineExpose({
   show() {
-    visible.value = true;
-  }
-});
-
+    visible.value = true
+  },
+})
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

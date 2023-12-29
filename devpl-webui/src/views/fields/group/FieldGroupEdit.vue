@@ -1,9 +1,23 @@
 <template>
-  <vxe-modal v-model="visible" :title="!dataForm.group?.id ? '新增' : '修改'" :mask-closable="false" show-footer
-             width="50%">
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
+  <vxe-modal
+    v-model="visible"
+    :title="!dataForm.group?.id ? '新增' : '修改'"
+    :mask-closable="false"
+    show-footer
+    width="50%"
+  >
+    <el-form
+      ref="dataFormRef"
+      :model="dataForm"
+      :rules="dataRules"
+      label-width="80px"
+      @keyup.enter="submitHandle()"
+    >
       <el-form-item label="组名称" prop="groupName">
-        <el-input v-model="dataForm.group.groupName" placeholder="组名称"></el-input>
+        <el-input
+          v-model="dataForm.group.groupName"
+          placeholder="组名称"
+        ></el-input>
       </el-form-item>
       <el-form-item label="字段信息" prop="fields">
         <template #default>
@@ -13,7 +27,12 @@
             <el-table-column label="名称" prop="fieldName"></el-table-column>
             <el-table-column label="数据类型" prop="dataType"></el-table-column>
           </el-table>
-          <el-button class="mt-4" style="width: 100%" @click="showFieldSelectModal">选择</el-button>
+          <el-button
+            class="mt-4"
+            style="width: 100%"
+            @click="showFieldSelectModal"
+            >选择</el-button
+          >
         </template>
       </el-form-item>
     </el-form>
@@ -23,96 +42,98 @@
     </template>
   </vxe-modal>
 
-  <FieldSelectModal ref="fieldSelectModal" @selection-change="handleSelection"></FieldSelectModal>
+  <FieldSelectModal
+    ref="fieldSelectModal"
+    @selection-change="handleSelection"
+  ></FieldSelectModal>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { ElMessage } from "element-plus/es";
-import { apiGetModelById, apiSaveOrUpdateModelById } from "@/api/model";
-import FieldSelectModal from "@/views/fields/FieldSelectModal.vue";
-import { apiListGroupFieldsById, apiUpdateFieldGroup } from "@/api/fields";
+import { reactive, ref } from "vue"
+import { ElMessage } from "element-plus/es"
+import { apiGetModelById, apiSaveOrUpdateModelById } from "@/api/model"
+import FieldSelectModal from "@/views/fields/FieldSelectModal.vue"
+import { apiListGroupFieldsById, apiUpdateFieldGroup } from "@/api/fields"
 
-const emit = defineEmits(["refreshDataList"]);
+const emit = defineEmits(["refreshDataList"])
 
-const visible = ref(false);
-const dataFormRef = ref();
-const fieldSelectModal = ref();
+const visible = ref(false)
+const dataFormRef = ref()
+const fieldSelectModal = ref()
 
 const dataForm = reactive<{
-  group?: FieldGroup,
+  group?: FieldGroup
   fields: FieldInfo[]
 }>({
   group: {
     id: -1,
-    groupName: ""
+    groupName: "",
   },
-  fields: []
-});
+  fields: [],
+})
 
 const handleSelection = (val: FieldInfo[]) => {
-  const oldValue = dataForm.fields || [];
+  const oldValue = dataForm.fields || []
   if (oldValue.length == 0) {
-    dataForm.fields = oldValue.concat(val);
+    dataForm.fields = oldValue.concat(val)
   } else {
     for (let i = 0; i < val.length; i++) {
-      if (!oldValue.find(item => item.fieldKey == val[i].fieldKey)) {
-        oldValue.push(val[i]);
+      if (!oldValue.find((item) => item.fieldKey == val[i].fieldKey)) {
+        oldValue.push(val[i])
       }
     }
   }
-};
+}
 
 const getModelClass = (id: number) => {
-  apiGetModelById(id).then(res => {
-    Object.assign(dataForm, res.data);
-  });
-};
+  apiGetModelById(id).then((res) => {
+    Object.assign(dataForm, res.data)
+  })
+}
 
 const showFieldSelectModal = () => {
-  fieldSelectModal.value.show(dataForm.fields);
-};
+  fieldSelectModal.value.show(dataForm.fields)
+}
 
 const dataRules = ref({
   packageName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  code: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
-});
+  code: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+})
 
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid || dataForm.group == undefined) {
-      return false;
+      return false
     }
     apiUpdateFieldGroup(dataForm.group, dataForm.fields).then(() => {
       ElMessage.success({
         message: "操作成功",
         duration: 500,
         onClose: () => {
-          visible.value = false;
-          emit("refreshDataList");
-        }
-      });
-    });
-  });
-};
+          visible.value = false
+          emit("refreshDataList")
+        },
+      })
+    })
+  })
+}
 
 defineExpose({
   show: (group?: FieldGroup) => {
-    visible.value = true;
+    visible.value = true
     // 重置表单数据
     if (dataFormRef.value) {
-      dataFormRef.value.resetFields();
+      dataFormRef.value.resetFields()
     }
     // id 存在则为修改
     if (group) {
-
-      dataForm.group = group;
+      dataForm.group = group
 
       apiListGroupFieldsById(group.id).then((res) => {
-        dataForm.fields = res.data;
-      });
+        dataForm.fields = res.data
+      })
     }
-  }
-});
+  },
+})
 </script>

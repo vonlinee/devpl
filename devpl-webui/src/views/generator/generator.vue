@@ -1,30 +1,61 @@
 <template>
-  <vxe-modal v-model="visible" title="生成代码" :mask-closable="false" :draggable="false" width="60%" show-footer
-             :z-index="2000">
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
+  <vxe-modal
+    v-model="visible"
+    title="生成代码"
+    :mask-closable="false"
+    :draggable="false"
+    width="60%"
+    show-footer
+    :z-index="2000"
+  >
+    <el-form
+      ref="dataFormRef"
+      :model="dataForm"
+      :rules="dataRules"
+      label-width="120px"
+    >
       <el-row>
         <el-col :span="12">
           <el-form-item label="表名" prop="tableName">
-            <el-input v-model="dataForm.tableName" disabled placeholder="表名"></el-input>
+            <el-input
+              v-model="dataForm.tableName"
+              disabled
+              placeholder="表名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="说明" prop="tableComment">
-            <el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
+            <el-input
+              v-model="dataForm.tableComment"
+              placeholder="说明"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="类名" prop="className">
-            <el-input v-model="dataForm.className" placeholder="类名"></el-input>
+            <el-input
+              v-model="dataForm.className"
+              placeholder="类名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item prop="baseclassId" label="继承">
-            <el-select v-model="dataForm.baseclassId" placeholder="继承" style="width: 100%" clearable>
-              <el-option v-for="item in baseClassList" :key="item.id" :label="item.code"
-                         :value="item.id"></el-option>
+            <el-select
+              v-model="dataForm.baseclassId"
+              placeholder="继承"
+              style="width: 100%"
+              clearable
+            >
+              <el-option
+                v-for="item in baseClassList"
+                :key="item.id"
+                :label="item.code"
+                :value="item.id"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -32,36 +63,54 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="模块名" prop="moduleName">
-            <el-input v-model="dataForm.moduleName" placeholder="模块名"></el-input>
+            <el-input
+              v-model="dataForm.moduleName"
+              placeholder="模块名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="功能名" prop="functionName">
-            <el-input v-model="dataForm.functionName" placeholder="功能名"></el-input>
+            <el-input
+              v-model="dataForm.functionName"
+              placeholder="功能名"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="项目包名" prop="packageName">
-            <el-input v-model="dataForm.packageName" placeholder="项目包名"></el-input>
+            <el-input
+              v-model="dataForm.packageName"
+              placeholder="项目包名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="版本号" prop="version">
-            <el-input v-model="dataForm.version" placeholder="版本号"></el-input>
+            <el-input
+              v-model="dataForm.version"
+              placeholder="版本号"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="默认作者" prop="author">
-            <el-input v-model="dataForm.author" placeholder="默认作者"></el-input>
+            <el-input
+              v-model="dataForm.author"
+              placeholder="默认作者"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="作者邮箱" prop="email">
-            <el-input v-model="dataForm.email" placeholder="作者邮箱"></el-input>
+            <el-input
+              v-model="dataForm.email"
+              placeholder="作者邮箱"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -83,11 +132,25 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
-        <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
+      <el-form-item
+        v-if="dataForm.generatorType === 1"
+        label="后端生成路径"
+        prop="backendPath"
+      >
+        <el-input
+          v-model="dataForm.backendPath"
+          placeholder="后端生成路径"
+        ></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
-        <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
+      <el-form-item
+        v-if="dataForm.generatorType === 1"
+        label="前端生成路径"
+        prop="frontendPath"
+      >
+        <el-input
+          v-model="dataForm.frontendPath"
+          placeholder="前端生成路径"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -101,23 +164,23 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { ElMessage } from "element-plus/es";
-import { apiListBaseClass } from "@/api/model";
-import { useDownloadApi, useGeneratorApi } from "@/api/generator";
-import { apiGetGenTableById, useTableSubmitApi } from "@/api/table";
-import CodeGenResult from "@/views/generator/CodeGenResult.vue";
+import { reactive, ref } from "vue"
+import { ElMessage } from "element-plus/es"
+import { apiListBaseClass } from "@/api/model"
+import { useDownloadApi, useGeneratorApi } from "@/api/generator"
+import { apiGetGenTableById, useTableSubmitApi } from "@/api/table"
+import CodeGenResult from "@/views/generator/CodeGenResult.vue"
 
 /**
  * 展示生成结果
  */
-const resultDialogRef = ref();
+const resultDialogRef = ref()
 
-const emit = defineEmits(["refreshDataList"]);
+const emit = defineEmits(["refreshDataList"])
 
-const visible = ref(false);
-const dataFormRef = ref();
-const baseClassList = ref<any[]>([]);
+const visible = ref(false)
+const dataFormRef = ref()
+const baseClassList = ref<any[]>([])
 const dataForm = reactive({
   id: "",
   baseclassId: "",
@@ -133,105 +196,114 @@ const dataForm = reactive({
   functionName: "",
   className: "",
   tableComment: "",
-  tableName: ""
-});
+  tableName: "",
+})
 
 const init = (id: number) => {
-  visible.value = true;
-  dataForm.id = "";
+  visible.value = true
+  dataForm.id = ""
   // 重置表单数据
   if (dataFormRef.value) {
-    dataFormRef.value.resetFields();
+    dataFormRef.value.resetFields()
   }
-  getBaseClassList();
-  getTable(id);
-};
+  getBaseClassList()
+  getTable(id)
+}
 
 const getBaseClassList = () => {
-  apiListBaseClass().then(res => {
-    baseClassList.value = res.data;
-  });
-};
+  apiListBaseClass().then((res) => {
+    baseClassList.value = res.data
+  })
+}
 
 /**
  * 获取表信息
  * @param id 生成的表ID
  */
 const getTable = (id: number) => {
-  apiGetGenTableById(id).then(res => {
-    Object.assign(dataForm, res.data);
+  apiGetGenTableById(id).then((res) => {
+    Object.assign(dataForm, res.data)
     // 填充默认值
     if (dataForm.tableComment == null || dataForm.tableComment == "") {
-      dataForm.tableComment = res.data?.tableName == undefined ? "" : res.data?.tableName;
+      dataForm.tableComment =
+        res.data?.tableName == undefined ? "" : res.data?.tableName
     }
-  });
-};
+  })
+}
 
 const dataRules = ref({
   tableName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  tableComment: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+  tableComment: [
+    { required: true, message: "必填项不能为空", trigger: "blur" },
+  ],
   className: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   packageName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   author: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   moduleName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  functionName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  generatorType: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+  functionName: [
+    { required: true, message: "必填项不能为空", trigger: "blur" },
+  ],
+  generatorType: [
+    { required: true, message: "必填项不能为空", trigger: "blur" },
+  ],
   formLayout: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   backendPath: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  frontendPath: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
-});
+  frontendPath: [
+    { required: true, message: "必填项不能为空", trigger: "blur" },
+  ],
+})
 
 // 保存
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid) {
-      return false;
+      return false
     }
     useTableSubmitApi(dataForm).then(() => {
       ElMessage.success({
         message: "操作成功",
         duration: 500,
         onClose: () => {
-          visible.value = false;
-          emit("refreshDataList");
-        }
-      });
-    });
-  });
-};
+          visible.value = false
+          emit("refreshDataList")
+        },
+      })
+    })
+  })
+}
 
 // 生成代码
 const generatorHandle = () => {
   dataFormRef.value.validate(async (valid: boolean) => {
     if (!valid) {
-      return false;
+      return false
     }
 
     // 先保存
-    await useTableSubmitApi(dataForm);
+    await useTableSubmitApi(dataForm)
 
     // 生成代码，zip压缩包
     if (dataForm.generatorType === 0) {
-      useDownloadApi([dataForm.id]);
-      visible.value = false;
-      return;
+      useDownloadApi([dataForm.id])
+      visible.value = false
+      return
     }
 
     // 生成代码，自定义路径
     useGeneratorApi([dataForm.id]).then((res) => {
-      visible.value = false;
+      visible.value = false
       if (res.data) {
         // 返回所有根目录列表
-        resultDialogRef.value.init(res.data);
+        resultDialogRef.value.init(res.data)
       }
-      emit("refreshDataList");
-    });
-  });
-};
+      emit("refreshDataList")
+    })
+  })
+}
 
 defineExpose({
-  init
-});
+  init,
+})
 </script>
 
 <style lang="scss" scoped>

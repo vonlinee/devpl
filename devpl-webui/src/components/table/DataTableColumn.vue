@@ -30,27 +30,34 @@
   >
     <!-- (START) 当slot-header有值时使用插槽类型 -->
     <template v-if="column.headerSlot" #header="scope">
-      <slot name="header" :row="scope.row" :column="scope.column" :index="scope.index"></slot>
+      <slot
+        name="header"
+        :row="scope.row"
+        :column="scope.column"
+        :index="scope.index"
+      ></slot>
     </template>
     <!-- (END) 当slot-header有值时使用插槽类型 -->
     <!-- (START) 当slot有值时使用插槽类型 -->
     <template v-if="column.slot" #default="scope">
-      <slot name="default" :row="scope.row" :column="scope.column" :index="scope.index"></slot>
+      <slot
+        name="default"
+        :row="scope.row"
+        :column="scope.column"
+        :index="scope.index"
+      ></slot>
     </template>
     <!-- (END) 当slot有值时使用插槽类型 -->
   </el-table-column>
 </template>
 <script lang="ts" setup>
-import { PropType } from "vue";
-import { DataTableColumnProps } from "./interface";
+import { PropType } from "vue"
+import { DataTableColumnProps } from "./interface"
 
 const props = defineProps({
   column: {
     type: Object as PropType<DataTableColumnProps>,
-    default: () => {
-    }
-  }
-});
-
+    default: () => {},
+  },
+})
 </script>
-

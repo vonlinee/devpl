@@ -14,11 +14,11 @@ type DataTypeGroup = {
   /**
    * 备注信息
    */
-  remark: string,
+  remark: string
   /**
    * 是否处于编辑状态
    */
-  editing: boolean,
+  editing: boolean
   /**
    * 是否内置
    */

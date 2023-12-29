@@ -13,14 +13,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from "vue"
 
 const options = [
   {
     value: "java",
-    label: "Java"
-  }
-];
-const value = ref(options[0].value);
-
+    label: "Java",
+  },
+]
+const value = ref(options[0].value)
 </script>

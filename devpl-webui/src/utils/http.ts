@@ -3,11 +3,11 @@ import axios, {
   AxiosInstance,
   AxiosResponse,
   CreateAxiosDefaults,
-  InternalAxiosRequestConfig
-} from "axios";
-import { ElMessage } from "element-plus";
-import qs from "qs";
-import { ResponseStatus, HttpStatus } from "./http/status";
+  InternalAxiosRequestConfig,
+} from "axios"
+import { ElMessage } from "element-plus"
+import qs from "qs"
+import { ResponseStatus, HttpStatus } from "./http/status"
 
 /**
  * 后端接口响应数据结构
@@ -17,31 +17,31 @@ export interface Response<T = Record<string, any>> {
   /**
    * 接口响应状态码，和HTTP状态码区分开
    */
-  code: number | string;
+  code: number | string
   /**
    * 接口返回消息
    */
-  msg: string;
+  msg: string
   /**
    * 用于提示的消息，由后端定义
    */
-  toast?: string;
+  toast?: string
   /**
    * 总条数，仅当返回数据为列表时有值
    */
-  total?: number;
+  total?: number
   /**
    * 接口返回的数据，T或者T[]，需要调用方进行指定
    */
-  data?: T;
+  data?: T
   /**
    * 异常调用栈，仅在开发阶段使用，用于调试
    */
-  stackTrace?: string;
+  stackTrace?: string
   /**
    * 时间戳
    */
-  timestamp: number | string;
+  timestamp: number | string
 }
 
 // 请求数据，可能放在请求体里也可能放在请求参数里
@@ -53,7 +53,7 @@ type RequestParam = Record<string, any> | string | any[]
  * Http请求头
  */
 export interface HttpHeader extends Record<string, string> {
-  "Content-Type": string;
+  "Content-Type": string
 }
 
 /**
@@ -65,17 +65,17 @@ class Http {
   /**
    * Axios实例
    */
-  instance: AxiosInstance;
+  instance: AxiosInstance
 
   constructor(config: CreateAxiosDefaults) {
-    this.instance = axios.create(config);
+    this.instance = axios.create(config)
 
     // 请求拦截器
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         // GET请求追加时间戳，防止GET请求缓存
         if (config.method?.toUpperCase() === "GET" && config.params) {
-          config.params.timestamp = new Date().getTime();
+          config.params.timestamp = new Date().getTime()
         }
 
         // 表单
@@ -84,40 +84,40 @@ class Http {
             "application/x-www-form-urlencoded"
           )
         ) {
-          config.data = qs.stringify(config.data);
+          config.data = qs.stringify(config.data)
         }
-        return config;
+        return config
       },
       (error: AxiosError) => {
-        return Promise.reject(error);
+        return Promise.reject(error)
       }
-    );
+    )
 
     // 响应拦截器
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => {
         if (response.status !== HttpStatus.OK) {
           // HTTP请求失败
-          return Promise.reject(new Error(response.statusText || "Error"));
+          return Promise.reject(new Error(response.statusText || "Error"))
         }
-        const res = response.data as Response;
+        const res = response.data as Response
         if (res.code === ResponseStatus.SUCCESS) {
           // 业务响应成功
-          return res as unknown as AxiosResponse;
+          return res as unknown as AxiosResponse
         }
         // 错误提示 通过自定义弹窗方式进行显示
         if (res.toast) {
-          ElMessage.error(res.toast);
+          ElMessage.error(res.toast)
         } else {
-          ElMessage.error(res.msg);
+          ElMessage.error(res.msg)
         }
-        return Promise.reject(res.msg || "Error");
+        return Promise.reject(res.msg || "Error")
       },
       (error) => {
-        ElMessage.error(error.message);
-        return Promise.reject(error);
+        ElMessage.error(error.message)
+        return Promise.reject(error)
       }
-    );
+    )
   }
 
   /**
@@ -126,7 +126,7 @@ class Http {
    * @param params
    */
   get<T = any>(url: string, params?: RequestData): ResponsePromise<T> {
-    return this.instance.get(url, { params: params });
+    return this.instance.get(url, { params: params })
   }
 
   /**
@@ -141,7 +141,7 @@ class Http {
     params?: RequestParam,
     headers: HttpHeader = { "Content-Type": "application/json" }
   ): ResponsePromise<T> {
-    return this.instance.post(url, params, { headers });
+    return this.instance.post(url, params, { headers })
   }
 
   /**
@@ -156,7 +156,7 @@ class Http {
     params?: RequestParam,
     headers: HttpHeader = { "Content-Type": "application/json" }
   ): ResponsePromise<T> {
-    return this.instance.put(url, params, { headers });
+    return this.instance.put(url, params, { headers })
   }
 
   /**
@@ -175,8 +175,8 @@ class Http {
       url: url,
       method: "delete",
       data: params,
-      headers: headers
-    });
+      headers: headers,
+    })
   }
 
   /**
@@ -190,7 +190,7 @@ class Http {
     params?: RequestParam,
     headers: HttpHeader = { "Content-Type": "multipart/form-data" }
   ): ResponsePromise<T> {
-    return this.instance.post(url, params, { headers });
+    return this.instance.post(url, params, { headers })
   }
 }
 
@@ -205,8 +205,8 @@ const config: CreateAxiosDefaults = {
   /**
    * 超时时间，毫秒
    */
-  timeout: 6000
-};
+  timeout: 6000,
+}
 
-const http = new Http(config);
-export default http;
+const http = new Http(config)
+export default http

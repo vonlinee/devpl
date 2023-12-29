@@ -1,25 +1,23 @@
 <template>
   <el-table-column :prop="columnName" :label="columnName" show-overflow-tooltip>
-    <template v-slot:header="scope">
+    <template #header="scope">
       <span class="result_set_header">{{ scope.column.label }}</span>
     </template>
   </el-table-column>
 </template>
 <script setup lang="ts">
-
 interface ResultSetColumnProps {
   /**
    * 列名称
    */
-  columnName: string,
+  columnName: string
   /**
    * 列数据类型: 根据数据类型决定图标样式
    */
   columnType: number
 }
 
-const { columnName, columnType } = defineProps<ResultSetColumnProps>();
-
+const { columnName, columnType } = defineProps<ResultSetColumnProps>()
 </script>
 <style lang="scss" scoped>
 .result_set_header {

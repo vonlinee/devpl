@@ -2,8 +2,8 @@ import {
   createRouter,
   createWebHashHistory,
   Router,
-  RouteRecordRaw
-} from "vue-router";
+  RouteRecordRaw,
+} from "vue-router"
 
 /**
  * 菜单路由
@@ -16,24 +16,24 @@ export const menuRoutes: RouteRecordRaw[] = [
     component: () => import("../views/datasource/index.vue"),
     meta: {
       title: "数据源管理",
-      icon: "icon-database-fill"
-    }
+      icon: "icon-database-fill",
+    },
   },
   {
     path: "/codegen",
     meta: {
       title: "代码生成",
-      icon: "icon-appstore"
+      icon: "icon-appstore",
     },
     children: [
       {
         path: "/codegen/template",
         meta: {
           title: "模板管理",
-          icon: "icon-appstore"
+          icon: "icon-appstore",
         },
         component: () => import("@/views/template/index.vue"),
-        children: []
+        children: [],
       },
       {
         path: "/codegen/file",
@@ -41,8 +41,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/generator/index.vue"),
         meta: {
           title: "文件生成",
-          icon: "icon-fire"
-        }
+          icon: "icon-fire",
+        },
       },
       {
         path: "/codegen/project",
@@ -50,26 +50,26 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/project/index.vue"),
         meta: {
           title: "项目管理",
-          icon: "icon-edit-square"
-        }
-      }
-    ]
+          icon: "icon-edit-square",
+        },
+      },
+    ],
   },
   {
     path: "/scripts",
     meta: {
       title: "脚本管理",
-      icon: "icon-appstore"
+      icon: "icon-appstore",
     },
     component: () => import("@/views/scripts/index.vue"),
-    children: []
+    children: [],
   },
   {
     path: "/model",
     name: "领域模型",
     meta: {
       title: "领域模型",
-      icon: "icon-appstore"
+      icon: "icon-appstore",
     },
     children: [
       {
@@ -78,26 +78,26 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/datatype/index.vue"),
         meta: {
           title: "类型系统",
-          icon: "icon-menu"
-        }
+          icon: "icon-menu",
+        },
       },
       {
         path: "/fields",
         meta: {
           title: "字段信息",
-          icon: "icon-appstore"
+          icon: "icon-appstore",
         },
         component: () => import("@/views/fields/index.vue"),
-        children: []
+        children: [],
       },
       {
         path: "/field/group",
         meta: {
           title: "字段分组",
-          icon: "icon-appstore"
+          icon: "icon-appstore",
         },
         component: () => import("@/views/fields/group/index.vue"),
-        children: []
+        children: [],
       },
       {
         path: "/codegen/model",
@@ -105,16 +105,16 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/model/index.vue"),
         meta: {
           title: "模型管理",
-          icon: "icon-cluster"
-        }
-      }
-    ]
+          icon: "icon-cluster",
+        },
+      },
+    ],
   },
   {
     path: "/devtools",
     meta: {
       title: "开发工具",
-      icon: "icon-appstore"
+      icon: "icon-appstore",
     },
     children: [
       {
@@ -123,8 +123,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/devtools/database/index.vue"),
         meta: {
           title: "数据库",
-          icon: "icon-fire"
-        }
+          icon: "icon-fire",
+        },
       },
       {
         path: "/devtools/mybatis",
@@ -133,8 +133,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         meta: {
           title: "MyBatis",
           icon: "icon-edit-square",
-          keepAlive: true
-        }
+          keepAlive: true,
+        },
       },
       {
         path: "/devtools/mocker",
@@ -143,8 +143,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         meta: {
           title: "数据模拟",
           icon: "icon-edit-square",
-          keepAlive: true
-        }
+          keepAlive: true,
+        },
       },
       {
         path: "/devtools/designer",
@@ -153,8 +153,8 @@ export const menuRoutes: RouteRecordRaw[] = [
         meta: {
           title: "设计工具",
           icon: "icon-edit-square",
-          keepAlive: true
-        }
+          keepAlive: true,
+        },
       },
       {
         path: "/devtools/collection",
@@ -163,10 +163,10 @@ export const menuRoutes: RouteRecordRaw[] = [
         meta: {
           title: "工具箱",
           icon: "icon-edit-square",
-          keepAlive: true
-        }
-      }
-    ]
+          keepAlive: true,
+        },
+      },
+    ],
   },
   {
     path: "/test",
@@ -174,10 +174,10 @@ export const menuRoutes: RouteRecordRaw[] = [
     component: () => import("@/views/test/index.vue"),
     meta: {
       title: "测试",
-      icon: "icon-edit-square"
-    }
-  }
-];
+      icon: "icon-edit-square",
+    },
+  },
+]
 
 /**
  * 默认路由
@@ -189,27 +189,27 @@ export const constantRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: "/redirect/:path(.*)",
-        component: () => import("../layout/components/Router/Redirect.vue")
-      }
-    ]
+        component: () => import("../layout/components/Router/Redirect.vue"),
+      },
+    ],
   },
   {
     path: "/",
     component: () => import("../layout/index.vue"),
     redirect: "/codegen/file",
-    children: [...menuRoutes]
+    children: [...menuRoutes],
   },
   {
     path: "/404",
-    component: () => import("../views/404.vue")
+    component: () => import("../views/404.vue"),
   },
   {
     path: "/:pathMatch(.*)",
-    redirect: "/404"
-  }
-];
+    redirect: "/404",
+  },
+]
 
 export const router: Router = createRouter({
   history: createWebHashHistory(),
-  routes: constantRoutes
-});
+  routes: constantRoutes,
+})

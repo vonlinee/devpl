@@ -1,15 +1,41 @@
 <template>
-  <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000" :width="600"
-             @close="resetFields" :show-footer="true">
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
+  <vxe-modal
+    v-model="visible"
+    :title="!dataForm.id ? '新增' : '修改'"
+    :mask-closable="false"
+    :z-index="1000"
+    :width="600"
+    :show-footer="true"
+    @close="resetFields"
+  >
+    <el-form
+      ref="dataFormRef"
+      :model="dataForm"
+      :rules="dataRules"
+      label-width="80px"
+      @keyup.enter="submitHandle()"
+    >
       <el-form-item label="类型分组" prop="typeGroupId">
-        <el-select v-model="dataForm.typeGroupId" placeholder="选择类型组" style="width: 100%">
-          <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
-                     :value="item.typeGroupId">
+        <el-select
+          v-model="dataForm.typeGroupId"
+          placeholder="选择类型组"
+          style="width: 100%"
+        >
+          <el-option
+            v-for="item in typeGroupOptions"
+            :key="item.typeGroupId"
+            :label="item.typeGroupId"
+            :value="item.typeGroupId"
+          >
             <span style="float: left">{{ item.typeGroupId }}</span>
-            <span style="float: right; color: var(--el-text-color-secondary); font-size: 13px;">{{
-                item.typeGroupName
-              }}</span>
+            <span
+              style="
+                float: right;
+                color: var(--el-text-color-secondary);
+                font-size: 13px;
+              "
+              >{{ item.typeGroupName }}</span
+            >
           </el-option>
         </el-select>
       </el-form-item>
@@ -20,7 +46,10 @@
         <el-input v-model="dataForm.typeName"></el-input>
       </el-form-item>
       <el-form-item label="长度范围">
-        <range-number v-model:min-value="dataForm.minLength" v-model:max-value="dataForm.maxLength">
+        <range-number
+          v-model:min-value="dataForm.minLength"
+          v-model:max-value="dataForm.maxLength"
+        >
         </range-number>
       </el-form-item>
       <el-form-item label="精度" prop="precision">
@@ -30,8 +59,13 @@
         <el-input v-model="dataForm.defaultValue"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input type="textarea" v-model="dataForm.remark" show-word-limit maxlength="50"
-                  :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
+        <el-input
+          v-model="dataForm.remark"
+          type="textarea"
+          show-word-limit
+          maxlength="50"
+          :autosize="{ minRows: 3, maxRows: 4 }"
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -39,48 +73,47 @@
       <el-button type="primary" @click="submitHandle()">确定</el-button>
     </template>
   </vxe-modal>
-
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, toRaw } from "vue";
-import { ElButton, ElMessage } from "element-plus/es";
+import { onMounted, reactive, ref, toRaw } from "vue"
+import { ElButton, ElMessage } from "element-plus/es"
 import {
   apiListAllDataTypeGroups,
   apiSaveDataTypeItems,
-  apiUpdateDataTypeItem
-} from "@/api/datatype";
-import { Plus } from "@element-plus/icons-vue";
-import RangeNumber from "@/components/input/RangeNumber.vue";
+  apiUpdateDataTypeItem,
+} from "@/api/datatype"
+import { Plus } from "@element-plus/icons-vue"
+import RangeNumber from "@/components/input/RangeNumber.vue"
 
-const emit = defineEmits(["refreshDataList"]);
+const emit = defineEmits(["refreshDataList"])
 
-const typeGroupOptions = ref<DataTypeGroup[]>([]);
+const typeGroupOptions = ref<DataTypeGroup[]>([])
 
 onMounted(() => {
   apiListAllDataTypeGroups().then((res) => {
-    typeGroupOptions.value = res.data || [];
-  });
-});
+    typeGroupOptions.value = res.data || []
+  })
+})
 
-const visible = ref(false);
+const visible = ref(false)
 
-const dataFormRef = ref();
+const dataFormRef = ref()
 
 /**
  * 表单数据模型
  */
 interface FormVO {
-  id: number | string | undefined,
-  typeGroupId: string,
-  typeKey: string,
-  typeName: string,
-  defaultValue: string,
-  minLength: number,
-  maxLength: number,
+  id: number | string | undefined
+  typeGroupId: string
+  typeKey: string
+  typeName: string
+  defaultValue: string
+  minLength: number
+  maxLength: number
   // 精度
-  precision: string,
-  remark: string,
+  precision: string
+  remark: string
   // 是否内部定义的数据类型，内部定义的不可删除
   internal: boolean
 }
@@ -95,40 +128,40 @@ const dataForm = reactive<FormVO>({
   maxLength: 0,
   precision: "",
   remark: "",
-  internal: false
-});
+  internal: false,
+})
 
 const resetForm = () => {
-  dataForm.id = undefined;
-  dataForm.typeGroupId = "";
-  dataForm.typeKey = "";
-  dataForm.typeName = "";
-  dataForm.defaultValue = "";
-  dataForm.minLength = 0;
-  dataForm.maxLength = 0;
-  dataForm.precision = "";
-  dataForm.remark = "";
-};
+  dataForm.id = undefined
+  dataForm.typeGroupId = ""
+  dataForm.typeKey = ""
+  dataForm.typeName = ""
+  dataForm.defaultValue = ""
+  dataForm.minLength = 0
+  dataForm.maxLength = 0
+  dataForm.precision = ""
+  dataForm.remark = ""
+}
 
 /**
  * 重置表单，将对象置为初始值
  */
 const resetFields = () => {
-  resetForm();
-  emit("refreshDataList");
-};
+  resetForm()
+  emit("refreshDataList")
+}
 
 /**
  * 初始化
  * @param row 新增为null，修改不为null
  */
 const init = (row?: any) => {
-  visible.value = true;
+  visible.value = true
   if (row) {
     // id 存在则为修改
     if (row.id) {
-      dataForm.id = row.id;
-      Object.assign(dataForm, row);
+      dataForm.id = row.id
+      Object.assign(dataForm, row)
       // dataForm.typeGroupId = row.typeGroupId;
       // dataForm.typeKey = row.typeKey;
       // dataForm.typeName = row.typeName;
@@ -141,48 +174,48 @@ const init = (row?: any) => {
   } else {
     // 重置表单数据
     if (dataFormRef.value) {
-      dataFormRef.value.resetFields();
+      dataFormRef.value.resetFields()
     }
   }
-};
+}
 
 const dataRules = ref({
   columnType: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  attrType: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
-});
+  attrType: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+})
 
 const closeAndRefresh = () => {
-  resetFields();
-  visible.value = false;
-};
+  resetFields()
+  visible.value = false
+}
 
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid) {
-      return false;
+      return false
     }
     if (dataForm.id) {
       apiUpdateDataTypeItem(toRaw(dataForm)).then((res) => {
         ElMessage({
           message: "更新成功",
           duration: 200,
-          onClose: closeAndRefresh
-        });
-      });
+          onClose: closeAndRefresh,
+        })
+      })
     } else {
       apiSaveDataTypeItems([toRaw(dataForm)]).then((res) => {
         ElMessage({
           message: "保存成功",
           duration: 200,
-          onClose: closeAndRefresh
-        });
-      });
+          onClose: closeAndRefresh,
+        })
+      })
     }
-  });
-};
+  })
+}
 
 defineExpose({
-  init
-});
+  init,
+})
 </script>

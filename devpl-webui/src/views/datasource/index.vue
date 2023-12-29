@@ -1,15 +1,28 @@
 <template>
   <el-card>
-    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
+    <el-form
+      :inline="true"
+      :model="state.queryForm"
+      @keyup.enter="getDataList()"
+    >
       <el-form-item>
-        <el-input v-model="state.queryForm.connName" placeholder="连接名"></el-input>
+        <el-input
+          v-model="state.queryForm.connName"
+          placeholder="连接名"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="dbType">
-        <el-select v-model="state.queryForm.dbType" clearable placeholder="数据库类型">
-          <el-option v-for="dbType in supportedDbTypes"
-                     :key="dbType.id"
-                     :value="dbType.id"
-                     :label="dbType.name"></el-option>
+        <el-select
+          v-model="state.queryForm.dbType"
+          clearable
+          placeholder="数据库类型"
+        >
+          <el-option
+            v-for="dbType in supportedDbTypes"
+            :key="dbType.id"
+            :value="dbType.id"
+            :label="dbType.name"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -22,24 +35,72 @@
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
-              @selection-change="selectionChangeHandle">
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="connName" label="连接名" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="driverType" label="驱动类型" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="connUrl" label="数据库URL" show-overflow-tooltip header-align="center"
-                       align="center"></el-table-column>
-      <el-table-column prop="username" label="用户名" header-align="center" align="center"></el-table-column>
+    <el-table
+      v-loading="state.dataListLoading"
+      :data="state.dataList"
+      border
+      style="width: 100%"
+      @selection-change="selectionChangeHandle"
+    >
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50"
+      ></el-table-column>
+      <el-table-column
+        prop="connName"
+        label="连接名"
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="driverType"
+        label="驱动类型"
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="connUrl"
+        label="数据库URL"
+        show-overflow-tooltip
+        header-align="center"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="username"
+        label="用户名"
+        header-align="center"
+        align="center"
+      ></el-table-column>
       <el-table-column label="密码" header-align="center" align="center">
         <template #default="scope">
           <span>{{ formatPassword(scope.row.password) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="170">
+      <el-table-column
+        label="操作"
+        fixed="right"
+        header-align="center"
+        align="center"
+        width="170"
+      >
         <template #default="scope">
-          <el-button type="primary" link @click="datasourceHandle(scope.row.id)">测试</el-button>
-          <el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
-          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+          <el-button type="primary" link @click="datasourceHandle(scope.row.id)"
+            >测试</el-button
+          >
+          <el-button
+            type="primary"
+            link
+            @click="addOrUpdateHandle(scope.row.id)"
+            >编辑</el-button
+          >
+          <el-button
+            type="primary"
+            link
+            @click="deleteBatchHandle(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -55,63 +116,72 @@
     </el-pagination>
 
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
+    <add-or-update
+      ref="addOrUpdateRef"
+      @refresh-data-list="getDataList"
+    ></add-or-update>
   </el-card>
 
   <drvier-manager></drvier-manager>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
-import { DataTableOption } from "@/hooks/interface";
+import { onMounted, reactive, ref } from "vue"
+import { DataTableOption } from "@/hooks/interface"
 import {
   apiListDataSource,
   apiListSupportedDbTypes,
   apiRemoveDataSourceByIds,
-  useDataSourceTestApi
-} from "@/api/datasource";
-import { useCrud } from "@/hooks";
-import { ElButton, ElMessage } from "element-plus";
-import AddOrUpdate from "./add-or-update.vue";
-import { decrypt } from "@/utils/tool";
-import DrvierManager from "./DrvierManager.vue";
-import { DriverTypeVO } from "./types";
+  useDataSourceTestApi,
+} from "@/api/datasource"
+import { useCrud } from "@/hooks"
+import { ElButton, ElMessage } from "element-plus"
+import AddOrUpdate from "./add-or-update.vue"
+import { decrypt } from "@/utils/tool"
+import DrvierManager from "./DrvierManager.vue"
+import { DriverTypeVO } from "./types"
 
 const state: DataTableOption = reactive({
   dataListUrl: "/api/gen/datasource/page",
   deleteUrl: "/api/gen/datasource",
   queryForm: {
     connName: "",
-    dbType: ""
+    dbType: "",
   },
   queryPage: apiListDataSource,
-  removeByIds: apiRemoveDataSourceByIds
-});
+  removeByIds: apiRemoveDataSourceByIds,
+})
 
-const supportedDbTypes = ref<DriverTypeVO[]>([]);
+const supportedDbTypes = ref<DriverTypeVO[]>([])
 
 onMounted(() => {
   apiListSupportedDbTypes().then((res) => {
-    supportedDbTypes.value = res.data;
-  });
-});
+    supportedDbTypes.value = res.data
+  })
+})
 
 const datasourceHandle = (id: number) => {
   useDataSourceTestApi(id).then((res) => {
     if (!res.data?.failed) {
-      ElMessage.success("连接成功");
+      ElMessage.success("连接成功")
     }
-  });
-};
+  })
+}
 
-const addOrUpdateRef = ref();
+const addOrUpdateRef = ref()
 const addOrUpdateHandle = (id?: number) => {
-  addOrUpdateRef.value.init(id);
-};
+  addOrUpdateRef.value.init(id)
+}
 
-const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);
+const {
+  getDataList,
+  selectionChangeHandle,
+  sizeChangeHandle,
+  currentChangeHandle,
+  deleteBatchHandle,
+} = useCrud(state)
 
 const formatPassword = (str: string): string => {
-  return Array(decrypt(str).length).fill("•").join("");
-};
+  return Array(decrypt(str).length).fill("•").join("")
+}
 </script>

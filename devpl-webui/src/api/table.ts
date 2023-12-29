@@ -1,29 +1,29 @@
-import http from "@/utils/http";
-import { Keys } from "@/api/index";
+import http from "@/utils/http"
+import { Keys } from "@/api/index"
 
 /**
  * 查询生成表列表
  * @param id
  */
 export const apiGetGenTableById = (id: number) => {
-  return http.get<GenTable>("/gen/table/" + id);
-};
+  return http.get<GenTable>("/gen/table/" + id)
+}
 
 export const apiListGenTables = (page: number, limit: number, params: any) => {
   return http.get<GenTable>("/gen/table/page", {
     pageIndex: page,
     pageSize: limit,
-    ...params
-  });
-};
+    ...params,
+  })
+}
 
 export const useTableSubmitApi = (dataForm: any) => {
-  return http.put("/gen/table", dataForm);
-};
+  return http.put("/gen/table", dataForm)
+}
 
 export const apiRemoveGenTableByIds = (ids: Keys) => {
-  return http.delete("/gen/table/remove", ids);
-};
+  return http.delete("/gen/table/remove", ids)
+}
 
 /**
  * 导入表
@@ -31,22 +31,26 @@ export const apiRemoveGenTableByIds = (ids: Keys) => {
  * @param tableNameList
  * @param projectId
  */
-export const apiImportTables = (datasourceId: number, tableNameList: string[], projectId?: number) => {
+export const apiImportTables = (
+  datasourceId: number,
+  tableNameList: string[],
+  projectId?: number
+) => {
   return http.post("/gen/table/import", {
     dataSourceId: datasourceId,
     tableNameList: tableNameList,
-    projectId: projectId
-  });
-};
+    projectId: projectId,
+  })
+}
 
 export const apiUpdateGenTableFields = (tableId: number, fieldList: any) => {
-  return http.put("/gen/table/field/" + tableId, fieldList);
-};
+  return http.put("/gen/table/field/" + tableId, fieldList)
+}
 
 /**
  * 同步表的配置
  * @param id
  */
 export const apiSyncTable = (id: number) => {
-  return http.post("/gen/table/sync/" + id);
-};
+  return http.post("/gen/table/sync/" + id)
+}

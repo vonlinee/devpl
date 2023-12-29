@@ -1,11 +1,11 @@
-import http from '@/utils/http'
+import http from "@/utils/http"
 
 /**
  * 获取Mapper中的参数
  * @param content
  */
 export const apiGetSampleXmlText = () => {
-    return http.get('/api/tools/mybatis/ms/sample')
+  return http.get("/api/tools/mybatis/ms/sample")
 }
 
 /**
@@ -14,17 +14,17 @@ export const apiGetSampleXmlText = () => {
  * @param options
  */
 export const getMapperStatementParams = (content: string, options: any) => {
-    return http.post('/api/tools/mybatis/ms/params', {
-        mapperStatement: content,
-        ...options
-    })
+  return http.post("/api/tools/mybatis/ms/params", {
+    mapperStatement: content,
+    ...options,
+  })
 }
 
 /**
  * 获取Mapper中的参数
  */
 export const apiGetMapperStatementValueTypes = () => {
-    return http.get('/api/tools/mybatis/ms/param/datatypes')
+  return http.get("/api/tools/mybatis/ms/param/datatypes")
 }
 
 /**
@@ -32,9 +32,9 @@ export const apiGetMapperStatementValueTypes = () => {
  * @return SQL 字符串
  */
 export const apiGetSql = (ms: string, params: any[], real: boolean) => {
-    return http.post('/api/tools/mybatis/ms/sql', {
-        mapperStatement: ms,
-        msParams: params,
-        real: real ? 1 : 0.
-    })
+  return http.post("/api/tools/mybatis/ms/sql", {
+    mapperStatement: ms,
+    msParams: params,
+    real: real ? 1 : 0,
+  })
 }

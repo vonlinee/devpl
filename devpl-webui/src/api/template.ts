@@ -1,5 +1,5 @@
-import http from "@/utils/http";
-import { Keys } from "@/api/index";
+import http from "@/utils/http"
+import { Keys } from "@/api/index"
 
 /**
  * 获取模板列表
@@ -7,19 +7,23 @@ import { Keys } from "@/api/index";
  * @param pageSize
  * @param params
  */
-export function apiListTemplatesByPage(pageIndex?: number, pageSize?: number, params?: any) {
+export function apiListTemplatesByPage(
+  pageIndex?: number,
+  pageSize?: number,
+  params?: any
+) {
   return http.get("/api/codegen/template/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
-    ...params
-  });
+    ...params,
+  })
 }
 
 /**
  * 查询模板类型
  */
 export function apiListTemplateTypes() {
-  return http.get<TemplateProvider[]>("/api/codegen/template/types");
+  return http.get<TemplateProvider[]>("/api/codegen/template/types")
 }
 
 /**
@@ -27,7 +31,7 @@ export function apiListTemplateTypes() {
  * @param params
  */
 export function apiAddTemplate(params: object) {
-  return http.post("/api/codegen/template/save", params);
+  return http.post("/api/codegen/template/save", params)
 }
 
 /**
@@ -35,23 +39,22 @@ export function apiAddTemplate(params: object) {
  * @param ids
  */
 export function apiBatchRemoveTemplateByIds(ids: Keys) {
-  return http.delete("/api/codegen/template/delete/batch/ids", ids);
+  return http.delete("/api/codegen/template/delete/batch/ids", ids)
 }
-
 
 /**
  * 修改模板
  * @param params
  */
 export function apiUpdateTemplate(params: object) {
-  return http.put("/api/codegen/template/update", params);
+  return http.put("/api/codegen/template/update", params)
 }
 
 /**
  * 可选择的模板列表
  */
 export function apiListSelectableTemplates() {
-  return http.get("/api/codegen/template/list/selectable");
+  return http.get("/api/codegen/template/list/selectable")
 }
 
 /**
@@ -59,5 +62,5 @@ export function apiListSelectableTemplates() {
  * @param templateId 模板ID
  */
 export function apiGetTemplateById(templateId: number) {
-  return http.get<TemplateInfo>(`/api/codegen/template/info/${templateId}`);
+  return http.get<TemplateInfo>(`/api/codegen/template/info/${templateId}`)
 }

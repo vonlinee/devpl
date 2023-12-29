@@ -2,28 +2,48 @@
   代码生成结果展示
  -->
 <template>
-  <vxe-modal ref="modalRef" show-footer v-model="dialogVisiableRef" title="生成结果" width="80%" height="80%" transfer
-             :mask-closable="false" destroy-on-close draggable show-zoom>
+  <vxe-modal
+    ref="modalRef"
+    v-model="dialogVisiableRef"
+    show-footer
+    title="生成结果"
+    width="80%"
+    height="80%"
+    transfer
+    :mask-closable="false"
+    destroy-on-close
+    draggable
+    show-zoom
+  >
     <Splitpanes>
       <Pane min-size="20" size="35">
-        <div class="tree-container" :style="{
-          height: '100%',
-          overflowY: 'scroll'
-        }
-          ">
-          <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick">
-            <template v-slot="{ node, data }">
+        <div
+          class="tree-container"
+          :style="{
+            height: '100%',
+            overflowY: 'scroll',
+          }"
+        >
+          <el-tree
+            :data="treeData"
+            :props="defaultProps"
+            default-expand-all
+            @node-click="handleFileTreeNodeClick"
+          >
+            <template #default="{ node, data }">
               <svg-icon :icon="getIconName(data)" />
-              <span style="padding-left: 4px;">{{ node.label }}</span>
+              <span style="padding-left: 4px">{{ node.label }}</span>
             </template>
           </el-tree>
         </div>
       </Pane>
       <pane>
-        <div :style="{
-          height: '100%',
-          overflowY: 'scroll'
-        }">
+        <div
+          :style="{
+            height: '100%',
+            overflowY: 'scroll',
+          }"
+        >
           <monaco-editor ref="editorRef" language="java"></monaco-editor>
         </div>
       </pane>
@@ -32,21 +52,20 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref } from "vue";
-import { getLanguage } from "@/components/editor/monaco-editor-wrapper";
-import { apiGetFileContent, apiGetFileTree } from "@/api/factory";
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import SvgIcon from "@/components/svg-icon";
-import { Splitpanes, Pane } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
+import { nextTick, ref } from "vue"
+import { getLanguage } from "@/components/editor/monaco-editor-wrapper"
+import { apiGetFileContent, apiGetFileTree } from "@/api/factory"
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import SvgIcon from "@/components/svg-icon"
+import { Splitpanes, Pane } from "splitpanes"
+import "splitpanes/dist/splitpanes.css"
 
-import { getIconName } from "@/utils/tool";
+import { getIconName } from "@/utils/tool"
 
-const dialogVisiableRef = ref();
-const modalRef = ref();
+const dialogVisiableRef = ref()
+const modalRef = ref()
 // 根目录列表
-const rootDirRef = ref<string | undefined>();
-
+const rootDirRef = ref<string | undefined>()
 
 /**
  * 初始化
@@ -54,15 +73,15 @@ const rootDirRef = ref<string | undefined>();
  */
 function init(dirs: string[]) {
   if (dirs[0] == undefined) {
-    return;
+    return
   }
-  rootDirRef.value = dirs[0] || "";
-  dialogVisiableRef.value = true;
+  rootDirRef.value = dirs[0] || ""
+  dialogVisiableRef.value = true
   // 加载文件树
-  apiGetFileTree(rootDirRef.value).then(res => {
-    treeData.value = res.data;
-    nextTick(() => onClickFirstFile(treeData.value));
-  });
+  apiGetFileTree(rootDirRef.value).then((res) => {
+    treeData.value = res.data
+    nextTick(() => onClickFirstFile(treeData.value))
+  })
 }
 
 /**
@@ -70,25 +89,28 @@ function init(dirs: string[]) {
  * @param fileNode 当前节点
  * @param defaultExpandedKeys 保存展开节点的key，递归遍历节点数，填充key到此数组
  */
-function expandAllParentNode(fileNode: FileNode, defaultExpandedKeys: string[]) {
+function expandAllParentNode(
+  fileNode: FileNode,
+  defaultExpandedKeys: string[]
+) {
   if (!fileNode.isLeaf) {
-    return;
+    return
   }
-  defaultExpandedKeys.push(fileNode.key);
+  defaultExpandedKeys.push(fileNode.key)
   for (let i = 0; i < fileNode.children.length; i++) {
-    expandAllParentNode(fileNode.children[i], defaultExpandedKeys);
+    expandAllParentNode(fileNode.children[i], defaultExpandedKeys)
   }
 }
 
-const editorRef = ref();
-const treeData = ref<FileNode[]>([]);
+const editorRef = ref()
+const treeData = ref<FileNode[]>([])
 
 // 返回数据结构取的字段
 const defaultProps = {
   children: "children",
   label: "label",
-  id: "key"
-};
+  id: "key",
+}
 
 /**
  * 树节点点击事件
@@ -100,51 +122,49 @@ const defaultProps = {
 const handleFileTreeNodeClick = (fileNode: FileNode) => {
   if (fileNode && fileNode.isLeaf) {
     if (fileNode.path !== "") {
-      const lang = getLanguage(fileNode.extension);
-      apiGetFileContent(fileNode.path).then(res => {
+      const lang = getLanguage(fileNode.extension)
+      apiGetFileContent(fileNode.path).then((res) => {
         if (editorRef.value) {
-          editorRef.value.setLanguage(lang);
-          editorRef.value.setText(res.data);
+          editorRef.value.setLanguage(lang)
+          editorRef.value.setText(res.data)
         }
-      });
+      })
     }
   }
-};
+}
 
 /**
  * 找到第一个文件节点
  * @param fileNode
  */
-let findFirstLeafNode = function(fileNode: FileNode): FileNode | undefined {
+let findFirstLeafNode = function (fileNode: FileNode): FileNode | undefined {
   if (fileNode.isLeaf) {
-    return fileNode;
+    return fileNode
   }
-  let firstNode: FileNode | undefined;
+  let firstNode: FileNode | undefined
   for (let i = 0; i < fileNode.children.length; i++) {
-    firstNode = findFirstLeafNode(fileNode.children[i]);
+    firstNode = findFirstLeafNode(fileNode.children[i])
     if (fileNode) {
-      break;
+      break
     }
   }
-  return firstNode;
-};
+  return firstNode
+}
 
 /**
  * 手动模拟选中第一个文件
  * @param fileNodes
  */
 let onClickFirstFile = async (fileNodes: FileNode[]) => {
-  let node = findFirstLeafNode(fileNodes[0]);
+  let node = findFirstLeafNode(fileNodes[0])
   if (node) {
-    handleFileTreeNodeClick(node);
+    handleFileTreeNodeClick(node)
   }
-};
+}
 
 defineExpose({
-  init
-});
+  init,
+})
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

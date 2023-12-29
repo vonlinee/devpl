@@ -1,18 +1,40 @@
 <template>
-    <el-table stripe v-loading="loading" :data="classificationList" style="width: 100%"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" ref="sortableTable" :key="tableKey" row-key="id"
-        @row-click="rowClick">
-        <el-table-column type="index" width="50" label="序号"></el-table-column>
-        <el-table-column prop="name" show-overflow-tooltip label="分类名称"></el-table-column>
-        <el-table-column prop="code" show-overflow-tooltip label="分类编码"></el-table-column>
-        <el-table-column prop="operating" label="操作" width="220">
-            <template slot-scope="scope">
-                <el-button type="text" @click="getDetailCategory(scope.row)">详情</el-button>
-                <el-button type="text" @click="getEditCategory(scope.row)">编辑</el-button>
-                <el-button type="text" @click="getDeleteC(scope.row.id)">删除</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+  <el-table
+    ref="sortableTable"
+    :key="tableKey"
+    v-loading="loading"
+    stripe
+    :data="classificationList"
+    style="width: 100%"
+    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+    row-key="id"
+    @row-click="rowClick"
+  >
+    <el-table-column type="index" width="50" label="序号"></el-table-column>
+    <el-table-column
+      prop="name"
+      show-overflow-tooltip
+      label="分类名称"
+    ></el-table-column>
+    <el-table-column
+      prop="code"
+      show-overflow-tooltip
+      label="分类编码"
+    ></el-table-column>
+    <el-table-column prop="operating" label="操作" width="220">
+      <template #default="scope">
+        <el-button type="text" @click="getDetailCategory(scope.row)"
+          >详情</el-button
+        >
+        <el-button type="text" @click="getEditCategory(scope.row)"
+          >编辑</el-button
+        >
+        <el-button type="text" @click="getDeleteC(scope.row.id)"
+          >删除</el-button
+        >
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script lang="js">
@@ -207,7 +229,7 @@ export default {
         },
         //递归给每一级增加一个level
         arrayFlagLevel(array, level) {
-            if (!array || !array.length) return;
+            if (!array || !array.length) {return;}
             array.forEach(item => {
                 item.level = level;
                 if (item.children && item.children.length) {
@@ -217,5 +239,4 @@ export default {
         }
     }
 }
-
 </script>

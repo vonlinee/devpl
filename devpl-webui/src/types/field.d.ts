@@ -33,11 +33,11 @@ type FieldInfo = {
   /**
    * 是否选中
    */
-  selected?: boolean,
+  selected?: boolean
   /**
    * 子节点
    */
-  children?: FieldInfo[],
+  children?: FieldInfo[]
   /**
    * 是否处于编辑状态
    */
@@ -45,6 +45,6 @@ type FieldInfo = {
 }
 
 type FieldGroup = {
-  id: number,
+  id: number
   groupName: string
 }

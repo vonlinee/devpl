@@ -1,8 +1,17 @@
 <template>
   <div>
-    <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
+    <el-tree
+      :data="dataSource"
+      :props="defaultProps"
+      :load="loadDbTables"
+      lazy
+      @node-click="nodeClickHandler"
+    >
       <template #default="{ node, data }">
-        <span class="custom-tree-node" @contextmenu="displayContextMenu($event, node, data)">
+        <span
+          class="custom-tree-node"
+          @contextmenu="displayContextMenu($event, node, data)"
+        >
           <span v-contextmenu:contextMenuRef>{{ node.label }}</span>
         </span>
       </template>
@@ -10,17 +19,19 @@
   </div>
 
   <Contextmenu ref="contextMenuRef">
-    <contextmenu-item @click="handleMockerMenuItemClicked">数据模拟</contextmenu-item>
+    <contextmenu-item @click="handleMockerMenuItemClicked"
+      >数据模拟</contextmenu-item
+    >
     <contextmenu-item>DDL</contextmenu-item>
     <contextmenu-item>菜单3</contextmenu-item>
   </Contextmenu>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource";
-import type Node from "element-plus/es/components/tree/src/model/node";
-import { Contextmenu, ContextmenuItem } from "v-contextmenu";
+import { computed, ref } from "vue"
+import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource"
+import type Node from "element-plus/es/components/tree/src/model/node"
+import { Contextmenu, ContextmenuItem } from "v-contextmenu"
 
 const dbMocker = ref()
 
@@ -28,7 +39,7 @@ const contextMenuRef = ref()
 
 /**
  * 展示右键菜单
- * @param event 
+ * @param event
  * @param node 点击的节点
  * @param data 节点的数据
  */
@@ -41,16 +52,16 @@ function handleMockerMenuItemClicked() {
 }
 
 const defaultProps = {
-  label: 'label',
-  children: 'children',
-  isLeaf: 'leaf',
-};
+  label: "label",
+  children: "children",
+  isLeaf: "leaf",
+}
 
-const dataSource = ref<TreeNodeVO[]>([]);
+const dataSource = ref<TreeNodeVO[]>([])
 
 interface DatabaseNavigationViewProps {
-  dataSourceId?: number,
-  nodeClickCallback: (param: DBTableDataVO) => void,
+  dataSourceId?: number
+  nodeClickCallback: (param: DBTableDataVO) => void
 }
 
 const props = defineProps<DatabaseNavigationViewProps>()
@@ -61,8 +72,8 @@ const dataSourceId = computed(() => {
 
 /**
  * 加载数据库表
- * @param node 
- * @param resolve 
+ * @param node
+ * @param resolve
  */
 const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
   if (dataSourceId.value) {
@@ -72,25 +83,30 @@ const loadDbTables = (node: Node, resolve: (data: TreeNodeVO[]) => void) => {
         for (let i = 0; i < res.data?.length; i++) {
           tableNodes.push({
             label: res.data[i],
-            leaf: true
-          });
+            leaf: true,
+          })
         }
         resolve(tableNodes)
       } else {
         resolve([])
       }
-    });
+    })
   }
 }
 
 /**
  * 节点点击
- * @param data 
- * @param node 
- * @param item 
- * @param param 
+ * @param data
+ * @param node
+ * @param item
+ * @param param
  */
-const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) => {
+const nodeClickHandler = (
+  data: TreeNodeVO,
+  node: Node,
+  item: any,
+  param: any
+) => {
   // if (node.level == 2) {
   //   const apiParam: ParamGetDbTableData = {
   //     dataSourceId: dataSourceId.value,
@@ -109,25 +125,24 @@ const nodeClickHandler = (data: TreeNodeVO, node: Node, item: any, param: any) =
 
 /**
  * 加载数据库列表
- * @param val 
+ * @param val
  */
 const loadDatabases = (val: number) => {
   apiGetDatabaseNamesById(val).then((res) => {
-    const nodes: TreeNodeVO[] = [];
+    const nodes: TreeNodeVO[] = []
     for (let i = 0; i < res.data.length; i++) {
       nodes.push({
         label: res.data[i],
-        leaf: false
-      });
+        leaf: false,
+      })
     }
-    dataSource.value = nodes;
-  });
-};
+    dataSource.value = nodes
+  })
+}
 
 defineExpose({
-  loadDbSchemas: loadDatabases
+  loadDbSchemas: loadDatabases,
 })
-
 </script>
 
 <style lang="scss" scoped>

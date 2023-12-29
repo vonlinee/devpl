@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 600px;">
+  <div style="height: 600px">
     <MonacoEditor ref="editorRef" language="java" minimap></MonacoEditor>
   </div>
   <el-card>
@@ -8,12 +8,12 @@
     <el-button @click="parseCode">解析</el-button>
   </el-card>
 </template>
-<script setup lang='ts'>
-import { apiCompile, apiGetCompileSampleCode, apiParseCode } from '@/api/code';
-import MonacoEditor from '@/components/editor/MonacoEditor.vue';
-import { hasText } from '@/utils/tool';
-import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+<script setup lang="ts">
+import { apiCompile, apiGetCompileSampleCode, apiParseCode } from "@/api/code"
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import { hasText } from "@/utils/tool"
+import { ElMessage } from "element-plus"
+import { ref } from "vue"
 
 const editorRef = ref()
 
@@ -25,9 +25,9 @@ const handleCompileButtonClicked = () => {
     })
   } else {
     ElMessage({
-      type: 'warning',
+      type: "warning",
       message: "文本为空",
-      duration: 500
+      duration: 500,
     })
   }
 }
@@ -46,14 +46,11 @@ const parseCode = () => {
     })
   } else {
     ElMessage({
-      type: 'warning',
+      type: "warning",
       message: "文本为空",
-      duration: 500
+      duration: 500,
     })
   }
 }
-
 </script>
-<style lang='scss' scoped>
-
-</style>
+<style lang="scss" scoped></style>

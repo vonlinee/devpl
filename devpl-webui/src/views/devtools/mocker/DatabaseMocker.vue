@@ -2,12 +2,7 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <el-table
-          :data="tableData"
-          row-key="id"
-          border
-          default-expand-all
-        >
+        <el-table :data="tableData" row-key="id" border default-expand-all>
           <el-table-column prop="schemaName" label="数据库对象" />
           <el-table-column prop="generatorName" label="生成器" />
         </el-table>
@@ -16,17 +11,15 @@
         <el-table></el-table>
       </el-col>
     </el-row>
-
-
   </div>
 </template>
 <script lang="ts" setup>
 interface User {
-  id: number;
-  schemaName: string;
-  generatorName: string;
-  hasChildren?: boolean;
-  children?: User[];
+  id: number
+  schemaName: string
+  generatorName: string
+  hasChildren?: boolean
+  children?: User[]
 }
 
 const tableData: User[] = [
@@ -43,16 +36,16 @@ const tableData: User[] = [
           {
             id: 312,
             schemaName: "user_name",
-            generatorName: "Skip"
-          }
-        ]
+            generatorName: "Skip",
+          },
+        ],
       },
       {
         id: 32,
         schemaName: "model_info",
-        generatorName: "Skip"
-      }
-    ]
-  }
-];
+        generatorName: "Skip",
+      },
+    ],
+  },
+]
 </script>

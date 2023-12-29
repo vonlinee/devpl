@@ -5,14 +5,10 @@
     <v-contextmenu-item>菜单3</v-contextmenu-item>
   </v-contextmenu>
 </template>
-<script setup lang='ts'>
-
+<script setup lang="ts">
 /**
  * 接收属性
  */
-interface NavigationContextMenuProps {
-
-}
-
+interface NavigationContextMenuProps {}
 </script>
-<style lang='scss' scoped></style>
+<style lang="scss" scoped></style>

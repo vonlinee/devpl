@@ -4,37 +4,37 @@
       <span class="title_label">输入 {{ lang }}</span>
       <button class="btn-format" @click="formatCode">格式化</button>
     </div>
-    <monaco-editor ref="editorRef" :language="lang" :text="text" height="400px"></monaco-editor>
+    <monaco-editor
+      ref="editorRef"
+      :language="lang"
+      :text="text"
+      height="400px"
+    ></monaco-editor>
   </div>
 </template>
 
 <script lang="ts" setup>
-
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { computed, ref } from "vue";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import { computed, ref } from "vue"
 
 const { lang, code } = defineProps<{
-  lang: string,
+  lang: string
   code?: string
-}>();
+}>()
 
-const editorRef = ref();
-const emits = defineEmits(["update:code"]);
+const editorRef = ref()
+const emits = defineEmits(["update:code"])
 
 const text = computed({
   get() {
-    editorRef.value?.getText();
+    editorRef.value?.getText()
   },
   set(value) {
-    editorRef.value?.setText(value);
-  }
-});
+    editorRef.value?.setText(value)
+  },
+})
 
-const formatCode = () => {
-
-};
-
-
+const formatCode = () => {}
 </script>
 
 <style lang="scss" scoped>

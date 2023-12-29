@@ -1,14 +1,8 @@
 <!--
   数据类型选择器 下拉列表
 -->
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
+<template></template>
 
-<template>
-
-</template>
-
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

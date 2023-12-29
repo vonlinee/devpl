@@ -1,13 +1,17 @@
-import http from "@/utils/http";
+import http from "@/utils/http"
 
-export const apiListMockFields = (dsId: number, dbName: string, tableName: string) => {
+export const apiListMockFields = (
+  dsId: number,
+  dbName: string,
+  tableName: string
+) => {
   return http.get<MockField[]>("/api/tools/mock/columns", {
     dataSourceId: dsId,
     databaseName: dbName,
-    tableName: tableName
-  });
-};
+    tableName: tableName,
+  })
+}
 
 export const apiListMockGenerators = () => {
-  return http.get<GeneratorItem[]>("/api/tools/mock/generators");
-};
+  return http.get<GeneratorItem[]>("/api/tools/mock/generators")
+}

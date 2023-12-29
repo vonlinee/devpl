@@ -1,5 +1,10 @@
 <template>
-  <div ref="splitPane" class="split-pane" :class="direction" :style="{ flexDirection: direction }">
+  <div
+    ref="splitPane"
+    class="split-pane"
+    :class="direction"
+    :style="{ flexDirection: direction }"
+  >
     <div class="pane pane-one" :style="lengthType + ':' + paneLengthValue">
       <slot name="one"></slot>
     </div>
@@ -22,82 +27,94 @@ export default {
   props: {
     direction: {
       type: String,
-      default: "row"
+      default: "row",
     },
     min: {
       type: Number,
-      default: 10
+      default: 10,
     },
 
     max: {
       type: Number,
-      default: 90
-    }
+      default: 90,
+    },
   },
   data() {
     return {
       // 滑动条宽度 像素4px
       triggerLength: 4,
       paneLengthPercent: 30,
-      triggerLeftOffset: 0 // 鼠标距滑动器左(顶)侧偏移量
-    };
+      triggerLeftOffset: 0, // 鼠标距滑动器左(顶)侧偏移量
+    }
   },
   computed: {
     lengthType() {
-      return this.direction === "row" ? "width" : "height";
+      return this.direction === "row" ? "width" : "height"
     },
 
     paneLengthValue() {
-      return `calc(${this.paneLengthPercent}% - ${this.triggerLength / 2 + "px"})`;
+      return `calc(${this.paneLengthPercent}% - ${
+        this.triggerLength / 2 + "px"
+      })`
     },
 
     triggerLengthValue() {
-      return this.triggerLength + "px";
-    }
+      return this.triggerLength + "px"
+    },
   },
 
   methods: {
     // 按下滑动器
     handleMouseDown(e) {
-      document.addEventListener("mousemove", this.handleMouseMove);
-      document.addEventListener("mouseup", this.handleMouseUp);
+      document.addEventListener("mousemove", this.handleMouseMove)
+      document.addEventListener("mouseup", this.handleMouseUp)
 
       if (this.direction === "row") {
-        this.triggerLeftOffset = e.pageX - e.srcElement.getBoundingClientRect().left;
+        this.triggerLeftOffset =
+          e.pageX - e.srcElement.getBoundingClientRect().left
       } else {
-        this.triggerLeftOffset = e.pageY - e.srcElement.getBoundingClientRect().top;
+        this.triggerLeftOffset =
+          e.pageY - e.srcElement.getBoundingClientRect().top
       }
     },
 
     // 按下滑动器后移动鼠标
     handleMouseMove(e) {
-      const clientRect = this.$refs.splitPane.getBoundingClientRect();
-      let paneLengthPercent = 0;
+      const clientRect = this.$refs.splitPane.getBoundingClientRect()
+      let paneLengthPercent = 0
 
       if (this.direction === "row") {
-        const offset = e.pageX - clientRect.left - this.triggerLeftOffset + this.triggerLength / 2;
-        paneLengthPercent = (offset / clientRect.width) * 100;
+        const offset =
+          e.pageX -
+          clientRect.left -
+          this.triggerLeftOffset +
+          this.triggerLength / 2
+        paneLengthPercent = (offset / clientRect.width) * 100
       } else {
-        const offset = e.pageY - clientRect.top - this.triggerLeftOffset + this.triggerLength / 2;
-        paneLengthPercent = (offset / clientRect.height) * 100;
+        const offset =
+          e.pageY -
+          clientRect.top -
+          this.triggerLeftOffset +
+          this.triggerLength / 2
+        paneLengthPercent = (offset / clientRect.height) * 100
       }
 
       if (paneLengthPercent < this.min) {
-        paneLengthPercent = this.min;
+        paneLengthPercent = this.min
       }
       if (paneLengthPercent > this.max) {
-        paneLengthPercent = this.max;
+        paneLengthPercent = this.max
       }
-      console.log(this.paneLengthValue);
-      this.paneLengthPercent = paneLengthPercent;
+      console.log(this.paneLengthValue)
+      this.paneLengthPercent = paneLengthPercent
     },
 
     // 松开滑动器
     handleMouseUp() {
-      document.removeEventListener("mousemove", this.handleMouseMove);
-    }
-  }
-};
+      document.removeEventListener("mousemove", this.handleMouseMove)
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">

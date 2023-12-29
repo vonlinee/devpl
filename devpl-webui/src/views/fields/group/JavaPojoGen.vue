@@ -2,8 +2,14 @@
   生成Java pojo类
 -->
 <template>
-  <vxe-modal v-model="visible" title="生成Java Pojo类" width="80%" height="80%" show-footer>
-    <div style="height: 100%;">
+  <vxe-modal
+    v-model="visible"
+    title="生成Java Pojo类"
+    width="80%"
+    height="80%"
+    show-footer
+  >
+    <div style="height: 100%">
       <el-row>
         <el-col :span="8">
           <FieldTree :fields="fields"></FieldTree>
@@ -33,44 +39,43 @@
 </template>
 
 <script setup lang="ts">
-import { apiListGroupFieldsById } from "@/api/fields";
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { toRaw, reactive, ref } from "vue";
-import FieldTree from "@/components/fields/FieldTree.vue";
-import LanguageSelect from "@/components/LanguageSelect.vue";
-import { apiCodeGenJavaPojo } from "@/api/generator";
+import { apiListGroupFieldsById } from "@/api/fields"
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import { toRaw, reactive, ref } from "vue"
+import FieldTree from "@/components/fields/FieldTree.vue"
+import LanguageSelect from "@/components/LanguageSelect.vue"
+import { apiCodeGenJavaPojo } from "@/api/generator"
 
-const tableData = ref();
-const outputEditorRef = ref();
+const tableData = ref()
+const outputEditorRef = ref()
 
-const visible = ref();
+const visible = ref()
 
-const fields = ref<FieldInfo[]>([]);
+const fields = ref<FieldInfo[]>([])
 
 const formData = reactive({
   type: 3,
   packageName: "io.devpl.test",
-  className: "Test"
-});
+  className: "Test",
+})
 
 const gen = () => {
   apiCodeGenJavaPojo({
     ...toRaw(formData),
-    fields: fields.value
+    fields: fields.value,
   }).then((res) => {
-    outputEditorRef.value.setText(res.data);
-  });
-};
+    outputEditorRef.value.setText(res.data)
+  })
+}
 
 defineExpose({
   show(groupId: number) {
     apiListGroupFieldsById(groupId).then((res) => {
-      fields.value = res.data;
-      visible.value = true;
-    });
-  }
-});
-
+      fields.value = res.data
+      visible.value = true
+    })
+  },
+})
 </script>
 
 <style lang="scss" scoped></style>

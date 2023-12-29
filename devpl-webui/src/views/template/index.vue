@@ -1,13 +1,24 @@
 <template>
   <el-card>
-    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
+    <el-form
+      :inline="true"
+      :model="state.queryForm"
+      @keyup.enter="getDataList()"
+    >
       <el-form-item>
-        <el-input v-model="state.queryForm.templateName" placeholder="模板名称"></el-input>
+        <el-input
+          v-model="state.queryForm.templateName"
+          placeholder="模板名称"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-select v-model="state.queryForm.templateType" clearable>
-          <el-option v-for="templateType in templateTypes" :key="templateType.provider" :value="templateType.provider"
-            :label="templateType.providerName"></el-option>
+          <el-option
+            v-for="templateType in templateTypes"
+            :key="templateType.provider"
+            :value="templateType.provider"
+            :label="templateType.providerName"
+          ></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -23,75 +34,144 @@
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
-      @selection-change="selectionChangeHandle">
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
+    <el-table
+      v-loading="state.dataListLoading"
+      :data="state.dataList"
+      border
+      height="450px"
+      @selection-change="selectionChangeHandle"
+    >
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50"
+      ></el-table-column>
+      <el-table-column
+        prop="templateName"
+        label="模板名称"
+        header-align="center"
+        align="center"
+      >
         <template #default="scope">
-          <el-text class="mx-1" type="primary" @click="showTemplateEditDialog(scope.row)" style="cursor: pointer;">{{
-            scope.row.templateName
-          }}</el-text>
+          <el-text
+            class="mx-1"
+            type="primary"
+            style="cursor: pointer"
+            @click="showTemplateEditDialog(scope.row)"
+            >{{ scope.row.templateName }}</el-text
+          >
         </template>
       </el-table-column>
-      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px" align="center"></el-table-column>
-      <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
-        width="300px"></el-table-column>
-      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
+      <el-table-column
+        prop="provider"
+        label="技术类型"
+        header-align="center"
+        width="200px"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        prop="remark"
+        label="备注"
+        show-overflow-tooltip
+        header-align="center"
+        align="center"
+        width="300px"
+      ></el-table-column>
+      <el-table-column
+        label="操作"
+        fixed="right"
+        header-align="center"
+        align="center"
+        width="180"
+      >
         <template #default="scope">
-          <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">参数表</el-button>
-          <el-button v-if="!scope.row.internal" type="primary" link @click="addOrUpdateHandle(scope.row)">修改</el-button>
-          <el-button v-if="!scope.row.internal" type="primary" link @click="deleteBatchHandle(scope.row.templateId)">
+          <el-button type="primary" link @click="addOrUpdateHandle(scope.row)"
+            >参数表</el-button
+          >
+          <el-button
+            v-if="!scope.row.internal"
+            type="primary"
+            link
+            @click="addOrUpdateHandle(scope.row)"
+            >修改</el-button
+          >
+          <el-button
+            v-if="!scope.row.internal"
+            type="primary"
+            link
+            @click="deleteBatchHandle(scope.row.templateId)"
+          >
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes || []" :page-size="state.limit"
-      :total="state.total" layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle">
+    <el-pagination
+      :current-page="state.page"
+      :page-sizes="state.pageSizes || []"
+      :page-size="state.limit"
+      :total="state.total"
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
+    >
     </el-pagination>
 
     <template-viewer ref="templateContentEditorRef"></template-viewer>
 
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
+    <add-or-update
+      ref="addOrUpdateRef"
+      @refresh-data-list="getDataList"
+    ></add-or-update>
   </el-card>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
-import { ElButton } from "element-plus";
-import AddOrUpdate from "./add-or-update.vue";
-import { useCrud } from "@/hooks";
-import { DataTableOption } from "@/hooks/interface";
-import TemplateViewer from "@/views/template/TemplateViewer.vue";
-import { apiBatchRemoveTemplateByIds, apiListTemplatesByPage, apiListTemplateTypes } from "@/api/template";
+import { onMounted, reactive, ref } from "vue"
+import { ElButton } from "element-plus"
+import AddOrUpdate from "./add-or-update.vue"
+import { useCrud } from "@/hooks"
+import { DataTableOption } from "@/hooks/interface"
+import TemplateViewer from "@/views/template/TemplateViewer.vue"
+import {
+  apiBatchRemoveTemplateByIds,
+  apiListTemplatesByPage,
+  apiListTemplateTypes,
+} from "@/api/template"
 
 const state: DataTableOption = reactive({
   queryForm: {
     templateName: "",
-    templateType: ""
+    templateType: "",
   },
   primaryKey: "templateId",
   isPage: true,
   queryPage: apiListTemplatesByPage,
-  removeByIds: apiBatchRemoveTemplateByIds
-});
+  removeByIds: apiBatchRemoveTemplateByIds,
+})
 
-const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state);
+const {
+  getDataList,
+  selectionChangeHandle,
+  sizeChangeHandle,
+  currentChangeHandle,
+  deleteBatchHandle,
+} = useCrud(state)
 
-const addOrUpdateRef = ref();
+const addOrUpdateRef = ref()
 const addOrUpdateHandle = (row?: any) => {
-  addOrUpdateRef.value.init(row);
-};
+  addOrUpdateRef.value.init(row)
+}
 
-const templateContentEditorRef = ref();
-const templateTypes = ref<TemplateProvider[]>();
+const templateContentEditorRef = ref()
+const templateTypes = ref<TemplateProvider[]>()
 
 const resetForm = () => {
   state.queryForm = {
     templateName: "",
-    templateType: ""
+    templateType: "",
   }
   getDataList()
 }
@@ -101,20 +181,20 @@ const resetForm = () => {
  * @param templateInfo
  */
 function showTemplateEditDialog(templateInfo: any) {
-  let content = templateInfo.content;
+  let content = templateInfo.content
   if (templateInfo.type == 1) {
     // 获取文件内容
   } else {
     // 字符串模板
   }
-  templateContentEditorRef.value.init(templateInfo.templateName, content);
+  templateContentEditorRef.value.init(templateInfo.templateName, content)
 }
 
 onMounted(() => {
-  getDataList();
+  getDataList()
 
   apiListTemplateTypes().then((res) => {
-    templateTypes.value = res.data;
-  });
-});
+    templateTypes.value = res.data
+  })
+})
 </script>

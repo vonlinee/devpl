@@ -11,14 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import ModelConverter from "@/views/devtools/toolset/ModelConverter.vue";
-import SqlConverter from "@/views/devtools/toolset/SqlConverter.vue";
+import { ref } from "vue"
+import ModelConverter from "@/views/devtools/toolset/ModelConverter.vue"
+import SqlConverter from "@/views/devtools/toolset/SqlConverter.vue"
 
-const activeTabName = ref();
-
+const activeTabName = ref()
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

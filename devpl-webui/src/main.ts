@@ -22,8 +22,8 @@ import { isWindows } from "./utils/tool"
 
 // 全局注册
 
-import contextmenu from "v-contextmenu";
-import "v-contextmenu/dist/themes/default.css";
+import contextmenu from "v-contextmenu"
+import "v-contextmenu/dist/themes/default.css"
 
 VXETable.config({
   zIndex: 2000,
@@ -37,7 +37,7 @@ const app = createApp(App)
 // 创建 Pinia 实例
 const pinia: Pinia = createPinia()
 
-app.use(contextmenu);
+app.use(contextmenu)
 app.use(pinia)
 app.use(router)
 app.use(SvgIcon)

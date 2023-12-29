@@ -2,12 +2,12 @@
  * 模板信息
  */
 type TemplateInfo = {
-  templateId?: number,
-  templateName: string,
-  templatePath: string,
-  content: string,
-  type: number,  // 模板类型，1-字符串模板 2-文件模板
-  typeName?: string,
+  templateId?: number
+  templateName: string
+  templatePath: string
+  content: string
+  type: number // 模板类型，1-字符串模板 2-文件模板
+  typeName?: string
   provider: string
   remark?: string
   /**
@@ -23,11 +23,11 @@ type TemplateSelectVO = {
   /**
    * 模板ID
    */
-  templateId: number,
+  templateId: number
   /**
    * 模板名称
    */
-  templateName: string,
+  templateName: string
   /**
    * 备注信息
    */

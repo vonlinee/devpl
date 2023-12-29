@@ -1,19 +1,44 @@
 <template>
-  <vxe-modal width="50%" v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :draggable="false"
-    :z-index="2000" show-footer>
-    <el-form ref="dataFormRef" label-position="right" :model="dataForm" :rules="dataRules" label-width="120px"
-      @keyup.enter="submitHandle()">
+  <vxe-modal
+    v-model="visible"
+    width="50%"
+    :title="!dataForm.id ? '新增' : '修改'"
+    :mask-closable="false"
+    :draggable="false"
+    :z-index="2000"
+    show-footer
+  >
+    <el-form
+      ref="dataFormRef"
+      label-position="right"
+      :model="dataForm"
+      :rules="dataRules"
+      label-width="120px"
+      @keyup.enter="submitHandle()"
+    >
       <el-row>
         <el-col :span="16">
           <el-form-item label="连接名" prop="connName">
-            <el-input v-model="dataForm.connName" placeholder="连接名"></el-input>
+            <el-input
+              v-model="dataForm.connName"
+              placeholder="连接名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item prop="driverType" label="驱动类型">
-            <el-select v-model="dataForm.driverType" clearable placeholder="驱动类型" style="width: 100%">
-              <el-option v-for="dbType in supportedDriverTypes" :key="dbType.id" :value="dbType.id"
-                :label="dbType.name"></el-option>
+            <el-select
+              v-model="dataForm.driverType"
+              clearable
+              placeholder="驱动类型"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="dbType in supportedDriverTypes"
+                :key="dbType.id"
+                :value="dbType.id"
+                :label="dbType.name"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -21,7 +46,10 @@
       <el-row>
         <el-col :span="16">
           <el-form-item prop="ip" label="IP">
-            <el-input v-model="dataForm.host" placeholder="127.0.0.1"></el-input>
+            <el-input
+              v-model="dataForm.host"
+              placeholder="127.0.0.1"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -34,32 +62,53 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="dataForm.username" placeholder="用户名"></el-input>
+            <el-input
+              v-model="dataForm.username"
+              placeholder="用户名"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="密码" prop="password">
-            <el-input v-model="dataForm.password" autocomplete="off" placeholder="密码" show-password></el-input>
+            <el-input
+              v-model="dataForm.password"
+              autocomplete="off"
+              placeholder="密码"
+              show-password
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
 
       <el-form-item prop="dbType" label="数据库名称">
-        <el-select v-model="dataForm.dbName" clearable placeholder="数据库名称" @blur="selectBlur" @change="onDbNameChange"
-          @visibleChange="onStartSelect" filterable style="width: 100%">
-          <el-option v-for="item in databaseNames" :key="item" :label="item" :value="item" />
+        <el-select
+          v-model="dataForm.dbName"
+          clearable
+          placeholder="数据库名称"
+          filterable
+          style="width: 100%"
+          @blur="selectBlur"
+          @change="onDbNameChange"
+          @visibleChange="onStartSelect"
+        >
+          <el-option
+            v-for="item in databaseNames"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="数据库URL" prop="connUrl">
         <el-input v-model="dataForm.connUrl" placeholder="数据库URL"></el-input>
       </el-form-item>
-
     </el-form>
     <template #footer>
-
       <el-popover placement="left" :width="400" trigger="click">
         <template #reference>
-          <el-button @click="testConnection" style="margin-right: 116px">测试连接</el-button>
+          <el-button style="margin-right: 116px" @click="testConnection"
+            >测试连接</el-button
+          >
         </template>
         <span>{{ testConnResult.status }}</span>
       </el-popover>
@@ -71,16 +120,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, toRaw } from "vue";
-import { ElButton, ElCol, ElMessage } from "element-plus/es";
-import { apiGetDatabaseNames, apiListSupportedDbTypes, apiTestConnection, useDataSourceApi, useDataSourceSubmitApi } from "@/api/datasource";
-import { decrypt, encrypt } from "@/utils/tool";
-import { DriverTypeVO } from "./types";
+import { onMounted, reactive, ref, toRaw } from "vue"
+import { ElButton, ElCol, ElMessage } from "element-plus/es"
+import {
+  apiGetDatabaseNames,
+  apiListSupportedDbTypes,
+  apiTestConnection,
+  useDataSourceApi,
+  useDataSourceSubmitApi,
+} from "@/api/datasource"
+import { decrypt, encrypt } from "@/utils/tool"
+import { DriverTypeVO } from "./types"
 
-const emit = defineEmits(["refreshDataList"]);
+const emit = defineEmits(["refreshDataList"])
 
-const visible = ref(false);
-const dataFormRef = ref();
+const visible = ref(false)
+const dataFormRef = ref()
 
 const dataForm = reactive({
   id: "",
@@ -91,8 +146,8 @@ const dataForm = reactive({
   connName: "",
   connUrl: "",
   username: "root",
-  password: "123456"
-});
+  password: "123456",
+})
 
 interface TestConnResult {
   status: string
@@ -100,7 +155,7 @@ interface TestConnResult {
 
 const testConnResult = ref({
   status: "",
-  dbmsType: ""
+  dbmsType: "",
 })
 
 const supportedDriverTypes = ref<DriverTypeVO[]>([])
@@ -112,34 +167,32 @@ onMounted(() => {
 })
 
 const init = (id?: number) => {
-  visible.value = true;
-  dataForm.id = "";
+  visible.value = true
+  dataForm.id = ""
 
   // 重置表单数据
   if (dataFormRef.value) {
-    dataFormRef.value.resetFields();
+    dataFormRef.value.resetFields()
   }
 
   // id 存在则为修改
   if (id) {
-    getDataSource(id);
+    getDataSource(id)
   } else {
     // 新增
-    dataForm.username = "root";
-    dataForm.password = "123456";
+    dataForm.username = "root"
+    dataForm.password = "123456"
   }
-};
+}
 
 const getDataSource = (id: number) => {
-  useDataSourceApi(id).then(res => {
-    res.data.password = decrypt(res.data.password);
-    Object.assign(dataForm, res.data);
-  });
-};
-
-function onDbNameChange(val: string) {
-
+  useDataSourceApi(id).then((res) => {
+    res.data.password = decrypt(res.data.password)
+    Object.assign(dataForm, res.data)
+  })
 }
+
+function onDbNameChange(val: string) {}
 
 /**
  * 测试数据库连接
@@ -148,13 +201,14 @@ const testConnection = () => {
   apiTestConnection(toRaw(dataForm)).then((res) => {
     if (!res.data?.failed) {
       testConnResult.value.status = "成功"
-      testConnResult.value.dbmsType = res.data?.dbmsType == undefined ? "" : res.data?.dbmsType
+      testConnResult.value.dbmsType =
+        res.data?.dbmsType == undefined ? "" : res.data?.dbmsType
     }
   })
 }
 
-let flag = ref(false);
-let databaseNames = ref<string[]>([]);
+let flag = ref(false)
+let databaseNames = ref<string[]>([])
 
 /**
  * 第一次选择时初始化数据库名称
@@ -162,19 +216,19 @@ let databaseNames = ref<string[]>([]);
  */
 function onStartSelect(visiable: boolean) {
   if (visiable && databaseNames.value.length == 0) {
-    apiGetDatabaseNames(toRaw(dataForm)).then(res => {
-      databaseNames.value = res.data;
+    apiGetDatabaseNames(toRaw(dataForm)).then((res) => {
+      databaseNames.value = res.data
       // 第一次时自动获取，之后手动获取
-      flag.value = true;
-    });
+      flag.value = true
+    })
   }
 }
 
 function selectBlur(event: FocusEvent) {
   if (event.target) {
-    let target = event.target as HTMLInputElement;
+    let target = event.target as HTMLInputElement
     if (target.value !== "") {
-      dataForm.dbName = target.value;
+      dataForm.dbName = target.value
     }
   }
 }
@@ -185,29 +239,32 @@ const dataRules = ref({
   port: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   connName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   username: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  password: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
-});
+  password: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+})
 
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid) {
-      return false;
+      return false
     }
-    useDataSourceSubmitApi({ ...dataForm, password: encrypt(dataForm.password) }).then(() => {
+    useDataSourceSubmitApi({
+      ...dataForm,
+      password: encrypt(dataForm.password),
+    }).then(() => {
       ElMessage.success({
         message: "操作成功",
         duration: 500,
         onClose: () => {
-          visible.value = false;
-          emit("refreshDataList");
-        }
-      });
-    });
-  });
-};
+          visible.value = false
+          emit("refreshDataList")
+        },
+      })
+    })
+  })
+}
 
 defineExpose({
-  init
-});
+  init,
+})
 </script>

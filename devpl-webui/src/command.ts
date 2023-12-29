@@ -1,5 +1,5 @@
-import { VXETable } from "vxe-table";
-import { toRaw } from "vue";
+import { VXETable } from "vxe-table"
+import { toRaw } from "vue"
 
 // 添加全局自定义指令
 // https://vxetable.cn/v4/#/table/commands/api
@@ -10,9 +10,9 @@ import { toRaw } from "vue";
  */
 VXETable.commands.add("openModal", {
   commandMethod({ button }): void {
-    let params = toRaw(button?.params);
+    let params = toRaw(button?.params)
     if (params.modalModelValue) {
-      params.modalModelValue.value = true;
+      params.modalModelValue.value = true
     }
-  }
-});
+  },
+})

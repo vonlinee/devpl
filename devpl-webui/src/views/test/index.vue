@@ -6,11 +6,10 @@
 </template>
 
 <script setup lang="ts">
+import FieldTreeTable from "@/components/fields/FieldTreeTable.vue"
 
-import FieldTreeTable from "@/components/fields/FieldTreeTable.vue";
-
-import FieldTree from "@/components/fields/FieldTree.vue";
-import Pagination from "@/components/Pagination.vue";
+import FieldTree from "@/components/fields/FieldTree.vue"
+import Pagination from "@/components/Pagination.vue"
 </script>
 
 <style scoped lang="scss">
@@ -27,6 +26,4 @@ import Pagination from "@/components/Pagination.vue";
     border: 1px solid black;
   }
 }
-
 </style>
-

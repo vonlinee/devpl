@@ -1,26 +1,30 @@
-import http from "@/utils/http";
-import { Keys } from "@/api/index";
+import http from "@/utils/http"
+import { Keys } from "@/api/index"
 
 export const apiGetModelById = (id: Number) => {
-  return http.get("/api/model/" + id);
-};
+  return http.get("/api/model/" + id)
+}
 
-export const apiListBaseClass = (page: number = 1, limit: number = 10, params?: any) => {
+export const apiListBaseClass = (
+  page: number = 1,
+  limit: number = 10,
+  params?: any
+) => {
   return http.get("/api/model/list/page", {
     pageIndex: page,
     pageSize: limit,
-    ...params
-  });
-};
+    ...params,
+  })
+}
 
 export const apiBatchRemoveModelById = (ids: Keys) => {
-  return http.delete("/api/model/remove", ids);
-};
+  return http.delete("/api/model/remove", ids)
+}
 
 export const apiSaveOrUpdateModelById = (dataForm: any) => {
   if (dataForm.id) {
-    return http.put("/api/model/update", dataForm);
+    return http.put("/api/model/update", dataForm)
   } else {
-    return http.post("/api/model/save", dataForm);
+    return http.post("/api/model/save", dataForm)
   }
-};
+}

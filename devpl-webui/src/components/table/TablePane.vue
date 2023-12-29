@@ -5,22 +5,15 @@
   <el-card>
     <slot name="form"></slot>
   </el-card>
-  <el-table>
-
-  </el-table>
+  <el-table> </el-table>
 </template>
 
 <script lang="ts">
-
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 
 const TablePane = defineComponent({
-  setup: () => {
-
-  }
-});
+  setup: () => {},
+})
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

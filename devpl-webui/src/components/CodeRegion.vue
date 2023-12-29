@@ -1,17 +1,15 @@
 <!--代码区域-->
 <script setup lang="ts">
-
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { ref } from "vue";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import { ref } from "vue"
 
 const { lang } = defineProps<{
   lang: string
-}>();
+}>()
 
-const languageMode = ref(lang);
+const languageMode = ref(lang)
 
-defineExpose({});
-
+defineExpose({})
 </script>
 
 <template>
@@ -26,6 +24,4 @@ defineExpose({});
   <monaco-editor :language="languageMode" height="500px"></monaco-editor>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

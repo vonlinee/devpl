@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { useUserVisitPopup } from "@/hooks/user-visit-popup"
+import { useEventNotificationPopup } from "@/hooks/event-notification-popup"
 
-import { useUserVisitPopup } from '@/hooks/user-visit-popup';
-import { useEventNotificationPopup } from '@/hooks/event-notification-popup';
+const { openWelcomePopup, openNewUserPopup } = useUserVisitPopup()
 
-const { openWelcomePopup, openNewUserPopup } = useUserVisitPopup();
-
-const { openNewEventNotificationPopup, openEventNotificationPopup } = useEventNotificationPopup();
+const { openNewEventNotificationPopup, openEventNotificationPopup } =
+  useEventNotificationPopup()
 </script>
 
 <template>

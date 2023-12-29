@@ -1,4 +1,4 @@
-import http from "@/utils/http";
+import http from "@/utils/http"
 
 /**
  * 查询字段列表
@@ -10,25 +10,25 @@ export const apiListFields = (page: number, limit: number, params: any) => {
   return http.get("/api/field/page", {
     pageIndex: page,
     pageSize: limit,
-    ...params
-  });
-};
+    ...params,
+  })
+}
 
 /**
  * 查询字段列表，不分页
  * @param params
  */
 export const apiListAllFields = (params?: any) => {
-  return http.get("/api/field/list", params || {});
-};
+  return http.get("/api/field/list", params || {})
+}
 
 /**
  * 批量保存字段信息
  * @param fields
  */
 export const apiSaveBatchFields = (fields: FieldInfo[]) => {
-  return http.post("/api/field/save/batch", fields);
-};
+  return http.post("/api/field/save/batch", fields)
+}
 
 /**
  * 保存或更新字段
@@ -36,32 +36,31 @@ export const apiSaveBatchFields = (fields: FieldInfo[]) => {
  */
 export const apiSaveOrUpdateField = (field: any) => {
   if (!field.fieldName) {
-    field.fieldName = field.fieldKey;
+    field.fieldName = field.fieldKey
   }
-  return http.post("/api/field/save", field);
-};
-
+  return http.post("/api/field/save", field)
+}
 
 /**
  * 保存或更新字段
  */
 export const apiDeleteFieldByIds = (ids: number[]) => {
-  return http.delete<boolean>("/api/field/delete", ids);
-};
+  return http.delete<boolean>("/api/field/delete", ids)
+}
 
 interface FieldParseParam {
   /**
    * 输入类型
    */
-  type: string;
+  type: string
   /**
    * 待解析的文本
    */
-  content: string;
+  content: string
   /**
    * 其他选项
    */
-  options?: Record<string, any>;
+  options?: Record<string, any>
 }
 
 /**
@@ -69,8 +68,8 @@ interface FieldParseParam {
  * @param param
  */
 export const apiParseFields = (param: FieldParseParam) => {
-  return http.post<FieldInfo[]>("/api/field/parse", param);
-};
+  return http.post<FieldInfo[]>("/api/field/parse", param)
+}
 
 /**
  * 字段组
@@ -85,14 +84,17 @@ type FiledGroup = {
  * @param pageSize
  * @param param
  */
-export const apiPageFieldGroup = (pageIndex?: number, pageSize?: number, param?: any) => {
+export const apiPageFieldGroup = (
+  pageIndex?: number,
+  pageSize?: number,
+  param?: any
+) => {
   return http.get("/api/field/group/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
-    ...param
-  });
-};
-
+    ...param,
+  })
+}
 
 /**
  * 查询字段组的字段列表
@@ -100,35 +102,37 @@ export const apiPageFieldGroup = (pageIndex?: number, pageSize?: number, param?:
  */
 export const apiListGroupFieldsById = (groupId: number) => {
   return http.get("/api/field/group/field-list", {
-    groupId: groupId
-  });
-};
-
+    groupId: groupId,
+  })
+}
 
 /**
  * 查询字段组的字段列表
  */
 export const apiNewFieldGroup = () => {
-  return http.post("/api/field/group/new");
-};
+  return http.post("/api/field/group/new")
+}
 
 /**
  * 查询字段组的字段列表
  */
-export const apiUpdateFieldGroup = (group: {
-  id: number,
-  groupName: string
-}, fields: FieldInfo[]) => {
+export const apiUpdateFieldGroup = (
+  group: {
+    id: number
+    groupName: string
+  },
+  fields: FieldInfo[]
+) => {
   return http.post("/api/field/group", {
     group: group,
-    fields: fields
-  });
-};
+    fields: fields,
+  })
+}
 
 /**
  * 查询字段组的字段列表
  * @param groupId 字段组ID
  */
 export const apiDeleteFieldGroup = (groupId: number) => {
-  return http.delete(`/api/field/group?id=${groupId}`);
-};
+  return http.delete(`/api/field/group?id=${groupId}`)
+}
