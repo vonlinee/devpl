@@ -7,4 +7,6 @@ public interface CodeGenerationService {
     String generateJavaPojoClass(JavaPojoCodeGenParam param);
 
     String generatedDtoClass(JavaPojoCodeGenParam param);
+
+    String generatePoiPojo(JavaPojoCodeGenParam param);
 }

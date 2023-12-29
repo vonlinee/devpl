@@ -7,23 +7,23 @@ import $importItem;
 
 /**
  * @author vonline
- */
+ **/
 public class ${className} #if($!superClass.length() > 0) extends ${superClass} #end #if( $superInterfaces.size() > 0 ) implements #foreach( $si in $superInterfaces) ${si} #end #end {
 
 #foreach( $field in $fields)
     #if(${field.commentOn})
     /**
-     * ${field.comment}
-     **/
+    * ${field.comment}
+    **/
     #end
-    @Excel("${field.name}")
+    @JsonAlias("${field.name}")
     ${field.modifier} ${field.dataType} ${field.name};
 #end
 
 #foreach( $method in $methods)
     /**
-     * ${field.comment}
-     **/
+    * ${field.comment}
+    **/
     ${method.modifier} ${method.name} ;
 #end
 }

@@ -20,11 +20,6 @@
           </span>
         </span>
       </template>
-
-      <template #empty>
-        没有字段
-        <el-button link @click="addIfEmpty">添加</el-button>
-      </template>
     </el-tree>
   </div>
 </template>

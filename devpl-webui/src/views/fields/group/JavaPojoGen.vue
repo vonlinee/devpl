@@ -39,7 +39,6 @@ import { toRaw, reactive, ref } from "vue";
 import FieldTree from "@/components/fields/FieldTree.vue";
 import LanguageSelect from "@/components/LanguageSelect.vue";
 import { apiCodeGenJavaPojo } from "@/api/generator";
-import CodeRegion from "@/components/CodeRegion.vue";
 
 const tableData = ref();
 const outputEditorRef = ref();
@@ -49,6 +48,7 @@ const visible = ref();
 const fields = ref<FieldInfo[]>([]);
 
 const formData = reactive({
+  type: 3,
   packageName: "io.devpl.test",
   className: "Test"
 });
