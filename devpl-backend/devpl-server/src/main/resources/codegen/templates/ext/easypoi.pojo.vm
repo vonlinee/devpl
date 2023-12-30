@@ -16,7 +16,7 @@ public class ${className} #if($!superClass.length() > 0) extends ${superClass} #
      * ${field.comment}
      **/
     #end
-    @Excel("${field.name}")
+    @Excel(name = "${field.name}")
     ${field.modifier} ${field.dataType} ${field.name};
 #end
 

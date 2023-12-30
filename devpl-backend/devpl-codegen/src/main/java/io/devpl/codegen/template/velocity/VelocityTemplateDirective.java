@@ -50,10 +50,11 @@ public abstract class VelocityTemplateDirective extends Directive implements Tem
             directiveArguments[i] = node.jjtGetChild(i).value(context);
         }
         // 渲染结果
-        String renderResult = render(directiveArguments);
+        String renderResult = this.render(directiveArguments);
         if (renderResult == null) {
             return false;
         }
+        // 输出渲染结果
         writer.write(renderResult);
         return true;
     }

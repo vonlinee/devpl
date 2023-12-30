@@ -5,7 +5,6 @@
   <div class="field-tree-container" :style="containerStyle">
     <el-tree
       :data="dataSource"
-      height="100%"
       :show-checkbox="selectable"
       default-expand-all
       :expand-on-click-node="false"
@@ -22,28 +21,25 @@
       @node-drop="handleDrop"
     >
       <template #default="{ node, data }">
-        <span class="field-tree-node">
-          <span v-if="!(data.editing || false)" @click="fireInput(data)">{{
-              data.fieldKey
-            }}</span>
-          <input
-            v-if="data.editing || false"
-            ref="currentInputRef"
-            :value="data.fieldKey"
-            @blur="data.editing = false"
-            @change="(event) => onInputChange(event, data)"
-            @keyup.enter="(event) => onInputChange(event, data)"
-          />
-          <span>
-            <el-button link :icon="Plus" @click="append(data)"></el-button>
-            <el-button
-              v-if="node.fieldKey !== 'Root'"
-              link
-              :icon="Minus"
-              @click="remove(node, data)"
-            ></el-button>
-          </span>
-        </span>
+        <div class="field-tree-node-container">
+          <!-- 字段名称 -->
+          <a class="field-label" v-if="!(data.editing || false)" :title="data.description || '无'"
+             @click="fireInput(data)">{{ data.fieldKey }}</a>
+          <input v-if="data.editing || false" class="field-input" ref="currentInputRef" @blur="data.editing = false"
+                 @change="(e) => onInputChange(e, data)" @keyup.enter="(e) => onInputChange(e, data)">
+
+          <!-- 数据类型-->
+          <el-button v-if="!(data.editing || false)" link style="margin-left: 10px; color: green">
+            {{ data.dataType || "unknown" }}
+          </el-button>
+
+          <div class="operation-btn-container">
+            <span style="display: inline-block; height: 100%;">
+              <el-button link :icon="Plus" @click="append(data)"></el-button>
+              <el-button link :icon="Minus" @click="remove(node, data)" style="margin: 0"></el-button>
+            </span>
+          </div>
+        </div>
       </template>
     </el-tree>
   </div>
@@ -59,17 +55,22 @@ import type {
 } from "element-plus/es/components/tree/src/tree.type";
 import { Minus, Plus } from "@element-plus/icons";
 import { watch } from "vue";
+import { CopyDocument } from "@element-plus/icons-vue";
+import { ElIcon } from "element-plus";
 
 const currentInputRef = ref();
+
+const fireInput = (data: FieldInfo) => {
+  data.editing = true;
+  nextTick(() => {
+    currentInputRef.value.value = data.fieldKey;
+    currentInputRef.value.focus();
+  });
+};
 
 const onInputChange = (event: Event, data: FieldInfo) => {
   data.fieldKey = (event.target as HTMLInputElement).value;
   data.editing = false;
-};
-
-const fireInput = (data: FieldInfo) => {
-  data.editing = true;
-  nextTick(() => currentInputRef.value.focus());
 };
 
 /**
@@ -86,7 +87,7 @@ const { selectable, height, fields } = withDefaults(
   defineProps<FieldTreeProps>(),
   {
     selectable: false,
-    height: "500px"
+    height: "100%"
   }
 );
 
@@ -107,7 +108,6 @@ const addIfEmpty = () => {
  */
 const containerStyle = reactive({
   height: height,
-  display: "block",
   overflowY: "scroll"
 }) as StyleValue;
 
@@ -222,19 +222,51 @@ defineExpose({
 
 </script>
 
-<style>
-.field-tree-node {
-  flex: 1;
+<style lang="scss" scoped>
+.field-tree-node-container {
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  //justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
-}
 
-.field-tree-container {
-  height: 300px;
-  display: block;
-  overflow-y: scroll;
+  .operation-btn-container {
+    flex: 1;
+    text-align: right;
+    position: relative;
+    right: 0;
+  }
+
+  // 字段标签
+  .field-label {
+    display: block;
+    //width: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -icab-text-overflow: ellipsis;
+    -khtml-text-overflow: ellipsis;
+    -moz-text-overflow: ellipsis;
+    -webkit-text-overflow: ellipsis;
+  }
+
+  .field-input {
+    width: 100%;
+    outline-style: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px;
+    //font-size: 14px;
+  }
+
+  input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+  }
 }
 </style>

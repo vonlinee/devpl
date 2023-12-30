@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import LanguageSelector from "@/components/LanguageSelector.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { CopyDocument } from "@element-plus/icons-vue";
 import { ElIcon, ElMessage } from "element-plus";
 
@@ -10,7 +10,10 @@ const props = withDefaults(
   defineProps<{
     lang: string
     langSelector?: boolean,
-    format?: boolean
+    /**
+     * 是否需要格式化按钮
+     */
+    format?: boolean,
   }>(),
   {
     lang: "text",
@@ -22,6 +25,7 @@ const props = withDefaults(
 const languageMode = ref(props.lang);
 const editorRef = ref();
 const value = ref("");
+const containerRef = ref();
 
 function copyTextClipboard() {
   const text = editorRef.value.getText();
@@ -50,14 +54,10 @@ defineExpose({
     editorRef.value.setText(val);
   }
 });
-
-onMounted(() => {
-
-});
 </script>
 
 <template>
-  <div>
+  <div ref="containerRef" class="code-region-container">
     <div class="code-region-toolbar">
       <LanguageSelector v-if="props.languageSelector"></LanguageSelector>
       <div style="flex: 1; text-align: right">
@@ -70,11 +70,24 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <monaco-editor ref="editorRef" :language="languageMode" height="500px"></monaco-editor>
+    <div class="editor-container">
+      <monaco-editor ref="editorRef" :language="languageMode"></monaco-editor>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.code-region-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  .editor-container {
+    flex-grow: 1;
+  }
+}
+
 .code-region-toolbar {
   width: 100%;
   display: flex;

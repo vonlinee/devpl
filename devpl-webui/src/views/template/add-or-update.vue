@@ -49,6 +49,9 @@
             <el-select v-model="dataForm.provider">
               <el-option label="Velocity" value="Velocity"></el-option>
               <el-option label="FreeMarker" value="FreeMarker"></el-option>
+              <el-option label="JFinal Enjoy" value="Enjoy"></el-option>
+              <el-option label="String Template" value="ST"></el-option>
+              <el-option label="Beetl" value="Beetl"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -71,38 +74,38 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRaw } from "vue"
-import { ElButton, ElMessage, UploadFile } from "element-plus/es"
-import { apiUploadSingleFile } from "@/api/fileupload"
-import { apiAddTemplate, apiUpdateTemplate } from "@/api/template"
-import MonacoEditor from "@/components/editor/MonacoEditor.vue"
-import { isBlank } from "@/utils/tool"
+import { reactive, ref, toRaw } from "vue";
+import { ElButton, ElMessage, UploadFile } from "element-plus/es";
+import { apiUploadSingleFile } from "@/api/fileupload";
+import { apiAddTemplate, apiUpdateTemplate } from "@/api/template";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { isBlank } from "@/utils/tool";
 
-const visible = ref(false)
-const dataFormRef = ref()
+const visible = ref(false);
+const dataFormRef = ref();
 
-const emit = defineEmits(["refreshDataList"])
+const emit = defineEmits(["refreshDataList"]);
 
-const inputRef = ref()
-const monacoEditorRef = ref()
+const inputRef = ref();
+const monacoEditorRef = ref();
 
 /**
  * 打开文件选择弹窗
  */
 async function showFileChooserDialog(v: boolean) {
   if (v) {
-    inputRef.value.click()
+    inputRef.value.click();
   }
 }
 
 function assignTemplateTypeName(val: Number): string {
   if (val == 1) {
-    return "字符串模板"
+    return "字符串模板";
   }
   if (val == 2) {
-    return "文件模板"
+    return "文件模板";
   }
-  return ""
+  return "";
 }
 
 /**
@@ -110,8 +113,8 @@ function assignTemplateTypeName(val: Number): string {
  * @param val
  */
 function templateTypeChange(val: any) {
-  dataForm.typeName = assignTemplateTypeName(val)
-  showFileChooserDialog(val == 2)
+  dataForm.typeName = assignTemplateTypeName(val);
+  showFileChooserDialog(val == 2);
 }
 
 /**
@@ -125,23 +128,24 @@ const dataForm = reactive<TemplateInfo>({
   type: 1,
   typeName: "字符串模板",
   provider: "Velocity",
-})
+  internal: false
+});
 
 /**
  * 模板文件选择
  * @param event
  */
 function onFileListChange(event: Event) {
-  const files: File[] = inputRef.value.files
+  const files: File[] = inputRef.value.files;
   if (files && files.length > 0) {
-    let file = files[0]
-    dataForm.templateName = file.name
-    let fileReader = new FileReader()
-    fileReader.readAsText(file, "UTF-8")
+    let file = files[0];
+    dataForm.templateName = file.name;
+    let fileReader = new FileReader();
+    fileReader.readAsText(file, "UTF-8");
     // 读取文件，得到文件内容
-    fileReader.onload = function (e: ProgressEvent) {
-      monacoEditorRef.value.setText(fileReader.result)
-    }
+    fileReader.onload = function(e: ProgressEvent) {
+      monacoEditorRef.value.setText(fileReader.result);
+    };
   }
 }
 
@@ -149,35 +153,35 @@ function onFileListChange(event: Event) {
  * 初始化函数
  * @param row
  */
-const init = (row: TemplateInfo) => {
-  visible.value = true
-  if (row.templateId) {
-    dataForm.templateId = row.templateId
-    dataForm.content = row.content
-    dataForm.type = row.type
-    dataForm.typeName = assignTemplateTypeName(row.type)
-    dataForm.templatePath = row.templatePath
-    dataForm.templateName = row.templateName
-    monacoEditorRef.value.setText(row.content)
+const init = (row?: TemplateInfo) => {
+  visible.value = true;
+  if (row != undefined && row.templateId != undefined) {
+    dataForm.templateId = row.templateId;
+    dataForm.content = row.content;
+    dataForm.type = row.type;
+    dataForm.typeName = assignTemplateTypeName(row.type);
+    dataForm.templatePath = row.templatePath;
+    dataForm.templateName = row.templateName;
+    monacoEditorRef.value.setText(row.content);
   } else {
     // 重置表单数据
     if (dataFormRef.value) {
-      dataFormRef.value.resetFields()
+      dataFormRef.value.resetFields();
     }
   }
-}
+};
 
 function onClosed() {
-  dataForm.templateId = undefined
+  dataForm.templateId = undefined;
 }
 
-const fileUpload = ref()
+const fileUpload = ref();
 
 // 选择文件时被调用，将他赋值给fileUpload
 const handleChange = (file: UploadFile) => {
-  fileUpload.value = file
-  dataForm.templateName = file.name
-}
+  fileUpload.value = file;
+  dataForm.templateName = file.name;
+};
 
 // 确定上传
 const uploadBtn = async () => {
@@ -187,32 +191,32 @@ const uploadBtn = async () => {
         message: "上传成功",
         duration: 500,
         onClose: () => {
-          dataForm.templatePath = res.data.pathList[0]
-        },
-      })
+          dataForm.templatePath = res.data.pathList[0];
+        }
+      });
     }
-  })
-}
+  });
+};
 
 const dataRules = ref({
   templateName: [
-    { required: true, message: "必填项不能为空", trigger: "blur" },
+    { required: true, message: "必填项不能为空", trigger: "blur" }
   ],
   projectCode: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   projectPackage: [
-    { required: true, message: "必填项不能为空", trigger: "blur" },
+    { required: true, message: "必填项不能为空", trigger: "blur" }
   ],
-  projectPath: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-})
+  projectPath: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
+});
 
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid) {
-      return false
+      return false;
     }
     if (isBlank(dataForm.content)) {
-      dataForm.content = monacoEditorRef.value.getText()
+      dataForm.content = monacoEditorRef.value.getText();
     }
     if (dataForm.templateId) {
       // 编辑
@@ -223,12 +227,12 @@ const submitHandle = () => {
             message: "修改成功",
             duration: 500,
             onClose: () => {
-              visible.value = false
-              emit("refreshDataList")
-            },
-          })
+              visible.value = false;
+              emit("refreshDataList");
+            }
+          });
         }
-      })
+      });
     } else {
       // 新增模板
       apiAddTemplate(toRaw(dataForm)).then((res) => {
@@ -238,17 +242,17 @@ const submitHandle = () => {
             message: "保存成功",
             duration: 500,
             onClose: () => {
-              visible.value = false
-              emit("refreshDataList")
-            },
-          })
+              visible.value = false;
+              emit("refreshDataList");
+            }
+          });
         }
-      })
+      });
     }
-  })
-}
+  });
+};
 
 defineExpose({
-  init,
-})
+  init
+});
 </script>

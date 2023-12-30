@@ -40,6 +40,11 @@ public class FieldInfo extends DBEntity implements Serializable {
     private String dataType;
 
     /**
+     * 字段注释信息，相比{@link FieldInfo#description}比较简短
+     */
+    private String comment;
+
+    /**
      * 描述信息
      */
     private String description;
@@ -49,10 +54,4 @@ public class FieldInfo extends DBEntity implements Serializable {
      */
     @TableField(value = "field_value")
     private String defaultValue;
-
-    /**
-     * 字段注释信息
-     */
-    @TableField(exist = false)
-    private String comment;
 }

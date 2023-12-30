@@ -22,15 +22,28 @@ public class BeanUtils {
         return name.startsWith("get") || name.startsWith("is") || name.startsWith("has");
     }
 
+    /**
+     * 从getter方法中获取属性名称
+     *
+     * @param getterName getter方法名称
+     * @return 属性名称
+     */
     public static String getPropertyNameFromGetter(String getterName) {
         if (getterName.startsWith("get") || getterName.startsWith("has")) {
             return Character.toLowerCase(getterName.charAt(3)) + getterName.substring(4);
         } else if (getterName.startsWith("is")) {
             return Character.toLowerCase(getterName.charAt(2)) + getterName.substring(3);
         }
-        return null; // Unrecognized getter name
+        // Unrecognized getter name
+        return null;
     }
 
+    /**
+     * 从getter方法中获取对应的setter方法名称
+     *
+     * @param getterName getter方法名称
+     * @return setter方法名称
+     */
     public static String getSetterName(String getterName) {
         if (getterName.startsWith("get")) {
             return "set" + getterName.substring(3);
@@ -84,6 +97,7 @@ public class BeanUtils {
 
     /**
      * Converts a user's property name to a bean method name.
+     *
      * @param propertyName the user property name
      * @return the equivalent bean method name
      */
@@ -96,6 +110,7 @@ public class BeanUtils {
 
     /**
      * Converts a user's property name to a bean method name.
+     *
      * @param methodName the method name
      * @return the equivalent property name
      */
@@ -180,8 +195,8 @@ public class BeanUtils {
         for (Method method : methods) {
             // The method must be public
             if ((!Modifier.isPublic(method.getModifiers())) || (!Modifier.isPublic(method.getDeclaringClass()
-                    .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
-                    .equals(void.class))) {
+                .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
+                .equals(void.class))) {
                 continue;
             } else if (!ignoreCase && method.getName().equals(getName)) {
                 // If it matches the get name, it's the right method
@@ -205,15 +220,16 @@ public class BeanUtils {
 
     /**
      * Finds the matching set method
+     *
      * @param setName the method name
      */
     private static Method getSetMethod(Method[] methods, String setName, boolean ignoreCase) {
         for (Method method : methods) {
             // The method name must match
             if (!(ignoreCase ? method.getName().equalsIgnoreCase(setName) : method.getName()
-                    .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
-                    .getDeclaringClass()
-                    .getModifiers()) || method.getParameterTypes().length != 1) continue;
+                .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
+                .getDeclaringClass()
+                .getModifiers()) || method.getParameterTypes().length != 1) continue;
 
             return method;
         }
@@ -297,6 +313,7 @@ public class BeanUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> Class<? extends T> findAssignableType(Class<?>[] types, Class<T> type) {
         for (Class<?> childType : types) {
             if (type.isAssignableFrom(childType)) {
@@ -310,6 +327,7 @@ public class BeanUtils {
      * Determines the distance of the given object to the given class in the
      * inheritance tree.
      * <p>
+     *
      * @param object the root object
      * @param clazz  the class to determine the distance to
      * @return the distance of the object to the class. If the object is not an

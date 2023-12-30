@@ -24,6 +24,12 @@ public class FieldGroup implements Serializable {
     private Long id;
 
     /**
+     * 父组ID
+     */
+    @TableField(value = "parent_id")
+    private Long parentId;
+
+    /**
      * 字段组名称
      */
     @TableField(value = "group_name")
