@@ -12,6 +12,7 @@ import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
+import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -152,5 +154,25 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
             return dataTypeMappingMapper.listAllUnMappedDataTypes();
         }
         return dataTypeMappingMapper.listAllMappableDataTypes(typeId);
+    }
+
+    @Override
+    public List<SelectOptionVO> getSelectableTypes(String typeGroup) {
+        List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByGroupId(typeGroup);
+        List<SelectOptionVO> result = new ArrayList<>();
+        for (DataTypeItem item : dataTypeItems) {
+            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeGroupId() + item.getTypeName(), item.getTypeKey()));
+        }
+        return result;
+    }
+
+    @Override
+    public List<SelectOptionVO> getSelectableTypeGroups() {
+        List<DataTypeGroupVO> dataTypeGroupVOS = dataTypeGroupMapper.selectAllGroups();
+        List<SelectOptionVO> result = new ArrayList<>();
+        for (DataTypeGroupVO group : dataTypeGroupVOS) {
+            result.add(new SelectOptionVO(group.getId(), group.getTypeGroupId(), group.getTypeGroupId()));
+        }
+        return result;
     }
 }

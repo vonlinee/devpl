@@ -7,6 +7,7 @@ import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
+import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import org.springframework.util.MultiValueMap;
@@ -41,4 +42,8 @@ public interface DataTypeService extends IService<DataTypeItem> {
     List<DataTypeMappingListVO> listDataTypeMappings(Long typeId);
 
     List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
+
+    List<SelectOptionVO> getSelectableTypes(String typeGroup);
+
+    List<SelectOptionVO>  getSelectableTypeGroups();
 }

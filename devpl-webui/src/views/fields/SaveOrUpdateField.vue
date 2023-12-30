@@ -40,7 +40,24 @@
             ></vxe-input>
           </template>
         </vxe-form-item>
-
+        <vxe-form-item
+          field="typeGroupId"
+          title="类型分组"
+          :span="12"
+          :item-render="{}"
+        >
+          <template #default="{ data }">
+            <vxe-select v-model="data.typeGroupId" transfer clearable filterable
+                        @change="(val) => onTypeGroupChange(val, data)">
+              <vxe-option
+                v-for="item in typeGroupOptions"
+                :key="item.key"
+                :value="item.value"
+                :label="item.label"
+              ></vxe-option>
+            </vxe-select>
+          </template>
+        </vxe-form-item>
         <vxe-form-item
           field="dataType"
           title="数据类型"
@@ -48,7 +65,7 @@
           :item-render="{}"
         >
           <template #default="{ data }">
-            <vxe-select v-model="data.dataType" transfer>
+            <vxe-select v-model="data.dataType" transfer clearable filterable>
               <vxe-option
                 v-for="item in fieldDataTypeOptions"
                 :key="item.value"
@@ -98,19 +115,27 @@
 </template>
 
 <script lang="ts" setup>
-import { apiSaveOrUpdateField } from "@/api/fields"
-import { VxeFormPropTypes } from "vxe-table"
-import { reactive, ref, toRaw } from "vue"
-import { ElMessage } from "element-plus"
+import { apiSaveOrUpdateField } from "@/api/fields";
+import { VxeFormPropTypes } from "vxe-table";
+import { onMounted, reactive, ref, toRaw } from "vue";
+import { ElMessage } from "element-plus";
+import { apiListDataTypeOptions, apiListTypeGroupOptions } from "@/api/datatype";
 
-const showEdit = ref(false)
-const modalTitle = ref()
-const submitLoading = ref(false)
+const showEdit = ref(false);
+const modalTitle = ref();
+const submitLoading = ref(false);
 
-const fieldDataTypeOptions = ref([
-  { label: "int", value: "0" },
-  { label: "double", value: "1" },
-])
+const fieldDataTypeOptions = ref([]);
+const typeGroupOptions = ref([]);
+
+const onTypeGroupChange = (param: any, row: any) => {
+  row.typeGroupId = param.value;
+  if (param.value != row.typeGroupId) {
+    apiListDataTypeOptions(param.value).then((res) => {
+      fieldDataTypeOptions.value = res.data;
+    });
+  }
+};
 
 /**
  * 新增和修改表单
@@ -119,62 +144,76 @@ const formData = ref({
   fieldName: "",
   fieldKey: "",
   dataType: "int",
+  typeGroupId: "",
   defaultValue: "",
-  description: "",
-})
+  description: ""
+});
 
 const resetFields = () => {
   formData.value = {
     fieldName: "",
     fieldKey: "",
+    typeGroupId: "",
     dataType: "int",
     defaultValue: "",
-    description: "",
-  }
-}
+    description: ""
+  };
+};
+
+onMounted(() => {
+  apiListTypeGroupOptions().then((res) => {
+    typeGroupOptions.value = res.data;
+    if (res.data?.length > 0) {
+      formData.value.typeGroupId = res.data[0].value;
+      apiListDataTypeOptions(formData.value.typeGroupId).then((res) => {
+        fieldDataTypeOptions.value = res.data;
+      });
+    }
+  });
+});
 
 /**
  * 表单校验规则
  */
 const formRules = reactive<VxeFormPropTypes.Rules>({
   fieldKey: [{ required: true, message: "请输入字段Key" }],
-  dataType: [{ required: true, message: "请选择字段数据类型" }],
-})
+  dataType: [{ required: true, message: "请选择字段数据类型" }]
+});
 
-const emits = defineEmits(["refresh-table"])
+const emits = defineEmits(["refresh-table"]);
 
 /**
  * 新增字段表单提交
  */
 const submitEvent = () => {
   // 表单填充默认值
-  submitLoading.value = true
+  submitLoading.value = true;
   apiSaveOrUpdateField(toRaw(formData.value))
     .then((res) => {
       ElMessage({
         message: "保存成功",
-        duration: 500,
-      })
-      submitLoading.value = false
-      emits("refresh-table")
-      showEdit.value = false
+        duration: 500
+      });
+      submitLoading.value = false;
+      emits("refresh-table");
+      showEdit.value = false;
     })
     .catch(() => {
-      submitLoading.value = false
-    })
-}
+      submitLoading.value = false;
+    });
+};
 
 defineExpose({
   show: (row?: any) => {
     if (row) {
-      modalTitle.value = "编辑&保存"
-      formData.value = row
+      modalTitle.value = "编辑&保存";
+      formData.value = row;
     } else {
-      modalTitle.value = "新增&保存"
+      modalTitle.value = "新增&保存";
     }
-    showEdit.value = true
-  },
-})
+    showEdit.value = true;
+  }
+});
 </script>
 
 <style lang="scss" scoped></style>

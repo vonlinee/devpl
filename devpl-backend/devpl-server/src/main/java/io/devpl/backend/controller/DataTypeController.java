@@ -8,6 +8,7 @@ import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
+import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.service.DataTypeService;
@@ -137,5 +138,23 @@ public class DataTypeController {
     @GetMapping("/mappable")
     public ListResult<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
         return ListResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
+    }
+
+    /**
+     * @param typeGroupId 类型分组，为空则获取所有
+     * @return 选项VO
+     */
+    @GetMapping("/options")
+    public Result<List<SelectOptionVO>> getSelectableTypes(
+        @RequestParam(name = "typeGroupId", required = false) String typeGroupId) {
+        return Result.ok(dataTypeService.getSelectableTypes(typeGroupId));
+    }
+
+    /**
+     * @return 选项VO
+     */
+    @GetMapping("/group/options")
+    public Result<List<SelectOptionVO>> getSelectableTypeGroups() {
+        return Result.ok(dataTypeService.getSelectableTypeGroups());
     }
 }

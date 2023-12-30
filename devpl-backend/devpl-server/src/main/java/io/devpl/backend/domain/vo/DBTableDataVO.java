@@ -1,7 +1,8 @@
 package io.devpl.backend.domain.vo;
 
 import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,8 @@ import java.util.Map;
 /**
  * 数据库表的数据
  */
-@Data
+@Getter
+@Setter
 public class DBTableDataVO {
 
     /**
