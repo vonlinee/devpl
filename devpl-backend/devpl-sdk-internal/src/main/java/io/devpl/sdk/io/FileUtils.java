@@ -1,5 +1,7 @@
 package io.devpl.sdk.io;
 
+import io.devpl.sdk.lang.RuntimeIOException;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1569,7 +1571,7 @@ public class FileUtils {
      * @throws RuntimeException IO异常
      * @since 3.0.6
      */
-    public static boolean clean(File directory) throws RuntimeException {
+    public static boolean clean(File directory) throws RuntimeIOException {
         if (directory == null || !directory.exists() || !directory.isDirectory()) {
             return true;
         }
@@ -1600,12 +1602,11 @@ public class FileUtils {
      * @throws RuntimeException IO异常
      * @see Files#delete(Path)
      */
-    public static boolean del(File file) throws RuntimeException {
+    public static boolean del(File file) throws RuntimeIOException {
         if (file == null || !file.exists()) {
             // 如果文件不存在或已被删除，此处返回true表示删除成功
             return true;
         }
-
         if (file.isDirectory()) {
             // 清空目录下所有文件和目录
             boolean isOk = clean(file);

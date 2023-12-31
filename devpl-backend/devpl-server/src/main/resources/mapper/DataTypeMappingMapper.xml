@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.DataTypeMappingMapper">
 
-    <select id="listDataTypeMappingItems" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
+    <select id="listDataTypeMappings" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
         SELECT A.type_id,
         B.type_name,
         B.type_group_id,

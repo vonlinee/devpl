@@ -1,64 +1,64 @@
 <script setup lang="ts">
-import { reactive, ref, toRaw } from "vue"
-import { ElMessage, ElTableColumn } from "element-plus"
-import { apiParseFields } from "@/api/fields"
-import { isBlank } from "@/utils/tool"
-import { Splitpanes, Pane } from "splitpanes"
-import "splitpanes/dist/splitpanes.css"
-import FieldParserInput from "./FieldParserInput.vue"
+import { reactive, ref, toRaw } from "vue";
+import { ElMessage, ElTableColumn } from "element-plus";
+import { apiParseFields } from "@/api/fields";
+import { isBlank } from "@/utils/tool";
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
+import FieldParserInput from "./FieldParserInput.vue";
 
-const modalVisible = ref()
+const modalVisible = ref();
 
 const init = () => {
-  modalVisible.value = true
-}
+  modalVisible.value = true;
+};
 
 defineExpose({
-  init: init,
-})
+  init: init
+});
 
-const fields = ref<FieldInfo[]>()
+const fields = ref<FieldInfo[]>();
 
-const fieldParserInputRef = ref()
+const fieldParserInputRef = ref();
 
 const parseFields = () => {
-  const inputType: string = fieldParserInputRef.value.getInputType()
-  let text = fieldParserInputRef.value.getParseableText()
+  const inputType: string = fieldParserInputRef.value.getInputType();
+  let text = fieldParserInputRef.value.getParseableText();
   if (isBlank(text)) {
-    ElMessage("输入文本为空")
-    return
+    ElMessage("输入文本为空");
+    return;
   }
   apiParseFields({
     type: inputType,
     content: text,
-    ...toRaw(columnMappingForm),
+    ...toRaw(columnMappingForm)
   }).then((res) => {
-    const existed = fields.value || []
+    const existed = fields.value || [];
     res.data?.forEach((i) => {
       if (!existed.find((f) => f.fieldKey == i.fieldKey)) {
-        existed?.push(i)
+        existed?.push(i);
       }
-    })
-    fields.value = existed
-  })
-}
+    });
+    fields.value = existed;
+  });
+};
 
 const emits = defineEmits([
   // 完成
-  "finished",
-])
+  "finished"
+]);
 
 const onModalClose = () => {
-  emits("finished", fields.value)
-}
+  emits("finished", fields.value);
+};
 
 /**
  * 删除行
  * @param row
  */
 const removeRow = (row: FieldInfo) => {
-  fields.value = fields.value?.filter((f) => f.fieldKey != row.fieldKey)
-}
+  fields.value = fields.value?.filter((f) => f.fieldKey != row.fieldKey);
+};
 
 /**
  * 字段映射规则
@@ -67,8 +67,8 @@ const removeRow = (row: FieldInfo) => {
 const columnMappingForm = reactive({
   fieldNameColumn: "1",
   fieldTypeColumn: "2",
-  fieldDescColumn: "3",
-})
+  fieldDescColumn: "3"
+});
 </script>
 
 <template>
@@ -81,6 +81,7 @@ const columnMappingForm = reactive({
     width="80%"
     height="80%"
     :z-index="2000"
+    fullscreen
     @close="onModalClose"
   >
     <template #default>
@@ -127,6 +128,8 @@ const columnMappingForm = reactive({
 
 <style scoped lang="scss">
 .demo-tabs > .el-tabs__content {
+  height: 100%;
+  overflow-y: scroll;
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

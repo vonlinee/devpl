@@ -20,8 +20,6 @@ public class GeneratorProperties {
     @PostConstruct
     public void init() {
         // 模板路径，如果不是以/结尾，则添加/
-        if (!StringUtils.endWith(template, '/')) {
-            template = template + "/";
-        }
+        template = StringUtils.withEnd(template, "/");
     }
 }

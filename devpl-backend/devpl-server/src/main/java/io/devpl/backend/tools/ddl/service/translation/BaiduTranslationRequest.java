@@ -1,8 +1,10 @@
 package io.devpl.backend.tools.ddl.service.translation;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class BaiduTranslationRequest {
 
     private String q;

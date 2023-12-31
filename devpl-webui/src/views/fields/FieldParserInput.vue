@@ -1,10 +1,12 @@
 <!-- 
-    字段解析输入
+    字段解析输入组件
  -->
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import CodeRegion from "@/components/CodeRegion.vue";
+import LanguageSelector from "@/components/LanguageSelector.vue";
 
 const activeTabName = ref("java");
 const modalVisible = ref();
@@ -21,11 +23,7 @@ const columnMappingForm = reactive({
 
 const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
   activeTabName.value = tab.paneName as string;
-  parserInputType.value = activeTabName.value
-};
-
-const init = () => {
-  modalVisible.value = true;
+  parserInputType.value = activeTabName.value;
 };
 
 const fields = ref<FieldInfo[]>();
@@ -88,7 +86,9 @@ const emits = defineEmits([
  * 暴露API
  */
 defineExpose({
-  init: init,
+  init: () => {
+    modalVisible.value = true;
+  },
   /**
    * 获取待解析的文本
    */
@@ -108,15 +108,15 @@ defineExpose({
   <el-tabs
     v-model="activeTabName"
     class="demo-tabs"
-    height="600px"
     @tab-click="handleTabClicked"
   >
-    <el-tab-pane label="Java" name="java">
-      <monaco-editor
-        ref="javaEditorRef"
-        language="java"
-        height="480px"
-      ></monaco-editor>
+    <el-tab-pane label="Language" name="java">
+      <div style="height: 100%; display: flex; flex-direction: column;background-color: red">
+        <LanguageSelector></LanguageSelector>
+        <div style="flex-grow: 1">
+          <monaco-editor ref="javaEditorRef" language="java"></monaco-editor>
+        </div>
+      </div>
     </el-tab-pane>
     <el-tab-pane label="SQL" name="sql">
       <monaco-editor
@@ -202,6 +202,7 @@ defineExpose({
 
 <style scoped lang="scss">
 .demo-tabs > .el-tabs__content {
+  height: 500px;
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

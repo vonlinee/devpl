@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * http://api.fanyi.baidu.com/product/113
+ * <a href="http://api.fanyi.baidu.com/product/113">...</a>
  */
 public class BaiduTranslationService implements TranslationService {
 

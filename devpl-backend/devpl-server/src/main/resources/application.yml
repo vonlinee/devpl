@@ -12,36 +12,15 @@ spring:
         url: jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useAffectedRows=true&allowMultiQueries=true
         username: root
         password: 123456
-        # Oracle
-        #    driver-class-name: oracle.jdbc.OracleDriver
-        #    url: jdbc:oracle:thin:@localhost:1521:xe
-        #    username: maku_generator
-        #    password: maku_generator
-        # SQLServer
-        #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-        #    url: jdbc:sqlserver://localhost:1433;DatabaseName=maku_generator;encrypt=true;trustServerCertificate=true
-        #    username: sa
-        #    password: 123456@maku
-        # postgresql
-        #    driver-class-name: org.postgresql.Driver
-        #    url: jdbc:postgresql://localhost:5432/postgres
-        #    username: postgres
-        #    password: 123456
-        # 达梦8
-#    driver-class-name: dm.jdbc.driver.DmDriver
-#    url: jdbc:dm://localhost:5236/maku_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-#    username: maku_generator
-#    password: 12345678
-
 
 # 需要指定对应的模板
 codegen:
-    template: /template/maku-boot
+    template: /codegen/templates
 
 # mybatis-plus配置
 mybatis-plus:
     mapper-locations: classpath:/mapper/*.xml
-    typeAliasesPackage: io.devpl.generator.entity
+    typeAliasesPackage: io.devpl.backend.entity
     global-config:
         db-config:
             id-type: AUTO
@@ -52,7 +31,7 @@ mybatis-plus:
         call-setters-on-nulls: true
         jdbc-type-for-null: 'null'
         log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 不输出日志
-#        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台输出日志
+    #        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台输出日志
     configuration-properties:
         prefix:
         blobType: BLOB

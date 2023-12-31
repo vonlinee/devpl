@@ -30,8 +30,7 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
     public ModelInfo getModelInfo(Long modelId) {
         ModelInfo modelInfo = getById(modelId);
         if (modelInfo != null) {
-            List<ModelField> modelFields = baseMapper.selectModelFields(modelId);
-            modelInfo.setFields(modelFields);
+            modelInfo.setFields(baseMapper.selectModelFields(modelId));
         }
         return modelInfo;
     }

@@ -1,11 +1,13 @@
 package io.devpl.backend.tools.ddl.service.translation;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class BaiduTranslationResult {
 
     private String from;

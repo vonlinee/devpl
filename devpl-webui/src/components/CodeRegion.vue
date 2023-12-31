@@ -81,7 +81,7 @@ defineExpose({
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  // overflow-y: scroll;
 
   .editor-container {
     flex-grow: 1;

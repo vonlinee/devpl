@@ -139,7 +139,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
 
     @Override
     public List<DataTypeMappingListVO> listDataTypeMappings(Long typeId) {
-        return dataTypeMappingMapper.listDataTypeMappingItems(typeId);
+        return dataTypeMappingMapper.listDataTypeMappings(typeId);
     }
 
     /**

@@ -18,7 +18,7 @@ import java.util.List;
 @Mapper
 public interface DataTypeMappingMapper extends EntityMapper<DataTypeMapping> {
 
-    List<DataTypeMappingListVO> listDataTypeMappingItems(@Param("typeId") Long typeId);
+    List<DataTypeMappingListVO> listDataTypeMappings(@Param("typeId") Long typeId);
 
     default List<DataTypeMapping> selectListByIds(Collection<Long> ids) {
         Assert.notEmpty(ids, "ID列表为空");

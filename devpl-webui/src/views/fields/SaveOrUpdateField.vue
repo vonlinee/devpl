@@ -92,8 +92,7 @@
           field="description"
           title="描述信息"
           :span="24"
-          :item-render="{}"
-        >
+          :item-render="{}">
           <template #default="{ data }">
             <vxe-textarea
               v-model="data.description"

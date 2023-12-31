@@ -1,11 +1,13 @@
 package io.devpl.backend.tools.ddl.service.translation;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 翻译结果
  */
-@Data
+@Getter
+@Setter
 public class TranslationResult {
 
     private String src;

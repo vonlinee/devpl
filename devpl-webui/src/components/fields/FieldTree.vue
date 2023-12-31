@@ -2,7 +2,7 @@
   字段树结构
  -->
 <template>
-  <div class="field-tree-container" :style="containerStyle">
+  <el-scrollbar max-height="100%">
     <el-tree
       :data="dataSource"
       :show-checkbox="selectable"
@@ -42,7 +42,7 @@
         </div>
       </template>
     </el-tree>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script lang="ts" setup>

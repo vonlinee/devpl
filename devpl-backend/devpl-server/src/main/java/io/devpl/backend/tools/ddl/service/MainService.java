@@ -3,7 +3,6 @@ package io.devpl.backend.tools.ddl.service;
 import io.devpl.backend.tools.ddl.Constant;
 import io.devpl.backend.tools.ddl.model.Field;
 import io.devpl.backend.tools.ddl.setting.MainSetting;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -11,12 +10,13 @@ public class MainService {
 
     /**
      * 获取注释
-     * @param field
-     * @param translationMap
-     * @return
+     *
+     * @param field          Field
+     * @param translationMap translationMap
+     * @return 注释信息
      */
     private static String getCommend(Field field, Map<String, String> translationMap) {
-        if (!StringUtils.equals(field.getName(), "id")) {
+        if (!"id".equals(field.getName())) {
             if (MainSetting.getInstance().myProperties.getAutoTranslationRadio()) {
                 return translationMap.getOrDefault(field.getTableColumn().replace("_", " "), "");
             }
@@ -28,8 +28,9 @@ public class MainService {
 
     /**
      * 字段类型是否需要加入转换
-     * @param field
-     * @return
+     *
+     * @param field Field字段信息
+     * @return 是否需要进行转换
      */
     private boolean isNeedAddConvert(Field field) {
         if (null == field) {
@@ -50,11 +51,11 @@ public class MainService {
     }
 
     private boolean isAdditional(String canonicalText) {
-        return (StringUtils.equals(Constant.STRING_PACKAGE, canonicalText)
-            || StringUtils.equals(Constant.DATE_PACKAGE, canonicalText)
-            || StringUtils.equals(Constant.BIG_DECIMAL_PACKAGE, canonicalText)
-            || StringUtils.equals(Constant.LOCAL_DATE, canonicalText)
-            || StringUtils.equals(Constant.LOCAL_TIME, canonicalText)
-            || StringUtils.equals(Constant.LOCAL_DATE_TIME, canonicalText));
+        return (Constant.STRING_PACKAGE.equals(canonicalText)
+            || Constant.DATE_PACKAGE.equals(canonicalText)
+            || Constant.BIG_DECIMAL_PACKAGE.equals(canonicalText)
+            || Constant.LOCAL_DATE.equals(canonicalText)
+            || Constant.LOCAL_TIME.equals(canonicalText)
+            || Constant.LOCAL_DATE_TIME.equals(canonicalText));
     }
 }

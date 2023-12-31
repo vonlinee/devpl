@@ -167,7 +167,7 @@ public abstract class StringUtils {
      * @param len      长度
      * @return String
      */
-    public static String append(String sequence, char c, int len) {
+    public static String endWith(String sequence, char c, int len) {
         int i = len - sequence.length();
         if (i > 0) {
             sequence = sequence + String.valueOf(c).repeat(i);
@@ -218,11 +218,7 @@ public abstract class StringUtils {
      * {@link #hasLength(String)} or {@link #hasText(String)} instead.</b>
      *
      * @param str the candidate object (possibly a {@code String})
-     * @since 3.2.1
-     * @deprecated as of 5.3, in favor of {@link #hasLength(String)} and
-     * {@link #hasText(String)} (or {@link ObjectUtils#isEmpty(Object)})
      */
-    @Deprecated
     public static boolean isEmpty(Object str) {
         return (str == null || "".equals(str));
     }
@@ -2140,14 +2136,14 @@ public abstract class StringUtils {
     }
 
     /**
-     * 追加
+     * 以特定的字符串结尾
      *
      * @param source 原字符串
      * @param end    结尾的字符串
      * @return 拼接后的字符串
      */
-    public static String appendIfNotEndWith(String source, String end) {
-        if (source == null) {
+    public static String withEnd(String source, String end) {
+        if (source == null || source.isEmpty()) {
             return end;
         }
         if (source.endsWith(end)) {
