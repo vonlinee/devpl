@@ -1,12 +1,15 @@
 package io.devpl.backend.utils;
 
 import io.devpl.sdk.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.MessageFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -51,5 +54,46 @@ public class Utils {
                 log.error("faile to trim value {}", value, exception);
             }
         }
+    }
+
+    /**
+     * 去除不可见字符
+     *
+     * @param str 字符串
+     * @return 输入为空，返回空字符串
+     */
+    @NotNull
+    public static String removeNonPrintableCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        // https://stackoverflow.com/questions/6198986/how-can-i-replace-non-printable-unicode-characters-in-java#
+        return str.replace("\\p{C}", "");
+    }
+
+    static Pattern pattern = Pattern.compile("\\s*|\\t|\\r|\\n");
+
+    /**
+     * 去除不可见字符 空格\t、回车\n、换行符\r、制表符\t
+     * 笨方法：String s = "你要去除的字符串";
+     * 1.去除空格：s = s.replace('\\s','');
+     * 2.去除回车：s = s.replace('\n','');
+     * 这样也可以把空格和回车去掉，其他也可以照这样做。
+     * 注：
+     * \n 回车(\u000a)
+     * \t 水平制表符(\u0009)
+     * \s 空格(\u0008)
+     * \r 换行(\u000d)
+     *
+     * @param str 字符串
+     * @return 输入为空，返回空字符串
+     */
+    @NotNull
+    public static String removeInvisibleCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        Matcher m = pattern.matcher(str);
+        return m.replaceAll("");
     }
 }

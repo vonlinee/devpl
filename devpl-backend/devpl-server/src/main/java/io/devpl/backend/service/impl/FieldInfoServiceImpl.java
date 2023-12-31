@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.dao.FieldInfoMapper;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
@@ -66,7 +67,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
      * @return 字段列表
      */
     @Override
-    public List<FieldInfo> parseFields(FieldParseParam param) {
+    public List<FieldInfo> parseFields(FieldParseParam param) throws FieldParseException {
         String type = param.getType();
         String content = param.getContent();
         FieldParser parser = FieldParser.EMPTY;
@@ -82,6 +83,8 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             parser = new HtmlTableDomFieldParser(columnMapping);
         } else if ("sql".equalsIgnoreCase(type)) {
             parser = new SqlFieldParser();
+        } else if ("url".equalsIgnoreCase(type)) {
+            parser = new URLFieldParser();
         }
         return convertParseResultToFields(parser.parse(content));
     }

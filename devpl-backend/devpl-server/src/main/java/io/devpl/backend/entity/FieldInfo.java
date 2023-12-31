@@ -30,12 +30,20 @@ public class FieldInfo extends DBEntity implements Serializable {
     private String fieldKey;
 
     /**
+     * 类型分组ID
+     */
+    @TableField(value = "type_group_id")
+    private String typeGroupId;
+
+    /**
      * 字段名，中文名
      */
     private String fieldName;
 
     /**
      * 数据类型
+     *
+     * @see DataTypeItem#getTypeKey()
      */
     private String dataType;
 

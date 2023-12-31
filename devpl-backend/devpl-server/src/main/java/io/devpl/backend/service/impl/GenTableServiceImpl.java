@@ -2,7 +2,7 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.devpl.backend.common.ServerException;
+import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;
@@ -236,7 +236,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        throw new ServerException("数据表不存在：" + tableName);
+        throw new BusinessException("数据表不存在：" + tableName);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         }
         // 从数据库获取表字段列表
         if (dbTableFieldList.isEmpty()) {
-            throw new ServerException("同步失败，请检查数据库表：" + table.getTableName());
+            throw new BusinessException("同步失败，请检查数据库表：" + table.getTableName());
         }
 
         // 表字段列表
@@ -336,7 +336,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             }
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            throw ServerException.create("获取表字段异常", e);
+            throw BusinessException.create("获取表字段异常", e);
         }
         return tableFieldList;
     }

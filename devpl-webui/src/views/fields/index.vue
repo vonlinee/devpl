@@ -5,55 +5,55 @@
 import {
   apiDeleteFieldByIds,
   apiListFields,
-  apiSaveBatchFields,
-} from "@/api/fields"
-import FieldParseToolModal from "./FieldParseToolModal.vue"
-import { onMounted, reactive, ref } from "vue"
-import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue"
-import { useCrud } from "@/hooks"
-import { DataTableOption } from "@/hooks/interface"
-import { ElMessage } from "element-plus"
+  apiSaveBatchFields
+} from "@/api/fields";
+import FieldParseToolModal from "./FieldParseToolModal.vue";
+import { onMounted, reactive, ref } from "vue";
+import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
+import { useCrud } from "@/hooks";
+import { DataTableOption } from "@/hooks/interface";
+import { ElMessage } from "element-plus";
 
 /**
  * 表格数据模型
  */
 interface RowVO {
-  id: number
-  fieldId: string
-  fieldKey: string
-  fieldName: string
-  dataType: string
-  description: string
-  defaultValue: string
+  id: number;
+  fieldId: string;
+  fieldKey: string;
+  fieldName: string;
+  dataType: string;
+  description: string;
+  defaultValue: string;
 }
 
-const fieldImportModalRef = ref()
-const saveOrUpdateFieldModal = ref()
+const fieldImportModalRef = ref();
+const saveOrUpdateFieldModal = ref();
 
 const showSaveOrUpdateModal = (row?: RowVO) => {
-  saveOrUpdateFieldModal.value.show(row)
-}
+  saveOrUpdateFieldModal.value.show(row);
+};
 
 const removeEvent = async (row: RowVO) => {
-  deleteHandle(row.id)
-}
+  deleteHandle(row.id);
+};
 
 onMounted(() => {
-  getDataList()
-})
+  getDataList();
+});
 
 const option: DataTableOption = reactive({
   pageSizes: [10, 15, 20],
   queryForm: {
     fieldKey: "",
-    fieldName: "",
+    fieldName: ""
   },
   queryPage: apiListFields,
-  removeByIds: apiDeleteFieldByIds,
-} as DataTableOption)
+  removeByIds: apiDeleteFieldByIds
+} as DataTableOption);
 
 const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } =
-  useCrud(option)
+  useCrud(option);
 
 /**
  * 保存解析的字段
@@ -66,12 +66,12 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
         message: "新增成功",
         duration: 500,
         onClose: () => {
-          getDataList()
-        },
-      })
-    })
+          getDataList();
+        }
+      });
+    });
   }
-}
+};
 </script>
 
 <template>
@@ -90,14 +90,17 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
         </el-form-item>
         <el-form-item>
           <el-button type="danger" @click="option.queryForm = {}"
-            >重置</el-button
+          >重置
+          </el-button
           >
           <el-button type="primary" @click="getDataList()">查询</el-button>
           <el-button type="primary" @click="showSaveOrUpdateModal(null)"
-            >新增</el-button
+          >新增
+          </el-button
           >
           <el-button type="primary" @click="fieldImportModalRef.init()"
-            >导入</el-button
+          >导入
+          </el-button
           >
         </el-form-item>
       </div>
@@ -113,6 +116,7 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
     ></el-table-column>
     <el-table-column prop="fieldKey" label="字段Key"></el-table-column>
     <el-table-column prop="fieldName" label="名称"></el-table-column>
+    <el-table-column prop="typeGroupId" label="类型组"></el-table-column>
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
     <el-table-column
       prop="defaultValue"

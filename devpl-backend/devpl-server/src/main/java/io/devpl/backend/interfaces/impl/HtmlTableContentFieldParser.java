@@ -1,5 +1,7 @@
 package io.devpl.backend.interfaces.impl;
 
+import io.devpl.backend.common.exception.FieldParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
      * @return 字段信息
      */
     @Override
-    public List<String[]> parseRows(String content) {
+    public List<String[]> parseRows(String content) throws FieldParseException {
         String[] lines = content.split("\n");
 
         // 第一行为标题

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import io.devpl.backend.boot.CodeGenProperties;
-import io.devpl.backend.common.ServerException;
+import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.dao.TemplateInfoMapper;
 import io.devpl.backend.domain.TemplateEngineType;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
@@ -96,9 +96,9 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             template.process(dataModel, out);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            throw new ServerException("渲染模板失败，请检查模板语法", e);
+            throw new BusinessException("渲染模板失败，请检查模板语法", e);
         } catch (TemplateException e) {
-            throw new ServerException("模板语法不正确", e);
+            throw new BusinessException("模板语法不正确", e);
         }
     }
 
@@ -126,9 +126,9 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             content = sw.toString();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
-            throw new ServerException("渲染模板失败，请检查模板语法", e);
+            throw new BusinessException("渲染模板失败，请检查模板语法", e);
         } catch (TemplateException e) {
-            throw new ServerException("模板语法不正确", e);
+            throw new BusinessException("模板语法不正确", e);
         }
         return content;
     }

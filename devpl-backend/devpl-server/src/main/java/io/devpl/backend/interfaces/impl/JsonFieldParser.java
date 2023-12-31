@@ -1,6 +1,7 @@
 package io.devpl.backend.interfaces.impl;
 
 import de.marhali.json5.*;
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.interfaces.FieldParser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +19,7 @@ public class JsonFieldParser implements FieldParser {
      * @return 字段列表
      */
     @Override
-    public List<Map<String, Object>> parse(String content) {
+    public List<Map<String, Object>> parse(String content) throws FieldParseException {
         try {
             List<Map<String, Object>> res = new ArrayList<>();
             Json5Element root = json5.parse(content);

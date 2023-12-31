@@ -2,12 +2,12 @@
     字段解析输入
  -->
 <script setup lang="ts">
-import { reactive, ref } from "vue"
-import { TabsPaneContext } from "element-plus"
-import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import { reactive, ref } from "vue";
+import { TabsPaneContext } from "element-plus";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 
-const activeTabName = ref("java")
-const modalVisible = ref()
+const activeTabName = ref("java");
+const modalVisible = ref();
 
 /**
  * 字段映射规则
@@ -16,65 +16,73 @@ const modalVisible = ref()
 const columnMappingForm = reactive({
   fieldNameColumn: "1",
   fieldTypeColumn: "2",
-  fieldDescColumn: "3",
-})
+  fieldDescColumn: "3"
+});
 
 const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
-  activeTabName.value = tab.paneName as string
-}
+  activeTabName.value = tab.paneName as string;
+  parserInputType.value = activeTabName.value
+};
 
 const init = () => {
-  modalVisible.value = true
-}
+  modalVisible.value = true;
+};
 
-const fields = ref<FieldInfo[]>()
+const fields = ref<FieldInfo[]>();
 
 type MonacoEditorType = typeof MonacoEditor
 
-const javaEditorRef = ref<MonacoEditorType>()
+const javaEditorRef = ref<MonacoEditorType>();
 // 仅支持mysql
-const sqlEditorRef = ref<MonacoEditorType>()
+const sqlEditorRef = ref<MonacoEditorType>();
 // 支持json5
-const jsonEditorRef = ref<MonacoEditorType>()
+const jsonEditorRef = ref<MonacoEditorType>();
 // TS/JS
-const tsOrJsEditorRef = ref<MonacoEditorType>()
+const tsOrJsEditorRef = ref<MonacoEditorType>();
 // html文本解析
-const html1EditorRef = ref<MonacoEditorType>()
+const html1EditorRef = ref<MonacoEditorType>();
 // html dom文本解析
-const html2EditorRef = ref<MonacoEditorType>()
+const html2EditorRef = ref<MonacoEditorType>();
+// 其他
+const otherEditorRef = ref<MonacoEditorType>();
+
+const parserInputType = ref();
 
 const getInputText = () => {
-  const inputType: string = activeTabName.value
-  let text = ""
+  let inputType: string = activeTabName.value;
+  let text = "";
   switch (inputType) {
     case "java":
-      text = javaEditorRef.value?.getText()
-      break
+      text = javaEditorRef.value?.getText();
+      break;
     case "sql":
-      text = sqlEditorRef.value?.getText()
-      break
+      text = sqlEditorRef.value?.getText();
+      break;
     case "json":
-      text = jsonEditorRef.value?.getText()
-      break
+      text = jsonEditorRef.value?.getText();
+      break;
     case "ts/js":
-      text = tsOrJsEditorRef.value?.getText()
-      break
+      text = tsOrJsEditorRef.value?.getText();
+      break;
     case "html1":
-      text = html1EditorRef.value?.getText()
-      break
+      text = html1EditorRef.value?.getText();
+      break;
     case "html2":
-      text = html2EditorRef.value?.getText()
-      break
+      text = html2EditorRef.value?.getText();
+      break;
+    case "other":
+      text = otherEditorRef.value?.getText();
+      break;
     default:
-      break
+      break;
   }
-  return text
-}
+  return text;
+};
 
 const emits = defineEmits([
   // 完成
-  "finished",
-])
+  "finished"
+]);
 
 /**
  * 暴露API
@@ -85,15 +93,15 @@ defineExpose({
    * 获取待解析的文本
    */
   getParseableText() {
-    return getInputText()
+    return getInputText();
   },
   /**
    * 输入类型
    */
   getInputType() {
-    return activeTabName.value
-  },
-})
+    return parserInputType.value;
+  }
+});
 </script>
 
 <template>
@@ -178,6 +186,16 @@ defineExpose({
           </el-form-item>
         </el-form>
       </el-card>
+    </el-tab-pane>
+    <el-tab-pane label="其他" name="other">
+      <el-select v-model="parserInputType">
+        <el-option label="URL" value="url"></el-option>
+      </el-select>
+      <monaco-editor
+        ref="otherEditorRef"
+        language="html"
+        height="480px"
+      ></monaco-editor>
     </el-tab-pane>
   </el-tabs>
 </template>

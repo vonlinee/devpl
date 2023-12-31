@@ -1,5 +1,6 @@
 package io.devpl.backend.interfaces.impl;
 
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.interfaces.FieldParser;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.NumberUtils;
@@ -18,7 +19,7 @@ public abstract class MappingFieldParserAdapter implements FieldParser {
     }
 
     @Override
-    public List<Map<String, Object>> parse(String content) {
+    public List<Map<String, Object>> parse(String content) throws FieldParseException {
         List<String[]> rows = parseRows(content);
 
         if (CollectionUtils.isEmpty(rows)) {

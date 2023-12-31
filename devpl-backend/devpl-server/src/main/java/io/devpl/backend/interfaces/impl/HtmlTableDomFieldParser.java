@@ -1,5 +1,6 @@
 package io.devpl.backend.interfaces.impl;
 
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.interfaces.FieldParser;
 import io.devpl.backend.utils.ArrayUtils;
 import org.jsoup.Jsoup;
@@ -27,7 +28,7 @@ public class HtmlTableDomFieldParser implements FieldParser {
     }
 
     @Override
-    public List<Map<String, Object>> parse(String content) {
+    public List<Map<String, Object>> parse(String content) throws FieldParseException {
         Document document = Jsoup.parse(content);
 
         Elements tableElements = document.getElementsByTag("table");

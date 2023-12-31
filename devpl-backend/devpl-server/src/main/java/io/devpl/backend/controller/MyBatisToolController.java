@@ -1,14 +1,15 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.DataTypeVO;
 import io.devpl.backend.domain.ParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MyBatisParam;
+import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.util.Arrays;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,12 +59,8 @@ public class MyBatisToolController {
      * 获取Mapper Statement的可选的参数值类型枚举
      */
     @GetMapping("/ms/param/datatypes")
-    public Result<List<DataTypeVO>> getDataTypes() {
-        return Result.ok(Arrays.stream(MapperStatementParamValueType.values()).map(i -> {
-            DataTypeVO dataTypeVO = new DataTypeVO(i.name());
-            dataTypeVO.setLabel(i.getQualifier());
-            return dataTypeVO;
-        }).collect(Collectors.toList()));
+    public Result<List<SelectOptionVO>> getDataTypes() {
+        return Result.ok(Arrays.toList(MapperStatementParamValueType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
     }
 
     /**

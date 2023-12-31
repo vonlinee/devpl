@@ -1,6 +1,7 @@
 package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
@@ -18,7 +19,7 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
 
     IPage<FieldInfo> selectPage(FieldInfoListParam param);
 
-    List<FieldInfo> parseFields(FieldParseParam param);
+    List<FieldInfo> parseFields(FieldParseParam param) throws FieldParseException;
 
     boolean saveFieldsInfos(List<FieldInfo> fieldInfo);
 

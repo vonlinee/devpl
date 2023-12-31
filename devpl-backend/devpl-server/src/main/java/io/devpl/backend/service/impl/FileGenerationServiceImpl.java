@@ -1,7 +1,7 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.boot.CodeGenProperties;
-import io.devpl.backend.common.ServerException;
+import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.domain.FileNode;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.GenTable;
@@ -203,10 +203,10 @@ public class FileGenerationServiceImpl implements FileGenerationService {
             try {
                 return FileUtils.readUTF8String(new File(path));
             } catch (Exception exception) {
-                throw ServerException.create("读取文件%s失败", path, exception.getMessage());
+                throw BusinessException.create("读取文件%s失败", path, exception.getMessage());
             }
         }
-        throw ServerException.create("文件%s不存在", path);
+        throw BusinessException.create("文件%s不存在", path);
     }
 
     /**

@@ -68,7 +68,7 @@
             <vxe-select v-model="data.dataType" transfer clearable filterable>
               <vxe-option
                 v-for="item in fieldDataTypeOptions"
-                :key="item.value"
+                :key="item.key"
                 :value="item.value"
                 :label="item.label"
               ></vxe-option>
@@ -128,15 +128,6 @@ const submitLoading = ref(false);
 const fieldDataTypeOptions = ref([]);
 const typeGroupOptions = ref([]);
 
-const onTypeGroupChange = (param: any, row: any) => {
-  row.typeGroupId = param.value;
-  if (param.value != row.typeGroupId) {
-    apiListDataTypeOptions(param.value).then((res) => {
-      fieldDataTypeOptions.value = res.data;
-    });
-  }
-};
-
 /**
  * 新增和修改表单
  */
@@ -160,6 +151,21 @@ const resetFields = () => {
   };
 };
 
+const getDataTypes = (typeGroupId: string) => {
+  apiListDataTypeOptions(typeGroupId).then((res) => {
+    fieldDataTypeOptions.value = res.data;
+  });
+};
+
+/**
+ * 类型分组下拉菜单联动
+ * @param param
+ * @param row
+ */
+const onTypeGroupChange = (param: any, row: any) => {
+  getDataTypes(param.value);
+};
+
 onMounted(() => {
   apiListTypeGroupOptions().then((res) => {
     typeGroupOptions.value = res.data;
@@ -176,8 +182,9 @@ onMounted(() => {
  * 表单校验规则
  */
 const formRules = reactive<VxeFormPropTypes.Rules>({
-  fieldKey: [{ required: true, message: "请输入字段Key" }],
-  dataType: [{ required: true, message: "请选择字段数据类型" }]
+  fieldKey: [{ required: true, content: "请输入字段Key" }],
+  dataType: [{ required: true, content: "请选择字段数据类型" }],
+  typeGroupId: [{ required: true, content: "请选择字段数据类型" }]
 });
 
 const emits = defineEmits(["refresh-table"]);

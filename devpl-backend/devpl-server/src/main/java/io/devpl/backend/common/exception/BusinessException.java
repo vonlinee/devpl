@@ -1,35 +1,36 @@
-package io.devpl.backend.common;
+package io.devpl.backend.common.exception;
 
 import io.devpl.backend.common.query.StatusCode;
 
 /**
  * 自定义服务器异常
+ * 后台代码所有异常类继承此类
  */
-public final class ServerException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
     private int code;
     private String msg;
 
-    public ServerException(String msg) {
+    public BusinessException(String msg) {
         super(msg);
         this.code = StatusCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
     }
 
-    public ServerException(StatusCode errorCode) {
+    public BusinessException(StatusCode errorCode) {
         super(errorCode.getMsg());
         this.code = errorCode.getCode();
         this.msg = errorCode.getMsg();
     }
 
-    public ServerException(String msg, Throwable e) {
+    public BusinessException(String msg, Throwable e) {
         super(msg, e);
         this.code = StatusCode.INTERNAL_SERVER_ERROR.getCode();
         this.msg = msg;
     }
 
-    public static ServerException create(String msgTemplate, Object... args) {
-        return new ServerException(msgTemplate.formatted(args));
+    public static BusinessException create(String msgTemplate, Object... args) {
+        return new BusinessException(msgTemplate.formatted(args));
     }
 
     public int getCode() {

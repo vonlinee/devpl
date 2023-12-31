@@ -1,5 +1,6 @@
 package io.devpl.backend.interfaces.impl;
 
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.interfaces.FieldParser;
 import io.devpl.codegen.parser.java.JavaASTUtils;
 import io.devpl.codegen.parser.java.MetaField;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Slf4j
 public class JavaFieldParser implements FieldParser {
     @Override
-    public List<Map<String, Object>> parse(String content) {
+    public List<Map<String, Object>> parse(String content) throws FieldParseException {
         List<Map<String, Object>> result = new ArrayList<>();
         try {
             List<MetaField> metaFields = JavaASTUtils.parseFields(content);

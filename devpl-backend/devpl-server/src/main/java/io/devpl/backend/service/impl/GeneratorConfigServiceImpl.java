@@ -1,6 +1,6 @@
 package io.devpl.backend.service.impl;
 
-import io.devpl.backend.common.ServerException;
+import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.config.GeneratorProperties;
 import io.devpl.backend.service.GeneratorConfigService;
 import io.devpl.backend.utils.JSONUtils;
@@ -71,7 +71,7 @@ public class GeneratorConfigServiceImpl implements GeneratorConfigService {
         // 模板配置文件
         InputStream isConfig = this.getClass().getResourceAsStream(template + "config.json");
         if (isConfig == null) {
-            throw new ServerException("模板配置文件，config.json不存在");
+            throw new BusinessException("模板配置文件，config.json不存在");
         }
         return isConfig;
     }

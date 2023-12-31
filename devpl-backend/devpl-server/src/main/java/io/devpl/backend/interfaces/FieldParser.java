@@ -1,5 +1,7 @@
 package io.devpl.backend.interfaces;
 
+import io.devpl.backend.common.exception.FieldParseException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,7 @@ public interface FieldParser {
      * @param content 文本内容，任意内容，可以是SQL
      * @return 字段列表，每个Map代表一个字段信息，包括3个字段：name, type, description
      */
-    List<Map<String, Object>> parse(String content);
+    List<Map<String, Object>> parse(String content) throws FieldParseException;
 
     FieldParser EMPTY = content -> List.of();
 }

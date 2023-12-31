@@ -1,6 +1,5 @@
 package io.devpl.backend.common.exception;
 
-import io.devpl.backend.common.ServerException;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +8,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 异常处理器
+ * 全局异常处理器
  */
 @Slf4j
 @RestControllerAdvice
-public class ServerExceptionHandler {
+public class GlobalExceptionHandler {
 
     /**
      * 参数异常
@@ -31,8 +30,8 @@ public class ServerExceptionHandler {
     /**
      * 处理自定义异常
      */
-    @ExceptionHandler(ServerException.class)
-    public Result<String> handleRenException(ServerException ex) {
+    @ExceptionHandler(BusinessException.class)
+    public Result<String> handleRenException(BusinessException ex) {
         log.error("", ex);
         return Result.error(ex.getCode(), ex.getMsg());
     }

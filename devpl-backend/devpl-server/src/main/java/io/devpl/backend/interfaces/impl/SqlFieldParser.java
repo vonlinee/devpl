@@ -11,6 +11,7 @@ import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 import com.alibaba.druid.wall.WallCheckResult;
 import com.alibaba.druid.wall.WallProvider;
 import com.alibaba.druid.wall.spi.MySqlWallProvider;
+import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.domain.bo.SelectColumn;
 import io.devpl.backend.domain.bo.SelectTable;
 import io.devpl.backend.interfaces.FieldParser;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
  */
 public class SqlFieldParser implements FieldParser, SQLASTVisitor {
     @Override
-    public List<Map<String, Object>> parse(String sql) {
+    public List<Map<String, Object>> parse(String sql) throws FieldParseException {
         WallProvider provider = new MySqlWallProvider();
         WallCheckResult result = provider.check(sql);
         if (result.getViolations().isEmpty()) {
