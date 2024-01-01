@@ -1,19 +1,13 @@
 <template>
-  <vxe-modal
-    v-model="visible"
-    title="导入字段分组"
-    show-footer
-    width="90%"
-    height="90%"
-  >
-    <el-row>
-      <el-col :span="12">
+  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="90%" height="90%">
+    <Splitpanes>
+      <Pane>
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
-      </el-col>
-      <el-col :span="12">
+      </Pane>
+      <Pane>
         <FieldTreeTable ref="fieldTableRef"></FieldTreeTable>
-      </el-col>
-    </el-row>
+      </Pane>
+    </Splitpanes>
     <template #footer>
       <vxe-button @click="parseFields">解析</vxe-button>
       <vxe-button>取消</vxe-button>
@@ -29,6 +23,9 @@ import { reactive, ref, toRaw } from "vue"
 import { isBlank } from "@/utils/tool"
 import { ElMessage } from "element-plus"
 import { apiParseFields } from "@/api/fields"
+
+import { Pane, Splitpanes } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 
 const visible = ref()
 

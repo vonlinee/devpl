@@ -118,7 +118,7 @@ public final class ClassUtils {
      * @return 全类名的包名，比如java.util.List，返回java.util
      */
     public static String getPackageName(String qualifiedClassName) {
-        if (qualifiedClassName == null || qualifiedClassName.length() == 0) {
+        if (qualifiedClassName == null || qualifiedClassName.isEmpty()) {
             return qualifiedClassName;
         }
         if (!qualifiedClassName.contains(".")) {

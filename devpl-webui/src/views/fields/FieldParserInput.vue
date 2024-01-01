@@ -5,7 +5,6 @@
 import { nextTick, onMounted, reactive, ref } from "vue";
 import { TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import CodeRegion from "@/components/CodeRegion.vue";
 import LanguageSelector from "@/components/LanguageSelector.vue";
 
 const activeTabName = ref("java");
@@ -106,52 +105,29 @@ defineExpose({
 </script>
 
 <template>
-  <el-tabs
-    v-model="activeTabName"
-    class="demo-tabs"
-    @tab-click="handleTabClicked"
-  >
+  <el-tabs v-model="activeTabName" class="input-tabs" @tab-click="handleTabClicked">
     <el-tab-pane label="Language" name="java">
-      <el-scrollbar max-height="400px">
+      <div style="display: flex; flex-direction: column; height: 100%;">
         <LanguageSelector></LanguageSelector>
-        <div style="height: 500px">
+        <div style="flex-grow: 1;">
           <monaco-editor language="java" />
         </div>
-      </el-scrollbar>
+      </div>
+
     </el-tab-pane>
     <el-tab-pane label="SQL" name="sql">
-      <monaco-editor
-        ref="sqlEditorRef"
-        language="sql"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="sqlEditorRef" language="sql" height="480px"></monaco-editor>
     </el-tab-pane>
     <el-tab-pane label="JSON" name="json">
-      <monaco-editor
-        ref="jsonEditorRef"
-        language="json"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
     </el-tab-pane>
     <el-tab-pane label="TS/JS" name="ts/js">
-      <monaco-editor
-        ref="jsonEditorRef"
-        language="json"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
     </el-tab-pane>
     <el-tab-pane label="HTML文本" name="html1">
-      <monaco-editor
-        ref="html1EditorRef"
-        language="text"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="html1EditorRef" language="text" height="480px"></monaco-editor>
       <el-card>
-        <el-form
-          :form="columnMappingForm"
-          label-width="150"
-          label-position="left"
-        >
+        <el-form :form="columnMappingForm" label-width="150" label-position="left">
           <el-form-item label="字段名称列">
             <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
           </el-form-item>
@@ -165,17 +141,9 @@ defineExpose({
       </el-card>
     </el-tab-pane>
     <el-tab-pane label="HTML Dom" name="html2">
-      <monaco-editor
-        ref="html2EditorRef"
-        language="html"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="html2EditorRef" language="html" height="480px"></monaco-editor>
       <el-card>
-        <el-form
-          :form="columnMappingForm"
-          label-width="150"
-          label-position="left"
-        >
+        <el-form :form="columnMappingForm" label-width="150" label-position="left">
           <el-form-item label="字段名称列">
             <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
           </el-form-item>
@@ -192,18 +160,17 @@ defineExpose({
       <el-select v-model="parserInputType">
         <el-option label="URL" value="url"></el-option>
       </el-select>
-      <monaco-editor
-        ref="otherEditorRef"
-        language="html"
-        height="480px"
-      ></monaco-editor>
+      <monaco-editor ref="otherEditorRef" language="html" height="480px"></monaco-editor>
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <style scoped lang="scss">
+.input-tabs {
+  height: 100%;
+}
+
 .el-tabs .el-tabs__content {
-  max-height: 100px;
   overflow: auto;
 }
 </style>
