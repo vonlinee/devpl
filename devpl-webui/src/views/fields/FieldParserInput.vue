@@ -2,7 +2,7 @@
     字段解析输入组件
  -->
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref } from "vue";
 import { TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import CodeRegion from "@/components/CodeRegion.vue";
@@ -102,6 +102,7 @@ defineExpose({
     return parserInputType.value;
   }
 });
+
 </script>
 
 <template>
@@ -111,12 +112,12 @@ defineExpose({
     @tab-click="handleTabClicked"
   >
     <el-tab-pane label="Language" name="java">
-      <div style="height: 100%; display: flex; flex-direction: column;background-color: red">
+      <el-scrollbar max-height="400px">
         <LanguageSelector></LanguageSelector>
-        <div style="flex-grow: 1">
-          <monaco-editor ref="javaEditorRef" language="java"></monaco-editor>
+        <div style="height: 500px">
+          <monaco-editor language="java" />
         </div>
-      </div>
+      </el-scrollbar>
     </el-tab-pane>
     <el-tab-pane label="SQL" name="sql">
       <monaco-editor
@@ -201,11 +202,8 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-.demo-tabs > .el-tabs__content {
-  height: 500px;
-  padding: 32px;
-  color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
+.el-tabs .el-tabs__content {
+  max-height: 100px;
+  overflow: auto;
 }
 </style>

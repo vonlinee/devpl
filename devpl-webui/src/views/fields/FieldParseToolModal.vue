@@ -81,7 +81,6 @@ const columnMappingForm = reactive({
     width="80%"
     height="80%"
     :z-index="2000"
-    fullscreen
     @close="onModalClose"
   >
     <template #default>
