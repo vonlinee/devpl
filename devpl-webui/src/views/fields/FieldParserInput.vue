@@ -2,12 +2,12 @@
     字段解析输入组件
  -->
 <script setup lang="ts">
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { TabsPaneContext } from "element-plus";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import LanguageSelector from "@/components/LanguageSelector.vue";
 
-const activeTabName = ref("java");
+const activeTabName = ref("pl");
 const modalVisible = ref();
 
 /**
@@ -22,35 +22,32 @@ const columnMappingForm = reactive({
 
 const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
   activeTabName.value = tab.paneName as string;
-  parserInputType.value = activeTabName.value;
 };
 
 const fields = ref<FieldInfo[]>();
 
 type MonacoEditorType = typeof MonacoEditor
 
-const javaEditorRef = ref<MonacoEditorType>();
+const plInputType = ref('java')
+const htmlInputType = ref('html-table-dom')
+const otherInputType = ref('url')
+
+const plEditorRef = ref<MonacoEditorType>();
 // 仅支持mysql
 const sqlEditorRef = ref<MonacoEditorType>();
 // 支持json5
 const jsonEditorRef = ref<MonacoEditorType>();
-// TS/JS
-const tsOrJsEditorRef = ref<MonacoEditorType>();
 // html文本解析
-const html1EditorRef = ref<MonacoEditorType>();
-// html dom文本解析
-const html2EditorRef = ref<MonacoEditorType>();
+const htmlEditorRef = ref<MonacoEditorType>();
 // 其他
 const otherEditorRef = ref<MonacoEditorType>();
-
-const parserInputType = ref();
 
 const getInputText = () => {
   let inputType: string = activeTabName.value;
   let text = "";
   switch (inputType) {
-    case "java":
-      text = javaEditorRef.value?.getText();
+    case "pl":
+      text = plEditorRef.value?.getText();
       break;
     case "sql":
       text = sqlEditorRef.value?.getText();
@@ -58,14 +55,8 @@ const getInputText = () => {
     case "json":
       text = jsonEditorRef.value?.getText();
       break;
-    case "ts/js":
-      text = tsOrJsEditorRef.value?.getText();
-      break;
-    case "html1":
-      text = html1EditorRef.value?.getText();
-      break;
-    case "html2":
-      text = html2EditorRef.value?.getText();
+    case "html":
+      text = htmlEditorRef.value?.getText();
       break;
     case "other":
       text = otherEditorRef.value?.getText();
@@ -75,6 +66,34 @@ const getInputText = () => {
   }
   return text;
 };
+
+/**
+ * 解析选项
+ */
+const jsonOptions = reactive({
+  /**
+   * 是否解析多层JSON结构
+   */
+  recursive: false,
+  /**
+   * 多层JSON结构如何返回 flat(平铺结构返回), tree(树形结构返回)
+   */
+  resultType: 'flat'
+})
+
+/**
+ * SQL输入解析选项
+ */
+const sqlOptions = reactive({
+  /**
+   * sql语法类型，数据库类型
+   */
+  dbType: 'mysql',
+  /**
+   * sql的类型
+   */
+  sqlType: 'ddl'
+})
 
 const emits = defineEmits([
   // 完成
@@ -98,7 +117,31 @@ defineExpose({
    * 输入类型
    */
   getInputType() {
-    return parserInputType.value;
+    let tabName: string = activeTabName.value;
+    if (tabName == 'pl') {
+      return plInputType.value;
+    } else if (tabName == 'html') {
+      return htmlInputType.value;
+    } else if (tabName == 'other') {
+      return otherInputType.value;
+    } else if (tabName == 'sql') {
+      return sqlOptions;
+    }
+    return tabName;
+  },
+  /**
+   * 获取对应输入类型的选项
+   */
+  getOptions() {
+    let tabName: string = activeTabName.value;
+    if (tabName == 'pl') {
+      return {}
+    } else if (tabName == 'html') {
+      return {}
+    } else if (tabName == 'json') {
+      return jsonOptions
+    }
+    return {};
   }
 });
 
@@ -106,71 +149,112 @@ defineExpose({
 
 <template>
   <el-tabs v-model="activeTabName" class="input-tabs" @tab-click="handleTabClicked">
-    <el-tab-pane label="Language" name="java">
+    <el-tab-pane label="Language" name="pl">
       <div style="display: flex; flex-direction: column; height: 100%;">
-        <LanguageSelector></LanguageSelector>
+        <LanguageSelector @selection-change="(val) => plInputType = val"></LanguageSelector>
         <div style="flex-grow: 1;">
-          <monaco-editor language="java" />
+          <monaco-editor ref="plEditorRef" language="java" />
         </div>
       </div>
-
     </el-tab-pane>
     <el-tab-pane label="SQL" name="sql">
-      <monaco-editor ref="sqlEditorRef" language="sql" height="480px"></monaco-editor>
+      <div style="display: flex; flex-direction: column; height: 100%;">
+        <el-form :form="sqlOptions" inline>
+          <el-form-item>
+            <el-select v-model="sqlOptions.dbType">
+              <!-- 暂时只支持MySQL -->
+              <el-option label="MySQL" value="mysql"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="sqlOptions.sqlType">
+              <el-option label="DDL(建表SQL)" value="ddl"></el-option>
+              <el-option label="QML(查询SQL)" value="qml"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div style="flex-grow: 1;">
+          <monaco-editor ref="sqlEditorRef" language="sql"></monaco-editor>
+        </div>
+      </div>
     </el-tab-pane>
     <el-tab-pane label="JSON" name="json">
-      <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
+      <div style="display: flex; flex-direction: column; height: 100%;">
+        <el-card>
+          <el-form :form="jsonOptions" label-width="100px" label-position="left">
+            <el-form-item label="嵌套解析">
+              <el-switch v-model="jsonOptions.recursive" size="small" />
+            </el-form-item>
+            <el-form-item label="结果类型">
+              <el-radio-group v-model="jsonOptions.resultType" class="ml-4">
+                <el-radio label="flat">平铺</el-radio>
+                <el-radio label="tree">树形结构</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <div style="flex-grow: 1;">
+          <monaco-editor ref="jsonEditorRef" language="json"></monaco-editor>
+        </div>
+      </div>
     </el-tab-pane>
-    <el-tab-pane label="TS/JS" name="ts/js">
-      <monaco-editor ref="jsonEditorRef" language="json" height="480px"></monaco-editor>
-    </el-tab-pane>
-    <el-tab-pane label="HTML文本" name="html1">
-      <monaco-editor ref="html1EditorRef" language="text" height="480px"></monaco-editor>
-      <el-card>
-        <el-form :form="columnMappingForm" label-width="150" label-position="left">
-          <el-form-item label="字段名称列">
-            <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
-          </el-form-item>
-          <el-form-item label="字段数据类型列">
-            <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
-          </el-form-item>
-          <el-form-item label="字段描述信息列">
-            <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-tab-pane>
-    <el-tab-pane label="HTML Dom" name="html2">
-      <monaco-editor ref="html2EditorRef" language="html" height="480px"></monaco-editor>
-      <el-card>
-        <el-form :form="columnMappingForm" label-width="150" label-position="left">
-          <el-form-item label="字段名称列">
-            <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
-          </el-form-item>
-          <el-form-item label="字段数据类型列">
-            <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
-          </el-form-item>
-          <el-form-item label="字段描述信息列">
-            <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-card>
+    <el-tab-pane label="HTML" name="html">
+      <div style="display: flex; flex-direction: column; height: 100%;">
+        <el-select v-model="htmlInputType">
+          <el-option label="HTML Table Dom" value="html-table-dom"></el-option>
+          <el-option label="HTML Table Text" value="html-table-text"></el-option>
+        </el-select>
+        <el-card>
+          <el-form :form="columnMappingForm" label-width="150" inline label-position="left">
+            <el-form-item label="字段名称列">
+              <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
+            </el-form-item>
+            <el-form-item label="字段数据类型列">
+              <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
+            </el-form-item>
+            <el-form-item label="字段描述信息列">
+              <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <div style="flex-grow: 1;">
+          <monaco-editor ref="htmlEditorRef" language="text"></monaco-editor>
+        </div>
+      </div>
     </el-tab-pane>
     <el-tab-pane label="其他" name="other">
-      <el-select v-model="parserInputType">
-        <el-option label="URL" value="url"></el-option>
-      </el-select>
-      <monaco-editor ref="otherEditorRef" language="html" height="480px"></monaco-editor>
+      <div style="display: flex; flex-direction: column; height: 100%;">
+        <el-select v-model="otherInputType">
+          <el-option label="URL" value="url"></el-option>
+        </el-select>
+        <div style="flex-grow: 1;">
+          <monaco-editor ref="otherEditorRef" language="html"></monaco-editor>
+        </div>
+      </div>
     </el-tab-pane>
   </el-tabs>
 </template>
 
-<style scoped lang="scss">
+<style  lang="scss">
 .input-tabs {
   height: 100%;
-}
 
-.el-tabs .el-tabs__content {
-  overflow: auto;
+  .el-tabs__content {
+    height: calc(100% - 55px);
+    overflow-y: auto;
+  }
+
+  .el-tab-pane {
+    height: 100%;
+  }
+
+  .el-card-define {
+    min-height: 100%;
+    height: 100%;
+  }
+
+  .el-card-define>>>.el-card__body {
+    height: 100%;
+  }
 }
 </style>

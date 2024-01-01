@@ -1,14 +1,9 @@
 <!--
-  语言选择
+  语言选择下拉列表：包含语言的logo
 -->
 <template>
-  <el-select v-model="value" class="m-2" placeholder="Select">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    />
+  <el-select v-model="value" class="m-2" placeholder="选择语言" @change="handleChange">
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
   </el-select>
 </template>
 
@@ -19,9 +14,21 @@ const options = [
   {
     value: "java",
     label: "Java"
+  },
+  {
+    value: "ts",
+    label: "TypeScript"
   }
 ];
 const value = ref(options[0].value);
+
+const emits = defineEmits([
+  "selection-change"
+])
+
+const handleChange = (val: any) => {
+  emits("selection-change", val)
+}
 </script>
 
 <style scoped>

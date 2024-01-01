@@ -23,6 +23,8 @@ const fieldParserInputRef = ref();
 
 const parseFields = () => {
   const inputType: string = fieldParserInputRef.value.getInputType();
+  console.log(inputType);
+  
   let text = fieldParserInputRef.value.getParseableText();
   if (isBlank(text)) {
     ElMessage("输入文本为空");
