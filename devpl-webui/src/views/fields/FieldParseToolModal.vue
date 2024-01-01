@@ -23,17 +23,16 @@ const fieldParserInputRef = ref();
 
 const parseFields = () => {
   const inputType: string = fieldParserInputRef.value.getInputType();
-  console.log(inputType);
-  
   let text = fieldParserInputRef.value.getParseableText();
   if (isBlank(text)) {
     ElMessage("输入文本为空");
     return;
   }
+  let options = fieldParserInputRef.value.getOptions();
   apiParseFields({
     type: inputType,
     content: text,
-    ...toRaw(columnMappingForm)
+    options
   }).then((res) => {
     const existed = fields.value || [];
     res.data?.forEach((i) => {
@@ -74,17 +73,8 @@ const columnMappingForm = reactive({
 </script>
 
 <template>
-  <vxe-modal
-    v-model="modalVisible"
-    title="字段解析"
-    :draggable="false"
-    show-footer
-    :mask-closable="false"
-    width="80%"
-    height="80%"
-    :z-index="2000"
-    @close="onModalClose"
-  >
+  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false" width="80%"
+    height="80%" :z-index="2000" @close="onModalClose">
     <template #default>
       <Splitpanes>
         <Pane>
@@ -92,26 +82,10 @@ const columnMappingForm = reactive({
         </Pane>
         <Pane>
           <el-table :data="fields" border height="100%">
-            <ElTableColumn
-              label="名称"
-              prop="fieldKey"
-              show-overflow-tooltip
-            ></ElTableColumn>
-            <ElTableColumn
-              label="数据类型"
-              prop="dataType"
-              show-overflow-tooltip
-            ></ElTableColumn>
-            <ElTableColumn
-              label="默认值"
-              prop="defaultValue"
-              show-overflow-tooltip
-            ></ElTableColumn>
-            <ElTableColumn
-              label="描述信息"
-              prop="description"
-              show-overflow-tooltip
-            ></ElTableColumn>
+            <ElTableColumn label="名称" prop="fieldKey" show-overflow-tooltip></ElTableColumn>
+            <ElTableColumn label="数据类型" prop="dataType" show-overflow-tooltip></ElTableColumn>
+            <ElTableColumn label="默认值" prop="defaultValue" show-overflow-tooltip></ElTableColumn>
+            <ElTableColumn label="描述信息" prop="description" show-overflow-tooltip></ElTableColumn>
             <el-table-column label="操作" fixed="right" align="center">
               <template #default="scope">
                 <el-button link @click="removeRow(scope.row)">删除</el-button>
@@ -128,7 +102,7 @@ const columnMappingForm = reactive({
 </template>
 
 <style scoped lang="scss">
-.demo-tabs > .el-tabs__content {
+.demo-tabs>.el-tabs__content {
   height: 100%;
   overflow-y: scroll;
   padding: 32px;

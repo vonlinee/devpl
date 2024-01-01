@@ -10,21 +10,9 @@ import LanguageSelector from "@/components/LanguageSelector.vue";
 const activeTabName = ref("pl");
 const modalVisible = ref();
 
-/**
- * 字段映射规则
- * 指定列的索引号(从1开始)或者列名称与字段含义的对应关系
- */
-const columnMappingForm = reactive({
-  fieldNameColumn: "1",
-  fieldTypeColumn: "2",
-  fieldDescColumn: "3"
-});
-
 const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
   activeTabName.value = tab.paneName as string;
 };
-
-const fields = ref<FieldInfo[]>();
 
 type MonacoEditorType = typeof MonacoEditor
 
@@ -95,6 +83,16 @@ const sqlOptions = reactive({
   sqlType: 'ddl'
 })
 
+/**
+ * 字段映射规则
+ * 指定列的索引号(从1开始)或者列名称与字段含义的对应关系
+ */
+const htmlParserOptions = reactive({
+  fieldNameColumn: "1",
+  fieldTypeColumn: "2",
+  fieldDescColumn: "3"
+})
+
 const emits = defineEmits([
   // 完成
   "finished"
@@ -137,7 +135,7 @@ defineExpose({
     if (tabName == 'pl') {
       return {}
     } else if (tabName == 'html') {
-      return {}
+      return htmlParserOptions
     } else if (tabName == 'json') {
       return jsonOptions
     }
@@ -205,15 +203,15 @@ defineExpose({
           <el-option label="HTML Table Text" value="html-table-text"></el-option>
         </el-select>
         <el-card>
-          <el-form :form="columnMappingForm" label-width="150" inline label-position="left">
+          <el-form :form="htmlParserOptions" label-width="150" inline label-position="left">
             <el-form-item label="字段名称列">
-              <el-input v-model="columnMappingForm.fieldNameColumn"></el-input>
+              <el-input v-model="htmlParserOptions.fieldNameColumn"></el-input>
             </el-form-item>
             <el-form-item label="字段数据类型列">
-              <el-input v-model="columnMappingForm.fieldTypeColumn"></el-input>
+              <el-input v-model="htmlParserOptions.fieldTypeColumn"></el-input>
             </el-form-item>
             <el-form-item label="字段描述信息列">
-              <el-input v-model="columnMappingForm.fieldDescColumn"></el-input>
+              <el-input v-model="htmlParserOptions.fieldDescColumn"></el-input>
             </el-form-item>
           </el-form>
         </el-card>
