@@ -2313,4 +2313,15 @@ public abstract class StringUtils {
         }
         return charSequence.toString();
     }
+
+    /**
+     * 如果指定字符串为空，则返回指定的值
+     *
+     * @param str         判断的字符串
+     * @param placeholder 指定的值
+     * @return 如果指定字符串为空，则返回指定的值
+     */
+    public static String whenBlank(String str, String placeholder) {
+        return isBlank(str) ? placeholder : str;
+    }
 }

@@ -3,11 +3,11 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.CodeGenerationService;
-import io.devpl.backend.utils.Vals;
 import io.devpl.codegen.lang.LanguageMode;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.FieldData;
 import io.devpl.codegen.template.model.TypeData;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import org.springframework.javapoet.*;
 import org.springframework.stereotype.Service;
@@ -37,12 +37,13 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
      */
     @Override
     public String generateJavaPojoClass(JavaPojoCodeGenParam param) {
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(Vals.whenBlank(param.getClassName(), "Pojo"))
+
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(StringUtils.whenBlank(param.getClassName(), "Pojo"))
             .addModifiers(Modifier.PUBLIC);
 
         for (FieldInfo fieldInfo : param.getFields()) {
             FieldSpec.Builder fb = FieldSpec.builder(TypeName.get(String.class), fieldInfo.getFieldName(), Modifier.PRIVATE)
-                .addJavadoc(Vals.whenBlank(fieldInfo.getDescription(), fieldInfo.getFieldName()));
+                .addJavadoc(StringUtils.whenBlank(fieldInfo.getDescription(), fieldInfo.getFieldName()));
 
             FieldSpec fieldSpec = fb.build();
 

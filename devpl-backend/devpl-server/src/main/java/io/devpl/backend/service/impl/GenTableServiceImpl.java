@@ -15,7 +15,7 @@ import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.EncryptUtils;
-import io.devpl.backend.utils.NamingUtils;
+import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
@@ -113,7 +113,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             table.setAuthor("author");
             table.setEmail("email");
 
-            table.setClassName(NamingUtils.toPascalCase(tableName));
+            table.setClassName(CaseFormat.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
             table.setFunctionName(getFunctionName(tableName));
 

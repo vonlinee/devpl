@@ -10,7 +10,6 @@ import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
-import io.devpl.backend.utils.DateUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.Arrays;
 import io.devpl.sdk.util.StringUtils;
@@ -130,8 +129,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 开发者信息
         dataModel.put("author", table.getAuthor());
         dataModel.put("email", table.getEmail());
-        dataModel.put("datetime", DateUtils.nowDateTimeString());
-        dataModel.put("date", DateUtils.nowDateString());
+        dataModel.put("datetime", DateTimeUtils.stringOfNow());
+        dataModel.put("date", DateTimeUtils.nowDateString());
 
         // 设置字段分类
         setFieldTypeList(dataModel, table);

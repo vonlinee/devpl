@@ -715,4 +715,41 @@ public enum CaseFormat implements NamingStrategy {
         }
         return sb.toString();
     }
+
+
+    /**
+     * 将下划线方式命名的字符串转换为帕斯卡式。<br>
+     * 规则为：
+     * 单字之间不以空格或任何连接符断开
+     * 第一个单字首字母采用大写字母
+     * 后续单字的首字母亦用大写字母
+     * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
+     * 例如：hello_world=》HelloWorld
+     *
+     * @param name 转换前的下划线大写方式命名的字符串
+     * @return 转换后的驼峰式命名的字符串
+     */
+    public static String toPascalCase(String name) {
+        return upperFirst(toCamelCase(name));
+    }
+
+    /**
+     * 大写首字母<br>
+     * 例如：str = name, return Name
+     *
+     * @param str 字符串
+     * @return 字符串
+     */
+    public static String upperFirst(CharSequence str) {
+        if (null == str) {
+            return null;
+        }
+        if (!str.isEmpty()) {
+            char firstChar = str.charAt(0);
+            if (Character.isLowerCase(firstChar)) {
+                return Character.toUpperCase(firstChar) + str.subSequence(1, str.length()).toString();
+            }
+        }
+        return str.toString();
+    }
 }

@@ -2,12 +2,12 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.dao.GenTableFieldMapper;
+import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.entity.GenFieldType;
 import io.devpl.backend.entity.GenTableField;
-import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.service.GenFieldTypeService;
 import io.devpl.backend.service.GenTableFieldService;
-import io.devpl.backend.utils.NamingUtils;
+import io.devpl.codegen.core.CaseFormat;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +48,7 @@ public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, 
         Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
         int index = 0;
         for (GenTableField field : tableFieldList) {
-            field.setAttrName(NamingUtils.toCamelCase(field.getFieldName()));
+            field.setAttrName(CaseFormat.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
             GenFieldType fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
             if (fieldTypeMapping == null) {

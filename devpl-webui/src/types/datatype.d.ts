@@ -24,3 +24,12 @@ type DataTypeGroup = {
    */
   internal: boolean
 }
+
+/**
+ * 数据类型下拉选项
+ */
+type DataTypeSelectOption = {
+  label: string
+  key: number | string
+  value: any
+}
