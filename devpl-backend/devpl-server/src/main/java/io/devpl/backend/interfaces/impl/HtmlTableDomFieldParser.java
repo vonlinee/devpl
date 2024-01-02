@@ -2,7 +2,6 @@ package io.devpl.backend.interfaces.impl;
 
 import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.interfaces.FieldParser;
-import io.devpl.backend.utils.ArrayUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -66,9 +65,6 @@ public class HtmlTableDomFieldParser implements FieldParser {
         }
 
         String[] titleRow = rows.get(0);
-
-
-        Map<String, Integer> indexMap = ArrayUtils.mapValueIndex(titleRow);
 
         List<Map<String, Object>> fields = new ArrayList<>();
         for (int i = 1; i < rows.size(); i++) {

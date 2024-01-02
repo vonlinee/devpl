@@ -26,8 +26,18 @@ import java.util.regex.Pattern;
  * <a href="https://juejin.cn/post/7083280831602982919">...</a>
  */
 public class SqlFieldParser implements FieldParser, SQLASTVisitor {
+
+    private final String dbType;
+
+    public SqlFieldParser(String dbType) {
+        this.dbType = dbType;
+    }
+
     @Override
     public List<Map<String, Object>> parse(String sql) throws FieldParseException {
+
+        DbType dbTypeEnum = DbType.of(dbType);
+
         WallProvider provider = new MySqlWallProvider();
         WallCheckResult result = provider.check(sql);
         if (result.getViolations().isEmpty()) {

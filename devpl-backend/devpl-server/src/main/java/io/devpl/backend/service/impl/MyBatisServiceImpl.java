@@ -1,13 +1,14 @@
 package io.devpl.backend.service.impl;
 
+import io.devpl.backend.utils.SqlFormat;
 import io.devpl.codegen.util.TypeUtils;
-import io.devpl.backend.domain.ParamNode;
+import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.*;
 import io.devpl.sdk.TreeNode;
 import io.devpl.backend.service.MyBatisService;
-import io.devpl.backend.utils.ReflectionUtils;
+import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * TODO 直接解析本地项目所有文件
+ * 直接解析本地项目所有文件
  */
 @Slf4j
 @Service
@@ -46,11 +47,11 @@ public class MyBatisServiceImpl implements MyBatisService {
     DataSource dataSource;
 
     @Override
-    public List<ParamNode> getMapperStatementParams(String content, boolean inferType) {
+    public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
         ParseResult result = this.parseMapperStatement(content, inferType);
         // 根节点不使用
         TreeNode<ParamMeta> root = result.getRoot();
-        final List<ParamNode> rows = new LinkedList<>();
+        final List<MsParamNode> rows = new LinkedList<>();
         if (root.hasChildren()) {
             for (TreeNode<ParamMeta> node : root.getChildren()) {
                 this.recursive(node, rows, -1);
@@ -84,7 +85,7 @@ public class MyBatisServiceImpl implements MyBatisService {
     }
 
     /**
-     * @param ognlVar ognl变量列表
+     * @param ognlVar ognl变量列表  变量名称可能带有多级嵌套形式
      * @return 转化成树形结构
      */
     private TreeNode<ParamMeta> tree(Set<ParamMeta> ognlVar) {
@@ -92,10 +93,16 @@ public class MyBatisServiceImpl implements MyBatisService {
         TreeNode<ParamMeta> current = forest;
         for (ParamMeta expression : ognlVar) {
             TreeNode<ParamMeta> root = current;
-            for (String data : expression.getName().split("\\.")) {
-                current = current.addChild(new ParamMeta(data));
+            // 包含嵌套结构则继续向下
+            if (expression.getName().indexOf(".") > 0) {
+                for (String data : expression.getName().split("\\.")) {
+                    current = current.addChild(new ParamMeta(data));
+                }
+                current = root;
+            } else {
+                // 直接添加
+                current.addChild(expression);
             }
-            current = root;
         }
         return forest;
     }
@@ -104,9 +111,8 @@ public class MyBatisServiceImpl implements MyBatisService {
     public String getExecutableSql(MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject) {
         Configuration configuration = sqlSessionFactory.getConfiguration();
         ParameterHandler parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        try {
+        try (Connection connection = dataSource.getConnection()) {
             // 获取数据源
-            Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql());
             parameterHandler.setParameters(preparedStatement);
             String sql = preparedStatement.toString();
@@ -124,9 +130,9 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     @Override
     public String getSqlOfMappedStatement(GetSqlParam param) {
-        List<TreeNode<ParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
+        List<TreeNode<MsParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
         Map<String, Object> map = new HashMap<>();
-        for (TreeNode<ParamNode> treeNode : treeNodes) {
+        for (TreeNode<MsParamNode> treeNode : treeNodes) {
             fillParamMap(treeNode, map);
         }
         ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true);
@@ -190,15 +196,15 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param node     参数节点
      * @param paramMap 嵌套Map
      */
-    private void fillParamMap(TreeNode<ParamNode> node, Map<String, Object> paramMap) {
+    private void fillParamMap(TreeNode<MsParamNode> node, Map<String, Object> paramMap) {
         if (node.hasChildren()) {
             Map<String, Object> childMap = new HashMap<>();
-            for (TreeNode<ParamNode> child : node.getChildren()) {
+            for (TreeNode<MsParamNode> child : node.getChildren()) {
                 fillParamMap(child, childMap);
             }
             paramMap.put(node.getData().getName(), childMap);
         } else {
-            ParamNode paramNode = node.getData();
+            MsParamNode paramNode = node.getData();
             paramMap.put(paramNode.getName(), getParamValueByType(paramNode));
         }
     }
@@ -211,8 +217,8 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param rows       存储转换结果
      * @param parentId   父节点ID
      */
-    private void recursive(TreeNode<ParamMeta> parentNode, List<ParamNode> rows, int parentId) {
-        ParamNode parentRow = new ParamNode();
+    private void recursive(TreeNode<ParamMeta> parentNode, List<MsParamNode> rows, int parentId) {
+        MsParamNode parentRow = new MsParamNode();
         parentRow.setId(rows.size());
         parentRow.setKey(rows.size());
         if (parentId != -1) {
@@ -236,9 +242,9 @@ public class MyBatisServiceImpl implements MyBatisService {
      *
      * @param params 参数列表
      */
-    private List<TreeNode<ParamNode>> buildParamNodeTree(List<ParamNode> params) {
-        Map<Integer, TreeNode<ParamNode>> parentNodeMap = new HashMap<>();
-        for (ParamNode curNode : params) {
+    private List<TreeNode<MsParamNode>> buildParamNodeTree(List<MsParamNode> params) {
+        Map<Integer, TreeNode<MsParamNode>> parentNodeMap = new HashMap<>();
+        for (MsParamNode curNode : params) {
             // 父节点为null则默认为-1
             if (curNode.isLeaf()) {
                 Integer parentId = curNode.getParentKey();
@@ -248,14 +254,14 @@ public class MyBatisServiceImpl implements MyBatisService {
                     if (parentNodeMap.containsKey(parentId)) {
                         parentNodeMap.get(parentId).addChild(curNode);
                     } else {
-                        parentNodeMap.get(parentId).addChild(new ParamNode());
+                        parentNodeMap.get(parentId).addChild(new MsParamNode());
                     }
                 }
             } else {
                 // 父节点
                 final Integer nodeId = curNode.getKey();
                 if (parentNodeMap.containsKey(nodeId)) {
-                    TreeNode<ParamNode> treeNode = parentNodeMap.get(nodeId);
+                    TreeNode<MsParamNode> treeNode = parentNodeMap.get(nodeId);
                     treeNode.getChildren().add(new TreeNode<>(curNode));
                 } else {
                     parentNodeMap.put(nodeId, new TreeNode<>(curNode));
@@ -273,7 +279,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param node 参数表中的一行数据
      * @return 参数值，将字符串推断为某个数据类型，比如字符串类型的数字，将会转化为数字类型
      */
-    public Object getParamValueByType(ParamNode node) {
+    public Object getParamValueByType(MsParamNode node) {
         Object val = node.getValue();
         if (!(val instanceof String)) {
             return val;
@@ -352,7 +358,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
         } else if (parent instanceof ForEachSqlNode fesn) {
             /**
-             * 在使用mybatis的foreach遍历查询的时候，item起的名字不能跟后面的字段的参数名一样，否则会影响到查询的结果
+             * 在使用mybatis的foreach遍历查询的时候，item属性起的名字不能跟后面的字段的参数名一样，否则会影响到查询的结果
              */
             String expression = (String) ReflectionUtils.getValue(fesn, "collectionExpression");
             // 应忽略item参数
@@ -360,7 +366,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 item = ReflectionUtils.getTypedValue(fesn, "item", "");
             }
             if (!Objects.equals(expression, item)) {
-                paramMetaMap.put(expression, new ParamMeta(expression));
+                paramMetaMap.put(expression, new ParamMeta(expression, MapperStatementParamValueType.COLLECTION));
                 SqlNode contents = (SqlNode) ReflectionUtils.getValue(fesn, "contents");
                 searchParams(contents, paramMetaMap, item);
             }
@@ -394,6 +400,12 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
     }
 
+    /**
+     * 解析if表达式中的参数
+     *
+     * @param testCondition 条件表达式
+     * @param expressions   存放参数结果
+     */
     private void parseIfExpression(String testCondition, Map<String, ParamMeta> expressions) {
         try {
             Object node = Ognl.parseExpression(testCondition);
@@ -402,6 +414,8 @@ public class MyBatisServiceImpl implements MyBatisService {
             } else if (node instanceof ASTProperty astPropertyNode) {
                 ParamMeta meta = new ParamMeta(astPropertyNode.toString());
                 expressions.put(meta.getName(), meta);
+            } else {
+                log.warn("if判断中未处理的节点类型 {}", node.getClass());
             }
         } catch (OgnlException e) {
             // ignore
@@ -424,6 +438,12 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
     }
 
+    /**
+     * 搜索子节点
+     *
+     * @param parent  父节点
+     * @param results 保存结果
+     */
     private void searchChildren(SimpleNode parent, Map<String, ParamMeta> results) {
         int childrenCount = parent.jjtGetNumChildren();
         for (int i = 0; i < childrenCount; i++) {

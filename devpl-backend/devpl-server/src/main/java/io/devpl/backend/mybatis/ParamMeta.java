@@ -15,11 +15,18 @@ public class ParamMeta {
     private String name;
 
     /**
+     * 默认字符串
+     *
      * @see MapperStatementParamValueType#getType()
      */
-    private int type;
+    private int type = MapperStatementParamValueType.STRING.getType();
 
     public ParamMeta(String name) {
         this.name = name;
+    }
+
+    public ParamMeta(String name, MapperStatementParamValueType msPvType) {
+        this.name = name;
+        this.type = msPvType.getType();
     }
 }

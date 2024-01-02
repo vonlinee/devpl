@@ -1,4 +1,4 @@
-package io.devpl.backend.mybatis;
+package io.devpl.backend.utils;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;

@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class ParamNode {
+public class MsParamNode {
 
     /**
      * 这里的ID无意义，只是作为一个唯一的序号
@@ -53,7 +53,7 @@ public class ParamNode {
     /**
      * 参数类型，枚举值
      */
-    private String dataType;
+    private String dataType = MapperStatementParamValueType.STRING.getQualifier();
 
     /**
      * 是否叶子结点
@@ -63,7 +63,7 @@ public class ParamNode {
     /**
      * 子节点
      */
-    private List<ParamNode> children;
+    private List<MsParamNode> children;
 
     private MapperStatementParamValueType valueType;
 

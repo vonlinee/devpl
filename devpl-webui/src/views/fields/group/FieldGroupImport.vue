@@ -26,6 +26,7 @@ import { apiParseFields } from "@/api/fields"
 
 import { Pane, Splitpanes } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
+import { Message } from "@/hooks/message"
 
 const visible = ref()
 
@@ -43,8 +44,11 @@ const parseFields = () => {
   apiParseFields({
     type: inputType,
     content: text,
-    options,
+    ...options,
   }).then((res) => {
+    if (res.data?.failed) {
+      Message.error(res.data?.errorMsg)
+    }
     fieldTableRef.value.setFields(res.data)
   })
 }

@@ -10,8 +10,6 @@ import java.util.*;
 @Slf4j
 public class JsonFieldParser implements FieldParser {
 
-    private final Json5 json5 = new Json5(Json5Options.builder().build().remainComment(true));
-
     /**
      * 仅支持单层JSON对象
      *
@@ -22,32 +20,7 @@ public class JsonFieldParser implements FieldParser {
     public List<Map<String, Object>> parse(String content) throws FieldParseException {
         try {
             List<Map<String, Object>> res = new ArrayList<>();
-            Json5Element root = json5.parse(content);
-            if (root.isJson5Object()) {
-                Json5Object obj = root.getAsJson5Object();
-                for (Map.Entry<String, Json5Element> entry : obj.entrySet()) {
-                    Map<String, Object> fieldInfo = new HashMap<>();
-                    fieldInfo.put(FIELD_NAME, entry.getKey());
 
-                    Json5Element value = entry.getValue();
-                    if (value.isJson5Primitive()) {
-                        Json5Primitive primitive = value.getAsJson5Primitive();
-                        if (primitive.isBoolean()) {
-                            fieldInfo.put(FIELD_TYPE, "Boolean");
-                        } else if (primitive.isString()) {
-                            fieldInfo.put(FIELD_TYPE, "Boolean");
-                        } else if (primitive.isNumber()) {
-                            fieldInfo.put(FIELD_TYPE, "Boolean");
-                        }
-                    }
-
-                    Json5Comment comment = obj.getComment(entry.getKey());
-                    if (comment != null) {
-                        fieldInfo.put(FIELD_DESCRIPTION, comment.getText());
-                    }
-                    res.add(fieldInfo);
-                }
-            }
             return res;
         } catch (Exception exception) {
             log.error("[字段解析 JSON] 解析失败", exception);

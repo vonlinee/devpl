@@ -13,6 +13,7 @@ import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue";
 import { useCrud } from "@/hooks";
 import { DataTableOption } from "@/hooks/interface";
 import { ElMessage } from "element-plus";
+import { Message } from "@/hooks/message";
 
 /**
  * 表格数据模型
@@ -62,13 +63,7 @@ const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } =
 const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
   if (parsedFields && parsedFields.length > 0) {
     apiSaveBatchFields(parsedFields).then((res) => {
-      ElMessage.info({
-        message: "新增成功",
-        duration: 500,
-        onClose: () => {
-          getDataList();
-        }
-      });
+      Message.info("新增成功", getDataList)
     });
   }
 };
@@ -76,11 +71,7 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
 
 <template>
   <el-card>
-    <el-form
-      :inline="true"
-      :model="option.queryForm"
-      @keyup.enter="getDataList()"
-    >
+    <el-form :inline="true" :model="option.queryForm" @keyup.enter="getDataList()">
       <div class="query-form">
         <el-form-item label="字段Key" :show-message="false">
           <el-input v-model="option.queryForm.fieldKey"></el-input>
@@ -89,45 +80,26 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
           <el-input v-model="option.queryForm.fieldName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" @click="option.queryForm = {}"
-          >重置
-          </el-button
-          >
+          <el-button type="danger" @click="option.queryForm = {}">重置
+          </el-button>
           <el-button type="primary" @click="getDataList()">查询</el-button>
-          <el-button type="primary" @click="showSaveOrUpdateModal(null)"
-          >新增
-          </el-button
-          >
-          <el-button type="primary" @click="fieldImportModalRef.init()"
-          >导入
-          </el-button
-          >
+          <el-button type="primary" @click="showSaveOrUpdateModal()">新增
+          </el-button>
+          <el-button type="primary" @click="fieldImportModalRef.init()">导入
+          </el-button>
         </el-form-item>
       </div>
     </el-form>
   </el-card>
 
   <el-table :border="true" height="525" :data="option.dataList">
-    <el-table-column
-      type="selection"
-      width="60"
-      header-align="center"
-      align="center"
-    ></el-table-column>
+    <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
     <el-table-column prop="fieldKey" label="字段Key"></el-table-column>
     <el-table-column prop="fieldName" label="名称"></el-table-column>
     <el-table-column prop="typeGroupId" label="类型组"></el-table-column>
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
-    <el-table-column
-      prop="defaultValue"
-      label="默认值"
-      show-overflow-tooltip
-    ></el-table-column>
-    <el-table-column
-      prop="description"
-      label="描述信息"
-      show-overflow-tooltip
-    ></el-table-column>
+    <el-table-column prop="defaultValue" label="默认值" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="description" label="描述信息" show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" align="center" fixed="right" width="130">
       <template #default="{ row }">
         <el-button link @click="showSaveOrUpdateModal(row)">编辑</el-button>
@@ -135,27 +107,14 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination
-    :current-page="option.page"
-    background
-    :page-size="option.limit"
-    :page-sizes="option.pageSizes"
-    :total="option.total"
-    layout="total, sizes, prev, next, jumper"
-    @size-change="sizeChangeHandle"
-    @current-change="currentChangeHandle"
-  >
+  <el-pagination :current-page="option.page" background :page-size="option.limit" :page-sizes="option.pageSizes"
+    :total="option.total" layout="total, sizes, prev, next, jumper" @size-change="sizeChangeHandle"
+    @current-change="currentChangeHandle">
   </el-pagination>
 
-  <save-or-update-field
-    ref="saveOrUpdateFieldModal"
-    @refresh-table="getDataList"
-  ></save-or-update-field>
+  <save-or-update-field ref="saveOrUpdateFieldModal" @refresh-table="getDataList"></save-or-update-field>
 
-  <field-parse-tool-modal
-    ref="fieldImportModalRef"
-    @finished="handleFieldParseFinished"
-  ></field-parse-tool-modal>
+  <field-parse-tool-modal ref="fieldImportModalRef" @finished="handleFieldParseFinished"></field-parse-tool-modal>
 </template>
 
 <style scoped lang="scss">

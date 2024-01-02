@@ -1,7 +1,6 @@
 package io.devpl.backend.domain.param;
 
-import io.devpl.backend.domain.ParamNode;
-import lombok.Data;
+import io.devpl.backend.domain.MsParamNode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,7 @@ public class GetSqlParam {
     /**
      * 参数
      */
-    private List<ParamNode> msParams;
+    private List<MsParamNode> msParams;
 
     /**
      * 实际sql还是预编译的sql

@@ -29,7 +29,6 @@ open module devpl.codegen {
     requires java.sql;
     requires lombok;
     requires devpl.sdk.internal;
-    requires org.mybatis.generator;
     requires com.github.javaparser.core;
     requires druid;
     requires jsqlparser;

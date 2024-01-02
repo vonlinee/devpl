@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref, toRaw } from "vue";
-import { ElMessage, ElTableColumn } from "element-plus";
+import { Action, ElMessage, ElMessageBox, ElTableColumn } from "element-plus";
 import { apiParseFields } from "@/api/fields";
 import { isBlank } from "@/utils/tool";
 import { Splitpanes, Pane } from "splitpanes";
@@ -32,10 +32,11 @@ const parseFields = () => {
   apiParseFields({
     type: inputType,
     content: text,
-    options
+    ...options
   }).then((res) => {
     const existed = fields.value || [];
-    res.data?.forEach((i) => {
+    // 合并
+    res.data?.fields.forEach((i: any) => {
       if (!existed.find((f) => f.fieldKey == i.fieldKey)) {
         existed?.push(i);
       }
@@ -61,15 +62,6 @@ const removeRow = (row: FieldInfo) => {
   fields.value = fields.value?.filter((f) => f.fieldKey != row.fieldKey);
 };
 
-/**
- * 字段映射规则
- * 指定列的索引号(从1开始)或者列名称与字段含义的对应关系
- */
-const columnMappingForm = reactive({
-  fieldNameColumn: "1",
-  fieldTypeColumn: "2",
-  fieldDescColumn: "3"
-});
 </script>
 
 <template>

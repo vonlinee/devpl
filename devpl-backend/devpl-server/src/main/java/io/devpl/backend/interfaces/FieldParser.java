@@ -23,5 +23,8 @@ public interface FieldParser {
      */
     List<Map<String, Object>> parse(String content) throws FieldParseException;
 
+    /**
+     * 默认空实现
+     */
     FieldParser EMPTY = content -> List.of();
 }

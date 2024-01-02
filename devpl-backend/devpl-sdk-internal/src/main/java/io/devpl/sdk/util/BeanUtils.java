@@ -1,9 +1,8 @@
-package io.devpl.backend.utils;
+package io.devpl.sdk.util;
 
 import java.lang.reflect.*;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * BeanUtils
@@ -18,6 +17,12 @@ public class BeanUtils {
     public static final Byte DEFAULT_BYTE = (byte) 0;
     public static final Character DEFAULT_CHAR = (char) 0;
 
+    /**
+     * 判断方法名是否是符合JavaBean规范的getter方法名
+     *
+     * @param name 方法名称
+     * @return 是否是getter方法名
+     */
     public static boolean isGetterName(String name) {
         return name.startsWith("get") || name.startsWith("is") || name.startsWith("has");
     }
@@ -135,15 +140,12 @@ public class BeanUtils {
 
     public static boolean isCollectionType(Type type) {
         if (type instanceof Class && Collection.class.isAssignableFrom((Class<?>) type)) {
-/*
-            if (type instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType)type;
-                if (pt.getActualTypeArguments().length == 1) {
-                    return true;
-                }
-            }
-*/
             return true;
+        }
+        if (type instanceof ParameterizedType pt) {
+            if (pt.getActualTypeArguments().length == 1) {
+                return true;
+            }
         }
         return isArrayType(type);
     }
@@ -194,9 +196,7 @@ public class BeanUtils {
     private static Method getGetMethod(Method[] methods, String getName, String isName, boolean ignoreCase) {
         for (Method method : methods) {
             // The method must be public
-            if ((!Modifier.isPublic(method.getModifiers())) || (!Modifier.isPublic(method.getDeclaringClass()
-                .getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType()
-                .equals(void.class))) {
+            if ((!Modifier.isPublic(method.getModifiers())) || (!Modifier.isPublic(method.getDeclaringClass().getModifiers())) || (method.getParameterTypes().length != 0) || (method.getReturnType().equals(void.class))) {
                 continue;
             } else if (!ignoreCase && method.getName().equals(getName)) {
                 // If it matches the get name, it's the right method
@@ -226,10 +226,8 @@ public class BeanUtils {
     private static Method getSetMethod(Method[] methods, String setName, boolean ignoreCase) {
         for (Method method : methods) {
             // The method name must match
-            if (!(ignoreCase ? method.getName().equalsIgnoreCase(setName) : method.getName()
-                .equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method
-                .getDeclaringClass()
-                .getModifiers()) || method.getParameterTypes().length != 1) continue;
+            if (!(ignoreCase ? method.getName().equalsIgnoreCase(setName) : method.getName().equals(setName)) || !Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()) || method.getParameterTypes().length != 1)
+                continue;
 
             return method;
         }
@@ -357,5 +355,27 @@ public class BeanUtils {
             field.setAccessible(true);
         }
         return (T) field.get(object);
+    }
+
+    /**
+     * 对象转Map
+     *
+     * @param obj 对象
+     * @return Map
+     */
+    public static Map<String, Object> toMap(Object obj) {
+        if (obj == null) {
+            return Collections.emptyMap();
+        }
+        Class<?> clazz = obj.getClass();
+        Map<String, Object> map = new HashMap<>();
+        for (Field field : clazz.getDeclaredFields()) {
+            ReflectionUtils.makeAccessible(field);
+            try {
+                map.put(field.getName(), field.get(obj));
+            } catch (IllegalAccessException ignore) {
+            }
+        }
+        return map;
     }
 }

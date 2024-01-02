@@ -68,7 +68,7 @@ interface FieldParseParam {
  * @param param
  */
 export const apiParseFields = (param: FieldParseParam) => {
-  return http.post<FieldInfo[]>("/api/field/parse", param)
+  return http.post("/api/field/parse", param)
 }
 
 /**

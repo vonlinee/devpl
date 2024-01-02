@@ -8,6 +8,7 @@ import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.dao.FieldInfoMapper;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.domain.vo.FieldParseResult;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.interfaces.FieldParser;
@@ -42,9 +43,11 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public List<FieldInfo> listFields(FieldInfoListParam param) {
         LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldKey, param.getKeyword());
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldName, param.getKeyword());
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getDescription, param.getKeyword());
+        if (!StringUtils.isBlank(param.getKeyword())) {
+            qw.like(FieldInfo::getFieldKey, param.getKeyword());
+            qw.or().like(FieldInfo::getDescription, param.getKeyword());
+            qw.or().like(FieldInfo::getFieldName, param.getKeyword());
+        }
         return baseMapper.selectList(qw);
     }
 
@@ -53,40 +56,60 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
         LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
         qw.notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys));
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldKey, param.getKeyword());
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getDescription, param.getKeyword());
-        qw.like(StringUtils.hasText(param.getKeyword()), FieldInfo::getFieldName, param.getKeyword());
+        if (!StringUtils.isBlank(param.getKeyword())) {
+            qw.and(w -> {
+                w.like(FieldInfo::getFieldKey, param.getKeyword());
+                w.or().like(FieldInfo::getDescription, param.getKeyword());
+                w.or().like(FieldInfo::getFieldName, param.getKeyword());
+            });
+        }
         qw.orderBy(true, false, FieldInfo::getCreateTime);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
 
     /**
      * 解析字段
+     * TODO 完善类型推断
      *
      * @param param 参数
      * @return 字段列表
      */
     @Override
-    public List<FieldInfo> parseFields(FieldParseParam param) throws FieldParseException {
-        String type = param.getType();
-        String content = param.getContent();
+    public FieldParseResult parseFields(FieldParseParam param) throws FieldParseException {
+        final String[] types = param.getType().split(">");
+        final String content = param.getContent();
         FieldParser parser = FieldParser.EMPTY;
-        if ("java".equalsIgnoreCase(type)) {
-            parser = new JavaFieldParser();
-        } else if ("json".equalsIgnoreCase(type)) {
-            parser = new JsonFieldParser();
-        } else if ("html1".equalsIgnoreCase(type)) {
+        if ("pl".equalsIgnoreCase(types[0])) {
+            if ("java".equalsIgnoreCase(types[1])) {
+                parser = new JavaFieldParser();
+            }
+        } else if ("json".equalsIgnoreCase(types[0])) {
+            if ("json5".equalsIgnoreCase(types[1])) {
+                parser = new Json5FieldParser();
+            } else if ("json".equalsIgnoreCase(types[1])) {
+                parser = new JsonFieldParser();
+            }
+        } else if ("html".equalsIgnoreCase(types[0])) {
             String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
-            parser = new HtmlTableContentFieldParser(columnMapping);
-        } else if ("html2".equalsIgnoreCase(type)) {
-            String[] columnMapping = {param.getFieldNameColumn(), param.getFieldTypeColumn(), param.getFieldDescColumn()};
-            parser = new HtmlTableDomFieldParser(columnMapping);
-        } else if ("sql".equalsIgnoreCase(type)) {
-            parser = new SqlFieldParser();
-        } else if ("url".equalsIgnoreCase(type)) {
-            parser = new URLFieldParser();
+            if ("table-dom".equalsIgnoreCase(types[1])) {
+                parser = new HtmlTableDomFieldParser(columnMapping);
+            } else if ("table-text".equalsIgnoreCase(types[1])) {
+                parser = new HtmlTableContentFieldParser(columnMapping);
+            }
+        } else if ("sql".equalsIgnoreCase(types[0])) {
+            if ("dml".equalsIgnoreCase(types[1])) {
+
+            } else if ("qml".equalsIgnoreCase(types[1])) {
+                parser = new SqlFieldParser(param.getDbType());
+            }
+        } else if ("other".equalsIgnoreCase(types[0])) {
+            if ("url".equalsIgnoreCase(types[1])) {
+                parser = new URLFieldParser();
+            }
         }
-        return convertParseResultToFields(parser.parse(content));
+        FieldParseResult result = new FieldParseResult();
+        result.setFields(convertParseResultToFields(parser.parse(content)));
+        return result;
     }
 
     private List<FieldInfo> convertParseResultToFields(List<Map<String, Object>> fields) {

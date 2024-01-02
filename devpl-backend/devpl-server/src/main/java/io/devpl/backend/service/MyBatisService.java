@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import io.devpl.backend.domain.ParamNode;
+import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.ParamMeta;
@@ -22,7 +22,7 @@ public interface MyBatisService {
      * @param inferType 推断参数的类型
      * @return 参数列表
      */
-    List<ParamNode> getMapperStatementParams(String content, boolean inferType);
+    List<MsParamNode> getMapperStatementParams(String content, boolean inferType);
 
     /**
      * 解析字符串形式的Mapper Statement

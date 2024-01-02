@@ -1,7 +1,7 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.ParamNode;
+import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MyBatisParam;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * MyBatis 控制器
@@ -47,7 +46,7 @@ public class MyBatisToolController {
      * 获取Mapper Statement的所有参数名及推断参数类型
      */
     @PostMapping("/ms/params")
-    public Result<List<ParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
+    public Result<List<MsParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
         String content = param.getMapperStatement();
         if (StringUtils.isBlank(content)) {
             return Result.error("文本为空");

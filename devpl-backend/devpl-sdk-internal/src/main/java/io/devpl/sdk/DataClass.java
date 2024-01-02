@@ -23,15 +23,4 @@ public final class DataClass {
     public static void setObjectFactory(Supplier<DataObject> supplier) {
         INSTANCE.supplier = supplier;
     }
-
-    public static void main(String[] args) {
-        DataObject obj = DataClass.newObject();
-
-        obj.put("name", "zs");
-
-        String name = obj.getTypedValue("name", "");
-
-        System.out.println(name);
-
-    }
 }

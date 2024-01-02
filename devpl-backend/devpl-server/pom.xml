@@ -13,6 +13,7 @@
     </parent>
 
     <properties>
+        <!--跳过单元测试-->
         <skipTests>true</skipTests>
         <mybatisplus.version>3.5.5</mybatisplus.version>
         <hutool.version>5.8.11</hutool.version>
@@ -76,24 +77,20 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
-
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>${freemarker.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.github.wnameless</groupId>
             <artifactId>json-flattener</artifactId>
             <version>0.7.1</version>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>

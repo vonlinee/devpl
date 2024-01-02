@@ -17,8 +17,9 @@ const handleTabClicked = (tab: TabsPaneContext, event: Event) => {
 type MonacoEditorType = typeof MonacoEditor
 
 const plInputType = ref('java')
-const htmlInputType = ref('html-table-dom')
+const htmlInputType = ref('table-dom')
 const otherInputType = ref('url')
+const jsonInputType = ref('json')
 
 const plEditorRef = ref<MonacoEditorType>();
 // 仅支持mysql
@@ -29,31 +30,6 @@ const jsonEditorRef = ref<MonacoEditorType>();
 const htmlEditorRef = ref<MonacoEditorType>();
 // 其他
 const otherEditorRef = ref<MonacoEditorType>();
-
-const getInputText = () => {
-  let inputType: string = activeTabName.value;
-  let text = "";
-  switch (inputType) {
-    case "pl":
-      text = plEditorRef.value?.getText();
-      break;
-    case "sql":
-      text = sqlEditorRef.value?.getText();
-      break;
-    case "json":
-      text = jsonEditorRef.value?.getText();
-      break;
-    case "html":
-      text = htmlEditorRef.value?.getText();
-      break;
-    case "other":
-      text = otherEditorRef.value?.getText();
-      break;
-    default:
-      break;
-  }
-  return text;
-};
 
 /**
  * 解析选项
@@ -109,23 +85,48 @@ defineExpose({
    * 获取待解析的文本
    */
   getParseableText() {
-    return getInputText();
+    let inputType: string = activeTabName.value;
+    let text = "";
+    switch (inputType) {
+      case "pl":
+        text = plEditorRef.value?.getText();
+        break;
+      case "sql":
+        text = sqlEditorRef.value?.getText();
+        break;
+      case "json":
+        text = jsonEditorRef.value?.getText();
+        break;
+      case "html":
+        text = htmlEditorRef.value?.getText();
+        break;
+      case "other":
+        text = otherEditorRef.value?.getText();
+        break;
+      default:
+        break;
+    }
+    return text;
   },
   /**
    * 输入类型
+   * 二级分类:第一级标签名称，第二级每个标签内的选项值
    */
   getInputType() {
     let tabName: string = activeTabName.value;
+    let categoryName = undefined
     if (tabName == 'pl') {
-      return plInputType.value;
+      categoryName = plInputType.value;
     } else if (tabName == 'html') {
-      return htmlInputType.value;
+      categoryName = htmlInputType.value;
     } else if (tabName == 'other') {
-      return otherInputType.value;
+      categoryName = otherInputType.value;
     } else if (tabName == 'sql') {
-      return sqlOptions;
+      categoryName = tabName;
+    } else if (tabName == 'json') {
+      categoryName = jsonInputType.value
     }
-    return tabName;
+    return tabName + ">" + categoryName;
   },
   /**
    * 获取对应输入类型的选项
@@ -138,6 +139,8 @@ defineExpose({
       return htmlParserOptions
     } else if (tabName == 'json') {
       return jsonOptions
+    } else if (tabName == 'sql') {
+      return sqlOptions
     }
     return {};
   }
@@ -180,6 +183,12 @@ defineExpose({
       <div style="display: flex; flex-direction: column; height: 100%;">
         <el-card>
           <el-form :form="jsonOptions" label-width="100px" label-position="left">
+            <el-form-item label="语法格式">
+              <el-select v-model="jsonInputType">
+                <el-option label="JSON5" value="json5"></el-option>
+                <el-option label="JSON" value="json"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="嵌套解析">
               <el-switch v-model="jsonOptions.recursive" size="small" />
             </el-form-item>
@@ -199,8 +208,8 @@ defineExpose({
     <el-tab-pane label="HTML" name="html">
       <div style="display: flex; flex-direction: column; height: 100%;">
         <el-select v-model="htmlInputType">
-          <el-option label="HTML Table Dom" value="html-table-dom"></el-option>
-          <el-option label="HTML Table Text" value="html-table-text"></el-option>
+          <el-option label="HTML Table Dom" value="table-dom"></el-option>
+          <el-option label="HTML Table Text" value="table-text"></el-option>
         </el-select>
         <el-card>
           <el-form :form="htmlParserOptions" label-width="150" inline label-position="left">

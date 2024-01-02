@@ -5,6 +5,7 @@ import io.devpl.backend.common.exception.FieldParseException;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.domain.vo.FieldParseResult;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 
@@ -19,7 +20,7 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
 
     IPage<FieldInfo> selectPage(FieldInfoListParam param);
 
-    List<FieldInfo> parseFields(FieldParseParam param) throws FieldParseException;
+    FieldParseResult parseFields(FieldParseParam param) throws FieldParseException;
 
     boolean saveFieldsInfos(List<FieldInfo> fieldInfo);
 

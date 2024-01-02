@@ -6,19 +6,28 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.dao.ProjectInfoMapper;
+import io.devpl.backend.domain.ProjectModule;
 import io.devpl.backend.domain.param.ProjectListParam;
 import io.devpl.backend.domain.vo.ProjectSelectVO;
 import io.devpl.backend.entity.ProjectInfo;
 import io.devpl.backend.service.ProjectService;
-import io.devpl.backend.utils.ArrayUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.ZipUtils;
+import io.devpl.sdk.util.Arrays;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -147,7 +156,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
         destRoot = new File(replaceData(destPath, replaceMap));
 
         // 获取排除后的源文件
-        File[] srcFiles = ArrayUtils.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !ArrayUtils.contains(exclusions, file.getName()));
+        File[] srcFiles = Arrays.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !Arrays.contains(exclusions, file.getName()));
 
         if (srcFiles == null) {
             throw new IOException("没有需要拷贝的文件 " + srcRoot);
@@ -179,8 +188,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
         for (File dest : destList) {
             try {
                 List<String> lines = FileUtils.readLines(dest, StandardCharsets.UTF_8);
-                List<String> newList = lines.stream().map(line -> replaceData(line, replaceMap))
-                    .collect(Collectors.toList());
+                List<String> newList = lines.stream().map(line -> replaceData(line, replaceMap)).collect(Collectors.toList());
                 FileUtils.writeLines(dest, newList);
             } catch (IOException e) {
                 log.error("内容格式化失败", e);
@@ -200,5 +208,59 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
             str = str.replaceAll(key, map.get(key));
         }
         return str;
+    }
+
+    public static void main(String[] args) {
+        test();
+    }
+
+    public static void test() {
+        try {
+            File inputFile = new File("");
+            inputFile = new File(inputFile.getAbsolutePath(), "pom.xml");
+
+            //通过DocumentBuilderFactory工厂
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            //通过DocumentBuilderFactory工厂创建DocumentBuilder对象
+            DocumentBuilder documentBuilder = dbf.newDocumentBuilder();
+            //使用DocumentBuilder的parse方法，从文件中解析出Document（文档）对象
+            Document document = documentBuilder.parse(inputFile);
+            //通过Document的getElementsByTagName方法，获取相应的NodeList节点集
+
+            // 获取文档元素，及根节点
+            Element documentElement = document.getDocumentElement();
+            ProjectModule rootModule = new ProjectModule(inputFile.getName());
+            NodeList childNodes = documentElement.getChildNodes();
+            for (int i = 0; i < childNodes.getLength(); i++) {
+                Node item = childNodes.item(i);
+                switch (item.getNodeName()) {
+                    case "groupId" -> {
+                        item.normalize();
+                        rootModule.setGroupId(item.getTextContent());
+                    }
+                    case "artifactId" -> {
+                        item.normalize();
+                        rootModule.setArtifactId(item.getTextContent());
+                        rootModule.setName(item.getTextContent());
+                    }
+                    case "version" -> {
+                        item.normalize();
+                        rootModule.setVersion(item.getTextContent());
+                    }
+                    case "modules" -> {
+                        childNodes = item.getChildNodes();
+                        for (int j = 0; j < childNodes.getLength(); j++) {
+                            item = childNodes.item(j);
+                            if (item.getNodeType() == Node.ELEMENT_NODE) {
+                                rootModule.addModule(item.getTextContent());
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(rootModule);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

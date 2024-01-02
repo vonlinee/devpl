@@ -6,6 +6,7 @@ import io.devpl.backend.domain.param.FieldGroupListParam;
 import io.devpl.backend.domain.param.FieldGroupParam;
 import io.devpl.backend.domain.param.FieldInfoListParam;
 import io.devpl.backend.domain.param.FieldParseParam;
+import io.devpl.backend.domain.vo.FieldParseResult;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.entity.GroupField;
@@ -39,7 +40,7 @@ public class FieldInfoController {
     }
 
     /**
-     * 分页查询列表
+     * 分页查询字段列表
      *
      * @return 列表
      */
@@ -84,7 +85,7 @@ public class FieldInfoController {
      * @return 解析得到的字段信息
      */
     @PostMapping(value = "/parse")
-    public Result<List<FieldInfo>> parseFields(@RequestBody FieldParseParam param) {
+    public Result<FieldParseResult> parseFields(@RequestBody FieldParseParam param) {
         return Result.ok(fieldInfoService.parseFields(param));
     }
 

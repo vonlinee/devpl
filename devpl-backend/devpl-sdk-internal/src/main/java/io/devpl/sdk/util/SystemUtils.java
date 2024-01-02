@@ -57,7 +57,6 @@ public class SystemUtils {
             return false;
         } catch (LinkageError ex) {
             // unexpected error, need to let the user know the actual error
-            ex.printStackTrace();
             return false;
         }
     }

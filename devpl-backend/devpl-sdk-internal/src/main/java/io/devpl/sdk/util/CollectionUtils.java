@@ -247,7 +247,7 @@ public abstract class CollectionUtils {
      * @param <E>        集合元素类型
      * @return 统计数量，返回Int
      */
-    public static <E> int counti(Collection<E> collection, Predicate<E> condition) {
+    public static <E> int countInt(Collection<E> collection, Predicate<E> condition) {
         if (isEmpty(collection)) {
             return 0;
         }
@@ -262,7 +262,7 @@ public abstract class CollectionUtils {
      * @param <E>        集合元素类型
      * @return 统计数量，返回long
      */
-    public static <E> long countl(Collection<E> collection, Predicate<E> condition) {
+    public static <E> long countLong(Collection<E> collection, Predicate<E> condition) {
         if (isEmpty(collection)) {
             return 0;
         }
