@@ -1,24 +1,11 @@
 <template>
-  <param-table :rows="rows" :data-types="dataTypes"></param-table>
+  <param-table></param-table>
 </template>
 <script lang="ts" setup>
-import ParamTable from '@/components/ParamTable.vue';
-import { ref, onMounted } from 'vue'
-
-const rows = ref<ParamItem[]>([
-  {
-    id: 1,
-    name: "name",
-    leaf: false,
-  }
-])
-const dataTypes = ref([])
-onMounted(() => {
-
-})
+import ParamTable from "@/views/devtools/mybatis/ParamTable.vue";
 
 </script>
-<style lang = "scss" >
+<style lang="scss">
 .el-tabs__content {
   height: calc(100% - 55px);
   overflow-y: auto;

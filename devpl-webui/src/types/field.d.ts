@@ -1,5 +1,6 @@
 /**
  * 字段信息
+ * 任何类型的字段
  */
 type FieldInfo = {
   /**
@@ -18,6 +19,10 @@ type FieldInfo = {
    * 字段名，中文名
    */
   fieldName?: string
+  /**
+   * 值，对应数据类型的值
+   */
+  value?: any
   /**
    * 数据类型
    */
@@ -44,6 +49,9 @@ type FieldInfo = {
   editing?: boolean
 }
 
+/**
+ * 字段组信息
+ */
 type FieldGroup = {
   id: number
   groupName: string
