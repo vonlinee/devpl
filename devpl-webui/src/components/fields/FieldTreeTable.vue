@@ -9,7 +9,7 @@
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
     <el-table-column prop="description" label="注释" show-overflow-tooltip></el-table-column>
     <template #empty>
-      <el-text @click="insertEmptyRow">暂无数据</el-text>
+      <el-text @click="insertEmptyRow" class="click-target">暂无数据</el-text>
     </template>
   </el-table>
 </template>

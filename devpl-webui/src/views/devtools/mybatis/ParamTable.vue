@@ -5,8 +5,14 @@
       <template #default="{ row }">
         <a class="field-label" v-if="!(row.editing || false)" :title="row.description || '无'" @click="fireInput(row)">{{
           row.fieldKey }}</a>
-        <input v-if="row.editing || false" class="field-input" ref="currentInputRef" @blur="row.editing = false"
-          @change="(e) => onInputChange(e, row)" @keyup.enter="(e) => onInputChange(e, row)">
+
+        <div v-if="row.editing || false" style="display: flex; flex-direction: row; height: 100%; align-items: center;">
+          <input class="field-input" ref="currentInputRef" @blur="row.editing = false"
+            @change="(e) => onInputChange(e, row)" @keyup.enter="(e) => onInputChange(e, row)">
+        </div>
+        <el-icon :size="16" @click="openValueEditor(row)" style="cursor: pointer;">
+            <Edit />
+          </el-icon>
       </template>
     </el-table-column>
     <el-table-column label="值" prop="fieldKey">
@@ -48,7 +54,7 @@
     </el-table-column>
 
     <template #empty>
-      <el-text @click="addRow()">添加</el-text>
+      暂无数据, <a @click="addRow()" style="color: rgb(40, 133, 238);">点击添加</a>
     </template>
   </el-table>
 
@@ -224,11 +230,11 @@ defineExpose({
 
 .field-input {
   // width: 100%;
-  flex-grow: 1;
+  // flex-grow: 1;
   height: 100%;
   outline-style: none;
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 8px;
+  padding: 5px;
 }
 </style>
