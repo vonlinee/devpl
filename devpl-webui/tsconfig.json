@@ -21,7 +21,8 @@
       "web-bluetooth",
       "vite/client",
       "node",
-      "vite-plugin-svg-icons/client"
+      "vite-plugin-svg-icons/client",
+      "element-plus/global"
     ],
     "paths": {
       "@/*": [

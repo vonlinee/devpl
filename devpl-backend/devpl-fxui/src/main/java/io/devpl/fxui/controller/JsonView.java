@@ -8,7 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

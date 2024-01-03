@@ -13,7 +13,8 @@ import java.util.Map.Entry;
 
 /**
  * A MyBatis Generator plugin to use annotations of Lombok.
- * For example, use @Data annotation instead of getter ands setter.
+ * For example, use @Getter
+@Setter annotation instead of getter ands setter.
  * @author Paolo Predonzani (<a href="http://softwareloop.com/">...</a>)
  */
 public class LombokPlugin extends PluginAdapter {
@@ -124,7 +125,8 @@ public class LombokPlugin extends PluginAdapter {
     public void setProperties(Properties properties) {
         super.setProperties(properties);
 
-        //@Data is default annotation
+        //@Getter
+@Setter is default annotation
         annotations.add(LombokAnnotation.DATA);
 
         for (Entry<Object, Object> entry : properties.entrySet()) {
@@ -159,7 +161,8 @@ public class LombokPlugin extends PluginAdapter {
     }
 
     private enum LombokAnnotation {
-        DATA("data", "@Data", "lombok.Data"),
+        DATA("data", "@Getter
+@Setter", "lombok.Data"),
         BUILDER("builder", "@Builder", "lombok.Builder"),
         ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"),
         NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"),

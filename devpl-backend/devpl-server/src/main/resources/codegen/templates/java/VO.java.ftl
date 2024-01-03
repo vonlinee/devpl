@@ -2,7 +2,8 @@ package ${package}.${moduleName}.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import java.io.Serializable;
 import ${package}.framework.common.utils.DateUtils;
 <#list importList as i>
@@ -15,7 +16,8 @@ import ${i!};
  * @author ${author} ${email}
  * @since ${version} ${date}
  **/
-@Data
+@Getter
+@Setter
 @Schema(description = "${tableComment}")
 public class ${ClassName}VO implements Serializable {
     private static final long serialVersionUID = 1L;

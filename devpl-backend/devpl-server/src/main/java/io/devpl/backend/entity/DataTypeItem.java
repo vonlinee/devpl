@@ -2,7 +2,8 @@ package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
 /**
  * 数据类型表
  */
-@Data
+@Getter
+@Setter
 @TableName("data_type_item")
 public class DataTypeItem {
     /**

@@ -1,10 +1,12 @@
 package io.devpl.backend.domain.param;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class DataTypeMappingParam {
 
     private Long typeId;

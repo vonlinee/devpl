@@ -1,11 +1,13 @@
 package io.devpl.fxui.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 数据库信息
  */
-@Data
+@Getter
+@Setter
 public class DatabaseInfo {
 
     private String name;

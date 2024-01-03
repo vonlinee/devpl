@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import LanguageSelector from "@/components/LanguageSelector.vue";
-import { computed, onMounted, ref } from "vue";
+import { ref } from "vue";
 import { CopyDocument } from "@element-plus/icons-vue";
 import { ElIcon, ElMessage } from "element-plus";
 

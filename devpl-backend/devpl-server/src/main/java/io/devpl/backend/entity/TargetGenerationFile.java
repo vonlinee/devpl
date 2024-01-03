@@ -4,14 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 /**
  * 生成的文件信息，以及使用的模板信息
  */
-@Data
+@Getter
+@Setter
 @TableName("target_generation_file")
 public class TargetGenerationFile implements Serializable {
     /**

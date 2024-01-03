@@ -2,13 +2,15 @@ package io.devpl.codegen.parser.sql;
 
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 通用的列定义信息
  * @see com.alibaba.druid.sql.ast.statement.SQLColumnDefinition
  */
-@Data
+@Getter
+@Setter
 public class ColumnDefinitionWrapper {
     final SQLColumnDefinition columnDefinition;
     private String columnName;

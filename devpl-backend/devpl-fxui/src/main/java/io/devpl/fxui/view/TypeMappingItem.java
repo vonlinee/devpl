@@ -2,9 +2,11 @@ package io.devpl.fxui.view;
 
 import io.devpl.fxui.components.table.FXTableViewColumn;
 import io.devpl.fxui.components.table.FXTableViewModel;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @FXTableViewModel
 public class TypeMappingItem {
 

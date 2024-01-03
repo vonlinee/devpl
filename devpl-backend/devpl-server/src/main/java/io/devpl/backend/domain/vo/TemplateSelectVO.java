@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 模板选择列表VO
  */
-@Data
+@Getter
+@Setter
 public class TemplateSelectVO {
 
     /**

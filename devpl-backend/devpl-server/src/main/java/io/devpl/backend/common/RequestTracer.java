@@ -24,7 +24,6 @@ public class RequestTracer implements HandlerInterceptor {
             sb.append(entry.getKey()).append("=").append(StringUtils.join(entry.getValue()));
         }
         log.info("url => {}?{}", request.getRequestURI().replace(servletContextPath, ""), sb);
-
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

@@ -16,6 +16,13 @@ import java.util.Map;
  */
 @Slf4j
 public class JavaFieldParser implements FieldParser {
+
+    /**
+     * 类型解析加上包名
+     *
+     * @param content 文本内容，Java类
+     * @return 字段列表
+     */
     @Override
     public List<Map<String, Object>> parse(String content) throws FieldParseException {
         List<Map<String, Object>> result = new ArrayList<>();
@@ -31,6 +38,7 @@ public class JavaFieldParser implements FieldParser {
             }
         } catch (IOException e) {
             log.error("[字段解析 JAVA] 解析失败", e);
+            throw new FieldParseException(e);
         }
         return result;
     }

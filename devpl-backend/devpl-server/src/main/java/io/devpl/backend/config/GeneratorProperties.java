@@ -2,13 +2,15 @@ package io.devpl.backend.config;
 
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 生成器配置属性
  */
-@Data
+@Getter
+@Setter
 @ConfigurationProperties("codegen")
 public class GeneratorProperties {
 

@@ -1,11 +1,13 @@
 package io.devpl.fxui.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * SSH连接信息
  */
-@Data
+@Getter
+@Setter
 public class SSHConnectionConfiguration {
     private String lport;
     private String rport;

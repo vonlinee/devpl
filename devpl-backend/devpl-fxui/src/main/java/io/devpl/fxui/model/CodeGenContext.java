@@ -1,13 +1,15 @@
 package io.devpl.fxui.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
 /**
  * 代码生成参数
  */
-@Data
+@Getter
+@Setter
 public class CodeGenContext {
 
     private ProjectConfiguration projectConfiguration;

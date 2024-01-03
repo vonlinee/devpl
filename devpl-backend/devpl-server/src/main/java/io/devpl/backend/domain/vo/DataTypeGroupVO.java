@@ -1,8 +1,10 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DataTypeGroupVO {
 
     private Long id;

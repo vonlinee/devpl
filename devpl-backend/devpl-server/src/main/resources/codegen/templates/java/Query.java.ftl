@@ -1,7 +1,8 @@
 package ${package}.${moduleName}.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import ${package}.framework.common.query.Query;
 
@@ -15,7 +16,8 @@ import ${i!};
  * @author ${author} ${email}
  * @since ${version} ${date}
  **/
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = false)
 @Schema(description = "${tableComment}查询")
 public class ${ClassName}Query extends Query {

@@ -7,13 +7,15 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.devpl.fxui.components.table.FXTableViewColumn;
 import io.devpl.fxui.components.table.FXTableViewModel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 /**
  * 字段信息
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "field_spec")

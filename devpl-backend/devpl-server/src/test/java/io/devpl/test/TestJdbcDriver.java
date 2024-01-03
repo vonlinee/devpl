@@ -1,10 +1,10 @@
-package io.devpl.backend.jdbc;
+package io.devpl.test;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class Test {
+public class TestJdbcDriver {
 
     private static final String DRIVER_FILE_8 = "D:\\Temp\\drivers\\mysql\\5.1.49\\mysql-connector-java-5.1.49.jar";
     private static final String DRIVER_FILE_5 = "D:\\Temp\\drivers\\mysql\\8.0.18\\mysql-connector-java-8.0.18.jar";
@@ -13,7 +13,7 @@ public class Test {
 
 //        Class<?> driverClass = Class.forName("java.sql.Driver");
 
-        System.out.println(Test.class.getClassLoader());
+        System.out.println(TestJdbcDriver.class.getClassLoader());
 
 
         // 先new一个URLClassLoader加载mysql8的驱动

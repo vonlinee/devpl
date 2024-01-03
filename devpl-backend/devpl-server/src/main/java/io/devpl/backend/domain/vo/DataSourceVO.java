@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 数据源列表
  */
-@Data
+@Getter
+@Setter
 public class DataSourceVO {
 
     /**

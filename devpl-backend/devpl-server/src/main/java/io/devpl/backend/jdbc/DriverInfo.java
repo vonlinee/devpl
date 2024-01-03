@@ -4,7 +4,7 @@ import io.devpl.codegen.db.JDBCDriver;
 
 import java.sql.Driver;
 
-public class DriverInfo {
+class DriverInfo {
 
     Driver driver;
     String version;

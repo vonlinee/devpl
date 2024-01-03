@@ -2,13 +2,15 @@ package io.devpl.backend.domain.param;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 /**
  * 查询公共参数
  */
-@Data
+@Getter
+@Setter
 public class Query {
     private String code;
     private String tableName;

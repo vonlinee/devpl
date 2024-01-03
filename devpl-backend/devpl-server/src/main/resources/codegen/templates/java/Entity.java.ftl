@@ -1,6 +1,7 @@
 package ${package}.${moduleName}.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.*;
@@ -18,7 +19,8 @@ import ${baseClass.packageName}.${baseClass.code};
 * @since ${version} ${date}
 */
 <#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>
-@Data
+@Getter
+@Setter
 @TableName("${tableName}")
 public class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {
 <#list fieldList as field>

@@ -1,10 +1,12 @@
 package io.devpl.fxui.tools.mybatis;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.mapping.MappedStatement;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class ParseResult {
 

@@ -1,24 +1,13 @@
+<!-- 
+  可拖拽树结构
+ -->
 <template>
-  <el-table
-    ref="fieldTable"
-    border
-    row-key="id"
-    :data="tableData"
-    default-expand-all
-    @expand-change="handleExpandChange"
-  >
-    <el-table-column
-      type="selection"
-      width="35"
-      align="center"
-    ></el-table-column>
-    <el-table-column prop="fieldKey" label="Key"></el-table-column>
-    <el-table-column
-      prop="fieldName"
-      label="字段名称"
-      show-overflow-tooltip
-    ></el-table-column>
+  <el-table ref="fieldTable" border row-key="id" :data="tableData" default-expand-all @expand-change="handleExpandChange">
+    <el-table-column type="selection" width="35" align="center"></el-table-column>
+    <el-table-column prop="fieldKey" label="Key" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="fieldName" label="字段名称" show-overflow-tooltip></el-table-column>
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
+    <el-table-column prop="description" label="注释" show-overflow-tooltip></el-table-column>
     <template #empty>
       <el-text @click="insertEmptyRow">暂无数据</el-text>
     </template>

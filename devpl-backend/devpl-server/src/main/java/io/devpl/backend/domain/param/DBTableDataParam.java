@@ -1,9 +1,11 @@
 package io.devpl.backend.domain.param;
 
 import io.devpl.backend.entity.DbConnInfo;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class DBTableDataParam {
 
     private Integer pageIndex;

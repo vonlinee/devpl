@@ -1,4 +1,4 @@
-package io.devpl.backend.common.aspect;
+package io.devpl.backend.common.annotation;
 
 import java.lang.annotation.*;
 

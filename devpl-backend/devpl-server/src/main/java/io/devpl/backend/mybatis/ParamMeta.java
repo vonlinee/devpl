@@ -1,7 +1,8 @@
 package io.devpl.backend.mybatis;
 
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Getter;
 import lombok.Setter;
 

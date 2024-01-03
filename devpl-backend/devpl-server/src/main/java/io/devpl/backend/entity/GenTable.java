@@ -1,7 +1,8 @@
 package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
 /**
  * 数据表
  */
-@Data
+@Getter
+@Setter
 @TableName("gen_table")
 public class GenTable {
 

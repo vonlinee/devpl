@@ -1,8 +1,10 @@
 package io.devpl.fxui.utils.maven;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class MavenCoordinate {
 
     private String groupId;

@@ -4,7 +4,8 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,8 @@ import java.util.Map;
 /**
  * 存放导入信息
  */
-@Data
+@Getter
+@Setter
 public class ImportInfo {
 
     private String packageName;

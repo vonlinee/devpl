@@ -2,7 +2,8 @@ package io.devpl.backend.mybatis;
 
 import io.devpl.sdk.TreeNode;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.mapping.MappedStatement;

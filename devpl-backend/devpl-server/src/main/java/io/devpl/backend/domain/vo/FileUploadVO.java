@@ -1,6 +1,7 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,8 @@ import java.util.List;
 /**
  * 文件上传结果
  */
-@Data
+@Getter
+@Setter
 public class FileUploadVO {
 
     /**

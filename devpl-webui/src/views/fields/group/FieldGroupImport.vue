@@ -49,7 +49,7 @@ const parseFields = () => {
     if (res.data?.failed) {
       Message.error(res.data?.errorMsg)
     }
-    fieldTableRef.value.setFields(res.data)
+    fieldTableRef.value.setFields(res.data.fields)
   })
 }
 

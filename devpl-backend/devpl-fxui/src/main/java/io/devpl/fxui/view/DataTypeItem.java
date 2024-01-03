@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.devpl.fxui.components.table.FXTableViewColumn;
 import io.devpl.fxui.components.table.FXTableViewModel;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,8 @@ import java.time.LocalDateTime;
 /**
  * 数据类型表
  */
-@Data
+@Getter
+@Setter
 @TableName("data_type_item")
 @FXTableViewModel
 public class DataTypeItem {

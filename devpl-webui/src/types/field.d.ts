@@ -1,12 +1,11 @@
 /**
  * 字段信息
- * 任何类型的字段
  */
 type FieldInfo = {
   /**
    * ID
    */
-  id: string | number
+  id?: string | number
   /**
    * 父节点ID
    */
@@ -26,7 +25,7 @@ type FieldInfo = {
   /**
    * 数据类型
    */
-  dataType?: string
+  dataType?: string | number
   /**
    * 描述信息
    */
@@ -44,15 +43,29 @@ type FieldInfo = {
    */
   children?: FieldInfo[]
   /**
+   * 是否有子节点
+   */
+  hasChildren?: boolean
+  /**
    * 是否处于编辑状态
    */
   editing?: boolean
+  /**
+   * 是否是叶子结点，默认是叶子结点
+   */
+  leaf?: boolean
 }
 
 /**
  * 字段组信息
  */
 type FieldGroup = {
+  /**
+   * 字段组ID
+   */
   id: number
+  /**
+   * 字段组名称
+   */
   groupName: string
 }

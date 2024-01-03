@@ -6,7 +6,8 @@ import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.DBUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
@@ -76,7 +77,8 @@ public class PoiUtils2 {
         return tableInfo;
     }
 
-    @Data
+    @Getter
+@Setter
     static class TableSchemeInfo {
         private InfoSchemaTable table;
         private List<InfoSchemaColumn> columnList;
@@ -146,7 +148,8 @@ public class PoiUtils2 {
         final XWPFParagraph empty2 = document.createParagraph();
     }
 
-    @Data
+    @Getter
+@Setter
     static class TableDescription {
 
         String tableName;
@@ -206,7 +209,8 @@ public class PoiUtils2 {
         final String text = paragraph.getText();
     }
 
-    @Data
+    @Getter
+@Setter
     @ExcelTarget("数据表定义")
     static class Row {
 

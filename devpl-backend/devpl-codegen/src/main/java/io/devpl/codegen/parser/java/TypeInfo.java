@@ -1,12 +1,14 @@
 package io.devpl.codegen.parser.java;
 
 import com.github.javaparser.ast.body.TypeDeclaration;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 类型信息
  */
-@Data
+@Getter
+@Setter
 public class TypeInfo {
 
     // 简单类名

@@ -11,6 +11,12 @@ public class BusinessException extends RuntimeException {
     private int code;
     private String msg;
 
+    public BusinessException(Throwable throwable) {
+        super(throwable);
+        this.code = StatusCode.INTERNAL_SERVER_ERROR.getCode();
+        this.msg = throwable.getMessage();
+    }
+
     public BusinessException(String msg) {
         super(msg);
         this.code = StatusCode.INTERNAL_SERVER_ERROR.getCode();

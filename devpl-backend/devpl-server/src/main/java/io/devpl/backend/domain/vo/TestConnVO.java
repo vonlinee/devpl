@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 类似Idea的测试连接结果
  */
-@Data
+@Getter
+@Setter
 public class TestConnVO {
 
     /**

@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.param;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 文件下载参数
  */
-@Data
+@Getter
+@Setter
 public class FileDownloadParam {
 
     /**

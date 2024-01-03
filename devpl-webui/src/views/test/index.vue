@@ -4,6 +4,9 @@
 <script lang="ts" setup>
 import ParamTable from "@/views/devtools/mybatis/ParamTable.vue";
 
+
+
+
 </script>
 <style lang="scss">
 .el-tabs__content {

@@ -1,7 +1,8 @@
 package io.devpl.fxui.model;
 
 import io.devpl.fxui.utils.Utils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
@@ -11,7 +12,8 @@ import java.util.List;
  * 长驻内存：每个表对应一个单例
  * 表生成配置
  */
-@Data
+@Getter
+@Setter
 public class TableGeneration {
 
     /**

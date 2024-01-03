@@ -36,7 +36,7 @@ public class EncryptParameterAspect {
     /**
      * 加密解密切点方法
      */
-    @Pointcut("@annotation(io.devpl.backend.common.aspect.EncryptionDecryption)")
+    @Pointcut("@annotation(io.devpl.backend.common.annotation.EncryptionDecryption)")
     public void encryptionDecryptionPointCut() {
     }
 

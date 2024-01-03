@@ -1,11 +1,13 @@
 package io.devpl.backend.domain.vo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 数据类型映射VO
  */
-@Data
+@Getter
+@Setter
 public class DataTypeMappingVO {
 
     private Long typeId;

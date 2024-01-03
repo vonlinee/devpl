@@ -3,7 +3,8 @@ package io.devpl.fxui.controller.domain;
 import io.devpl.codegen.jdbc.CommonJavaType;
 import io.devpl.codegen.jdbc.JDBCType;
 import io.devpl.codegen.type.JavaType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.SQLType;
 import java.util.ArrayList;
@@ -12,7 +13,8 @@ import java.util.List;
 /**
  * 类型映射
  */
-@Data
+@Getter
+@Setter
 public class TypeMapping {
 
     public static List<TypeMapping> mapppings = defaultMapping();

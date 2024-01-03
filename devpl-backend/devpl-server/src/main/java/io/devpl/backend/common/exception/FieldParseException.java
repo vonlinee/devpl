@@ -7,4 +7,8 @@ public class FieldParseException extends BusinessException {
     public FieldParseException(String msg) {
         super(msg);
     }
+
+    public FieldParseException(Throwable throwable) {
+        super(throwable);
+    }
 }

@@ -1,11 +1,13 @@
 package io.devpl.backend.config.template;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 开发者信息
  */
-@Data
+@Getter
+@Setter
 public class DeveloperInfo {
     /**
      * 作者

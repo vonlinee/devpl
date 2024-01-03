@@ -13,17 +13,17 @@ import org.apache.ibatis.session.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyXmlStatemtnBuilder extends XMLStatementBuilder {
+public class MyXmlStatementBuilder extends XMLStatementBuilder {
 
     // 覆盖父类的final属性
     private XNode context;
 
-    public MyXmlStatemtnBuilder(Configuration configuration, XNode context) {
+    public MyXmlStatementBuilder(Configuration configuration, XNode context) {
         // mapper文件路径
         this(configuration, new MyMapperBuilderAssistant(configuration, null), context, null);
     }
 
-    MyXmlStatemtnBuilder(Configuration configuration, MapperBuilderAssistant builderAssistant, XNode context, String databaseId) {
+    MyXmlStatementBuilder(Configuration configuration, MapperBuilderAssistant builderAssistant, XNode context, String databaseId) {
         super(configuration, builderAssistant, context, databaseId);
     }
 

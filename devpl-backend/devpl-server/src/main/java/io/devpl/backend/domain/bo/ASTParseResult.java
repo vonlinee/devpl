@@ -1,10 +1,12 @@
 package io.devpl.backend.domain.bo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ASTParseResult {
 
     private List<ASTClassInfo> classInfoList;

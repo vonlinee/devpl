@@ -55,8 +55,6 @@ import type {
 } from "element-plus/es/components/tree/src/tree.type";
 import { Minus, Plus } from "@element-plus/icons";
 import { watch } from "vue";
-import { CopyDocument } from "@element-plus/icons-vue";
-import { ElIcon } from "element-plus";
 
 const currentInputRef = ref();
 

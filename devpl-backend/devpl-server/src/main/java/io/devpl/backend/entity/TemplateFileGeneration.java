@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 模板文件生成关联表
@@ -13,7 +14,8 @@ import lombok.Data;
  * @author vonlinee vonlinee@163.com
  * @since 1.0.0 2023-11-25
  */
-@Data
+@Getter
+@Setter
 @TableName("template_file_generation")
 public class TemplateFileGeneration {
     /**

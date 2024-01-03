@@ -160,7 +160,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         // TODO 支持所有类型的SQL标签
         XNode selectNode = xPathParser.evalNode("select");
         MyBatisConfiguration configuration = new MyBatisConfiguration(sqlSessionFactory.getConfiguration());
-        MyXmlStatemtnBuilder statementParser = new MyXmlStatemtnBuilder(configuration, selectNode);
+        MyXmlStatementBuilder statementParser = new MyXmlStatementBuilder(configuration, selectNode);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
         return configuration.getMappedStatements().stream().findFirst().orElse(null);

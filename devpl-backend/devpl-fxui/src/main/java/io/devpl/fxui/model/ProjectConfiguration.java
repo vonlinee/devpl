@@ -1,14 +1,16 @@
 package io.devpl.fxui.model;
 
 import io.devpl.fxui.controller.mbg.ProjectLayout;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 /**
  * 项目配置
  */
-@Data
+@Getter
+@Setter
 public class ProjectConfiguration {
 
     /**

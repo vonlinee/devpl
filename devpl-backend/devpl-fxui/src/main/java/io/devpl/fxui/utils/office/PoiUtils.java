@@ -9,7 +9,8 @@ import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
 import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.DBUtils;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xwpf.usermodel.*;
@@ -79,7 +80,8 @@ public class PoiUtils {
         return tableInfo;
     }
 
-    @Data
+    @Getter
+@Setter
     static class TableSchemeInfo {
         private InfoSchemaTable table;
         private List<InfoSchemaColumn> columnList;
@@ -198,7 +200,8 @@ public class PoiUtils {
         final String text = paragraph.getText();
     }
 
-    @Data
+    @Getter
+@Setter
     @ExcelTarget("数据表定义")
     static class Row {
 
