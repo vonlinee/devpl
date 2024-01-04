@@ -1,6 +1,5 @@
 package io.devpl.sdk.util;
 
-import io.devpl.sdk.collection.CollectionUtils;
 import io.devpl.sdk.validation.Assert;
 
 import java.beans.Introspector;

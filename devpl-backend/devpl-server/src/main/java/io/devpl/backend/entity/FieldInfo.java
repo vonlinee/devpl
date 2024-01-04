@@ -48,7 +48,9 @@ public class FieldInfo extends DBEntity implements Serializable {
     private String dataType;
 
     /**
-     * 字段注释信息，相比{@link FieldInfo#description}比较简短
+     * 字段注释信息，相比description字段比较简短
+     *
+     * @see FieldInfo#description
      */
     private String comment;
 

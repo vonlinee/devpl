@@ -202,10 +202,10 @@ public class MyBatisServiceImpl implements MyBatisService {
             for (TreeNode<MsParamNode> child : node.getChildren()) {
                 fillParamMap(child, childMap);
             }
-            paramMap.put(node.getData().getName(), childMap);
+            paramMap.put(node.getData().getFieldKey(), childMap);
         } else {
             MsParamNode paramNode = node.getData();
-            paramMap.put(paramNode.getName(), getParamValueByType(paramNode));
+            paramMap.put(paramNode.getFieldKey(), getParamValueByType(paramNode));
         }
     }
 
@@ -225,7 +225,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             parentRow.setParentKey(parentId);
             parentRow.setParentId(parentId);
         }
-        parentRow.setName(parentNode.getData().getName());
+        parentRow.setFieldKey(parentNode.getData().getName());
         parentRow.setDataType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
         rows.add(parentRow);
         if (parentNode.hasChildren()) {

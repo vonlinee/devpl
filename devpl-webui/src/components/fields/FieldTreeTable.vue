@@ -270,7 +270,7 @@ const rowDrop = () => {
       // 因为禁用了排序，所以oldIndex == newIndex
       // from == to，均为tbody
       // 计算拖拽结束时的节点位置
-      console.log("从", dragData.startRowIndex, "到", dragData.endRowIndex)
+      // console.log("从", dragData.startRowIndex, "到", dragData.endRowIndex)
 
       let sourceObj = toRaw(flattArray.value[dragData.startRowIndex])
       let targetObj = toRaw(flattArray.value[dragData.endRowIndex])

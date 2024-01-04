@@ -135,26 +135,6 @@ public class DateTimes {
         return 0;
     }
 
-    public static LocalDateTime string2DateTime(String datetime) {
-        LocalDateTime dt = null;
-        try {
-            dt = LocalDateTime.parse(datetime, DT_FORMATTER_YMDHMS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dt == null ? LocalDateTime.now() : dt;
-    }
-
-    public static LocalDateTime string2DateTime(String datetime, String format) {
-        LocalDateTime dt = null;
-        try {
-            dt = LocalDateTime.parse(datetime, DateTimeFormatter.ofPattern(format));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return dt == null ? LocalDateTime.now() : dt;
-    }
-
     public static String dateTime2String(LocalDateTime dt) {
         return dt.format(DT_FORMATTER_YMDHMS);
     }

@@ -13,23 +13,9 @@
       <el-button @click="fillSampleMapperStatement">填充样例</el-button>
       <el-button @click="showDialog()">导入</el-button>
       <param-import ref="importModalRef"></param-import>
-      <vxe-table ref="msParamTable" show-overflow border height="500px" row-key header-align="center"
-        :data="mapperParams" :checkbox-config="{ checkStrictly: true }" :tree-config="{ transform: true }"
-        :edit-config="editConfig">
-        <vxe-column field="name" title="参数名" tree-node></vxe-column>
-        <vxe-column field="value" title="参数值" :edit-render="{ name: 'input' }"></vxe-column>
-        <vxe-column field="dataType" title="类型" :edit-render="{}" :width="130" align="center">
-          <template #default="{ row }">
-            <span>{{ row.dataType }}</span>
-          </template>
-          <template #edit="{ row }">
-            <vxe-select v-model="row.dataType" clearable transfer>
-              <vxe-option v-for="item in msParamValueTypes" :key="item.key" :value="item.value"
-                :label="item.label"></vxe-option>
-            </vxe-select>
-          </template>
-        </vxe-column>
-      </vxe-table>
+
+      <FieldValueTreeTable ref="msParamTable" :data-types="msParamValueTypes"></FieldValueTreeTable>
+
       <div>
         <el-card>
           <el-button-group class="ml-4">
@@ -63,7 +49,7 @@
 
 <script setup lang="ts">
 import { getSubStrings, hasText, isBlank } from "@/utils/tool"
-import { computed, nextTick, onMounted, reactive, ref, toRaw } from "vue"
+import { computed, nextTick, onMounted, ref, toRaw } from "vue"
 
 import {
   apiGetMapperStatementValueTypes,
@@ -74,15 +60,10 @@ import {
 import { ElButton, ElMessage } from "element-plus"
 
 import ParamImport from "./ParamImport.vue"
+import FieldValueTreeTable from "./FieldValueTreeTable.vue"
 import MonacoEditor from "@/components/editor/MonacoEditor.vue"
 import { appStore } from "@/store"
-import {
-  VxeGridConstructor,
-  VxeTableConstructor,
-  VxeTableDefines,
-  VxeTablePrivateMethods,
-  VxeTablePropTypes,
-} from "vxe-table/types/all"
+
 import { foreachSnippet, stringSnippet } from "@/utils/mybatis"
 import { ArrowDown } from "@element-plus/icons"
 
@@ -97,24 +78,6 @@ const editorHeight = ref('400')
 const msParamTable = ref()
 const msParamValueTypes = ref()
 
-type RowModel = any
-
-const editConfig = reactive<VxeTablePropTypes.EditConfig<RowModel>>({
-  trigger: "click",
-  mode: "cell",
-  beforeEditMethod: (params: {
-    row: RowModel
-    rowIndex: number
-    column: VxeTableDefines.ColumnInfo<RowModel>
-    columnIndex: number
-    $table: VxeTableConstructor<RowModel> & VxeTablePrivateMethods<RowModel>
-    $grid: VxeGridConstructor<RowModel> | null | undefined
-  }) => {
-    // 只有叶子结点可编辑
-    return params.row.leaf != null && params.row.leaf
-  },
-})
-
 onMounted(() => {
   const layoutCard: any = document.querySelector(".layout-card")
   if (layoutCard) {
@@ -122,7 +85,7 @@ onMounted(() => {
   }
 
   apiGetMapperStatementValueTypes().then((res) => {
-    msParamValueTypes.value = res.data
+     msParamValueTypes.value = res.data
   })
 })
 
@@ -153,19 +116,6 @@ const handleMsStringNotEmpty = () => {
 const ms = computed(() => store.ms)
 
 /**
- * 参数节点
- */
-interface MsParamNode {
-  id: number
-  leaf: boolean
-  name: string
-  parentId: number | undefined
-  type: string
-  value: string
-  valueType: string
-}
-
-/**
  * 类型推断规则
  */
 interface MyBatisToolOptions {
@@ -174,20 +124,11 @@ interface MyBatisToolOptions {
   inferByParamName: boolean
 }
 
-// mybatis mapper语句参数
-const mapperParams = ref<MsParamNode[]>()
-
 const options = ref<MyBatisToolOptions>({
   enableTypeInference: true,
   inferByParamName: true,
 })
 
-const expandAll = () => {
-  const $table = msParamTable.value
-  if ($table) {
-    $table.setAllTreeExpand(true)
-  }
-}
 
 // 获取参数
 function getParams() {
@@ -195,10 +136,8 @@ function getParams() {
   if (hasText(code)) {
     getMapperStatementParams(code, toRaw(options.value))
       .then((value) => {
-        nextTick(() => (mapperParams.value = value.data))
-        msParamTable.value.loadData(toRaw(value.data))
+        msParamTable.value.setFields(toRaw(value.data))
       })
-      .then(() => expandAll())
   } else {
     ElMessage.warning("输入文本为空!")
   }
@@ -211,7 +150,7 @@ function getSqlOfMapperStatement(real: boolean) {
     ElMessage.warning("输入文本为空!")
     return
   }
-  apiGetSql(code, mapperParams.value || [], real).then((res) => {
+  apiGetSql(code, msParamTable.value.getFields() || [], real).then((res) => {
     outputRef.value.setText(res.data)
   })
 }

@@ -1,6 +1,5 @@
 package io.devpl.sdk.util;
 
-import io.devpl.sdk.collection.CollectionUtils;
 import io.devpl.sdk.lang.Interpolations;
 import io.devpl.sdk.validation.Assert;
 
@@ -192,11 +191,11 @@ public abstract class StringUtils {
      * 分割字符串
      *
      * @param str       字符串
-     * @param delimeter 分隔符
+     * @param delimiter 分隔符
      * @return 分割后的字符串数组
      */
-    public static String[] split1(String str, String delimeter) {
-        StringTokenizer st = new StringTokenizer(str, delimeter);
+    public static String[] split1(String str, String delimiter) {
+        StringTokenizer st = new StringTokenizer(str, delimiter);
         int i = st.countTokens();
         String[] strings = new String[i];
         while (st.hasMoreTokens()) {

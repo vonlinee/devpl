@@ -35,8 +35,6 @@ public abstract class MapCollections<K, V> {
         return oldSize != map.size();
     }
 
-    ;
-
     public static <T> boolean equalsSetHelper(Set<T> set, Object object) {
         if (set == object) {
             return true;
@@ -62,8 +60,6 @@ public abstract class MapCollections<K, V> {
         }
         return result;
     }
-
-    ;
 
     @SuppressWarnings("unchecked")
     public <T> T[] toArrayHelper(T[] array, int offset) {

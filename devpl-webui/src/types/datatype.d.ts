@@ -29,7 +29,16 @@ type DataTypeGroup = {
  * 数据类型下拉选项
  */
 type DataTypeSelectOption = {
+  /**
+   * 选项显示文本
+   */
   label: string
+  /**
+   * 选项的key
+   */
   key: number | string
+  /**
+   * 选项key对应的值
+   */
   value: any
 }

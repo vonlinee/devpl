@@ -73,6 +73,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <executable>true</executable>
+                    <mainClass>io.devpl.backend.DevplMain8088</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -145,7 +146,8 @@
                             <encoding>UTF-8</encoding>
                             <docencoding>UTF-8</docencoding>
                         </configuration>
-                        <version>2.9.1</version>
+                        <!--支持Java17版本-->
+                        <version>3.6.3</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -153,6 +155,7 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
+                                    <!--忽略javadoc错误-->
                                     <additionalparam>-Xdoclint:none</additionalparam>
                                     <charset>UTF-8</charset>
                                     <encoding>UTF-8</encoding>

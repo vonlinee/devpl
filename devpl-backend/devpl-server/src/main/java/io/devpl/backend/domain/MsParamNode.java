@@ -43,7 +43,7 @@ public class MsParamNode {
     /**
      * 参数名
      */
-    private String name;
+    private String fieldKey;
 
     /**
      * 参数值

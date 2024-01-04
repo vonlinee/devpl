@@ -1,6 +1,6 @@
 package io.devpl.sdk.validation;
 
-import io.devpl.sdk.collection.CollectionUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.ObjectUtils;
 import io.devpl.sdk.util.StringUtils;
 
@@ -653,12 +653,12 @@ public abstract class Assert {
      * <pre class="code">Assert.isAssignable(Number.class, myClass, "Number expected");</pre>
      *
      * @param superType the super type to check against
-     * @param subType   the sub type to check
+     * @param subType   the subtype to check
      * @param message   a message which will be prepended to provide further context.
      *                  If it is empty or ends in ":" or ";" or "," or ".", a full exception message
-     *                  will be appended. If it ends in a space, the name of the offending sub type
+     *                  will be appended. If it ends in a space, the name of the offending subtype
      *                  will be appended. In any other case, a ":" with a space and the name of the
-     *                  offending sub type will be appended.
+     *                  offending subtype will be appended.
      * @throws IllegalArgumentException if the classes are not assignable
      */
     public static void isAssignable(Class<?> superType, Class<?> subType, String message) {
@@ -693,7 +693,7 @@ public abstract class Assert {
      * <pre class="code">Assert.isAssignable(Number.class, myClass);</pre>
      *
      * @param superType the super type to check
-     * @param subType   the sub type to check
+     * @param subType   the subtype to check
      * @throws IllegalArgumentException if the classes are not assignable
      */
     public static void isAssignable(Class<?> superType, Class<?> subType) {

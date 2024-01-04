@@ -68,8 +68,6 @@ public class GithubJavaParserASTService implements JavaASTService {
             }
         }
 
-        ASTParseResult result = new ASTParseResult();
-
-        return result;
+        return new ASTParseResult();
     }
 }
