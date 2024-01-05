@@ -7,14 +7,17 @@ import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
-import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.DBUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.DataClassRowMapper;
@@ -41,10 +44,11 @@ public class PoiUtils {
     static final Logger log = LoggerFactory.getLogger(PoiUtils.class);
 
     static final String sql = "SELECT * FROM information_schema.`TABLES` WHERE TABLE_SCHEMA = 'lgdb_campus_intelligent_portrait'\n" +
-            "AND TABLE_NAME = '%s'";
+        "AND TABLE_NAME = '%s'";
 
     /**
      * 获取所有表字段信息
+     *
      * @return
      * @throws SQLException
      */
@@ -81,7 +85,7 @@ public class PoiUtils {
     }
 
     @Getter
-@Setter
+    @Setter
     static class TableSchemeInfo {
         private InfoSchemaTable table;
         private List<InfoSchemaColumn> columnList;
@@ -201,7 +205,7 @@ public class PoiUtils {
     }
 
     @Getter
-@Setter
+    @Setter
     @ExcelTarget("数据表定义")
     static class Row {
 
@@ -239,12 +243,13 @@ public class PoiUtils {
 
     /**
      * 复制一个XWPFTable
+     *
      * @param target
      * @param source
      */
     public static void cloneTable(XWPFTable target, XWPFTable source) {
         target.getCTTbl()
-                .set(source.getCTTbl());
+            .set(source.getCTTbl());
     }
 
     public static void cloneParagraph(XWPFParagraph target, XWPFParagraph source) {
@@ -254,19 +259,20 @@ public class PoiUtils {
         for (XWPFRun xwpfRun : xwpfRuns) {
             final XWPFRun run = target.createRun();
             run.getCTR()
-                    .set(xwpfRun.getCTR());
+                .set(xwpfRun.getCTR());
         }
     }
 
     /**
      * 复制单元格和样式，有点问题
+     *
      * @param targetRow 要复制的行
      * @param sourceRow 被复制的行
      */
     public static void cloneTableRow(XWPFTableRow targetRow, XWPFTableRow sourceRow) {
         targetRow.getCtRow()
-                .setTrPr(sourceRow.getCtRow()
-                        .getTrPr());
+            .setTrPr(sourceRow.getCtRow()
+                .getTrPr());
         List<XWPFTableCell> tableCells = sourceRow.getTableCells();
         if (CollectionUtils.isEmpty(tableCells)) {
             return;
@@ -275,8 +281,8 @@ public class PoiUtils {
         for (XWPFTableCell sourceCell : tableCells) {
             XWPFTableCell newCell = targetRow.addNewTableCell();
             newCell.getCTTc()
-                    .setTcPr(sourceCell.getCTTc()
-                            .getTcPr());
+                .setTcPr(sourceCell.getCTTc()
+                    .getTcPr());
             List<XWPFParagraph> sourceParagraphs = sourceCell.getParagraphs();
             if (CollectionUtils.isEmpty(sourceParagraphs)) {
                 continue;
@@ -285,13 +291,13 @@ public class PoiUtils {
             List<XWPFParagraph> targetParagraphs = newCell.getParagraphs();
             XWPFParagraph targetParagraph = CollectionUtils.isEmpty(targetParagraphs) ? newCell.addParagraph() : (XWPFParagraph) targetParagraphs.get(0);
             targetParagraph.getCTP()
-                    .setPPr(sourceParagraph.getCTP()
-                            .getPPr());
+                .setPPr(sourceParagraph.getCTP()
+                    .getPPr());
             XWPFRun targetRun = targetParagraph.getRuns()
-                    .isEmpty() ? targetParagraph.createRun() : targetParagraph.getRuns()
-                    .get(0);
+                .isEmpty() ? targetParagraph.createRun() : targetParagraph.getRuns()
+                .get(0);
             List<XWPFRun> sourceRunList = sourceParagraph.getRuns();
-            if (CollectionUtils.isNotEmpty(sourceRunList)) {
+            if (!CollectionUtils.isEmpty(sourceRunList)) {
                 XWPFRun sourceRun = sourceRunList.get(0);
                 targetRun.setFontFamily(sourceRun.getFontFamily());  // 字体名称
                 targetRun.setFontSize(sourceRun.getFontSize()); // 字体大小
@@ -304,16 +310,17 @@ public class PoiUtils {
 
     public static void fillEmptyTableRows(XWPFTable table, int targetRowCount) {
         final int originRowCount = table.getRows()
-                .size();
+            .size();
         int rowCountNeedToFill = targetRowCount - originRowCount;
         if (rowCountNeedToFill <= 0) return;
         final XWPFTableRow oldRow = table.getRows()
-                .get(0);
+            .get(0);
         fillEmptyTableRows(table, 0, rowCountNeedToFill, originRowCount);
     }
 
     /**
      * des:表末尾添加行(表，要复制样式的行，添加行数，插入的行下标索引)
+     *
      * @param table
      * @param source
      * @param rows
@@ -330,8 +337,8 @@ public class PoiUtils {
                 XWPFTableRow targetRow = table.insertNewTableRow(insertRowIndex++);
                 // 复制行的样式给新行
                 targetRow.getCtRow()
-                        .setTrPr(sourceRow.getCtRow()
-                                .getTrPr());
+                    .setTrPr(sourceRow.getCtRow()
+                        .getTrPr());
                 // 获取要复制样式的行的单元格
                 List<XWPFTableCell> sourceCells = sourceRow.getTableCells();
                 // 循环复制单元格
@@ -340,20 +347,20 @@ public class PoiUtils {
                     XWPFTableCell newCell = targetRow.addNewTableCell();
                     // 复制单元格的样式给新单元格
                     newCell.getCTTc()
-                            .setTcPr(sourceCell.getCTTc()
-                                    .getTcPr());
+                        .setTcPr(sourceCell.getCTTc()
+                            .getTcPr());
                     // 设置垂直居中
                     newCell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);// 垂直居中
                     // 复制单元格的居中方式给新单元格
                     CTPPr pPr = sourceCell.getCTTc()
-                            .getPList()
-                            .get(0)
-                            .getPPr();
+                        .getPList()
+                        .get(0)
+                        .getPPr();
                     if (pPr != null && pPr.getJc() != null && pPr.getJc()
-                            .getVal() != null) {
+                        .getVal() != null) {
                         CTTc cttc = newCell.getCTTc();
                         CTP ctp = cttc.getPList()
-                                .get(0);
+                            .get(0);
                         CTPPr ctppr = ctp.getPPr();
                         if (ctppr == null) {
                             ctppr = ctp.addNewPPr();
@@ -363,7 +370,7 @@ public class PoiUtils {
                             ctjc = ctppr.addNewJc();
                         }
                         ctjc.setVal(pPr.getJc()
-                                .getVal()); // 水平居中
+                            .getVal()); // 水平居中
                     }
                     // 得到复制单元格的段落
                     List<XWPFParagraph> sourceParagraphs = sourceCell.getParagraphs();
@@ -381,27 +388,27 @@ public class PoiUtils {
                         XWPFParagraph ph = newCell.addParagraph();
                         // 复制段落样式给新段落
                         ph.getCTP()
-                                .setPPr(sourceParagraph.getCTP()
-                                        .getPPr());
+                            .setPPr(sourceParagraph.getCTP()
+                                .getPPr());
                         // 得到文本对象
                         XWPFRun run = ph.getRuns()
-                                .isEmpty() ? ph.createRun() : ph.getRuns()
-                                .get(0);
+                            .isEmpty() ? ph.createRun() : ph.getRuns()
+                            .get(0);
                         // 复制文本样式
                         run.setFontFamily(sourceParagraph.getRuns()
-                                .get(0)
-                                .getFontFamily());
+                            .get(0)
+                            .getFontFamily());
                     } else {
                         XWPFParagraph ph = targetParagraphs.get(0);
                         ph.getCTP()
-                                .setPPr(sourceParagraph.getCTP()
-                                        .getPPr());
+                            .setPPr(sourceParagraph.getCTP()
+                                .getPPr());
                         XWPFRun run = ph.getRuns()
-                                .isEmpty() ? ph.createRun() : ph.getRuns()
-                                .get(0);
+                            .isEmpty() ? ph.createRun() : ph.getRuns()
+                            .get(0);
                         run.setFontFamily(sourceParagraph.getRuns()
-                                .get(0)
-                                .getFontFamily());
+                            .get(0)
+                            .getFontFamily());
                     }
                 }
             }
@@ -412,6 +419,7 @@ public class PoiUtils {
 
     /**
      * 功能描述:复制单元格，从source到target
+     *
      * @param target
      * @param source
      * @param index
@@ -422,12 +430,12 @@ public class PoiUtils {
 // 列属性
         if (source.getCTTc() != null) {
             target.getCTTc()
-                    .setTcPr(source.getCTTc()
-                            .getTcPr());
+                .setTcPr(source.getCTTc()
+                    .getTcPr());
         }
 // 删除段落
         for (int pos = 0; pos < target.getParagraphs()
-                .size(); pos++) {
+            .size(); pos++) {
             target.removeParagraph(pos);
         }
 // 添加段落
@@ -439,6 +447,7 @@ public class PoiUtils {
 
     /**
      * 功能描述:复制段落，从source到target
+     *
      * @param target
      * @param source
      * @param index
@@ -448,11 +457,11 @@ public class PoiUtils {
     public static void copyParagraph(XWPFParagraph target, XWPFParagraph source, Integer index) {
         // 设置段落样式
         target.getCTP()
-                .setPPr(source.getCTP()
-                        .getPPr());
+            .setPPr(source.getCTP()
+                .getPPr());
         // 移除所有的run
         for (int pos = target.getRuns()
-                .size() - 1; pos >= 0; pos--) {
+            .size() - 1; pos >= 0; pos--) {
             target.removeRun(pos);
         }
         // copy 新的run
@@ -464,6 +473,7 @@ public class PoiUtils {
 
     /**
      * 功能描述:复制RUN，从source到target
+     *
      * @param target
      * @param source
      * @param index
@@ -473,19 +483,20 @@ public class PoiUtils {
     public static void copyRun(XWPFRun target, XWPFRun source, Integer index) {
         // 设置run属性
         target.getCTR()
-                .setRPr(source.getCTR()
-                        .getRPr());
+            .setRPr(source.getCTR()
+                .getRPr());
         // 设置文本
         String tail = "";
         if (index != null) {
             tail = index.toString();
         }
         target.setText(source.text()
-                .replace("}", "") + tail + "}");
+            .replace("}", "") + tail + "}");
     }
 
     /**
      * 功能描述:复制行，从source到target
+     *
      * @param target
      * @param source
      * @param index
@@ -496,12 +507,12 @@ public class PoiUtils {
         // 复制样式
         if (source.getCtRow() != null) {
             target.getCtRow()
-                    .setTrPr(source.getCtRow()
-                            .getTrPr());
+                .setTrPr(source.getCtRow()
+                    .getTrPr());
         }
         // 复制单元格
         for (int i = 0; i < source.getTableCells()
-                .size(); i++) {
+            .size(); i++) {
             XWPFTableCell cell1 = target.getCell(i);
             XWPFTableCell cell2 = source.getCell(i);
             if (cell1 == null) {
@@ -513,6 +524,7 @@ public class PoiUtils {
 
     /**
      * 功能描述:为表格插入数据，行数不够添加新行
+     *
      * @param table
      * @param tableList
      * @param daList
@@ -534,7 +546,7 @@ public class PoiUtils {
 // 创建行,根据需要插入的数据添加新行，不处理表头
             for (int i = 0; i < daList.size(); i++) {
                 List<XWPFTableCell> cells = table.getRow(i + 1)
-                        .getTableCells();
+                    .getTableCells();
                 for (int j = 0; j < cells.size(); j++) {
                     XWPFTableCell cell02 = cells.get(j);
                     cell02.setText(daList.get(i)[j]);
@@ -546,13 +558,14 @@ public class PoiUtils {
                 XWPFTableRow row = table.createRow();
                 List<XWPFTableCell> cells = row.getTableCells();
                 cells.get(0)
-                        .setText(tableList.get(i));
+                    .setText(tableList.get(i));
             }
         }
     }
 
     /**
      * 功能描述:判断文本中时候包含$
+     *
      * @param text
      * @return
      * @see [相关类/方法](可选)
@@ -564,6 +577,7 @@ public class PoiUtils {
 
     /**
      * 功能描述:匹配传入信息集合与模板
+     *
      * @param value
      * @param textMap
      * @return

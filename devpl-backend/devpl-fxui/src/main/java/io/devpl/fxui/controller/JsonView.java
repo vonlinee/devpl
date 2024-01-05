@@ -1,6 +1,9 @@
 package io.devpl.fxui.controller;
 
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import de.marhali.json5.*;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
@@ -8,8 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

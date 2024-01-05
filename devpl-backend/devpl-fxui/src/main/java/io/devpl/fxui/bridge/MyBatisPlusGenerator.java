@@ -10,7 +10,7 @@ import io.devpl.codegen.core.ActionCallback;
 import io.devpl.codegen.core.FastAutoGenerator;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.fxui.model.*;
-import io.devpl.fxui.utils.CollectionUtils;
+import io.devpl.sdk.util.CollectionUtils;
 
 import java.io.File;
 import java.util.ArrayList;

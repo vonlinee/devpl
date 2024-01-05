@@ -4,7 +4,7 @@ import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ConnectionRegistry;
 import io.devpl.fxui.model.TableGeneration;
 import io.devpl.fxui.model.props.ColumnCustomConfiguration;
-import io.devpl.fxui.utils.CollectionUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.fxtras.Alerts;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
@@ -76,21 +76,18 @@ public class TableCustomizationView extends FxmlView {
             return cell;
         });
 
-        jdbcTypeColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow())
-                .setJdbcType(event.getNewValue()));
+        jdbcTypeColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow()).setJdbcType(event.getNewValue()));
         javaTypeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        javaTypeColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow())
-                .setJavaType(event.getNewValue()));
+        javaTypeColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow()).setJavaType(event.getNewValue()));
         propertyNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        propertyNameColumn.setOnEditCommit(event -> event.getTableView().getItems()
-                .get(event.getTablePosition().getRow()).setPropertyName(event.getNewValue()));
+        propertyNameColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow()).setPropertyName(event.getNewValue()));
         typeHandlerColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        typeHandlerColumn.setOnEditCommit(event -> event.getTableView().getItems()
-                .get(event.getTablePosition().getRow()).setTypeHandler(event.getNewValue()));
+        typeHandlerColumn.setOnEditCommit(event -> event.getTableView().getItems().get(event.getTablePosition().getRow()).setTypeHandler(event.getNewValue()));
     }
 
     /**
      * 定制表配置
+     *
      * @param tableInfo 表生成信息
      */
     @Subscribe(name = "CustomizeTable")
@@ -123,7 +120,7 @@ public class TableCustomizationView extends FxmlView {
     @FXML
     public void applyConfig(ActionEvent event) {
         ObservableList<ColumnCustomConfiguration> items = columnListView.getItems();
-        if (CollectionUtils.isNotEmpty(items)) {
+        if (!CollectionUtils.isEmpty(items)) {
             List<IgnoredColumn> ignoredColumns = new ArrayList<>();
             List<ColumnOverride> columnOverrides = new ArrayList<>();
             for (ColumnCustomConfiguration item : items) {

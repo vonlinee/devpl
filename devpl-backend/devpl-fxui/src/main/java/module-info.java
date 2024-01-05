@@ -19,6 +19,7 @@ module devpl.fxui {
     opens io.devpl.fxui.controller.domain;
     opens io.devpl.fxui.controller.fields;
     opens io.devpl.fxui.controller.dbconn;
+    opens io.devpl.fxui.view;
 
     exports io.devpl.fxui.model;
     opens io.devpl.fxui.model;

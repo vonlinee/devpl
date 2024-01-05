@@ -4,8 +4,8 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
-import io.devpl.fxui.utils.CollectionUtils;
 import io.devpl.fxui.utils.DBUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -304,7 +304,7 @@ public class PoiUtils2 {
                     .isEmpty() ? targetParagraph.createRun() : targetParagraph.getRuns()
                     .get(0);
             List<XWPFRun> sourceRunList = sourceParagraph.getRuns();
-            if (CollectionUtils.isNotEmpty(sourceRunList)) {
+            if (!CollectionUtils.isEmpty(sourceRunList)) {
                 XWPFRun sourceRun = sourceRunList.get(0);
                 targetRun.setFontFamily(sourceRun.getFontFamily());  // 字体名称
                 targetRun.setFontSize(sourceRun.getFontSize()); // 字体大小

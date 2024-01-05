@@ -1,5 +1,6 @@
 package io.devpl.fxui.tools.mybatis;
 
+import io.devpl.sdk.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
