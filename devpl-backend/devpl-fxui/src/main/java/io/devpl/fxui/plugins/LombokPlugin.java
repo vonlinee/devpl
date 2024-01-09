@@ -14,8 +14,9 @@ import java.util.Map.Entry;
 /**
  * A MyBatis Generator plugin to use annotations of Lombok.
  * For example, use @Getter
-@Setter annotation instead of getter ands setter.
+ *
  * @author Paolo Predonzani (<a href="http://softwareloop.com/">...</a>)
+ * @Setter annotation instead of getter ands setter.
  */
 public class LombokPlugin extends PluginAdapter {
 
@@ -38,6 +39,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts base record class generation
+     *
      * @param topLevelClass     the generated base record class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -51,6 +53,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts primary key class generation
+     *
      * @param topLevelClass     the generated primary key class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -64,6 +67,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Intercepts "record with blob" class generation
+     *
      * @param topLevelClass     the generated record with BLOBs class
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -78,6 +82,7 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all getters from being generated.
      * See SimpleModelGenerator
+     *
      * @param method             the getter, or accessor, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -95,6 +100,7 @@ public class LombokPlugin extends PluginAdapter {
     /**
      * Prevents all setters from being generated
      * See SimpleModelGenerator
+     *
      * @param method             the setter, or mutator, method generated for the specified
      *                           column
      * @param topLevelClass      the partially implemented model class
@@ -112,6 +118,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * Adds the lombok annotations' imports and annotations to the class
+     *
      * @param topLevelClass the partially implemented model class
      */
     private void addDataAnnotation(TopLevelClass topLevelClass) {
@@ -125,18 +132,16 @@ public class LombokPlugin extends PluginAdapter {
     public void setProperties(Properties properties) {
         super.setProperties(properties);
 
-        //@Getter
-@Setter is default annotation
         annotations.add(LombokAnnotation.DATA);
 
         for (Entry<Object, Object> entry : properties.entrySet()) {
             boolean isEnable = Boolean.parseBoolean(entry.getValue()
-                    .toString());
+                .toString());
 
             if (isEnable) {
                 String paramName = entry.getKey()
-                        .toString()
-                        .trim();
+                    .toString()
+                    .trim();
                 LombokAnnotation annotation = LombokAnnotation.getValueOf(paramName);
                 if (annotation != null) {
                     annotations.add(annotation);
@@ -148,6 +153,7 @@ public class LombokPlugin extends PluginAdapter {
 
     /**
      * 添加@Mapper注解
+     *
      * @param interfaceType     the generated interface if any, may be null
      * @param introspectedTable The class containing information about the table as
      *                          introspected from the database
@@ -161,8 +167,9 @@ public class LombokPlugin extends PluginAdapter {
     }
 
     private enum LombokAnnotation {
-        DATA("data", "@Getter
-@Setter", "lombok.Data"),
+        DATA("data", "@Getter", ""),
+        GETTER("getter", "@Getter", ""),
+        SETTER("setter", "@Setter", "lombok.Data"),
         BUILDER("builder", "@Builder", "lombok.Builder"),
         ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"),
         NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"),

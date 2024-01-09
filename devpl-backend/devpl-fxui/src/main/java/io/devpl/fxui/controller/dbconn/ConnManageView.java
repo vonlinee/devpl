@@ -65,8 +65,8 @@ public class ConnManageView extends FxmlView {
         tblcDatabaseName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
         tblcConnectionName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getConnectionName()));
         tblcProtocol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()
-                .getDriver()
-                .getSubProtocol()));
+            .getDriver()
+            .getSubProtocol()));
         fillConnectionInfo();
     }
 
