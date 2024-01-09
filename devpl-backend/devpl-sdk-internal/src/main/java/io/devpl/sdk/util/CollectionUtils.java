@@ -23,7 +23,7 @@ public abstract class CollectionUtils {
      * @return whether the given Collection is empty
      */
     public static boolean isEmpty(Collection<?> collection) {
-        return (collection == null || collection.isEmpty());
+        return collection == null || collection.isEmpty();
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class CollectionUtils {
         return list.stream().collect(Collectors.groupingBy(classifier));
     }
 
-    public static <E> List<E> streamSort(List<E> list, Comparator<E> comparator) {
+    public static <E> List<E> sort(List<E> list, Comparator<E> comparator) {
         return list.stream().sorted(comparator).collect(Collectors.toList());
     }
 
@@ -87,7 +87,7 @@ public abstract class CollectionUtils {
         return list.stream().filter(filter).collect(Collectors.toList());
     }
 
-    public static <E> int sumInt(List<E> list, ToIntFunction<? super E> mapper) {
+    public static <E> int sumInt(Collection<E> list, ToIntFunction<? super E> mapper) {
         return sumInt(list, true, mapper);
     }
 
@@ -111,56 +111,38 @@ public abstract class CollectionUtils {
         return list.stream().collect(Collectors.toMap(keyMapper, Function.identity()));
     }
 
-    public static <E> int sumInt(List<E> list, boolean filterNull, ToIntFunction<? super E> toIntFunction) {
-        if (isEmpty(list)) {
+    /**
+     * 求和
+     *
+     * @param collection    集合
+     * @param filterNull    是否过滤null元素，即null元素不参与求和
+     * @param toIntFunction int function
+     * @param <E>           元素类型
+     * @return 求和
+     */
+    public static <E> int sumInt(Collection<E> collection, boolean filterNull, ToIntFunction<? super E> toIntFunction) {
+        if (isEmpty(collection)) {
             return 0;
         }
         int sum = 0;
-        for (int i = 0; i < list.size(); i++) {
-            E e = list.get(i);
-            if (filterNull && e == null) {
+        for (E element : collection) {
+            if (filterNull && element == null) {
                 continue;
             }
-            sum += toIntFunction.applyAsInt(list.get(i));
+            sum += toIntFunction.applyAsInt(element);
         }
         return sum;
     }
 
-    public static <E> long sumLong(List<E> list, ToLongFunction<? super E> toIntFunction) {
+    public static <E> long sumLong(Collection<E> list, ToLongFunction<? super E> toIntFunction) {
         if (isEmpty(list)) {
             return 0;
         }
         long sum = 0;
-        for (int i = 0; i < list.size(); i++) {
-            sum += toIntFunction.applyAsLong(list.get(i));
+        for (E element : list) {
+            sum += toIntFunction.applyAsLong(element);
         }
         return sum;
-    }
-
-    public static <V, T> List<T> values(Map<?, V> map, Function<V, T> mapper) {
-        if (isEmpty(map)) {
-            return Collections.emptyList();
-        }
-        return map.values().stream().map(mapper).collect(Collectors.toList());
-    }
-
-
-    public static <E> E findFirst(List<E> list, E defaults) {
-        if (isEmpty(list)) {
-            return defaults;
-        }
-        return list.get(0);
-    }
-
-    public static <E, T> T findFirst(List<E> list, Function<E, T> mapper, T defaults) {
-        if (isEmpty(list)) {
-            return defaults;
-        }
-        if (mapper != null) {
-            T val = mapper.apply(list.get(0));
-            return val == null ? defaults : val;
-        }
-        return defaults;
     }
 
     public static <E, V> String join(List<E> list, Function<E, V> mapper) {
@@ -182,7 +164,6 @@ public abstract class CollectionUtils {
     public static <K, E, T> T treeify(Collection<E> collection, TreeBuilder<K, E, T> builder) {
         return builder.apply(collection);
     }
-
 
     public static <E, T, U extends Comparable<? super U>> T min(Collection<E> collection, Function<E, T> key, Function<? super T, ? extends U> keyExtractor) {
         if (collection == null) {
@@ -226,6 +207,12 @@ public abstract class CollectionUtils {
         coll.addAll(Arrays.asList(arr));
     }
 
+    /**
+     * 集合添加多个元素，支持数组和可变参数
+     *
+     * @param intColl int集合
+     * @param ints    新加的元素
+     */
     public static void addAll(Collection<Integer> intColl, int[] ints) {
         if (intColl == null || ints == null || ints.length == 0) {
             return;
@@ -313,13 +300,16 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * 求差集
+     *
      * @param coll1 集合1
      * @param coll2 集合2
      * @param <E>   集合元素类型
+     * @return 返回新的list，不影响作为参数的两个集合
      */
-    public static <E> List<E> differ(Collection<E> coll1, Collection<E> coll2) {
+    public static <C extends Collection<E>, E> List<E> differ(C coll1, C coll2) {
         if (isEmpty(coll1)) {
-            return new ArrayList<>(coll2);
+            return coll2 == null ? new ArrayList<>() : new ArrayList<>(coll2);
         }
         if (isEmpty(coll2)) {
             return new ArrayList<>(coll1);

@@ -88,8 +88,14 @@ const editConfig = reactive<VxeTablePropTypes.EditConfig<FieldInfo>>({
   },
 })
 
+/**
+ * 监听父组件异步传递props变化
+ */
 watch(() => props.dataTypes, (oldData, newData) => {
+  console.log(newData);
   dataTypes.value = newData
+}, {
+  deep: true
 })
 
 /**

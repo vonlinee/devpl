@@ -1,6 +1,6 @@
 <template>
   <div id="child">
-    {{ childCount }}
+    {{ count }}
   </div>
 </template>
 
@@ -12,10 +12,5 @@ interface ChildProps {
 }
 
 const props = defineProps<ChildProps>()
-
-console.log(props)
-
-const childCount = computed(() => {
-  return props.count
-})
+console.log(props.count) // undefined
 </script>
