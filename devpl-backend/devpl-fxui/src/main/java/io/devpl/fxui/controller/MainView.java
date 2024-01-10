@@ -11,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -42,18 +40,18 @@ public class MainView extends FxmlView {
 
     /**
      * 添加新连接，点击每个连接将填充子TreeItem
+     *
      * @param connectionInfo 连接信息
      */
-    @Subscribe(name = "add-new-connection", threadMode = ThreadMode.BACKGROUND)
     public void addConnection(ConnectionConfig connectionInfo) {
         // trvDbNavigation.addConnection(connectionInfo);
     }
 
     /**
      * 删除数据库连接
-     * @param event
+     *
+     * @param event DeleteConnEvent
      */
-    @Subscribe
     public void removeConnection(DeleteConnEvent event) {
         // ObservableList<TreeItem<String>> children = trvDbNavigation.getRoot().getChildren();
         // Iterator<TreeItem<String>> iterator = children.iterator();

@@ -24,7 +24,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.TextAlignment;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.net.URL;
@@ -305,7 +304,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
      * 添加一个表到需要进行代码生成的表
      * @param tableInfo
      */
-    @Subscribe
     public void addTable(TableGeneration tableInfo) {
         String key = tableInfo.getUniqueKey();
         if (tableConfigsToBeGenerated.containsKey(key)) {
@@ -366,7 +364,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
      * 加载配置信息，填充到界面上
      * @param projectConfig 配置信息
      */
-    @Subscribe(name = "LoadConfig")
     public void loadConfig(ProjectConfiguration projectConfig) {
         projectFolderField.setText(projectConfig.getProjectRootFolder());
         modelTargetPackage.setText(projectConfig.getEntityPackageName());

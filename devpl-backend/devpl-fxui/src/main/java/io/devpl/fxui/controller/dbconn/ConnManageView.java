@@ -19,7 +19,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.TextAlignment;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -75,7 +74,6 @@ public class ConnManageView extends FxmlView {
         StageManager.show(NewConnView.class);
     }
 
-    @Subscribe(name = "add-new-connection")
     public void addNewConnectionInfo(ConnectionConfig connectionInfo) {
         if (connectionConfigService.save(connectionInfo)) {
             log.info("保存成功 {}", connectionInfo);

@@ -1,11 +1,13 @@
 package io.devpl.fxui.controller.fields;
 
-import io.devpl.fxui.controls.FXUtils;
+import io.devpl.common.interfaces.FieldParser;
+import io.devpl.common.interfaces.impl.FieldInfoMap;
+import io.fxtras.utils.FXUtils;
 import io.devpl.fxui.model.FieldNode;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +23,11 @@ abstract class FieldParseView extends Region {
             getChildren().add(root);
     }
 
+    /**
+     * 标签名
+     *
+     * @return 标签名
+     */
     abstract String getName();
 
     /**
@@ -55,7 +62,19 @@ abstract class FieldParseView extends Region {
      * @return 字段信息
      */
     public List<FieldNode> parse(String text) {
-        return Collections.emptyList();
+        List<FieldNode> nodes = new ArrayList<>();
+        for (FieldInfoMap fieldInfoMap : FieldInfoMap.wrap(getFieldParser().parse(text))) {
+            FieldNode node = new FieldNode();
+            node.setName(fieldInfoMap.getFieldName());
+            node.setDataType(fieldInfoMap.getFieldDataType());
+            node.setDescription(fieldInfoMap.getFieldDescription());
+            nodes.add(node);
+        }
+        return nodes;
+    }
+
+    protected FieldParser getFieldParser() {
+        return FieldParser.EMPTY;
     }
 
     @Override

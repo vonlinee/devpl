@@ -12,8 +12,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,7 +58,6 @@ public class DbConnView extends FxmlView {
      * @param configuration 事件
      * @see ConnectionConfig
      */
-    @Subscribe(name = "Event-FillConnectionInfo", threadMode = ThreadMode.BACKGROUND)
     public void initBinder(ConnectionConfig configuration) {
         configuration.setPort(portField.getText());
         configuration.setUsername(userNameField.getText());
@@ -88,7 +85,6 @@ public class DbConnView extends FxmlView {
      * 填充默认值
      * @param event 填充默认值
      */
-    @Subscribe
     public void fillDefaultValue(FillDefaultValueEvent event) {
         userNameField.setText("root");
         portField.setText("3306");

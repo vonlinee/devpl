@@ -25,7 +25,7 @@ public class FXUtils {
 
     public static <S> void setData(TableView<S> tableView, List<S> data) {
         ObservableList<S> items = tableView.getItems();
-        if (items.size() > 0) {
+        if (!items.isEmpty()) {
             items.clear();
         }
         items.addAll(data);
@@ -191,5 +191,30 @@ public class FXUtils {
         final TableView.TableViewSelectionModel<S> selectionModel = tableView.getSelectionModel();
         tableView.getItems().removeAll(selectionModel.getSelectedItems());
         selectionModel.clearSelection(); // 清除选择状态
+    }
+
+    public static boolean isRowEmpty(TableRow<?> row) {
+        return row == null || row.isEmpty();
+    }
+
+    public static boolean isRowEmpty(TreeTableRow<?> row) {
+        return row == null || row.isEmpty();
+    }
+
+    public static TextArea newTextArea(int fontSize) {
+        TextArea textArea = new TextArea();
+        textArea.setFont(Font.font(fontSize));
+        return textArea;
+    }
+
+    public static void expandAll(TreeItem<?> treeItem) {
+        if (!treeItem.isExpanded()) {
+            treeItem.setExpanded(true);
+        }
+        if (!treeItem.isLeaf() && !treeItem.getChildren().isEmpty()) {
+            for (TreeItem<?> child : treeItem.getChildren()) {
+                expandAll(child);
+            }
+        }
     }
 }

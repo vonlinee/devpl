@@ -23,6 +23,7 @@ public class FieldNode {
     private List<FieldNode> children;
 
     public FieldNode() {
+        this("Unknown");
     }
 
     public FieldNode(String name) {

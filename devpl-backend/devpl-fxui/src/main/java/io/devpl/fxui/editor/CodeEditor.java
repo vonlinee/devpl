@@ -10,18 +10,28 @@ import java.util.function.Function;
  */
 public interface CodeEditor {
 
+    static CodeEditor newInstance(LanguageMode mode) {
+        return CodeMirrorEditor.newInstance(mode);
+    }
+
     /**
      * 获取编辑器文本
+     *
      * @return 编辑器文本
      */
     String getContent();
 
+    /**
+     * @param newContent 文本
+     * @param markClean  是否清除之前的文本
+     */
     void setContent(String newContent, boolean markClean);
 
     /**
      * doc.isClean(?generation: integer) → boolean
      * 参数为空时，从初始化或最后一次调用 markClean 函数到现在，正文是否有修改。
      * 参数不为空时，从调用 changeGeneration 函数到现在，正文是否有修改。
+     *
      * @return 返回正文是否是 "clean" 的。
      */
     boolean isClean();
@@ -40,18 +50,21 @@ public interface CodeEditor {
 
     /**
      * 初始化回调
+     *
      * @param runAfterLoading WebView加载完成之后调用
      */
     void init(Runnable... runAfterLoading);
 
     /**
      * 编辑器对应的节点 Node
+     *
      * @return 编辑器对应的节点 Node
      */
     Parent getView();
 
     /**
      * 编辑器是否只读
+     *
      * @return 编辑器是否只读
      */
     boolean isReadOnly();
@@ -73,6 +86,7 @@ public interface CodeEditor {
 
     /**
      * 回调
+     *
      * @param runnable
      */
     void runWhenReady(Runnable runnable);

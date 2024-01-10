@@ -1,15 +1,11 @@
 package io.fxtras.mvvm;
 
 import io.devpl.fxui.utils.ResourceLoader;
-import io.fxtras.Alerts;
-import io.fxtras.eventbus.JavaFXMainThreadSupport;
 import io.fxtras.fxml.FXMLClassLoader;
 import io.fxtras.utils.WeakValueHashMap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.PostEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,18 +30,7 @@ public abstract class View implements SceneGraphAccessor {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final EventBus GLOBAL_EVENT_BUS = EventBus.builder().eventInheritance(true).allowEmptySubscriber(true)   // 是否允许空@Subsciber进行注册
-        .logNoSubscriberMessages(true) // 没有订阅者时记录日志
-        .mainThreadSupport(new JavaFXMainThreadSupport()).build();
-
-    public View() {
-        try {
-            GLOBAL_EVENT_BUS.register(this);
-        } catch (Exception exception) {
-            // ignore
-            log.error("failed to register Subscriber[{}]", this, exception);
-        }
-    }
+    public View() {}
 
     protected void setRoot(Node root) {
         this.root = root;
@@ -64,11 +49,7 @@ public abstract class View implements SceneGraphAccessor {
      * @param event 事件类型对象
      */
     public final void publish(Object event) {
-        try {
-            GLOBAL_EVENT_BUS.post(event);
-        } catch (Exception exception) {
-            Alerts.exception("发布事件异常", exception).showAndWait();
-        }
+
     }
 
     /**
@@ -78,11 +59,7 @@ public abstract class View implements SceneGraphAccessor {
      * @param event     事件类型对象
      */
     public final void publish(String eventName, Object event) {
-        try {
-            GLOBAL_EVENT_BUS.post(new PostEvent(eventName, event));
-        } catch (Exception exception) {
-            Alerts.exception("发布事件异常", exception).showAndWait();
-        }
+
     }
 
     /**

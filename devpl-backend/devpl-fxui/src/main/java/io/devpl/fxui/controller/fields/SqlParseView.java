@@ -1,17 +1,17 @@
 package io.devpl.fxui.controller.fields;
 
-import io.devpl.fxui.model.FieldNode;
+import io.devpl.common.interfaces.FieldParser;
+import io.devpl.common.interfaces.impl.SqlFieldParser;
+import io.devpl.fxui.editor.CodeEditor;
+import io.devpl.fxui.editor.LanguageMode;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
-
-import java.util.List;
 
 /**
  * 导入SQL，支持DDL和查询SQL
  */
 public class SqlParseView extends FieldParseView {
 
-    TextArea textArea;
+    CodeEditor textArea;
 
     @Override
     String getName() {
@@ -20,24 +20,23 @@ public class SqlParseView extends FieldParseView {
 
     @Override
     Node createRootNode() {
-        textArea = new TextArea();
-        textArea.prefHeightProperty().bind(this.heightProperty());
-        return textArea;
+        textArea = CodeEditor.newInstance(LanguageMode.SQL);
+        return textArea.getView();
     }
 
     @Override
     public String getParseableText() {
-        return textArea.getText();
+        return textArea.getContent();
     }
 
     @Override
     public void fillSampleText() {
-        textArea.setText(getSampleText());
+        textArea.setContent(getSampleText(), true);
     }
 
     @Override
-    public List<FieldNode> parse(String text) {
-        return super.parse(text);
+    protected FieldParser getFieldParser() {
+        return new SqlFieldParser("mysql");
     }
 
     @Override

@@ -34,7 +34,7 @@
             is_deleted = #{param.deleted},
         </if>
         <if test="param.description != null">
-            description = #{param.description},
+            remark = #{param.description},
         </if>
         update_time = NOW()
         WHERE id = #{param.id}

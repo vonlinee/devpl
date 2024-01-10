@@ -11,7 +11,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-import io.devpl.backend.domain.bo.ASTParseResult;
+import io.devpl.common.model.ASTParseResult;
 import io.devpl.backend.service.JavaASTService;
 import org.springframework.stereotype.Service;
 

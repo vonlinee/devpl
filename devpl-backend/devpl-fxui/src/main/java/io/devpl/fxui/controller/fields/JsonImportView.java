@@ -4,15 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.devpl.fxui.editor.CodeEditor;
+import io.devpl.fxui.editor.LanguageMode;
+import io.devpl.fxui.model.FieldSpec;
+import io.devpl.fxui.tools.json.JSONTreeView;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.fxui.tools.json.JSONTreeView;
 import io.fxtras.Alerts;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
-import io.devpl.fxui.editor.CodeMirrorEditor;
-import io.devpl.fxui.editor.LanguageMode;
-import io.devpl.fxui.model.FieldSpec;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -20,7 +20,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.net.URL;
@@ -37,7 +36,7 @@ public class JsonImportView extends FxmlView {
     @FXML
     public BorderPane bopRoot;
 
-    CodeMirrorEditor codeEditor;
+    CodeEditor codeEditor;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,7 +44,7 @@ public class JsonImportView extends FxmlView {
         chbJsonSpec.getSelectionModel().select(0);
 
         if (codeEditor == null) {
-            codeEditor = CodeMirrorEditor.newInstance(LanguageMode.JSON);
+            codeEditor = CodeEditor.newInstance(LanguageMode.JSON);
             bopRoot.setCenter(codeEditor.getView());
         }
     }
@@ -54,7 +53,6 @@ public class JsonImportView extends FxmlView {
      * 解析字段
      * @param event
      */
-    @Subscribe
     public void parseFieldsFromInput(FieldImportEvent event) {
         try {
             List<FieldSpec> list = extractFieldsFromJson(codeEditor.getContent());

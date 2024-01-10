@@ -18,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
-import org.greenrobot.eventbus.Subscribe;
 import org.mybatis.generator.config.ColumnOverride;
 import org.mybatis.generator.config.IgnoredColumn;
 
@@ -90,7 +89,6 @@ public class TableCustomizationView extends FxmlView {
      *
      * @param tableInfo 表生成信息
      */
-    @Subscribe(name = "CustomizeTable")
     public void customize(TableGeneration tableInfo) {
         // 获取数据库表的所有列信息
         List<ColumnCustomConfiguration> columns = new ArrayList<>();

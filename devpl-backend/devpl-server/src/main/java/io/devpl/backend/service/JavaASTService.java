@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import io.devpl.backend.domain.bo.ASTParseResult;
+import io.devpl.common.model.ASTParseResult;
 
 /**
  * Java源代码解析

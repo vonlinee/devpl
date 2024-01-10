@@ -39,3 +39,5 @@ https://openjdk.org/projects/jigsaw/spec/reqs/
 --add-exports=javafx.graphics/com.sun.scenario.animation.shared=ALL-UNNAMED
 --add-exports=javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED
 
+
+添加了module-info.java后，Idea不会将devpl-fxuid编译后的根路径(...target/classes)加到类路径，因此通过ClassLoader.getResourceAsStream方法会返回null

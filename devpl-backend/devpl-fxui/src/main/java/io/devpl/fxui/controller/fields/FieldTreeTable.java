@@ -2,13 +2,18 @@ package io.devpl.fxui.controller.fields;
 
 import io.devpl.fxui.controls.TextInputTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
+import io.devpl.fxui.utils.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.util.converter.DefaultStringConverter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -89,7 +94,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         public RowContextMenu() {
             MenuItem menuItem1 = new MenuItem("添加子节点");
             menuItem1.setOnAction(e -> {
-                if (!curRow.isEmpty()) {
+                if (!FXUtils.isRowEmpty(curRow)) {
                     curRow.getTreeItem().getChildren().add(new TreeItem<>(new FieldNode("Unknown", "", "")));
                     curRow.getTreeItem().setExpanded(true);
                 }
@@ -183,13 +188,13 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
 
                     int fromLevel = tableView.getTreeItemLevel(fromRow.getTreeItem());
                     int toLevel = tableView.getTreeItemLevel(toRow.getTreeItem());
-                    System.out.println("层级" + fromLevel + " -> " + toLevel);
+                    // System.out.println("层级" + fromLevel + " -> " + toLevel);
                     if (toLevel > fromLevel) {
                         // 判断是否父节点拖到其子孙节点
                         TreeItem<FieldNode> parent = toRow.getTreeItem().getParent();
                         for (int i = toLevel; i > fromLevel; i--) {
                             if (parent == fromRow.getTreeItem()) {
-                                System.out.println("父节点拖到其子孙节点");
+                                // System.out.println("父节点拖到其子孙节点");
                                 return;
                             }
                             parent = parent.getParent();
@@ -199,7 +204,7 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
 
                 }
 
-                System.out.println("从" + fromRow.getIndex() + "拖到" + toRow.getIndex());
+                // System.out.println("从" + fromRow.getIndex() + "拖到" + toRow.getIndex());
 
                 // 连同所有子节点一起移动
                 TreeItem<FieldNode> removedItem = remove(fromRow.getTreeItem());
@@ -225,28 +230,23 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
     }
 
     public final void expandAll() {
-        setExpandStatusRecursively(rootNode);
-    }
-
-    private void setExpandStatusRecursively(TreeItem<?> parent) {
-        if (!parent.isLeaf() && !parent.getChildren().isEmpty()) {
-            parent.setExpanded(true);
-            for (TreeItem<?> child : parent.getChildren()) {
-                setExpandStatusRecursively(child);
-            }
-        }
+        FXUtils.expandAll(rootNode);
     }
 
     private void markDroppedTargetRow(TreeTableRow<?> row) {
 
     }
 
-    public void addFields(List<FieldNode> nodeList) {
+    public void addFields(Collection<FieldNode> nodeList) {
         for (FieldNode fieldNode : nodeList) {
             TreeItem<FieldNode> item = new TreeItem<>(fieldNode);
             rootNode.getChildren().add(item);
             add(item, fieldNode);
         }
+    }
+
+    public void clearAll() {
+        rootNode.getChildren().clear();
     }
 
     private void add(TreeItem<FieldNode> parent, FieldNode parentItem) {
