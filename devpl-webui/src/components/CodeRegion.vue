@@ -98,7 +98,7 @@ defineExpose({
     border: none;
     background: rgba(255, 255, 255, 0.5);
     /*整个按钮的不透明度，会影响到文字，0完全透明，1完全不透明*/
-    opacity: 0.7;
+    // opacity: 0.7;
     padding: 5px 10px 5px 10px;
     color: #000;
     text-align: center;

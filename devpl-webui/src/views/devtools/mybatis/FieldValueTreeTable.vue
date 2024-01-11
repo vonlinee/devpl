@@ -13,7 +13,6 @@
     <vxe-column
       field="fieldKey"
       title="Key"
-      width="140"
       tree-node
       :edit-render="{}"
     >
@@ -24,12 +23,14 @@
     <vxe-column
       field="dataType"
       title="数据类型"
-      width="140"
       header-align="center"
       :edit-render="{}"
     >
       <template #edit="{ row }">
-        <vxe-select v-model="row.dataType">
+        <vxe-select
+          v-model="row.dataType"
+          popup-class-name="datatype-select-drop-container"
+        >
           <vxe-option
             v-for="dt in valueDataTypes"
             :key="dt.key"
@@ -42,7 +43,6 @@
     <vxe-column
       field="value"
       title="值"
-      width="140"
       header-align="center"
       :edit-render="{}"
     >
@@ -248,3 +248,9 @@ defineExpose({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.datatype-select-drop-container{
+  background-color: red;
+}
+</style>
