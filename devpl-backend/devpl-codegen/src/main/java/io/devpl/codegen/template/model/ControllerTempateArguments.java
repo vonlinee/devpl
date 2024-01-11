@@ -4,7 +4,7 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class ControllerTempateArguments extends TypeData implements TableInitial
     @NotNull
     public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
         Map<String, Object> data = new HashMap<>(5);
-        data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
+        data.put("controllerMappingHyphen", NamingStrategy.camelToHyphen(tableInfo.getEntityPath()));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
         data.put("restControllerStyle", this.restStyle);
         data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);

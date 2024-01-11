@@ -2,18 +2,16 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.FileUtils;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Consumer;
@@ -194,16 +192,8 @@ public class AutoGenerator {
         context = new Context(packageConfig, dataSourceConfig, strategyConfig, templateConfig, globalConfig, injectionConfig);
 
         context.initialize();
-
         // 初始化Context组件
-        Class<? extends DatabaseIntrospector> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
-        try {
-            Constructor<? extends DatabaseIntrospector> declaredConstructor = databaseQueryClass.getDeclaredConstructor();
-            DatabaseIntrospector databaseIntrospector = declaredConstructor.newInstance();
-            context.setDatabaseIntrospection(databaseIntrospector);
-        } catch (ReflectiveOperationException exception) {
-            throw new RuntimeException("创建DatabaseIntrospector实例出现错误:", exception);
-        }
+        context.setDatabaseIntrospection(ClassUtils.instantiate(dataSourceConfig.getDatabaseQueryClass()));
     }
 
     /**

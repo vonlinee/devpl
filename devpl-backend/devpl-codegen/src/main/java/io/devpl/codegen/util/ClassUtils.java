@@ -1,5 +1,8 @@
 package io.devpl.codegen.util;
 
+import io.devpl.sdk.lang.RuntimeReflectiveOperationException;
+import io.devpl.sdk.util.StringUtils;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
@@ -115,5 +118,21 @@ public final class ClassUtils {
             }
             return instance;
         }).orElseThrow(() -> new RuntimeException("创建对象" + className + "失败"));
+    }
+
+    /**
+     * 实例化指定的类
+     *
+     * @param clazz 指定类
+     * @param <T>   类型
+     * @return 对象
+     */
+    public static <T> T instantiate(Class<T> clazz) {
+        try {
+            return clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
+            throw new RuntimeReflectiveOperationException(e);
+        }
     }
 }

@@ -8,7 +8,7 @@ public interface TreeBuilder<K, E, T> {
     Class<K> keyType();
 
     default List<Function<E, K>> getKeyMappers() {
-        return null;
+        return Collections.emptyList();
     }
 
     T apply(Collection<E> collection);
@@ -39,6 +39,8 @@ public interface TreeBuilder<K, E, T> {
     }
 
     void addChild(T parent, T child, int level, K key);
+
+    boolean hasNext(int level, K parentLevelKey, E element, T parentNode);
 
     Comparator<K> getKeyComparator();
 
@@ -72,21 +74,29 @@ public interface TreeBuilder<K, E, T> {
 
         @Override
         public void next(int level, _K parentLevelKey, _E element, _T parentNode) {
-            if (level == keyMappers.size()) {
-                return;
-            }
-            _K levelKey = getKey(element, level);
-            if (levelParentNodeMap.containsKey(levelKey)) {
-                parentNode = levelParentNodeMap.get(levelKey);
-            } else {
-                _T node = map(level, levelKey, element);
-                if (parentNode != null) {
-                    addChild(parentNode, node, level, levelKey);
-                    levelParentNodeMap.put(levelKey, node);
+            if (hasNext(level, parentLevelKey, element, parentNode)) {
+                _K levelKey = getKey(element, level);
+                if (levelParentNodeMap.containsKey(levelKey)) {
+                    parentNode = levelParentNodeMap.get(levelKey);
+                } else {
+                    _T node = map(level, levelKey, element);
+                    if (parentNode != null) {
+                        addChild(parentNode, node, level, levelKey);
+                        levelParentNodeMap.put(levelKey, node);
+                    }
+                    parentNode = node;
                 }
-                parentNode = node;
+                next(level + 1, parentLevelKey, element, parentNode);
             }
-            next(level + 1, parentLevelKey, element, parentNode);
+        }
+
+        protected _T build(Collection<_E> collection) {
+            int level = 0;
+            _T root = map(-1, null, null);
+            for (_E element : collection) {
+                next(level, null, element, root);
+            }
+            return root;
         }
 
         @Override
@@ -94,12 +104,10 @@ public interface TreeBuilder<K, E, T> {
             if (this.keyMappers == null) {
                 this.keyMappers = getKeyMappers();
             }
-            int level = 0;
-            _T root = map(-1, null, null);
-            for (_E element : collection) {
-                next(level, null, element, root);
+            if (this.keyMappers == null || this.keyMappers.isEmpty()) {
+                return null;
             }
-            return root;
+            return build(collection);
         }
     }
 }

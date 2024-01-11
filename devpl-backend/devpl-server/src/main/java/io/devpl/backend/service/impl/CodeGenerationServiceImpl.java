@@ -3,25 +3,18 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.CodeGenerationService;
-import io.devpl.codegen.lang.LanguageMode;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.FieldData;
 import io.devpl.codegen.template.model.TypeData;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
-import org.springframework.javapoet.*;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CodeGenerationServiceImpl implements CodeGenerationService {
@@ -37,35 +30,18 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
      */
     @Override
     public String generateJavaPojoClass(JavaPojoCodeGenParam param) {
-
-        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(StringUtils.whenBlank(param.getClassName(), "Pojo"))
-            .addModifiers(Modifier.PUBLIC);
-
+        TypeData model = new TypeData();
+        model.setClassName(StringUtils.whenBlank(param.getClassName(), "Pojo"));
+        model.setModifier(Modifier.PUBLIC.toString());
         for (FieldInfo fieldInfo : param.getFields()) {
-            FieldSpec.Builder fb = FieldSpec.builder(TypeName.get(String.class), fieldInfo.getFieldName(), Modifier.PRIVATE)
-                .addJavadoc(StringUtils.whenBlank(fieldInfo.getDescription(), fieldInfo.getFieldName()));
-
-            FieldSpec fieldSpec = fb.build();
-
-            typeSpecBuilder.addField(fieldSpec);
+            FieldData fieldData = new FieldData();
+            fieldData.setName(fieldInfo.getFieldKey());
+            fieldData.setModifier(Modifier.PRIVATE);
+            fieldData.setDataType(fieldData.getDataType());
+            fieldData.setComment(fieldInfo.getComment());
+            model.addField(fieldData);
         }
-
-        // lombok注解支持
-        if (param.useLombok()) {
-            typeSpecBuilder.addAnnotation(AnnotationSpec.builder(ClassName.bestGuess("lombok.Getter")).build());
-            typeSpecBuilder.addAnnotation(AnnotationSpec.builder(ClassName.bestGuess("lombok.Setter")).build());
-        }
-
-        JavaFile javaFile = JavaFile.builder(param.getPackageName(), typeSpecBuilder.build())
-            .build();
-
-        try {
-            StringWriter sw = new StringWriter();
-            javaFile.writeTo(sw);
-            return sw.toString();
-        } catch (IOException e) {
-            return e.getMessage();
-        }
+        return templateEngine.render("codegen/templates/ext/java.pojo.vm", model);
     }
 
     @Override
@@ -80,23 +56,13 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
             fieldData.setName(field.getFieldName());
-            fieldData.setDataType("String");
+            fieldData.setDataType(StringUtils.whenBlank(field.getDataType(), "String"));
             fieldData.setComment(field.getComment());
-            fieldData.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
+            fieldData.setModifier(Modifier.PRIVATE);
             fieldDataList.add(fieldData);
         }
         model.setFields(fieldDataList);
-
-        // 字段信息
-        Map<String, Object> args = new HashMap<>();
-        model.fill(args);
-
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", args, baos);
-            return baos.toString(StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            return e.getMessage();
-        }
+        return templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", model);
     }
 
     @Override
@@ -119,22 +85,14 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
             fieldData.setName(field.getFieldName());
-            fieldData.setDataType("String");
+            fieldData.setDataType(StringUtils.whenBlank(field.getDataType(), "String"));
             fieldData.setComment(field.getComment());
-            fieldData.setModifier(LanguageMode.JAVA.getModifierName(java.lang.reflect.Modifier.PRIVATE));
+            fieldData.setModifier(Modifier.PRIVATE);
             fieldDataList.add(fieldData);
         }
         model.setFields(fieldDataList);
 
         // 字段信息
-        Map<String, Object> args = new HashMap<>();
-        model.fill(args);
-
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", args, baos);
-            return baos.toString(StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            return e.getMessage();
-        }
+        return templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", model);
     }
 }

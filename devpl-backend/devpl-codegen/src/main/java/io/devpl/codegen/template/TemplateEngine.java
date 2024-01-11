@@ -66,6 +66,10 @@ public interface TemplateEngine {
         render(getTemplate(name, false), new TemplateArgumentsMap(arguments, false), fos);
     }
 
+    default void render(String name, TemplateArguments arguments, OutputStream fos) throws TemplateException {
+        render(getTemplate(name, false), arguments, fos);
+    }
+
     /**
      * 渲染模板，输出为字符串
      *
@@ -81,6 +85,26 @@ public interface TemplateEngine {
             throw new TemplateException(e);
         }
     }
+
+    /**
+     * @param template  模板名称
+     * @param arguments 模板渲染参数
+     * @return 渲染结果
+     * @throws TemplateException 模板异常
+     */
+    default String render(String template, TemplateArguments arguments) throws TemplateException {
+        TemplateSource ts = getTemplate(template, false);
+        if (ts.exists()) {
+            return ts.getName();
+        }
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            render(ts, arguments, os);
+            return os.toString(StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new TemplateException(e);
+        }
+    }
+
     /**
      * 注册自定义指令
      *

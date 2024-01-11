@@ -4,7 +4,7 @@ import io.devpl.codegen.template.model.ControllerTempateArguments;
 import io.devpl.codegen.template.model.EntityTemplateArugments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

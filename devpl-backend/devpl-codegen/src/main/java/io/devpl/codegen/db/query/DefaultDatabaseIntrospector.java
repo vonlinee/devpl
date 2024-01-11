@@ -10,7 +10,7 @@ import io.devpl.codegen.jdbc.meta.PrimaryKey;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.type.TypeConverter;
 import io.devpl.codegen.util.JdbcUtils;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

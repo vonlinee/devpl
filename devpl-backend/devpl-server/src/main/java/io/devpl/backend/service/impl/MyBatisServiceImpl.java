@@ -316,6 +316,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         Object val;
         switch (paramValueType) {
             case NUMERIC -> val = Long.parseLong(literalValue);
+            // TODO 转为集合类型
             case COLLECTION -> val = LocalDateTime.parse(literalValue);
             default -> val = literalValue;
         }

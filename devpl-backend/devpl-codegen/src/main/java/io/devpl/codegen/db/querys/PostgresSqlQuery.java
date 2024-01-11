@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.querys;
 
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

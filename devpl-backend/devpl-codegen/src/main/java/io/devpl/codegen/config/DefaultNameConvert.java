@@ -1,7 +1,7 @@
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.core.TableGeneration;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 import java.util.Set;
 

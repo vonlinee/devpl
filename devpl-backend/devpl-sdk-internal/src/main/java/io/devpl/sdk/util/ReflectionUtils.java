@@ -1,11 +1,12 @@
 package io.devpl.sdk.util;
 
 import io.devpl.sdk.collection.ConcurrentReferenceHashMap;
+import io.devpl.sdk.lang.RuntimeReflectiveOperationException;
 import io.devpl.sdk.validation.Assert;
 
 import java.lang.reflect.*;
-import java.util.*;
 import java.util.Arrays;
+import java.util.*;
 
 /**
  * Simple utility class for working with the reflection API and handling
@@ -805,7 +806,6 @@ public abstract class ReflectionUtils {
         declaredMethodsCache.clear();
         declaredFieldsCache.clear();
     }
-
 
     /**
      * Action to take on each method.

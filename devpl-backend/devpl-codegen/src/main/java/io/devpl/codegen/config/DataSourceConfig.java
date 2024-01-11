@@ -8,7 +8,7 @@ import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.db.query.DefaultDatabaseIntrospector;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.util.JdbcUtils;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

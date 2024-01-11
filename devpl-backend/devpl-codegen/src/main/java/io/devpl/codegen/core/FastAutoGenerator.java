@@ -2,7 +2,7 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.TemplateEngine;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import io.devpl.codegen.util.Utils;
 import org.jetbrains.annotations.NotNull;
 

@@ -5,7 +5,7 @@ import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.IdType;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

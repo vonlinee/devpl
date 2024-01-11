@@ -32,4 +32,5 @@ open module devpl.codegen {
     requires com.github.javaparser.core;
     requires druid;
     requires jsqlparser;
+    requires java.compiler;
 }

@@ -1,5 +1,6 @@
 package io.devpl.sdk.util;
 
+import io.devpl.sdk.lang.RuntimeReflectiveOperationException;
 import io.devpl.sdk.validation.Assert;
 
 import java.beans.Introspector;
@@ -1505,9 +1506,9 @@ public abstract class ClassUtils {
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("failed to instantiate class " + clazz + " cause:", e);
+            throw new RuntimeReflectiveOperationException("failed to instantiate class " + clazz + " cause:", e);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("failed to instantiate class " + clazz + " cause: no default constructor in Class[" + clazz + "]", e);
+            throw new RuntimeReflectiveOperationException("failed to instantiate class " + clazz + " cause: no default constructor in Class[" + clazz + "]", e);
         }
     }
 

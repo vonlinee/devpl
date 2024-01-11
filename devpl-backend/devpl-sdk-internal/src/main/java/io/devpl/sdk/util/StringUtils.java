@@ -2323,4 +2323,259 @@ public abstract class StringUtils {
     public static String whenBlank(String str, String placeholder) {
         return isBlank(str) ? placeholder : str;
     }
+
+    /**
+     * 对象转为字符串去除左右空格
+     *
+     * @param o 带转换对象
+     * @return 去掉开头和末尾的空格
+     */
+    public static String trim(Object o) {
+        return String.valueOf(o).trim();
+    }
+
+    public static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.isEmpty();
+    }
+
+    /**
+     * 首字母转换小写
+     *
+     * @param param 需要转换的字符串
+     * @return 转换好的字符串
+     */
+    public static String firstToLowerCase(String param) {
+        if (!StringUtils.hasText(param)) {
+            return param;
+        }
+        return param.substring(0, 1).toLowerCase() + param.substring(1);
+    }
+
+    /**
+     * 正则表达式匹配
+     *
+     * @param regex 正则表达式字符串
+     * @param input 要匹配的字符串
+     * @return 如果 input 符合 regex 正则表达式格式, 返回true, 否则返回 false;
+     */
+    public static boolean matches(String regex, String input) {
+        if (null == regex || null == input) {
+            return false;
+        }
+        return Pattern.matches(regex, input);
+    }
+
+    /**
+     * 拼接字符串第二个字符串第一个字母大写
+     */
+    public static String concatCapitalize(String concatStr, final String str) {
+        if (hasText(concatStr)) {
+            concatStr = "";
+        }
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+
+        final char firstChar = str.charAt(0);
+        if (Character.isTitleCase(firstChar)) {
+            // already capitalized
+            return str;
+        }
+
+        return concatStr + Character.toTitleCase(firstChar) + str.substring(1);
+    }
+
+    /**
+     * 包含大写字母
+     *
+     * @param word 待判断字符串
+     * @return ignore
+     */
+    public static boolean containsUpperCase(String word) {
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (Character.isUpperCase(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断是否以某个字符串结尾（区分大小写）
+     * Check if a String ends with a specified suffix.
+     * <p>
+     * <code>null</code>s are handled without exceptions. Two <code>null</code>
+     * references are considered to be equal. The comparison is case-sensitive.
+     * </p>
+     * <p>
+     * <pre>
+     * StringUtils.endsWith(null, null)      = true
+     * StringUtils.endsWith(null, "abcdef")  = false
+     * StringUtils.endsWith("def", null)     = false
+     * StringUtils.endsWith("def", "abcdef") = true
+     * StringUtils.endsWith("def", "ABCDEF") = false
+     * </pre>
+     * </p>
+     *
+     * @param str    the String to check, may be null
+     * @param suffix the suffix to find, may be null
+     * @return <code>true</code> if the String ends with the suffix, case-sensitive, or both <code>null</code>
+     * @see String#endsWith(String)
+     * @since 2.4
+     */
+    public static boolean endsWith(String str, String suffix) {
+        return endsWith(str, suffix, false);
+    }
+
+    /**
+     * Check if a String ends with a specified suffix (optionally case-insensitive).
+     *
+     * @param str        the String to check, may be null
+     * @param suffix     the suffix to find, may be null
+     * @param ignoreCase indicates whether the compare should ignore case (case-insensitive) or not.
+     * @return <code>true</code> if the String starts with the prefix or both
+     * <code>null</code>
+     * @see String#endsWith(String)
+     */
+    private static boolean endsWith(String str, String suffix, boolean ignoreCase) {
+        if (str == null || suffix == null) {
+            return (str == null && suffix == null);
+        }
+        if (suffix.length() > str.length()) {
+            return false;
+        }
+        int strOffset = str.length() - suffix.length();
+        return str.regionMatches(ignoreCase, strOffset, suffix, 0, suffix.length());
+    }
+
+    /**
+     * 是否为CharSequence类型
+     *
+     * @param clazz class
+     * @return true 为是 CharSequence 类型
+     */
+    public static boolean isCharSequence(Class<?> clazz) {
+        return clazz != null && CharSequence.class.isAssignableFrom(clazz);
+    }
+
+    /**
+     * 前n个首字母小写,之后字符大小写的不变
+     *
+     * @param rawString 需要处理的字符串
+     * @param index     多少个字符(从左至右)
+     * @return ignore
+     */
+    public static String prefixToLower(String rawString, int index) {
+        return rawString.substring(0, index).toLowerCase() +
+            rawString.substring(index);
+    }
+
+    /**
+     * 删除字符前缀之后,首字母小写,之后字符大小写的不变
+     * <p>StringUtils.removePrefixAfterPrefixToLower( "isUser", 2 )     = user</p>
+     * <p>StringUtils.removePrefixAfterPrefixToLower( "isUserInfo", 2 ) = userInfo</p>
+     *
+     * @param rawString 需要处理的字符串
+     * @param index     删除多少个字符(从左至右)
+     * @return ignore
+     */
+    public static String removePrefixAfterPrefixToLower(String rawString, int index) {
+        return prefixToLower(rawString.substring(index), 1);
+    }
+
+    /**
+     * <p>比较两个字符串，相同则返回true。字符串可为null</p>
+     *
+     * <p>对字符串大小写敏感</p>
+     *
+     * <pre>
+     * StringUtils.equals(null, null)   = true
+     * StringUtils.equals(null, "abc")  = false
+     * StringUtils.equals("abc", null)  = false
+     * StringUtils.equals("abc", "abc") = true
+     * StringUtils.equals("abc", "ABC") = false
+     * </pre>
+     *
+     * @param cs1 第一个字符串, 可为 {@code null}
+     * @param cs2 第二个字符串, 可为 {@code null}
+     * @return {@code true} 如果两个字符串相同, 或者都为 {@code null}
+     * @see Object#equals(Object)
+     */
+    public static boolean equals(final CharSequence cs1, final CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 == null || cs2 == null) {
+            return false;
+        }
+        if (cs1.length() != cs2.length()) {
+            return false;
+        }
+        if (cs1 instanceof String && cs2 instanceof String) {
+            return cs1.equals(cs2);
+        }
+        // Step-wise comparison
+        final int length = cs1.length();
+        for (int i = 0; i < length; i++) {
+            if (cs1.charAt(i) != cs2.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 去除不可见的字符，例如 \t, \n, \r
+     *
+     * @param str 原字符串
+     * @return 去掉\t, \n, \r之后的结果
+     */
+    public static String trimInvisibleCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        int left = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != '\n' || str.charAt(i) != '\t') {
+                break;
+            }
+            left++;
+        }
+        int right = str.length() - 1;
+        for (int i = str.length() - 1; i > 0; i--) {
+            if (i < left || str.charAt(i) != '\n') {
+                break;
+            }
+            right--;
+        }
+        return str.substring(left, right + 1);
+    }
+
+    /**
+     * 去掉首尾换行符
+     *
+     * @param str 字符串
+     * @return 去掉首尾换行符
+     */
+    public static String trimWrapCharacters(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        int left = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != '\n') {
+                break;
+            }
+            left++;
+        }
+        int right = str.length() - 1;
+        for (int i = str.length() - 1; i > 0; i--) {
+            if (i < left || str.charAt(i) != '\n') {
+                break;
+            }
+            right--;
+        }
+        return str.substring(left, right + 1);
+    }
 }

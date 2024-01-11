@@ -1,19 +1,12 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.template.TemplateArguments;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 生成Java类的模板参数
  */
-@Getter
-@Setter
 public class TypeData implements TemplateArguments {
 
     /**
@@ -73,6 +66,13 @@ public class TypeData implements TemplateArguments {
         arguments.put("methods", this.methods);
     }
 
+    @Override
+    public Map<String, Object> asMap() {
+        Map<String, Object> map = new HashMap<>();
+        fill(map);
+        return map;
+    }
+
     public final void addImport(String... importTypes) {
         if (importItems == null) {
             importItems = new ArrayList<>(Arrays.asList(importTypes));
@@ -94,5 +94,85 @@ public class TypeData implements TemplateArguments {
             this.fields = new ArrayList<>();
         }
         this.fields.add(fieldData);
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
+    }
+
+    public List<String> getImportItems() {
+        return importItems;
+    }
+
+    public void setImportItems(List<String> importItems) {
+        this.importItems = importItems;
+    }
+
+    public List<String> getStaticImportItem() {
+        return staticImportItem;
+    }
+
+    public void setStaticImportItem(List<String> staticImportItem) {
+        this.staticImportItem = staticImportItem;
+    }
+
+    public String getSuperClass() {
+        return superClass;
+    }
+
+    public void setSuperClass(String superClass) {
+        this.superClass = superClass;
+    }
+
+    public List<String> getSuperInterfaces() {
+        return superInterfaces;
+    }
+
+    public void setSuperInterfaces(List<String> superInterfaces) {
+        this.superInterfaces = superInterfaces;
+    }
+
+    public List<FieldData> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<FieldData> fields) {
+        this.fields = fields;
+    }
+
+    public List<MethodData> getMethods() {
+        return methods;
+    }
+
+    public void setMethods(List<MethodData> methods) {
+        this.methods = methods;
     }
 }

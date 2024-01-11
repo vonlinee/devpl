@@ -1,7 +1,7 @@
 package io.devpl.codegen.config;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**

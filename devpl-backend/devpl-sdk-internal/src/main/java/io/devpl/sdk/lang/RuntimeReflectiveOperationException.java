@@ -10,4 +10,8 @@ public class RuntimeReflectiveOperationException extends RuntimeException {
     public RuntimeReflectiveOperationException(ReflectiveOperationException roe) {
         super(roe);
     }
+
+    public RuntimeReflectiveOperationException(String message, ReflectiveOperationException roe) {
+        super(message, roe);
+    }
 }

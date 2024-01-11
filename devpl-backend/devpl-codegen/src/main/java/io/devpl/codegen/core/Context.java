@@ -6,7 +6,7 @@ import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.plugins.TableGenerationPlugin;
 import io.devpl.codegen.strategy.MavenProjectFileLocator;
 import io.devpl.codegen.strategy.ProjectFileLocator;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 

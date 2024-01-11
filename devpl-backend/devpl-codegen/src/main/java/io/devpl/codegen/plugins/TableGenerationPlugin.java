@@ -11,7 +11,7 @@ import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
-import io.devpl.codegen.util.StringUtils;
+import io.devpl.sdk.util.StringUtils;
 
 import java.io.File;
 import java.util.*;

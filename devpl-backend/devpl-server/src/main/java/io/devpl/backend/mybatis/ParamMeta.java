@@ -3,8 +3,6 @@ package io.devpl.backend.mybatis;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter
