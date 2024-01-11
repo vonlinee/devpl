@@ -1,25 +1,65 @@
 <template>
-  <el-table border :data="tableData" :row-class-name="rowClassNameCallbackFn" row-key="id" default-expand-all
-    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+  <el-table
+    border
+    :data="tableData"
+    :row-class-name="rowClassNameCallbackFn"
+    row-key="id"
+    default-expand-all
+    :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+  >
     <el-table-column label="名称" prop="fieldKey">
       <template #default="{ row }">
-        <a class="field-label" v-if="!(row.editing || false)" :title="row.description || '无'" @click="fireInput(row)">{{
-          row.fieldKey }}</a>
+        <a
+          v-if="!(row.editing || false)"
+          class="field-label"
+          :title="row.description || '无'"
+          @click="fireInput(row)"
+          >{{ row.fieldKey }}</a
+        >
 
-        <div v-if="row.editing || false" style="display: flex; flex-direction: row; height: 100%; align-items: center;">
-          <input class="field-input" ref="currentInputRef" @blur="row.editing = false"
-            @change="(e) => onInputChange(e, row)" @keyup.enter="(e) => onInputChange(e, row)">
+        <div
+          v-if="row.editing || false"
+          style="
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            align-items: center;
+          "
+        >
+          <input
+            ref="currentInputRef"
+            class="field-input"
+            @blur="row.editing = false"
+            @change="(e) => onInputChange(e, row)"
+            @keyup.enter="(e) => onInputChange(e, row)"
+          />
         </div>
-        <el-icon :size="16" @click="openValueEditor(row)" style="cursor: pointer;">
-            <Edit />
-          </el-icon>
+        <el-icon
+          :size="16"
+          style="cursor: pointer"
+          @click="openValueEditor(row)"
+        >
+          <Edit />
+        </el-icon>
       </template>
     </el-table-column>
     <el-table-column label="值" prop="fieldKey">
       <template #default="scope">
-        <div style="display: flex; flex-direction: row; height: 100%; align-items: center;">
-          <el-text style="flex-grow: 1;">{{ scope.row.value }}</el-text>
-          <el-icon v-if="scope.row.leaf" :size="16" @click="openValueEditor(scope.row)" style="cursor: pointer;">
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            align-items: center;
+          "
+        >
+          <el-text style="flex-grow: 1">{{ scope.row.value }}</el-text>
+          <el-icon
+            v-if="scope.row.leaf"
+            :size="16"
+            style="cursor: pointer"
+            @click="openValueEditor(scope.row)"
+          >
             <Edit />
           </el-icon>
         </div>
@@ -28,25 +68,43 @@
     <el-table-column label="数据类型" prop="dataType">
       <template #default="scope">
         <el-select v-model="scope.row.dataType">
-          <el-option v-for="dt in dataTypes" :label="dt.label" :key="dt.key" :value="dt.value" />
+          <el-option
+            v-for="dt in dataTypes"
+            :key="dt.key"
+            :label="dt.label"
+            :value="dt.value"
+          />
         </el-select>
       </template>
     </el-table-column>
-    <el-table-column label="操作" width="70px" header-align="center" fixed="right">
+    <el-table-column
+      label="操作"
+      width="70px"
+      header-align="center"
+      fixed="right"
+    >
       <template #default="scope">
-        <div style="display: flex; align-items: center; height: 100%;">
+        <div style="display: flex; align-items: center; height: 100%">
           <el-dropdown>
-            <el-icon :size="16" style="cursor: pointer;">
+            <el-icon :size="16" style="cursor: pointer">
               <Plus />
             </el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="addRow(scope.row)">同级节点</el-dropdown-item>
-                <el-dropdown-item @click="addRow(scope.row, 1)">子节点</el-dropdown-item>
+                <el-dropdown-item @click="addRow(scope.row)"
+                  >同级节点</el-dropdown-item
+                >
+                <el-dropdown-item @click="addRow(scope.row, 1)"
+                  >子节点</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <el-icon :size="16" style="cursor: pointer; margin-left: 10px;" @click="removeRow(scope.row)">
+          <el-icon
+            :size="16"
+            style="cursor: pointer; margin-left: 10px"
+            @click="removeRow(scope.row)"
+          >
             <Delete />
           </el-icon>
         </div>
@@ -54,7 +112,8 @@
     </el-table-column>
 
     <template #empty>
-      暂无数据, <a @click="addRow()" style="color: rgb(40, 133, 238);">点击添加</a>
+      暂无数据,
+      <a style="color: rgb(40, 133, 238)" @click="addRow()">点击添加</a>
     </template>
   </el-table>
 
@@ -62,34 +121,34 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from "vue";
-import FieldValueEditor from "@/components/fields/FieldValueEditor.vue";
-import { Edit, Delete, Plus } from '@element-plus/icons-vue'
+import { nextTick, ref } from "vue"
+import FieldValueEditor from "@/components/fields/FieldValueEditor.vue"
+import { Edit, Delete, Plus } from "@element-plus/icons-vue"
 
 const valueEditorModalRef = ref()
-const currentInputRef = ref();
+const currentInputRef = ref()
 
 const props = defineProps<{
-  fields?: FieldInfo[],
+  fields?: FieldInfo[]
   dataTypes?: DataTypeSelectOption[]
 }>()
 
 // 表格数据
-const tableData = ref<FieldInfo[]>(props.fields || []);
+const tableData = ref<FieldInfo[]>(props.fields || [])
 // 可选择的数据类型
-const dataTypes = ref<DataTypeSelectOption[]>(props.dataTypes || []);
+const dataTypes = ref<DataTypeSelectOption[]>(props.dataTypes || [])
 
 /**
  * 触发编辑输入
- * @param data 
+ * @param data
  */
 const fireInput = (data: FieldInfo) => {
-  data.editing = true;
+  data.editing = true
   nextTick(() => {
-    currentInputRef.value.value = data.fieldKey;
-    currentInputRef.value.focus();
-  });
-};
+    currentInputRef.value.value = data.fieldKey
+    currentInputRef.value.focus()
+  })
+}
 
 const openValueEditor = (row: FieldInfo) => {
   valueEditorModalRef.value.open(row)
@@ -102,29 +161,33 @@ const openValueEditor = (row: FieldInfo) => {
 const removeRow = (row: FieldInfo) => {
   if (row.parentId) {
     // 递归查找 找到其父节点
-    recursiveSearch(tableData.value, f => f.id == row.parentId, p => {
-      const children = p.children || []
-      if (children.length > 0) {
-        let index: number = children.indexOf(row)
-        if (index > -1) {
-          children.splice(index, 1);
+    recursiveSearch(
+      tableData.value,
+      (f) => f.id == row.parentId,
+      (p) => {
+        const children = p.children || []
+        if (children.length > 0) {
+          let index: number = children.indexOf(row)
+          if (index > -1) {
+            children.splice(index, 1)
+          }
         }
       }
-    })
+    )
   } else {
     // 直接删除
     let index: number = tableData.value.indexOf(row)
     if (index > -1) {
-      tableData.value.splice(index, 1);
+      tableData.value.splice(index, 1)
     }
   }
-};
+}
 
 /**
  * rowClassName回调函数
- * @param param 
+ * @param param
  */
-const rowClassNameCallbackFn = (data: { row: FieldInfo, rowIndex: number }) => {
+const rowClassNameCallbackFn = (data: { row: FieldInfo; rowIndex: number }) => {
   data.row.id = data.rowIndex + 1 // 从1开始
   return "param-table-row"
 }
@@ -135,11 +198,15 @@ const rowClassNameCallbackFn = (data: { row: FieldInfo, rowIndex: number }) => {
  * @param condition 搜索条件
  * @param consumer 找到之后的逻辑
  */
-const recursiveSearch = (nodes: FieldInfo[], condition: (node: FieldInfo) => boolean, consumer: (node: FieldInfo) => void) => {
+const recursiveSearch = (
+  nodes: FieldInfo[],
+  condition: (node: FieldInfo) => boolean,
+  consumer: (node: FieldInfo) => void
+) => {
   if (nodes == undefined) {
     return
   }
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     if (condition(node)) {
       consumer(node)
     } else {
@@ -154,12 +221,11 @@ const recursiveSearch = (nodes: FieldInfo[], condition: (node: FieldInfo) => boo
  * @param type null或者0添加同级节点
  */
 const addRow = (row?: FieldInfo, type?: number) => {
-
   const newObj = {
     fieldKey: "new",
     editing: false,
     selected: false,
-    leaf: true
+    leaf: true,
   } as FieldInfo
 
   if (dataTypes.value?.length > 0) {
@@ -189,27 +255,30 @@ const addRow = (row?: FieldInfo, type?: number) => {
       // 新增同级节点
       if (row.parentId) {
         // 递归查找 添加同级节点
-        recursiveSearch(tableData.value, f => f.id == row.parentId, p => {
-          const children = p.children || []
-          newObj.parentId = p.id
-          newObj.id = Number.parseInt(p.id + "" + children.length)
-          children.push(newObj)
-          p.children = children
-        })
+        recursiveSearch(
+          tableData.value,
+          (f) => f.id == row.parentId,
+          (p) => {
+            const children = p.children || []
+            newObj.parentId = p.id
+            newObj.id = Number.parseInt(p.id + "" + children.length)
+            children.push(newObj)
+            p.children = children
+          }
+        )
       } else {
         // 根节点新增同级节点
         newObj.id = Number.parseInt(row.id + "" + tableData.value.length)
-        tableData.value.splice(tableData.value.length, 0, newObj);
+        tableData.value.splice(tableData.value.length, 0, newObj)
       }
     }
   }
 }
 
 const onInputChange = (event: Event, data: FieldInfo) => {
-  data.fieldKey = (event.target as HTMLInputElement).value;
-  data.editing = false;
-};
-
+  data.fieldKey = (event.target as HTMLInputElement).value
+  data.editing = false
+}
 
 defineExpose({
   /**
@@ -217,10 +286,8 @@ defineExpose({
    */
   getFields() {
     return tableData.value
-  }
+  },
 })
-
-
 </script>
 
 <style lang="scss" scoped>

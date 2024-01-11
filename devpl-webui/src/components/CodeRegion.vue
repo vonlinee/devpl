@@ -1,59 +1,59 @@
 <!--代码区域-->
 <script setup lang="ts">
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import LanguageSelector from "@/components/LanguageSelector.vue";
-import { ref } from "vue";
-import { CopyDocument } from "@element-plus/icons-vue";
-import { ElIcon, ElMessage } from "element-plus";
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import LanguageSelector from "@/components/LanguageSelector.vue"
+import { ref } from "vue"
+import { CopyDocument } from "@element-plus/icons-vue"
+import { ElIcon, ElMessage } from "element-plus"
 
 const props = withDefaults(
   defineProps<{
     lang: string
-    langSelector?: boolean,
+    langSelector?: boolean
     /**
      * 是否需要格式化按钮
      */
-    format?: boolean,
+    format?: boolean
   }>(),
   {
     lang: "text",
     languageSelector: false,
-    format: false
+    format: false,
   }
-);
+)
 
-const languageMode = ref(props.lang);
-const editorRef = ref();
-const value = ref("");
-const containerRef = ref();
+const languageMode = ref(props.lang)
+const editorRef = ref()
+const value = ref("")
+const containerRef = ref()
 
 function copyTextClipboard() {
-  const text = editorRef.value.getText();
+  const text = editorRef.value.getText()
   // 写入文本到剪贴板
   navigator.clipboard.writeText(text).then(
-    function() {
+    function () {
       ElMessage({
         message: "复制成功",
-        center: true
-      });
+        center: true,
+      })
     },
-    function() {
+    function () {
       ElMessage({
         message: "复制失败",
-        center: true
-      });
+        center: true,
+      })
     }
-  );
+  )
 }
 
 defineExpose({
-  getText: function() {
-    return editorRef.value.getText();
+  getText: function () {
+    return editorRef.value.getText()
   },
-  setText: function(val: string) {
-    editorRef.value.setText(val);
-  }
-});
+  setText: function (val: string) {
+    editorRef.value.setText(val)
+  },
+})
 </script>
 
 <template>

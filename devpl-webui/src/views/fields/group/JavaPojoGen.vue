@@ -47,67 +47,63 @@
 </template>
 
 <script setup lang="ts">
-import { apiListGroupFieldsById } from "@/api/fields";
-import { toRaw, reactive, ref, onMounted, onBeforeMount, nextTick } from "vue";
-import FieldTree from "@/components/fields/FieldTree.vue";
-import { apiCodeGenJavaPojo } from "@/api/generator";
-import CodeRegion from "@/components/CodeRegion.vue";
-import { Pane, Splitpanes } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
-import FieldTable from "@/components/fields/FieldTable.vue";
+import { apiListGroupFieldsById } from "@/api/fields"
+import { toRaw, reactive, ref, onMounted, onBeforeMount, nextTick } from "vue"
+import FieldTree from "@/components/fields/FieldTree.vue"
+import { apiCodeGenJavaPojo } from "@/api/generator"
+import CodeRegion from "@/components/CodeRegion.vue"
+import { Pane, Splitpanes } from "splitpanes"
+import "splitpanes/dist/splitpanes.css"
+import FieldTable from "@/components/fields/FieldTable.vue"
 
-const tableData = ref();
-const outputEditorRef = ref();
+const tableData = ref()
+const outputEditorRef = ref()
 
-const visible = ref();
-const fieldTableRef = ref();
-const modalRef = ref();
-const contentHeight = ref();
+const visible = ref()
+const fieldTableRef = ref()
+const modalRef = ref()
+const contentHeight = ref()
 
-const fields = ref<FieldInfo[]>([]);
+const fields = ref<FieldInfo[]>([])
 
 const formData = reactive({
   type: 1,
   packageName: "io.devpl.test",
-  className: "Test"
-});
+  className: "Test",
+})
 
 const gen = () => {
   apiCodeGenJavaPojo({
     ...toRaw(formData),
-    fields: fieldTableRef.value.getFields()
+    fields: fieldTableRef.value.getFields(),
   }).then((res) => {
-    outputEditorRef.value.setText(res.data);
-  });
-};
+    outputEditorRef.value.setText(res.data)
+  })
+}
 
 defineExpose({
   show(groupId: number) {
     apiListGroupFieldsById(groupId).then((res) => {
-      visible.value = true;
-      nextTick(() => fieldTableRef.value.setFields(res.data));
-    });
-  }
-});
-
+      visible.value = true
+      nextTick(() => fieldTableRef.value.setFields(res.data))
+    })
+  },
+})
 
 const showInfo = () => {
-  console.log(contentHeight.value);
-};
+  console.log(contentHeight.value)
+}
 
-onBeforeMount(() => {
-
-});
+onBeforeMount(() => {})
 
 const onShow = (param: any) => {
-  contentHeight.value = param.$modal.getBox().clientHeight;
-};
+  contentHeight.value = param.$modal.getBox().clientHeight
+}
 
 onMounted(() => {
-  const modalBox = modalRef.value.getBox() as HTMLDivElement;
-  console.log(modalBox.clientHeight);
-});
-
+  const modalBox = modalRef.value.getBox() as HTMLDivElement
+  console.log(modalBox.clientHeight)
+})
 </script>
 
 <style lang="scss" scoped></style>

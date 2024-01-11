@@ -3,11 +3,27 @@
 -->
 <template>
   <el-table :data="tableData" border height="100%">
-    <el-table-column label="名称" prop="fieldKey" show-overflow-tooltip></el-table-column>
-    <el-table-column label="数据类型" prop="dataType" show-overflow-tooltip></el-table-column>
-    <el-table-column v-if="showDefaultValueColumn" label="默认值" prop="defaultValue"
-                     show-overflow-tooltip></el-table-column>
-    <el-table-column label="描述信息" prop="comment" show-overflow-tooltip></el-table-column>
+    <el-table-column
+      label="名称"
+      prop="fieldKey"
+      show-overflow-tooltip
+    ></el-table-column>
+    <el-table-column
+      label="数据类型"
+      prop="dataType"
+      show-overflow-tooltip
+    ></el-table-column>
+    <el-table-column
+      v-if="showDefaultValueColumn"
+      label="默认值"
+      prop="defaultValue"
+      show-overflow-tooltip
+    ></el-table-column>
+    <el-table-column
+      label="描述信息"
+      prop="comment"
+      show-overflow-tooltip
+    ></el-table-column>
     <el-table-column label="操作" fixed="right" align="center">
       <template #default="scope">
         <el-button link @click="removeRow(scope.row)">删除</el-button>
@@ -17,38 +33,38 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref } from "vue"
 
-const props = withDefaults(defineProps<{
-  /**
-   * 是否展示默认值列
-   */
-  showDefaultValueColumn?: boolean
-}>(), {
-  showDefaultValueColumn: false
-});
+const props = withDefaults(
+  defineProps<{
+    /**
+     * 是否展示默认值列
+     */
+    showDefaultValueColumn?: boolean
+  }>(),
+  {
+    showDefaultValueColumn: false,
+  }
+)
 
-const tableData = ref<FieldInfo[]>();
+const tableData = ref<FieldInfo[]>()
 
 /**
  * 删除行
  * @param row
  */
 const removeRow = (row: FieldInfo) => {
-  tableData.value = tableData.value?.filter((f) => f.fieldKey != row.fieldKey);
-};
+  tableData.value = tableData.value?.filter((f) => f.fieldKey != row.fieldKey)
+}
 
 defineExpose({
   getFields() {
-    return tableData.value;
+    return tableData.value
   },
   setFields(fields?: FieldInfo[]) {
-    tableData.value = fields || [];
-  }
-});
-
+    tableData.value = fields || []
+  },
+})
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

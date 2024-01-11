@@ -1,5 +1,11 @@
 <template>
-  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="90%" height="90%">
+  <vxe-modal
+    v-model="visible"
+    title="导入字段分组"
+    show-footer
+    width="90%"
+    height="90%"
+  >
     <Splitpanes>
       <Pane>
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
@@ -24,8 +30,8 @@ import { isBlank } from "@/utils/tool"
 import { ElMessage } from "element-plus"
 import { apiParseFields } from "@/api/fields"
 
-import { Pane, Splitpanes } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
+import { Pane, Splitpanes } from "splitpanes"
+import "splitpanes/dist/splitpanes.css"
 import { Message } from "@/hooks/message"
 
 const visible = ref()
@@ -40,7 +46,7 @@ const parseFields = () => {
     ElMessage("输入文本为空")
     return
   }
-  let options = fieldParserInputRef.value.getOptions();
+  let options = fieldParserInputRef.value.getOptions()
   apiParseFields({
     type: inputType,
     content: text,

@@ -10,7 +10,7 @@ export namespace Message {
    */
   export function info(content: string, onClose?: () => void) {
     ElMessage({
-      type: 'info',
+      type: "info",
       message: content,
       duration: DEFAULT_DURATION,
       onClose: onClose,
@@ -24,7 +24,7 @@ export namespace Message {
    */
   export function error(content: string, onClose?: () => void) {
     ElMessage({
-      type: 'error',
+      type: "error",
       message: content,
       duration: DEFAULT_DURATION,
       onClose: onClose,

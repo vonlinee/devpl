@@ -47,8 +47,13 @@
           :item-render="{}"
         >
           <template #default="{ data }">
-            <vxe-select v-model="data.typeGroupId" transfer clearable filterable
-                        @change="(val) => onTypeGroupChange(val, data)">
+            <vxe-select
+              v-model="data.typeGroupId"
+              transfer
+              clearable
+              filterable
+              @change="(val) => onTypeGroupChange(val, data)"
+            >
               <vxe-option
                 v-for="item in typeGroupOptions"
                 :key="item.key"
@@ -92,7 +97,8 @@
           field="description"
           title="描述信息"
           :span="24"
-          :item-render="{}">
+          :item-render="{}"
+        >
           <template #default="{ data }">
             <vxe-textarea
               v-model="data.description"
@@ -114,18 +120,18 @@
 </template>
 
 <script lang="ts" setup>
-import { apiSaveOrUpdateField } from "@/api/fields";
-import { VxeFormPropTypes } from "vxe-table";
-import { onMounted, reactive, ref, toRaw } from "vue";
-import { ElMessage } from "element-plus";
-import { apiListDataTypeOptions, apiListTypeGroupOptions } from "@/api/datatype";
+import { apiSaveOrUpdateField } from "@/api/fields"
+import { VxeFormPropTypes } from "vxe-table"
+import { onMounted, reactive, ref, toRaw } from "vue"
+import { ElMessage } from "element-plus"
+import { apiListDataTypeOptions, apiListTypeGroupOptions } from "@/api/datatype"
 
-const showEdit = ref(false);
-const modalTitle = ref();
-const submitLoading = ref(false);
+const showEdit = ref(false)
+const modalTitle = ref()
+const submitLoading = ref(false)
 
-const fieldDataTypeOptions = ref([]);
-const typeGroupOptions = ref([]);
+const fieldDataTypeOptions = ref([])
+const typeGroupOptions = ref([])
 
 /**
  * 新增和修改表单
@@ -136,8 +142,8 @@ const formData = ref({
   dataType: "int",
   typeGroupId: "",
   defaultValue: "",
-  description: ""
-});
+  description: "",
+})
 
 const resetFields = () => {
   formData.value = {
@@ -146,15 +152,15 @@ const resetFields = () => {
     typeGroupId: "",
     dataType: "int",
     defaultValue: "",
-    description: ""
-  };
-};
+    description: "",
+  }
+}
 
 const getDataTypes = (typeGroupId: string) => {
   apiListDataTypeOptions(typeGroupId).then((res) => {
-    fieldDataTypeOptions.value = res.data;
-  });
-};
+    fieldDataTypeOptions.value = res.data
+  })
+}
 
 /**
  * 类型分组下拉菜单联动
@@ -162,20 +168,20 @@ const getDataTypes = (typeGroupId: string) => {
  * @param row
  */
 const onTypeGroupChange = (param: any, row: any) => {
-  getDataTypes(param.value);
-};
+  getDataTypes(param.value)
+}
 
 onMounted(() => {
   apiListTypeGroupOptions().then((res) => {
-    typeGroupOptions.value = res.data;
+    typeGroupOptions.value = res.data
     if (res.data?.length > 0) {
-      formData.value.typeGroupId = res.data[0].value;
+      formData.value.typeGroupId = res.data[0].value
       apiListDataTypeOptions(formData.value.typeGroupId).then((res) => {
-        fieldDataTypeOptions.value = res.data;
-      });
+        fieldDataTypeOptions.value = res.data
+      })
     }
-  });
-});
+  })
+})
 
 /**
  * 表单校验规则
@@ -183,43 +189,43 @@ onMounted(() => {
 const formRules = reactive<VxeFormPropTypes.Rules>({
   fieldKey: [{ required: true, content: "请输入字段Key" }],
   dataType: [{ required: true, content: "请选择字段数据类型" }],
-  typeGroupId: [{ required: true, content: "请选择字段数据类型" }]
-});
+  typeGroupId: [{ required: true, content: "请选择字段数据类型" }],
+})
 
-const emits = defineEmits(["refresh-table"]);
+const emits = defineEmits(["refresh-table"])
 
 /**
  * 新增字段表单提交
  */
 const submitEvent = () => {
   // 表单填充默认值
-  submitLoading.value = true;
+  submitLoading.value = true
   apiSaveOrUpdateField(toRaw(formData.value))
     .then((res) => {
       ElMessage({
         message: "保存成功",
-        duration: 500
-      });
-      submitLoading.value = false;
-      emits("refresh-table");
-      showEdit.value = false;
+        duration: 500,
+      })
+      submitLoading.value = false
+      emits("refresh-table")
+      showEdit.value = false
     })
     .catch(() => {
-      submitLoading.value = false;
-    });
-};
+      submitLoading.value = false
+    })
+}
 
 defineExpose({
   show: (row?: any) => {
     if (row) {
-      modalTitle.value = "编辑&保存";
-      formData.value = row;
+      modalTitle.value = "编辑&保存"
+      formData.value = row
     } else {
-      modalTitle.value = "新增&保存";
+      modalTitle.value = "新增&保存"
     }
-    showEdit.value = true;
-  }
-});
+    showEdit.value = true
+  },
+})
 </script>
 
 <style lang="scss" scoped></style>

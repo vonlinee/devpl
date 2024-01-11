@@ -1,66 +1,74 @@
 <script setup lang="ts">
-import { ref} from "vue";
-import { ElMessage} from "element-plus";
-import { apiParseFields } from "@/api/fields";
-import { isBlank } from "@/utils/tool";
-import { Splitpanes, Pane } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
-import FieldParserInput from "./FieldParserInput.vue";
-import FieldTable from "@/components/fields/FieldTable.vue";
+import { ref } from "vue"
+import { ElMessage } from "element-plus"
+import { apiParseFields } from "@/api/fields"
+import { isBlank } from "@/utils/tool"
+import { Splitpanes, Pane } from "splitpanes"
+import "splitpanes/dist/splitpanes.css"
+import FieldParserInput from "./FieldParserInput.vue"
+import FieldTable from "@/components/fields/FieldTable.vue"
 
-const modalVisible = ref();
+const modalVisible = ref()
 
 const init = () => {
-  modalVisible.value = true;
-};
+  modalVisible.value = true
+}
 
 defineExpose({
-  init: init
-});
+  init: init,
+})
 
-const fields = ref<FieldInfo[]>();
+const fields = ref<FieldInfo[]>()
 
-const fieldParserInputRef = ref();
-const fieldTableRef = ref();
+const fieldParserInputRef = ref()
+const fieldTableRef = ref()
 
 const parseFields = () => {
-  const inputType: string = fieldParserInputRef.value.getInputType();
-  let text = fieldParserInputRef.value.getParseableText();
+  const inputType: string = fieldParserInputRef.value.getInputType()
+  let text = fieldParserInputRef.value.getParseableText()
   if (isBlank(text)) {
-    ElMessage("输入文本为空");
-    return;
+    ElMessage("输入文本为空")
+    return
   }
-  let options = fieldParserInputRef.value.getOptions();
+  let options = fieldParserInputRef.value.getOptions()
   apiParseFields({
     type: inputType,
     content: text,
-    ...options
+    ...options,
   }).then((res) => {
-    const existed = fields.value || [];
+    const existed = fields.value || []
     // 合并
     res.data?.fields.forEach((i: any) => {
       if (!existed.find((f) => f.fieldKey == i.fieldKey)) {
-        existed?.push(i);
+        existed?.push(i)
       }
-    });
-    fieldTableRef.value.setFields(existed);
-  });
-};
+    })
+    fieldTableRef.value.setFields(existed)
+  })
+}
 
 const emits = defineEmits([
   // 完成
-  "finished"
-]);
+  "finished",
+])
 
 const onModalClose = () => {
-  emits("finished", fields.value);
-};
-
+  emits("finished", fields.value)
+}
 </script>
 
 <template>
-  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false" width="80%"
-             height="80%" :z-index="2000" @close="onModalClose">
+  <vxe-modal
+    v-model="modalVisible"
+    title="字段解析"
+    :draggable="false"
+    show-footer
+    :mask-closable="false"
+    width="80%"
+    height="80%"
+    :z-index="2000"
+    @close="onModalClose"
+  >
     <template #default>
       <Splitpanes>
         <Pane>

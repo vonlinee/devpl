@@ -1,4 +1,4 @@
-import http from "@/utils/http";
+import http from "@/utils/http"
 
 /**
  * 查询数据类型列表
@@ -14,16 +14,16 @@ export const apiListDataTypes = (
   return http.get("/api/datatype/page", {
     pageIndex: pageIndex,
     pageSize: pageSize,
-    ...param
-  });
-};
+    ...param,
+  })
+}
 
 /**
  * @returns
  */
 export const apiListAllDataTypeGroups = () => {
-  return http.get<DataTypeGroup[]>("/api/datatype/groups");
-};
+  return http.get<DataTypeGroup[]>("/api/datatype/groups")
+}
 
 /**
  * @returns
@@ -31,29 +31,29 @@ export const apiListAllDataTypeGroups = () => {
 export const apiSaveDataTypeGroup = (group: any) => {
   return http.post("/api/datatype/group/add", {
     groupId: group.typeGroupId,
-    groupName: group.typeGroupName
-  });
-};
+    groupName: group.typeGroupName,
+  })
+}
 
 /**
  * @returns
  */
 export const apiUpdateDataTypeItem = (dataTypeItem: any) => {
-  return http.post("/api/datatype/update", dataTypeItem);
-};
+  return http.post("/api/datatype/update", dataTypeItem)
+}
 
 /**
  * @returns
  */
 export const apiSaveDataTypeItems = (dataTypeItem: any[]) => {
   return http.post("/api/datatype/saveOrUpdateBatch", {
-    dataTypeItems: dataTypeItem
-  });
-};
+    dataTypeItems: dataTypeItem,
+  })
+}
 
 export interface DataTypeMappingParam {
-  typeId: number;
-  anotherTypeId: number | undefined;
+  typeId: number
+  anotherTypeId: number | undefined
 }
 
 /**
@@ -62,9 +62,9 @@ export interface DataTypeMappingParam {
  */
 export const apiAddDataTypeMapping = (dataTypeItem: DataTypeMappingParam[]) => {
   return http.post("/api/datatype/mapping", {
-    mappings: dataTypeItem
-  });
-};
+    mappings: dataTypeItem,
+  })
+}
 
 /**
  * 所有可映射的数据类型
@@ -75,9 +75,9 @@ export const apiListAllMappableDataTypes = (
   typeId: number | undefined = undefined
 ) => {
   return http.get("/api/datatype/mappable", {
-    typeId: typeId
-  });
-};
+    typeId: typeId,
+  })
+}
 
 /**
  * 添加数据类型映射关系
@@ -89,17 +89,17 @@ export const apiListAllDataTypeMappings = (
 ) => {
   return http.get("/api/datatype/mapping/all", {
     typeId: typeId,
-    typeGroupId: typeGroupId
-  });
-};
+    typeGroupId: typeGroupId,
+  })
+}
 
 /**
  * 保存或更新类型分组信息
  * @returns
  */
 export const apiSaveOrUpdateDataTypeGroups = (groups: any[]) => {
-  return http.post("/api/datatype/group/saveupdate/batch", groups);
-};
+  return http.post("/api/datatype/group/saveupdate/batch", groups)
+}
 
 /**
  * 数据类型选项
@@ -107,14 +107,13 @@ export const apiSaveOrUpdateDataTypeGroups = (groups: any[]) => {
  */
 export const apiListDataTypeOptions = (typeGroupId?: string) => {
   return http.get("/api/datatype/options", {
-    typeGroupId: typeGroupId || ""
-  });
-};
-
+    typeGroupId: typeGroupId || "",
+  })
+}
 
 /**
  * 数据类型选项
  */
 export const apiListTypeGroupOptions = () => {
-  return http.get("/api/datatype/group/options");
-};
+  return http.get("/api/datatype/group/options")
+}

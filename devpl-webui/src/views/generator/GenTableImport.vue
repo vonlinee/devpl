@@ -68,15 +68,15 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { ElMessage } from "element-plus/es";
-import { useDataSourceListApi } from "@/api/datasource";
-import { useDataSourceTableListApi } from "@/api/datasource";
+import { reactive, ref } from "vue"
+import { ElMessage } from "element-plus/es"
+import { useDataSourceListApi } from "@/api/datasource"
+import { useDataSourceTableListApi } from "@/api/datasource"
 
-const emit = defineEmits(["handleSelection"]);
+const emit = defineEmits(["handleSelection"])
 
-const visible = ref(false);
-const dataFormRef = ref();
+const visible = ref(false)
+const dataFormRef = ref()
 
 type FormData = {
   id?: number
@@ -98,62 +98,62 @@ const dataForm = reactive<FormData>({
   datasourceList: [] as any,
   tableList: [] as any,
   table: {
-    tableName: ""
-  }
-});
+    tableName: "",
+  },
+})
 
 // 多选
 const selectionChangeHandle = (selections: any[]) => {
   dataForm.tableNameListSelections = selections.map(
     (item: any) => item["tableName"]
-  );
-};
+  )
+}
 
 const getDataSourceList = () => {
   useDataSourceListApi().then((res) => {
-    dataForm.datasourceList = res.data;
-  });
-};
+    dataForm.datasourceList = res.data
+  })
+}
 
 const getTableList = () => {
-  dataForm.table.tableName = "";
+  dataForm.table.tableName = ""
   if (dataForm.datasourceId === undefined) {
-    return;
+    return
   }
   useDataSourceTableListApi(
     dataForm.datasourceId,
     dataForm.tableNamePattern
   ).then((res) => {
-    dataForm.tableList = res.data;
-  });
-};
+    dataForm.tableList = res.data
+  })
+}
 
 // 表单提交
 const submitHandle = () => {
   const tableNameList = dataForm.tableNameListSelections
     ? dataForm.tableNameListSelections
-    : [];
+    : []
   if (tableNameList.length === 0) {
-    ElMessage.warning("请选择记录");
-    return;
+    ElMessage.warning("请选择记录")
+    return
   }
   if (dataForm.datasourceId) {
-    visible.value = false;
-    emit("handleSelection", dataForm.datasourceId, tableNameList);
+    visible.value = false
+    emit("handleSelection", dataForm.datasourceId, tableNameList)
   }
-};
+}
 defineExpose({
   show: (id?: number) => {
-    visible.value = true;
+    visible.value = true
     if (id) {
-      dataForm.id = id;
+      dataForm.id = id
     }
     // 重置表单数据
     if (dataFormRef.value) {
-      dataFormRef.value.resetFields();
+      dataFormRef.value.resetFields()
     }
-    dataForm.tableList = [];
-    getDataSourceList();
-  }
-});
+    dataForm.tableList = []
+    getDataSourceList()
+  },
+})
 </script>
