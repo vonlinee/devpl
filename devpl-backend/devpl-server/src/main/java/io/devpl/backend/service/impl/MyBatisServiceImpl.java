@@ -113,15 +113,16 @@ public class MyBatisServiceImpl implements MyBatisService {
         ParameterHandler parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
         try (Connection connection = dataSource.getConnection()) {
             // 获取数据源
-            PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql());
-            parameterHandler.setParameters(preparedStatement);
-            String sql = preparedStatement.toString();
-            int index = sql.indexOf(":");
-            if (index >= 0) {
-                sql = sql.substring(index + 1);
+            try (PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql())){
+                parameterHandler.setParameters(preparedStatement);
+                String sql = preparedStatement.toString();
+                int index = sql.indexOf(":");
+                if (index >= 0) {
+                    sql = sql.substring(index + 1);
+                }
+                sql = sql.replace("\n", "").replace("\t", "");
+                return SqlFormat.mysql(sql);
             }
-            sql = sql.replace("\n", "").replace("\t", "");
-            return SqlFormat.mysql(sql);
         } catch (Exception exception) {
             log.error("获取真实sql出错");
         }
@@ -208,7 +209,6 @@ public class MyBatisServiceImpl implements MyBatisService {
             paramMap.put(paramNode.getFieldKey(), getParamValueByType(paramNode));
         }
     }
-
 
     /**
      * 递归将树形结构转换为列表

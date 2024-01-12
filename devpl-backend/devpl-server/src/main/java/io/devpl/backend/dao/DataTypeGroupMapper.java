@@ -13,6 +13,6 @@ public interface DataTypeGroupMapper extends BaseMapper<DataTypeGroup> {
 
     List<DataTypeGroupVO> selectAllGroups();
 
-    @Select("SELECT id FROM data_type_group WHERE group_id = #{groupId}")
+    @Select(value = "SELECT id FROM data_type_group WHERE group_id = #{groupId}")
     DataTypeGroup selectByGroupId(String groupId);
 }

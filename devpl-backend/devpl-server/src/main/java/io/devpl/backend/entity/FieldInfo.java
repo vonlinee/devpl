@@ -64,4 +64,11 @@ public class FieldInfo extends DBEntity implements Serializable {
      */
     @TableField(value = "field_value")
     private String defaultValue;
+
+    public String getFieldName() {
+        if (fieldName == null || fieldName.isEmpty()) {
+            return fieldKey;
+        }
+        return fieldName;
+    }
 }

@@ -5,7 +5,7 @@ import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.service.CodeGenerationService;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.FieldData;
-import io.devpl.codegen.template.model.TypeData;
+import io.devpl.codegen.template.model.JavaFileTemplateArguments;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -30,24 +30,34 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
      */
     @Override
     public String generateJavaPojoClass(JavaPojoCodeGenParam param) {
-        TypeData model = new TypeData();
+        JavaFileTemplateArguments model = new JavaFileTemplateArguments();
+        model.addSuperInterfaces(Serializable.class);
+        model.setPackageName(param.getPackageName());
         model.setClassName(StringUtils.whenBlank(param.getClassName(), "Pojo"));
         model.setModifier(Modifier.PUBLIC.toString());
-        for (FieldInfo fieldInfo : param.getFields()) {
+        for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
-            fieldData.setName(fieldInfo.getFieldKey());
+            fieldData.setName(field.getFieldName());
             fieldData.setModifier(Modifier.PRIVATE);
-            fieldData.setDataType(fieldData.getDataType());
-            fieldData.setComment(fieldInfo.getComment());
+            fieldData.setDataType(getDataType(field));
+            fieldData.setComment(StringUtils.replace(field.getComment(), "\n", " "));
             model.addField(fieldData);
         }
         return templateEngine.render("codegen/templates/ext/java.pojo.vm", model);
     }
 
+    public String getDataType(FieldInfo fieldInfo) {
+        String dataType = fieldInfo.getDataType();
+        if (dataType == null) {
+            return "String";
+        }
+        return dataType;
+    }
+
     @Override
     public String generatedDtoClass(JavaPojoCodeGenParam param) {
-        TypeData model = new TypeData();
-
+        JavaFileTemplateArguments model = new JavaFileTemplateArguments();
+        model.addSuperInterfaces(Serializable.class);
         model.setPackageName(param.getPackageName());
         model.setClassName(param.getClassName());
 
@@ -56,8 +66,8 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
             fieldData.setName(field.getFieldName());
-            fieldData.setDataType(StringUtils.whenBlank(field.getDataType(), "String"));
-            fieldData.setComment(field.getComment());
+            fieldData.setDataType(getDataType(field));
+            fieldData.setComment(StringUtils.replace(field.getComment(), "\n", " "));
             fieldData.setModifier(Modifier.PRIVATE);
             fieldDataList.add(fieldData);
         }
@@ -71,10 +81,9 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
     }
 
     private String test(JavaPojoCodeGenParam param) {
-        TypeData model = new TypeData();
-
+        JavaFileTemplateArguments model = new JavaFileTemplateArguments();
+        model.addSuperInterfaces(Serializable.class);
         model.setPackageName(param.getPackageName());
-
         model.setSuperClass(Serializable.class.getName());
         model.setSuperClass(HashMap.class.getName());
         model.addSuperInterfaces(Serializable.class.getName());
@@ -85,13 +94,13 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
             fieldData.setName(field.getFieldName());
-            fieldData.setDataType(StringUtils.whenBlank(field.getDataType(), "String"));
-            fieldData.setComment(field.getComment());
+            fieldData.setDataType(getDataType(field));
+
+            fieldData.setComment(StringUtils.replace(field.getComment(), "\n", " "));
             fieldData.setModifier(Modifier.PRIVATE);
             fieldDataList.add(fieldData);
         }
         model.setFields(fieldDataList);
-
         // 字段信息
         return templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", model);
     }

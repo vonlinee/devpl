@@ -26,16 +26,6 @@ public final class Arrays {
     }
 
     /**
-     * 构造一个基本类型的int数组
-     *
-     * @param nums 元素列表
-     */
-    public static int @NotNull [] intArray(int @Nullable ... nums) {
-        if (nums == null) return new int[0];
-        return nums;
-    }
-
-    /**
      * 构造一个ArrayList
      *
      * @param elements 元素列表
@@ -71,6 +61,28 @@ public final class Arrays {
         }
         return java.util.Arrays.asList(elements);
     }
+
+    // ================================ 基本类型数组和包装类型数组之间的转换 start ===============================================
+
+    /**
+     * 构造一个基本类型的int数组
+     *
+     * @param nums 元素列表
+     */
+    public static int @NotNull [] toIntArray(int @Nullable ... nums) {
+        if (nums == null) return new int[0];
+        return nums;
+    }
+
+    public static Integer[] toIntegerArray(int... intArr) {
+        Integer[] res = new Integer[intArr.length];
+        for (int i = 0; i < intArr.length; i++) {
+            res[i] = intArr[i];
+        }
+        return res;
+    }
+
+    // ================================ 基本类型数组和包装类型数组之间的转换 end ===============================================
 
     /**
      * 将数组映射为List

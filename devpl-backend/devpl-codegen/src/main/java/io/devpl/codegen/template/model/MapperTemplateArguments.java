@@ -1,7 +1,9 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.config.*;
+import io.devpl.codegen.config.BaseBuilder;
+import io.devpl.codegen.config.StrategyConfig;
+import io.devpl.codegen.config.TableInitializer;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +16,7 @@ import java.util.function.Function;
 /**
  * 控制器属性配置
  */
-public class MapperTemplateArguments extends TypeData implements TableInitializer {
+public class MapperTemplateArguments extends JavaFileTemplateArguments implements TableInitializer {
 
     /**
      * 自定义继承的Mapper类全称，带包名

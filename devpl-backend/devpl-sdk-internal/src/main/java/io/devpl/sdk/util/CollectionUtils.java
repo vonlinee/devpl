@@ -208,6 +208,20 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * 集合添加另外一个集合的所有元素
+     *
+     * @param coll              集合
+     * @param anotherCollection 新加的元素集合
+     * @param <E>               元素类型
+     */
+    public static <E> void addAll(Collection<E> coll, Collection<? extends E> anotherCollection) {
+        if (coll == null || isEmpty(anotherCollection)) {
+            return;
+        }
+        coll.addAll(anotherCollection);
+    }
+
+    /**
      * 集合添加多个元素，支持数组和可变参数
      *
      * @param intColl int集合
@@ -217,9 +231,7 @@ public abstract class CollectionUtils {
         if (intColl == null || ints == null || ints.length == 0) {
             return;
         }
-        for (int i = 0; i < ints.length; i++) {
-            intColl.add(ints[i]);
-        }
+        addAll(intColl, Arrays.toIntegerArray(ints));
     }
 
     public static <E, T> long count(Collection<E> collection, Function<E, T> key, Predicate<T> condition) {
@@ -322,5 +334,23 @@ public abstract class CollectionUtils {
             }
         }
         return list;
+    }
+
+    /**
+     * 使用集合覆盖指定的集合元素
+     *
+     * @param set        待覆盖的集合元素
+     * @param collection 集合
+     * @param <T>        元素类型
+     * @return 覆盖后的集合，最终返回不为空，集合元素以参数collection为准
+     */
+    public static <T> Set<T> setAll(Set<T> set, Collection<T> collection) {
+        if (isEmpty(set)) {
+            set = new HashSet<>(collection);
+        } else {
+            set.clear();
+            set.addAll(collection);
+        }
+        return set;
     }
 }

@@ -94,7 +94,7 @@ public interface TemplateEngine {
      */
     default String render(String template, TemplateArguments arguments) throws TemplateException {
         TemplateSource ts = getTemplate(template, false);
-        if (ts.exists()) {
+        if (!ts.exists()) {
             return ts.getName();
         }
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {

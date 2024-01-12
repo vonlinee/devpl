@@ -43,6 +43,6 @@ public class FileTemplateSource implements TemplateSource {
 
     @Override
     public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
-        throw new UnsupportedOperationException("file template is not supported currently");
+        throw new UnsupportedOperationException("file template is not supported yet");
     }
 }

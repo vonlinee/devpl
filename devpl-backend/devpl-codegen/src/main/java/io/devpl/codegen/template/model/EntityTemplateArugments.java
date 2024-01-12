@@ -17,7 +17,7 @@ import java.util.function.Function;
 /**
  * 实体属性配置
  */
-public class EntityTemplateArugments extends TypeData implements TableInitializer {
+public class EntityTemplateArugments extends JavaFileTemplateArguments implements TableInitializer {
 
     private final static Logger log = LoggerFactory.getLogger(EntityTemplateArugments.class);
     /**

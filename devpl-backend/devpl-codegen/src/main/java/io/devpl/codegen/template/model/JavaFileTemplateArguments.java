@@ -1,13 +1,14 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.sdk.util.CollectionUtils;
 
 import java.util.*;
 
 /**
  * 生成Java类的模板参数
  */
-public class TypeData implements TemplateArguments {
+public class JavaFileTemplateArguments implements TemplateArguments {
 
     /**
      * 包名
@@ -28,11 +29,11 @@ public class TypeData implements TemplateArguments {
     /**
      * 导入的类型
      */
-    private List<String> importItems;
+    private Set<String> importItems;
     /**
      * 静态导入项
      */
-    private List<String> staticImportItem;
+    private Set<String> staticImportItem;
     /**
      * 父类型，只能有一个
      */
@@ -40,17 +41,17 @@ public class TypeData implements TemplateArguments {
     /**
      * 父接口
      */
-    private List<String> superInterfaces;
+    private Set<String> superInterfaces;
 
     /**
      * 字段列表
      */
-    private List<FieldData> fields;
+    private Set<FieldData> fields;
 
     /**
      * 方法列表
      */
-    private List<MethodData> methods;
+    private Set<MethodData> methods;
 
     @Override
     public void fill(Map<String, Object> arguments) {
@@ -75,7 +76,7 @@ public class TypeData implements TemplateArguments {
 
     public final void addImport(String... importTypes) {
         if (importItems == null) {
-            importItems = new ArrayList<>(Arrays.asList(importTypes));
+            importItems = new HashSet<>(Arrays.asList(importTypes));
         } else {
             importItems.addAll(Arrays.asList(importTypes));
         }
@@ -83,15 +84,33 @@ public class TypeData implements TemplateArguments {
 
     public final void addSuperInterfaces(String... superInterfaces) {
         if (this.superInterfaces == null) {
-            this.superInterfaces = new ArrayList<>(Arrays.asList(superInterfaces));
+            this.superInterfaces = new HashSet<>(Arrays.asList(superInterfaces));
         } else {
             this.superInterfaces.addAll(Arrays.asList(superInterfaces));
         }
     }
 
+    public final void addSuperInterfaces(Class<?>... superInterfaces) {
+        Objects.requireNonNull(superInterfaces, "super interfaces cannot be null");
+
+        Set<String> packageNames = new HashSet<>();
+
+        for (Class<?> superInterface : superInterfaces) {
+            if (superInterface == null || !superInterface.isInterface()) {
+                throw new IllegalArgumentException(superInterface + " is not a interface");
+            }
+            if (this.superInterfaces == null) {
+                this.superInterfaces = new HashSet<>();
+            }
+            this.superInterfaces.add(superInterface.getName());
+
+            String packageName1 = superInterface.getPackageName();
+        }
+    }
+
     public final void addField(FieldData fieldData) {
         if (this.fields == null) {
-            this.fields = new ArrayList<>();
+            this.fields = new HashSet<>();
         }
         this.fields.add(fieldData);
     }
@@ -128,19 +147,24 @@ public class TypeData implements TemplateArguments {
         this.modifier = modifier;
     }
 
-    public List<String> getImportItems() {
+    public Set<String> getImportItems() {
         return importItems;
     }
 
-    public void setImportItems(List<String> importItems) {
-        this.importItems = importItems;
+    public void setImportItems(Collection<String> importItems) {
+        if (this.importItems == null) {
+            this.importItems = new HashSet<>(importItems);
+        } else {
+            this.importItems.clear();
+            this.importItems.addAll(importItems);
+        }
     }
 
-    public List<String> getStaticImportItem() {
+    public Set<String> getStaticImportItem() {
         return staticImportItem;
     }
 
-    public void setStaticImportItem(List<String> staticImportItem) {
+    public void setStaticImportItem(Set<String> staticImportItem) {
         this.staticImportItem = staticImportItem;
     }
 
@@ -152,27 +176,27 @@ public class TypeData implements TemplateArguments {
         this.superClass = superClass;
     }
 
-    public List<String> getSuperInterfaces() {
+    public Set<String> getSuperInterfaces() {
         return superInterfaces;
     }
 
-    public void setSuperInterfaces(List<String> superInterfaces) {
+    public void setSuperInterfaces(Set<String> superInterfaces) {
         this.superInterfaces = superInterfaces;
     }
 
-    public List<FieldData> getFields() {
+    public Set<FieldData> getFields() {
         return fields;
     }
 
-    public void setFields(List<FieldData> fields) {
-        this.fields = fields;
+    public void setFields(Collection<FieldData> fields) {
+        this.fields = CollectionUtils.setAll(this.fields, fields);
     }
 
-    public List<MethodData> getMethods() {
+    public Set<MethodData> getMethods() {
         return methods;
     }
 
-    public void setMethods(List<MethodData> methods) {
-        this.methods = methods;
+    public void setMethods(Collection<MethodData> methods) {
+        this.methods = CollectionUtils.setAll(this.methods, methods);
     }
 }
