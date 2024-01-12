@@ -32,11 +32,7 @@ public enum CaseFormat implements NamingStrategy {
             if (source == null) {
                 return "";
             }
-            char[] charArray = source.toCharArray();
-            for (int i = 0; i < charArray.length; i++) {
-                charArray[i] = Character.toUpperCase(charArray[i]);
-            }
-            return String.valueOf(charArray);
+            return source.toUpperCase();
         }
 
         @Override

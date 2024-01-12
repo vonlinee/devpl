@@ -1,4 +1,4 @@
-package io.devpl.codegen.util;
+package io.devpl.sdk;
 
 import java.io.IOException;
 import java.io.OutputStream;

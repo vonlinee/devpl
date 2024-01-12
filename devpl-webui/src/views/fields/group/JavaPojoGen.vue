@@ -20,7 +20,7 @@
         <div>
           <el-form :form="formData" label-position="top">
             <el-form-item>
-              <el-select v-model="formData.type">
+              <el-select v-model="formData.type" @change="onSelectionChange">
                 <el-option label="Java VO类型" :value="1"></el-option>
                 <el-option label="Jackson响应类型" :value="2"></el-option>
                 <el-option label="EasyPOI类型" :value="3"></el-option>
@@ -49,14 +49,12 @@
 <script setup lang="ts">
 import { apiListGroupFieldsById } from "@/api/fields"
 import { toRaw, reactive, ref, onMounted, onBeforeMount, nextTick } from "vue"
-import FieldTree from "@/components/fields/FieldTree.vue"
 import { apiCodeGenJavaPojo } from "@/api/generator"
 import CodeRegion from "@/components/CodeRegion.vue"
 import { Pane, Splitpanes } from "splitpanes"
 import "splitpanes/dist/splitpanes.css"
 import FieldTable from "@/components/fields/FieldTable.vue"
 
-const tableData = ref()
 const outputEditorRef = ref()
 
 const visible = ref()
@@ -71,6 +69,11 @@ const formData = reactive({
   packageName: "io.devpl.test",
   className: "Test",
 })
+
+const onSelectionChange = (val: number) => {
+  formData.type = val
+  gen()
+}
 
 const gen = () => {
   apiCodeGenJavaPojo({

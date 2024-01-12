@@ -1,5 +1,7 @@
 package io.devpl.codegen.util;
 
+import io.devpl.sdk.UnsynchronizedBuffer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandle;

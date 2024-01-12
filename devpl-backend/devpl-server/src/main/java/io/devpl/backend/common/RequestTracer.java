@@ -19,11 +19,11 @@ public class RequestTracer implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(request.getRequestURI().replace(servletContextPath, ""));
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             sb.append(entry.getKey()).append("=").append(StringUtils.join(entry.getValue()));
         }
-        log.info("url => {}?{}", request.getRequestURI().replace(servletContextPath, ""), sb);
+        log.info("url => {}", sb);
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

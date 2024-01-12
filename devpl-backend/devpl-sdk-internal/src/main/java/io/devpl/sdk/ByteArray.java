@@ -1,4 +1,4 @@
-package io.devpl.codegen.util;
+package io.devpl.sdk;
 
 import java.io.Serial;
 import java.io.Serializable;
