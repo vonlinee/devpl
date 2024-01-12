@@ -204,7 +204,7 @@ public abstract class CollectionUtils {
         if (coll == null || arr == null || arr.length == 0) {
             return;
         }
-        coll.addAll(Arrays.asList(arr));
+        coll.addAll(ArrayUtils.asList(arr));
     }
 
     /**
@@ -231,7 +231,7 @@ public abstract class CollectionUtils {
         if (intColl == null || ints == null || ints.length == 0) {
             return;
         }
-        addAll(intColl, Arrays.toIntegerArray(ints));
+        addAll(intColl, ArrayUtils.toIntegerArray(ints));
     }
 
     public static <E, T> long count(Collection<E> collection, Function<E, T> key, Predicate<T> condition) {

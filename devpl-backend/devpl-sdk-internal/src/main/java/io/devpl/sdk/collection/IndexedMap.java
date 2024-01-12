@@ -57,13 +57,12 @@ abstract class IndexedMap<K, V> {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T[] toArrayHelper(T[] array, int offset) {
         final int N = colGetSize();
         if (array.length < N) {
-            @SuppressWarnings("unchecked")
-            T[] newArray = (T[]) Array.newInstance(array.getClass()
+            array = (T[]) Array.newInstance(array.getClass()
                 .getComponentType(), N);
-            array = newArray;
         }
         for (int i = 0; i < N; i++) {
             array[i] = (T) colGetEntry(i, offset);

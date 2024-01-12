@@ -14,7 +14,7 @@ import io.devpl.backend.service.ProjectService;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.ZipUtils;
-import io.devpl.sdk.util.Arrays;
+import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,7 +156,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
         destRoot = new File(replaceData(destPath, replaceMap));
 
         // 获取排除后的源文件
-        File[] srcFiles = Arrays.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !Arrays.contains(exclusions, file.getName()));
+        File[] srcFiles = ArrayUtils.isEmpty(exclusions) ? srcRoot.listFiles() : srcRoot.listFiles(file -> !ArrayUtils.contains(exclusions, file.getName()));
 
         if (srcFiles == null) {
             throw new IOException("没有需要拷贝的文件 " + srcRoot);

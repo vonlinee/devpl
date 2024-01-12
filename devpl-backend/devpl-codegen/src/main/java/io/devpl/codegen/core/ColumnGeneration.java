@@ -103,6 +103,10 @@ public class ColumnGeneration {
         return null;
     }
 
+    public boolean isBooleanType() {
+        return "boolean".equalsIgnoreCase(getPropertyType());
+    }
+
     /**
      * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称
      * 需要处理一下特殊情况：

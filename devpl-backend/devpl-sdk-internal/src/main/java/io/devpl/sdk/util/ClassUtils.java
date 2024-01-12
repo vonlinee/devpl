@@ -627,7 +627,7 @@ public abstract class ClassUtils {
      * @see java.util.AbstractCollection#toString()
      */
     public static String classNamesToString(Class<?>... classes) {
-        return classNamesToString(Arrays.asArrayList(classes));
+        return classNamesToString(ArrayUtils.asArrayList(classes));
     }
 
     /**

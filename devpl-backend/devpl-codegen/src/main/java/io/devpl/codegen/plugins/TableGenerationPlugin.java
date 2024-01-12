@@ -219,7 +219,7 @@ public class TableGenerationPlugin extends PluginAdapter {
             // 字段类型
 
             // boolean类型字段
-            if (entity.isBooleanColumnRemoveIsPrefix() && "boolean".equalsIgnoreCase(column.getPropertyType()) && propertyName.startsWith("is")) {
+            if (entity.isBooleanColumnRemoveIsPrefix() && column.isBooleanType() && propertyName.startsWith("is")) {
                 column.setConvert(true);
                 // 前两个字符小写，后面的不变
                 String rawString = propertyName.substring(2);

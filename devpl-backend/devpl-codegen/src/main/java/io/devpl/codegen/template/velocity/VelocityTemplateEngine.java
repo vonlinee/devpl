@@ -19,6 +19,8 @@ import java.util.Properties;
  * <a href="https://velocity.apache.org/engine/devel/user-guide.html">...</a>
  * <p>
  * org/apache/velocity/runtime/defaults/velocity.properties
+ *
+ * <a href="https://blog.51cto.com/zhangzhixi/3241138">...</a>
  */
 public class VelocityTemplateEngine implements TemplateEngine {
 

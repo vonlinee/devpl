@@ -38,6 +38,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
      * 父类型，只能有一个
      */
     private String superClass;
+
     /**
      * 父接口
      */
@@ -104,7 +105,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
             }
             this.superInterfaces.add(superInterface.getName());
 
-            String packageName1 = superInterface.getPackageName();
+            importItems.add(superInterface.getPackageName());
         }
     }
 

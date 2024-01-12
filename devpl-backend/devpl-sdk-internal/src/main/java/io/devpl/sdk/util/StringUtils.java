@@ -517,7 +517,7 @@ public abstract class StringUtils {
      * @return 拼接后的字符串
      */
     public static String join(final String separator, String... items) {
-        return join(Arrays.asArrayList(items).iterator(), separator);
+        return join(ArrayUtils.asArrayList(items).iterator(), separator);
     }
 
     /**
@@ -527,7 +527,7 @@ public abstract class StringUtils {
      * @return 拼接后的字符串
      */
     public static String join(String... items) {
-        return join(Arrays.asArrayList(items).iterator(), DEFAULT_SEPARATOR);
+        return join(ArrayUtils.asArrayList(items).iterator(), DEFAULT_SEPARATOR);
     }
 
     /**
@@ -1611,7 +1611,7 @@ public abstract class StringUtils {
             return array1;
         }
 
-        List<String> result = new ArrayList<>(Arrays.asArrayList(array1));
+        List<String> result = new ArrayList<>(ArrayUtils.asArrayList(array1));
         for (String str : array2) {
             if (!result.contains(str)) {
                 result.add(str);
@@ -1664,7 +1664,7 @@ public abstract class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-        Set<String> set = new LinkedHashSet<>(Arrays.asArrayList(array));
+        Set<String> set = new LinkedHashSet<>(ArrayUtils.asArrayList(array));
         return toStringArray(set);
     }
 
@@ -1884,7 +1884,7 @@ public abstract class StringUtils {
      */
     public static Set<String> commaDelimitedListToSet(String str) {
         String[] tokens = commaDelimitedListToStringArray(str);
-        return new LinkedHashSet<>(Arrays.asArrayList(tokens));
+        return new LinkedHashSet<>(ArrayUtils.asArrayList(tokens));
     }
 
     /**

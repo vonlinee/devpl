@@ -11,7 +11,7 @@ import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.sdk.io.FileUtils;
-import io.devpl.sdk.util.Arrays;
+import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -174,7 +174,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         String[] fields = baseClass.getFieldsName().split(",");
         // 标注为基类字段
         for (GenTableField field : table.getFieldList()) {
-            if (Arrays.contains(fields, field.getFieldName())) {
+            if (ArrayUtils.contains(fields, field.getFieldName())) {
                 field.setBaseField(true);
             }
         }

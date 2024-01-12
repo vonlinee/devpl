@@ -9,7 +9,7 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.sdk.io.FileUtils;
-import io.devpl.sdk.util.Arrays;
+import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class MyBatisToolController {
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<SelectOptionVO>> getDataTypes() {
-        return Result.ok(Arrays.toList(MapperStatementParamValueType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
+        return Result.ok(ArrayUtils.toList(MapperStatementParamValueType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
     }
 
     /**
