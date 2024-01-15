@@ -82,7 +82,7 @@ public interface CodeEditor {
 
     String getTheme();
 
-    void setTheme(String theme, String... cssFile);
+    void setTheme(Theme theme, String... cssFile);
 
     /**
      * 回调

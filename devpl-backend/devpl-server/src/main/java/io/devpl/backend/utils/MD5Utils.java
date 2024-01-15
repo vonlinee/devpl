@@ -58,7 +58,7 @@ public class MD5Utils {
             String result = md5(in);
             in.close();
             return result;
-        } catch (IOException e) {
+        } catch (IOException ignored) {
 
         }
         return null;

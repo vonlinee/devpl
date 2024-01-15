@@ -63,19 +63,17 @@ public class CellUtils {
         }
     };
 
-    private final static StringConverter<?> defaultTreeItemStringConverter =
-        new StringConverter<TreeItem<?>>() {
-            @Override
-            public String toString(TreeItem<?> treeItem) {
-                return (treeItem == null || treeItem.getValue() == null) ?
-                    "" : treeItem.getValue().toString();
-            }
+    private final static StringConverter<?> defaultTreeItemStringConverter = new StringConverter<TreeItem<?>>() {
+        @Override
+        public String toString(TreeItem<?> treeItem) {
+            return (treeItem == null || treeItem.getValue() == null) ? "" : treeItem.getValue().toString();
+        }
 
-            @Override
-            public TreeItem<?> fromString(String string) {
-                return new TreeItem<>(string);
-            }
-        };
+        @Override
+        public TreeItem<?> fromString(String string) {
+            return new TreeItem<>(string);
+        }
+    };
 
     /* *************************************************************************
      *                                                                         *
@@ -102,16 +100,12 @@ public class CellUtils {
     }
 
     private static <T> String getItemText(Cell<T> cell, StringConverter<T> converter) {
-        return converter == null ?
-            cell.getItem() == null ? "" : cell.getItem().toString() :
-            converter.toString(cell.getItem());
+        return converter == null ? cell.getItem() == null ? "" : cell.getItem().toString() : converter.toString(cell.getItem());
     }
-
 
     public static Node getGraphic(TreeItem<?> treeItem) {
         return treeItem == null ? null : treeItem.getGraphic();
     }
-
 
 
     /* *************************************************************************
@@ -120,17 +114,11 @@ public class CellUtils {
      *                                                                         *
      **************************************************************************/
 
-    public static <T> void updateItem(final Cell<T> cell,
-                                      final StringConverter<T> converter,
-                                      final ChoiceBox<T> choiceBox) {
+    public static <T> void updateItem(final Cell<T> cell, final StringConverter<T> converter, final ChoiceBox<T> choiceBox) {
         updateItem(cell, converter, null, null, choiceBox);
     }
 
-    public static <T> void updateItem(final Cell<T> cell,
-                                      final StringConverter<T> converter,
-                                      final HBox hbox,
-                                      final Node graphic,
-                                      final ChoiceBox<T> choiceBox) {
+    public static <T> void updateItem(final Cell<T> cell, final StringConverter<T> converter, final HBox hbox, final Node graphic, final ChoiceBox<T> choiceBox) {
         if (cell.isEmpty()) {
             cell.setText(null);
             cell.setGraphic(null);
@@ -154,11 +142,8 @@ public class CellUtils {
         }
     }
 
-    public static <T> ChoiceBox<T> createChoiceBox(
-        final Cell<T> cell,
-        final ObservableList<T> items,
-        final ObjectProperty<StringConverter<T>> converter) {
-        ChoiceBox<T> choiceBox = new ChoiceBox<T>(items);
+    public static <T> ChoiceBox<T> createChoiceBox(final Cell<T> cell, final ObservableList<T> items, final ObjectProperty<StringConverter<T>> converter) {
+        ChoiceBox<T> choiceBox = new ChoiceBox<>(items);
         choiceBox.setMaxWidth(Double.MAX_VALUE);
         choiceBox.converterProperty().bind(converter);
         choiceBox.showingProperty().addListener(o -> {
@@ -177,17 +162,11 @@ public class CellUtils {
      *                                                                         *
      **************************************************************************/
 
-    public static <T> void updateItem(final Cell<T> cell,
-                                      final StringConverter<T> converter,
-                                      final TextField textField) {
+    public static <T> void updateItem(final Cell<T> cell, final StringConverter<T> converter, final TextField textField) {
         updateItem(cell, converter, null, null, textField);
     }
 
-    public static <T> void updateItem(final Cell<T> cell,
-                                      final StringConverter<T> converter,
-                                      final HBox hbox,
-                                      final Node graphic,
-                                      final TextField textField) {
+    public static <T> void updateItem(final Cell<T> cell, final StringConverter<T> converter, final HBox hbox, final Node graphic, final TextField textField) {
         if (cell.isEmpty()) {
             cell.setText(null);
             cell.setGraphic(null);
@@ -211,13 +190,10 @@ public class CellUtils {
         }
     }
 
-    public static <T> void startEdit(final Cell<T> cell,
-                                     final StringConverter<T> converter,
-                                     final HBox hbox,
-                                     final Node graphic,
-                                     final TextField textField) {
+    public static <T> void startEdit(final Cell<T> cell, final StringConverter<T> converter, final HBox hbox, final Node graphic, final TextField textField) {
         if (textField != null) {
             textField.setText(getItemText(cell, converter));
+            textField.selectAll();
         }
         cell.setText(null);
 
@@ -228,11 +204,11 @@ public class CellUtils {
             cell.setGraphic(textField);
         }
 
-        textField.selectAll();
-
-        // requesting focus so that key input can immediately go into the
-        // TextField (see RT-28132)
-        textField.requestFocus();
+        if (textField != null) {
+            // requesting focus so that key input can immediately go into the
+            // TextField (see RT-28132)
+            textField.requestFocus();
+        }
     }
 
     public static <T> void cancelEdit(Cell<T> cell, final StringConverter<T> converter, Node graphic) {
@@ -247,10 +223,7 @@ public class CellUtils {
         // as otherwise we encounter RT-34685
         textField.setOnAction(event -> {
             if (converter == null) {
-                throw new IllegalStateException(
-                    "Attempting to convert text input into Object, but provided "
-                        + "StringConverter is null. Be sure to set a StringConverter "
-                        + "in your cell factory.");
+                throw new IllegalStateException("Attempting to convert text input into Object, but provided " + "StringConverter is null. Be sure to set a StringConverter " + "in your cell factory.");
             }
             cell.commitEdit(converter.fromString(textField.getText()));
             event.consume();
@@ -264,8 +237,6 @@ public class CellUtils {
         return textField;
     }
 
-
-
     /* *************************************************************************
      *                                                                         *
      * ComboBox convenience                                                   *
@@ -276,11 +247,7 @@ public class CellUtils {
         updateItem(cell, converter, null, null, comboBox);
     }
 
-    public static <T> void updateItem(final Cell<T> cell,
-                                      final StringConverter<T> converter,
-                                      final HBox hbox,
-                                      final Node graphic,
-                                      final ComboBox<T> comboBox) {
+    public static <T> void updateItem(final Cell<T> cell, final StringConverter<T> converter, final HBox hbox, final Node graphic, final ComboBox<T> comboBox) {
         if (cell.isEmpty()) {
             cell.setText(null);
             cell.setGraphic(null);
@@ -304,10 +271,8 @@ public class CellUtils {
         }
     }
 
-    public static <T> ComboBox<T> createComboBox(final Cell<T> cell,
-                                                 final ObservableList<T> items,
-                                                 final ObjectProperty<StringConverter<T>> converter) {
-        ComboBox<T> comboBox = new ComboBox<T>(items);
+    public static <T> ComboBox<T> createComboBox(final Cell<T> cell, final ObservableList<T> items, final ObjectProperty<StringConverter<T>> converter) {
+        ComboBox<T> comboBox = new ComboBox<>(items);
         comboBox.converterProperty().bind(converter);
         comboBox.setMaxWidth(Double.MAX_VALUE);
 
@@ -332,7 +297,7 @@ public class CellUtils {
         });
 
         // Third listener makes an assumption about the skin being used, and attempts to add
-        // a listener to the ListView within it, such that when the user mouse clicks on a
+        // a listener to the ListView within it, such that when the user mouse clicks on and
         // on an item, that is immediately committed and the cell exits the editing mode.
         boolean success = listenToComboBoxSkin(comboBox, cell);
         if (!success) {
@@ -346,7 +311,6 @@ public class CellUtils {
                 }
             });
         }
-
         return comboBox;
     }
 

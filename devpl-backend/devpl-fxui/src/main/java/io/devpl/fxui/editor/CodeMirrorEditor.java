@@ -38,7 +38,7 @@ public class CodeMirrorEditor implements CodeEditor {
     public static CodeMirrorEditor newInstance(LanguageMode languageMode) {
         CodeMirrorEditor codeEditor = new CodeMirrorEditor();
         codeEditor.init(() -> codeEditor.setMode(languageMode),
-            () -> codeEditor.setTheme("xq-light"));
+            () -> codeEditor.setTheme(Theme.XQ_LIGHT));
         return codeEditor;
     }
 
@@ -192,8 +192,8 @@ public class CodeMirrorEditor implements CodeEditor {
     }
 
     @Override
-    public void setTheme(String theme, String... cssFile) {
-        String argument = "'" + theme + "'";
+    public void setTheme(Theme theme, String... cssFile) {
+        String argument = "'" + theme.getName() + "'";
         if (cssFile != null && cssFile.length > 0) {
             StringBuilder cssFileArgument = new StringBuilder();
             for (String file : cssFile) {

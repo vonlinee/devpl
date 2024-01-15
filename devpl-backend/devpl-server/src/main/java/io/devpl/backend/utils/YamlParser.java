@@ -227,9 +227,9 @@ public class YamlParser {
         if (parent.containsKey(key)) {
             return (List<Object>) parent.get(key);
         } else {
-            List<Object> chlid = new GrowthList(16);
-            parent.put(key, chlid);
-            return chlid;
+            List<Object> child = new GrowthList(16);
+            parent.put(key, child);
+            return child;
         }
     }
 
@@ -238,7 +238,7 @@ public class YamlParser {
         if (obj.equals("true") || obj.equals("false")) {
             result = Boolean.valueOf(obj);
         } else if (isBigDecimal(obj)) {
-            if (obj.indexOf(".") == -1) {
+            if (!obj.contains(".")) {
                 result = Long.valueOf(obj);
             } else {
                 result = Double.valueOf(obj);
@@ -251,7 +251,7 @@ public class YamlParser {
 
 
     public static boolean isBigDecimal(String str) {
-        if (str == null || str.trim().length() == 0) {
+        if (str == null || str.trim().isEmpty()) {
             return false;
         }
         char[] chars = str.toCharArray();
@@ -276,7 +276,7 @@ public class YamlParser {
 
     public static void main(String[] args) throws IOException {
         File file = new File(YamlParser.class.getResource("/").getFile() + "test.yml");
-        String content = Files.toString(file, Charsets.UTF_8);
+        String content = Files.asCharSource(file, Charsets.UTF_8).read();
         Map<String, Object> a = YamlParser.yamlToFlattenedMap(content);
         System.out.println(a);
 

@@ -63,7 +63,7 @@ public class EncryptUtils {
         }
         // 采用base64算法进行转码,避免出现中文乱码
         byte[] encryptBytes = Base64.getDecoder().decode(encryptStr);
-        byte[] decryptBytes = new byte[0];
+        byte[] decryptBytes;
         try {
             decryptBytes = cipher.doFinal(encryptBytes);
         } catch (IllegalBlockSizeException | BadPaddingException e) {

@@ -1,6 +1,7 @@
 package io.devpl.fxui.utils;
 
 import io.devpl.sdk.util.StringUtils;
+import org.jetbrains.annotations.Contract;
 
 import java.awt.*;
 import java.io.File;

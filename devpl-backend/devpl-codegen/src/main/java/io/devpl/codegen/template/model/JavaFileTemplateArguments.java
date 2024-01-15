@@ -1,13 +1,21 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.util.ClassUtils;
 import io.devpl.sdk.util.CollectionUtils;
+import lombok.Getter;
+import lombok.Setter;
+import org.beetl.android.util.ArrayMap;
+import org.beetl.android.util.ArraySet;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 
 /**
  * 生成Java类的模板参数
  */
+@Getter
+@Setter
 public class JavaFileTemplateArguments implements TemplateArguments {
 
     /**
@@ -50,6 +58,11 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     private Set<FieldData> fields;
 
     /**
+     * 类上的注解
+     */
+    private Set<String> annotations;
+
+    /**
      * 方法列表
      */
     private Set<MethodData> methods;
@@ -83,6 +96,12 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         }
     }
 
+    public void addAnnotation(Class<? extends Annotation>... annotations) {
+        if (this.annotations == null) {
+            this.annotations = new ArraySet<>();
+        }
+    }
+
     public final void addSuperInterfaces(String... superInterfaces) {
         if (this.superInterfaces == null) {
             this.superInterfaces = new HashSet<>(Arrays.asList(superInterfaces));
@@ -96,6 +115,10 @@ public class JavaFileTemplateArguments implements TemplateArguments {
 
         Set<String> packageNames = new HashSet<>();
 
+        if (this.importItems == null) {
+            this.importItems = new HashSet<>();
+        }
+
         for (Class<?> superInterface : superInterfaces) {
             if (superInterface == null || !superInterface.isInterface()) {
                 throw new IllegalArgumentException(superInterface + " is not a interface");
@@ -103,7 +126,8 @@ public class JavaFileTemplateArguments implements TemplateArguments {
             if (this.superInterfaces == null) {
                 this.superInterfaces = new HashSet<>();
             }
-            this.superInterfaces.add(superInterface.getName());
+
+            this.superInterfaces.add(ClassUtils.getSimpleName(superInterface.getName()));
 
             importItems.add(superInterface.getPackageName());
         }
@@ -116,42 +140,6 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         this.fields.add(fieldData);
     }
 
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getClassType() {
-        return classType;
-    }
-
-    public void setClassType(String classType) {
-        this.classType = classType;
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
-    }
-
-    public Set<String> getImportItems() {
-        return importItems;
-    }
-
     public void setImportItems(Collection<String> importItems) {
         if (this.importItems == null) {
             this.importItems = new HashSet<>(importItems);
@@ -161,40 +149,8 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         }
     }
 
-    public Set<String> getStaticImportItem() {
-        return staticImportItem;
-    }
-
-    public void setStaticImportItem(Set<String> staticImportItem) {
-        this.staticImportItem = staticImportItem;
-    }
-
-    public String getSuperClass() {
-        return superClass;
-    }
-
-    public void setSuperClass(String superClass) {
-        this.superClass = superClass;
-    }
-
-    public Set<String> getSuperInterfaces() {
-        return superInterfaces;
-    }
-
-    public void setSuperInterfaces(Set<String> superInterfaces) {
-        this.superInterfaces = superInterfaces;
-    }
-
-    public Set<FieldData> getFields() {
-        return fields;
-    }
-
     public void setFields(Collection<FieldData> fields) {
         this.fields = CollectionUtils.setAll(this.fields, fields);
-    }
-
-    public Set<MethodData> getMethods() {
-        return methods;
     }
 
     public void setMethods(Collection<MethodData> methods) {
