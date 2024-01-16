@@ -2,17 +2,13 @@ package io.devpl.sdk;
 
 import io.devpl.sdk.collection.ArrayMap;
 
-import java.io.Serial;
 import java.util.*;
 import java.util.regex.Pattern;
 
 /**
  * 采用ArrayMap结构实现，适用于小数据量
  */
-final class DataObjectArrayMapImpl implements DataObject {
-
-    @Serial
-    private static final long serialVersionUID = 4967941937079805838L;
+final class DataObjectArrayMapImpl implements DataObject, Cloneable {
 
     /**
      * 小驼峰命名:以字母开头
@@ -74,7 +70,7 @@ final class DataObjectArrayMapImpl implements DataObject {
     }
 
     @Override
-    public void setValue(String name, Object value) throws NoSuchElementException {
+    public void set(String name, Object value) throws NoSuchElementException {
         if (!containsKey(name)) {
             throw new NoSuchElementException(name);
         }
@@ -187,5 +183,10 @@ final class DataObjectArrayMapImpl implements DataObject {
     @Override
     public DataObject copy() {
         return new DataObjectArrayMapImpl(this.data);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

@@ -2,6 +2,7 @@ package io.devpl.sdk.collection;
 
 import io.devpl.sdk.util.ObjectUtils;
 import io.devpl.sdk.validation.Assert;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
@@ -213,7 +214,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
      * collisions. This implementation uses the same Wang/Jenkins algorithm as
      * {@link ConcurrentHashMap}. Subclasses can override to provide alternative hashing.
      *
-     * @param o the object to hash (may be null)
+     * @param o the object to hash (maybe null)
      * @return the resulting hash code
      */
     protected int getHash(Object o) {
@@ -267,7 +268,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public V putIfAbsent(K key, V value) {
+    public V putIfAbsent(@NotNull K key, V value) {
         return put(key, value, false);
     }
 
@@ -306,7 +307,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public boolean remove(Object key, final Object value) {
+    public boolean remove(@NotNull Object key, final Object value) {
         Boolean result = doTask(key, new Task<Boolean>(TaskOption.RESTRUCTURE_AFTER, TaskOption.SKIP_IF_EMPTY) {
             @Override
             protected Boolean execute(Reference<K, V> ref, Entry<K, V> entry) {
@@ -323,7 +324,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public boolean replace(K key, final V oldValue, final V newValue) {
+    public boolean replace(@NotNull K key, final @NotNull V oldValue, final @NotNull V newValue) {
         Boolean result = doTask(key, new Task<Boolean>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.SKIP_IF_EMPTY) {
             @Override
             protected Boolean execute(Reference<K, V> ref, Entry<K, V> entry) {
@@ -338,7 +339,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public V replace(K key, final V value) {
+    public V replace(@NotNull K key, final @NotNull V value) {
         return doTask(key, new Task<V>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.SKIP_IF_EMPTY) {
             @Override
             protected V execute(Reference<K, V> ref, Entry<K, V> entry) {
@@ -391,7 +392,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public Set<Map.Entry<K, V>> entrySet() {
+    public @NotNull Set<Map.Entry<K, V>> entrySet() {
         Set<Map.Entry<K, V>> entrySet = this.entrySet;
         if (entrySet == null) {
             entrySet = new EntrySet();
@@ -668,7 +669,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
          * @param task the update operation
          * @return the result of the operation
          */
-        public <T> T doTask(final int hash, final Object key, final Task<T> task) {
+        private  <T> T doTask(final int hash, final Object key, final Task<T> task) {
             boolean resize = task.hasOption(TaskOption.RESIZE);
             if (task.hasOption(TaskOption.RESTRUCTURE_BEFORE)) {
                 restructureIfNecessary(resize);
@@ -722,7 +723,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
          *
          * @param allowResize if resizing is permitted
          */
-        protected final void restructureIfNecessary(boolean allowResize) {
+        private void restructureIfNecessary(boolean allowResize) {
             int currCount = this.count.get();
             boolean needsResize = allowResize && (currCount > 0 && currCount >= this.resizeThreshold);
             Reference<K, V> ref = this.referenceManager.pollForPurge();
@@ -878,7 +879,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     private class EntrySet extends AbstractSet<Map.Entry<K, V>> {
 
         @Override
-        public Iterator<Map.Entry<K, V>> iterator() {
+        public @NotNull Iterator<Map.Entry<K, V>> iterator() {
             return new EntryIterator();
         }
 

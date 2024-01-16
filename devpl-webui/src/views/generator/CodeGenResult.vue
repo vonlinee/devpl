@@ -8,7 +8,7 @@
     show-footer
     title="生成结果"
     width="80%"
-    height="80%"
+    height="90%"
     transfer
     :mask-closable="false"
     destroy-on-close

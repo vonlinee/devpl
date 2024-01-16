@@ -15,6 +15,12 @@ public class TestStringUtils {
         String result = StringUtils.lastSubstring(sb, 0);
 
         System.out.println(result);
+
+        DataObject obj = DataClass.newObject();
+
+        obj.set("name", "zs");
+        obj.set("age", 12);
+
     }
 
 }

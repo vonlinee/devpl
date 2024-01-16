@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * 用于方法间的数据传输，可以动态地存放数据
  */
-public interface DataObject extends Serializable, Cloneable {
+public interface DataObject extends Serializable {
 
     static DataObject create() {
         return DataClass.newObject();
@@ -38,7 +38,7 @@ public interface DataObject extends Serializable, Cloneable {
      * @param value 数据项的新值
      * @throws NoSuchElementException 如果name指示的元素不存在，抛出此异常
      */
-    void setValue(String name, Object value) throws NoSuchElementException;
+    void set(String name, Object value) throws NoSuchElementException;
 
     /**
      * 放入一个新的数据项，若key指示的数据项已存在，直接覆盖
