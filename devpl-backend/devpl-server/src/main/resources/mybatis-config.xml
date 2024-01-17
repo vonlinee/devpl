@@ -32,7 +32,4 @@
             </dataSource>
         </environment>
     </environments>
-    <mappers>
-        <mapper resource="mappers/DepartmentMapper.xml"/>
-    </mappers>
 </configuration>

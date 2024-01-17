@@ -38,3 +38,24 @@ export const apiGetSql = (ms: string, params: any[], real: boolean) => {
     real: real ? 1 : 0,
   })
 }
+
+/**
+ * 加载目录中的所有mapper文件
+ * @return SQL 字符串
+ */
+export const apiBuildIndex = (dir: string) => {
+  return http.get<string[]>("/api/tools/mybatis/index/build", {
+    projectRootDir: dir
+  })
+}
+
+/**
+ * 加载目录中的所有mapper文件
+ * @return SQL 字符串
+ */
+export const apiGetMapperStatementContent = (dir: string, msId: string) => {
+  return http.get<string[]>("/api/tools/mybatis/index/query/ms", {
+    projectRootDir: dir,
+    mapperStatementId: msId
+  })
+}

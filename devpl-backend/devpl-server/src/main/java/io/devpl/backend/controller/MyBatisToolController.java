@@ -77,4 +77,20 @@ public class MyBatisToolController {
     public Result<List<ParamMeta>> getParamMetaData(@RequestBody GetSqlParam param) {
         return Result.ok(myBatisService.getParamMetadata(param.getMapperStatement()));
     }
+
+    /**
+     * 获取Mapper Statement结合输入参数获取参数元数据
+     */
+    @GetMapping("/index/build")
+    public Result<List<String>> getParamMetaData(String projectRootDir) {
+        return Result.ok(myBatisService.buildIndex(projectRootDir));
+    }
+
+    /**
+     * 获取Mapper Statement结合输入参数获取参数元数据
+     */
+    @GetMapping("/index/query/ms")
+    public Result<String> getParamMetaData(String projectRootDir, String mapperStatementId) {
+        return Result.ok(myBatisService.getContent(projectRootDir, mapperStatementId));
+    }
 }

@@ -1,17 +1,19 @@
 package io.devpl.backend.service.impl;
 
-import io.devpl.backend.utils.SqlFormat;
-import io.devpl.codegen.util.TypeUtils;
 import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.mybatis.*;
-import io.devpl.sdk.TreeNode;
 import io.devpl.backend.service.MyBatisService;
+import io.devpl.backend.utils.SqlFormat;
+import io.devpl.codegen.util.TypeUtils;
+import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.builder.xml.XMLConfigBuilder;
+import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -22,13 +24,20 @@ import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * 直接解析本地项目所有文件
@@ -113,7 +122,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         ParameterHandler parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
         try (Connection connection = dataSource.getConnection()) {
             // 获取数据源
-            try (PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql())){
+            try (PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql())) {
                 parameterHandler.setParameters(preparedStatement);
                 String sql = preparedStatement.toString();
                 int index = sql.indexOf(":");
@@ -506,5 +515,64 @@ public class MyBatisServiceImpl implements MyBatisService {
             type = MapperStatementParamValueType.NUMERIC;
         }
         return type;
+    }
+
+    /**
+     * key-项目根路径
+     * value-缓存的Mapper实例
+     */
+    Map<String, Configuration> cache = new ConcurrentHashMap<>();
+
+    @Override
+    public String getContent(String projectId, String msId) {
+        Configuration configuration = cache.get(projectId);
+        if (configuration == null) {
+            return "项目" + projectId + "还未进行缓存";
+        }
+        MappedStatement mappedStatement = configuration.getMappedStatement(msId);
+        if (mappedStatement == null) {
+            return "项目" + projectId + "不存在ID为" + msId;
+        }
+        return mappedStatement.getBoundSql(new HashMap<>()).getSql();
+    }
+
+    @Override
+    public List<String> buildIndex(String projectRootDir) {
+        ClassPathResource resource = new ClassPathResource("mybatis-config.xml");
+        Properties properties = new Properties();
+        String environment = "";
+
+        try (InputStream inputStream = resource.getInputStream()) {
+            XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
+
+            Configuration configuration = parser.parse();
+
+            try (Stream<Path> mapperFilesStream = Files.list(Path.of(resource.getFile().getParent(), "mapper"))) {
+                /**
+                 * mapper文件中的sql标签
+                 * key为namespace + <sql>标签的id，val为对应的XNode
+                 */
+                Map<String, XNode> sqlFragments = new HashMap<>();
+
+                mapperFilesStream.forEach(file -> {
+                    log.info("开始解析{}", file.toString());
+                    try (InputStream is = Files.newInputStream(file)) {
+                        XMLMapperBuilder builder = new XMLMapperBuilder(is, configuration, file.toAbsolutePath().toString(), sqlFragments);
+                        builder.parse();
+                    } catch (IOException ignored) {
+                        log.info("解析{}失败", file);
+                    }
+                });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            cache.put(projectRootDir, configuration);
+
+            return configuration.getMappedStatements().stream().map(MappedStatement::getId).toList();
+        } catch (Exception exception) {
+            log.error("解析MyBatis配置出现错误", exception);
+        }
+        return Collections.emptyList();
     }
 }

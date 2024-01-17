@@ -14,6 +14,8 @@
     <div style="flex-grow: 1">
       <el-button @click="fillSampleMapperStatement">填充样例</el-button>
       <el-button @click="showDialog()">导入</el-button>
+
+      <MapperStatementSelector @changed="handleMsChanged"/>
       <param-import ref="importModalRef"></param-import>
 
       <FieldValueTreeTable
@@ -73,6 +75,7 @@ import { getSubStrings, hasText, isBlank } from "@/utils/tool"
 import { computed, nextTick, onMounted, ref, toRaw } from "vue"
 
 import {
+apiGetMapperStatementContent,
   apiGetMapperStatementValueTypes,
   apiGetSampleXmlText,
   apiGetSql,
@@ -87,6 +90,7 @@ import { appStore } from "@/store"
 
 import { foreachSnippet, stringSnippet } from "@/utils/mybatis"
 import { ArrowDown } from "@element-plus/icons"
+import MapperStatementSelector from "./MapperStatementSelector.vue"
 
 // 数据
 const inputRef = ref()
@@ -118,6 +122,12 @@ function output(handler: (input: string) => string) {
     const result = handler(input)
     outputRef.value.setText(result)
   }
+}
+
+const handleMsChanged = (msId: string) => {
+  apiGetMapperStatementContent("111", msId).then((res) => {
+    inputRef.value.setText(res.data)
+  })
 }
 
 const handleMsForeach = () => {

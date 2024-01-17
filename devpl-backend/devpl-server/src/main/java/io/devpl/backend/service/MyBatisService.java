@@ -82,4 +82,8 @@ public interface MyBatisService {
      * @return 参数数据类型
      */
     MapperStatementParamValueType inferType(String paramName);
+
+    String getContent(String projectId, String msId);
+
+    List<String> buildIndex(String projectRootDir);
 }
