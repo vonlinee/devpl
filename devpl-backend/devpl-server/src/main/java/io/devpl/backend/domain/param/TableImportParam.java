@@ -10,6 +10,10 @@ import java.util.List;
 @Setter
 public class TableImportParam {
 
+    /**
+     * 数据源ID
+     */
+    @Nullable
     private Long dataSourceId;
 
     /**
@@ -24,6 +28,9 @@ public class TableImportParam {
     @Nullable
     private List<String> tableNameList;
 
+    /**
+     * 导入选项
+     */
     private Integer option;
 
     /**

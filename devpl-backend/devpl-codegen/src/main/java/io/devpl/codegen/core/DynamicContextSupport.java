@@ -19,10 +19,10 @@ public interface DynamicContextSupport {
     /**
      * 批量添加上下文参数，用于子类实现逻辑
      *
-     * @param contexMap 多个上下文参数K-V对
+     * @param contextMap 多个上下文参数K-V对
      */
-    default void addContext(Map<String, Object> contexMap) {
-        for (Map.Entry<String, Object> entry : contexMap.entrySet()) {
+    default void addContext(Map<String, Object> contextMap) {
+        for (Map.Entry<String, Object> entry : contextMap.entrySet()) {
             addContext(entry.getKey(), entry.getValue());
         }
     }

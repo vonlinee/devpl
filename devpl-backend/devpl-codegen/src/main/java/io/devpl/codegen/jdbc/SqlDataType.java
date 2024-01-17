@@ -11,7 +11,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * this class if copied from Apache Calcite.
+ * <p>this class is copied from Apache Calcite.</p>
+ * <p>
  * Extends the information in {@link java.sql.Types}.
  *
  * <p>The information in the following conversions tables

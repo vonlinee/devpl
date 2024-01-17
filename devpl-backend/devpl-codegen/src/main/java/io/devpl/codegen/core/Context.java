@@ -4,8 +4,8 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.plugins.TableGenerationPlugin;
-import io.devpl.codegen.strategy.MavenProjectFileLocator;
-import io.devpl.codegen.strategy.ProjectFileLocator;
+import io.devpl.codegen.strategy.MavenProjectArchetype;
+import io.devpl.codegen.strategy.ProjectArchetype;
 import io.devpl.sdk.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -77,7 +77,7 @@ public class Context {
     /**
      * 用于定位文件位置
      */
-    private ProjectFileLocator fileLocator = new MavenProjectFileLocator();
+    private ProjectArchetype fileLocator = new MavenProjectArchetype();
 
     /**
      * 在构造器中处理配置

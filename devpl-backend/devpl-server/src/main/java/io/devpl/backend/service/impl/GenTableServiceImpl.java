@@ -85,7 +85,6 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     public void importSingleTable(TableImportParam param) {
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
-
         // 查询表是否存在
         GenTable table = this.getByTableName(tableName);
         // 表存在
@@ -94,14 +93,13 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         }
 
         DBType dbType = DBType.MYSQL;
-        if (datasourceId != -1) {
+        if (!dataSourceService.isSystemDataSource(datasourceId)) {
             DbConnInfo connInfo = dataSourceService.getById(datasourceId);
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
 
         // 项目信息
         ProjectInfo project = projectService.getById(param.getProjectId());
-
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             AbstractQuery query = dataSourceService.getQuery(dbType);
             // 从数据库获取表信息

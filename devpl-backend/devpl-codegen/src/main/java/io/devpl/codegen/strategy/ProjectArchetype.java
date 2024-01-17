@@ -1,11 +1,9 @@
 package io.devpl.codegen.strategy;
 
-import io.devpl.codegen.core.DynamicContextSupport;
-
 /**
- * 项目文件定位策略
+ * 项目结构
  */
-public interface ProjectFileLocator extends DynamicContextSupport {
+public interface ProjectArchetype {
 
     /**
      * 根目录

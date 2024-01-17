@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.JdbcType;
 
 /**
  * 生成配置信息-表字段
@@ -92,6 +93,7 @@ public class GenTableField {
     /**
      * 表单类型
      */
+    @TableField(value = "form_type", jdbcType = JdbcType.VARCHAR)
     private String formType;
 
     /**

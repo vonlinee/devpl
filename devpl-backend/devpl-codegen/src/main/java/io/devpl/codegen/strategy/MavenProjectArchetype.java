@@ -1,14 +1,12 @@
 package io.devpl.codegen.strategy;
 
-import io.devpl.codegen.config.ConfigurationHolder;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
  * 适用于Maven的项目结构
  */
-public class MavenProjectFileLocator extends ConfigurationHolder implements ProjectFileLocator {
+public class MavenProjectArchetype implements ProjectArchetype {
 
     private String rootDir;
     private String moduleName;
@@ -21,11 +19,6 @@ public class MavenProjectFileLocator extends ConfigurationHolder implements Proj
     @Override
     public void setModuleName(String module) {
         this.moduleName = module;
-    }
-
-    @Override
-    public void addContext(String name, Object value) {
-        super.setValue(name, value);
     }
 
     @Override

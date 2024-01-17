@@ -3,6 +3,7 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.dao.GenTableFieldMapper;
 import io.devpl.backend.domain.enums.AutoFillEnum;
+import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.entity.GenFieldType;
 import io.devpl.backend.entity.GenTableField;
 import io.devpl.backend.service.GenFieldTypeService;
@@ -64,7 +65,7 @@ public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, 
             field.setGridItem(true);
             field.setQueryType("=");
             field.setQueryFormType("text");
-            field.setFormType("text");
+            field.setFormType(FormType.TEXT.getText());
             field.setSort(index++);
         }
     }
