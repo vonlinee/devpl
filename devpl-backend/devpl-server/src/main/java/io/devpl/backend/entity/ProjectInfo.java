@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,9 +16,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @TableName("project_info")
-public class ProjectInfo {
+public class ProjectInfo implements Serializable {
     /**
-     * id
+     * 项目id
      */
     @TableId(type = IdType.AUTO)
     private Long id;

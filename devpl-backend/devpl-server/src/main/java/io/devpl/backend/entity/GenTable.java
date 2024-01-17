@@ -76,7 +76,7 @@ public class GenTable {
     /**
      * 基类ID
      */
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Long baseclassId;
     /**
      * 创建时间

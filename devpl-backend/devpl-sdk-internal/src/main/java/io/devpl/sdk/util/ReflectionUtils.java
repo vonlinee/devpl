@@ -1,7 +1,6 @@
 package io.devpl.sdk.util;
 
 import io.devpl.sdk.collection.ConcurrentReferenceHashMap;
-import io.devpl.sdk.lang.RuntimeReflectiveOperationException;
 import io.devpl.sdk.validation.Assert;
 
 import java.lang.reflect.*;
@@ -214,7 +213,7 @@ public abstract class ReflectionUtils {
      * @param clazz      the class to introspect
      * @param name       the name of the method
      * @param paramTypes the parameter types of the method
-     *                   (may be {@code null} to indicate any signature)
+     *                   (maybe {@code null} to indicate any signature)
      * @return the Method object, or {@code null} if none found
      */
 
@@ -263,7 +262,7 @@ public abstract class ReflectionUtils {
      *
      * @param method the method to invoke
      * @param target the target object to invoke the method on
-     * @param args   the invocation arguments (may be {@code null})
+     * @param args   the invocation arguments (maybe {@code null})
      * @return the invocation result, if any
      */
 
@@ -279,7 +278,7 @@ public abstract class ReflectionUtils {
     /**
      * Determine whether the given method explicitly declares the given
      * exception or one of its superclasses, which means that an exception
-     * of that type can be propagated as-is within a reflective invocation.
+     * to that type can be propagated as-is within a reflective invocation.
      *
      * @param method        the declaring method
      * @param exceptionType the exception to throw
@@ -479,7 +478,6 @@ public abstract class ReflectionUtils {
         return (result.length == 0 || !defensive) ? result : result.clone();
     }
 
-
     private static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
         List<Method> result = null;
         for (Class<?> ifc : clazz.getInterfaces()) {
@@ -596,8 +594,8 @@ public abstract class ReflectionUtils {
      * up to {@link Object}.
      *
      * @param clazz the class to introspect
-     * @param name  the name of the field (may be {@code null} if type is specified)
-     * @param type  the type of the field (may be {@code null} if name is specified)
+     * @param name  the name of the field (maybe {@code null} if type is specified)
+     * @param type  the type of the field (maybe {@code null} if name is specified)
      * @return the corresponding Field object, or {@code null} if not found
      */
 
@@ -629,7 +627,7 @@ public abstract class ReflectionUtils {
      * @param field  the field to set
      * @param target the target object on which to set the field
      *               (or {@code null} for a static field)
-     * @param value  the value to set (may be {@code null})
+     * @param value  the value to set (maybe {@code null})
      */
     public static void setField(Field field, Object target, Object value) {
         try {
@@ -988,7 +986,7 @@ public abstract class ReflectionUtils {
      * @param index 第几个泛型参数
      * @return 泛型类型
      */
-    public static Class<?> getSuperClassGenricType(Class<?> clazz, int index) {
+    public static Class<?> getSuperClassGenericType(Class<?> clazz, int index) {
         Type genType = clazz.getGenericSuperclass();
         if (!(genType instanceof ParameterizedType)) {
             return Object.class;
@@ -1013,7 +1011,7 @@ public abstract class ReflectionUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> getSuperGenericType(Class<T> clazz) {
-        return (Class<T>) getSuperClassGenricType(clazz, 0);
+        return (Class<T>) getSuperClassGenericType(clazz, 0);
     }
 
     /**
@@ -1025,7 +1023,6 @@ public abstract class ReflectionUtils {
      * @return Method对象
      */
     public static Method getDeclaredMethod(Object object, String methodName, Class<?>[] parameterTypes) {
-
         for (Class<?> superClass = object.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
             try {
                 return superClass.getDeclaredMethod(methodName, parameterTypes);
@@ -1033,7 +1030,6 @@ public abstract class ReflectionUtils {
                 // Method 不在当前类定义, 继续向上转型
             }
         }
-
         return null;
     }
 
@@ -1200,12 +1196,12 @@ public abstract class ReflectionUtils {
      * 根据传入的构造方法对象，以及，获取对应的实例
      *
      * @param constructor 构造方法对象
-     * @param initargs    传入构造方法的实参【可以不写】
+     * @param initArgs    传入构造方法的实参【可以不写】
      * @return 对应的实例【Object类型】
      */
-    public static Object getNewInstance(Constructor<?> constructor, Object... initargs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static Object getNewInstance(Constructor<?> constructor, Object... initArgs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         constructor.setAccessible(true);
-        return constructor.newInstance(initargs);
+        return constructor.newInstance(initArgs);
     }
 
     /**

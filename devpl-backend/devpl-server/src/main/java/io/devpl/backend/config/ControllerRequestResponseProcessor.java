@@ -15,6 +15,8 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import java.lang.reflect.Method;
+
 /**
  * 对控制器层的请求入参和响应返回值统一处理
  * 如果Controller没有返回值时，这个接口的代码就不会执行。因为存在另类的写法，Controller的返回值不一定是 return 回去的，可以用类似于 ModelAndView 之类的对象传递
@@ -41,14 +43,12 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
     }
 
     @Override
-    public void handleReturnValue(Object returnValue, MethodParameter returnType, @NotNull ModelAndViewContainer mavContainer, @NotNull NativeWebRequest webRequest) throws Exception {
-        // 如果类或者方法含有不包装注解则忽略包装
-        if (returnType.getDeclaringClass() == Result.class || Result.class.isAssignableFrom(returnType.getDeclaringClass())) {
-            delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
+    public void handleReturnValue(Object returnValue, @NotNull MethodParameter returnType, @NotNull ModelAndViewContainer mavContainer, @NotNull NativeWebRequest webRequest) throws Exception {
+        if (returnValue == null) {
             return;
         }
 
-        if (returnValue.getClass() == Result.class) {
+        if (!Result.class.isAssignableFrom(returnValue.getClass())) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;
         }

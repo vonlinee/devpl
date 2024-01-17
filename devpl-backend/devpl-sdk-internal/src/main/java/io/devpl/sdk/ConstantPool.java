@@ -1,5 +1,6 @@
 package io.devpl.sdk;
 
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,15 +24,9 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * "#" + secondNameComponent)}.
      */
     public T valueOf(Class<?> firstNameComponent, String secondNameComponent) {
-        return valueOf(checkNotNull(firstNameComponent, "firstNameComponent").getName() + '#' + checkNotNull(secondNameComponent, "secondNameComponent"));
-    }
-
-    protected Class<?> checkNotNull(Class<?> firstNameComponent, String string) {
-        return Object.class;
-    }
-
-    protected Class<?> checkNotNull(String secondNameComponent, String string) {
-        return Object.class;
+        return valueOf(Objects.requireNonNull(firstNameComponent, "firstNameComponent").getName()
+            + '#'
+            + Objects.requireNonNull(secondNameComponent, "secondNameComponent"));
     }
 
     /**
@@ -43,11 +38,14 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * @param name the name of the {@link Constant}
      */
     public T valueOf(String name) {
-        return getOrCreate(checkNonEmpty(name, "name"));
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Param '" + name + "' must not be empty");
+        }
+        return getOrCreate(name);
     }
 
     /**
-     * Get existing constant by name or creates new one if not exists. Threadsafe
+     * Get existing constant by name or creates new one if not exists. Thread safe
      *
      * @param name the name of the {@link Constant}
      */
@@ -68,7 +66,10 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * {@code name}.
      */
     public boolean exists(String name) {
-        return constants.containsKey(checkNonEmpty(name, "name"));
+        if (name == null || name.isEmpty()) {
+            return false;
+        }
+        return constants.containsKey(name);
     }
 
     /**
@@ -77,18 +78,14 @@ public abstract class ConstantPool<T extends Constant<T>> {
      * {@code name} exists.
      */
     public T newInstance(String name) {
-        return createOrThrow(checkNonEmpty(name, "name"));
-    }
-
-    protected String checkNonEmpty(String name, String string) {
         if (name == null || name.isEmpty()) {
-            return string;
+            throw new IllegalArgumentException("the param " + name + " must not be empty");
         }
-        return name;
+        return createOrThrow(name);
     }
 
     /**
-     * Creates constant by name or throws exception. Threadsafe
+     * Creates constant by name or throws exception. Thread safe
      *
      * @param name the name of the {@link Constant}
      */

@@ -87,7 +87,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     /**
      * 自定义的参数解析器的优先级是低于Spring内置的
      */
-    // @Configuration(proxyBeanMethods = false)
+    @Configuration(proxyBeanMethods = false)
     public static class RequestMethodProcessorConfiguration implements InitializingBean {
 
         private final RequestMappingHandlerAdapter requestMappingHandlerAdapter;

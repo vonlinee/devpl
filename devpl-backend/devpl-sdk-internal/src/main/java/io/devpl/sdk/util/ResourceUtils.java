@@ -485,7 +485,7 @@ public final class ResourceUtils {
         }
         File file = new File(ROOT_CLASSPATH + pathname);
         if (!file.exists()) {
-            throw new FileNotFoundException(file.getAbsolutePath() + " doesnot exists");
+            throw new FileNotFoundException(file.getAbsolutePath() + " doesn't exists");
         }
         return new BufferedInputStream(new FileInputStream(file));
     }

@@ -949,8 +949,8 @@ public class ObjectUtils {
      * <p>Returns:
      * <ul>
      * <li>{@code "null"} if {@code obj} is {@code null}</li>
-     * <li>{@code"Optional.empty"} if {@code obj} is an empty {@link Optional}</li>
-     * <li>{@code"Optional[<concise-string>]"} if {@code obj} is a non-empty {@code Optional},
+     * <li>{@code Optional.empty"} if {@code obj} is an empty {@link Optional}</li>
+     * <li>{@code Optional[<concise-string>]"} if {@code obj} is a non-empty {@code Optional},
      * where {@code <concise-string>} is the result of invoking {#nullSafeConciseToString}
      * on the object contained in the {@code Optional}</li>
      * <li>{@code "{}"} if {@code obj} is an empty array or {@link Map}</li>
@@ -1071,6 +1071,18 @@ public class ObjectUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * Checks that the given argument is neither null nor empty.
+     * If it is, throws {@link NullPointerException} or {@link IllegalArgumentException}.
+     * Otherwise, returns the argument.
+     */
+    public static String requireNonEmpty(final String value, final String name) {
+        if (Objects.requireNonNull(value, name).isEmpty()) {
+            throw new IllegalArgumentException("Param '" + name + "' must not be empty");
+        }
+        return value;
     }
 
     /**

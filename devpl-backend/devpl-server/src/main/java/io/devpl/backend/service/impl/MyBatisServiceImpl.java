@@ -332,7 +332,6 @@ public class MyBatisServiceImpl implements MyBatisService {
         return val;
     }
 
-
     /**
      * 查找MyBatis的MappedStatement中所有出现的变量引用，只能出现文本中出现的变量
      * MyBatis未提供响应的API来遍历，因此使用反射来获取

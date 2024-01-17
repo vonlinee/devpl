@@ -1,5 +1,7 @@
 package io.devpl.sdk;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -83,7 +85,7 @@ public class UnsynchronizedBuffer extends OutputStream {
      * @throws IndexOutOfBoundsException if off or length are invalid
      */
     @Override
-    public void write(byte[] bytes, int off, int length) {
+    public void write(byte @NotNull [] bytes, int off, int length) {
         reserve(length);
         System.arraycopy(bytes, off, data, offset, length);
         offset += length;
