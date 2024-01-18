@@ -48,13 +48,14 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
             return;
         }
 
-        if (!Result.class.isAssignableFrom(returnValue.getClass())) {
+        // 已被包装的无需再进行包装
+        if (Result.class.isAssignableFrom(returnValue.getClass())) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;
         }
 
         // 表示此函数可以处理请求，不必交给别的代码处理
-        // mavContainer.setRequestHandled(true);
+        mavContainer.setRequestHandled(true);
         // 自定义返回格式
         delegate.handleReturnValue(Result.ok(returnValue), returnType, mavContainer, webRequest);
     }
