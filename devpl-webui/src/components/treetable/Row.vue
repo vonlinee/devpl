@@ -96,14 +96,22 @@ export default {
         this.$forceUpdate();
       }
     },
+    /**
+     * 如果拖拽子行，那么会一层层地向外触发onDragStart
+     * @param e
+     */
     onDragStart(e) {
       if (navigator.userAgent.indexOf("Firefox") >= 0) {
         // Firefox drag have a bug
         e.dataTransfer.setData("Text", this.id);
       }
+
+
       window.dragId = e.target.children[0].getAttribute("tree-id");
       window.dragPId = e.target.children[0].getAttribute("tree-p-id");
       window.dragParentNode = e.target;
+
+      console.log(e.target);
       e.target.style.opacity = 0.2;
     },
     onDragEnd(e) {
