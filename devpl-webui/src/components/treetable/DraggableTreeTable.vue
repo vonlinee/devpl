@@ -2,11 +2,12 @@
   TODO 出现滚动条时会出现表头和内容区错位的情况
 -->
 <template>
-  <div class="drag-tree-table" ref="table" v-bind:class="{ border: border !== undefined }">
+  <div class="drag-tree-table" ref="table" :class="{ border: border !== undefined }">
+    <!-- 表头 -->
     <div class="drag-tree-table-header">
       <Column v-for="(item, index) in data.columns" :width="item.width" :flex="item.flex"
               :border="border === undefined ? resize : border"
-              v-bind:class="['align-' + item.titleAlign, 'colIndex' + index]"
+              :class="['align-' + item.titleAlign, 'colIndex' + index]"
               :key="index">
         <input v-if="item.type === 'checkbox'" class="checkbox" type="checkbox"
                @click="onCheckAll($event, item.onChange)">
@@ -17,16 +18,17 @@
         </div>
       </Column>
     </div>
-    <div class="drag-tree-table-body" v-bind:style="bodyStyle" @dragover="onDragOver" @dragend="onDropEnd"
+    <!-- 内容区域 -->
+    <div class="drag-tree-table-body" :style="bodyStyle" @dragover="onDragOver" @dragend="onDropEnd"
          :class="isDraing ? 'dragging' : ''">
       <Row depth="0" :columns="data.columns" :draggable="draggable" :model="item" v-for="(item, index) in data.lists"
            :custom_field="custom_field" :onCheck="onSingleCheckChange" :border="border === undefined ? resize : border"
            :isContainChildren="isContainChildren" :key="index">
         <template v-slot:selection="{ row }">
-          <slot name="selection" v-bind:row="row"></slot>
+          <slot name="selection" :row="row"></slot>
         </template>
         <template v-for="(subItem, subIndex) in data.columns" v-slot:[subItem.type]="{ row }">
-          <slot :name="subItem.type" v-bind:row="row"></slot>
+          <slot :name="subItem.type" :row="row"></slot>
         </template>
       </Row>
     </div>
@@ -122,6 +124,7 @@ export default {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
       this.isDraing = true;
+      console.log(e.pageX, e.pageY);
       if (e.pageX == this.dragX && e.pageY == this.dragY) return;
       this.dragX = e.pageX;
       this.dragY = e.clientY;
@@ -150,12 +153,12 @@ export default {
     },
     // 查找匹配的行，处理拖拽样式
     filter(x, y) {
-
       let rows = document.querySelectorAll(".tree-row");
       this.targetId = undefined;
-      const dragRect = window.dragParentNode.getBoundingClientRect();
-      const dragW = dragRect.left + window.dragParentNode.clientWidth;
-      const dragH = dragRect.top + window.dragParentNode.clientHeight;
+      const parentNode = window.dragParentNode;
+      const dragRect = parentNode.getBoundingClientRect();
+      const dragW = dragRect.left + parentNode.clientWidth;
+      const dragH = dragRect.top + parentNode.clientHeight;
       if (x >= dragRect.left && x <= dragW && y >= dragRect.top && y <= dragH) {
         // 当前正在拖拽原始块不允许插入
         return;
@@ -313,7 +316,7 @@ export default {
       return curItem;
     },
     // 对外暴漏
-    DelById(id) {
+    removeById(id) {
       const listKey = this.custom_field.lists;
       const orderKey = this.custom_field.order;
       const idKey = this.custom_field.id;
@@ -345,7 +348,7 @@ export default {
       const listKey = this.custom_field.lists;
       for (let i = 0; i < list.length; i++) {
         if (ids !== undefined) {
-          if (ids.includes(list[i][this.custom_field["id"]])) {
+          if (ids.includes(list[i][this.custom_field.id])) {
             list[i][this.custom_field[key]] = val;
           }
         } else {
@@ -361,25 +364,30 @@ export default {
       this.deepSetAttr("open", false, list);
       this.data.lists = list;
     },
-    OpenAll(id, deep = true) {
+    expandAll(id = undefined, deep = true) {
       let list = func.deepClone(this.data.lists);
       this.deepSetAttr("open", true, list);
       this.data.lists = list;
     },
-    GetLevelById(id) {
+    getTreeLevel(id) {
       let row = this.$refs.table.querySelector("[tree-id=\"" + id + "\"]");
       return row.getAttribute("data-level") * 1;
     },
-    HighlightRow(id, isHighlight = true, deep = false) {
+    highlightRow(id, isHighlight = true, deep = false) {
       let list = func.deepClone(this.data.lists);
       let ids = [id];
-      if (deep == true) {
+      if (deep === true) {
         ids = ids.concat(this.GetChildIds(id, true));
       }
       this.deepSetAttr("highlight", isHighlight, list, ids);
       this.data.lists = list;
     },
-    AddRow(pId, data) {
+    /**
+     * 添加行
+     * @param pId
+     * @param data
+     */
+    addRow(pId, data) {
       const deepList = func.deepClone(this.data.lists);
       let _this = this;
 
@@ -408,7 +416,7 @@ export default {
       deep(deepList);
       this.data.lists = deepList;
     },
-    EditRow(id, data) {
+    editRow(id, data) {
       const deepList = func.deepClone(this.data.lists);
       let _this = this;
 

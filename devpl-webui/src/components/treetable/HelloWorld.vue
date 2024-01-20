@@ -51,25 +51,24 @@ export default {
       this.treeData.lists = list;
     },
     onAdd(pId, data) {
-      debugger
-      this.$refs.table.AddRow(pId, data);
+      this.$refs.table.addRow(pId, data);
     },
     onEdit(id, data) {
-      this.$refs.table.EditRow(id, data);
+      this.$refs.table.editRow(id, data);
     },
     openAll() {
-      this.$refs.table.OpenAll();
+      this.$refs.table.expandAll();
     },
     zipAll() {
       this.$refs.table.ZipAll(-1);
     },
     onDel(item) {
       // console.log("当前行的数据", updatedLists);
-      this.treeData.lists = this.$refs.table.DelById(item.id);
+      this.treeData.lists = this.$refs.table.removeById(item.id);
       alert("本地删除成功");
     },
     highlight(flag) {
-      this.$refs.table.HighlightRow(383, flag, true);
+      this.$refs.table.highlightRow(383, flag, true);
     },
     add(row) {
       this.$refs.addDialog.show("add", row.id);

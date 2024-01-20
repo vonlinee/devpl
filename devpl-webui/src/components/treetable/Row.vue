@@ -14,7 +14,7 @@
                     </span>
                     <span v-if="subItem.formatter" v-html="subItem.formatter(model)"></span>
                     <span v-else-if="subItem.field" v-html="model[subItem.field]"></span>
-                    <slot v-else name="selection" v-bind:row="model"></slot>
+                    <slot v-else name="selection" :row="model"></slot>
                 </span>
         <span v-else-if="subItem.type === 'checkbox'">
                     <input type="checkbox" v-if="model.isShowCheckbox !== false" :name="model[custom_field.id]"
@@ -24,16 +24,16 @@
         <span v-else-if="subItem.type === 'action'">
                     <span v-if="subItem.actions">
                         <a class="action-item" v-for="(acItem, acIndex) in subItem.actions" :key="acIndex" type="text"
-                           size="small" @click.stop.prevent="acItem.onclick(model)">
+                           @click.stop.prevent="acItem.onclick(model)">
                             <i :class="acItem.icon" v-html="acItem.formatter(model)"></i>
                         </a>
                     </span>
                     <span v-else>
-                        <slot name="action" v-bind:row="model"></slot>
+                        <slot name="action" :row="model"></slot>
                     </span>
                 </span>
         <span v-else-if="subItem.type">
-                    <slot :name="subItem.type" v-bind:row="model"></slot>
+                    <slot :name="subItem.type" :row="model"></slot>
                 </span>
         <span v-else>
                     <span v-if="subItem.formatter" v-html="subItem.formatter(model)"></span>
@@ -57,10 +57,10 @@
          :columns="columns" :key="index" :draggable="draggable" :border="border" :depth="depth * 1 + 1"
          :custom_field="custom_field" :onCheck="onCheck" :isContainChildren="isContainChildren" v-if="isFolder">
       <template v-slot:selection="{ row }">
-        <slot name="selection" v-bind:row="row"></slot>
+        <slot name="selection" :row="row"></slot>
       </template>
       <template v-for="(subItem, subIndex) in columns" v-slot:[subItem.type]="{ row }">
-        <slot :name="subItem.type" v-bind:row="row"></slot>
+        <slot :name="subItem.type" :row="row"></slot>
       </template>
     </Row>
   </div>
