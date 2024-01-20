@@ -5,7 +5,7 @@
       <button @click="openAll">全部开</button>
       <button @click="highlight(true)">高亮行</button>
       <button @click="highlight(false)">取消高亮</button>
-      <DraggableTreeTable ref="table" :data="treeData" @drag="onTreeDataChange" resize fixed :isdraggable="true">
+      <DraggableTreeTable ref="table" :data="treeData" @drag="onTreeDataChange" resize fixed :draggable="true">
         <template #selection="{ row }">
           {{ row.name }}
         </template>
@@ -28,8 +28,9 @@
 
 <script>
 import MyDialog from "./MyDialog.vue";
-import demoDataList from './data';
+import demoDataList from "./data";
 import DraggableTreeTable from "./DraggableTreeTable.vue";
+
 export default {
   name: "app",
   data() {
@@ -46,7 +47,7 @@ export default {
   },
   methods: {
     onTreeDataChange(list) {
-      console.log(list);
+      // console.log(list);
       this.treeData.lists = list;
     },
     onAdd(pId, data) {
@@ -62,9 +63,8 @@ export default {
       this.$refs.table.ZipAll()
     },
     onDel(item) {
-      const updatedLists = this.$refs.table.DelById(item.id)
-      console.log("当前行的数据", updatedLists);
-      this.treeData.lists = updatedLists;
+      // console.log("当前行的数据", updatedLists);
+      this.treeData.lists = this.$refs.table.DelById(item.id);
       alert('本地删除成功')
     },
     highlight(flag) {
@@ -85,7 +85,7 @@ export default {
         width: 100,
         align: "center",
         onChange: (item) => {
-          console.log(item)
+          // console.log(item)
           alert('您选中了' + item.length + '条数据');
         }
       },
@@ -130,7 +130,7 @@ export default {
               this.$refs.editDialog.show('edit', item);
             },
             formatter: item => {
-              console.log(item);
+              // console.log(item);
               return "<i>修改子节点 </i>";
             }
           },
@@ -138,7 +138,7 @@ export default {
             text: "删除",
             onclick: this.onDel,
             formatter: item => {
-              console.log(item);
+              // console.log(item);
               return "<i>删除</i>";
             }
           }

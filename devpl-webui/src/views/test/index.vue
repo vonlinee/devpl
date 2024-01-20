@@ -1,6 +1,6 @@
 <template>
   
-  <Child :count="count"></Child>
+<!--  <Child :count="count"></Child>-->
 
   <HelloWorld></HelloWorld>
 

@@ -6,7 +6,7 @@ import java.io.StringWriter;
 /**
  * @param <T> 携带的数据
  */
-abstract class RestfulResult<T> {
+public abstract class RestfulResult<T> {
     /**
      * 结果状态码
      */

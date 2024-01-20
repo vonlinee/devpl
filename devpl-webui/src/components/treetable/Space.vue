@@ -4,25 +4,31 @@
     </span>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const { depth } = defineProps<{
-    depth: number
-}>()
+  depth: number | string
+}>();
 
 const spaces = computed(() => {
-    const aArr = []
-    for (let i = 0; i < depth; i++) {
-        aArr.push('')
-    }
-    return aArr
-})
+  const aArr = [];
+  let maxSpace: number;
+  if (typeof depth === "string") {
+    maxSpace = Number.parseInt(depth);
+  } else {
+    maxSpace = depth;
+  }
+  for (let i = 0; i < maxSpace; i++) {
+    aArr.push("");
+  }
+  return aArr;
+});
 
 </script>
 <style>
 .space {
-    display: inline-block;
-    width: 15px;
+  display: inline-block;
+  width: 15px;
 }
 </style>
   

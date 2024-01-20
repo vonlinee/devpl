@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import io.devpl.backend.common.query.RestfulResult;
 import io.devpl.backend.common.query.Result;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
@@ -49,7 +50,7 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
         }
 
         // 已被包装的无需再进行包装
-        if (Result.class.isAssignableFrom(returnValue.getClass())) {
+        if (RestfulResult.class.isAssignableFrom(returnValue.getClass())) {
             delegate.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
             return;
         }
