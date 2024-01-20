@@ -60,7 +60,7 @@ export default {
       this.$refs.table.expandAll();
     },
     zipAll() {
-      this.$refs.table.ZipAll(-1);
+      this.$refs.table.foldAll(-1);
     },
     onDel(item) {
       // console.log("当前行的数据", updatedLists);

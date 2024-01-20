@@ -124,8 +124,10 @@ export default {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
       this.isDraing = true;
-      console.log(e.pageX, e.pageY);
-      if (e.pageX == this.dragX && e.pageY == this.dragY) return;
+      if (e.pageX === this.dragX && e.pageY === this.dragY) {
+        // 鼠标未移动
+        return;
+      }
       this.dragX = e.pageX;
       this.dragY = e.clientY;
       this.filter(e.pageX, e.clientY);
@@ -136,7 +138,7 @@ export default {
       }
     },
     onDropEnd(event) {
-      func.clearHoverStatus();
+      this.clearHoverStatus();
       this.resetTreeData();
       this.isDraing = false;
       if (this.targetId !== undefined) {
@@ -153,7 +155,6 @@ export default {
     },
     // 查找匹配的行，处理拖拽样式
     filter(x, y) {
-      let rows = document.querySelectorAll(".tree-row");
       this.targetId = undefined;
       const parentNode = window.dragParentNode;
       const dragRect = parentNode.getBoundingClientRect();
@@ -167,6 +168,7 @@ export default {
       let targetId = undefined;
       let whereInsert = "";
 
+      let rows = document.querySelectorAll(".tree-row");
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         const rect = row.getBoundingClientRect();
@@ -200,8 +202,7 @@ export default {
       }
       if (targetId === undefined) {
         // 匹配不到清空上一个状态
-        func.clearHoverStatus();
-        let whereInsert = "";
+        this.clearHoverStatus();
         return;
       }
 
@@ -211,28 +212,37 @@ export default {
         const targetRow = this.getItemById(this.data.lists, targetId);
         canDrag = this.beforeDragOver(curRow, targetRow, whereInsert);
       }
-      if (canDrag == false) return;
+      if (!canDrag) return;
       hoverBlock.style.display = "block";
-      if (whereInsert == "bottom") {
+      if (whereInsert === "bottom") {
         if (hoverBlock.children[2].style.opacity !== "0.5") {
-          func.clearHoverStatus();
+          this.clearHoverStatus();
           hoverBlock.children[2].style.opacity = 0.5;
         }
-      } else if (whereInsert == "center") {
+      } else if (whereInsert === "center") {
         if (hoverBlock.children[1].style.opacity !== "0.5") {
-          func.clearHoverStatus();
+          this.clearHoverStatus();
           hoverBlock.children[1].style.opacity = 0.5;
         }
       } else {
         if (hoverBlock.children[0].style.opacity !== "0.5") {
-          func.clearHoverStatus();
+          this.clearHoverStatus();
           hoverBlock.children[0].style.opacity = 0.5;
         }
       }
-
-
       this.targetId = targetId;
       this.whereInsert = whereInsert;
+    },
+    clearHoverStatus() {
+      let rows = document.querySelectorAll(".tree-row");
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const hoverBlock = row.children[row.children.length - 1];
+        hoverBlock.style.display = "none";
+        hoverBlock.children[0].style.opacity = 0.1;
+        hoverBlock.children[1].style.opacity = 0.1;
+        hoverBlock.children[2].style.opacity = 0.1;
+      }
     },
     resetTreeData() {
       if (this.targetId === undefined) return;
@@ -243,7 +253,7 @@ export default {
       const curList = this.data.lists;
       const _this = this;
       let curDragItem = null;
-      let taggetItem = null;
+      let targetItem = null;
 
       function pushData(curList, needPushList) {
         for (let i = 0; i < curList.length; i++) {
@@ -252,7 +262,7 @@ export default {
           obj[listKey] = [];
           if (_this.targetId == item[idKey]) {
             curDragItem = _this.getItemById(_this.data.lists, window.dragId);
-            taggetItem = _this.getItemById(_this.data.lists, _this.targetId);
+            targetItem = _this.getItemById(_this.data.lists, _this.targetId);
             if (_this.whereInsert === "top") {
               curDragItem[parentIdKey] = item[parentIdKey];
               needPushList.push(curDragItem);
@@ -281,8 +291,8 @@ export default {
 
       pushData(curList, newList);
       this.resetOrder(newList);
-      this.onDrag(newList, curDragItem, taggetItem, _this.whereInsert);
-      this.$emit("drag", newList, curDragItem, taggetItem, _this.whereInsert);
+      this.onDrag(newList, curDragItem, targetItem, _this.whereInsert);
+      this.$emit("drag", newList, curDragItem, targetItem, _this.whereInsert);
     },
     // 重置所有数据的顺序order
     resetOrder(list) {
@@ -300,19 +310,19 @@ export default {
       const listKey = this.custom_field.lists;
       const idKey = this.custom_field.id;
 
-      function getchild(curList) {
+      function getChild(curList) {
         for (let i = 0; i < curList.length; i++) {
           let item = curList[i];
           if (item[idKey] == id) {
             curItem = JSON.parse(JSON.stringify(item));
             break;
           } else if (item[listKey] && item[listKey].length) {
-            getchild(item[listKey]);
+            getChild(item[listKey]);
           }
         }
       }
 
-      getchild(lists);
+      getChild(lists);
       return curItem;
     },
     // 对外暴漏
@@ -359,7 +369,7 @@ export default {
         }
       }
     },
-    ZipAll(id, deep = true) {
+    foldAll(id, deep = true) {
       let list = func.deepClone(this.data.lists);
       this.deepSetAttr("open", false, list);
       this.data.lists = list;
@@ -384,8 +394,8 @@ export default {
     },
     /**
      * 添加行
-     * @param pId
-     * @param data
+     * @param pId 父节点ID
+     * @param data 添加的行的数据
      */
     addRow(pId, data) {
       const deepList = func.deepClone(this.data.lists);

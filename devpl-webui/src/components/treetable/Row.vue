@@ -1,7 +1,7 @@
 <template>
   <div class="tree-block" :draggable="!!draggable" @dragstart="onDragStart($event)" @dragend="onDragEnd($event)">
     <div class="tree-row" @click="toggle" :data-level="depth" :tree-id="model[custom_field.id]"
-         :tree-p-id="model[custom_field.parent_id]" :class="{ 'highlight-row': model.highlight == true }"
+         :tree-p-id="model[custom_field.parentId]" :class="{ 'highlight-row': model.highlight == true }"
          v-bind:style="{ backgroundColor: model.backgroundColor }">
       <Column v-for="(subItem, subIndex) in columns" v-bind:class="['align-' + subItem.align, 'colIndex' + subIndex]"
               :field="subItem.field" :width="subItem.width" :flex="subItem.flex" :border="border" :key="subIndex">
