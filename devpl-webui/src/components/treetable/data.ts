@@ -1,3 +1,6 @@
+/**
+ * 表格行数据模型
+ */
 const demoDataList = [
   {
     id: 110,
@@ -14,8 +17,14 @@ const demoDataList = [
         name: "联系人",
         uri: "/customer/contacts",
         lists: null,
+        /**
+         * 是否展示checkbox
+         */
         isShowCheckbox: false,
-        highlight: true
+        /**
+         * 是否高亮
+         */
+        highlight: false
       },
       {
         id: 173,
@@ -24,7 +33,7 @@ const demoDataList = [
         name: "客户",
         uri: "/customer/customerList",
         lists: null,
-        checked: true,
+        checked: true
       },
       {
         id: 117,
@@ -219,5 +228,5 @@ const demoDataList = [
       }
     ]
   }
-]
+];
 export default demoDataList;

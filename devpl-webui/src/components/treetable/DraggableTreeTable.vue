@@ -84,11 +84,20 @@ export default {
       targetId: "",
       whereInsert: "",
       isDraing: false,
+      /**
+       * 自定义字段
+       */
       custom_field: {
         id: "id",
         parent_id: "parent_id",
         order: "order",
+        /**
+         * 子行数据
+         */
         lists: "lists",
+        /**
+         * 树节点是否展开
+         */
         open: "open",
         checked: "checked",
         highlight: "highlight"
@@ -196,7 +205,6 @@ export default {
       }
       if (canDrag == false) return;
       hoverBlock.style.display = "block";
-      var rowHeight = row.offsetHeight;
       if (whereInsert == "bottom") {
         if (hoverBlock.children[2].style.opacity !== "0.5") {
           func.clearHoverStatus();
@@ -354,8 +362,8 @@ export default {
       this.data.lists = list;
     },
     GetLevelById(id) {
-      var row = this.$refs.table.querySelector("[tree-id=\"" + id + "\"]");
-      var level = row.getAttribute("data-level") * 1;
+      let row = this.$refs.table.querySelector("[tree-id=\"" + id + "\"]");
+      let level = row.getAttribute("data-level") * 1;
       return level;
     },
     HighlightRow(id, isHighlight = true, deep = false) {
@@ -369,14 +377,14 @@ export default {
     },
     AddRow(pId, data) {
       const deepList = func.deepClone(this.data.lists);
-      var _this = this;
+      let _this = this;
 
       function deep(list) {
         const listKey = _this.custom_field.lists;
-        for (var i = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
           if (list[i][_this.custom_field["id"]] == pId) {
             list[i][_this.custom_field["open"]] = true;
-            var newRow = Object.assign({}, data);
+            let newRow = Object.assign({}, data);
             newRow[_this.custom_field["parent_id"]] = pId;
             if (list[i][listKey]) {
               newRow[_this.custom_field["order"]] = list[i][listKey].length;
@@ -398,13 +406,13 @@ export default {
     },
     EditRow(id, data) {
       const deepList = func.deepClone(this.data.lists);
-      var _this = this;
+      let _this = this;
 
       function deep(list) {
         const listKey = _this.custom_field.lists;
-        for (var i = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
           if (list[i][_this.custom_field["id"]] == id) {
-            var newRow = Object.assign({}, list[i], data);
+            let newRow = Object.assign({}, list[i], data);
             console.log(2222, newRow);
             list[i] = newRow;
           }
@@ -424,7 +432,7 @@ export default {
 
       function getChilds(list, id) {
         const listKey = _this.custom_field.lists;
-        for (var i = 0; i < list.length; i++) {
+        for (let i = 0; i < list.length; i++) {
           let currentPid = "";
           let pid = list[i][_this.custom_field["parent_id"]];
           if (id == pid) {
@@ -450,6 +458,7 @@ export default {
      * @param onChangeFunction
      */
     onCheckAll(evt, onChangeFunction) {
+      // 选中子节点
       this.setAllCheckData(this.data.lists, !!evt.target.checked);
       const checkedList = this.getCheckedList(this.data.lists);
       onChangeFunction && onChangeFunction(checkedList);
@@ -457,7 +466,7 @@ export default {
     /**
      * 单个CheckBox勾选触发
      */
-    onSingleCheckChange() {
+    onSingleCheckChange(e) {
       const checkedList = this.getCheckedList(this.data.lists);
       this.onCheckChange && this.onCheckChange(checkedList);
     },

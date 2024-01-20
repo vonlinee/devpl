@@ -82,6 +82,8 @@ export default {
     column,
     space
   },
+  beforeMount() {
+  },
   computed: {
     isFolder() {
       return this.model[this.custom_field.lists] && this.model[this.custom_field.lists].length;
@@ -110,8 +112,9 @@ export default {
     setAllCheckData(curList, flag) {
       const listKey = this.custom_field.lists;
       for (let i = 0; i < curList.length; i++) {
-        var item = curList[i];
-        this.$set(item, "checked", flag);
+        let item = curList[i];
+        item[this.custom_field.checked] = flag;
+        // this.$set(item, "checked", flag);
         if (item[listKey] && item[listKey].length) {
           this.setAllCheckData(item[listKey], flag);
         }
@@ -123,7 +126,8 @@ export default {
       if (list && this.isContainChildren) {
         this.setAllCheckData([model] || [], !!evt.target.checked);
       } else {
-        this.$set(model, "checked", !!evt.target.checked);
+        model[this.custom_field.checked] = !!evt.target.checked;
+        // this.$set(model, "checked", !!evt.target.checked);
       }
       this.onCheck && this.onCheck();
     }

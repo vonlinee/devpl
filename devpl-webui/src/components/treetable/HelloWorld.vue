@@ -51,42 +51,45 @@ export default {
       this.treeData.lists = list;
     },
     onAdd(pId, data) {
-      this.$refs.table.AddRow(pId, data)
+      this.$refs.table.AddRow(pId, data);
     },
     onEdit(id, data) {
-      this.$refs.table.EditRow(id, data)
+      this.$refs.table.EditRow(id, data);
     },
     openAll() {
       this.$refs.table.OpenAll();
     },
     zipAll() {
-      this.$refs.table.ZipAll()
+      this.$refs.table.ZipAll(-1);
     },
     onDel(item) {
       // console.log("当前行的数据", updatedLists);
       this.treeData.lists = this.$refs.table.DelById(item.id);
-      alert('本地删除成功')
+      alert("本地删除成功");
     },
     highlight(flag) {
       this.$refs.table.HighlightRow(383, flag, true);
     },
     add(row) {
-      this.$refs.addDialog.show('add', row.id);
+      this.$refs.addDialog.show("add", row.id);
     },
     edit(row) {
-      this.$refs.editDialog.show('edit', row);
+      this.$refs.editDialog.show("edit", row);
     }
   },
   mounted() {
-    var columns = [
+    let columns = [
       {
+        /**
+         * 列类型
+         */
         type: "checkbox",
         isContainChildren: true,
         width: 100,
         align: "center",
         onChange: (item) => {
           // console.log(item)
-          alert('您选中了' + item.length + '条数据');
+          alert("您选中了" + item.length + "条数据");
         }
       },
       {
@@ -95,7 +98,7 @@ export default {
         field: "name",
         width: 200,
         align: "left",
-        titleAlign: "left",
+        titleAlign: "left"
       },
       {
         title: "ID",
@@ -118,7 +121,7 @@ export default {
           {
             text: "添加子节点",
             onclick: (item) => {
-              this.$refs.addDialog.show('add', item.id);
+              this.$refs.addDialog.show("add", item.id);
             },
             formatter: item => {
               return "<i>添加子节点 </i>" + item;
@@ -127,7 +130,7 @@ export default {
           {
             text: "修改子节点",
             onclick: (item) => {
-              this.$refs.editDialog.show('edit', item);
+              this.$refs.editDialog.show("edit", item);
             },
             formatter: item => {
               // console.log(item);
@@ -148,8 +151,8 @@ export default {
         title: "操作(使用slot自定义)",
         type: "action",
         flex: 1,
-        align: "center",
-      },
+        align: "center"
+      }
     ];
     this.treeData = {
       columns: columns,
