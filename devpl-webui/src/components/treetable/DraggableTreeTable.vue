@@ -1,22 +1,25 @@
+<!--
+  TODO 出现滚动条时会出现表头和内容区错位的情况
+-->
 <template>
   <div class="drag-tree-table" ref="table" v-bind:class="{ border: border !== undefined }">
     <div class="drag-tree-table-header">
-      <column v-for="(item, index) in data.columns" :width="item.width" :flex="item.flex"
+      <Column v-for="(item, index) in data.columns" :width="item.width" :flex="item.flex"
               :border="border === undefined ? resize : border"
               v-bind:class="['align-' + item.titleAlign, 'colIndex' + index]"
               :key="index">
-        <input v-if="item.type == 'checkbox'" class="checkbox" type="checkbox"
+        <input v-if="item.type === 'checkbox'" class="checkbox" type="checkbox"
                @click="onCheckAll($event, item.onChange)">
         <span v-else v-html="item.title">
         </span>
+        <!-- 调整列宽 -->
         <div class="resize-line" @mousedown="mousedown(index, $event)" v-show="resize !== undefined">
-
         </div>
-      </column>
+      </Column>
     </div>
-    <div class="drag-tree-table-body" v-bind:style="bodyStyle" @dragover="draging" @dragend="drop"
-         :class="isDraing ? 'is-draging' : ''">
-      <row depth="0" :columns="data.columns" :isdraggable="draggable" :model="item" v-for="(item, index) in data.lists"
+    <div class="drag-tree-table-body" v-bind:style="bodyStyle" @dragover="onDragOver" @dragend="onDropEnd"
+         :class="isDraing ? 'dragging' : ''">
+      <Row depth="0" :columns="data.columns" :draggable="draggable" :model="item" v-for="(item, index) in data.lists"
            :custom_field="custom_field" :onCheck="onSingleCheckChange" :border="border === undefined ? resize : border"
            :isContainChildren="isContainChildren" :key="index">
         <template v-slot:selection="{ row }">
@@ -25,7 +28,7 @@
         <template v-for="(subItem, subIndex) in data.columns" v-slot:[subItem.type]="{ row }">
           <slot :name="subItem.type" v-bind:row="row"></slot>
         </template>
-      </row>
+      </Row>
     </div>
     <div class="drag-line">
     </div>
@@ -33,21 +36,17 @@
 </template>
 
 <script>
-import row from "./Row.vue";
-import column from "./Column.vue";
-import space from "./Space.vue";
+import Row from "./Row.vue";
+import Column from "./Column.vue";
+import Space from "./Space.vue";
 import func from "./func";
 
-document.body.ondrop = function(event) {
-  event.preventDefault();
-  event.stopPropagation();
-};
 export default {
-  name: "dragTreeTable",
+  name: "DraggableTreeTable",
   components: {
-    row,
-    column,
-    space
+    Row,
+    Column,
+    Space
   },
   computed: {
     bodyStyle() {
@@ -76,6 +75,12 @@ export default {
     resize: String,
     beforeDragOver: Function
   },
+  beforeMount() {
+    document.body.ondrop = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+  },
   data() {
     return {
       dragX: 0,
@@ -89,7 +94,7 @@ export default {
        */
       custom_field: {
         id: "id",
-        parent_id: "parent_id",
+        parentId: "parentId",
         order: "order",
         /**
          * 子行数据
@@ -113,7 +118,7 @@ export default {
     };
   },
   methods: {
-    draging(e) {
+    onDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
       this.isDraing = true;
@@ -127,14 +132,14 @@ export default {
         window.scrollTo(0, scrollY + 6);
       }
     },
-    drop(event) {
+    onDropEnd(event) {
       func.clearHoverStatus();
       this.resetTreeData();
       this.isDraing = false;
       if (this.targetId !== undefined) {
         if (this.highlightRowChange !== undefined) {
           this.$nextTick(() => {
-            var rowEle = document.querySelector("[tree-id='" + window.dragId + "']");
+            let rowEle = document.querySelector("[tree-id='" + window.dragId + "']");
             rowEle.style.backgroundColor = "rgba(64,158,255,0.5)";
             setTimeout(() => {
               rowEle.style.backgroundColor = "rgba(64,158,255,0)";
@@ -146,7 +151,7 @@ export default {
     // 查找匹配的行，处理拖拽样式
     filter(x, y) {
 
-      var rows = document.querySelectorAll(".tree-row");
+      let rows = document.querySelectorAll(".tree-row");
       this.targetId = undefined;
       const dragRect = window.dragParentNode.getBoundingClientRect();
       const dragW = dragRect.left + window.dragParentNode.clientWidth;
@@ -175,7 +180,7 @@ export default {
           }
           targetId = row.getAttribute("tree-id");
           hoverBlock = row.children[row.children.length - 1];
-          var rowHeight = row.offsetHeight;
+          let rowHeight = row.offsetHeight;
           if (diffY / rowHeight > 3 / 4) {
             whereInsert = "bottom";
           } else if (diffY / rowHeight > 1 / 4) {
@@ -229,7 +234,7 @@ export default {
     resetTreeData() {
       if (this.targetId === undefined) return;
       const listKey = this.custom_field.lists;
-      const parentIdKey = this.custom_field.parent_id;
+      const parentIdKey = this.custom_field.parentId;
       const idKey = this.custom_field.id;
       const newList = [];
       const curList = this.data.lists;
@@ -240,7 +245,7 @@ export default {
       function pushData(curList, needPushList) {
         for (let i = 0; i < curList.length; i++) {
           const item = curList[i];
-          var obj = func.deepClone(item);
+          const obj = func.deepClone(item);
           obj[listKey] = [];
           if (_this.targetId == item[idKey]) {
             curDragItem = _this.getItemById(_this.data.lists, window.dragId);
@@ -279,7 +284,7 @@ export default {
     // 重置所有数据的顺序order
     resetOrder(list) {
       const listKey = this.custom_field.lists;
-      for (var i = 0; i < list.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         list[i][this.custom_field.order] = i;
         if (list[i][listKey] && list[i][listKey].length) {
           this.resetOrder(list[i][listKey]);
@@ -288,13 +293,13 @@ export default {
     },
     // 根据id获取当前行
     getItemById(lists, id) {
-      var curItem = null;
+      let curItem = null;
       const listKey = this.custom_field.lists;
       const idKey = this.custom_field.id;
 
       function getchild(curList) {
         for (let i = 0; i < curList.length; i++) {
-          var item = curList[i];
+          let item = curList[i];
           if (item[idKey] == id) {
             curItem = JSON.parse(JSON.stringify(item));
             break;
@@ -320,7 +325,7 @@ export default {
         for (let i = 0; i < curList.length; i++) {
           const item = curList[i];
           if (item[idKey] != id) {
-            var obj = func.deepClone(item);
+            const obj = func.deepClone(item);
             obj[orderKey] = order;
             obj[listKey] = [];
             needPushList.push(obj);
@@ -338,7 +343,7 @@ export default {
     // 递归设置属性,只允许设置组件内置属性
     deepSetAttr(key, val, list, ids) {
       const listKey = this.custom_field.lists;
-      for (var i = 0; i < list.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         if (ids !== undefined) {
           if (ids.includes(list[i][this.custom_field["id"]])) {
             list[i][this.custom_field[key]] = val;
@@ -363,8 +368,7 @@ export default {
     },
     GetLevelById(id) {
       let row = this.$refs.table.querySelector("[tree-id=\"" + id + "\"]");
-      let level = row.getAttribute("data-level") * 1;
-      return level;
+      return row.getAttribute("data-level") * 1;
     },
     HighlightRow(id, isHighlight = true, deep = false) {
       let list = func.deepClone(this.data.lists);
@@ -382,16 +386,16 @@ export default {
       function deep(list) {
         const listKey = _this.custom_field.lists;
         for (let i = 0; i < list.length; i++) {
-          if (list[i][_this.custom_field["id"]] == pId) {
-            list[i][_this.custom_field["open"]] = true;
+          if (list[i][_this.custom_field.id] == pId) {
+            list[i][_this.custom_field.open] = true;
             let newRow = Object.assign({}, data);
-            newRow[_this.custom_field["parent_id"]] = pId;
+            newRow[_this.custom_field.parentId] = pId;
             if (list[i][listKey]) {
-              newRow[_this.custom_field["order"]] = list[i][listKey].length;
+              newRow[_this.custom_field.order] = list[i][listKey].length;
               list[i][listKey].push(newRow);
             } else {
               list[i][listKey] = [];
-              newRow[_this.custom_field["order"]] = 0;
+              newRow[_this.custom_field.order] = 0;
               list[i][listKey].push(newRow);
             }
           }
@@ -411,10 +415,8 @@ export default {
       function deep(list) {
         const listKey = _this.custom_field.lists;
         for (let i = 0; i < list.length; i++) {
-          if (list[i][_this.custom_field["id"]] == id) {
-            let newRow = Object.assign({}, list[i], data);
-            console.log(2222, newRow);
-            list[i] = newRow;
+          if (list[i][_this.custom_field.id] === id) {
+            list[i] = Object.assign({}, list[i], data);
           }
           if (list[i][listKey] && list[i][listKey].length) {
             deep(list[i][listKey]);
@@ -430,26 +432,26 @@ export default {
       let ids = [];
       const _this = this;
 
-      function getChilds(list, id) {
+      function getChildren(list, id) {
         const listKey = _this.custom_field.lists;
         for (let i = 0; i < list.length; i++) {
           let currentPid = "";
-          let pid = list[i][_this.custom_field["parent_id"]];
+          let pid = list[i][_this.custom_field.parentId];
           if (id == pid) {
-            currentPid = list[i][_this.custom_field["id"]];
+            currentPid = list[i][_this.custom_field.id];
             ids.push(currentPid);
           } else {
             currentPid = id;
           }
           if (deep == true || id == currentPid) {
             if (list[i][listKey] && list[i][listKey].length) {
-              getChilds(list[i][listKey], currentPid);
+              getChildren(list[i][listKey], currentPid);
             }
           }
         }
       }
 
-      getChilds(this.data.lists, id);
+      getChildren(this.data.lists, id);
       return ids;
     },
     /**
@@ -487,19 +489,19 @@ export default {
       let checkedList = [];
       const deepList = func.deepClone(lists);
 
-      function getchild(curList) {
+      function getChild(curList) {
         for (let i = 0; i < curList.length; i++) {
           let item = curList[i];
-          if (item.checked && item.isShowCheckbox != false) {
+          if (item.checked && item.isShowCheckbox !== false) {
             checkedList.push(item);
           }
           if (item[listKey] && item[listKey].length) {
-            getchild(item[listKey]);
+            getChild(item[listKey]);
           }
         }
       }
 
-      getchild(deepList);
+      getChild(deepList);
       return checkedList;
     },
     mousedown(curIndex, e) {
@@ -519,7 +521,7 @@ export default {
     }
     setTimeout(() => {
       this.data.columns.map((item) => {
-        if (item.type == "checkbox") {
+        if (item.type === "checkbox") {
           this.onCheckChange = item.onChange;
           this.isContainChildren = item.isContainChildren;
         }
@@ -561,6 +563,7 @@ export default {
   margin: 20px 0;
   color: #606266;
   font-size: 12px;
+  table-layout: fixed;
 
   &.border {
     border: 1px solid #eee;
@@ -607,7 +610,7 @@ export default {
   visibility: hidden;
 }
 
-.is-draging .tree-row:hover {
+.dragging .tree-row:hover {
   background: transparent !important;
 }
 

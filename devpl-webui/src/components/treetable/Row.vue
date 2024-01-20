@@ -1,12 +1,12 @@
 <template>
-  <div class="tree-block" :draggable="!!isdraggable" @dragstart="dragstart($event)" @dragend="dragend($event)">
+  <div class="tree-block" :draggable="!!draggable" @dragstart="onDragStart($event)" @dragend="onDragEnd($event)">
     <div class="tree-row" @click="toggle" :data-level="depth" :tree-id="model[custom_field.id]"
          :tree-p-id="model[custom_field.parent_id]" :class="{ 'highlight-row': model.highlight == true }"
          v-bind:style="{ backgroundColor: model.backgroundColor }">
-      <column v-for="(subItem, subIndex) in columns" v-bind:class="['align-' + subItem.align, 'colIndex' + subIndex]"
+      <Column v-for="(subItem, subIndex) in columns" v-bind:class="['align-' + subItem.align, 'colIndex' + subIndex]"
               :field="subItem.field" :width="subItem.width" :flex="subItem.flex" :border="border" :key="subIndex">
                 <span v-if="subItem.type === 'selection'">
-                    <space :depth="depth" />
+                    <Space :depth="depth" />
                     <span v-if="model[custom_field.lists] && model[custom_field.lists].length" class="zip-icon"
                           v-bind:class="[model[custom_field.open] ? 'arrow-bottom' : 'arrow-right']">
                     </span>
@@ -39,7 +39,7 @@
                     <span v-if="subItem.formatter" v-html="subItem.formatter(model)"></span>
                     <span v-else>{{ model[subItem.field] }}</span>
                 </span>
-      </column>
+      </Column>
       <div class="hover-model" style="display: none">
         <div class="hover-block prev-block">
           <i class="el-icon-caret-top"></i>
@@ -53,8 +53,8 @@
       </div>
     </div>
     <!--  树形结构子行，包含在parent行内部，从而拖拽父节点时拖拽其所有子节点  -->
-    <row v-show="model[custom_field.open]" v-for="(item, index) in model[custom_field.lists]" :model="item"
-         :columns="columns" :key="index" :isdraggable="isdraggable" :border="border" :depth="depth * 1 + 1"
+    <Row v-show="model[custom_field.open]" v-for="(item, index) in model[custom_field.lists]" :model="item"
+         :columns="columns" :key="index" :draggable="draggable" :border="border" :depth="depth * 1 + 1"
          :custom_field="custom_field" :onCheck="onCheck" :isContainChildren="isContainChildren" v-if="isFolder">
       <template v-slot:selection="{ row }">
         <slot name="selection" v-bind:row="row"></slot>
@@ -62,16 +62,16 @@
       <template v-for="(subItem, subIndex) in columns" v-slot:[subItem.type]="{ row }">
         <slot :name="subItem.type" v-bind:row="row"></slot>
       </template>
-    </row>
+    </Row>
   </div>
 </template>
 <script>
-import column from "./Column.vue";
-import space from "./Space.vue";
+import Column from "./Column.vue";
+import Space from "./Space.vue";
 
 export default {
   name: "Row",
-  props: ["model", "depth", "columns", "isdraggable", "border", "custom_field", "onCheck", "isContainChildren"],
+  props: ["model", "depth", "columns", "draggable", "border", "custom_field", "onCheck", "isContainChildren"],
   data() {
     return {
       open: false,
@@ -79,8 +79,8 @@ export default {
     };
   },
   components: {
-    column,
-    space
+    Column,
+    Space
   },
   beforeMount() {
   },
@@ -96,7 +96,7 @@ export default {
         this.$forceUpdate();
       }
     },
-    dragstart(e) {
+    onDragStart(e) {
       if (navigator.userAgent.indexOf("Firefox") >= 0) {
         // Firefox drag have a bug
         e.dataTransfer.setData("Text", this.id);
@@ -106,7 +106,7 @@ export default {
       window.dragParentNode = e.target;
       e.target.style.opacity = 0.2;
     },
-    dragend(e) {
+    onDragEnd(e) {
       e.target.style.opacity = 1;
     },
     setAllCheckData(curList, flag) {

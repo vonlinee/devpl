@@ -40,6 +40,7 @@
 <script lang="ts" setup>
 import { nextTick, onMounted, ref, toRaw } from "vue"
 import Sortable from "sortablejs"
+import { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 
 const children = "children"
 const rowKey = "id"
@@ -257,7 +258,8 @@ const rowDrop = () => {
       // element index within parent
       // 记录开始时的鼠标的位置
       const _e = e as any
-      const dragEvent = _e.originalEvent
+      const dragEvent : DragEvent = _e.originalEvent
+
       if (e.oldIndex !== undefined) {
         dragData.status = true
         dragData.startTop = e.item.getBoundingClientRect().top

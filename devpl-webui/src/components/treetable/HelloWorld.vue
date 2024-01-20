@@ -51,6 +51,7 @@ export default {
       this.treeData.lists = list;
     },
     onAdd(pId, data) {
+      debugger
       this.$refs.table.AddRow(pId, data);
     },
     onEdit(id, data) {
@@ -124,7 +125,7 @@ export default {
               this.$refs.addDialog.show("add", item.id);
             },
             formatter: item => {
-              return "<i>添加子节点 </i>" + item;
+              return "<i>添加子节点</i>";
             }
           },
           {
@@ -134,7 +135,7 @@ export default {
             },
             formatter: item => {
               // console.log(item);
-              return "<i>修改子节点 </i>";
+              return "<i>修改子节点</i>";
             }
           },
           {
