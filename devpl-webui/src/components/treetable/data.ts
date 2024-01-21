@@ -9,14 +9,17 @@ const demoDataList = [
     name: "客户管理",
     uri: "无",
     open: true,
-    lists: [
+    children: [
       {
         id: 201,
         parentId: 110,
         order: 0,
         name: "联系人",
         uri: "/customer/contacts",
-        lists: null,
+        /**
+         * 子数据行
+         */
+        children: null,
         /**
          * 是否展示checkbox
          */
@@ -32,7 +35,7 @@ const demoDataList = [
         order: 1,
         name: "客户",
         uri: "/customer/customerList",
-        lists: null,
+        children: null,
         checked: true
       },
       {
@@ -41,7 +44,7 @@ const demoDataList = [
         order: 2,
         name: "客户维护记录",
         uri: "/customer/maintain",
-        lists: null
+        children: null
       },
       {
         id: 383,
@@ -49,14 +52,14 @@ const demoDataList = [
         order: 3,
         name: "客户冲突",
         uri: "无",
-        lists: [
+        children: [
           {
             id: 390,
             parentId: 383,
             order: 0,
             name: "个人冲突",
             uri: "/customer/personalConflict",
-            lists: null
+            children: null
           },
           {
             id: 397,
@@ -64,7 +67,7 @@ const demoDataList = [
             order: 1,
             name: "团队冲突",
             uri: "/customer/teamConflict",
-            lists: null
+            children: null
           },
           {
             id: 215,
@@ -72,7 +75,7 @@ const demoDataList = [
             order: 2,
             name: "客户查询",
             uri: "/customer/inquiry",
-            lists: null
+            children: null
           }
         ]
       },
@@ -82,7 +85,7 @@ const demoDataList = [
         order: 4,
         name: "线索管理",
         uri: "/customer/clue",
-        lists: null
+        children: null
       },
       {
         id: 159,
@@ -90,7 +93,7 @@ const demoDataList = [
         order: 5,
         name: "集团信息",
         uri: "/customer/agent",
-        lists: null
+        children: null
       }
     ]
   },
@@ -100,14 +103,14 @@ const demoDataList = [
     order: 1,
     name: "审核中心",
     uri: "无",
-    lists: [
+    children: [
       {
         id: 187,
         parentId: 404,
         order: 0,
         name: "资质审核",
         uri: "/customer/qualifications",
-        lists: null
+        children: null
       }
     ]
   },
@@ -117,14 +120,14 @@ const demoDataList = [
     order: 2,
     name: "数据统计",
     uri: "无",
-    lists: [
+    children: [
       {
         id: 222,
         parentId: 306,
         order: 0,
         name: "线索",
         uri: "/customer/clueStatistics",
-        lists: null
+        children: null
       },
       {
         id: 124,
@@ -132,7 +135,7 @@ const demoDataList = [
         order: 1,
         name: "客户",
         uri: "/customer/statistics",
-        lists: null
+        children: null
       }
     ]
   },
@@ -142,14 +145,14 @@ const demoDataList = [
     order: 3,
     name: "基础数据",
     uri: "",
-    lists: [
+    children: [
       {
         id: 152,
         parentId: 334,
         order: 0,
         name: "行业信息",
         uri: "/customer/industry",
-        lists: null
+        children: null
       },
       {
         id: 166,
@@ -157,7 +160,7 @@ const demoDataList = [
         order: 1,
         name: "客户部门",
         uri: "/customer/departmentType",
-        lists: null
+        children: null
       }
     ]
   },
@@ -168,21 +171,21 @@ const demoDataList = [
     name: "系统管理",
     uri: "",
     open: false,
-    lists: [
+    children: [
       {
         id: 313,
         parentId: 9,
         order: 0,
         name: "员工管理",
         uri: "/rbac/userManagement",
-        lists: [
+        children: [
           {
             id: 412,
             parentId: 313,
             order: 0,
             name: "员工管理-子节点",
             uri: "/rbac/userManagement",
-            lists: null
+            children: null
           }
         ]
       },
@@ -192,7 +195,7 @@ const demoDataList = [
         order: 1,
         name: "部门管理",
         uri: "/rbac/departmentManagement",
-        lists: null
+        children: null
       },
       {
         id: 23,
@@ -200,7 +203,7 @@ const demoDataList = [
         order: 2,
         name: "角色管理",
         uri: "/rbac/roleManagement",
-        lists: null
+        children: null
       },
       {
         id: 16,
@@ -208,7 +211,7 @@ const demoDataList = [
         order: 3,
         name: "权限管理",
         uri: "/rbac/authorityManagement",
-        lists: null
+        children: null
       },
       {
         id: 2,
@@ -216,7 +219,7 @@ const demoDataList = [
         order: 4,
         name: "菜单管理",
         uri: "/menu/menuManagement",
-        lists: null
+        children: null
       },
       {
         id: 107,
@@ -224,7 +227,7 @@ const demoDataList = [
         order: 5,
         name: "操作日志",
         uri: "/operation/log",
-        lists: null
+        children: null
       }
     ]
   }

@@ -84,7 +84,7 @@ export default {
          * 列类型
          */
         type: "checkbox",
-        isContainChildren: true,
+        hasChildren: true,
         width: 100,
         align: "center",
         onChange: (item) => {

@@ -20,10 +20,10 @@
     </div>
     <!-- 内容区域 -->
     <div class="drag-tree-table-body" :style="bodyStyle" @dragover="onDragOver" @dragend="onDropEnd"
-         :class="isDraing ? 'dragging' : ''">
+         :class="dragging ? 'dragging' : ''">
       <Row depth="0" :columns="data.columns" :draggable="draggable" :model="item" v-for="(item, index) in data.lists"
            :custom_field="custom_field" :onCheck="onSingleCheckChange" :border="border === undefined ? resize : border"
-           :isContainChildren="isContainChildren" :key="index">
+           :hasChildren="hasChildren" :key="index">
         <template v-slot:selection="{ row }">
           <slot name="selection" :row="row"></slot>
         </template>
@@ -90,7 +90,7 @@ export default {
       dragId: "",
       targetId: "",
       whereInsert: "",
-      isDraing: false,
+      dragging: false,
       /**
        * 自定义字段
        */
@@ -101,7 +101,7 @@ export default {
         /**
          * 子行数据
          */
-        lists: "lists",
+        lists: "children",
         /**
          * 树节点是否展开
          */
@@ -110,7 +110,7 @@ export default {
         highlight: "highlight"
       },
       onCheckChange: null,
-      isContainChildren: false,
+      hasChildren: false,
       mouse: {
         status: 0,
         startX: 0,
@@ -123,7 +123,7 @@ export default {
     onDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
-      this.isDraing = true;
+      this.dragging = true;
       if (e.pageX === this.dragX && e.pageY === this.dragY) {
         // 鼠标未移动
         return;
@@ -140,7 +140,7 @@ export default {
     onDropEnd(event) {
       this.clearHoverStatus();
       this.resetTreeData();
-      this.isDraing = false;
+      this.dragging = false;
       if (this.targetId !== undefined) {
         if (this.highlightRowChange !== undefined) {
           this.$nextTick(() => {
@@ -325,7 +325,6 @@ export default {
       getChild(lists);
       return curItem;
     },
-    // 对外暴漏
     removeById(id) {
       const listKey = this.custom_field.lists;
       const orderKey = this.custom_field.order;
@@ -495,7 +494,8 @@ export default {
       const listKey = this.custom_field.lists;
       for (let i = 0; i < curList.length; i++) {
         let item = curList[i];
-        this.$set(item, "checked", flag);
+        item[this.custom_field.checked] = flag;
+        // this.$set(item, "checked", flag);
         if (item[listKey] && item[listKey].length) {
           this.setAllCheckData(item[listKey], flag);
         }
@@ -541,7 +541,7 @@ export default {
       this.data.columns.map((item) => {
         if (item.type === "checkbox") {
           this.onCheckChange = item.onChange;
-          this.isContainChildren = item.isContainChildren;
+          this.hasChildren = item.hasChildren;
         }
       });
     }, 100);

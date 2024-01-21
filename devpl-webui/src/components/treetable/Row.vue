@@ -1,7 +1,7 @@
 <template>
   <div class="tree-block" :draggable="!!draggable" @dragstart="onDragStart($event)" @dragend="onDragEnd($event)">
     <div class="tree-row" @click="toggle" :data-level="depth" :tree-id="model[custom_field.id]"
-         :tree-p-id="model[custom_field.parentId]" :class="{ 'highlight-row': model.highlight == true }"
+         :tree-p-id="model[custom_field.parentId]" :class="{ 'highlight-row': model.highlight === true }"
          v-bind:style="{ backgroundColor: model.backgroundColor }">
       <Column v-for="(subItem, subIndex) in columns" v-bind:class="['align-' + subItem.align, 'colIndex' + subIndex]"
               :field="subItem.field" :width="subItem.width" :flex="subItem.flex" :border="border" :key="subIndex">
@@ -55,7 +55,7 @@
     <!--  树形结构子行，包含在parent行内部，从而拖拽父节点时拖拽其所有子节点  -->
     <Row v-show="model[custom_field.open]" v-for="(item, index) in model[custom_field.lists]" :model="item"
          :columns="columns" :key="index" :draggable="draggable" :border="border" :depth="depth * 1 + 1"
-         :custom_field="custom_field" :onCheck="onCheck" :isContainChildren="isContainChildren" v-if="isFolder">
+         :custom_field="custom_field" :onCheck="onCheck" :hasChildren="hasChildren" v-if="isFolder">
       <template v-slot:selection="{ row }">
         <slot name="selection" :row="row"></slot>
       </template>
@@ -71,7 +71,7 @@ import Space from "./Space.vue";
 
 export default {
   name: "Row",
-  props: ["model", "depth", "columns", "draggable", "border", "custom_field", "onCheck", "isContainChildren"],
+  props: ["model", "depth", "columns", "draggable", "border", "custom_field", "onCheck", "hasChildren"],
   data() {
     return {
       open: false,
@@ -90,10 +90,12 @@ export default {
     }
   },
   methods: {
+    /**
+     * 切换展开状态
+     */
     toggle() {
       if (this.isFolder) {
         this.model[this.custom_field.open] = !this.model[this.custom_field.open];
-        this.$forceUpdate();
       }
     },
     /**
@@ -106,12 +108,10 @@ export default {
         e.dataTransfer.setData("Text", this.id);
       }
 
-
       window.dragId = e.target.children[0].getAttribute("tree-id");
       window.dragPId = e.target.children[0].getAttribute("tree-p-id");
       window.dragParentNode = e.target;
 
-      console.log(e.target);
       e.target.style.opacity = 0.2;
     },
     onDragEnd(e) {
@@ -131,7 +131,7 @@ export default {
     onCheckboxClick(evt, model) {
       const list = model[this.custom_field.lists];
       // 判断是否有子节点，如有需递归处理
-      if (list && this.isContainChildren) {
+      if (list && this.hasChildren) {
         this.setAllCheckData([model] || [], !!evt.target.checked);
       } else {
         model[this.custom_field.checked] = !!evt.target.checked;
