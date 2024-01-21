@@ -2,6 +2,7 @@
 
 <!--  <Child :count="count"></Child>-->
 
+<!--  <FieldTreeTableV1></FieldTreeTableV1>-->
   <HelloWorld></HelloWorld>
 
 </template>
@@ -12,6 +13,7 @@ import Child from "./Child.vue"
 
 import { apiListTemplateTypes } from "@/api/template"
 import HelloWorld from "@/components/treetable/HelloWorld.vue";
+import FieldTreeTableV1 from "@/components/fields/FieldTreeTableV1.vue";
 
 const count = ref()
 

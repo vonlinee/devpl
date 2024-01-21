@@ -1,5 +1,6 @@
 <template>
-  <div class="tree-block" :draggable="!!draggable" @dragstart="onDragStart($event)" @dragend="onDragEnd($event)">
+  <div class="tree-block" :draggable="!!draggable" @dragstart="onDragStart($event)" @dragend="onDragEnd($event)"
+       @drop="onDrop">
     <div class="tree-row" @click="toggle" :data-level="depth" :tree-id="model[custom_field.id]"
          :tree-p-id="model[custom_field.parentId]" :class="{ 'highlight-row': model.highlight === true }"
          v-bind:style="{ backgroundColor: model.backgroundColor }">
@@ -40,6 +41,7 @@
                     <span v-else>{{ model[subItem.field] }}</span>
                 </span>
       </Column>
+      <!-- 位置指示器 -->
       <div class="hover-model" style="display: none">
         <div class="hover-block prev-block">
           <i class="el-icon-caret-top"></i>
@@ -82,8 +84,6 @@ export default {
     Column,
     Space
   },
-  beforeMount() {
-  },
   computed: {
     isFolder() {
       return this.model[this.custom_field.lists] && this.model[this.custom_field.lists].length;
@@ -98,6 +98,9 @@ export default {
         this.model[this.custom_field.open] = !this.model[this.custom_field.open];
       }
     },
+    onDrop(e) {
+
+    },
     /**
      * 如果拖拽子行，那么会一层层地向外触发onDragStart
      * @param e
@@ -107,6 +110,8 @@ export default {
         // Firefox drag have a bug
         e.dataTransfer.setData("Text", this.id);
       }
+
+      e.stopPropagation();
 
       window.dragId = e.target.children[0].getAttribute("tree-id");
       window.dragPId = e.target.children[0].getAttribute("tree-p-id");
@@ -193,22 +198,22 @@ export default {
   align-items: center;
 
   i {
-    color: #FFF;
+    color: #07ccbb;
   }
 }
 
 .prev-block {
-  height: 25%;
-  background: #a0c8f7;
+  height: 20%;
+  background: #6894f1;
 }
 
 .center-block {
-  height: 50%;
+  height: 60%;
   background: #a0c8f7;
 }
 
 .next-block {
-  height: 25%;
+  height: 20%;
   background: #a0c8f7;
 }
 

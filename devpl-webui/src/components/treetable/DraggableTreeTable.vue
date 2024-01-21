@@ -19,7 +19,8 @@
       </Column>
     </div>
     <!-- 内容区域 -->
-    <div class="drag-tree-table-body" :style="bodyStyle" @dragover="onDragOver" @dragend="onDropEnd"
+    <div class="drag-tree-table-body" :style="bodyStyle" @dragover="onDragOver" @drop="handDragDrop"
+         @dragend="onDropEnd"
          :class="dragging ? 'dragging' : ''">
       <Row depth="0" :columns="data.columns" :draggable="draggable" :model="item" v-for="(item, index) in data.lists"
            :custom_field="custom_field" :onCheck="onSingleCheckChange" :border="border === undefined ? resize : border"
@@ -42,6 +43,7 @@ import Row from "./Row.vue";
 import Column from "./Column.vue";
 import Space from "./Space.vue";
 import func from "./func";
+import { toRaw } from "vue";
 
 export default {
   name: "DraggableTreeTable",
@@ -52,10 +54,17 @@ export default {
   },
   computed: {
     bodyStyle() {
-      return {
-        overflow: (this.fixed !== undefined && this.fixed !== false) ? "auto" : "hidden",
-        height: (this.fixed !== undefined && this.fixed !== false) ? (this.height || 400) + "px" : "auto"
-      };
+      if (this.height !== undefined) {
+        return {
+          overflow: "auto",
+          height: this.height + "px"
+        };
+      } else {
+        return {
+          overflow: "hidden",
+          height: "auto"
+        };
+      }
     }
   },
   props: {
@@ -69,7 +78,6 @@ export default {
       default: () => {
       }
     },
-    fixed: String | Boolean,
     height: String | Number,
     border: String,
     onlySameLevelCanDrag: String,
@@ -88,7 +96,7 @@ export default {
       dragX: 0,
       dragY: 0,
       dragId: "",
-      targetId: "",
+      targetId: undefined,
       whereInsert: "",
       dragging: false,
       /**
@@ -120,6 +128,9 @@ export default {
     };
   },
   methods: {
+    handDragDrop(e) {
+
+    },
     onDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
@@ -137,6 +148,10 @@ export default {
         window.scrollTo(0, scrollY + 6);
       }
     },
+    /**
+     * 拖拽结束
+     * @param event
+     */
     onDropEnd(event) {
       this.clearHoverStatus();
       this.resetTreeData();
@@ -386,7 +401,7 @@ export default {
       let list = func.deepClone(this.data.lists);
       let ids = [id];
       if (deep === true) {
-        ids = ids.concat(this.GetChildIds(id, true));
+        ids = ids.concat(this.getChildIds(id, true));
       }
       this.deepSetAttr("highlight", isHighlight, list, ids);
       this.data.lists = list;
@@ -445,7 +460,7 @@ export default {
       console.log(deepList);
       this.data.lists = deepList;
     },
-    GetChildIds(id, deep = true) {
+    getChildIds(id, deep = true) {
       let ids = [];
       const _this = this;
 
@@ -531,6 +546,9 @@ export default {
         curIndex,
         curColWidth
       };
+    },
+    getTableRows() {
+      return toRaw(this.data.lists);
     }
   },
   mounted() {

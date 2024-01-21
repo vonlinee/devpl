@@ -5,7 +5,8 @@
       <button @click="openAll">全部开</button>
       <button @click="highlight(true)">高亮行</button>
       <button @click="highlight(false)">取消高亮</button>
-      <DraggableTreeTable ref="table" :data="treeData" @drag="onTreeDataChange" resize fixed :draggable="true">
+      <button @click="getRows()">获取表格所有数据</button>
+      <DraggableTreeTable ref="table" :data="treeData" @drag="onTreeDataChange" resize :draggable="true">
         <template #selection="{ row }">
           {{ row.name }}
         </template>
@@ -49,6 +50,11 @@ export default {
     onTreeDataChange(list) {
       // console.log(list);
       this.treeData.lists = list;
+    },
+    getRows() {
+      let rows = this.$refs.table.getTableRows();
+      console.log(rows);
+      return rows;
     },
     onAdd(pId, data) {
       this.$refs.table.addRow(pId, data);
