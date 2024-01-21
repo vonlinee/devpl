@@ -20,7 +20,7 @@
     </div>
     <!-- 内容区域 -->
     <div class="drag-tree-table-body" :style="bodyStyle" @dragover="onDragOver" @drop="handDragDrop"
-         @dragend="onDropEnd"
+         @dragend="onDragEnd"
          :class="dragging ? 'dragging' : ''">
       <Row depth="0" :columns="data.columns" :draggable="draggable" :model="item" v-for="(item, index) in data.lists"
            :custom_field="custom_field" :onCheck="onSingleCheckChange" :border="border === undefined ? resize : border"
@@ -128,9 +128,6 @@ export default {
     };
   },
   methods: {
-    handDragDrop(e) {
-
-    },
     onDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = "move";
@@ -148,11 +145,14 @@ export default {
         window.scrollTo(0, scrollY + 6);
       }
     },
+    handDragDrop(e) {
+
+    },
     /**
      * 拖拽结束
      * @param event
      */
-    onDropEnd(event) {
+    onDragEnd(event) {
       this.clearHoverStatus();
       this.resetTreeData();
       this.dragging = false;
@@ -264,7 +264,6 @@ export default {
       const listKey = this.custom_field.lists;
       const parentIdKey = this.custom_field.parentId;
       const idKey = this.custom_field.id;
-      const newList = [];
       const curList = this.data.lists;
       const _this = this;
       let curDragItem = null;
@@ -276,6 +275,7 @@ export default {
           const obj = func.deepClone(item);
           obj[listKey] = [];
           if (_this.targetId == item[idKey]) {
+
             curDragItem = _this.getItemById(_this.data.lists, window.dragId);
             targetItem = _this.getItemById(_this.data.lists, _this.targetId);
             if (_this.whereInsert === "top") {
@@ -304,8 +304,13 @@ export default {
         }
       }
 
+      const newList = [];
       pushData(curList, newList);
       this.resetOrder(newList);
+
+
+      _this.treeData.lists = newList;
+
       this.onDrag(newList, curDragItem, targetItem, _this.whereInsert);
       this.$emit("drag", newList, curDragItem, targetItem, _this.whereInsert);
     },
@@ -457,7 +462,6 @@ export default {
       }
 
       deep(deepList);
-      console.log(deepList);
       this.data.lists = deepList;
     },
     getChildIds(id, deep = true) {

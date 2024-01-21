@@ -31,6 +31,33 @@ const treeData = ref({
       field: "comment",
       width: 200,
       align: "center"
+    },
+    {
+      title: "操作",
+      type: "action",
+      flex: 1,
+      align: "center",
+      actions: [
+        {
+          text: "添加子节点",
+          onclick: (item: { id: any; }) => {
+
+          },
+          formatter: (item: any) => {
+            return "<i>添加子节点</i>";
+          }
+        },
+        {
+          text: "删除",
+          onclick: (row) => {
+
+          },
+          formatter: item => {
+            // console.log(item);
+            return "<i>删除</i>";
+          }
+        }
+      ]
     }
   ]
 });
@@ -41,16 +68,16 @@ onMounted(() => {
   });
 });
 
-const addRow = (row: any) => {
+const saveOrUpdate = (row: any) => {
 
 };
 </script>
 
 <template>
   <DraggableTreeTable ref="table" :data="treeData" :draggable="true">
-
     <template #action="{ row }">
-      <a class="action-item" @click.stop.prevent="addRow(row)">添加子节点</a>
+      <a class="action-item" @click.stop.prevent="saveOrUpdate(row)">添加子节点</a>
+      <a class="action-item" @click.stop.prevent="saveOrUpdate(row)"><i>删除</i></a>
     </template>
   </DraggableTreeTable>
 </template>

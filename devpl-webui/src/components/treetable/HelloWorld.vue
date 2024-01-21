@@ -77,6 +77,8 @@ export default {
       this.$refs.table.highlightRow(383, flag, true);
     },
     add(row) {
+
+      console.log(row);
       this.$refs.addDialog.show("add", row.id);
     },
     edit(row) {
