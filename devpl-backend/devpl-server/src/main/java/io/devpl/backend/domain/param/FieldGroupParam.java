@@ -20,4 +20,9 @@ public class FieldGroupParam {
      * 字段信息
      */
     private List<FieldInfo> fields;
+
+    /**
+     * 批量添加参数
+     */
+    private List<FieldGroupParam> groups;
 }

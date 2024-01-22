@@ -5,8 +5,8 @@ const DEFAULT_DURATION = 500
 export namespace Message {
   /**
    * 展示info信息
-   * @param content
-   * @param onClose
+   * @param content 消息文本
+   * @param onClose 消息提示弹窗关闭的回调
    */
   export function info(content: string, onClose?: () => void) {
     ElMessage({
@@ -18,9 +18,9 @@ export namespace Message {
   }
 
   /**
-   * 展示info信息
-   * @param content
-   * @param onClose
+   * 展示error信息
+   * @param content 消息文本
+   * @param onClose 消息提示弹窗关闭的回调
    */
   export function error(content: string, onClose?: () => void) {
     ElMessage({

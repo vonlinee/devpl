@@ -16,7 +16,9 @@ public interface FieldGroupService {
 
     List<GroupField> listGroupFieldsById(Long groupId);
 
-    FieldGroup newGroup();
+    FieldGroup newGroup(FieldGroupParam param);
+
+    boolean addFieldGroup(FieldGroupParam param);
 
     boolean removeFieldGroupById(Long id);
 

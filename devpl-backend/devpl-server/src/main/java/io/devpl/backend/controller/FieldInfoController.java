@@ -114,8 +114,8 @@ public class FieldInfoController {
      * @return 字段组信息
      */
     @PostMapping(value = "/group/new")
-    public Result<FieldGroup> pageFieldGroups() {
-        return Result.ok(fieldGroupService.newGroup());
+    public Result<FieldGroup> createFieldGroup(@RequestBody FieldGroupParam param) {
+        return Result.ok(fieldGroupService.newGroup(param));
     }
 
     /**

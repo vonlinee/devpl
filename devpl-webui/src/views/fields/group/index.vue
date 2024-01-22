@@ -1,7 +1,7 @@
 <template>
   <el-button @click="showFieldImportModal">导入</el-button>
 
-  <FieldGroupImport ref="importFieldGroupModal"></FieldGroupImport>
+  <FieldGroupImport ref="importFieldGroupModal" @finished="onParseFinished"></FieldGroupImport>
   <el-card>
     <el-button @click="refreshTableData()">刷新</el-button>
   </el-card>
@@ -56,6 +56,17 @@ const fieldGroupEditModalRef = ref()
 
 const showFieldImportModal = () => {
   importFieldGroupModal.value.show()
+}
+
+const onParseFinished = (fields: FieldInfo[]) => {
+  if (fields) {
+    apiNewFieldGroup(fields).then((res) => {
+      if (res) {
+        Message.info("添加字段组成功")
+        refreshTableData()
+      }
+    })
+  }
 }
 
 const showFieldGroupEditModal = (group?: FieldGroup) => {

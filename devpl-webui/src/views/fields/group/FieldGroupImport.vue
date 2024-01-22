@@ -1,11 +1,5 @@
 <template>
-  <vxe-modal
-    v-model="visible"
-    title="导入字段分组"
-    show-footer
-    width="90%"
-    height="90%"
-  >
+  <vxe-modal v-model="visible" title="导入字段分组" show-footer width="90%" height="90%" @close="handleClose">
     <Splitpanes>
       <Pane>
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
@@ -17,7 +11,7 @@
     <template #footer>
       <vxe-button @click="parseFields">解析</vxe-button>
       <vxe-button>取消</vxe-button>
-      <vxe-button status="primary">确定</vxe-button>
+      <vxe-button status="primary" @click="submit">确定</vxe-button>
     </template>
   </vxe-modal>
 </template>
@@ -39,6 +33,18 @@ const visible = ref()
 const fieldParserInputRef = ref()
 const fieldTableRef = ref()
 
+const emits = defineEmits([
+  "finished"
+])
+
+const handleClose = (flag?: boolean) => {
+  const fields = fieldTableRef.value.getFields()
+  if (flag) {
+    visible.value = !flag
+  }
+  emits("finished", fields)
+}
+
 const parseFields = () => {
   const inputType: string = fieldParserInputRef.value.getInputType()
   let text = fieldParserInputRef.value.getParseableText()
@@ -57,6 +63,10 @@ const parseFields = () => {
     }
     fieldTableRef.value.setFields(res.data.fields)
   })
+}
+
+const submit = () => {
+  handleClose(true)
 }
 
 defineExpose({

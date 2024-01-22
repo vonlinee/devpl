@@ -183,6 +183,7 @@ export default {
       let targetId = undefined;
       let whereInsert = "";
 
+      // 获取所有数据行
       let rows = document.querySelectorAll(".tree-row");
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
@@ -308,8 +309,8 @@ export default {
       pushData(curList, newList);
       this.resetOrder(newList);
 
-
-      _this.treeData.lists = newList;
+      // 直接替换整个列表
+      this.data.lists = newList;
 
       this.onDrag(newList, curDragItem, targetItem, _this.whereInsert);
       this.$emit("drag", newList, curDragItem, targetItem, _this.whereInsert);

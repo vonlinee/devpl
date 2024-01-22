@@ -17,7 +17,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -45,14 +48,29 @@ public class FieldGroupServiceImpl implements FieldGroupService {
     }
 
     @Override
-    public FieldGroup newGroup() {
+    public FieldGroup newGroup(FieldGroupParam param) {
         FieldGroup fieldGroup = new FieldGroup();
         Long maxGroupId = fieldGroupMapper.getMaxGroupId();
         if (maxGroupId == null) {
             maxGroupId = 1L;
         }
         fieldGroup.setGroupName("组" + (maxGroupId + 1));
-        return fieldGroupMapper.insert(fieldGroup) > 0 ? fieldGroup : null;
+        int affectedRows = fieldGroupMapper.insert(fieldGroup);
+        if (!CollectionUtils.isEmpty(param.getFields())) {
+            fieldInfoService.saveFieldsInfos(param.getFields());
+            Set<Long> fieldIds = CollectionUtils.toSet(param.getFields(), FieldInfo::getId);
+            boolean result = groupFieldService.updateGroupFieldRelation(fieldGroup.getId(), fieldIds, CrudMode.APPEND);
+        }
+        return fieldGroup;
+    }
+
+    @Override
+    public boolean addFieldGroup(FieldGroupParam param) {
+
+        FieldGroup group = param.getGroup();
+
+
+        return false;
     }
 
     @Override

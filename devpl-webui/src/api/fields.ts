@@ -64,7 +64,7 @@ interface FieldParseParam {
 }
 
 /**
- * 保存或更新字段
+ * 解析字段
  * @param param
  */
 export const apiParseFields = (param: FieldParseParam) => {
@@ -107,10 +107,12 @@ export const apiListGroupFieldsById = (groupId: number) => {
 }
 
 /**
- * 查询字段组的字段列表
+ * 添加新的字段组
  */
-export const apiNewFieldGroup = () => {
-  return http.post("/api/field/group/new")
+export const apiNewFieldGroup = (fields?: FieldInfo[]) => {
+  return http.post("/api/field/group/new", {
+    fields: fields
+  })
 }
 
 /**
