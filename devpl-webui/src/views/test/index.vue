@@ -9,11 +9,13 @@
     <FieldTree :fields="fields" selectable></FieldTree>
   </div>
 
-  <ItemList :list="fields">
+  <ForEach :items="fields" name="div">
     <template #default="scope">
-      {{ scope.item }}
+      <div>
+        {{ scope.item.fieldKey }}
+      </div>
     </template>
-  </ItemList>
+  </ForEach>
 
 </template>
 
@@ -24,7 +26,7 @@ import { apiListTemplateTypes } from "@/api/template";
 import HelloWorld from "@/components/treetable/HelloWorld.vue";
 import FieldTreeTableV1 from "@/components/fields/FieldTreeTableV1.vue";
 import FieldTree from "@/components/fields/FieldTree.vue";
-import ItemList from "@/components/ItemList.vue";
+import ForEach from "@/components/ForEach.vue";
 
 const fields = ref<FieldInfo[]>([{
   id: 1,
