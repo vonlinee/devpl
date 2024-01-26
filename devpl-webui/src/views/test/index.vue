@@ -5,7 +5,10 @@
   <!--  <FieldTreeTableV1></FieldTreeTableV1>-->
   <!--  <HelloWorld></HelloWorld>-->
 
-  <FieldTree :fields="fields"></FieldTree>
+  <div style="width: 500px; height: 600px">
+    <FieldTree :fields="fields" selectable></FieldTree>
+
+  </div>
 
 </template>
 
@@ -18,11 +21,16 @@ import FieldTreeTableV1 from "@/components/fields/FieldTreeTableV1.vue";
 import FieldTree from "@/components/fields/FieldTree.vue";
 
 const fields = ref<FieldInfo[]>([{
+  id: 1,
   fieldKey: "param",
-  description: "描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息描述信息",
+  dataType: "Object",
+  description: "描述信息描述信息描述信息描述信息描述信息描述信息描述信",
   children: [{
+    id: 10,
+    parentId: 1,
     fieldKey: "userName",
-    description: "userAge"
+    description: "描述信息",
+    dataType: "String"
   }]
 }]);
 

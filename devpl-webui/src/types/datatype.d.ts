@@ -1,7 +1,16 @@
 /**
+ * 任意数据类型
+ */
+type TypeNameAny = "any"
+
+
+/**
  * 类型分组
  */
 type DataTypeGroup = {
+  /**
+   * 数据类型ID
+   */
   id?: number
   /**
    * 类型分组ID

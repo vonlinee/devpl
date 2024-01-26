@@ -74,7 +74,7 @@ const saveOrUpdate = (row: any) => {
 </script>
 
 <template>
-  <DraggableTreeTable ref="table" :data="treeData" :draggable="true">
+  <DraggableTreeTable ref="table" :data="treeData" :draggable="true" resize>
     <template #action="{ row }">
       <a class="action-item" @click.stop.prevent="saveOrUpdate(row)">添加子节点</a>
       <a class="action-item" @click.stop.prevent="saveOrUpdate(row)"><i>删除</i></a>

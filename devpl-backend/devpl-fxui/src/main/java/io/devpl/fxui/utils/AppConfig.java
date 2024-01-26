@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class AppConfig {
 
-    static final String URL = "jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
+    static final String URL = "jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true";
 
     static final String USERNAME = "root";
     static final String PASSWORD = "123456";

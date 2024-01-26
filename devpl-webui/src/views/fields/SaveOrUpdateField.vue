@@ -130,8 +130,8 @@ const showEdit = ref(false)
 const modalTitle = ref()
 const submitLoading = ref(false)
 
-const fieldDataTypeOptions = ref([])
-const typeGroupOptions = ref([])
+const fieldDataTypeOptions = ref<SelectOptionVO[]>([])
+const typeGroupOptions = ref<SelectOptionVO[]>([])
 
 /**
  * 新增和修改表单

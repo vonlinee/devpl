@@ -6,7 +6,7 @@ import { isBlank } from "@/utils/tool"
 import { Splitpanes, Pane } from "splitpanes"
 import "splitpanes/dist/splitpanes.css"
 import FieldParserInput from "./FieldParserInput.vue"
-import FieldTable from "@/components/fields/FieldTable.vue"
+import FieldTree from "@/components/fields/FieldTree.vue"
 
 const modalVisible = ref()
 
@@ -58,24 +58,15 @@ const onModalClose = () => {
 </script>
 
 <template>
-  <vxe-modal
-    v-model="modalVisible"
-    title="字段解析"
-    :draggable="false"
-    show-footer
-    :mask-closable="false"
-    width="80%"
-    height="80%"
-    :z-index="2000"
-    @close="onModalClose"
-  >
+  <vxe-modal v-model="modalVisible" title="字段解析" :draggable="false" show-footer :mask-closable="false" width="80%"
+    height="80%" :z-index="2000" @close="onModalClose">
     <template #default>
       <Splitpanes>
         <Pane>
           <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
         </Pane>
         <Pane>
-          <FieldTable ref="fieldTableRef"></FieldTable>
+          <FieldTree ref="fieldTableRef"></FieldTree>
         </Pane>
       </Splitpanes>
     </template>
@@ -86,7 +77,7 @@ const onModalClose = () => {
 </template>
 
 <style scoped lang="scss">
-.demo-tabs > .el-tabs__content {
+.demo-tabs>.el-tabs__content {
   height: 100%;
   overflow-y: scroll;
   padding: 32px;

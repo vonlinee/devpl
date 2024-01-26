@@ -1,6 +1,6 @@
 package io.devpl.fxui.controller.fields;
 
-import io.devpl.fxui.controls.TextInputTreeTableCell;
+import io.devpl.fxui.controls.MFXTextFieldTreeTableCell;
 import io.devpl.fxui.model.FieldNode;
 import io.devpl.fxui.utils.FXUtils;
 import javafx.collections.ObservableList;
@@ -37,8 +37,8 @@ public class FieldTreeTable extends TreeTableView<FieldNode> {
         dataTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("dataType"));
         descCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
 
-        nameCol.setCellFactory(ttc -> new TextInputTreeTableCell<>(new DefaultStringConverter()));
-        descCol.setCellFactory(ttc -> new TextInputTreeTableCell<>(new DefaultStringConverter()));
+        nameCol.setCellFactory(ttc -> new MFXTextFieldTreeTableCell<>(new DefaultStringConverter()));
+        descCol.setCellFactory(ttc -> new MFXTextFieldTreeTableCell<>(new DefaultStringConverter()));
         this.getColumns().add(nameCol);
         this.getColumns().add(dataTypeCol);
         this.getColumns().add(descCol);

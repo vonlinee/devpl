@@ -1,70 +1,51 @@
 <!-- 
   字段树结构
+  可拖拽改变层级关系或者排序
  -->
 <template>
   <el-scrollbar max-height="100%">
-    <el-tree
-      :data="dataSource"
-      :show-checkbox="selectable"
-      default-expand-all
-      :expand-on-click-node="false"
-      draggable
-      node-key="id"
-      :allow-drop="allowDrop"
-      :allow-drag="allowDrag"
-      @node-drag-start="handleDragStart"
-      @node-drag-enter="handleDragEnter"
-      @node-drag-leave="handleDragLeave"
-      @node-drag-over="handleDragOver"
-      @node-drag-end="handleDragEnd"
-      @node-click="handleNodeClicked"
-      @node-drop="handleDrop"
-    >
+    <el-tree ref="treeRef" :data="dataSource" :show-checkbox="selectable" highlight-current default-expand-all
+      :expand-on-click-node="false" draggable node-key="id" :allow-drop="allowDrop" :allow-drag="allowDrag"
+      @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
+      @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop">
       <template #default="{ node, data }">
-        <div style="height: auto">
-          <div class="field-tree-node-container">
-            <!-- 字段名称 -->
-            <a
-              v-if="!(data.editing || false)"
-              class="field-label"
-              :title="data.description || '无'"
-              @click="fireInput(data)"
-            >{{ data.fieldKey }}</a
-            >
-            <input
-              v-if="data.editing || false"
-              ref="currentInputRef"
-              class="field-input"
-              @blur="data.editing = false"
-              @change="(e) => onInputChange(e, data)"
-              @keyup.enter="(e) => onInputChange(e, data)"
-            />
+        <div style="height: auto; display: flex; flex-direction: row; width: 100%; align-items: stretch">
+          <div style="height: auto; flex-grow: 1">
+            <div class="field-tree-node-container">
+              <!-- 字段名称 -->
+              <button v-if="!(data.editing || false)" class="field-label" :title="data.description || '无'"
+                @dblclick="handleNodeClicked($event, data)">{{
+                  data.fieldKey }}
+              </button>
+              <input v-if="data.editing || false" ref="currentInputRef" class="field-input" @blur="data.editing = false"
+                @change="(e) => onInputChange(e, data)" @keyup.enter="(e) => onInputChange(e, data)" />
 
-            <!-- 数据类型-->
-            <el-button
-              v-if="!(data.editing || false)"
-              link
-              style="margin-left: 10px; color: green"
-            >
-              {{ data.dataType || "unknown" }}
-            </el-button>
-
-            <div class="operation-btn-container">
-            <span style="display: inline-block; height: 100%">
-              <el-button link :icon="Plus" @click="append(data)"></el-button>
-              <el-button
-                link
-                :icon="Minus"
-                style="margin: 0"
-                @click="remove(node, data)"
-              ></el-button>
-            </span>
+              <!-- 数据类型-->
+              <el-button v-if="!(data.editing || false)" link style="margin-left: 10px; color: green">
+                {{ data.dataType || "unknown" }}
+              </el-button>
             </div>
+            <div class="description" :draggable="false">{{ data.description }}</div>
           </div>
-          <div class="description" :draggable="false">{{ data.description }}</div>
+          <!-- 操作区域 -->
+          <div class="operation-btn-container">
+            <el-dropdown style="height: 100%; width: 20px;" size="small">
+              <el-button link :icon="Plus"></el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="addSibling(data)">添加相邻节点</el-dropdown-item>
+                  <el-dropdown-item @click="addChild(data)">添加子节点</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+            <el-button link :icon="Minus" style="margin: 0; height: 100%;  margin-right: 10px;"
+              @click="remove(node, data)"></el-button>
+          </div>
         </div>
       </template>
     </el-tree>
+
+    <field-info-form-modal ref="fieldInfoFormModalRef" />
   </el-scrollbar>
 </template>
 
@@ -78,8 +59,13 @@ import type {
 } from "element-plus/es/components/tree/src/tree.type";
 import { Minus, Plus } from "@element-plus/icons";
 import { watch } from "vue";
+import FieldInfoFormModal from "./FieldInfoFormModal.vue";
 
 const currentInputRef = ref();
+
+const treeRef = ref();
+
+const fieldInfoFormModalRef = ref();
 
 const fireInput = (data: FieldInfo) => {
   data.editing = true;
@@ -134,20 +120,39 @@ const containerStyle = reactive({
 
 let id = 1000;
 
+const unknownItemName = "Unknown"
+
 /**
- * 追加节点
+ * 添加子节点
  * @param data 节点数据
  */
-const append = (data: FieldInfo) => {
-  const newChild = { id: id++, fieldKey: "New Item", children: [] } as FieldInfo;
+const addChild = (data: FieldInfo) => {
+  const newChild = { id: id++, fieldKey: unknownItemName, children: [] } as FieldInfo;
   if (!data.children) {
     data.children = [];
   }
   data.children.push(newChild);
   dataSource.value = [...dataSource.value];
+  // treeRef.value.append(newChild, data.id)
 };
 
-const handleNodeClicked = (data: any, node: any, item: any) => {
+/**
+ * 添加相邻节点
+ * @param data 节点数据
+ */
+const addSibling = (data: FieldInfo) => {
+  const newNode = { id: id++, fieldKey: unknownItemName, children: [] } as FieldInfo
+  treeRef.value.insertAfter(newNode, data)
+}
+
+/**
+ * 四个参数：对应于节点点击的节点对象，TreeNode 的 node 属性, TreeNode和事件对象
+ * @param data 
+ * @param node 
+ * @param item 
+ */
+const handleNodeClicked = (event: Event, data: FieldInfo) => {
+  fieldInfoFormModalRef.value.show(data)
 };
 
 /**
@@ -235,21 +240,33 @@ watch(
 );
 
 defineExpose({
-  getFields: function() {
+  /**
+   * 获取所有字段信息
+   */
+  getFields() {
     return dataSource.value;
+  },
+  /**
+   * 设置所有字段信息
+   * @param fields 字段信息
+   */
+  setFields(fields?: FieldInfo[]) {
+    dataSource.value = fields || []
   }
 });
 </script>
 
 <style lang="scss" scoped>
-
 // 每个节点高度由其节点的子节点决定
 ::v-deep(.el-tree-node__content) {
   height: auto;
+  cursor: default;
 }
 
 .description {
   margin-left: 11px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   font-size: 12px;
   /*这两行代码可以解决大部分场景下的换行问题*/
   word-break: break-all;
@@ -260,8 +277,12 @@ defineExpose({
 
 .field-tree-node-container {
   width: 100%;
-  height: 30px;
+  height: auto;
   display: flex;
+
+  margin-bottom: 5px;
+  margin-top: 5px;
+
   align-items: center;
   //justify-content: space-between;
   font-size: 14px;
@@ -269,14 +290,29 @@ defineExpose({
 
   .operation-btn-container {
     flex: 1;
+    height: 30px;
     text-align: right;
-    position: relative;
-    right: 0;
+    // right: 30px;
+    background-color: red;
+
+
   }
 
-  // 字段标签
+  // 字段名称
   .field-label {
-    display: block;
+    display: inline-block;
+    height: 30px;
+    /* 上右下左的顺序设置内边距 */
+    padding: 5px 5px 10px 10px;
+    /* 修改文本颜色为#1e97f8 */
+    background-color: #e6f7ff;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    /* 添加圆角边框 */
+    cursor: pointer;
+
     //width: 100%;
     word-break: keep-all;
     white-space: nowrap;
@@ -302,9 +338,9 @@ defineExpose({
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+      0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+      0 0 8px rgba(102, 175, 233, 0.6);
   }
 }
 </style>
