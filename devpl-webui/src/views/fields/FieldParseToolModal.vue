@@ -66,7 +66,7 @@ const onModalClose = () => {
           <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
         </Pane>
         <Pane>
-          <FieldTree ref="fieldTableRef"></FieldTree>
+          <FieldTree ref="fieldTableRef" selectable></FieldTree>
         </Pane>
       </Splitpanes>
     </template>

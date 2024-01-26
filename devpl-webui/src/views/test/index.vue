@@ -7,8 +7,13 @@
 
   <div style="width: 500px; height: 600px">
     <FieldTree :fields="fields" selectable></FieldTree>
-
   </div>
+
+  <ItemList :list="fields">
+    <template #default="scope">
+      {{ scope.item }}
+    </template>
+  </ItemList>
 
 </template>
 
@@ -19,8 +24,21 @@ import { apiListTemplateTypes } from "@/api/template";
 import HelloWorld from "@/components/treetable/HelloWorld.vue";
 import FieldTreeTableV1 from "@/components/fields/FieldTreeTableV1.vue";
 import FieldTree from "@/components/fields/FieldTree.vue";
+import ItemList from "@/components/ItemList.vue";
 
 const fields = ref<FieldInfo[]>([{
+  id: 1,
+  fieldKey: "param",
+  dataType: "Object",
+  description: "描述信息描述信息描述信息描述信息描述信息描述信息描述信",
+  children: [{
+    id: 10,
+    parentId: 1,
+    fieldKey: "userName",
+    description: "描述信息",
+    dataType: "String"
+  }]
+}, {
   id: 1,
   fieldKey: "param",
   dataType: "Object",

@@ -54,12 +54,10 @@ const resetFields = () => {
  * 提交
  */
 const onSubmit = () => {
-  formData.value
-
   if (current) {
+    visible.value = false
     Object.assign(current, formData.value)
     resetFields()
-    visible.value = false
   }
 }
 

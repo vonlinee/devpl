@@ -20,10 +20,15 @@
               <input v-if="data.editing || false" ref="currentInputRef" class="field-input" @blur="data.editing = false"
                 @change="(e) => onInputChange(e, data)" @keyup.enter="(e) => onInputChange(e, data)" />
 
-              <!-- 数据类型-->
-              <el-button v-if="!(data.editing || false)" link style="margin-left: 10px; color: green">
-                {{ data.dataType || "unknown" }}
-              </el-button>
+              <!-- 数据类型 TODO 节点共用一个popover，数据量大的时候卡顿 -->
+              <el-popover placement="right" title="Title" :width="200" trigger="click"
+                content="this is content, this is content, this is content">
+                <template #reference>
+                  <el-button v-if="!(data.editing || false)" link style="margin-left: 10px; color: green">
+                    {{ data.dataType || "unknown" }}
+                  </el-button>
+                </template>
+              </el-popover>
             </div>
             <div class="description" :draggable="false">{{ data.description }}</div>
           </div>
@@ -64,6 +69,7 @@ import FieldInfoFormModal from "./FieldInfoFormModal.vue";
 const currentInputRef = ref();
 
 const treeRef = ref();
+const dataTypeBtnRef = ref();
 
 const fieldInfoFormModalRef = ref();
 

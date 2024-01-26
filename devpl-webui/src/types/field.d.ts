@@ -35,7 +35,7 @@ type FieldInfo = {
    */
   defaultValue?: string
   /**
-   * 是否选中
+   * 是否选中，默认否
    */
   selected?: boolean
   /**
