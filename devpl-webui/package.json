@@ -10,6 +10,9 @@
   "dependencies": {
     "@element-plus/icons": "^0.0.11",
     "@element-plus/icons-vue": "^2.1.0",
+    "@floating-ui/dom": "^1.6.0",
+    "@floating-ui/vue": "^1.0.5",
+    "@headlessui/vue": "^1.7.17",
     "@vueuse/core": "9.1.1",
     "axios": "1.6.0",
     "crypto-js": "^4.1.1",

@@ -13,33 +13,26 @@
           <div style="height: auto; flex-grow: 1">
             <div class="field-tree-node-container">
               <!-- 字段名称 -->
-              <button v-if="!(data.editing || false)" class="field-label" :title="data.description || '无'"
-                @dblclick="handleNodeClicked($event, data)">{{
-                  data.fieldKey }}
+              <button class="field-label" :title="data.description || '无'" @dblclick="handleNodeClicked($event, data)">{{
+                data.fieldKey }}
               </button>
-              <input v-if="data.editing || false" ref="currentInputRef" class="field-input" @blur="data.editing = false"
-                @change="(e) => onInputChange(e, data)" @keyup.enter="(e) => onInputChange(e, data)" />
-
-              <!-- 数据类型 TODO 节点共用一个popover，数据量大的时候卡顿 -->
-              <el-popover placement="right" title="Title" :width="200" trigger="click"
-                content="this is content, this is content, this is content">
-                <template #reference>
-                  <el-button v-if="!(data.editing || false)" link style="margin-left: 10px; color: green">
-                    {{ data.dataType || "unknown" }}
-                  </el-button>
-                </template>
-              </el-popover>
+              <!-- 字段类型 -->
+              <el-button ref="buttonRef" link style="margin-left: 10px; color: green">
+                {{ data.dataType || "unknown" }}
+              </el-button>
             </div>
             <div class="description" :draggable="false">{{ data.description }}</div>
           </div>
           <!-- 操作区域 -->
           <div class="operation-btn-container">
             <el-dropdown style="height: 100%; width: 20px;" size="small">
-              <el-button link :icon="Plus"></el-button>
+              <el-button link :icon="Plus" @click="addNode((data))"></el-button>
+              <!-- 只有对象类型能添加子节点 -->
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="addSibling(data)">添加相邻节点</el-dropdown-item>
-                  <el-dropdown-item @click="addChild(data)">添加子节点</el-dropdown-item>
+                  <el-dropdown-item @click="addNode(data, 'sibling')">添加相邻节点</el-dropdown-item>
+                  <el-dropdown-item v-if="data.dataType == 'Object'"
+                    @click="addNode(data, 'child')">添加子节点</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -55,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StyleValue, nextTick, reactive, ref } from "vue";
+import { StyleValue, nextTick, reactive, ref, unref } from "vue";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import type { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 import type {
@@ -66,25 +59,11 @@ import { Minus, Plus } from "@element-plus/icons";
 import { watch } from "vue";
 import FieldInfoFormModal from "./FieldInfoFormModal.vue";
 
-const currentInputRef = ref();
-
 const treeRef = ref();
-const dataTypeBtnRef = ref();
+
+const buttonRef = ref()
 
 const fieldInfoFormModalRef = ref();
-
-const fireInput = (data: FieldInfo) => {
-  data.editing = true;
-  nextTick(() => {
-    currentInputRef.value.value = data.fieldKey;
-    currentInputRef.value.focus();
-  });
-};
-
-const onInputChange = (event: Event, data: FieldInfo) => {
-  data.fieldKey = (event.target as HTMLInputElement).value;
-  data.editing = false;
-};
 
 /**
  * 组件属性
@@ -128,6 +107,22 @@ let id = 1000;
 
 const unknownItemName = "Unknown"
 
+const addNode = (data: FieldInfo, type?: string) => {
+  if (type == undefined) {
+    if (data.dataType == 'Object') {
+      addChild(data)
+    } else {
+      addSibling(data)
+    }
+  } else {
+    if (type == 'sibling') {
+      addSibling(data)
+    } else if (type == 'child') {
+      addChild(data)
+    }
+  }
+}
+
 /**
  * 添加子节点
  * @param data 节点数据
@@ -149,6 +144,8 @@ const addChild = (data: FieldInfo) => {
 const addSibling = (data: FieldInfo) => {
   const newNode = { id: id++, fieldKey: unknownItemName, children: [] } as FieldInfo
   treeRef.value.insertAfter(newNode, data)
+  // 默认选中
+  treeRef.value!.setCheckedKeys([newNode.id], false)
 }
 
 /**
@@ -200,7 +197,7 @@ const allowDrag = (draggingNode: Node) => {
 };
 
 const handleDragStart = (node: Node, ev: DragEvents) => {
-  console.log("drag start", node);
+
 };
 
 const handleDragEnter = (
@@ -236,15 +233,6 @@ const handleDrop = (
 ) => {
 };
 
-watch(
-  () => fields,
-  (newValue, oldValue) => {
-  },
-  {
-    deep: true
-  }
-);
-
 defineExpose({
   /**
    * 获取所有字段信息
@@ -258,6 +246,19 @@ defineExpose({
    */
   setFields(fields?: FieldInfo[]) {
     dataSource.value = fields || []
+  },
+  /**
+   * 获取选中的字段列表
+   * 不是树形结构
+   */
+  getSelectedFields() {
+    return treeRef.value!.getCheckedNodes(false, false)
+  },
+  /**
+   * 获取选中的字段ID列表
+   */
+  getSelectedKeys() {
+    return treeRef.value!.getCheckedKeys(false)
   }
 });
 </script>

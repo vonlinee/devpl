@@ -2,8 +2,7 @@
   列表组件
  -->
 <script lang="ts">
-import { h, defineComponent, PropType, VNode } from "vue"
-import { VNodeArrayChildren, RendererNode, RendererElement } from "vue-demi"
+import { h, defineComponent, PropType } from "vue"
 
 export default defineComponent({
   props: {
@@ -12,7 +11,7 @@ export default defineComponent({
      */
     rowHeight: Number,
     /**
-     * 渲染子节点的名称
+     * 渲染子节点的名称，如果不传，则需要在插槽内指定每项的父节点
      */
     name: String,
     /**
@@ -25,23 +24,29 @@ export default defineComponent({
 
     const nodes: ChildrenVNodes = []
 
-    if (items && name) {
+    if (items) {
       for (let i = 0; i < items?.length; i++) {
         if (slots.default) {
           const defaultSlot = slots?.default({
-            item: items[i],
+            item: items[i]
           })
-          nodes.push(
-            h(
-              name,
-              {
-                style: {
-                  height: rowHeight,
+
+          if (name) {
+            nodes.push(
+              h(
+                name,
+                {
+                  style: {
+                    height: rowHeight,
+                  },
                 },
-              },
-              defaultSlot
+                defaultSlot
+              )
             )
-          )
+          } else {
+            // 无法在子组件给插槽节点添加样式
+            nodes.push(defaultSlot)
+          }
         }
       }
     }

@@ -2,19 +2,11 @@
   生成Java pojo类
 -->
 <template>
-  <vxe-modal
-    ref="modalRef"
-    v-model="visible"
-    title="生成Java Pojo类"
-    width="80%"
-    height="90%"
-    show-footer
-    destroy-on-close
-    @show="onShow"
-  >
+  <vxe-modal ref="modalRef" v-model="visible" title="生成Java Pojo类" width="80%" height="90%" show-footer destroy-on-close
+    @show="onShow">
     <Splitpanes>
       <Pane min-size="20" size="35">
-        <FieldTable ref="fieldTableRef"></FieldTable>
+        <FieldTree ref="fieldTableRef" selectable />
       </Pane>
       <Pane>
         <div>
@@ -54,7 +46,7 @@ import CodeRegion from "@/components/CodeRegion.vue"
 import { Pane, Splitpanes } from "splitpanes"
 import "splitpanes/dist/splitpanes.css"
 import FieldTable from "@/components/fields/FieldTable.vue"
-
+import FieldTree from "@/components/fields/FieldTree.vue"
 const outputEditorRef = ref()
 
 const visible = ref()
@@ -97,7 +89,7 @@ const showInfo = () => {
   console.log(contentHeight.value)
 }
 
-onBeforeMount(() => {})
+onBeforeMount(() => { })
 
 const onShow = (param: any) => {
   contentHeight.value = param.$modal.getBox().clientHeight

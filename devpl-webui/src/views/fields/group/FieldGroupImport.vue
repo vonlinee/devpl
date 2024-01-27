@@ -5,7 +5,7 @@
         <FieldParserInput ref="fieldParserInputRef"></FieldParserInput>
       </Pane>
       <Pane>
-        <FieldTreeTable ref="fieldTableRef"></FieldTreeTable>
+        <FieldTree ref="fieldTableRef"></FieldTree>
       </Pane>
     </Splitpanes>
     <template #footer>
@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts" setup>
-import FieldTreeTable from "@/components/fields/FieldTreeTable.vue"
 import FieldParserInput from "../FieldParserInput.vue"
+import FieldTree from "@/components/fields/FieldTree.vue"
 import { ref } from "vue"
 import { isBlank } from "@/utils/tool"
 import { ElMessage } from "element-plus"

@@ -10,8 +10,7 @@
       </el-form-item>
       <el-form-item label="数据类型">
         <el-select v-model="formData.dataType" placeholder="Activity zone" clearable>
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+          <el-option :label="dataType.label" :value="dataType.value" v-for="dataType in dataTypeOptions" />
         </el-select>
       </el-form-item>
       <el-form-item label="描述信息">
@@ -26,7 +25,52 @@
 
 <script lang="ts" setup>
 import { ref, toRaw } from 'vue';
-import { toArray } from 'xe-utils';
+
+/**
+ * 可选择的数据类型
+ */
+const dataTypeOptions = ref<DataTypeSelectOption[]>([
+  {
+    label: "String",
+    value: "String",
+    key: "string"
+  },
+  {
+    label: "Integer",
+    value: "Integer",
+    key: "Integer"
+  },
+  {
+    label: "Boolean",
+    value: "Boolean",
+    key: "Boolean"
+  },
+  {
+    label: "Array",
+    value: "Array",
+    key: "Array"
+  },
+  {
+    label: "Object",
+    value: "Object",
+    key: "Object"
+  },
+  {
+    label: "Number",
+    value: "Number",
+    key: "Number"
+  },
+  {
+    label: "null",
+    value: "null",
+    key: "null"
+  },
+  {
+    label: "any",
+    value: "any",
+    key: "any"
+  }
+])
 
 const visible = ref()
 

@@ -6,22 +6,14 @@
     <el-button @click="refreshTableData()">刷新</el-button>
   </el-card>
   <el-table border row-key="id" :data="tableData" height="100%">
-    <el-table-column
-      type="selection"
-      width="35"
-      align="center"
-    ></el-table-column>
+    <el-table-column type="selection" width="35" align="center"></el-table-column>
     <el-table-column prop="groupName" label="组名称"></el-table-column>
     <el-table-column label="操作" width="500" fixed="right">
       <template #default="scope">
-        <el-button link @click="javaPojoGenModal.show(scope.row.id)"
-          >Java</el-button
-        >
+        <el-button link @click="javaPojoGenModal.show(scope.row.id)">Java</el-button>
         <el-button link>SQL</el-button>
         <el-button link>转为模型</el-button>
-        <el-button link @click="showFieldGroupEditModal(scope.row)"
-          >编辑</el-button
-        >
+        <el-button link @click="showFieldGroupEditModal(scope.row)">编辑</el-button>
         <el-button link @click="removeFieldGroup(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
@@ -29,9 +21,7 @@
       <el-text>暂无数据</el-text>
     </template>
   </el-table>
-  <el-button class="mt-4" style="width: 100%" @click="onAddItem"
-    >新增字段组</el-button
-  >
+  <el-button class="mt-4" style="width: 100%" @click="onAddItem">新增字段组</el-button>
   <JavaPojoGen ref="javaPojoGenModal"></JavaPojoGen>
 
   <FieldGroupEdit ref="fieldGroupEditModalRef"></FieldGroupEdit>
