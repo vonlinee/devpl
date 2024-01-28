@@ -66,16 +66,16 @@ public final class Lists {
     /**
      * 不可变的List
      *
-     * @param elements
-     * @param <E>
-     * @return
+     * @param elements 初始元素列表
+     * @param <E>      元素类型
+     * @return 不可变的list
      */
     @SafeVarargs
     public static <E> List<E> immutableOf(E... elements) {
-        if (elements == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
+        if (elements == null || elements.length == 0) {
+            return Collections.emptyList();
         }
-        return Collections.unmodifiableList(ArrayUtils.asArrayList(elements));
+        return List.of(elements);
     }
 
     public static ArrayList<Integer> arrayOf(int[] arr) {

@@ -6,6 +6,8 @@
         SELECT gf.*,
                f.field_key,
                f.field_name,
+               f.data_type,
+               f.description,
                f.description AS comment
         FROM group_field gf
                  LEFT JOIN field_info f ON gf.field_id = f.id

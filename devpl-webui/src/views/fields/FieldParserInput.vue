@@ -148,16 +148,10 @@ defineExpose({
 </script>
 
 <template>
-  <el-tabs
-    v-model="activeTabName"
-    class="input-tabs"
-    @tab-click="handleTabClicked"
-  >
+  <el-tabs v-model="activeTabName" class="input-tabs" @tab-click="handleTabClicked">
     <el-tab-pane label="Language" name="pl">
       <div style="display: flex; flex-direction: column; height: 100%">
-        <LanguageSelector
-          @selection-change="(val) => (plInputType = val)"
-        ></LanguageSelector>
+        <LanguageSelector @selection-change="(val) => (plInputType = val)"></LanguageSelector>
         <div style="flex-grow: 1">
           <monaco-editor ref="plEditorRef" language="java" />
         </div>
@@ -187,11 +181,7 @@ defineExpose({
     <el-tab-pane label="JSON" name="json">
       <div style="display: flex; flex-direction: column; height: 100%">
         <el-card>
-          <el-form
-            :form="jsonOptions"
-            label-width="100px"
-            label-position="left"
-          >
+          <el-form :form="jsonOptions" label-width="100px" label-position="left">
             <el-form-item label="语法格式">
               <el-select v-model="jsonInputType">
                 <el-option label="JSON5" value="json5"></el-option>
@@ -221,12 +211,7 @@ defineExpose({
           <el-option label="HTML Table Text" value="table-text"></el-option>
         </el-select>
         <el-card>
-          <el-form
-            :form="htmlParserOptions"
-            label-width="150"
-            inline
-            label-position="left"
-          >
+          <el-form :form="htmlParserOptions" label-width="150" inline label-position="left">
             <el-form-item label="字段名称列">
               <el-input v-model="htmlParserOptions.fieldNameColumn"></el-input>
             </el-form-item>
@@ -262,7 +247,7 @@ defineExpose({
 
   .el-tabs__content {
     height: calc(100% - 55px);
-    overflow-y: auto;
+    // overflow-y: auto;
   }
 
   .el-tab-pane {
@@ -274,7 +259,7 @@ defineExpose({
     height: 100%;
   }
 
-  .el-card-define >>> .el-card__body {
+  .el-card-define>>>.el-card__body {
     height: 100%;
   }
 }

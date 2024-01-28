@@ -21,10 +21,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -121,13 +118,13 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     /**
      * 填充树形结构，适配前端组件的树形字段
      * 1
-     *      101
-     *      102
-     *      103
+     * 101
+     * 102
+     * 103
      * 2
-     *      201
-     *      202
-     *      203
+     * 201
+     * 202
+     * 203
      * 。。。。
      * 一层不超过100个字段
      *
@@ -170,11 +167,13 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
      * @return 是否成功
      */
     @Override
-    public boolean saveFieldsInfos(List<FieldInfo> fieldInfoList) {
-        List<String> existedKeys = listFieldKeys();
-        if (!CollectionUtils.isEmpty(existedKeys)) {
-            Map<String, String> existedKeyMap = CollectionUtils.toMap(existedKeys, Function.identity());
-            fieldInfoList.removeIf(f -> existedKeyMap.containsKey(f.getFieldKey()));
+    public boolean saveFieldsInfos(List<FieldInfo> fieldInfoList, boolean allowFieldKeyDuplicated) {
+        if (!allowFieldKeyDuplicated) {
+            List<String> existedKeys = listFieldKeys();
+            if (!CollectionUtils.isEmpty(existedKeys)) {
+                Map<String, String> existedKeyMap = CollectionUtils.toMap(existedKeys, Function.identity());
+                fieldInfoList.removeIf(f -> existedKeyMap.containsKey(f.getFieldKey()));
+            }
         }
         if (fieldInfoList.isEmpty()) {
             return true;
@@ -191,6 +190,20 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public List<String> listFieldKeys() {
         return baseMapper.selectFieldKeys();
+    }
+
+    @Override
+    public void batchSetFieldValue(Collection<FieldInfo> fields, boolean setIdToNull, boolean temporary, boolean deleted) {
+        if (fields == null || fields.isEmpty()) {
+            return;
+        }
+        for (FieldInfo field : fields) {
+            if (setIdToNull)
+                field.setId(null);
+            if (field.hasChildren()) {
+                batchSetFieldValue(field.getChildren(), setIdToNull, temporary, deleted);
+            }
+        }
     }
 
     @Override

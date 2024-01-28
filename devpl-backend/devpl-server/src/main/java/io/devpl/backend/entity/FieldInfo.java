@@ -26,6 +26,12 @@ public class FieldInfo extends DBEntity implements Serializable {
     private Long id;
 
     /**
+     * 父级字段主键ID
+     */
+    @TableField(value = "parent_id")
+    private Long parentId;
+
+    /**
      * 字段Key，区分大小写
      */
     @TableField(value = "field_key")
@@ -68,10 +74,16 @@ public class FieldInfo extends DBEntity implements Serializable {
     private String defaultValue;
 
     /**
-     * 主键ID
+     * 是否临时字段，可被删除
      */
-    @TableField(exist = false)
-    private Long parentId;
+    @TableField(value = "temporary")
+    private Boolean temporary;
+
+    /**
+     * 是否可选字段
+     */
+    @TableField(value = "optional")
+    private Boolean optional;
 
     /**
      * 嵌套的字段列表

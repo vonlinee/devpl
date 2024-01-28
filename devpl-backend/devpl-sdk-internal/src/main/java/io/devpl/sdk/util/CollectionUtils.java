@@ -3,10 +3,7 @@ package io.devpl.sdk.util;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongFunction;
+import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -344,13 +341,13 @@ public abstract class CollectionUtils {
      * @param <T>        元素类型
      * @return 覆盖后的集合，最终返回不为空，集合元素以参数collection为准
      */
-    public static <T> Set<T> setAll(Set<T> set, Collection<T> collection) {
-        if (isEmpty(set)) {
-            set = new HashSet<>(collection);
-        } else {
+    public static <S extends Set<T>, T> S setAll(S set, Collection<T> collection, Supplier<S> empty) {
+        if (!isEmpty(set)) {
             set.clear();
-            set.addAll(collection);
+        } else if (empty != null) {
+            set = empty.get();
         }
+        set.addAll(collection);
         return set;
     }
 }

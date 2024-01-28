@@ -9,6 +9,7 @@ import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.common.exception.FieldParseException;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,9 +23,16 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
 
     FieldParseResult parseFields(FieldParseParam param) throws FieldParseException;
 
-    boolean saveFieldsInfos(List<FieldInfo> fieldInfo);
+    boolean saveFieldsInfos(List<FieldInfo> fieldInfo, boolean allowFieldKeyDuplicated);
 
     List<String> listFieldKeys();
+
+    /**
+     * 前端组件使用id字段维持唯一性
+     *
+     * @param fields 字段列表
+     */
+    void batchSetFieldValue(Collection<FieldInfo> fields, boolean setIdToNull, boolean temporary, boolean deleted);
 
     boolean addFieldGroup(List<FieldGroup> groups);
 

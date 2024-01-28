@@ -66,7 +66,7 @@ public class FieldInfoController {
      */
     @PostMapping(value = "/save/batch")
     public Result<Boolean> saveBatch(@RequestBody List<FieldInfo> fieldInfo) {
-        return Result.ok(fieldInfoService.saveFieldsInfos(fieldInfo));
+        return Result.ok(fieldInfoService.saveFieldsInfos(fieldInfo, false));
     }
 
     /**

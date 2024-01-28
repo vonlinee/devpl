@@ -2,11 +2,10 @@ package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.util.ClassUtils;
+import io.devpl.sdk.collection.ArraySet;
 import io.devpl.sdk.util.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.beetl.android.util.ArrayMap;
-import org.beetl.android.util.ArraySet;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -55,17 +54,17 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     /**
      * 字段列表
      */
-    private Set<FieldData> fields;
+    private ArraySet<FieldData> fields;
 
     /**
      * 类上的注解
      */
-    private Set<String> annotations;
+    private ArraySet<String> annotations;
 
     /**
      * 方法列表
      */
-    private Set<MethodData> methods;
+    private ArraySet<MethodData> methods;
 
     @Override
     public void fill(Map<String, Object> arguments) {
@@ -96,7 +95,8 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         }
     }
 
-    public void addAnnotation(Class<? extends Annotation>... annotations) {
+    @SafeVarargs
+    public final void addAnnotation(Class<? extends Annotation>... annotations) {
         if (this.annotations == null) {
             this.annotations = new ArraySet<>();
         }
@@ -135,7 +135,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
 
     public final void addField(FieldData fieldData) {
         if (this.fields == null) {
-            this.fields = new HashSet<>();
+            this.fields = new ArraySet<>();
         }
         this.fields.add(fieldData);
     }
@@ -150,10 +150,10 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     }
 
     public void setFields(Collection<FieldData> fields) {
-        this.fields = CollectionUtils.setAll(this.fields, fields);
+        this.fields = CollectionUtils.setAll(this.fields, fields, ArraySet::new);
     }
 
     public void setMethods(Collection<MethodData> methods) {
-        this.methods = CollectionUtils.setAll(this.methods, methods);
+        this.methods = CollectionUtils.setAll(this.methods, methods, ArraySet::new);
     }
 }
