@@ -5,14 +5,13 @@
   <ul :style="listStyle">
     <li v-for="item in items" :key="item[key]" class="list-item-container" @click="handleItemClicked($event, item)">
       <!-- 单个项插槽 -->
-
       <slot name="item" :item="item">{{ item[label] }}</slot>
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from "vue";
 
 const { height, width, key, items } = withDefaults(defineProps<{
   key?: string,
@@ -23,25 +22,24 @@ const { height, width, key, items } = withDefaults(defineProps<{
 }>(), {
   key: "key",
   label: "label",
-  height: "30px",
   width: "400px"
-})
+});
 
 const listStyle = computed(() => {
   return {
     height: height,
     width: width,
-    listStyleType: 'none'
-  }
-})
+    listStyleType: "none"
+  };
+});
 
-const emits = defineEmits([
-  "item-clicked"
-])
+const emits = defineEmits<{
+  (e: "item-clicked", item: any, event: Event): void
+}>();
 
 const handleItemClicked = (event: Event, item: any) => {
-  emits("item-clicked",  item, event)
-}
+  emits("item-clicked", item, event);
+};
 
 </script>
 

@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <name>devpl-backend</name>
-    <description>devpl for backend in Java.</description>
+    <description>devpl for backend in Java</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

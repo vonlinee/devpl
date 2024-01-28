@@ -1,6 +1,8 @@
 <!--
   https://github.com/accforgit/blog-data/blob/master/Popover/src/App.vue
   浮动面板组件
+
+  将锚点元素与popover进行隔离
 -->
 <template>
   <div class="custom-popover">
@@ -73,7 +75,7 @@ const arrowTop = ref<string | undefined>();
 const arrowLeft = ref<string | undefined>();
 const arrowBottom = ref<string | undefined>();
 const arrowRight = ref<string | undefined>();
-// trigger: 'hover'的情况下
+// trigger模式为hover的情况下
 // 在 referenceRef 与 bodyRef 之间来回移动，不应该改变visible
 const debounceTimer = ref<number>(-1);
 const referenceRef = ref<HTMLElement>();
@@ -90,8 +92,12 @@ const setPosition = () => {
   if (!referenceRef.value || !bodyRef.value) return;
   const referenceRect = referenceRef.value.getBoundingClientRect();
   const bodyRect = bodyRef.value.getBoundingClientRect();
-  const referencerectTop = referenceRef.value.offsetTop;
-  const referencerectLeft = referenceRef.value.offsetLeft;
+
+  // const referencerectTop = referenceRef.value.offsetTop;
+  // const referencerectLeft = referenceRef.value.offsetLeft;
+  // 相对于视口的距离
+  const referencerectTop = referenceRect.top;
+  const referencerectLeft = referenceRect.left;
   const bodyTop = referencerectTop - bodyRect.height;
   let _arrowLeft = 0;
   let _arrowTop = 0;
@@ -203,6 +209,11 @@ const setPosition = () => {
       break;
   }
   positionComputeDone.value = true;
+
+  console.log(referencerectLeft, referenceRect.width);
+  console.log("left = ", left.value, "top = ", top.value);
+
+  console.log(referenceRef.value?.offsetParent);
 };
 const handleVisibleChange = (v: boolean) => {
   emit("visible-change", v);
@@ -241,7 +252,6 @@ onBeforeUnmount(() => {
 });
 </script>
 
-
 <style scoped lang="scss">
 .custom-popover-body {
   position: absolute;
@@ -279,7 +289,6 @@ $halfArrowSize: calc(-1 * $arrowSize / 2);
   width: $arrowSize;
   height: $arrowSize;
   box-sizing: border-box;
-  border-style: solid;
   transform: rotate(45deg);
   background-color: #fff;
 

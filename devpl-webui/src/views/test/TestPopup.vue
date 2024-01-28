@@ -13,7 +13,25 @@ const onClick = (event: Event) => {
 </script>
 
 <template>
-  <button ref="anchor" @click="onClick">1111111</button>
+  <button @click="onClick">1111111</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="onClick">222222</button>
+  <br>
+  <button @click="popupRef.hide()">222222</button>
 
-  <Popup ref="popupRef" :anchor="anchor"></Popup>
+  <Popup ref="popupRef" :anchor="() => anchor" position="right" trigger="click" :z-index="500">
+    <li>A</li>
+    <li>B</li>
+    <li>C</li>
+  </Popup>
 </template>

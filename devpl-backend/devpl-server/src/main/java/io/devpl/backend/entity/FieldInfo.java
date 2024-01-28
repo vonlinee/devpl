@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 字段信息表
@@ -65,10 +67,30 @@ public class FieldInfo extends DBEntity implements Serializable {
     @TableField(value = "field_value")
     private String defaultValue;
 
+    /**
+     * 主键ID
+     */
+    @TableField(exist = false)
+    private Long parentId;
+
+    /**
+     * 嵌套的字段列表
+     */
+    @TableField(exist = false)
+    private List<FieldInfo> children;
+
     public String getFieldName() {
         if (fieldName == null || fieldName.isEmpty()) {
             return fieldKey;
         }
         return fieldName;
+    }
+
+    public boolean hasChildren() {
+        return children != null && !children.isEmpty();
+    }
+
+    public List<FieldInfo> getChildren() {
+        return children == null ? Collections.emptyList() : children;
     }
 }

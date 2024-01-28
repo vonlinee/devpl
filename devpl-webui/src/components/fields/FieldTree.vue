@@ -5,19 +5,20 @@
 <template>
   <el-scrollbar max-height="100%">
     <el-tree ref="treeRef" :data="dataSource" :show-checkbox="selectable" highlight-current default-expand-all
-      :expand-on-click-node="false" draggable node-key="id" :allow-drop="allowDrop" :allow-drag="allowDrag"
-      @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
-      @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop">
+             :expand-on-click-node="false" draggable node-key="id" :allow-drop="allowDrop" :allow-drag="allowDrag"
+             @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
+             @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop">
       <template #default="{ node, data }">
         <div style="height: auto; display: flex; flex-direction: row; width: 100%; align-items: stretch">
           <div style="height: auto; flex-grow: 1">
             <div class="field-tree-node-container">
               <!-- 字段名称 -->
-              <button class="field-label" :title="data.description || '无'" @dblclick="handleNodeClicked($event, data)">{{
-                data.fieldKey }}
+              <button class="field-label" :title="data.description || '无'" @dblclick="handleNodeClicked($event, data)">
+                {{ data.fieldKey }}
               </button>
               <!-- 字段类型 -->
-              <el-button ref="buttonRef" link style="margin-left: 10px; color: green">
+              <el-button ref="buttonRef" link style="margin-left: 10px; color: green"
+                         @click="handleDataTypeClicked($event, data)">
                 {{ data.dataType || "unknown" }}
               </el-button>
             </div>
@@ -32,16 +33,28 @@
                 <el-dropdown-menu>
                   <el-dropdown-item @click="addNode(data, 'sibling')">添加相邻节点</el-dropdown-item>
                   <el-dropdown-item v-if="data.dataType == 'Object'"
-                    @click="addNode(data, 'child')">添加子节点</el-dropdown-item>
+                                    @click="addNode(data, 'child')">添加子节点
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
-            <el-button link :icon="Minus" style="margin: 0; height: 100%;  margin-right: 10px;"
-              @click="remove(node, data)"></el-button>
+            <el-button link :icon="Minus" style="height: 100%;  margin: 0 10px 0 0;"
+                       @click="remove(node, data)"></el-button>
           </div>
         </div>
+
+
       </template>
     </el-tree>
+
+    <popup ref="dataTypePopupRef" position="right" :z-index="10000">
+      <List :items="dataTypeOptions" width="100px"
+            @item-clicked="(item) => handleDataTypeEdit(item)">
+        <template #item="scope">
+          {{ scope.item.label }}
+        </template>
+      </List>
+    </popup>
 
     <field-info-form-modal ref="fieldInfoFormModalRef" />
   </el-scrollbar>
@@ -56,14 +69,76 @@ import type {
   NodeDropType
 } from "element-plus/es/components/tree/src/tree.type";
 import { Minus, Plus } from "@element-plus/icons";
-import { watch } from "vue";
 import FieldInfoFormModal from "./FieldInfoFormModal.vue";
+import Popup from "@/views/test/Popup.vue";
+import List from "@/components/List.vue";
+
+/**
+ * 可选择的数据类型
+ */
+const dataTypeOptions = ref<DataTypeSelectOption[]>([
+  {
+    label: "String",
+    value: "String",
+    key: "string"
+  },
+  {
+    label: "Integer",
+    value: "Integer",
+    key: "Integer"
+  },
+  {
+    label: "Boolean",
+    value: "Boolean",
+    key: "Boolean"
+  },
+  {
+    label: "Array",
+    value: "Array",
+    key: "Array"
+  },
+  {
+    label: "Object",
+    value: "Object",
+    key: "Object"
+  },
+  {
+    label: "Number",
+    value: "Number",
+    key: "Number"
+  },
+  {
+    label: "null",
+    value: "null",
+    key: "null"
+  },
+  {
+    label: "any",
+    value: "any",
+    key: "any"
+  }
+]);
 
 const treeRef = ref();
 
-const buttonRef = ref()
+const buttonRef = ref();
+const dataTypePopupRef = ref();
 
 const fieldInfoFormModalRef = ref();
+
+let editingField: FieldInfo | undefined;
+
+const handleDataTypeEdit = (item: any) => {
+  if (editingField != undefined) {
+    editingField.dataType = item.value;
+  }
+  dataTypePopupRef.value.hide();
+};
+
+const handleDataTypeClicked = (event: MouseEvent, field: FieldInfo) => {
+  editingField = field;
+  dataTypePopupRef.value.show(event);
+};
 
 /**
  * 组件属性
@@ -105,23 +180,23 @@ const containerStyle = reactive({
 
 let id = 1000;
 
-const unknownItemName = "Unknown"
+const unknownItemName = "Unknown";
 
 const addNode = (data: FieldInfo, type?: string) => {
   if (type == undefined) {
-    if (data.dataType == 'Object') {
-      addChild(data)
+    if (data.dataType == "Object") {
+      addChild(data);
     } else {
-      addSibling(data)
+      addSibling(data);
     }
   } else {
-    if (type == 'sibling') {
-      addSibling(data)
-    } else if (type == 'child') {
-      addChild(data)
+    if (type == "sibling") {
+      addSibling(data);
+    } else if (type == "child") {
+      addChild(data);
     }
   }
-}
+};
 
 /**
  * 添加子节点
@@ -142,26 +217,25 @@ const addChild = (data: FieldInfo) => {
  * @param data 节点数据
  */
 const addSibling = (data: FieldInfo) => {
-  const newNode = { id: id++, fieldKey: unknownItemName, children: [] } as FieldInfo
-  treeRef.value.insertAfter(newNode, data)
+  const newNode = { id: id++, fieldKey: unknownItemName, children: [] } as FieldInfo;
+  treeRef.value.insertAfter(newNode, data);
   // 默认选中
-  treeRef.value!.setCheckedKeys([newNode.id], false)
-}
+  treeRef.value!.setCheckedKeys([newNode.id], false);
+};
 
 /**
  * 四个参数：对应于节点点击的节点对象，TreeNode 的 node 属性, TreeNode和事件对象
- * @param data 
- * @param node 
- * @param item 
+ * @param event
+ * @param data
  */
 const handleNodeClicked = (event: Event, data: FieldInfo) => {
-  fieldInfoFormModalRef.value.show(data)
+  fieldInfoFormModalRef.value.show(data);
 };
 
 /**
  * 删除节点
- * @param node
- * @param data
+ * @param node 要删除的节点
+ * @param data  要删除的节点数据
  */
 const remove = (node: Node, data: FieldInfo) => {
   if (node.label === "Root") {
@@ -245,20 +319,20 @@ defineExpose({
    * @param fields 字段信息
    */
   setFields(fields?: FieldInfo[]) {
-    dataSource.value = fields || []
+    dataSource.value = fields || [];
   },
   /**
    * 获取选中的字段列表
    * 不是树形结构
    */
   getSelectedFields() {
-    return treeRef.value!.getCheckedNodes(false, false)
+    return treeRef.value!.getCheckedNodes(false, false);
   },
   /**
    * 获取选中的字段ID列表
    */
   getSelectedKeys() {
-    return treeRef.value!.getCheckedKeys(false)
+    return treeRef.value!.getCheckedKeys(false);
   }
 });
 </script>
@@ -345,9 +419,9 @@ defineExpose({
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-      0 0 8px rgba(102, 175, 233, 0.6);
+    0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-      0 0 8px rgba(102, 175, 233, 0.6);
+    0 0 8px rgba(102, 175, 233, 0.6);
   }
 }
 </style>
