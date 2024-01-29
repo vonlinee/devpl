@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import FieldParserInput from "../FieldParserInput.vue"
 import FieldTree from "@/components/fields/FieldTree.vue"
-import { ref } from "vue"
+import { ref, toRaw } from "vue";
 import { isBlank } from "@/utils/tool"
 import { ElMessage } from "element-plus"
 import { apiParseFields } from "@/api/fields"
@@ -42,7 +42,7 @@ const handleClose = (flag?: boolean) => {
   if (flag) {
     visible.value = !flag
   }
-  emits("finished", fields)
+  emits("finished", toRaw(fields))
 }
 
 const parseFields = () => {

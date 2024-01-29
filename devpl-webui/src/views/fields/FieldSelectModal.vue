@@ -18,8 +18,7 @@
       </el-form-item>
       <el-form-item label="数据类型" prop="region">
         <el-select v-model="option.queryForm.dataType">
-          <el-option label="String" value="String" />
-          <el-option label="int" value="Int" />
+          <el-option :label="dt" :value="dt" :key="dt" v-for="dt in dataTypes" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -73,30 +72,38 @@
 </template>
 
 <script lang="ts" setup>
-import { DataTableOption } from "@/hooks/interface"
-import { reactive, ref } from "vue"
-import { apiDeleteFieldByIds, apiListFields } from "@/api/fields"
-import { useCrud } from "@/hooks"
+import { DataTableOption } from "@/hooks/interface";
+import { onMounted, reactive, ref } from "vue";
+import { apiDeleteFieldByIds, apiListFieldDataTypeNames, apiListFields } from "@/api/fields";
+import { useCrud } from "@/hooks";
 
-const visible = ref()
+const visible = ref();
 
-const emits = defineEmits(["selection-change"])
+const dataTypes = ref<string[]>();
+
+onMounted(() => {
+  apiListFieldDataTypeNames().then((res) => {
+    dataTypes.value = res.data;
+  });
+});
+
+const emits = defineEmits(["selection-change"]);
 
 /**
  * 选中回调
  * @param val
  */
 const handleSelection = (val: FieldInfo[]) => {
-  emits("selection-change", val)
-}
+  emits("selection-change", val);
+};
 
 const handleClose = () => {
   option.queryForm = {
     keyword: "",
     dataType: "String",
-    excludedKeys: "",
-  }
-}
+    excludedKeys: ""
+  };
+};
 
 const option: DataTableOption = reactive({
   queryForm: {
@@ -105,24 +112,24 @@ const option: DataTableOption = reactive({
      */
     excludedKeys: "",
     keyword: "",
-    dataType: "String",
+    dataType: "String"
   },
   queryPage: apiListFields,
-  removeByIds: apiDeleteFieldByIds,
-} as DataTableOption)
+  removeByIds: apiDeleteFieldByIds
+} as DataTableOption);
 
-const { getDataList, sizeChangeHandle, currentChangeHandle } = useCrud(option)
+const { getDataList, sizeChangeHandle, currentChangeHandle } = useCrud(option);
 
 defineExpose({
   show: (existed?: FieldInfo[]) => {
-    visible.value = true
+    visible.value = true;
     // 过滤已选择的字段
     if (existed) {
-      option.queryForm.excludedKeys = existed.map((f) => f.fieldKey).join(",")
+      option.queryForm.excludedKeys = existed.map((f) => f.fieldKey).join(",");
     }
-    getDataList()
-  },
-})
+    getDataList();
+  }
+});
 </script>
 
 <style lang="scss" scoped>

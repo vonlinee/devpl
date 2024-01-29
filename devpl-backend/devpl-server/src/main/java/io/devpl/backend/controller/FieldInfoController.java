@@ -147,4 +147,9 @@ public class FieldInfoController {
     public ListResult<GroupField> listGroupFields(FieldGroupListParam param) {
         return ListResult.ok(fieldGroupService.listGroupFieldsById(param.getGroupId()));
     }
+
+    @GetMapping(value = "/datatype/names")
+    public List<String> listFieldDataTypeNames() {
+        return fieldInfoService.listFieldDataTypeNames();
+    }
 }

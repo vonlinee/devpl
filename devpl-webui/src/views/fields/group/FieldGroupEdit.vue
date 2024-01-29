@@ -41,7 +41,7 @@
             class="mt-4"
             style="width: 100%"
             @click="showFieldSelectModal"
-            >选择
+          >选择
           </el-button>
         </template>
       </el-form-item>
@@ -59,16 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRaw } from "vue"
-import { ElMessage } from "element-plus/es"
-import FieldSelectModal from "@/views/fields/FieldSelectModal.vue"
-import { apiListGroupFieldsById, apiUpdateFieldGroup } from "@/api/fields"
+import { reactive, ref, toRaw } from "vue";
+import { ElMessage } from "element-plus/es";
+import FieldSelectModal from "@/views/fields/FieldSelectModal.vue";
+import { apiListGroupFieldsById, apiUpdateFieldGroup } from "@/api/fields";
 
-const emit = defineEmits(["refreshDataList"])
+const emit = defineEmits(["refreshDataList"]);
 
-const visible = ref(false)
-const dataFormRef = ref()
-const fieldSelectModal = ref()
+const visible = ref(false);
+const dataFormRef = ref();
+const fieldSelectModal = ref();
 
 const dataForm = reactive<{
   group?: FieldGroup
@@ -76,75 +76,75 @@ const dataForm = reactive<{
 }>({
   group: {
     id: -1,
-    groupName: "",
+    groupName: ""
   },
-  fields: [],
-})
+  fields: []
+});
 
 const removeRow = (row: FieldInfo) => {
-  const rawRow = toRaw(row)
-  const index = dataForm.fields.indexOf(rawRow)
+  const rawRow = toRaw(row);
+  const index = dataForm.fields.indexOf(rawRow);
   if (index >= 0) {
-    dataForm.fields.splice(index, 1)
+    dataForm.fields.splice(index, 1);
   }
-}
+};
 
 const handleSelection = (val: FieldInfo[]) => {
-  const oldValue = dataForm.fields || []
+  const oldValue = dataForm.fields || [];
   if (oldValue.length == 0) {
-    dataForm.fields = oldValue.concat(val)
+    dataForm.fields = oldValue.concat(val);
   } else {
     for (let i = 0; i < val.length; i++) {
       if (!oldValue.find((item) => item.fieldKey == val[i].fieldKey)) {
-        oldValue.push(val[i])
+        oldValue.push(val[i]);
       }
     }
   }
-}
+};
 
 const showFieldSelectModal = () => {
-  fieldSelectModal.value.show(dataForm.fields)
-}
+  fieldSelectModal.value.show(dataForm.fields);
+};
 
 const dataRules = ref({
   packageName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  code: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-})
+  code: [{ required: true, message: "必填项不能为空", trigger: "blur" }]
+});
 
 // 表单提交
 const submitHandle = () => {
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid || dataForm.group == undefined) {
-      return false
+      return false;
     }
     apiUpdateFieldGroup(dataForm.group, dataForm.fields).then(() => {
       ElMessage.success({
         message: "操作成功",
         duration: 500,
         onClose: () => {
-          visible.value = false
-          emit("refreshDataList")
-        },
-      })
-    })
-  })
-}
+          visible.value = false;
+          emit("refreshDataList");
+        }
+      });
+    });
+  });
+};
 
 defineExpose({
   show: (group?: FieldGroup) => {
-    visible.value = true
+    visible.value = true;
     // 重置表单数据
     if (dataFormRef.value) {
-      dataFormRef.value.resetFields()
+      dataFormRef.value.resetFields();
     }
     // id 存在则为修改
     if (group) {
-      dataForm.group = group
+      dataForm.group = group;
 
       apiListGroupFieldsById(group.id).then((res) => {
-        dataForm.fields = res.data
-      })
+        dataForm.fields = res.data;
+      });
     }
-  },
-})
+  }
+});
 </script>

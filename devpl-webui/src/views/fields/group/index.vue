@@ -1,8 +1,6 @@
 <template>
-  <el-button @click="showFieldImportModal">导入</el-button>
-
-  <FieldGroupImport ref="importFieldGroupModal" @finished="onParseFinished"></FieldGroupImport>
   <el-card>
+    <el-button @click="showFieldImportModal">导入</el-button>
     <el-button @click="refreshTableData()">刷新</el-button>
   </el-card>
   <el-table border row-key="id" :data="tableData" height="100%">
@@ -22,71 +20,74 @@
     </template>
   </el-table>
   <el-button class="mt-4" style="width: 100%" @click="onAddItem">新增字段组</el-button>
+
+  <FieldGroupImport ref="importFieldGroupModal" @finished="onParseFinished"></FieldGroupImport>
+
   <JavaPojoGen ref="javaPojoGenModal"></JavaPojoGen>
 
   <FieldGroupEdit ref="fieldGroupEditModalRef"></FieldGroupEdit>
 </template>
 
 <script lang="ts" setup>
-import FieldGroupImport from "./FieldGroupImport.vue"
-import { onMounted, ref } from "vue"
+import FieldGroupImport from "./FieldGroupImport.vue";
+import { onMounted, ref } from "vue";
 import {
   apiDeleteFieldGroup,
   apiNewFieldGroup,
-  apiPageFieldGroup,
-} from "@/api/fields"
-import JavaPojoGen from "@/views/fields/group/JavaPojoGen.vue"
-import { Message } from "@/hooks/message"
-import FieldGroupEdit from "@/views/fields/group/FieldGroupEdit.vue"
+  apiPageFieldGroup
+} from "@/api/fields";
+import JavaPojoGen from "@/views/fields/group/JavaPojoGen.vue";
+import { Message } from "@/hooks/message";
+import FieldGroupEdit from "@/views/fields/group/FieldGroupEdit.vue";
 
-const importFieldGroupModal = ref()
-const tableData = ref<FieldGroup[]>([])
-const javaPojoGenModal = ref()
-const fieldGroupEditModalRef = ref()
+const importFieldGroupModal = ref();
+const tableData = ref<FieldGroup[]>([]);
+const javaPojoGenModal = ref();
+const fieldGroupEditModalRef = ref();
 
 const showFieldImportModal = () => {
-  importFieldGroupModal.value.show()
-}
+  importFieldGroupModal.value.show();
+};
 
 const onParseFinished = (fields: FieldInfo[]) => {
-  if (fields) {
+  if (fields && fields.length > 0) {
     apiNewFieldGroup(fields).then((res) => {
       if (res) {
-        Message.info("添加字段组成功")
-        refreshTableData()
+        Message.info("添加字段组成功");
+        refreshTableData();
       }
-    })
+    });
   }
-}
+};
 
 const showFieldGroupEditModal = (group?: FieldGroup) => {
-  fieldGroupEditModalRef.value.show(group)
-}
+  fieldGroupEditModalRef.value.show(group);
+};
 
 const refreshTableData = () => {
   apiPageFieldGroup().then((res) => {
-    tableData.value = res.data
-  })
-}
+    tableData.value = res.data;
+  });
+};
 
 onMounted(() => {
-  refreshTableData()
-})
+  refreshTableData();
+});
 
 const onAddItem = () => {
   apiNewFieldGroup().then((res) => {
     if (res.data) {
-      tableData.value.push(res.data)
+      tableData.value.push(res.data);
     }
-  })
-}
+  });
+};
 
 const removeFieldGroup = (id: number) => {
   apiDeleteFieldGroup(id).then(() => {
-    Message.info("删除成功")
-    refreshTableData()
-  })
-}
+    Message.info("删除成功");
+    refreshTableData();
+  });
+};
 </script>
 
 <style scoped></style>

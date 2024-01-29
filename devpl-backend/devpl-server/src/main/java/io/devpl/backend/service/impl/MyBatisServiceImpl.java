@@ -543,23 +543,20 @@ public class MyBatisServiceImpl implements MyBatisService {
 
         try (InputStream inputStream = resource.getInputStream()) {
             XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
-
             Configuration configuration = parser.parse();
-
             try (Stream<Path> mapperFilesStream = Files.list(Path.of(resource.getFile().getParent(), "mapper"))) {
                 /**
                  * mapper文件中的sql标签
                  * key为namespace + <sql>标签的id，val为对应的XNode
                  */
                 Map<String, XNode> sqlFragments = new HashMap<>();
-
                 mapperFilesStream.forEach(file -> {
-                    log.info("开始解析{}", file.toString());
+                    // log.info("开始解析{}", file.toString());
                     try (InputStream is = Files.newInputStream(file)) {
                         XMLMapperBuilder builder = new XMLMapperBuilder(is, configuration, file.toAbsolutePath().toString(), sqlFragments);
                         builder.parse();
                     } catch (IOException ignored) {
-                        log.info("解析{}失败", file);
+                        log.error("解析{}失败", file);
                     }
                 });
             } catch (IOException e) {

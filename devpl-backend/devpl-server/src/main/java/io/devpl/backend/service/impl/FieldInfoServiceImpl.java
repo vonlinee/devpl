@@ -60,6 +60,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
                 w.or().like(FieldInfo::getFieldName, param.getKeyword());
             });
         }
+        qw.eq(StringUtils.hasText(param.getDataType()), FieldInfo::getDataType, param.getDataType());
         qw.orderBy(true, false, FieldInfo::getCreateTime);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
@@ -214,5 +215,10 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     @Override
     public String getSampleText(String type) {
         return null;
+    }
+
+    @Override
+    public List<String> listFieldDataTypeNames() {
+        return baseMapper.selectFieldDataTypeNames();
     }
 }

@@ -43,4 +43,6 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
      * @return 示例文本
      */
     String getSampleText(String type);
+
+    List<String> listFieldDataTypeNames();
 }

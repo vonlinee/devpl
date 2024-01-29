@@ -18,6 +18,14 @@ public class URLFieldParser implements FieldParser {
     @Override
     public List<Map<String, Object>> parse(String content) throws FieldParseException {
         content = Utils.removeInvisibleCharacters(content);
+
+        // 兼容不以http开头的输入，例如/aa/bb/cc?arg1=1&arg2=10...
+        if (content.startsWith("/")) {
+            content = "http://localhost:8088" + content;
+        } else if (!content.startsWith("http")) {
+            content = "http://localhost:8088/" + content;
+        }
+
         List<Map<String, Object>> result = new ArrayList<>();
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(content);

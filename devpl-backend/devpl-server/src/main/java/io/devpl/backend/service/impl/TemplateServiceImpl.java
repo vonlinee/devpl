@@ -225,7 +225,6 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     templateInfo.setDeleted(false);
                     templateInfo.setTemplatePath(templatePath);
                     templateInfo.setType(1);
-                    templateInfo.setCreateTime(now);
                     templateInfo.setUpdateTime(now);
                     templateInfo.setRemark("");
                     try {
