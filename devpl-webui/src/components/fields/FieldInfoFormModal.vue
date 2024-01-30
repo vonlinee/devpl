@@ -1,5 +1,5 @@
 <!-- 
-  字段信息表单, 编辑不和后台交互
+  字段信息表单, 此处编辑不和后台交互
   包含字段值编辑，和字段管理那里的表单有区别
  -->
 <template>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, toRaw } from 'vue';
+import { ref, toRaw } from "vue";
 
 /**
  * 可选择的数据类型
@@ -70,9 +70,9 @@ const dataTypeOptions = ref<DataTypeSelectOption[]>([
     value: "any",
     key: "any"
   }
-])
+]);
 
-const visible = ref()
+const visible = ref();
 
 const formData = ref<FieldInfo>({
   fieldKey: "",
@@ -80,9 +80,9 @@ const formData = ref<FieldInfo>({
   parentId: undefined,
   dataType: "Any",
   description: ""
-})
+});
 
-let current: FieldInfo | undefined = undefined
+let current: FieldInfo | undefined = undefined;
 
 const resetFields = () => {
   formData.value = {
@@ -90,29 +90,29 @@ const resetFields = () => {
     fieldKey: "",
     dataType: "Any",
     defaultValue: "",
-    description: "",
-  }
-}
+    description: ""
+  };
+};
 
 /**
  * 提交
  */
 const onSubmit = () => {
   if (current) {
-    visible.value = false
-    Object.assign(current, formData.value)
-    resetFields()
+    visible.value = false;
+    Object.assign(current, formData.value);
+    resetFields();
   }
-}
+};
 
 defineExpose({
   show(f?: FieldInfo) {
     if (f) {
-      current = f
-      formData.value = Object.assign({}, toRaw(f))
-      visible.value = true
+      current = f;
+      formData.value = Object.assign({}, toRaw(f));
+      visible.value = true;
     }
   }
-})
+});
 
 </script>

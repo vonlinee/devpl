@@ -1,14 +1,17 @@
 package io.devpl.backend.config;
 
+import io.devpl.backend.common.RepeatableFilter;
 import io.devpl.backend.common.RequestTracer;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
+import jakarta.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +53,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new DefaultResponseErrorHandler());
         return restTemplate;
+    }
+
+    /**
+     * 利用过滤器配置，把RepeatableFilter设置成第一个调用的过滤器。注意FilterRegistrationBean的setOrder()方法，数值越小越先执行。
+     *
+     * @return 过滤器配置Bean
+     */
+    @Bean
+    public FilterRegistrationBean<Filter> repeatableFilterBean() {
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new RepeatableFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("repeatableFilter");
+        registration.setOrder(1);
+        return registration;
     }
 
     /**

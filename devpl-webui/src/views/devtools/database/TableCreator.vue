@@ -1,3 +1,6 @@
+<!--
+  创建数据库表 表单
+-->
 <template>
   <div>
     <el-button @click="addColumn">添加字段</el-button>
@@ -5,11 +8,11 @@
 
   <el-tabs>
     <el-tab-pane label="字段">
-      <el-table height="500px"
-        :data="columns"
-        border
-        style="width: 100%"
-        show-overflow-tooltip
+      <el-table height="400px"
+                :data="columns"
+                border
+                style="width: 100%"
+                show-overflow-tooltip
       >
         <el-table-column prop="columnName" label="列名" width="180">
           <template #default="scope">
@@ -76,7 +79,7 @@
       </el-table>
     </el-tab-pane>
 
-    <el-tab-pane label="索引"> </el-tab-pane>
+    <el-tab-pane label="索引"></el-tab-pane>
 
     <el-tab-pane label="选项">
       <el-form>
@@ -94,9 +97,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref } from "vue";
 
-const columns = ref<ColumnInfo[]>([])
+const columns = ref<ColumnInfo[]>([]);
 
 const addColumn = () => {
   columns.value?.push({
@@ -107,9 +110,9 @@ const addColumn = () => {
     nullable: true,
     virtual: false,
     primaryKey: false,
-    remarks: "",
-  })
-}
+    remarks: ""
+  });
+};
 
 type ColumnInfo = {
   columnName: string
@@ -121,6 +124,33 @@ type ColumnInfo = {
   primaryKey: boolean
   remarks: string
 }
+
+defineExpose({
+  addColumns(fields: FieldInfo[]) {
+    if (fields) {
+
+      const _columns: ColumnInfo[] = [];
+      for (let i = 0; i < fields.length; i++) {
+
+        const field = fields[i];
+
+        _columns.push({
+          columnName: field.fieldName || "",
+          dataType: (field.dataType || "varchar") as string,
+          columnSize: 0,
+          decimalDigits: 0,
+          nullable: true,
+          virtual: false,
+          primaryKey: false,
+          remarks: ""
+        });
+      }
+
+      columns.value = _columns;
+    }
+  }
+});
+
 </script>
 
 <style scoped lang="scss">

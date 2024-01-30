@@ -3,7 +3,7 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.config.GeneratorProperties;
 import io.devpl.backend.service.GeneratorConfigService;
-import io.devpl.backend.utils.JSONUtils;
+import io.devpl.common.JSONUtils;
 import io.devpl.backend.utils.PathUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;

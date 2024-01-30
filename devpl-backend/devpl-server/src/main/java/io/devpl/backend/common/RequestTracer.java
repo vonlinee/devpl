@@ -6,14 +6,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
+@Setter
 @Slf4j
 public class RequestTracer implements HandlerInterceptor {
 
-    @Setter
     private String servletContextPath;
 
     @Override
@@ -28,7 +32,16 @@ public class RequestTracer implements HandlerInterceptor {
             }
         }
 
-        log.info("url => {}", sb.substring(0, sb.length() - 1));
+        String requestBodyJsonAsString = null;
+        if (Objects.equals(request.getContentType(), MediaType.APPLICATION_JSON_VALUE)) {
+            requestBodyJsonAsString = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
+        }
+
+        if (requestBodyJsonAsString != null) {
+            log.info("url => {} \nbody: {}", sb.substring(0, sb.length() - 1), requestBodyJsonAsString);
+        } else {
+            log.info("url => {}", sb.substring(0, sb.length() - 1));
+        }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }

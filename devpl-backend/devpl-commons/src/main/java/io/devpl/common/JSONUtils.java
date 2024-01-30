@@ -1,6 +1,5 @@
-package io.devpl.backend.utils;
+package io.devpl.common;
 
-import com.alibaba.fastjson2.JSONReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * JSON 工具类
@@ -22,6 +20,12 @@ public abstract class JSONUtils {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * 对象转为字符串，默认无样式
+     *
+     * @param object 对象
+     * @return JSON字符串
+     */
     public static String toString(Object object) {
         return toString(object, false);
     }
@@ -29,9 +33,9 @@ public abstract class JSONUtils {
     /**
      * 对象转为字符串
      *
-     * @param object
-     * @param prettyStyle
-     * @return
+     * @param object      对象
+     * @param prettyStyle 是否以指定样式进行转换，添加换行缩进等
+     * @return JSON字符串
      */
     public static String toString(Object object, boolean prettyStyle) {
         try {
@@ -45,25 +49,21 @@ public abstract class JSONUtils {
         }
     }
 
-    public static <T> T parseObject(String text, Class<T> clazz) {
+    /**
+     * 解析JSON字符串到指定对象
+     *
+     * @param text      JSON字符串
+     * @param pojoClass 普通对象类型
+     * @param <T>       对象类型
+     * @return 对象
+     */
+    public static <T> T parseObject(String text, Class<T> pojoClass) {
         if (!StringUtils.hasText(text)) {
             return null;
         }
         try {
-            return objectMapper.readValue(text, clazz);
+            return objectMapper.readValue(text, pojoClass);
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void writeFile(Object obj, File file) {
-        writeFile(obj, file, false);
-    }
-
-    public static void writeFile(Object obj, File file, boolean prettyStyle) {
-        try {
-            Files.writeString(file.toPath(), toString(obj, prettyStyle), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -89,17 +89,36 @@ public abstract class JSONUtils {
     }
 
     /**
+     * 将对象以JSON字符串形式写入到文件
+     *
+     * @param obj  对象
+     * @param file 目标文件
+     */
+    public static void writeFile(Object obj, File file) {
+        writeFile(obj, file, false);
+    }
+
+    /**
+     * 将对象以JSON字符串形式写入到文件
+     *
+     * @param obj         对象
+     * @param file        目标文件
+     * @param prettyStyle 保留缩进与对其
+     */
+    public static void writeFile(Object obj, File file, boolean prettyStyle) {
+        try {
+            Files.writeString(file.toPath(), toString(obj, prettyStyle), StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * 解析字符串，有语法错误直接抛异常
      *
      * @param text 可能为JSON的字符串
      */
     public static void validateJson(String text) throws RuntimeException {
         parseObject(text, Object.class);
-    }
-
-    public static Map<String, Object> toMap(String json) {
-        try (JSONReader reader = JSONReader.of(json)) {
-            return reader.readObject();
-        }
     }
 }

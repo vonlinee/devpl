@@ -29,6 +29,12 @@ public class DataTypeItem {
     private String typeGroupId;
 
     /**
+     * 类型分类id
+     */
+    @TableField(value = "category_id")
+    private Long categoryId;
+
+    /**
      * 类型ID
      */
     @TableField(value = "type_key")

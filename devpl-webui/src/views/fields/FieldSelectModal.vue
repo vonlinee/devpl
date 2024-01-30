@@ -5,7 +5,7 @@
   <vxe-modal
     v-model="visible"
     title="字段选择"
-    width="60%"
+    width="70%"
     destroy-on-close
     @close="handleClose"
   >
@@ -17,7 +17,7 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="数据类型" prop="region">
-        <el-select v-model="option.queryForm.dataType">
+        <el-select v-model="option.queryForm.dataType" clearable>
           <el-option :label="dt" :value="dt" :key="dt" v-for="dt in dataTypes" />
         </el-select>
       </el-form-item>
@@ -63,7 +63,7 @@
       background
       :page-sizes="option.pageSizes"
       :total="option.total"
-      layout="prev, next"
+      layout="total, prev, next"
       @size-change="sizeChangeHandle"
       @current-change="currentChangeHandle"
     >
@@ -97,28 +97,27 @@ const handleSelection = (val: FieldInfo[]) => {
   emits("selection-change", val);
 };
 
-const handleClose = () => {
-  option.queryForm = {
-    keyword: "",
-    dataType: "String",
-    excludedKeys: ""
-  };
-};
-
-const option: DataTableOption = reactive({
+const { option, getDataList, sizeChangeHandle, currentChangeHandle } = useCrud({
   queryForm: {
     /**
      * 需要排除的字段列表，英文逗号分隔
      */
     excludedKeys: "",
     keyword: "",
-    dataType: "String"
+    dataType: ""
   },
   queryPage: apiListFields,
   removeByIds: apiDeleteFieldByIds
 } as DataTableOption);
 
-const { getDataList, sizeChangeHandle, currentChangeHandle } = useCrud(option);
+const handleClose = () => {
+  option.queryForm = {
+    keyword: "",
+    dataType: "",
+    excludedKeys: ""
+  };
+};
+
 
 defineExpose({
   show: (existed?: FieldInfo[]) => {
