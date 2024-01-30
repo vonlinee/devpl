@@ -2,10 +2,10 @@ package io.devpl.fxui.utils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl;
+import io.devpl.common.utils.JSONUtils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ProjectConfiguration;
-import io.devpl.fxui.utils.json.JSONUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Connection;
@@ -120,14 +120,14 @@ public class AppConfig {
             ProjectConfiguration item = new ProjectConfiguration();
             Object value = map.get("value");
             if (value != null) {
-                results.add(JSONUtils.toObject(value.toString(), ProjectConfiguration.class));
+                results.add(JSONUtils.parseObject(value.toString(), ProjectConfiguration.class));
             }
         }
         return results;
     }
 
     public static int saveProjectConfiguration(ProjectConfiguration projectConfiguration) {
-        return template.update("insert into generator_config values(?, ?)", projectConfiguration.getName(), JSONUtils.toJSONString(projectConfiguration));
+        return template.update("insert into generator_config values(?, ?)", projectConfiguration.getName(), JSONUtils.toString(projectConfiguration));
     }
 
     /**

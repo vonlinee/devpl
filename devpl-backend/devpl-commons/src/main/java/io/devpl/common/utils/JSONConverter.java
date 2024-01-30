@@ -1,4 +1,4 @@
-package io.devpl.fxui.utils.json;
+package io.devpl.common.utils;
 
 /**
  * JSON和对象之间互相转换

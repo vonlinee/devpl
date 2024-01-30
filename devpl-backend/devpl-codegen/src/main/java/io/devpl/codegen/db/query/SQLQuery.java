@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.core.Context;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.converts.MySqlTypeConvert;
@@ -134,7 +134,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                     }
                 });
             }
-            EntityTemplateArugments entity = strategyConfig.entity();
+            EntityTemplateArguments entity = strategyConfig.entity();
             dbQuery.execute(tableFieldsSql, result -> {
                 String columnName = result.getStringResult(dbQuery.fieldName());
                 // TODO 修改

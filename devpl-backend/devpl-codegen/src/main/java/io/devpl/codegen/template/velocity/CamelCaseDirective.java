@@ -3,9 +3,11 @@ package io.devpl.codegen.template.velocity;
 import io.devpl.codegen.core.CaseFormat;
 
 /**
- * userdirective=com.baomidou.mybatisplus.generator.engine.velocity.CamelCaseDirective
+ * userdirective=aaa.bbb.ccc.XxxDirective
  * 注册自定义指令: velocity.properties
- * userdirective=继承了Directive类的子类全类名
+ * (userdirective=继承了org.apache.velocity.runtime.directive.Directive类的子类全类名)
+ * 新版本配置:
+ * runtime.custom_directives=io.devpl.codegen.template.velocity.CamelCaseDirective
  */
 public class CamelCaseDirective extends VelocityTemplateDirective {
 

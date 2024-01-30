@@ -1,7 +1,7 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.template.model.ControllerTempateArguments;
-import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.ControllerTemplateArguments;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
 import io.devpl.sdk.util.StringUtils;
@@ -50,8 +50,8 @@ public class StrategyConfig extends ConfigurationHolder {
      * 当{@link #enableSqlFilter}为true时，正则表达式无效.
      */
     private final Set<String> exclude = new HashSet<>();
-    private final EntityTemplateArugments.Builder entityBuilder = new EntityTemplateArugments.Builder(this);
-    private final ControllerTempateArguments.Builder controllerBuilder = new ControllerTempateArguments.Builder(this);
+    private final EntityTemplateArguments.Builder entityBuilder = new EntityTemplateArguments.Builder(this);
+    private final ControllerTemplateArguments.Builder controllerBuilder = new ControllerTemplateArguments.Builder(this);
     private final MapperTemplateArguments.Builder mapperBuilder = new MapperTemplateArguments.Builder(this);
     private final ServiceTemplateArguments.Builder serviceBuilder = new ServiceTemplateArguments.Builder(this);
     /**
@@ -84,8 +84,8 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.3.0
      */
     private LikeTable notLikeTable;
-    private EntityTemplateArugments entity;
-    private ControllerTempateArguments controller;
+    private EntityTemplateArguments entity;
+    private ControllerTemplateArguments controller;
     private MapperTemplateArguments mapper;
     private ServiceTemplateArguments service;
 
@@ -103,7 +103,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public EntityTemplateArugments.Builder entityBuilder() {
+    public EntityTemplateArguments.Builder entityBuilder() {
         return entityBuilder;
     }
 
@@ -114,7 +114,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public EntityTemplateArugments entity() {
+    public EntityTemplateArguments entity() {
         if (entity == null) {
             this.entity = entityBuilder.get();
         }
@@ -128,7 +128,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public ControllerTempateArguments.Builder controllerBuilder() {
+    public ControllerTemplateArguments.Builder controllerBuilder() {
         return controllerBuilder;
     }
 
@@ -139,7 +139,7 @@ public class StrategyConfig extends ConfigurationHolder {
      * @since 3.5.0
      */
     @NotNull
-    public ControllerTempateArguments controller() {
+    public ControllerTemplateArguments controller() {
         if (controller == null) {
             this.controller = controllerBuilder.get();
         }

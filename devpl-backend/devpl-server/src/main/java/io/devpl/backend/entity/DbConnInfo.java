@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-@TableName("db_conn_info")
+@TableName("database_connection")
 public class DbConnInfo implements Serializable {
     /**
      * id

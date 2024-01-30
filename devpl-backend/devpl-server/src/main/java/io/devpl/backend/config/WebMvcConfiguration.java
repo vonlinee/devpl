@@ -1,14 +1,17 @@
 package io.devpl.backend.config;
 
+import io.devpl.backend.common.RepeatableFilter;
 import io.devpl.backend.common.RequestTracer;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
+import jakarta.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite;
@@ -53,6 +59,21 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
+     * 利用过滤器配置，把RepeatableFilter设置成第一个调用的过滤器。注意FilterRegistrationBean的setOrder()方法，数值越小越先执行。
+     *
+     * @return 过滤器配置Bean
+     */
+    @Bean
+    public FilterRegistrationBean<Filter> repeatableFilterBean() {
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new RepeatableFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("repeatableFilter");
+        registration.setOrder(1);
+        return registration;
+    }
+
+    /**
      * 注册请求拦截器
      *
      * @param registry 拦截器注册中心
@@ -65,10 +86,25 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
+     * 跨域过滤器配置
+     */
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+    }
+
+    /**
      * 解决Application跨域
      *
      * @param registry CORS
-     * @see CorsFilterConfiguration
+     * @see WebMvcConfiguration#corsFilter()
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -155,7 +191,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * @return 路由配置
      */
     @Bean
-    public RouterFunction<ServerResponse> personRoute() {
+    public RouterFunction<ServerResponse> globalRouteMapping() {
         return RouterFunctions
             .route()
             .GET("/403", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.FORBIDDEN)))

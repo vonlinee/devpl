@@ -1,4 +1,4 @@
-package io.devpl.common;
+package io.devpl.common.utils;
 
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;

@@ -1,9 +1,12 @@
 package io.devpl.codegen.db;
 
+import lombok.Getter;
+
 /**
  * 支持的数据库类型,主要用于分页方言
  * 抄自com.baomidou.mybatisplus.annotation.DbType
  */
+@Getter
 public enum DBType {
 
     /**
@@ -218,10 +221,6 @@ public enum DBType {
         return getDriver(0);
     }
 
-    public JDBCDriver[] getDrivers() {
-        return drivers;
-    }
-
     public JDBCDriver getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;
@@ -232,15 +231,4 @@ public enum DBType {
         return drivers[index];
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public int getDefaultPort() {
-        return defaultPort;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

@@ -1,8 +1,14 @@
 /**
- * 模板信息
+ * 模板实现
  */
 type TemplateProvider = {
+  /**
+   * ID
+   */
   provider: string
+  /**
+   * 名称
+   */
   providerName: string
 }
 

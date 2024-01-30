@@ -2,6 +2,7 @@ package io.devpl.codegen.template;
 
 /**
  * 所有模板引擎的指令实现
+ * 注：某些模板引擎不支持自定义指令
  */
 public interface TemplateDirective {
 

@@ -59,6 +59,7 @@
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl</artifactId>
             <version>3.7.0.RELEASE</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
