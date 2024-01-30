@@ -1,11 +1,11 @@
 package io.devpl.fxui.controller.mbg;
 
+import io.devpl.common.utils.JSONUtils;
 import io.devpl.fxui.common.HBoxBuilder;
 import io.devpl.fxui.common.VBoxBuilder;
 import io.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.fxui.utils.AppConfig;
-import io.devpl.fxui.utils.json.JSONUtils;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,15 +56,15 @@ public class ProjectConfigurationView extends FxmlView {
                     VBox content = (VBox) dialog.getDialogPane().getContent();
                     TextArea textArea = (TextArea) content.getChildren().get(1);
                     ProjectConfiguration rowItem = row.getItem();
-                    String text = JSONUtils.toJSONString(rowItem, true);
+                    String text = JSONUtils.toString(rowItem, true);
                     textArea.setText(text);
                     Optional<ButtonType> buttonType = dialog.showAndWait();
                     if (buttonType.isPresent()) {
                         ButtonType btnType = buttonType.get();
                         if (btnType == ButtonType.OK) {
                             text = textArea.getText();
-                            ProjectConfiguration newItem = JSONUtils.toObject(text, ProjectConfiguration.class);
-                            AppConfig.updateProjectConfiguration(rowItem.getName(), newItem.getName(), JSONUtils.toJSONString(newItem));
+                            ProjectConfiguration newItem = JSONUtils.parseObject(text, ProjectConfiguration.class);
+                            AppConfig.updateProjectConfiguration(rowItem.getName(), newItem.getName(), JSONUtils.toString(newItem));
                         }
                     }
                 }

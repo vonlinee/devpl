@@ -2,7 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.service.FileGenerationService;
 import io.devpl.backend.utils.ServletUtils;
-import io.devpl.common.Utils;
+import io.devpl.common.utils.Utils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;

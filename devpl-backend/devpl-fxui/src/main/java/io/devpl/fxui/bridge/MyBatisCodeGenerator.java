@@ -155,7 +155,7 @@ public class MyBatisCodeGenerator {
             tableConfig.setCatalog(tableCodeGenConfig.getDatabaseName());
         }
         // 针对 postgresql 单独配置
-        if (driverType == JDBCDriver.POSTGRE_SQL) {
+        if (driverType == JDBCDriver.POSTGRESQL) {
             tableConfig.setDelimitIdentifiers(true);
         }
 
@@ -270,7 +270,7 @@ public class MyBatisCodeGenerator {
         }
         // limit/offset插件
         if (option.isOffsetLimit()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRESQL == driverInfo) {
                 addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
@@ -283,18 +283,18 @@ public class MyBatisCodeGenerator {
         }
         // forUpdate 插件
         if (option.isNeedForUpdate()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.POSTGRESQL == driverInfo) {
                 addPluginConfiguration(context, MySQLForUpdatePlugin.class);
             }
         }
         // repository 插件
         if (option.isAnnotationDAO()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRESQL == driverInfo) {
                 addPluginConfiguration(context, RepositoryPlugin.class);
             }
         }
         if (option.isUseDAOExtendStyle()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRESQL == driverInfo) {
                 PluginConfiguration pf = addPluginConfiguration(context, CommonDAOInterfacePlugin.class);
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(option.isUseExample()));
             }

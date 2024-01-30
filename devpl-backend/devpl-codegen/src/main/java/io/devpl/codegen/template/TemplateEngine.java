@@ -11,6 +11,7 @@ import java.util.Properties;
  * 模板引擎实现
  *
  * @see TemplateSource
+ * @see TemplateException 所有异常通过TemplateException进行抛出
  */
 public interface TemplateEngine {
 
@@ -87,6 +88,8 @@ public interface TemplateEngine {
     }
 
     /**
+     * TODO 限制此方法不能传入模板字符串
+     *
      * @param template  模板名称
      * @param arguments 模板渲染参数
      * @return 渲染结果

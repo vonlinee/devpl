@@ -1,12 +1,12 @@
 package io.devpl.backend.service;
 
-import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.GenTable;
+import io.devpl.codegen.template.TemplateArgumentsMap;
 
 import java.sql.Connection;
 import java.util.Collection;
@@ -19,6 +19,12 @@ public interface GenTableService extends BaseService<GenTable> {
 
     List<GenTable> listGenTables(Collection<String> tableNames);
 
+    /**
+     * 查询已导入的表名称
+     *
+     * @param dataSourceId 数据源ID
+     * @return 已导入的表名称
+     */
     List<String> listTableNames(Long dataSourceId);
 
     ListResult<GenTable> selectPage(GenTableListParam param);

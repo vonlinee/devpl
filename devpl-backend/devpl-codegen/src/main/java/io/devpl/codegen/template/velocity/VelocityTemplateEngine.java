@@ -4,7 +4,12 @@ import io.devpl.codegen.template.*;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.context.Context;
+import org.apache.velocity.context.InternalContextAdapter;
+import org.apache.velocity.runtime.RuntimeInstance;
+import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.runtime.directive.Directive;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +24,7 @@ import java.util.Properties;
  * <a href="https://velocity.apache.org/engine/devel/user-guide.html">...</a>
  * <p>
  * org/apache/velocity/runtime/defaults/velocity.properties
- *
+ * <p>
  * <a href="https://blog.51cto.com/zhangzhixi/3241138">...</a>
  */
 public class VelocityTemplateEngine implements TemplateEngine {
@@ -50,6 +55,9 @@ public class VelocityTemplateEngine implements TemplateEngine {
          * VelocityStringResourceRepository repository = (VelocityStringResourceRepository) engine.getApplicationAttribute("devpl");
          */
         engine.setApplicationAttribute("devpl", stringTemplates);
+
+        registerDirective(new CamelCaseDirective());
+
         return engine;
     }
 
@@ -67,6 +75,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
      * @param templateSource 模板类型
      * @param arguments      模板参数
      * @param outputStream   输出位置，不会关闭流
+     * @see Template#merge(Context, Writer)  可使用自定义指令功能
      * @see VelocityStringResourceRepository
      */
     @Override
@@ -97,6 +106,8 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     /**
+     * 此方法未验证nameOrTemplate和stringTemplate参数实际值是否一致
+     *
      * @param nameOrTemplate 模板名称或者字符串模板
      * @param stringTemplate nameOrTemplate参数是否是模板内容, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
      * @return 模板
@@ -110,5 +121,25 @@ public class VelocityTemplateEngine implements TemplateEngine {
         }
         Template template = engine.getTemplate(nameOrTemplate, StandardCharsets.UTF_8.name());
         return new VelocityTemplateSource(template);
+    }
+
+    /**
+     * 可在RUNTIME_DEFAULT_DIRECTIVES.properties配置文件中配置默认指令
+     *
+     * @param directive 指令实现
+     * @return 是否注册成功
+     * @see org.apache.velocity.runtime.parser.node.ASTDirective#init(InternalContextAdapter, Object) 根据指令名称初始化ASTDirective指令对象
+     * @see org.apache.velocity.runtime.directive.RuntimeMacro
+     */
+    @Override
+    public boolean registerDirective(TemplateDirective directive) {
+        RuntimeServices runtimeServices = RuntimeSingleton.getRuntimeServices();
+        if (runtimeServices instanceof RuntimeInstance ri) {
+            if (directive instanceof Directive td) {
+                ri.addDirective(td);
+                return true;
+            }
+        }
+        return false;
     }
 }

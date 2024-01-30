@@ -12,7 +12,7 @@ import java.util.Properties;
 public enum JDBCDriver {
 
     MYSQL5("com.mysql.jdbc.Driver", "mysql", "MySQL 5"),
-    MYSQL8("com.mysql.cj.jdbc.Driver", "mysql", "MySQL 8"),
+    MYSQL8("com.mysql.cj.jdbc.Driver", MYSQL5.subProtocol, "MySQL 8"),
 
     // Oracle Database
     ORACLE("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 11 thin") {
@@ -21,7 +21,7 @@ public enum JDBCDriver {
             return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
         }
     },
-    ORACLE_12C("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 12 thin") {
+    ORACLE_12C(ORACLE.driverClassName, ORACLE.subProtocol, "Oracle 12 thin") {
         @Override
         public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
             return ORACLE.getConnectionUrlPrefix(hostname, port, databaseName);
@@ -32,11 +32,20 @@ public enum JDBCDriver {
     SQLITE("org.sqlite.JDBC", "sqlite");
 
     private static final String JDBC_PROTOCOL = "jdbc";
-    // 驱动类全类名
+
+    /**
+     * 驱动类全类名
+     */
     protected final String driverClassName;
-    // 子协议
+
+    /**
+     * 子协议
+     */
     protected final String subProtocol;
-    // 描述信息
+
+    /**
+     * 描述信息
+     */
     protected String description;
 
     JDBCDriver(String driverClassName, String subProtocol) {

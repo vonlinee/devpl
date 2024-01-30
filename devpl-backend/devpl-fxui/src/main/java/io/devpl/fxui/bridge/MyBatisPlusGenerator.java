@@ -2,8 +2,8 @@ package io.devpl.fxui.bridge;
 
 import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.config.OutputFile;
-import io.devpl.codegen.template.model.ControllerTempateArguments;
-import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.ControllerTemplateArguments;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
 import io.devpl.codegen.core.ActionCallback;
@@ -103,7 +103,7 @@ public class MyBatisPlusGenerator {
                     builder.addTableSuffix("");
                     builder.addInclude(tableNames); // 设置需要生成的表名
                     // Entity策略配置
-                    EntityTemplateArugments.Builder entityBuilder = builder.entityBuilder();
+                    EntityTemplateArguments.Builder entityBuilder = builder.entityBuilder();
                     entityBuilder.enableLombok();  // 使用Lombok
                     entityBuilder.enableTableFieldAnnotation(); // 字段添加TableField注解
                     entityBuilder.mapperBuilder();
@@ -113,7 +113,7 @@ public class MyBatisPlusGenerator {
                     mapperBuilder.enableFileOverride();
                     mapperBuilder.enableBaseResultMap(); // 生成默认的ResultMap标签
                     // Controller 配置
-                    ControllerTempateArguments.Builder controllerBuilder = builder.controllerBuilder();
+                    ControllerTemplateArguments.Builder controllerBuilder = builder.controllerBuilder();
                     controllerBuilder.enableFileOverride();
                     // Service配置
                     ServiceTemplateArguments.Builder serviceBuilder = builder.serviceBuilder();

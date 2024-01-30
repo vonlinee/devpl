@@ -2,7 +2,7 @@ package io.devpl.fxui.utils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl;
-import io.devpl.common.JSONUtils;
+import io.devpl.common.utils.JSONUtils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ProjectConfiguration;

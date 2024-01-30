@@ -1,6 +1,6 @@
 package io.devpl.common.interfaces.impl;
 
-import io.devpl.common.Utils;
+import io.devpl.common.utils.Utils;
 import io.devpl.common.exception.FieldParseException;
 import io.devpl.common.interfaces.FieldParser;
 import org.springframework.util.MultiValueMap;

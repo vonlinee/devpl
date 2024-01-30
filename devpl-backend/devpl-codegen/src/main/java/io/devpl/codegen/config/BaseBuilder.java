@@ -1,7 +1,7 @@
 package io.devpl.codegen.config;
 
-import io.devpl.codegen.template.model.ControllerTempateArguments;
-import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.ControllerTemplateArguments;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
 
@@ -16,11 +16,11 @@ public class BaseBuilder {
         this.strategyConfig = strategyConfig;
     }
 
-    public EntityTemplateArugments.Builder entityBuilder() {
+    public EntityTemplateArguments.Builder entityBuilder() {
         return strategyConfig.entityBuilder();
     }
 
-    public ControllerTempateArguments.Builder controllerBuilder() {
+    public ControllerTemplateArguments.Builder controllerBuilder() {
         return strategyConfig.controllerBuilder();
     }
 

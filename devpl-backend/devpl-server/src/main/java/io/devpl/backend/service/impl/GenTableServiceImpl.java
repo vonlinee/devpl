@@ -177,8 +177,8 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
             TableFileGeneration tableFileGen = new TableFileGeneration();
             tableFileGen.setTableId(table.getId());
             tableFileGen.setGenerationId(templateFileGen.getId());
-            // 需替换参数变量
 
+            // 需替换参数变量
             if (StringUtils.hasText(targetGenFile.getFileName())) {
                 tableFileGen.setFileName(templateEngine.evaluate(targetGenFile.getFileName(), params));
             }

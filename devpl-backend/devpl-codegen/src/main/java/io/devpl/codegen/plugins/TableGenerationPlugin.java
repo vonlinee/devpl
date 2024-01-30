@@ -2,7 +2,7 @@ package io.devpl.codegen.plugins;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.template.model.EntityTemplateArugments;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.core.*;
 import io.devpl.codegen.db.DbColumnType;
 import io.devpl.codegen.db.IKeyWordsHandler;
@@ -32,7 +32,7 @@ public class TableGenerationPlugin extends PluginAdapter {
 
         if (unit instanceof TableGeneration tg) {
             StrategyConfig strategyConfig = context.getStrategyConfig();
-            EntityTemplateArugments entity = strategyConfig.entity();
+            EntityTemplateArguments entity = strategyConfig.entity();
 
             String entityName = entity.getNameConvert().entityNameConvert(tg);
             tg.setEntityName(entity.getConverterFileName().apply(entityName));
@@ -74,7 +74,7 @@ public class TableGenerationPlugin extends PluginAdapter {
     public void importPackage(TableGeneration tableGeneration) {
         List<String> importPackages = new ArrayList<>();
         StrategyConfig strategyConfig = context.getStrategyConfig();
-        EntityTemplateArugments entity = strategyConfig.entity();
+        EntityTemplateArguments entity = strategyConfig.entity();
         String superEntity = entity.getSuperClass();
         if (StringUtils.hasText(superEntity)) {
             // 自定义父类
@@ -133,7 +133,7 @@ public class TableGenerationPlugin extends PluginAdapter {
         tableGeneration.getImportPackages().addAll(importPackages);
     }
 
-    public String getFieldFill(ColumnGeneration column, EntityTemplateArugments entity) {
+    public String getFieldFill(ColumnGeneration column, EntityTemplateArguments entity) {
         if (StringUtils.isBlank(column.getFill())) {
             for (FieldFillStrategy tf : entity.getTableFillList()) {
                 // 忽略大写字段问题
@@ -148,7 +148,7 @@ public class TableGenerationPlugin extends PluginAdapter {
     }
 
     private void initializeColumns(TableGeneration tableGeneration) {
-        EntityTemplateArugments entity = context.getStrategyConfig().entity();
+        EntityTemplateArguments entity = context.getStrategyConfig().entity();
 
         DataSourceConfig dataSourceConfig = context.getDataSourceConfig();
         GlobalConfig globalConfig = context.getGlobalConfig();
@@ -196,7 +196,7 @@ public class TableGenerationPlugin extends PluginAdapter {
     }
 
     void initColumns(TableGeneration introspectedTable) {
-        EntityTemplateArugments entity = context.getStrategyConfig().entity();
+        EntityTemplateArguments entity = context.getStrategyConfig().entity();
 
         GlobalConfig globalConfig = context.getGlobalConfig();
         DateType dateType = globalConfig.getDateType();

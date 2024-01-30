@@ -19,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite;
@@ -83,10 +86,25 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
+     * 跨域过滤器配置
+     */
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+    }
+
+    /**
      * 解决Application跨域
      *
      * @param registry CORS
-     * @see CorsFilterConfiguration
+     * @see WebMvcConfiguration#corsFilter()
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -173,7 +191,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * @return 路由配置
      */
     @Bean
-    public RouterFunction<ServerResponse> personRoute() {
+    public RouterFunction<ServerResponse> globalRouteMapping() {
         return RouterFunctions
             .route()
             .GET("/403", RequestPredicates.accept(MediaType.ALL), (request) -> ServerResponse.ok().body(Result.error(StatusCode.FORBIDDEN)))

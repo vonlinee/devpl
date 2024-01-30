@@ -17,9 +17,9 @@ import java.util.function.Function;
 /**
  * 实体属性配置
  */
-public class EntityTemplateArugments extends JavaFileTemplateArguments implements TableInitializer {
+public class EntityTemplateArguments extends JavaFileTemplateArguments implements TableInitializer {
 
-    private final static Logger log = LoggerFactory.getLogger(EntityTemplateArugments.class);
+    private final static Logger log = LoggerFactory.getLogger(EntityTemplateArguments.class);
     /**
      * 自定义基础的Entity类，公共字段
      */
@@ -138,7 +138,7 @@ public class EntityTemplateArugments extends JavaFileTemplateArguments implement
      */
     private boolean fileOverride;
 
-    private EntityTemplateArugments() {
+    private EntityTemplateArguments() {
     }
 
     /**
@@ -300,7 +300,7 @@ public class EntityTemplateArugments extends JavaFileTemplateArguments implement
 
     public static class Builder extends BaseBuilder {
 
-        private final EntityTemplateArugments entity = new EntityTemplateArugments();
+        private final EntityTemplateArguments entity = new EntityTemplateArguments();
 
         public Builder(StrategyConfig strategyConfig) {
             super(strategyConfig);
@@ -582,7 +582,7 @@ public class EntityTemplateArugments extends JavaFileTemplateArguments implement
             return this;
         }
 
-        public EntityTemplateArugments get() {
+        public EntityTemplateArguments get() {
             String superClass = this.entity.superClass;
             if (StringUtils.hasText(superClass)) {
                 ClassUtils.tryLoadClass(superClass).ifPresent(this.entity::convertSuperEntityColumns);

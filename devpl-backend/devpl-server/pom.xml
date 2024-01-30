@@ -104,7 +104,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-autoconfigure</artifactId>
                 </exclusion>
-                <!-- 排除自带的spring-boot-autoconfigure依赖 -->
+                <!-- 排除自带的spring-boot-starter-jdbc依赖 -->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-jdbc</artifactId>
