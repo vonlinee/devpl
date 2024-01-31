@@ -1,17 +1,8 @@
 <template>
   <div>
-    <el-tree
-      :data="dataSource"
-      :props="defaultProps"
-      :load="loadDbTables"
-      lazy
-      @node-click="nodeClickHandler"
-    >
+    <el-tree :data="dataSource" :props="defaultProps" :load="loadDbTables" lazy @node-click="nodeClickHandler">
       <template #default="{ node, data }">
-        <span
-          class="custom-tree-node"
-          @contextmenu="displayContextMenu($event, node, data)"
-        >
+        <span class="custom-tree-node" @contextmenu="displayContextMenu($event, node, data)">
           <span v-contextmenu:contextMenuRef>{{ node.label }}</span>
         </span>
       </template>
@@ -19,9 +10,7 @@
   </div>
 
   <Contextmenu ref="contextMenuRef">
-    <contextmenu-item @click="handleMockerMenuItemClicked"
-      >数据模拟</contextmenu-item
-    >
+    <contextmenu-item @click="handleMockerMenuItemClicked">数据模拟</contextmenu-item>
     <contextmenu-item>DDL</contextmenu-item>
     <contextmenu-item>菜单3</contextmenu-item>
   </Contextmenu>
@@ -29,7 +18,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from "vue"
-import { apiGetDatabaseNamesById, apiListTableNames } from "@/api/datasource"
+import { apiGetDatabaseNamesById, apiGetTableData, apiListTableNames } from "@/api/datasource"
 import type Node from "element-plus/es/components/tree/src/model/node"
 import { Contextmenu, ContextmenuItem } from "v-contextmenu"
 
@@ -107,20 +96,20 @@ const nodeClickHandler = (
   item: any,
   param: any
 ) => {
-  // if (node.level == 2) {
-  //   const apiParam: ParamGetDbTableData = {
-  //     dataSourceId: dataSourceId.value,
-  //     dbName: node.parent.label,
-  //     tableName: node.label,
-  //     pageIndex: 1,
-  //     pageSize: 100
-  //   }
-  //   apiGetTableData(apiParam).then((res) => {
-  //     if (res.data) {
-  //       props.nodeClickCallback(res.data)
-  //     }
-  //   })
-  // }
+  if (node.level == 2) {
+    const apiParam: ParamGetDbTableData = {
+      dataSourceId: dataSourceId.value,
+      dbName: node.parent.label,
+      tableName: node.label,
+      pageIndex: 1,
+      pageSize: 100
+    }
+    apiGetTableData(apiParam).then((res) => {
+      if (res.data) {
+        props.nodeClickCallback(res.data)
+      }
+    })
+  }
 }
 
 /**

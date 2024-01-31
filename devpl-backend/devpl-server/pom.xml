@@ -349,6 +349,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
+                    <!--解决SpringBoot3.2.2版本请求报错问题:https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x-->
+                    <parameters>true</parameters>
                     <source>17</source>
                     <target>17</target>
                     <encoding>UTF-8</encoding>

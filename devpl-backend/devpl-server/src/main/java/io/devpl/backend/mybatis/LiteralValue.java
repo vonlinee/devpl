@@ -1,7 +1,7 @@
 package io.devpl.backend.mybatis;
 
-import ognl.Ognl;
-import ognl.OgnlException;
+import org.apache.ibatis.ognl.Ognl;
+import org.apache.ibatis.ognl.OgnlException;
 
 import java.util.ArrayList;
 import java.util.Collections;

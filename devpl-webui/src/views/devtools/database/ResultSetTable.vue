@@ -14,11 +14,13 @@
 import { ref, reactive } from 'vue'
 import { VxeGridInstance, VxeGridListeners, VxeGridPropTypes, VxeGridProps, VxeTableDefines, VxeTablePropTypes } from 'vxe-table'
 
+type ResultSetRowModel = Record<string, any>
+
 /**
  * 初始化所有列
  * @param columns 
  */
-const initColumns = (columns: ResultSetColumnDef[]) => {
+const initColumns = (columns: ResultSetColumnMetadata[]) => {
   const columnsOptions: VxeGridPropTypes.Columns<ResultSetRowModel> = [
     { type: 'seq', width: 50 },
   ]
@@ -98,7 +100,7 @@ const gridEvents = reactive<VxeGridListeners<ResultSetRowModel>>({
  * 初始化表格配置属性
  * @param columns 
  */
-const initVxeGridProps = (columns: ResultSetColumnDef[]) => {
+const initVxeGridProps = (columns: ResultSetColumnMetadata[]) => {
   const options = {
     border: true,
     showOverflow: true,
@@ -147,14 +149,15 @@ const selectRow = ref<ResultSetRowModel | null>(null)
 const xGrid = ref<VxeGridInstance<ResultSetRowModel>>()
 
 defineExpose({
-
-  refresh(table: any) {
-
+  /**
+   * 刷新表格，包括表格列及表格数据
+   * @param table 
+   */
+  refresh(table: DBTableDataVO) {
     const $grid = xGrid.value
     if ($grid) {
       $grid.reloadColumn(initColumns(table.headers))
     }
-
     this.loadData(table.rows1)
   },
 

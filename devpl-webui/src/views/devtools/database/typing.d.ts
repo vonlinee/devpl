@@ -118,11 +118,11 @@ type DBTableDataVO = {
   /**
    * 表行数据列表，仅包含数据行
    */
-  rows?: Array<string[]>
+  rows: string[][]
   /**
    * 表行数据列表格式，包含标题和数据行
    */
-  rows1?: Array<Record<string, any>[]>
+  rows1: ResultSetRowModel[]
 }
 
 /**
