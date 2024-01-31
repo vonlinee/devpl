@@ -94,22 +94,6 @@ public class TableGeneration implements GenerationUnit {
         this.name = metadata.getTableName();
     }
 
-    public List<ColumnGeneration> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<ColumnGeneration> columns) {
-        this.columns = columns;
-    }
-
-    public List<PrimaryKey> getPrimaryKeys() {
-        return primaryKeys;
-    }
-
-    public void setPrimaryKeys(List<PrimaryKey> primaryKeys) {
-        this.primaryKeys = primaryKeys;
-    }
-
     /**
      * 表名
      *
@@ -143,67 +127,14 @@ public class TableGeneration implements GenerationUnit {
         return this.fieldNames;
     }
 
-    public Set<String> getImportPackages() {
-        return importPackages;
-    }
-
-    public boolean isConvert() {
-        return convert;
-    }
-
     public TableGeneration setConvert(boolean convert) {
         this.convert = convert;
         return this;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
     public TableGeneration setComment(String comment) {
         this.comment = comment;
         return this;
-    }
-
-    public String getEntityName() {
-        return entityName;
-    }
-
-    /**
-     * @param entityName 实体名称
-     * @return this
-     */
-    public TableGeneration setEntityName(String entityName) {
-        this.entityName = entityName;
-        return this;
-    }
-
-    public String getMapperName() {
-        return mapperName;
-    }
-
-    public String getXmlName() {
-        return xmlName;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public String getServiceImplName() {
-        return serviceImplName;
-    }
-
-    public String getControllerName() {
-        return controllerName;
-    }
-
-    public List<ColumnGeneration> getCommonColumns() {
-        return commonColumns;
     }
 
     /**
@@ -213,13 +144,5 @@ public class TableGeneration implements GenerationUnit {
      */
     public boolean hasPrimaryKey() {
         return this.primaryKeys != null && !this.primaryKeys.isEmpty();
-    }
-
-    public String getSchemaName() {
-        return schemaName;
-    }
-
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
     }
 }

@@ -19,11 +19,7 @@ public class TypeInfoRegistry {
     }
 
     public static void register(TypeInfo typeInfo) {
-        CopyOnWriteArrayList<TypeInfo> typeInfoList = types.get(typeInfo.getSimpleName());
-        if (typeInfoList == null) {
-            typeInfoList = new CopyOnWriteArrayList<>();
-            types.put(typeInfo.getSimpleName(), typeInfoList);
-        }
+        CopyOnWriteArrayList<TypeInfo> typeInfoList = types.computeIfAbsent(typeInfo.getSimpleName(), k -> new CopyOnWriteArrayList<>());
         typeInfoList.add(typeInfo);
     }
 }

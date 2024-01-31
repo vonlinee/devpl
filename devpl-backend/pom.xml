@@ -33,6 +33,8 @@
         <spring.verseion>6.1.3</spring.verseion>
         <spring.boot.version>3.2.2</spring.boot.version>
 
+        <github.jsqlparser.version>4.6</github.jsqlparser.version>
+
     </properties>
 
     <dependencyManagement>
@@ -80,6 +82,26 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+
+            <!--Google Java代码格式化-->
+            <dependency>
+                <groupId>com.google.googlejavaformat</groupId>
+                <artifactId>google-java-format</artifactId>
+                <version>1.19.2</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>32.1.3-jre</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.14.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

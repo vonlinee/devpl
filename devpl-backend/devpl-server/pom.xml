@@ -156,17 +156,11 @@
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
         </dependency>
-        <dependency>
-            <groupId>ognl</groupId>
-            <artifactId>ognl</artifactId>
-            <version>3.3.4</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>32.0.1-jre</version>
         </dependency>
 
         <dependency>
@@ -233,7 +227,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.14.2</version>
         </dependency>
 
         <dependency>
@@ -265,7 +258,6 @@
         <dependency>
             <groupId>com.google.googlejavaformat</groupId>
             <artifactId>google-java-format</artifactId>
-            <version>1.15.0</version>
         </dependency>
 
         <!-- Velocity模板引擎 -->
@@ -289,7 +281,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.5</version>
             <scope>compile</scope>
         </dependency>
 
@@ -301,7 +292,7 @@
         <dependency>
             <groupId>com.github.jsqlparser</groupId>
             <artifactId>jsqlparser</artifactId>
-            <version>4.4</version>
+            <version>${github.jsqlparser.version}</version>
             <scope>compile</scope>
         </dependency>
 

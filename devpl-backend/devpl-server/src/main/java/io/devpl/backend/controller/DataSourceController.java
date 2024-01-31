@@ -1,7 +1,5 @@
 package io.devpl.backend.controller;
 
-import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DBTableDataParam;
@@ -14,6 +12,8 @@ import io.devpl.backend.entity.DbConnInfo;
 import io.devpl.backend.entity.GenTable;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.GenTableService;
+import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list/selectable")
-    public ListResult<DataSourceVO> listSelectableDataSources(String internal) {
+    public ListResult<DataSourceVO> listSelectableDataSources(@RequestParam(required = false) String internal) {
         List<DataSourceVO> dataSourceVOS = datasourceService.listIdAndNames();
         if ("true".equals(internal)) {
             dataSourceVOS = new ArrayList<>(dataSourceVOS);

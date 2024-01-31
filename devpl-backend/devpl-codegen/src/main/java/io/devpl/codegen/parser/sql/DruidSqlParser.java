@@ -10,6 +10,7 @@ import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.ast.statement.SQLNotNullConstraint;
 import com.alibaba.druid.sql.ast.statement.SQLTableElement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ import java.util.List;
  */
 public class DruidSqlParser {
 
+    @Getter
     private final String rawSql;
+    @Getter
     private final DbType dbType;
     private final List<SQLStatement> statements;
 
@@ -66,11 +69,4 @@ public class DruidSqlParser {
         }
     }
 
-    public String getRawSql() {
-        return rawSql;
-    }
-
-    public DbType getDbType() {
-        return dbType;
-    }
 }

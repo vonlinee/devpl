@@ -116,7 +116,7 @@ export const apiListSupportedDbTypes = () => {
  */
 export const apiListSelectableDataSources = (internal?: boolean) => {
   return http.get<DataSourceVO[]>("/api/gen/datasource/list/selectable", {
-    internal: internal,
+    internal: internal || false,
   })
 }
 
