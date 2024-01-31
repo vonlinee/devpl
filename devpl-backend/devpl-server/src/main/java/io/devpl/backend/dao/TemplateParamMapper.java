@@ -1,7 +1,7 @@
 package io.devpl.backend.dao;
 
 import io.devpl.backend.common.mvc.EntityMapper;
-import io.devpl.backend.entity.TemplateParamEntity;
+import io.devpl.backend.entity.TemplateParam;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 1.0.0 2023-07-29
  */
 @Mapper
-public interface TemplateParamMapper extends EntityMapper<TemplateParamEntity> {
+public interface TemplateParamMapper extends EntityMapper<TemplateParam> {
 
 }

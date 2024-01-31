@@ -33,6 +33,9 @@
       <el-form-item>
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="globalTempParamModalRef = true">全局模板参数</el-button>
+      </el-form-item>
     </el-form>
     <el-table
       v-loading="state.dataListLoading"
@@ -59,7 +62,7 @@
             type="primary"
             style="cursor: pointer"
             @click="showTemplateEditDialog(scope.row)"
-            >{{ scope.row.templateName }}
+          >{{ scope.row.templateName }}
           </el-text>
         </template>
       </el-table-column>
@@ -90,14 +93,14 @@
             type="primary"
             link
             @click="openTemplateVarTableModal(scope.row)"
-            >参数表
+          >参数表
           </el-button>
           <el-button
             v-if="!scope.row.internal"
             type="primary"
             link
             @click="addOrUpdateHandle(scope.row)"
-            >修改
+          >修改
           </el-button>
           <el-button
             v-if="!scope.row.internal"
@@ -125,89 +128,102 @@
 
     <TemplateVarTable ref="templateVarTableModalRef"></TemplateVarTable>
 
-    <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update
-      ref="addOrUpdateRef"
-      @refresh-data-list="getDataList"
-    ></add-or-update>
+
   </el-card>
+
+  <!-- 弹窗, 新增 / 修改 -->
+  <add-or-update
+    ref="addOrUpdateRef"
+    @refresh-data-list="getDataList"
+  ></add-or-update>
+
+  <vxe-modal title="全局模板参数" v-model="globalTempParamModalRef" width="80%">
+    <HeightFixedRegion :minus="200">
+      <template #default="scope">
+        <template-param-table></template-param-table>
+      </template>
+    </HeightFixedRegion>
+  </vxe-modal>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue"
-import { ElButton } from "element-plus"
-import AddOrUpdate from "./add-or-update.vue"
-import { useCrud } from "@/hooks"
-import { DataTableOption } from "@/hooks/interface"
-import TemplateViewer from "@/views/template/TemplateViewer.vue"
+import { onMounted, reactive, ref } from "vue";
+import { ElButton } from "element-plus";
+import AddOrUpdate from "./add-or-update.vue";
+import { useCrud } from "@/hooks";
+import { DataTableOption } from "@/hooks/interface";
+import TemplateViewer from "@/views/template/TemplateViewer.vue";
+import HeightFixedRegion from "@/components/HeightFixedRegion.vue";
 import {
   apiBatchRemoveTemplateByIds,
   apiListTemplatesByPage,
-  apiListTemplateTypes,
-} from "@/api/template"
-import TemplateVarTable from "@/views/template/TemplateVarTable.vue"
+  apiListTemplateTypes
+} from "@/api/template";
+import TemplateVarTable from "@/views/template/TemplateVarTable.vue";
+import TemplateParamTable from "@/views/template/TemplateParamTable.vue";
 
 const state: DataTableOption = reactive({
   queryForm: {
     templateName: "",
-    templateType: "",
+    templateType: ""
   },
   primaryKey: "templateId",
   isPage: true,
   queryPage: apiListTemplatesByPage,
-  removeByIds: apiBatchRemoveTemplateByIds,
-})
+  removeByIds: apiBatchRemoveTemplateByIds
+});
 
 const {
   getDataList,
   selectionChangeHandle,
   sizeChangeHandle,
   currentChangeHandle,
-  deleteBatchHandle,
-} = useCrud(state)
+  deleteBatchHandle
+} = useCrud(state);
 
-const addOrUpdateRef = ref()
+const addOrUpdateRef = ref();
+const globalTempParamModalRef = ref();
 const addOrUpdateHandle = (row?: any) => {
-  addOrUpdateRef.value.init(row)
-}
+  addOrUpdateRef.value.init(row);
+};
 
-const templateVarTableModalRef = ref()
+const templateVarTableModalRef = ref();
 const openTemplateVarTableModal = (row?: any) => {
   if (row) {
-    templateVarTableModalRef.value.show(row)
+    templateVarTableModalRef.value.show(row);
   }
-}
+};
 
-const templateContentEditorRef = ref()
-const templateTypes = ref<TemplateProvider[]>()
+const templateContentEditorRef = ref();
+const templateTypes = ref<TemplateProvider[]>();
 
 const resetForm = () => {
   state.queryForm = {
     templateName: "",
-    templateType: "",
-  }
-  getDataList()
-}
+    templateType: ""
+  };
+  getDataList();
+};
 
 /**
  * 展示模板内容弹窗
  * @param templateInfo
  */
 function showTemplateEditDialog(templateInfo: any) {
-  let content = templateInfo.content
+  let content = templateInfo.content;
   if (templateInfo.type == 1) {
     // 获取文件内容
   } else {
     // 字符串模板
   }
-  templateContentEditorRef.value.init(templateInfo.templateName, content)
+  templateContentEditorRef.value.init(templateInfo.templateName, content);
 }
 
 onMounted(() => {
-  getDataList()
+  getDataList();
 
   apiListTemplateTypes().then((res) => {
-    templateTypes.value = res.data
-  })
-})
+    templateTypes.value = res.data;
+  });
+});
 </script>

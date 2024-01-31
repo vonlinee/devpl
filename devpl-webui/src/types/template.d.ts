@@ -72,3 +72,29 @@ type TemplateSelectVO = {
    */
   remark?: string
 }
+
+/**
+ * 模板参数
+ */
+type TemplateParam = {
+  /**
+   * 参数key
+   */
+  paramKey?: number
+  /**
+   * 参数名称
+   */
+  paramName: string
+  /**
+   * 参数值
+   */
+  paramValue: string
+  /**
+   * 默认值
+   */
+  defaultValue: string
+  /**
+   * 数据类型ID
+   */
+  dataTypeId: number | string
+}

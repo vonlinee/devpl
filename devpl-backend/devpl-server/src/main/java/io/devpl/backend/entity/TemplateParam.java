@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 模板参数元数据表
+ * 模板参数表
  *
  * @author 111 222
  * @since 1.0.0 2023-07-29
@@ -15,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("template_param")
-public class TemplateParamEntity {
+public class TemplateParam {
 
     /**
      * 主键ID

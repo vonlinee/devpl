@@ -34,7 +34,7 @@ public class CustomConfigurationFileLoader implements EnvironmentPostProcessor {
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         for (PropertySourceLoader loader : this.propertySourceLoaders) {
             for (String fileExtension : loader.getFileExtensions()) {
-                // 这里定义了一下配置文件的前缀【wayne-】，加载所有前缀为wayne-的配置文件。前缀可以自定义
+                // 这里定义了一下配置文件的前缀【wayne-】，加载所有前缀为devpl的配置文件。前缀可以自定义
                 String location = ResourceUtils.CLASSPATH_URL_PREFIX + "devpl-*." + fileExtension;
                 try {
                     Resource[] resources = this.resourceLoader.getResources(location);
