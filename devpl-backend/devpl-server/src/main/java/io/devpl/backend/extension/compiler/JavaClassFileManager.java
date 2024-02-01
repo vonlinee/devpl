@@ -1,4 +1,4 @@
-package io.devpl.backend.compiler;
+package io.devpl.backend.extension.compiler;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 内置的JavaFileManager是面向类路径下的Java源码文件进行加载，这里也需要自行实现JavaFileManager
  * 自定义一个JavaFileManage来控制编译之后字节码的输出位置
  */
 public class JavaClassFileManager extends ForwardingJavaFileManager<JavaFileManager> {

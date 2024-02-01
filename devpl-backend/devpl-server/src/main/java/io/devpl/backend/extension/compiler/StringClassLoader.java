@@ -1,4 +1,4 @@
-package io.devpl.backend.compiler;
+package io.devpl.backend.extension.compiler;
 
 /**
  * 自定义类加载器, 用来加载动态的字节码

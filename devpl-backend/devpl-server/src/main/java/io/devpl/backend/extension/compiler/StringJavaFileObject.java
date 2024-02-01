@@ -1,4 +1,4 @@
-package io.devpl.backend.compiler;
+package io.devpl.backend.extension.compiler;
 
 import javax.tools.SimpleJavaFileObject;
 import java.io.IOException;

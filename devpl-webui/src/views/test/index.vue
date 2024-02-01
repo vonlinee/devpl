@@ -11,7 +11,6 @@
       }">{{ scope.size.height }}</div>
     </template>
   </Modal>
-
   <p>
     <button id="updateDetails">Update details</button>
   </p>

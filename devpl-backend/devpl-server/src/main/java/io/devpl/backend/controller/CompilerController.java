@@ -1,7 +1,7 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.compiler.CompilationResult;
+import io.devpl.backend.extension.compiler.CompilationResult;
 import io.devpl.common.model.ASTParseResult;
 import io.devpl.backend.domain.param.CompilerParam;
 import io.devpl.backend.service.CompilationService;

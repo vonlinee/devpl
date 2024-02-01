@@ -1,4 +1,4 @@
-package io.devpl.backend.compiler;
+package io.devpl.backend.extension.compiler;
 
 import lombok.Getter;
 import lombok.Setter;

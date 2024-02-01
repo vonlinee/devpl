@@ -5,7 +5,7 @@
   <vxe-modal ref="vxeModalRef" v-model="visible" :height="height" :width="width" show-footer :z-index="zIndex"
     @show="onShown">
     <template #default>
-      <slot name="default" :size="modalConentSize"></slot>
+      <slot name="default" :size="modalContentSize"></slot>
     </template>
 
     <template #footer>
@@ -22,7 +22,7 @@ import { ref, onMounted } from 'vue';
 
 const visible = ref()
 const vxeModalRef = ref()
-const modalConentSize = ref({
+const modalContentSize = ref({
   width: 0,
   height: 0
 })
@@ -56,20 +56,9 @@ const onShown = (param: { type: string }) => {
   const content : HTMLDivElement = vxeModalBox.getElementsByClassName("vxe-modal--content")[0] as HTMLDivElement
   // const footer = vxeModalBox.getElementsByClassName("vxe-modal--footer")[0]
 
-  modalConentSize.value = {
+  modalContentSize.value = {
     width: vxeModalBox.clientWidth,
     height: content.offsetHeight
   }
 }
-
-onMounted(() => {
-
-  if (vxeModalRef.value) {
-
-
-  }
-
-})
-
-
 </script>

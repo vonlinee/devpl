@@ -49,15 +49,6 @@ export const menuRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: "/codegen/template",
-        meta: {
-          title: "模板管理",
-          icon: "icon-appstore",
-        },
-        component: () => import("@/views/template/index.vue"),
-        children: [],
-      },
-      {
         path: "/codegen/file",
         name: "Generator",
         component: () => import("@/views/generator/index.vue"),
@@ -74,6 +65,30 @@ export const menuRoutes: RouteRecordRaw[] = [
           title: "项目管理",
           icon: "icon-edit-square",
         },
+      },
+    ],
+  },
+  {
+    path: "/codegen/template",
+    meta: {
+      title: "模板管理",
+      icon: "icon-appstore",
+    },
+    children: [
+      {
+        path: "/codegen/template/list",
+        meta: {
+          title: "模板列表",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/template/index.vue"),
+      }, {
+        path: "/codegen/template/directives",
+        meta: {
+          title: "模板指令",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/template/directive/index.vue"),
       },
     ],
   },

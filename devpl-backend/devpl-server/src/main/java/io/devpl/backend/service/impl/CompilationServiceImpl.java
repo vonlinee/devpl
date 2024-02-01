@@ -1,7 +1,7 @@
 package io.devpl.backend.service.impl;
 
-import io.devpl.backend.compiler.CompilationResult;
-import io.devpl.backend.compiler.DynamicJavaCompiler;
+import io.devpl.backend.extension.compiler.CompilationResult;
+import io.devpl.backend.extension.compiler.DynamicJavaCompiler;
 import io.devpl.backend.domain.param.CompilerParam;
 import io.devpl.backend.service.CompilationService;
 import org.springframework.stereotype.Service;

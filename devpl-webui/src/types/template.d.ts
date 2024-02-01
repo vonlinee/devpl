@@ -98,3 +98,13 @@ type TemplateParam = {
    */
   dataTypeId: number | string
 }
+
+/**
+ * 自定义指令
+ */
+type CustomDirective = {
+  directiveId: string,
+  directiveName: string,
+  sourceCode: string,
+  remark?: string
+}

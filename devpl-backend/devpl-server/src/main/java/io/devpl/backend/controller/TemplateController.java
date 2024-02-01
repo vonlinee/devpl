@@ -2,6 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.param.CustomTemplateDirectiveParam;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.param.TemplateParamParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
@@ -157,5 +158,48 @@ public class TemplateController {
     @PostMapping(value = "/param")
     public boolean listTemplateParams(@RequestBody TemplateParamParam params) {
         return templateParamService.saveOrUpdateBatch(params.getParams());
+    }
+
+    /**
+     * 获取自定义模板的示例文本
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/directive/custom/example")
+    public String getCustomTemplateDirectiveExample() {
+        return """
+            public class CustomTemplateDirective implements TemplateDirective {
+
+                /**
+                 * 指令名称，该指令在模板中的名称
+                 *
+                 * @return 指令名称
+                 */
+                @Override
+                public String getName() {
+                    return "指令名称";
+                }
+
+                @Override
+                public Class<?>[] getParameterTypes() {
+                    return new Class[0];
+                }
+
+                @Override
+                public String render(Object[] params) {
+                    return "渲染结果";
+                }
+            }
+            """;
+    }
+
+    /**
+     * 获取自定义模板的示例文本
+     *
+     * @return 列表
+     */
+    @PostMapping(value = "/directive/custom/add")
+    public boolean addCustomTemplateDirective(@RequestBody CustomTemplateDirectiveParam param) {
+        return true;
     }
 }

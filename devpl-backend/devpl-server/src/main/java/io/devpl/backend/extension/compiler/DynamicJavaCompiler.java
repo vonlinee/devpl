@@ -1,4 +1,4 @@
-package io.devpl.backend.compiler;
+package io.devpl.backend.extension.compiler;
 
 import javax.tools.*;
 import java.io.ByteArrayOutputStream;
@@ -14,7 +14,6 @@ import java.util.Locale;
 /**
  * 使用javax.tool实现java代码编译
  * <a href="https://www.cnblogs.com/andysd/p/10081443.html">...</a>
- * Create by andy on 2018-12-06 21:25
  */
 public class DynamicJavaCompiler {
 
@@ -27,7 +26,7 @@ public class DynamicJavaCompiler {
      * 存放编译过程中输出的信息
      */
     private final DiagnosticCollector<JavaFileObject> diagnosticsCollector;
-    private final JavaFileManager jfm;
+    private final JavaClassFileManager jfm;
 
     public DynamicJavaCompiler() {
         this(Locale.CHINA, StandardCharsets.UTF_8);
@@ -53,6 +52,7 @@ public class DynamicJavaCompiler {
         // 获取一个编译任务
         JavaCompiler.CompilationTask task = compiler.getTask(null, jfm, diagnosticsCollector, null, null, List.of(javaFileObject));
         result.stop();
+        // 执行编译任务
         result.setFailed(task.call());
         if (result.isFailed()) {
             result.setCompileMessage(getCompilerMessage());
@@ -70,7 +70,6 @@ public class DynamicJavaCompiler {
             PrintStream printStream = new PrintStream(outputStream);
             // PrintStream ps = new PrintStream("/Users/andy/Desktop/tem.sql"); //输出到文件
             System.setOut(printStream);
-
             ClassLoader loader = jfm.getClassLoader(null);
             Class<?> aClass = loader.loadClass(result.getFullClassName());
             Method main = aClass.getMethod(method, String[].class);

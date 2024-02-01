@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import io.devpl.backend.compiler.CompilationResult;
+import io.devpl.backend.extension.compiler.CompilationResult;
 import io.devpl.backend.domain.param.CompilerParam;
 
 public interface CompilationService {
