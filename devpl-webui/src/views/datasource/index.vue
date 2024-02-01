@@ -122,7 +122,6 @@
     ></add-or-update>
   </el-card>
 
-  <drvier-manager></drvier-manager>
 </template>
 
 <script setup lang="ts">
@@ -138,7 +137,6 @@ import { useCrud } from "@/hooks"
 import { ElButton, ElMessage } from "element-plus"
 import AddOrUpdate from "./add-or-update.vue"
 import { decrypt } from "@/utils/tool"
-import DrvierManager from "./DrvierManager.vue"
 import { DriverTypeVO } from "./types"
 
 const state: DataTableOption = reactive({

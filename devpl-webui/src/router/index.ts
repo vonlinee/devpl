@@ -7,17 +7,39 @@ import {
 
 /**
  * 菜单路由
+ * 
+ * 目录级别的菜单不需要指定component，否则会导致子菜单跳转的路由均为该目录的component指定的组件
+ * 
  * https://router.vuejs.org/zh/guide/
  */
 export const menuRoutes: RouteRecordRaw[] = [
   {
     path: "/datasource",
-    name: "DataSource",
-    component: () => import("../views/datasource/index.vue"),
     meta: {
-      title: "数据源管理",
+      title: "数据源",
       icon: "icon-database-fill",
     },
+    children: [
+      {
+        path: "/datasource/driver",
+        name: "DriverManager",
+        meta: {
+          title: "驱动管理",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/datasource/driver/index.vue")
+      },
+      {
+        path: "/datasource/connection-info",
+        name: "ConnectionInfo",
+        meta: {
+          title: "连接信息",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/datasource/index.vue"),
+        children: [],
+      },
+    ]
   },
   {
     path: "/codegen",
