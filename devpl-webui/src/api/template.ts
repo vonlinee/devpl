@@ -64,3 +64,22 @@ export function apiListSelectableTemplates() {
 export function apiGetTemplateById(templateId: number) {
   return http.get<TemplateInfo>(`/api/codegen/template/info/${templateId}`)
 }
+
+
+/**
+ * 模板参数列表
+ */
+export function apiListTemplateParams(templateId?: number) {
+  return http.get("/api/codegen/template/param/list", {
+    templateId: templateId || null
+  })
+}
+
+/**
+ * 模板参数列表
+ */
+export function apiSaveOrUpdateTemplateParams(params: TemplateParam[]) {
+  return http.post("/api/codegen/template/param", {
+    params: params
+  })
+}

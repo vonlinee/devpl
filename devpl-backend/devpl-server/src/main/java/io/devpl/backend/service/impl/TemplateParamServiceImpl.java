@@ -24,7 +24,17 @@ public class TemplateParamServiceImpl extends ServiceImpl<TemplateParamMapper, T
     @Override
     public List<TemplateParam> getGlobalTemplateParams() {
         LambdaQueryWrapper<TemplateParam> qw = new LambdaQueryWrapper<>();
-        qw.eq(TemplateParam::getTemplateId, null);
+        qw.isNull(TemplateParam::getTemplateId);
+        return list(qw);
+    }
+
+    @Override
+    public List<TemplateParam> listTemplateParamsByTemplateId(Long templateId) {
+        if (templateId == null) {
+            return getGlobalTemplateParams();
+        }
+        LambdaQueryWrapper<TemplateParam> qw = new LambdaQueryWrapper<>();
+        qw.eq(TemplateParam::getTemplateId, templateId);
         return list(qw);
     }
 }

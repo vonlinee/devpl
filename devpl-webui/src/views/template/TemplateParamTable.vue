@@ -1,24 +1,57 @@
 <template>
-  <el-table border :data="tableData" :height="height + 'px'">
-    <el-table-column fixed prop="paramKey" label="参数Key" width="150" />
-    <el-table-column prop="name" label="参数名称" width="120" />
-    <el-table-column prop="state" label="默认值" width="120" />
-    <el-table-column prop="city" label="数据类型" width="120" />
-    <el-table-column fixed="right" label="操作" width="120">
+  <vxe-toolbar>
+    <template #buttons>
+      <vxe-button content="查询" status="primary" @click="queryList"></vxe-button>
+      <vxe-button content="新增" status="primary" @click="onAddItem"></vxe-button>
+      <!-- <vxe-button content="下拉按钮">
+        <template #dropdowns>
+          <vxe-button type="text" content="按钮1"></vxe-button>
+          <vxe-button type="text" content="按钮2"></vxe-button>
+          <vxe-button type="text" content="按钮3"></vxe-button>
+        </template>
+      </vxe-button> -->
+    </template>
+  </vxe-toolbar>
+
+  <vxe-table ref="tableRef" border show-overflow :data="tableData" :column-config="{ resizable: true }" :height="height"
+    :edit-config="{ trigger: 'click', mode: 'row' }">
+    <vxe-column type="seq" width="60"></vxe-column>
+    <vxe-column field="paramKey" title="参数Key" :edit-render="{}">
+      <template #edit="{ row }">
+        <vxe-input v-model="row.paramKey" type="text"></vxe-input>
+      </template>
+    </vxe-column>
+    <vxe-column field="paramName" title="参数名称" :edit-render="{}">
+      <template #edit="{ row }">
+        <vxe-input v-model="row.paramName" type="text"></vxe-input>
+      </template>
+    </vxe-column>
+    <vxe-column field="dataType" title="数据类型" :edit-render="{}">
+      <template #default="{ row }">
+        <span>{{ row.dataType }}</span>
+      </template>
+      <template #edit="{ row }">
+        <vxe-select v-model="row.dataType" type="text" :options="dataTypeOptions" transfer></vxe-select>
+      </template>
+    </vxe-column>
+    <vxe-column field="paramValue" title="参数值" :edit-render="{}">
+      <template #edit="{ row }">
+        <vxe-input v-model="row.paramValue" type="text"></vxe-input>
+      </template>
+    </vxe-column>
+    <vxe-column fixed="right" title="操作" width="80" header-align="center" align="center">
       <template #default="scope">
-        <el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
+        <el-button link type="primary" @click.prevent="removeRow(scope.row)">
           删除
         </el-button>
       </template>
-    </el-table-column>
-  </el-table>
-  <el-button class="mt-4" style="width: 100%" @click="onAddItem"
-    >增加
-  </el-button>
+    </vxe-column>
+  </vxe-table>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
+import { apiListTemplateParams } from "@/api/template";
+import { ref, onMounted } from "vue"
 
 const { height } = withDefaults(
   defineProps<{
@@ -28,11 +61,23 @@ const { height } = withDefaults(
     height: 500,
   }
 )
+const tableRef = ref()
+const dataTypeOptions = ref()
 
 const tableData = ref<TemplateParam[]>([])
 
-const deleteRow = (index: number) => {
-  tableData.value.splice(index, 1)
+
+const removeRow = async (row: TemplateParam) => {
+  const $table = tableRef.value
+  if ($table) {
+    await $table.remove(row)
+  }
+}
+
+const queryList = () => {
+  apiListTemplateParams().then((res) => {
+    tableData.value = res.data
+  })
 }
 
 const onAddItem = () => {
@@ -43,4 +88,17 @@ const onAddItem = () => {
     dataTypeId: "",
   })
 }
+
+defineExpose({
+  /**
+   * 获取表的数据
+   */
+  getParams() {
+    return tableData.value
+  }
+})
+
+onMounted(() => {
+  queryList()
+})
 </script>

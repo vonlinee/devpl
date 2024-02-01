@@ -3,9 +3,12 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
+import io.devpl.backend.domain.param.TemplateParamParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
+import io.devpl.backend.entity.TemplateParam;
+import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
@@ -24,6 +27,9 @@ public class TemplateController {
 
     @Resource
     TemplateService templateService;
+
+    @Resource
+    TemplateParamService templateParamService;
 
     /**
      * 模板上传
@@ -131,5 +137,25 @@ public class TemplateController {
     @GetMapping(value = "/info/{templateId}")
     public Result<TemplateInfo> getTemplateById(@PathVariable(value = "templateId") Integer templateId) {
         return Result.ok(templateService.getById(templateId));
+    }
+
+    /**
+     * 根据ID获取模板信息
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/param/list")
+    public ListResult<TemplateParam> listTemplateParams(@RequestParam(value = "templateId", required = false) Long templateId) {
+        return ListResult.ok(templateParamService.listTemplateParamsByTemplateId(templateId));
+    }
+
+    /**
+     * 保存模板参数信息
+     *
+     * @return 列表
+     */
+    @PostMapping(value = "/param")
+    public boolean listTemplateParams(@RequestBody TemplateParamParam params) {
+        return templateParamService.saveOrUpdateBatch(params.getParams());
     }
 }

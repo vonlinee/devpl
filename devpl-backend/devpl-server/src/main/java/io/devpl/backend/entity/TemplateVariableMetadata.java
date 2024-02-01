@@ -15,8 +15,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("template_variable_info")
-public class TemplateVarInfo extends DBEntity {
+@TableName("template_variable_metadata")
+public class TemplateVariableMetadata extends DBEntity {
     /**
      * 主键ID
      */

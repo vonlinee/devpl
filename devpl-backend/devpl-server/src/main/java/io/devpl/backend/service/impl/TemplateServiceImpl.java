@@ -13,7 +13,7 @@ import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
-import io.devpl.backend.entity.TemplateVarInfo;
+import io.devpl.backend.entity.TemplateVariableMetadata;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -46,7 +46,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Resource
     CodeGenProperties codeGenProperties;
 
-    /**
+    /**p
      * 获取模板类型
      *
      * @return 模板类型列表
@@ -254,7 +254,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      * @return 模板变量信息
      */
     @Override
-    public List<TemplateVarInfo> introspect(TemplateInfo templateInfo) {
+    public List<TemplateVariableMetadata> introspect(TemplateInfo templateInfo) {
         return Collections.emptyList();
     }
 }

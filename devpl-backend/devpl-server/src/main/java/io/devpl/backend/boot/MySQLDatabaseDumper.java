@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -16,7 +17,8 @@ import java.nio.file.Path;
 /**
  * MySQL数据备份
  */
-//@Component
+@Component
+@ConditionalOnProperty(prefix = "devpl.db.backup", name = "enabled", havingValue = "true")
 public class MySQLDatabaseDumper implements CommandLineRunner {
 
     static final Logger logger = LoggerFactory.getLogger(MySQLDatabaseDumper.class);

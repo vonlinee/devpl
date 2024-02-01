@@ -6,7 +6,7 @@ import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
-import io.devpl.backend.entity.TemplateVarInfo;
+import io.devpl.backend.entity.TemplateVariableMetadata;
 
 import java.io.File;
 import java.io.Writer;
@@ -109,5 +109,5 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @param templateInfo 模板信息
      * @return 模板变量列表
      */
-    List<TemplateVarInfo> introspect(TemplateInfo templateInfo);
+    List<TemplateVariableMetadata> introspect(TemplateInfo templateInfo);
 }
