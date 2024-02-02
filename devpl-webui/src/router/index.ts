@@ -58,6 +58,15 @@ export const menuRoutes: RouteRecordRaw[] = [
         },
       },
       {
+        path: "/codegen/targetfile",
+        name: "TargetFile",
+        component: () => import("@/views/generator/targetfile/index.vue"),
+        meta: {
+          title: "目标文件",
+          icon: "icon-fire",
+        },
+      },
+      {
         path: "/codegen/project",
         name: "ProjectIndex",
         component: () => import("@/views/project/index.vue"),
