@@ -89,10 +89,14 @@ public class CrudServiceImpl implements CrudService {
             int res;
             if (fieldValue == null) {
                 String insertOneStatement = tableInfo.getCurrentNamespace() + "." + SqlMethod.INSERT_ONE.getMethod();
-                res = sqlSession.insert(insertOneStatement, entity);
+                MapperMethod.ParamMap<Object> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, entity);
+                res = sqlSession.insert(insertOneStatement, param);
             } else {
+                MapperMethod.ParamMap<Object> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, entity);
                 String updateByIdStatement = tableInfo.getCurrentNamespace() + "." + SqlMethod.UPDATE_BY_ID.getMethod();
-                res = sqlSession.update(updateByIdStatement, entity);
+                res = sqlSession.update(updateByIdStatement, param);
             }
             return res > 0;
         } catch (Exception exception) {

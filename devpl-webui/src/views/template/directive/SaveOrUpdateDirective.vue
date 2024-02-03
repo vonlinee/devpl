@@ -17,24 +17,45 @@
     </div>
 
     <template #footer>
+      <el-button @click="getSample">获取示例</el-button>
       <el-button @click="submit" type="primary">确定</el-button>
     </template>
   </vxe-modal>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw, nextTick } from "vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
+import { apiAddCustomTemplateDirective, apiGetCustomTemplateDirectiveExample } from "@/api/template";
+import { Message } from "@/hooks/message";
+import { hasText } from "@/utils/tool";
 
 const visible = ref();
 const editorRef = ref();
 
 const formObject = reactive<CustomDirective>({
-  directiveId: "",
+  directiveId: undefined,
   directiveName: "",
   sourceCode: "",
   remark: ""
 });
+
+const emits = defineEmits([
+  "submit"
+])
+
+const submit = () => {
+  if (editorRef.value) {
+    formObject.sourceCode = editorRef.value.getText()
+  }
+  apiAddCustomTemplateDirective(toRaw(formObject)).then((res) => {
+    if (res.data) {
+      Message.info("添加成功")
+      visible.value = false
+      emits("submit")
+    }
+  })
+}
 
 defineExpose({
   show(data?: CustomDirective) {
@@ -43,14 +64,22 @@ defineExpose({
       formObject.directiveName = data.directiveName;
       formObject.sourceCode = data.sourceCode;
       formObject.remark = data.remark;
-      editorRef.value.setText(data.sourceCode);
+      visible.value = true;
+      if (hasText(data.sourceCode)) {
+        nextTick(() => editorRef.value.setText(data.sourceCode));
+      }
+    } else {
+      formObject.directiveId = undefined
+      formObject.directiveName = "";
+      formObject.sourceCode = "";
+      formObject.remark = "";
+      nextTick(() => editorRef.value.setText(""));
+      visible.value = true;
     }
-    visible.value = true;
   }
 });
 
-const submit = () => {
-
+const getSample = () => {
+  apiGetCustomTemplateDirectiveExample().then((res) => editorRef.value.setText(res.data));
 };
-
 </script>

@@ -103,7 +103,7 @@ type TemplateParam = {
  * 自定义指令
  */
 type CustomDirective = {
-  directiveId: string,
+  directiveId?: number | string,
   directiveName: string,
   sourceCode: string,
   remark?: string

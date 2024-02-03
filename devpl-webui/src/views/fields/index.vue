@@ -12,7 +12,6 @@ import { onMounted, reactive, ref } from "vue"
 import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue"
 import { useCrud } from "@/hooks"
 import { DataTableOption } from "@/hooks/interface"
-import { ElMessage } from "element-plus"
 import { Message } from "@/hooks/message"
 
 /**

@@ -1,9 +1,10 @@
 package io.devpl.backend.service.impl;
 
+import io.devpl.backend.domain.param.CompilerParam;
 import io.devpl.backend.extension.compiler.CompilationResult;
 import io.devpl.backend.extension.compiler.DynamicJavaCompiler;
-import io.devpl.backend.domain.param.CompilerParam;
 import io.devpl.backend.service.CompilationService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
@@ -12,7 +13,8 @@ import java.util.regex.Pattern;
 @Service
 public class CompilationServiceImpl implements CompilationService {
 
-    private final DynamicJavaCompiler compiler = new DynamicJavaCompiler();
+    @Resource
+    private DynamicJavaCompiler compiler;
 
     @Override
     public CompilationResult compile(CompilerParam param) {

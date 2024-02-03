@@ -24,6 +24,9 @@ public class JavaClassFileManager extends ForwardingJavaFileManager<JavaFileMana
      */
     private final ClassLoader classLoader;
 
+    /**
+     * @param fileManager com.sun.tools.javac.file.JavacFileManager
+     */
     public JavaClassFileManager(JavaFileManager fileManager) {
         super(fileManager);
         classLoader = new StringClassLoader(this);
@@ -45,6 +48,16 @@ public class JavaClassFileManager extends ForwardingJavaFileManager<JavaFileMana
         ByteJavaFileObject javaFileObject = new ByteJavaFileObject(className, kind);
         javaFileObjectMap.put(className, javaFileObject);
         return javaFileObject;
+    }
+
+    @Override
+    public JavaFileObject getJavaFileForInput(Location location, String className, JavaFileObject.Kind kind) throws IOException {
+
+        if (location instanceof ClassPathLocation classPathLocation) {
+
+        }
+
+        return super.getJavaFileForInput(location, className, kind);
     }
 
     @Override

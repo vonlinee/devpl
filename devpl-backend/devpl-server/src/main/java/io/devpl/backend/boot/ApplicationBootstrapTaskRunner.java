@@ -1,5 +1,6 @@
 package io.devpl.backend.boot;
 
+import io.devpl.backend.config.ThreadPoolConfiguration;
 import io.devpl.backend.service.TemplateService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class ApplicationBootstrapTaskRunner implements CommandLineRunner {
     TemplateService templateService;
 
     @Resource
-    @Qualifier(value = "common-pool")
+    @Qualifier(value = ThreadPoolConfiguration.COMMON_POOL)
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override

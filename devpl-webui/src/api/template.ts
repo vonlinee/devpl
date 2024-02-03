@@ -89,3 +89,27 @@ export function apiSaveOrUpdateTemplateParams(params: TemplateParam[]) {
 export function apiGetCustomTemplateDirectiveExample() {
   return http.get<string>("/api/codegen/template/directive/custom/example");
 }
+
+/**
+ * 获取自定义指令列表
+ */
+export function apiListCustomTemplateDirective(page?: number, limit?: number, queryParams?: any) {
+  return http.get("/api/codegen/template/directive/custom/list", {
+    page: page,
+    limit: limit
+  });
+}
+
+/**
+ * 添加/修改自定义指令
+ */
+export function apiAddCustomTemplateDirective(param: CustomDirective) {
+  return http.post<boolean>("/api/codegen/template/directive/custom/add", param);
+}
+
+/**
+ * 删除自定义指令
+ */
+export function apiDeleteCustomTemplateDirective(param: CustomDirective) {
+  return http.delete<boolean>("/api/codegen/template/directive/custom/remove", param);
+}

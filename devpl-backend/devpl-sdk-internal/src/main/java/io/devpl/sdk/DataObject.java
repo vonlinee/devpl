@@ -41,15 +41,6 @@ public interface DataObject extends Serializable {
     void set(String name, Object value) throws NoSuchElementException;
 
     /**
-     * 放入一个新的数据项，若key指示的数据项已存在，直接覆盖
-     *
-     * @param key   数据项的名称
-     * @param value 数据项的新值
-     * @return DataObject 提供链式调用API
-     */
-    DataObject put(String key, Object value);
-
-    /**
      * 根据名称获取值
      *
      * @param key 数据项名称
@@ -66,6 +57,7 @@ public interface DataObject extends Serializable {
      * @param valueType 期望的值类型，必须相等才认为是同类型，不允许向上造型
      * @param <V>       期望的值类型
      * @return 期望的值，如果实际的类型和期望的值类型不兼容，返回null
+     * @throws ClassCastException 如果实际的类型和期望的值类型不兼容，会抛出ClassCastException
      */
     <V> V getTypedValue(String name, Class<V> valueType);
 
@@ -87,6 +79,7 @@ public interface DataObject extends Serializable {
      * @param defaultValue 默认值
      * @param <V>          期望的值类型
      * @return 期望的值，如果实际的类型和期望的值类型valueType不同，返回默认值
+     * @throws ClassCastException 如果实际的类型和期望的值类型不兼容，会抛出ClassCastException
      */
     <V> V getTypedValue(String name, Class<V> valueType, V defaultValue);
 
@@ -151,11 +144,4 @@ public interface DataObject extends Serializable {
      * @return 包含所有数据项的map，不能为空
      */
     Map<String, Object> asMap();
-
-    /**
-     * 复制数据到一个新的DataObject
-     *
-     * @return DataObject
-     */
-    DataObject copy();
 }

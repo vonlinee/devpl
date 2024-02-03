@@ -2,27 +2,68 @@
   模板指令管理
  -->
 <template>
-  <el-button @click="saveOrUpdateRef.show()">
-</el-button>
+  <el-card>
+    <el-form inline v-model="state.queryForm" @keyup.enter="getDataList()">
+      <el-form-item>
+        <el-input v-model="state.queryForm.directiveName" placeholder="指令名称" clearable></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">查询</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataList()">刷新</el-button>
+        <el-button type="primary" @click="saveOrUpdateRef.show()">新增</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
 
-  <MonacoEditor ref="editor" language="java" height="500px"></MonacoEditor>
+  <el-table :data="state.dataList" style="width: 100%" height="600px">
+    <el-table-column prop="directiveName" label="指令名称" width="180" />
+    <el-table-column prop="sourceCode" label="源码" show-overflow-tooltip />
+    <el-table-column prop="remark" label="备注信息" width="180" />
 
-  <el-button @click="getSample">获取示例</el-button>
+    <el-table-column label="操作" width="120px" header-align="center" align="center">
+      <template #default="scope">
+        <el-button link @click="saveOrUpdateRef.show(scope.row)">编辑</el-button>
+        <el-button link @click="remove(scope.row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 
-  <save-or-update-directive ref="saveOrUpdateRef"></save-or-update-directive>
+  <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
+    layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+    @current-change="currentChangeHandle">
+  </el-pagination>
+
+  <save-or-update-directive ref="saveOrUpdateRef" @submit="getDataList"></save-or-update-directive>
 </template>
 <script lang='ts' setup>
-import MonacoEditor from "@/components/editor/MonacoEditor.vue";
-import { apiGetCustomTemplateDirectiveExample } from "@/api/template";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import SaveOrUpdateDirective from "@/views/template/directive/SaveOrUpdateDirective.vue";
+import { useCrud } from "@/hooks";
+import { apiListCustomTemplateDirective, apiDeleteCustomTemplateDirective } from "@/api/template";
+import { Message } from "@/hooks/message";
+import { DataTableOption } from "@/hooks/interface";
 
-const editor = ref();
 const saveOrUpdateRef = ref();
 
-const getSample = () => {
-  apiGetCustomTemplateDirectiveExample().then((res) => editor.value.setText(res.data));
-};
+const state = reactive({
+  queryForm: {
+    directiveName: ""
+  },
+  createdIsNeed: true,
+  queryPage: apiListCustomTemplateDirective
+} as DataTableOption)
+
+const { getDataList, sizeChangeHandle, currentChangeHandle } = useCrud(state)
+
+const remove = (row: CustomDirective) => {
+  apiDeleteCustomTemplateDirective(row).then((res) => {
+    Message.info("删除成功")
+    getDataList()
+  })
+}
+
+
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

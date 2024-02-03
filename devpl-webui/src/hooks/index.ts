@@ -5,6 +5,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 
 /**
  * CRUD Hooks
+ * 
+ * TODO 解决类型声明问题
  * @param options
  */
 export const useCrud = (options: DataTableOption) => {
@@ -48,6 +50,9 @@ export const useCrud = (options: DataTableOption) => {
   // 覆盖默认值
   let option: DataTableOption = mergeDefaultOptions(defaultOptions, options);
 
+  /**
+   * 需要在组件内部调用
+   */
   onMounted(() => {
     if (option.createdIsNeed) {
       query();
@@ -56,36 +61,31 @@ export const useCrud = (options: DataTableOption) => {
 
   // 查询
   const query = () => {
-    if (!option.dataListUrl) {
-    } else if (!option.queryPage) {
+    if (!option.dataListUrl && !option.queryPage) {
       return;
     }
     option.dataListLoading = true;
     if (option.queryPage) {
-      option
-        .queryPage(
-          option.page ? option.page : 1,
-          option.limit ? option.limit : 10,
-          option.queryForm
-        )
-        .then((res) => {
-          // 分页
-          option.dataList = res.data;
-          option.total = res.total == undefined ? -1 : res.total;
-        });
+      option.queryPage(
+        option.page ? option.page : 1,
+        option.limit ? option.limit : 10,
+        option.queryForm
+      ).then((res) => {
+        // 分页
+        option.dataList = res.data;
+        option.total = res.total == undefined ? -1 : res.total;
+      });
     } else if (option.dataListUrl) {
-      http
-        .get(option.dataListUrl, {
-          order: option.order,
-          asc: option.asc,
-          page: option.isPage ? option.page : null,
-          limit: option.isPage ? option.limit : null,
-          ...option.queryForm
-        })
-        .then((res) => {
-          option.dataList = res.data;
-          option.total = res.total == undefined ? -1 : res.total;
-        });
+      http.get(option.dataListUrl, {
+        order: option.order,
+        asc: option.asc,
+        page: option.isPage ? option.page : null,
+        limit: option.isPage ? option.limit : null,
+        ...option.queryForm
+      }).then((res) => {
+        option.dataList = res.data;
+        option.total = res.total == undefined ? -1 : res.total;
+      });
     }
     option.dataListLoading = false;
   };
@@ -229,10 +229,7 @@ export const useCrud = (options: DataTableOption) => {
       });
   };
 
-  option = reactive(option)
-
   return {
-    option,
     getDataList,
     sizeChangeHandle,
     currentChangeHandle,

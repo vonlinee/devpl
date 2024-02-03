@@ -85,8 +85,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
                 log.info("创建文件成功 {}", file.getAbsolutePath());
                 try (Writer writer = new FileWriter(file)) {
                     templateService.render(tfg.getTemplateId(), dataModel, writer);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    log.error("渲染{}失败", tfg.getFileName(), e);
                 }
             }
         }

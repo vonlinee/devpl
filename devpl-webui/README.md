@@ -45,3 +45,11 @@ https://github.com/dbeaver/dbeaver/wiki/Mock-Data-Generation-in-DBeaver
 https://github.com/vuejs/awesome-vue
 
 https://alfred-skyblue.github.io/vue-draggable-plus/guide/
+
+
+
+
+
+# TODO 
+1.重构前端，单个页面的增删改查封装成一个组件
+2.页面布局增加标签页

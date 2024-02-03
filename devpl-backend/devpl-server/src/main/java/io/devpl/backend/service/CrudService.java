@@ -14,7 +14,7 @@ import java.util.List;
 public interface CrudService {
 
     /**
-     * 查询所有
+     * 查询一张表的所有数据
      *
      * @param entityType 实体类型
      * @param <T>        实体类型

@@ -1,20 +1,25 @@
 package io.devpl.backend.extension.compiler;
 
+import io.devpl.codegen.template.TemplateDirective;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
+
 import javax.tools.*;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 /**
+ * TODO 动态编译 沙箱环境
  * 使用javax.tool实现java代码编译
  * <a href="https://www.cnblogs.com/andysd/p/10081443.html">...</a>
  */
+@Component
 public class DynamicJavaCompiler {
 
     /**
@@ -26,7 +31,7 @@ public class DynamicJavaCompiler {
      * 存放编译过程中输出的信息
      */
     private final DiagnosticCollector<JavaFileObject> diagnosticsCollector;
-    private final JavaClassFileManager jfm;
+    private final JavaFileManager jfm;
 
     public DynamicJavaCompiler() {
         this(Locale.CHINA, StandardCharsets.UTF_8);
@@ -49,13 +54,65 @@ public class DynamicJavaCompiler {
         // 构造源代码对象
         result.start();
         JavaFileObject javaFileObject = new StringJavaFileObject(fullClassName, sourceCode);
+
+        List<JavaFileObject> javaFileObjects = new ArrayList<>();
+        javaFileObjects.add(javaFileObject);
+
+        try {
+            JavaFileObject templateDirectiveJfo = jfm.getJavaFileForInput(new JavaFileManager.Location() {
+                @Override
+                public String getName() {
+                    ClassPathResource resource = new ClassPathResource("static/samples/TemplateDirective.java");
+                    return resource.getPath();
+                }
+
+                @Override
+                public boolean isOutputLocation() {
+                    return false;
+                }
+            }, TemplateDirective.class.getName(), JavaFileObject.Kind.SOURCE);
+
+            javaFileObjects.add(templateDirectiveJfo);
+        } catch (IOException e) {
+
+            result.setFailed(true);
+
+            return result;
+        }
+
+        StringWriter out = new StringWriter();
+
         // 获取一个编译任务
-        JavaCompiler.CompilationTask task = compiler.getTask(null, jfm, diagnosticsCollector, null, null, List.of(javaFileObject));
+        JavaCompiler.CompilationTask task = compiler.getTask(out, jfm, diagnosticsCollector, null, null, javaFileObjects);
+
         result.stop();
         // 执行编译任务
-        result.setFailed(task.call());
-        if (result.isFailed()) {
-            result.setCompileMessage(getCompilerMessage());
+
+        Boolean callResult = task.call();
+
+        if (callResult) {
+
+            ClassLoader classloader = jfm.getClassLoader(null);
+            try {
+                Class<?> clazz = classloader.loadClass(fullClassName);
+                result.addCompiledClass(fullClassName, clazz);
+            } catch (ClassNotFoundException e) {
+                result.appendMsg("无法加载类").appendMsg(fullClassName);
+            }
+            if (result.isFailed()) {
+                result.appendMsg(getCompilerMessage());
+            }
+            // 输出编译信息
+
+            List<Diagnostic<? extends JavaFileObject>> diagnostics = diagnosticsCollector.getDiagnostics();
+            diagnostics.forEach(diagnostic -> {
+                if (diagnostic.getKind() == Diagnostic.Kind.ERROR) {
+                    result.setFailed(true);
+                }
+                result.appendMsg("[").appendMsg(diagnostic.getKind()).appendMsg("]").appendMsg(diagnostic.getMessage(Locale.CHINA));
+            });
+        } else {
+            result.setFailed(true);
         }
         return result;
     }

@@ -8,7 +8,7 @@ public class CustomTemplateDirectiveParam {
     /**
      * 指令名称
      */
-    private String directiveId;
+    private Long directiveId;
 
     /**
      * 指令名称
@@ -24,4 +24,9 @@ public class CustomTemplateDirectiveParam {
      * 备注信息
      */
     private String remark;
+
+    /**
+     * 自定义指令实现类名
+     */
+    private String className;
 }

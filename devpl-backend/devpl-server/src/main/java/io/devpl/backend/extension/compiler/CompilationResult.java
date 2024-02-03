@@ -3,6 +3,9 @@ package io.devpl.backend.extension.compiler;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 储存编译结果
  */
@@ -35,7 +38,21 @@ public class CompilationResult {
      */
     private boolean failed;
 
-    private String compileMessage;
+    public StringBuilder compileMessage = new StringBuilder();
+
+    private Map<String, Class<?>> compiledClassMap = new HashMap<>();
+
+    public void addCompiledClass(String fullClassName, Class<?> clazz) {
+        compiledClassMap.put(fullClassName, clazz);
+    }
+
+    public void addCompiledClass(Class<?> clazz) {
+        compiledClassMap.put(clazz.getName(), clazz);
+    }
+
+    public Class<?> getClass(String name) {
+        return compiledClassMap.get(name);
+    }
 
     public void start() {
         this.compilerTakeTime = System.currentTimeMillis();
@@ -59,5 +76,10 @@ public class CompilationResult {
 
     public String prettyPrint() {
         return this.toString();
+    }
+
+    public CompilationResult appendMsg(Object message) {
+        compileMessage.append(message);
+        return this;
     }
 }

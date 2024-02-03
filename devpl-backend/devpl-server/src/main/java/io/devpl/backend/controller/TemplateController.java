@@ -7,8 +7,10 @@ import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.param.TemplateParamParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
+import io.devpl.backend.entity.CustomDirective;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateParam;
+import io.devpl.backend.service.TemplateDirectiveService;
 import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.sdk.validation.Assert;
@@ -31,6 +33,8 @@ public class TemplateController {
 
     @Resource
     TemplateParamService templateParamService;
+    @Resource
+    TemplateDirectiveService templateDirectiveService;
 
     /**
      * 模板上传
@@ -161,7 +165,7 @@ public class TemplateController {
     }
 
     /**
-     * 获取自定义模板的示例文本
+     * 获取自定义指令的示例文本
      *
      * @return 列表
      */
@@ -194,12 +198,32 @@ public class TemplateController {
     }
 
     /**
-     * 获取自定义模板的示例文本
+     * 获取自定义指令列表
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/directive/custom/list")
+    public List<CustomDirective> listCustomTemplateDirective(CustomTemplateDirectiveParam param) {
+        return templateDirectiveService.listCustomDirectives(param);
+    }
+
+    /**
+     * 添加自定义指令
      *
      * @return 列表
      */
     @PostMapping(value = "/directive/custom/add")
     public boolean addCustomTemplateDirective(@RequestBody CustomTemplateDirectiveParam param) {
-        return true;
+        return templateDirectiveService.addCustomDirective(param);
+    }
+
+    /**
+     * 删除自定义指令
+     *
+     * @return 列表
+     */
+    @DeleteMapping(value = "/directive/custom/remove")
+    public boolean removeCustomTemplateDirective(@RequestBody CustomTemplateDirectiveParam param) {
+        return templateDirectiveService.removeCustomDirective(param);
     }
 }

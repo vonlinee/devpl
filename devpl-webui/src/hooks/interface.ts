@@ -3,7 +3,7 @@ import { ResponsePromise } from "@/utils/http"
 /**
  * 增删改查配置项
  */
-export interface DataTableOption {
+export type DataTableOption = {
   // 否在创建页面时，调用数据列表接口
   createdIsNeed?: boolean
   // 数据列表 Url

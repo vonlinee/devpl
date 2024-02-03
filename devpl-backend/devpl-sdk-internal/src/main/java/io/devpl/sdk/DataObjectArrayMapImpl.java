@@ -77,13 +77,6 @@ final class DataObjectArrayMapImpl implements DataObject, Cloneable {
         data.put(name, value);
     }
 
-    @Override
-    public DataObject put(String name, Object value) {
-        ensureValidName(name);
-        data.put(name, value);
-        return this;
-    }
-
     /**
      * 数据项的名称需要字母或者数字
      *
@@ -178,11 +171,6 @@ final class DataObjectArrayMapImpl implements DataObject, Cloneable {
     @Override
     public Map<String, Object> asMap() {
         return data;
-    }
-
-    @Override
-    public DataObject copy() {
-        return new DataObjectArrayMapImpl(this.data);
     }
 
     @Override
