@@ -37,6 +37,27 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
      */
     private final Pattern javaIdentifierPattern = Pattern.compile("^([a-zA-Z_$][a-zA-Z\\d_$]*)$");
 
+    /**
+     * 过滤不存在的字段ID列表
+     *
+     * @param fieldIds 过滤的字段ID列表
+     * @return 返回参数的子集
+     */
+    @Override
+    public List<Long> filterExisted(Collection<Long> fieldIds) {
+        if (CollectionUtils.isEmpty(fieldIds)) {
+            return Collections.emptyList();
+        }
+        LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
+        qw.select(FieldInfo::getId);
+        qw.in(FieldInfo::getId, fieldIds);
+        List<FieldInfo> fields = list(qw);
+        if (!CollectionUtils.isEmpty(fields)) {
+            fieldIds.removeAll(CollectionUtils.toList(fields, FieldInfo::getId));
+        }
+        return new ArrayList<>(fieldIds);
+    }
+
     @Override
     public List<FieldInfo> listFields(FieldInfoListParam param) {
         LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();

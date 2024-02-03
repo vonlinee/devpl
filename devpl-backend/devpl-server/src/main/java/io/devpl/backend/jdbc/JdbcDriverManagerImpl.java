@@ -29,7 +29,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     private final Map<JDBCDriver, DriverInfo> drivers = new ConcurrentHashMap<>();
 
-    @Value("${devpl.driver.location:}")
+    @Value("${devpl.db.driver.location:}")
     private String driverLocation;
 
     private Properties prepareConnectionProperties(String username, String password, Properties properties) {

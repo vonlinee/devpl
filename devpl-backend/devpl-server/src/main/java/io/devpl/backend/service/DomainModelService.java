@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.backend.domain.param.ModelListParam;
 import io.devpl.backend.entity.ModelInfo;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * 基类管理
@@ -20,6 +20,8 @@ public interface DomainModelService extends IService<ModelInfo> {
 
     boolean saveModel(ModelInfo modelInfo);
 
+    boolean removeField(Long modelId, Collection<Long> fieldIds);
+
     boolean updateModel(ModelInfo modelInfo);
 
     /**
@@ -29,5 +31,5 @@ public interface DomainModelService extends IService<ModelInfo> {
      * @param fieldIds 字段ID列表
      * @return 是否成功
      */
-    boolean addFieldsForModel(Long modelId, List<Long> fieldIds);
+    boolean addFieldsForModel(Long modelId, Collection<Long> fieldIds);
 }

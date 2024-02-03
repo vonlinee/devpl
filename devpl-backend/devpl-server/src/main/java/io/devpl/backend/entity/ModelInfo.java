@@ -4,21 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * 模型信息
  */
-@Getter
-@Setter
+@Data
 @TableName("model_info")
-public class ModelInfo {
+public class ModelInfo implements Serializable {
     /**
-     * id
+     * 主键id
      */
     @TableId(type = IdType.AUTO)
     private Long id;

@@ -48,4 +48,8 @@ https://xcheck.tencent.com/index
 数据模拟参考文章：
 https://www.jianshu.com/p/533adbc1d37f
 
+TODO
+
+简化代码
+去掉@RequestBody注解，默认都是JSON形式数据
 

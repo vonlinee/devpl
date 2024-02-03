@@ -8,6 +8,16 @@
             (#{modelId}, #{item})
         </foreach>
     </insert>
+    <delete id="removeFields">
+        DELETE FROM model_field
+        WHERE model_id = #{modelId}
+        <if test="fieldIds != null and fieldIds.size() > 0">
+            AND field_id IN
+            <foreach item="item" index="index" collection="fieldIds" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
 
     <select id="selectModelFields" resultType="io.devpl.backend.entity.ModelField">
         SELECT *

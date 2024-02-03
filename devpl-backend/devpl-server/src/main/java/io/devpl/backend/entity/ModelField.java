@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 模型和字段关联
@@ -13,10 +14,9 @@ import lombok.Setter;
  * @see ModelInfo
  * @see FieldInfo
  */
-@Getter
-@Setter
+@Data
 @TableName("model_field")
-public class ModelField {
+public class ModelField implements Serializable {
 
     /**
      * 主键id

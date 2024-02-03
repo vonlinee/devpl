@@ -17,6 +17,8 @@ import java.util.List;
  */
 public interface FieldInfoService extends BaseService<FieldInfo> {
 
+    List<Long> filterExisted(Collection<Long> fieldIds);
+
     List<FieldInfo> listFields(FieldInfoListParam param);
 
     IPage<FieldInfo> selectPage(FieldInfoListParam param);

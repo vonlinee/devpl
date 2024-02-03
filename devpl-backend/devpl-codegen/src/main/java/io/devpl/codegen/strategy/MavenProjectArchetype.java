@@ -8,7 +8,14 @@ import java.nio.file.Paths;
  */
 public class MavenProjectArchetype implements ProjectArchetype {
 
+    /**
+     * 项目根目录
+     */
     private String rootDir;
+
+    /**
+     * 模块名称
+     */
     private String moduleName;
 
     @Override

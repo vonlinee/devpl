@@ -5,6 +5,7 @@ import io.devpl.backend.common.RequestTracer;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
 import jakarta.servlet.Filter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -51,6 +52,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Value(value = "${server.servlet.context-path:}")
     private String contextPath;
 
+    @Value(value = "${spring.profiles.active}")
+    private String activeProfile;
+
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
@@ -79,10 +83,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      * @param registry 拦截器注册中心
      */
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        RequestTracer requestTracer = new RequestTracer();
-        requestTracer.setServletContextPath(this.contextPath);
-        registry.addInterceptor(requestTracer);
+    public void addInterceptors(@NotNull InterceptorRegistry registry) {
+        if ("dev".equalsIgnoreCase(activeProfile)) {
+            RequestTracer requestTracer = new RequestTracer();
+            requestTracer.setServletContextPath(this.contextPath);
+            registry.addInterceptor(requestTracer);
+        }
     }
 
     /**

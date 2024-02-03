@@ -3,6 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.ModelListParam;
+import io.devpl.backend.domain.param.ModelUpdateParam;
 import io.devpl.backend.entity.ModelInfo;
 import io.devpl.backend.service.DomainModelService;
 import jakarta.annotation.Resource;
@@ -53,9 +54,26 @@ public class DomainModelController {
         return Result.ok(modelService.saveModel(entity));
     }
 
+    /**
+     * 更新模型信息
+     *
+     * @param entity 模型信息
+     * @return 是否成功
+     */
     @PutMapping("/update")
-    public Result<Boolean> update(@RequestBody ModelInfo entity) {
-        return Result.ok(modelService.updateModel(entity));
+    public boolean update(@RequestBody ModelInfo entity) {
+        return modelService.updateModel(entity);
+    }
+
+    /**
+     * 删除模型字段
+     *
+     * @param param ModelUpdateParam
+     * @return 是否成功
+     */
+    @DeleteMapping("/field/remove")
+    public boolean removeModelField(@RequestBody ModelUpdateParam param) {
+        return modelService.removeField(param.getModelId(), param.getFieldIds());
     }
 
     @DeleteMapping("/remove")

@@ -1,7 +1,7 @@
 package io.devpl.codegen.strategy;
 
 /**
- * 项目结构
+ * 项目骨架
  */
 public interface ProjectArchetype {
 

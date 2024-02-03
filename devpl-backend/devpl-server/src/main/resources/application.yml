@@ -12,6 +12,12 @@ spring:
         url: jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useAffectedRows=true&allowMultiQueries=true
         username: root
         password: 123456
+    servlet:
+        multipart:
+            # 文件上传最大限制
+            max-file-size: 50MB
+            # 请求数据最大限制
+            max-request-size: 10MB
 
 # 需要指定对应的模板
 codegen:
@@ -36,3 +42,20 @@ mybatis-plus:
         prefix:
         blobType: BLOB
         boolValue: TRUE
+
+devpl:
+    file:
+        upload:
+            root: /Temp # 文件上传根目录
+        codegen:
+            root: /Temp # 代码生成根目录
+    codegen:
+        template-location: /Temp # 模板存放根目录，不配置默认user.dir
+    package:
+        entity: io.devpl.backend.entity # 实体类包名
+    db:
+        driver:
+            location:   # 驱动保存位置
+        backup:
+            # 是否开启数据库备份
+            enabled: true

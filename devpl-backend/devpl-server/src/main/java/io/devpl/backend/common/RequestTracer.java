@@ -38,7 +38,7 @@ public class RequestTracer implements HandlerInterceptor {
         }
 
         if (requestBodyJsonAsString != null) {
-            log.info("{} \nbody: {}", sb.substring(0, sb.length()), requestBodyJsonAsString);
+            log.info("{}\nbody: {}", sb.substring(0, sb.length()), requestBodyJsonAsString);
         } else {
             log.info("{}", sb.substring(0, sb.length()));
         }
