@@ -81,9 +81,8 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfile")
-    public Result<Boolean> saveOrUpdateOne(@RequestBody TargetGenerationFile param) {
-        targetGenFileService.saveOrUpdate(param);
-        return Result.ok(true);
+    public boolean saveOrUpdateOne(@RequestBody TargetGenerationFile param) {
+        return targetGenFileService.saveOrUpdate(param);
     }
 
     /**

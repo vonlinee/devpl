@@ -14,10 +14,10 @@ import { ElMessage } from "element-plus/es";
 import { hasText } from "@/utils/tool";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
 
-const dialogVisibleRef = ref(false);
 const templateContentEditorRef = ref();
 // 默认的文件生成与模板对应关系
 const tableData = ref<TargetGenFile[]>([]);
+const templateOptions = ref<TemplateInfo[]>([]);
 
 /**
  * 获取表格数据
@@ -26,15 +26,6 @@ function refreshTableData() {
   apiListGenFiles().then((res) => {
     tableData.value = res.data;
   });
-}
-
-function init() {
-  dialogVisibleRef.value = true;
-  templateOptions.value = [];
-  apiListSelectableTemplates().then((res) => {
-    templateOptions.value = res.data;
-  });
-  refreshTableData();
 }
 
 /**
@@ -52,31 +43,14 @@ function addNewFileType() {
   });
 }
 
-defineExpose({
-  init
-});
-
-let templateOptions = ref<TemplateInfo[]>([]);
-
-function handleCurrentChange() {
+function init() {
+  apiListSelectableTemplates().then((res) => {
+    templateOptions.value = res.data;
+  });
+  refreshTableData();
 }
 
-function submit() {
-  let len: number = tableData.value.length;
-  let exit: boolean = true;
-  for (let i = 0; i < len; i++) {
-    if (tableData.value[i].editing) {
-      exit = false;
-    }
-  }
-  if (exit) {
-    dialogVisibleRef.value = false;
-  } else {
-    ElMessage.error({
-      message: "有数据行处于编辑状态中，请保存后再试",
-      duration: 500
-    });
-  }
+function handleCurrentChange() {
 }
 
 /**
@@ -125,18 +99,16 @@ function deleteHandle(rowIndex: number) {
  * 选择框绑定的值是模板ID，但是显示的值是模板名称
  * @param row
  */
-function fillTemplateName(row: TargetGenFile) {
-  if (!hasText(row.templateName)) {
-    if (row.templateId) {
-      apiGetTemplateById(row.templateId).then((res) => {
-        row.templateName = res.data?.templateName || "";
-      });
-    }
+function fillTemplateName(templateId: number, row: TargetGenFile) {
+  const targetOption = templateOptions.value.filter(option => option.templateId == templateId)[0];
+  if (targetOption) {
+    row.templateId = templateId
+    row.templateName = targetOption.templateName
   }
 }
 
 onMounted(() => {
-  refreshTableData()
+  init()
 })
 
 /**
@@ -146,7 +118,7 @@ onMounted(() => {
 const previewTemplate = (row: TargetGenFile) => {
   if (row.templateId != undefined) {
     apiGetTemplateById(row.templateId).then((res) => {
-
+      templateContentEditorRef.value.init(res.data?.templateName, res.data?.content)
     })
   }
 }
@@ -157,9 +129,6 @@ const previewTemplate = (row: TargetGenFile) => {
   <el-card>
     <el-button type="primary" @click="refreshTableData()">刷新</el-button>
     <el-button type="info" @click="addNewFileType()">新增</el-button>
-    <el-button type="success" @click="submit()">确认</el-button>
-    <el-button type="danger" @click="dialogVisibleRef = false">取消
-    </el-button>
   </el-card>
   <el-table ref="singleTableRef" border :data="tableData" table-layout="auto" highlight-current-row
     @current-change="handleCurrentChange">
@@ -176,15 +145,15 @@ const previewTemplate = (row: TargetGenFile) => {
     </el-table-column>
     <el-table-column label="模板" width="120px" show-overflow-tooltip>
       <template #default="scope">
-        <div>
-          <el-text v-if="!scope.row.editing" truncated type="info" @click="previewTemplate(scope.row)">{{ scope.row.templateName }}
-          </el-text>
-          <el-select v-if="scope.row.editing" v-model="scope.row.templateId" class="m-2" placeholder="选择模板" filterable
-            @change="fillTemplateName(scope.row)">
-            <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
-              :value="item.templateId || 'null'" />
-          </el-select>
-        </div>
+        <a v-if="!scope.row.editing" truncated @click="previewTemplate(scope.row)" style="color: blue;">{{
+          scope.row.templateName }}
+        </a>
+        <el-select v-if="scope.row.editing" v-model="scope.row.templateName" class="m-2" placeholder="选择模板" filterable
+          @change="(val) => fillTemplateName(val, scope.row)">
+          <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
+            :value="item.templateId!">
+          </el-option>
+        </el-select>
       </template>
     </el-table-column>
     <el-table-column property="fileName" label="文件名称" width="240" show-overflow-tooltip>
