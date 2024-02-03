@@ -5895,3 +5895,19 @@ CREATE TABLE `template_variable_info`  (
 -- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ----------------------------
+-- Table structure for mapped_statement_item
+-- ----------------------------
+DROP TABLE IF EXISTS `mapped_statement_item`;
+CREATE TABLE `mapped_statement_item` (
+    `id` varchar(26) NOT NULL COMMENT '主键ID',
+    `statement_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '语句ID',
+    `statement_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '语句类型',
+    `namespace` varchar(100) DEFAULT NULL COMMENT '命名空间',
+    `param_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数类型',
+    `result_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '结果类型',
+    `statement` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '语句内容',
+    `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否逻辑删除',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='MyBatis Mapper语句记录表';

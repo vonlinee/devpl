@@ -2,9 +2,13 @@ package io.devpl.backend.config;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.github.f4b6a3.ulid.Ulid;
+import com.github.f4b6a3.ulid.UlidCreator;
+import io.devpl.backend.common.ValueEnum;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.type.*;
 import org.springframework.beans.factory.InitializingBean;
@@ -57,6 +61,11 @@ public class MyBatisPlusConfiguration implements InitializingBean {
         // 防止全表更新与删除
         mybatisPlusInterceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
         return mybatisPlusInterceptor;
+    }
+
+    @Bean
+    public IdentifierGenerator idGenerator() {
+        return new ULIDGenerator();
     }
 
     /**
@@ -125,9 +134,36 @@ public class MyBatisPlusConfiguration implements InitializingBean {
         };
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    /**
+     * 使用ULID作为主键
+     * <a href="https://github.com/ulid/spec">ULID Specification</a>
+     * <a href="https://github.com/f4b6a3/ulid-creator">...</a>
+     *
+     * @see com.baomidou.mybatisplus.annotation.IdType
+     */
+    static class ULIDGenerator implements IdentifierGenerator {
 
+        @Override
+        public boolean assignId(Object idValue) {
+            return true;
+        }
+
+        @Override
+        public Number nextId(Object entity) {
+            return null;
+        }
+
+        /**
+         * 生成ulid
+         *
+         * @param entity 实体
+         * @return uuid
+         */
+        @Override
+        public String nextUUID(Object entity) {
+            Ulid ulid = UlidCreator.getMonotonicUlid();
+            return ulid.toString();
+        }
     }
 
     /**
@@ -135,7 +171,7 @@ public class MyBatisPlusConfiguration implements InitializingBean {
      *
      * @see org.apache.ibatis.type.BooleanTypeHandler
      */
-    public static class BooleanTypeHandlerWrapper extends BooleanTypeHandler {
+    static class BooleanTypeHandlerWrapper extends BooleanTypeHandler {
 
         TypeHandler<Boolean> handler;
 
@@ -153,5 +189,38 @@ public class MyBatisPlusConfiguration implements InitializingBean {
         public void setNonNullParameter(PreparedStatement ps, int i, Boolean parameter, JdbcType jdbcType) throws SQLException {
             super.setNonNullParameter(ps, i, parameter, jdbcType);
         }
+    }
+
+    /**
+     * 统一数据库枚举类型字段，一般是tinyint
+     *
+     * @see ValueEnum
+     */
+    static class ValueEnumTypeHandler extends BaseTypeHandler<ValueEnum<?, ?>> {
+
+        @Override
+        public void setNonNullParameter(PreparedStatement ps, int i, ValueEnum<?, ?> parameter, JdbcType jdbcType) throws SQLException {
+
+        }
+
+        @Override
+        public ValueEnum<?, ?> getNullableResult(ResultSet rs, String columnName) throws SQLException {
+            return null;
+        }
+
+        @Override
+        public ValueEnum<?, ?> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+            return null;
+        }
+
+        @Override
+        public ValueEnum<?, ?> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+            return null;
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
     }
 }
