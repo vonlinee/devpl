@@ -67,7 +67,7 @@ const dataForm = reactive<FormDataType>({
 
 const removeField = (row: FieldInfo) => {
   const index = dataForm.fields.indexOf(row)
-  if (index > 0) {
+  if (index >= 0) {
     dataForm.fields.splice(index, 1)
   }
 }
