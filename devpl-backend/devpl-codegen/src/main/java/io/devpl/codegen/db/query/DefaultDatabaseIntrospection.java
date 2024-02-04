@@ -6,10 +6,10 @@ import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.config.StrategyConfig;
 import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.PrimaryKey;
+import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.type.TypeConverter;
-import io.devpl.codegen.util.JdbcUtils;
+import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * </p>
  * @since 3.5.3
  */
-public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
+public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -161,9 +161,9 @@ public class DefaultDatabaseIntrospector extends AbstractDatabaseIntrospector {
     protected void introspectTableColumns(DatabaseMetaData dbmd, TableGeneration tableInfo, String catalog, String schema) {
         String tableName = tableInfo.getName();
         // 主键信息
-        final List<PrimaryKey> primaryKeys;
+        final List<PrimaryKeyMetadata> primaryKeys;
         try (ResultSet rs = dbmd.getPrimaryKeys(catalog, schema, tableName)) {
-            primaryKeys = JdbcUtils.toBeans(rs, PrimaryKey::new);
+            primaryKeys = JdbcUtils.toBeans(rs, PrimaryKeyMetadata::new);
         } catch (SQLException e) {
             throw new RuntimeException("读取表主键信息:" + tableName + "错误:", e);
         }

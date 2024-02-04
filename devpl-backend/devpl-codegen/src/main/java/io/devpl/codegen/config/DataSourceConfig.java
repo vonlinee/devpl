@@ -5,9 +5,9 @@ import io.devpl.codegen.db.DatabaseDialect;
 import io.devpl.codegen.db.IKeyWordsHandler;
 import io.devpl.codegen.db.query.AbstractDatabaseIntrospector;
 import io.devpl.codegen.db.query.DatabaseIntrospector;
-import io.devpl.codegen.db.query.DefaultDatabaseIntrospector;
+import io.devpl.codegen.db.query.DefaultDatabaseIntrospection;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
-import io.devpl.codegen.util.JdbcUtils;
+import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,11 +86,11 @@ public class DataSourceConfig extends ConfigurationHolder {
     /**
      * 查询方式
      *
-     * @see DefaultDatabaseIntrospector 默认查询方式
+     * @see DefaultDatabaseIntrospection 默认查询方式
      * SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
      * @since 3.5.3
      */
-    private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospector.class;
+    private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospection.class;
 
     private DataSourceConfig() {
     }
@@ -149,7 +149,7 @@ public class DataSourceConfig extends ConfigurationHolder {
     }
 
     private void processProperties(Properties properties) {
-        if (this.databaseQueryClass.getName().equals(DefaultDatabaseIntrospector.class.getName())) {
+        if (this.databaseQueryClass.getName().equals(DefaultDatabaseIntrospection.class.getName())) {
             switch (this.getDbType()) {
                 case MYSQL -> {
                     properties.put("remarks", "true");

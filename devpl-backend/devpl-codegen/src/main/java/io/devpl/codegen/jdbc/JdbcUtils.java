@@ -1,8 +1,7 @@
-package io.devpl.codegen.util;
+package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.db.query.SQLRuntimeException;
 import io.devpl.sdk.util.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -166,7 +165,7 @@ public class JdbcUtils {
                 tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
             }
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new RuntimeSQLException(e);
         }
         return tableTypes;
     }
@@ -423,5 +422,22 @@ public class JdbcUtils {
             }
         }
         return result.toString();
+    }
+
+    /**
+     * Determines whether a value for the specified column is present in the given result set.
+     *
+     * @param resultSet  The result set 未关闭的ResultSet
+     * @param columnName 不为空
+     * @return <code>true</code> if the column is present in the result set
+     */
+    public static boolean isColumnInResultSet(ResultSet resultSet, String columnName) throws SQLException {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
+            if (columnName.equals(metaData.getColumnName(idx).toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

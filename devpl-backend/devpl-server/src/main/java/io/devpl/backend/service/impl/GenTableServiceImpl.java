@@ -1,7 +1,6 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.common.mvc.BaseServiceImpl;
 import io.devpl.backend.common.query.ListResult;
@@ -62,7 +61,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
     @Override
     public ListResult<GenTable> selectPage(GenTableListParam query) {
-        return ListResult.ok(baseMapper.selectPage(new Page<>(query.getPageIndex(), query.getPageSize()),
+        return ListResult.ok(baseMapper.selectPage(query,
             new LambdaQueryWrapper<GenTable>().eq(StringUtils.hasText(query.getTableName()), GenTable::getTableName, query.getTableName())));
     }
 
@@ -343,7 +342,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     public List<GenTable> getTableList(Long datasourceId, String tableNamePattern) {
         try (Connection connection = dataSourceService.getConnection(datasourceId)) {
             DBType dbType = DBType.MYSQL;
-            if (datasourceId != -1) {
+            if (!dataSourceService.isSystemDataSource(datasourceId)) {
                 DbConnInfo connInfo = dataSourceService.getById(datasourceId);
                 if (connInfo != null) {
                     dbType = DBType.getValue(connInfo.getDbType());

@@ -1,6 +1,6 @@
 package io.devpl.codegen.core;
 
-import io.devpl.codegen.jdbc.meta.PrimaryKey;
+import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,7 +70,7 @@ public class TableGeneration implements GenerationUnit {
     /**
      * 主键
      */
-    private List<PrimaryKey> primaryKeys;
+    private List<PrimaryKeyMetadata> primaryKeys;
     /**
      * 是否有主键
      */

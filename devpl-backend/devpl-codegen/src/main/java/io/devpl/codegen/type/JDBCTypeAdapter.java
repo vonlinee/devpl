@@ -1,7 +1,7 @@
 package io.devpl.codegen.type;
 
 import io.devpl.codegen.jdbc.CommonJavaType;
-import io.devpl.codegen.util.JdbcUtils;
+import io.devpl.codegen.jdbc.JdbcUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

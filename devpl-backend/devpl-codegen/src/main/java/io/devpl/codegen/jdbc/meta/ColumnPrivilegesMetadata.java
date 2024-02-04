@@ -1,9 +1,12 @@
 package io.devpl.codegen.jdbc.meta;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * @see java.sql.DatabaseMetaData#getColumnPrivileges(String, String, String, String)
  */
-public class ColumnPrivileges {
+public class ColumnPrivilegesMetadata {
 
     /**
      * TABLE_CAT String => table catalog (may be null)
@@ -121,5 +124,18 @@ public class ColumnPrivileges {
             ", privilege='" + privilege + '\'' +
             ", isGrantable='" + isGrantable + '\'' +
             '}';
+    }
+
+    public void initialize(ResultSet resultSet) throws SQLException {
+        setTableCat(resultSet.getString(1));
+
+        this.tableSchem = resultSet.getString(2);
+        setTableName(resultSet.getString(3));
+        setColumnName(resultSet.getString(4));
+        setGrantor(resultSet.getString(5));
+        setGrantee(resultSet.getString(6));
+        setPrivilege(resultSet.getString(7));
+
+        this.isGrantable = resultSet.getString(8);
     }
 }

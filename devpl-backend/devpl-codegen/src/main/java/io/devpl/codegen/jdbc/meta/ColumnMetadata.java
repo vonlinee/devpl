@@ -1,5 +1,8 @@
 package io.devpl.codegen.jdbc.meta;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * metadata of a column in a database table
  *
@@ -138,7 +141,7 @@ public class ColumnMetadata {
      * SOURCE_DATA_TYPE short => source type of distinct type or user-generated Ref type,
      * SQL type from java.sql.Types (null if DATA_TYPE isn't DISTINCT or user-generated REF)
      */
-    private String sourceDataType;
+    private Short sourceDataType;
 
     /**
      * IS_AUTOINCREMENT String => Indicates whether this column is auto incremented
@@ -338,11 +341,11 @@ public class ColumnMetadata {
         this.scopeTable = scopeTable;
     }
 
-    public String getSourceDataType() {
+    public Short getSourceDataType() {
         return sourceDataType;
     }
 
-    public void setSourceDataType(String sourceDataType) {
+    public void setSourceDataType(Short sourceDataType) {
         this.sourceDataType = sourceDataType;
     }
 
@@ -398,5 +401,32 @@ public class ColumnMetadata {
             ", isAutoincrement='" + isAutoincrement + '\'' +
             ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
             '}';
+    }
+
+    public void initialize(ResultSet resultSet) throws SQLException {
+        this.tableCat = resultSet.getString("TABLE_CAT");
+        this.tableSchem = resultSet.getString("TABLE_SCHEM");
+        this.tableName = resultSet.getString("TABLE_NAME");
+        this.columnName = resultSet.getString("COLUMN_NAME");
+        this.dataType = resultSet.getInt("DATA_TYPE");
+        this.typeName = resultSet.getString("TYPE_NAME");
+        this.columnSize = resultSet.getInt("COLUMN_SIZE");
+        this.bufferLength = resultSet.getInt("BUFFER_LENGTH");
+        this.decimalDigits = resultSet.getInt("DECIMAL_DIGITS");
+        this.numPrecRadix = resultSet.getInt("NUM_PREC_RADIX");
+        this.nullable = resultSet.getInt("NULLABLE");
+        this.remarks = resultSet.getString("REMARKS");
+        this.columnDef = resultSet.getString("COLUMN_DEF");
+        this.sqlDataType = resultSet.getInt("SQL_DATA_TYPE");
+        this.sqlDatetimeSub = resultSet.getInt("SQL_DATETIME_SUB");
+        this.charOctetLength = resultSet.getInt("CHAR_OCTET_LENGTH");
+        this.ordinalPosition = resultSet.getInt("ORDINAL_POSITION");
+        this.isNullable = resultSet.getString("IS_NULLABLE");
+        this.scopeCatalog = resultSet.getString("SCOPE_CATALOG");
+        this.scopeSchema = resultSet.getString("SCOPE_SCHEMA");
+        this.scopeTable = resultSet.getString("SCOPE_TABLE");
+        this.sourceDataType = resultSet.getShort("SOURCE_DATA_TYPE");
+        this.isAutoincrement = resultSet.getString("IS_AUTOINCREMENT");
+        this.isGeneratedcolumn = resultSet.getString("IS_GENERATEDCOLUMN");
     }
 }

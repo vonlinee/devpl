@@ -2,7 +2,7 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.jdbc.CommonJavaType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.PrimaryKey;
+import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.type.JavaType;
 
 import java.util.List;
@@ -276,8 +276,8 @@ public class ColumnGeneration {
      * @return 该列是否为主键
      */
     public boolean isPrimaryKey() {
-        List<PrimaryKey> primaryKeys = belongTable.getPrimaryKeys();
-        for (PrimaryKey primaryKey : primaryKeys) {
+        List<PrimaryKeyMetadata> primaryKeys = belongTable.getPrimaryKeys();
+        for (PrimaryKeyMetadata primaryKey : primaryKeys) {
             if (this.metadata.getColumnName().equals(primaryKey.getColumnName())) {
                 return true;
             }

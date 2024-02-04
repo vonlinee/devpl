@@ -20,9 +20,9 @@ import java.util.regex.Pattern;
 /**
  * Jdbc工具类
  */
-public class JdbcUtils {
+public class DBUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(JdbcUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(DBUtils.class);
 
     /**
      * 从连接url字符串解析数据库名称

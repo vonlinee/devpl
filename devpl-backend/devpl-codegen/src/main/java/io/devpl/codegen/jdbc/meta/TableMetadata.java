@@ -1,5 +1,7 @@
 package io.devpl.codegen.jdbc.meta;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 
 /**
@@ -157,5 +159,18 @@ public class TableMetadata {
     @Override
     public int hashCode() {
         return Objects.hash(tableCat, tableSchem, tableName, tableType, remarks, typeCat, typeSchem, typeName, selfReferencingColName, refGeneration);
+    }
+
+    public void initialize(ResultSet resultSet) throws SQLException {
+        this.tableCat = resultSet.getString("TABLE_CAT");
+        this.tableSchem = resultSet.getString("TABLE_SCHEM");
+        this.tableName = resultSet.getString("TABLE_NAME");
+        this.tableType = resultSet.getString("TABLE_TYPE");
+        this.remarks = resultSet.getString("REMARKS");
+        this.typeCat = resultSet.getString("TYPE_CAT");
+        this.tableSchem = resultSet.getString("TYPE_SCHEM");
+        this.typeName = resultSet.getString("TYPE_NAME");
+        this.selfReferencingColName = resultSet.getString("SELF_REFERENCING_COL_NAME");
+        this.refGeneration = resultSet.getString("REF_GENERATION");
     }
 }

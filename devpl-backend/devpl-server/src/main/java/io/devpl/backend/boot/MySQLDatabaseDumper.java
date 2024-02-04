@@ -2,7 +2,7 @@ package io.devpl.backend.boot;
 
 import io.devpl.backend.service.DatabaseBackupService;
 import io.devpl.backend.utils.DateTimeUtils;
-import io.devpl.backend.utils.JdbcUtils;
+import io.devpl.backend.utils.DBUtils;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class MySQLDatabaseDumper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String databaseName = JdbcUtils.getDatabaseNameFromConnectionUrl(url);
+        String databaseName = DBUtils.getDatabaseNameFromConnectionUrl(url);
         Path path = Path.of(new File("").getAbsolutePath(), "db/backup", databaseName + "-" + DateTimeUtils.nowForFilename() + ".sql");
         boolean result = databaseBackupService.backup(url, username, password, databaseName, path);
         if (result) {

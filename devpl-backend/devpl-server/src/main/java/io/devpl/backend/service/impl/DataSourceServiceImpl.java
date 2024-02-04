@@ -2,9 +2,6 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.db.JDBCDriver;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.*;
 import io.devpl.backend.dao.DbConnInfoMapper;
@@ -15,10 +12,13 @@ import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.DbConnInfo;
 import io.devpl.backend.jdbc.JdbcDriverManager;
-import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.utils.EncryptUtils;
-import io.devpl.backend.utils.JdbcUtils;
+import io.devpl.backend.utils.DBUtils;
+import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.JDBCDriver;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -168,7 +168,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         try (Connection connection = getConnection(entity)) {
             DatabaseMetaData metaData = connection.getMetaData();
             try (ResultSet catalogs = metaData.getCatalogs()) {
-                list = JdbcUtils.extractSingleColumn(catalogs, String.class);
+                list = DBUtils.extractSingleColumn(catalogs, String.class);
             }
         } catch (Exception exception) {
             log.error("", exception);
@@ -206,7 +206,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
             DatabaseMetaData dbmd = connection.getMetaData();
             String catalog = connection.getCatalog();
             try (ResultSet resultSet = dbmd.getColumns(catalog, databaseName, tableName, "%")) {
-                result.addAll(JdbcUtils.extractRows(resultSet, ColumnMetadata.class));
+                result.addAll(DBUtils.extractRows(resultSet, ColumnMetadata.class));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -269,7 +269,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
             try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = pstmt.executeQuery()) {
                     // 表头
-                    List<ResultSetColumnMetadata> columnMetadata = JdbcUtils.getColumnMetadata(resultSet);
+                    List<ResultSetColumnMetadata> columnMetadata = DBUtils.getColumnMetadata(resultSet);
                     // 表数据
                     vo.setHeaders(columnMetadata);
                     // vo.setRows(getTableData(resultSet));
@@ -289,7 +289,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
      * @return 每行的数据
      */
     private List<Map<String, Object>> getTableData1(ResultSet resultSet) throws SQLException {
-        return JdbcUtils.extractMaps(resultSet);
+        return DBUtils.extractMaps(resultSet);
     }
 
     /**
