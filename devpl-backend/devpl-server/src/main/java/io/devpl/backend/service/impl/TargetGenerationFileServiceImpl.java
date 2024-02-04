@@ -31,6 +31,11 @@ public class TargetGenerationFileServiceImpl implements TargetGenerationFileServ
     }
 
     @Override
+    public List<TargetGenerationFile> listDefaultGeneratedFileTypes() {
+        return targetGenFileMapper.selectDefaultGeneratedFileTypes();
+    }
+
+    @Override
     public List<TargetGenerationFile> listGeneratedFileTypes() {
         return targetGenFileMapper.selectGeneratedFileTypes();
     }

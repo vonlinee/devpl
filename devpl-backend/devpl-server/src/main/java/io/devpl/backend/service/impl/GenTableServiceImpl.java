@@ -175,7 +175,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
      */
     @Override
     public void initTargetGenerationFiles(GenTable table, TemplateArgumentsMap params) {
-        List<TargetGenerationFile> targetGenFiles = targetGenFileService.listGeneratedFileTypes();
+        List<TargetGenerationFile> targetGenFiles = targetGenFileService.listDefaultGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
 
         for (TargetGenerationFile targetGenFile : targetGenFiles) {
@@ -352,7 +352,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         List<GenTable> tableList = new ArrayList<>();
         // 根据数据源，获取全部数据表
         try (DatabaseMetadataLoader loader = getDatabaseMetadataLoader(datasourceId, databaseName, tableNamePattern)) {
-            List<TableMetadata> tables = loader.getTables(databaseName, null, null, new String[]{"TABLE"});
+            List<TableMetadata> tables = loader.getTables(databaseName, null, tableNamePattern, null);
             for (TableMetadata table : tables) {
                 GenTable genTable = new GenTable();
                 genTable.setDatabaseName(table.getTableSchem());

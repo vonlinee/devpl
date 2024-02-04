@@ -14,6 +14,8 @@ public interface TargetGenerationFileService {
 
     boolean saveOrUpdate(TargetGenerationFile file);
 
+    List<TargetGenerationFile> listDefaultGeneratedFileTypes();
+
     List<TargetGenerationFile> listGeneratedFileTypes();
 
     boolean removeBatchByIds(List<Integer> ids);

@@ -40,7 +40,8 @@ function addNewFileType() {
     editing: true,
     builtin: false,
     templateName: "",
-    typeName: ""
+    typeName: "",
+    defaultTarget: false
   });
 }
 
@@ -179,7 +180,12 @@ const previewTemplate = (row: TargetGenFile) => {
     </el-table-column>
     <el-table-column prop="builtin" align="center" label="是否内置" width="90px" min-width="60px">
       <template #default="scope">
-        <el-checkbox v-model="scope.row.builtin" :disabled="!scope.row.editing" size="large" />
+        <el-checkbox v-model="scope.row.builtin" :disabled="!scope.row.editing" />
+      </template>
+    </el-table-column>
+    <el-table-column prop="defaultTarget" align="center" label="是否默认生成" width="120px" min-width="120px">
+      <template #default="scope">
+        <el-checkbox v-model="scope.row.defaultTarget" :disabled="!scope.row.editing" />
       </template>
     </el-table-column>
     <el-table-column label="模板" width="200px" show-overflow-tooltip>

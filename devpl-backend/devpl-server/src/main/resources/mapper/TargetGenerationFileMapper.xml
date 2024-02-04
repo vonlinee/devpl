@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.TargetGenerationFileMapper">
 
+    <select id="selectDefaultGeneratedFileTypes" resultType="io.devpl.backend.entity.TargetGenerationFile">
+        SELECT tfg.*, ti.template_name
+        FROM target_generation_file tfg
+                 LEFT JOIN template_info ti on tfg.template_id = ti.template_id
+        WHERE tfg.default_target = 1
+    </select>
+
     <select id="selectGeneratedFileTypes" resultType="io.devpl.backend.entity.TargetGenerationFile">
         SELECT tfg.*, ti.template_name
         FROM target_generation_file tfg

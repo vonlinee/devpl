@@ -14,7 +14,7 @@ public class SQLServerQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName) {
+    public String getTableQuerySql(String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("select cast(so.name as varchar(500)) as TABLE_NAME, cast(sep.value as varchar(500)) as COMMENTS from sysobjects so ");
         sql.append("left JOIN sys.extended_properties sep on sep.major_id=so.id and sep.minor_id=0 where (xtype='U' or xtype='V') ");

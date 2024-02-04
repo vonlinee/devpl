@@ -16,6 +16,15 @@ public interface TargetGenerationFileMapper extends MyBatisPlusMapper<TargetGene
      * 查询可选择的生成文件
      *
      * @return 生成文件列表
+     * @see TargetGenerationFile#isDefaultTarget()
+     */
+    List<TargetGenerationFile> selectDefaultGeneratedFileTypes();
+
+    /**
+     * 查询可选择的生成文件
+     *
+     * @return 生成文件列表
+     * @see TargetGenerationFile#isDefaultTarget()
      */
     List<TargetGenerationFile> selectGeneratedFileTypes();
 }

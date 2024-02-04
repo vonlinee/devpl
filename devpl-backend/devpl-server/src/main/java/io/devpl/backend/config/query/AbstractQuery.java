@@ -17,7 +17,7 @@ public interface AbstractQuery {
      * 表信息查询 SQL
      * 需要数据库名称，表名称，表注释信息
      */
-    String getTableQuerySql(@Nullable String tableName);
+    String getTableQuerySql(@Nullable String tableName, boolean likeMatch);
 
     /**
      * 表名称 ResultSet 列名

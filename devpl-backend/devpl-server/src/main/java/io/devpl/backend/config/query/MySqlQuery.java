@@ -21,7 +21,7 @@ public class MySqlQuery implements AbstractQuery {
      * @return
      */
     @Override
-    public String getTableQuerySql(String tableName) {
+    public String getTableQuerySql(String tableName, boolean likeMatch) {
 
         StringBuilder sql = new StringBuilder("""
             select table_schema, table_name, table_comment from information_schema.tables
@@ -30,9 +30,13 @@ public class MySqlQuery implements AbstractQuery {
 
         // 表名查询
         if (StringUtils.hasText(tableName)) {
-            sql.append("and table_name = '").append(tableName).append("' ");
+            if (likeMatch) {
+                sql.append("and table_name like '%").append(tableName).append("%'");
+            } else {
+                sql.append("and table_name = '").append(tableName).append("'");
+            }
         }
-        sql.append("order by table_name asc");
+        sql.append(" order by table_name asc");
 
         return sql.toString();
     }

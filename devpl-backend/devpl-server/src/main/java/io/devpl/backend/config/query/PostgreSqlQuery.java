@@ -14,7 +14,7 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName) {
+    public String getTableQuerySql(String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("select t1.tablename, obj_description(relfilenode, 'pg_class') as comments from pg_tables t1, pg_class t2 ");
         sql.append("where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname ");

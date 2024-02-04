@@ -5,6 +5,7 @@ import io.devpl.sdk.util.StringUtils;
 
 /**
  * ClickHouse 表数据查询
+ *
  * @author ratelfu
  * @since 2021-03-10
  */
@@ -21,7 +22,7 @@ public class ClickHouseQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName) {
+    public String getTableQuerySql(String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM system.tables WHERE 1=1 ");
 

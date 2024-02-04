@@ -63,4 +63,10 @@ public class TargetGenerationFile implements Serializable {
      */
     @TableField(exist = false)
     private String templateName;
+
+    /**
+     * 是否默认在代码生成中使用
+     */
+    @TableField(value = "default_target")
+    private boolean defaultTarget;
 }

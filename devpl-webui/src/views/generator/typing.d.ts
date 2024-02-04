@@ -46,7 +46,11 @@ type TargetGenFile = {
   /**
    * 是否内置的生成文件类型，内置的不可删除，不可修改
    */
-  builtin: boolean
+  builtin: boolean,
+  /**
+   * 是否默认在代码生成中生成此类型的文件
+   */
+  defaultTarget: boolean,
   /**
    * 是否选中
    */

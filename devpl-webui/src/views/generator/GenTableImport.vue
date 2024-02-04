@@ -4,30 +4,34 @@
 
     <div style="display: flex; height: 100%; flex-direction: column;">
 
-      <el-form ref="dataFormRef" :model="dataForm" inline>
-        <el-form-item label="数据源" prop="datasourceId">
-          <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源"
-            @change="getTableList(true)">
-            <el-option label="默认数据源" :value="-1"></el-option>
-            <el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connName" :value="ds.id"></el-option>
-          </el-select>
-        </el-form-item>
+      <div style="display: flex; flex-direction: row;">
+        <div>
+          <el-form ref="dataFormRef" :model="dataForm" inline>
+            <el-form-item label="数据源" prop="datasourceId">
+              <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源"
+                @change="getTableList(true)">
+                <el-option label="默认数据源" :value="-1"></el-option>
+                <el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connName"
+                  :value="ds.id"></el-option>
+              </el-select>
+            </el-form-item>
 
-        <el-form-item label="数据库" prop="datasourceId">
-          <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList">
-            <el-option v-for="databaseName in dataForm.databaseNames" :key="databaseName" :label="databaseName"
-              :value="databaseName"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="表名称" prop="tableNamePattern">
-          <el-row>
-            <el-input v-model="dataForm.tableNamePattern" clearable></el-input>
-          </el-row>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="() => getTableList()">查询</el-button>
-        </el-form-item>
-      </el-form>
+            <el-form-item label="数据库" prop="datasourceId">
+              <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList">
+                <el-option v-for="databaseName in dataForm.databaseNames" :key="databaseName" :label="databaseName"
+                  :value="databaseName"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="表名称" prop="tableNamePattern">
+              <el-row>
+                <el-input v-model="dataForm.tableNamePattern" clearable @keyup.enter="() => getTableList()"></el-input>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </div>
+        <el-button type="primary" @click="() => getTableList()"
+          style="margin-left: auto; margin-right: 20px;">查询</el-button>
+      </div>
       <div style="flex: 1; min-height: 0">
         <el-table :data="dataForm.tableList" height="100%" border @selection-change="selectionChangeHandle">
           <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>

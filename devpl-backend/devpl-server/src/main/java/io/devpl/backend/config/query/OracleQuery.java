@@ -14,7 +14,7 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName) {
+    public String getTableQuerySql(String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("select dt.table_name, dtc.comments from user_tables dt,user_tab_comments dtc ");
         sql.append("where dt.table_name = dtc.table_name ");
