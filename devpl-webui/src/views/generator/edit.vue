@@ -2,7 +2,7 @@
   生成配置
  -->
 <template>
-  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="3000">
+  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="150">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="basic">
         <generator ref="generatorRef" @handle="handleResult"></generator>

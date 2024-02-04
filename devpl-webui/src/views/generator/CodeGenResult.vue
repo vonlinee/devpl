@@ -14,7 +14,7 @@
     destroy-on-close
     draggable
     show-zoom
-    :z-index="5000"
+    :z-index="1000"
   >
     <Splitpanes>
       <Pane min-size="20" size="35">
