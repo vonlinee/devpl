@@ -15,7 +15,7 @@ const { readonly } = withDefaults(defineProps<{
   /**
    * 是否只读
    */
-  readonly: boolean
+  readonly?: boolean
 }>(), {
   readonly: true
 })
