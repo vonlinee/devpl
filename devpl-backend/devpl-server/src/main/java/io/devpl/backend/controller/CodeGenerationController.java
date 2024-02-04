@@ -31,6 +31,7 @@ public class CodeGenerationController {
 
     /**
      * 生成代码（自定义目录）
+     * TODO 一次生成只操作同一个目录
      *
      * @param tableIds 数据库表ID
      * @return 所有生成的根目录
