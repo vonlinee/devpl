@@ -1,6 +1,12 @@
+<!-- 
+  生成配置
+ -->
 <template>
-  <el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">
+  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="3000">
     <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="基本信息" name="basic">
+        <generator ref="generatorRef" @handle="handleResult"></generator>
+      </el-tab-pane>
       <el-tab-pane label="文件类型" name="target">
         <el-table border :data="generationFiles">
           <el-table-column label="文件名" prop="fileName">
@@ -156,10 +162,14 @@
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="submitHandle()">确定</el-button>
+      <div style="height: 100%; width: 100%; display: flex; align-items: center;justify-content:center;">
+        <el-button type="primary" @click="submitHandle()">保存配置</el-button>
+        <el-button type="success" @click="generateCode()">生成代码</el-button>
+      </div>
     </template>
   </el-drawer>
+
+  <code-gen-result ref="resultDialogRef"></code-gen-result>
 </template>
 
 <script setup lang="ts">
@@ -183,10 +193,17 @@ import {
   apiListGenerationFiles,
   apiSaveGenerationFileConfig,
 } from "@/api/generator"
+import Generator from "./generator.vue"
 import TemplateSelector from "./TemplateSelector.vue"
+import CodeGenResult from "@/views/generator/CodeGenResult.vue"
 import { apiListSelectableTemplates } from "@/api/template"
 
-const activeName = ref()
+/**
+ * 展示生成结果弹窗Ref
+ */
+const resultDialogRef = ref()
+const generatorRef = ref()
+const activeName = ref('basic')
 const fieldTable = ref<VxeTableInstance>()
 const formTable = ref<VxeTableInstance>()
 const gridTable = ref<VxeTableInstance>()
@@ -271,7 +288,9 @@ const init = (id: number) => {
     dataFormRef.value.resetFields()
   }
 
-  activeName.value = "target"
+  activeName.value = "basic"
+
+  nextTick(() => generatorRef.value.init(id))
 
   rowDrop()
   getTable(id)
@@ -315,9 +334,23 @@ const getFieldTypeList = async () => {
 }
 
 /**
+ * 根目录
+ * @param root 
+ */
+const handleResult = (root: string) => {
+  if (root) {
+    // 返回所有根目录列表
+    resultDialogRef.value.init(root)
+  }
+}
+
+/**
  * 确定按钮，表单提交
  */
 const submitHandle = () => {
+  // 保存基本配置信息
+  generatorRef.value.save()
+
   apiUpdateGenTableFields(tableId.value, fieldList.value).then(() => {
     apiSaveGenerationFileConfig(
       tableId.value,
@@ -328,13 +361,16 @@ const submitHandle = () => {
           message: "操作成功",
           duration: 500,
           onClose: () => {
-            visible.value = false
             emit("refreshDataList")
           },
         })
       }
     })
   })
+}
+
+const generateCode = () => {
+  generatorRef.value.generate()
 }
 
 defineExpose({

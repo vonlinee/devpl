@@ -34,13 +34,13 @@
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
     <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150"></el-table-column>
     <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200"></el-table-column>
-    <el-table-column prop="tableComment" label="表说明" header-align="center" align="center" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"
+      show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
       <template #default="scope">
-        <el-button type="primary" link @click="editHandle(scope.row.id)">参数配置</el-button>
-        <el-button type="primary" link @click="generatorHandle(scope.row.id)">生成</el-button>
-        <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+        <el-button type="primary" link @click="editHandle(scope.row.id)">编辑</el-button>
         <el-button type="primary" link @click="syncHandle(scope.row)">同步</el-button>
+        <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -51,7 +51,6 @@
 
   <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
   <edit ref="editRef" @refresh-data-list="getDataList"></edit>
-  <generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
 </template>
 
 <script setup lang="ts">
@@ -60,7 +59,6 @@ import { DataTableOption } from "@/hooks/interface"
 import { useCrud } from "@/hooks"
 import GenTableImport from "./GenTableImport.vue"
 import Edit from "./edit.vue"
-import Generator from "./generator.vue"
 import {
   apiImportTables,
   apiListGenTables,
