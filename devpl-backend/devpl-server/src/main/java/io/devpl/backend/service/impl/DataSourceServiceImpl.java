@@ -13,8 +13,8 @@ import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.DbConnInfo;
 import io.devpl.backend.jdbc.JdbcDriverManager;
 import io.devpl.backend.service.DataSourceService;
-import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.backend.utils.DBUtils;
+import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
@@ -41,7 +41,7 @@ import java.util.Map;
 public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnInfo> implements DataSourceService {
 
     /**
-     * 程序内部的数据源
+     * 程序自身使用的数据源
      */
     private final DataSource dataSource;
     private final JdbcDriverManager driverManager;
@@ -104,7 +104,6 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
      */
     @Override
     public Connection getConnection(DbConnInfo connInfo) throws SQLException {
-
         if (connInfo.getId() != null && isSystemDataSource(connInfo.getId())) {
             // 本系统连接的数据源
             return dataSource.getConnection();
@@ -164,16 +163,21 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
             return Collections.emptyList();
         }
         entity.setConnUrl(getConnectionUrl(entity));
-        List<String> list = null;
+
         try (Connection connection = getConnection(entity)) {
-            DatabaseMetaData metaData = connection.getMetaData();
-            try (ResultSet catalogs = metaData.getCatalogs()) {
-                list = DBUtils.extractSingleColumn(catalogs, String.class);
-            }
-        } catch (Exception exception) {
-            log.error("", exception);
+            return getDatabaseNames(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return list == null ? Collections.emptyList() : list;
+    }
+
+    public List<String> getDatabaseNames(Connection connection) throws SQLException {
+        List<String> list;
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet catalogs = metaData.getCatalogs()) {
+            list = DBUtils.extractSingleColumn(catalogs, String.class);
+        }
+        return list;
     }
 
     @Override
@@ -200,12 +204,21 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
     }
 
     @Override
+    public List<String> getDatabaseNames(Long dataSourceId) {
+        DbConnInfo connInfo = this.getConnectionInfo(dataSourceId);
+        if (connInfo != null) {
+            return getDbNames(connInfo);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<ColumnMetadata> getColumns(DbConnInfo connInfo, String databaseName, String tableName) {
         List<ColumnMetadata> result = new ArrayList<>();
         try (Connection connection = getConnection(connInfo)) {
-            DatabaseMetaData dbmd = connection.getMetaData();
+            DatabaseMetaData dmd = connection.getMetaData();
             String catalog = connection.getCatalog();
-            try (ResultSet resultSet = dbmd.getColumns(catalog, databaseName, tableName, "%")) {
+            try (ResultSet resultSet = dmd.getColumns(catalog, databaseName, tableName, "%")) {
                 result.addAll(DBUtils.extractRows(resultSet, ColumnMetadata.class));
             }
         } catch (SQLException e) {

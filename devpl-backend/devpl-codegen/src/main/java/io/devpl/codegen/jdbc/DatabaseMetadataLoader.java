@@ -7,7 +7,7 @@ import io.devpl.codegen.jdbc.meta.TableMetadata;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 
-public interface DatabaseMetadataLoader {
+public interface DatabaseMetadataLoader extends AutoCloseable {
 
     /**
      * @return table metadata list
@@ -36,4 +36,8 @@ public interface DatabaseMetadataLoader {
      */
     List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema,
                                                        String table, String columnNamePattern) throws RuntimeSQLException;
+
+    @Override
+    default void close() {
+    }
 }

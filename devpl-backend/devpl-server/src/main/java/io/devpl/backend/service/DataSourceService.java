@@ -1,7 +1,5 @@
 package io.devpl.backend.service;
 
-import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.config.query.AbstractQuery;
@@ -11,6 +9,8 @@ import io.devpl.backend.domain.vo.DBTableDataVO;
 import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.DbConnInfo;
+import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -82,6 +82,14 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      * @return 数据库名称
      */
     List<String> getDbNames(DbConnInfo entity);
+
+    /**
+     * 获取数据库名称
+     *
+     * @param dataSourceId 数据源ID
+     * @return 数据库名称
+     */
+    List<String> getDatabaseNames(Long dataSourceId);
 
     List<String> getTableNames(DbConnInfo connInfo, String databaseName);
 

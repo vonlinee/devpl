@@ -112,9 +112,7 @@ public class DataSourceController {
     @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
     public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
         Assert.notNull(id, "id不能为空");
-        DbConnInfo connInfo = datasourceService.getConnectionInfo(id);
-        Assert.notNull(connInfo, "数据源不存在");
-        return Result.ok(datasourceService.getDbNames(connInfo));
+        return Result.ok(datasourceService.getDatabaseNames(id));
     }
 
     /**
@@ -204,7 +202,7 @@ public class DataSourceController {
         @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
-            return ListResult.ok(tableService.getTableList(id, tableNamePattern));
+            return ListResult.ok(tableService.getTableList(id, databaseName, tableNamePattern));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ListResult.error("数据源配置错误，请检查数据源配置！");

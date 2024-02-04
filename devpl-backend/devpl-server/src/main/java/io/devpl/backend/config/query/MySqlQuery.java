@@ -24,7 +24,7 @@ public class MySqlQuery implements AbstractQuery {
     public String getTableQuerySql(String tableName) {
 
         StringBuilder sql = new StringBuilder("""
-            select table_name, table_comment from information_schema.tables
+            select table_schema, table_name, table_comment from information_schema.tables
             where table_schema = (select database())
              """);
 
@@ -35,6 +35,11 @@ public class MySqlQuery implements AbstractQuery {
         sql.append("order by table_name asc");
 
         return sql.toString();
+    }
+
+    @Override
+    public String getDatabaseNameResultSetColumnName() {
+        return "table_schema";
     }
 
     @Override

@@ -2,8 +2,8 @@
   <el-card>
     <el-form>
       <el-form-item label="选择项目">
-        <el-select v-model="project">
-          <el-option v-for="project in projects" :key="project.projectId" :value="project"
+        <el-select v-model="state.queryForm.projectId">
+          <el-option v-for="project in projects" :key="project.projectId" :value="project.projectId"
             :label="project.projectName"></el-option>
         </el-select>
       </el-form-item>
@@ -32,8 +32,9 @@
   <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
     @selection-change="selectionChangeHandle">
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-    <el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
-    <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
+    <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150"></el-table-column>
+    <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200"></el-table-column>
+    <el-table-column prop="tableComment" label="表说明" header-align="center" align="center" show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
       <template #default="scope">
         <el-button type="primary" link @click="editHandle(scope.row.id)">参数配置</el-button>
@@ -74,6 +75,7 @@ import { useRouter } from "vue-router"
 const state: DataTableOption = reactive({
   queryForm: {
     tableName: "",
+    projectId: undefined
   },
   queryPage: apiListGenTables,
   removeByIds: apiRemoveGenTableByIds,

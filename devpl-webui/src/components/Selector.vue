@@ -11,20 +11,36 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+const selectedValue = ref()
+
 const handleValueChange = (val: any) => {
   const option = options.filter(option => option[value] == val)[0]
   if (option) {
-    
+    selectedValue.value = option[value]
   }
 }
 
-const selectedValue = ref()
-
-const { options, value } = defineProps<{
-  key: string,
-  label: string,
-  value: string,
+const { options, value } = withDefaults(defineProps<{
+  /**
+   * key字段名
+   */
+  key?: string,
+  /**
+   * label字段名
+   */
+  label?: string,
+  /**
+   * value字段名
+   */
+  value?: string,
+  /**
+   * 对象列表，而非基本类型列表
+   */
   options: any[]
-}>()
+}>(), {
+  key: "key",
+  label: "label",
+  value: "value"
+})
 
 </script>

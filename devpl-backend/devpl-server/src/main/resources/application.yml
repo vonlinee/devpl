@@ -57,5 +57,5 @@ devpl:
         driver:
             location:   # 驱动保存位置
         backup:
-            # 是否开启数据库备份
+            # 是否开启数据库备份，启动时备份数据库的表结构及全量数据
             enabled: true

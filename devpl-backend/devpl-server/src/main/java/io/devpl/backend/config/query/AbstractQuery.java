@@ -1,6 +1,7 @@
 package io.devpl.backend.config.query;
 
 import io.devpl.codegen.db.DBType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Query
@@ -16,12 +17,16 @@ public interface AbstractQuery {
      * 表信息查询 SQL
      * 需要数据库名称，表名称，表注释信息
      */
-    String getTableQuerySql(String tableName);
+    String getTableQuerySql(@Nullable String tableName);
 
     /**
      * 表名称 ResultSet 列名
      */
     String getTableNameResultSetColumnName();
+
+    default String getDatabaseNameResultSetColumnName() {
+        return null;
+    }
 
     /**
      * 表注释

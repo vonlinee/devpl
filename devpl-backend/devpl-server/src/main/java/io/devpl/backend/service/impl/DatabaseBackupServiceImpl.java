@@ -31,12 +31,22 @@ public class DatabaseBackupServiceImpl implements DatabaseBackupService {
         FileUtils.clean(path.getParent().toFile());
         String saveLocation = path.toAbsolutePath().toString();
         String command = "%sbin/mysqldump -u%s -p%s %s -r %s".formatted(baseDir, username, password, databaseName, saveLocation);
-        logger.info("mysqldump => {}", command);
+        logger.info("mysqldump with command: {}", command);
+
+        DatabaseBackupHistory history = new DatabaseBackupHistory();
+        history.setSaveLocation(saveLocation);
+        history.setBackupTime(LocalDateTime.now());
         try {
             Runtime.getRuntime().exec(command);
-            saveHistory(saveLocation);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.error("数据库备份失败", e);
+            history.setSaveLocation("备份失败");
+        } finally {
+            try {
+                databaseBackupHistoryMapper.insert(history);
+            } catch (Exception exception) {
+                logger.error("保存数据库备份记录失败", exception);
+            }
         }
         return true;
     }

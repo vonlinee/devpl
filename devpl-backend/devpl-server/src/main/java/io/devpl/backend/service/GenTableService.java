@@ -45,10 +45,9 @@ public interface GenTableService extends BaseService<GenTable> {
      *
      * @param connection   数据源连接
      * @param query        查询策略
-     * @param dataSourceId 数据源ID
      * @param tableName    表名
      */
-    GenTable getTable(Connection connection, AbstractQuery query, Long dataSourceId, String tableName);
+    GenTable loadTableInfo(Connection connection, AbstractQuery query, String tableName);
 
     /**
      * 同步数据库表
@@ -61,7 +60,8 @@ public interface GenTableService extends BaseService<GenTable> {
      * 根据数据源，获取指定数据表
      *
      * @param datasourceId     数据源ID
+     * @param databaseName     数据库名称
      * @param tableNamePattern 表名，模糊匹配
      */
-    List<GenTable> getTableList(Long datasourceId, String tableNamePattern);
+    List<GenTable> getTableList(Long datasourceId, String databaseName, String tableNamePattern);
 }
