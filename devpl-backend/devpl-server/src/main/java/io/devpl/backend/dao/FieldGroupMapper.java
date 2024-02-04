@@ -1,6 +1,6 @@
 package io.devpl.backend.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.GroupField;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @Mapper
-public interface FieldGroupMapper extends BaseMapper<FieldGroup> {
+public interface FieldGroupMapper extends MyBatisPlusMapper<FieldGroup> {
 
     /**
      * 查询组的字段列表

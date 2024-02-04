@@ -1,7 +1,7 @@
 package io.devpl.backend.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import io.devpl.backend.common.mvc.EntityMapper;
+import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
 import io.devpl.backend.entity.DataTypeMapping;
@@ -16,7 +16,7 @@ import java.util.List;
  * 数据类型对应关系关联表
  **/
 @Mapper
-public interface DataTypeMappingMapper extends EntityMapper<DataTypeMapping> {
+public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping> {
 
     List<DataTypeMappingListVO> listDataTypeMappings(@Param("typeId") Long typeId);
 

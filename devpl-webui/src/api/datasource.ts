@@ -62,7 +62,7 @@ export const useDataSourceSubmitApi = (dataForm: any) => {
 export const useDataSourceTableListApi = (
   id: number,
   databaseName?: string,
-  tableNamePattern?: string | null
+  tableNamePattern?: string
 ) => {
   return http.get("/api/gen/datasource/table/list", {
     dataSourceId: id,

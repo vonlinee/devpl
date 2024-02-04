@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 /**
  * 基础服务类，所有Service都要继承
  */
-public abstract class BaseServiceImpl<M extends EntityMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
+public abstract class BaseServiceImpl<M extends MyBatisPlusMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
 
     /**
      * 获取分页对象

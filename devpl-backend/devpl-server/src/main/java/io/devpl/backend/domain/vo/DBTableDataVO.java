@@ -1,6 +1,6 @@
 package io.devpl.backend.domain.vo;
 
-import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import lombok.Getter;
 import lombok.Setter;
 

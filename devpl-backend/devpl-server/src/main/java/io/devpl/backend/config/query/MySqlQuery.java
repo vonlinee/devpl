@@ -5,6 +5,7 @@ import io.devpl.sdk.util.StringUtils;
 
 /**
  * MySQL查询
+ * TODO 重构数据库元数据查询接口
  */
 public class MySqlQuery implements AbstractQuery {
 
@@ -13,11 +14,20 @@ public class MySqlQuery implements AbstractQuery {
         return DBType.MYSQL;
     }
 
+    /**
+     * database() 返回当前（默认）数据库的名称：
+     *
+     * @param tableName 表名称
+     * @return
+     */
     @Override
     public String getTableQuerySql(String tableName) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select table_name, table_comment from information_schema.tables ");
-        sql.append("where table_schema = (select database()) ");
+
+        StringBuilder sql = new StringBuilder("""
+            select table_name, table_comment from information_schema.tables
+            where table_schema = (select database())
+             """);
+
         // 表名查询
         if (StringUtils.hasText(tableName)) {
             sql.append("and table_name = '").append(tableName).append("' ");

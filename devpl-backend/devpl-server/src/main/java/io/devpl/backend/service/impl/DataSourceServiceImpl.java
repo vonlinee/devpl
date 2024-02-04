@@ -15,7 +15,7 @@ import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.DbConnInfo;
 import io.devpl.backend.jdbc.JdbcDriverManager;
-import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.backend.utils.JdbcUtils;
@@ -66,7 +66,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         LambdaQueryWrapper<DbConnInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(param.getConnName()), DbConnInfo::getConnName, param.getConnName());
         wrapper.eq(StringUtils.hasText(param.getDriverType()), DbConnInfo::getDriverType, param.getDriverType());
-        return ListResult.ok(dbConnInfoMapper.selectPage(param.asPage(), wrapper));
+        return ListResult.ok(dbConnInfoMapper.selectPage(param, wrapper));
     }
 
     @Override

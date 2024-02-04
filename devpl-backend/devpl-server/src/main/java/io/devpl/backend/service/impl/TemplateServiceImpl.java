@@ -46,7 +46,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Resource
     CodeGenProperties codeGenProperties;
 
-    /**p
+    /**
+     * p
      * 获取模板类型
      *
      * @return 模板类型列表
@@ -135,7 +136,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Override
     public IPage<TemplateInfo> listPageTemplates(TemplateInfoListParam param) {
-        return templateInfoMapper.selectPage(param.asPage(), new LambdaQueryWrapper<TemplateInfo>()
+        return templateInfoMapper.selectPage(param, new LambdaQueryWrapper<TemplateInfo>()
             .eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType())
             .like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName()));
     }

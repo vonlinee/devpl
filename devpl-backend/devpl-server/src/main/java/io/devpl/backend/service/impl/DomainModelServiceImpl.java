@@ -43,7 +43,7 @@ public class DomainModelServiceImpl extends ServiceImpl<ModelInfoMapper, ModelIn
     public IPage<ModelInfo> listPage(ModelListParam param) {
         LambdaQueryWrapper<ModelInfo> qw = new LambdaQueryWrapper<>();
         qw.like(ModelInfo::getCode, param.getCode());
-        return baseMapper.selectPage(param.asPage(), qw);
+        return baseMapper.selectPage(param, qw);
     }
 
     @Override

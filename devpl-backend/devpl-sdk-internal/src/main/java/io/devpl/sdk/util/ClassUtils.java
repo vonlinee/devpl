@@ -975,7 +975,7 @@ public abstract class ClassUtils {
     }
 
     /**
-     * Return the short string name of a Java class in uncapitalized JavaBeans
+     * Return the short string name of a Java class in un capitalized JavaBeans
      * property format. Strips the outer class name in case of a nested class.
      *
      * @param clazz the class
@@ -1468,17 +1468,16 @@ public abstract class ClassUtils {
      * @param <T>   类型，由输入类型决定
      * @return 返回新的实例
      */
-    public static <T> T newInstance(Class<T> clazz) throws InstantiationException {
+    public static <T> T newInstance(Class<T> clazz) throws RuntimeReflectiveOperationException {
         try {
             Constructor<T> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                  NoSuchMethodException e) {
-            throw new InstantiationException(String.format("实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", clazz.getName()));
+            throw new RuntimeReflectiveOperationException(String.format("实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", clazz.getName()), e);
         }
     }
-
 
     /**
      * 代理 class 的名称

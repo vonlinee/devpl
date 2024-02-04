@@ -1,4 +1,4 @@
-package io.devpl.backend.jdbc.metadata;
+package io.devpl.codegen.jdbc.meta;
 
 import java.io.Serializable;
 

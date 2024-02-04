@@ -15,8 +15,15 @@ import java.util.List;
 @TableName("gen_table")
 public class GenTable {
 
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
+    /**
+     * 数据库名
+     */
+    private String databaseName;
     /**
      * 表名
      */
@@ -82,7 +89,6 @@ public class GenTable {
      * 创建时间
      */
     private LocalDateTime createTime;
-
     /**
      * 更新时间
      */

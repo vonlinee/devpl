@@ -1,6 +1,6 @@
 package io.devpl.backend.dao;
 
-import io.devpl.backend.common.mvc.EntityMapper;
+import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.entity.FieldInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface FieldInfoMapper extends EntityMapper<FieldInfo> {
+public interface FieldInfoMapper extends MyBatisPlusMapper<FieldInfo> {
 
     /**
      * 查询所有字段Key

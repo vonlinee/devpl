@@ -37,7 +37,7 @@ public class FieldGroupServiceImpl implements FieldGroupService {
     @Override
     public IPage<FieldGroup> listPage(FieldGroupListParam param) {
         LambdaQueryWrapper<FieldGroup> qw = new LambdaQueryWrapper<>();
-        return fieldGroupMapper.selectPage(param.asPage(), qw);
+        return fieldGroupMapper.selectPage(param, qw);
     }
 
     @Override

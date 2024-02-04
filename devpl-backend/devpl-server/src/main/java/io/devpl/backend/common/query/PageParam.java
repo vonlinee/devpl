@@ -2,16 +2,14 @@ package io.devpl.backend.common.query;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.Getter;
-import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * 分页查询参数父类
- * jackson默认使用setter/getter映射JSON数据
+ * jackson默认使用setter/getter映射JSON数据而不是字段名
  */
-@Getter
-@Setter
-public class PageParam {
+public class PageParam implements Serializable {
 
     /**
      * 页码，默认0，第一页
@@ -45,5 +43,21 @@ public class PageParam {
 
     public <T> IPage<T> asPage() {
         return new Page<>(page, limit);
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 }

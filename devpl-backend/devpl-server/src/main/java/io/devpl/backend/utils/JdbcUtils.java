@@ -1,7 +1,7 @@
 package io.devpl.backend.utils;
 
 import io.devpl.codegen.db.DBType;
-import io.devpl.backend.jdbc.metadata.ResultSetColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
