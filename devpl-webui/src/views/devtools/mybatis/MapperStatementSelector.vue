@@ -16,7 +16,7 @@ const emits = defineEmits([
     "changed"
 ])
 
-const handleSelectionChanged = (newVal : string) => {
+const handleSelectionChanged = (newVal: string) => {
     emits("changed", newVal)
 }
 

@@ -31,6 +31,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -208,6 +211,18 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
             str = str.replaceAll(key, map.get(key));
         }
         return str;
+    }
+
+    /**
+     * @param projectRootDir 项目根目录
+     */
+    public void analyzeProject(String projectRootDir) {
+        final Path path = Paths.get(projectRootDir);
+        if (!Files.exists(path)) {
+            return;
+        }
+        ProjectInfo projectInfo = new ProjectInfo();
+
     }
 
     public static void main(String[] args) {

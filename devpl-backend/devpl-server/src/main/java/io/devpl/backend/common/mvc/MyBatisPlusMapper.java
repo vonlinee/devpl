@@ -14,6 +14,11 @@ import java.util.List;
  */
 public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
 
+    /**
+     * 查询单表所有数据
+     *
+     * @return 单表所有数据
+     */
     default List<T> selectList() {
         return selectList(Wrappers.emptyWrapper());
     }

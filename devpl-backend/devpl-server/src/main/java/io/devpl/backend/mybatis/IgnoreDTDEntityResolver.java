@@ -9,8 +9,9 @@ import java.io.IOException;
 
 /**
  * 忽略DTD验证
+ * DTD验证需要联网
  */
-public class IgnoreDTDEntityResolver implements EntityResolver {
+public final class IgnoreDTDEntityResolver implements EntityResolver {
 
     @Override
     public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {

@@ -59,3 +59,25 @@ export const apiGetMapperStatementContent = (dir: string, msId: string) => {
     mapperStatementId: msId
   })
 }
+
+/**
+ * 加载目录中的所有mapper文件
+ * @return SQL 字符串
+ */
+export const apiBuildMappedStatementIndex = (dir: string) => {
+  return http.get("/api/tools/mybatis/index/build1/ms", {
+    dir: dir
+  })
+}
+
+/**
+ * 
+ * @return SQL 字符串
+ */
+export const apiListMappedStatements = (page: number, limit: number, params: any) => {
+  return http.get("/api/tools/mybatis/index/query/mslist", {
+    pageIndex: page,
+    pageSize: limit,
+    ...params
+  })
+}

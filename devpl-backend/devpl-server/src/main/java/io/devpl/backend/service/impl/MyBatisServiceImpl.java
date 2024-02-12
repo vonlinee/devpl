@@ -1,19 +1,28 @@
 package io.devpl.backend.service.impl;
 
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import io.devpl.backend.dao.MappedStatementItemMapper;
 import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
+import io.devpl.backend.domain.param.MappedStatementListParam;
+import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.mybatis.*;
+import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.utils.SqlFormat;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.sdk.TreeNode;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
+import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -28,8 +37,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -51,9 +62,14 @@ public class MyBatisServiceImpl implements MyBatisService {
      */
     @Resource
     SqlSessionFactory sqlSessionFactory;
-
     @Resource
     DataSource dataSource;
+    @Resource
+    CrudService crudService;
+    @Resource
+    IdentifierGenerator identifierGenerator;
+    @Resource
+    MappedStatementItemMapper mappedStatementItemMapper;
 
     @Override
     public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
@@ -564,11 +580,67 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
 
             cache.put(projectRootDir, configuration);
-
             return configuration.getMappedStatements().stream().map(MappedStatement::getId).toList();
         } catch (Exception exception) {
             log.error("解析MyBatis配置出现错误", exception);
         }
         return Collections.emptyList();
+    }
+
+    /**
+     * @param projectRootDir 项目根路径
+     * @see XMLConfigBuilder#mappersElement(XNode)
+     * @see XMLConfigBuilder#parseConfiguration(XNode)
+     */
+    @Override
+    public void buildMapperXmlIndexForProject(String projectRootDir) {
+
+        URL resource = this.getClass().getResource("/");
+
+        File mapperLocationDir = new File(FileUtils.toFile(resource), "mapper");
+
+        List<MappedStatementItem> items = new ArrayList<>();
+
+        try (Stream<File> stream = Arrays.stream(Objects.requireNonNull(mapperLocationDir.listFiles()))) {
+            stream.forEach(mapperFile -> {
+                try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
+                    XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
+                    XNode rootNode = parser.evalNode("/mapper");
+
+                    String namespace = rootNode.getStringAttribute("namespace");
+
+                    /**
+                     * @see XMLStatementBuilder#parseStatementNode()
+                     */
+                    for (XNode context : rootNode.getChildren()) {
+                        String nodeName = context.getNode().getNodeName();
+                        String id = context.getStringAttribute("id");
+
+                        MappedStatementItem item = new MappedStatementItem();
+                        item.setId(identifierGenerator.nextUUID(null));
+                        item.setStatementId(id);
+                        item.setBelongFile(mapperFile.getAbsolutePath());
+                        item.setStatement(context.toString());
+                        item.setStatementType(nodeName);
+                        item.setNamespace(namespace);
+                        item.setParamType(context.getStringAttribute("paramType"));
+                        item.setResultType(context.getStringAttribute("resultType"));
+
+                        items.add(item);
+                    }
+                } catch (IOException e) {
+                    log.error("", e);
+                }
+            });
+        }
+        crudService.saveBatch(items);
+    }
+
+    @Override
+    public IPage<MappedStatementItem> pageIndexedMappedStatements(MappedStatementListParam param) {
+        return mappedStatementItemMapper.selectPage(param, Wrappers.<MappedStatementItem>lambdaQuery()
+            .eq(StringUtils.hasText(param.getStatementType()), MappedStatementItem::getStatementType, param.getStatementType())
+            .eq(StringUtils.hasText(param.getStatementId()), MappedStatementItem::getStatementId, param.getStatementId())
+            .like(StringUtils.hasText(param.getNamespace()), MappedStatementItem::getNamespace, param.getNamespace()));
     }
 }

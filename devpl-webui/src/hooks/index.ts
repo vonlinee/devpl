@@ -1,6 +1,6 @@
 import { DataTableOption } from "@/hooks/interface";
 import http from "@/utils/http";
-import { onMounted, reactive } from "vue";
+import { isReactive, onMounted, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 /**
@@ -10,6 +10,11 @@ import { ElMessage, ElMessageBox } from "element-plus";
  * @param options
  */
 export const useCrud = (options: DataTableOption) => {
+
+  if (!isReactive(options)) {
+    console.error("option of crud hook should be reactive")
+  }
+
   /**
    * 默认选项
    */

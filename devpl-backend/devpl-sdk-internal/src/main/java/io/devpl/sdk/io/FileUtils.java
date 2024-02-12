@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.stream.Stream;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
@@ -1526,6 +1527,10 @@ public class FileUtils {
         }
         File[] files = directory.listFiles();
         return files == null ? new File[0] : files;
+    }
+
+    public static Stream<File> listFileStream(File directory) throws IOException {
+        return Files.list(directory.toPath()).map(Path::toFile);
     }
 
     /**

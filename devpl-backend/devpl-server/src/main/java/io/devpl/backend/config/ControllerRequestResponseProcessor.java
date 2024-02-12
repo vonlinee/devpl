@@ -44,6 +44,12 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
     @Override
     public void handleReturnValue(Object returnValue, @NotNull MethodParameter returnType, @NotNull ModelAndViewContainer mavContainer, @NotNull NativeWebRequest webRequest) throws Exception {
         if (returnValue == null) {
+            // 如果Controller方法无返回值，不进行处理的话 后台会进行重定向，处理方式: mavContainer.setRequestHandled(true);
+            // 比如请求: /api/user/list
+            // 那么第二次请求的路径为: /api/user/api/user/list(会报错，Resource Not Found)，即拼接了路径的上级子路径
+            // TODO 具体什么原因未知
+            mavContainer.setRequestHandled(true);
+            delegate.handleReturnValue(Result.ok(null), returnType, mavContainer, webRequest);
             return;
         }
 

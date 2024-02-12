@@ -1,8 +1,11 @@
 package io.devpl.backend.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.backend.domain.MsParamNode;
 import io.devpl.backend.domain.enums.MapperStatementParamValueType;
 import io.devpl.backend.domain.param.GetSqlParam;
+import io.devpl.backend.domain.param.MappedStatementListParam;
+import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.mybatis.ParamMeta;
 import io.devpl.backend.mybatis.ParseResult;
 import org.apache.ibatis.mapping.BoundSql;
@@ -86,4 +89,8 @@ public interface MyBatisService {
     String getContent(String projectId, String msId);
 
     List<String> buildIndex(String projectRootDir);
+
+    void buildMapperXmlIndexForProject(String projectRootDir);
+
+    IPage<MappedStatementItem> pageIndexedMappedStatements(MappedStatementListParam param);
 }

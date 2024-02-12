@@ -1,15 +1,9 @@
 <!--
-  分页组件
+  适配crud hook的表格分页组件
 -->
 <template>
-  <el-pagination
-    background
-    layout="prev, pager, next, sizes"
-    :total="total"
-    :current-page="currentPage"
-    :page-size="currentPageSize"
-    @change="handleChange"
-  />
+  <el-pagination background layout="prev, pager, next, sizes" :total="total" :current-page="currentPage"
+    :page-size="currentPageSize" @change="handleChange" />
 </template>
 
 <script lang="ts" setup>
