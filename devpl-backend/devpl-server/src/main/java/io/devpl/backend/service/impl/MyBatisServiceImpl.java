@@ -12,10 +12,13 @@ import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.mybatis.*;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.MyBatisService;
+import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.utils.SqlFormat;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.lang.RuntimeIOException;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
@@ -40,9 +43,11 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
@@ -70,6 +75,8 @@ public class MyBatisServiceImpl implements MyBatisService {
     IdentifierGenerator identifierGenerator;
     @Resource
     MappedStatementItemMapper mappedStatementItemMapper;
+    @Resource
+    ProjectService projectService;
 
     @Override
     public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
@@ -594,44 +601,77 @@ public class MyBatisServiceImpl implements MyBatisService {
      */
     @Override
     public void buildMapperXmlIndexForProject(String projectRootDir) {
+        File rootDir = new File(projectRootDir);
+        if (!projectService.isProjectRootDirectory(rootDir)) {
+            return;
+        }
 
-        URL resource = this.getClass().getResource("/");
+        // projectService.analyse(rootDir);
 
-        File mapperLocationDir = new File(FileUtils.toFile(resource), "mapper");
+        List<File> mapperXmlFiles = new ArrayList<>();
+        try {
+            Files.walkFileTree(rootDir.toPath(), new SimpleFileVisitor<>() {
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    String pathname = dir.toString();
+                    // 忽略Idea编译输出目录
+                    if (pathname.contains("target")) {
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+
+                    return super.preVisitDirectory(dir, attrs);
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    String path = file.toString();
+                    if (path.contains("Mapper.xml")) {
+                        mapperXmlFiles.add(file.toFile());
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            throw RuntimeIOException.wrap(e);
+        }
+
+        Set<String> belongedFiles = mappedStatementItemMapper.listBelongedFiles();
+        if (!CollectionUtils.isEmpty(belongedFiles)) {
+            mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
+        }
 
         List<MappedStatementItem> items = new ArrayList<>();
 
-        try (Stream<File> stream = Arrays.stream(Objects.requireNonNull(mapperLocationDir.listFiles()))) {
-            stream.forEach(mapperFile -> {
-                try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
-                    XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
-                    XNode rootNode = parser.evalNode("/mapper");
+        for (File mapperFile : mapperXmlFiles) {
+            try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
+                XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
+                XNode rootNode = parser.evalNode("/mapper");
 
-                    String namespace = rootNode.getStringAttribute("namespace");
+                String namespace = rootNode.getStringAttribute("namespace");
 
-                    /**
-                     * @see XMLStatementBuilder#parseStatementNode()
-                     */
-                    for (XNode context : rootNode.getChildren()) {
-                        String nodeName = context.getNode().getNodeName();
-                        String id = context.getStringAttribute("id");
+                /**
+                 * @see XMLStatementBuilder#parseStatementNode()
+                 */
+                for (XNode context : rootNode.getChildren()) {
+                    String nodeName = context.getNode().getNodeName();
+                    String id = context.getStringAttribute("id");
 
-                        MappedStatementItem item = new MappedStatementItem();
-                        item.setId(identifierGenerator.nextUUID(null));
-                        item.setStatementId(id);
-                        item.setBelongFile(mapperFile.getAbsolutePath());
-                        item.setStatement(context.toString());
-                        item.setStatementType(nodeName);
-                        item.setNamespace(namespace);
-                        item.setParamType(context.getStringAttribute("paramType"));
-                        item.setResultType(context.getStringAttribute("resultType"));
+                    MappedStatementItem item = new MappedStatementItem();
+                    item.setId(identifierGenerator.nextUUID(null));
+                    item.setStatementId(id);
+                    item.setBelongFile(mapperFile.getAbsolutePath());
+                    item.setStatement(context.toString());
+                    item.setStatementType(nodeName);
+                    item.setNamespace(namespace);
+                    item.setParamType(context.getStringAttribute("paramType"));
+                    item.setResultType(context.getStringAttribute("resultType"));
 
-                        items.add(item);
-                    }
-                } catch (IOException e) {
-                    log.error("", e);
+                    items.add(item);
                 }
-            });
+            } catch (IOException e) {
+                log.error("解析文件{}失败", mapperFile, e);
+            }
         }
         crudService.saveBatch(items);
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 项目名变更
@@ -105,4 +106,10 @@ public class ProjectInfo implements Serializable {
      */
     @TableField(value = "create_time")
     private LocalDateTime createTime;
+
+    /**
+     * 项目的子模块信息
+     */
+    @TableField(exist = false)
+    private List<ModuleInfo> modules;
 }

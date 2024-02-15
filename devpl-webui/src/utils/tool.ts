@@ -130,8 +130,8 @@ export const deepClone = (obj: Record<string, any>) => {
   const copy: any = Object.assign({}, obj)
   Object.keys(copy).forEach(
     (key) =>
-      (copy[key] =
-        typeof obj[key] === "object" ? deepClone(obj[key]) : obj[key])
+    (copy[key] =
+      typeof obj[key] === "object" ? deepClone(obj[key]) : obj[key])
   )
   return Array.isArray(obj)
     ? (copy.length = obj.length) && Array.from(copy)
@@ -200,4 +200,9 @@ export const getSubStrings = (input: string) => {
     }
   }
   return result
+}
+
+// 挂载全局方法到window对象上
+window.hasText = (val: any): boolean => {
+  return !isBlank(val)
 }

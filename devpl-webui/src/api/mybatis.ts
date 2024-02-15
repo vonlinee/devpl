@@ -65,7 +65,7 @@ export const apiGetMapperStatementContent = (dir: string, msId: string) => {
  * @return SQL 字符串
  */
 export const apiBuildMappedStatementIndex = (dir: string) => {
-  return http.get("/api/tools/mybatis/index/build1/ms", {
+  return http.get("/api/tools/mybatis/index/build/ms", {
     dir: dir
   })
 }

@@ -13,4 +13,8 @@ public class RuntimeIOException extends RuntimeException {
     public RuntimeIOException(IOException exception) {
         super(exception);
     }
+
+    public static RuntimeIOException wrap(IOException ioe) {
+        return new RuntimeIOException(ioe);
+    }
 }

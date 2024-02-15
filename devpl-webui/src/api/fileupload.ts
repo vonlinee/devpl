@@ -22,3 +22,13 @@ export const apiUploadSingleFile = (folder: string, file: File) => {
 export const apiUploadMultiFiles = (param: FormData) => {
   return http.post("/api/file/upload/single", param)
 }
+
+/**
+ * 获取服务器文件目录结构
+ * @param parent 上级目录
+ */
+export const apiGetFileSystemTree = (parent?: string) => {
+  return http.get("/api/file/fs/tree", {
+    parent: parent
+  })
+}

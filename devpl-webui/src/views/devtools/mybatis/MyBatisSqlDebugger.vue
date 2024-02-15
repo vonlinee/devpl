@@ -1,60 +1,60 @@
 <template>
-  <div style="height: 100% !important; display: flex; flex-direction: row">
-    <div style="display: flex; flex-direction: column; height: 100%; width: 800px">
-      <div style="flex-grow: 1; height: 400px">
-        <monaco-editor ref="inputRef" language="xml" />
+  <vxe-modal title="调试Mapper Statement" v-model="visible" width="80%" fullscreen show-zoom @show="onModalShown">
+    <div style="height: 100% !important; display: flex; flex-direction: row">
+      <div style="display: flex; flex-direction: column; height: 100%; width: 800px">
+        <div style="flex-grow: 1; height: 400px">
+          <monaco-editor ref="inputRef" language="xml" />
+        </div>
+        <div style="height: 450px">
+          <monaco-editor ref="outputRef" language="sql" />
+        </div>
       </div>
-      <div style="height: 450px">
-        <monaco-editor ref="outputRef" language="sql" />
+
+      <div style="flex-grow: 1">
+        <el-button @click="fillSampleMapperStatement">填充样例</el-button>
+        <el-button @click="showDialog()">导入</el-button>
+
+        <param-import ref="importModalRef"></param-import>
+
+        <FieldValueTreeTable ref="msParamTable" :data-types="msParamValueTypes"></FieldValueTreeTable>
+
+        <div>
+          <el-card>
+            <el-button-group class="ml-4">
+              <el-button type="primary" @click="getParams()">解析参数</el-button>
+              <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
+              <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
+            </el-button-group>
+
+            <el-dropdown>
+              <el-button type="primary">
+                Mapper Snippet<el-icon class="el-icon--right">
+                  <ArrowDown />
+                </el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="handleMsForeach">Foreach</el-dropdown-item>
+                  <el-dropdown-item @click="handleMsStringNotEmpty">Test字符串不为空</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </el-card>
+          <el-card>
+            <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
+            <el-checkbox v-model="options.inferByParamName" label="根据名称推断类型" size="large" />
+          </el-card>
+        </div>
       </div>
     </div>
-
-    <div style="flex-grow: 1">
-      <el-button @click="fillSampleMapperStatement">填充样例</el-button>
-      <el-button @click="showDialog()">导入</el-button>
-
-      <MapperStatementSelector @changed="handleMsChanged" />
-      <param-import ref="importModalRef"></param-import>
-
-      <FieldValueTreeTable ref="msParamTable" :data-types="msParamValueTypes"></FieldValueTreeTable>
-
-      <div>
-        <el-card>
-          <el-button-group class="ml-4">
-            <el-button type="primary" @click="getParams()">解析参数</el-button>
-            <el-button type="primary" @click="getSqlOfMapperStatement(false)">获取预编译sql</el-button>
-            <el-button type="primary" @click="getSqlOfMapperStatement(true)">获取实际sql</el-button>
-          </el-button-group>
-
-          <el-dropdown>
-            <el-button type="primary">
-              Mapper Snippet<el-icon class="el-icon--right">
-                <ArrowDown />
-              </el-icon>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item @click="handleMsForeach">Foreach</el-dropdown-item>
-                <el-dropdown-item @click="handleMsStringNotEmpty">Test字符串不为空</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </el-card>
-        <el-card>
-          <el-checkbox v-model="options.enableTypeInference" label="开启类型推断" size="large" />
-          <el-checkbox v-model="options.inferByParamName" label="根据名称推断类型" size="large" />
-        </el-card>
-      </div>
-    </div>
-  </div>
+  </vxe-modal>
 </template>
 
 <script setup lang="ts">
 import { getSubStrings, hasText, isBlank } from "@/utils/tool"
-import { onMounted, ref, toRaw } from "vue"
+import { nextTick, onMounted, ref, toRaw } from "vue"
 
 import {
-  apiGetMapperStatementContent,
   apiGetMapperStatementValueTypes,
   apiGetSampleXmlText,
   apiGetSql,
@@ -65,18 +65,17 @@ import { ElButton, ElMessage } from "element-plus"
 import ParamImport from "./ParamImport.vue"
 import FieldValueTreeTable from "./FieldValueTreeTable.vue"
 import MonacoEditor from "@/components/editor/MonacoEditor.vue"
-import { appStore } from "@/store"
 
 import { foreachSnippet, stringSnippet } from "@/utils/mybatis"
 import { ArrowDown } from "@element-plus/icons"
-import MapperStatementSelector from "./MapperStatementSelector.vue"
 
 // 数据
 const inputRef = ref()
 const outputRef = ref()
-
+const visible = ref()
 
 const importModalRef = ref()
+
 
 const editorHeight = ref("400")
 
@@ -95,20 +94,12 @@ onMounted(() => {
   })
 })
 
-const store = appStore()
-
 function output(handler: (input: string) => string) {
   const input = inputRef.value.getText()
   if (!isBlank(input)) {
     const result = handler(input)
     outputRef.value.setText(result)
   }
-}
-
-const handleMsChanged = (msId: string) => {
-  apiGetMapperStatementContent("111", msId).then((res) => {
-    inputRef.value.setText(res.data)
-  })
 }
 
 const handleMsForeach = () => {
@@ -172,6 +163,22 @@ const fillSampleMapperStatement = () => {
     inputRef.value.setText(res.data)
   })
 }
+
+const inputText = ref<string>('')
+
+const onModalShown = () => {
+  nextTick(() => inputRef.value.setText(inputText.value))
+}
+
+defineExpose({
+  show(content?: string) {
+    if (content) {
+      inputText.value = content
+      visible.value = true
+    }
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>

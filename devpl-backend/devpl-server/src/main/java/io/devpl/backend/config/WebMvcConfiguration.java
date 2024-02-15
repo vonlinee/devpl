@@ -67,7 +67,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      *
      * @return 过滤器配置Bean
      */
-    // @Bean
+    @Bean
     public FilterRegistrationBean<Filter> repeatableFilterBean() {
         FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new RepeatableFilter());

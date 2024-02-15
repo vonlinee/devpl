@@ -2,22 +2,19 @@ import { createApp } from "vue"
 import ElementPlus from "element-plus"
 import App from "./App.vue"
 import { router } from "./router"
-import "virtual:svg-icons-register"
-import "xe-utils"
-import VXETable from "vxe-table"
 import SvgIcon from "@/components/svg-icon"
-import "vxe-table/lib/style.css"
-
 import { createPinia, Pinia } from "pinia"
 
-import "./command.ts"
+import "virtual:svg-icons-register"
 
 // 使用svg目录下的svg文件
 // import '@/icons/iconfont/iconfont'
 import "element-plus/dist/index.css"
 import "@/styles/index.scss"
 
-import "./useMonaco"
+import "./utils/monaco"
+import VXETable from "./utils/vxetable"
+
 import { isWindows } from "./utils/tool"
 
 // 全局注册
@@ -25,12 +22,6 @@ import { isWindows } from "./utils/tool"
 import contextmenu from "v-contextmenu"
 import "v-contextmenu/dist/themes/default.css"
 
-VXETable.config({
-  zIndex: 2000,
-  select: {
-    transfer: true,
-  },
-})
 
 const app = createApp(App)
 
@@ -53,3 +44,5 @@ window.addEventListener("keydown", function (e) {
     }
   }
 })
+
+

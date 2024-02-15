@@ -55,7 +55,7 @@ devpl:
         entity: io.devpl.backend.entity # 实体类包名
     db:
         driver:
-            location:   # 驱动保存位置
+            location:  # 驱动保存位置，默认db/drivers
         backup:
             # 是否开启数据库备份，启动时备份数据库的表结构及全量数据
             enabled: true

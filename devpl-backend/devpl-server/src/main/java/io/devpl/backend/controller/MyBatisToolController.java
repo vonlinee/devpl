@@ -90,9 +90,9 @@ public class MyBatisToolController {
     }
 
     /**
-     * 获取Mapper Statement结合输入参数获取参数元数据
+     * 解析并保存Mapped Statement信息
      */
-    @GetMapping("/index/build1/ms")
+    @GetMapping("/index/build/ms")
     public void buildMappedStatementIndex(@RequestParam(value = "dir") String projectRootDir) {
         myBatisService.buildMapperXmlIndexForProject(projectRootDir);
     }

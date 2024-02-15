@@ -7,7 +7,7 @@
         </template>
       </el-form-item>
       <div style="margin-left: 20px;">
-        <el-button type="primary">选择项目</el-button>
+        <el-button type="primary" @click="openSelectModal">选择项目</el-button>
         <el-button type="primary" @click="buildMsIndex">索引</el-button>
       </div>
     </div>
@@ -43,28 +43,50 @@
     <el-table-column label="返回值" prop="resultType"></el-table-column>
     <el-table-column label="操作" width="150">
       <template #default="scope">
-        <el-button link>SQL调试</el-button>
+        <el-button link @click="showSqlDebugTool(scope.row.statement)">SQL调试</el-button>
       </template>
     </el-table-column>
   </el-table>
 
   <el-pagination layout="total, prev, pager, next" :total="options.total" :page-size="options.page"
     @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
+
+  <FileOpenModal ref="fileOpenModalRef" @selected="handleSelected"></FileOpenModal>
+
+  <MyBatisSqlDebugger ref="sqlDebugModalRef"></MyBatisSqlDebugger>
 </template>
 
 <script setup lang="ts">
 import { apiBuildMappedStatementIndex, apiListMappedStatements } from '@/api/mybatis';
+import FileOpenModal from '@/components/FileOpenModal.vue';
 import { useCrud } from '@/hooks';
 import { DataTableOption } from '@/hooks/interface';
+import { Message } from '@/hooks/message';
 import { onMounted, reactive, ref } from 'vue';
-const rootDir = ref('D:\\Develop\\Code\\devpl-backend\\devpl-backend')
-
+import MyBatisSqlDebugger from './MyBatisSqlDebugger.vue';
+const rootDir = ref('')
+const fileOpenModalRef = ref()
+const sqlDebugModalRef = ref()
 const buildMsIndex = () => {
-  if (rootDir.value) {
+  if (!window.hasText(rootDir.value)) {
+    Message.info("项目根目录为空")
+  } else {
     apiBuildMappedStatementIndex(rootDir.value).then((res) => {
       getDataList()
     })
   }
+}
+
+const showSqlDebugTool = (statement: string) => {
+  sqlDebugModalRef.value.show(statement)
+}
+
+const openSelectModal = () => {
+  fileOpenModalRef.value.show()
+}
+
+const handleSelected = (val: any) => {
+  rootDir.value = val
 }
 
 const options = reactive({

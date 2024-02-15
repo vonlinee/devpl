@@ -1,5 +1,15 @@
-import { VXETable } from "vxe-table"
 import { toRaw } from "vue"
+
+import "xe-utils"
+import VXETable from "vxe-table"
+import "vxe-table/lib/style.css"
+// 配置vxe-table
+VXETable.config({
+  zIndex: 2000,
+  select: {
+    transfer: true,
+  },
+})
 
 // 添加全局自定义指令
 // https://vxetable.cn/v4/#/table/commands/api
@@ -16,3 +26,5 @@ VXETable.commands.add("openModal", {
     }
   },
 })
+
+export default VXETable

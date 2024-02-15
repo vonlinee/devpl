@@ -4,15 +4,25 @@ import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.FileDownloadParam;
 import io.devpl.backend.domain.param.MultiFileUploadParam;
 import io.devpl.backend.domain.param.SingleFileUploadParam;
+import io.devpl.backend.domain.vo.FileItem;
 import io.devpl.backend.domain.vo.FileUploadVO;
 import io.devpl.backend.service.FileUploadService;
+import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 文件相关控制器，文件上传，下载等
@@ -28,6 +38,7 @@ public class FileController {
 
     /**
      * 单文件上传
+     *
      * @return 返回文件上传成功的路径 保存目录 ${devpl.file.upload.root}作为根目录，folder/filename
      */
     @ResponseBody
@@ -52,10 +63,40 @@ public class FileController {
 
     /**
      * 文件下载，不通过静态资源访问
+     *
      * @return 文件字节
      */
     @GetMapping(value = "/download")
     public ResponseEntity<byte[]> download(FileDownloadParam param) {
         return new ResponseEntity<>(new byte[]{}, HttpStatusCode.valueOf(200));
+    }
+
+    /**
+     * 获取服务器文件目录结构
+     *
+     * @param parent 父路径
+     * @return 文件目录
+     */
+    @ResponseBody
+    @GetMapping(value = "/fs/tree")
+    public List<FileItem> getFileSystemTree(String parent) {
+        List<FileItem> result;
+        if (StringUtils.hasText(parent)) {
+            result = new ArrayList<>();
+            // 获取该目录的子路径
+            File file = new File(parent);
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    if (f.isHidden()) {
+                        continue;
+                    }
+                    result.add(new FileItem(f));
+                }
+            }
+        } else {
+            result = Arrays.stream(File.listRoots()).map(FileItem::new).toList();
+        }
+        return result;
     }
 }

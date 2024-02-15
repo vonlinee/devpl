@@ -9,6 +9,7 @@ import io.devpl.backend.dao.ProjectInfoMapper;
 import io.devpl.backend.domain.ProjectModule;
 import io.devpl.backend.domain.param.ProjectListParam;
 import io.devpl.backend.domain.vo.ProjectSelectVO;
+import io.devpl.backend.entity.ModuleInfo;
 import io.devpl.backend.entity.ProjectInfo;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.sdk.io.FileUtils;
@@ -277,5 +278,25 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean isProjectRootDirectory(File file) {
+        return getProjectBulidToolFile(file) != null;
+    }
+
+    public File getProjectBulidToolFile(File file) {
+        File[] files = file.listFiles((dir, name) -> name.equals("pom.xml") || "build.gradle".equals(name));
+        if (files == null || files.length == 0) {
+            return null;
+        }
+        return files[0];
+    }
+
+    @Override
+    public void analyse(File projectRootDir) {
+        File projectBulidToolFile = getProjectBulidToolFile(projectRootDir);
+
+        ProjectInfo projectInfo = new ProjectInfo();
     }
 }
