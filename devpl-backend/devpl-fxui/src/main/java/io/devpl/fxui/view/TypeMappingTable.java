@@ -11,7 +11,7 @@ import io.devpl.fxui.components.table.TablePaneOption;
 import io.devpl.fxui.mapper.DataTypeItemMapper;
 import io.devpl.fxui.mapper.MyBatis;
 import io.devpl.fxui.utils.FXUtils;
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.BorderPane;
@@ -91,8 +91,8 @@ public class TypeMappingTable extends BorderPane {
                     formObject.setTypeGroup(row.getTypeGroupId());
                     formObject.setTypeName(row.getTypeName());
                     formObject.setTypeKey(row.getTypeKey());
-                    formObject.setMinLength(Utils.defaults(row.getMinLength(), -1));
-                    formObject.setMaxLength(Utils.defaults(row.getMaxLength(), -1));
+                    formObject.setMinLength(Helper.defaults(row.getMinLength(), -1));
+                    formObject.setMaxLength(Helper.defaults(row.getMaxLength(), -1));
                     formObject.setDefaultValue(row.getDefaultValue());
                 } else {
                     formObject.setTypeGroup("Java");

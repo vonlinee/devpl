@@ -5,7 +5,7 @@ import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.common.StringKey;
 import io.devpl.fxui.model.*;
 import io.devpl.fxui.plugins.*;
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import io.devpl.sdk.util.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.Plugin;
@@ -90,7 +90,7 @@ public class MyBatisCodeGenerator {
         context.addProperty(StringKey.JAVA_FILE_ENCODING, StandardCharsets.UTF_8.name());
         context.addProperty(StringKey.AUTO_DELIMIT_KEYWORDS, "true");
         // 父包名
-        context.addProperty(StringKey.PARENT_PACKAGE, Utils.whenNull(generatorConfig.getParentPackage(), ""));
+        context.addProperty(StringKey.PARENT_PACKAGE, Helper.whenNull(generatorConfig.getParentPackage(), ""));
         // 文件编码
         context.addProperty("javaFileEncoding", StandardCharsets.UTF_8.name());
 

@@ -4,12 +4,12 @@
  -->
 <template>
   <vxe-modal title="字段编辑" v-model="visible" show-close show-footer @close="resetFields">
-    <el-form :inline="true" :model="formData" class="demo-form-inline">
+    <el-form :model="formData" class="demo-form-inline" label-width="80px" label-position="left">
       <el-form-item label="fieldKey">
-        <el-input v-model="formData.fieldKey" placeholder="英文名" clearable />
+        <el-input v-model="formData.fieldKey" placeholder="" clearable />
       </el-form-item>
       <el-form-item label="数据类型">
-        <el-select v-model="formData.dataType" placeholder="Activity zone" clearable>
+        <el-select v-model="formData.dataType" placeholder="" clearable filterable>
           <el-option :label="dataType.label" :value="dataType.value" v-for="dataType in dataTypeOptions" />
         </el-select>
       </el-form-item>

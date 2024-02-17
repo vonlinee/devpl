@@ -4,11 +4,12 @@ package ${packageName};
 #foreach( $importItem in $importItems)
 import $importItem;
 #end
+import cn.afterturn.easypoi.excel.annotation.Excel;
 
 /**
- * @author vonline
+ * @author ${author}
  **/
-public class ${className} #if($!superClass.length() > 0) extends ${superClass} #end #if( $superInterfaces.size() > 0 ) implements #foreach( $si in $superInterfaces) ${si} #end #end {
+public class ${className}#if($!superClass.length() > 0) extends ${superClass}#end#if($superInterfaces.size() > 0) implements #foreach( $si in $superInterfaces) ${si} #end#end {
 
 #foreach( $field in $fields)
     #if(${field.commentOn})

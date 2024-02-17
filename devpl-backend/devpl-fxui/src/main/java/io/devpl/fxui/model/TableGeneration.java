@@ -1,6 +1,6 @@
 package io.devpl.fxui.model;
 
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import lombok.Getter;
 import lombok.Setter;
 import org.mybatis.generator.config.ColumnOverride;
@@ -64,14 +64,14 @@ public class TableGeneration {
     }
 
     public String getMapperName() {
-        String tableNameCamel = Utils.underlineToCamel(tableName);
-        tableNameCamel = Utils.upperFirst(tableNameCamel);
+        String tableNameCamel = Helper.underlineToCamel(tableName);
+        tableNameCamel = Helper.upperFirst(tableNameCamel);
         return tableNameCamel + "Mapper";
     }
 
     public String getDomainObjectName() {
-        String tableNameCamel = Utils.underlineToCamel(tableName);
-        tableNameCamel = Utils.upperFirst(tableNameCamel);
+        String tableNameCamel = Helper.underlineToCamel(tableName);
+        tableNameCamel = Helper.upperFirst(tableNameCamel);
         return tableNameCamel;
     }
 }

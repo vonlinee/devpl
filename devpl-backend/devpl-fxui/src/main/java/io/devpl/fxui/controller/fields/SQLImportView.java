@@ -2,7 +2,7 @@ package io.devpl.fxui.controller.fields;
 
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
 import io.devpl.codegen.jdbc.CommonJavaType;
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
@@ -75,7 +75,7 @@ public class SQLImportView extends FxmlView {
                 FieldInfo fieldInfo = new FieldInfo();
                 fieldInfo.setModifier("private");
                 fieldInfo.setDataType(CommonJavaType.STRING);
-                fieldInfo.setName(Utils.underlineToCamel(metadatum.getColumnName()));
+                fieldInfo.setName(Helper.underlineToCamel(metadatum.getColumnName()));
                 fieldInfo.setRemarks(metadatum.getColumnComment());
                 fieldInfos.add(fieldInfo);
             }

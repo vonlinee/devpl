@@ -71,7 +71,7 @@ const dataFormRef = ref();
 const fieldSelectModal = ref();
 
 const dataForm = reactive<{
-  group?: FieldGroup
+  group: FieldGroup
   fields: FieldInfo[]
 }>({
   group: {

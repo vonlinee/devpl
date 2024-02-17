@@ -1,7 +1,7 @@
 package io.devpl.fxui.view;
 
 import io.fxtras.mvvm.FxmlBinder;
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import io.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,7 +51,7 @@ public class FileHelperView extends FxmlView {
     @FXML
     public void selectFile(ActionEvent actionEvent) {
         FileChooser chooser = new FileChooser();
-        if (Utils.hasText(txfInitDir.getText())) {
+        if (Helper.hasText(txfInitDir.getText())) {
             chooser.setInitialDirectory(new File(txfInitDir.getText()));
         }
         List<File> files = chooser.showOpenMultipleDialog(getStage(actionEvent));

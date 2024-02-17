@@ -7,9 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 模板参数表
+ * 模板参数表(形参)
  *
  * @author 111 222
+ * @see TemplateArgument 实参
  * @since 1.0.0 2023-07-29
  */
 @Getter
@@ -24,7 +25,7 @@ public class TemplateParam {
     private Integer id;
 
     /**
-     * 模板ID
+     * 模板ID，为null表示所有模板通用的参数
      */
     private Integer templateId;
 

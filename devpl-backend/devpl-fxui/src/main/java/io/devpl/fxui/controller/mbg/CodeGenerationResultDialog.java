@@ -1,6 +1,6 @@
 package io.devpl.fxui.controller.mbg;
 
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -47,14 +47,14 @@ public class CodeGenerationResultDialog extends Dialog<Void> {
                                 TableView<File> tableView = param.getTableView();
                                 int index = this.getIndex();
                                 File file = tableView.getItems().get(index);
-                                Utils.show(file.getParentFile());
+                                Helper.show(file.getParentFile());
                             });
                             Button btnOpen = new Button("Open");
                             btnOpen.setOnAction(event -> {
                                 TableView<File> tableView = param.getTableView();
                                 int index = this.getIndex();
                                 File file = tableView.getItems().get(index);
-                                Utils.edit(file);
+                                Helper.edit(file);
                             });
                             hBox.getChildren().addAll(btnOpen);
                             setGraphic(hBox);

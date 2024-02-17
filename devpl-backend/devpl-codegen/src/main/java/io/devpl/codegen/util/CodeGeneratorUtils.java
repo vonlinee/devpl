@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * 仅在此模块内部使用
  */
-public class Utils {
+public class CodeGeneratorUtils {
 
     /**
      * 获取桌面目录
@@ -102,7 +102,6 @@ public class Utils {
         }
         return properties;
     }
-
 
     /**
      * Makes a directory, including any necessary but nonexistent parent

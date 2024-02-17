@@ -1,7 +1,6 @@
 package io.devpl.fxui.utils;
 
 import io.devpl.sdk.util.StringUtils;
-import org.jetbrains.annotations.Contract;
 
 import java.awt.*;
 import java.io.File;
@@ -9,7 +8,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class Utils {
+public class Helper {
 
     /**
      * 调用Object的toString方法，不管子类是否重写toString
@@ -73,7 +72,7 @@ public class Utils {
      */
     public static final char UNDERLINE = '_';
 
-    private Utils() {
+    private Helper() {
     }
 
     /**

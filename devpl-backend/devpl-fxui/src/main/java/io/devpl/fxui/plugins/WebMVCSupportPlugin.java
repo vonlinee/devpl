@@ -1,7 +1,7 @@
 package io.devpl.fxui.plugins;
 
 import io.devpl.fxui.common.StringKey;
-import io.devpl.fxui.utils.Utils;
+import io.devpl.fxui.utils.Helper;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -59,7 +59,7 @@ public class WebMVCSupportPlugin extends PluginAdapter {
         for (IntrospectedTable introspectedTable : introspectedTables) {
 
             final String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
-            final String className = Utils.underlineToCamel(tableName);
+            final String className = Helper.underlineToCamel(tableName);
             String name = parentPackage + ".controller." + className + "Controller";
             final FullyQualifiedJavaType type = new FullyQualifiedJavaType(name);
 

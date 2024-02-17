@@ -6,7 +6,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public class Utils {
+public class OfficeUtils {
 
     /**
      * 根据Class定位本地的Class文件位置

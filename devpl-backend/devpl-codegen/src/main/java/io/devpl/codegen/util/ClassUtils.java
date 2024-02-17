@@ -101,7 +101,7 @@ public final class ClassUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(String className, Class<T> superType) throws RuntimeException {
-        Utils.notBlank(className, "类名为空");
+        CodeGeneratorUtils.notBlank(className, "类名为空");
         Objects.requireNonNull(superType, "父类型为空");
         return (T) tryLoadClass(className).map(clazz -> {
             if (!superType.isAssignableFrom(clazz)) {

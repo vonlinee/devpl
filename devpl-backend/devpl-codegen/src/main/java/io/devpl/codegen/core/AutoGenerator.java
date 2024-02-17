@@ -4,7 +4,7 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.util.ClassUtils;
-import io.devpl.codegen.util.Utils;
+import io.devpl.codegen.util.CodeGeneratorUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -322,7 +322,7 @@ public class AutoGenerator {
                 boolean exist = file.exists();
                 if (!exist) {
                     File parentFile = file.getParentFile();
-                    Utils.forceMkdir(parentFile);
+                    CodeGeneratorUtils.forceMkdir(parentFile);
                 }
                 if (callback != null) {
                     callback.writeFile(file);

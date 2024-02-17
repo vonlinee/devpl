@@ -3,7 +3,7 @@ package io.devpl.codegen.core;
 import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.codegen.util.Utils;
+import io.devpl.codegen.util.CodeGeneratorUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -69,7 +69,7 @@ public final class FastAutoGenerator {
      * @return FastAutoGenerator
      */
     public static FastAutoGenerator create(File propsFile) {
-        Properties properties = Utils.loadProperties(propsFile);
+        Properties properties = CodeGeneratorUtils.loadProperties(propsFile);
         String url = (String) properties.get("url");
         String username = (String) properties.get("username");
         String password = (String) properties.get("password");

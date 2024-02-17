@@ -4,7 +4,7 @@ import io.devpl.codegen.core.AutoGenerator;
 import io.devpl.codegen.core.FastAutoGenerator;
 import io.devpl.codegen.samples.ui.GenerationResultView;
 import io.devpl.codegen.samples.ui.UIHelper;
-import io.devpl.codegen.util.Utils;
+import io.devpl.codegen.util.CodeGeneratorUtils;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ public class MySQLGenerator {
     public static void main(String[] args) {
         AutoGenerator generator = FastAutoGenerator
             // 配置数据源
-            .create(new File(Utils.getDesktopDirectory(), "jdbc.properties"))
+            .create(new File(CodeGeneratorUtils.getDesktopDirectory(), "jdbc.properties"))
             // 全局配置
             .globalConfig(builder -> {
                 builder.author("author") // 设置作者
