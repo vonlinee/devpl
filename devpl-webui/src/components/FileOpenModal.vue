@@ -5,7 +5,7 @@
   <vxe-modal title="选择文件或者项目" width="60%" v-model="visible" @show="init" @close="onClose(true)" show-footer
     destroy-on-close>
     <div style="display: flex; flex-direction: column; ">
-      <el-select v-model="path" clearable>
+      <el-select v-model="path" clearable filterable>
         <el-option v-for="hs in historySelections" :label="hs" :value="hs"></el-option>
       </el-select>
       <div style="flex: 1; display: block; overflow-y: scroll; min-height: 400px; height: 400px; max-height: 400px;">

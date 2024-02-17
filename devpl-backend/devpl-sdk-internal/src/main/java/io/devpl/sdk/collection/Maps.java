@@ -107,7 +107,7 @@ public final class Maps {
      * @since 3.0.4
      */
     public static <K, V> HashMap<K, V> newHashMap(int size, boolean isOrder) {
-        int initialCapacity = (int) (size / DEFAULT_LOAD_FACTOR) + 1;
+        int initialCapacity = computeMapInitialCapacity(size);
         return isOrder ? new LinkedHashMap<>(initialCapacity) : new HashMap<>(initialCapacity);
     }
 
@@ -928,5 +928,23 @@ public final class Maps {
             values.add(map.get(keys.next()));
         }
         return values;
+    }
+
+    /**
+     * Instantiate a new {@link LinkedHashMap} with an initial capacity
+     * that can accommodate the specified number of elements without
+     * any immediate resize/rehash operations to be expected.
+     * <p>This differs from the regular {@link LinkedHashMap} constructor
+     * which takes an initial capacity relative to a load factor
+     *
+     * @param expectedSize the expected number of elements (with a corresponding
+     *                     capacity to be derived so that no resize/rehash operations are needed)
+     */
+    public static <K, V> LinkedHashMap<K, V> newLinkedHashMap(int expectedSize) {
+        return new LinkedHashMap<>(computeMapInitialCapacity(expectedSize), DEFAULT_LOAD_FACTOR);
+    }
+
+    private static int computeMapInitialCapacity(int expectedSize) {
+        return (int) Math.ceil(expectedSize / (double) DEFAULT_LOAD_FACTOR);
     }
 }
