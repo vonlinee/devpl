@@ -4,6 +4,7 @@ import io.devpl.sdk.lang.Interpolations;
 import io.devpl.sdk.validation.Assert;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.function.Function;
@@ -471,7 +472,7 @@ public abstract class StringUtils {
      * @param str 字符串
      * @return 字符串是否包含文本
      */
-    private static boolean containsText(CharSequence str) {
+    public static boolean containsText(CharSequence str) {
         int strLen = str.length();
         for (int i = 0; i < strLen; i++) {
             if (!Character.isWhitespace(str.charAt(i))) {
@@ -1368,7 +1369,6 @@ public abstract class StringUtils {
      * @return the decoded value
      * @throws IllegalArgumentException when the given source contains invalid encoded sequences
      * @see java.net.URLDecoder#decode(String, String)
-     * @since 5.0
      */
     public static String uriDecode(String source, Charset charset) {
         int length = source.length();
@@ -1376,30 +1376,33 @@ public abstract class StringUtils {
             return source;
         }
         Assert.notNull(charset, "Charset must not be null");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(length);
-        boolean changed = false;
-        for (int i = 0; i < length; i++) {
-            int ch = source.charAt(i);
-            if (ch == '%') {
-                if (i + 2 < length) {
-                    char hex1 = source.charAt(i + 1);
-                    char hex2 = source.charAt(i + 2);
-                    int u = Character.digit(hex1, 16);
-                    int l = Character.digit(hex2, 16);
-                    if (u == -1 || l == -1) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream(length)) {
+            boolean changed = false;
+            for (int i = 0; i < length; i++) {
+                int ch = source.charAt(i);
+                if (ch == '%') {
+                    if (i + 2 < length) {
+                        char hex1 = source.charAt(i + 1);
+                        char hex2 = source.charAt(i + 2);
+                        int u = Character.digit(hex1, 16);
+                        int l = Character.digit(hex2, 16);
+                        if (u == -1 || l == -1) {
+                            throw new IllegalArgumentException("Invalid encoded sequence \"" + source.substring(i) + "\"");
+                        }
+                        baos.write((char) ((u << 4) + l));
+                        i += 2;
+                        changed = true;
+                    } else {
                         throw new IllegalArgumentException("Invalid encoded sequence \"" + source.substring(i) + "\"");
                     }
-                    baos.write((char) ((u << 4) + l));
-                    i += 2;
-                    changed = true;
                 } else {
-                    throw new IllegalArgumentException("Invalid encoded sequence \"" + source.substring(i) + "\"");
+                    baos.write(ch);
                 }
-            } else {
-                baos.write(ch);
             }
+            return (changed ? baos.toString(charset) : source);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return (changed ? baos.toString(charset) : source);
     }
 
     /**
@@ -2331,9 +2334,18 @@ public abstract class StringUtils {
      * @return 去掉开头和末尾的空格
      */
     public static String trim(Object o) {
-        return String.valueOf(o).trim();
+        if (o == null) {
+            return EMPTY;
+        }
+        return o.toString().trim();
     }
 
+    /**
+     * 字符串是否为空，长度为0
+     *
+     * @param cs 字符序列
+     * @return 是否为空
+     */
     public static boolean isEmpty(CharSequence cs) {
         return cs == null || cs.isEmpty();
     }
@@ -2577,5 +2589,39 @@ public abstract class StringUtils {
             right--;
         }
         return str.substring(left, right + 1);
+    }
+
+    /**
+     * Removes a substring only if it is at the end of a source string,
+     * otherwise returns the source string.
+     *
+     * <p>A {@code null} source string will return {@code null}.
+     * An empty ("") source string will return the empty string.
+     * A {@code null} search string will return the source string.</p>
+     *
+     * <pre>
+     * StringUtils.removeEnd(null, *)      = null
+     * StringUtils.removeEnd("", *)        = ""
+     * StringUtils.removeEnd(*, null)      = *
+     * StringUtils.removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * StringUtils.removeEnd("www.domain.com", ".com")   = "www.domain"
+     * StringUtils.removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * StringUtils.removeEnd("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param str    the source String to search, may be null
+     * @param remove the String to search for and remove, may be null
+     * @return the substring with the string removed if found,
+     * {@code null} if null String input
+     * @since 2.1
+     */
+    public static String removeEnd(final String str, final String remove) {
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+        return str;
     }
 }

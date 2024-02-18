@@ -1,5 +1,6 @@
-package io.devpl.fxui.components.pane;
+package io.fxtras.control;
 
+import io.fxtras.control.skin.SplitPaneSkin;
 import javafx.beans.DefaultProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -88,6 +89,7 @@ import java.util.WeakHashMap;
  *
  * <img src="doc-files/SplitPane.png" alt="Image of the SplitPane control">
  *
+ * @see javafx.scene.control.SplitPane
  * @since JavaFX 2.0
  */
 @DefaultProperty("items")
@@ -160,42 +162,39 @@ public class SplitPane extends Control {
         // null StyleOrigin ensures that css will be able to override the value.
         ((StyleableProperty<Boolean>) (WritableValue<Boolean>) focusTraversableProperty()).applyStyle(null, Boolean.FALSE);
 
-        getItems().addListener(new ListChangeListener<Node>() {
-            @Override
-            public void onChanged(Change<? extends Node> c) {
-                while (c.next()) {
-                    int index = c.getFrom();
-                    for (int i = 0; i < c.getRemovedSize(); i++) {
-                        if (index < dividers.size()) {
-                            dividerCache.put(index, Double.MAX_VALUE);
-                        } else if (index == dividers.size()) {
-                            if (!dividers.isEmpty()) {
-                                if (c.wasReplaced()) {
-                                    dividerCache.put(index - 1, dividers.get(index - 1).getPosition());
-                                } else {
-                                    dividerCache.put(index - 1, Double.MAX_VALUE);
-                                }
+        getItems().addListener((ListChangeListener<Node>) c -> {
+            while (c.next()) {
+                int index = c.getFrom();
+                for (int i = 0; i < c.getRemovedSize(); i++) {
+                    if (index < dividers.size()) {
+                        dividerCache.put(index, Double.MAX_VALUE);
+                    } else if (index == dividers.size()) {
+                        if (!dividers.isEmpty()) {
+                            if (c.wasReplaced()) {
+                                dividerCache.put(index - 1, dividers.get(index - 1).getPosition());
+                            } else {
+                                dividerCache.put(index - 1, Double.MAX_VALUE);
                             }
                         }
-                        index++;
                     }
-                    for (int i = 0; i < dividers.size(); i++) {
-                        if (dividerCache.get(i) == null) {
-                            dividerCache.put(i, dividers.get(i).getPosition());
-                        }
+                    index++;
+                }
+                for (int i = 0; i < dividers.size(); i++) {
+                    if (dividerCache.get(i) == null) {
+                        dividerCache.put(i, dividers.get(i).getPosition());
                     }
                 }
-                dividers.clear();
-                for (int i = 0; i < getItems().size() - 1; i++) {
-                    if (dividerCache.containsKey(i) && dividerCache.get(i) != Double.MAX_VALUE) {
-                        Divider d = new Divider();
-                        d.setPosition(dividerCache.get(i));
-                        dividers.add(d);
-                    } else {
-                        dividers.add(new Divider());
-                    }
-                    dividerCache.remove(i);
+            }
+            dividers.clear();
+            for (int i = 0; i < getItems().size() - 1; i++) {
+                if (dividerCache.containsKey(i) && dividerCache.get(i) != Double.MAX_VALUE) {
+                    Divider d = new Divider();
+                    d.setPosition(dividerCache.get(i));
+                    dividers.add(d);
+                } else {
+                    dividers.add(new Divider());
                 }
+                dividerCache.remove(i);
             }
         });
 
@@ -294,7 +293,7 @@ public class SplitPane extends Control {
      **************************************************************************/
 
     /**
-     * Returns an ObservableList which can be use to modify the contents of the SplitPane.
+     * Returns an ObservableList which can be used to modify the contents of the SplitPane.
      * The order the nodes are placed into this list will be the same order in the SplitPane.
      *
      * @return the list of items in this SplitPane.

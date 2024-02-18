@@ -3,6 +3,7 @@ package io.devpl.fxui.controller;
 import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.model.props.ColumnCustomConfiguration;
 import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.sdk.util.StringUtils;
 import io.fxtras.Alerts;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.internal.util.JavaBeansUtil;
 
 import java.net.URL;
@@ -67,7 +67,7 @@ public class TableColumnConfigView extends FxmlView {
 
     private void genPropertyNameByColumnNamePrefix() {
         String columnNamePrefix = this.columnNamePrefixTextLabel.getText();
-        if (StringUtils.isNotBlank(columnNamePrefix)) {
+        if (StringUtils.hasText(columnNamePrefix)) {
             if (StringUtils.endsWith(columnNamePrefix.trim(), Constants.OR_REGEX)) {
                 columnNamePrefix = StringUtils.removeEnd(columnNamePrefix.trim(), Constants.OR_REGEX);
             }
@@ -85,11 +85,11 @@ public class TableColumnConfigView extends FxmlView {
                 if (matcher.find()) {
                     // use first match result
                     String regexColumnName = matcher.group();
-                    if (StringUtils.isNotBlank(regexColumnName)) {
+                    if (StringUtils.hasText(regexColumnName)) {
                         String propertyName = JavaBeansUtil.getCamelCaseString(regexColumnName, false);
                         log.debug("table:{} column_name:{} regex_column_name:{} property_name:{}", tableName, columnName, regexColumnName, propertyName);
 
-                        if (StringUtils.isNotBlank(propertyName)) item.setPropertyName(propertyName);
+                        if (StringUtils.hasText(propertyName)) item.setPropertyName(propertyName);
                     } else {
                         log.warn("table:{} column_name:{} regex_column_name is blank", tableName, columnName);
                     }

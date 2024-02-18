@@ -1,5 +1,6 @@
-package io.devpl.fxui.components.pane;
+package io.fxtras.control.skin;
 
+import io.fxtras.control.SplitPane;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,6 +26,7 @@ import java.util.ListIterator;
  * Default skin implementation for the {@link SplitPane} control.
  *
  * @see SplitPane
+ * @see javafx.scene.control.skin.SplitPaneSkin
  * @since 9
  */
 public class SplitPaneSkin extends SkinBase<SplitPane> {
@@ -38,8 +40,6 @@ public class SplitPaneSkin extends SkinBase<SplitPane> {
     private ObservableList<Content> contentRegions;
     private ObservableList<ContentDivider> contentDividers;
     private boolean horizontal;
-
-
 
     /* *************************************************************************
      *                                                                         *
@@ -59,8 +59,8 @@ public class SplitPaneSkin extends SkinBase<SplitPane> {
 //        control.setManaged(false);
         horizontal = getSkinnable().getOrientation() == Orientation.HORIZONTAL;
 
-        contentRegions = FXCollections.<Content>observableArrayList();
-        contentDividers = FXCollections.<ContentDivider>observableArrayList();
+        contentRegions = FXCollections.observableArrayList();
+        contentDividers = FXCollections.observableArrayList();
 
         int index = 0;
         for (Node n : getSkinnable().getItems()) {
@@ -893,11 +893,11 @@ public class SplitPaneSkin extends SkinBase<SplitPane> {
             if (horizontal) {
                 c.resize(dividerWidth, height);
                 positionInArea(c, c.getX() + paddingX, c.getY() + paddingY, dividerWidth, height,
-                        /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
+                    /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
             } else {
                 c.resize(width, dividerWidth);
                 positionInArea(c, c.getX() + paddingX, c.getY() + paddingY, width, dividerWidth,
-                        /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
+                    /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
             }
         }
     }
@@ -1097,7 +1097,7 @@ public class SplitPaneSkin extends SkinBase<SplitPane> {
             double grabberY = (getHeight() - grabberHeight) / 2;
             grabber.resize(grabberWidth, grabberHeight);
             positionInArea(grabber, grabberX, grabberY, grabberWidth, grabberHeight,
-                    /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
+                /*baseline ignored*/0, HPos.CENTER, VPos.CENTER);
         }
     }
 

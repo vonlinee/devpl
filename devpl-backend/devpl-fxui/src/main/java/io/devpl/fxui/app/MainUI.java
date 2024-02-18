@@ -9,11 +9,6 @@ import javafx.stage.Stage;
 public class MainUI extends JavaFXApplication {
 
     @Override
-    protected void onInit() throws Exception {
-
-    }
-
-    @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setScene(new Scene(View.load(MainView.class)));
         primaryStage.show();

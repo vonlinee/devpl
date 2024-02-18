@@ -5,8 +5,8 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.fxui.model.DatabaseInfo;
 import io.devpl.fxui.utils.NumberUtils;
+import io.devpl.sdk.util.StringUtils;
 import io.fxtras.Alerts;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +39,9 @@ public class JSchUtils {
             config.put("StrictHostKeyChecking", "no");
             Integer port = NumberUtils.decode(databaseConfig.getSshPort(), 22);
             session = jsch.getSession(databaseConfig.getSshUser(), databaseConfig.getSshHost(), port);
-            if (StringUtils.isNotBlank(databaseConfig.getPrivateKey())) {
+            if (StringUtils.hasText(databaseConfig.getPrivateKey())) {
                 // 使用秘钥方式认证
-                jsch.addIdentity(databaseConfig.getPrivateKey(), StringUtils.defaultIfBlank(databaseConfig.getPrivateKeyPassword(), null));
+                jsch.addIdentity(databaseConfig.getPrivateKey(), StringUtils.whenBlank(databaseConfig.getPrivateKeyPassword(), null));
             } else {
                 session.setPassword(databaseConfig.getSshPassword());
             }
@@ -71,7 +71,7 @@ public class JSchUtils {
                         String s = session.getPortForwardingL()[0];
                         String[] split = StringUtils.split(s, ":");
                         boolean portForwarding = String.format("%s:%s", split[0], split[1])
-                                .equals(lport + ":" + config.getHost());
+                            .equals(lport + ":" + config.getHost());
                         if (portForwarding) {
                             return;
                         }
@@ -84,8 +84,8 @@ public class JSchUtils {
                 } catch (JSchException e) {
                     log.error("Connect Over SSH failed", e);
                     if (e.getCause() != null && e.getCause()
-                            .getMessage()
-                            .equals("Address already in use: JVM_Bind")) {
+                        .getMessage()
+                        .equals("Address already in use: JVM_Bind")) {
                         throw new RuntimeException("Address already in use: JVM_Bind");
                     }
                     throw new RuntimeException(e.getMessage());
@@ -103,7 +103,7 @@ public class JSchUtils {
                 }
                 log.info("executorService isShutdown:{}", executorService.isShutdown());
                 Alerts.error("OverSSH 失败，请检查连接设置:" + e.getMessage())
-                        .showAndWait();
+                    .showAndWait();
             }
         }
     }
