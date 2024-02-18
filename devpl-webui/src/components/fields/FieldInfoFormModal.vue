@@ -9,7 +9,7 @@
         <el-input v-model="formData.fieldKey" placeholder="" clearable />
       </el-form-item>
       <el-form-item label="数据类型">
-        <el-select v-model="formData.dataType" placeholder="" clearable filterable>
+        <el-select v-model="formData.dataType" placeholder="" allow-create clearable filterable>
           <el-option :label="dataType.label" :value="dataType.value" v-for="dataType in dataTypeOptions" />
         </el-select>
       </el-form-item>

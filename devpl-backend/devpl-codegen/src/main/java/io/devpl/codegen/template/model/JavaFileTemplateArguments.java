@@ -36,7 +36,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     /**
      * 导入的类型
      */
-    private Set<String> importItems;
+    private ArraySet<String> importItems;
     /**
      * 静态导入项
      */
@@ -89,7 +89,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
 
     public final void addImport(String... importTypes) {
         if (importItems == null) {
-            importItems = new HashSet<>(Arrays.asList(importTypes));
+            importItems = new ArraySet<>(Arrays.asList(importTypes));
         } else {
             importItems.addAll(Arrays.asList(importTypes));
         }
@@ -116,7 +116,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         Set<String> packageNames = new HashSet<>();
 
         if (this.importItems == null) {
-            this.importItems = new HashSet<>();
+            this.importItems = new ArraySet<>();
         }
 
         for (Class<?> superInterface : superInterfaces) {
@@ -142,10 +142,9 @@ public class JavaFileTemplateArguments implements TemplateArguments {
 
     public void setImportItems(Collection<String> importItems) {
         if (this.importItems == null) {
-            this.importItems = new HashSet<>(importItems);
+            this.importItems = new ArraySet<>(importItems);
         } else {
-            this.importItems.clear();
-            this.importItems.addAll(importItems);
+            this.importItems.setAll(importItems);
         }
     }
 

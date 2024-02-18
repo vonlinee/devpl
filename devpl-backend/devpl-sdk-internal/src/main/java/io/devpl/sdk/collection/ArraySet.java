@@ -956,4 +956,14 @@ public final class ArraySet<E> implements Collection<E>, Set<E>, RandomAccess {
         }
         return removed;
     }
+
+    /**
+     * Remove all values in the array set, then add all elements in the given collection to this ArraySet.
+     *
+     * @param collection The collection whose contents are to be used
+     */
+    public void setAll(Collection<? extends E> collection) {
+        this.clear();
+        this.addAll(collection);
+    }
 }
