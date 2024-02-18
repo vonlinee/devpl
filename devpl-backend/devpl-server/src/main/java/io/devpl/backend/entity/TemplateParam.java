@@ -41,6 +41,7 @@ public class TemplateParam {
 
     /**
      * 参数值,默认参数值, 未提供该参数时使用此值
+     * 暂时仅支持字面值，不支持动态表达式求值
      */
     private String paramValue;
 

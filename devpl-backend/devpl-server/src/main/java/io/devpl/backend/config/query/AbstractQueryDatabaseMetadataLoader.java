@@ -25,6 +25,11 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     }
 
     @Override
+    public List<String> getCatalogs() {
+        return null;
+    }
+
+    @Override
     public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws RuntimeSQLException {
         List<TableMetadata> tableList = new ArrayList<>();
         String tableQuerySql = query.getTableQuerySql(tableNamePattern, true);

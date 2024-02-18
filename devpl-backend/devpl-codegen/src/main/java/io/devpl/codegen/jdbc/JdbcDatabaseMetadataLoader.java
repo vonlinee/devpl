@@ -23,6 +23,22 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     }
 
     @Override
+    public List<String> getCatalogs() {
+        List<String> catalogs = new ArrayList<>();
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            try (ResultSet resultSet = metaData.getCatalogs()) {
+                while (resultSet.next()) {
+                    catalogs.add(resultSet.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeSQLException(e);
+        }
+        return catalogs;
+    }
+
+    @Override
     public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws RuntimeSQLException {
         List<TableMetadata> result = new ArrayList<>();
         try {

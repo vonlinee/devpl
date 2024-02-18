@@ -1,6 +1,8 @@
 package io.devpl.codegen.jdbc.meta;
 
 import java.io.Serializable;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 
 /**
  * JDBC查询结果元数据
@@ -9,6 +11,11 @@ import java.io.Serializable;
  * @see java.sql.ResultSetMetaData
  */
 public class ResultSetColumnMetadata implements Serializable {
+
+    /**
+     * 处于结果集的第几列
+     */
+    private int columnIndex;
 
     /**
      * 列名
@@ -155,5 +162,33 @@ public class ResultSetColumnMetadata implements Serializable {
 
     public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
+    }
+
+    public int getColumnIndex() {
+        return columnIndex;
+    }
+
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
+    }
+
+    /**
+     * @param resultSetMetaData ResultSetMetaData JDBC元数据
+     * @param columnIndex       columnIndex 第几列，从1开始
+     * @throws SQLException SQL异常
+     */
+    public void initialize(ResultSetMetaData resultSetMetaData, int columnIndex) throws SQLException {
+        this.columnIndex = columnIndex;
+        this.setColumnName(resultSetMetaData.getColumnName(columnIndex));
+        this.setColumnLabel(resultSetMetaData.getColumnLabel(columnIndex));
+        this.setColumnClassName(resultSetMetaData.getColumnClassName(columnIndex));
+        this.setColumnType(resultSetMetaData.getColumnType(columnIndex));
+        this.setTableName(resultSetMetaData.getTableName(columnIndex));
+        this.setCatalogName(resultSetMetaData.getCatalogName(columnIndex));
+        this.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnIndex));
+        this.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnIndex));
+        this.setPrecision(resultSetMetaData.getPrecision(columnIndex));
+        this.setScale(resultSetMetaData.getScale(columnIndex));
+        this.setSchemaName(resultSetMetaData.getSchemaName(columnIndex));
     }
 }

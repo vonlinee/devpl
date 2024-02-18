@@ -29,7 +29,7 @@ public class ColumnPrivilegesMetadata {
     private String columnName;
 
     /**
-     * GRANTOR String => grantor of access (may be null)
+     * GRANTOR String => grantor of access (maybe null)
      */
     private String grantor;
 

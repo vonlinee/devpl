@@ -2,8 +2,11 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.entity.FieldInfo;
+import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.service.CodeGenerationService;
+import io.devpl.backend.service.TemplateParamService;
 import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.FieldData;
 import io.devpl.codegen.template.model.JavaFileTemplateArguments;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.lang.model.element.Modifier;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -23,6 +25,9 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
 
     @Resource
     TemplateEngine templateEngine;
+
+    @Resource
+    TemplateParamService templateParamService;
 
     /**
      * 生成Java Pojo类
@@ -45,7 +50,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
             fieldData.setComment(Utils.removeInvisibleCharacters(field.getComment()));
             model.addField(fieldData);
         }
-        return templateEngine.render("codegen/templates/ext/java.pojo.vm", model);
+        return templateEngine.render("codegen/templates/ext/java.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     public String getDataType(FieldInfo fieldInfo) {
@@ -74,7 +79,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
             fieldDataList.add(fieldData);
         }
         model.setFields(fieldDataList);
-        return templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", model);
+        return templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     @Override
@@ -96,17 +101,22 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         }
         model.setFields(fieldDataList);
         // 字段信息
-        return templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", model);
+        return templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     /**
-     * TODO 填充全局模板参数
+     * 填充全局模板参数
      *
      * @param arguments 已有的模板参数
      */
-    private void fillGlobalTemplateParams(TemplateArguments arguments) {
-        if (arguments.isMap()) {
-
+    private TemplateArguments mergeGlobalTemplateParams(TemplateArguments arguments) {
+        List<TemplateParam> globalTemplateParams = templateParamService.getGlobalTemplateParams();
+        if (!arguments.isMap()) {
+            arguments = new TemplateArgumentsMap(arguments.asMap());
         }
+        for (TemplateParam param : globalTemplateParams) {
+            arguments.add(param.getParamKey(), param.getParamValue());
+        }
+        return arguments;
     }
 }

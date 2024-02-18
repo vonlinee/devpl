@@ -1,6 +1,6 @@
 package io.devpl.fxui.controller.domain;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.model.FieldInfo;
 import io.devpl.fxui.utils.StringConverters;
 import io.fxtras.mvvm.FxmlBinder;

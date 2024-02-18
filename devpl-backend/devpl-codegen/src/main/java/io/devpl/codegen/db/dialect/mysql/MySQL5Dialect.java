@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.dialect.mysql;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.codegen.jdbc.SqlDataType;
 import io.devpl.codegen.db.dialect.SqlDialect;
 

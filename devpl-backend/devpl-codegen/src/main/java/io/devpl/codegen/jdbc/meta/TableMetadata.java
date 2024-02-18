@@ -54,12 +54,12 @@ public class TableMetadata {
     private String typeName;
 
     /**
-     * SELF_REFERENCING_COL_NAME String => name of the designated "identifier" column of a typed table (may be null)
+     * SELF_REFERENCING_COL_NAME String => name of the designated "identifier" column of a typed table (maybe null)
      */
     private String selfReferencingColName;
 
     /**
-     * REF_GENERATION String => specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (may be null)
+     * REF_GENERATION String => specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (maybe null)
      */
     private String refGeneration;
 

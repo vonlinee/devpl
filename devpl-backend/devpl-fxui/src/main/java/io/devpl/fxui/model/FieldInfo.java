@@ -1,6 +1,6 @@
 package io.devpl.fxui.model;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.components.table.FXTableViewColumn;
 import io.devpl.fxui.components.table.FXTableViewModel;
 import javafx.beans.property.ObjectProperty;

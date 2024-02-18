@@ -1,6 +1,6 @@
 package io.devpl.fxui.tools.mybatis;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.utils.DBUtils;
 import io.devpl.fxui.utils.NumberUtils;
 import io.devpl.fxui.utils.TypeUtils;

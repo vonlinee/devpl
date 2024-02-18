@@ -1,6 +1,6 @@
 package io.devpl.codegen.core;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.type.JavaType;

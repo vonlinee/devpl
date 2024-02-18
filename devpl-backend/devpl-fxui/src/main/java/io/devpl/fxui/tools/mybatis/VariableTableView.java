@@ -1,6 +1,6 @@
 package io.devpl.fxui.tools.mybatis;
 
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.utils.StringConverters;
 import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.Visitor;

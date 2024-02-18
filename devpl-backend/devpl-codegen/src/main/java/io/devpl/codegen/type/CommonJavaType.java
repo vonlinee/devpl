@@ -1,6 +1,4 @@
-package io.devpl.codegen.jdbc;
-
-import io.devpl.codegen.type.JavaType;
+package io.devpl.codegen.type;
 
 import java.util.HashMap;
 import java.util.Map;

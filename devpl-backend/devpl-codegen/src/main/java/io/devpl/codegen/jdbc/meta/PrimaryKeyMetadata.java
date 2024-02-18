@@ -99,7 +99,6 @@ public class PrimaryKeyMetadata {
             '}';
     }
 
-
     /**
      * @param resultSet ResultSet
      * @throws SQLException SQLException

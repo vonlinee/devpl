@@ -3,7 +3,6 @@ package io.devpl.codegen.jdbc;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.NumberUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class JdbcUtils {
     /**
      * 过滤正则
      */
-    private static final Pattern REGX = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
+    private static final Pattern REGEX_TABLE_NAME = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
 
     /**
      * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
@@ -38,8 +37,8 @@ public class JdbcUtils {
      * @param tableName 表名
      * @return 是否正则
      */
-    public static boolean matcherRegTable(@NotNull String tableName) {
-        return REGX.matcher(tableName).find();
+    public static boolean matcherRegTable(String tableName) {
+        return REGEX_TABLE_NAME.matcher(tableName).find();
     }
 
     /**
@@ -48,8 +47,7 @@ public class JdbcUtils {
      * @param str url
      * @return 类型枚举值，如果没找到，则返回 null
      */
-    @NotNull
-    public static DBType getDbType(@NotNull String str) {
+    public static DBType getDbType(String str) {
         str = str.toLowerCase();
         if (str.contains(":mysql:") || str.contains(":cobar:")) {
             return DBType.MYSQL;

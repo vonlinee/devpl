@@ -11,6 +11,7 @@ import org.apache.velocity.runtime.parser.node.Node;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * Velocity模板指令的父类
@@ -51,11 +52,8 @@ public abstract class VelocityTemplateDirective extends Directive implements Tem
         }
         // 渲染结果
         String renderResult = this.render(directiveArguments);
-        if (renderResult == null) {
-            return false;
-        }
         // 输出渲染结果
-        writer.write(renderResult);
+        writer.write(Objects.requireNonNullElse(renderResult, ""));
         return true;
     }
 }

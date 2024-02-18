@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller.fields;
 
 import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
-import io.devpl.codegen.jdbc.CommonJavaType;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.utils.Helper;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;

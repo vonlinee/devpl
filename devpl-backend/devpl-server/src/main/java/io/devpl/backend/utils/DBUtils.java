@@ -190,17 +190,7 @@ public class DBUtils {
         List<ResultSetColumnMetadata> list = new ArrayList<>(colCount);
         for (int i = 1; i < colCount + 1; i++) {
             ResultSetColumnMetadata rscmd = new ResultSetColumnMetadata();
-            rscmd.setColumnName(metaData.getColumnName(i));
-            rscmd.setColumnLabel(metaData.getColumnLabel(i));
-            rscmd.setColumnClassName(metaData.getColumnClassName(i));
-            rscmd.setColumnType(metaData.getColumnType(i));
-            rscmd.setTableName(metaData.getTableName(i));
-            rscmd.setCatalogName(metaData.getCatalogName(i));
-            rscmd.setColumnDisplaySize(metaData.getColumnDisplaySize(i));
-            rscmd.setColumnTypeName(metaData.getColumnTypeName(i));
-            rscmd.setPrecision(metaData.getPrecision(i));
-            rscmd.setScale(metaData.getScale(i));
-            rscmd.setSchemaName(metaData.getSchemaName(i));
+            rscmd.initialize(metaData, i);
             list.add(rscmd);
         }
         return list;
