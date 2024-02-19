@@ -41,77 +41,77 @@ import javafx.scene.paint.Paint;
  * @since 1.0
  */
 public class MarkerContext {
-   private Node contextNode = null;
-   private MarkerSpec markerStart = null;
-   private MarkerSpec markerMid = null;
-   private MarkerSpec markerEnd = null;
-   private Paint contextFill = null;
-   private Paint contextStroke = null;
+    private Node contextNode = null;
+    private MarkerSpec markerStart = null;
+    private MarkerSpec markerMid = null;
+    private MarkerSpec markerEnd = null;
+    private Paint contextFill = null;
+    private Paint contextStroke = null;
 
-   public MarkerContext() {
-   }
+    public MarkerContext() {
+    }
 
-   public boolean isEmpty() {
-      return markerStart == null && markerMid == null && markerEnd == null;
-   }
+    public boolean isEmpty() {
+        return markerStart == null && markerMid == null && markerEnd == null;
+    }
 
-   public void setMarkerStart(MarkerSpec markerStart) {
-      this.markerStart = markerStart;
-   }
+    public void setMarkerStart(MarkerSpec markerStart) {
+        this.markerStart = markerStart;
+    }
 
-   public boolean hasMarkerStart() {
-      return markerStart != null;
-   }
+    public boolean hasMarkerStart() {
+        return markerStart != null;
+    }
 
-   public MarkerSpec getMarkerStart() {
-      return markerStart;
-   }
+    public MarkerSpec getMarkerStart() {
+        return markerStart;
+    }
 
-   public void setMarkerMid(MarkerSpec markerMid) {
-      this.markerMid = markerMid;
-   }
+    public void setMarkerMid(MarkerSpec markerMid) {
+        this.markerMid = markerMid;
+    }
 
-   public boolean hasMarkerMid() {
-      return markerMid != null;
-   }
+    public boolean hasMarkerMid() {
+        return markerMid != null;
+    }
 
-   public MarkerSpec getMarkerMid() {
-      return markerMid;
-   }
+    public MarkerSpec getMarkerMid() {
+        return markerMid;
+    }
 
-   public boolean hasMarkerEnd() {
-      return markerEnd != null;
-   }
+    public boolean hasMarkerEnd() {
+        return markerEnd != null;
+    }
 
-   public MarkerSpec getMarkerEnd() {
-      return markerEnd;
-   }
+    public MarkerSpec getMarkerEnd() {
+        return markerEnd;
+    }
 
-   public void setMarkerEnd(MarkerSpec markerEnd) {
-      this.markerEnd = markerEnd;
-   }
+    public void setMarkerEnd(MarkerSpec markerEnd) {
+        this.markerEnd = markerEnd;
+    }
 
-   public void setContextFill(Paint fill) {
-      this.contextFill = fill;
-   }
+    public void setContextFill(Paint fill) {
+        this.contextFill = fill;
+    }
 
-   public Paint getContextFill() {
-      return contextFill;
-   }
+    public Paint getContextFill() {
+        return contextFill;
+    }
 
-   public void setContextNode(Node node) {
-      this.contextNode = node;
-   }
+    public void setContextNode(Node node) {
+        this.contextNode = node;
+    }
 
-   public Node getContextNode() {
-      return contextNode;
-   }
+    public Node getContextNode() {
+        return contextNode;
+    }
 
-   public void setContextStroke(Paint stroke) {
-      this.contextStroke = stroke;
-   }
+    public void setContextStroke(Paint stroke) {
+        this.contextStroke = stroke;
+    }
 
-   public Paint getContextStroke() {
-      return contextStroke;
-   }
+    public Paint getContextStroke() {
+        return contextStroke;
+    }
 }

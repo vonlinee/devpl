@@ -38,24 +38,24 @@ package io.fxtras.svg;
  * @since 0.6
  */
 public interface ExceptionsHandling {
-   /**
-    * Skip the exceptions.
-    */
-   public static short SKIP_EXCEPTION = 0;
-   /**
-    * Print the exception message on the <code>System.err</code> stream.
-    */
-   public static short PRINT_EXCEPTION_MESSAGE = 1;
-   /**
-    * Print the exception StackTrace.
-    */
-   public static short PRINT_EXCEPTION_STACKTRACE = 2;
-   /**
-    * Rethrow the exceptions.
-    */
-   public static short RETROW_EXCEPTION = 3;
-   /**
-    * Rethrow the exceptions and the error messages as exceptions.
-    */
-   public static short RETROW_ALL = 4;
+    /**
+     * Skip the exceptions.
+     */
+    short SKIP_EXCEPTION = 0;
+    /**
+     * Print the exception message on the <code>System.err</code> stream.
+     */
+    short PRINT_EXCEPTION_MESSAGE = 1;
+    /**
+     * Print the exception StackTrace.
+     */
+    short PRINT_EXCEPTION_STACKTRACE = 2;
+    /**
+     * Rethrow the exceptions.
+     */
+    short RETROW_EXCEPTION = 3;
+    /**
+     * Rethrow the exceptions and the error messages as exceptions.
+     */
+    short RETROW_ALL = 4;
 }

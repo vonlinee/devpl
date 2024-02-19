@@ -40,168 +40,168 @@ import javafx.scene.Node;
  * @version 1.0
  */
 public class Viewbox {
-   /**
-    * The width attribute.
-    */
-   protected double width = 0;
-   /**
-    * The height attribute.
-    */
-   protected double height = 0;
-   /**
-    * True if the viewbox has a width and height.
-    */
-   protected boolean hasWidthAndHeight = false;
-   /**
-    * The x position of the viewBox attribute.
-    */
-   protected double viewboxX = 0;
-   /**
-    * The y position of the viewBox attribute.
-    */
-   protected double viewboxY = 0;
-   /**
-    * The width of the viewBox attribute.
-    */
-   protected double viewboxWidth = 0;
-   /**
-    * The height of the viewBox attribute.
-    */
-   protected double viewboxHeight = 0;
-   /**
-    * True if the "preserveAspectRatio" attribute has a value different from "none".
-    */
-   protected boolean preserveAspectRatio = true;
+    /**
+     * The width attribute.
+     */
+    protected double width = 0;
+    /**
+     * The height attribute.
+     */
+    protected double height = 0;
+    /**
+     * True if the viewbox has a width and height.
+     */
+    protected boolean hasWidthAndHeight = false;
+    /**
+     * The x position of the viewBox attribute.
+     */
+    protected double viewboxX = 0;
+    /**
+     * The y position of the viewBox attribute.
+     */
+    protected double viewboxY = 0;
+    /**
+     * The width of the viewBox attribute.
+     */
+    protected double viewboxWidth = 0;
+    /**
+     * The height of the viewBox attribute.
+     */
+    protected double viewboxHeight = 0;
+    /**
+     * True if the "preserveAspectRatio" attribute has a value different from "none".
+     */
+    protected boolean preserveAspectRatio = true;
 
-   public Viewbox(double width, double height) {
-      this.width = width;
-      this.height = height;
-      this.hasWidthAndHeight = true;
-   }
+    public Viewbox(double width, double height) {
+        this.width = width;
+        this.height = height;
+        this.hasWidthAndHeight = true;
+    }
 
-   /**
-    * Set true if the aspect ratio must be preserved. Note that only two states are supported, contrary to the
-    * full SVG specification.
-    *
-    * @param preserveAspectRatio true if the aspect ratio must be preserved
-    */
-   public void setPreserveAspectRatio(boolean preserveAspectRatio) {
-      this.preserveAspectRatio = preserveAspectRatio;
-   }
+    /**
+     * Set true if the aspect ratio must be preserved. Note that only two states are supported, contrary to the
+     * full SVG specification.
+     *
+     * @param preserveAspectRatio true if the aspect ratio must be preserved
+     */
+    public void setPreserveAspectRatio(boolean preserveAspectRatio) {
+        this.preserveAspectRatio = preserveAspectRatio;
+    }
 
-   /**
-    * Return true if the aspect ratio must be preserved. Note that only two states are supported, contrary to the
-    * full SVG specification.
-    *
-    * @return true if the aspect ratio must be preserved
-    */
-   public boolean isPreservingAspectRatio() {
-      return preserveAspectRatio;
-   }
+    /**
+     * Return true if the aspect ratio must be preserved. Note that only two states are supported, contrary to the
+     * full SVG specification.
+     *
+     * @return true if the aspect ratio must be preserved
+     */
+    public boolean isPreservingAspectRatio() {
+        return preserveAspectRatio;
+    }
 
-   /**
-    * Set the width and height of the viewBox
-    *
-    * @param viewboxX the viewBox X coordinate
-    * @param viewboxY the viewBox y coordinate
-    * @param viewboxWidth the viewBox width
-    * @param viewboxHeight the viewBox height
-    */
-   public void setViewbox(double viewboxX, double viewboxY, double viewboxWidth, double viewboxHeight) {
-      this.viewboxX = viewboxX;
-      this.viewboxY = viewboxY;
-      this.viewboxWidth = viewboxWidth;
-      this.viewboxHeight = viewboxHeight;
-   }
+    /**
+     * Set the width and height of the viewBox
+     *
+     * @param viewboxX      the viewBox X coordinate
+     * @param viewboxY      the viewBox y coordinate
+     * @param viewboxWidth  the viewBox width
+     * @param viewboxHeight the viewBox height
+     */
+    public void setViewbox(double viewboxX, double viewboxY, double viewboxWidth, double viewboxHeight) {
+        this.viewboxX = viewboxX;
+        this.viewboxY = viewboxY;
+        this.viewboxWidth = viewboxWidth;
+        this.viewboxHeight = viewboxHeight;
+    }
 
-   /**
-    * Scale a Node.
-    *
-    * @param node the node
-    */
-   public void scaleNode(Node node) {
-      if (hasWidthAndHeight) {
-         if (!preserveAspectRatio) {
-            if (viewboxWidth != 0 && viewboxHeight != 0) {
-               node.setScaleX(width / viewboxWidth);
-               node.setScaleY(height / viewboxHeight);
+    /**
+     * Scale a Node.
+     *
+     * @param node the node
+     */
+    public void scaleNode(Node node) {
+        if (hasWidthAndHeight) {
+            if (!preserveAspectRatio) {
+                if (viewboxWidth != 0 && viewboxHeight != 0) {
+                    node.setScaleX(width / viewboxWidth);
+                    node.setScaleY(height / viewboxHeight);
+                }
+            } else if (viewboxWidth != 0) {
+                node.setScaleX(width / viewboxWidth);
+                node.setScaleY(width / viewboxWidth);
             }
-         } else if (viewboxWidth != 0) {
-            node.setScaleX(width / viewboxWidth);
-            node.setScaleY(width / viewboxWidth);
-         }
-      }
-   }
+        }
+    }
 
-   /**
-    * Scale a SVG element attribute value. The value will only be scaled if the
-    * {@link #isPreservingAspectRatio()} returns true.
-    *
-    * @param isWidth true for a width value
-    * @param value the value
-    * @return the scaled value
-    */
-   public double scaleValue(boolean isWidth, double value) {
-      if (preserveAspectRatio) {
-         return value * width / viewboxWidth;
-      } else if (isWidth) {
-         return value;
-      } else {
-         return value;
-      }
-   }
+    /**
+     * Scale a SVG element attribute value. The value will only be scaled if the
+     * {@link #isPreservingAspectRatio()} returns true.
+     *
+     * @param isWidth true for a width value
+     * @param value   the value
+     * @return the scaled value
+     */
+    public double scaleValue(boolean isWidth, double value) {
+        if (preserveAspectRatio) {
+            return value * width / viewboxWidth;
+        } else if (isWidth) {
+            return value;
+        } else {
+            return value;
+        }
+    }
 
-   /**
-    * Return the viewBox x position.
-    *
-    * @return the x position
-    */
-   public double getViewboxX() {
-      return viewboxX;
-   }
+    /**
+     * Return the viewBox x position.
+     *
+     * @return the x position
+     */
+    public double getViewboxX() {
+        return viewboxX;
+    }
 
-   /**
-    * Return the viewBox y position.
-    *
-    * @return the y position
-    */
-   public double getViewboxY() {
-      return viewboxY;
-   }
+    /**
+     * Return the viewBox y position.
+     *
+     * @return the y position
+     */
+    public double getViewboxY() {
+        return viewboxY;
+    }
 
-   /**
-    * Return the viewBox width.
-    *
-    * @return the width
-    */
-   public double getViewboxWidth() {
-      return viewboxWidth;
-   }
+    /**
+     * Return the viewBox width.
+     *
+     * @return the width
+     */
+    public double getViewboxWidth() {
+        return viewboxWidth;
+    }
 
-   /**
-    * Return the viewBox height.
-    *
-    * @return the height
-    */
-   public double getViewboxHeight() {
-      return viewboxHeight;
-   }
+    /**
+     * Return the viewBox height.
+     *
+     * @return the height
+     */
+    public double getViewboxHeight() {
+        return viewboxHeight;
+    }
 
-   /**
-    * Return the width.
-    *
-    * @return the width
-    */
-   public double getWidth() {
-      return width;
-   }
+    /**
+     * Return the width.
+     *
+     * @return the width
+     */
+    public double getWidth() {
+        return width;
+    }
 
-   /**
-    * Return the height.
-    *
-    * @return the height
-    */
-   public double getHeight() {
-      return height;
-   }
+    /**
+     * Return the height.
+     *
+     * @return the height
+     */
+    public double getHeight() {
+        return height;
+    }
 }

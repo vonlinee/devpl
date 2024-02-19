@@ -40,49 +40,49 @@ import java.awt.image.RGBImageFilter;
  * @since 1.0
  */
 public class OpacityFilter extends RGBImageFilter {
-   private double opacity = 0;
-   private boolean multiply = false;
+    private double opacity = 0;
+    private boolean multiply = false;
 
-   /**
-    * Constructor.
-    *
-    * @param opacity the opacity value
-    * @param multiply true if the current pixel opacity must be multiplied by the opacity value, false if the opaciy value must
-    * replace the current pixel opacity
-    */
-   public OpacityFilter(double opacity, boolean multiply) {
-      this.opacity = opacity;
-      this.multiply = multiply;
-   }
+    /**
+     * Constructor.
+     *
+     * @param opacity  the opacity value
+     * @param multiply true if the current pixel opacity must be multiplied by the opacity value, false if the opaciy value must
+     *                 replace the current pixel opacity
+     */
+    public OpacityFilter(double opacity, boolean multiply) {
+        this.opacity = opacity;
+        this.multiply = multiply;
+    }
 
-   /**
-    * Convert a single input pixel in the default RGB ColorModel to a single output pixel. The resulting pixel will have the same color but
-    * a modified opacity (alpha) value, depending on the <code>multiply</code> flag:
-    * <ul>
-    * <li>If the <code>multiply</code> flag is set to false, the pixel opacity will be replaced by the <code>opacity</code> value</li>
-    * <li>If the <code>multiply</code> flag is set to true, the pixel opacity will be multiplied by the <code>opacity</code> value</li>
-    * </ul>
-    *
-    * @param x the X coordinate of the pixel
-    * @param y the Y coordinate of the pixel
-    * @param rgb the integer pixel representation in the default RGB color model
-    * @return a filtered pixel in the default RGB color model
-    */
-   @Override
-   public int filterRGB(int x, int y, int rgb) {
-      int alpha;
-      if (multiply) {
-         alpha = rgb & 0xFF000000;
-         alpha = (int) ((double) alpha * opacity);
-      } else {
-         alpha = (int) (opacity * 255);
-      }
-      if (alpha < 0) {
-         alpha = 0;
-      } else if (alpha > 255) {
-         alpha = 255;
-      }
-      return (rgb & 0x00FFFFFF) + (alpha << 24);
-   }
+    /**
+     * Convert a single input pixel in the default RGB ColorModel to a single output pixel. The resulting pixel will have the same color but
+     * a modified opacity (alpha) value, depending on the <code>multiply</code> flag:
+     * <ul>
+     * <li>If the <code>multiply</code> flag is set to false, the pixel opacity will be replaced by the <code>opacity</code> value</li>
+     * <li>If the <code>multiply</code> flag is set to true, the pixel opacity will be multiplied by the <code>opacity</code> value</li>
+     * </ul>
+     *
+     * @param x   the X coordinate of the pixel
+     * @param y   the Y coordinate of the pixel
+     * @param rgb the integer pixel representation in the default RGB color model
+     * @return a filtered pixel in the default RGB color model
+     */
+    @Override
+    public int filterRGB(int x, int y, int rgb) {
+        int alpha;
+        if (multiply) {
+            alpha = rgb & 0xFF000000;
+            alpha = (int) ((double) alpha * opacity);
+        } else {
+            alpha = (int) (opacity * 255);
+        }
+        if (alpha < 0) {
+            alpha = 0;
+        } else if (alpha > 255) {
+            alpha = 255;
+        }
+        return (rgb & 0x00FFFFFF) + (alpha << 24);
+    }
 
 }

@@ -41,44 +41,44 @@ import javafx.css.StyleableProperty;
  * @since 1.0
  */
 public class CSSProperty {
-   private StyleableProperty<?> prop = null;
-   private Object value = null;
+    private StyleableProperty<?> prop = null;
+    private Object value = null;
 
-   /**
-    * Constructor.
-    *
-    * @param prop the StyleableProperty
-    * @param value the property value
-    */
-   public CSSProperty(StyleableProperty<?> prop, Object value) {
-      this.prop = prop;
-      this.value = value;
-   }
+    /**
+     * Constructor.
+     *
+     * @param prop  the StyleableProperty
+     * @param value the property value
+     */
+    public CSSProperty(StyleableProperty<?> prop, Object value) {
+        this.prop = prop;
+        this.value = value;
+    }
 
-   /**
-    * Return the associated StyleableProperty.
-    *
-    * @return the StyleableProperty
-    */
-   public StyleableProperty<?> getProperty() {
-      return prop;
-   }
+    /**
+     * Return the associated StyleableProperty.
+     *
+     * @return the StyleableProperty
+     */
+    public StyleableProperty<?> getProperty() {
+        return prop;
+    }
 
-   /**
-    * Return the StyleOrigin.
-    *
-    * @return the StyleOrigin
-    */
-   public StyleOrigin getStyleOrigin() {
-      return prop.getStyleOrigin();
-   }
+    /**
+     * Return the StyleOrigin.
+     *
+     * @return the StyleOrigin
+     */
+    public StyleOrigin getStyleOrigin() {
+        return prop.getStyleOrigin();
+    }
 
-   /**
-    * Return the property value.
-    *
-    * @return the property value
-    */
-   public Object getValue() {
-      return value;
-   }
+    /**
+     * Return the property value.
+     *
+     * @return the property value
+     */
+    public Object getValue() {
+        return value;
+    }
 }

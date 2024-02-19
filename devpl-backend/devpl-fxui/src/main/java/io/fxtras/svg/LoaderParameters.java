@@ -46,72 +46,71 @@ package io.fxtras.svg;
  * @version 0.6.1
  */
 public class LoaderParameters implements Cloneable {
-   /**
-    * The styleSheets. The default is null, which means that no styleSheets is used.
-    */
-   public String styleSheets = null;
-   /**
-    * The scale. The default is -1, which means that no scaling is applied.
-    */
-   public double scale = -1;
-   /**
-    * True if line widths must also be scaled. The default is true, which means that line widths are also scaled.
-    */
-   public boolean scaleLineWidth = true;
-   /**
-    * The width. The default is -1, which means that no width setting is applied.
-    */
-   public double width = -1;
-   /**
-    * True if animations should be auto-started. The default is true.
-    */
-   public boolean autoStartAnimations = true;
-   /**
-    * True if the resulting image must be centered. The default is false.
-    */
-   public boolean centerImage = false;
-   /**
-    * True if the x and y position of the viewPort is applied. The default is true.
-    */
-   public boolean applyViewportPosition = true;
+    /**
+     * The styleSheets. The default is null, which means that no styleSheets is used.
+     */
+    public String styleSheets = null;
+    /**
+     * The scale. The default is -1, which means that no scaling is applied.
+     */
+    public double scale = -1;
+    /**
+     * True if line widths must also be scaled. The default is true, which means that line widths are also scaled.
+     */
+    public boolean scaleLineWidth = true;
+    /**
+     * The width. The default is -1, which means that no width setting is applied.
+     */
+    public double width = -1;
+    /**
+     * True if animations should be auto-started. The default is true.
+     */
+    public boolean autoStartAnimations = true;
+    /**
+     * True if the resulting image must be centered. The default is false.
+     */
+    public boolean centerImage = false;
+    /**
+     * True if the x and y position of the viewPort is applied. The default is true.
+     */
+    public boolean applyViewportPosition = true;
 
-   /**
-    * Create a clone of the parameters.
-    *
-    * @return the cloned parameters
-    */
-   @Override
-   public LoaderParameters clone() {
-      try {
-         LoaderParameters params = (LoaderParameters) super.clone();
-         return params;
-      } catch (CloneNotSupportedException ex) {
-         // we should never go there
-         return this;
-      }
-   }
+    /**
+     * Create a clone of the parameters.
+     *
+     * @return the cloned parameters
+     */
+    @Override
+    public LoaderParameters clone() {
+        try {
+            return (LoaderParameters) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            // we should never go there
+            return this;
+        }
+    }
 
-   /**
-    * Create parameters with a width property.
-    *
-    * @param width the width
-    * @return the LoaderParameters
-    */
-   public static LoaderParameters createWidthParameters(double width) {
-      LoaderParameters params = new LoaderParameters();
-      params.width = width;
-      return params;
-   }
+    /**
+     * Create parameters with a width property.
+     *
+     * @param width the width
+     * @return the LoaderParameters
+     */
+    public static LoaderParameters createWidthParameters(double width) {
+        LoaderParameters params = new LoaderParameters();
+        params.width = width;
+        return params;
+    }
 
-   /**
-    * Create a parameters with a scale property.
-    *
-    * @param scale the scale
-    * @return the LoaderParameters
-    */
-   public static LoaderParameters createScaleParameters(double scale) {
-      LoaderParameters params = new LoaderParameters();
-      params.scale = scale;
-      return params;
-   }
+    /**
+     * Create a parameters with a scale property.
+     *
+     * @param scale the scale
+     * @return the LoaderParameters
+     */
+    public static LoaderParameters createScaleParameters(double scale) {
+        LoaderParameters params = new LoaderParameters();
+        params.scale = scale;
+        return params;
+    }
 }

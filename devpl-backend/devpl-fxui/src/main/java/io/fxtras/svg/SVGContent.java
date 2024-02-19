@@ -40,58 +40,58 @@ import java.net.URL;
  * @since 1.0
  */
 public class SVGContent {
-   /**
-    * The url of the SVG file.
-    */
-   public final URL url;
-   /**
-    * The SVG content as a String.
-    */
-   public final String content;
-   /**
-    * The loader parameters.
-    */
-   public final LoaderParameters params;
+    /**
+     * The url of the SVG file.
+     */
+    public final URL url;
+    /**
+     * The SVG content as a String.
+     */
+    public final String content;
+    /**
+     * The loader parameters.
+     */
+    public final LoaderParameters params;
 
-   /**
-    * Constructor.
-    *
-    * @param url the url of the SVG file
-    * @param params the loader parameters
-    */
-   public SVGContent(URL url, LoaderParameters params) {
-      this.url = url;
-      this.params = params;
-      this.content = null;
-   }
+    /**
+     * Constructor.
+     *
+     * @param url    the url of the SVG file
+     * @param params the loader parameters
+     */
+    public SVGContent(URL url, LoaderParameters params) {
+        this.url = url;
+        this.params = params;
+        this.content = null;
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param content the SVG content as a String
-    * @param params the loader parameters
-    */
-   public SVGContent(String content, LoaderParameters params) {
-      this.url = null;
-      this.params = params;
-      this.content = content;
-   }
+    /**
+     * Constructor.
+     *
+     * @param content the SVG content as a String
+     * @param params  the loader parameters
+     */
+    public SVGContent(String content, LoaderParameters params) {
+        this.url = null;
+        this.params = params;
+        this.content = content;
+    }
 
-   /**
-    * Return true if the SVG content if from an URL.
-    *
-    * @return true if the SVG content if from an URL
-    */
-   public boolean isFromURL() {
-      return url != null;
-   }
+    /**
+     * Return true if the SVG content if from an URL.
+     *
+     * @return true if the SVG content if from an URL
+     */
+    public boolean isFromURL() {
+        return url != null;
+    }
 
-   /**
-    * Return true if the SVG content if from a String.
-    *
-    * @return true if the SVG content if from a String
-    */
-   public boolean isFromString() {
-      return content != null;
-   }
+    /**
+     * Return true if the SVG content if from a String.
+     *
+     * @return true if the SVG content if from a String
+     */
+    public boolean isFromString() {
+        return content != null;
+    }
 }

@@ -32,10 +32,10 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.tosvg.converters;
 
+import io.fxtras.svg.tosvg.xml.XMLNode;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Labeled;
-import io.fxtras.svg.tosvg.xml.XMLNode;
 
 /**
  * A converter which convert Controls.
@@ -43,35 +43,35 @@ import io.fxtras.svg.tosvg.xml.XMLNode;
  * @since 1.0
  */
 public class ControlConverter extends RegionConverter {
-   private Control control = null;
+    private Control control = null;
 
-   public ControlConverter(ConverterDelegate delegate, Control control, XMLNode xmlParent) {
-      super(delegate, control, xmlParent);
-      this.control = control;
-   }
+    public ControlConverter(ConverterDelegate delegate, Control control, XMLNode xmlParent) {
+        super(delegate, control, xmlParent);
+        this.control = control;
+    }
 
-   /**
-    * Convert the Control.
-    *
-    * @return the xml node
-    */
-   @Override
-   public XMLNode convert() {
-      return super.convert();
-   }
+    /**
+     * Convert the Control.
+     *
+     * @return the xml node
+     */
+    @Override
+    public XMLNode convert() {
+        return super.convert();
+    }
 
-   /**
-    * Return the additional child Node on this Node.
-    * Will return null, except for a {@link Labeled}, where it will return {@link Labeled#getGraphic()}.
-    *
-    * @return the additional child Node on this Node
-    */
-   @Override
-   public Node getAdditionalNode() {
-      if (control instanceof Labeled) {
-         return ((Labeled) control).getGraphic();
-      } else {
-         return null;
-      }
-   }
+    /**
+     * Return the additional child Node on this Node.
+     * Will return null, except for a {@link Labeled}, where it will return {@link Labeled#getGraphic()}.
+     *
+     * @return the additional child Node on this Node
+     */
+    @Override
+    public Node getAdditionalNode() {
+        if (control instanceof Labeled) {
+            return ((Labeled) control).getGraphic();
+        } else {
+            return null;
+        }
+    }
 }

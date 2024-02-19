@@ -38,12 +38,12 @@ package io.fxtras.svg;
  * @since 1.0
  */
 public interface ScaleQuality {
-   /**
-    * This value specifies that the JavaFX scaling will be used.
-    */
-   public static short RENDER_SPEED = 0;
-   /**
-    * This value specifies that the scaling will be performed at the SVGImage Node level before saving the snapshot.
-    */
-   public static short RENDER_QUALITY = 1;
+    /**
+     * This value specifies that the JavaFX scaling will be used.
+     */
+    short RENDER_SPEED = 0;
+    /**
+     * This value specifies that the scaling will be performed at the SVGImage Node level before saving the snapshot.
+     */
+    short RENDER_QUALITY = 1;
 }

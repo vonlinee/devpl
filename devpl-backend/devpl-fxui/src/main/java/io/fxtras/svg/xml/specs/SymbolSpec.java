@@ -41,27 +41,27 @@ import io.fxtras.svg.xml.parsers.XMLNode;
  * @version 1.0
  */
 public class SymbolSpec implements SVGTags {
-   private Viewbox viewbox = null;
-   private final XMLNode node;
+    private Viewbox viewbox = null;
+    private final XMLNode node;
 
-   public SymbolSpec(XMLNode node) {
-      this.node = node;
-   }
+    public SymbolSpec(XMLNode node) {
+        this.node = node;
+    }
 
-   public void setViewbox(Viewbox viewbox) {
-      this.viewbox = viewbox;
-   }
+    public void setViewbox(Viewbox viewbox) {
+        this.viewbox = viewbox;
+    }
 
-   public boolean hasViewbox() {
-      return viewbox != null;
-   }
+    public boolean hasViewbox() {
+        return viewbox != null;
+    }
 
-   public Viewbox getViewbox() {
-      return viewbox;
-   }
+    public Viewbox getViewbox() {
+        return viewbox;
+    }
 
-   public XMLNode getXMLNode() {
-      return node;
-   }
+    public XMLNode getXMLNode() {
+        return node;
+    }
 
 }

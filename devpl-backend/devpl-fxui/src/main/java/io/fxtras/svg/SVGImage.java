@@ -45,12 +45,15 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.io.File;
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
 
 /**
  * The resulting SVG image. It is a JavaFX Nodes tree.
+ *
  * @version 1.0
  */
 public class SVGImage extends Group {
@@ -69,6 +72,7 @@ public class SVGImage extends Group {
 
     /**
      * Constructor.
+     *
      * @param content the SVG content
      */
     public SVGImage(SVGContent content) {
@@ -77,6 +81,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the SVG content origin.
+     *
      * @return the SVG content
      */
     public SVGContent getSVGContent() {
@@ -86,6 +91,7 @@ public class SVGImage extends Group {
     /**
      * Set the default SnapshotParameters to use when creating a snapshot. The default is null, which means that a
      * default SnapshotParameters will be created when creating a snapshot.
+     *
      * @param params the default SnapshotParameters
      */
     public static void setDefaultSnapshotParameters(SnapshotParameters params) {
@@ -94,6 +100,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the default SnapshotParameters used when creating a snapshot.
+     *
      * @return the default SnapshotParameters
      */
     public static SnapshotParameters getDefaultSnapshotParameters() {
@@ -106,6 +113,7 @@ public class SVGImage extends Group {
 
     /**
      * Return true if there is a Node indicated by an id.
+     *
      * @param id the name of the Node
      * @return true if there is a Node indicated by the id
      */
@@ -115,6 +123,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the Node indicated by id.
+     *
      * @param id the name of the Node
      * @return the Node
      */
@@ -124,6 +133,7 @@ public class SVGImage extends Group {
 
     /**
      * Set the list of animations.
+     *
      * @param animations the animations.
      */
     void setAnimations(List<Animation> animations) {
@@ -150,9 +160,7 @@ public class SVGImage extends Group {
 
     private void playAnimationsImpl() {
         if (!animations.isEmpty()) {
-            Iterator<Animation> it = animations.iterator();
-            while (it.hasNext()) {
-                Animation tr = it.next();
+            for (Animation tr : animations) {
                 tr.play();
             }
         }
@@ -178,9 +186,7 @@ public class SVGImage extends Group {
 
     private void stopAnimationsImpl() {
         if (!animations.isEmpty()) {
-            Iterator<Animation> it = animations.iterator();
-            while (it.hasNext()) {
-                Animation tr = it.next();
+            for (Animation tr : animations) {
                 tr.stop();
             }
         }
@@ -188,6 +194,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the width of the image.
+     *
      * @return the width
      */
     public double getWidth() {
@@ -196,6 +203,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the width of the image, taking into account the scaling of the svg image.
+     *
      * @return the width
      */
     public double getScaledWidth() {
@@ -204,6 +212,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the height of the image.
+     *
      * @return the height
      */
     public double getHeight() {
@@ -212,6 +221,7 @@ public class SVGImage extends Group {
 
     /**
      * Return the height of the image, taking into account the scaling of the svg image.
+     *
      * @return the height
      */
     public double getScaledHeight() {
@@ -220,6 +230,7 @@ public class SVGImage extends Group {
 
     /**
      * Convert the Node tree to an image.
+     *
      * @param scale the scale
      * @return the Image
      */
@@ -229,6 +240,7 @@ public class SVGImage extends Group {
 
     /**
      * Convert the Node tree to a scaled image.
+     *
      * @param quality the scaling quality
      * @param scaleX  the X scale
      * @param scaleY  the Y scale
@@ -259,13 +271,13 @@ public class SVGImage extends Group {
                 params.setFill(SNAPSHOT_PARAMS.getFill());
                 params.setViewport(viewport);
             }
-            WritableImage image = snapshotImpl(params);
-            return image;
+            return snapshotImpl(params);
         }
     }
 
     /**
      * Convert the Node tree to a scaled image.
+     *
      * @param scaleX the X scale
      * @param scaleY the Y scale
      * @return the Image
@@ -276,6 +288,7 @@ public class SVGImage extends Group {
 
     /**
      * Convert the Node tree to an image, specifying the resulting width and preserving the image ratio.
+     *
      * @param quality the scaling quality
      * @param width   the resulting width
      * @return the Image
@@ -289,13 +302,11 @@ public class SVGImage extends Group {
             double initialWidth = this.getLayoutBounds().getWidth();
             double initialHeight = this.getLayoutBounds().getHeight();
             double scaleX = width / initialWidth;
-            double scaleY = scaleX;
             this.setScaleX(scaleX);
-            this.setScaleY(scaleY);
-            double finalWidth = width;
-            double finalHeight = initialHeight * scaleY;
+            this.setScaleY(scaleX);
+            double finalHeight = initialHeight * scaleX;
             SnapshotParameters params = SNAPSHOT_PARAMS;
-            Rectangle2D viewport = new Rectangle2D(0, 0, finalWidth, finalHeight);
+            Rectangle2D viewport = new Rectangle2D(0, 0, width, finalHeight);
             if (params == null) {
                 params = new SnapshotParameters();
                 params.setViewport(viewport);
@@ -307,13 +318,13 @@ public class SVGImage extends Group {
                 params.setFill(SNAPSHOT_PARAMS.getFill());
                 params.setViewport(viewport);
             }
-            WritableImage image = snapshotImpl(params);
-            return image;
+            return snapshotImpl(params);
         }
     }
 
     /**
      * Convert the Node tree to an image, specifying the resulting width and preserving the image ratio.
+     *
      * @param width the resulting width
      * @return the Image
      */
@@ -323,6 +334,7 @@ public class SVGImage extends Group {
 
     /**
      * Convert the Node tree to an image, without applying a scale.
+     *
      * @return the Image
      */
     public Image toImage() {
@@ -330,18 +342,17 @@ public class SVGImage extends Group {
         if (params == null) {
             params = new SnapshotParameters();
         }
-        WritableImage image = snapshotImpl(params);
-        return image;
+        return snapshotImpl(params);
     }
 
     /**
      * Convert the Node tree to an image.
+     *
      * @param params the parameters
      * @return the Image
      */
     public Image toImage(SnapshotParameters params) {
-        WritableImage image = snapshotImpl(params);
-        return image;
+        return snapshotImpl(params);
     }
 
     private WritableImage snapshotImplInJFX(SnapshotParameters params) {
@@ -350,6 +361,7 @@ public class SVGImage extends Group {
 
     /**
      * Scale the image. Return the initial SVGImage.
+     *
      * @param scale the scale factor
      * @return the new image
      */
@@ -359,6 +371,7 @@ public class SVGImage extends Group {
 
     /**
      * Scale the image. If <code>createNew</code> is <code>true</code>, then return the initial SVGImage.
+     *
      * @param scale     the scale factor
      * @param createNew true to create a new image
      * @return the new image
@@ -401,6 +414,7 @@ public class SVGImage extends Group {
 
     /**
      * Scale the image to a specified width. Return the initial SVGImage.
+     *
      * @param width the width of the scaled image
      * @return the new image
      */
@@ -410,6 +424,7 @@ public class SVGImage extends Group {
 
     /**
      * Scale the image to a specified width. If <code>createNew</code> is <code>true</code>, then return the initial SVGImage.
+     *
      * @param width     the width of the scaled image
      * @param createNew true to creata a new image
      * @return the new image
@@ -430,6 +445,7 @@ public class SVGImage extends Group {
      * <p>
      * Reasons for the save to not being able to generate the snapshot are the directory being read-only, or swing
      * not available.
+     *
      * @param params the parameters
      * @param format the format
      * @param file   the file
@@ -461,6 +477,7 @@ public class SVGImage extends Group {
      * <p>
      * Reasons for the save to not being able to generate the snapshot are the directory being read-only, or swing
      * not available.
+     *
      * @param format the format
      * @param file   the file
      * @return true if the save was successful
@@ -480,13 +497,7 @@ public class SVGImage extends Group {
         } else {
             // the next instruction is only there to initialize the JavaFX platform
             new JFXPanel();
-            FutureTask<WritableImage> future = new FutureTask<>(new Callable<WritableImage>() {
-                @Override
-                public WritableImage call() throws Exception {
-                    WritableImage img = snapshotImplInJFX(params);
-                    return img;
-                }
-            });
+            FutureTask<WritableImage> future = new FutureTask<>(() -> snapshotImplInJFX(params));
             Platform.runLater(future);
             try {
                 return future.get();

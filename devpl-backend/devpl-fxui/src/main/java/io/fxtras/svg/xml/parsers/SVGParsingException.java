@@ -38,15 +38,15 @@ package io.fxtras.svg.xml.parsers;
  * @version 1.0
  */
 public class SVGParsingException extends SVGLibraryException {
-   public SVGParsingException(String message) {
-      super(message);
-   }
+    public SVGParsingException(String message) {
+        super(message);
+    }
 
-   public SVGParsingException(String message, Throwable cause) {
-      super(message, cause);
-   }
+    public SVGParsingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public SVGParsingException(Throwable cause) {
-      super(cause);
-   }
+    public SVGParsingException(Throwable cause) {
+        super(cause);
+    }
 }

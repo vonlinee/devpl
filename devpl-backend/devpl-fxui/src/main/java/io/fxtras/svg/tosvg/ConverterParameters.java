@@ -38,12 +38,12 @@ package io.fxtras.svg.tosvg;
  * @since 1.0
  */
 public class ConverterParameters {
-   /**
-    * The width.
-    */
-   public double width = -1;
-   /**
-    * The height.
-    */
-   public double height = -1;   
+    /**
+     * The width.
+     */
+    public double width = -1;
+    /**
+     * The height.
+     */
+    public double height = -1;
 }

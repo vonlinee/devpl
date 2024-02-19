@@ -41,121 +41,121 @@ import java.util.Objects;
  * @since 1.0
  */
 public class XMLRoot extends XMLNode {
-   private String encoding = null;
+    private String encoding = null;
 
-   /**
-    * Create the root Node.
-    *
-    * @param nodeName the Node name
-    */
-   public XMLRoot(String nodeName) {
-      super(nodeName);
-      addStandardAttributes();
-   }
+    /**
+     * Create the root Node.
+     *
+     * @param nodeName the Node name
+     */
+    public XMLRoot(String nodeName) {
+        super(nodeName);
+        addStandardAttributes();
+    }
 
-   private void addStandardAttributes() {
-      this.addAttribute("xmlns", SVGConstants.XMNLS_SVG);
-      this.addAttribute("xmlns:svg", SVGConstants.XMNLS_SVG);
-   }
+    private void addStandardAttributes() {
+        this.addAttribute("xmlns", SVGConstants.XMNLS_SVG);
+        this.addAttribute("xmlns:svg", SVGConstants.XMNLS_SVG);
+    }
 
-   /**
-    * Set the encoding of the XML file.
-    *
-    * @param encoding the encoding of the XML file
-    */
-   public void setEncoding(String encoding) {
-      this.encoding = encoding;
-   }
+    /**
+     * Set the encoding of the XML file.
+     *
+     * @param encoding the encoding of the XML file
+     */
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
 
-   /**
-    * Return the declared encoding of the XML file. Return null if there is no declared encoding in the file.
-    *
-    * @return the declared encoding of the XML file
-    */
-   public String getEncoding() {
-      return encoding;
-   }
+    /**
+     * Return the declared encoding of the XML file. Return null if there is no declared encoding in the file.
+     *
+     * @return the declared encoding of the XML file
+     */
+    public String getEncoding() {
+        return encoding;
+    }
 
-   @Override
-   XMLRoot createCopyInstanceImpl() {
-      XMLRoot node = new XMLRoot(name);
-      node.encoding = encoding;
-      return node;
-   }
+    @Override
+    XMLRoot createCopyInstanceImpl() {
+        XMLRoot node = new XMLRoot(name);
+        node.encoding = encoding;
+        return node;
+    }
 
-   /**
-    * Create a copy of this node. It will also copy all the children under this node.
-    *
-    * @return the Node copy.
-    */
-   @Override
-   public XMLRoot copy() {
-      XMLNode node = super.copy();
-      return (XMLRoot) node;
-   }
+    /**
+     * Create a copy of this node. It will also copy all the children under this node.
+     *
+     * @return the Node copy.
+     */
+    @Override
+    public XMLRoot copy() {
+        XMLNode node = super.copy();
+        return (XMLRoot) node;
+    }
 
-   /**
-    * Return true if this node is equal to another Object.
-    *
-    * @param o the object
-    * @return true true if this node is equal to the Object
-    */
-   @Override
-   public boolean equals(Object o) {
-      if (!(o instanceof XMLNode)) {
-         return false;
-      }
-      if (!(o.getClass() == XMLRoot.class)) {
-         return false;
-      }
-      XMLRoot node = (XMLRoot) o;
-      if (!node.getName().equals(name)) {
-         return false;
-      }
-      if (node.encoding == null && encoding != null) {
-         return false;
-      }
-      if (node.encoding != null && encoding == null) {
-         return false;
-      }
-      if (encoding != null && !node.encoding.equals(encoding)) {
-         return false;
-      }
-      if (node.getAttributes().size() != attributes.size()) {
-         return false;
-      }
-      Iterator<String> it = node.getAttributes().keySet().iterator();
-      while (it.hasNext()) {
-         String key = it.next();
-         if (!attributes.containsKey(key)) {
+    /**
+     * Return true if this node is equal to another Object.
+     *
+     * @param o the object
+     * @return true true if this node is equal to the Object
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof XMLNode)) {
             return false;
-         }
-         String value = node.getAttributes().get(key);
-         String value2 = attributes.get(key);
-         if (!value.equals(value2)) {
+        }
+        if (!(o.getClass() == XMLRoot.class)) {
             return false;
-         }
-      }
-      if (node.getChildren().size() != children.size()) {
-         return false;
-      }
-      for (int i = 0; i < node.getChildren().size(); i++) {
-         XMLNode child = node.getChildren().get(i);
-         XMLNode child2 = children.get(i);
-         if (!child.equals(child2)) {
+        }
+        XMLRoot node = (XMLRoot) o;
+        if (!node.getName().equals(name)) {
             return false;
-         }
-      }
-      return true;
-   }
+        }
+        if (node.encoding == null && encoding != null) {
+            return false;
+        }
+        if (node.encoding != null && encoding == null) {
+            return false;
+        }
+        if (encoding != null && !node.encoding.equals(encoding)) {
+            return false;
+        }
+        if (node.getAttributes().size() != attributes.size()) {
+            return false;
+        }
+        Iterator<String> it = node.getAttributes().keySet().iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            if (!attributes.containsKey(key)) {
+                return false;
+            }
+            String value = node.getAttributes().get(key);
+            String value2 = attributes.get(key);
+            if (!value.equals(value2)) {
+                return false;
+            }
+        }
+        if (node.getChildren().size() != children.size()) {
+            return false;
+        }
+        for (int i = 0; i < node.getChildren().size(); i++) {
+            XMLNode child = node.getChildren().get(i);
+            XMLNode child2 = children.get(i);
+            if (!child.equals(child2)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-   @Override
-   public int hashCode() {
-      int hash = 7;
-      hash = 59 * hash + Objects.hashCode(this.encoding);
-      hash = 59 * hash + Objects.hashCode(this.name);
-      hash = 59 * hash + Objects.hashCode(this.children);
-      hash = 59 * hash + Objects.hashCode(this.attributes);
-      return hash;
-   }
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.encoding);
+        hash = 59 * hash + Objects.hashCode(this.name);
+        hash = 59 * hash + Objects.hashCode(this.children);
+        hash = 59 * hash + Objects.hashCode(this.attributes);
+        return hash;
+    }
 }

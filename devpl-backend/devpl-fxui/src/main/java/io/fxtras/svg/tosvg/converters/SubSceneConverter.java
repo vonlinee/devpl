@@ -32,9 +32,9 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.tosvg.converters;
 
+import io.fxtras.svg.tosvg.xml.XMLNode;
 import javafx.scene.Parent;
 import javafx.scene.SubScene;
-import io.fxtras.svg.tosvg.xml.XMLNode;
 
 /**
  * A converter which convert a subScene.
@@ -42,50 +42,49 @@ import io.fxtras.svg.tosvg.xml.XMLNode;
  * @since 1.0
  */
 public class SubSceneConverter extends AbstractConverter {
-   private SubScene subScene = null;
+    private SubScene subScene = null;
 
-   public SubSceneConverter(ConverterDelegate delegate, SubScene subScene, XMLNode xmlParent) {
-      super(delegate, subScene, xmlParent);
-      this.subScene = subScene;
-   }
+    public SubSceneConverter(ConverterDelegate delegate, SubScene subScene, XMLNode xmlParent) {
+        super(delegate, subScene, xmlParent);
+        this.subScene = subScene;
+    }
 
-   /**
-    * Return the SubScene.
-    *
-    * @return the SubScene
-    */
-   public SubScene getSubScene() {
-      return subScene;
-   }
+    /**
+     * Return the SubScene.
+     *
+     * @return the SubScene
+     */
+    public SubScene getSubScene() {
+        return subScene;
+    }
 
-   /**
-    * Return the converter SubScene root Node.
-    *
-    * @return the converter SubScene root Node
-    */
-   @Override
-   public Parent getParent() {
-      return subScene.getRoot();
-   }
+    /**
+     * Return the converter SubScene root Node.
+     *
+     * @return the converter SubScene root Node
+     */
+    @Override
+    public Parent getParent() {
+        return subScene.getRoot();
+    }
 
-   @Override
-   public void applyStyle(XMLNode node, String clipID) {
-      if (clipID != null) {
-         StringBuilder buf = new StringBuilder();
-         String style = buf.toString();
-         node.addAttribute("style", style);
-      }      
-   }
+    @Override
+    public void applyStyle(XMLNode node, String clipID) {
+        if (clipID != null) {
+            String style = "";
+            node.addAttribute("style", style);
+        }
+    }
 
-   /**
-    * Return a g node.
-    *
-    * @return the node
-    */
-   @Override
-   public XMLNode convert() {
-      XMLNode xmlGroup = new XMLNode("g");
-      xmlParent.addChild(xmlGroup);
-      return xmlGroup;
-   }
+    /**
+     * Return a g node.
+     *
+     * @return the node
+     */
+    @Override
+    public XMLNode convert() {
+        XMLNode xmlGroup = new XMLNode("g");
+        xmlParent.addChild(xmlGroup);
+        return xmlGroup;
+    }
 }

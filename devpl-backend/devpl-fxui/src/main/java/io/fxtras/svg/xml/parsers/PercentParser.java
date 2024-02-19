@@ -41,90 +41,90 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class PercentParser {
-   private static final Pattern NUMBER = Pattern.compile("\\d+(\\.\\d+)?");
-   private static final Pattern PERCENT_UNIT = Pattern.compile("(\\d+)(\\.\\d+)?%");
+    private static final Pattern NUMBER = Pattern.compile("\\d+(\\.\\d+)?");
+    private static final Pattern PERCENT_UNIT = Pattern.compile("(\\d+)(\\.\\d+)?%");
 
-   private PercentParser() {
-   }
+    private PercentParser() {
+    }
 
-   /**
-    * Parse a node attribute as a percent value.
-    *
-    * @param node the node
-    * @param attrName the attribute name
-    * @param allowAbsolute true if absolute values must be allowed
-    * @return the value clamped between and 1
-    */
-   public static double parseValue(XMLNode node, String attrName, boolean allowAbsolute) {
-      String valueAsString = node.getAttributeValue(attrName);
-      if (valueAsString != null) {
-         return parseValue(valueAsString, allowAbsolute);
-      } else {
-         return 0;
-      }
-   }
+    /**
+     * Parse a node attribute as a percent value.
+     *
+     * @param node          the node
+     * @param attrName      the attribute name
+     * @param allowAbsolute true if absolute values must be allowed
+     * @return the value clamped between and 1
+     */
+    public static double parseValue(XMLNode node, String attrName, boolean allowAbsolute) {
+        String valueAsString = node.getAttributeValue(attrName);
+        if (valueAsString != null) {
+            return parseValue(valueAsString, allowAbsolute);
+        } else {
+            return 0;
+        }
+    }
 
-   /**
-    * Parse a node attribute as a percent value.
-    *
-    * @param node the node
-    * @param attrName the attribute name
-    * @return the value clamped between and 1
-    */
-   public static double parseValue(XMLNode node, String attrName) {
-      return parseValue(node, attrName, false);
-   }
+    /**
+     * Parse a node attribute as a percent value.
+     *
+     * @param node     the node
+     * @param attrName the attribute name
+     * @return the value clamped between and 1
+     */
+    public static double parseValue(XMLNode node, String attrName) {
+        return parseValue(node, attrName, false);
+    }
 
-   /**
-    * Parse a percent value.
-    *
-    * @param value the value
-    * @return the value clamped between and 1
-    */
-   public static double parseValue(String value) {
-      return parseValue(value, false);
-   }
+    /**
+     * Parse a percent value.
+     *
+     * @param value the value
+     * @return the value clamped between and 1
+     */
+    public static double parseValue(String value) {
+        return parseValue(value, false);
+    }
 
-   /**
-    * Parse a percent value.
-    *
-    * @param value the value
-    * @param allowAbsolute true if absolute values must be allowed
-    * @return the value
-    */
-   public static double parseValue(String value, boolean allowAbsolute) {
-      value = value.trim();
-      Matcher m = NUMBER.matcher(value);
-      if (m.matches()) {
-         double parsedValue = Double.parseDouble(value);
-         if (parsedValue < 0) {
-            parsedValue = 0;
-         } else if (!allowAbsolute && parsedValue > 1) {
-            parsedValue = 1;
-         }
-         return parsedValue;
-      }
-      m = PERCENT_UNIT.matcher(value);
-      if (m.matches()) {
-         String startDigits = m.group(1);
-         String endDigit = null;
-         if (m.groupCount() > 1) {
-            endDigit = m.group(2);
-         }
-         double parsedValue;
-         if (endDigit == null) {
-            parsedValue = Double.parseDouble(startDigits);
-         } else {
-            parsedValue = Double.parseDouble(startDigits + "." + endDigit);
-         }
-         parsedValue = parsedValue / 100;
-         if (parsedValue < 0) {
-            parsedValue = 0;
-         } else if (parsedValue > 1) {
-            parsedValue = 1;
-         }
-         return parsedValue;
-      }
-      return 0d;
-   }
+    /**
+     * Parse a percent value.
+     *
+     * @param value         the value
+     * @param allowAbsolute true if absolute values must be allowed
+     * @return the value
+     */
+    public static double parseValue(String value, boolean allowAbsolute) {
+        value = value.trim();
+        Matcher m = NUMBER.matcher(value);
+        if (m.matches()) {
+            double parsedValue = Double.parseDouble(value);
+            if (parsedValue < 0) {
+                parsedValue = 0;
+            } else if (!allowAbsolute && parsedValue > 1) {
+                parsedValue = 1;
+            }
+            return parsedValue;
+        }
+        m = PERCENT_UNIT.matcher(value);
+        if (m.matches()) {
+            String startDigits = m.group(1);
+            String endDigit = null;
+            if (m.groupCount() > 1) {
+                endDigit = m.group(2);
+            }
+            double parsedValue;
+            if (endDigit == null) {
+                parsedValue = Double.parseDouble(startDigits);
+            } else {
+                parsedValue = Double.parseDouble(startDigits + "." + endDigit);
+            }
+            parsedValue = parsedValue / 100;
+            if (parsedValue < 0) {
+                parsedValue = 0;
+            } else if (parsedValue > 1) {
+                parsedValue = 1;
+            }
+            return parsedValue;
+        }
+        return 0d;
+    }
 }

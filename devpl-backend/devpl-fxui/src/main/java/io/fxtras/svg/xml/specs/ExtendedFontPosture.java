@@ -40,16 +40,16 @@ import javafx.scene.text.FontPosture;
  * @version 1.0
  */
 public class ExtendedFontPosture {
-   public final FontPosture posture;
-   public final boolean isOblique;
+    public final FontPosture posture;
+    public final boolean isOblique;
 
-   public ExtendedFontPosture(FontPosture posture) {
-      this.posture = posture;
-      this.isOblique = false;
-   }
+    public ExtendedFontPosture(FontPosture posture) {
+        this.posture = posture;
+        this.isOblique = false;
+    }
 
-   public ExtendedFontPosture(boolean isOblique) {
-      this.posture = FontPosture.REGULAR;
-      this.isOblique = isOblique;
-   }
+    public ExtendedFontPosture(boolean isOblique) {
+        this.posture = FontPosture.REGULAR;
+        this.isOblique = isOblique;
+    }
 }

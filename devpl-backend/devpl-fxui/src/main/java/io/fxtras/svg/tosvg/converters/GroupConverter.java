@@ -32,9 +32,9 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.tosvg.converters;
 
+import io.fxtras.svg.tosvg.xml.XMLNode;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import io.fxtras.svg.tosvg.xml.XMLNode;
 
 /**
  * A converter which convert Groups.
@@ -42,41 +42,40 @@ import io.fxtras.svg.tosvg.xml.XMLNode;
  * @since 1.0
  */
 public class GroupConverter extends AbstractConverter {
-   private Group group = null;
+    private Group group = null;
 
-   public GroupConverter(ConverterDelegate delegate, Group group, XMLNode xmlParent) {
-      super(delegate, group, xmlParent);
-      this.group = group;
-   }
+    public GroupConverter(ConverterDelegate delegate, Group group, XMLNode xmlParent) {
+        super(delegate, group, xmlParent);
+        this.group = group;
+    }
 
-   /**
-    * Return the converter Group Node.
-    *
-    * @return the converter Group Node
-    */
-   @Override
-   public Parent getParent() {
-      return group;
-   }
+    /**
+     * Return the converter Group Node.
+     *
+     * @return the converter Group Node
+     */
+    @Override
+    public Parent getParent() {
+        return group;
+    }
 
-   @Override
-   public void applyStyle(XMLNode node, String clipID) {
-      if (clipID != null) {
-         StringBuilder buf = new StringBuilder();
-         String style = buf.toString();
-         node.addAttribute("style", style);
-      }      
-   }
+    @Override
+    public void applyStyle(XMLNode node, String clipID) {
+        if (clipID != null) {
+            String style = "";
+            node.addAttribute("style", style);
+        }
+    }
 
-   /**
-    * Convert the Group.
-    *
-    * @return the xml node
-    */
-   @Override
-   public XMLNode convert() {
-      XMLNode xmlGroup = new XMLNode("g");
-      xmlParent.addChild(xmlGroup);
-      return xmlGroup;
-   }
+    /**
+     * Convert the Group.
+     *
+     * @return the xml node
+     */
+    @Override
+    public XMLNode convert() {
+        XMLNode xmlGroup = new XMLNode("g");
+        xmlParent.addChild(xmlGroup);
+        return xmlGroup;
+    }
 }

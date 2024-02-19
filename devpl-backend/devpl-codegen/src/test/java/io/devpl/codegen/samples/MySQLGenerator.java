@@ -13,7 +13,7 @@ public class MySQLGenerator {
     public static void main(String[] args) {
         AutoGenerator generator = FastAutoGenerator
             // 配置数据源
-            .create(new File(CodeGeneratorUtils.getDesktopDirectory(), "codegen.properties"))
+            .create(new File(CodeGeneratorUtils.getDesktopDirectory(), "codegen-sample.properties"))
             // 全局配置
             .globalConfig(builder -> {
                 builder.author("author") // 设置作者
@@ -31,6 +31,6 @@ public class MySQLGenerator {
             })
             .execute();
 
-        // generator.show(rootDir -> UIHelper.showFrame("生成结果", new GenerationResultView(new File(rootDir)), 800, 600));
+        generator.show(rootDir -> UIHelper.showFrame("生成结果", new GenerationResultView(new File(rootDir)), 800, 600));
     }
 }

@@ -38,157 +38,157 @@ package io.fxtras.svg.tosvg.utils;
  * @since 1.0
  */
 public interface CSSProperties {
-   /**
-    * the {@value} CSS property.
-    */
-   public String VISIBILITY = "-visibility";// all Nodes
-   /**
-    * the {@value} CSS property.
-    */
-   public String OPACITY = "-fx-opacity";
-   /**
-    * the {@value} CSS property.
-    */
-   public String TRANSLATE_X = "-fx-translate-x";
-   /**
-    * the {@value} CSS property.
-    */
-   public String TRANSLATE_Y = "-fx-translate-y";
-   /**
-    * the {@value} CSS property.
-    */
-   public String SCALE_X = "-fx-scale-x";
-   /**
-    * the {@value} CSS property.
-    */
-   public String SCALE_Y = "-fx-scale-y";
-   // Regions
-   /**
-    * the {@value} CSS property.
-    */
-   public String REGION_BACKGROUND = "-fx-region-background";
-   /**
-    * the {@value} CSS property.
-    */
-   public String REGION_BORDER = "-fx-region-border";
-   /**
-    * the {@value} CSS property.
-    */
-   public String BACKGROUND_COLOR = "-fx-background-color";
-   /**
-    * the {@value} CSS property.
-    */
-   public String BACKGROUND_IMAGE = "-fx-background-image";
-   /**
-    * the {@value} CSS property.
-    */
-   public String BACKGROUND_RADIUS = "-fx-background-radius";
-   /**
-    * the {@value} CSS property.
-    */
-   public String REGION_BACKGROUND_SIZE = "-fx-background-size";
-   /**
-    * the {@value} CSS property.
-    */
-   public String REGION_BACKGROUND_RADIUS = "-fx-background-radius";
-   /**
-    * the {@value} CSS property.
-    */
-   public String REGION_BACKGROUND_POSITION = "-fx-background-position";
-   /**
-    * the {@value} CSS property.
-    */
-   public String BORDER_COLOR = "-fx-border-color";
-   /**
-    * the {@value} CSS property.
-    */
-   public String BORDER_RADIUS = "-fx-border-radius";
-   /**
-    * the {@value} CSS property.
-    */
-   public String SHAPE = "-fx-shape";
-   /**
-    * the {@value} CSS property.
-    */
-   public String SCALE_SHAPE = "-fx-scale-shape";
-   // Shapes
-   /**
-    * the {@value} CSS property.
-    */
-   public String ARC_WIDTH = "-fx-arc-width";
-   /**
-    * the {@value} CSS property.
-    */
-   public String ARC_HEIGHT = "-fx-arc-height";
-   /**
-    * the {@value} CSS property.
-    */
-   public String IMAGE = "-fx-image";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_PAINT = "-fx-stroke";
-   /**
-    * the {@value} CSS property.
-    */
-   public String FILL_PAINT = "-fx-fill";
-   /**
-    * the {@value} CSS property.
-    */
-   public String TEXT_FILL = "-fx-text-fill";
-   // Texts
-   /**
-    * the {@value} CSS property.
-    */
-   public String TEXT_BOUNDS_TYPE = "-fx-bounds-type";
-   // font properties
-   /**
-    * the {@value} CSS property.
-    */
-   public String FONT = "-fx-font";
-   /**
-    * the {@value} CSS property.
-    */
-   public String FONT_FAMILY = "-fx-font-family";
-   /**
-    * the {@value} CSS property.
-    */
-   public String FONT_SIZE = "-fx-font-size";
-   /**
-    * the {@value} CSS property.
-    */
-   public String FONT_STYLE = "-fx-font-style";
-   /**
-    * the {@value} CSS property.
-    */
-   public String FONT_WEIGHT = "-fx-font-weight";
-   // stroke properties
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_WIDTH = "-fx-stroke-width";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_LINECAP = "-fx-stroke-line-cap";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_LINEJOIN = "-fx-stroke-line-join";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_MITERLIMIT = "-fx-stroke-miter-limit";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_DASHARRAY = "-fx-stroke-dash-array";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_DASHOFFSET = "-fx-stroke-dash-offset";
-   /**
-    * the {@value} CSS property.
-    */
-   public String STROKE_TYPE = "-fx-stroke-type";
+    /**
+     * the {@value} CSS property.
+     */
+    String VISIBILITY = "-visibility";// all Nodes
+    /**
+     * the {@value} CSS property.
+     */
+    String OPACITY = "-fx-opacity";
+    /**
+     * the {@value} CSS property.
+     */
+    String TRANSLATE_X = "-fx-translate-x";
+    /**
+     * the {@value} CSS property.
+     */
+    String TRANSLATE_Y = "-fx-translate-y";
+    /**
+     * the {@value} CSS property.
+     */
+    String SCALE_X = "-fx-scale-x";
+    /**
+     * the {@value} CSS property.
+     */
+    String SCALE_Y = "-fx-scale-y";
+    // Regions
+    /**
+     * the {@value} CSS property.
+     */
+    String REGION_BACKGROUND = "-fx-region-background";
+    /**
+     * the {@value} CSS property.
+     */
+    String REGION_BORDER = "-fx-region-border";
+    /**
+     * the {@value} CSS property.
+     */
+    String BACKGROUND_COLOR = "-fx-background-color";
+    /**
+     * the {@value} CSS property.
+     */
+    String BACKGROUND_IMAGE = "-fx-background-image";
+    /**
+     * the {@value} CSS property.
+     */
+    String BACKGROUND_RADIUS = "-fx-background-radius";
+    /**
+     * the {@value} CSS property.
+     */
+    String REGION_BACKGROUND_SIZE = "-fx-background-size";
+    /**
+     * the {@value} CSS property.
+     */
+    String REGION_BACKGROUND_RADIUS = "-fx-background-radius";
+    /**
+     * the {@value} CSS property.
+     */
+    String REGION_BACKGROUND_POSITION = "-fx-background-position";
+    /**
+     * the {@value} CSS property.
+     */
+    String BORDER_COLOR = "-fx-border-color";
+    /**
+     * the {@value} CSS property.
+     */
+    String BORDER_RADIUS = "-fx-border-radius";
+    /**
+     * the {@value} CSS property.
+     */
+    String SHAPE = "-fx-shape";
+    /**
+     * the {@value} CSS property.
+     */
+    String SCALE_SHAPE = "-fx-scale-shape";
+    // Shapes
+    /**
+     * the {@value} CSS property.
+     */
+    String ARC_WIDTH = "-fx-arc-width";
+    /**
+     * the {@value} CSS property.
+     */
+    String ARC_HEIGHT = "-fx-arc-height";
+    /**
+     * the {@value} CSS property.
+     */
+    String IMAGE = "-fx-image";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_PAINT = "-fx-stroke";
+    /**
+     * the {@value} CSS property.
+     */
+    String FILL_PAINT = "-fx-fill";
+    /**
+     * the {@value} CSS property.
+     */
+    String TEXT_FILL = "-fx-text-fill";
+    // Texts
+    /**
+     * the {@value} CSS property.
+     */
+    String TEXT_BOUNDS_TYPE = "-fx-bounds-type";
+    // font properties
+    /**
+     * the {@value} CSS property.
+     */
+    String FONT = "-fx-font";
+    /**
+     * the {@value} CSS property.
+     */
+    String FONT_FAMILY = "-fx-font-family";
+    /**
+     * the {@value} CSS property.
+     */
+    String FONT_SIZE = "-fx-font-size";
+    /**
+     * the {@value} CSS property.
+     */
+    String FONT_STYLE = "-fx-font-style";
+    /**
+     * the {@value} CSS property.
+     */
+    String FONT_WEIGHT = "-fx-font-weight";
+    // stroke properties
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_WIDTH = "-fx-stroke-width";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_LINECAP = "-fx-stroke-line-cap";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_LINEJOIN = "-fx-stroke-line-join";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_MITERLIMIT = "-fx-stroke-miter-limit";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_DASHARRAY = "-fx-stroke-dash-array";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_DASHOFFSET = "-fx-stroke-dash-offset";
+    /**
+     * the {@value} CSS property.
+     */
+    String STROKE_TYPE = "-fx-stroke-type";
 }

@@ -32,17 +32,18 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.xml.specs;
 
-import io.fxtras.svg.xml.parsers.XMLNode;
 import io.fxtras.svg.xml.parsers.ParserUtils;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import io.fxtras.svg.xml.parsers.TransformUtils;
+import io.fxtras.svg.xml.parsers.XMLNode;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 import javafx.scene.transform.Transform;
-import io.fxtras.svg.xml.parsers.TransformUtils;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Contains the specification for a linear gradient.
@@ -50,141 +51,141 @@ import io.fxtras.svg.xml.parsers.TransformUtils;
  * @version 1.0
  */
 public class LinearGradientSpec extends GradientSpec {
-   private LinearGradient gradient = null;
+    private LinearGradient gradient = null;
 
-   public LinearGradientSpec(XMLNode node) {
-      super(node);
-   }
+    public LinearGradientSpec(XMLNode node) {
+        super(node);
+    }
 
-   public LinearGradientSpec(XMLNode node, String href) {
-      super(node, href);
-   }
+    public LinearGradientSpec(XMLNode node, String href) {
+        super(node, href);
+    }
 
-   public void setLinearGradient(LinearGradient gradient) {
-      this.gradient = gradient;
-   }
+    public void setLinearGradient(LinearGradient gradient) {
+        this.gradient = gradient;
+    }
 
-   @Override
-   public void resolve(Map<String, GradientSpec> gradients, Viewport viewport) {
-      if (isResolved) {
-         return;
-      }
-      LinearGradientSpec linearSpec = null;
-      if (href != null && gradients.containsKey(href)) {
-         GradientSpec spec = gradients.get(href);
-         if (spec instanceof LinearGradientSpec) {
-            linearSpec = (LinearGradientSpec) spec;
-            linearSpec.resolve(gradients, viewport);
-         }
-      }
-      double x1 = 0;
-      double y1 = 0;
-      double x2 = 1d;
-      double y2 = 0d;
-      CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
-      boolean hasPos = false;
-      boolean hasSpread = false;
-      boolean isProportional = false;
-
-      Iterator<String> it = xmlNode.getAttributes().keySet().iterator();
-      while (it.hasNext()) {
-         String attrname = it.next();
-         switch (attrname) {
-            case GRADIENT_UNITS:
-               String gradientUnits = xmlNode.getAttributeValue(attrname);
-               if (!gradientUnits.equals(USERSPACE_ON_USE)) {
-                  return;
-               }
-               break;
-            case SPREAD_METHOD:
-               String methodS = xmlNode.getAttributeValue(attrname);
-               cycleMethod = getCycleMethod(methodS);
-               hasSpread = true;
-               break;
-            case X1:
-               x1 = getGradientPos(xmlNode, X1);
-               isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
-               hasPos = true;
-               break;
-            case Y1:
-               y1 = getGradientPos(xmlNode, Y1);
-               isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
-               hasPos = true;
-               break;
-            case X2:
-               x2 = getGradientPos(xmlNode, X2);
-               isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
-               hasPos = true;
-               break;
-            case Y2:
-               y2 = getGradientPos(xmlNode, Y2);
-               isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
-               hasPos = true;
-               break;
-            case GRADIENT_TRANSFORM:
-               transformList = TransformUtils.extractTransforms(xmlNode.getAttributeValue(attrname), viewport);
-               break;
-            default:
-               break;
-         }
-      }
-      specStops = buildStops(this, xmlNode, LINEAR_GRADIENT);
-      if (specStops.isEmpty() && linearSpec != null) {
-         specStops = linearSpec.getStops();
-      }
-      if (transformList == null && linearSpec != null) {
-         transformList = linearSpec.getTransformList();
-      }
-      if (!hasPos && linearSpec != null) {
-         LinearGradient refGradient = linearSpec.gradient;
-         x1 = refGradient.getStartX();
-         y1 = refGradient.getStartY();
-         x2 = refGradient.getEndX();
-         y2 = refGradient.getEndY();
-         isProportional = refGradient.isProportional();
-      }
-      if (!hasSpread && linearSpec != null) {
-         LinearGradient refGradient = linearSpec.gradient;
-         cycleMethod = refGradient.getCycleMethod();
-      }
-      if (!(x1 == 0 && y1 == 0 && x2 == 0 && y2 == 0)) {
-         if (transformList != null && !transformList.isEmpty()) {
-            Transform concatTransform = null;
-            Iterator<Transform> it2 = transformList.iterator();
-            while (it2.hasNext()) {
-               Transform theTransform = it2.next();
-               if (concatTransform == null) {
-                  concatTransform = theTransform;
-               } else {
-                  concatTransform = concatTransform.createConcatenation(theTransform);
-               }
+    @Override
+    public void resolve(Map<String, GradientSpec> gradients, Viewport viewport) {
+        if (isResolved) {
+            return;
+        }
+        LinearGradientSpec linearSpec = null;
+        if (href != null && gradients.containsKey(href)) {
+            GradientSpec spec = gradients.get(href);
+            if (spec instanceof LinearGradientSpec) {
+                linearSpec = (LinearGradientSpec) spec;
+                linearSpec.resolve(gradients, viewport);
             }
+        }
+        double x1 = 0;
+        double y1 = 0;
+        double x2 = 1d;
+        double y2 = 0d;
+        CycleMethod cycleMethod = CycleMethod.NO_CYCLE;
+        boolean hasPos = false;
+        boolean hasSpread = false;
+        boolean isProportional = false;
 
-            if (concatTransform != null) {
-               double x1d = x1;
-               double y1d = y1;
-               double x2d = x2;
-               double y2d = y2;
-               x1 = x1d * concatTransform.getMxx() + y1d * concatTransform.getMxy() + concatTransform.getTx();
-               y1 = x1d * concatTransform.getMyx() + y1d * concatTransform.getMyy() + concatTransform.getTy();
-               x2 = x2d * concatTransform.getMxx() + y2d * concatTransform.getMxy() + concatTransform.getTx();
-               y2 = x2d * concatTransform.getMyx() + y2d * concatTransform.getMyy() + concatTransform.getTy();
+        Iterator<String> it = xmlNode.getAttributes().keySet().iterator();
+        while (it.hasNext()) {
+            String attrname = it.next();
+            switch (attrname) {
+                case GRADIENT_UNITS:
+                    String gradientUnits = xmlNode.getAttributeValue(attrname);
+                    if (!gradientUnits.equals(USERSPACE_ON_USE)) {
+                        return;
+                    }
+                    break;
+                case SPREAD_METHOD:
+                    String methodS = xmlNode.getAttributeValue(attrname);
+                    cycleMethod = getCycleMethod(methodS);
+                    hasSpread = true;
+                    break;
+                case X1:
+                    x1 = getGradientPos(xmlNode, X1);
+                    isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
+                    hasPos = true;
+                    break;
+                case Y1:
+                    y1 = getGradientPos(xmlNode, Y1);
+                    isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
+                    hasPos = true;
+                    break;
+                case X2:
+                    x2 = getGradientPos(xmlNode, X2);
+                    isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
+                    hasPos = true;
+                    break;
+                case Y2:
+                    y2 = getGradientPos(xmlNode, Y2);
+                    isProportional = isProportional || ParserUtils.isPercent(xmlNode, attrname);
+                    hasPos = true;
+                    break;
+                case GRADIENT_TRANSFORM:
+                    transformList = TransformUtils.extractTransforms(xmlNode.getAttributeValue(attrname), viewport);
+                    break;
+                default:
+                    break;
             }
-         }
-      }
+        }
+        specStops = buildStops(this, xmlNode, LINEAR_GRADIENT);
+        if (specStops.isEmpty() && linearSpec != null) {
+            specStops = linearSpec.getStops();
+        }
+        if (transformList == null && linearSpec != null) {
+            transformList = linearSpec.getTransformList();
+        }
+        if (!hasPos && linearSpec != null) {
+            LinearGradient refGradient = linearSpec.gradient;
+            x1 = refGradient.getStartX();
+            y1 = refGradient.getStartY();
+            x2 = refGradient.getEndX();
+            y2 = refGradient.getEndY();
+            isProportional = refGradient.isProportional();
+        }
+        if (!hasSpread && linearSpec != null) {
+            LinearGradient refGradient = linearSpec.gradient;
+            cycleMethod = refGradient.getCycleMethod();
+        }
+        if (!(x1 == 0 && y1 == 0 && x2 == 0 && y2 == 0)) {
+            if (transformList != null && !transformList.isEmpty()) {
+                Transform concatTransform = null;
+                Iterator<Transform> it2 = transformList.iterator();
+                while (it2.hasNext()) {
+                    Transform theTransform = it2.next();
+                    if (concatTransform == null) {
+                        concatTransform = theTransform;
+                    } else {
+                        concatTransform = concatTransform.createConcatenation(theTransform);
+                    }
+                }
 
-      List<Stop> stops = convertStops(specStops);
-      gradient = new LinearGradient(x1, y1, x2, y2, isProportional, cycleMethod, stops);
-      isResolved = true;
-   }
+                if (concatTransform != null) {
+                    double x1d = x1;
+                    double y1d = y1;
+                    double x2d = x2;
+                    double y2d = y2;
+                    x1 = x1d * concatTransform.getMxx() + y1d * concatTransform.getMxy() + concatTransform.getTx();
+                    y1 = x1d * concatTransform.getMyx() + y1d * concatTransform.getMyy() + concatTransform.getTy();
+                    x2 = x2d * concatTransform.getMxx() + y2d * concatTransform.getMxy() + concatTransform.getTx();
+                    y2 = x2d * concatTransform.getMyx() + y2d * concatTransform.getMyy() + concatTransform.getTy();
+                }
+            }
+        }
 
-   public LinearGradient getLinearGradient() {
-      return gradient;
-   }
+        List<Stop> stops = convertStops(specStops);
+        gradient = new LinearGradient(x1, y1, x2, y2, isProportional, cycleMethod, stops);
+        isResolved = true;
+    }
 
-   @Override
-   public Paint getPaint() {
-      return gradient;
-   }
+    public LinearGradient getLinearGradient() {
+        return gradient;
+    }
+
+    @Override
+    public Paint getPaint() {
+        return gradient;
+    }
 
 }

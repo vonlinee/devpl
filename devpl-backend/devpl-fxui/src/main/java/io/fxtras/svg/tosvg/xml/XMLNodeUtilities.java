@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 /**
  * Various utilities concerning XML content.
+ *
  * @since 1.0
  */
 public class XMLNodeUtilities {
@@ -34,6 +35,7 @@ public class XMLNodeUtilities {
 
     /**
      * Save in a File the content of an XML file under a root Node.
+     *
      * @param node       the root node
      * @param tab        the tabulation for the XML file for each child node
      * @param outputFile the output file
@@ -44,6 +46,7 @@ public class XMLNodeUtilities {
 
     /**
      * Save in a File the content of an XML file under a root Node.
+     *
      * @param node       the root node
      * @param tab        the tabulation for the XML file for each child node
      * @param outputFile the output file
@@ -55,8 +58,7 @@ public class XMLNodeUtilities {
         String tabS = new String(chars);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            if (node instanceof XMLRoot && encoding == null) {
-                XMLRoot root = (XMLRoot) node;
+            if (node instanceof XMLRoot root && encoding == null) {
                 encoding = root.getEncoding();
             }
             if (encoding != null) {
@@ -69,6 +71,7 @@ public class XMLNodeUtilities {
 
     /**
      * Save in n URL the content of an XML file under a root Node.
+     *
      * @param node      the root node
      * @param tab       the tabulation for the XML file for each child node
      * @param outputURL the output URL
@@ -144,6 +147,7 @@ public class XMLNodeUtilities {
 
     /**
      * Print as a String the content of an XML file under a root Node.
+     *
      * @param node the root node
      * @param tab  the tabulation for the XML file for each child node
      * @return the String
@@ -154,6 +158,7 @@ public class XMLNodeUtilities {
 
     /**
      * Print as a String the content of an XML file under a root Node.
+     *
      * @param node     the root node
      * @param tab      the tabulation for the XML file for each child node
      * @param encoding the encoding (vcan be null)
@@ -165,8 +170,7 @@ public class XMLNodeUtilities {
         String tabS = new String(chars);
 
         StringBuilder buf = new StringBuilder();
-        if (node instanceof XMLRoot && encoding == null) {
-            XMLRoot root = (XMLRoot) node;
+        if (node instanceof XMLRoot root && encoding == null) {
             encoding = root.getEncoding();
         }
         if (encoding != null) {

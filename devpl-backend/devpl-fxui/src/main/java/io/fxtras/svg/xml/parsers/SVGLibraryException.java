@@ -38,15 +38,15 @@ package io.fxtras.svg.xml.parsers;
  * @version 1.0
  */
 public class SVGLibraryException extends RuntimeException {
-   public SVGLibraryException(String message) {
-      super(message);
-   }
+    public SVGLibraryException(String message) {
+        super(message);
+    }
 
-   public SVGLibraryException(String message, Throwable cause) {
-      super(message, cause);
-   }
+    public SVGLibraryException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public SVGLibraryException(Throwable cause) {
-      super(cause);
-   }
+    public SVGLibraryException(Throwable cause) {
+        super(cause);
+    }
 }

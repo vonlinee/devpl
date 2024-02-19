@@ -45,147 +45,147 @@ import javafx.scene.paint.Paint;
  * @version 0.21
  */
 public class BorderWrapper {
-   private Paint paint = null;
-   private double width = 1;
-   private CornerRadii radii = null;
-   private BorderStrokeStyle strokeStyle = null;
-   private double x = 0;
-   private double y = 0;
+    private Paint paint = null;
+    private double width = 1;
+    private CornerRadii radii = null;
+    private BorderStrokeStyle strokeStyle = null;
+    private double x = 0;
+    private double y = 0;
 
-   /**
-    * Constructor.
-    *
-    * @param paint the Paint
-    * @param width the width of the Border
-    */
-   public BorderWrapper(Paint paint, double width) {
-      this.paint = paint;
-      this.width = width;
-   }
+    /**
+     * Constructor.
+     *
+     * @param paint the Paint
+     * @param width the width of the Border
+     */
+    public BorderWrapper(Paint paint, double width) {
+        this.paint = paint;
+        this.width = width;
+    }
 
-   /**
-    * Set the stroke style.
-    *
-    * @param strokeStyle the stroke style
-    */
-   public void setStrokeStyle(BorderStrokeStyle strokeStyle) {
-      this.strokeStyle = strokeStyle;
-   }
+    /**
+     * Set the stroke style.
+     *
+     * @param strokeStyle the stroke style
+     */
+    public void setStrokeStyle(BorderStrokeStyle strokeStyle) {
+        this.strokeStyle = strokeStyle;
+    }
 
-   /**
-    * Return the stroke style (can be null).
-    *
-    * @return the stroke style
-    */
-   public BorderStrokeStyle getStrokeStyle() {
-      return strokeStyle;
-   }
+    /**
+     * Return the stroke style (can be null).
+     *
+     * @return the stroke style
+     */
+    public BorderStrokeStyle getStrokeStyle() {
+        return strokeStyle;
+    }
 
-   /**
-    * Set the position of the wrapper.
-    *
-    * @param x the X position
-    * @param y the Y position
-    */
-   public void setPosition(double x, double y) {
-      this.x = x;
-      this.y = y;
-   }
+    /**
+     * Set the position of the wrapper.
+     *
+     * @param x the X position
+     * @param y the Y position
+     */
+    public void setPosition(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
 
-   /**
-    * Return the X position of the wrapper.
-    *
-    * @return the X position of the wrapper
-    */
-   public double getX() {
-      return x;
-   }
+    /**
+     * Return the X position of the wrapper.
+     *
+     * @return the X position of the wrapper
+     */
+    public double getX() {
+        return x;
+    }
 
-   /**
-    * Return the Y position of the wrapper.
-    *
-    * @return the Y position of the wrapper
-    */
-   public double getY() {
-      return y;
-   }
+    /**
+     * Return the Y position of the wrapper.
+     *
+     * @return the Y position of the wrapper
+     */
+    public double getY() {
+        return y;
+    }
 
-   /**
-    * Return the Paint of the wrapper.
-    *
-    * @return the Paint of the wrapper
-    */
-   public Paint getPaint() {
-      return paint;
-   }
+    /**
+     * Return the Paint of the wrapper.
+     *
+     * @return the Paint of the wrapper
+     */
+    public Paint getPaint() {
+        return paint;
+    }
 
-   /**
-    * Set the corners Radii of the wrapper.
-    *
-    * @param radii the Radii
-    */
-   public void setRadii(CornerRadii radii) {
-      this.radii = radii;
-   }
+    /**
+     * Set the corners Radii of the wrapper.
+     *
+     * @param radii the Radii
+     */
+    public void setRadii(CornerRadii radii) {
+        this.radii = radii;
+    }
 
-   /**
-    * Return the corners Radii of the wrapper.
-    *
-    * @return the Radii
-    */
-   public CornerRadii getRadii() {
-      return radii;
-   }
+    /**
+     * Return the corners Radii of the wrapper.
+     *
+     * @return the Radii
+     */
+    public CornerRadii getRadii() {
+        return radii;
+    }
 
-   /**
-    * Return true if the wrapper has a CornerRadii (means that at least one corner radius is 0).
-    *
-    * @return true if the wrapper has a CornerRadii
-    */
-   public boolean hasRadii() {
-      return radii != null
-         && (radii.getBottomLeftHorizontalRadius() != 0 || radii.getBottomLeftVerticalRadius() != 0
-         || radii.getBottomRightHorizontalRadius() != 0 || radii.getBottomRightVerticalRadius() != 0
-         || radii.getTopLeftHorizontalRadius() != 0 || radii.getTopLeftVerticalRadius() != 0
-         || radii.getTopRightHorizontalRadius() != 0 || radii.getTopRightVerticalRadius() != 0);
-   }
+    /**
+     * Return true if the wrapper has a CornerRadii (means that at least one corner radius is 0).
+     *
+     * @return true if the wrapper has a CornerRadii
+     */
+    public boolean hasRadii() {
+        return radii != null
+            && (radii.getBottomLeftHorizontalRadius() != 0 || radii.getBottomLeftVerticalRadius() != 0
+            || radii.getBottomRightHorizontalRadius() != 0 || radii.getBottomRightVerticalRadius() != 0
+            || radii.getTopLeftHorizontalRadius() != 0 || radii.getTopLeftVerticalRadius() != 0
+            || radii.getTopRightHorizontalRadius() != 0 || radii.getTopRightVerticalRadius() != 0);
+    }
 
-   /**
-    * Return the width of the wrapper.
-    *
-    * @return the width of the wrapper
-    */
-   public double getWidth() {
-      return width;
-   }
+    /**
+     * Return the width of the wrapper.
+     *
+     * @return the width of the wrapper
+     */
+    public double getWidth() {
+        return width;
+    }
 
-   /**
-    * Return the mean width value of the corners Radii.
-    *
-    * @return the mean width value of the corners Radii
-    */
-   public int getMeanRadiiWidth() {
-      if (radii == null) {
-         return 0;
-      } else {
-         double mean = (radii.getBottomLeftHorizontalRadius() + radii.getBottomRightHorizontalRadius()
-            + radii.getTopLeftHorizontalRadius() + radii.getTopRightHorizontalRadius()) / 8d;
-         return (int) mean;
-      }
-   }
+    /**
+     * Return the mean width value of the corners Radii.
+     *
+     * @return the mean width value of the corners Radii
+     */
+    public int getMeanRadiiWidth() {
+        if (radii == null) {
+            return 0;
+        } else {
+            double mean = (radii.getBottomLeftHorizontalRadius() + radii.getBottomRightHorizontalRadius()
+                + radii.getTopLeftHorizontalRadius() + radii.getTopRightHorizontalRadius()) / 8d;
+            return (int) mean;
+        }
+    }
 
-   /**
-    * Return the mean height value of the corners Radii.
-    *
-    * @return the mean height value of the corners Radii
-    */
-   public int getMeanRadiiHeight() {
-      if (radii == null) {
-         return 0;
-      } else {
-         double mean = (radii.getBottomLeftVerticalRadius() + radii.getBottomRightVerticalRadius()
-            + radii.getTopLeftVerticalRadius() + radii.getTopRightVerticalRadius()) / 8d;
-         return (int) mean;
-      }
-   }
+    /**
+     * Return the mean height value of the corners Radii.
+     *
+     * @return the mean height value of the corners Radii
+     */
+    public int getMeanRadiiHeight() {
+        if (radii == null) {
+            return 0;
+        } else {
+            double mean = (radii.getBottomLeftVerticalRadius() + radii.getBottomRightVerticalRadius()
+                + radii.getTopLeftVerticalRadius() + radii.getTopRightVerticalRadius()) / 8d;
+            return (int) mean;
+        }
+    }
 }

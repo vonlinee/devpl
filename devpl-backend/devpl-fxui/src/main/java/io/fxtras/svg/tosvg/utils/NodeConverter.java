@@ -32,8 +32,9 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.tosvg.utils;
 
-import java.util.Map;
 import io.fxtras.svg.tosvg.xml.XMLNode;
+
+import java.util.Map;
 
 /**
  * The converter interface.
@@ -41,41 +42,41 @@ import io.fxtras.svg.tosvg.xml.XMLNode;
  * @since 1.0
  */
 public interface NodeConverter {
-   /**
-    * Convert the Node to an xml element.
-    *
-    * @return the xml node
-    */
-   public XMLNode convert();
+    /**
+     * Convert the Node to an xml element.
+     *
+     * @return the xml node
+     */
+    XMLNode convert();
 
-   /**
-    * Return the CSS properties Map of the Node. These properties include those which are set by default (null
-    * StyleOrigin).
-    *
-    * @return the CSS properties Map
-    */
-   public Map<String, CSSProperty> getCSSProperties();
+    /**
+     * Return the CSS properties Map of the Node. These properties include those which are set by default (null
+     * StyleOrigin).
+     *
+     * @return the CSS properties Map
+     */
+    Map<String, CSSProperty> getCSSProperties();
 
-   /**
-    * Return all the CSS properties Map of the Node.
-    *
-    * @return the CSS properties Map
-    */
-   public Map<String, Object> getAllProperties();
+    /**
+     * Return all the CSS properties Map of the Node.
+     *
+     * @return the CSS properties Map
+     */
+    Map<String, Object> getAllProperties();
 
-   /**
-    * Return the CSS properties Map of the Node. These propeties only include those set by the CSS user file or inline
-    * for the widget.
-    *
-    * @return the CSS properties Map
-    */
-   public Map<String, Object> getProperties();
+    /**
+     * Return the CSS properties Map of the Node. These propeties only include those set by the CSS user file or inline
+     * for the widget.
+     *
+     * @return the CSS properties Map
+     */
+    Map<String, Object> getProperties();
 
-   /**
-    * Apply the node style.
-    *
-    * @param node the node
-    * @param clipID the clip ID (may be null)
-    */
-   public void applyStyle(XMLNode node, String clipID);
+    /**
+     * Apply the node style.
+     *
+     * @param node   the node
+     * @param clipID the clip ID (may be null)
+     */
+    void applyStyle(XMLNode node, String clipID);
 }

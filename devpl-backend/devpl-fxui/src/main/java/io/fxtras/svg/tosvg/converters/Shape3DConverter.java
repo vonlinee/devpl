@@ -32,11 +32,11 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.tosvg.converters;
 
+import io.fxtras.svg.tosvg.xml.XMLNode;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape3D;
-import io.fxtras.svg.tosvg.xml.XMLNode;
 
 /**
  * A converter which convert a Shape3D.
@@ -44,55 +44,54 @@ import io.fxtras.svg.tosvg.xml.XMLNode;
  * @since 1.0
  */
 public class Shape3DConverter extends AbstractImageConverter {
-   private Shape3D shape = null;
+    private Shape3D shape = null;
 
-   public Shape3DConverter(ConverterDelegate delegate, Shape3D shape, XMLNode xmlParent) {
-      super(delegate, shape, xmlParent);
-      this.shape = shape;
-   }
+    public Shape3DConverter(ConverterDelegate delegate, Shape3D shape, XMLNode xmlParent) {
+        super(delegate, shape, xmlParent);
+        this.shape = shape;
+    }
 
-   /**
-    * Return the Shape3D.
-    *
-    * @return the Shape3D
-    */
-   public Shape3D getShape() {
-      return shape;
-   }
+    /**
+     * Return the Shape3D.
+     *
+     * @return the Shape3D
+     */
+    public Shape3D getShape() {
+        return shape;
+    }
 
-   @Override
-   public void applyStyle(XMLNode node, String clipID) {
-      if (clipID != null) {
-         StringBuilder buf = new StringBuilder();
-         String style = buf.toString();
-         node.addAttribute("style", style);
-      }
-   }
+    @Override
+    public void applyStyle(XMLNode node, String clipID) {
+        if (clipID != null) {
+            String style = "";
+            node.addAttribute("style", style);
+        }
+    }
 
-   /**
-    * Convert a Shape3D by serializing the Shape as an Image.
-    *
-    * @return the node
-    */
-   @Override
-   public XMLNode convert() {
-      SnapshotParameters params = new SnapshotParameters();
-      Color transparent = new Color(0, 0, 0, 0);
-      params.setFill(transparent);
-      params.setDepthBuffer(true);
-      params.setCamera(shape.getScene().getCamera());
+    /**
+     * Convert a Shape3D by serializing the Shape as an Image.
+     *
+     * @return the node
+     */
+    @Override
+    public XMLNode convert() {
+        SnapshotParameters params = new SnapshotParameters();
+        Color transparent = new Color(0, 0, 0, 0);
+        params.setFill(transparent);
+        params.setDepthBuffer(true);
+        params.setCamera(shape.getScene().getCamera());
 
-      XMLNode node = new XMLNode("image");
-      node.addAttribute("x", shape.getLayoutX());
-      node.addAttribute("y", shape.getLayoutY());
-      double width = shape.getBoundsInLocal().getWidth();
-      double height = shape.getBoundsInLocal().getHeight();      
-      node.addAttribute("width", width);
-      node.addAttribute("height", height);
-      WritableImage image = shape.snapshot(params, null);
+        XMLNode node = new XMLNode("image");
+        node.addAttribute("x", shape.getLayoutX());
+        node.addAttribute("y", shape.getLayoutY());
+        double width = shape.getBoundsInLocal().getWidth();
+        double height = shape.getBoundsInLocal().getHeight();
+        node.addAttribute("width", width);
+        node.addAttribute("height", height);
+        WritableImage image = shape.snapshot(params, null);
 
-      writeImage(shape, node, image, width, height);
-      xmlParent.addChild(node);
-      return node;
-   }
+        writeImage(shape, node, image, width, height);
+        xmlParent.addChild(node);
+        return node;
+    }
 }

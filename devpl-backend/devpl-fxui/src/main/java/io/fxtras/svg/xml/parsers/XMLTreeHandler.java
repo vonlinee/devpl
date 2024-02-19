@@ -32,10 +32,11 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg.xml.parsers;
 
-import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
+
+import java.util.Stack;
 
 /**
  * Parse an XML File and return the associated tree of Nodes.
@@ -43,107 +44,107 @@ import org.xml.sax.ext.DefaultHandler2;
  * @version 1.0
  */
 public class XMLTreeHandler extends DefaultHandler2 implements SVGTags {
-   private XMLNode node = null;
-   private final Stack<XMLNode> nodes = new Stack<>();
-   private XMLRoot root = null;
-   private String encoding = null;
-   private StringBuilder buf = null;
+    private XMLNode node = null;
+    private final Stack<XMLNode> nodes = new Stack<>();
+    private XMLRoot root = null;
+    private String encoding = null;
+    private StringBuilder buf = null;
 
-   /**
-    * Constructor.
-    */
-   public XMLTreeHandler() {
-   }
+    /**
+     * Constructor.
+     */
+    public XMLTreeHandler() {
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param encoding the encoding of the XML file
-    */
-   public XMLTreeHandler(String encoding) {
-      this.encoding = encoding;
-   }
+    /**
+     * Constructor.
+     *
+     * @param encoding the encoding of the XML file
+     */
+    public XMLTreeHandler(String encoding) {
+        this.encoding = encoding;
+    }
 
-   /**
-    * Return the root node.
-    *
-    * @return the root node
-    */
-   public XMLRoot getRoot() {
-      return root;
-   }
+    /**
+     * Return the root node.
+     *
+     * @return the root node
+     */
+    public XMLRoot getRoot() {
+        return root;
+    }
 
-   /**
-    * Receive notification of the beginning of an element.
-    *
-    * @param uri the Namespace URI
-    * @param localname the local name (without prefix), or the empty string if Namespace processing is not being performed
-    * @param qname The qualified name (with prefix), or the empty string if qualified names are not available
-    * @param attr the specified or defaulted attributes
-    */
-   @Override
-   public void startElement(String uri, String localname, String qname, Attributes attr) throws SAXException {
-      parseElement(qname, attr);
-   }
+    /**
+     * Receive notification of the beginning of an element.
+     *
+     * @param uri       the Namespace URI
+     * @param localname the local name (without prefix), or the empty string if Namespace processing is not being performed
+     * @param qname     The qualified name (with prefix), or the empty string if qualified names are not available
+     * @param attr      the specified or defaulted attributes
+     */
+    @Override
+    public void startElement(String uri, String localname, String qname, Attributes attr) throws SAXException {
+        parseElement(qname, attr);
+    }
 
-   @Override
-   public void endElement(String uri, String localname, String qname) {
-      if (!nodes.empty()) {
-         node = nodes.pop();
-         if (buf != null) {
+    @Override
+    public void endElement(String uri, String localname, String qname) {
+        if (!nodes.empty()) {
+            node = nodes.pop();
+            if (buf != null) {
+                String cdata = buf.toString();
+                if (!cdata.trim().isEmpty()) {
+                    node.setCDATA(cdata);
+                }
+                buf = null;
+            }
+            node = node.getParent();
+        }
+    }
+
+    @Override
+    public void characters(char[] characters, int start, int length) {
+        if (buf != null) {
+            buf.append(characters, start, length);
+        }
+    }
+
+    /**
+     * Parse a node.
+     *
+     * @param qname the node qualified name
+     * @param attr  the node attributes
+     */
+    private void parseElement(String qname, Attributes attr) {
+        XMLNode childNode;
+        if (buf != null && node != null) {
             String cdata = buf.toString();
             if (!cdata.trim().isEmpty()) {
-               node.setCDATA(cdata);
+                node.setCDATA(cdata);
             }
             buf = null;
-         }
-         node = node.getParent();
-      }
-   }
-
-   @Override
-   public void characters(char[] characters, int start, int length) {
-      if (buf != null) {
-         buf.append(characters, start, length);
-      }
-   }
-
-   /**
-    * Parse a node.
-    *
-    * @param qname the node qualified name
-    * @param attr the node attributes
-    */
-   private void parseElement(String qname, Attributes attr) {
-      XMLNode childNode;
-      if (buf != null && node != null) {
-         String cdata = buf.toString();
-         if (!cdata.trim().isEmpty()) {
-            node.setCDATA(cdata);
-         }
-         buf = null;
-      }
-      if (node == null) {
-         root = new XMLRoot(qname);
-         root.setEncoding(encoding);
-         childNode = root;
-      } else {
-         childNode = new XMLNode(node, qname);
-      }
-      buf = new StringBuilder();
-      if (node != null) {
-         node.addChild(childNode);
-      }
-      for (int i = 0; i < attr.getLength(); i++) {
-         String attrname = attr.getQName(i);
-         String attrvalue = attr.getValue(i);
-         childNode.addAttribute(attrname, attrvalue);
-      }
-      if (node != null) {
-         // Propagate style attributes from parent nodes to child nodes
-         ParserUtils.propagateStyleAttributes(node, childNode);
-      }
-      nodes.push(childNode);
-      node = childNode;
-   }
+        }
+        if (node == null) {
+            root = new XMLRoot(qname);
+            root.setEncoding(encoding);
+            childNode = root;
+        } else {
+            childNode = new XMLNode(node, qname);
+        }
+        buf = new StringBuilder();
+        if (node != null) {
+            node.addChild(childNode);
+        }
+        for (int i = 0; i < attr.getLength(); i++) {
+            String attrname = attr.getQName(i);
+            String attrvalue = attr.getValue(i);
+            childNode.addAttribute(attrname, attrvalue);
+        }
+        if (node != null) {
+            // Propagate style attributes from parent nodes to child nodes
+            ParserUtils.propagateStyleAttributes(node, childNode);
+        }
+        nodes.push(childNode);
+        node = childNode;
+    }
 }

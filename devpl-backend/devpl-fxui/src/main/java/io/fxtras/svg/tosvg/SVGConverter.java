@@ -21,6 +21,7 @@ public class SVGConverter {
 
     /**
      * Return the ConverterDelegate.
+     *
      * @return the ConverterDelegate
      */
     public ConverterDelegate getConverterDelegate() {
@@ -29,6 +30,7 @@ public class SVGConverter {
 
     /**
      * Convert a JavaFX Node hierarchy.
+     *
      * @param root the root Node
      * @param file the file
      */
@@ -38,6 +40,7 @@ public class SVGConverter {
 
     /**
      * Convert a JavaFX Node hierarchy.
+     *
      * @param root   the root Node
      * @param file   the file
      * @param params the conversion parameters
@@ -64,6 +67,7 @@ public class SVGConverter {
 
     /**
      * Convert a JavaFX Node hierarchy.
+     *
      * @param root the root Node
      * @param url  the url
      */
@@ -73,6 +77,7 @@ public class SVGConverter {
 
     /**
      * Convert a JavaFX Node hierarchy.
+     *
      * @param root   the root Node
      * @param url    the url
      * @param params the conversion parameters

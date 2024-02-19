@@ -29,13 +29,14 @@ import java.util.Map;
 
 /**
  * A sample browser.
+ *
  * @version 1.0
  */
 public class SVGBrowser extends Application {
     private Stage stage = null;
-    private MenuBar menuBar = new MenuBar();
-    private TabPane tabPane = new TabPane();
-    private Map<Integer, SVGImage> imagesByIndex = new HashMap<>();
+    private final MenuBar menuBar = new MenuBar();
+    private final TabPane tabPane = new TabPane();
+    private final Map<Integer, SVGImage> imagesByIndex = new HashMap<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -162,7 +163,7 @@ public class SVGBrowser extends Application {
         }
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG Files", "*.png"),
-                new ExtensionFilter("JPEG Files", "*.jpg", ".jpeg"));
+            new ExtensionFilter("JPEG Files", "*.jpg", ".jpeg"));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.setTitle("Save as Image");
         File file = fileChooser.showSaveDialog(stage);
@@ -250,7 +251,7 @@ public class SVGBrowser extends Application {
 
                     Point2D posInZoomTarget = node.parentToLocal(new Point2D(event.getX(), event.getY()));
                     Point2D adjustment = node.getLocalToParentTransform()
-                            .deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
+                        .deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
                     scrollPane.layout();
                     scrollPane.setViewportBounds(groupBounds);
 

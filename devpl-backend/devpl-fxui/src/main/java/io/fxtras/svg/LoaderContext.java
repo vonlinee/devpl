@@ -32,22 +32,17 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
  */
 package io.fxtras.svg;
 
+import io.fxtras.svg.xml.parsers.ClippingFactory;
+import io.fxtras.svg.xml.parsers.XMLNode;
+import io.fxtras.svg.xml.specs.*;
+import javafx.animation.Animation;
+import javafx.scene.paint.Paint;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javafx.animation.Animation;
-import javafx.scene.paint.Paint;
-import io.fxtras.svg.xml.parsers.ClippingFactory;
-import io.fxtras.svg.xml.specs.FilterSpec;
-import io.fxtras.svg.xml.specs.GradientSpec;
-import io.fxtras.svg.xml.specs.MarkerSpec;
-import io.fxtras.svg.xml.specs.Styles;
-import io.fxtras.svg.xml.specs.SymbolSpec;
-import io.fxtras.svg.xml.specs.Viewport;
-import io.fxtras.svg.xml.parsers.XMLNode;
 
 /**
  * The context of a {@link SVGLoader}.
@@ -55,212 +50,210 @@ import io.fxtras.svg.xml.parsers.XMLNode;
  * @version 1.0
  */
 public class LoaderContext {
-   /**
-    * The resulting group.
-    */
-   public final SVGImage root;
-   /**
-    * The loader parameters.
-    */
-   public final LoaderParameters params;
-   /**
-    * The viewport.
-    */
-   public Viewport viewport = null;
-   /**
-    * The overall "styles" element if it exists.
-    */
-   public Styles svgStyle = null;
-   /**
-    * The SVG file url.
-    */
-   public final URL url;
-   /**
-    * The clipping factory.
-    */
-   public final ClippingFactory clippingFactory = new ClippingFactory();
-   /**
-    * The gradients specifications.
-    */
-   public final Map<String, GradientSpec> gradientSpecs = new HashMap<>();
-   /**
-    * The filters specifications.
-    */
-   public final Map<String, FilterSpec> filterSpecs = new HashMap<>();
-   /**
-    * The gradients.
-    */
-   public final Map<String, Paint> gradients = new HashMap<>();
-   public final Map<String, MarkerSpec> markers = new HashMap<>();
-   private final Map<String, XMLNode> namedNodes = new HashMap<>();
-   private final Map<String, SymbolSpec> symbols = new HashMap<>();
-   /**
-    * The animations.
-    */
-   List<Animation> animations = new ArrayList<>();
+    /**
+     * The resulting group.
+     */
+    public final SVGImage root;
+    /**
+     * The loader parameters.
+     */
+    public final LoaderParameters params;
+    /**
+     * The viewport.
+     */
+    public Viewport viewport = null;
+    /**
+     * The overall "styles" element if it exists.
+     */
+    public Styles svgStyle = null;
+    /**
+     * The SVG file url.
+     */
+    public final URL url;
+    /**
+     * The clipping factory.
+     */
+    public final ClippingFactory clippingFactory = new ClippingFactory();
+    /**
+     * The gradients specifications.
+     */
+    public final Map<String, GradientSpec> gradientSpecs = new HashMap<>();
+    /**
+     * The filters specifications.
+     */
+    public final Map<String, FilterSpec> filterSpecs = new HashMap<>();
+    /**
+     * The gradients.
+     */
+    public final Map<String, Paint> gradients = new HashMap<>();
+    public final Map<String, MarkerSpec> markers = new HashMap<>();
+    private final Map<String, XMLNode> namedNodes = new HashMap<>();
+    private final Map<String, SymbolSpec> symbols = new HashMap<>();
+    /**
+     * The animations.
+     */
+    List<Animation> animations = new ArrayList<>();
 
-   /**
-    * True if the effects are supported.
-    */
-   public boolean effectsSupported = false;
+    /**
+     * True if the effects are supported.
+     */
+    public boolean effectsSupported = false;
 
-   public LoaderContext(SVGImage root, LoaderParameters params, URL url) {
-      this.root = root;
-      this.params = params;
-      this.url = url;
-   }
+    public LoaderContext(SVGImage root, LoaderParameters params, URL url) {
+        this.root = root;
+        this.params = params;
+        this.url = url;
+    }
 
-   /**
-    * Add a named node.
-    *
-    * @param id the node id
-    * @param xmlNode the node
-    */
-   public void addNamedNode(String id, XMLNode xmlNode) {
-      namedNodes.put(id, xmlNode);
-   }
+    /**
+     * Add a named node.
+     *
+     * @param id      the node id
+     * @param xmlNode the node
+     */
+    public void addNamedNode(String id, XMLNode xmlNode) {
+        namedNodes.put(id, xmlNode);
+    }
 
-   /**
-    * Add a marker node.
-    *
-    * @param id the node id
-    * @param xmlNode the node
-    */
-   public void addMarker(String id, MarkerSpec xmlNode) {
-      markers.put(id, xmlNode);
-   }
+    /**
+     * Add a marker node.
+     *
+     * @param id      the node id
+     * @param xmlNode the node
+     */
+    public void addMarker(String id, MarkerSpec xmlNode) {
+        markers.put(id, xmlNode);
+    }
 
-   /**
-    * Return true if there is at least one marker.
-    *
-    * @return true if there is at least one marker
-    */
-   public boolean hasMarkers() {
-      return !markers.isEmpty();
-   }
+    /**
+     * Return true if there is at least one marker.
+     *
+     * @return true if there is at least one marker
+     */
+    public boolean hasMarkers() {
+        return !markers.isEmpty();
+    }
 
-   /**
-    * Return true if there is a marker with a specified id.
-    *
-    * @param id the marker id
-    * @return true if there is a marker with the specified id
-    */
-   public boolean hasMarker(String id) {
-      return markers.containsKey(id);
-   }
+    /**
+     * Return true if there is a marker with a specified id.
+     *
+     * @param id the marker id
+     * @return true if there is a marker with the specified id
+     */
+    public boolean hasMarker(String id) {
+        return markers.containsKey(id);
+    }
 
-   /**
-    * Return the marker of a specified id.
-    *
-    * @param id the marker id
-    * @return the node
-    */
-   public MarkerSpec getMarker(String id) {
-      return markers.get(id);
-   }
+    /**
+     * Return the marker of a specified id.
+     *
+     * @param id the marker id
+     * @return the node
+     */
+    public MarkerSpec getMarker(String id) {
+        return markers.get(id);
+    }
 
-   /**
-    * Return true if there is a node with a specified id.
-    *
-    * @param id the node id
-    * @return true if there is a node with the specified id
-    */
-   public boolean hasReifiedNamedNode(String id) {
-      return namedNodes.containsKey(id);
-   }
+    /**
+     * Return true if there is a node with a specified id.
+     *
+     * @param id the node id
+     * @return true if there is a node with the specified id
+     */
+    public boolean hasReifiedNamedNode(String id) {
+        return namedNodes.containsKey(id);
+    }
 
-   /**
-    * Return true if there is a node with a specified id.
-    *
-    * @param id the node id
-    * @return true if there is a node with the specified id
-    */
-   public boolean hasNamedNode(String id) {
-      return namedNodes.containsKey(id) || symbols.containsKey(id);
-   }
+    /**
+     * Return true if there is a node with a specified id.
+     *
+     * @param id the node id
+     * @return true if there is a node with the specified id
+     */
+    public boolean hasNamedNode(String id) {
+        return namedNodes.containsKey(id) || symbols.containsKey(id);
+    }
 
-   /**
-    * Return the node of a specified id.
-    *
-    * @param id the node id
-    * @return the node
-    */
-   public XMLNode getReifiedNamedNode(String id) {
-      return namedNodes.get(id);
-   }
+    /**
+     * Return the node of a specified id.
+     *
+     * @param id the node id
+     * @return the node
+     */
+    public XMLNode getReifiedNamedNode(String id) {
+        return namedNodes.get(id);
+    }
 
-   /**
-    * Return the node of a specified id.
-    *
-    * @param id the node id
-    * @return the node
-    */
-   public XMLNode getNamedNode(String id) {
-      if (namedNodes.containsKey(id)) {
-         return namedNodes.get(id);
-      } else {
-         return symbols.get(id).getXMLNode();
-      }
-   }
+    /**
+     * Return the node of a specified id.
+     *
+     * @param id the node id
+     * @return the node
+     */
+    public XMLNode getNamedNode(String id) {
+        if (namedNodes.containsKey(id)) {
+            return namedNodes.get(id);
+        } else {
+            return symbols.get(id).getXMLNode();
+        }
+    }
 
-   /**
-    * Add a symbol.
-    *
-    * @param id the symbols id
-    * @param symbol the symbol
-    */
-   public void addSymbol(String id, SymbolSpec symbol) {
-      symbols.put(id, symbol);
-   }
+    /**
+     * Add a symbol.
+     *
+     * @param id     the symbols id
+     * @param symbol the symbol
+     */
+    public void addSymbol(String id, SymbolSpec symbol) {
+        symbols.put(id, symbol);
+    }
 
-   /**
-    * Return true if there is a symbol with a specified id.
-    *
-    * @param id the symbols id
-    * @return true if there is a symbol with the specified id
-    */
-   public boolean hasSymbol(String id) {
-      return symbols.containsKey(id);
-   }
+    /**
+     * Return true if there is a symbol with a specified id.
+     *
+     * @param id the symbols id
+     * @return true if there is a symbol with the specified id
+     */
+    public boolean hasSymbol(String id) {
+        return symbols.containsKey(id);
+    }
 
-   /**
-    * Return the symbol of a specified id.
-    *
-    * @param id the symbols id
-    * @return the symbols
-    */
-   public SymbolSpec getSymbol(String id) {
-      return symbols.get(id);
-   }
+    /**
+     * Return the symbol of a specified id.
+     *
+     * @param id the symbols id
+     * @return the symbols
+     */
+    public SymbolSpec getSymbol(String id) {
+        return symbols.get(id);
+    }
 
-   /**
-    * Add an animation.
-    *
-    * @param animation the animation.
-    */
-   public void addTransition(Animation animation) {
-      animations.add(animation);
-   }
+    /**
+     * Add an animation.
+     *
+     * @param animation the animation.
+     */
+    public void addTransition(Animation animation) {
+        animations.add(animation);
+    }
 
-   /**
-    * Add a list of animations.
-    *
-    * @param theAnimations the animations.
-    */
-   public void addAnimations(List<Animation> theAnimations) {
-      animations.addAll(theAnimations);
-   }
+    /**
+     * Add a list of animations.
+     *
+     * @param theAnimations the animations.
+     */
+    public void addAnimations(List<Animation> theAnimations) {
+        animations.addAll(theAnimations);
+    }
 
-   /**
-    * Play the transitions.
-    */
-   public void playAnimations() {
-      if (!animations.isEmpty()) {
-         Iterator<Animation> it = animations.iterator();
-         while (it.hasNext()) {
-            Animation tr = it.next();
-            tr.play();
-         }
-      }
-   }
+    /**
+     * Play the transitions.
+     */
+    public void playAnimations() {
+        if (!animations.isEmpty()) {
+            for (Animation tr : animations) {
+                tr.play();
+            }
+        }
+    }
 }

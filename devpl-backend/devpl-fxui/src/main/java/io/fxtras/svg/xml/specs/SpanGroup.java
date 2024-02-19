@@ -33,10 +33,11 @@ the project website at the project page on https://github.com/hervegirod/fxsvgim
 package io.fxtras.svg.xml.specs;
 
 import io.fxtras.svg.xml.parsers.XMLNode;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents spans elements under a text element.
@@ -44,33 +45,33 @@ import javafx.scene.text.Text;
  * @version 1.0
  */
 public class SpanGroup {
-   private Group textGroup;
-   private List<TSpan> tspans = new ArrayList<>();
+    private final Group textGroup;
+    private final List<TSpan> tspans = new ArrayList<>();
 
-   public SpanGroup(Group textGroup) {
-      this.textGroup = textGroup;
-   }
+    public SpanGroup(Group textGroup) {
+        this.textGroup = textGroup;
+    }
 
-   public Group getTextGroup() {
-      return textGroup;
-   }
+    public Group getTextGroup() {
+        return textGroup;
+    }
 
-   public List<TSpan> getSpans() {
-      return tspans;
-   }
+    public List<TSpan> getSpans() {
+        return tspans;
+    }
 
-   public void addTSpan(XMLNode node, Text text) {
-      TSpan tspan = new TSpan(node, text);
-      tspans.add(tspan);
-   }
+    public void addTSpan(XMLNode node, Text text) {
+        TSpan tspan = new TSpan(node, text);
+        tspans.add(tspan);
+    }
 
-   public class TSpan {
-      public final XMLNode node;
-      public final Text text;
+    public class TSpan {
+        public final XMLNode node;
+        public final Text text;
 
-      private TSpan(XMLNode node, Text text) {
-         this.node = node;
-         this.text = text;
-      }
-   }
+        private TSpan(XMLNode node, Text text) {
+            this.node = node;
+            this.text = text;
+        }
+    }
 }

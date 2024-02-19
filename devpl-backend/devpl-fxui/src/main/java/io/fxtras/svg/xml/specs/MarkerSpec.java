@@ -42,74 +42,74 @@ import io.fxtras.svg.xml.parsers.XMLNode;
  * @since 1.0
  */
 public class MarkerSpec implements SVGTags {
-   private Viewbox viewbox = null;
-   private final XMLNode node;
-   private double refX = 0;
-   private double refY = 0;
-   private double width = -1;
-   private double height = -1;
+    private Viewbox viewbox = null;
+    private final XMLNode node;
+    private double refX = 0;
+    private double refY = 0;
+    private double width = -1;
+    private double height = -1;
 
-   public MarkerSpec(XMLNode node) {
-      this.node = node;
-   }
+    public MarkerSpec(XMLNode node) {
+        this.node = node;
+    }
 
-   public void computeRefPosition(Viewport viewport) {
-      if (node.hasAttribute(REFX)) {
-         refX = -node.getLengthValue(REFX, viewport);
-      }
-      if (node.hasAttribute(REFY)) {
-         refY = -node.getLengthValue(REFY, viewport);
-      }
-      if (node.hasAttribute(MARKER_WIDTH)) {
-         width = node.getLengthValue(MARKER_WIDTH, viewport);
-      }
-      if (node.hasAttribute(MARKER_HEIGHT)) {
-         height = node.getLengthValue(MARKER_HEIGHT, viewport);
-      }
-   }
+    public void computeRefPosition(Viewport viewport) {
+        if (node.hasAttribute(REFX)) {
+            refX = -node.getLengthValue(REFX, viewport);
+        }
+        if (node.hasAttribute(REFY)) {
+            refY = -node.getLengthValue(REFY, viewport);
+        }
+        if (node.hasAttribute(MARKER_WIDTH)) {
+            width = node.getLengthValue(MARKER_WIDTH, viewport);
+        }
+        if (node.hasAttribute(MARKER_HEIGHT)) {
+            height = node.getLengthValue(MARKER_HEIGHT, viewport);
+        }
+    }
 
-   public double getWidth() {
-      return width;
-   }
+    public double getWidth() {
+        return width;
+    }
 
-   public double getHeight() {
-      return height;
-   }
+    public double getHeight() {
+        return height;
+    }
 
-   public double getRefX() {
-      return refX;
-   }
+    public double getRefX() {
+        return refX;
+    }
 
-   public double getRefY() {
-      return refY;
-   }
+    public double getRefY() {
+        return refY;
+    }
 
-   public void setViewbox(Viewbox viewbox) {
-      this.viewbox = viewbox;
-      if (node.hasAttribute(PRESERVE_ASPECT_RATIO)) {
-         String value = node.getAttributeValue(PRESERVE_ASPECT_RATIO);
-         boolean preserveAspectRatio = ParserUtils.getPreserveAspectRatio(value);
-         viewbox.setPreserveAspectRatio(preserveAspectRatio);
-      }
-   }
+    public void setViewbox(Viewbox viewbox) {
+        this.viewbox = viewbox;
+        if (node.hasAttribute(PRESERVE_ASPECT_RATIO)) {
+            String value = node.getAttributeValue(PRESERVE_ASPECT_RATIO);
+            boolean preserveAspectRatio = ParserUtils.getPreserveAspectRatio(value);
+            viewbox.setPreserveAspectRatio(preserveAspectRatio);
+        }
+    }
 
-   public boolean hasViewbox() {
-      return viewbox != null;
-   }
+    public boolean hasViewbox() {
+        return viewbox != null;
+    }
 
-   public Viewbox getViewbox() {
-      return viewbox;
-   }
+    public Viewbox getViewbox() {
+        return viewbox;
+    }
 
-   public XMLNode getXMLNode() {
-      return node;
-   }
+    public XMLNode getXMLNode() {
+        return node;
+    }
 
-   public double scaleWidth(double coord) {
-      return coord * 1;
-   }
+    public double scaleWidth(double coord) {
+        return coord * 1;
+    }
 
-   public double scaleHeight(double coord) {
-      return coord * 1;
-   }
+    public double scaleHeight(double coord) {
+        return coord * 1;
+    }
 }
