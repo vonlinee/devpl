@@ -16,12 +16,12 @@ import ${baseClass.packageName}.${baseClass.code};
 * ${tableComment}
 *
 * @author ${author} ${email}
-* @since ${version} ${date}
+* @since ${date}
 */
 <#if baseClass??>@EqualsAndHashCode(callSuper=false)</#if>
 @Getter
 @Setter
-@TableName("${tableName}")
+@TableName(value = "${tableName}")
 public class ${ClassName}Entity<#if baseClass??> extends ${baseClass.code}</#if> {
 <#list fieldList as field>
 <#if !field.baseField>

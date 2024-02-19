@@ -32,11 +32,11 @@
   <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
     @selection-change="selectionChangeHandle">
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-    <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150"></el-table-column>
-    <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200"></el-table-column>
+    <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200" show-overflow-tooltip></el-table-column>
     <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"
       show-overflow-tooltip></el-table-column>
-    <el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
+    <el-table-column label="操作" fixed="right" header-align="center" align="center" width="170">
       <template #default="scope">
         <el-button type="primary" link @click="editHandle(scope.row.id)">编辑</el-button>
         <el-button type="primary" link @click="syncHandle(scope.row)">同步</el-button>

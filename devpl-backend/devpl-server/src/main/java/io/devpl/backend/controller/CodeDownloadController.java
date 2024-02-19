@@ -2,7 +2,6 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.service.FileGenerationService;
 import io.devpl.backend.utils.ServletUtils;
-import io.devpl.common.utils.Utils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -31,14 +30,8 @@ public class CodeDownloadController {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); ZipOutputStream zip = new ZipOutputStream(outputStream)) {
             // 生成代码
             for (String tableId : tableIds.split(",")) {
-
                 String root = codeGenService.getAbsolutePath(codeGenService.generateForTable(Long.parseLong(tableId)));
-
                 File file = new File(root);
-
-                Utils.openDirectory(file.getAbsolutePath());
-
-                System.out.println(file);
             }
             // zip压缩包数据
             ServletUtils.downloadFile(response, "devpl.zip", outputStream);

@@ -4,10 +4,7 @@ import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.domain.FileNode;
 import io.devpl.backend.domain.param.TableImportParam;
-import io.devpl.backend.entity.GenTable;
-import io.devpl.backend.entity.GenTableField;
-import io.devpl.backend.entity.ModelInfo;
-import io.devpl.backend.entity.TableFileGeneration;
+import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.sdk.io.FileUtils;
@@ -19,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -53,6 +49,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private TemplateArgumentService templateArgumentService;
     @Resource
+    private TemplateParamService templateParamService;
+    @Resource
     private CodeGenProperties codeGenProperties;
 
     /**
@@ -70,19 +68,20 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
 
+        StringBuilder sb = new StringBuilder();
+
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
 
             String saveLocation = parentDirectory + File.separator + tfg.getSavePath() + File.separator + tfg.getFileName();
 
             saveLocation = this.getAbsolutePath(saveLocation);
-
-            log.info("保存地址 {}", saveLocation);
+            sb.append("模板").append(tfg.getTemplateName()).append("\t => ").append(saveLocation).append("\n");
             File file = new File(saveLocation);
 
             FileUtils.createFileQuietly(file, true);
             if (file.exists()) {
-                log.info("创建文件成功 {}", file.getAbsolutePath());
+                sb.append("\t创建文件成功 ").append(file.getAbsolutePath()).append("\n");
                 try (Writer writer = new FileWriter(file)) {
                     templateService.render(tfg.getTemplateId(), dataModel, writer);
                 } catch (Exception e) {
@@ -90,6 +89,9 @@ public class FileGenerationServiceImpl implements FileGenerationService {
                 }
             }
         }
+
+        log.info("生成日志 \n{}", sb);
+
         return parentDirectory;
     }
 
@@ -152,6 +154,11 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 前后端生成路径
         dataModel.put("backendPath", table.getBackendPath());
         dataModel.put("frontendPath", table.getFrontendPath());
+
+        // 全局模板参数
+        for (TemplateParam param : templateParamService.getGlobalTemplateParams()) {
+            dataModel.put(param.getParamKey(), param.getParamValue());
+        }
 
         return dataModel;
     }

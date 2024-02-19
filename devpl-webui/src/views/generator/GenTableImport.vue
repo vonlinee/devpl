@@ -17,7 +17,7 @@
             </el-form-item>
 
             <el-form-item label="数据库" prop="datasourceId">
-              <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList">
+              <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList" filterable clearable>
                 <el-option v-for="databaseName in dataForm.databaseNames" :key="databaseName" :label="databaseName"
                   :value="databaseName"></el-option>
               </el-select>
