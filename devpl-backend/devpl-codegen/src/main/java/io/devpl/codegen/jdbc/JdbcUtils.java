@@ -44,42 +44,42 @@ public class JdbcUtils {
     /**
      * 判断数据库类型
      *
-     * @param str url
+     * @param connectionUrl 数据库连接地址
      * @return 类型枚举值，如果没找到，则返回 null
      */
-    public static DBType getDbType(String str) {
-        str = str.toLowerCase();
-        if (str.contains(":mysql:") || str.contains(":cobar:")) {
+    public static DBType getDbType(String connectionUrl) {
+        connectionUrl = connectionUrl.toLowerCase();
+        if (connectionUrl.contains(":mysql:") || connectionUrl.contains(":cobar:")) {
             return DBType.MYSQL;
-        } else if (str.contains(":oracle:")) {
+        } else if (connectionUrl.contains(":oracle:")) {
             return DBType.ORACLE;
-        } else if (str.contains(":postgresql:")) {
+        } else if (connectionUrl.contains(":postgresql:")) {
             return DBType.POSTGRE_SQL;
-        } else if (str.contains(":sqlserver:")) {
+        } else if (connectionUrl.contains(":sqlserver:")) {
             return DBType.SQL_SERVER;
-        } else if (str.contains(":db2:")) {
+        } else if (connectionUrl.contains(":db2:")) {
             return DBType.DB2;
-        } else if (str.contains(":mariadb:")) {
+        } else if (connectionUrl.contains(":mariadb:")) {
             return DBType.MARIADB;
-        } else if (str.contains(":sqlite:")) {
+        } else if (connectionUrl.contains(":sqlite:")) {
             return DBType.SQLITE;
-        } else if (str.contains(":h2:")) {
+        } else if (connectionUrl.contains(":h2:")) {
             return DBType.H2;
-        } else if (str.contains(":kingbase:") || str.contains(":kingbase8:")) {
+        } else if (connectionUrl.contains(":kingbase:") || connectionUrl.contains(":kingbase8:")) {
             return DBType.KINGBASE_ES;
-        } else if (str.contains(":dm:")) {
+        } else if (connectionUrl.contains(":dm:")) {
             return DBType.DM;
-        } else if (str.contains(":zenith:")) {
+        } else if (connectionUrl.contains(":zenith:")) {
             return DBType.GAUSS;
-        } else if (str.contains(":oscar:")) {
+        } else if (connectionUrl.contains(":oscar:")) {
             return DBType.OSCAR;
-        } else if (str.contains(":firebird:")) {
+        } else if (connectionUrl.contains(":firebird:")) {
             return DBType.FIREBIRD;
-        } else if (str.contains(":xugu:")) {
+        } else if (connectionUrl.contains(":xugu:")) {
             return DBType.XU_GU;
-        } else if (str.contains(":clickhouse:")) {
+        } else if (connectionUrl.contains(":clickhouse:")) {
             return DBType.CLICK_HOUSE;
-        } else if (str.contains(":sybase:")) {
+        } else if (connectionUrl.contains(":sybase:")) {
             return DBType.SYBASE;
         } else {
             return DBType.OTHER;

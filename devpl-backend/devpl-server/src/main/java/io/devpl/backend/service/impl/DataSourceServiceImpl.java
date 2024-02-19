@@ -17,6 +17,7 @@ import io.devpl.backend.utils.DBUtils;
 import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
+import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
@@ -119,7 +120,12 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         if (dataSourceId == null) {
             return dataSource.getConnection();
         }
-        return getConnection(getConnectionInfo(dataSourceId));
+
+        DbConnInfo connectionInfo = getConnectionInfo(dataSourceId);
+        if (connectionInfo == null) {
+            return null;
+        }
+        return getConnection(connectionInfo);
     }
 
     @Override
@@ -164,7 +170,15 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
         }
         entity.setConnUrl(getConnectionUrl(entity));
 
+        JDBCDriver driver = dbType.getDriver(0);
+        if (driver != null) {
+            entity.setDriverClassName(driver.getDriverClassName());
+        }
+
         try (Connection connection = getConnection(entity)) {
+            if (connection == null) {
+                return Collections.emptyList();
+            }
             return getDatabaseNames(connection);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -231,16 +245,19 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
     public TestConnVO testJdbcConnection(Long id) {
         TestConnVO vo = new TestConnVO();
         try (Connection connection = this.getConnection(id)) {
-            getTestConnectionInfo(connection);
+            if (connection == null) {
+                vo.setFailed(true);
+                vo.setErrorMsg("connection is null");
+            } else {
+                vo.setFailed(false);
+                DatabaseMetaData metaData = connection.getMetaData();
+                vo.setDbmsType(metaData.getDatabaseProductName());
+            }
         } catch (SQLException e) {
             vo.setErrorMsg(e.getMessage());
             vo.setFailed(true);
         }
         return vo;
-    }
-
-    public String getTestConnectionInfo(Connection connection) {
-        return "";
     }
 
     @Override
@@ -332,6 +349,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
      */
     private DbConnInfo fixMissingConnectionInfo(DbConnInfo connInfo, boolean saveOrUpdate) {
         if (saveOrUpdate) {
+            // 新增
             if (!StringUtils.hasText(connInfo.getHost())) {
                 connInfo.setHost("localhost");
             }
@@ -344,6 +362,19 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, DbConnI
             }
             if (!StringUtils.hasText(connInfo.getConnName())) {
                 connInfo.setConnName(String.join("-", connInfo.getHost(), String.valueOf(connInfo.getPort()), connInfo.getDriverType()));
+            }
+        } else {
+            // 更新
+            if (StringUtils.isBlank(connInfo.getDbType()) && StringUtils.hasText(connInfo.getConnUrl())) {
+                DBType dbType = JdbcUtils.getDbType(connInfo.getConnUrl());
+                if (dbType != null) {
+                    connInfo.setDbType(dbType.getName());
+                    if (!StringUtils.hasText(connInfo.getDriverClassName())) {
+                        for (JDBCDriver driver : dbType.getSupportedDrivers()) {
+                            connInfo.setDriverClassName(driver.getDriverClassName());
+                        }
+                    }
+                }
             }
         }
         if (!StringUtils.hasText(connInfo.getDriverClassName())) {

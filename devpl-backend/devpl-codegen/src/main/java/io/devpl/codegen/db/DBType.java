@@ -235,4 +235,8 @@ public enum DBType {
         return drivers[index];
     }
 
+    public JDBCDriver[] getSupportedDrivers() {
+        return drivers == null ? new JDBCDriver[0] : drivers;
+    }
+
 }

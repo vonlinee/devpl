@@ -95,6 +95,12 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
 
     List<ColumnMetadata> getColumns(DbConnInfo connInfo, String databaseName, String tableName);
 
+    /**
+     * 测试数据源连接
+     *
+     * @param id 数据源ID
+     * @return 数据源连接信息
+     */
     TestConnVO testJdbcConnection(Long id);
 
     TestConnVO testJdbcConnection(DbConnInfo connInfo);

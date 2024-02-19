@@ -88,8 +88,8 @@ public class DataSourceController {
      * @return 连接信息
      */
     @GetMapping("/datasource/test/{id}")
-    public Result<TestConnVO> test(@PathVariable("id") Long id) {
-        return Result.ok(datasourceService.testJdbcConnection(id));
+    public TestConnVO test(@PathVariable("id") Long id) {
+        return datasourceService.testJdbcConnection(id);
     }
 
     /**
@@ -122,8 +122,8 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public Result<List<String>> getDbNames(@RequestBody DbConnInfo entity) {
-        return Result.ok(datasourceService.getDbNames(entity));
+    public List<String> getDbNames(@RequestBody DbConnInfo entity) {
+        return datasourceService.getDbNames(entity);
     }
 
     /**
@@ -171,12 +171,12 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PostMapping("/datasource")
-    public Result<Boolean> save(@RequestBody DbConnInfo entity) {
+    public boolean save(@RequestBody DbConnInfo entity) {
         if (entity.getId() != null) {
             datasourceService.updateOne(entity);
-            return Result.ok();
+            return true;
         }
-        return Result.ok(datasourceService.addOne(entity));
+        return datasourceService.addOne(entity);
     }
 
     /**
