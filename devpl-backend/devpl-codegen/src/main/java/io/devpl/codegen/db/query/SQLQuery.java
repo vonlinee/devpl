@@ -4,7 +4,7 @@ import io.devpl.codegen.config.*;
 import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.core.Context;
 import io.devpl.codegen.core.TableGeneration;
-import io.devpl.codegen.db.converts.MySqlTypeConvert;
+import io.devpl.codegen.db.converts.MySqlTypeConverter;
 import io.devpl.codegen.db.converts.TypeConverts;
 import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
@@ -158,13 +158,13 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
                     .setCustomMap(dbQuery.getCustomFields(result.getResultSet()));
                 String propertyName = entity.getNameConvert().propertyNameConvert(field.getName());
 
-                ITypeConvert typeConvert = dataSourceConfig.getTypeConvert();
+                TypeConverter typeConvert = dataSourceConfig.getTypeConvert();
                 if (typeConvert == null) {
                     DBType dbType1 = JdbcUtils.getDbType(dataSourceConfig.getUrl());
                     // 默认 MYSQL
                     typeConvert = TypeConverts.getTypeConvert(dbType1);
                     if (null == typeConvert) {
-                        typeConvert = MySqlTypeConvert.INSTANCE;
+                        typeConvert = MySqlTypeConverter.INSTANCE;
                     }
                 }
 

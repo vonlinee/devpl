@@ -93,7 +93,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
         templateSource = templateSource.getSource();
         if (templateSource instanceof VelocityTemplateSource) {
             try (Writer writer = new OutputStreamWriter(outputStream)) {
-                templateSource.render(this, arguments, writer);
+                render(templateSource, arguments, writer);
             } catch (IOException e) {
                 throw new TemplateException(e);
             }

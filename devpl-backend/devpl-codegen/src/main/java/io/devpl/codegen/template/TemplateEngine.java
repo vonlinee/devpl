@@ -52,8 +52,25 @@ public interface TemplateEngine {
      * @param templateSource 模板
      * @param arguments      模板参数
      * @param outputStream   输出位置
+     * @throws TemplateException 渲染失败
      */
     void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) throws TemplateException;
+
+    /**
+     * 渲染并输出到指定位置
+     *
+     * @param templateSource 模板
+     * @param arguments      模板参数
+     * @param writer         输出位置
+     * @throws TemplateException 渲染失败
+     */
+    default void render(TemplateSource templateSource, TemplateArguments arguments, Writer writer) throws TemplateException {
+        try {
+            templateSource.render(this, arguments, writer);
+        } catch (Exception e) {
+            throw new TemplateException(e);
+        }
+    }
 
     /**
      * 同render方法

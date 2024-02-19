@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -11,8 +11,8 @@ import io.devpl.codegen.db.DbColumnType;
  * @author halower, hanchunlin, daiby
  * @since 2019-06-27
  */
-public class DmTypeConvert implements ITypeConvert {
-    public static final DmTypeConvert INSTANCE = new DmTypeConvert();
+public class DmTypeConverter implements TypeConverter {
+    public static final DmTypeConverter INSTANCE = new DmTypeConverter();
 
     private static ColumnJavaType toNumberType(String typeName) {
         if (typeName.matches("number\\([0-9]\\)")) {
@@ -46,7 +46,7 @@ public class DmTypeConvert implements ITypeConvert {
     public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "text").then(DbColumnType.STRING))
-            .test(TypeConverts.contains("number").then(DmTypeConvert::toNumberType))
+            .test(TypeConverts.contains("number").then(DmTypeConverter::toNumberType))
             .test(TypeConverts.containsAny("numeric", "dec", "money").then(DbColumnType.BIG_DECIMAL))
             .test(TypeConverts.containsAny("bit", "bool").then(DbColumnType.BOOLEAN))
             .test(TypeConverts.contains("bigint").then(DbColumnType.BIG_INTEGER))

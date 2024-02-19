@@ -16,7 +16,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -26,8 +26,8 @@ import io.devpl.codegen.db.DbColumnType;
  * @author hubin, hanchunlin
  * @since 2017-01-20
  */
-public class OracleTypeConvert implements ITypeConvert {
-    public static final OracleTypeConvert INSTANCE = new OracleTypeConvert();
+public class OracleTypeConverter implements TypeConverter {
+    public static final OracleTypeConverter INSTANCE = new OracleTypeConverter();
 
     /**
      * 将对应的类型名称转换为对应的 java 类类型
@@ -77,7 +77,7 @@ public class OracleTypeConvert implements ITypeConvert {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "clob").then(DbColumnType.STRING))
             .test(TypeConverts.containsAny("date", "timestamp").then(p -> toDateType(config)))
-            .test(TypeConverts.contains("number").then(OracleTypeConvert::toNumberType))
+            .test(TypeConverts.contains("number").then(OracleTypeConverter::toNumberType))
             .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
             .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
             .test(TypeConverts.containsAny("binary", "raw").then(DbColumnType.BYTE_ARRAY))

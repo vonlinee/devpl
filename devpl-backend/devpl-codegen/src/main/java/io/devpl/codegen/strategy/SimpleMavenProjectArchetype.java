@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 /**
  * 适用于Maven的项目结构
  */
-public class MavenProjectArchetype implements ProjectArchetype {
+public class SimpleMavenProjectArchetype implements ProjectArchetype {
 
     /**
      * 项目根目录

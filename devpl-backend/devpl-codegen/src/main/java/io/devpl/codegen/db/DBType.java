@@ -1,6 +1,7 @@
 package io.devpl.codegen.db;
 
 import lombok.Getter;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 支持的数据库类型,主要用于分页方言
@@ -212,15 +213,18 @@ public enum DBType {
         return getDriverClassName(0);
     }
 
+    @Nullable
     public String getDriverClassName(int index) {
         JDBCDriver driver = getDriver(index);
         return driver == null ? null : driver.getDriverClassName();
     }
 
+    @Nullable
     public JDBCDriver getDriver() {
         return getDriver(0);
     }
 
+    @Nullable
     public JDBCDriver getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;

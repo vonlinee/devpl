@@ -1,6 +1,6 @@
 package io.devpl.backend.config.query;
 
-import io.devpl.codegen.jdbc.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ColumnPrivilegesMetadata;

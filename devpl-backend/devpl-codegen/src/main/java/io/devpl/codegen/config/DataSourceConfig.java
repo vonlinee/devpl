@@ -29,32 +29,24 @@ public class DataSourceConfig extends ConfigurationHolder {
     protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
     /**
      * 数据库连接属性
-     *
-     * @since 3.5.3
      */
     private final Map<String, String> connectionProperties = new HashMap<>();
     /**
      * 数据库信息查询
      */
     private DatabaseDialect dbQuery;
-
     /**
      * schemaName
      */
     private String schemaName;
-
     /**
      * 类型转换
      */
-    private ITypeConvert typeConvert;
-
+    private TypeConverter typeConvert;
     /**
      * 关键字处理器
-     *
-     * @since 3.3.2
      */
     private IKeyWordsHandler keyWordsHandler;
-
     /**
      * 驱动连接的URL
      */
@@ -72,8 +64,6 @@ public class DataSourceConfig extends ConfigurationHolder {
 
     /**
      * 数据源实例
-     *
-     * @since 3.5.0
      */
     private DataSource dataSource;
 
@@ -88,7 +78,6 @@ public class DataSourceConfig extends ConfigurationHolder {
      *
      * @see DefaultDatabaseIntrospection 默认查询方式
      * SQLQuery SQL语句查询方式，配合{@link #typeConvert} 使用
-     * @since 3.5.3
      */
     private Class<? extends AbstractDatabaseIntrospector> databaseQueryClass = DefaultDatabaseIntrospection.class;
 
@@ -102,7 +91,7 @@ public class DataSourceConfig extends ConfigurationHolder {
         return dbQuery;
     }
 
-    public ITypeConvert getTypeConvert() {
+    public TypeConverter getTypeConvert() {
         return typeConvert;
     }
 
@@ -301,7 +290,7 @@ public class DataSourceConfig extends ConfigurationHolder {
          * @param typeConvert 类型转换器
          * @return this
          */
-        public Builder typeConvert(@NotNull ITypeConvert typeConvert) {
+        public Builder typeConvert(@NotNull TypeConverter typeConvert) {
             this.dataSourceConfig.typeConvert = typeConvert;
             return this;
         }

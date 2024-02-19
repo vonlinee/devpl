@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -10,9 +10,9 @@ import io.devpl.codegen.db.DbColumnType;
  *
  * @author urzeye
  */
-public class ClickHouseTypeConvert implements ITypeConvert {
+public class ClickHouseTypeConverter implements TypeConverter {
 
-    public static final ClickHouseTypeConvert INSTANCE = new ClickHouseTypeConvert();
+    public static final ClickHouseTypeConverter INSTANCE = new ClickHouseTypeConverter();
 
     static final String[] INTEGER_TYPE = new String[]{
         "intervalyear", "intervalquarter", "intervalmonth", "intervalweek",

@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.util.select.BranchBuilder;
 import io.devpl.codegen.util.select.Selector;
 import io.devpl.codegen.db.ColumnJavaType;
@@ -17,19 +17,19 @@ public class TypeConverts {
      * @param dbType 数据库类型
      * @return 返回转换器
      */
-    public static ITypeConvert getTypeConvert(DBType dbType) {
+    public static TypeConverter getTypeConvert(DBType dbType) {
         return switch (dbType) {
-            case ORACLE -> OracleTypeConvert.INSTANCE;
-            case DB2 -> DB2TypeConvert.INSTANCE;
-            case DM, GAUSS -> DmTypeConvert.INSTANCE;
-            case KINGBASE_ES -> KingbaseESTypeConvert.INSTANCE;
-            case OSCAR -> OscarTypeConvert.INSTANCE;
-            case MYSQL, MARIADB -> MySqlTypeConvert.INSTANCE;
-            case POSTGRE_SQL -> PostgreSqlTypeConvert.INSTANCE;
-            case SQLITE -> SqliteTypeConvert.INSTANCE;
-            case SQL_SERVER -> SqlServerTypeConvert.INSTANCE;
-            case FIREBIRD -> FirebirdTypeConvert.INSTANCE;
-            case CLICK_HOUSE -> ClickHouseTypeConvert.INSTANCE;
+            case ORACLE -> OracleTypeConverter.INSTANCE;
+            case DB2 -> DB2TypeConverter.INSTANCE;
+            case DM, GAUSS -> DmTypeConverter.INSTANCE;
+            case KINGBASE_ES -> KingbaseESTypeConverter.INSTANCE;
+            case OSCAR -> OscarTypeConverter.INSTANCE;
+            case MYSQL, MARIADB -> MySqlTypeConverter.INSTANCE;
+            case POSTGRE_SQL -> PostgreSqlTypeConverter.INSTANCE;
+            case SQLITE -> SqliteTypeConverter.INSTANCE;
+            case SQL_SERVER -> SqlServerTypeConverter.INSTANCE;
+            case FIREBIRD -> FirebirdTypeConverter.INSTANCE;
+            case CLICK_HOUSE -> ClickHouseTypeConverter.INSTANCE;
             default -> null;
         };
     }

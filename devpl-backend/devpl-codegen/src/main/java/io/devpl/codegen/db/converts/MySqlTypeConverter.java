@@ -16,7 +16,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -27,8 +27,8 @@ import io.devpl.codegen.db.DbColumnType;
  * @author hubin, hanchunlin, xiaoliang
  * @since 2017-01-20
  */
-public class MySqlTypeConvert implements ITypeConvert {
-    public static final MySqlTypeConvert INSTANCE = new MySqlTypeConvert();
+public class MySqlTypeConverter implements TypeConverter {
+    public static final MySqlTypeConverter INSTANCE = new MySqlTypeConverter();
 
     /**
      * 转换为日期类型

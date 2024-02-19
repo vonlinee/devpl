@@ -160,12 +160,51 @@ public class JdbcUtils {
         try {
             ResultSet tableTypesResultSet = dbmd.getTableTypes();
             while (tableTypesResultSet.next()) {
-                tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
+                // TABLE_TYPE
+                tableTypes.add(tableTypesResultSet.getString(1));
             }
         } catch (SQLException e) {
             throw new RuntimeSQLException(e);
         }
         return tableTypes;
+    }
+
+    /**
+     * 获取数据库catalog列表
+     * MySQL数据库，catalog为数据库名称
+     *
+     * @param dbmd 数据库元数据
+     * @return 表类型
+     */
+    public static List<String> getCatalogs(DatabaseMetaData dbmd) {
+        List<String> catalogs = new ArrayList<>();
+        try {
+            ResultSet catalogsResultSet = dbmd.getCatalogs();
+            while (catalogsResultSet.next()) {
+                // TABLE_CAT
+                catalogs.add(catalogsResultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeSQLException(e);
+        }
+        return catalogs;
+    }
+
+    public static List<String> getSchemaNames(DatabaseMetaData dbmd, String catalog) {
+        List<String> schemaNames = new ArrayList<>();
+        try {
+            if ("".equals(catalog)) {
+                catalog = null;
+            }
+            ResultSet schemaResultSet = dbmd.getSchemas(catalog, null);
+            while (schemaResultSet.next()) {
+                // TABLE_CAT
+                schemaNames.add(schemaResultSet.getString("TABLE_SCHEM"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeSQLException(e);
+        }
+        return schemaNames;
     }
 
     /**
@@ -376,13 +415,13 @@ public class JdbcUtils {
             obj = rs.getTimestamp(index);
         } else if (className != null && className.startsWith("oracle.sql.DATE")) {
             String metaDataClassName = rs.getMetaData().getColumnClassName(index);
-            if ("java.sql.Timestamp".equals(metaDataClassName) || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+            if (Timestamp.class.getName().equals(metaDataClassName) || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
                 obj = rs.getTimestamp(index);
             } else {
                 obj = rs.getDate(index);
             }
         } else if (obj instanceof java.sql.Date) {
-            if ("java.sql.Timestamp".equals(rs.getMetaData().getColumnClassName(index))) {
+            if (Timestamp.class.getName().equals(rs.getMetaData().getColumnClassName(index))) {
                 obj = rs.getTimestamp(index);
             }
         }

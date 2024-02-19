@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.db.DbColumnType;
@@ -12,8 +12,8 @@ import io.devpl.codegen.db.DbColumnType;
  * @author kingbase, hanchunlin
  * @since 2019-10-12
  */
-public class OscarTypeConvert implements ITypeConvert {
-    public static final OscarTypeConvert INSTANCE = new OscarTypeConvert();
+public class OscarTypeConverter implements TypeConverter {
+    public static final OscarTypeConverter INSTANCE = new OscarTypeConverter();
 
     /**
      * @param globalConfig 全局配置

@@ -9,7 +9,7 @@ import io.devpl.codegen.db.ColumnJavaType;
  * @author hanchunlin
  * @since 2017-01-20
  */
-public interface ITypeConvert {
+public interface TypeConverter {
 
     /**
      * 执行类型转换

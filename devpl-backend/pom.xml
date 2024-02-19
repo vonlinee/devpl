@@ -48,6 +48,7 @@
         <clickhouse.version>0.3.2</clickhouse.version>
     </properties>
 
+    <!--统一依赖版本号-->
     <dependencyManagement>
         <dependencies>
             <dependency>

@@ -2,14 +2,14 @@ package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.config.DataSourceConfig;
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.config.StrategyConfig;
 import io.devpl.codegen.core.ColumnGeneration;
+import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.type.TypeConverter;
-import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +66,13 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
             final DatabaseMetaData dbmd = connection.getMetaData();
             // 数据库支持的表类型
             List<String> supportedTableTypes = JdbcUtils.getSupportedTableTypes(dbmd);
+
+            List<String> catalogs = JdbcUtils.getCatalogs(dbmd);
+            List<String> schemas = JdbcUtils.getSchemaNames(dbmd, null);
+
+            log.info("catalogs {}", catalogs);
+            log.info("schemas {}", schemas);
+
             log.info("支持的表类型 {}", supportedTableTypes);
             // 获取表的元数据信息（不包含表的字段）
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);

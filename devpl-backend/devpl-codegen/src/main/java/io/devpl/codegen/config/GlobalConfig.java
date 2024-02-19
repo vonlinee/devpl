@@ -2,8 +2,6 @@ package io.devpl.codegen.config;
 
 import io.devpl.codegen.core.ActionCallback;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,8 +15,6 @@ import java.util.function.Supplier;
  */
 public class GlobalConfig {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(GlobalConfig.class);
-
     /**
      * 回调接口
      */
@@ -27,7 +23,6 @@ public class GlobalConfig {
      * 生成文件的输出目录【 windows:D://  linux or mac:/tmp 】
      */
     private String outputDir = "/tmp";
-
     /**
      * 是否打开输出目录
      */
@@ -54,8 +49,6 @@ public class GlobalConfig {
     private DateType dateType = DateType.TIME_PACK;
     /**
      * 获取注释日期
-     *
-     * @since 3.5.0
      */
     private Supplier<String> commentDate = () -> new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
@@ -99,9 +92,6 @@ public class GlobalConfig {
 
     /**
      * 全局配置构建
-     *
-     * @author nieqiurong 2020/10/11.
-     * @since 3.5.0
      */
     public static class Builder {
 

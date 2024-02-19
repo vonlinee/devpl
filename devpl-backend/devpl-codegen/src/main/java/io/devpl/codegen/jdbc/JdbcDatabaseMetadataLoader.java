@@ -2,6 +2,7 @@ package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ColumnPrivilegesMetadata;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 
 import java.sql.Connection;

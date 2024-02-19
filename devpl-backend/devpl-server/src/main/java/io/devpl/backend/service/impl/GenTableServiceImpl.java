@@ -17,7 +17,7 @@ import io.devpl.backend.service.*;
 import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateArgumentsMap;

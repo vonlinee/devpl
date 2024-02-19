@@ -1,8 +1,6 @@
-package io.devpl.codegen.jdbc;
+package io.devpl.codegen.jdbc.meta;
 
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.ColumnPrivilegesMetadata;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.codegen.jdbc.RuntimeSQLException;
 
 import java.util.List;
 

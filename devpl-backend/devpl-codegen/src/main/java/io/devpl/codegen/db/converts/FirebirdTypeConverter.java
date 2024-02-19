@@ -16,7 +16,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.ITypeConvert;
+import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -26,8 +26,8 @@ import io.devpl.codegen.db.DbColumnType;
  * @author hubin, hanchunlin
  * @since 2017-01-20
  */
-public class FirebirdTypeConvert implements ITypeConvert {
-    public static final FirebirdTypeConvert INSTANCE = new FirebirdTypeConvert();
+public class FirebirdTypeConverter implements TypeConverter {
+    public static final FirebirdTypeConverter INSTANCE = new FirebirdTypeConverter();
 
     /**
      * 转换为日期类型

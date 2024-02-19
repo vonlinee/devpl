@@ -2,6 +2,8 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateEngine;
+import io.devpl.codegen.template.TemplateSource;
+import io.devpl.sdk.io.IOUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +34,11 @@ public class TemplateGeneratedFile extends GeneratedFile {
 
     @Override
     public void write(Writer writer, Charset charset) {
-
+        TemplateSource ts = templateEngine.getTemplate(template, false);
+        try {
+            templateEngine.render(ts, templateArguments, writer);
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
     }
 }
