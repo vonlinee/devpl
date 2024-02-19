@@ -58,4 +58,4 @@ devpl:
             location:  # 驱动保存位置，默认db/drivers
         backup:
             # 是否开启数据库备份，启动时备份数据库的表结构及全量数据
-            enabled: true
+            enabled: false
