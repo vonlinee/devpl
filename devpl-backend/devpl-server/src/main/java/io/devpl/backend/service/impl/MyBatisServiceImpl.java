@@ -25,16 +25,19 @@ import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.ognl.*;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
+import org.apache.ibatis.scripting.defaults.RawSqlSource;
 import org.apache.ibatis.scripting.xmltags.*;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -180,6 +183,14 @@ public class MyBatisServiceImpl implements MyBatisService {
         if (sqlSource instanceof DynamicSqlSource dss) {
             SqlNode rootNode = ReflectionUtils.getTypedValue(dss, "rootSqlNode", null);
             searchParams(rootNode, result, null);
+        } else if (sqlSource instanceof RawSqlSource rss) {
+            SqlSource ss = ReflectionUtils.getTypedValue(rss, "sqlSource", null);
+            if (ss instanceof StaticSqlSource sss) {
+                List<ParameterMapping> mappings = ReflectionUtils.getTypedValue(sss, "parameterMappings", null);
+                for (ParameterMapping mapping : mappings) {
+                    result.put(mapping.getProperty(), new ParamMeta(mapping.getProperty()));
+                }
+            }
         }
         return new HashSet<>(result.values());
     }
