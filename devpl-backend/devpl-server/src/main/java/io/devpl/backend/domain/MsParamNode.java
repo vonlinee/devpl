@@ -1,6 +1,6 @@
 package io.devpl.backend.domain;
 
-import io.devpl.backend.domain.enums.MapperStatementParamValueType;
+import io.devpl.backend.domain.enums.MSParamDataType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,7 +53,7 @@ public class MsParamNode {
     /**
      * 参数类型，枚举值
      */
-    private String dataType = MapperStatementParamValueType.STRING.getQualifier();
+    private String dataType = MSParamDataType.STRING.getQualifier();
 
     /**
      * 是否叶子结点
@@ -65,10 +65,10 @@ public class MsParamNode {
      */
     private List<MsParamNode> children;
 
-    private MapperStatementParamValueType valueType;
+    private MSParamDataType valueType;
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
-        this.valueType = MapperStatementParamValueType.valueOfTypeName(dataType);
+        this.valueType = MSParamDataType.valueOfTypeName(dataType);
     }
 }

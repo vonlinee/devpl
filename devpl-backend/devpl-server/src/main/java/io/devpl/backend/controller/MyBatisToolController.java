@@ -3,7 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.MsParamNode;
-import io.devpl.backend.domain.enums.MapperStatementParamValueType;
+import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.domain.param.MyBatisParam;
@@ -62,7 +62,7 @@ public class MyBatisToolController {
      */
     @GetMapping("/ms/param/datatypes")
     public Result<List<SelectOptionVO>> getDataTypes() {
-        return Result.ok(ArrayUtils.toList(MapperStatementParamValueType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
+        return Result.ok(ArrayUtils.toList(MSParamDataType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
     }
 
     /**

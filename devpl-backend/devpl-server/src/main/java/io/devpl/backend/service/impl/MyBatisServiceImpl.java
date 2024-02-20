@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.devpl.backend.dao.MappedStatementItemMapper;
 import io.devpl.backend.domain.MsParamNode;
-import io.devpl.backend.domain.enums.MapperStatementParamValueType;
+import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
@@ -149,6 +149,10 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
         }
 
+        if (parentNode.isLeaf()) {
+            parentNode.setDataType(currentParam.getMsDataType().getQualifier());
+        }
+
         MsParamNode ppNode = parentMap.get(level - 1);
         if (ppNode != null) {
             parentNode.setParentId(ppNode.getId());
@@ -188,7 +192,8 @@ public class MyBatisServiceImpl implements MyBatisService {
             if (ss instanceof StaticSqlSource sss) {
                 List<ParameterMapping> mappings = ReflectionUtils.getTypedValue(sss, "parameterMappings", null);
                 for (ParameterMapping mapping : mappings) {
-                    result.put(mapping.getProperty(), new ParamMeta(mapping.getProperty()));
+                    ParamMeta paramMeta = new ParamMeta(mapping.getProperty(), MSParamDataType.fromType(mapping.getJavaType()));
+                    result.put(mapping.getProperty(), paramMeta);
                 }
             }
         }
@@ -371,20 +376,20 @@ public class MyBatisServiceImpl implements MyBatisService {
             return val;
         }
         final String literalValue = String.valueOf(val);
-        MapperStatementParamValueType paramValueType = node.getValueType();
+        MSParamDataType paramValueType = node.getValueType();
         if (paramValueType == null) {
-            paramValueType = MapperStatementParamValueType.valueOfTypeName(node.getDataType());
+            paramValueType = MSParamDataType.valueOfTypeName(node.getDataType());
         }
         if (paramValueType == null) {
             // 根据字符串推断类型，结果只能是简单的类型，不会很复杂
             if (TypeUtils.isInteger(literalValue)) {
-                paramValueType = MapperStatementParamValueType.NUMERIC;
+                paramValueType = MSParamDataType.NUMERIC;
             } else if (TypeUtils.isDouble(literalValue)) {
-                paramValueType = MapperStatementParamValueType.NUMERIC;
+                paramValueType = MSParamDataType.NUMERIC;
             } else {
                 // 非数字类型的其他类型都可以当做字符串处理
                 // 推断失败
-                paramValueType = MapperStatementParamValueType.STRING;
+                paramValueType = MSParamDataType.STRING;
             }
         }
         // 根据指定的类型进行赋值
@@ -398,7 +403,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param paramValueType 值类型
      * @return 对应类型 {@code paramValueType} 的值
      */
-    private Object parseLiteralValue(String literalValue, MapperStatementParamValueType paramValueType) {
+    private Object parseLiteralValue(String literalValue, MSParamDataType paramValueType) {
         Object val;
         switch (paramValueType) {
             case NUMERIC -> val = Long.parseLong(literalValue);
@@ -452,7 +457,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 item = ReflectionUtils.getTypedValue(fesn, "item", "");
             }
             if (!Objects.equals(expression, item)) {
-                paramMetaMap.put(expression, new ParamMeta(expression, MapperStatementParamValueType.COLLECTION));
+                paramMetaMap.put(expression, new ParamMeta(expression, MSParamDataType.COLLECTION));
                 SqlNode contents = (SqlNode) ReflectionUtils.getValue(fesn, "contents");
                 searchParams(contents, paramMetaMap, item);
             }
@@ -583,12 +588,12 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @return Mapper参数类型
      */
     @Override
-    public MapperStatementParamValueType inferType(String paramName) {
-        MapperStatementParamValueType type = MapperStatementParamValueType.NULL;
+    public MSParamDataType inferType(String paramName) {
+        MSParamDataType type = MSParamDataType.NULL;
         if (StringUtils.endsWithIgnoreCase(paramName, "name")) {
-            type = MapperStatementParamValueType.STRING;
+            type = MSParamDataType.STRING;
         } else if (StringUtils.endsWithIgnoreCase(paramName, "num")) {
-            type = MapperStatementParamValueType.NUMERIC;
+            type = MSParamDataType.NUMERIC;
         }
         return type;
     }

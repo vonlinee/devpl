@@ -1,6 +1,6 @@
 package io.devpl.backend.mybatis;
 
-import io.devpl.backend.domain.enums.MapperStatementParamValueType;
+import io.devpl.backend.domain.enums.MSParamDataType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,16 +16,19 @@ public class ParamMeta {
     /**
      * 默认字符串
      *
-     * @see MapperStatementParamValueType#getType()
+     * @see MSParamDataType#getType()
      */
-    private int type = MapperStatementParamValueType.STRING.getType();
+    private int type = MSParamDataType.STRING.getType();
+
+    private MSParamDataType msDataType;
 
     public ParamMeta(String name) {
         this.name = name;
     }
 
-    public ParamMeta(String name, MapperStatementParamValueType msPvType) {
+    public ParamMeta(String name, MSParamDataType msPvType) {
         this.name = name;
         this.type = msPvType.getType();
+        this.msDataType = msPvType;
     }
 }
