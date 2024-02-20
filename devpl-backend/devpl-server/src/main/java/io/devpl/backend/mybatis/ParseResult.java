@@ -13,6 +13,14 @@ public class ParseResult {
 
     /**
      * 变量表，树形结构
+     *
+     * 比如
+     * param.name
+     * param.age
+     * 结果为:
+     * param
+     *      -> name
+     *      -> age
      */
     private TreeNode<ParamMeta> root;
 

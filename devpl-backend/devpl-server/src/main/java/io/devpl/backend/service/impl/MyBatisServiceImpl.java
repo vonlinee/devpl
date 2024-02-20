@@ -89,18 +89,75 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Resource
     ProjectService projectService;
 
+    /**
+     * 适配vxe-table的树形结构，根据id和parentId来确定层级关系
+     *
+     * @param content   MyBatis Mapper Statement
+     * @param inferType 推断参数的类型
+     * @return
+     */
     @Override
     public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
         ParseResult result = this.parseMapperStatement(content, inferType);
         // 根节点不使用
         TreeNode<ParamMeta> root = result.getRoot();
+
         final List<MsParamNode> rows = new LinkedList<>();
         if (root.hasChildren()) {
+            // 每层的父节点
+            Map<Integer, MsParamNode> parentNodeMap = new HashMap<>();
+            int num = 0;
             for (TreeNode<ParamMeta> node : root.getChildren()) {
-                this.recursive(node, rows, -1);
+                recursive(node, rows, 1, num++, parentNodeMap);
             }
         }
         return rows;
+    }
+
+    /**
+     * 递归将树形结构转换为列表
+     *
+     * @param currentNode 当前节点
+     * @param rows        存储转换结果
+     * @param nextNum     单层下一个节点的编号
+     * @param level       层级，从1开始
+     */
+    private void recursive(TreeNode<ParamMeta> currentNode, List<MsParamNode> rows, int level, int nextNum, Map<Integer, MsParamNode> parentMap) {
+        ParamMeta currentParam = currentNode.getData();
+        MsParamNode parentNode = parentMap.get(level);
+        if (parentNode == null) {
+            // 当前层未初始化父节点S
+            parentNode = new MsParamNode();
+            parentNode.setId(level * 10 + nextNum);
+            parentNode.setFieldKey(currentParam.getName());
+            parentNode.setLeaf(!currentNode.hasChildren());
+            rows.add(parentNode);
+
+            parentMap.put(level, parentNode);
+        } else {
+            if (Objects.equals(currentParam.getName(), parentNode.getFieldKey())) {
+                // 该节点重复，继续递归
+            } else {
+                parentNode = new MsParamNode();
+                parentNode.setId(level * 10 + nextNum);
+                parentNode.setFieldKey(currentParam.getName());
+                parentNode.setLeaf(!currentNode.hasChildren());
+                rows.add(parentNode);
+            }
+        }
+
+        MsParamNode ppNode = parentMap.get(level - 1);
+        if (ppNode != null) {
+            parentNode.setParentId(ppNode.getId());
+        }
+
+
+        if (currentNode.hasChildren()) {
+            nextNum = 0;
+            for (TreeNode<ParamMeta> child : currentNode.getChildren()) {
+                recursive(child, rows, level + 1, nextNum++, parentMap);
+            }
+        }
     }
 
     @Override
@@ -252,33 +309,6 @@ public class MyBatisServiceImpl implements MyBatisService {
         } else {
             MsParamNode paramNode = node.getData();
             paramMap.put(paramNode.getFieldKey(), getParamValueByType(paramNode));
-        }
-    }
-
-    /**
-     * 递归将树形结构转换为列表
-     *
-     * @param parentNode 父节点
-     * @param rows       存储转换结果
-     * @param parentId   父节点ID
-     */
-    private void recursive(TreeNode<ParamMeta> parentNode, List<MsParamNode> rows, int parentId) {
-        MsParamNode parentRow = new MsParamNode();
-        parentRow.setId(rows.size());
-        parentRow.setKey(rows.size());
-        if (parentId != -1) {
-            parentRow.setParentKey(parentId);
-            parentRow.setParentId(parentId);
-        }
-        parentRow.setFieldKey(parentNode.getData().getName());
-        parentRow.setDataType(MapperStatementParamValueType.valueOfType(parentNode.getData().getType(), MapperStatementParamValueType.STRING).getQualifier());
-        rows.add(parentRow);
-        if (parentNode.hasChildren()) {
-            for (TreeNode<ParamMeta> node : parentNode.getChildren()) {
-                recursive(node, rows, parentRow.getKey());
-            }
-        } else {
-            parentRow.setLeaf(true);
         }
     }
 
@@ -835,7 +865,7 @@ public class MyBatisServiceImpl implements MyBatisService {
     public IPage<MappedStatementItem> pageIndexedMappedStatements(MappedStatementListParam param) {
         return mappedStatementItemMapper.selectPage(param, Wrappers.<MappedStatementItem>lambdaQuery()
             .eq(StringUtils.hasText(param.getStatementType()), MappedStatementItem::getStatementType, param.getStatementType())
-            .eq(StringUtils.hasText(param.getStatementId()), MappedStatementItem::getStatementId, param.getStatementId())
+            .like(StringUtils.hasText(param.getStatementId()), MappedStatementItem::getStatementId, param.getStatementId())
             .like(StringUtils.hasText(param.getNamespace()), MappedStatementItem::getNamespace, param.getNamespace()));
     }
 }
