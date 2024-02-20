@@ -14,7 +14,9 @@ import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.utils.SqlFormat;
+import io.devpl.backend.utils.XmlNode;
 import io.devpl.codegen.util.TypeUtils;
+import io.devpl.common.utils.XMLUtils;
 import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.lang.RuntimeIOException;
@@ -38,9 +40,18 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.sql.DataSource;
+import javax.xml.parsers.*;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileVisitResult;
@@ -72,7 +83,7 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Resource
     CrudService crudService;
     @Resource
-    IdentifierGenerator identifierGenerator;
+    public IdentifierGenerator identifierGenerator;
     @Resource
     MappedStatementItemMapper mappedStatementItemMapper;
     @Resource
@@ -193,7 +204,9 @@ public class MyBatisServiceImpl implements MyBatisService {
         // TODO 支持所有类型的SQL标签
         XNode selectNode = xPathParser.evalNode("select");
         MyBatisConfiguration configuration = new MyBatisConfiguration(sqlSessionFactory.getConfiguration());
-        MyXmlStatementBuilder statementParser = new MyXmlStatementBuilder(configuration, selectNode);
+
+        MissingCompatiableStatementBuilder.MyMapperBuilderAssistant assistant = new MissingCompatiableStatementBuilder.MyMapperBuilderAssistant(configuration, null);
+        MissingCompatiableStatementBuilder statementParser = new MissingCompatiableStatementBuilder(configuration, selectNode, assistant);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
         return configuration.getMappedStatements().stream().findFirst().orElse(null);
@@ -641,39 +654,181 @@ public class MyBatisServiceImpl implements MyBatisService {
             mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
         }
 
+        List<MappedStatementItem> statementItems = mapperXmlFiles.stream().map(this::parseMappedStatements).flatMap(Collection::stream).toList();
+        if (!CollectionUtils.isEmpty(statementItems)) {
+            crudService.saveBatch(statementItems);
+        }
+    }
+
+    public List<MappedStatementItem> parseMappedStatements(File mapperFile) {
         List<MappedStatementItem> items = new ArrayList<>();
+        try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
+            /**
+             * MyBatis使用XPath进行XML的解析
+             */
+            XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
+            XNode rootNode = parser.evalNode("/mapper");
 
-        for (File mapperFile : mapperXmlFiles) {
-            try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
-                XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
-                XNode rootNode = parser.evalNode("/mapper");
+            String namespace = rootNode.getStringAttribute("namespace");
 
-                String namespace = rootNode.getStringAttribute("namespace");
+            /**
+             * @see XMLStatementBuilder#parseStatementNode()
+             */
+            for (XNode context : rootNode.getChildren()) {
+                String nodeName = context.getNode().getNodeName();
+
+                if (!isMappedStatementNode(nodeName)) {
+                    continue;
+                }
+
+                String id = context.getStringAttribute("id");
+                MappedStatementItem item = new MappedStatementItem();
+                item.setId(identifierGenerator.nextUUID(null));
+                item.setStatementId(id);
+                item.setBelongFile(mapperFile.getAbsolutePath());
+                /**
+                 * 如果包含<![CDATA[<]]>，那么结果XNode.toString()的结果不包含<![CDATA[]]>标签，只会包含其内容
+                 * 解析器解析得到的文本不包含CDATA，因此这里的XML内容是有语法错误的
+                 */
+                XmlNode node = new XmlNode(context.getNode(), null);
+                item.setStatement(String.valueOf(node));
+                item.setStatementType(nodeName);
+                item.setNamespace(namespace);
+                item.setParamType(context.getStringAttribute("paramType"));
+                item.setResultType(context.getStringAttribute("resultType"));
+
+                items.add(item);
+            }
+        } catch (IOException e) {
+            log.error("解析文件{}失败", mapperFile, e);
+        }
+        return items;
+    }
+
+    /**
+     * 使用SAX进行解析
+     *
+     * @param mapperFile mapper xml文件
+     * @return
+     */
+    public List<MappedStatementItem> parseMappedStatementsWithSaxParser(File mapperFile) {
+        List<MappedStatementItem> items = new ArrayList<>();
+        try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
+            // javax.xml.parsers.SAXParserFactory 原生api获取factory
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            // javax.xml.parsers.SAXParser 原生api获取parse
+            SAXParser saxParser = factory.newSAXParser();
+            // 获取xmlReader
+            XMLReader xmlReader = saxParser.getXMLReader();
+            xmlReader.setContentHandler(new DefaultHandler() {
+
+                private String currentName;
+
+                private boolean startFlag;
+                private boolean endFlag;
+
+                final StringBuilder sb = new StringBuilder();
 
                 /**
-                 * @see XMLStatementBuilder#parseStatementNode()
+                 * 处理节点内容
+                 * @param ch 当前元素的字符序列
+                 * @param start 当前元素的字符
+                 * @param length 当前元素的字符序列长度
                  */
-                for (XNode context : rootNode.getChildren()) {
-                    String nodeName = context.getNode().getNodeName();
-                    String id = context.getStringAttribute("id");
-
-                    MappedStatementItem item = new MappedStatementItem();
-                    item.setId(identifierGenerator.nextUUID(null));
-                    item.setStatementId(id);
-                    item.setBelongFile(mapperFile.getAbsolutePath());
-                    item.setStatement(context.toString());
-                    item.setStatementType(nodeName);
-                    item.setNamespace(namespace);
-                    item.setParamType(context.getStringAttribute("paramType"));
-                    item.setResultType(context.getStringAttribute("resultType"));
-
-                    items.add(item);
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    if (startFlag) {
+                        sb.append(ch);
+                    }
                 }
-            } catch (IOException e) {
-                log.error("解析文件{}失败", mapperFile, e);
-            }
+
+                /**
+                 * 每次sax读取到一个element开始时都会调用这个方法
+                 * @param qName 元素的标签名称
+                 */
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    currentName = qName;
+                    startFlag = isMappedStatementNode(qName);
+                }
+
+                /**
+                 * 结束时还会调用一次characters方法
+                 */
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    if (startFlag && qName.equals(currentName)) {
+                        // 结束
+                        endFlag = true;
+                        System.out.println(sb);
+                    }
+
+                    if (endFlag) {
+                        sb.setLength(0);
+                        endFlag = false;
+                    }
+                }
+            });
+            xmlReader.parse(new InputSource(new FileReader(mapperFile)));
+        } catch (IOException e) {
+            log.error("解析文件{}失败", mapperFile, e);
+        } catch (ParserConfigurationException | SAXException e) {
+            throw new RuntimeException(e);
         }
-        crudService.saveBatch(items);
+        return items;
+    }
+
+    public static boolean isMappedStatementNode(String name) {
+        return StringUtils.equalsAny(name, "select", "update", "insert", "delete");
+    }
+
+    /**
+     * 使用dom解析，会将整个xml读入内存
+     *
+     * @param mapperFile mapper xml 文件
+     * @return mapper标签
+     */
+    public List<MappedStatementItem> parseMappedStatementsWithDomParser(File mapperFile) {
+        List<MappedStatementItem> items = new ArrayList<>();
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/dom/include-ignorable-whitespace", false);
+            // 转换CDATA标签为纯文本，设为true保留CDATA标签
+            factory.setCoalescing(true);
+            factory.setExpandEntityReferences(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(mapperFile);
+
+            NodeList mapperNodes = document.getElementsByTagName("mapper");
+            for (int i = 0; i < mapperNodes.getLength(); i++) {
+                org.w3c.dom.Node item = mapperNodes.item(i);
+
+                NodeList childNodes = item.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    org.w3c.dom.Node msNode = childNodes.item(j);
+                }
+            }
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+
+        return items;
+    }
+
+    /**
+     * MyBatis使用XML语法，转义字符如下
+     * &lt;<  小于号；
+     * &gt;> 大于号；
+     * &amp; & 和 ；
+     * &apos;  ‘’单引号；
+     * &quot; “”  双引号；
+     *
+     * @param content XML内容
+     * @return 未转义的字符
+     */
+    public String toRawUnEscapedContent(String content) {
+        content = content.replace("<", XMLUtils.wrapWithCDATA("<"));
+        return content;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.devpl.fxui.utils.xml;
+package io.devpl.common.utils;
 
 import io.devpl.sdk.util.StringUtils;
 import org.dom4j.Document;
@@ -45,6 +45,7 @@ public final class XMLUtils {
 
     /**
      * 将文本用html标签包起来
+     *
      * @param content 文本
      * @param tagName 标签名
      * @return
@@ -59,6 +60,7 @@ public final class XMLUtils {
 
     /**
      * 将xml转为key value
+     *
      * @param xml xml格式字符串
      * @return map
      */
@@ -85,11 +87,11 @@ public final class XMLUtils {
         try {
             Document doc = reader.read(source);
             Iterator<Element> iter = doc.getRootElement()
-                    .elementIterator();
+                .elementIterator();
             while (iter.hasNext()) {
                 Element e = iter.next();
                 if (!e.elementIterator()
-                        .hasNext()) {
+                    .hasNext()) {
                     map.put(e.getName(), e.getTextTrim());
                     continue;
                 }
@@ -130,14 +132,25 @@ public final class XMLUtils {
 
     public static void main(String[] args) throws DocumentException {
         String xml = """
-                <dependency>
-                    <groupId>org.dom4j</groupId>
-                    <artifactId>dom4j</artifactId>
-                    <version>2.1.3</version>
-                </dependency>""".indent(8);
+            <dependency>
+                <groupId>org.dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>2.1.3</version>
+            </dependency>""".indent(8);
 
         final Map<String, Object> map = XMLUtils.parseXml(xml);
 
         System.out.println(map);
+    }
+
+    /**
+     * 将内容以<![CDATA[ ]>进行包裹
+     * 被<![CDATA[]]>这个标记所包含的内容将表示为纯文本，比如<![CDATA[<]]>表示文本内容“<”。
+     * <a href="https://www.runoob.com/xml/xml-cdata.html">CDATA</a>
+     * @param content 待包裹的内容
+     * @return 包裹结果
+     */
+    public static String wrapWithCDATA(String content) {
+        return "<![CDATA[" + content + "]]>";
     }
 }
