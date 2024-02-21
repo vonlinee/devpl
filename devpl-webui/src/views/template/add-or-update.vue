@@ -1,20 +1,7 @@
 <template>
-  <vxe-modal
-    v-model="visible"
-    draggable
-    :title="!dataForm.templateId ? '新增' : '修改'"
-    :mask-closable="false"
-    width="75%"
-    :z-index="2000"
-    show-footer
-    @close="onClosed"
-  >
-    <el-form
-      ref="dataFormRef"
-      :model="dataForm"
-      :rules="dataRules"
-      @keyup.enter="submitHandle()"
-    >
+  <vxe-modal v-model="visible" draggable :title="!dataForm.templateId ? '新增' : '修改'" :mask-closable="false" width="75%"
+    :z-index="2000" show-footer @close="onClosed">
+    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" @keyup.enter="submitHandle()">
       <el-row>
         <el-col :span="12">
           <el-form-item label="模板名称" prop="templateName">
@@ -22,30 +9,17 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item
-            prop="typeName"
-            label="模板类型"
-            style="padding-left: 30px"
-          >
+          <el-form-item prop="typeName" label="模板类型" style="padding-left: 30px">
             <el-select v-model="dataForm.typeName" @change="templateTypeChange">
               <el-option label="字符串模板" value="1"></el-option>
               <el-option label="文件模板" value="2"></el-option>
             </el-select>
           </el-form-item>
-          <input
-            ref="inputRef"
-            type="file"
-            style="display: none"
-            accept=".txt,.ftl.vm"
-            @change="onFileListChange($event)"
-          />
+          <input ref="inputRef" type="file" style="display: none" accept=".txt,.ftl.vm"
+            @change="onFileListChange($event)" />
         </el-col>
         <el-col :span="6">
-          <el-form-item
-            prop="provider"
-            label="技术类型"
-            style="padding-left: 30px"
-          >
+          <el-form-item prop="provider" label="技术类型" style="padding-left: 30px">
             <el-select v-model="dataForm.provider">
               <el-option label="Velocity" value="Velocity"></el-option>
               <el-option label="FreeMarker" value="FreeMarker"></el-option>
@@ -58,12 +32,12 @@
       </el-row>
       <el-form-item label="模板内容" prop="content">
         <div style="height: 400px; width: 100%">
-          <monaco-editor
-            ref="monacoEditorRef"
-            language="plain"
-            :text="dataForm.content"
-          ></monaco-editor>
+          <monaco-editor ref="monacoEditorRef" language="plain" :text="dataForm.content"></monaco-editor>
         </div>
+      </el-form-item>
+
+      <el-form-item label="备注" prop="remark">
+        <el-input type="textarea" v-model="dataForm.remark"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -128,6 +102,7 @@ const dataForm = reactive<TemplateInfo>({
   type: 1,
   typeName: "字符串模板",
   provider: "Velocity",
+  remark: "",
   internal: false,
 })
 
@@ -162,6 +137,7 @@ const init = (row?: TemplateInfo) => {
     dataForm.typeName = assignTemplateTypeName(row.type)
     dataForm.templatePath = row.templatePath
     dataForm.templateName = row.templateName
+    dataForm.remark = row.remark
     monacoEditorRef.value.setText(row.content)
   } else {
     // 重置表单数据
