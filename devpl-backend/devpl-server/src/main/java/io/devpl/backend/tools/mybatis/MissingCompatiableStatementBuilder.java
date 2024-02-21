@@ -23,6 +23,8 @@ public class MissingCompatiableStatementBuilder extends XMLStatementBuilder {
 
     private MyMapperBuilderAssistant builderAssistant;
 
+    private MappedStatement lastMappedStatement;
+
     public MissingCompatiableStatementBuilder(Configuration configuration, XNode context, MapperBuilderAssistant builderAssistant) {
         // mapper文件路径
         this(configuration, builderAssistant, context, null);
@@ -114,9 +116,21 @@ public class MissingCompatiableStatementBuilder extends XMLStatementBuilder {
         String resultSets = context.getStringAttribute("resultSets");
         boolean dirtySelect = context.getBooleanAttribute("affectData", Boolean.FALSE);
 
-        builderAssistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap,
+        lastMappedStatement = builderAssistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap,
             parameterTypeClass, resultMap, resultTypeClass, resultSetTypeEnum, flushCache, useCache, resultOrdered,
             keyGenerator, keyProperty, keyColumn, null, langDriver, resultSets, dirtySelect);
+    }
+
+    /**
+     * 解析MappedStatement标签
+     *
+     * @return
+     */
+    public synchronized MappedStatement parseMappedStatement() {
+        this.parseStatementNode();
+        MappedStatement ms = lastMappedStatement;
+        this.lastMappedStatement = null;
+        return ms;
     }
 
     private void processSelectKeyNodes(String id, Class<?> parameterTypeClass, LanguageDriver langDriver) {
@@ -204,5 +218,7 @@ public class MissingCompatiableStatementBuilder extends XMLStatementBuilder {
         return configuration.getLanguageDriver(langClass);
     }
 
-
+    public MappedStatement getLastMappedStatement() {
+        return lastMappedStatement;
+    }
 }

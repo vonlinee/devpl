@@ -291,11 +291,12 @@ public class MyBatisServiceImpl implements MyBatisService {
      */
     @Override
     public MappedStatement parseMappedStatement(String statement) {
-        assistant = new MyMapperBuilderAssistant(configuration, null);
         MissingCompatiableStatementBuilder statementParser = new MissingCompatiableStatementBuilder(configuration, msParser.getNode(statement), assistant);
-        // 解析结果会放到 Configuration里
-        statementParser.parseStatementNode();
-        return configuration.getMappedStatements().stream().findFirst().orElse(null);
+        /**
+         * 解析结果会放到 Configuration里
+         * @see DynamicMyBatisConfiguration#addMappedStatement(MappedStatement)
+         */
+        return statementParser.parseMappedStatement();
     }
 
     /**

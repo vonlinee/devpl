@@ -36,8 +36,13 @@ public class DynamicMyBatisConfiguration extends Configuration {
     }
 
     @Override
-    public synchronized void addMappedStatement(MappedStatement ms) {
-        super.addMappedStatement(ms);
+    public void addMappedStatement(MappedStatement ms) {
+        this.mappedStatements.put(ms.getId(), ms);
+    }
+
+    @Override
+    public MappedStatement getMappedStatement(String id) {
+        return this.mappedStatements.get(id);
     }
 
     @Override
