@@ -1,4 +1,4 @@
-package io.devpl.backend.mybatis;
+package io.devpl.backend.tools.mybatis;
 
 import org.apache.ibatis.scripting.xmltags.DynamicContext;
 import org.apache.ibatis.session.Configuration;

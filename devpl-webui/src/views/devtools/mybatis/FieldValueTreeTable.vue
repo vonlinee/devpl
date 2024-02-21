@@ -1,76 +1,30 @@
 <template>
-  <vxe-table
-    ref="tableRef"
-    :height="height"
-    border
-    show-overflow
-    :column-config="{ resizable: true }"
-    :tree-config="{ transform: true }"
-    :edit-config="editConfig"
-    :data="tableData"
-    cell-click=""
-  >
-    <vxe-column
-      field="fieldKey"
-      title="Key"
-      tree-node
-      :edit-render="{}"
-    >
+  <vxe-table ref="tableRef" :height="height" border show-overflow :column-config="{ resizable: true }"
+    :tree-config="{ transform: true }" :edit-config="editConfig" :data="tableData" cell-click="">
+    <vxe-column field="fieldKey" title="Key" tree-node :edit-render="{}">
       <template #edit="{ row }">
         <vxe-input v-model="row.fieldKey" type="text"></vxe-input>
       </template>
     </vxe-column>
-    <vxe-column
-      field="dataType"
-      title="数据类型"
-      header-align="center"
-      :edit-render="{}"
-    >
+    <vxe-column field="dataType" title="数据类型" header-align="center" width="100" :edit-render="{}">
       <template #edit="{ row }">
-        <vxe-select
-          v-model="row.dataType"
-          popup-class-name="datatype-select-drop-container"
-        >
-          <vxe-option
-            v-for="dt in valueDataTypes"
-            :key="dt.key"
-            :label="dt.label"
-            :value="dt.value"
-          ></vxe-option>
+        <vxe-select v-model="row.dataType" popup-class-name="datatype-select-drop-container">
+          <vxe-option v-for="dt in valueDataTypes" :key="dt.key" :label="dt.label" :value="dt.value"></vxe-option>
         </vxe-select>
       </template>
     </vxe-column>
-    <vxe-column
-      field="value"
-      title="值"
-      header-align="center"
-      :edit-render="{}"
-    >
+    <vxe-column field="value" title="值" header-align="center" :edit-render="{}">
       <template #edit="{ row }">
         <vxe-input v-model="row.value" type="text"></vxe-input>
       </template>
     </vxe-column>
-    <vxe-column
-      title="操作"
-      width="140"
-      header-align="center"
-      align="center"
-      fixed="right"
-    >
+    <vxe-column title="操作" width="140" header-align="center" align="center" fixed="right">
       <template #default="{ row }">
         <vxe-button type="text" transfer>
           <template #default>添加</template>
           <template #dropdowns>
-            <vxe-button
-              type="text"
-              content="同级节点"
-              @click="insertNextRow(row, 'current')"
-            ></vxe-button>
-            <vxe-button
-              type="text"
-              content="子节点"
-              @click="insertRow(row, 'bottom')"
-            ></vxe-button>
+            <vxe-button type="text" content="同级节点" @click="insertNextRow(row, 'current')"></vxe-button>
+            <vxe-button type="text" content="子节点" @click="insertRow(row, 'bottom')"></vxe-button>
           </template>
         </vxe-button>
         <vxe-button type="text" @click="removeRow(row)">删除</vxe-button>
@@ -82,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watch, reactive, ref, toRaw, computed } from "vue"
+import { reactive, ref, computed } from "vue"
 import FieldValueEditor from "@/components/fields/FieldValueEditor.vue"
 
 import {
@@ -250,7 +204,7 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.datatype-select-drop-container{
+.datatype-select-drop-container {
   background-color: red;
 }
 </style>

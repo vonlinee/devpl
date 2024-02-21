@@ -48,8 +48,8 @@
     </el-table-column>
   </el-table>
 
-  <el-pagination layout="total, prev, pager, next" :total="options.total" :page-size="options.page"
-    @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
+  <el-pagination layout="sizes, total, prev, pager, next" background :total="options.total" :current-page="options.page"
+    :page-sizes="options.pageSizes" @current-change="currentChangeHandle" @size-change="sizeChangeHandle" />
 
   <FileOpenModal ref="fileOpenModalRef" @selected="handleSelected"></FileOpenModal>
 

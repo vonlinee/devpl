@@ -1,4 +1,4 @@
-package io.devpl.backend.mybatis;
+package io.devpl.backend.tools.mybatis;
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;

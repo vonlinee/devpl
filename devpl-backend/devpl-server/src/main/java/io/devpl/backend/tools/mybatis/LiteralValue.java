@@ -1,4 +1,4 @@
-package io.devpl.backend.mybatis;
+package io.devpl.backend.tools.mybatis;
 
 import org.apache.ibatis.ognl.Ognl;
 import org.apache.ibatis.ognl.OgnlException;
@@ -20,7 +20,7 @@ public class LiteralValue {
      */
     public static <T> List<T> get(String literal) {
         try {
-            return (List<T>) Ognl.getValue(literal, (Object) new HashMap<>(), List.class);
+            return (List<T>) Ognl.getValue(literal, new HashMap<>(), List.class);
         } catch (OgnlException e) {
             e.printStackTrace();
         }

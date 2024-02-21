@@ -1,6 +1,5 @@
 package io.devpl.test;
 
-import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.service.impl.MyBatisServiceImpl;
 import org.xml.sax.Attributes;
@@ -22,8 +21,6 @@ public class TestMapperParser {
     public static void main(String[] args) {
 
         MyBatisServiceImpl impl = new MyBatisServiceImpl();
-
-        impl.identifierGenerator = new DefaultIdentifierGenerator();
 
         String file = "D:\\Work\\Code\\exam-univ-java\\src\\main\\resources\\mapper\\ExamRecordMapper.xml";
 

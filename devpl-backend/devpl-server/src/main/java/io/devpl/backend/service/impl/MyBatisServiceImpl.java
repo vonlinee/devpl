@@ -9,10 +9,10 @@ import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
-import io.devpl.backend.mybatis.*;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
+import io.devpl.backend.tools.mybatis.*;
 import io.devpl.backend.utils.SqlFormat;
 import io.devpl.backend.utils.XmlNode;
 import io.devpl.codegen.util.TypeUtils;
@@ -23,6 +23,7 @@ import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.StaticSqlSource;
@@ -86,25 +87,29 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Resource
     CrudService crudService;
     @Resource
-    public IdentifierGenerator identifierGenerator;
+    IdentifierGenerator identifierGenerator;
     @Resource
     MappedStatementItemMapper mappedStatementItemMapper;
     @Resource
     ProjectService projectService;
+
+    // 线程安全
+    DynamicMyBatisConfiguration configuration;
+    MyMapperBuilderAssistant assistant;
+    MapperStatementParser msParser = new MapperStatementParser();
 
     /**
      * 适配vxe-table的树形结构，根据id和parentId来确定层级关系
      *
      * @param content   MyBatis Mapper Statement
      * @param inferType 推断参数的类型
-     * @return
+     * @return 参数节点列表
      */
     @Override
     public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
         ParseResult result = this.parseMapperStatement(content, inferType);
         // 根节点不使用
         TreeNode<ParamMeta> root = result.getRoot();
-
         final List<MsParamNode> rows = new LinkedList<>();
         if (root.hasChildren()) {
             // 每层的父节点
@@ -149,7 +154,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
         }
 
-        if (parentNode.isLeaf()) {
+        if (parentNode.isLeaf() && currentParam.getMsDataType() != null) {
             parentNode.setDataType(currentParam.getMsDataType().getQualifier());
         }
 
@@ -228,8 +233,11 @@ public class MyBatisServiceImpl implements MyBatisService {
         Configuration configuration = sqlSessionFactory.getConfiguration();
         ParameterHandler parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
         try (Connection connection = dataSource.getConnection()) {
-            // 获取数据源
             try (PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql())) {
+                /**
+                 * 这里BoundSql.getSql() 获取的sql是预编译的sql,带占位符
+                 * 后续会经过ParameterHandler处理进行参数填充
+                 */
                 parameterHandler.setParameters(preparedStatement);
                 String sql = preparedStatement.toString();
                 int index = sql.indexOf(":");
@@ -254,6 +262,10 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
         ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true);
         MappedStatement ms = result.getMappedStatement();
+        /**
+         * MappedStatement#getBoundSql每次返回的是不同的对象
+         * @see MappedStatement#getBoundSql(Object)
+         */
         BoundSql boundSql = ms.getBoundSql(map);
         String resultSql;
         if (param.getReal() == 0) {
@@ -265,6 +277,12 @@ public class MyBatisServiceImpl implements MyBatisService {
         return resultSql;
     }
 
+    @PostConstruct
+    public void init() {
+        configuration = new DynamicMyBatisConfiguration(sqlSessionFactory.getConfiguration());
+        assistant = new MyMapperBuilderAssistant(configuration, null);
+    }
+
     /**
      * 将字符串的statement解析为MappedStatement对象
      *
@@ -273,13 +291,8 @@ public class MyBatisServiceImpl implements MyBatisService {
      */
     @Override
     public MappedStatement parseMappedStatement(String statement) {
-        XPathParser xPathParser = new XPathParser(statement, false, null, new IgnoreDTDEntityResolver());
-        // TODO 支持所有类型的SQL标签
-        XNode selectNode = xPathParser.evalNode("select");
-        MyBatisConfiguration configuration = new MyBatisConfiguration(sqlSessionFactory.getConfiguration());
-
-        MissingCompatiableStatementBuilder.MyMapperBuilderAssistant assistant = new MissingCompatiableStatementBuilder.MyMapperBuilderAssistant(configuration, null);
-        MissingCompatiableStatementBuilder statementParser = new MissingCompatiableStatementBuilder(configuration, selectNode, assistant);
+        assistant = new MyMapperBuilderAssistant(configuration, null);
+        MissingCompatiableStatementBuilder statementParser = new MissingCompatiableStatementBuilder(configuration, msParser.getNode(statement), assistant);
         // 解析结果会放到 Configuration里
         statementParser.parseStatementNode();
         return configuration.getMappedStatements().stream().findFirst().orElse(null);
@@ -655,8 +668,8 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     /**
      * @param projectRootDir 项目根路径
-     * @see XMLConfigBuilder#mappersElement(XNode)
-     * @see XMLConfigBuilder#parseConfiguration(XNode)
+     *                       XMLConfigBuilder#mappersElement(XNode)
+     *                       XMLConfigBuilder#parseConfiguration(XNode)
      */
     @Override
     public void buildMapperXmlIndexForProject(String projectRootDir) {

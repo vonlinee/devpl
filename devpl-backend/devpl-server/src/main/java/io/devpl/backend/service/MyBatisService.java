@@ -6,8 +6,8 @@ import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
-import io.devpl.backend.mybatis.ParamMeta;
-import io.devpl.backend.mybatis.ParseResult;
+import io.devpl.backend.tools.mybatis.ParamMeta;
+import io.devpl.backend.tools.mybatis.ParseResult;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 

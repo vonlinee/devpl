@@ -98,7 +98,7 @@ public final class XMLUtils {
                 Iterator<Element> iterator = e.elementIterator();
                 Map<String, String> param = new HashMap<>();
                 while (iterator.hasNext()) {
-                    Element el = (Element) iterator.next();
+                    Element el = iterator.next();
                     param.put(el.getName(), el.getTextTrim());
                 }
                 map.put(e.getName(), param);

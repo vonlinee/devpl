@@ -9,7 +9,7 @@ import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.domain.param.MyBatisParam;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.MappedStatementItem;
-import io.devpl.backend.mybatis.ParamMeta;
+import io.devpl.backend.tools.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
