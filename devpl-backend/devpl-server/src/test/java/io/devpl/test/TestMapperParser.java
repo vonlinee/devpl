@@ -1,7 +1,11 @@
 package io.devpl.test;
 
-import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.service.impl.MyBatisServiceImpl;
+import jakarta.annotation.Resource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -11,24 +15,23 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 public class TestMapperParser {
 
-    public static void main(String[] args) {
+    @Resource
+    MyBatisServiceImpl myBatisService;
 
-        MyBatisServiceImpl impl = new MyBatisServiceImpl();
-
-        String file = "D:\\Work\\Code\\exam-univ-java\\src\\main\\resources\\mapper\\ExamRecordMapper.xml";
-
-        List<MappedStatementItem> statements = impl.parseMappedStatements(new File(file));
-
+    @Test
+    public void test1() {
+        System.out.println(myBatisService);
     }
 
-    public static void test1() throws ParserConfigurationException, SAXException, IOException {
+    @Test
+    public void test2() throws ParserConfigurationException, SAXException, IOException {
         String xml = """
             <mapper>
               <select id="selectList">

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * 集合操作工具类
+ * 简化stream操作
  */
 public abstract class CollectionUtils {
 
@@ -92,7 +93,27 @@ public abstract class CollectionUtils {
         return list.stream().map(mapper).collect(Collectors.toList());
     }
 
+    /**
+     * 先经过一层map，再进行flatMap操作
+     *
+     * @param collection 愿集合
+     * @param mapper     映射逻辑
+     * @param <E>        原集合数据类型
+     * @param <T>        映射后的集合元素类型
+     * @param <C>        映射后的集合类型
+     * @return 映射后的list集合
+     */
+    public static <E, T, C extends Collection<T>> List<T> toFlatList(Collection<E> collection, Function<E, C> mapper) {
+        if (isEmpty(collection)) {
+            return Collections.emptyList();
+        }
+        return collection.stream().map(mapper).flatMap(Collection::stream).toList();
+    }
+
     public static <E, T> Set<T> toSet(List<E> list, Function<E, T> mapper) {
+        if (isEmpty(list)) {
+            return Collections.emptySet();
+        }
         return list.stream().map(mapper).collect(Collectors.toSet());
     }
 

@@ -2,6 +2,7 @@ package io.devpl.sdk;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 树节点
@@ -51,7 +52,7 @@ public class TreeNode<T> implements Visitable<T> {
             children = new LinkedList<>();
         }
         for (TreeNode<T> child : children) {
-            if (child.data.equals(data)) {
+            if (Objects.equals(child.data, data)) {
                 return child;
             }
         }
