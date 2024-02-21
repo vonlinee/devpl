@@ -885,7 +885,10 @@ public abstract class StringUtils {
      * @return 如果参数为空，原样返回
      */
     public static String trim(String str) {
-        if (hasLength(str)) {
+        if (str == null) {
+            return EMPTY;
+        }
+        if (!str.isEmpty()) {
             str = str.trim();
         }
         return str;

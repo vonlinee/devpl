@@ -34,3 +34,13 @@ export const apiUpdateProjectInfo = (dataForm: any) => {
 export const apiDownloadProject = (id: string) => {
   location.href = import.meta.env.VITE_API_URL + "/api/project/download/" + id
 }
+
+/**
+ * 项目源码下载
+ * @param id
+ */
+export const apiAnalyseProject = (path: string) => {
+  return http.get("/api/project/analyse", {
+    path: path
+  })
+}

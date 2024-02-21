@@ -9,9 +9,9 @@ import io.devpl.backend.dao.ProjectInfoMapper;
 import io.devpl.backend.domain.ProjectModule;
 import io.devpl.backend.domain.param.ProjectListParam;
 import io.devpl.backend.domain.vo.ProjectSelectVO;
-import io.devpl.backend.entity.ModuleInfo;
 import io.devpl.backend.entity.ProjectInfo;
 import io.devpl.backend.service.ProjectService;
+import io.devpl.backend.utils.ProjectUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.ZipUtils;
@@ -20,15 +20,7 @@ import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -226,60 +219,6 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
 
     }
 
-    public static void main(String[] args) {
-        test();
-    }
-
-    public static void test() {
-        try {
-            File inputFile = new File("");
-            inputFile = new File(inputFile.getAbsolutePath(), "pom.xml");
-
-            //通过DocumentBuilderFactory工厂
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            //通过DocumentBuilderFactory工厂创建DocumentBuilder对象
-            DocumentBuilder documentBuilder = dbf.newDocumentBuilder();
-            //使用DocumentBuilder的parse方法，从文件中解析出Document（文档）对象
-            Document document = documentBuilder.parse(inputFile);
-            //通过Document的getElementsByTagName方法，获取相应的NodeList节点集
-
-            // 获取文档元素，及根节点
-            Element documentElement = document.getDocumentElement();
-            ProjectModule rootModule = new ProjectModule(inputFile.getName());
-            NodeList childNodes = documentElement.getChildNodes();
-            for (int i = 0; i < childNodes.getLength(); i++) {
-                Node item = childNodes.item(i);
-                switch (item.getNodeName()) {
-                    case "groupId" -> {
-                        item.normalize();
-                        rootModule.setGroupId(item.getTextContent());
-                    }
-                    case "artifactId" -> {
-                        item.normalize();
-                        rootModule.setArtifactId(item.getTextContent());
-                        rootModule.setName(item.getTextContent());
-                    }
-                    case "version" -> {
-                        item.normalize();
-                        rootModule.setVersion(item.getTextContent());
-                    }
-                    case "modules" -> {
-                        childNodes = item.getChildNodes();
-                        for (int j = 0; j < childNodes.getLength(); j++) {
-                            item = childNodes.item(j);
-                            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                                rootModule.addModule(item.getTextContent());
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println(rootModule);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public boolean isProjectRootDirectory(File file) {
         return getProjectBulidToolFile(file) != null;
@@ -295,8 +234,25 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
 
     @Override
     public void analyse(File projectRootDir) {
-        File projectBulidToolFile = getProjectBulidToolFile(projectRootDir);
+        ProjectModule rootProject = ProjectUtils.parse(projectRootDir);
+        if (rootProject == null) {
+            return;
+        }
+        List<ProjectInfo> projectInfos = new ArrayList<>();
+        ProjectInfo projectInfo = convertProjectInfo(rootProject);
+        projectInfos.add(projectInfo);
+        if (rootProject.hasModules()) {
+            for (ProjectModule module : rootProject.getModules()) {
+                projectInfos.add(convertProjectInfo(module));
+            }
+        }
+        saveBatch(projectInfos);
+    }
 
+    private ProjectInfo convertProjectInfo(ProjectModule module) {
         ProjectInfo projectInfo = new ProjectInfo();
+        projectInfo.setProjectName(module.getName());
+        projectInfo.setProjectPath(module.getRootPath());
+        return projectInfo;
     }
 }

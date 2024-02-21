@@ -26,4 +26,13 @@ public class ModuleInfo implements Serializable {
      * 模块名
      */
     private String moduleName;
+
+    /**
+     * 组
+     */
+    private String groupId;
+
+    private String artifactId;
+
+    private String version;
 }

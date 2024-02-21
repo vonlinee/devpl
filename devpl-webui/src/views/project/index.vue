@@ -1,16 +1,8 @@
 <template>
   <el-card>
-    <el-form
-      :inline="true"
-      :model="state.queryForm"
-      @keyup.enter="getDataList()"
-    >
+    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
-        <el-input
-          v-model="state.queryForm.projectName"
-          placeholder="项目名"
-          clearable
-        ></el-input>
+        <el-input v-model="state.queryForm.projectName" placeholder="项目名" clearable></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -19,93 +11,41 @@
         <el-button type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
       <el-form-item>
+        <el-button type="primary" @click="fileOpenModalRef.show()">解析</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-button type="danger" @click="deleteBatchHandle()">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table
-      v-loading="state.dataListLoading"
-      :data="state.dataList"
-      border
-      style="width: 100%"
-      @selection-change="selectionChangeHandle"
-    >
-      <el-table-column
-        type="selection"
-        header-align="center"
-        align="center"
-        width="50"
-      ></el-table-column>
-      <el-table-column
-        prop="projectName"
-        label="项目名"
-        header-align="center"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="projectCode"
-        label="项目标识"
-        header-align="center"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="projectPackage"
-        label="项目包名"
-        show-overflow-tooltip
-        header-align="center"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        prop="projectPath"
-        label="项目路径"
-        show-overflow-tooltip
-        header-align="center"
-        align="center"
-      ></el-table-column>
-      <el-table-column
-        label="操作"
-        fixed="right"
-        header-align="center"
-        align="center"
-        width="180"
-      >
+    <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
+      @selection-change="selectionChangeHandle">
+      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+      <el-table-column prop="projectName" label="项目名" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="projectCode" label="项目标识" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="projectPackage" label="项目包名" show-overflow-tooltip header-align="center"
+        align="center"></el-table-column>
+      <el-table-column prop="projectPath" label="项目路径" show-overflow-tooltip header-align="center"
+        align="center"></el-table-column>
+      <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
         <template #default="scope">
-          <el-button
-            type="primary"
-            link
-            @click="addOrUpdateHandle(scope.row.id)"
-            >修改</el-button
-          >
-          <el-button type="primary" link @click="downloadHandle(scope.row.id)"
-            >源码下载</el-button
-          >
-          <el-button
-            type="primary"
-            link
-            @click="deleteBatchHandle(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="primary" link @click="downloadHandle(scope.row.id)">源码下载</el-button>
+          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="state.page"
-      :page-sizes="state.pageSizes"
-      :page-size="state.limit"
-      :total="state.total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-    >
+    <el-pagination :current-page="state.page" :page-sizes="state.pageSizes" :page-size="state.limit" :total="state.total"
+      layout="total, sizes, prev, pager, next, jumper" @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle">
     </el-pagination>
 
     <!-- 弹窗, 新增 / 修改 -->
-    <add-or-update
-      ref="addOrUpdateRef"
-      @refresh-data-list="getDataList"
-    ></add-or-update>
+    <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
     <!-- 源码下载 -->
     <download ref="downloadRef"></download>
   </el-card>
+
+  <FileOpenModal ref="fileOpenModalRef" @selected="handleSelected"></FileOpenModal>
 </template>
 
 <script setup lang="ts">
@@ -113,8 +53,12 @@ import { useCrud } from "@/hooks"
 import { reactive, ref } from "vue"
 import AddOrUpdate from "./add-or-update.vue"
 import Download from "./download.vue"
+import FileOpenModal from "@/components/FileOpenModal.vue"
 import { DataTableOption } from "@/hooks/interface"
 import { ElButton } from "element-plus"
+import { apiAnalyseProject } from "@/api/project"
+
+const fileOpenModalRef = ref()
 
 const state: DataTableOption = reactive({
   dataListUrl: "/api/project/page",
@@ -132,6 +76,12 @@ const addOrUpdateHandle = (id?: number) => {
 const downloadRef = ref()
 const downloadHandle = (id?: number) => {
   downloadRef.value.init(id)
+}
+
+const handleSelected = (path: string) => {
+  apiAnalyseProject(path).then((res) => {
+    getDataList()
+  })
 }
 
 const {

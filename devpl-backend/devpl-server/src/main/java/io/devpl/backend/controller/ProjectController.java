@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -64,5 +65,13 @@ public class ProjectController {
         ProjectInfo project = projectService.getById(id);
         byte[] data = projectService.download(project);
         ServletUtils.downloadFile(response, project.getModifyProjectName() + ".zip", data);
+    }
+
+    /**
+     * 分析项目结构
+     */
+    @GetMapping("/analyse")
+    public void analyse(@RequestParam("path") String path) {
+        projectService.analyse(new File(path));
     }
 }
