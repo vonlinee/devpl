@@ -72,7 +72,7 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
 
     @Override
     public List<RdbmsConnectionInfo> listAll() {
-        return dbConnInfoMapper.selectList();
+        return dbConnInfoMapper.selectAll();
     }
 
     @Override

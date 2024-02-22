@@ -1,13 +1,17 @@
 package io.devpl.backend.common.mvc;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.backend.common.query.PageParam;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +26,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      *
      * @return 单表所有数据
      */
-    default List<T> selectList() {
+    default List<T> selectAll() {
         return selectList(Wrappers.emptyWrapper());
     }
 
@@ -33,8 +37,8 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @param pageSize  每页大小
      * @return 一页的数据
      */
-    default List<T> selectPage(int pageIndex, int pageSize) {
-        return selectPage(pageIndex, pageSize, Wrappers.emptyWrapper());
+    default List<T> selectList(int pageIndex, int pageSize) {
+        return selectList(pageIndex, pageSize, Wrappers.emptyWrapper());
     }
 
     /**
@@ -45,7 +49,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @param queryWrapper 查询条件
      * @return 一页的数据
      */
-    default List<T> selectPage(int pageIndex, int pageSize, Wrapper<T> queryWrapper) {
+    default List<T> selectList(int pageIndex, int pageSize, Wrapper<T> queryWrapper) {
         Page<T> page = selectPage(new Page<>(pageIndex, pageSize), queryWrapper);
         return page.getRecords();
     }
@@ -61,15 +65,139 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
         return selectPage(param.asPage(), qw);
     }
 
+    /**
+     * 批量插入
+     *
+     * @param entities 实体列表
+     * @return 是否成功
+     */
     default boolean insertBatch(Collection<T> entities) {
+        if (entities == null || entities.size() == 0) {
+            return false;
+        }
+        if (entities.size() == 1) {
+            for (T entity : entities) {
+                return SqlHelper.retBool(insert(entity));
+            }
+        }
         return Db.saveBatch(entities);
     }
 
+    /**
+     * 批量插入
+     *
+     * @param entities 实体列表
+     * @return 是否成功
+     */
+    default boolean insertBatch(T... entities) {
+        if (entities == null || entities.length == 0) {
+            return false;
+        }
+        if (entities.length == 1) {
+            return SqlHelper.retBool(insert(entities[0]));
+        }
+        return Db.saveBatch(Arrays.asList(entities));
+    }
+
+    /**
+     * 根据主键批量更新
+     *
+     * @param entities 实体列表
+     * @return 是否成功
+     */
     default boolean updateBatchById(Collection<T> entities) {
+        if (entities == null || entities.size() == 0) {
+            return false;
+        }
+        if (entities.size() == 1) {
+            for (T entity : entities) {
+                return SqlHelper.retBool(updateById(entity));
+            }
+        }
         return Db.updateBatchById(entities);
     }
 
+    /**
+     * 根据主键新增或者更新
+     *
+     * @param entities 实体列表
+     * @return 是否成功
+     */
     default boolean insertOrUpdateBatch(Collection<T> entities) {
+        if (entities == null || entities.size() == 0) {
+            return false;
+        }
+        if (entities.size() == 1) {
+            for (T entity : entities) {
+                return Db.saveOrUpdate(entity);
+            }
+        }
         return Db.saveOrUpdateBatch(entities);
+    }
+
+    /**
+     * 新增或保存
+     *
+     * @param entity 实体
+     * @return 是否成功
+     */
+    default boolean insertOrUpdate(T entity) {
+        if (entity == null) {
+            return false;
+        }
+        return Db.saveOrUpdate(entity);
+    }
+
+    /**
+     * 清空所有数据
+     *
+     * @return 是否成功
+     */
+    default boolean deleteAll() {
+        return Db.remove(Wrappers.emptyWrapper());
+    }
+
+    /**
+     * 根据主键删除
+     *
+     * @param ids        主键
+     * @param entityType 实体类型
+     * @return 是否成功
+     */
+    default boolean deleteByIds(Class<T> entityType, Collection<? extends Serializable> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return false;
+        }
+        return Db.removeByIds(ids, entityType);
+    }
+
+    /**
+     * 根据主键删除
+     *
+     * @param ids        主键
+     * @param entityType 实体类型
+     * @return 是否成功
+     */
+    default boolean deleteByIds(Class<T> entityType, Serializable... ids) {
+        if (ids == null || ids.length == 0) {
+            return false;
+        }
+        return Db.removeByIds(Arrays.asList(ids), entityType);
+    }
+
+    /**
+     * 根据主键ID列表逻辑删除
+     *
+     * @param ids 主键ID列表
+     * @return 是否成功
+     */
+    default boolean logicDeleteByIds(Serializable... ids) {
+        if (ids == null || ids.length == 0) {
+            return false;
+        }
+        UpdateWrapper<T> qw = new UpdateWrapper<>();
+        qw.set("is_deleted", 1);
+        qw.in("id", (Object[]) ids);
+        return SqlHelper.retBool(update(qw));
     }
 }
