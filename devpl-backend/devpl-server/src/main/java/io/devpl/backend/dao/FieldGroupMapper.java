@@ -4,6 +4,7 @@ import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.GroupField;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,4 +29,10 @@ public interface FieldGroupMapper extends MyBatisPlusMapper<FieldGroup> {
     @Nullable
     @Select(value = "SELECT MAX(id) FROM field_group")
     Long getMaxGroupId();
+
+    @Select(value = """
+        select * from field_group
+        where group_name like concat('%', #{groupName}, '%')
+        """)
+    List<FieldGroup> selectFieldGroups(@Param("groupName") String grouoName);
 }

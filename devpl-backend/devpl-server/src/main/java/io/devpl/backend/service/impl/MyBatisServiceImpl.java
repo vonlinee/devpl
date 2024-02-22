@@ -367,7 +367,9 @@ public class MyBatisServiceImpl implements MyBatisService {
                 final Integer nodeId = curNode.getKey();
                 if (parentNodeMap.containsKey(nodeId)) {
                     TreeNode<MsParamNode> treeNode = parentNodeMap.get(nodeId);
-                    treeNode.getChildren().add(new TreeNode<>(curNode));
+                    if (treeNode != null) {
+                        treeNode.addChild(curNode);
+                    }
                 } else {
                     parentNodeMap.put(nodeId, new TreeNode<>(curNode));
                 }
@@ -713,13 +715,15 @@ public class MyBatisServiceImpl implements MyBatisService {
         if (!CollectionUtils.isEmpty(belongedFiles)) {
             mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
         }
-
-        List<MappedStatementItem> statementItems = mapperXmlFiles.stream().map(this::parseMappedStatements).flatMap(Collection::stream).toList();
-        if (!CollectionUtils.isEmpty(statementItems)) {
-            crudService.saveBatch(statementItems);
-        }
+        crudService.saveBatch(CollectionUtils.toFlatList(mapperXmlFiles, this::parseMappedStatements));
     }
 
+    /**
+     * TODO 解析参数和返回值
+     *
+     * @param mapperFile
+     * @return
+     */
     public List<MappedStatementItem> parseMappedStatements(File mapperFile) {
         List<MappedStatementItem> items = new ArrayList<>();
         try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
@@ -743,6 +747,7 @@ public class MyBatisServiceImpl implements MyBatisService {
 
                 String id = context.getStringAttribute("id");
                 MappedStatementItem item = new MappedStatementItem();
+
                 item.setId(identifierGenerator.nextUUID(null));
                 item.setStatementId(id);
                 item.setBelongFile(mapperFile.getAbsolutePath());

@@ -62,8 +62,8 @@ public class CodeGenerationController {
      * @return 所有生成的根目录
      */
     @PostMapping("/config")
-    public Result<Boolean> saveGeneratorConfig(String content) {
-        return Result.ok(generatorConfigService.saveGeneratorConfig(content));
+    public boolean saveGeneratorConfig(String content) {
+        return generatorConfigService.saveGeneratorConfig(content);
     }
 
     /**
