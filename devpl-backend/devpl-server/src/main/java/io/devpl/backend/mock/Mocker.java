@@ -1,5 +1,7 @@
 package io.devpl.backend.mock;
 
+import io.devpl.backend.entity.FieldGroup;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +15,8 @@ public class Mocker {
     public static void main(String[] args) {
 
         int[] ints = Mocker.split(7, 232);
+
+        FieldGroup group = new FieldGroup();
 
     }
 
