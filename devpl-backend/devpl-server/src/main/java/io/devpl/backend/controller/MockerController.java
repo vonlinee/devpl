@@ -5,7 +5,7 @@ import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.MockColumnListParam;
 import io.devpl.backend.domain.vo.MockField;
 import io.devpl.backend.domain.vo.MockGeneratorVO;
-import io.devpl.backend.entity.DbConnInfo;
+import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.MockerService;
 import jakarta.annotation.Resource;
@@ -27,7 +27,7 @@ public class MockerController {
 
     @GetMapping(value = "/columns")
     public Result<List<MockField>> getMockItems(MockColumnListParam param) {
-        DbConnInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
+        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) {
             return Result.error("数据源不存在");
         }

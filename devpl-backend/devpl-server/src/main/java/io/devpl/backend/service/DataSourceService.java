@@ -8,7 +8,7 @@ import io.devpl.backend.domain.param.DbConnInfoListParam;
 import io.devpl.backend.domain.vo.DBTableDataVO;
 import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
-import io.devpl.backend.entity.DbConnInfo;
+import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 数据源管理
  */
-public interface DataSourceService extends BaseService<DbConnInfo> {
+public interface DataSourceService extends BaseService<RdbmsConnectionInfo> {
 
     /**
      * 数据源ID是否是系统自身数据源
@@ -36,11 +36,11 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      * @param id 数据源ID
      * @return 数据库连接信息
      */
-    DbConnInfo getConnectionInfo(long id);
+    RdbmsConnectionInfo getConnectionInfo(long id);
 
-    ListResult<DbConnInfo> listPage(DbConnInfoListParam param);
+    ListResult<RdbmsConnectionInfo> listPage(DbConnInfoListParam param);
 
-    List<DbConnInfo> listAll();
+    List<RdbmsConnectionInfo> listAll();
 
     List<DataSourceVO> listIdAndNames();
 
@@ -52,7 +52,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      */
     String getDatabaseProductName(Long datasourceId);
 
-    boolean addOne(DbConnInfo connInfo);
+    boolean addOne(RdbmsConnectionInfo connInfo);
 
     /**
      * 获取数据库连接
@@ -61,7 +61,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      * @return 数据库连接
      * @throws SQLException SQLException
      */
-    Connection getConnection(DbConnInfo connInfo) throws SQLException;
+    Connection getConnection(RdbmsConnectionInfo connInfo) throws SQLException;
 
     /**
      * 获取数据库连接
@@ -73,7 +73,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
 
     AbstractQuery getQuery(DBType dbType);
 
-    String getConnectionUrl(DbConnInfo entity);
+    String getConnectionUrl(RdbmsConnectionInfo entity);
 
     /**
      * 获取数据库名称
@@ -81,7 +81,7 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      * @param entity 数据库连接信息
      * @return 数据库名称
      */
-    List<String> getDbNames(DbConnInfo entity);
+    List<String> getDbNames(RdbmsConnectionInfo entity);
 
     /**
      * 获取数据库名称
@@ -91,9 +91,9 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      */
     List<String> getDatabaseNames(Long dataSourceId);
 
-    List<String> getTableNames(DbConnInfo connInfo, String databaseName);
+    List<String> getTableNames(RdbmsConnectionInfo connInfo, String databaseName);
 
-    List<ColumnMetadata> getColumns(DbConnInfo connInfo, String databaseName, String tableName);
+    List<ColumnMetadata> getColumns(RdbmsConnectionInfo connInfo, String databaseName, String tableName);
 
     /**
      * 测试数据源连接
@@ -103,9 +103,9 @@ public interface DataSourceService extends BaseService<DbConnInfo> {
      */
     TestConnVO testJdbcConnection(Long id);
 
-    TestConnVO testJdbcConnection(DbConnInfo connInfo);
+    TestConnVO testJdbcConnection(RdbmsConnectionInfo connInfo);
 
-    DbConnInfo updateOne(DbConnInfo entity);
+    RdbmsConnectionInfo updateOne(RdbmsConnectionInfo entity);
 
     DBTableDataVO getTableData(DBTableDataParam param);
 }

@@ -11,7 +11,7 @@
               <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源"
                 @change="getTableList(true)">
                 <el-option label="默认数据源" :value="-1"></el-option>
-                <el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connName"
+                <el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connectionName"
                   :value="ds.id"></el-option>
               </el-select>
             </el-form-item>

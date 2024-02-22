@@ -1,7 +1,7 @@
 package io.devpl.backend.domain.param;
 
 import io.devpl.backend.common.query.PageParam;
-import io.devpl.backend.entity.DbConnInfo;
+import io.devpl.backend.entity.RdbmsConnectionInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,5 +27,5 @@ public class DBTableDataParam extends PageParam {
     /**
      * 连接配置
      */
-    private DbConnInfo connInfo;
+    private RdbmsConnectionInfo connInfo;
 }

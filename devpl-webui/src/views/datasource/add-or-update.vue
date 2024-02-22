@@ -5,8 +5,8 @@
       @keyup.enter="submitHandle()">
       <el-row>
         <el-col :span="16">
-          <el-form-item label="连接名" prop="connName">
-            <el-input v-model="dataForm.connName" placeholder="连接名"></el-input>
+          <el-form-item label="连接名" prop="connectionName">
+            <el-input v-model="dataForm.connectionName" placeholder="连接名"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -50,8 +50,8 @@
           <el-option v-for="item in databaseNames" :key="item" :label="item" :value="item" />
         </el-select>
       </el-form-item>
-      <el-form-item label="数据库URL" prop="connUrl">
-        <el-input v-model="dataForm.connUrl" placeholder="数据库URL"></el-input>
+      <el-form-item label="数据库URL" prop="connectionUrl">
+        <el-input v-model="dataForm.connectionUrl" placeholder="数据库URL"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -92,8 +92,8 @@ const dataForm = reactive({
   host: "127.0.0.1",
   port: 3306,
   dbName: "",
-  connName: "",
-  connUrl: "",
+  connectionName: "",
+  connectionUrl: "",
   username: "root",
   password: "123456",
 })
@@ -186,7 +186,7 @@ const dataRules = ref({
   dbType: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   host: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   port: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
-  connName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
+  connectionName: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   username: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
   password: [{ required: true, message: "必填项不能为空", trigger: "blur" }],
 })

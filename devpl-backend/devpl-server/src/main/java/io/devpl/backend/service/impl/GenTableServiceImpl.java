@@ -102,7 +102,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
         DBType dbType = DBType.MYSQL;
         if (!dataSourceService.isSystemDataSource(datasourceId)) {
-            DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+            RdbmsConnectionInfo connInfo = dataSourceService.getById(datasourceId);
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
 
@@ -250,7 +250,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     public void sync(Long id) {
         GenTable table = this.getById(id);
 
-        DbConnInfo connInfo = dataSourceService.getById(table.getDatasourceId());
+        RdbmsConnectionInfo connInfo = dataSourceService.getById(table.getDatasourceId());
 
         DBType dbType = DBType.getValue(connInfo.getDbType());
         AbstractQuery query = dataSourceService.getQuery(dbType);
@@ -372,7 +372,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 //        return new JdbcDatabaseMetadataLoader(connection);
         DBType dbType = DBType.MYSQL;
         if (!dataSourceService.isSystemDataSource(datasourceId)) {
-            DbConnInfo connInfo = dataSourceService.getById(datasourceId);
+            RdbmsConnectionInfo connInfo = dataSourceService.getById(datasourceId);
             if (connInfo != null) {
                 dbType = DBType.getValue(connInfo.getDbType());
             }

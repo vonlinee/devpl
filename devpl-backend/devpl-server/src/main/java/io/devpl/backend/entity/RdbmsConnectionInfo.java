@@ -12,12 +12,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 数据库连接信息管理
+ * 关系型数据库连接信息
  */
 @Getter
 @Setter
-@TableName("database_connection_info")
-public class DbConnInfo implements Serializable {
+@TableName("rdbms_connection_info")
+public class RdbmsConnectionInfo implements Serializable {
     /**
      * id
      */
@@ -57,14 +57,14 @@ public class DbConnInfo implements Serializable {
     /**
      * 连接名
      */
-    @TableField(value = "conn_name")
-    private String connName;
+    @TableField(value = "connection_name")
+    private String connectionName;
 
     /**
      * URL
      */
-    @TableField(value = "conn_url")
-    private String connUrl;
+    @TableField(value = "connection_url")
+    private String connectionUrl;
 
     /**
      * 用户名

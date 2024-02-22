@@ -44,11 +44,11 @@ type DbConnInfo = {
   /**
    * 连接名
    */
-  connName?: null | string
+  connectionName?: null | string
   /**
    * URL
    */
-  connUrl?: null | string
+  connectionUrl?: null | string
   /**
    * 创建时间
    */

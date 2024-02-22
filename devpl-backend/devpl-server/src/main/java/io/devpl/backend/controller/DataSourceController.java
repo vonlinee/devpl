@@ -8,7 +8,7 @@ import io.devpl.backend.domain.vo.DBTableDataVO;
 import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.DriverTypeVO;
 import io.devpl.backend.domain.vo.TestConnVO;
-import io.devpl.backend.entity.DbConnInfo;
+import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.GenTable;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.GenTableService;
@@ -42,7 +42,7 @@ public class DataSourceController {
      * @return 分页查询结果
      */
     @GetMapping("/datasource/page")
-    public ListResult<DbConnInfo> page(DbConnInfoListParam param) {
+    public ListResult<RdbmsConnectionInfo> page(DbConnInfoListParam param) {
         return datasourceService.listPage(param);
     }
 
@@ -52,7 +52,7 @@ public class DataSourceController {
      * @return 数据源列表
      */
     @GetMapping("/datasource/list")
-    public ListResult<DbConnInfo> list() {
+    public ListResult<RdbmsConnectionInfo> list() {
         return ListResult.ok(datasourceService.listAll());
     }
 
@@ -77,7 +77,7 @@ public class DataSourceController {
      * @return 数据源信息
      */
     @GetMapping("/datasource/{id}")
-    public Result<DbConnInfo> get(@PathVariable("id") Long id) {
+    public Result<RdbmsConnectionInfo> get(@PathVariable("id") Long id) {
         return Result.ok(datasourceService.getById(id));
     }
 
@@ -99,7 +99,7 @@ public class DataSourceController {
      * @return 连接成功，返回驱动及数据库信息
      */
     @PostMapping("/datasource/connection/test")
-    public Result<TestConnVO> test(@RequestBody DbConnInfo connInfo) {
+    public Result<TestConnVO> test(@RequestBody RdbmsConnectionInfo connInfo) {
         return Result.ok(datasourceService.testJdbcConnection(connInfo));
     }
 
@@ -122,7 +122,7 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @PostMapping(value = "/datasource/dbnames")
-    public List<String> getDbNames(@RequestBody DbConnInfo entity) {
+    public List<String> getDbNames(@RequestBody RdbmsConnectionInfo entity) {
         return datasourceService.getDbNames(entity);
     }
 
@@ -138,7 +138,7 @@ public class DataSourceController {
         @RequestParam(value = "dataSourceId") Long id,
         @RequestParam(value = "databaseName", required = false) String dbName,
         @RequestParam(value = "pattern", required = false) String tableNamePattern) {
-        DbConnInfo connInfo = datasourceService.getConnectionInfo(id);
+        RdbmsConnectionInfo connInfo = datasourceService.getConnectionInfo(id);
         if (connInfo == null) {
             return Result.error("资源不存在");
         }
@@ -171,7 +171,7 @@ public class DataSourceController {
      * @return 是否成功
      */
     @PostMapping("/datasource")
-    public boolean save(@RequestBody DbConnInfo entity) {
+    public boolean save(@RequestBody RdbmsConnectionInfo entity) {
         if (entity.getId() != null) {
             datasourceService.updateOne(entity);
             return true;
@@ -219,7 +219,7 @@ public class DataSourceController {
     public Result<DBTableDataVO> getTableData(@RequestBody DBTableDataParam param) {
         try {
             if (param.getConnInfo() == null) {
-                DbConnInfo connInfo = datasourceService.getConnectionInfo(param.getDataSourceId());
+                RdbmsConnectionInfo connInfo = datasourceService.getConnectionInfo(param.getDataSourceId());
                 if (connInfo == null) {
                     return Result.error("数据源不存在");
                 }
