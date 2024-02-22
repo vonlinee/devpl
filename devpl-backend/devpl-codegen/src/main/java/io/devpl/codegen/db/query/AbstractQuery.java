@@ -1,4 +1,4 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ public interface AbstractQuery {
      * 表信息查询 SQL
      * 需要数据库名称，表名称，表注释信息
      */
-    String getTableQuerySql(@Nullable String tableName, boolean likeMatch);
+    String getTableQuerySql(String catalog, String schemaName, @Nullable String tableName, boolean likeMatch);
 
     /**
      * 表名称 ResultSet 列名

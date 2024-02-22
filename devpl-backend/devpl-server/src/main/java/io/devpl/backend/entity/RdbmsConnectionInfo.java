@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.devpl.codegen.db.JDBCDriver;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Properties;
 
 /**
  * 关系型数据库连接信息
@@ -51,6 +54,7 @@ public class RdbmsConnectionInfo implements Serializable {
     /**
      * 数据库名称
      */
+    @Nullable
     @TableField(value = "db_name")
     private String dbName;
 
@@ -81,8 +85,8 @@ public class RdbmsConnectionInfo implements Serializable {
     /**
      * 驱动属性
      */
-    @TableField(value = "driver_props")
-    private String driverProps;
+    @TableField(value = "driver_props", typeHandler = JacksonTypeHandler.class)
+    private Properties driverProperties;
 
     /**
      * 创建时间
@@ -109,4 +113,17 @@ public class RdbmsConnectionInfo implements Serializable {
      */
     @TableField(value = "driver_type")
     private String driverType;
+
+    public String buildConnectionUrl() {
+        return buildConnectionUrl(this.dbName);
+    }
+
+    public String buildConnectionUrl(String databaseName) {
+        String connectionUrl = null;
+        if (this.driverClassName != null) {
+            JDBCDriver driver = JDBCDriver.findByDriverClassName(this.driverClassName);
+            connectionUrl = driver.getConnectionUrl(this.host, this.port, databaseName, this.driverProperties);
+        }
+        return connectionUrl;
+    }
 }

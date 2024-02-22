@@ -118,7 +118,7 @@ public enum JDBCDriver {
      *
      * @param hostname     主机IP
      * @param port         端口号
-     * @param databaseName 数据库名
+     * @param databaseName 数据库名，如果为空则不进行拼接
      * @return JDBC URL连接字符串
      */
     public String getConnectionUrl(String hostname, String port, String databaseName, Properties props) {
@@ -130,7 +130,7 @@ public enum JDBCDriver {
         return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, port, databaseName), props);
     }
 
-    private int parsePortNumber(String port) {
+    public int parsePortNumber(String port) {
         int portNum;
         if (port == null || port.isEmpty()) {
             portNum = 3306;

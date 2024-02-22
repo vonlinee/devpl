@@ -1,4 +1,4 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
@@ -14,7 +14,7 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName, boolean likeMatch) {
+    public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("select dt.table_name, dtc.comments from user_tables dt,user_tab_comments dtc ");
         sql.append("where dt.table_name = dtc.table_name ");

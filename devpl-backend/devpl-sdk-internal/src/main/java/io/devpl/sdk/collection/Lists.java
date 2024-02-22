@@ -4,6 +4,7 @@ import io.devpl.sdk.util.ArrayUtils;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 /**
  * List工具类
@@ -112,5 +113,25 @@ public final class Lists {
 
     public static <T> boolean isEmpty(List<T> list) {
         return list == null || list.isEmpty();
+    }
+
+    /**
+     * 取第一个满足条件的元素
+     *
+     * @param list      list
+     * @param condition 条件
+     * @param <E>       元素类型
+     * @return 第一个元素
+     */
+    public static <E> E first(List<E> list, Predicate<E> condition) {
+        if (isEmpty(list)) {
+            return null;
+        }
+        for (E element : list) {
+            if (condition.test(element)) {
+                return element;
+            }
+        }
+        return null;
     }
 }

@@ -6,7 +6,6 @@ import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -41,34 +40,36 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     }
 
     @Override
-    public Connection getConnection(String driverClassName, String url, String username, String password, Properties properties) {
+    public Connection getConnection(String driverClassName, String jdbcUrl, String username, String password, Properties properties) throws SQLException {
         JDBCDriver driveType = JDBCDriver.findByDriverClassName(driverClassName);
+        Connection connection = null;
         if (driveType != null) {
             DriverInfo driverInfo = drivers.get(driveType);
             if (driverInfo == null) {
                 // 驱动未注册
-                throw new CannotGetJdbcConnectionException("驱动未注册");
+                throw new SQLException("驱动" + driverClassName + "未注册");
             }
             try {
                 if (driverInfo.driver != null) {
-                    Connection connection = driverInfo.driver.connect(url, prepareConnectionProperties(username, password, properties));
+                    connection = driverInfo.driver.connect(jdbcUrl, prepareConnectionProperties(username, password, properties));
                     if (connection != null) {
-                        log.info("获取连接成功 驱动文件{} 连接{}", driverInfo.filename, connection);
+                        if (log.isDebugEnabled()) {
+                            log.debug("获取连接成功 驱动文件{} 连接{}", driverInfo.filename, connection);
+                        }
                     }
-                    return connection;
                 }
             } catch (Throwable e) {
-                if (e instanceof SQLException sqlException) {
-                    throw new CannotGetJdbcConnectionException("获取连接失败", sqlException);
+                if (e instanceof SQLException) {
+                    throw e;
                 }
-                log.error("获取连接失败 {}", driverInfo.filename, e);
+                throw new SQLException(e.getMessage(), e);
             }
         }
-        return null;
+        return connection;
     }
 
     @Override
-    public boolean isRegisted(String driverClassName) {
+    public boolean isRegistered(String driverClassName) {
         JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
         if (driver == null) {
             return false;

@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  *
  * @since 17
  */
-@SuppressWarnings("unused")
 public abstract class StringUtils {
 
     /**
@@ -129,16 +128,6 @@ public abstract class StringUtils {
     }
 
     /**
-     * 字符串是否有长度
-     *
-     * @param str 字符串
-     * @return 字符串是否有长度
-     */
-    public static boolean hasLength(String str) {
-        return hasLength((CharSequence) str);
-    }
-
-    /**
      * 将字符串转换为同意最长的长度
      *
      * @param strings 数组
@@ -215,7 +204,7 @@ public abstract class StringUtils {
      * that commonly deals with Strings but generally has to iterate over
      * Objects since attributes may e.g. be primitive value objects as well.
      * <p><b>Note: If the object is typed to {@code String} upfront, prefer
-     * {@link #hasLength(String)} or {@link #hasText(String)} instead.</b>
+     * {@link #hasText(String)} instead.</b>
      *
      * @param str the candidate object (possibly a {@code String})
      */
@@ -396,7 +385,6 @@ public abstract class StringUtils {
      * @return {@code true} if the {@code String} is not {@code null}, its
      * length is greater than 0, and it does not contain whitespace only
      * @see #hasText(CharSequence)
-     * @see #hasLength(String)
      * @see Character#isWhitespace
      */
     public static boolean hasText(String str) {
@@ -459,7 +447,6 @@ public abstract class StringUtils {
      *
      * @param str the {@code CharSequence} to check (maybe {@code null})
      * @return {@code true} if the {@code CharSequence} is not {@code null} and has length
-     * @see #hasLength(String)
      * @see #hasText(CharSequence)
      */
     public static boolean hasLength(CharSequence str) {
@@ -2311,8 +2298,7 @@ public abstract class StringUtils {
      * @since 5.3.27
      */
     public static String truncate(CharSequence charSequence, int threshold) {
-        Assert.isTrue(threshold > 0,
-            () -> "Truncation threshold must be a positive number: " + threshold);
+        Assert.isTrue(threshold > 0, () -> "Truncation threshold must be a positive number: " + threshold);
         if (charSequence.length() > threshold) {
             return charSequence.subSequence(0, threshold) + TRUNCATION_SUFFIX;
         }
@@ -2482,8 +2468,7 @@ public abstract class StringUtils {
      * @return ignore
      */
     public static String prefixToLower(String rawString, int index) {
-        return rawString.substring(0, index).toLowerCase() +
-            rawString.substring(index);
+        return rawString.substring(0, index).toLowerCase() + rawString.substring(index);
     }
 
     /**

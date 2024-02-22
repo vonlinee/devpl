@@ -9,6 +9,7 @@ import io.devpl.sdk.validation.Assert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
 
     List<DataTypeMappingListVO> listDataTypeMappings(@Param("typeId") Long typeId);
 
-    default List<DataTypeMapping> selectListByIds(Collection<Long> ids) {
+    default List<DataTypeMapping> selectListByIds(Collection<? extends Serializable> ids) {
         Assert.notEmpty(ids, "ID列表为空");
         LambdaQueryWrapper<DataTypeMapping> qw = new LambdaQueryWrapper<>();
         qw.in(DataTypeMapping::getId, ids);

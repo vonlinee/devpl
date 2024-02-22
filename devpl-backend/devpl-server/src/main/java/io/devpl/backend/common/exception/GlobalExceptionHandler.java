@@ -2,10 +2,15 @@ package io.devpl.backend.common.exception;
 
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.common.query.StatusCode;
+import io.devpl.codegen.jdbc.RuntimeSQLException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
 
 /**
  * 全局异常处理器
@@ -59,5 +64,12 @@ public class GlobalExceptionHandler {
         Result<String> result = Result.error(StatusCode.INTERNAL_SERVER_ERROR);
         result.setMsg(ex.getMessage());
         return result;
+    }
+
+    public static Throwable wrap(Throwable throwable) {
+        if (throwable instanceof SQLException ex) {
+            return RuntimeSQLException.wrap(ex);
+        }
+        return throwable;
     }
 }

@@ -3,8 +3,7 @@ package io.devpl.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.backend.common.query.ListResult;
-import io.devpl.backend.config.query.*;
-import io.devpl.backend.dao.DbConnInfoMapper;
+import io.devpl.backend.dao.RdbmsConnectionInfoMapper;
 import io.devpl.backend.domain.param.DBTableDataParam;
 import io.devpl.backend.domain.param.DbConnInfoListParam;
 import io.devpl.backend.domain.vo.DBTableDataVO;
@@ -18,6 +17,7 @@ import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.codegen.jdbc.JdbcUtils;
+import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
@@ -39,14 +39,14 @@ import java.util.Map;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsConnectionInfo> implements DataSourceService {
+public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper, RdbmsConnectionInfo> implements DataSourceService {
 
     /**
      * 程序自身使用的数据源
      */
     private final DataSource dataSource;
     private final JdbcDriverManager driverManager;
-    private final DbConnInfoMapper dbConnInfoMapper;
+    private final RdbmsConnectionInfoMapper dbConnInfoMapper;
 
     @Override
     public boolean isSystemDataSource(Long id) {
@@ -104,47 +104,39 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
      * @return 数据库连接
      */
     @Override
-    public Connection getConnection(RdbmsConnectionInfo connInfo) throws SQLException {
-        if (connInfo.getId() != null && isSystemDataSource(connInfo.getId())) {
-            // 本系统连接的数据源
-            return dataSource.getConnection();
+    public Connection getRdbmsConnection(RdbmsConnectionInfo connInfo) throws RuntimeSQLException {
+        try {
+            if (connInfo.getId() != null && isSystemDataSource(connInfo.getId())) {
+                // 本系统连接的数据源
+                return dataSource.getConnection();
+            }
+            return driverManager.getConnection(connInfo.getDriverClassName(), connInfo.buildConnectionUrl(), connInfo.getUsername(), connInfo.getPassword(), connInfo.getDriverProperties());
+        } catch (SQLException e) {
+            throw RuntimeSQLException.wrap(e);
         }
-        return driverManager.getConnection(connInfo.getDriverClassName(), connInfo.getConnectionUrl(), connInfo.getUsername(), connInfo.getPassword(), null);
     }
 
     @Override
-    public Connection getConnection(Long dataSourceId) throws SQLException {
-        if (dataSourceId != null && isSystemDataSource(dataSourceId)) {
-            return dataSource.getConnection();
+    public Connection getConnection(Long dataSourceId, String databaseName, boolean useDatabaseName) throws RuntimeSQLException {
+        try {
+            if (dataSourceId == null || isSystemDataSource(dataSourceId)) {
+                return dataSource.getConnection();
+            }
+            RdbmsConnectionInfo connectionInfo = getConnectionInfo(dataSourceId);
+            if (connectionInfo == null) {
+                throw new RuntimeSQLException("数据源%s不存在", dataSourceId);
+            }
+            if (useDatabaseName) {
+                if (StringUtils.hasText(databaseName)) {
+                    connectionInfo.setDbName(databaseName);
+                }
+            } else {
+                connectionInfo.setDbName(null); // 不使用数据库名称获取连接
+            }
+            return getRdbmsConnection(connectionInfo);
+        } catch (Throwable e) {
+            throw RuntimeSQLException.wrap(e);
         }
-        if (dataSourceId == null) {
-            return dataSource.getConnection();
-        }
-
-        RdbmsConnectionInfo connectionInfo = getConnectionInfo(dataSourceId);
-        if (connectionInfo == null) {
-            return null;
-        }
-        return getConnection(connectionInfo);
-    }
-
-    @Override
-    public AbstractQuery getQuery(DBType dbType) {
-        AbstractQuery dbQuery = null;
-        if (dbType == DBType.MYSQL) {
-            dbQuery = new MySqlQuery();
-        } else if (dbType == DBType.ORACLE) {
-            dbQuery = new OracleQuery();
-        } else if (dbType == DBType.POSTGRE_SQL) {
-            dbQuery = new PostgreSqlQuery();
-        } else if (dbType == DBType.SQL_SERVER) {
-            dbQuery = new SQLServerQuery();
-        } else if (dbType == DBType.DM) {
-            dbQuery = new DmQuery();
-        } else if (dbType == DBType.CLICK_HOUSE) {
-            dbQuery = new ClickHouseQuery();
-        }
-        return dbQuery;
     }
 
     /**
@@ -175,7 +167,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
             entity.setDriverClassName(driver.getDriverClassName());
         }
 
-        try (Connection connection = getConnection(entity)) {
+        try (Connection connection = getRdbmsConnection(entity)) {
             if (connection == null) {
                 return Collections.emptyList();
             }
@@ -204,7 +196,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
         }
         connInfo.setConnectionUrl(connectionUrl);
         List<String> list = new ArrayList<>();
-        try (Connection connection = getConnection(connInfo)) {
+        try (Connection connection = getRdbmsConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
             String catalog = connection.getCatalog();
             ResultSet rs = metaData.getTables(catalog, databaseName, null, null);
@@ -229,14 +221,14 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
     @Override
     public List<ColumnMetadata> getColumns(RdbmsConnectionInfo connInfo, String databaseName, String tableName) {
         List<ColumnMetadata> result = new ArrayList<>();
-        try (Connection connection = getConnection(connInfo)) {
+        try (Connection connection = getRdbmsConnection(connInfo)) {
             DatabaseMetaData dmd = connection.getMetaData();
             String catalog = connection.getCatalog();
             try (ResultSet resultSet = dmd.getColumns(catalog, databaseName, tableName, "%")) {
                 result.addAll(DBUtils.extractRows(resultSet, ColumnMetadata.class));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw RuntimeSQLException.wrap(e);
         }
         return result;
     }
@@ -244,7 +236,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
     @Override
     public TestConnVO testJdbcConnection(Long id) {
         TestConnVO vo = new TestConnVO();
-        try (Connection connection = this.getConnection(id)) {
+        try (Connection connection = this.getConnection(id, null, false)) {
             if (connection == null) {
                 vo.setFailed(true);
                 vo.setErrorMsg("connection is null");
@@ -266,12 +258,12 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
             connInfo.setConnectionUrl(getConnectionUrl(connInfo));
         }
         TestConnVO vo = new TestConnVO();
-        try (Connection connection = getConnection(connInfo)) {
+        try (Connection connection = getRdbmsConnection(connInfo)) {
             DatabaseMetaData metaData = connection.getMetaData();
             vo.setDbmsType(metaData.getDatabaseProductName());
             vo.setUseSsl(false);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw RuntimeSQLException.wrap(e);
         }
         return vo;
     }
@@ -294,10 +286,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
         param.getConnInfo().setDbName(param.getDbName());
         // 更换连接地址
         param.getConnInfo().setConnectionUrl(getConnectionUrl(param.getConnInfo()));
-        try (Connection connection = getConnection(param.getConnInfo())) {
+        try (Connection connection = getRdbmsConnection(param.getConnInfo())) {
             String sql = "select * from " + param.getTableName();
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-                try (ResultSet resultSet = pstmt.executeQuery()) {
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                try (ResultSet resultSet = stmt.executeQuery()) {
                     // 表头
                     List<ResultSetColumnMetadata> columnMetadata = DBUtils.getColumnMetadata(resultSet);
                     // 表数据
@@ -307,7 +299,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DbConnInfoMapper, RdbmsCo
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw RuntimeSQLException.wrap(e);
         }
         return vo;
     }

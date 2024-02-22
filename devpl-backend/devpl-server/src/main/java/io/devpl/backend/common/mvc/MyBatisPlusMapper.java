@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import io.devpl.backend.common.query.PageParam;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
- * 基础Mapper
+ * 扩展MyBatisPlus的Mapper
+ * 在Mapper层封装批量操作，不用再使用Service
  */
 public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
 
@@ -56,5 +59,17 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      */
     default IPage<T> selectPage(PageParam param, Wrapper<T> qw) {
         return selectPage(param.asPage(), qw);
+    }
+
+    default boolean insertBatch(Collection<T> entities) {
+        return Db.saveBatch(entities);
+    }
+
+    default boolean updateBatchById(Collection<T> entities) {
+        return Db.updateBatchById(entities);
+    }
+
+    default boolean insertOrUpdateBatch(Collection<T> entities) {
+        return Db.saveOrUpdateBatch(entities);
     }
 }

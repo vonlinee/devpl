@@ -1,12 +1,18 @@
-type GenTable = {
+/**
+ * 表生成信息
+ */
+type TableGeneration = {
   id: number
   tableName: string
   className: string
   tableComment: string
-  fieldList: GenTableField[]
+  fieldList: TableGenerationField[]
 }
 
-type GenTableField = {
+/**
+ * 生成的表的字段
+ */
+type TableGenerationField = {
   tableId: number
   fieldName: string
   sort: number

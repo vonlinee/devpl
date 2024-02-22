@@ -1,4 +1,4 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
@@ -21,8 +21,15 @@ public class ClickHouseQuery implements AbstractQuery {
         return DBType.CLICK_HOUSE;
     }
 
+    /**
+     * <a href="https://clickhouse.com/docs/zh/operations/system-tables/tables">...</a>
+     *
+     * @param tableName 表名
+     * @param likeMatch 是否模糊匹配
+     * @return 表查询sql
+     */
     @Override
-    public String getTableQuerySql(String tableName, boolean likeMatch) {
+    public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM system.tables WHERE 1=1 ");
 

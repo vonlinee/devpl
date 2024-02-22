@@ -1,7 +1,9 @@
 package io.devpl.backend.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.devpl.backend.common.mvc.BaseServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.dao.GenFieldTypeMapper;
 import io.devpl.backend.domain.param.Query;
@@ -21,15 +23,22 @@ import java.util.stream.Collectors;
  * 字段类型管理
  */
 @Service
-public class GenFieldTypeServiceImpl extends BaseServiceImpl<GenFieldTypeMapper, GenFieldType> implements GenFieldTypeService {
+public class GenFieldTypeServiceImpl extends MyBatisPlusServiceImpl<GenFieldTypeMapper, GenFieldType> implements GenFieldTypeService {
 
     @Override
     public ListResult<GenFieldType> page(Query query) {
-        IPage<GenFieldType> page = baseMapper.selectPage(
-            getPage(query),
-            getWrapper(query)
-        );
-        return ListResult.ok(page);
+        Page<GenFieldType> page1 = new Page<>(query.getPage(), query.getLimit());
+        page1.addOrder(OrderItem.desc("id"));
+
+        QueryWrapper<GenFieldType> wrapper = new QueryWrapper<>();
+        wrapper.like(StringUtils.hasText(query.getCode()), "code", query.getCode());
+        wrapper.like(StringUtils.hasText(query.getTableName()), "table_name", query.getTableName());
+        wrapper.like(StringUtils.hasText(query.getAttrType()), "attr_type", query.getAttrType());
+        wrapper.like(StringUtils.hasText(query.getColumnType()), "column_type", query.getColumnType());
+        wrapper.like(StringUtils.hasText(query.getConnName()), "conn_name", query.getConnName());
+        wrapper.eq(StringUtils.hasText(query.getDbType()), "db_type", query.getDbType());
+        wrapper.like(StringUtils.hasText(query.getProjectName()), "project_name", query.getProjectName());
+        return ListResult.ok(baseMapper.selectPage(page1, wrapper));
     }
 
     @Override

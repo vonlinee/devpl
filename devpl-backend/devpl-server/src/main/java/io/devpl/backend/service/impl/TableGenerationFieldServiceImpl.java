@@ -1,13 +1,13 @@
 package io.devpl.backend.service.impl;
 
-import io.devpl.backend.common.mvc.BaseServiceImpl;
+import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.dao.GenTableFieldMapper;
 import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.entity.GenFieldType;
-import io.devpl.backend.entity.GenTableField;
+import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.GenFieldTypeService;
-import io.devpl.backend.service.GenTableFieldService;
+import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.codegen.core.CaseFormat;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ import java.util.Map;
  */
 @Service
 @AllArgsConstructor
-public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, GenTableField> implements GenTableFieldService {
+public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<GenTableFieldMapper, TableGenerationField> implements TableGenerationFieldService {
     private final GenFieldTypeService fieldTypeService;
 
     @Override
-    public List<GenTableField> listByTableId(Long tableId) {
+    public List<TableGenerationField> listByTableId(Long tableId) {
         return baseMapper.getByTableId(tableId);
     }
 
@@ -34,21 +34,21 @@ public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, 
     }
 
     @Override
-    public void updateTableField(Long tableId, List<GenTableField> tableFieldList) {
+    public void updateTableField(Long tableId, List<TableGenerationField> tableFieldList) {
         // 更新字段数据
         int sort = 0;
-        for (GenTableField tableField : tableFieldList) {
+        for (TableGenerationField tableField : tableFieldList) {
             tableField.setSort(sort++);
             this.updateById(tableField);
         }
     }
 
     @Override
-    public void initFieldList(List<GenTableField> tableFieldList) {
+    public List<TableGenerationField> initTableFields(List<TableGenerationField> tableFieldList) {
         // 字段类型、属性类型映射
         Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
         int index = 0;
-        for (GenTableField field : tableFieldList) {
+        for (TableGenerationField field : tableFieldList) {
             field.setAttrName(CaseFormat.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
             GenFieldType fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
@@ -68,5 +68,6 @@ public class TableFieldServiceImpl extends BaseServiceImpl<GenTableFieldMapper, 
             field.setFormType(FormType.TEXT.getText());
             field.setSort(index++);
         }
+        return tableFieldList;
     }
 }

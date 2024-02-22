@@ -12,8 +12,8 @@ import java.util.List;
  */
 @Getter
 @Setter
-@TableName("gen_table")
-public class GenTable {
+@TableName("table_generation")
+public class TableGeneration {
 
     /**
      * 主键ID
@@ -97,5 +97,5 @@ public class GenTable {
      * 字段列表
      */
     @TableField(exist = false)
-    private List<GenTableField> fieldList;
+    private List<TableGenerationField> fieldList;
 }

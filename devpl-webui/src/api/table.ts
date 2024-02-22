@@ -6,11 +6,11 @@ import { Keys } from "@/api/index"
  * @param id
  */
 export const apiGetGenTableById = (id: number) => {
-  return http.get<GenTable>("/gen/table/" + id)
+  return http.get<TableGeneration>("/gen/table/" + id)
 }
 
 export const apiListGenTables = (page: number, limit: number, params: any) => {
-  return http.get<GenTable>("/gen/table/page", {
+  return http.get<TableGeneration>("/gen/table/page", {
     pageIndex: page,
     pageSize: limit,
     ...params,

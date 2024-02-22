@@ -9,9 +9,9 @@ import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.DriverTypeVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
-import io.devpl.backend.entity.GenTable;
+import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.service.DataSourceService;
-import io.devpl.backend.service.GenTableService;
+import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.validation.Assert;
@@ -33,7 +33,7 @@ import java.util.List;
 public class DataSourceController {
 
     private DataSourceService datasourceService;
-    private GenTableService tableService;
+    private TableGenerationService tableService;
 
     /**
      * 获取数据源列表
@@ -77,8 +77,8 @@ public class DataSourceController {
      * @return 数据源信息
      */
     @GetMapping("/datasource/{id}")
-    public Result<RdbmsConnectionInfo> get(@PathVariable("id") Long id) {
-        return Result.ok(datasourceService.getById(id));
+    public RdbmsConnectionInfo get(@PathVariable("id") Long id) {
+        return datasourceService.getById(id);
     }
 
     /**
@@ -196,13 +196,13 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/datasource/table/list")
-    public ListResult<GenTable> tableList(
+    public ListResult<TableGeneration> tableList(
         @RequestParam(value = "dataSourceId") Long id,
         @RequestParam(value = "databaseName", required = false) String databaseName,
         @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
-            return ListResult.ok(tableService.getTableList(id, databaseName, tableNamePattern));
+            return ListResult.ok(tableService.getGenerationTargetTables(id, databaseName, tableNamePattern));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ListResult.error("数据源配置错误，请检查数据源配置！");

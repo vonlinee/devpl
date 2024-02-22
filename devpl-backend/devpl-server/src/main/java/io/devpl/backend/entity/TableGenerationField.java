@@ -13,8 +13,8 @@ import org.apache.ibatis.type.JdbcType;
  */
 @Getter
 @Setter
-@TableName("gen_table_field")
-public class GenTableField {
+@TableName("table_generation_field")
+public class TableGenerationField {
 
     /**
      * 主键ID

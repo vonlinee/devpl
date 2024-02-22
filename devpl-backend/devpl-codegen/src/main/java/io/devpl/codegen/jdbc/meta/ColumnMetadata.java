@@ -77,6 +77,7 @@ public class ColumnMetadata {
     private Integer nullable;
 
     /**
+     * 字段注释信息
      * REMARKS String => comment describing column (may be null)
      */
     private String remarks;
@@ -115,6 +116,7 @@ public class ColumnMetadata {
      * NO --- if the column cannot include NULLs
      * empty string --- if the nullability for the column is unknown
      *
+     * @see <a href="https://stackoverflow.com/questions/26490427/jdbc-getcolumns-differences-between-is-nullable-and-nullable">JDBC getColumns differences between "IS_NULLABLE" and "NULLABLE"</a>
      * @see ColumnMetadata#nullable
      */
     private String isNullable;
@@ -158,6 +160,23 @@ public class ColumnMetadata {
      * empty string --- if it cannot be determined whether this is a generated column
      */
     private String isGeneratedcolumn;
+
+    /**
+     * 不同数据库平台的数据类型名称
+     * 比如mysql里的varchar, oracle的varchar2等等
+     * 此字段并不是jdbc元数据中可获取的值
+     *
+     * @see java.sql.DatabaseMetaData#getColumns(String, String, String, String)
+     */
+    private String platformDataType;
+
+    public String getPlatformDataType() {
+        return platformDataType;
+    }
+
+    public void setPlatformDataType(String platformDataType) {
+        this.platformDataType = platformDataType;
+    }
 
     public String getTableCat() {
         return tableCat;
@@ -376,31 +395,7 @@ public class ColumnMetadata {
 
     @Override
     public String toString() {
-        return "ColumnMetadata{" + "tableCat='" + tableCat + '\'' +
-            ", tableSchem='" + tableSchem + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", columnName='" + columnName + '\'' +
-            ", dataType=" + dataType +
-            ", typeName='" + typeName + '\'' +
-            ", columnSize=" + columnSize +
-            ", bufferLength=" + bufferLength +
-            ", decimalDigits='" + decimalDigits + '\'' +
-            ", numPrecRadix=" + numPrecRadix +
-            ", nullable=" + nullable +
-            ", remarks='" + remarks + '\'' +
-            ", columnDef='" + columnDef + '\'' +
-            ", sqlDataType=" + sqlDataType +
-            ", sqlDatetimeSub=" + sqlDatetimeSub +
-            ", charOctetLength=" + charOctetLength +
-            ", ordinalPosition=" + ordinalPosition +
-            ", isNullable='" + isNullable + '\'' +
-            ", scopeCatalog='" + scopeCatalog + '\'' +
-            ", scopeSchema='" + scopeSchema + '\'' +
-            ", scopeTable='" + scopeTable + '\'' +
-            ", sourceDataType='" + sourceDataType + '\'' +
-            ", isAutoincrement='" + isAutoincrement + '\'' +
-            ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' +
-            '}';
+        return "ColumnMetadata{" + "tableCat='" + tableCat + '\'' + ", tableSchem='" + tableSchem + '\'' + ", tableName='" + tableName + '\'' + ", columnName='" + columnName + '\'' + ", dataType=" + dataType + ", typeName='" + typeName + '\'' + ", columnSize=" + columnSize + ", bufferLength=" + bufferLength + ", decimalDigits='" + decimalDigits + '\'' + ", numPrecRadix=" + numPrecRadix + ", nullable=" + nullable + ", remarks='" + remarks + '\'' + ", columnDef='" + columnDef + '\'' + ", sqlDataType=" + sqlDataType + ", sqlDatetimeSub=" + sqlDatetimeSub + ", charOctetLength=" + charOctetLength + ", ordinalPosition=" + ordinalPosition + ", isNullable='" + isNullable + '\'' + ", scopeCatalog='" + scopeCatalog + '\'' + ", scopeSchema='" + scopeSchema + '\'' + ", scopeTable='" + scopeTable + '\'' + ", sourceDataType='" + sourceDataType + '\'' + ", isAutoincrement='" + isAutoincrement + '\'' + ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' + '}';
     }
 
     public void initialize(ResultSet resultSet) throws SQLException {

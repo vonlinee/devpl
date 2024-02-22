@@ -4,10 +4,10 @@ import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
-import io.devpl.backend.entity.GenTable;
-import io.devpl.backend.entity.GenTableField;
-import io.devpl.backend.service.GenTableFieldService;
-import io.devpl.backend.service.GenTableService;
+import io.devpl.backend.entity.TableGeneration;
+import io.devpl.backend.entity.TableGenerationField;
+import io.devpl.backend.service.TableGenerationFieldService;
+import io.devpl.backend.service.TableGenerationService;
 import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +22,9 @@ import java.util.List;
 public class TableController {
 
     @Resource
-    GenTableService tableService;
+    TableGenerationService tableService;
     @Resource
-    GenTableFieldService tableFieldService;
+    TableGenerationFieldService tableFieldService;
 
     /**
      * 分页
@@ -32,7 +32,7 @@ public class TableController {
      * @param param 查询参数
      */
     @GetMapping("page")
-    public ListResult<GenTable> page(GenTableListParam param) {
+    public ListResult<TableGeneration> page(GenTableListParam param) {
         return tableService.selectPage(param);
     }
 
@@ -42,8 +42,8 @@ public class TableController {
      * @param id 表ID
      */
     @GetMapping("{id}")
-    public Result<GenTable> get(@PathVariable("id") Long id) {
-        GenTable table = tableService.getById(id);
+    public Result<TableGeneration> get(@PathVariable("id") Long id) {
+        TableGeneration table = tableService.getById(id);
         // 获取表的字段
         table.setFieldList(tableFieldService.listByTableId(table.getId()));
         return Result.ok(table);
@@ -55,7 +55,7 @@ public class TableController {
      * @param table 表信息
      */
     @PutMapping
-    public Result<Boolean> update(@RequestBody GenTable table) {
+    public Result<Boolean> update(@RequestBody TableGeneration table) {
         return Result.ok(tableService.updateById(table));
     }
 
@@ -108,7 +108,7 @@ public class TableController {
      * @param tableFieldList 字段列表
      */
     @PutMapping("field/{tableId}")
-    public Result<String> updateTableField(@PathVariable("tableId") Long tableId, @RequestBody List<GenTableField> tableFieldList) {
+    public Result<String> updateTableField(@PathVariable("tableId") Long tableId, @RequestBody List<TableGenerationField> tableFieldList) {
         tableFieldService.updateTableField(tableId, tableFieldList);
         return Result.ok();
     }

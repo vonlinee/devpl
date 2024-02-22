@@ -1,11 +1,10 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
 /**
  * MySQL查询
- * TODO 重构数据库元数据查询接口
  */
 public class MySqlQuery implements AbstractQuery {
 
@@ -15,18 +14,22 @@ public class MySqlQuery implements AbstractQuery {
     }
 
     /**
-     * database() 返回当前（默认）数据库的名称：
+     * database() 返回当前（默认）数据库的名称：如果连接url指定了数据库，则database()返回该数据库名称
      *
      * @param tableName 表名称
-     * @return
+     * @return 表查询sql
      */
     @Override
-    public String getTableQuerySql(String tableName, boolean likeMatch) {
+    public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
+        StringBuilder sql = new StringBuilder("select table_schema, table_name, table_comment from information_schema.tables ");
 
-        StringBuilder sql = new StringBuilder("""
-            select table_schema, table_name, table_comment from information_schema.tables
-            where table_schema = (select database())
-             """);
+        if (schemaName == null || schemaName.isEmpty()) {
+            // schemaName为空表示不过滤数据库
+            // 如果 database() 返回为NULL，则忽略数据库名称这个查询条件
+            sql.append("where 1 = 1");
+        } else {
+            sql.append("where table_schema = '").append(schemaName).append("' ");
+        }
 
         // 表名查询
         if (StringUtils.hasText(tableName)) {
@@ -36,7 +39,7 @@ public class MySqlQuery implements AbstractQuery {
                 sql.append("and table_name = '").append(tableName).append("'");
             }
         }
-        sql.append(" order by table_name asc");
+        sql.append(" order by table_schema, table_name asc");
 
         return sql.toString();
     }
@@ -58,8 +61,15 @@ public class MySqlQuery implements AbstractQuery {
 
     @Override
     public String getTableFieldsQuerySql() {
-        return "select column_name, data_type, column_comment, column_key from information_schema.columns "
-            + "where table_name = '%s' and table_schema = (select database()) order by ordinal_position";
+        return """
+            select
+                column_name,
+                data_type,
+                column_comment,
+                column_key
+            from information_schema.columns
+            where table_name = '%s' and table_schema = (select database()) order by ordinal_position
+            """;
     }
 
     @Override

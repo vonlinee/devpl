@@ -2,11 +2,9 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.devpl.backend.common.exception.BusinessException;
-import io.devpl.backend.common.mvc.BaseServiceImpl;
+import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.common.query.ListResult;
-import io.devpl.backend.config.query.AbstractQuery;
-import io.devpl.backend.config.query.AbstractQueryDatabaseMetadataLoader;
-import io.devpl.backend.dao.GenTableMapper;
+import io.devpl.backend.dao.TableGenerationMapper;
 import io.devpl.backend.domain.TemplateFillStrategy;
 import io.devpl.backend.domain.enums.FormLayoutEnum;
 import io.devpl.backend.domain.enums.GeneratorTypeEnum;
@@ -17,11 +15,15 @@ import io.devpl.backend.service.*;
 import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
+import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataLoader;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
+import io.devpl.sdk.collection.Lists;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -29,7 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -39,8 +42,8 @@ import java.util.*;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTable> implements GenTableService {
-    private final GenTableFieldService tableFieldService;
+public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGenerationMapper, TableGeneration> implements TableGenerationService {
+    private final TableGenerationFieldService tableFieldService;
     private final DataSourceService dataSourceService;
     private final TargetGenerationFileService targetGenFileService;
     private final TableFileGenerationService tableFileGenerationService;
@@ -49,12 +52,12 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     private final TemplateEngine templateEngine;
 
     @Override
-    public List<GenTable> listGenTables(Collection<String> tableNames) {
+    public List<TableGeneration> listGenTables(Collection<String> tableNames) {
         if (tableNames == null || tableNames.isEmpty()) {
             return Collections.emptyList();
         }
-        LambdaQueryWrapper<GenTable> qw = new LambdaQueryWrapper<>();
-        qw.in(GenTable::getTableName, tableNames);
+        LambdaQueryWrapper<TableGeneration> qw = new LambdaQueryWrapper<>();
+        qw.in(TableGeneration::getTableName, tableNames);
         return list(qw);
     }
 
@@ -64,13 +67,13 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     }
 
     @Override
-    public ListResult<GenTable> selectPage(GenTableListParam query) {
+    public ListResult<TableGeneration> selectPage(GenTableListParam query) {
         return ListResult.ok(baseMapper.selectPage(query,
-            new LambdaQueryWrapper<GenTable>().eq(StringUtils.hasText(query.getTableName()), GenTable::getTableName, query.getTableName())));
+            new LambdaQueryWrapper<TableGeneration>().eq(StringUtils.hasText(query.getTableName()), TableGeneration::getTableName, query.getTableName())));
     }
 
     @Override
-    public GenTable getByTableName(String tableName) {
+    public TableGeneration getByTableName(String tableName) {
         return baseMapper.selectOneByTableName(tableName);
     }
 
@@ -94,7 +97,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
         // 查询表是否存在
-        GenTable table = this.getByTableName(tableName);
+        TableGeneration table = this.getByTableName(tableName);
         // 表存在
         if (table != null) {
             return;
@@ -108,10 +111,12 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
         // 项目信息
         ProjectInfo project = projectService.getById(param.getProjectId());
-        try (Connection connection = dataSourceService.getConnection(datasourceId)) {
-            AbstractQuery query = dataSourceService.getQuery(dbType);
+        try (Connection connection = dataSourceService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
-            table = this.loadTableInfo(connection, query, tableName);
+
+            DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, dbType);
+            List<TableGeneration> tables = prepareTables(loader.getTables(null, null, tableName, null));
+            table = Lists.first(tables, t -> Objects.equals(t.getTableName(), tableName));
             if (table == null) {
                 return;
             }
@@ -156,16 +161,25 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
 
             this.initTargetGenerationFiles(table, params);
 
-            // 获取原生字段数据
-            List<GenTableField> tableFieldList = this.getTableFieldList(dbType, connection, query, datasourceId, table.getId(), table.getTableName());
-            // 初始化字段数据
-            tableFieldService.initFieldList(tableFieldList);
-            // 保存列数据
+            List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, dbType, connection, table);
+            // 初始化字段数据并保存列数据
             tableFieldService.saveBatch(tableFieldList);
         } catch (SQLException exception) {
             log.error("导入表失败", exception);
             throw new RuntimeSQLException(exception);
         }
+    }
+
+    private List<TableGeneration> prepareTables(List<TableMetadata> tablesMetadata) {
+        List<TableGeneration> tableList = new ArrayList<>();
+        for (TableMetadata tm : tablesMetadata) {
+            TableGeneration tableGeneration = new TableGeneration();
+            tableGeneration.setTableName(tm.getTableName());
+            tableGeneration.setTableComment(tm.getRemarks());
+            tableGeneration.setDatabaseName(tm.getTableSchem());
+            tableList.add(tableGeneration);
+        }
+        return tableList;
     }
 
     /**
@@ -174,7 +188,7 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
      * @param table 要生成的数据库表
      */
     @Override
-    public void initTargetGenerationFiles(GenTable table, TemplateArgumentsMap params) {
+    public void initTargetGenerationFiles(TableGeneration table, TemplateArgumentsMap params) {
         List<TargetGenerationFile> targetGenFiles = targetGenFileService.listDefaultGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
 
@@ -227,39 +241,19 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         return StringUtils.subAfter(packageName, ".", true);
     }
 
-    /**
-     * 根据数据源，获取指定数据表 GenTable 实体
-     */
-    @Override
-    public GenTable loadTableInfo(Connection connection, AbstractQuery query, String tableName) {
-        AbstractQueryDatabaseMetadataLoader loader = new AbstractQueryDatabaseMetadataLoader(connection, query);
-        List<TableMetadata> tables = loader.getTables(null, null, tableName, null);
-        List<GenTable> tableList = new ArrayList<>();
-        for (TableMetadata table : tables) {
-            GenTable genTable = new GenTable();
-            genTable.setTableName(table.getTableName());
-            genTable.setTableComment(table.getRemarks());
-            genTable.setDatabaseName(table.getTableSchem());
-            tableList.add(genTable);
-        }
-        return tableList.stream().filter(t -> Objects.equals(t.getTableName(), tableName)).findFirst().orElse(null);
-    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void sync(Long id) {
-        GenTable table = this.getById(id);
+        TableGeneration table = this.getById(id);
 
         RdbmsConnectionInfo connInfo = dataSourceService.getById(table.getDatasourceId());
-
         DBType dbType = DBType.getValue(connInfo.getDbType());
-        AbstractQuery query = dataSourceService.getQuery(dbType);
 
-        List<GenTableField> dbTableFieldList;
-        try (Connection connection = dataSourceService.getConnection(connInfo)) {
-            dbTableFieldList = getTableFieldList(dbType, connection, query, table.getDatasourceId(), table.getId(), table.getTableName());
+        List<TableGenerationField> dbTableFieldList;
+        try (Connection connection = dataSourceService.getRdbmsConnection(connInfo)) {
+            dbTableFieldList = this.loadTableGenerationFields(null, dbType, connection, table);
         } catch (Exception exception) {
-            throw new RuntimeException(exception);
+            throw new BusinessException("同步失败，请检查数据库表：" + table.getTableName());
         }
         // 从数据库获取表字段列表
         if (dbTableFieldList.isEmpty()) {
@@ -267,22 +261,19 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         }
 
         // 表字段列表
-        List<GenTableField> tableFieldList = tableFieldService.listByTableId(id);
+        List<TableGenerationField> tableFieldList = tableFieldService.listByTableId(id);
 
-        Map<String, GenTableField> tableFieldMap = CollectionUtils.toMap(tableFieldList, GenTableField::getFieldName);
+        Map<String, TableGenerationField> tableFieldMap = CollectionUtils.toMap(tableFieldList, TableGenerationField::getFieldName);
 
-        // 初始化字段数据
-        tableFieldService.initFieldList(dbTableFieldList);
-
-        // 同步表结构字段
-        dbTableFieldList.forEach(field -> {
+        // 初始化字段数据 同步表结构字段
+        tableFieldService.initTableFields(dbTableFieldList).forEach(field -> {
             // 新增字段
             if (!tableFieldMap.containsKey(field.getFieldName())) {
                 tableFieldService.save(field);
                 return;
             }
             // 修改字段
-            GenTableField updateField = tableFieldMap.get(field.getFieldName());
+            TableGenerationField updateField = tableFieldMap.get(field.getFieldName());
             updateField.setPrimaryKey(field.isPrimaryKey());
             updateField.setFieldComment(field.getFieldComment());
             updateField.setFieldType(field.getFieldType());
@@ -292,11 +283,11 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
         });
 
         // 删除数据库表中没有的字段
-        List<String> dbTableFieldNameList = CollectionUtils.toList(dbTableFieldList, GenTableField::getFieldName);
-        List<GenTableField> delFieldList = CollectionUtils.filter(tableFieldList, field -> !dbTableFieldNameList.contains(field.getFieldName()));
+        List<String> dbTableFieldNameList = CollectionUtils.toList(dbTableFieldList, TableGenerationField::getFieldName);
+        List<TableGenerationField> delFieldList = CollectionUtils.filter(tableFieldList, field -> !dbTableFieldNameList.contains(field.getFieldName()));
 
         if (!delFieldList.isEmpty()) {
-            tableFieldService.removeBatchByIds(CollectionUtils.toList(delFieldList, GenTableField::getId));
+            tableFieldService.removeBatchByIds(CollectionUtils.toList(delFieldList, TableGenerationField::getId));
         }
     }
 
@@ -304,72 +295,48 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
     /**
      * 获取表的所有字段
      *
-     * @param dbType    数据库类型
-     * @param tableId   表ID
-     * @param tableName 表名
+     * @param dbType 数据库类型
+     * @param table  表信息
      * @return 表的所有字段信息
      */
-    public List<GenTableField> getTableFieldList(DBType dbType, Connection connection, AbstractQuery query, Long dataSourceId, Long tableId, String tableName) {
-        List<GenTableField> tableFieldList = new ArrayList<>();
-        String tableFieldsSql = query.getTableFieldsQuerySql();
+    private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataLoader loader, DBType dbType, Connection connection, TableGeneration table) {
+        List<TableGenerationField> tableFieldList = new ArrayList<>();
         try {
-            if (dbType == DBType.ORACLE) {
-                DatabaseMetaData md = connection.getMetaData();
-                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
-            } else {
-                tableFieldsSql = String.format(tableFieldsSql, tableName);
+            if (loader == null) {
+                loader = getDatabaseMetadataLoader(connection, dbType);
             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    GenTableField field = new GenTableField();
-                    field.setTableId(tableId);
-                    field.setFieldName(rs.getString(query.fieldName()));
-                    String fieldType = rs.getString(query.fieldType());
-                    if (fieldType.contains(" ")) {
-                        fieldType = fieldType.substring(0, fieldType.indexOf(" "));
-                    }
-                    field.setFieldType(fieldType);
-                    field.setFieldComment(rs.getString(query.fieldComment()));
-                    String key = rs.getString(query.fieldKey());
-                    field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
+            List<ColumnMetadata> columns = loader.getColumns(null, table.getTableName(), null, null);
+            // 获取主键数据
+            List<PrimaryKeyMetadata> primaryKeys = loader.getPrimaryKeys(null, null, table.getTableName());
+            Map<String, PrimaryKeyMetadata> primaryKeyMetadataMap = CollectionUtils.toMap(primaryKeys, PrimaryKeyMetadata::getColumnName);
+            for (ColumnMetadata column : columns) {
+                TableGenerationField tgf = new TableGenerationField();
+                tgf.setFieldName(column.getColumnName());
+                tgf.setFieldType(column.getPlatformDataType());
+                tgf.setFieldComment(column.getRemarks());
+                tgf.setPrimaryKey(primaryKeyMetadataMap.containsKey(column.getColumnName()));
 
-                    tableFieldList.add(field);
-                }
+                tableFieldList.add(tgf);
             }
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-            throw BusinessException.create("获取表字段异常", e);
+
+            tableFieldList = tableFieldService.initTableFields(tableFieldList);
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
         return tableFieldList;
     }
 
+    /**
+     * 获取数据源的表信息列表
+     *
+     * @param datasourceId     数据源ID
+     * @param databaseName     数据库名称，如果为空，则获取数据源下的所有数据库的表信息
+     * @param tableNamePattern 表名，模糊匹配
+     * @return 表信息列表
+     */
     @Override
-    public List<GenTable> getTableList(Long datasourceId, String databaseName, String tableNamePattern) {
-        List<GenTable> tableList = new ArrayList<>();
-        // 根据数据源，获取全部数据表
-        try (DatabaseMetadataLoader loader = getDatabaseMetadataLoader(datasourceId, databaseName, tableNamePattern)) {
-            List<TableMetadata> tables = loader.getTables(databaseName, null, tableNamePattern, null);
-            for (TableMetadata table : tables) {
-                GenTable genTable = new GenTable();
-                genTable.setDatabaseName(table.getTableSchem());
-                genTable.setTableComment(table.getRemarks());
-                genTable.setTableName(table.getTableName());
-                genTable.setDatasourceId(datasourceId);
-                tableList.add(genTable);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return tableList;
-    }
-
-    public DatabaseMetadataLoader getDatabaseMetadataLoader(Long datasourceId, String databaseName, String tableNamePattern) throws SQLException {
-//        Connection connection = dataSourceService.getConnection(datasourceId);
-//        return new JdbcDatabaseMetadataLoader(connection);
+    public List<TableGeneration> getGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern) {
+        List<TableGeneration> tableList = new ArrayList<>();
         DBType dbType = DBType.MYSQL;
         if (!dataSourceService.isSystemDataSource(datasourceId)) {
             RdbmsConnectionInfo connInfo = dataSourceService.getById(datasourceId);
@@ -377,8 +344,24 @@ public class GenTableServiceImpl extends BaseServiceImpl<GenTableMapper, GenTabl
                 dbType = DBType.getValue(connInfo.getDbType());
             }
         }
-        AbstractQuery query = dataSourceService.getQuery(dbType);
-        Connection connection = dataSourceService.getConnection(datasourceId);
-        return new AbstractQueryDatabaseMetadataLoader(connection, query);
+
+        try (Connection connection = dataSourceService.getConnection(datasourceId, databaseName, StringUtils.hasLength(databaseName))) {
+            // 根据数据源，获取全部数据表
+            try (DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, dbType)) {
+                List<TableMetadata> tables = loader.getTables(null, databaseName, tableNamePattern, null);
+                List<TableGeneration> tgs = this.prepareTables(tables);
+                for (TableGeneration tg : tgs) {
+                    tg.setDatasourceId(datasourceId);
+                    tableList.add(tg);
+                }
+            }
+        } catch (Exception e) {
+            throw RuntimeSQLException.wrap(e);
+        }
+        return tableList;
+    }
+
+    private DatabaseMetadataLoader getDatabaseMetadataLoader(Connection connection, DBType dbType) {
+        return new AbstractQueryDatabaseMetadataLoader(connection, dbType);
     }
 }

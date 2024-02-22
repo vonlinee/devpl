@@ -248,7 +248,7 @@ const sortable = ref() as any
 const typeList = ref([]) as any
 const tableId = ref()
 const generationFiles = ref<TableFileGeneration[]>()
-const fieldList = ref<GenTableField[]>([])
+const fieldList = ref<TableGenerationField[]>([])
 const fillList = reactive([
   { label: "DEFAULT", value: "DEFAULT" },
   { label: "INSERT", value: "INSERT" },
@@ -315,7 +315,7 @@ const rowDrop = () => {
 
 const getTable = (id: number) => {
   apiGetGenTableById(id).then((res) => {
-    fieldList.value = res.data?.fieldList as GenTableField[]
+    fieldList.value = res.data?.fieldList as TableGenerationField[]
   })
 
   apiListGenerationFiles(id).then((res) => {

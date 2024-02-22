@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
  * 数据源管理
  */
 @Mapper
-public interface DbConnInfoMapper extends MyBatisPlusMapper<RdbmsConnectionInfo> {
+public interface RdbmsConnectionInfoMapper extends MyBatisPlusMapper<RdbmsConnectionInfo> {
 
 }

@@ -1,4 +1,4 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
@@ -14,7 +14,7 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName, boolean likeMatch) {
+    public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("select t1.tablename, obj_description(relfilenode, 'pg_class') as comments from pg_tables t1, pg_class t2 ");
         sql.append("where t1.tablename not like 'pg%' and t1.tablename not like 'sql_%' and t1.tablename = t2.relname ");

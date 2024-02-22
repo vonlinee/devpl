@@ -1,4 +1,4 @@
-package io.devpl.backend.config.query;
+package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
@@ -14,7 +14,7 @@ public class DmQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableQuerySql(String tableName, boolean likeMatch) {
+    public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT T.* FROM (SELECT DISTINCT T1.TABLE_NAME AS TABLE_NAME,T2.COMMENTS AS TABLE_COMMENT FROM USER_TAB_COLUMNS T1 ");
         sql.append("INNER JOIN USER_TAB_COMMENTS T2 ON T1.TABLE_NAME = T2.TABLE_NAME) T WHERE 1=1 ");

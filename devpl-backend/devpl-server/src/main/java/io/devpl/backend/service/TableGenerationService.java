@@ -2,22 +2,20 @@ package io.devpl.backend.service;
 
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
-import io.devpl.backend.config.query.AbstractQuery;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
-import io.devpl.backend.entity.GenTable;
+import io.devpl.backend.entity.TableGeneration;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 
-import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * 数据表
  */
-public interface GenTableService extends BaseService<GenTable> {
+public interface TableGenerationService extends BaseService<TableGeneration> {
 
-    List<GenTable> listGenTables(Collection<String> tableNames);
+    List<TableGeneration> listGenTables(Collection<String> tableNames);
 
     /**
      * 查询已导入的表名称
@@ -27,9 +25,9 @@ public interface GenTableService extends BaseService<GenTable> {
      */
     List<String> listTableNames(Long dataSourceId);
 
-    ListResult<GenTable> selectPage(GenTableListParam param);
+    ListResult<TableGeneration> selectPage(GenTableListParam param);
 
-    GenTable getByTableName(String tableName);
+    TableGeneration getByTableName(String tableName);
 
     boolean deleteBatchIds(Long[] ids);
 
@@ -38,16 +36,7 @@ public interface GenTableService extends BaseService<GenTable> {
      */
     void importSingleTable(TableImportParam param);
 
-    void initTargetGenerationFiles(GenTable table, TemplateArgumentsMap params);
-
-    /**
-     * 根据数据源，获取指定数据表
-     *
-     * @param connection   数据源连接
-     * @param query        查询策略
-     * @param tableName    表名
-     */
-    GenTable loadTableInfo(Connection connection, AbstractQuery query, String tableName);
+    void initTargetGenerationFiles(TableGeneration table, TemplateArgumentsMap params);
 
     /**
      * 同步数据库表
@@ -60,8 +49,8 @@ public interface GenTableService extends BaseService<GenTable> {
      * 根据数据源，获取指定数据表
      *
      * @param datasourceId     数据源ID
-     * @param databaseName     数据库名称
+     * @param databaseName     数据库名称，如果为空，则获取数据源下的所有数据库的表信息
      * @param tableNamePattern 表名，模糊匹配
      */
-    List<GenTable> getTableList(Long datasourceId, String databaseName, String tableNamePattern);
+    List<TableGeneration> getGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern);
 }

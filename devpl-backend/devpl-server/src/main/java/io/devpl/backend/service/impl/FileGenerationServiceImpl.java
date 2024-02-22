@@ -35,9 +35,9 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private DomainModelService baseClassService;
     @Resource
-    private GenTableService tableService;
+    private TableGenerationService tableService;
     @Resource
-    private GenTableFieldService tableFieldService;
+    private TableGenerationFieldService tableFieldService;
     @Resource
     private TemplateService templateService;
     @Resource
@@ -58,7 +58,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      *
      * @param tableId gen_table主键
      * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
-     * @see GenTableService#importSingleTable(TableImportParam)
+     * @see TableGenerationService#importSingleTable(TableImportParam)
      */
     @Override
     public String generateForTable(Long tableId) {
@@ -108,8 +108,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Override
     public Map<String, Object> prepareDataModel(Long tableId) {
         // 表信息
-        GenTable table = tableService.getById(tableId);
-        List<GenTableField> fieldList = tableFieldService.listByTableId(tableId);
+        TableGeneration table = tableService.getById(tableId);
+        List<TableGenerationField> fieldList = tableFieldService.listByTableId(tableId);
         table.setFieldList(fieldList);
 
         // 数据模型
@@ -169,7 +169,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      * @param dataModel 数据模型
      * @param table     表
      */
-    private void setBaseClass(Map<String, Object> dataModel, GenTable table) {
+    private void setBaseClass(Map<String, Object> dataModel, TableGeneration table) {
         if (table.getBaseclassId() == null) {
             return;
         }
@@ -180,7 +180,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 基类字段
         String[] fields = baseClass.getFieldsName().split(",");
         // 标注为基类字段
-        for (GenTableField field : table.getFieldList()) {
+        for (TableGenerationField field : table.getFieldList()) {
             if (ArrayUtils.contains(fields, field.getFieldName())) {
                 field.setBaseField(true);
             }
@@ -221,16 +221,16 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      * @param dataModel 数据模型
      * @param table     表
      */
-    private void setFieldTypeList(Map<String, Object> dataModel, GenTable table) {
+    private void setFieldTypeList(Map<String, Object> dataModel, TableGeneration table) {
         // 主键列表 (支持多主键)
-        List<GenTableField> primaryList = new ArrayList<>();
+        List<TableGenerationField> primaryList = new ArrayList<>();
         // 表单列表
-        List<GenTableField> formList = new ArrayList<>();
+        List<TableGenerationField> formList = new ArrayList<>();
         // 网格列表
-        List<GenTableField> gridList = new ArrayList<>();
+        List<TableGenerationField> gridList = new ArrayList<>();
         // 查询列表
-        List<GenTableField> queryList = new ArrayList<>();
-        for (GenTableField field : table.getFieldList()) {
+        List<TableGenerationField> queryList = new ArrayList<>();
+        for (TableGenerationField field : table.getFieldList()) {
             if (field.isPrimaryKey()) {
                 primaryList.add(field);
             }
