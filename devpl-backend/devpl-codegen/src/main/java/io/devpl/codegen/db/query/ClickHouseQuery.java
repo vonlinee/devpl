@@ -9,7 +9,7 @@ import io.devpl.sdk.util.StringUtils;
  * @author ratelfu
  * @since 2021-03-10
  */
-public class ClickHouseQuery implements AbstractQuery {
+public class ClickHouseQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
@@ -46,30 +46,40 @@ public class ClickHouseQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableComment() {
+    public String getDatabaseNameResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getTableCommentResultSetColumnName() {
         return "comment";
     }
 
     @Override
-    public String fieldName() {
+    public String getTableCatalogResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getColumnNameResultSetColumnName() {
         return "name";
     }
 
 
     @Override
-    public String fieldType() {
+    public String getColumnDataTypeResultSetColumnName() {
         return "type";
     }
 
 
     @Override
-    public String fieldComment() {
+    public String getColumnCommentResultSetColumnName() {
         return "comment";
     }
 
 
     @Override
-    public String fieldKey() {
+    public String getPrimaryKeyResultSetColumnName() {
         return "is_in_primary_key";
     }
 

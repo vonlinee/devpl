@@ -6,7 +6,7 @@ import io.devpl.sdk.util.StringUtils;
 /**
  * 达梦8 查询
  */
-public class DmQuery implements AbstractQuery {
+public class DmQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public DBType dbType() {
@@ -52,27 +52,37 @@ public class DmQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableComment() {
+    public String getDatabaseNameResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getTableCommentResultSetColumnName() {
         return "TABLE_COMMENT";
     }
 
     @Override
-    public String fieldName() {
+    public String getTableCatalogResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getColumnNameResultSetColumnName() {
         return "COLUMN_NAME";
     }
 
     @Override
-    public String fieldType() {
+    public String getColumnDataTypeResultSetColumnName() {
         return "DATA_TYPE";
     }
 
     @Override
-    public String fieldComment() {
+    public String getColumnCommentResultSetColumnName() {
         return "COMMENTS";
     }
 
     @Override
-    public String fieldKey() {
+    public String getPrimaryKeyResultSetColumnName() {
         return "KEY";
     }
 }

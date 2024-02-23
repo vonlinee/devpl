@@ -267,7 +267,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         Map<String, TableGenerationField> tableFieldMap = CollectionUtils.toMap(tableFieldList, TableGenerationField::getFieldName);
 
         // 初始化字段数据 同步表结构字段
-        tableFieldService.initTableFields(dbTableFieldList).forEach(field -> {
+        tableFieldService.initTableFields(table, dbTableFieldList).forEach(field -> {
             // 新增字段
             if (!tableFieldMap.containsKey(field.getFieldName())) {
                 tableFieldService.save(field);
@@ -320,7 +320,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 tableFieldList.add(tgf);
             }
 
-            tableFieldList = tableFieldService.initTableFields(tableFieldList);
+            tableFieldList = tableFieldService.initTableFields(table, tableFieldList);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }

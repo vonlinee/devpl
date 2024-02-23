@@ -5,7 +5,7 @@ import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.codegen.util.CodeGeneratorUtils;
+import io.devpl.codegen.util.InternalUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -450,7 +450,7 @@ public class StrategyConfig extends ConfigurationHolder {
          * @return this
          */
         public Builder addInclude(List<String> includes) {
-            CodeGeneratorUtils.notEmpty(includes, "表名为空");
+            InternalUtils.notEmpty(includes, "表名为空");
             this.strategyConfig.addIncludedTables(includes);
             return this;
         }
@@ -462,7 +462,7 @@ public class StrategyConfig extends ConfigurationHolder {
          * @return this
          */
         public Builder addInclude(String includes) {
-            CodeGeneratorUtils.notBlank(includes, "表名[%s]为空", includes);
+            InternalUtils.notBlank(includes, "表名[%s]为空", includes);
             if (includes.contains(",")) {
                 this.strategyConfig.addIncludedTables(includes.split(","));
             } else {

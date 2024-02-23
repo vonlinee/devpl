@@ -6,7 +6,7 @@ import io.devpl.sdk.util.StringUtils;
 /**
  * PostgreSql查询
  */
-public class PostgreSqlQuery implements AbstractQuery {
+public class PostgreSqlQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public DBType dbType() {
@@ -42,27 +42,37 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableComment() {
+    public String getDatabaseNameResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getTableCommentResultSetColumnName() {
         return "comments";
     }
 
     @Override
-    public String fieldName() {
+    public String getTableCatalogResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getColumnNameResultSetColumnName() {
         return "columnName";
     }
 
     @Override
-    public String fieldType() {
+    public String getColumnDataTypeResultSetColumnName() {
         return "dataType";
     }
 
     @Override
-    public String fieldComment() {
+    public String getColumnCommentResultSetColumnName() {
         return "columnComment";
     }
 
     @Override
-    public String fieldKey() {
+    public String getPrimaryKeyResultSetColumnName() {
         return "columnKey";
     }
 }

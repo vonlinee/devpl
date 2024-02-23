@@ -1,12 +1,17 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.sdk.util.StringUtils;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 /**
  * Oracle查询
  */
-public class OracleQuery implements AbstractQuery {
+public class OracleQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public DBType dbType() {
@@ -33,39 +38,70 @@ public class OracleQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableComment() {
+    public String getDatabaseNameResultSetColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getTableCommentResultSetColumnName() {
         return "comments";
     }
 
     @Override
-    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
-        return "SELECT A.COLUMN_NAME, A.DATA_TYPE, B.COMMENTS,DECODE(C.POSITION, '1', 'PRI') KEY FROM ALL_TAB_COLUMNS A "
-            + " INNER JOIN ALL_COL_COMMENTS B ON A.TABLE_NAME = B.TABLE_NAME AND A.COLUMN_NAME = B.COLUMN_NAME AND B.OWNER = '#schema'"
-            + " LEFT JOIN ALL_CONSTRAINTS D ON D.TABLE_NAME = A.TABLE_NAME AND D.CONSTRAINT_TYPE = 'P' AND D.OWNER = '#schema'"
-            + " LEFT JOIN ALL_CONS_COLUMNS C ON C.CONSTRAINT_NAME = D.CONSTRAINT_NAME AND C.COLUMN_NAME=A.COLUMN_NAME AND C.OWNER = '#schema'"
-            + "WHERE A.OWNER = '#schema' AND A.TABLE_NAME = '%s' ORDER BY A.COLUMN_ID ";
+    public String getTableCatalogResultSetColumnName() {
+        return null;
     }
 
     @Override
-    public String fieldName() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
+        String tableFieldsSql = """
+            SELECT A.COLUMN_NAME,
+                A.DATA_TYPE,
+                B.COMMENTS,
+                DECODE(C.POSITION, '1', 'PRI') AS KEY
+            FROM ALL_TAB_COLUMNS A
+                INNER JOIN ALL_COL_COMMENTS B ON A.TABLE_NAME = B.TABLE_NAME AND A.COLUMN_NAME = B.COLUMN_NAME AND B.OWNER = '#schema'
+                LEFT JOIN ALL_CONSTRAINTS D ON D.TABLE_NAME = A.TABLE_NAME AND D.CONSTRAINT_TYPE = 'P' AND D.OWNER = '#schema'
+                LEFT JOIN ALL_CONS_COLUMNS C ON C.CONSTRAINT_NAME = D.CONSTRAINT_NAME AND C.COLUMN_NAME = A.COLUMN_NAME AND C.OWNER = '#schema'
+            WHERE A.OWNER = '#schema' AND A.TABLE_NAME = '%s'
+            ORDER BY A.COLUMN_ID
+            """;
+
+        Connection connection = getConnection();
+        if (connection == null) {
+            throw new RuntimeSQLException("cannot get sql to query table fields, cause connection is null");
+        }
+        try {
+            if (isClosed()) {
+                DatabaseMetaData md = connection.getMetaData();
+                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
+            }
+        } catch (SQLException e) {
+            throw RuntimeSQLException.wrap(e);
+        }
+        return tableFieldsSql;
+    }
+
+    @Override
+    public String getColumnNameResultSetColumnName() {
         return "COLUMN_NAME";
     }
 
 
     @Override
-    public String fieldType() {
+    public String getColumnDataTypeResultSetColumnName() {
         return "DATA_TYPE";
     }
 
 
     @Override
-    public String fieldComment() {
+    public String getColumnCommentResultSetColumnName() {
         return "COMMENTS";
     }
 
 
     @Override
-    public String fieldKey() {
+    public String getPrimaryKeyResultSetColumnName() {
         return "KEY";
     }
 }

@@ -72,7 +72,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @return 是否成功
      */
     default boolean insertBatch(Collection<T> entities) {
-        if (entities == null || entities.size() == 0) {
+        if (entities == null || entities.isEmpty()) {
             return false;
         }
         if (entities.size() == 1) {
@@ -85,7 +85,8 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
 
     /**
      * 批量插入
-     *
+     * warning: Possible heap pollution from parameterized vararg type
+     * <a href="https://stackoverflow.com/questions/12462079/possible-heap-pollution-via-varargs-parameter">...</a>
      * @param entities 实体列表
      * @return 是否成功
      */
@@ -106,7 +107,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @return 是否成功
      */
     default boolean updateBatchById(Collection<T> entities) {
-        if (entities == null || entities.size() == 0) {
+        if (entities == null || entities.isEmpty()) {
             return false;
         }
         if (entities.size() == 1) {
@@ -124,7 +125,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @return 是否成功
      */
     default boolean insertOrUpdateBatch(Collection<T> entities) {
-        if (entities == null || entities.size() == 0) {
+        if (entities == null || entities.isEmpty()) {
             return false;
         }
         if (entities.size() == 1) {

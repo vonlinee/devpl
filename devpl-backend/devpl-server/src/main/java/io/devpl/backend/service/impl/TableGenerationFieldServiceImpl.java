@@ -5,6 +5,7 @@ import io.devpl.backend.dao.GenTableFieldMapper;
 import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.entity.GenFieldType;
+import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.GenFieldTypeService;
 import io.devpl.backend.service.TableGenerationFieldService;
@@ -44,11 +45,15 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<GenT
     }
 
     @Override
-    public List<TableGenerationField> initTableFields(List<TableGenerationField> tableFieldList) {
+    public List<TableGenerationField> initTableFields(TableGeneration table, List<TableGenerationField> tableFieldList) {
         // 字段类型、属性类型映射
         Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
         int index = 0;
         for (TableGenerationField field : tableFieldList) {
+
+            // 关联表和字段
+            field.setTableId(table.getId());
+
             field.setAttrName(CaseFormat.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
             GenFieldType fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());

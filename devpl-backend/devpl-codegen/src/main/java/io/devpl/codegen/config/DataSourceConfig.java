@@ -8,11 +8,10 @@ import io.devpl.codegen.db.query.DatabaseIntrospector;
 import io.devpl.codegen.db.query.DefaultDatabaseIntrospection;
 import io.devpl.codegen.db.querys.DbQueryDecorator;
 import io.devpl.codegen.jdbc.JdbcUtils;
+import io.devpl.codegen.util.InternalUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -26,7 +25,7 @@ import java.util.Properties;
  * 数据库配置
  */
 public class DataSourceConfig extends ConfigurationHolder {
-    protected final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
+
     /**
      * 数据库连接属性
      */
@@ -208,6 +207,10 @@ public class DataSourceConfig extends ConfigurationHolder {
         return databaseQueryClass;
     }
 
+    public static Builder builder(Properties properties) {
+        return new Builder(properties);
+    }
+
     /**
      * 数据库配置构建者
      *
@@ -220,6 +223,20 @@ public class DataSourceConfig extends ConfigurationHolder {
 
         private Builder() {
             this.dataSourceConfig = new DataSourceConfig();
+        }
+
+        private Builder(Properties properties) {
+            this.dataSourceConfig = new DataSourceConfig();
+            initialize(properties);
+        }
+
+        private void initialize(Properties properties) {
+            String url = (String) properties.get("url");
+            String username = (String) properties.get("username");
+            String password = (String) properties.get("password");
+            this.dataSourceConfig.url = InternalUtils.requireNonEmpty(url, "url is empty");
+            this.dataSourceConfig.username = InternalUtils.requireNonEmpty(username, "username is empty");
+            this.dataSourceConfig.password = InternalUtils.requireNonEmpty(password, "password is empty");
         }
 
         /**

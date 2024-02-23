@@ -1,4 +1,4 @@
-package io.devpl.codegen.util.select;
+package io.devpl.codegen.util;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

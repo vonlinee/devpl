@@ -7,6 +7,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -139,6 +141,28 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<String> getSQLKeywords() throws SQLException {
+        String sqlKeywords = databaseMetaData.getSQLKeywords();
+        if (sqlKeywords == null || sqlKeywords.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(sqlKeywords.split(",")).toList();
+    }
+
+    @Override
+    public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
+                                     String functionNamePattern) throws SQLException {
+        ResultSet rs = databaseMetaData.getFunctions(catalog, schemaPattern, functionNamePattern);
+        List<FunctionMetadata> functionMetadataList = new ArrayList<>();
+        while (rs.next()) {
+            FunctionMetadata fm = new FunctionMetadata();
+            fm.initialize(rs);
+            functionMetadataList.add(fm);
+        }
+        return functionMetadataList;
     }
 
     /**

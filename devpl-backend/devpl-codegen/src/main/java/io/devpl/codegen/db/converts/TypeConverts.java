@@ -1,8 +1,8 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.config.TypeConverter;
-import io.devpl.codegen.util.select.BranchBuilder;
-import io.devpl.codegen.util.select.Selector;
+import io.devpl.codegen.util.BranchBuilder;
+import io.devpl.codegen.util.Selector;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DBType;
 

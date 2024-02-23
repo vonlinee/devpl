@@ -49,6 +49,9 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      */
     List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException;
 
+    List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
+                              String functionNamePattern) throws SQLException;
+
     /**
      * @param catalog           catalog
      * @param schema            schema
@@ -56,6 +59,13 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      * @param columnNamePattern columnNamePattern
      */
     List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws SQLException;
+
+    /**
+     * 获取SQL中的关键字列表
+     *
+     * @return 关键字列表
+     */
+    List<String> getSQLKeywords() throws SQLException;
 
     /**
      * 数据清理操作

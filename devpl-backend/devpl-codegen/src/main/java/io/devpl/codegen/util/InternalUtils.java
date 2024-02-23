@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * 仅在此模块内部使用
  */
-public class CodeGeneratorUtils {
+public abstract class InternalUtils {
 
     /**
      * 获取桌面目录
@@ -84,6 +84,13 @@ public class CodeGeneratorUtils {
         return name;
     }
 
+    public static String requireNonEmpty(String res, String message) {
+        if (res == null || res.isEmpty()) {
+            throw new IllegalArgumentException(message);
+        }
+        return res;
+    }
+
     /**
      * 加载properties文件
      *
@@ -119,9 +126,9 @@ public class CodeGeneratorUtils {
             if (!directory.isDirectory()) {
                 final String message =
                     "File "
-                        + directory
-                        + " exists and is "
-                        + "not a directory. Unable to create directory.";
+                    + directory
+                    + " exists and is "
+                    + "not a directory. Unable to create directory.";
                 throw new IOException(message);
             }
         } else {

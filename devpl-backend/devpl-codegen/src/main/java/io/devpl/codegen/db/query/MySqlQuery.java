@@ -6,7 +6,7 @@ import io.devpl.sdk.util.StringUtils;
 /**
  * MySQL查询
  */
-public class MySqlQuery implements AbstractQuery {
+public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public DBType dbType() {
@@ -55,42 +55,49 @@ public class MySqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String tableComment() {
+    public String getTableCommentResultSetColumnName() {
         return "table_comment";
     }
 
     @Override
-    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
-        StringBuilder sql = new StringBuilder();
-
-        return """
-            select
-                column_name,
-                data_type,
-                column_comment,
-                column_key
-            from information_schema.columns
-            where table_name = '%s' and table_schema = (select database()) order by ordinal_position
-            """;
+    public String getTableCatalogResultSetColumnName() {
+        return "table_catalog";
     }
 
     @Override
-    public String fieldName() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
+        StringBuilder sql = new StringBuilder("select table_catalog, table_schema, table_name, column_name, data_type, column_comment, column_key from information_schema.columns where 1 = 1");
+
+        if (schema != null && !schema.isEmpty()) {
+            sql.append(" and table_schema = '").append(schema).append("' ");
+        }
+
+        if (tableName != null && !tableName.isEmpty()) {
+            sql.append(" and table_name = '").append(tableName).append("' ");
+        }
+
+        sql.append(" order by ordinal_position");
+
+        return sql.toString();
+    }
+
+    @Override
+    public String getColumnNameResultSetColumnName() {
         return "column_name";
     }
 
     @Override
-    public String fieldType() {
+    public String getColumnDataTypeResultSetColumnName() {
         return "data_type";
     }
 
     @Override
-    public String fieldComment() {
+    public String getColumnCommentResultSetColumnName() {
         return "column_comment";
     }
 
     @Override
-    public String fieldKey() {
+    public String getPrimaryKeyResultSetColumnName() {
         return "column_key";
     }
 }

@@ -1,6 +1,7 @@
 package io.devpl.backend.service;
 
 import io.devpl.backend.common.mvc.BaseService;
+import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 
 import java.util.List;
@@ -31,5 +32,5 @@ public interface TableGenerationFieldService extends BaseService<TableGeneration
     /**
      * 初始化字段数据
      */
-    List<TableGenerationField> initTableFields(List<TableGenerationField> tableFieldList);
+    List<TableGenerationField> initTableFields(TableGeneration tableGeneration, List<TableGenerationField> tableFieldList);
 }

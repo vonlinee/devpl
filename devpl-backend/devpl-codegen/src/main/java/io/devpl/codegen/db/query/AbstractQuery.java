@@ -28,14 +28,20 @@ public interface AbstractQuery {
      */
     String getTableNameResultSetColumnName();
 
-    default String getDatabaseNameResultSetColumnName() {
-        return null;
-    }
+    /**
+     * 数据库名称
+     */
+    String getDatabaseNameResultSetColumnName();
 
     /**
      * 表注释
      */
-    String tableComment();
+    String getTableCommentResultSetColumnName();
+
+    /**
+     * 表目录
+     */
+    String getTableCatalogResultSetColumnName();
 
     /**
      * 表字段信息查询 SQL
@@ -45,20 +51,20 @@ public interface AbstractQuery {
     /**
      * 字段名称
      */
-    String fieldName();
+    String getColumnNameResultSetColumnName();
 
     /**
      * 字段类型
      */
-    String fieldType();
+    String getColumnDataTypeResultSetColumnName();
 
     /**
      * 字段注释
      */
-    String fieldComment();
+    String getColumnCommentResultSetColumnName();
 
     /**
      * 主键字段
      */
-    String fieldKey();
+    String getPrimaryKeyResultSetColumnName();
 }

@@ -2,6 +2,7 @@ package io.devpl.codegen.jdbc;
 
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,18 +21,24 @@ public enum TableType {
     ALIAS,
     SYNONYM;
 
-    public static TableType[] valueOf(String[] names) {
+    public static TableType[] valueOf(String... names) {
         if (names == null || names.length == 0) {
             return new TableType[0];
         }
         List<TableType> tableTypes = new ArrayList<>(names.length);
         for (String name : names) {
             for (TableType type : values()) {
-                if (type.name().equalsIgnoreCase(name)) {
+                if (type.name().equalsIgnoreCase(name.trim())) {
                     tableTypes.add(type);
                 }
             }
         }
         return tableTypes.toArray(TableType[]::new);
+    }
+
+    public static void main(String[] args) {
+        TableType[] tableTypes = valueOf("table ", "view", "system table");
+
+        System.out.println(Arrays.toString(tableTypes));
     }
 }

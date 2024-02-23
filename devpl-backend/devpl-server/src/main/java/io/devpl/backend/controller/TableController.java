@@ -31,7 +31,7 @@ public class TableController {
      *
      * @param param 查询参数
      */
-    @GetMapping("page")
+    @GetMapping("/page")
     public ListResult<TableGeneration> page(GenTableListParam param) {
         return tableService.selectPage(param);
     }
@@ -41,7 +41,7 @@ public class TableController {
      *
      * @param id 表ID
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Result<TableGeneration> get(@PathVariable("id") Long id) {
         TableGeneration table = tableService.getById(id);
         // 获取表的字段
@@ -74,7 +74,7 @@ public class TableController {
      *
      * @param id 表ID
      */
-    @PostMapping("sync/{id}")
+    @PostMapping("/sync/{id}")
     public Result<String> sync(@PathVariable("id") Long id) {
         tableService.sync(id);
         return Result.ok();
@@ -107,7 +107,7 @@ public class TableController {
      * @param tableId        表ID
      * @param tableFieldList 字段列表
      */
-    @PutMapping("field/{tableId}")
+    @PutMapping("/field/{tableId}")
     public Result<String> updateTableField(@PathVariable("tableId") Long tableId, @RequestBody List<TableGenerationField> tableFieldList) {
         tableFieldService.updateTableField(tableId, tableFieldList);
         return Result.ok();

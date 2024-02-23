@@ -6,7 +6,10 @@ import io.devpl.codegen.jdbc.meta.*;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +47,11 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
         } else if (dbType == DBType.CLICK_HOUSE) {
             dbQuery = new ClickHouseQuery();
         }
+
+        if (query != null) {
+            query.setConnection(connection);
+        }
+
         return dbQuery;
     }
 
@@ -81,7 +89,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
                         table.setTableSchem(rs.getString(query.getDatabaseNameResultSetColumnName()));
                     }
                     table.setTableName(tableName);
-                    table.setRemarks(rs.getString(query.tableComment()));
+                    table.setRemarks(rs.getString(query.getTableCommentResultSetColumnName()));
                     tableList.add(table);
                 }
             }
@@ -103,18 +111,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
      * @return sql, 用于获取表信息
      */
     String getTableFieldQuerySql(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
-        String tableFieldsSql = query.getTableFieldsQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern, true);
-        try {
-            if (dbType == DBType.ORACLE) {
-                DatabaseMetaData md = connection.getMetaData();
-                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableNamePattern);
-            } else {
-                tableFieldsSql = String.format(tableFieldsSql, tableNamePattern);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return tableFieldsSql;
+        return query.getTableFieldsQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern, true);
     }
 
     @Override
@@ -128,15 +125,17 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     ColumnMetadata cmd = new ColumnMetadata();
-                    cmd.setColumnName(rs.getString(query.fieldName()));
-                    String fieldType = rs.getString(query.fieldType());
+                    cmd.setColumnName(rs.getString(query.getColumnNameResultSetColumnName()));
+                    String fieldType = rs.getString(query.getColumnDataTypeResultSetColumnName());
                     if (fieldType.contains(" ")) {
                         fieldType = fieldType.substring(0, fieldType.indexOf(" "));
                     }
 
                     cmd.setPlatformDataType(fieldType);
-                    cmd.setRemarks(rs.getString(query.fieldComment()));
-
+                    cmd.setRemarks(rs.getString(query.getColumnCommentResultSetColumnName()));
+                    cmd.setTableSchem(rs.getString(query.getDatabaseNameResultSetColumnName()));
+                    cmd.setTableName(rs.getString(query.getTableNameResultSetColumnName()));
+                    cmd.setTableCat(rs.getString(query.getTableCatalogResultSetColumnName()));
                     // 主键
                     // String key = rs.getString(query.fieldKey());
                     // field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
@@ -156,10 +155,10 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     // 主键
-                    String key = rs.getString(query.fieldKey());
+                    String key = rs.getString(query.getPrimaryKeyResultSetColumnName());
                     if (StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key)) {
                         PrimaryKeyMetadata pkm = new PrimaryKeyMetadata();
-                        pkm.setColumnName(rs.getString(query.fieldName()));
+                        pkm.setColumnName(rs.getString(query.getColumnNameResultSetColumnName()));
                         primaryKeyMetadata.add(pkm);
                     }
                 }
@@ -169,7 +168,17 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     }
 
     @Override
+    public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern, String functionNamePattern) throws SQLException {
+        return null;
+    }
+
+    @Override
     public List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws RuntimeSQLException {
+        return null;
+    }
+
+    @Override
+    public List<String> getSQLKeywords() throws SQLException {
         return null;
     }
 
@@ -177,7 +186,9 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     public void close() {
         if (connection != null) {
             try {
-                connection.close();
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
             } catch (SQLException ignored) {
             }
         }
