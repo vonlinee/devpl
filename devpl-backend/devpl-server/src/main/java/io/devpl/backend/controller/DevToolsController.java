@@ -53,7 +53,7 @@ public class DevToolsController {
      * @param param 参数
      * @return DDL
      */
-    @PostMapping(value = "/table/columns")
+    @PostMapping(value = "/table/create/columns")
     public Result<List<ColumnInfoVO>> getCreateTableColumns(@RequestBody TableCreatorParam param) {
 
         List<GroupField> groupFields = fieldGroupService.listGroupFieldsById(param.getGroupId());
@@ -80,5 +80,16 @@ public class DevToolsController {
         columns.get(0).setDataTypes(dataTypeLabels);
 
         return Result.ok(columns);
+    }
+
+    /**
+     * 通过列信息生成DDL语句
+     *
+     * @param param 参数
+     * @return DDL
+     */
+    @PostMapping(value = "/table/create/ddl")
+    public String getCreateTableDDL(@RequestBody TableCreatorParam param) {
+        return devToolsService.getCreateTableDDL(param);
     }
 }

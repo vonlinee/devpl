@@ -65,6 +65,5 @@ public class MappedStatementItem {
      * 是否逻辑删除
      */
     @TableField(value = "is_deleted")
-    private Integer deleted;
-
+    private Boolean deleted;
 }

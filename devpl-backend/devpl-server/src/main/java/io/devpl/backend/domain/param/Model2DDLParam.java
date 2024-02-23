@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Model2DDLParam {
 
     /**
-     * 文本
+     * 文本，实体类java源码
      */
     private String content;
 

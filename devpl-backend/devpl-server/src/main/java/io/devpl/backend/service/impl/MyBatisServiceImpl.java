@@ -721,8 +721,8 @@ public class MyBatisServiceImpl implements MyBatisService {
     /**
      * TODO 解析参数和返回值
      *
-     * @param mapperFile
-     * @return
+     * @param mapperFile XxxMapper.xml文件
+     * @return MappedStatementItem信息
      */
     public List<MappedStatementItem> parseMappedStatements(File mapperFile) {
         List<MappedStatementItem> items = new ArrayList<>();

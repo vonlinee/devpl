@@ -18,6 +18,7 @@ import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.DataTypeItemService;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -121,9 +122,8 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
 
     @Override
     public boolean addDataTypeMapping(List<DataTypeMappingParam> params) {
-        return crudService.saveBatch(params.stream()
-            .map(i -> new DataTypeMapping(i.getTypeId(), i.getAnotherTypeId()))
-            .toList());
+        List<DataTypeMapping> list = CollectionUtils.toList(params, i -> new DataTypeMapping(i.getTypeId(), i.getAnotherTypeId()));
+        return crudService.saveBatch(list);
     }
 
     /**
