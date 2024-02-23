@@ -21,7 +21,7 @@ import java.util.Properties;
  */
 @Getter
 @Setter
-@TableName("rdbms_connection_info")
+@TableName(value = "rdbms_connection_info", autoResultMap = true)
 public class RdbmsConnectionInfo implements Serializable {
     /**
      * id
@@ -86,6 +86,7 @@ public class RdbmsConnectionInfo implements Serializable {
 
     /**
      * 驱动属性
+     * 需要指定autoResultMap = true
      */
     @TableField(value = "driver_props", typeHandler = JacksonTypeHandler.class)
     private Properties driverProperties;

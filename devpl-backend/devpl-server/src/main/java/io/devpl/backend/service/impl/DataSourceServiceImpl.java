@@ -65,7 +65,7 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
 
     @Override
     public RdbmsConnectionInfo getConnectionInfo(Long dataSourceId) {
-        RdbmsConnectionInfo connInfo = baseMapper.getByDataSourceId(dataSourceId);
+        RdbmsConnectionInfo connInfo = getById(dataSourceId);
         if (connInfo != null) {
             connInfo.setPassword(EncryptUtils.tryDecrypt(connInfo.getPassword()));
         }

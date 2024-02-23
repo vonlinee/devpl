@@ -12,7 +12,6 @@ import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 
@@ -37,14 +36,6 @@ public interface DataSourceService extends BaseService<RdbmsConnectionInfo> {
      * @return 数据库连接信息
      */
     RdbmsConnectionInfo getConnectionInfo(Long dataSourceId);
-
-    @Override
-    default RdbmsConnectionInfo getById(Serializable id) {
-        if (id instanceof Number nid) {
-            return getConnectionInfo(nid.longValue());
-        }
-        return null;
-    }
 
     long getSystemDataSourceId();
 
