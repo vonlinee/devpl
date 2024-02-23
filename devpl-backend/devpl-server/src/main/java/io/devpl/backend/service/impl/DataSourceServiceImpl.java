@@ -23,7 +23,10 @@ import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -39,7 +42,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper, RdbmsConnectionInfo> implements DataSourceService {
+public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper, RdbmsConnectionInfo> implements DataSourceService, InitializingBean {
 
     /**
      * 程序自身使用的数据源
@@ -50,22 +53,46 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
     JdbcDriverManager driverManager;
     @Resource
     RdbmsConnectionInfoMapper dbConnInfoMapper;
-
+    @Resource
+    Environment environment;
     @Value(value = "${devpl.db.name}")
     private String databaseName;
 
     @Override
     public boolean isSystemDataSource(Long id) {
-        return id != null && id == -1;
+        return id != null && id == getSystemDataSourceId();
     }
 
     @Override
-    public RdbmsConnectionInfo getConnectionInfo(long id) {
-        RdbmsConnectionInfo connInfo = getById(id);
+    public RdbmsConnectionInfo getConnectionInfo(Long dataSourceId) {
+        RdbmsConnectionInfo connInfo = baseMapper.getByDataSourceId(dataSourceId);
         if (connInfo != null) {
             connInfo.setPassword(EncryptUtils.tryDecrypt(connInfo.getPassword()));
         }
         return connInfo;
+    }
+
+    @Override
+    public long getSystemDataSourceId() {
+        return 0L;
+    }
+
+    @NotNull
+    @Override
+    public RdbmsConnectionInfo getInternalConnectionInfo() {
+        RdbmsConnectionInfo connectionInfo = new RdbmsConnectionInfo(environment.getProperty("spring.datasource.url"));
+        /**
+         * 关于使用数据库id自增策略后，无法自行指定id的问题
+         * https://gitee.com/baomidou/mybatis-plus/issues/I1MY0F
+         */
+        // connectionInfo.setId(getSystemDataSourceId());
+        connectionInfo.setConnectionName("默认数据源");
+        connectionInfo.setUsername(environment.getProperty("spring.datasource.username"));
+        connectionInfo.setPassword(environment.getProperty("spring.datasource.password"));
+        if (StringUtils.hasText(connectionInfo.getPassword())) {
+            connectionInfo.setPassword(EncryptUtils.tryEncrypt(connectionInfo.getPassword()));
+        }
+        return connectionInfo;
     }
 
     @Override
@@ -78,7 +105,7 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
 
     @Override
     public List<RdbmsConnectionInfo> listAll() {
-        return dbConnInfoMapper.selectAll();
+        return dbConnInfoMapper.selectDataSources();
     }
 
     @Override
@@ -396,5 +423,22 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
             connInfo.setUpdateTime(LocalDateTime.now());
         }
         return connInfo;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        try {
+            RdbmsConnectionInfo connectionInfo = baseMapper.getByDataSourceId(getSystemDataSourceId());
+            if (connectionInfo == null) {
+                connectionInfo = getInternalConnectionInfo();
+                baseMapper.insert(connectionInfo);
+            } else {
+                RdbmsConnectionInfo _connectionInfo = getInternalConnectionInfo();
+                _connectionInfo.setId(connectionInfo.getId());
+                baseMapper.updateById(_connectionInfo);
+            }
+        } catch (Exception exception) {
+            log.error("初始化系统内置数据源信息失败", exception);
+        }
     }
 }

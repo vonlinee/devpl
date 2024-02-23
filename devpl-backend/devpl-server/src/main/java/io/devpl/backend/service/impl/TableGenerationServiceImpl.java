@@ -115,7 +115,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
         DBType dbType = DBType.MYSQL;
         if (!dataSourceService.isSystemDataSource(datasourceId)) {
-            RdbmsConnectionInfo connInfo = dataSourceService.getById(datasourceId);
+            RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(datasourceId);
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
 
@@ -272,13 +272,14 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     public void sync(Long id) {
         TableGeneration table = this.getById(id);
 
-        RdbmsConnectionInfo connInfo = dataSourceService.getById(table.getDatasourceId());
+        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(table.getDatasourceId());
         DBType dbType = DBType.getValue(connInfo.getDbType());
 
         List<TableGenerationField> dbTableFieldList;
         try (Connection connection = dataSourceService.getRdbmsConnection(connInfo)) {
             dbTableFieldList = this.loadTableGenerationFields(null, dbType, connection, table);
         } catch (Exception exception) {
+            log.error("同步数据库表失败{}", table.getTableName());
             throw new BusinessException("同步失败，请检查数据库表：" + table.getTableName());
         }
         // 从数据库获取表字段列表

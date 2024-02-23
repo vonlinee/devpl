@@ -10,7 +10,6 @@
             <el-form-item label="数据源" prop="datasourceId">
               <el-select v-model="dataForm.datasourceId" style="width: 100%" placeholder="请选择数据源"
                 @change="getTableList(true)">
-                <el-option label="默认数据源" :value="-1"></el-option>
                 <el-option v-for="ds in dataForm.datasourceList" :key="ds.id" :label="ds.connectionName"
                   :value="ds.id"></el-option>
               </el-select>
@@ -64,7 +63,6 @@ const dataFormRef = ref()
 const loading = ref(false)
 
 type FormData = {
-  dataSourceId?: number
   tableNameListSelections: any[]
   datasourceId?: number,
   /**
@@ -84,10 +82,9 @@ type FormData = {
  * 表单
  */
 const dataForm = reactive<FormData>({
-  dataSourceId: -1,
   tableNameListSelections: [] as any,
   databaseName: "",
-  datasourceId: -1,
+  datasourceId: 0,
   tableNamePattern: undefined,
   databaseNames: [],
   datasourceList: [] as any,
@@ -167,7 +164,7 @@ const submitHandle = () => {
     ElMessage.warning("请选择记录")
     return
   }
-  if (dataForm.datasourceId) {
+  if (dataForm.datasourceId != undefined) {
     visible.value = false
     emit("handleSelection", dataForm.datasourceId, tableNameList)
   }

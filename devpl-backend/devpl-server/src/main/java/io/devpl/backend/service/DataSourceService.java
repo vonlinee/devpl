@@ -12,6 +12,7 @@ import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.util.List;
 
@@ -32,10 +33,22 @@ public interface DataSourceService extends BaseService<RdbmsConnectionInfo> {
      * 获取数据库连接信息
      * 对一些加密的参数进行解密
      *
-     * @param id 数据源ID
+     * @param dataSourceId 数据源ID
      * @return 数据库连接信息
      */
-    RdbmsConnectionInfo getConnectionInfo(long id);
+    RdbmsConnectionInfo getConnectionInfo(Long dataSourceId);
+
+    @Override
+    default RdbmsConnectionInfo getById(Serializable id) {
+        if (id instanceof Number nid) {
+            return getConnectionInfo(nid.longValue());
+        }
+        return null;
+    }
+
+    long getSystemDataSourceId();
+
+    RdbmsConnectionInfo getInternalConnectionInfo();
 
     ListResult<RdbmsConnectionInfo> listPage(DbConnInfoListParam param);
 

@@ -72,6 +72,14 @@ public class EncryptUtils {
         return new String(decryptBytes);
     }
 
+    public static String tryEncrypt(String content) {
+        try {
+            return encrypt(content);
+        } catch (Exception ignore) {
+            return content;
+        }
+    }
+
     /**
      * 不抛异常，解密失败返回原字符串
      *

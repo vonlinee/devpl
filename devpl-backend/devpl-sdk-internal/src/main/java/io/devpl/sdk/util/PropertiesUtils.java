@@ -9,6 +9,22 @@ import java.util.Map.Entry;
  */
 public class PropertiesUtils {
 
+    /**
+     * @param str 字符串形式 name=zs&age=15等
+     * @return Properties
+     */
+    public static Properties parse(String str) {
+        Properties properties = new Properties();
+        String[] pairs = str.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            if (keyValue.length == 2) {
+                properties.setProperty(keyValue[0], keyValue[1]);
+            }
+        }
+        return properties;
+    }
+
     public static void loadProperties(Properties properties, File file) {
         try (InputStream stream = new FileInputStream(file)) {
             properties.load(stream);

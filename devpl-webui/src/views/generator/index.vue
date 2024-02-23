@@ -32,8 +32,10 @@
   <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
     @selection-change="selectionChangeHandle">
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-    <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150" show-overflow-tooltip></el-table-column>
-    <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150"
+      show-overflow-tooltip></el-table-column>
+    <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200"
+      show-overflow-tooltip></el-table-column>
     <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"
       show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" fixed="right" header-align="center" align="center" width="170">
@@ -160,8 +162,13 @@ const syncHandle = (row: any) => {
     .catch(() => { })
 }
 
+/**
+ * 导入表生成配置数据
+ * @param dataSourceId 数据源ID 
+ * @param tableNames 导入的表名称
+ */
 const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
-  if (dataSourceId) {
+  if (dataSourceId != undefined) {
     apiImportTables(dataSourceId, tableNames, project.value?.projectId)
       .then(() => {
         ElMessage.success({
