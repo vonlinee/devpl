@@ -2,18 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.GenTableFieldMapper">
 
-    <select id="getByTableId" resultType="io.devpl.backend.entity.TableGenerationField">
-        select *
-        from gen_table_field
-        where table_id = #{value}
-        order by sort
-    </select>
-
     <delete id="deleteBatchTableIds">
-        delete from gen_table_field where table_id in
+        delete from table_generation_field where table_id in
         <foreach item="tableId" collection="array" open="(" separator="," close=")">
             #{tableId}
         </foreach>
     </delete>
-
 </mapper>

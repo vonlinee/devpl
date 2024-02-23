@@ -16,6 +16,7 @@ import io.devpl.backend.utils.EncryptUtils;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.JdbcDatabaseMetadataLoader;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
@@ -305,7 +306,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             if (loader == null) {
                 loader = getDatabaseMetadataLoader(connection, dbType);
             }
-            List<ColumnMetadata> columns = loader.getColumns(null, table.getTableName(), null, null);
+            List<ColumnMetadata> columns = loader.getColumns(null, table.getDatabaseName(), table.getTableName(), null);
             // 获取主键数据
             List<PrimaryKeyMetadata> primaryKeys = loader.getPrimaryKeys(null, null, table.getTableName());
             Map<String, PrimaryKeyMetadata> primaryKeyMetadataMap = CollectionUtils.toMap(primaryKeys, PrimaryKeyMetadata::getColumnName);
@@ -362,6 +363,9 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     }
 
     private DatabaseMetadataLoader getDatabaseMetadataLoader(Connection connection, DBType dbType) {
+        if (dbType == null) {
+            return new JdbcDatabaseMetadataLoader(connection);
+        }
         return new AbstractQueryDatabaseMetadataLoader(connection, dbType);
     }
 }

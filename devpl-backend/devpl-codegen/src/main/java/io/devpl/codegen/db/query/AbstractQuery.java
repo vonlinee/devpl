@@ -3,10 +3,14 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import org.jetbrains.annotations.Nullable;
 
+import java.sql.Connection;
+
 /**
  * Query
  */
 public interface AbstractQuery {
+
+    void setConnection(Connection connection);
 
     /**
      * 数据库类型
@@ -36,7 +40,7 @@ public interface AbstractQuery {
     /**
      * 表字段信息查询 SQL
      */
-    String getTableFieldsQuerySql();
+    String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch);
 
     /**
      * 字段名称

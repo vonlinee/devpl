@@ -54,6 +54,7 @@ devpl:
     package:
         entity: io.devpl.backend.entity # 实体类包名
     db:
+        name: devpl # 本系统数据库名称
         driver:
             location:  # 驱动保存位置，默认db/drivers
         backup:

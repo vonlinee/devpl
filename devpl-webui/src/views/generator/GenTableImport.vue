@@ -29,11 +29,12 @@
             </el-form-item>
           </el-form>
         </div>
-        <el-button type="primary" @click="() => getTableList()"
+        <el-button type="primary" @click="() => getTableList(true)"
           style="margin-left: auto; margin-right: 20px;">查询</el-button>
       </div>
       <div style="flex: 1; min-height: 0">
-        <el-table :data="dataForm.tableList" height="100%" border @selection-change="selectionChangeHandle">
+        <el-table v-loading="loading" :data="dataForm.tableList" height="100%" border
+          @selection-change="selectionChangeHandle">
           <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
           <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center"
             width="200"></el-table-column>
@@ -50,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue"
+import { nextTick, reactive, ref } from "vue"
 import { ElMessage } from "element-plus/es"
 import { apiGetDatabaseNamesById, useDataSourceListApi } from "@/api/datasource"
 import { useDataSourceTableListApi } from "@/api/datasource"
@@ -60,8 +61,10 @@ const emit = defineEmits(["handleSelection"])
 const visible = ref(false)
 const dataFormRef = ref()
 
+const loading = ref(false)
+
 type FormData = {
-  id?: number
+  dataSourceId?: number
   tableNameListSelections: any[]
   datasourceId?: number,
   /**
@@ -77,11 +80,14 @@ type FormData = {
   }
 }
 
+/**
+ * 表单
+ */
 const dataForm = reactive<FormData>({
-  id: undefined,
+  dataSourceId: -1,
   tableNameListSelections: [] as any,
   databaseName: "",
-  datasourceId: undefined,
+  datasourceId: -1,
   tableNamePattern: undefined,
   databaseNames: [],
   datasourceList: [] as any,
@@ -99,13 +105,20 @@ const selectionChangeHandle = (selections: any[]) => {
 }
 
 const getDataSourceList = () => {
+  loading.value = true
   useDataSourceListApi().then((res) => {
     dataForm.datasourceList = res.data
+    loading.value = false
+  }).finally(() => {
+    loading.value = false
   })
 }
 
+/**
+ * 获取表格数据
+ * @param refreshDataBaseNames 
+ */
 const getTableList = (refreshDataBaseNames?: boolean) => {
-  dataForm.table.tableName = ""
   if (dataForm.datasourceId === undefined) {
     return
   }
@@ -113,16 +126,36 @@ const getTableList = (refreshDataBaseNames?: boolean) => {
   if (refreshDataBaseNames == true) {
     apiGetDatabaseNamesById(dataForm.datasourceId).then((res) => {
       dataForm.databaseNames = res.data
+      // 取第一个
+      dataForm.databaseName = dataForm.databaseNames[0]
+      // 切换数据源时每次仅查单个数据库的表
+      nextTick(() => {
+        loading.value = true
+        useDataSourceTableListApi(
+          dataForm.datasourceId!,
+          dataForm.databaseName,
+          dataForm.tableNamePattern
+        ).then((res) => {
+          dataForm.tableList = res.data
+          loading.value = false
+        }).finally(() => {
+          loading.value = false
+        })
+      })
+    })
+  } else {
+    loading.value = true
+    useDataSourceTableListApi(
+      dataForm.datasourceId!,
+      dataForm.databaseName,
+      dataForm.tableNamePattern
+    ).then((res) => {
+      dataForm.tableList = res.data
+      loading.value = false
+    }).finally(() => {
+      loading.value = false
     })
   }
-
-  useDataSourceTableListApi(
-    dataForm.datasourceId,
-    dataForm.databaseName,
-    dataForm.tableNamePattern
-  ).then((res) => {
-    dataForm.tableList = res.data
-  })
 }
 
 // 表单提交
@@ -143,7 +176,7 @@ defineExpose({
   show: (id?: number) => {
     visible.value = true
     if (id) {
-      dataForm.id = id
+      dataForm.datasourceId = id
     }
     // 重置表单数据
     if (dataFormRef.value) {

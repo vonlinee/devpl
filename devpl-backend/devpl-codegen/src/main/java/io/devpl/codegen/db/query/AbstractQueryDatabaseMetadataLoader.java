@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO 重构
  * 通过不同平台的各自的sql进行查询
+ *
+ * @see io.devpl.codegen.jdbc.JdbcDatabaseMetadataLoader
  */
 @Slf4j
 public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoader {
@@ -99,8 +102,8 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
      * @param tableNamePattern 表名
      * @return sql, 用于获取表信息
      */
-    String getTableFieldQuerySql(String tableNamePattern) {
-        String tableFieldsSql = query.getTableFieldsQuerySql();
+    String getTableFieldQuerySql(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
+        String tableFieldsSql = query.getTableFieldsQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern, true);
         try {
             if (dbType == DBType.ORACLE) {
                 DatabaseMetaData md = connection.getMetaData();
@@ -117,10 +120,9 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     @Override
     public List<ColumnMetadata> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
 
-
         List<ColumnMetadata> columnsMetadata = new ArrayList<>();
 
-        String tableFieldsSql = getTableFieldQuerySql(tableNamePattern);
+        String tableFieldsSql = getTableFieldQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -148,7 +150,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
     @Override
     public List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
-        String tableFieldsSql = getTableFieldQuerySql(table);
+        String tableFieldsSql = getTableFieldQuerySql(catalog, schema, table, null);
         List<PrimaryKeyMetadata> primaryKeyMetadata = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {

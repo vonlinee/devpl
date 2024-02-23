@@ -12,7 +12,7 @@ import io.devpl.sdk.util.StringUtils;
 public class ClickHouseQuery implements AbstractQuery {
 
     @Override
-    public String getTableFieldsQuerySql() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
         return "select * from system.columns where table='%s'";
     }
 

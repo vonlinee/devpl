@@ -178,25 +178,6 @@ public class DBUtils {
     }
 
     /**
-     * get metadata of result set
-     *
-     * @param resultSet ResultSet
-     * @return list of ResultSetColumnMetadata
-     * @throws SQLException errors when get the metadata of ResultSet
-     */
-    public static List<ResultSetColumnMetadata> getColumnMetadata(ResultSet resultSet) throws SQLException {
-        final ResultSetMetaData metaData = resultSet.getMetaData();
-        final int colCount = metaData.getColumnCount();
-        List<ResultSetColumnMetadata> list = new ArrayList<>(colCount);
-        for (int i = 1; i < colCount + 1; i++) {
-            ResultSetColumnMetadata rscmd = new ResultSetColumnMetadata();
-            rscmd.initialize(metaData, i);
-            list.add(rscmd);
-        }
-        return list;
-    }
-
-    /**
      * @param resultSet 结果集合
      * @param rowType   行类型
      * @param <T>       行类型

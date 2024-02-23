@@ -112,7 +112,7 @@ public interface DataSourceService extends BaseService<RdbmsConnectionInfo> {
     List<String> getDbNames(RdbmsConnectionInfo entity);
 
     /**
-     * 获取数据库名称
+     * 获取数据库名称，如果时程序自身的数据源，则仅返回单个数据库
      *
      * @param dataSourceId 数据源ID
      * @return 数据库名称

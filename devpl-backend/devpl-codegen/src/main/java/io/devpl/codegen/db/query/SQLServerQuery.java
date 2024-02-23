@@ -29,7 +29,7 @@ public class SQLServerQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableFieldsQuerySql() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
         return "SELECT  cast(a.name AS VARCHAR(500)) AS TABLE_NAME,cast(b.name AS VARCHAR(500)) AS COLUMN_NAME, "
             + "cast(c.VALUE AS NVARCHAR(500)) AS COMMENTS,cast(sys.types.name AS VARCHAR (500)) AS DATA_TYPE,"
             + "(SELECT CASE count(1) WHEN 1 then 'PRI' ELSE '' END"

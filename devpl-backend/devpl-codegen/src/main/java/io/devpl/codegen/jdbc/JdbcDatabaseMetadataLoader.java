@@ -60,19 +60,21 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     }
 
     /**
+     * mysql8.0的驱动，在5.5之前nullCatalogMeansCurrent属性默认为true,8.0中默认为false，
+     * <a href="https://dev.mysql.com/doc/connectors/en/connector-j-upgrading-to-8.0.html">官网链接地址</a>。所以导致DatabaseMetaData.getTables()加载了全部的无关表。
+     *
      * @param catalog          catalog
      * @param schemaPattern    schema, 对于mysql，schema和database可以理解为等价的.
      * @param tableNamePattern 表名称pattern
      * @param types            表类型 {@link JdbcDatabaseMetadataLoader#getTableTypes()}
      * @return 表元数据
      * @throws SQLException 数据库操作异常
-     * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
+     * @see DatabaseMetaData#getTables(String, String, String, String[])
      */
     @Override
     public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
         List<TableMetadata> result = new ArrayList<>();
         DatabaseMetaData metaData = getDatabaseMetaData();
-        ;
         try (ResultSet resultSet = metaData.getTables(catalog, schemaPattern, tableNamePattern, types)) {
             while (resultSet.next()) {
                 TableMetadata tmd = new TableMetadata();
@@ -92,7 +94,6 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     public List<String> getTableTypes() throws SQLException {
         List<String> tableTypes = new ArrayList<>();
         DatabaseMetaData metaData = getDatabaseMetaData();
-        ;
         try (ResultSet tableTypesResultSet = metaData.getTableTypes()) {
             while (tableTypesResultSet.next()) {
                 tableTypes.add(tableTypesResultSet.getString("TABLE_TYPE"));
@@ -108,7 +109,6 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     public List<ColumnMetadata> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
         List<ColumnMetadata> result = new ArrayList<>();
         DatabaseMetaData metaData = getDatabaseMetaData();
-        ;
         try (ResultSet resultSet = metaData.getColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern)) {
             while (resultSet.next()) {
                 ColumnMetadata cmd = new ColumnMetadata();
@@ -131,7 +131,6 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     public List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
         List<PrimaryKeyMetadata> result = new ArrayList<>();
         DatabaseMetaData metaData = getDatabaseMetaData();
-        ;
         try (ResultSet resultSet = metaData.getPrimaryKeys(catalog, schema, table)) {
             while (resultSet.next()) {
                 PrimaryKeyMetadata pkm = new PrimaryKeyMetadata();
@@ -155,7 +154,6 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     public List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws SQLException {
         List<ColumnPrivilegesMetadata> result = new ArrayList<>();
         DatabaseMetaData metaData = getDatabaseMetaData();
-        ;
         try (ResultSet resultSet = metaData.getColumnPrivileges(catalog, schema, table, columnNamePattern)) {
             while (resultSet.next()) {
                 ColumnPrivilegesMetadata cpm = new ColumnPrivilegesMetadata();

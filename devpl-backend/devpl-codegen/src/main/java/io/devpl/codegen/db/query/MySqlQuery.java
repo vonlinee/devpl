@@ -26,7 +26,7 @@ public class MySqlQuery implements AbstractQuery {
         if (schemaName == null || schemaName.isEmpty()) {
             // schemaName为空表示不过滤数据库
             // 如果 database() 返回为NULL，则忽略数据库名称这个查询条件
-            sql.append("where 1 = 1");
+            sql.append("where 1 = 1 ");
         } else {
             sql.append("where table_schema = '").append(schemaName).append("' ");
         }
@@ -60,7 +60,9 @@ public class MySqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableFieldsQuerySql() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
+        StringBuilder sql = new StringBuilder();
+
         return """
             select
                 column_name,

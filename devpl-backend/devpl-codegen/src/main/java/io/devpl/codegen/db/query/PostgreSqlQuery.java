@@ -27,7 +27,7 @@ public class PostgreSqlQuery implements AbstractQuery {
     }
 
     @Override
-    public String getTableFieldsQuerySql() {
+    public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
         return "select t2.attname as columnName, pg_type.typname as dataType, col_description(t2.attrelid,t2.attnum) as columnComment,"
             + "(CASE t3.contype WHEN 'p' THEN 'PRI' ELSE '' END) as columnKey "
             + "from pg_class as t1, pg_attribute as t2 inner join pg_type on pg_type.oid = t2.atttypid "

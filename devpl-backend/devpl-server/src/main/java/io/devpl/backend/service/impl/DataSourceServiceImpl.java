@@ -21,8 +21,9 @@ import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
@@ -38,15 +39,20 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper, RdbmsConnectionInfo> implements DataSourceService {
 
     /**
      * 程序自身使用的数据源
      */
-    private final DataSource dataSource;
-    private final JdbcDriverManager driverManager;
-    private final RdbmsConnectionInfoMapper dbConnInfoMapper;
+    @Resource
+    DataSource dataSource;
+    @Resource
+    JdbcDriverManager driverManager;
+    @Resource
+    RdbmsConnectionInfoMapper dbConnInfoMapper;
+
+    @Value(value = "${devpl.db.name}")
+    private String databaseName;
 
     @Override
     public boolean isSystemDataSource(Long id) {
@@ -211,6 +217,9 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
 
     @Override
     public List<String> getDatabaseNames(Long dataSourceId) {
+        if (isSystemDataSource(dataSourceId)) {
+            return Collections.singletonList(databaseName);
+        }
         RdbmsConnectionInfo connInfo = this.getConnectionInfo(dataSourceId);
         if (connInfo != null) {
             return getDbNames(connInfo);
@@ -291,7 +300,7 @@ public class DataSourceServiceImpl extends ServiceImpl<RdbmsConnectionInfoMapper
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = stmt.executeQuery()) {
                     // 表头
-                    List<ResultSetColumnMetadata> columnMetadata = DBUtils.getColumnMetadata(resultSet);
+                    List<ResultSetColumnMetadata> columnMetadata = JdbcUtils.getColumnMetadata(resultSet);
                     // 表数据
                     vo.setHeaders(columnMetadata);
                     // vo.setRows(getTableData(resultSet));
