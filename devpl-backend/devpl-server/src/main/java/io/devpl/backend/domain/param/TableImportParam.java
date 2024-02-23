@@ -34,7 +34,7 @@ public class TableImportParam {
     private Integer option;
 
     /**
-     * 项目ID
+     * 项目ID，如果选择了项目，则使用项目的路径信息
      */
     @Nullable
     private Long projectId;

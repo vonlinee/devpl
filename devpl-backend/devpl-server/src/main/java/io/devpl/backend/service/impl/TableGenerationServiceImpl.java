@@ -25,9 +25,10 @@ import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.sdk.collection.Lists;
+import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
-import lombok.AllArgsConstructor;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,15 +43,23 @@ import java.util.*;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGenerationMapper, TableGeneration> implements TableGenerationService {
-    private final TableGenerationFieldService tableFieldService;
-    private final DataSourceService dataSourceService;
-    private final TargetGenerationFileService targetGenFileService;
-    private final TableFileGenerationService tableFileGenerationService;
-    private final ProjectService projectService;
-    private final TemplateFileGenerationService templateFileGenerationService;
-    private final TemplateEngine templateEngine;
+    @Resource
+    TableGenerationFieldService tableFieldService;
+    @Resource
+    DataSourceService dataSourceService;
+    @Resource
+    TargetGenerationFileService targetGenFileService;
+    @Resource
+    TableFileGenerationService tableFileGenerationService;
+    @Resource
+    ProjectService projectService;
+    @Resource
+    TemplateFileGenerationService templateFileGenerationService;
+    @Resource
+    TemplateParamService templateParamService;
+    @Resource
+    TemplateEngine templateEngine;
 
     @Override
     public List<TableGeneration> listGenTables(Collection<String> tableNames) {
@@ -110,8 +119,12 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
 
-        // 项目信息
-        ProjectInfo project = projectService.getById(param.getProjectId());
+        // 根据项目信息，生成表生成的相关信息，可选
+        ProjectInfo projectInfo = null;
+        if (param.getProjectId() != null) {
+            projectInfo = projectService.getById(param.getProjectId());
+        }
+
         try (Connection connection = dataSourceService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
 
@@ -126,9 +139,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
             // 保存表信息
             // 项目信息
-            // TODO 做成变量
-            table.setAuthor("author");
-            table.setEmail("email");
+            Map<String, TemplateParam> globalTemplateParamsMap = templateParamService.getGlobalTemplateParamsMap();
+
+            table.setAuthor(Maps.get(globalTemplateParamsMap, "author", TemplateParam::getParamValue));
+            table.setEmail(Maps.get(globalTemplateParamsMap, "email", TemplateParam::getParamValue));
 
             table.setClassName(CaseFormat.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
@@ -142,21 +156,21 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             table.setUpdateTime(table.getCreateTime());
 
             TemplateArgumentsMap params = new TemplateArgumentsMap();
-            if (project != null) {
-                table.setPackageName(project.getProjectPackage());
-                table.setVersion(project.getVersion());
-                table.setBackendPath(project.getBackendPath());
-                table.setFrontendPath(project.getFrontendPath());
-                table.setModuleName(project.getProjectName());
-                table.setVersion(project.getVersion());
-
-                params.setValue("backendPath", table.getBackendPath());
-                params.setValue("frontendPath", table.getFrontendPath());
-                params.setValue("tableName", table.getTableName());
-                params.setValue("packagePath", StringUtils.replace(table.getPackageName(), ".", "/"));
-                params.setValue("ClassName", table.getClassName());
-                params.setValue("moduleName", project.getProjectName());
+            if (projectInfo != null) {
+                table.setPackageName(projectInfo.getProjectPackage());
+                table.setVersion(projectInfo.getVersion());
+                table.setBackendPath(projectInfo.getBackendPath());
+                table.setFrontendPath(projectInfo.getFrontendPath());
+                table.setModuleName(projectInfo.getProjectName());
+                table.setVersion(projectInfo.getVersion());
+                params.setValue("moduleName", projectInfo.getProjectName());
             }
+
+            params.setValue("backendPath", table.getBackendPath());
+            params.setValue("frontendPath", table.getFrontendPath());
+            params.setValue("tableName", table.getTableName());
+            params.setValue("packagePath", StringUtils.replace(table.getPackageName(), ".", "/"));
+            params.setValue("ClassName", table.getClassName());
 
             this.save(table);
 

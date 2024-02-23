@@ -2,10 +2,10 @@ package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.backend.entity.TemplateParam;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import io.devpl.sdk.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 模板参数Service
@@ -19,6 +19,16 @@ public interface TemplateParamService extends IService<TemplateParam> {
      * @return 全局模板参数
      */
     List<TemplateParam> getGlobalTemplateParams();
+
+    /**
+     * 获取全局模板参数 Map
+     * 模板ID为NULL的为全局参数
+     *
+     * @return 全局模板参数 key为
+     */
+    default Map<String, TemplateParam> getGlobalTemplateParamsMap() {
+        return CollectionUtils.toMap(getGlobalTemplateParams(), TemplateParam::getParamKey);
+    }
 
     /**
      * 获取全局模板参数

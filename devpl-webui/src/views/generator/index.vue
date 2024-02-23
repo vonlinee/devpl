@@ -105,7 +105,7 @@ const importHandle = (id?: number) => {
     })
     return
   }
-  importRef.value.show(id)
+  importRef.value.show(null, state.queryForm.projectId)
 }
 
 const editHandle = (id?: number) => {
@@ -125,8 +125,16 @@ const downloadBatchHandle = () => {
   useDownloadApi(tableIds)
 }
 
+/**
+ * 可选择的项目列表
+ */
 const projects = ref<ProjectSelectVO[]>()
+
+/**
+ * 当前选择的项目信息
+ */
 const project = ref<ProjectSelectVO>()
+
 onMounted(() => {
   // 获取可选择的项目列表
   apiListSelectableProjects().then((res) => {

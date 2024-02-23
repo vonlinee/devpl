@@ -80,10 +80,10 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
+    <el-form-item label="后端生成路径" prop="backendPath">
       <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
     </el-form-item>
-    <el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
+    <el-form-item label="前端生成路径" prop="frontendPath">
       <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
     </el-form-item>
   </el-form>

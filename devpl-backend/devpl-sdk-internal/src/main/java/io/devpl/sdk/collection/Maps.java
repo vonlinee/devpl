@@ -947,4 +947,25 @@ public final class Maps {
     private static int computeMapInitialCapacity(int expectedSize) {
         return (int) Math.ceil(expectedSize / (double) DEFAULT_LOAD_FACTOR);
     }
+
+    public static <K, V> V get(Map<K, V> map, K key) {
+        return map.get(key);
+    }
+
+    public static <K, V, R> R get(Map<K, V> map, K key, Function<V, R> mapper) {
+        V value = map.get(key);
+        return mapper.apply(value);
+    }
+
+    public static <K, V, R> R getOrDefault(Map<K, V> map, K key, Function<V, R> mapper, R defaults) {
+        V value = map.get(key);
+        if (value == null) {
+            return defaults;
+        }
+        if (mapper == null) {
+            return defaults;
+        }
+        R result = mapper.apply(value);
+        return result == null ? defaults : result;
+    }
 }
