@@ -1,6 +1,5 @@
 package io.devpl.backend.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.devpl.backend.config.ThreadPoolConfiguration;
 import io.devpl.backend.dao.CustomDirectiveMapper;
 import io.devpl.backend.domain.param.CustomTemplateDirectiveParam;
@@ -85,12 +84,11 @@ public class TemplateDirectiveServiceImpl implements TemplateDirectiveService {
 
     @Override
     public List<CustomDirective> listCustomDirectives(CustomTemplateDirectiveParam param) {
-        return customDirectiveMapper.selectList(Wrappers.lambdaQuery());
+        return customDirectiveMapper.selectAll();
     }
 
     @Override
     public boolean removeCustomDirective(CustomTemplateDirectiveParam param) {
-
         int affectedRows = customDirectiveMapper.deleteById(param.getDirectiveId());
 
         return false;

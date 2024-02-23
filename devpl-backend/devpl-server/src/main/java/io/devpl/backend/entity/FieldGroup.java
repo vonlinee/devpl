@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 字段组信息表
@@ -34,4 +35,10 @@ public class FieldGroup implements Serializable {
      */
     @TableField(value = "group_name")
     private String groupName;
+
+    /**
+     * 该组的字段列表
+     */
+    @TableField(exist = false)
+    private List<GroupField> fields;
 }
