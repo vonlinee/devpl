@@ -15,11 +15,17 @@ import java.util.List;
  */
 public interface ProjectService extends BaseService<ProjectInfo> {
 
+    /**
+     * 可选择的项目列表
+     * @return 可选择的项目列表
+     */
     List<ProjectSelectVO> listSelectableProject();
 
     ListResult<ProjectInfo> listProjectInfos(ProjectListParam param);
 
     byte[] download(ProjectInfo project) throws IOException;
+
+    List<String> listProjectRootPath();
 
     boolean isProjectRootDirectory(File file);
 

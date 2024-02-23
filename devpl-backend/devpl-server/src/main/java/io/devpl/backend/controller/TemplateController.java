@@ -5,18 +5,23 @@ import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.CustomTemplateDirectiveParam;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.param.TemplateParamParam;
+import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.CustomDirective;
+import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateParam;
+import io.devpl.backend.service.DataTypeService;
 import io.devpl.backend.service.TemplateDirectiveService;
 import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
+import io.devpl.codegen.type.SimpleDataType;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -30,11 +35,12 @@ public class TemplateController {
 
     @Resource
     TemplateService templateService;
-
     @Resource
     TemplateParamService templateParamService;
     @Resource
     TemplateDirectiveService templateDirectiveService;
+    @Resource
+    DataTypeService dataTypeService;
 
     /**
      * 模板上传
@@ -162,6 +168,20 @@ public class TemplateController {
     @PostMapping(value = "/param")
     public boolean listTemplateParams(@RequestBody TemplateParamParam params) {
         return templateParamService.saveOrUpdateBatch(params.getParams());
+    }
+
+    /**
+     * 保存模板参数信息
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/param/datatypes")
+    public List<SelectOptionVO> listTemplateParamDatatype() {
+        List<SelectOptionVO> result = new ArrayList<>();
+        for (SimpleDataType item : SimpleDataType.values()) {
+            result.add(new SelectOptionVO(item.getQualifier(), item.getQualifier(), item.getQualifier()));
+        }
+        return result;
     }
 
     /**

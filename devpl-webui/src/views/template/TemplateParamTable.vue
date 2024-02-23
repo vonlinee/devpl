@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { apiListTemplateParams } from "@/api/template";
+import { apiListTemplateParams, apiListTemplateParamValueDataTypeOptions } from "@/api/template";
 import { ref, onMounted } from "vue"
 
 const { height } = withDefaults(
@@ -62,7 +62,7 @@ const { height } = withDefaults(
   }
 )
 const tableRef = ref()
-const dataTypeOptions = ref()
+const dataTypeOptions = ref([])
 
 const tableData = ref<TemplateParam[]>([])
 
@@ -100,5 +100,9 @@ defineExpose({
 
 onMounted(() => {
   queryList()
+
+  apiListTemplateParamValueDataTypeOptions().then((res) => {
+    dataTypeOptions.value = res.data
+  })
 })
 </script>

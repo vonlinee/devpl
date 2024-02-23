@@ -42,5 +42,5 @@ export const apiDownloadProject = (id: string) => {
 export const apiAnalyseProject = (path: string) => {
   return http.get("/api/project/analyse", {
     path: path
-  })
+  }, 100000)
 }

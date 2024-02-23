@@ -112,7 +112,7 @@ export const apiListDataTypeOptions = (typeGroupId?: string) => {
 }
 
 /**
- * 数据类型选项
+ * 数据类型组选择下拉列表
  */
 export const apiListTypeGroupOptions = () => {
   return http.get("/api/datatype/group/options")

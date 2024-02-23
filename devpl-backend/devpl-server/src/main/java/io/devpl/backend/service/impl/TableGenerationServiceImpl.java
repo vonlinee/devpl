@@ -139,10 +139,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
             // 保存表信息
             // 项目信息
-            Map<String, TemplateParam> globalTemplateParamsMap = templateParamService.getGlobalTemplateParamsMap();
+            Map<String, String> globalTemplateParamsMap = templateParamService.getGlobalTemplateParamValuesMap();
 
-            table.setAuthor(Maps.get(globalTemplateParamsMap, "author", TemplateParam::getParamValue));
-            table.setEmail(Maps.get(globalTemplateParamsMap, "email", TemplateParam::getParamValue));
+            table.setAuthor(Maps.get(globalTemplateParamsMap, "author"));
+            table.setEmail(Maps.get(globalTemplateParamsMap, "email"));
 
             table.setClassName(CaseFormat.toPascalCase(tableName));
             table.setModuleName(getModuleName(table.getPackageName()));
@@ -166,9 +166,20 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 params.setValue("moduleName", projectInfo.getProjectName());
             }
 
+            // 尝试填充全局模板参数
+            if (!StringUtils.hasText(table.getPackageName())) {
+                table.setPackageName(Maps.get(globalTemplateParamsMap, "packageName"));
+            }
+            if (!StringUtils.hasText(table.getBackendPath())) {
+                table.setBackendPath(Maps.get(globalTemplateParamsMap, "backendPath"));
+            }
+            if (!StringUtils.hasText(table.getFrontendPath())) {
+                table.setFrontendPath(Maps.get(globalTemplateParamsMap, "frontendPath"));
+            }
+
             params.setValue("backendPath", table.getBackendPath());
             params.setValue("frontendPath", table.getFrontendPath());
-            params.setValue("tableName", table.getTableName());
+            params.setValue("tableName", table.getTableName()); // 必填
             params.setValue("packagePath", StringUtils.replace(table.getPackageName(), ".", "/"));
             params.setValue("ClassName", table.getClassName());
 

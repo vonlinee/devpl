@@ -3,7 +3,7 @@ package io.devpl.codegen.type;
 /**
  * JSON数据类型枚举
  */
-public enum JsonDataType implements DataType {
+public enum JsonDataType implements EnumBasedDataType<JsonDataType> {
 
     /**
      * 数组类型

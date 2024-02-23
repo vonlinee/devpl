@@ -16,6 +16,7 @@ import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.ZipUtils;
 import io.devpl.sdk.util.ArrayUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -33,6 +35,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 项目信息Service
@@ -115,6 +118,11 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
         map.put(StringUtils.upperFirst(project.getProjectCode()), StringUtils.upperFirst(project.getModifyProjectCode()));
 
         return map;
+    }
+
+    @Override
+    public List<String> listProjectRootPath() {
+        return baseMapper.selectProjectRootPath();
     }
 
     @Override
@@ -246,13 +254,54 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectInfoMapper, ProjectIn
                 projectInfos.add(convertProjectInfo(module));
             }
         }
-        saveBatch(projectInfos);
+
+        List<String> rootPaths = listProjectRootPath();
+
+        projectInfos.removeIf(pf -> rootPaths.contains(pf.getProjectPath()));
+
+        if (!CollectionUtils.isEmpty(projectInfos)) {
+            saveBatch(projectInfos);
+        }
     }
 
     private ProjectInfo convertProjectInfo(ProjectModule module) {
         ProjectInfo projectInfo = new ProjectInfo();
         projectInfo.setProjectName(module.getName());
         projectInfo.setProjectPath(module.getRootPath());
+
+        // 一般情况下 parent module 不放代码，不需要包路径
+        if (!module.hasModules()) {
+            // maven和gradle项目 推测项目包路径
+            // 找到第一个不为空的路径
+            try {
+                Path srcPath = Paths.get(module.getRootPath(), "src", "main", "java");
+
+                String root = srcPath.toString();
+
+                if (Files.exists(srcPath)) {
+                    Path current = srcPath.toRealPath(LinkOption.NOFOLLOW_LINKS);
+                    while (current != null) {
+                        try (Stream<Path> stream = Files.list(current)) {
+                            Path[] pathArray = stream.filter(Files::isDirectory).toArray(Path[]::new);
+                            // 只有单个目录
+                            if (pathArray.length == 1) {
+                                current = pathArray[0];
+                            } else {
+
+                                String path = current.toString().replace(root, "");
+
+                                projectInfo.setProjectPackage(ProjectUtils.convertPathToPackage(path));
+                                current = null;
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return projectInfo;
     }
 }

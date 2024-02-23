@@ -1,4 +1,5 @@
 :root {
+  // 全局颜色，文本颜色等
   --el-color-primary: #1e97f8;
   // 侧边栏宽度
   --theme-aside-width: 200px;
@@ -13,7 +14,8 @@
   --theme-menu-hover-color: var(--el-color-primary);
   --theme-menu-hover-bg-color: var(--el-color-primary-light-9);
 
-  --theme-header-bg-color: var(--el-color-primary);
+  // 页面顶部背景色
+  --theme-header-bg-color: #80a46e;
   --theme-header-text-color: #ffffff;
   --theme-header-hover-color: rgba(0, 0, 0, 0.1);
 

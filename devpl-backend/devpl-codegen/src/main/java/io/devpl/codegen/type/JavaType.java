@@ -5,7 +5,7 @@ package io.devpl.codegen.type;
  *
  * @since 1.8
  */
-public interface JavaType extends DataType {
+public interface JavaType extends EnumBasedDataType<SimpleDataType> {
 
     @Override
     default String id() {

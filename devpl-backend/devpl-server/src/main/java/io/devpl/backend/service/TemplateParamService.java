@@ -30,6 +30,10 @@ public interface TemplateParamService extends IService<TemplateParam> {
         return CollectionUtils.toMap(getGlobalTemplateParams(), TemplateParam::getParamKey);
     }
 
+    default Map<String, String> getGlobalTemplateParamValuesMap() {
+        return CollectionUtils.toMap(getGlobalTemplateParams(), TemplateParam::getParamKey, TemplateParam::getParamValue);
+    }
+
     /**
      * 获取全局模板参数
      * 模板ID为NULL的为全局参数

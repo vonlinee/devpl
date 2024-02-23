@@ -113,3 +113,11 @@ export function apiAddCustomTemplateDirective(param: CustomDirective) {
 export function apiDeleteCustomTemplateDirective(param: CustomDirective) {
   return http.delete<boolean>("/api/codegen/template/directive/custom/remove", param);
 }
+
+/**
+ * 模板参数值类型选项
+ * @param typeGroupId
+ */
+export const apiListTemplateParamValueDataTypeOptions = () => {
+  return http.get("/api/codegen/template/param/datatypes")
+}

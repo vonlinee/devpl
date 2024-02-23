@@ -124,15 +124,16 @@ class Http {
    * 普通的get请求
    * @param url
    * @param params
+   * @param timeout 超时时间，单个接口设置
    */
-  get<T = any>(url: string, params?: RequestData): ResponsePromise<T> {
-    return this.instance.get(url, { params: params })
+  get<T = any>(url: string, params?: RequestData, timeout?: number): ResponsePromise<T> {
+    return this.instance.get(url, { params: params, timeout: timeout })
   }
 
   /**
-   * POST请求，JSON格式
-   * @param url
-   * @param params
+   * POST请求，默认JSON格式
+   * @param url raw字符串
+   * @param params 请求参数
    * @param headers
    * @returns
    */
@@ -145,7 +146,7 @@ class Http {
   }
 
   /**
-   * PUT请求，JSON格式
+   * PUT请求，默认JSON格式
    * @param url
    * @param params
    * @param headers
@@ -160,7 +161,7 @@ class Http {
   }
 
   /**
-   * DELETE请求，JSON格式
+   * DELETE请求，默认JSON格式
    * @param url
    * @param params
    * @param headers

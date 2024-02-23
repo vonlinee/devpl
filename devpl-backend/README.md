@@ -53,3 +53,25 @@ TODO
 简化代码
 去掉@RequestBody注解，默认都是JSON形式数据
 
+
+
+
+
+# 日志转SQL
+
+
+
+```plain
+==>  Preparing: SELECT id,project_name,project_code,project_package,project_path,modify_project_name,modify_project_code,modify_project_package,exclusions,modify_suffix,version,backend_path,frontend_path,status,build_tool,update_time,create_time FROM project_info WHERE id=?
+==> Parameters: 89(Long)
+<==    Columns: id, project_name, project_code, project_package, project_path, modify_project_name, modify_project_code, modify_project_package, exclusions, modify_suffix, version, backend_path, frontend_path, status, build_tool, update_time, create_time
+<==        Row: 89, devpl-backend, null, null, D:\Develop\Code\devpl-backend\devpl-backend, null, null, null, null, null, null, null, null, null, null, null, null
+<==      Total: 1
+```
+
+
+
+
+
+
+
