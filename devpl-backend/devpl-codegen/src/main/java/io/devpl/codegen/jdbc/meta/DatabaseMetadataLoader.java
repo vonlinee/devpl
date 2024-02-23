@@ -22,6 +22,13 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
     List<String> getCatalogs() throws SQLException;
 
     /**
+     * 获取所有数据库名称
+     *
+     * @return 所有数据库名称
+     */
+    List<String> getDatabaseNames() throws SQLException;
+
+    /**
      * 获取表的元数据，是否包含列信息看具体实现
      *
      * @param catalog          catalog
@@ -49,8 +56,17 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      */
     List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException;
 
+    /**
+     * 获取数据库的函数信息
+     *
+     * @param catalog             数据库目录
+     * @param schemaPattern       数据库 schema
+     * @param functionNamePattern 函数名称搜索值
+     * @return 函数信息
+     * @throws SQLException 访问数据库出错
+     */
     List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
-                              String functionNamePattern) throws SQLException;
+                                        String functionNamePattern) throws SQLException;
 
     /**
      * @param catalog           catalog
@@ -66,6 +82,8 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      * @return 关键字列表
      */
     List<String> getSQLKeywords() throws SQLException;
+
+    List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
 
     /**
      * 数据清理操作

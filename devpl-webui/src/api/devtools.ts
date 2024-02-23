@@ -5,3 +5,9 @@ export const apiModel2Ddl = (code: string) => {
     content: code,
   })
 }
+
+export const apiGetTableCreatorColumns = (fieldGroupId: number) => {
+  return http.post("/api/devtools/table/columns", {
+    groupId: fieldGroupId,
+  })
+}

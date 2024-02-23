@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.Collection;
 import java.util.List;
 
-public interface DataTypeService extends IService<DataTypeItem> {
+public interface DataTypeItemService extends IService<DataTypeItem> {
 
     boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems);
 

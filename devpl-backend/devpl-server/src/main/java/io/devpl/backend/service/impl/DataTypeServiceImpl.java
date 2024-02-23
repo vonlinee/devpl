@@ -17,7 +17,7 @@ import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.service.CrudService;
-import io.devpl.backend.service.DataTypeService;
+import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTypeItem> implements DataTypeService {
+public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTypeItem> implements DataTypeItemService {
 
     CrudService crudService;
     DataTypeGroupMapper dataTypeGroupMapper;

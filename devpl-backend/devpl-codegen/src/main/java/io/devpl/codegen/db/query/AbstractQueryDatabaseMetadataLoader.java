@@ -1,6 +1,7 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.jdbc.ConnectionHolder;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.*;
 import io.devpl.sdk.util.StringUtils;
@@ -48,8 +49,10 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
             dbQuery = new ClickHouseQuery();
         }
 
-        if (query != null) {
-            query.setConnection(connection);
+        if (dbQuery != null) {
+            dbQuery.setConnection(connection);
+            ConnectionHolder ch = (ConnectionHolder) dbQuery;
+            ch.setConnectionSupplier(() -> connection);
         }
 
         return dbQuery;
@@ -64,6 +67,11 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     @Override
     public List<String> getCatalogs() {
         return null;
+    }
+
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        return query.getDatabaseNames();
     }
 
     @Override
@@ -180,6 +188,11 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     @Override
     public List<String> getSQLKeywords() throws SQLException {
         return null;
+    }
+
+    @Override
+    public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
+        return query.getDataTypes(databaseName, tableName);
     }
 
     @Override

@@ -1,23 +1,8 @@
 <template>
-  <vxe-modal
-    v-model="visible"
-    :title="!dataForm.group?.id ? '新增' : '修改'"
-    :mask-closable="false"
-    show-footer
-    width="50%"
-  >
-    <el-form
-      ref="dataFormRef"
-      :model="dataForm"
-      :rules="dataRules"
-      label-width="80px"
-      @keyup.enter="submitHandle()"
-    >
+  <vxe-modal v-model="visible" :title="!dataForm.group?.id ? '新增' : '修改'" :mask-closable="false" show-footer width="50%" :draggable="false">
+    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="80px" @keyup.enter="submitHandle()">
       <el-form-item label="组名称" prop="groupName">
-        <el-input
-          v-model="dataForm.group.groupName"
-          placeholder="组名称"
-        ></el-input>
+        <el-input v-model="dataForm.group.groupName" placeholder="组名称"></el-input>
       </el-form-item>
       <el-form-item label="字段信息" prop="fields">
         <template #default>
@@ -26,22 +11,14 @@
             <el-table-column label="Key" prop="fieldKey"></el-table-column>
             <el-table-column label="名称" prop="fieldName"></el-table-column>
             <el-table-column label="数据类型" prop="dataType"></el-table-column>
-            <el-table-column
-              label="注释"
-              prop="comment"
-              show-overflow-tooltip
-            ></el-table-column>
+            <el-table-column label="注释" prop="comment" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" fixed="right" width="80">
               <template #default="scope">
                 <el-button link @click="removeRow(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
-          <el-button
-            class="mt-4"
-            style="width: 100%"
-            @click="showFieldSelectModal"
-          >选择
+          <el-button class="mt-4" style="width: 100%" @click="showFieldSelectModal">选择
           </el-button>
         </template>
       </el-form-item>
@@ -52,10 +29,7 @@
     </template>
   </vxe-modal>
 
-  <FieldSelectModal
-    ref="fieldSelectModal"
-    @selection-change="handleSelection"
-  ></FieldSelectModal>
+  <FieldSelectModal ref="fieldSelectModal" @selection-change="handleSelection"></FieldSelectModal>
 </template>
 
 <script setup lang="ts">

@@ -61,6 +61,11 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
         return catalogs;
     }
 
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        return null;
+    }
+
     /**
      * mysql8.0的驱动，在5.5之前nullCatalogMeansCurrent属性默认为true,8.0中默认为false，
      * <a href="https://dev.mysql.com/doc/connectors/en/connector-j-upgrading-to-8.0.html">官网链接地址</a>。所以导致DatabaseMetaData.getTables()加载了全部的无关表。
@@ -150,6 +155,11 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
             return Collections.emptyList();
         }
         return Arrays.stream(sqlKeywords.split(",")).toList();
+    }
+
+    @Override
+    public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
+        return null;
     }
 
     @Override

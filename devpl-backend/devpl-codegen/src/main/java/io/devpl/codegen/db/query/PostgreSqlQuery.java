@@ -3,6 +3,9 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * PostgreSql查询
  */
@@ -74,5 +77,10 @@ public class PostgreSqlQuery extends AbstractQueryBase implements AbstractQuery 
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "columnKey";
+    }
+
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        return null;
     }
 }

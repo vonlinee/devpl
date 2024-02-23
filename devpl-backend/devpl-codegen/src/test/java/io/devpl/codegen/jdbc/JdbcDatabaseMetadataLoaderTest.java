@@ -15,9 +15,7 @@ import java.util.Properties;
 
 public class JdbcDatabaseMetadataLoaderTest {
 
-    @Test
-    public void test1() throws IOException {
-
+    public Connection getConnection() throws IOException {
         String res = """
             driver-class-name=com.mysql.jdbc.Driver
             url=jdbc:mysql://localhost:3306?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useAffectedRows=true&allowMultiQueries=true
@@ -29,8 +27,12 @@ public class JdbcDatabaseMetadataLoaderTest {
         properties.load(new StringReader(res));
 
         DataSourceConfig dsc = DataSourceConfig.builder(properties).build();
+        return dsc.getConnection();
+    }
 
-        try (Connection connection = dsc.getConnection()){
+    @Test
+    public void test1() throws IOException {
+        try (Connection connection = getConnection()) {
 
             AbstractQueryDatabaseMetadataLoader loader = new AbstractQueryDatabaseMetadataLoader(connection, DBType.MYSQL);
 
@@ -38,6 +40,18 @@ public class JdbcDatabaseMetadataLoaderTest {
 
             System.out.println(columns);
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void test2() throws IOException {
+        try (Connection connection = getConnection()) {
+            AbstractQueryDatabaseMetadataLoader loader = new AbstractQueryDatabaseMetadataLoader(connection, DBType.MYSQL);
+            List<String> columns = loader.getDataTypes(null, null);
+
+            System.out.println(columns);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

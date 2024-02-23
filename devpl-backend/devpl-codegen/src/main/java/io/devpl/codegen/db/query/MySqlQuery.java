@@ -3,6 +3,13 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * MySQL查询
  */
@@ -99,5 +106,46 @@ public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "column_key";
+    }
+
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        Connection connection = getUsableConnection();
+        final List<String> result = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("show databases")) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                result.add(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT DATA_TYPE FROM information_schema.COLUMNS WHERE 1 = 1 ");
+
+        if (databaseName != null && !databaseName.isEmpty()) {
+            sql.append("AND TABLE_SCHEMA = '").append(databaseName).append("' ");
+        }
+        if (tableName != null && !tableName.isEmpty()) {
+            sql.append("AND TABLE_NAME = '").append(tableName).append("' ");
+        }
+        sql.append(" ORDER BY DATA_TYPE");
+
+        return query(sql, resultSet -> {
+            List<String> dataTypes = new ArrayList<>();
+            while (true) {
+                try {
+                    if (!resultSet.next()) break;
+                    dataTypes.add(resultSet.getString(1));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return dataTypes;
+        });
     }
 }

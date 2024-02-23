@@ -3,6 +3,8 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.util.List;
+
 /**
  * ClickHouse 表数据查询
  *
@@ -83,5 +85,8 @@ public class ClickHouseQuery extends AbstractQueryBase implements AbstractQuery 
         return "is_in_primary_key";
     }
 
-
+    @Override
+    public List<String> getDatabaseNames() {
+        return null;
+    }
 }

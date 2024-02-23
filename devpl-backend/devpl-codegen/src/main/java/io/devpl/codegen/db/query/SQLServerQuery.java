@@ -3,6 +3,9 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * SQLServer查询
  */
@@ -110,5 +113,10 @@ public class SQLServerQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "KEY";
+    }
+
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        return null;
     }
 }

@@ -9,10 +9,9 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.CustomDirective;
-import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateParam;
-import io.devpl.backend.service.DataTypeService;
+import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.TemplateDirectiveService;
 import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
@@ -40,7 +39,7 @@ public class TemplateController {
     @Resource
     TemplateDirectiveService templateDirectiveService;
     @Resource
-    DataTypeService dataTypeService;
+    DataTypeItemService dataTypeService;
 
     /**
      * 模板上传

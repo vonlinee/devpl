@@ -7,6 +7,7 @@ import io.devpl.sdk.util.StringUtils;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Oracle查询
@@ -103,5 +104,10 @@ public class OracleQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "KEY";
+    }
+
+    @Override
+    public List<String> getDatabaseNames() throws SQLException {
+        return null;
     }
 }

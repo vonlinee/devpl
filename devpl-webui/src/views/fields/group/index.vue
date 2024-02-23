@@ -67,7 +67,7 @@ const onParseFinished = (fields: FieldInfo[]) => {
 const showTableCreatorModal = (group?: FieldGroup) => {
   if (group && group.id) {
     apiListGroupFieldsById(group.id).then((res) => {
-      tableCreatorModalRef.value.show(res.data);
+      tableCreatorModalRef.value.show(group.id, res.data);
     });
   }
 };

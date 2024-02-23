@@ -3,6 +3,8 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import io.devpl.sdk.util.StringUtils;
 
+import java.util.List;
+
 /**
  * 达梦8 查询
  */
@@ -84,5 +86,10 @@ public class DmQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "KEY";
+    }
+
+    @Override
+    public List<String> getDatabaseNames() {
+        return null;
     }
 }

@@ -248,7 +248,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 return SqlFormat.mysql(sql);
             }
         } catch (Exception exception) {
-            log.error("获取真实sql出错");
+            log.error("获取真实sql出错", exception);
         }
         return "解析失败";
     }

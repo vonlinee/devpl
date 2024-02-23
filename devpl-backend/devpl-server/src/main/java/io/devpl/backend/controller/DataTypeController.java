@@ -11,7 +11,7 @@ import io.devpl.backend.domain.vo.DataTypeMappingVO;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
-import io.devpl.backend.service.DataTypeService;
+import io.devpl.backend.service.DataTypeItemService;
 import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ import java.util.List;
 public class DataTypeController {
 
     @Resource
-    DataTypeService dataTypeService;
+    DataTypeItemService dataTypeService;
 
     /**
      * 保存数据类型信息
