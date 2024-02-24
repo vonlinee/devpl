@@ -139,7 +139,7 @@ export const deepClone = (obj: Record<string, any>) => {
 }
 
 export function getIconName(data: FileNode): string {
-  if (!data.isLeaf) {
+  if (!data.leaf) {
     return "folder"
   }
   if (!data.extension) {

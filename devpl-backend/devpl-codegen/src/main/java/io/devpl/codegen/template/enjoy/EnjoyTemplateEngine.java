@@ -20,12 +20,12 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+    public void evaluate(String template, Object arguments, Writer writer) {
 
     }
 
     @Override
-    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+    public void render(Template template, Object arguments, OutputStream outputStream) {
 
     }
 
@@ -40,8 +40,8 @@ public class EnjoyTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull TemplateSource getTemplate(String name, boolean stringTemplate) {
-        return new EnjoyTemplateSource(engine.getTemplate(name));
+    public @NotNull Template getTemplate(String name, boolean stringTemplate) {
+        return new EnjoyTemplate(engine.getTemplate(name));
     }
 
     @Override

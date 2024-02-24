@@ -1,11 +1,20 @@
 package io.devpl.backend.common.exception;
 
 import io.devpl.backend.common.query.StatusCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 自定义服务器异常
  * 后台代码所有异常类继承此类
+ * 约定惯例:
+ * 1.controller层的异常只抛出此异常，或者Controller调用的Service中处理，只抛出此异常
+ * 2.所有后台Service接口方法不显示声明异常信息，如果要处理异常，则应统计处理底层的异常，抛出此异常
+ *
+ * @see GlobalExceptionHandler
  */
+@Setter
+@Getter
 public class BusinessException extends RuntimeException {
 
     private int code;
@@ -35,23 +44,11 @@ public class BusinessException extends RuntimeException {
         this.msg = msg;
     }
 
+    public static BusinessException create(String msg, Throwable e) {
+        return new BusinessException(msg, e);
+    }
+
     public static BusinessException create(String msgTemplate, Object... args) {
         return new BusinessException(msgTemplate.formatted(args));
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 }

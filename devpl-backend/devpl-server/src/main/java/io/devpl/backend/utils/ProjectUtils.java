@@ -16,6 +16,13 @@ import java.util.StringJoiner;
 
 public class ProjectUtils {
 
+    public static String toSimpleIdentifier(String src) {
+        if (src == null) {
+            return "null";
+        }
+        return src.replaceAll("[^a-zA-Z0-9]", "");
+    }
+
     public static ProjectModule parse(File entryFile) {
         if (entryFile.isDirectory()) {
             File[] files = entryFile.listFiles(f -> f.getName().equals("pom.xml") || f.getName().equals("build.grade"));

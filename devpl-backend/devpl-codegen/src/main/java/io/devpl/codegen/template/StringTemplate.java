@@ -10,11 +10,11 @@ import java.io.Writer;
  * 针对不同类型语法的模板做一层包装，不然就需要针对每一种语法写一个实现
  * VelocityStringTemplateSource，FreeMarkerStringTemplateSource等
  */
-public class StringTemplateSource implements TemplateSource {
+public class StringTemplate implements Template {
 
     String content;
 
-    public StringTemplateSource(String content) {
+    public StringTemplate(String content) {
         this.content = content;
     }
 
@@ -39,7 +39,7 @@ public class StringTemplateSource implements TemplateSource {
     }
 
     @Override
-    public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+    public void render(TemplateEngine engine, Object arguments, Writer writer) {
         String result = engine.evaluate(content, arguments);
         try {
             writer.write(result);

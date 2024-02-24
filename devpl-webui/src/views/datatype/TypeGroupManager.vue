@@ -1,78 +1,48 @@
 <template>
-  <vxe-modal
-    v-model="typeGroupModalVisible"
-    title="类型分组"
-    :loading="loading"
-    show-footer
-    :show-close="false"
-    width="60%"
-  >
+  <vxe-modal v-model="typeGroupModalVisible" title="类型分组" :loading="loading" show-footer :show-close="false" width="60%" :draggable="false">
     <el-table :data="typeGroups" border height="500px">
       <el-table-column label="分组ID" prop="typeGroupId">
         <template #default="{ row }">
           <span v-if="!row.editing">{{ row.typeGroupId }}</span>
-          <el-input
-            v-if="row.editing"
-            v-model="row.typeGroupId"
-            placeholder="请输入类型分组ID"
-            clearable
-          ></el-input>
+          <el-input v-if="row.editing" v-model="row.typeGroupId" placeholder="请输入类型分组ID" clearable></el-input>
         </template>
       </el-table-column>
       <el-table-column label="分组名称" prop="typeGroupName">
         <template #default="{ row }">
-          <el-input
-            v-if="row.editing"
-            v-model="row.typeGroupName"
-            placeholder="请输入类型分组名称"
-            clearable
-          ></el-input>
+          <el-input v-if="row.editing" v-model="row.typeGroupName" placeholder="请输入类型分组名称" clearable></el-input>
           <span v-if="!row.editing">{{ row.typeGroupName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" prop="remark" show-overflow-tooltip>
         <template #default="{ row }">
-          <el-input
-            v-if="row.editing"
-            v-model="row.remark"
-            clearable
-          ></el-input>
+          <el-input v-if="row.editing" v-model="row.remark" clearable></el-input>
           <span v-if="!row.editing">{{ row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="scope">
-          <el-button
-            v-if="!scope.row.editing"
-            link
-            @click="scope.row.editing = !scope.row.editing"
-            >编辑</el-button
-          >
-          <el-button v-if="scope.row.editing" link @click="saveRow(scope.row)"
-            >保存</el-button
-          >
-          <el-button v-if="!scope.row.internal" link>删除</el-button>
+          <el-button v-if="!scope.row.editing" link @click="scope.row.editing = !scope.row.editing">编辑</el-button>
+          <el-button v-if="scope.row.editing" link @click="saveRow(scope.row)">保存</el-button>
+          <el-button v-if="!scope.row.internal" link @click="deleteTypeGroup(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
     <template #footer>
-      <vxe-button content="刷新" @click="refreshTable()"></vxe-button>
-      <vxe-button content="新增" @click="insertRow()"></vxe-button>
-      <vxe-button content="保存" @click="submitEvent"></vxe-button>
-      <vxe-button
-        content="取消"
-        @click="typeGroupModalVisible = false"
-      ></vxe-button>
+      <vxe-button status="info" content="刷新" @click="refreshTable()"></vxe-button>
+      <vxe-button status="success" content="新增" @click="insertRow()"></vxe-button>
+      <vxe-button status="primary" content="保存" @click="submitEvent"></vxe-button>
+      <vxe-button content="取消" @click="typeGroupModalVisible = false"></vxe-button>
     </template>
   </vxe-modal>
 </template>
 <script setup lang="ts">
 import {
+  apiDeleteDataTypeGroupByIds,
   apiListAllDataTypeGroups,
   apiSaveDataTypeGroup,
   apiSaveOrUpdateDataTypeGroups,
 } from "@/api/datatype"
+import { Message } from "@/hooks/message";
 import { onMounted, ref } from "vue"
 
 const loading = ref(false)
@@ -101,6 +71,25 @@ const refreshTable = () => {
 onMounted(() => {
   refreshTable()
 })
+
+/**
+ * 删除类型分组
+ * @param rows 类型分组列表
+ */
+const deleteTypeGroup = (row: DataTypeGroup) => {
+
+  if (row.id == undefined) {
+    let index = typeGroups.value.indexOf(row)
+    if (index >= 0) {
+      typeGroups.value.splice(index, 1)
+    }
+    return;
+  }
+
+  apiDeleteDataTypeGroupByIds([row]).then((res) => {
+    Message.info("删除成功", () => refreshTable())
+  })
+}
 
 const typeGroupModalVisible = ref(false)
 

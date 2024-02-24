@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.backend.common.query.PageParam;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -20,6 +22,15 @@ import java.util.List;
  * 在Mapper层封装批量操作，不用再使用Service
  */
 public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
+
+    /**
+     * 实体类类型
+     *
+     * @return 实体类类型
+     */
+    default Class<T> getEntityClass() {
+        return null;
+    }
 
     /**
      * 查询单表所有数据
@@ -87,6 +98,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * 批量插入
      * warning: Possible heap pollution from parameterized vararg type
      * <a href="https://stackoverflow.com/questions/12462079/possible-heap-pollution-via-varargs-parameter">...</a>
+     *
      * @param entities 实体列表
      * @return 是否成功
      */
@@ -165,11 +177,41 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @param entityType 实体类型
      * @return 是否成功
      */
-    default boolean deleteByIds(Class<T> entityType, Collection<? extends Serializable> ids) {
+    default boolean deleteByIds(@Nullable Class<T> entityType, Collection<? extends Serializable> ids) {
         if (ids == null || ids.isEmpty()) {
             return false;
         }
+        if (entityType == null) {
+            entityType = getEntityClass();
+            Assert.notNull(entityType, "entity type is null");
+        } else {
+            Class<T> _entityType = getEntityClass();
+            if (entityType == _entityType) {
+                List<? extends Serializable> idList = ids.stream().toList();
+                if (idList.size() == 1) {
+                    return SqlHelper.retBool(deleteById(idList.get(0)));
+                }
+            }
+        }
         return Db.removeByIds(ids, entityType);
+    }
+
+    /**
+     * 根据主键批量删除
+     *
+     * @param ids 主键列表
+     * @return 是否成功
+     */
+    default boolean deleteByIds(Serializable... ids) {
+        if (ids == null || ids.length == 0) {
+            return false;
+        }
+        if (ids.length == 1) {
+            return SqlHelper.retBool(deleteById(ids[0]));
+        }
+        Class<T> entityClass = getEntityClass();
+        Assert.notNull(entityClass, "entity class is null");
+        return Db.removeByIds(Arrays.asList(ids), entityClass);
     }
 
     /**
@@ -179,8 +221,14 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @param entityType 实体类型
      * @return 是否成功
      */
-    default boolean deleteByIds(Class<T> entityType, Serializable... ids) {
+    default boolean deleteByIds(@Nullable Class<T> entityType, Serializable... ids) {
         if (ids == null || ids.length == 0) {
+            return false;
+        }
+        if (entityType == null) {
+            if (ids.length == 1) {
+                return SqlHelper.retBool(deleteById(ids[0]));
+            }
             return false;
         }
         return Db.removeByIds(Arrays.asList(ids), entityType);

@@ -1,9 +1,8 @@
 package io.devpl.codegen.template.rocker;
 
-import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateException;
-import io.devpl.codegen.template.TemplateSource;
 
 import java.io.OutputStream;
 import java.io.Writer;
@@ -15,12 +14,12 @@ import java.io.Writer;
 public class RockerTemplateEngine implements TemplateEngine {
 
     @Override
-    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+    public void evaluate(String template, Object arguments, Writer writer) {
 
     }
 
     @Override
-    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) throws TemplateException {
+    public void render(Template template, Object arguments, OutputStream outputStream) throws TemplateException {
 
     }
 

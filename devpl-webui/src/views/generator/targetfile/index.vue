@@ -141,7 +141,8 @@ const handleRowClicked = (row: TargetGenFile, column: any, event: Event) => {
  * 预览模板
  * @param row 
  */
-const previewTemplate = (row: TargetGenFile) => {
+const previewTemplate = (event : MouseEvent, row: TargetGenFile) => {
+  event.stopPropagation()
   if (row.templateId != undefined) {
     apiGetTemplateById(row.templateId).then((res) => {
       templateContentEditorRef.value.init(res.data?.templateName, res.data?.content)
@@ -190,7 +191,7 @@ const previewTemplate = (row: TargetGenFile) => {
     </el-table-column>
     <el-table-column label="模板" width="200px" show-overflow-tooltip>
       <template #default="scope">
-        <a v-if="!scope.row.editing" truncated @click="previewTemplate(scope.row)" style="color: blue;">{{
+        <a v-if="!scope.row.editing" truncated @click="previewTemplate($event, scope.row)" style="color: blue;">{{
           scope.row.templateName }}
         </a>
         <el-select v-if="scope.row.editing" v-model="scope.row.templateName" class="m-2" placeholder="选择模板" filterable

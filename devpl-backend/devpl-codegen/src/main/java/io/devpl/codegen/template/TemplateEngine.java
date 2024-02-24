@@ -10,7 +10,7 @@ import java.util.Properties;
 /**
  * 模板引擎实现
  *
- * @see TemplateSource
+ * @see Template
  * @see TemplateException 所有异常通过TemplateException进行抛出
  */
 public interface TemplateEngine {
@@ -28,7 +28,7 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @return 渲染结果
      */
-    default String evaluate(String template, TemplateArguments arguments) throws TemplateException {
+    default String evaluate(String template, Object arguments) throws TemplateException {
         try (Writer writer = new StringWriter()) {
             evaluate(template, arguments, writer);
             return writer.toString();
@@ -44,32 +44,30 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @param writer    渲染结果
      */
-    void evaluate(String template, TemplateArguments arguments, Writer writer);
+    void evaluate(String template, Object arguments, Writer writer);
 
     /**
      * 渲染并输出到指定位置
      *
-     * @param templateSource 模板
-     * @param arguments      模板参数
-     * @param outputStream   输出位置
+     * @param template     模板
+     * @param arguments    模板参数
+     * @param outputStream 输出位置
      * @throws TemplateException 渲染失败
      */
-    void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) throws TemplateException;
+    void render(Template template, Object arguments, OutputStream outputStream) throws TemplateException;
 
     /**
      * 渲染并输出到指定位置
+     * 实际上调用的是Template#render方法
      *
-     * @param templateSource 模板
-     * @param arguments      模板参数
-     * @param writer         输出位置
+     * @param template  模板
+     * @param arguments 模板参数
+     * @param writer    输出位置
      * @throws TemplateException 渲染失败
+     * @see Template#render(TemplateEngine, Object, Writer)
      */
-    default void render(TemplateSource templateSource, TemplateArguments arguments, Writer writer) throws TemplateException {
-        try {
-            templateSource.render(this, arguments, writer);
-        } catch (Exception e) {
-            throw new TemplateException(e);
-        }
+    default void render(@NotNull Template template, @NotNull Object arguments, @NotNull Writer writer) throws TemplateException {
+        template.render(this, arguments, writer);
     }
 
     /**
@@ -81,7 +79,16 @@ public interface TemplateEngine {
      * @throws TemplateException 渲染出错
      */
     default void render(String name, Map<String, Object> arguments, OutputStream fos) throws TemplateException {
-        render(getTemplate(name, false), new TemplateArgumentsMap(arguments, false), fos);
+        Template template = getTemplate(name, false);
+        if (template.exists()) {
+            template.render(this, arguments, new OutputStreamWriter(fos));
+        } else {
+            try {
+                fos.write(template.getName().getBytes(StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw TemplateException.wrap(e);
+            }
+        }
     }
 
     default void render(String name, TemplateArguments arguments, OutputStream fos) throws TemplateException {
@@ -95,13 +102,29 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @return 渲染结果
      */
-    default String render(TemplateSource template, TemplateArguments arguments) throws TemplateException {
+    default String render(Template template, TemplateArguments arguments) throws TemplateException {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             render(template, arguments, os);
             return os.toString(StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new TemplateException(e);
         }
+    }
+
+    /**
+     * 转换数据模型
+     *
+     * @param dataModel 数据模型
+     * @return 转换后的数据模型
+     */
+    default Object transfer(Object dataModel) {
+        if (dataModel instanceof Map<?, ?> map) {
+            return map;
+        }
+        if (dataModel instanceof TemplateArgumentsMap tam) {
+            return tam.asMap();
+        }
+        return dataModel;
     }
 
     /**
@@ -113,7 +136,7 @@ public interface TemplateEngine {
      * @throws TemplateException 模板异常
      */
     default String render(String template, TemplateArguments arguments) throws TemplateException {
-        TemplateSource ts = getTemplate(template, false);
+        Template ts = getTemplate(template, false);
         if (!ts.exists()) {
             return ts.getName();
         }
@@ -146,11 +169,12 @@ public interface TemplateEngine {
      * 获取模板
      *
      * @param nameOrTemplate 模板名称或者字符串模板
-     * @param st             是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称
-     * @return 模板实例
+     * @param st             是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称，不用程序自己来判断是否是模板名称还是模板字符串
+     * @return 模板实例，如果不存在，返回 {@link Template.UNKNOWN}
+     * @see Template
      */
     @NotNull
-    default TemplateSource getTemplate(String nameOrTemplate, boolean st) {
-        return TemplateSource.UNKNOWN;
+    default Template getTemplate(String nameOrTemplate, boolean st) throws TemplateException {
+        return Template.UNKNOWN;
     }
 }

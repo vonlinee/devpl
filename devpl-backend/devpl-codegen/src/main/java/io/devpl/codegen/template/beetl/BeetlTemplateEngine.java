@@ -1,12 +1,10 @@
 package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateArguments;
-import io.devpl.codegen.template.TemplateException;
-import io.devpl.codegen.template.TemplateSource;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
-import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +30,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
                 // 3.2.x 方法签名修改成了object,其他低版本为string
                 method = GroupTemplate.class.getDeclaredMethod("getTemplate", String.class);
             } catch (NoSuchMethodException exception) {
-                throw new RuntimeException(exception);
+                throw new RuntimeException("beetl template engine init failed", exception);
             }
         }
     }
@@ -50,12 +48,12 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public void evaluate(String template, TemplateArguments arguments, Writer writer) {
+    public void evaluate(String template, Object arguments, Writer writer) {
 
     }
 
     @Override
-    public void render(TemplateSource templateSource, TemplateArguments arguments, OutputStream outputStream) {
+    public void render(Template template, Object arguments, OutputStream outputStream) {
 
     }
 
@@ -65,10 +63,10 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public @NotNull TemplateSource getTemplate(String name, boolean stringTemplate) {
+    public @NotNull Template getTemplate(String name, boolean stringTemplate) {
         try {
-            Template template = (Template) method.invoke(groupTemplate, name);
-            return new BeetlTemplateSource(template);
+            org.beetl.core.Template template = (org.beetl.core.Template) method.invoke(groupTemplate, name);
+            return new BeetlTemplate(template);
         } catch (IllegalAccessException | InvocationTargetException e) {
             return super.getTemplate(name, stringTemplate);
         }

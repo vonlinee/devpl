@@ -28,7 +28,7 @@ public class TestVelocityTemplateEngine {
 
         String template = "Hello, #toCamelCase(${name})";
 
-        TemplateSource ts = engine.getTemplate(template, true);
+        Template ts = engine.getTemplate(template, true);
 
         String result = engine.render(ts, argumentsMap);
         System.out.println(result);
@@ -46,7 +46,7 @@ public class TestVelocityTemplateEngine {
 
         String template = "Hello, #toCamelCase(${name})";
 
-        TemplateSource ts = engine.getTemplate(template, false);
+        Template ts = engine.getTemplate(template, false);
 
         String result = engine.render(ts, argumentsMap);
         System.out.println(result);

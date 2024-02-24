@@ -3,10 +3,14 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.domain.FileNode;
+import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.TableImportParam;
+import io.devpl.backend.domain.vo.FileGenerationResult;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
+import io.devpl.backend.utils.PathUtils;
+import io.devpl.backend.utils.ProjectUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -53,6 +57,18 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private CodeGenProperties codeGenProperties;
 
+    @Override
+    public FileGenerationResult generateFile(FileGenerationParam param) {
+        FileGenerationResult result = new FileGenerationResult();
+        // 生成代码
+        List<String> rootDirs = new ArrayList<>();
+        for (Long tableId : param.getTableIds()) {
+            rootDirs.add(this.generateForTable(tableId));
+        }
+        result.setRootDirs(rootDirs);
+        return result;
+    }
+
     /**
      * 生成某个表的文件
      *
@@ -73,7 +89,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
 
-            String saveLocation = parentDirectory + File.separator + tfg.getSavePath() + File.separator + tfg.getFileName();
+            String saveLocation = PathUtils.of(parentDirectory, tfg.getSavePath(), tfg.getFileName());
 
             saveLocation = this.getAbsolutePath(saveLocation);
             sb.append("模板").append(tfg.getTemplateName()).append("\t => ").append(saveLocation).append("\n");
@@ -82,8 +98,11 @@ public class FileGenerationServiceImpl implements FileGenerationService {
             FileUtils.createFileQuietly(file, true);
             if (file.exists()) {
                 sb.append("\t创建文件成功 ").append(file.getAbsolutePath()).append("\n");
+
+                TemplateInfo templateInfo = templateService.getById(tfg.getTemplateId());
+
                 try (Writer writer = new FileWriter(file)) {
-                    templateService.render(tfg.getTemplateId(), dataModel, writer);
+                    templateService.render(templateInfo, dataModel, writer);
                 } catch (Exception e) {
                     log.error("渲染{}失败", tfg.getFileName(), e);
                 }
@@ -123,7 +142,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
-        dataModel.put("ModuleName", StringUtils.upperFirst(table.getModuleName()));
+        dataModel.put("ModuleName", StringUtils.upperFirst(ProjectUtils.toSimpleIdentifier(table.getModuleName())));
         dataModel.put("functionName", table.getFunctionName());
         dataModel.put("FunctionName", StringUtils.upperFirst(table.getFunctionName()));
         dataModel.put("formLayout", table.getFormLayout());

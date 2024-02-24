@@ -10,4 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CustomDirectiveMapper extends MyBatisPlusMapper<CustomDirective> {
 
+    @Override
+    default Class<CustomDirective> getEntityClass() {
+        return CustomDirective.class;
+    }
 }

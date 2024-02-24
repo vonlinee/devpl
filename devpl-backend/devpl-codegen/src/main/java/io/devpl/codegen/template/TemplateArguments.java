@@ -119,7 +119,7 @@ public interface TemplateArguments {
      * 返回数据模型对象
      *
      * @return 数据模型对象，有些模板引擎支持POJO类和Map，有些只支持Map作为参数，具体使用什么对象作为容器类根据不同的模板引擎实现决定
-     * @see TemplateSource
+     * @see Template
      * @see TemplateEngine
      */
     @NotNull

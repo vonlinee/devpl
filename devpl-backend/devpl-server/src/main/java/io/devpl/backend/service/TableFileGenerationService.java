@@ -17,4 +17,6 @@ public interface TableFileGenerationService extends IService<TableFileGeneration
     List<TableFileGeneration> listByTableId(Long tableId);
 
     boolean updateFilesToBeGenerated(TableFileGenParam param);
+
+    boolean removeByTableIds(Long[] tableIds, boolean logicDelete);
 }

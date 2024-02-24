@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.backend.dao.DataTypeGroupMapper;
 import io.devpl.backend.dao.DataTypeItemMapper;
 import io.devpl.backend.dao.DataTypeMappingMapper;
+import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
@@ -174,5 +175,10 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
             result.add(new SelectOptionVO(group.getId(), group.getTypeGroupId(), group.getTypeGroupId()));
         }
         return result;
+    }
+
+    @Override
+    public boolean removeDataTypeGroupByIds(DataTypeGroupParam param) {
+        return dataTypeGroupMapper.deleteByIds(CollectionUtils.toArray(param.getGroups(), DataTypeGroup::getId, Long[]::new));
     }
 }

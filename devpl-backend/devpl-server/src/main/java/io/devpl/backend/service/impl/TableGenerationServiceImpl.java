@@ -12,7 +12,8 @@ import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
-import io.devpl.backend.utils.EncryptUtils;
+import io.devpl.backend.utils.PathUtils;
+import io.devpl.backend.utils.ProjectUtils;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataLoader;
@@ -89,11 +90,29 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteBatchIds(Long[] ids) {
+    public boolean batchRemoveTablesById(Long[] ids) {
         // 删除表
         baseMapper.deleteBatchIds(Arrays.asList(ids));
         // 删除列
-        return tableFieldService.deleteBatchTableIds(ids);
+        tableFieldService.deleteBatchTableIds(ids);
+        // 删除生成的文件信息
+        return tableFileGenerationService.removeByTableIds(ids, false);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void importTable(TableImportParam param) {
+        if (!CollectionUtils.isEmpty(param.getTableNameList())) {
+            // 已经导入的表名
+            List<String> tableNamesImported = this.listTableNames(param.getDataSourceId());
+            param.getTableNameList().removeAll(tableNamesImported);
+            for (String tableName : param.getTableNameList()) {
+                param.setTableName(tableName);
+                this.importSingleTable(param);
+            }
+        } else {
+            this.importSingleTable(param);
+        }
     }
 
     /**
@@ -102,7 +121,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @param param TableImportParam
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void importSingleTable(TableImportParam param) {
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
@@ -111,12 +129,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         // 表存在
         if (table != null) {
             return;
-        }
-
-        DBType dbType = DBType.MYSQL;
-        if (!dataSourceService.isSystemDataSource(datasourceId)) {
-            RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(datasourceId);
-            connInfo.setPassword(EncryptUtils.decrypt(connInfo.getPassword()));
         }
 
         // 根据项目信息，生成表生成的相关信息，可选
@@ -128,7 +140,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         try (Connection connection = dataSourceService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
 
-            DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, dbType);
+            DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, param.getDbType());
             List<TableGeneration> tables = prepareTables(loader.getTables(null, null, tableName, null));
             table = Lists.first(tables, t -> Objects.equals(t.getTableName(), tableName));
             if (table == null) {
@@ -145,7 +157,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             table.setEmail(Maps.get(globalTemplateParamsMap, "email"));
 
             table.setClassName(CaseFormat.toPascalCase(tableName));
-            table.setModuleName(getModuleName(table.getPackageName()));
+            // 获取模块名
+            table.setModuleName(StringUtils.subAfter(table.getPackageName(), ".", true));
             table.setFunctionName(getFunctionName(tableName));
 
             // 默认初始值
@@ -163,7 +176,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 table.setFrontendPath(projectInfo.getFrontendPath());
                 table.setModuleName(projectInfo.getProjectName());
                 table.setVersion(projectInfo.getVersion());
-                params.setValue("moduleName", projectInfo.getProjectName());
+                params.setValue("moduleName", ProjectUtils.toSimpleIdentifier(projectInfo.getProjectName()));
             }
 
             // 尝试填充全局模板参数
@@ -185,9 +198,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
             this.save(table);
 
+            // 初始化该表需要生成的文件列表
             this.initTargetGenerationFiles(table, params);
 
-            List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, dbType, connection, table);
+            List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, param.getDbType(), connection, table);
             // 初始化字段数据并保存列数据
             tableFieldService.saveBatch(tableFieldList);
         } catch (SQLException exception) {
@@ -236,7 +250,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 tableFileGen.setFileName(templateEngine.evaluate(targetGenFile.getFileName(), params));
             }
             if (StringUtils.hasText(targetGenFile.getSavePath())) {
-                tableFileGen.setSavePath(templateEngine.evaluate(targetGenFile.getSavePath(), params));
+                tableFileGen.setSavePath(PathUtils.toRelative(templateEngine.evaluate(targetGenFile.getSavePath(), params)));
             }
             list.add(tableFileGen);
         }
@@ -257,15 +271,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         return functionName;
     }
 
-    /**
-     * 获取模块名
-     *
-     * @param packageName 包名
-     * @return 模块名
-     */
-    public String getModuleName(String packageName) {
-        return StringUtils.subAfter(packageName, ".", true);
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

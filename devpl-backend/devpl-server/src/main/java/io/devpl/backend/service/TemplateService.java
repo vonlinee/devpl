@@ -7,6 +7,7 @@ import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateVariableMetadata;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.Writer;
@@ -39,17 +40,18 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @param templateId 模板ID
      * @param dataModel  模板参数
      * @param out        输出位置
+     * @see TemplateService#render(TemplateInfo, Map, Writer)
      */
     void render(Long templateId, Map<String, Object> dataModel, Writer out);
 
     /**
-     * 模板渲染
+     * 渲染模板
      *
-     * @param content   模板内容
-     * @param dataModel 数据
-     * @param out       输出位置
+     * @param templateInfo 模板信息
+     * @param dataModel    模板参数
+     * @param out          输出位置
      */
-    void render(String content, Map<String, Object> dataModel, Writer out);
+    void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out);
 
     /**
      * 模板渲染 直接渲染文件模板

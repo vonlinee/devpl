@@ -1,6 +1,7 @@
 package io.devpl.backend.dao;
 
 import io.devpl.backend.common.mvc.MyBatisPlusMapper;
+import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,6 +16,11 @@ import java.util.List;
  **/
 @Mapper
 public interface DataTypeItemMapper extends MyBatisPlusMapper<DataTypeItem> {
+
+    @Override
+    default Class<DataTypeItem> getEntityClass() {
+        return DataTypeItem.class;
+    }
 
     List<DataTypeItem> listByGroupId(@Param("typeGroupId") String typeGroup);
 }

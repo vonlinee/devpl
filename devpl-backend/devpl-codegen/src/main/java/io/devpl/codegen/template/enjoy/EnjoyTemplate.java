@@ -1,19 +1,18 @@
 package io.devpl.codegen.template.enjoy;
 
-import com.jfinal.template.Template;
-import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
-import io.devpl.codegen.template.TemplateSource;
+import io.devpl.sdk.util.BeanUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Writer;
 
-class EnjoyTemplateSource implements TemplateSource {
+class EnjoyTemplate implements Template {
 
-    Template template;
+    com.jfinal.template.Template template;
 
-    public EnjoyTemplateSource(Template template) {
+    public EnjoyTemplate(com.jfinal.template.Template template) {
         this.template = template;
     }
 
@@ -23,8 +22,8 @@ class EnjoyTemplateSource implements TemplateSource {
     }
 
     @Override
-    public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
-        String result = template.renderToString(arguments.asMap());
+    public void render(TemplateEngine engine, Object arguments, Writer writer) {
+        String result = template.renderToString(BeanUtils.toMap(arguments));
         try {
             writer.append(result);
         } catch (IOException e) {

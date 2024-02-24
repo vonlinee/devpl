@@ -2,35 +2,15 @@
   代码生成结果展示
  -->
 <template>
-  <vxe-modal
-    ref="modalRef"
-    v-model="dialogVisiableRef"
-    show-footer
-    title="生成结果"
-    width="80%"
-    height="90%"
-    transfer
-    :mask-closable="false"
-    destroy-on-close
-    draggable
-    show-zoom
-    :z-index="1000"
-  >
+  <vxe-modal ref="modalRef" v-model="dialogVisiableRef" show-footer title="生成结果" width="80%" height="90%" transfer
+    :mask-closable="false" destroy-on-close draggable show-zoom :z-index="1000">
     <Splitpanes>
       <Pane min-size="20" size="35">
-        <div
-          class="tree-container"
-          :style="{
-            height: '100%',
-            overflowY: 'scroll',
-          }"
-        >
-          <el-tree
-            :data="treeData"
-            :props="defaultProps"
-            default-expand-all
-            @node-click="handleFileTreeNodeClick"
-          >
+        <div class="tree-container" :style="{
+          height: '100%',
+          overflowY: 'scroll',
+        }">
+          <el-tree :data="treeData" :props="defaultProps" default-expand-all @node-click="handleFileTreeNodeClick">
             <template #default="{ node, data }">
               <svg-icon :icon="getIconName(data)" />
               <span style="padding-left: 4px">{{ node.label }}</span>
@@ -39,12 +19,10 @@
         </div>
       </Pane>
       <pane>
-        <div
-          :style="{
-            height: '100%',
-            overflowY: 'scroll',
-          }"
-        >
+        <div :style="{
+          height: '100%',
+          overflowY: 'scroll',
+        }">
           <monaco-editor ref="editorRef" language="java"></monaco-editor>
         </div>
       </pane>
@@ -94,7 +72,7 @@ function expandAllParentNode(
   fileNode: FileNode,
   defaultExpandedKeys: string[]
 ) {
-  if (!fileNode.isLeaf) {
+  if (!fileNode.leaf) {
     return
   }
   defaultExpandedKeys.push(fileNode.key)
@@ -121,7 +99,7 @@ const defaultProps = {
  * @see FileNode#isLeaf
  */
 const handleFileTreeNodeClick = (fileNode: FileNode) => {
-  if (fileNode && fileNode.isLeaf) {
+  if (fileNode && fileNode.leaf) {
     if (fileNode.path !== "") {
       const lang = getLanguage(fileNode.extension)
       apiGetFileContent(fileNode.path).then((res) => {
@@ -139,7 +117,7 @@ const handleFileTreeNodeClick = (fileNode: FileNode) => {
  * @param fileNode
  */
 let findFirstLeafNode = function (fileNode: FileNode): FileNode | undefined {
-  if (fileNode.isLeaf) {
+  if (fileNode.leaf) {
     return fileNode
   }
   let firstNode: FileNode | undefined

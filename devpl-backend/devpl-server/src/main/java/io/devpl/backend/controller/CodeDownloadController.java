@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -30,8 +29,7 @@ public class CodeDownloadController {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); ZipOutputStream zip = new ZipOutputStream(outputStream)) {
             // 生成代码
             for (String tableId : tableIds.split(",")) {
-                String root = codeGenService.getAbsolutePath(codeGenService.generateForTable(Long.parseLong(tableId)));
-                File file = new File(root);
+
             }
             // zip压缩包数据
             ServletUtils.downloadFile(response, "devpl.zip", outputStream);

@@ -14,7 +14,8 @@
         SELECT tfg.*, tfg1.template_id, tfg1.template_name
         FROM table_file_generation tfg
                  LEFT JOIN template_file_generation tfg1 ON tfg.generation_id = tfg1.id
-        WHERE tfg.table_id = #{tableId}
+        WHERE tfg.is_deleted = 0
+          AND tfg.table_id = #{tableId}
     </select>
 
 </mapper>

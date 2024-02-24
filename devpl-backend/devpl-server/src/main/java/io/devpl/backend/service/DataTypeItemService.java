@@ -2,6 +2,7 @@ package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
@@ -45,5 +46,13 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
 
     List<SelectOptionVO> getSelectableTypes(String typeGroup);
 
-    List<SelectOptionVO>  getSelectableTypeGroups();
+    List<SelectOptionVO> getSelectableTypeGroups();
+
+    /**
+     * 删除类型分组
+     *
+     * @param param 类型分组参数
+     * @return 是否成功
+     */
+    boolean removeDataTypeGroupByIds(DataTypeGroupParam param);
 }

@@ -1,11 +1,12 @@
 package io.devpl.backend.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 表文件生成记录表
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("table_file_generation")
-public class TableFileGeneration {
+public class TableFileGeneration implements Serializable {
     /**
      * 主键ID
      */
@@ -46,6 +47,31 @@ public class TableFileGeneration {
      */
     @TableField(value = "save_path")
     private String savePath;
+
+    /**
+     * 更新时间
+     */
+    @JsonIgnore
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
+     * 创建时间
+     */
+    @JsonIgnore
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 是否逻辑删除
+     */
+    @JsonIgnore
+    @TableField(value = "is_deleted")
+    private boolean deleted;
+
+    public TableFileGeneration() {
+        this.setDeleted(false);
+    }
 
     // ================================= 非数据库字段 =================================
 

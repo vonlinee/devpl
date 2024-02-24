@@ -93,9 +93,10 @@
 import { reactive, ref } from "vue"
 import { ElMessage } from "element-plus/es"
 import { apiListBaseClass } from "@/api/model"
-import { useDownloadApi, useGeneratorApi } from "@/api/generator"
+import { useDownloadApi, apiFileGenerate } from "@/api/generator"
 import { apiGetGenTableById, useTableSubmitApi } from "@/api/table"
 
+// 事件 emit
 const emit = defineEmits(["refreshDataList", "handle"])
 
 const visible = ref(false)
@@ -194,7 +195,15 @@ defineExpose({
       })
     })
   },
-
+  /**
+   * 表单是否校验通过
+   * @returns 是否校验通过
+   */
+  isValid() {
+    dataFormRef.value.validate((valid: boolean) => {
+      return valid
+    })
+  },
   // 生成代码
   generate() {
     dataFormRef.value.validate(async (valid: boolean) => {
@@ -202,20 +211,21 @@ defineExpose({
         return false
       }
 
-      // 先保存
-      await useTableSubmitApi(dataForm)
+      // 先保存配置信息
+      useTableSubmitApi(dataForm).then((res) => {
 
-      // 生成代码，zip压缩包
-      if (dataForm.generatorType === 0) {
-        useDownloadApi([dataForm.id])
-        visible.value = false
-        return
-      }
+        // 生成代码，zip压缩包
+        if (dataForm.generatorType === 0) {
+          useDownloadApi([dataForm.id])
+          visible.value = false
+          return
+        }
 
-      // 生成代码，自定义路径
-      useGeneratorApi([dataForm.id]).then((res) => {
-        visible.value = false
-        emit("handle", res.data)
+        // 生成代码，自定义路径
+        apiFileGenerate([dataForm.id]).then((res) => {
+          visible.value = false
+          emit("handle", res.data)
+        })
       })
     })
   }

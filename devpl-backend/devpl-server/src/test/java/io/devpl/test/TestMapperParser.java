@@ -17,6 +17,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Comparator;
+import java.util.function.Function;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -75,4 +77,5 @@ public class TestMapperParser {
 
         xmlReader.parse(new InputSource(new StringReader(xml)));
     }
+
 }

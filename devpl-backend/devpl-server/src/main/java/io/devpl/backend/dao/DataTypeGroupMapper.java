@@ -1,7 +1,8 @@
 package io.devpl.backend.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
+import io.devpl.backend.entity.CustomDirective;
 import io.devpl.backend.entity.DataTypeGroup;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -9,7 +10,12 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface DataTypeGroupMapper extends BaseMapper<DataTypeGroup> {
+public interface DataTypeGroupMapper extends MyBatisPlusMapper<DataTypeGroup> {
+
+    @Override
+    default Class<DataTypeGroup> getEntityClass() {
+        return DataTypeGroup.class;
+    }
 
     List<DataTypeGroupVO> selectAllGroups();
 

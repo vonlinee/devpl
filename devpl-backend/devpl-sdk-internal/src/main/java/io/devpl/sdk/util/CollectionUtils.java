@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 /**
  * 集合操作工具类
  * 简化stream操作
+ *
+ * @since 17
  */
 public abstract class CollectionUtils {
 
@@ -370,5 +372,19 @@ public abstract class CollectionUtils {
         }
         set.addAll(collection);
         return set;
+    }
+
+    /**
+     * 集合映射字段为数组
+     *
+     * @param collection 集合
+     * @param mapper     字段映射
+     * @param array      指定数组构造
+     * @param <E>        集合类型
+     * @param <T>        数组类型
+     * @return 数组
+     */
+    public static <E, T> T[] toArray(Collection<E> collection, Function<E, T> mapper, IntFunction<T[]> array) {
+        return collection.stream().map(mapper).toArray(array);
     }
 }

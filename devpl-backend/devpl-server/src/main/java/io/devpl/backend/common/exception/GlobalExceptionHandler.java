@@ -14,6 +14,9 @@ import java.sql.SQLException;
 
 /**
  * 全局异常处理器
+ * 拦截其他可能出现的异常信息，避免将异常调用栈显示给前端
+ *
+ * @see BusinessException
  */
 @Slf4j
 @RestControllerAdvice

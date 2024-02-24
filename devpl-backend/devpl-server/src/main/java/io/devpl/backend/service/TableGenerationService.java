@@ -29,7 +29,18 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
 
     TableGeneration getByTableName(String tableName);
 
-    boolean deleteBatchIds(Long[] ids);
+    /**
+     * 删除表
+     *
+     * @param ids 主键ID列表
+     * @return 是否成功
+     */
+    boolean batchRemoveTablesById(Long[] ids);
+
+    /**
+     * 导入表
+     */
+    void importTable(TableImportParam param);
 
     /**
      * 导入单个表

@@ -4,11 +4,13 @@ import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
+import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
+import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.backend.service.TableGenerationService;
-import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.codegen.db.DBType;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +20,15 @@ import java.util.List;
  * 数据表管理
  */
 @RestController
-@RequestMapping("/gen/table")
+@RequestMapping("/api/filegen/table")
 public class TableController {
 
     @Resource
     TableGenerationService tableService;
     @Resource
     TableGenerationFieldService tableFieldService;
+    @Resource
+    DataSourceService dataSourceService;
 
     /**
      * 分页
@@ -66,7 +70,7 @@ public class TableController {
      */
     @DeleteMapping("/remove")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
-        return Result.ok(tableService.deleteBatchIds(ids));
+        return Result.ok(tableService.batchRemoveTablesById(ids));
     }
 
     /**
@@ -87,17 +91,17 @@ public class TableController {
      */
     @PostMapping("/import")
     public Result<String> tableImport(@RequestBody TableImportParam param) {
-        if (!CollectionUtils.isEmpty(param.getTableNameList())) {
-            // 已经导入的表名
-            List<String> tableNamesImported = tableService.listTableNames(param.getDataSourceId());
-            param.getTableNameList().removeAll(tableNamesImported);
-            for (String tableName : param.getTableNameList()) {
-                param.setTableName(tableName);
-                tableService.importSingleTable(param);
-            }
-        } else {
-            tableService.importSingleTable(param);
+        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
+        if (connInfo == null) {
+            return Result.error("数据源不存在");
         }
+        DBType dbType = DBType.getValue(connInfo.getDbType());
+        if (dbType == null) {
+            return Result.error("数据库类型" + connInfo.getDbType() + "不存在");
+        }
+        param.setConnInfo(connInfo);
+        param.setDbType(dbType);
+        tableService.importTable(param);
         return Result.ok();
     }
 

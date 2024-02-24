@@ -10,11 +10,11 @@ import java.nio.file.Files;
 /**
  * 文件模板
  */
-public class FileTemplateSource implements TemplateSource {
+public class FileTemplate implements Template {
 
     File file;
 
-    public FileTemplateSource(File file) {
+    public FileTemplate(File file) {
         this.file = file;
     }
 
@@ -42,7 +42,7 @@ public class FileTemplateSource implements TemplateSource {
     }
 
     @Override
-    public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+    public void render(TemplateEngine engine, Object arguments, Writer writer) {
         throw new UnsupportedOperationException("file template is not supported yet");
     }
 }

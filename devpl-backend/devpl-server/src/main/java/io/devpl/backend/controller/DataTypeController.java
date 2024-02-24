@@ -3,6 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DataTypeAddParam;
+import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
@@ -96,6 +97,16 @@ public class DataTypeController {
     @PostMapping("/group/add")
     public Result<Boolean> addDataTypeGroup(@RequestBody DataTypeGroup param) {
         return Result.ok(dataTypeService.saveDataTypeGroup(param));
+    }
+
+    /**
+     * 删除数据类型分组
+     *
+     * @return 类型分组信息
+     */
+    @DeleteMapping("/group/remove")
+    public boolean removeDataTypeGroups(@RequestBody DataTypeGroupParam param) {
+        return dataTypeService.removeDataTypeGroupByIds(param);
     }
 
     /**

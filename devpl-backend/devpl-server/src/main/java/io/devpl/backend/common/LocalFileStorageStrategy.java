@@ -1,5 +1,8 @@
 package io.devpl.backend.common;
 
+import io.devpl.backend.domain.FileNode;
+import io.devpl.backend.utils.SecurityUtils;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.IOUtils;
 import org.springframework.stereotype.Component;
 
@@ -9,9 +12,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
- * 本地文件存储
+ * 服务器本地文件存储
  */
 @Component
 public class LocalFileStorageStrategy implements FileStorageStrategy {
@@ -23,6 +31,11 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
 
     @Override
     public boolean isPathValid(String path) {
+        try {
+            Paths.get(path);
+        } catch (Exception exception) {
+            return false;
+        }
         return true;
     }
 
@@ -34,6 +47,17 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
     @Override
     public boolean exists(String path) {
         return Files.exists(Path.of(path));
+    }
+
+    @Override
+    public boolean isFile(String path) {
+        return Files.isRegularFile(Paths.get(path));
+    }
+
+    @Override
+    public boolean isDirectory(String path) {
+        Path fp = Paths.get(path);
+        return Files.isDirectory(fp);
     }
 
     @Override
@@ -50,6 +74,54 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
             IOUtils.copy(inputStream, os);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<FileNode> getFileTree(String rootPath) {
+        File root = new File(rootPath);
+        List<FileNode> node = new ArrayList<>();
+        // 自定义比较器，使得目录在前，文件在后
+        recursive(root, node, Comparator.comparing(f -> f.isDirectory() ? 0 : 1));
+        return node;
+    }
+
+    /**
+     * 递归生成文件树
+     *
+     * @param path 目录
+     * @param node 保存节点
+     */
+    private void recursive(File path, List<FileNode> node, Comparator<File> sort) {
+        if (path.isDirectory()) {
+            File[] list = path.listFiles();
+            if (list == null || list.length == 0) {
+                return;
+            }
+            Arrays.sort(list, sort);
+            for (File file : list) {
+                FileNode fileNode = new FileNode();
+                fileNode.setKey(SecurityUtils.base64Encode(file.getAbsolutePath()));
+                fileNode.setLabel(file.getName());
+                fileNode.setPath(file.getAbsolutePath());
+                node.add(fileNode);
+                if (file.isDirectory()) {
+                    fileNode.setLeaf(false);
+                    fileNode.setSelectable(false);
+                    List<FileNode> children = new ArrayList<>();
+                    fileNode.setChildren(children);
+                    recursive(file, children, sort);
+                } else {
+                    fileNode.setExtension(FileUtils.getExtensionName(file, "txt"));
+                }
+            }
+        } else {
+            FileNode fileNode = new FileNode();
+            fileNode.setKey(SecurityUtils.base64Encode(path.getAbsolutePath()));
+            fileNode.setLabel(path.getName());
+            fileNode.setLeaf(true);
+            fileNode.setSelectable(true);
+            node.add(fileNode);
         }
     }
 }

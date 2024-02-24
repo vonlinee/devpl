@@ -1,18 +1,16 @@
 package io.devpl.codegen.template.beetl;
 
-import io.devpl.codegen.template.TemplateArguments;
+import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
-import io.devpl.codegen.template.TemplateSource;
-import org.beetl.core.Template;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Writer;
 
-class BeetlTemplateSource implements TemplateSource {
+class BeetlTemplate implements Template {
 
-    Template template;
+    org.beetl.core.Template template;
 
-    public BeetlTemplateSource(Template template) {
+    public BeetlTemplate(org.beetl.core.Template template) {
         this.template = template;
     }
 
@@ -22,7 +20,7 @@ class BeetlTemplateSource implements TemplateSource {
     }
 
     @Override
-    public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+    public void render(TemplateEngine engine, Object arguments, Writer writer) {
         template.renderTo(writer);
     }
 }

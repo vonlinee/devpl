@@ -25,12 +25,12 @@ public class FileNode {
     /**
      * 是否是叶子结点
      */
-    private Boolean isLeaf;
+    private boolean leaf = true;
 
     /**
      * 是否可选中
      */
-    private Boolean selectable;
+    private boolean selectable = true;
 
     /**
      * 文件绝对路径

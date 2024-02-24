@@ -10,7 +10,7 @@ import java.util.Properties;
  */
 public abstract class AbstractTemplateEngine implements TemplateEngine {
 
-    Properties properties;
+    protected Properties properties;
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override

@@ -1,6 +1,8 @@
 package io.devpl.backend.service;
 
 import io.devpl.backend.domain.FileNode;
+import io.devpl.backend.domain.param.FileGenerationParam;
+import io.devpl.backend.domain.vo.FileGenerationResult;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,14 @@ import java.util.Map;
  * 代码文件生成
  */
 public interface FileGenerationService {
+
+    /**
+     * 文件生成
+     *
+     * @param param FileGenerationParam
+     * @return FileGenerationResult
+     */
+    FileGenerationResult generateFile(FileGenerationParam param);
 
     /**
      * 生成某个表的所有文件

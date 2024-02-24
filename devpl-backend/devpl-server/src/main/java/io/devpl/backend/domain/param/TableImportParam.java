@@ -1,5 +1,8 @@
 package io.devpl.backend.domain.param;
 
+import io.devpl.backend.entity.RdbmsConnectionInfo;
+import io.devpl.codegen.db.DBType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +16,7 @@ public class TableImportParam {
     /**
      * 数据源ID
      */
-    @Nullable
+    @NotNull(message = "数据源为空")
     private Long dataSourceId;
 
     /**
@@ -38,4 +41,11 @@ public class TableImportParam {
      */
     @Nullable
     private Long projectId;
+
+    private DBType dbType;
+
+    /**
+     * 后端填充
+     */
+    private RdbmsConnectionInfo connInfo;
 }

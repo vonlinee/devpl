@@ -9,21 +9,21 @@
       </el-tab-pane>
       <el-tab-pane label="文件类型" name="target">
         <el-table border :data="generationFiles">
-          <el-table-column label="文件名" prop="fileName">
+          <el-table-column label="文件名" prop="fileName" width="280">
             <template #default="scope">
               <span v-if="!scope.row.editing">{{ scope.row.fileName }}</span>
               <el-input v-if="scope.row.editing" v-model="scope.row.fileName"></el-input>
             </template>
           </el-table-column>
-          <el-table-column label="模板" prop="templateId">
+          <el-table-column label="模板" prop="templateId" width="200">
             <template #default="scope">
-              <span v-if="!scope.row.editing">{{ scope.row.fileName }}</span>
+              <span v-if="!scope.row.editing">{{ scope.row.templateName }}</span>
               <template-selector v-if="scope.row.editing" :current="scope.row.templateName ? scope.row.templateId : null"
                 :options="templateOptions"
                 :on-handle-value-change="(val) => (scope.row.templateId = val)"></template-selector>
             </template>
           </el-table-column>
-          <el-table-column label="保存路径" prop="savePath" show-overflow-tooltip>
+          <el-table-column label="保存路径(相对路径)" prop="savePath" show-overflow-tooltip>
             <template #default="scope">
               <span v-if="!scope.row.editing">{{ scope.row.savePath }}</span>
               <el-input v-if="scope.row.editing" v-model="scope.row.savePath"></el-input>
@@ -32,7 +32,7 @@
 
           <el-table-column fixed="right" label="操作" align="center" width="150px">
             <template #default="scope">
-              <el-button link type="primary" @click.prevent="scope.row.editing = !scope.row.editing">
+              <el-button link type="primary" @click.prevent="saveOrFireEdit(scope.row)">
                 {{ scope.row.editing ? "保存" : "编辑" }}
               </el-button>
               <el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
@@ -61,7 +61,7 @@
             </template>
           </vxe-column>
           <vxe-column field="fieldName" title="字段名"></vxe-column>
-          <vxe-column field="fieldComment" title="说明" :edit-render="{ name: 'input' }"></vxe-column>
+          <vxe-column field="fieldComment" title="说明" :edit-render="{ name: 'input' }" show-overflow></vxe-column>
           <vxe-column field="fieldType" title="字段类型"></vxe-column>
           <vxe-column field="attrName" title="属性名" :edit-render="{ name: 'input' }"></vxe-column>
           <vxe-column field="attrType" title="属性类型">
@@ -91,20 +91,20 @@
       <el-tab-pane label="表单配置" name="form">
         <vxe-table ref="formTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
           :edit-config="{ trigger: 'click', mode: 'cell' }">
-          <vxe-column field="attrName" title="属性名"></vxe-column>
+          <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
           <vxe-column field="fieldComment" title="说明"></vxe-column>
-          <vxe-column field="formItem" title="表单显示">
+          <vxe-column field="formItem" title="表单显示" width="80">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.formItem"></vxe-checkbox>
             </template>
           </vxe-column>
-          <vxe-column field="formRequired" title="表单必填">
+          <vxe-column field="formRequired" title="表单必填" width="80">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
             </template>
           </vxe-column>
           <vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
-          <vxe-column field="formType" title="表单类型">
+          <vxe-column field="formType" title="表单类型" width="120">
             <template #default="{ row }">
               <vxe-select v-model="row.formType" transfer>
                 <vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
@@ -112,20 +112,20 @@
               </vxe-select>
             </template>
           </vxe-column>
-          <vxe-column field="formDict" title="表单字典类型" :edit-render="{ name: 'input' }"></vxe-column>
+          <vxe-column field="formDict" title="表单字典类型" width="140" :edit-render="{ name: 'input' }"></vxe-column>
         </vxe-table>
       </el-tab-pane>
       <el-tab-pane label="列表配置" name="grid">
         <vxe-table ref="gridTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
           :edit-config="{ trigger: 'click', mode: 'cell' }">
-          <vxe-column field="attrName" title="属性名"></vxe-column>
-          <vxe-column field="fieldComment" title="说明"></vxe-column>
-          <vxe-column field="gridItem" title="列表显示">
+          <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
+          <vxe-column field="fieldComment" title="说明" show-overflow></vxe-column>
+          <vxe-column field="gridItem" title="列表显示" width="80">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
             </template>
           </vxe-column>
-          <vxe-column field="gridSort" title="列表排序">
+          <vxe-column field="gridSort" title="列表排序" width="80">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.gridSort"></vxe-checkbox>
             </template>
@@ -135,8 +135,8 @@
       <el-tab-pane label="查询配置" name="query">
         <vxe-table ref="queryTable" :border="true" row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
           :edit-config="{ trigger: 'click', mode: 'cell' }">
-          <vxe-column field="attrName" title="属性名"></vxe-column>
-          <vxe-column field="fieldComment" title="说明"></vxe-column>
+          <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
+          <vxe-column field="fieldComment" title="说明" show-overflow></vxe-column>
           <vxe-column field="queryItem" title="查询显示" width="80" align="center">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
@@ -191,12 +191,15 @@ import { useFieldTypeListApi } from "@/api/fieldType"
 import { VxeTableInstance } from "vxe-table"
 import {
   apiListGenerationFiles,
+  apiRemoveGenerationFiles,
   apiSaveGenerationFileConfig,
+  apiSaveOrUpdateGenerationFiles,
 } from "@/api/generator"
 import Generator from "./generator.vue"
 import TemplateSelector from "./TemplateSelector.vue"
 import CodeGenResult from "@/views/generator/CodeGenResult.vue"
 import { apiListSelectableTemplates } from "@/api/template"
+import { Message } from "@/hooks/message"
 
 /**
  * 展示生成结果弹窗Ref
@@ -224,7 +227,16 @@ onMounted(() => {
 })
 
 const deleteRow = (index: number) => {
-  generationFiles.value?.splice(index, 1)
+  if (generationFiles.value) {
+    const files = generationFiles.value
+    const file = files[index]
+    if (file.id != undefined) {
+      file.deleted = true
+      apiRemoveGenerationFiles(tableId.value, [file]).then((res) => {
+        Message.info("删除成功", () => files.splice(index, 1))
+      })
+    }
+  }
 }
 
 const onAddItem = () => {
@@ -236,6 +248,7 @@ const onAddItem = () => {
     fileName: "",
     savePath: "",
     editing: true,
+    deleted: false
   })
 }
 
@@ -278,6 +291,19 @@ const formTypeList = reactive([
   { label: "日期", value: "date" },
   { label: "日期时间", value: "datetime" },
 ])
+
+/**
+ * 保存或者触发编辑状态
+ * @param row 表文件生成记录
+ */
+const saveOrFireEdit = (row: TableFileGeneration) => {
+  row.editing = !row.editing
+  if (row.editing == false) {
+    apiSaveOrUpdateGenerationFiles([row]).then((res) => {
+      Message.info("保存成功")
+    })
+  }
+}
 
 const init = (id: number) => {
   visible.value = true
@@ -335,12 +361,12 @@ const getFieldTypeList = async () => {
 
 /**
  * 根目录
- * @param root 
+ * @param res 
  */
-const handleResult = (root: string) => {
-  if (root) {
+const handleResult = (res: FileGenerationResult) => {
+  if (res) {
     // 返回所有根目录列表
-    resultDialogRef.value.init(root)
+    resultDialogRef.value.init(res.rootDirs)
   }
 }
 
@@ -348,8 +374,11 @@ const handleResult = (root: string) => {
  * 确定按钮，表单提交
  */
 const submitHandle = () => {
+
   // 保存基本配置信息
-  generatorRef.value.save()
+  if (!generatorRef.value.save()) {
+    return
+  }
 
   apiUpdateGenTableFields(tableId.value, fieldList.value).then(() => {
     apiSaveGenerationFileConfig(
@@ -369,6 +398,9 @@ const submitHandle = () => {
   })
 }
 
+/**
+ * 生成代码
+ */
 const generateCode = () => {
   generatorRef.value.generate()
 }

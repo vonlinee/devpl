@@ -2,8 +2,10 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.FileNode;
+import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.domain.param.TableFileGenParam;
+import io.devpl.backend.domain.vo.FileGenerationResult;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.entity.TargetGenerationFile;
 import io.devpl.backend.service.*;
@@ -11,7 +13,6 @@ import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,19 +32,13 @@ public class CodeGenerationController {
 
     /**
      * 生成代码（自定义目录）
-     * TODO 一次生成只操作同一个目录
      *
-     * @param tableIds 数据库表ID
+     * @param param 文件生成参数
      * @return 所有生成的根目录
      */
-    @PostMapping("/code")
-    public Result<List<String>> generatorCode(@RequestBody Long[] tableIds) {
-        // 生成代码
-        List<String> rootDirs = new ArrayList<>(tableIds.length);
-        for (Long tableId : tableIds) {
-            rootDirs.add(fileGenService.generateForTable(tableId));
-        }
-        return Result.ok(rootDirs);
+    @PostMapping("/file")
+    public FileGenerationResult generatorCode(@RequestBody FileGenerationParam param) {
+        return fileGenService.generateFile(param);
     }
 
     /**
@@ -52,8 +47,8 @@ public class CodeGenerationController {
      * @return 所有生成的根目录
      */
     @GetMapping("/config")
-    public Result<String> getGeneratorConfig() {
-        return Result.ok(generatorConfigService.getCodeGenConfigContent());
+    public String getGeneratorConfig() {
+        return generatorConfigService.getCodeGenConfigContent();
     }
 
     /**
@@ -77,6 +72,16 @@ public class CodeGenerationController {
     }
 
     /**
+     * 生成的文件类型列表
+     *
+     * @return 生成的文件列表
+     */
+    @PostMapping("/genfiles")
+    public Result<Boolean> updateGeneratedFileTypes(@RequestBody List<TargetGenerationFile> param) {
+        return Result.ok(targetGenFileService.saveOrUpdateBatch(param));
+    }
+
+    /**
      * 修改和新增一条生成的文件类型列表
      *
      * @return 生成的文件列表
@@ -93,7 +98,7 @@ public class CodeGenerationController {
      * @return 生成的文件列表
      */
     @PostMapping("/genfiles/replace")
-    public Result<?> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenerationFile> files) {
+    public Result<Boolean> saveOrUpdateGeneratedFileTypes(@RequestBody List<TargetGenerationFile> files) {
         return Result.ok(targetGenFileService.saveOrUpdateBatch(files));
     }
 
@@ -117,6 +122,23 @@ public class CodeGenerationController {
     @PostMapping("/genfiles/config")
     public Result<Boolean> updateFilesToBeGenerated(@RequestBody TableFileGenParam param) {
         return Result.ok(tableFileGenerationService.updateFilesToBeGenerated(param));
+    }
+
+    /**
+     * 删除单个表需要生成的文件信息
+     *
+     * @param param 单个表需要生成的文件信息
+     * @return 文件列表
+     */
+    @DeleteMapping("/genfiles/remove")
+    public Result<Boolean> removeFilesToBeGenerated(@RequestBody TableFileGenParam param) {
+        if (param.isLr()) {
+            for (TableFileGeneration tfg : param.getFileInfoList()) {
+                tfg.setDeleted(true);
+            }
+            return Result.ok(tableFileGenerationService.updateFilesToBeGenerated(param));
+        }
+        return Result.ok(tableFileGenerationService.removeBatchByIds(param.getFileInfoList()));
     }
 
     /**

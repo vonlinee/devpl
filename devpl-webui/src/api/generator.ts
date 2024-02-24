@@ -15,8 +15,10 @@ export const useDownloadApi = (tableIds: any[]): void => {
  * 生成代码（自定义目录）
  * @param tableIds
  */
-export const useGeneratorApi = (tableIds: any[]) => {
-  return http.post("/api/codegen/code", tableIds)
+export const apiFileGenerate = (tableIds: any[]) => {
+  return http.post<FileGenerationResult>("/api/codegen/file", {
+    tableIds: tableIds
+  })
 }
 
 /**
@@ -43,12 +45,32 @@ export const apiSaveOrUpdateGenFiles = (genFiles: TargetGenFile[]) => {
 }
 
 /**
- * 保存或更新生成文件类型
+ * 查询生成文件列表
  * @param tableId
  */
 export const apiListGenerationFiles = (tableId: number) => {
   return http.get<TableFileGeneration[]>("/api/codegen/genfiles/list", {
     tableId: tableId,
+  })
+}
+
+/**
+ * 保存或更新生成文件信息
+ * @param tableId
+ */
+export const apiSaveOrUpdateGenerationFiles = (files: TableFileGeneration[]) => {
+  return http.post<TableFileGeneration[]>("/api/codegen/genfiles/config", files)
+}
+
+/**
+ * 保存或更新生成文件信息
+ * @param tableId
+ * @param files 
+ */
+export const apiRemoveGenerationFiles = (tableId: number, files: TableFileGeneration[]) => {
+  return http.delete<TableFileGeneration[]>("/api/codegen/genfiles/remove", {
+    tableId: tableId,
+    fileInfoList: files
   })
 }
 

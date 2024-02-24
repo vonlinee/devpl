@@ -3,8 +3,6 @@ package io.devpl.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.dao.TemplateInfoMapper;
@@ -15,14 +13,22 @@ import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateVariableMetadata;
 import io.devpl.backend.service.TemplateService;
+import io.devpl.codegen.template.Template;
+import io.devpl.codegen.template.TemplateEngine;
+import io.devpl.codegen.template.TemplateException;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -45,6 +51,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     TemplateInfoMapper templateInfoMapper;
     @Resource
     CodeGenProperties codeGenProperties;
+    @Resource
+    TemplateEngine templateEngine;
 
     /**
      * p
@@ -79,27 +87,27 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public void render(Long templateId, Map<String, Object> dataModel, Writer out) {
         TemplateInfo templateInfo = getById(templateId);
-        if (templateInfo == null) {
-            log.error("模板不存在 {}", templateId);
-            return;
-        }
-        if (StringUtils.hasText(templateInfo.getContent())) {
-            render(templateInfo.getContent(), dataModel, out);
-        }
+        render(templateInfo, dataModel, out);
     }
 
     @Override
-    public void render(String content, Map<String, Object> dataModel, Writer out) {
-        try (StringReader reader = new StringReader(content)) {
+    public void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) {
+        if (StringUtils.hasText(templateInfo.getContent())) {
+            renderTemplateString(templateInfo.getContent(), dataModel, out);
+        }
+    }
+
+    private void renderTemplateString(String templateContent, Map<String, Object> dataModel, Writer out) {
+        try {
             // 渲染模板
-            String templateName = dataModel.get("templateName").toString();
-            Template template = new Template(templateName, reader, null, "utf-8");
-            template.process(dataModel, out);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            throw new BusinessException("渲染模板失败，请检查模板语法", e);
+            Template template = templateEngine.getTemplate(templateContent, true);
+            if (template.exists()) {
+                template.render(templateEngine, dataModel, out);
+            }
         } catch (TemplateException e) {
-            throw new BusinessException("模板语法不正确", e);
+            // 去掉某些堆栈信息
+            IOUtils.writeQuietly(out, e.getMessage());
+            throw BusinessException.create(e.getMessage(), e);
         }
     }
 
@@ -119,17 +127,11 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         if (CollectionUtils.isEmpty(dataModel)) {
             return content;
         }
-        try (StringReader reader = new StringReader(content); StringWriter sw = new StringWriter()) {
-            // 渲染模板
-            String templateName = dataModel.get("templateName").toString();
-            Template template = new Template(templateName, reader, null, "utf-8");
-            template.process(dataModel, sw);
-            content = sw.toString();
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-            throw new BusinessException("渲染模板失败，请检查模板语法", e);
-        } catch (TemplateException e) {
-            throw new BusinessException("模板语法不正确", e);
+        StringWriter sw = new StringWriter();
+        try {
+            renderTemplateString(content, dataModel, sw);
+        } catch (TemplateException exception) {
+            throw new BusinessException("渲染模板失败，请检查模板语法", exception);
         }
         return content;
     }

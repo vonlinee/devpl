@@ -1,13 +1,14 @@
 package io.devpl.codegen.template;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Writer;
 
 /**
  * 为了统一不同的模板引擎的实现，将各个模板引擎的类进行包装
  */
-public interface TemplateSource {
+public interface Template {
 
     /**
      * 模板名称
@@ -24,10 +25,10 @@ public interface TemplateSource {
 
     /**
      * @return 获取实际的模板
-     * @see StringTemplateSource
-     * @see FileTemplateSource
+     * @see StringTemplate
+     * @see FileTemplate
      */
-    default TemplateSource getSource() {
+    default Template getSource() {
         return this;
     }
 
@@ -50,7 +51,7 @@ public interface TemplateSource {
      * 是否是字符串模板
      *
      * @return 如果是字符串模板，则获取模板内容时调用getContent方法
-     * @see TemplateSource#getContent()
+     * @see Template#getContent()
      */
     default boolean isStringTemplate() {
         return false;
@@ -68,15 +69,16 @@ public interface TemplateSource {
     /**
      * 渲染模板
      *
-     * @param arguments 本次渲染的参数
+     * @param engine    对应模板的模板引擎，用于渲染模板字符串 {@link StringTemplate}
+     * @param dataModel 此模板渲染的参数数据模型，Map或者普通javabean，或者TemplateArgumentsMap
      * @param writer    输出位置
      */
-    void render(TemplateEngine engine, TemplateArguments arguments, Writer writer);
+    void render(@Nullable TemplateEngine engine, Object dataModel, Writer writer) throws TemplateException;
 
     /**
      * 模板未找到时返回此值
      */
-    TemplateSource UNKNOWN = new TemplateSource() {
+    Template UNKNOWN = new Template() {
         @Override
         public @NotNull String getName() {
             return "Template Not Found";
@@ -88,8 +90,12 @@ public interface TemplateSource {
         }
 
         @Override
-        public void render(TemplateEngine engine, TemplateArguments arguments, Writer writer) {
+        public void render(@Nullable TemplateEngine engine, Object dataModel, Writer writer) {
+            try {
+                writer.write(getName());
+            } catch (Exception ignored) {
 
+            }
         }
     };
 }

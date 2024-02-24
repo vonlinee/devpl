@@ -6,11 +6,18 @@ import { Keys } from "@/api/index"
  * @param id
  */
 export const apiGetGenTableById = (id: number) => {
-  return http.get<TableGeneration>("/gen/table/" + id)
+  return http.get<TableGeneration>("/api/filegen/table/" + id)
 }
 
+/**
+ * 查询生成的表列表
+ * @param page 
+ * @param limit 
+ * @param params 
+ * @returns 
+ */
 export const apiListGenTables = (page: number, limit: number, params: any) => {
-  return http.get<TableGeneration>("/gen/table/page", {
+  return http.get<TableGeneration>("/api/filegen/table/page", {
     pageIndex: page,
     pageSize: limit,
     ...params,
@@ -18,11 +25,11 @@ export const apiListGenTables = (page: number, limit: number, params: any) => {
 }
 
 export const useTableSubmitApi = (dataForm: any) => {
-  return http.put("/gen/table", dataForm)
+  return http.put("/api/filegen/table", dataForm)
 }
 
 export const apiRemoveGenTableByIds = (ids: Keys) => {
-  return http.delete("/gen/table/remove", ids)
+  return http.delete("/api/filegen/table/remove", ids)
 }
 
 /**
@@ -36,7 +43,7 @@ export const apiImportTables = (
   tableNameList: string[],
   projectId?: number
 ) => {
-  return http.post("/gen/table/import", {
+  return http.post("/api/filegen/table/import", {
     dataSourceId: datasourceId,
     tableNameList: tableNameList,
     projectId: projectId,
@@ -44,7 +51,7 @@ export const apiImportTables = (
 }
 
 export const apiUpdateGenTableFields = (tableId: number, fieldList: any) => {
-  return http.put("/gen/table/field/" + tableId, fieldList)
+  return http.put("/api/filegen/table/field/" + tableId, fieldList)
 }
 
 /**
@@ -52,5 +59,5 @@ export const apiUpdateGenTableFields = (tableId: number, fieldList: any) => {
  * @param id
  */
 export const apiSyncTable = (id: number) => {
-  return http.post("/gen/table/sync/" + id)
+  return http.post("/api/filegen/table/sync/" + id)
 }

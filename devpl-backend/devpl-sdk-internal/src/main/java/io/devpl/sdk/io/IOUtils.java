@@ -755,6 +755,16 @@ public class IOUtils {
         }
     }
 
+    public static void writeQuietly(Writer writer, String data) {
+        try {
+            if (data != null) {
+                writer.write(data);
+            }
+        } catch (Exception ignored) {
+
+        }
+    }
+
     /**
      * Writes chars from a <code>String</code> to bytes on an
      * <code>OutputStream</code> using the default character encoding of the

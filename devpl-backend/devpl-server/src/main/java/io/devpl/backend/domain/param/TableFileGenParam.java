@@ -11,6 +11,11 @@ import java.util.List;
 public class TableFileGenParam {
 
     /**
+     * 逻辑删除参数
+     */
+    private boolean lr = true;
+
+    /**
      * 生成表ID
      */
     private Long tableId;

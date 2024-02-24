@@ -26,6 +26,7 @@ export const apiListAllDataTypeGroups = () => {
 }
 
 /**
+ * 添加类型分组
  * @returns
  */
 export const apiSaveDataTypeGroup = (group: any) => {
@@ -99,6 +100,16 @@ export const apiListAllDataTypeMappings = (
  */
 export const apiSaveOrUpdateDataTypeGroups = (groups: any[]) => {
   return http.post("/api/datatype/group/saveupdate/batch", groups)
+}
+
+/**
+ * 保存或更新类型分组信息
+ * @returns
+ */
+export const apiDeleteDataTypeGroupByIds = (groups: any[]) => {
+  return http.delete("/api/datatype/group/remove", {
+    groups: groups
+  })
 }
 
 /**
