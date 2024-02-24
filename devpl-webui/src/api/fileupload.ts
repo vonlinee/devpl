@@ -32,3 +32,13 @@ export const apiGetFileSystemTree = (parent?: string) => {
     parent: parent
   })
 }
+
+/**
+ * 获取服务器文件目录结构
+ * @param parent 上级目录
+ */
+export const apiListFiles = (parent?: string) => {
+  return http.get("/api/file/fs/list-files", {
+    parent: parent
+  })
+}

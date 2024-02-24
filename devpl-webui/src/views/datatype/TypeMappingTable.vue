@@ -103,7 +103,7 @@ import {
   apiListAllDataTypeMappings,
   apiListAllMappableDataTypes,
 } from "@/api/datatype"
-import { onMounted, reactive, ref } from "vue"
+import { reactive, ref } from "vue"
 import { VxeTableDefines } from "vxe-table/types/table"
 
 import { useMessage } from "@/hooks/useElMessage"

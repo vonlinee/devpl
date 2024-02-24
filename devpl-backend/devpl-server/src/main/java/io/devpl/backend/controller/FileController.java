@@ -1,13 +1,13 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.FileNode;
 import io.devpl.backend.domain.param.FileDownloadParam;
 import io.devpl.backend.domain.param.MultiFileUploadParam;
 import io.devpl.backend.domain.param.SingleFileUploadParam;
-import io.devpl.backend.domain.vo.FileItem;
 import io.devpl.backend.domain.vo.FileUploadVO;
+import io.devpl.backend.service.FileStorageService;
 import io.devpl.backend.service.FileUploadService;
-import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,6 +32,8 @@ public class FileController {
 
     @Resource
     FileUploadService fileUploadService;
+    @Resource
+    FileStorageService fileStorageService;
 
     /**
      * 单文件上传
@@ -77,26 +76,28 @@ public class FileController {
      * @param parent 父路径
      * @return 文件目录
      */
+    @Deprecated // 耗时
     @ResponseBody
     @GetMapping(value = "/fs/tree")
-    public List<FileItem> getFileSystemTree(String parent) {
-        List<FileItem> result;
-        if (StringUtils.hasText(parent)) {
-            result = new ArrayList<>();
-            // 获取该目录的子路径
-            File file = new File(parent);
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File f : files) {
-                    if (f.isHidden()) {
-                        continue;
-                    }
-                    result.add(new FileItem(f));
-                }
-            }
-        } else {
-            result = Arrays.stream(File.listRoots()).map(FileItem::new).toList();
+    public List<FileNode> getFileSystemTree(String parent) {
+        if (parent == null) {
+            parent = "/";
         }
-        return result;
+        return fileStorageService.getFileTree(parent);
+    }
+
+    /**
+     * 获取服务器文件目录结构
+     *
+     * @param parent 父路径
+     * @return 文件目录
+     */
+    @ResponseBody
+    @GetMapping(value = "/fs/list-files")
+    public List<FileNode> getChildren(String parent) {
+        if (parent == null) {
+            parent = "/";
+        }
+        return fileStorageService.listFiles(parent);
     }
 }

@@ -24,4 +24,15 @@ public class FileStorageServiceImpl implements FileStorageService {
     public List<FileNode> getFileTree(String rootPath) {
         return fileStorageStrategy.getFileTree(rootPath);
     }
+
+    /**
+     * 获取文件列表
+     *
+     * @param parent 父级目录
+     * @return 文件节点列表
+     */
+    @Override
+    public List<FileNode> listFiles(String parent) {
+        return fileStorageStrategy.listFiles(parent);
+    }
 }

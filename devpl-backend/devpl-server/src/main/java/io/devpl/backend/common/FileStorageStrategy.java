@@ -107,4 +107,12 @@ public interface FileStorageStrategy {
      * @return 文件树，相对路径
      */
     List<FileNode> getFileTree(String rootPath);
+
+    /**
+     * 获取目录下的所有文件
+     *
+     * @param parent 文件目录
+     * @return 目录下的所有文件
+     */
+    List<FileNode> listFiles(String parent);
 }

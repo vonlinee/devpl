@@ -3,6 +3,7 @@ package io.devpl.backend.common;
 import io.devpl.backend.domain.FileNode;
 import io.devpl.backend.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +14,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 服务器本地文件存储
@@ -85,6 +83,29 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
         recursive(root, node, Comparator.comparing(f -> f.isDirectory() ? 0 : 1));
         return node;
     }
+
+    @Override
+    public List<FileNode> listFiles(String parent) {
+        File parentFile = new File(parent);
+        File[] files = parentFile.listFiles();
+        List<FileNode> nodes = Collections.emptyList();
+        if (files != null) {
+            // 自定义比较器，使得目录在前，文件在后
+            nodes = Arrays.stream(files).sorted(Comparator.comparing(f -> f.isDirectory() ? 0 : 1)).map(this::createFileNode).toList();
+        }
+        return nodes;
+    }
+
+    private FileNode createFileNode(File file) {
+        FileNode node = new FileNode();
+        node.setPath(file.getAbsolutePath());
+        node.setLeaf(file.isFile());
+        node.setKey(file.getAbsolutePath());
+        node.setLabel(file.getName());
+        node.setExtension(FilenameUtils.getExtension(file.getName()));
+        return node;
+    }
+
 
     /**
      * 递归生成文件树

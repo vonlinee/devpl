@@ -16,4 +16,12 @@ public interface FileStorageService {
      * @return 文件树节点
      */
     List<FileNode> getFileTree(String workPath);
+
+    /**
+     * 获取文件列表
+     *
+     * @param parent 父路径
+     * @return 文件树节点
+     */
+    List<FileNode> listFiles(String parent);
 }

@@ -9,12 +9,15 @@ import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
+import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
+import io.devpl.backend.utils.PathUtils;
 import io.devpl.backend.utils.SqlFormat;
 import io.devpl.backend.utils.XmlNode;
+import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;
 import io.devpl.sdk.TreeNode;
@@ -58,10 +61,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -681,7 +681,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             return;
         }
 
-        // projectService.analyse(rootDir);
+        projectService.analyse(rootDir);
 
         List<File> mapperXmlFiles = new ArrayList<>();
         try {
@@ -715,7 +715,55 @@ public class MyBatisServiceImpl implements MyBatisService {
         if (!CollectionUtils.isEmpty(belongedFiles)) {
             mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
         }
-        crudService.saveBatch(CollectionUtils.toFlatList(mapperXmlFiles, this::parseMappedStatements));
+
+        List<MappedStatementItem> mappedStatements = CollectionUtils.toFlatList(mapperXmlFiles, this::parseMappedStatements);
+
+        // 解析参数信息
+        for (int i = 0; i < mappedStatements.size(); i++) {
+            MappedStatementItem item = mappedStatements.get(i);
+            File namespaceFile = findNamespaceFile(rootDir, item.getNamespace());
+
+            if (namespaceFile == null) {
+                continue;
+            }
+
+            ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor();
+
+            List<MappedStatementParamMappingItem> paramMappings = JavaParserUtils.parse(namespaceFile, paramMappingVisitor).orElse(Collections.emptyList());
+
+            Map<String, List<MappedStatementParamMappingItem>> map = CollectionUtils.groupingBy(paramMappings, MappedStatementParamMappingItem::getMappedStatementId);
+
+            crudService.saveBatch(paramMappings);
+        }
+
+        crudService.saveBatch(mappedStatements);
+    }
+
+    /**
+     * 定位到namespace所在文件
+     *
+     * @param root      项目根路径
+     * @param namespace namespace
+     * @return java源文件
+     */
+    private File findNamespaceFile(File root, String namespace) {
+        final String[] names = namespace.split("\\.");
+        Path path = Paths.get("", names).getParent();
+        File result = null;
+        try {
+            File[] files = Files.walk(root.toPath())
+                .filter(p -> Files.isDirectory(p) && !p.toString().contains("target")).filter(p -> PathUtils.contains(p, path)).map(Path::toFile).toArray(File[]::new);
+            if (files.length > 0) {
+
+                files = files[0].listFiles();
+                if (files != null && files.length > 0) {
+                    result = Arrays.stream(files).filter(file -> file.getName().contains(names[names.length - 1])).findFirst().orElse(null);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     /**
@@ -749,7 +797,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 MappedStatementItem item = new MappedStatementItem();
 
                 item.setId(identifierGenerator.nextUUID(null));
-                item.setStatementId(id);
+                item.setStatementId(namespace + "." + id);
                 item.setBelongFile(mapperFile.getAbsolutePath());
                 /**
                  * 如果包含<![CDATA[<]]>，那么结果XNode.toString()的结果不包含<![CDATA[]]>标签，只会包含其内容
