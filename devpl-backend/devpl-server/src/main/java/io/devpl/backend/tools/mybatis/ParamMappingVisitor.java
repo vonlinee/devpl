@@ -8,11 +8,30 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.*;
 import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.codegen.parser.java.CompilationUnitVisitor;
+import io.devpl.sdk.util.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParamMappingVisitor implements CompilationUnitVisitor<List<MappedStatementParamMappingItem>> {
+
+    private File mapperFile;
+
+    public ParamMappingVisitor() {
+    }
+
+    public ParamMappingVisitor(File file) {
+        this.mapperFile = file;
+    }
+
+    public File getMapperFile() {
+        return mapperFile;
+    }
+
+    public void setMapperFile(File mapperFile) {
+        this.mapperFile = mapperFile;
+    }
 
     @Override
     public List<MappedStatementParamMappingItem> visit(CompilationUnit cu) {
@@ -50,6 +69,14 @@ public class ParamMappingVisitor implements CompilationUnitVisitor<List<MappedSt
                     item.setParamName(paramName);
                     item.setParamType(parameter.getTypeAsString());
 
+                    if (StringUtils.equalsAny(item.getParamType(), false,
+                        "Int", "Long", "String", "Double", "Float", "Short", "Byte", "Collection")) {
+
+                    }
+
+                    System.out.println(item.getParamType());
+
+                    // 如果是对象类型 则解析该对象的字段
                     result.add(item);
                 }
             }

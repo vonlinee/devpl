@@ -2000,6 +2000,10 @@ public abstract class StringUtils {
         return equalsAny(str1, false, strs);
     }
 
+    public static boolean equalsAny(CharSequence str1, Collection<String> strs) {
+        return equalsAny(str1, false, strs.toArray(String[]::new));
+    }
+
     /**
      * 给定字符串是否与提供的中任一字符串相同，相同则返回{@code true}，没有相同的返回{@code false}<br>
      * 如果参与比对的字符串列表为空，返回{@code false}

@@ -12,6 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
@@ -241,11 +243,11 @@ public class FileUtils {
         if (listFiles == null || listFiles.length == 0) {
             return new ArrayList<>(0);
         }
-        File[] directorys = file.listFiles(); // 获取根目录下所有文件与文件夹
-        if (directorys == null || directorys.length == 0) {
+        File[] directory = file.listFiles(); // 获取根目录下所有文件与文件夹
+        if (directory == null || directory.length == 0) {
             return new ArrayList<>(0);
         }
-        LinkedList<File> directoryList = new LinkedList<>(Arrays.asList(directorys));
+        LinkedList<File> directoryList = new LinkedList<>(Arrays.asList(directory));
         while (!directoryList.isEmpty()) { // 文件集合中若存在数据，则继续循环
             File first = directoryList.removeFirst();
             if (first.exists()) {
@@ -1125,7 +1127,7 @@ public class FileUtils {
     // -----------------------------------------------------------------------
 
     /**
-     * Delete a file. If file is a directory, delete it and all sub-directories.
+     * Delete a file. If file is a directory, delete it and all subdirectories.
      * <p>
      * The difference between File.delete() and this method are:
      * <ul>
@@ -1154,7 +1156,7 @@ public class FileUtils {
 
     /**
      * Schedule a file to be deleted when JVM exits. If file is directory delete it
-     * and all sub-directories.
+     * and all subdirectories.
      *
      * @param file file or directory to delete, must not be <code>null</code>
      * @throws NullPointerException if the file is <code>null</code>
@@ -1443,7 +1445,7 @@ public class FileUtils {
      * simply by reusing the same checksum object. For example:
      *
      * <pre>
-     * long csum = FileUtils.checksum(file, new CRC32()).getValue();
+     * long checkSum = FileUtils.checksum(file, new CRC32()).getValue();
      * </pre>
      *
      * @param file     the file to checksum, must not be <code>null</code>
@@ -1533,10 +1535,61 @@ public class FileUtils {
         return Files.list(directory.toPath()).map(Path::toFile);
     }
 
+    public static void listPaths(Path dir, Consumer<Stream<Path>> consumer) {
+        try (Stream<Path> stream = Files.list(dir)) {
+            consumer.accept(stream);
+        } catch (IOException e) {
+            throw RuntimeIOException.wrap(e);
+        }
+    }
+
+    /**
+     * 列出路径下的所有子路径，仅当前层级
+     *
+     * @param dir      目录
+     * @param consumer 执行函数
+     * @param <R>      返回结果类型
+     * @return 返回结果
+     */
+    public static <R> R listPaths(Path dir, Function<Stream<Path>, R> consumer) {
+        try (Stream<Path> stream = Files.list(dir)) {
+            return consumer.apply(stream);
+        } catch (IOException e) {
+            throw RuntimeIOException.wrap(e);
+        }
+    }
+
+    /**
+     * 列出路径下的所有子路径
+     *
+     * @param dir      目录
+     * @param consumer 执行函数
+     * @param <R>      返回结果类型
+     * @return 返回结果
+     */
+    public static <R> R walkPaths(Path dir, Function<Stream<Path>, R> consumer) {
+        try (Stream<Path> stream = Files.walk(dir)) {
+            return consumer.apply(stream);
+        } catch (IOException e) {
+            throw RuntimeIOException.wrap(e);
+        }
+    }
+
     /**
      * 获取文件扩展名
      *
      * @param file 文件对象
+     * @return 文件扩展名
+     */
+    public static String getExtensionName(File file) {
+        return getExtensionName(file, null);
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     * @param file        文件对象
+     * @param placeholder 默认值
      * @return 文件扩展名
      */
     public static String getExtensionName(File file, String placeholder) {

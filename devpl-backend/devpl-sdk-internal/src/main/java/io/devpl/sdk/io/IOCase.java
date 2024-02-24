@@ -17,8 +17,6 @@ import java.util.Objects;
  * Wherever possible, you should use the {@code check} methods in this
  * class to compare file names.
  * </p>
- *
- * @since 1.3
  */
 public enum IOCase {
 
@@ -60,7 +58,6 @@ public enum IOCase {
      * The sensitivity flag.
      */
     private final transient boolean sensitive;
-
     /**
      * Constructs a new instance.
      *

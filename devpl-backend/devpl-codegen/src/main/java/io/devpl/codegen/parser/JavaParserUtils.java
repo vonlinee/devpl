@@ -6,8 +6,8 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
-import com.github.javaparser.ast.comments.JavadocComment;
-import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.expr.Name;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
@@ -31,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -49,14 +48,7 @@ public class JavaParserUtils {
     static PrinterConfiguration printerConfiguration;
 
     static {
-        ParserConfiguration parserConfig = new ParserConfiguration();
-        parserConfig.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_8); // JDK8
-        parserConfig.setCharacterEncoding(StandardCharsets.UTF_8); // 源代码字符编码
-        // 关闭注释分析 默认情况下启用注释分析，禁用将加快解析速度，但在处理单个源文件时速度提升不明显，如果要解析大量文件，建议禁用。
-        parserConfig.setAttributeComments(true);
-        // 设置为孤立注释
-        parserConfig.setDoNotAssignCommentsPrecedingEmptyLines(true);
-        JAVA_PARSER_INSTANCE = new JavaParser(parserConfig);
+        JAVA_PARSER_INSTANCE = new JavaParser(newSimpleParserConfiguration(8));
     }
 
     static {
@@ -64,6 +56,24 @@ public class JavaParserUtils {
         printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_COMMENTS, true));
         printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.PRINT_JAVADOC, true));
         printerConfiguration.addOption(new DefaultConfigurationOption(DefaultPrinterConfiguration.ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN, true));
+    }
+
+    public static ParserConfiguration newSimpleParserConfiguration(int javaVersionNo) {
+        ParserConfiguration.LanguageLevel level;
+        try {
+            level = ParserConfiguration.LanguageLevel.valueOf("JAVA_" + javaVersionNo);
+        } catch (Exception exception) {
+            level = ParserConfiguration.LanguageLevel.JAVA_8;
+        }
+        ParserConfiguration pf = new ParserConfiguration();
+        pf.setLanguageLevel(level); // JDK8
+        pf.setCharacterEncoding(StandardCharsets.UTF_8); // 源代码字符编码
+        // 关闭注释分析 默认情况下启用注释分析，禁用将加快解析速度，但在处理单个源文件时速度提升不明显，如果要解析大量文件，建议禁用。
+        pf.setAttributeComments(true);
+        pf.setDoNotAssignCommentsPrecedingEmptyLines(true);
+        // 设置为孤立注释
+        pf.setDoNotAssignCommentsPrecedingEmptyLines(true);
+        return pf;
     }
 
     /**
@@ -96,12 +106,33 @@ public class JavaParserUtils {
         });
     }
 
-    public static <T> Optional<T> parse(File file, CompilationUnitVisitor<T> visitor) {
-        ParseResult<CompilationUnit> pr = parseResult(file);
+    /**
+     * 解析单个java源文件
+     *
+     * @param file        java源文件
+     * @param javaVersion java版本号
+     * @param visitor     CompilationUnitVisitor
+     * @param <T>         返回结果
+     * @return 返回结果
+     */
+    public static <T> Optional<T> parse(File file, int javaVersion, CompilationUnitVisitor<T> visitor) {
+        ParseResult<CompilationUnit> pr = parseResult(file, javaVersion);
         if (pr.isSuccessful()) {
             return pr.getResult().map(visitor::visit);
         }
         return Optional.empty();
+    }
+
+    /**
+     * 解析单个java源文件
+     *
+     * @param file    java源文件
+     * @param visitor CompilationUnitVisitor
+     * @param <T>     返回结果
+     * @return 返回结果
+     */
+    public static <T> Optional<T> parse(File file, CompilationUnitVisitor<T> visitor) {
+        return parse(file, 8, visitor);
     }
 
     public static <T> Optional<T> parse(Reader reader, CompilationUnitVisitor<T> visitor) {
@@ -112,8 +143,8 @@ public class JavaParserUtils {
         return Optional.empty();
     }
 
-    public static ParseResult<CompilationUnit> parseResult(File file) {
-        JavaParser javaParser = new JavaParser();
+    public static ParseResult<CompilationUnit> parseResult(File file, int javaVersion) {
+        JavaParser javaParser = new JavaParser(newSimpleParserConfiguration(javaVersion));
         ParseResult<CompilationUnit> result = null;
         try {
             result = javaParser.parse(file);

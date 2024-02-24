@@ -201,12 +201,12 @@
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
-            <version>3.25.1</version>
+            <version>${github.javaparser.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>
-            <version>3.25.1</version>
+            <version>${github.javaparser.version}</version>
         </dependency>
 
         <dependency>

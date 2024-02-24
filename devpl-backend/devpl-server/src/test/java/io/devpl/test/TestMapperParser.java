@@ -1,11 +1,13 @@
 package io.devpl.test;
 
+import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.backend.service.impl.MyBatisServiceImpl;
+import io.devpl.backend.tools.mybatis.ParamMappingVisitor;
+import io.devpl.codegen.parser.JavaParserUtils;
+import io.devpl.sdk.io.FileUtils;
 import jakarta.annotation.Resource;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -15,12 +17,14 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Comparator;
-import java.util.function.Function;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class TestMapperParser {
 
@@ -58,7 +62,6 @@ public class TestMapperParser {
             @Override
             public void characters(char[] ch, int start, int length) throws SAXException {
                 System.out.println("=============");
-
                 System.out.println(ch);
                 System.out.println("start = " + start + " length = " + length);
                 System.out.println("=============");
@@ -78,4 +81,25 @@ public class TestMapperParser {
         xmlReader.parse(new InputSource(new StringReader(xml)));
     }
 
+    @Test
+    public void test3() throws IOException {
+        String path = TestMapper.class.getName().replace(".", "/");
+
+        String absolutePath = new File("").getAbsolutePath();
+
+        Path fpath = Path.of(absolutePath, "src/test/java", path);
+        ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor();
+
+        List<MappedStatementParamMappingItem> list = FileUtils.listPaths(fpath.getParent(), pathStream -> {
+            return pathStream.filter(p -> p.toString().contains("Mapper.java"))
+                .map(Path::toFile).map(f -> {
+                    paramMappingVisitor.setMapperFile(f);
+                    return JavaParserUtils.parse(f, 17, paramMappingVisitor).orElse(Collections.emptyList());
+                })
+                .flatMap(Collection::stream)
+                .toList();
+        });
+
+        System.out.println(list);
+    }
 }

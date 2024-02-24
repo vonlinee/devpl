@@ -727,9 +727,9 @@ public class MyBatisServiceImpl implements MyBatisService {
                 continue;
             }
 
-            ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor();
+            ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor(namespaceFile);
 
-            List<MappedStatementParamMappingItem> paramMappings = JavaParserUtils.parse(namespaceFile, paramMappingVisitor).orElse(Collections.emptyList());
+            List<MappedStatementParamMappingItem> paramMappings = JavaParserUtils.parse(namespaceFile, 17, paramMappingVisitor).orElse(Collections.emptyList());
 
             Map<String, List<MappedStatementParamMappingItem>> map = CollectionUtils.groupingBy(paramMappings, MappedStatementParamMappingItem::getMappedStatementId);
 
