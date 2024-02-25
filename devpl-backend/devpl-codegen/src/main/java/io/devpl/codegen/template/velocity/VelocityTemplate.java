@@ -1,12 +1,14 @@
 package io.devpl.codegen.template.velocity;
 
 import io.devpl.codegen.template.Template;
+import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateException;
 import org.apache.velocity.VelocityContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,8 +54,16 @@ class VelocityTemplate implements Template {
                 }
             }
             template.merge(new VelocityContext((Map<String, Object>) argumentsMap), writer);
-            return;
+        } else if (arguments instanceof TemplateArgumentsMap tam) {
+            if (tam.isMap()) {
+                template.merge(new VelocityContext(tam.asMap()), writer);
+            } else {
+                Map<String, Object> map = new HashMap<>();
+                tam.fill(map);
+                template.merge(new VelocityContext(map), writer);
+            }
+        } else {
+            throw new TemplateException("Velocity仅支持Map作为模板参数");
         }
-        throw new TemplateException("Velocity仅支持Map作为模板参数");
     }
 }
