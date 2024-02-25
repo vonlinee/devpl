@@ -1,10 +1,12 @@
 package io.devpl.sdk;
 
 import io.devpl.sdk.util.StringUtils;
+import org.junit.Test;
 
 public class TestStringUtils {
 
-    public static void main(String[] args) {
+    @Test
+    public void test1() {
 
         System.out.println(StringUtils.isBlank("   s    "));
 
@@ -20,7 +22,6 @@ public class TestStringUtils {
 
         obj.set("name", "zs");
         obj.set("age", 12);
-
     }
 
 }

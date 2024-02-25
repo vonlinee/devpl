@@ -64,10 +64,19 @@ export const apiGetMapperStatementContent = (dir: string, msId: string) => {
  * 加载目录中的所有mapper文件
  * @return SQL 字符串
  */
-export const apiBuildMappedStatementIndex = (dir: string) => {
+export const apiBuildMappedStatementIndex = (dir: string, reset: boolean) => {
   return http.get("/api/tools/mybatis/index/build/ms", {
-    dir: dir
+    dir: dir,
+    reset: reset
   })
+}
+
+/**
+ * 加载目录中的所有mapper文件
+ * @return SQL 字符串
+ */
+export const apiListIndexedProjectRootPaths = () => {
+  return http.get<string[]>("/api/tools/mybatis/index/project")
 }
 
 /**

@@ -19,6 +19,9 @@ public enum SqlStatementType {
     ALTER;
 
     public static boolean isDml(SqlStatementType sst) {
+        if (sst == null) {
+            return false;
+        }
         return sst == INSERT || sst == SELECT || sst == UPDATE || sst == DELETE;
     }
 

@@ -675,13 +675,16 @@ public class MyBatisServiceImpl implements MyBatisService {
      *                       XMLConfigBuilder#parseConfiguration(XNode)
      */
     @Override
-    public void buildMapperXmlIndexForProject(String projectRootDir) {
+    public void buildMapperXmlIndexForProject(String projectRootDir, boolean reset) {
         File rootDir = new File(projectRootDir);
         if (!projectService.isProjectRootDirectory(rootDir)) {
             return;
         }
 
         projectService.analyse(rootDir);
+
+
+        final Map<String, String> fileIndexMap = new HashMap<>();
 
         List<File> mapperXmlFiles = new ArrayList<>();
         try {
@@ -694,7 +697,6 @@ public class MyBatisServiceImpl implements MyBatisService {
                     if (pathname.contains("target")) {
                         return FileVisitResult.SKIP_SUBTREE;
                     }
-
                     return super.preVisitDirectory(dir, attrs);
                 }
 
@@ -704,6 +706,18 @@ public class MyBatisServiceImpl implements MyBatisService {
                     if (path.contains("Mapper.xml")) {
                         mapperXmlFiles.add(file.toFile());
                     }
+                    String fileName = file.getFileName().toString();
+                    // 重名文件
+                    if (fileIndexMap.containsKey(fileName)) {
+                        int count = 1;
+                        String key = fileName + count;
+                        while (fileIndexMap.containsKey(key)) {
+                            key = fileName + count++;
+                        }
+                        fileIndexMap.put(key, fileName);
+                    } else {
+                        fileIndexMap.put(fileName, file.toAbsolutePath().toString());
+                    }
                     return FileVisitResult.CONTINUE;
                 }
             });
@@ -711,32 +725,57 @@ public class MyBatisServiceImpl implements MyBatisService {
             throw RuntimeIOException.wrap(e);
         }
 
-        Set<String> belongedFiles = mappedStatementItemMapper.listBelongedFiles();
-        if (!CollectionUtils.isEmpty(belongedFiles)) {
-            mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
+        if (reset) {
+            Set<String> pathsToRemove = CollectionUtils.toSet(mapperXmlFiles, File::getAbsolutePath);
+            if (mappedStatementItemMapper.deleteByFile(pathsToRemove)) {
+                log.info("删除MapperStatement索引成功");
+            }
+        } else {
+            List<String> belongedFiles = mappedStatementItemMapper.listBelongedFiles();
+            if (!CollectionUtils.isEmpty(belongedFiles)) {
+                mapperXmlFiles.removeIf(file -> belongedFiles.contains(file.getAbsolutePath()));
+            }
         }
 
-        List<MappedStatementItem> mappedStatements = CollectionUtils.toFlatList(mapperXmlFiles, this::parseMappedStatements);
+        if (!mapperXmlFiles.isEmpty()) {
+            List<MappedStatementItem> mappedStatements = new ArrayList<>();
+            List<MappedStatementItem> paramMappings = new ArrayList<>();
 
-        // 解析参数信息
-        for (int i = 0; i < mappedStatements.size(); i++) {
-            MappedStatementItem item = mappedStatements.get(i);
-            File namespaceFile = findNamespaceFile(rootDir, item.getNamespace());
+            final ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor();
+            paramMappingVisitor.setFileIndexMap(fileIndexMap);
+            for (File mapperXmlFile : mapperXmlFiles) {
+                List<MappedStatementItem> mappedStatementsOfSingleFile = this.parseMappedStatements(rootDir, mapperXmlFile);
+                if (mappedStatementsOfSingleFile.isEmpty()) {
+                    continue;
+                }
+                // Mapper名称
+                final String mapperNamespace = mappedStatementsOfSingleFile.get(0).getNamespace();
+                // 每个语句指明的参数类型
+                Map<String, MappedStatementItem> mappedStatementItemMap = CollectionUtils.toMap(mappedStatementsOfSingleFile, MappedStatementItem::getStatementId);
+                // 解析参数信息
+                File namespaceFile = findNamespaceFile(rootDir, mapperNamespace);
+                if (namespaceFile == null) {
+                    log.error("未找到namespace指定的Java源文件 {}", mapperNamespace);
+                    continue;
+                }
+                paramMappingVisitor.setMapperFile(namespaceFile);
+                paramMappingVisitor.setMappedStatementMap(mappedStatementItemMap);
 
-            if (namespaceFile == null) {
-                continue;
+                List<MappedStatementParamMappingItem> paramMappingsOfSingleFile = JavaParserUtils.parse(namespaceFile, 17, paramMappingVisitor).orElse(Collections.emptyList());
+
+                Map<String, List<MappedStatementParamMappingItem>> map = CollectionUtils.groupingBy(paramMappingsOfSingleFile, MappedStatementParamMappingItem::getMappedStatementId);
+
+                mappedStatements.addAll(mappedStatementsOfSingleFile);
             }
 
-            ParamMappingVisitor paramMappingVisitor = new ParamMappingVisitor(namespaceFile);
-
-            List<MappedStatementParamMappingItem> paramMappings = JavaParserUtils.parse(namespaceFile, 17, paramMappingVisitor).orElse(Collections.emptyList());
-
-            Map<String, List<MappedStatementParamMappingItem>> map = CollectionUtils.groupingBy(paramMappings, MappedStatementParamMappingItem::getMappedStatementId);
-
             crudService.saveBatch(paramMappings);
+            crudService.saveBatch(mappedStatements);
         }
+    }
 
-        crudService.saveBatch(mappedStatements);
+    @Override
+    public List<String> listIndexedProjectRootPaths() {
+        return mappedStatementItemMapper.listIndexedProjectRootPaths();
     }
 
     /**
@@ -750,29 +789,26 @@ public class MyBatisServiceImpl implements MyBatisService {
         final String[] names = namespace.split("\\.");
         Path path = Paths.get("", names).getParent();
         File result = null;
-        try {
-            File[] files = Files.walk(root.toPath())
-                .filter(p -> Files.isDirectory(p) && !p.toString().contains("target")).filter(p -> PathUtils.contains(p, path)).map(Path::toFile).toArray(File[]::new);
+        try (Stream<Path> stream = Files.walk(root.toPath())) {
+            File[] files = stream.filter(p -> Files.isDirectory(p) && !p.toString().contains("target")).filter(p -> PathUtils.contains(p, path)).map(Path::toFile).toArray(File[]::new);
             if (files.length > 0) {
-
                 files = files[0].listFiles();
                 if (files != null && files.length > 0) {
                     result = Arrays.stream(files).filter(file -> file.getName().contains(names[names.length - 1])).findFirst().orElse(null);
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw RuntimeIOException.wrap(e);
         }
         return result;
     }
 
     /**
-     * TODO 解析参数和返回值
-     *
-     * @param mapperFile XxxMapper.xml文件
+     * @param projectRoot 项目根路径
+     * @param mapperFile  XxxMapper.xml文件
      * @return MappedStatementItem信息
      */
-    public List<MappedStatementItem> parseMappedStatements(File mapperFile) {
+    public List<MappedStatementItem> parseMappedStatements(File projectRoot, File mapperFile) {
         List<MappedStatementItem> items = new ArrayList<>();
         try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
             /**
@@ -799,6 +835,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 item.setId(identifierGenerator.nextUUID(null));
                 item.setStatementId(namespace + "." + id);
                 item.setBelongFile(mapperFile.getAbsolutePath());
+                item.setProjectRoot(projectRoot.getAbsolutePath());
                 /**
                  * 如果包含<![CDATA[<]]>，那么结果XNode.toString()的结果不包含<![CDATA[]]>标签，只会包含其内容
                  * 解析器解析得到的文本不包含CDATA，因此这里的XML内容是有语法错误的
@@ -946,9 +983,6 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     @Override
     public IPage<MappedStatementItem> pageIndexedMappedStatements(MappedStatementListParam param) {
-        return mappedStatementItemMapper.selectPage(param, Wrappers.<MappedStatementItem>lambdaQuery()
-            .eq(StringUtils.hasText(param.getStatementType()), MappedStatementItem::getStatementType, param.getStatementType())
-            .like(StringUtils.hasText(param.getStatementId()), MappedStatementItem::getStatementId, param.getStatementId())
-            .like(StringUtils.hasText(param.getNamespace()), MappedStatementItem::getNamespace, param.getNamespace()));
+        return mappedStatementItemMapper.selectPage(param, Wrappers.<MappedStatementItem>lambdaQuery().eq(StringUtils.hasText(param.getStatementType()), MappedStatementItem::getStatementType, param.getStatementType()).like(StringUtils.hasText(param.getStatementId()), MappedStatementItem::getStatementId, param.getStatementId()).like(StringUtils.hasText(param.getNamespace()), MappedStatementItem::getNamespace, param.getNamespace()));
     }
 }

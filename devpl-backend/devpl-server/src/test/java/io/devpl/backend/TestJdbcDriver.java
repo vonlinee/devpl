@@ -1,4 +1,4 @@
-package io.devpl.test;
+package io.devpl.backend;
 
 import java.io.File;
 import java.net.URL;

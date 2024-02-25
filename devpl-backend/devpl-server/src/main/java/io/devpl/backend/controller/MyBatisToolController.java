@@ -9,8 +9,8 @@ import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.domain.param.MyBatisParam;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.MappedStatementItem;
-import io.devpl.backend.tools.mybatis.ParamMeta;
 import io.devpl.backend.service.MyBatisService;
+import io.devpl.backend.tools.mybatis.ParamMeta;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -93,8 +93,16 @@ public class MyBatisToolController {
      * 解析并保存Mapped Statement信息
      */
     @GetMapping("/index/build/ms")
-    public void buildMappedStatementIndex(@RequestParam(value = "dir") String projectRootDir) {
-        myBatisService.buildMapperXmlIndexForProject(projectRootDir);
+    public void buildMappedStatementIndex(@RequestParam(value = "dir") String projectRootDir, @RequestParam(value = "reset") Boolean reset) {
+        myBatisService.buildMapperXmlIndexForProject(projectRootDir, reset != null && reset);
+    }
+
+    /**
+     * 解析并保存Mapped Statement信息
+     */
+    @GetMapping("/index/project")
+    public Result<List<String>> listIndexedProjectRootPaths() {
+        return Result.ok(myBatisService.listIndexedProjectRootPaths());
     }
 
     /**

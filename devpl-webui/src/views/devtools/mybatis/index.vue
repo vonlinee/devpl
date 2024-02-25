@@ -8,7 +8,15 @@
       </el-form-item>
       <div style="margin-left: 20px;">
         <el-button type="primary" @click="openSelectModal">选择项目</el-button>
-        <el-button type="primary" @click="buildMsIndex">索引</el-button>
+
+        <el-dropdown split-button type="primary" @click="buildMsIndex(false)">
+            索引 
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="buildMsIndex(true)">重置索引</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </el-form>
@@ -35,7 +43,7 @@
     </el-form>
   </el-card>
 
-  <el-table :data="options.dataList" border height="500px">
+  <el-table :data="options.dataList" border height="500px" v-loading="loading">
     <el-table-column label="命名空间" prop="namespace"></el-table-column>
     <el-table-column label="类型" prop="statementType" width="100"></el-table-column>
     <el-table-column label="ID" prop="statementId"></el-table-column>
@@ -57,22 +65,28 @@
 </template>
 
 <script setup lang="ts">
-import { apiBuildMappedStatementIndex, apiListMappedStatements } from '@/api/mybatis';
+import { apiBuildMappedStatementIndex, apiListMappedStatements, apiListIndexedProjectRootPaths } from '@/api/mybatis';
 import FileOpenModal from '@/components/FileOpenModal.vue';
 import { useCrud } from '@/hooks';
 import { DataTableOption } from '@/hooks/interface';
 import { Message } from '@/hooks/message';
 import { onMounted, reactive, ref } from 'vue';
 import MyBatisSqlDebugger from './MyBatisSqlDebugger.vue';
+
+const loading = ref(false)
 const rootDir = ref('')
 const fileOpenModalRef = ref()
 const sqlDebugModalRef = ref()
-const buildMsIndex = () => {
+const buildMsIndex = (reset: boolean) => {
   if (!window.hasText(rootDir.value)) {
     Message.info("项目根目录为空")
   } else {
-    apiBuildMappedStatementIndex(rootDir.value).then((res) => {
+    loading.value = true
+    apiBuildMappedStatementIndex(rootDir.value, reset).then((res) => {
       getDataList()
+      loading.value = false
+    }).catch(() => {
+      loading.value = false
     })
   }
 }
@@ -81,8 +95,10 @@ const showSqlDebugTool = (statement: string) => {
   sqlDebugModalRef.value.show(statement)
 }
 
+const indexedProjectRootPaths = ref<string[]>([])
+
 const openSelectModal = () => {
-  fileOpenModalRef.value.show()
+  fileOpenModalRef.value.show(indexedProjectRootPaths.value)
 }
 
 const handleSelected = (val: any) => {
@@ -102,6 +118,10 @@ const options = reactive({
 const { getDataList, currentChangeHandle, sizeChangeHandle } = useCrud(options)
 
 onMounted(() => {
+  apiListIndexedProjectRootPaths().then((res) => {
+    indexedProjectRootPaths.value = res.data || []
+  })
+
   getDataList()
 })
 

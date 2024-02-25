@@ -19,11 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import { apiGetFileSystemTree, apiListFiles } from '@/api/fileupload';
+import { apiListFiles } from '@/api/fileupload';
 import { ref, toRaw } from 'vue';
 import FileTreeView from "@/components/FileTreeView.vue"
 import type Node from 'element-plus/es/components/tree/src/model/node'
-
+import { addAll } from '@/utils/tool';
 const visible = ref()
 const fileTreeView = ref()
 
@@ -55,7 +55,10 @@ const loadNode = (node: Node, resolve: (data: FileNode[]) => void) => {
 }
 
 defineExpose({
-  show() {
+  show(paths?: string[]) {
+    if (paths) {
+      historySelections.value = addAll(historySelections.value, toRaw(paths))
+    }
     visible.value = true
   }
 })

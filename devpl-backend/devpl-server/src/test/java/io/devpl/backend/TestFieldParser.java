@@ -1,4 +1,4 @@
-package io.devpl.test;
+package io.devpl.backend;
 
 import io.devpl.common.interfaces.impl.URLFieldParser;
 import org.junit.jupiter.api.Test;

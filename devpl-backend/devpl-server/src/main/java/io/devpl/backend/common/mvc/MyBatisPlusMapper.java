@@ -32,6 +32,10 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
         return null;
     }
 
+    default boolean retBool(Integer result) {
+        return SqlHelper.retBool(result);
+    }
+
     /**
      * 查询单表所有数据
      *

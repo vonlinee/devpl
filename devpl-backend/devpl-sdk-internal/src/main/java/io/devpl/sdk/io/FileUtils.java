@@ -1,6 +1,7 @@
 package io.devpl.sdk.io;
 
 import io.devpl.sdk.lang.RuntimeIOException;
+import io.devpl.sdk.util.StringUtils;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -22,7 +23,7 @@ import java.util.zip.Checksum;
 /**
  * Copied from Apache Commons-io FileUtils
  */
-public class FileUtils {
+public abstract class FileUtils {
 
     /**
      * The number of bytes in a kilobyte.
@@ -1925,5 +1926,27 @@ public class FileUtils {
      */
     public static String getRelativePathString(Path child, Path ancestor) {
         return child.toAbsolutePath().toString().replace(ancestor.toString(), "");
+    }
+
+    /**
+     * 构造一个File对象
+     *
+     * @param parent   父文件夹
+     * @param children 子路径
+     * @return File对象
+     */
+    public static File newFile(File parent, String... children) {
+        return new File(parent, StringUtils.join(File.separatorChar, children));
+    }
+
+    /**
+     * 构造一个File对象
+     *
+     * @param parent   父文件夹
+     * @param children 子路径
+     * @return File对象
+     */
+    public static File newFile(String parent, String... children) {
+        return new File(parent, StringUtils.join(File.separatorChar, children));
     }
 }

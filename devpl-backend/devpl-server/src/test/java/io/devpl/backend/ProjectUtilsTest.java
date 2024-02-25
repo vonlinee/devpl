@@ -1,4 +1,4 @@
-package io.devpl.test;
+package io.devpl.backend;
 
 import io.devpl.backend.utils.ProjectUtils;
 import org.junit.Test;

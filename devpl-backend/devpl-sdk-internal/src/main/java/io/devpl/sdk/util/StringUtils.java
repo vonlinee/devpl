@@ -511,6 +511,21 @@ public abstract class StringUtils {
     /**
      * 使用指定分隔符拼接字符串
      *
+     * @param separator 分隔符
+     * @param items     带拼接的字符串
+     * @return 拼接后的字符串
+     */
+    public static String join(final char separator, String... items) {
+        StringBuilder sb = new StringBuilder();
+        for (String item : items) {
+            sb.append(item).append(separator);
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    /**
+     * 使用指定分隔符拼接字符串
+     *
      * @param items 字符串列表
      * @return 拼接后的字符串
      */

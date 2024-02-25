@@ -3,7 +3,9 @@
     :tree-config="{ transform: true }" :edit-config="editConfig" :data="tableData" cell-click="">
     <vxe-column field="fieldKey" title="Key" tree-node :edit-render="{}">
       <template #edit="{ row }">
-        <vxe-input v-model="row.fieldKey" type="text"></vxe-input>
+        <div>
+          <vxe-input v-model="row.fieldKey" type="text"></vxe-input>
+        </div>
       </template>
     </vxe-column>
     <vxe-column field="dataType" title="数据类型" header-align="center" width="100" :edit-render="{}">
@@ -199,6 +201,7 @@ defineExpose({
    */
   setFields(fields?: FieldInfo[]) {
     tableData.value = fields || []
+    expandAll()
   },
 })
 </script>

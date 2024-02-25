@@ -20,6 +20,12 @@ public class MappedStatementItem {
     private String id;
 
     /**
+     * 项目根路径
+     */
+    @TableField(value = "project_root")
+    private String projectRoot;
+
+    /**
      * 语句ID
      */
     @TableField(value = "belong_file")

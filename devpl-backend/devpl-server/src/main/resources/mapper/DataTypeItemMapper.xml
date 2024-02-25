@@ -10,4 +10,13 @@
             </if>
         </where>
     </select>
+
+    <select id="listByCondition" resultType="io.devpl.backend.entity.DataTypeItem">
+        SELECT * FROM data_type_item
+        <where>
+            <if test="typeGroupId != null and typeGroupId != ''">
+                AND type_group_id = #{param.typeGroupId}
+            </if>
+        </where>
+    </select>
 </mapper>

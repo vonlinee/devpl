@@ -206,3 +206,26 @@ export const getSubStrings = (input: string) => {
 window.hasText = (val: any): boolean => {
   return !isBlank(val)
 }
+
+/**
+ * 数组去重
+ * @param arr 
+ * @returns 
+ */
+export const removeDuplicate = (arr: any[]) => {
+  return Array.from(new Set(arr))
+}
+
+/**
+ * 数组添加元素
+ * @param arr 1
+ * @param arr 2
+ * @returns 返回数组1
+ */
+export const addAll = <T>(arr1: T[], arr2: T[]): T[] => {
+  for (let i = 0; i < arr2.length; i++) {
+    const element = arr2[i];
+    arr1.push(element)
+  }
+  return arr1
+}

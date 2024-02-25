@@ -1,4 +1,4 @@
-package io.devpl.test;
+package io.devpl.backend;
 
 import io.devpl.backend.entity.TableGenerationField;
 import org.apache.ibatis.annotations.Mapper;

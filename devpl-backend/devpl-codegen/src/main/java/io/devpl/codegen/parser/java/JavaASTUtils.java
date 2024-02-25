@@ -10,6 +10,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import io.devpl.codegen.parser.JavaParserUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,14 @@ public abstract class JavaASTUtils {
 
     public static List<MetaField> parseFields(String content) throws IOException {
         ParseResult<CompilationUnit> result = JavaParserUtils.parseString(content);
+        if (result.isSuccessful()) {
+            return result.getResult().map(JavaASTUtils::parseFields).orElse(Collections.emptyList());
+        }
+        return Collections.emptyList();
+    }
+
+    public static List<MetaField> parseFields(File file) {
+        ParseResult<CompilationUnit> result = JavaParserUtils.parseResult(file, 8);
         if (result.isSuccessful()) {
             return result.getResult().map(JavaASTUtils::parseFields).orElse(Collections.emptyList());
         }
@@ -109,6 +118,7 @@ public abstract class JavaASTUtils {
             .map(Javadoc::toText)
             .orElse("")
             .replace("\t", "")
+            .replace("\r", "")
             .replace("\n", "");
     }
 }

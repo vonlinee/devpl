@@ -90,7 +90,14 @@ public interface MyBatisService {
 
     List<String> buildIndex(String projectRootDir);
 
-    void buildMapperXmlIndexForProject(String projectRootDir);
+    /**
+     * 单个项目解析Mapper信息进行索引
+     *
+     * @param projectRootDir 项目根路径
+     */
+    void buildMapperXmlIndexForProject(String projectRootDir, boolean reset);
+
+    List<String> listIndexedProjectRootPaths();
 
     IPage<MappedStatementItem> pageIndexedMappedStatements(MappedStatementListParam param);
 }
