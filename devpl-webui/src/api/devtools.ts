@@ -7,7 +7,7 @@ export const apiModel2Ddl = (code: string) => {
 }
 
 export const apiGetTableCreatorColumns = (fieldGroupId: number) => {
-  return http.post("/api/devtools/table/columns", {
+  return http.post("/api/devtools/table/create/columns", {
     groupId: fieldGroupId,
   })
 }

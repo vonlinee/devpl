@@ -13,7 +13,7 @@
 <script setup lang="ts">
 import { computed } from "vue"
 
-const props = defineProps({
+const {icon, color, className, size, cursor} = defineProps({
   // 图标名称
   icon: {
     type: String,
@@ -38,7 +38,8 @@ const props = defineProps({
 })
 
 // https://www.iconfont.cn 图标库需使用前缀 icon- 才能匹配
-const iconName = computed(() => `#icon-${props.icon.replace("icon-", "")}`)
+const iconName = computed(() => `#icon-${icon.replace("icon-", "")}`)
+
 </script>
 
 <!--iconfont为何要设置vertical-align: -0.15em? https://blog.csdn.net/ddx2019/article/details/109047831-->

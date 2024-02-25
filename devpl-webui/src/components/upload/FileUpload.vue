@@ -74,7 +74,6 @@ export default defineComponent({
         }
       })
     }
-
     return {
       onChange,
       onRemove,

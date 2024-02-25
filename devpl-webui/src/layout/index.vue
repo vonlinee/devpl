@@ -1,10 +1,10 @@
 <template>
   <el-container class="layout-container">
     <el-header class="layout-header">
-      <Navbar />
+      <navbar />
     </el-header>
     <el-container>
-      <Sidebar />
+      <sidebar />
       <el-main class="layout-main">
         <el-scrollbar class="layout-scrollbar">
           <div class="layout-card">

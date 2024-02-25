@@ -1,19 +1,10 @@
 <template>
-  <div
-    ref="splitPane"
-    class="split-pane"
-    :class="direction"
-    :style="{ flexDirection: direction }"
-  >
+  <div ref="splitPane" class="split-pane" :class="direction" :style="{ flexDirection: direction }">
     <div class="pane pane-one" :style="lengthType + ':' + paneLengthValue">
       <slot name="one"></slot>
     </div>
 
-    <div
-      class="pane-trigger"
-      :style="lengthType + ':' + triggerLengthValue"
-      @mousedown="handleMouseDown"
-    ></div>
+    <div class="pane-trigger" :style="lengthType + ':' + triggerLengthValue" @mousedown="handleMouseDown"></div>
 
     <div class="pane pane-another">
       <slot name="another"></slot>
@@ -53,9 +44,8 @@ export default {
     },
 
     paneLengthValue() {
-      return `calc(${this.paneLengthPercent}% - ${
-        this.triggerLength / 2 + "px"
-      })`
+      return `calc(${this.paneLengthPercent}% - ${this.triggerLength / 2 + "px"
+        })`
     },
 
     triggerLengthValue() {
