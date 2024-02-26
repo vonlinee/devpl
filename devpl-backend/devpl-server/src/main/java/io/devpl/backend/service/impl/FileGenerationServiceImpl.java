@@ -13,6 +13,7 @@ import io.devpl.backend.utils.PathUtils;
 import io.devpl.backend.utils.ProjectUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -86,6 +87,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
         StringBuilder sb = new StringBuilder();
 
+        final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templateService.listByIds(CollectionUtils.toSet(fileToBeGenerated, TableFileGeneration::getTemplateId)), TemplateInfo::getTemplateId);
+
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
 
@@ -99,12 +102,14 @@ public class FileGenerationServiceImpl implements FileGenerationService {
             if (file.exists()) {
                 sb.append("\t创建文件成功 ").append(file.getAbsolutePath()).append("\n");
 
-                TemplateInfo templateInfo = templateService.getById(tfg.getTemplateId());
+                TemplateInfo templateInfo = templateInfoMap.get(tfg.getTemplateId());
 
-                try (Writer writer = new FileWriter(file)) {
-                    templateService.render(templateInfo, dataModel, writer);
-                } catch (Exception e) {
-                    log.error("渲染{}失败", tfg.getFileName(), e);
+                if (templateInfo != null) {
+                    try (Writer writer = new FileWriter(file)) {
+                        templateService.render(templateInfo, dataModel, writer);
+                    } catch (Exception e) {
+                        log.error("渲染{}失败", tfg.getFileName(), e);
+                    }
                 }
             }
         }

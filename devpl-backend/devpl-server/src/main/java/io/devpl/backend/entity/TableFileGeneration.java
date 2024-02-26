@@ -32,6 +32,8 @@ public class TableFileGeneration implements Serializable {
 
     /**
      * 文件生成关联ID
+     *
+     * @see TemplateFileGeneration#getId()
      */
     @TableField(value = "generation_id")
     private Long generationId;

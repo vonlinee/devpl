@@ -22,7 +22,7 @@ public class TemplateInfo extends DBEntity {
      * 模板ID
      */
     @TableId(value = "template_id", type = IdType.AUTO)
-    private Integer templateId;
+    private Long templateId;
 
     /**
      * 模板名称：唯一
