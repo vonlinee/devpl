@@ -75,3 +75,33 @@ TODO
 
 
 
+
+
+
+
+# 数据库迁移工具 TODO
+
+1.表结构转换
+
+https://blog.csdn.net/TIME_1981/article/details/128468035
+
+2.数据转换
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
