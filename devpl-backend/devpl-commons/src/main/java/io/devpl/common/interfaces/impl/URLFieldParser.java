@@ -3,6 +3,7 @@ package io.devpl.common.interfaces.impl;
 import io.devpl.common.utils.Utils;
 import io.devpl.common.exception.FieldParseException;
 import io.devpl.common.interfaces.FieldParser;
+import io.devpl.common.utils.Utils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,11 +39,12 @@ public class URLFieldParser implements FieldParser {
                 fieldInfo.setFieldKey(entry.getKey());
                 fieldInfo.setFieldName(entry.getKey());
                 fieldInfo.setFieldDescription(entry.getKey());
-
                 if (entry.getValue() == null || entry.getValue().isEmpty() || entry.getValue().size() == 1) {
                     fieldInfo.setFieldDataType("String");
+                    fieldInfo.setFieldValue(entry.getValue().get(0));
                 } else {
                     fieldInfo.setFieldDataType("Collection");
+                    fieldInfo.setFieldValue(String.join(",", entry.getValue()));
                 }
                 result.add(fieldInfo.asMap());
             }

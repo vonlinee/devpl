@@ -48,7 +48,7 @@ export const apiDeleteFieldByIds = (ids: number[]) => {
   return http.delete<boolean>("/api/field/delete", ids);
 };
 
-interface FieldParseParam {
+export type FieldParseParam = {
   /**
    * 输入类型
    */
@@ -63,12 +63,27 @@ interface FieldParseParam {
   options?: Record<string, any>;
 }
 
+export type FieldParseResult = {
+  /**
+   * 是否失败
+   */
+  failed: boolean,
+  /**
+   * 解析错误信息
+   */
+  errorMsg: string,
+  /**
+   * 解析字段信息
+   */
+  fields: FieldInfo[]
+}
+
 /**
  * 解析字段
  * @param param
  */
 export const apiParseFields = (param: FieldParseParam) => {
-  return http.post("/api/field/parse", param);
+  return http.post<FieldParseResult>("/api/field/parse", param);
 };
 
 /**

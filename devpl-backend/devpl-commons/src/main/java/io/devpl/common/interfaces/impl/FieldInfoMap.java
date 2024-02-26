@@ -53,6 +53,14 @@ public class FieldInfoMap {
         return (String) map.get(FieldParser.FIELD_TYPE);
     }
 
+    public void setFieldValue(String value) {
+        map.put(FieldParser.FIELD_VALUE, value);
+    }
+
+    public String getFieldValue(String value) {
+        return String.valueOf(map.get(FieldParser.FIELD_VALUE));
+    }
+
     public Map<String, Object> asMap() {
         return map;
     }

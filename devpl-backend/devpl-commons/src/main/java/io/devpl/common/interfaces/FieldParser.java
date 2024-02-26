@@ -13,6 +13,7 @@ public interface FieldParser {
     String FIELD_KEY = "key";
     String FIELD_NAME = "name";
     String FIELD_TYPE = "type";
+    String FIELD_VALUE = "value";
     String FIELD_DESCRIPTION = "description";
 
     /**

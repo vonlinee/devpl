@@ -23,19 +23,42 @@ const overrideModeOptions = ref([
   },
 ])
 
-const emits = defineEmits(["onSubmit"])
+const emits = defineEmits<{
+  (e: "submit", type: string, input: string): void
+}>()
 
-const importTabPane = ref()
+// const importTabPane = ref()
+
+const jsonEditorRef = ref()
+const urlEditorRef = ref()
+
+function getInputText(type: string) {
+  let text = ''
+  if (type == 'json') {
+    text = jsonEditorRef.value.getText()
+    // if (window.hasText(text)) {
+    //   obj = JSON.stringify(text)
+    // }
+    // return text
+  }
+  if (type == 'url') {
+    text = urlEditorRef.value.getText()
+    // if (window.hasText(text)) {
+    //   let url = new URL(text)
+    //   obj = url.searchParams
+    // }
+    // return obj
+  }
+  return text
+}
 
 /**
  * 提交更改
  */
 function submit() {
   const tabName = activeName.value
+  emits("submit", tabName, getInputText(tabName))
 }
-
-const jsonEditorRef = ref()
-const urlEditorRef = ref()
 
 defineExpose({
   init: () => {
@@ -45,32 +68,17 @@ defineExpose({
 </script>
 
 <template>
-  <vxe-modal
-    v-model="showRef"
-    size="small"
-    title="参数导入"
-    :show-footer="true"
-    :z-index="2000"
-    :width="800"
-  >
+  <vxe-modal v-model="showRef" size="small" title="参数导入" :show-footer="true" :z-index="2000" :width="800">
     <template #default>
       <el-tabs v-model="activeName" class="editor-tabs">
-        <el-tab-pane label="JSON" name="json">
+        <el-tab-pane label="JSON(仅支持最外层)" name="json">
           <div class="code-editor-box">
-            <monaco-editor
-              ref="jsonEditorRef"
-              language="json"
-              value=""
-            ></monaco-editor>
+            <monaco-editor ref="jsonEditorRef" language="json" value=""></monaco-editor>
           </div>
         </el-tab-pane>
         <el-tab-pane label="URL" name="url">
           <div class="code-editor-box">
-            <monaco-editor
-              ref="urlEditorRef"
-              language="text"
-              value=""
-            ></monaco-editor>
+            <monaco-editor ref="urlEditorRef" language="text" value=""></monaco-editor>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -83,13 +91,9 @@ defineExpose({
         <el-col :span="8" :offset="1">
           <span style="display: flex">
             <el-select v-model="overrideMode" class="m-2">
-              <el-option
-                v-for="item in overrideModeOptions"
-                :key="item.label"
-                :label="item.label"
-                :value="item.value"
-              /> </el-select
-          ></span>
+              <el-option v-for="item in overrideModeOptions" :key="item.label" :label="item.label" :value="item.value" />
+            </el-select>
+          </span>
         </el-col>
         <el-col :span="12">
           <el-button type="primary" @click="submit">确定</el-button>
@@ -100,7 +104,7 @@ defineExpose({
 </template>
 
 <style scoped lang="scss">
-.editor-tabs > .el-tabs__content {
+.editor-tabs>.el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;

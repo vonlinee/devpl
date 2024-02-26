@@ -11,6 +11,7 @@ import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.backend.service.CrudService;
+import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
@@ -90,6 +91,8 @@ public class MyBatisServiceImpl implements MyBatisService {
     IdentifierGenerator identifierGenerator;
     @Resource
     MappedStatementItemMapper mappedStatementItemMapper;
+    @Resource
+    FieldInfoService fieldInfoService;
     @Resource
     ProjectService projectService;
 
@@ -790,7 +793,8 @@ public class MyBatisServiceImpl implements MyBatisService {
         Path path = Paths.get("", names).getParent();
         File result = null;
         try (Stream<Path> stream = Files.walk(root.toPath())) {
-            File[] files = stream.filter(p -> Files.isDirectory(p) && !p.toString().contains("target")).filter(p -> PathUtils.contains(p, path)).map(Path::toFile).toArray(File[]::new);
+            File[] files = stream.filter(p -> Files.isDirectory(p) && !p.toString().contains("target") && PathUtils.contains(p, path))
+                .map(Path::toFile).toArray(File[]::new);
             if (files.length > 0) {
                 files = files[0].listFiles();
                 if (files != null && files.length > 0) {

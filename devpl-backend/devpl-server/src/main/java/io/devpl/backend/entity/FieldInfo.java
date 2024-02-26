@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @TableName(value = "field_info")
-public class FieldInfo extends DBEntity implements Serializable {
+public final class FieldInfo extends DBEntity implements Serializable {
 
     /**
      * 主键ID
@@ -32,7 +32,7 @@ public class FieldInfo extends DBEntity implements Serializable {
     private Long parentId;
 
     /**
-     * 字段Key，区分大小写
+     * 字段Key，区分大小写，不包含嵌套 比如 user.age ，层级关系由 id 和 parentId 进行确定
      */
     @TableField(value = "field_key")
     private String fieldKey;
@@ -68,9 +68,15 @@ public class FieldInfo extends DBEntity implements Serializable {
     private String description;
 
     /**
+     * 字面值
+     */
+    @TableField(value = "literal_value")
+    private String literalValue;
+
+    /**
      * 默认值
      */
-    @TableField(value = "field_value")
+    @TableField(value = "default_value")
     private String defaultValue;
 
     /**
@@ -84,6 +90,12 @@ public class FieldInfo extends DBEntity implements Serializable {
      */
     @TableField(value = "optional")
     private Boolean optional;
+
+    /**
+     * 是否是叶子节点
+     */
+    @TableField(exist = false)
+    private boolean leaf = true;
 
     /**
      * 嵌套的字段列表
@@ -100,6 +112,13 @@ public class FieldInfo extends DBEntity implements Serializable {
 
     public boolean hasChildren() {
         return children != null && !children.isEmpty();
+    }
+
+    public void setChildren(List<FieldInfo> children) {
+        if (children == null || children.isEmpty()) {
+            this.leaf = true;
+        }
+        this.children = children;
     }
 
     public List<FieldInfo> getChildren() {

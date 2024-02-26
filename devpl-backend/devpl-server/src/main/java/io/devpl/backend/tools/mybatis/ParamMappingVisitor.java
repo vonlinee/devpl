@@ -16,6 +16,7 @@ import io.devpl.codegen.parser.java.MetaField;
 import io.devpl.codegen.parser.sql.SqlStatementType;
 import io.devpl.sdk.util.StringUtils;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 @Setter
+@Slf4j
 public class ParamMappingVisitor implements CompilationUnitVisitor<List<MappedStatementParamMappingItem>> {
 
     /**
@@ -167,6 +169,11 @@ public class ParamMappingVisitor implements CompilationUnitVisitor<List<MappedSt
                                     String path = fileIndexMap.get(key);
                                     File paramClassFile = new File(path);
                                     List<MetaField> fields = JavaASTUtils.parseFields(paramClassFile);
+
+                                    if (fields.isEmpty()) {
+                                        log.error("found custom param type[{}], but no fields parsed", paramClassFile.getName());
+                                        continue;
+                                    }
 
                                     for (MetaField field : fields) {
                                         MappedStatementParamMappingItem paramItem = new MappedStatementParamMappingItem();

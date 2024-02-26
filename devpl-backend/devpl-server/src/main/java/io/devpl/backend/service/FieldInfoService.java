@@ -25,6 +25,8 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
 
     FieldParseResult parseFields(FieldParseParam param) throws FieldParseException;
 
+    void fillTreeNodeId(FieldInfo parentField, int depth, long num, long parentId);
+
     boolean saveFieldsInfos(List<FieldInfo> fieldInfo, boolean allowFieldKeyDuplicated);
 
     List<String> listFieldKeys();

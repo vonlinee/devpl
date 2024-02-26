@@ -16,8 +16,11 @@
       </template>
     </vxe-column>
     <vxe-column field="value" title="值" header-align="center" :edit-render="{}">
+      <template #default="{ row }">
+        {{ row.literalValue }}
+      </template>
       <template #edit="{ row }">
-        <vxe-input v-model="row.value" type="text"></vxe-input>
+        <vxe-input v-model="row.literalValue" type="text"></vxe-input>
       </template>
     </vxe-column>
     <vxe-column title="操作" width="140" header-align="center" align="center" fixed="right">
@@ -49,6 +52,7 @@ import {
   VxeTablePrivateMethods,
   VxeTablePropTypes,
 } from "vxe-table/types/all"
+import { addAll } from "@/utils/tool";
 
 const props = withDefaults(
   defineProps<{
@@ -154,6 +158,11 @@ const insertRow = async (currRow: FieldInfo, locat: string) => {
   }
 }
 
+/**
+ * 插入下一行
+ * @param currRow 
+ * @param locat 
+ */
 const insertNextRow = async (currRow: FieldInfo, locat: string) => {
   const $table = tableRef.value
   if ($table) {
@@ -174,16 +183,28 @@ const insertNextRow = async (currRow: FieldInfo, locat: string) => {
   }
 }
 
+/**
+ * 删除行
+ * @param row 
+ */
 const removeRow = async (row: FieldInfo) => {
   const $table = tableRef.value
   if ($table) {
     await $table.remove(row)
-
+    // console.log(tableData.value);
+    
     // 如果子节点为空，则修改为叶子结点
     if (row.parentId != undefined) {
       tableData.value
         .filter((f) => f.id == row.parentId)
         .forEach((f) => (f.leaf = f.children?.length == 0))
+    }
+    /**
+     * $table.remove(row)不会从tableData中删除该元素
+     */
+    let index = tableData.value.indexOf(row)
+    if (index >= 0) {
+      tableData.value.splice(index, 1)
     }
   }
 }
@@ -201,6 +222,14 @@ defineExpose({
    */
   setFields(fields?: FieldInfo[]) {
     tableData.value = fields || []
+    expandAll()
+  },
+  /**
+   * 添加字段数据
+   * @param fields
+   */
+  addFields(fields?: FieldInfo[]) {
+    tableData.value = addAll(tableData.value, fields)
     expandAll()
   },
 })

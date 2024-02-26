@@ -1,5 +1,5 @@
 /**
- * 字段信息
+ * 单个字段信息
  */
 type FieldInfo = {
   /**
@@ -30,6 +30,11 @@ type FieldInfo = {
    * 描述信息
    */
   description?: string
+  /**
+   * 字面值, value值的字符串形式
+   * @see value 
+   */
+  literalValue?: string
   /**
    * 默认值
    */

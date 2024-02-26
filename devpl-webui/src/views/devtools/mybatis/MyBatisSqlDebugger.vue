@@ -14,7 +14,7 @@
         <el-button @click="fillSampleMapperStatement">填充样例</el-button>
         <el-button @click="showDialog()">导入</el-button>
 
-        <param-import ref="importModalRef"></param-import>
+        <param-import ref="importModalRef" @submit="handleParamImport"></param-import>
 
         <FieldValueTreeTable ref="msParamTable" :data-types="msParamValueTypes"></FieldValueTreeTable>
 
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { getSubStrings, hasText, isBlank } from "@/utils/tool"
-import { nextTick, onMounted, ref, toRaw } from "vue"
+import { nextTick, onMounted, ref, resolveDirective, toRaw } from "vue"
 
 import {
   apiGetMapperStatementValueTypes,
@@ -68,6 +68,8 @@ import MonacoEditor from "@/components/editor/MonacoEditor.vue"
 
 import { foreachSnippet, stringSnippet } from "@/utils/mybatis"
 import { ArrowDown } from "@element-plus/icons"
+import { apiParseFields } from "@/api/fields"
+import { Message } from "@/hooks/message"
 
 // 数据
 const inputRef = ref()
@@ -82,6 +84,34 @@ const editorHeight = ref("400")
 // 表格实例
 const msParamTable = ref()
 const msParamValueTypes = ref()
+
+/**
+ * 参数导入
+ * @param type 
+ * @param input 
+ */
+const handleParamImport = (type: string, input: string) => {
+
+  if (type == 'url') {
+    type = 'other>' + type
+  } else if (type == 'json') {
+    type = 'json>' + type
+  } else {
+    Message.error("不支持的输入类型 " + type)
+    return;
+  }
+
+  apiParseFields({
+    type: type,
+    content: input
+  }).then((res) => {
+    if (res.data?.failed) {
+      Message.error("解析失败" + res.data?.errorMsg)
+    } else {
+      msParamTable.value.addFields(res.data?.fields)
+    }
+  })
+}
 
 onMounted(() => {
   const layoutCard: any = document.querySelector(".layout-card")

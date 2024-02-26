@@ -27,4 +27,11 @@ public class FieldParseResult {
      * 解析字段信息
      */
     private List<FieldInfo> fields;
+
+    public final FieldParseResult fail(String errorMsg) {
+        this.failed = true;
+        this.errorMsg = errorMsg;
+        this.fields = List.of();
+        return this;
+    }
 }

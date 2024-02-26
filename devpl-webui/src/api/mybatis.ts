@@ -1,4 +1,5 @@
 import http from "@/utils/http"
+import { FieldParseParam, FieldParseResult } from "./fields"
 
 /**
  * 获取Mapper中的参数

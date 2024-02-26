@@ -114,7 +114,7 @@ public class MyBatisToolController {
     }
 
     /**
-     * 获取Mapper Statement结合输入参数获取参数元数据
+     * 查询解析了的Mapper Statement列表
      */
     @GetMapping("/index/query/mslist")
     public ListResult<MappedStatementItem> listIndexedMappedStatements(MappedStatementListParam param) {

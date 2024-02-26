@@ -95,7 +95,12 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
      */
     @Override
     public FieldParseResult parseFields(FieldParseParam param) throws FieldParseException {
+        FieldParseResult result = new FieldParseResult();
         final String[] types = param.getType().split(">");
+        if (types.length != 2) {
+            return result.fail("参数错误");
+        }
+
         final String content = param.getContent();
         FieldParser parser = FieldParser.EMPTY;
         if ("pl".equalsIgnoreCase(types[0])) {
@@ -126,7 +131,6 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
                 parser = new URLFieldParser();
             }
         }
-        FieldParseResult result = new FieldParseResult();
         result.setFields(convertParseResultToFields(parser.parse(content)));
 
         // 分配唯一ID
@@ -138,23 +142,24 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     }
 
     /**
-     * 填充树形结构，适配前端组件的树形字段
+     * 填充树形结构，适配前端组件的树形字段，填充结果如下
      * 1
-     * 101
-     * 102
-     * 103
+     * ---101
+     * ---102
+     * ---103
      * 2
-     * 201
-     * 202
-     * 203
+     * ---201
+     * ---202
+     * ---203
      * 。。。。
-     * 一层不超过100个字段
+     * 单层一般不超过100个字段，仅使用2位数的id
      *
      * @param parentField 上一层的字段
      * @param depth       递归层级
      * @param num         当前层的第几个字段
      * @param parentId    父节点ID
      */
+    @Override
     public void fillTreeNodeId(FieldInfo parentField, int depth, long num, long parentId) {
         if (parentId == -1) {
             parentField.setParentId(null);
@@ -164,9 +169,12 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             parentField.setId((long) (parentId * Math.pow(10, depth + 1) + num));
         }
         if (parentField.hasChildren()) {
+            parentField.setLeaf(false);
             for (FieldInfo fieldInfo : parentField.getChildren()) {
                 fillTreeNodeId(fieldInfo, depth + 1, num++, parentField.getId());
             }
+        } else {
+            parentField.setLeaf(true);
         }
     }
 
@@ -177,6 +185,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             fieldInfo.setFieldKey(String.valueOf(field.get(FieldParser.FIELD_NAME)));
             fieldInfo.setDataType(String.valueOf(field.get(FieldParser.FIELD_TYPE)));
             fieldInfo.setDescription(String.valueOf(field.get(FieldParser.FIELD_DESCRIPTION)));
+            fieldInfo.setLiteralValue(String.valueOf(field.get(FieldParser.FIELD_VALUE)));
             fieldInfoList.add(fieldInfo);
         }
         return fieldInfoList;
@@ -220,8 +229,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             return;
         }
         for (FieldInfo field : fields) {
-            if (setIdToNull)
-                field.setId(null);
+            if (setIdToNull) field.setId(null);
             if (field.hasChildren()) {
                 batchSetFieldValue(field.getChildren(), setIdToNull, temporary, deleted);
             }

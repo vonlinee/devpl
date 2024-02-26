@@ -222,7 +222,10 @@ export const removeDuplicate = (arr: any[]) => {
  * @param arr 2
  * @returns 返回数组1
  */
-export const addAll = <T>(arr1: T[], arr2: T[]): T[] => {
+export const addAll = <T>(arr1: T[], arr2?: T[]): T[] => {
+  if (arr2 == undefined || arr2.length == 0) {
+    return arr1;
+  }
   for (let i = 0; i < arr2.length; i++) {
     const element = arr2[i];
     arr1.push(element)

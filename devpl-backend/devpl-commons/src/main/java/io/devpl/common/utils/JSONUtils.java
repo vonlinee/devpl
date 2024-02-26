@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * JSON 工具类
@@ -66,6 +67,12 @@ public abstract class JSONUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Map<String, Object> toMap(String json) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> map = JSONUtils.parseObject(json, Map.class);
+        return map;
     }
 
     public static <T> T parseObject(String text, TypeReference<T> typeReference) {
