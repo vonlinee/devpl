@@ -54,7 +54,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     /**
      * 字段列表
      */
-    private ArraySet<FieldData> fields;
+    private List<FieldData> fields;
 
     /**
      * 类上的注解
@@ -135,7 +135,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
 
     public final void addField(FieldData fieldData) {
         if (this.fields == null) {
-            this.fields = new ArraySet<>();
+            this.fields = new ArrayList<>();
         }
         this.fields.add(fieldData);
     }
@@ -149,7 +149,7 @@ public class JavaFileTemplateArguments implements TemplateArguments {
     }
 
     public void setFields(Collection<FieldData> fields) {
-        this.fields = CollectionUtils.setAll(this.fields, fields, ArraySet::new);
+        this.fields = CollectionUtils.setAll(this.fields, fields, ArrayList::new);
     }
 
     public void setMethods(Collection<MethodData> methods) {

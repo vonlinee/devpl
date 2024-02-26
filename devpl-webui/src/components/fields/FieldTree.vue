@@ -5,9 +5,9 @@
 <template>
   <el-scrollbar max-height="100%">
     <el-tree ref="treeRef" :data="dataSource" :show-checkbox="selectable" highlight-current default-expand-all
-             :expand-on-click-node="false" draggable node-key="id" :allow-drop="allowDrop" :allow-drag="allowDrag"
-             @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
-             @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop">
+      :expand-on-click-node="false" draggable node-key="id" :allow-drop="allowDrop" :allow-drag="allowDrag"
+      @node-drag-start="handleDragStart" @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave"
+      @node-drag-over="handleDragOver" @node-drag-end="handleDragEnd" @node-drop="handleDrop">
       <template #default="{ node, data }">
         <div style="height: auto; display: flex; flex-direction: row; width: 100%; align-items: stretch">
           <div style="height: auto; flex-grow: 1">
@@ -18,7 +18,7 @@
               </button>
               <!-- 字段类型 -->
               <el-button ref="buttonRef" link style="margin-left: 10px; color: green"
-                         @click="handleDataTypeClicked($event, data)">
+                @click="handleDataTypeClicked($event, data)">
                 {{ data.dataType || "unknown" }}
               </el-button>
             </div>
@@ -32,24 +32,20 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="addNode(data, 'sibling')">添加相邻节点</el-dropdown-item>
-                  <el-dropdown-item v-if="data.dataType == 'Object'"
-                                    @click="addNode(data, 'child')">添加子节点
+                  <el-dropdown-item v-if="data.dataType == 'Object'" @click="addNode(data, 'child')">添加子节点
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
             <el-button link :icon="Minus" style="height: 100%;  margin: 0 10px 0 0;"
-                       @click="remove(node, data)"></el-button>
+              @click="remove(node, data)"></el-button>
           </div>
         </div>
-
-
       </template>
     </el-tree>
 
     <popup ref="dataTypePopupRef" position="right" :z-index="10000">
-      <List :items="dataTypeOptions" width="100px"
-            @item-clicked="(item) => handleDataTypeEdit(item)">
+      <List :items="dataTypeOptions" width="100px" @item-clicked="(item) => handleDataTypeEdit(item)">
         <template #item="scope">
           {{ scope.item.label }}
         </template>
@@ -61,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { StyleValue, nextTick, reactive, ref, unref } from "vue";
+import { StyleValue, reactive, ref } from "vue";
 import type Node from "element-plus/es/components/tree/src/model/node";
 import type { DragEvents } from "element-plus/es/components/tree/src/model/useDragNode";
 import type {
@@ -419,9 +415,9 @@ defineExpose({
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+      0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
-    0 0 8px rgba(102, 175, 233, 0.6);
+      0 0 8px rgba(102, 175, 233, 0.6);
   }
 }
 </style>

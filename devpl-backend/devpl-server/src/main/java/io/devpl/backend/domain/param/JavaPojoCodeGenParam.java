@@ -27,9 +27,14 @@ public class JavaPojoCodeGenParam {
     private Boolean useLombok;
 
     /**
+     * 是否生成getter/setter
+     */
+    private Boolean setterAndGetter;
+
+    /**
      * 字段信息
      */
-    List<FieldInfo> fields;
+    private List<FieldInfo> fields;
 
     public boolean useLombok() {
         return useLombok == null || useLombok;

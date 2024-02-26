@@ -25,7 +25,6 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
 
     @Resource
     TemplateEngine templateEngine;
-
     @Resource
     TemplateParamService templateParamService;
 
@@ -90,7 +89,6 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         model.setClassName(param.getClassName());
 
         List<FieldData> fieldDataList = new ArrayList<>();
-
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
             fieldData.setName(field.getFieldName());

@@ -364,7 +364,7 @@ public abstract class CollectionUtils {
      * @param <T>        元素类型
      * @return 覆盖后的集合，最终返回不为空，集合元素以参数collection为准
      */
-    public static <S extends Set<T>, T> S setAll(S set, Collection<T> collection, Supplier<S> empty) {
+    public static <S extends Collection<T>, T> S setAll(S set, Collection<T> collection, Supplier<S> empty) {
         if (!isEmpty(set)) {
             set.clear();
         } else if (empty != null) {
