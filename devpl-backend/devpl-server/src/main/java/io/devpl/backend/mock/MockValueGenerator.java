@@ -4,6 +4,8 @@ import io.devpl.codegen.type.DataType;
 
 public interface MockValueGenerator {
 
+    void init(MockContext context);
+
     /**
      * 生成值的数据类型
      *

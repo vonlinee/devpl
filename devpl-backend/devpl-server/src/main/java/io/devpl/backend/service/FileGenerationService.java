@@ -23,10 +23,11 @@ public interface FileGenerationService {
     /**
      * 生成某个表的所有文件
      *
-     * @param tableId gen_table主键
+     * @param tableId         gen_table主键
+     * @param projectRootPath 项目根路径
      * @return 生成文件的根目录
      */
-    String generateForTable(Long tableId);
+    String generateForTable(Long tableId, String projectRootPath);
 
     /**
      * 获取代码生成绝对路径

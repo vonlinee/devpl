@@ -60,13 +60,12 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
     @Override
     public FileGenerationResult generateFile(FileGenerationParam param) {
-        FileGenerationResult result = new FileGenerationResult();
+        FileGenerationResult result = new FileGenerationResult(null);
         // 生成代码
-        List<String> rootDirs = new ArrayList<>();
+        final String parentDirectory = DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
         for (Long tableId : param.getTableIds()) {
-            rootDirs.add(this.generateForTable(tableId));
+            result.addRootDir(this.generateForTable(tableId, parentDirectory));
         }
-        result.setRootDirs(rootDirs);
         return result;
     }
 
@@ -78,9 +77,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      * @see TableGenerationService#importSingleTable(TableImportParam)
      */
     @Override
-    public String generateForTable(Long tableId) {
-        final String parentDirectory = tableId + "/" + DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
-
+    public String generateForTable(Long tableId, String parentDirectory) {
         List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(tableId);
         // 数据模型
         Map<String, Object> dataModel = prepareDataModel(tableId);
