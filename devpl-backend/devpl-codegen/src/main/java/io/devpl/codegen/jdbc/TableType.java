@@ -2,7 +2,6 @@ package io.devpl.codegen.jdbc;
 
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,11 +33,5 @@ public enum TableType {
             }
         }
         return tableTypes.toArray(TableType[]::new);
-    }
-
-    public static void main(String[] args) {
-        TableType[] tableTypes = valueOf("table ", "view", "system table");
-
-        System.out.println(Arrays.toString(tableTypes));
     }
 }

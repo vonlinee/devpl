@@ -44,7 +44,7 @@ public interface TemplateEngine {
      * @param arguments 模板参数
      * @param writer    渲染结果
      */
-    void evaluate(String template, Object arguments, Writer writer);
+    void evaluate(String template, Object arguments, Writer writer) throws TemplateException;
 
     /**
      * 渲染并输出到指定位置

@@ -755,6 +755,12 @@ public class IOUtils {
         }
     }
 
+    /**
+     * 向Writer中写入字符串，不抛出任何异常
+     *
+     * @param writer Writer
+     * @param data   字符串
+     */
     public static void writeQuietly(Writer writer, String data) {
         try {
             if (data != null) {

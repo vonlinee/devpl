@@ -64,8 +64,12 @@ public class VelocityTemplateEngine implements TemplateEngine {
     @Override
     @SuppressWarnings("unchecked")
     public void evaluate(String template, Object arguments, Writer writer) {
-        VelocityContext context = new VelocityContext((Map<String, Object>) transfer(arguments));
-        RuntimeSingleton.getRuntimeServices().evaluate(context, writer, ST_LOG_TAG, new StringReader(template));
+        try {
+            VelocityContext context = new VelocityContext((Map<String, Object>) transfer(arguments));
+            RuntimeSingleton.getRuntimeServices().evaluate(context, writer, ST_LOG_TAG, new StringReader(template));
+        } catch (Exception exception) {
+            throw TemplateException.wrap(exception);
+        }
     }
 
     /**

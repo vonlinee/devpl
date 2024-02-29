@@ -10,6 +10,7 @@ import io.devpl.backend.domain.vo.DriverTypeVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
+import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequestMapping("/api/datasource")
 public class DataSourceController {
 
+    private DataSourceService dataSourceService;
     private RdbmsConnectionInfoService datasourceService;
     private TableGenerationService tableService;
 
