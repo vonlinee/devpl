@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.service;
+package io.devpl.backend.tools.ddl;
 
 /**
  * 创建DDL
@@ -63,6 +63,7 @@ public class DdlBuilder {
 
     /**
      * 添加逗号
+     *
      * @return
      */
     public DdlBuilder addComma() {

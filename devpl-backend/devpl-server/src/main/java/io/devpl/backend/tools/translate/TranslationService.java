@@ -1,6 +1,6 @@
-package io.devpl.backend.tools.ddl.service.translation;
+package io.devpl.backend.tools.translate;
 
-import io.devpl.backend.tools.ddl.model.TranslationVO;
+import io.devpl.backend.tools.translate.TranslationVO;
 
 import java.util.List;
 

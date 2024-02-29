@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.service.translation;
+package io.devpl.backend.tools.translate;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Getter;

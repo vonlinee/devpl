@@ -1,0 +1,9 @@
+#if($drpoTable)
+DROP TABLE IF EXISTS ${tableName};
+#end
+CREATE TABLE `${tableName}`
+(
+    #foreach($column in $columns)
+    ${column.columnName} ${column.dataType}
+    #end
+)

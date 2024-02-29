@@ -13,6 +13,19 @@ public class TableCreatorParam {
     @Nullable
     private Long groupId;
 
+    private String tableName;
+
+    private String charset;
+
+    /**
+     * 是否使用引号包裹表名和列名
+     */
+    private Boolean wrapIdentifier = false;
+    /**
+     * 是否生成DROP Table语句
+     */
+    private Boolean dropTable = false;
+
     private List<FieldInfo> fields;
 
     /**

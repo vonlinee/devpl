@@ -1,8 +1,8 @@
-package io.devpl.backend.tools.ddl.service;
+package io.devpl.backend.tools.ddl;
 
 import io.devpl.backend.tools.ddl.Constant;
-import io.devpl.backend.tools.ddl.model.Field;
-import io.devpl.backend.tools.ddl.setting.MainSetting;
+import io.devpl.backend.tools.ddl.Field;
+import io.devpl.backend.tools.ddl.MainSetting;
 
 import java.util.Map;
 

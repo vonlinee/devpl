@@ -68,8 +68,8 @@ import { DriverTypeVO } from "./types"
 import { Message } from "@/hooks/message"
 
 const state: DataTableOption = reactive({
-  dataListUrl: "/api/gen/datasource/page",
-  deleteUrl: "/api/gen/datasource",
+  dataListUrl: "/api/datasource/page",
+  deleteUrl: "/api/datasource",
   queryForm: {
     connectionName: "",
     dbType: "",

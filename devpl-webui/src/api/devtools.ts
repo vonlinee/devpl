@@ -11,3 +11,12 @@ export const apiGetTableCreatorColumns = (fieldGroupId: number) => {
     groupId: fieldGroupId,
   })
 }
+
+/**
+ * 获取DDL
+ * @param fieldGroupId 
+ * @returns 
+ */
+export const apiGetTableCreatorDDL = (param: any) => {
+  return http.post<string>("/api/devtools/table/create/ddl", param)
+}

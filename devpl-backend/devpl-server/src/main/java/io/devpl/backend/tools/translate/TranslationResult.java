@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.service.translation;
+package io.devpl.backend.tools.translate;
 
 import lombok.Getter;
 import lombok.Setter;

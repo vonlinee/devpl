@@ -1,7 +1,7 @@
 package io.devpl.backend.utils;
 
 import io.devpl.backend.domain.ProjectModule;
-import io.devpl.backend.tools.MavenProjectParser;
+import io.devpl.backend.tools.MavenProjectAnalyser;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class ProjectUtils {
         }
 
         if ("pom.xml".equals(entryFile.getName())) {
-            return new MavenProjectParser().analyse(entryFile);
+            return new MavenProjectAnalyser().analyse(entryFile);
         }
         return null;
     }

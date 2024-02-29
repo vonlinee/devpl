@@ -1,10 +1,9 @@
-package io.devpl.backend.tools.ddl.service.translation;
+package io.devpl.backend.tools.translate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import io.devpl.backend.tools.ddl.model.TranslationVO;
 import io.devpl.backend.utils.MD5Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;

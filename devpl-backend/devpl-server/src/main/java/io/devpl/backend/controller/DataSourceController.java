@@ -10,7 +10,7 @@ import io.devpl.backend.domain.vo.DriverTypeVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
-import io.devpl.backend.service.DataSourceService;
+import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
@@ -29,10 +29,10 @@ import java.util.List;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/gen")
+@RequestMapping("/api/datasource")
 public class DataSourceController {
 
-    private DataSourceService datasourceService;
+    private RdbmsConnectionInfoService datasourceService;
     private TableGenerationService tableService;
 
     /**
@@ -41,7 +41,7 @@ public class DataSourceController {
      * @param param 查询参数
      * @return 分页查询结果
      */
-    @GetMapping("/datasource/page")
+    @GetMapping("/page")
     public ListResult<RdbmsConnectionInfo> page(DbConnInfoListParam param) {
         return datasourceService.listPage(param);
     }
@@ -51,7 +51,7 @@ public class DataSourceController {
      *
      * @return 数据源列表
      */
-    @GetMapping("/datasource/list")
+    @GetMapping("/list")
     public ListResult<RdbmsConnectionInfo> list() {
         return ListResult.ok(datasourceService.listAll());
     }
@@ -61,7 +61,7 @@ public class DataSourceController {
      *
      * @return 数据源列表
      */
-    @GetMapping("/datasource/list/selectable")
+    @GetMapping("/list/selectable")
     public ListResult<DataSourceVO> listSelectableDataSources(@RequestParam(required = false) String internal) {
         List<DataSourceVO> dataSourceVOS = datasourceService.listIdAndNames();
         if ("true".equals(internal)) {
@@ -76,7 +76,7 @@ public class DataSourceController {
      *
      * @return 数据源信息
      */
-    @GetMapping("/datasource/{id}")
+    @GetMapping("/{id}")
     public RdbmsConnectionInfo get(@PathVariable("id") Long id) {
         return datasourceService.getById(id);
     }
@@ -87,7 +87,7 @@ public class DataSourceController {
      * @param id 数据源ID
      * @return 连接信息
      */
-    @GetMapping("/datasource/test/{id}")
+    @GetMapping("/test/{id}")
     public TestConnVO test(@PathVariable("id") Long id) {
         return datasourceService.testJdbcConnection(id);
     }
@@ -98,7 +98,7 @@ public class DataSourceController {
      * @param connInfo 数据库连接信息
      * @return 连接成功，返回驱动及数据库信息
      */
-    @PostMapping("/datasource/connection/test")
+    @PostMapping("/connection/test")
     public Result<TestConnVO> test(@RequestBody RdbmsConnectionInfo connInfo) {
         return Result.ok(datasourceService.testJdbcConnection(connInfo));
     }
@@ -109,7 +109,7 @@ public class DataSourceController {
      * @param id 数据源ID
      * @return 数据库名称列表
      */
-    @GetMapping(value = "/datasource/dbnames/{dataSourceId}")
+    @GetMapping(value = "/dbnames/{dataSourceId}")
     public Result<List<String>> getDbNames(@PathVariable(value = "dataSourceId") Long id) {
         Assert.notNull(id, "id不能为空");
         return Result.ok(datasourceService.getDatabaseNames(id));
@@ -121,7 +121,7 @@ public class DataSourceController {
      * @param entity 连接信息
      * @return 数据库名称列表
      */
-    @PostMapping(value = "/datasource/dbnames")
+    @PostMapping(value = "/dbnames")
     public List<String> getDbNames(@RequestBody RdbmsConnectionInfo entity) {
         return datasourceService.getDbNames(entity);
     }
@@ -133,7 +133,7 @@ public class DataSourceController {
      * @param dbName 数据库名称
      * @return 数据库名称列表
      */
-    @GetMapping(value = "/datasource/table/names")
+    @GetMapping(value = "/table/names")
     public Result<List<String>> getTableNames(
         @RequestParam(value = "dataSourceId") Long id,
         @RequestParam(value = "databaseName", required = false) String dbName,
@@ -150,7 +150,7 @@ public class DataSourceController {
      *
      * @return 数据库类型列表
      */
-    @GetMapping(value = "/datasource/drivers")
+    @GetMapping(value = "/drivers")
     public ListResult<DriverTypeVO> getSupportedDbTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
         for (DBType dbType : DBType.values()) {
@@ -170,7 +170,7 @@ public class DataSourceController {
      * @param entity 数据库连接信息
      * @return 是否成功
      */
-    @PostMapping("/datasource")
+    @PostMapping("/datasource/update")
     public boolean save(@RequestBody RdbmsConnectionInfo entity) {
         if (entity.getId() != null) {
             datasourceService.updateOne(entity);
@@ -185,7 +185,7 @@ public class DataSourceController {
      * @param ids 数据源ID
      * @return 是否成功
      */
-    @DeleteMapping("/datasource")
+    @DeleteMapping("/remove")
     public Result<Boolean> delete(@RequestBody Long[] ids) {
         return Result.ok(datasourceService.removeBatchByIds(Arrays.asList(ids)));
     }
@@ -195,7 +195,7 @@ public class DataSourceController {
      *
      * @param id 数据源ID
      */
-    @GetMapping("/datasource/table/list")
+    @GetMapping("/table/list")
     public ListResult<TableGeneration> tableList(
         @RequestParam(value = "dataSourceId") Long id,
         @RequestParam(value = "databaseName", required = false) String databaseName,
@@ -215,7 +215,7 @@ public class DataSourceController {
      * @param param 参数
      * @return 数据库表的数据，包括表头及表格每行的数据
      */
-    @PostMapping("/datasource/table/data")
+    @PostMapping("/table/data")
     public Result<DBTableDataVO> getTableData(@RequestBody DBTableDataParam param) {
         try {
             if (param.getConnInfo() == null) {

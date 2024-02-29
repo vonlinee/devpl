@@ -6,7 +6,7 @@ import io.devpl.backend.domain.param.MockColumnListParam;
 import io.devpl.backend.domain.vo.MockField;
 import io.devpl.backend.domain.vo.MockGeneratorVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
-import io.devpl.backend.service.DataSourceService;
+import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.MockerService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +21,17 @@ import java.util.List;
 public class MockerController {
 
     @Resource
-    DataSourceService dataSourceService;
+    RdbmsConnectionInfoService rdbmsConnectionInfoService;
     @Resource
     MockerService mockerService;
 
     @GetMapping(value = "/columns")
     public Result<List<MockField>> getMockItems(MockColumnListParam param) {
-        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
+        RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) {
             return Result.error("数据源不存在");
         }
-        List<ColumnMetadata> columns = dataSourceService.getColumns(connInfo, param.getDatabaseName(), param.getTableName());
+        List<ColumnMetadata> columns = rdbmsConnectionInfoService.getColumns(connInfo, param.getDatabaseName(), param.getTableName());
         List<MockField> mockFields = new ArrayList<>();
         for (ColumnMetadata column : columns) {
             MockField field = new MockField();

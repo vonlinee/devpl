@@ -101,6 +101,12 @@ public class MyBatisServiceImpl implements MyBatisService {
     MyMapperBuilderAssistant assistant;
     MapperStatementParser msParser = new MapperStatementParser();
 
+    @PostConstruct
+    public void init() {
+        configuration = new DynamicMyBatisConfiguration(sqlSessionFactory.getConfiguration());
+        assistant = new MyMapperBuilderAssistant(configuration, null);
+    }
+
     /**
      * 适配vxe-table的树形结构，根据id和parentId来确定层级关系
      *
@@ -258,11 +264,7 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     @Override
     public String getSqlOfMappedStatement(GetSqlParam param) {
-        List<TreeNode<MsParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
-        Map<String, Object> map = new HashMap<>();
-        for (TreeNode<MsParamNode> treeNode : treeNodes) {
-            fillParamMap(treeNode, map);
-        }
+        final Map<String, Object> map = getParamMapOfMappedStatements(param);
         ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true);
         MappedStatement ms = result.getMappedStatement();
         /**
@@ -278,12 +280,6 @@ public class MyBatisServiceImpl implements MyBatisService {
             resultSql = this.getExecutableSql(ms, boundSql, map);
         }
         return resultSql;
-    }
-
-    @PostConstruct
-    public void init() {
-        configuration = new DynamicMyBatisConfiguration(sqlSessionFactory.getConfiguration());
-        assistant = new MyMapperBuilderAssistant(configuration, null);
     }
 
     /**
@@ -324,6 +320,21 @@ public class MyBatisServiceImpl implements MyBatisService {
     public List<ParamMeta> getParamMetadata(String statement) {
         MappedStatement mappedStatement = parseMappedStatement(statement);
         return getParamMetadata(mappedStatement);
+    }
+
+    /**
+     * 填充Mapper Statement参数
+     *
+     * @param param 参数
+     * @return 形成Map对象形式的参数
+     */
+    private Map<String, Object> getParamMapOfMappedStatements(GetSqlParam param) {
+        List<TreeNode<MsParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
+        Map<String, Object> map = new HashMap<>();
+        for (TreeNode<MsParamNode> treeNode : treeNodes) {
+            fillParamMap(treeNode, map);
+        }
+        return map;
     }
 
     /**

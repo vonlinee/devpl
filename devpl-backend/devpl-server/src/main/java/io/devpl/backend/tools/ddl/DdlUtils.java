@@ -1,8 +1,4 @@
-package io.devpl.backend.tools.ddl.utils;
-
-import io.devpl.backend.tools.ddl.model.Field;
-import io.devpl.backend.tools.ddl.service.DdlBuilder;
-import io.devpl.backend.tools.ddl.setting.MainSetting;
+package io.devpl.backend.tools.ddl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +6,7 @@ import java.util.List;
 /**
  * 生成DDL SQL语句
  */
-public class DdlFormatUtil {
+public class DdlUtils {
 
     public static String buildDdlScript(String tableName, List<Field> fieldList) {
         Boolean autoTranslation = MainSetting.getInstance().myProperties.getAutoTranslationRadio();
@@ -48,6 +44,7 @@ public class DdlFormatUtil {
             .wrap()
             .rightParenthesis();
         if (autoTranslation) {
+            // TODO 翻译
             HashMap<String, String> map = new HashMap<>();
             String tableNameCommend = map.getOrDefault(tableName.replace("_", " "), tableName);
             builder.space().addComment(tableNameCommend);

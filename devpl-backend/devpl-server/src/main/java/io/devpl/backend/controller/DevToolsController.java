@@ -37,7 +37,7 @@ public class DevToolsController {
     DataTypeItemService dataTypeService;
 
     /**
-     * 实体类转DDL
+     * TODO 实体类直接转DDL
      *
      * @param param 参数
      * @return DDL

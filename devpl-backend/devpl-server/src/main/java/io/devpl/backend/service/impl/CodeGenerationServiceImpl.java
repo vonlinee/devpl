@@ -49,7 +49,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
             fieldData.setComment(Utils.removeInvisibleCharacters(field.getComment()));
             model.addField(fieldData);
         }
-        return templateEngine.render("codegen/templates/ext/java.pojo.vm", mergeGlobalTemplateParams(model));
+        return templateEngine.render("codegen/templates/vm/java.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     public String getDataType(FieldInfo fieldInfo) {
@@ -78,7 +78,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
             fieldDataList.add(fieldData);
         }
         model.setFields(fieldDataList);
-        return templateEngine.render("codegen/templates/ext/jackson.response.pojo.vm", mergeGlobalTemplateParams(model));
+        return templateEngine.render("codegen/templates/vm/jackson.response.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         }
         model.setFields(fieldDataList);
         // 字段信息
-        return templateEngine.render("codegen/templates/ext/easypoi.pojo.vm", mergeGlobalTemplateParams(model));
+        return templateEngine.render("codegen/templates/vm/easypoi.pojo.vm", mergeGlobalTemplateParams(model));
     }
 
     /**

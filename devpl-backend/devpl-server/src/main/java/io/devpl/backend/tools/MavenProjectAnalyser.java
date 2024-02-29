@@ -14,7 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-public class MavenProjectParser implements ProjectAnalyser {
+public class MavenProjectAnalyser implements ProjectAnalyser {
 
     /**
      * 解析本地项目模块信息

@@ -1,9 +1,7 @@
-package io.devpl.backend.tools.ddl.model;
+package io.devpl.backend.tools.ddl;
 
 import com.google.common.base.CaseFormat;
 import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
-import io.devpl.backend.tools.ddl.utils.ConvertBean;
-import io.devpl.backend.tools.ddl.utils.SqlTypeMapUtil;
 
 import java.util.Objects;
 

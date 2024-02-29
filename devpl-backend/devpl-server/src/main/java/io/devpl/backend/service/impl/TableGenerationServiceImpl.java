@@ -48,7 +48,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     @Resource
     TableGenerationFieldService tableFieldService;
     @Resource
-    DataSourceService dataSourceService;
+    RdbmsConnectionInfoService rdbmsConnectionInfoService;
     @Resource
     TargetGenerationFileService targetGenFileService;
     @Resource
@@ -137,7 +137,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             projectInfo = projectService.getById(param.getProjectId());
         }
 
-        try (Connection connection = dataSourceService.getConnection(datasourceId, null)) {
+        try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
 
             DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, param.getDbType());
@@ -277,11 +277,11 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     public void sync(Long id) {
         TableGeneration table = this.getById(id);
 
-        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(table.getDatasourceId());
+        RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(table.getDatasourceId());
         DBType dbType = DBType.getValue(connInfo.getDbType());
 
         List<TableGenerationField> dbTableFieldList;
-        try (Connection connection = dataSourceService.getRdbmsConnection(connInfo)) {
+        try (Connection connection = rdbmsConnectionInfoService.getRdbmsConnection(connInfo)) {
             dbTableFieldList = this.loadTableGenerationFields(null, dbType, connection, table);
         } catch (Exception exception) {
             log.error("同步数据库表失败{}", table.getTableName());
@@ -370,14 +370,14 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     public List<TableGeneration> getGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern) {
         List<TableGeneration> tableList = new ArrayList<>();
         DBType dbType = DBType.MYSQL;
-        if (!dataSourceService.isSystemDataSource(datasourceId)) {
-            RdbmsConnectionInfo connInfo = dataSourceService.getById(datasourceId);
+        if (!rdbmsConnectionInfoService.isSystemDataSource(datasourceId)) {
+            RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getById(datasourceId);
             if (connInfo != null) {
                 dbType = DBType.getValue(connInfo.getDbType());
             }
         }
 
-        try (Connection connection = dataSourceService.getConnection(datasourceId, databaseName, StringUtils.hasLength(databaseName))) {
+        try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, databaseName, StringUtils.hasLength(databaseName))) {
             // 根据数据源，获取全部数据表
             try (DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, dbType)) {
                 List<TableMetadata> tables = loader.getTables(null, databaseName, tableNamePattern, null);

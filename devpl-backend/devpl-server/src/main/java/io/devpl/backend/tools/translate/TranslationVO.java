@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.model;
+package io.devpl.backend.tools.translate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

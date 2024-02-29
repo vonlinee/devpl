@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.setting;
+package io.devpl.backend.tools.ddl;
 
 public class MainSetting {
 

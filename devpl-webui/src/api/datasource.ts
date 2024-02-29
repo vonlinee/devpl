@@ -12,7 +12,7 @@ export const apiListDataSource = (
   limit: number = 10,
   params: any = {}
 ) => {
-  return http.get("/api/gen/datasource/page", {
+  return http.get("/api/datasource/page", {
     pageIndex: page,
     pageSize: limit,
     ...params,
@@ -24,11 +24,11 @@ export const apiListDataSource = (
  * @param ids
  */
 export const apiRemoveDataSourceByIds = (ids: Keys) => {
-  return http.delete("/api/gen/datasource", ids)
+  return http.delete("/api/datasource/remove", ids)
 }
 
 export const useDataSourceTestApi = (id: number) => {
-  return http.get<TestConnVO>("/api/gen/datasource/test/" + id)
+  return http.get<TestConnVO>("/api/datasource/test/" + id)
 }
 
 /**
@@ -37,19 +37,19 @@ export const useDataSourceTestApi = (id: number) => {
  * @returns
  */
 export const apiTestConnection = (connInfo: DbConnInfo) => {
-  return http.post<TestConnVO>("/api/gen/datasource/connection/test", connInfo)
+  return http.post<TestConnVO>("/api/datasource/connection/test", connInfo)
 }
 
 export const useDataSourceApi = (id: Number) => {
-  return http.get("/api/gen/datasource/" + id)
+  return http.get("/api/datasource/" + id)
 }
 
 export const useDataSourceListApi = () => {
-  return http.get("/api/gen/datasource/list")
+  return http.get("/api/datasource/list")
 }
 
 export const useDataSourceSubmitApi = (dataForm: any) => {
-  return http.post("/api/gen/datasource", dataForm)
+  return http.post("/api/datasource/update", dataForm)
 }
 
 /**
@@ -64,7 +64,7 @@ export const useDataSourceTableListApi = (
   databaseName?: string,
   tableNamePattern?: string
 ) => {
-  return http.get("/api/gen/datasource/table/list", {
+  return http.get("/api/datasource/table/list", {
     dataSourceId: id,
     databaseName: databaseName,
     tableNamePattern: tableNamePattern,
@@ -76,7 +76,7 @@ export const useDataSourceTableListApi = (
  * @param dataForm
  */
 export const apiGetDatabaseNames = (dataForm: any) => {
-  return http.post("/api/gen/datasource/dbnames", dataForm)
+  return http.post("/api/datasource/dbnames", dataForm)
 }
 
 /**
@@ -84,7 +84,7 @@ export const apiGetDatabaseNames = (dataForm: any) => {
  * @param dataSourceId
  */
 export const apiGetDatabaseNamesById = (dataSourceId: number) => {
-  return http.get(`/api/gen/datasource/dbnames/${dataSourceId}`)
+  return http.get(`/api/datasource/dbnames/${dataSourceId}`)
 }
 
 /**
@@ -106,7 +106,7 @@ export const apiUploadDriverJar = (file: File) => {
  * @returns 所有支持的数据库类型
  */
 export const apiListSupportedDbTypes = () => {
-  return http.get("/api/gen/datasource/drivers")
+  return http.get("/api/datasource/drivers")
 }
 
 /**
@@ -115,7 +115,7 @@ export const apiListSupportedDbTypes = () => {
  * @returns 所有可选择的数据源
  */
 export const apiListSelectableDataSources = (internal?: boolean) => {
-  return http.get<DataSourceVO[]>("/api/gen/datasource/list/selectable", {
+  return http.get<DataSourceVO[]>("/api/datasource/list/selectable", {
     internal: internal || false,
   })
 }
@@ -129,7 +129,7 @@ export const apiListTableNames = (
   dbName: string,
   pattern?: string
 ) => {
-  return http.get<string[]>("/api/gen/datasource/table/names", {
+  return http.get<string[]>("/api/datasource/table/names", {
     dataSourceId: id,
     databaseName: dbName,
     pattern: pattern,
@@ -141,5 +141,5 @@ export const apiListTableNames = (
  * @returns 所有支持的数据库类型
  */
 export const apiGetTableData = (param: ParamGetDbTableData) => {
-  return http.post<DBTableDataVO>("/api/gen/datasource/table/data", param)
+  return http.post<DBTableDataVO>("/api/datasource/table/data", param)
 }

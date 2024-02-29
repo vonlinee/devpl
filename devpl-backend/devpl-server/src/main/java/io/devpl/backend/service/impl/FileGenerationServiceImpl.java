@@ -34,7 +34,7 @@ import java.util.*;
 public class FileGenerationServiceImpl implements FileGenerationService {
 
     @Resource
-    private DataSourceService datasourceService;
+    private RdbmsConnectionInfoService datasourceService;
     @Resource
     private GenFieldTypeService fieldTypeService;
     @Resource

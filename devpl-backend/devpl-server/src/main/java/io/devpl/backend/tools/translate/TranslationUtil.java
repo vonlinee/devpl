@@ -1,13 +1,9 @@
-package io.devpl.backend.tools.ddl.utils;
+package io.devpl.backend.tools.translate;
 
 import io.devpl.backend.tools.ddl.enums.TranslationAppEnum;
-import io.devpl.backend.tools.ddl.model.Field;
-import io.devpl.backend.tools.ddl.model.TranslationVO;
-import io.devpl.backend.tools.ddl.service.translation.BaiduTranslationService;
-import io.devpl.backend.tools.ddl.service.translation.TencentTranslationService;
-import io.devpl.backend.tools.ddl.service.translation.TranslationService;
-import io.devpl.backend.tools.ddl.setting.MainSetting;
-import io.devpl.backend.tools.ddl.setting.MySettingProperties;
+import io.devpl.backend.tools.ddl.Field;
+import io.devpl.backend.tools.ddl.MainSetting;
+import io.devpl.backend.tools.ddl.MySettingProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 

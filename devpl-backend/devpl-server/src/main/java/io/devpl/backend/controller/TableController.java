@@ -7,7 +7,7 @@ import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
-import io.devpl.backend.service.DataSourceService;
+import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
@@ -28,7 +28,7 @@ public class TableController {
     @Resource
     TableGenerationFieldService tableFieldService;
     @Resource
-    DataSourceService dataSourceService;
+    RdbmsConnectionInfoService rdbmsConnectionInfoService;
 
     /**
      * 分页
@@ -91,7 +91,7 @@ public class TableController {
      */
     @PostMapping("/import")
     public Result<String> tableImport(@RequestBody TableImportParam param) {
-        RdbmsConnectionInfo connInfo = dataSourceService.getConnectionInfo(param.getDataSourceId());
+        RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) {
             return Result.error("数据源不存在");
         }

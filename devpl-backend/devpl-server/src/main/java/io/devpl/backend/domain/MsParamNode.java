@@ -11,8 +11,8 @@ import java.util.List;
  * <p>
  * antd和element-plus的树形表数据结构不同
  */
-@Getter
 @Setter
+@Getter
 public class MsParamNode {
 
     /**
@@ -58,7 +58,7 @@ public class MsParamNode {
     /**
      * 是否叶子结点
      */
-    private boolean leaf;
+    private Boolean leaf;
 
     /**
      * 子节点
@@ -70,5 +70,9 @@ public class MsParamNode {
     public void setDataType(String dataType) {
         this.dataType = dataType;
         this.valueType = MSParamDataType.valueOfTypeName(dataType);
+    }
+
+    public boolean isLeaf() {
+        return leaf == null || leaf;
     }
 }

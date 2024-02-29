@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.utils;
+package io.devpl.backend.tools.ddl;
 
 public class ConvertBean {
     private String sqlType;

@@ -1,7 +1,4 @@
-package io.devpl.backend.tools.ddl.utils;
-
-import io.devpl.backend.tools.ddl.setting.MainSetting;
-import io.devpl.backend.tools.ddl.setting.MySettingProperties;
+package io.devpl.backend.tools.ddl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
