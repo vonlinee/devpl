@@ -51,4 +51,21 @@ public class TestVelocityTemplateEngine {
         String result = engine.render(ts, argumentsMap);
         System.out.println(result);
     }
+
+    /**
+     * TODO 嵌套Map
+     * 模板中嵌套属性，支持单级Map
+     */
+    @Test
+    public void test3() {
+        TemplateArgumentsMap argumentsMap = new TemplateArgumentsMap();
+        argumentsMap.setValue("user.name", "table_info");
+
+        String template = "Hello, #toCamelCase(${user.name})";
+
+        Template ts = engine.getTemplate(template, false);
+
+        String result = engine.render(ts, argumentsMap);
+        System.out.println(result);
+    }
 }

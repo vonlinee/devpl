@@ -59,7 +59,9 @@ export const apiListGenerationFiles = (tableId: number) => {
  * @param tableId
  */
 export const apiSaveOrUpdateGenerationFiles = (files: TableFileGeneration[]) => {
-  return http.post<TableFileGeneration[]>("/api/codegen/genfiles/config", files)
+  return http.post<TableFileGeneration[]>("/api/codegen/genfiles/config", {
+    fileInfoList: files
+  })
 }
 
 /**

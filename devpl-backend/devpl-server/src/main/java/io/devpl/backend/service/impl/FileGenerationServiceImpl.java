@@ -138,9 +138,25 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
         // 获取数据库类型
         dataModel.put("dbType", datasourceService.getDatabaseProductName(table.getDatasourceId()));
+        dataModel.put("entity", table.getClassName());
+
+        // 包名配置
+        Map<String, Object> packageConfig = new HashMap<>();
+        packageConfig.put("Controller", table.getPackageName() + ".controller");
+        packageConfig.put("Mapper", table.getPackageName() + ".mapper");
+        packageConfig.put("Service", table.getPackageName() + ".service");
+        packageConfig.put("Entity", table.getPackageName() + ".entity");
+        packageConfig.put("ServiceImpl", table.getPackageName() + ".service.impl");
+
+        dataModel.put("package", packageConfig);
+
+        // 表配置信息
+        Map<String, Object> tableConfig = new HashMap<>();
+        tableConfig.put("entityPath", table.getTableName());
+        tableConfig.put("controllerName", table.getClassName() + ".Controller");
+        dataModel.put("table", tableConfig);
 
         // 项目信息
-        dataModel.put("package", table.getPackageName());
         dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());

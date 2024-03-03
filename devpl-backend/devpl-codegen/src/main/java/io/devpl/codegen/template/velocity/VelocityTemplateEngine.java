@@ -56,6 +56,9 @@ public class VelocityTemplateEngine implements TemplateEngine {
          */
         engine.setApplicationAttribute("devpl", stringTemplates);
 
+        /**
+         * 注册自定义指令
+         */
         registerDirective(new CamelCaseDirective());
 
         return engine;
