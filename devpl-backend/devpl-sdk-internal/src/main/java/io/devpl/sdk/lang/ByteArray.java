@@ -1,4 +1,4 @@
-package io.devpl.sdk;
+package io.devpl.sdk.lang;
 
 import java.io.Serial;
 import java.io.Serializable;

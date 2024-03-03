@@ -7,7 +7,6 @@ import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.entity.GenFieldType;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
-import io.devpl.backend.service.GenFieldTypeService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.codegen.core.CaseFormat;
 import lombok.AllArgsConstructor;

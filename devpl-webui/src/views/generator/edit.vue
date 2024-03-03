@@ -187,7 +187,6 @@ import {
 } from "element-plus/es"
 import Sortable from "sortablejs"
 import { apiGetGenTableById, apiUpdateGenTableFields } from "@/api/table"
-import { useFieldTypeListApi } from "@/api/fieldType"
 import { VxeTableInstance } from "vxe-table"
 import {
   apiListGenerationFiles,
@@ -350,13 +349,13 @@ const getTable = (id: number) => {
 }
 
 const getFieldTypeList = async () => {
-  typeList.value = []
-  // 获取数据
-  const { data } = await useFieldTypeListApi()
-  // 设置属性类型值
-  data.forEach((item: any) => typeList.value.push({ label: item, value: item }))
-  // 增加Object类型
-  typeList.value.push({ label: "Object", value: "Object" })
+  // typeList.value = []
+  // // 获取数据
+  // const { data } = await useFieldTypeListApi()
+  // // 设置属性类型值
+  // data.forEach((item: any) => typeList.value.push({ label: item, value: item }))
+  // // 增加Object类型
+  // typeList.value.push({ label: "Object", value: "Object" })
 }
 
 /**
