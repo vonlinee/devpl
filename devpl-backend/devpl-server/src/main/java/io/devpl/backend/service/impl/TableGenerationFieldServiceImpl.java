@@ -1,7 +1,7 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
-import io.devpl.backend.dao.GenTableFieldMapper;
+import io.devpl.backend.dao.TableGenerationFieldMapper;
 import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.entity.GenFieldType;
@@ -9,9 +9,9 @@ import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.codegen.core.CaseFormat;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +19,7 @@ import java.util.Map;
  * 表字段
  */
 @Service
-@AllArgsConstructor
-public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<GenTableFieldMapper, TableGenerationField> implements TableGenerationFieldService {
-    private final GenFieldTypeService fieldTypeService;
+public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<TableGenerationFieldMapper, TableGenerationField> implements TableGenerationFieldService {
 
     @Override
     public List<TableGenerationField> listByTableId(Long tableId) {
@@ -46,7 +44,7 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<GenT
     @Override
     public List<TableGenerationField> initTableFields(TableGeneration table, List<TableGenerationField> tableFieldList) {
         // 字段类型、属性类型映射
-        Map<String, GenFieldType> fieldTypeMap = fieldTypeService.getMap();
+        Map<String, GenFieldType> fieldTypeMap = new HashMap<>();
         int index = 0;
         for (TableGenerationField field : tableFieldList) {
 

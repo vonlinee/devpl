@@ -11,7 +11,7 @@ import java.util.List;
  * 表字段
  */
 @Mapper
-public interface GenTableFieldMapper extends MyBatisPlusMapper<TableGenerationField> {
+public interface TableGenerationFieldMapper extends MyBatisPlusMapper<TableGenerationField> {
 
     @Select(value = """
             select *

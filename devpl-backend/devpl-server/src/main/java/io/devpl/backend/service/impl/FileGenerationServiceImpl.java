@@ -36,8 +36,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private RdbmsConnectionInfoService datasourceService;
     @Resource
-    private GenFieldTypeService fieldTypeService;
-    @Resource
     private DomainModelService baseClassService;
     @Resource
     private TableGenerationService tableService;
@@ -178,7 +176,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         setBaseClass(dataModel, table);
 
         // 导入的包列表
-        Set<String> importList = fieldTypeService.getPackageByTableId(table.getId());
+        Set<String> importList = new HashSet<>();
         dataModel.put("importList", importList);
 
         // 表信息
@@ -249,7 +247,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
                 throw BusinessException.create("读取文件%s失败", path, exception.getMessage());
             }
         }
-        throw BusinessException.create("文件%s不存在", path);
+        return String.format("文件%s不存在", path);
     }
 
     /**
