@@ -18,7 +18,7 @@ import java.util.Properties;
 @Setter
 public class ConnectionConfig {
 
-    private String id;
+    private Long id;
     /**
      * 连接名称: 唯一名称，可作为Map Key
      */

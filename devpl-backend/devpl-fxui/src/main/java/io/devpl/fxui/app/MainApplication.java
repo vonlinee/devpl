@@ -1,13 +1,15 @@
 package io.devpl.fxui.app;
 
-import io.devpl.fxui.components.pane.RouterPane;
 import io.devpl.fxui.components.RouterView;
+import io.devpl.fxui.components.pane.RouterPane;
+import io.devpl.fxui.controller.MainView;
+import io.devpl.fxui.controller.dbconn.ConnManageView;
 import io.devpl.fxui.controller.template.TemplateManageView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
-import io.fxtras.mvvm.View;
 import io.devpl.fxui.view.IndexView;
 import io.devpl.fxui.view.TypeMappingTable;
+import io.fxtras.mvvm.View;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,6 +33,8 @@ public class MainApplication extends Application {
         TextField textField = new TextField();
         Button btn = new Button("AAA");
 
+        NavigationMenu menu1 = new NavigationMenu("连接信息", View.load(ConnManageView.class));
+
         NavigationMenu menu = new NavigationMenu("开发工具", null);
 
         RouterPane routerPane = new RouterPane();
@@ -42,6 +46,7 @@ public class MainApplication extends Application {
 
 //        menu.addChild("字段管理", RouterView.of(View.load(FieldsManageView.class)));
 
+        layoutPane.addNavigationMenu(menu1);
         layoutPane.addNavigationMenu(menu);
 
         layoutPane.expandAllMenu();
@@ -50,13 +55,9 @@ public class MainApplication extends Application {
 
         hBox.getChildren().addAll(textField, btn);
 
-        routerPane.addRouteMapping(1, new Button("111"));
-        routerPane.addRouteMapping(2, new Button("222"));
-        routerPane.addRouteMapping(3, new Button("333"));
-
+        menu.addChild("主界面", RouterView.of(View.load(MainView.class)));
         menu.addChild("数据类型", RouterView.of(new TypeMappingTable()));
         menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
-
 //        Modal modal = Modal.of("数据类型表", typeMappingTable, 700, 500);
 
         Label label = new Label("hello");

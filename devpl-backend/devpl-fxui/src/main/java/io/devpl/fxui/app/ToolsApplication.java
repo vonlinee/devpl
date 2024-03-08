@@ -16,6 +16,9 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 文件合并工具
+ */
 public class ToolsApplication extends Application {
 
     List<Class<?>> list = new ArrayList<>();
@@ -23,7 +26,6 @@ public class ToolsApplication extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-
         list.add(FileHelperView.class);
     }
 
@@ -32,7 +34,6 @@ public class ToolsApplication extends Application {
         BorderPane root = new BorderPane();
 
         ListView<Class<?>> listView = new ListView<>();
-
         listView.setCellFactory(TextFieldListCell.forListView(new StringConverter<>() {
             @Override
             public String toString(Class<?> object) {
