@@ -56,7 +56,7 @@ public class DateTimes {
         return DT_FORMATTER_YMDHMS.format(LocalDateTime.now());
     }
 
-    public static LocalDateTime plusDateTime(LocalDateTime dt, Unit timeUnit, int count) {
+    public static LocalDateTime plusDateTime(LocalDateTime dt, DateTimeUnit timeUnit, int count) {
         switch (timeUnit) {
             case DAY -> // 日
                 dt = dt.plusDays(count);
@@ -75,8 +75,8 @@ public class DateTimes {
     /**
      * 是否是闰年
      *
-     * @param year
-     * @return
+     * @param year 年份数字
+     * @return 是否闰年
      */
     public static boolean isLeapYear(int year) {
         return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
@@ -105,8 +105,8 @@ public class DateTimes {
     /**
      * 解析对象类型为LocalDateTime类型
      *
-     * @param dateTime
-     * @return
+     * @param dateTime 时期时间
+     * @return LocalDateTime
      */
     public static LocalDateTime parse(Object dateTime) {
         if (dateTime == null) {
@@ -155,20 +155,4 @@ public class DateTimes {
         return 1;
     }
 
-    /**
-     * 日期时间单位
-     *
-     * @see java.time.temporal.ChronoUnit
-     */
-    public enum Unit {
-        YEAR,
-        MONTH,
-        WEEK,
-        DAY,
-        HOUR,
-        MINUTE,
-        SECONDS,
-        MILLS,
-        NANOS
-    }
 }

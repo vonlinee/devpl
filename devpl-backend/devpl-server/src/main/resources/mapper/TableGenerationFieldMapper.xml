@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.devpl.backend.dao.GenTableFieldMapper">
+<mapper namespace="io.devpl.backend.dao.TableGenerationFieldMapper">
 
     <delete id="deleteBatchTableIds">
         delete from table_generation_field where table_id in

@@ -36,8 +36,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private RdbmsConnectionInfoService datasourceService;
     @Resource
-    private GenFieldTypeService fieldTypeService;
-    @Resource
     private DomainModelService baseClassService;
     @Resource
     private TableGenerationService tableService;
@@ -138,9 +136,25 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
         // 获取数据库类型
         dataModel.put("dbType", datasourceService.getDatabaseProductName(table.getDatasourceId()));
+        dataModel.put("entity", table.getClassName());
+
+        // 包名配置
+        Map<String, Object> packageConfig = new HashMap<>();
+        packageConfig.put("Controller", table.getPackageName() + ".controller");
+        packageConfig.put("Mapper", table.getPackageName() + ".mapper");
+        packageConfig.put("Service", table.getPackageName() + ".service");
+        packageConfig.put("Entity", table.getPackageName() + ".entity");
+        packageConfig.put("ServiceImpl", table.getPackageName() + ".service.impl");
+
+        dataModel.put("package", packageConfig);
+
+        // 表配置信息
+        Map<String, Object> tableConfig = new HashMap<>();
+        tableConfig.put("entityPath", table.getTableName());
+        tableConfig.put("controllerName", table.getClassName() + ".Controller");
+        dataModel.put("table", tableConfig);
 
         // 项目信息
-        dataModel.put("package", table.getPackageName());
         dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
@@ -162,7 +176,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         setBaseClass(dataModel, table);
 
         // 导入的包列表
-        Set<String> importList = fieldTypeService.getPackageByTableId(table.getId());
+        Set<String> importList = new HashSet<>();
         dataModel.put("importList", importList);
 
         // 表信息
@@ -233,7 +247,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
                 throw BusinessException.create("读取文件%s失败", path, exception.getMessage());
             }
         }
-        throw BusinessException.create("文件%s不存在", path);
+        return String.format("文件%s不存在", path);
     }
 
     /**
