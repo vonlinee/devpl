@@ -77,6 +77,7 @@ public class AppConfig {
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
                 item.setConnectionName(rs.getString("connection_name"));
+                item.setDriverClassName(rs.getString("driver_class_name"));
                 item.setHost(rs.getString("host"));
                 item.setDbType(rs.getString("db_type"));
                 item.setUsername(rs.getString("username"));

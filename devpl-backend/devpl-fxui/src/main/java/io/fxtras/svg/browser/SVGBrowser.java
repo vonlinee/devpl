@@ -3,8 +3,6 @@ package io.fxtras.svg.browser;
 import io.fxtras.svg.SVGImage;
 import io.fxtras.svg.SVGLoader;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -58,29 +56,16 @@ public class SVGBrowser extends Application {
         fileMenu.getItems().add(openItem);
         MenuItem saveItem = new MenuItem("Save Image");
         fileMenu.getItems().add(saveItem);
-        saveItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                save();
-            }
-        });
+        saveItem.setOnAction(t -> save());
 
         MenuItem exitItem = new MenuItem("Exit");
         fileMenu.getItems().add(exitItem);
-        exitItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                stage.close();
-                System.exit(0);
-            }
+        exitItem.setOnAction(t -> {
+            stage.close();
+            System.exit(0);
         });
 
-        openItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                open();
-            }
-        });
+        openItem.setOnAction(t -> open());
 
         ToolBar toolBar = new ToolBar();
         URL url = this.getClass().getResource("zoomIn.png");
@@ -88,24 +73,14 @@ public class SVGBrowser extends Application {
         Button zoomIn = new Button("", new ImageView(img));
         toolBar.getItems().add(zoomIn);
 
-        zoomIn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                zoomIn();
-            }
-        });
+        zoomIn.setOnAction(t -> zoomIn());
 
         url = this.getClass().getResource("zoomOut.png");
         img = new Image(url.toString());
         Button zoomOut = new Button("", new ImageView(img));
         toolBar.getItems().add(zoomOut);
 
-        zoomOut.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                zoomOut();
-            }
-        });
+        zoomOut.setOnAction(t -> zoomOut());
 
         VBox vBox = new VBox();
         vBox.getChildren().add(menuBar);

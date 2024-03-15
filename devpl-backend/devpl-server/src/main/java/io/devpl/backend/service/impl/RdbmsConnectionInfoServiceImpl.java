@@ -13,7 +13,7 @@ import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.jdbc.JdbcDriverManager;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.utils.DBUtils;
-import io.devpl.backend.utils.EncryptUtils;
+import io.devpl.common.utils.EncryptUtils;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.codegen.jdbc.JdbcUtils;

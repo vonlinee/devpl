@@ -16,7 +16,13 @@ import java.io.File;
 import java.sql.*;
 import java.util.*;
 
-public class DBUtils {
+/**
+ * 数据库操作工具类，简单封装Apache Common DBUtils工具类
+ */
+public final class DBUtils {
+
+    private DBUtils() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(DBUtils.class);
 
@@ -29,6 +35,7 @@ public class DBUtils {
 
     /**
      * 数据库驱动通过SPI自动加载，因此只需要提供url即可区分不同的数据库
+     *
      * @param url      连接URL
      * @param username 用户名
      * @param password 密码
@@ -41,6 +48,7 @@ public class DBUtils {
 
     /**
      * 获取连接
+     *
      * @param url        全部连接URL去掉参数的部分
      * @param properties 需要包含user和password两个key，其他JDBC连接属性可选
      * @return Connection
@@ -71,6 +79,7 @@ public class DBUtils {
 
     /**
      * 加载数据库驱动
+     *
      * @param dbType 数据库类型
      * @see JDBCDriver
      */
@@ -91,6 +100,7 @@ public class DBUtils {
 
     /**
      * 获取元数据
+     *
      * @param conn 连接
      * @return 元数据
      */
@@ -104,6 +114,7 @@ public class DBUtils {
 
     /**
      * 获取元数据
+     *
      * @param conn             连接对象
      * @param tableNamePattern 表名
      * @return 表字段元数据列表
@@ -125,6 +136,7 @@ public class DBUtils {
 
     /**
      * 连接时如果指定了数据库进行连接，则有数据，如果没有指定数据库进行连接，则无数据
+     *
      * @param conn             数据库连接
      * @param tableNamePattern 表名
      * @param types            表类型
@@ -170,6 +182,7 @@ public class DBUtils {
 
     /**
      * 删除操作
+     *
      * @param connection 连接
      * @param sql        sql
      * @return 操作记录行数
@@ -183,6 +196,7 @@ public class DBUtils {
 
     /**
      * 查询JavaBean组成的List
+     *
      * @param connection   数据库连接
      * @param sql          SQL
      * @param requiredType JavaBean类型
@@ -214,6 +228,7 @@ public class DBUtils {
 
     /**
      * 默认取第1列
+     *
      * @param <T>       数据类型
      * @param type      数据类型
      * @param resultSet ResultSet
@@ -246,6 +261,7 @@ public class DBUtils {
 
     /**
      * 获取连接的所有数据库名
+     *
      * @param connection 数据库连接对象
      * @return 所有数据库名称
      */

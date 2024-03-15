@@ -1,5 +1,6 @@
 package io.devpl.fxui.model;
 
+import io.devpl.common.utils.EncryptUtils;
 import io.devpl.fxui.utils.AppConfig;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,15 +43,19 @@ public class ConnectionRegistry {
 
     /**
      * 根据连接名称获取连接配置
+     *
      * @param connectionName 连接名称
      * @return 连接配置
      */
     public static ConnectionConfig get(String connectionName) {
-        return getRegisteredConnectionConfigMap().get(connectionName);
+        ConnectionConfig cg = getRegisteredConnectionConfigMap().get(connectionName);
+        cg.setPassword(EncryptUtils.tryDecrypt(cg.getPassword()));
+        return cg;
     }
 
     /**
      * 获取所有连接配置
+     *
      * @return 连接配置列表
      */
     public static ObservableList<ConnectionConfig> getConnectionConfigurations() {
@@ -59,6 +64,7 @@ public class ConnectionRegistry {
 
     /**
      * 同步方法
+     *
      * @return key为连接名，value为对应的连接信息
      */
     public static synchronized Map<String, ConnectionConfig> getRegisteredConnectionConfigMap() {

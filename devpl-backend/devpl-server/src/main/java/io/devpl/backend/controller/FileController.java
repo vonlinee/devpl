@@ -1,7 +1,7 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileDownloadParam;
 import io.devpl.backend.domain.param.MultiFileUploadParam;
 import io.devpl.backend.domain.param.SingleFileUploadParam;

@@ -6,18 +6,33 @@ import io.devpl.fxui.components.table.TableColumninitializer;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 
+import java.awt.*;
 import java.util.List;
 
 public class FXUtils {
+
+    /**
+     * @return 屏幕尺寸
+     * @see Toolkit#getDefaultToolkit()
+     * @see Toolkit#getScreenSize()
+     */
+    public static Rectangle2D getScreenBox() {
+        return Screen.getPrimary().getBounds();
+    }
 
     public static void layoutInRegion(Region parent, Node child) {
         Region.layoutInArea(child, 0, 0, parent.getWidth(), parent.getHeight(), 0, Insets.EMPTY, true, true, HPos.CENTER, VPos.CENTER, parent.isSnapToPixel());

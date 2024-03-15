@@ -2,7 +2,7 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.domain.vo.FileGenerationResult;

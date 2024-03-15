@@ -9,13 +9,14 @@ import javafx.stage.Window;
 
 public class StageManager {
 
-    public static <T> void show(Class<T> controllerClass) {
+    public static <T extends View> void show(Class<T> controllerClass) {
         Parent root = View.load(controllerClass);
         show(String.valueOf(root.getProperties().get("title")), root);
     }
 
     /**
      * 通过节点获取场景图，如果节点未被绑定到场景图上，创建一个新的场景图以及舞台
+     *
      * @param rootNode 节点
      */
     public static void show(String title, Parent rootNode) {

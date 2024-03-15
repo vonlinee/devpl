@@ -2,6 +2,7 @@ package io.devpl.fxui.model;
 
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.utils.DBUtils;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,12 +11,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Properties;
 
-/**
- * 数据库连接配置
- * 注意：连接配置不一定需要数据库，因此此处不存储数据库名称信息
- */
-@Getter
-@Setter
+@Data
 public class ConnectionConfig {
 
     private Long id;
@@ -34,12 +30,13 @@ public class ConnectionConfig {
     private String dbName;
     private String username;
     private String password;
+    private String driverClassName;
     private String encoding;
 
     private Properties properties;
 
     public String getConnectionUrl() {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
         String databaseName = schema;
         if (databaseName == null) {
             databaseName = "";
@@ -51,13 +48,13 @@ public class ConnectionConfig {
     }
 
     public String getConnectionUrl(String databaseName) {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 
     public String getConnectionUrl(String databaseName, Properties properties) {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(dbType);
+        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
@@ -129,7 +126,7 @@ public class ConnectionConfig {
 
     public JDBCDriver getDriver() {
         if (this.driverInfo == null) {
-            this.driverInfo = JDBCDriver.findByDriverClassName(dbType);
+            this.driverInfo = JDBCDriver.findByDriverClassName(driverClassName);
         }
         return driverInfo;
     }

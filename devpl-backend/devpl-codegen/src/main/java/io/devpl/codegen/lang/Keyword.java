@@ -1,4 +1,4 @@
-package io.devpl.fxui.model;
+package io.devpl.codegen.lang;
 
 /**
  * The Java modifier keywords.

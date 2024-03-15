@@ -18,7 +18,6 @@
             <columns>
                 <TableColumn fx:id="tblcConnectionName" text="连接名称"/>
                 <TableColumn fx:id="tblcDbType" text="数据库类型"/>
-                <TableColumn fx:id="tblcProtocol" text="协议"/>
                 <TableColumn fx:id="tblcHostname" text="IP"/>
                 <TableColumn fx:id="tblcPort" minWidth="40" maxWidth="40" text="端口"/>
                 <TableColumn fx:id="tblcDatabaseName" text="数据库"/>

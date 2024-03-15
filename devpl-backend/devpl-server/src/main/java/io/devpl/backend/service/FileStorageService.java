@@ -1,6 +1,6 @@
 package io.devpl.backend.service;
 
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 
 import java.util.List;
 

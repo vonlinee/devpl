@@ -36,8 +36,6 @@ public class ConnManageView extends FxmlView {
     @FXML
     public TableColumn<ConnectionConfig, String> tblcDbType;
     @FXML
-    public TableColumn<ConnectionConfig, String> tblcProtocol;
-    @FXML
     public TableColumn<ConnectionConfig, String> tblcHostname;
     @FXML
     public TableColumn<ConnectionConfig, String> tblcPort;
@@ -59,34 +57,11 @@ public class ConnManageView extends FxmlView {
             return row;
         });
         tblvConnectionList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tblcDbType.setCellValueFactory(param -> {
-            if (param == null) {
-                return new SimpleStringProperty("Unknown");
-            }
-            JDBCDriver driver = param.getValue().getDriver();
-            if (driver == null) {
-                return new SimpleStringProperty("Unknown");
-            }
-            return new SimpleStringProperty(driver.name());
-        });
+        tblcDbType.setCellValueFactory(new PropertyValueFactory<>("dbType"));
         tblcHostname.setCellValueFactory(new PropertyValueFactory<>("host"));
         tblcPort.setCellValueFactory(new PropertyValueFactory<>("port"));
         tblcDatabaseName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
         tblcConnectionName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getConnectionName()));
-        tblcProtocol.setCellValueFactory(param -> {
-            SimpleStringProperty property;
-            if (param == null) {
-                property = new SimpleStringProperty("Unknown");
-            } else {
-                JDBCDriver driver = param.getValue().getDriver();
-                if (driver == null) {
-                    property = new SimpleStringProperty("Unknown");
-                } else {
-                    property = new SimpleStringProperty(driver.getSubProtocol());
-                }
-            }
-            return property;
-        });
         fillConnectionInfo();
     }
 

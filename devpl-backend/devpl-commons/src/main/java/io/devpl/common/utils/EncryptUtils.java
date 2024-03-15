@@ -1,4 +1,4 @@
-package io.devpl.backend.utils;
+package io.devpl.common.utils;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;

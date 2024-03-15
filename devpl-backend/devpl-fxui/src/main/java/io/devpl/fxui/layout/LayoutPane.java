@@ -31,11 +31,11 @@ public class LayoutPane extends SplitPane {
         // 初始化内容区域
         contentPane.setStyle("-fx-background-color: #c48c8c");
 
-        setDividerPosition(0, 0.4);
-        getItems().addAll(menuPane, contentPane);
+        this.setDividerPosition(0, 0.3);
+        this.getItems().addAll(menuPane, contentPane);
 
         // 宽度自适应
-        getDividers().get(0).positionProperty()
+        this.getDividers().get(0).positionProperty()
             .addListener((observable, oldValue, newValue) -> {
                 menuPane.setPrefWidth(LayoutPane.this.getWidth() * newValue.doubleValue());
                 contentPane.setPrefWidth(LayoutPane.this.getWidth() * (1.0 - newValue.doubleValue()));
@@ -44,14 +44,14 @@ public class LayoutPane extends SplitPane {
         contentPane.prefHeightProperty().bind(this.heightProperty());
     }
 
-    public final void addNavigationMenu(NavigationMenu menuItem) {
-        menuPane.addNavigationMenu(menuItem);
+    public final void addNavigationMenu(NavigationMenu... menuItems) {
+        menuPane.addNavigationMenu(menuItems);
     }
 
     /**
      * 展开所有菜单
      */
-    public void expandAllMenu() {
+    public final void expandAllMenu() {
         menuPane.expandAll();
     }
 }

@@ -49,8 +49,8 @@ public class MenuContainer extends Region {
         FXUtils.layoutInRegion(this, menuTreeView);
     }
 
-    public final void addNavigationMenu(NavigationMenu menuItem) {
-        this.menuTreeView.getRoot().getChildren().add(menuItem);
+    public final void addNavigationMenu(NavigationMenu ... menuItem) {
+        this.menuTreeView.getRoot().getChildren().addAll(menuItem);
     }
 
     public void expandAll() {

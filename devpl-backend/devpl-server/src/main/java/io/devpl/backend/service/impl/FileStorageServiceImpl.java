@@ -1,7 +1,7 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.FileStorageStrategy;
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 import io.devpl.backend.service.FileStorageService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;

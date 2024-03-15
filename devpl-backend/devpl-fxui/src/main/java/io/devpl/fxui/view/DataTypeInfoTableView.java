@@ -18,11 +18,11 @@ import javafx.scene.layout.BorderPane;
 
 import java.util.List;
 
-public class TypeMappingTable extends BorderPane {
+public class DataTypeInfoTableView extends BorderPane {
 
     DataTypeItemMapper dataTypeItemMapper = MyBatis.getMapper(DataTypeItemMapper.class);
 
-    public TypeMappingTable() {
+    public DataTypeInfoTableView() {
         setCenter(FXUtils.createTableView(DataTypeItem.class));
 
         TablePaneOption option = TablePaneOption

@@ -1,83 +1,96 @@
 package io.devpl.fxui.app;
 
 import io.devpl.fxui.components.RouterView;
-import io.devpl.fxui.components.pane.RouterPane;
-import io.devpl.fxui.controller.MainView;
 import io.devpl.fxui.controller.dbconn.ConnManageView;
+import io.devpl.fxui.controller.domain.ClassDefView;
+import io.devpl.fxui.controller.domain.TypeMappingTable;
+import io.devpl.fxui.controller.expression.ExpressionEngineView;
+import io.devpl.fxui.controller.fields.FieldsManageView;
+import io.devpl.fxui.controller.mbg.MyBatisCodeGenerationView;
 import io.devpl.fxui.controller.template.TemplateManageView;
 import io.devpl.fxui.layout.LayoutPane;
 import io.devpl.fxui.layout.menu.NavigationMenu;
-import io.devpl.fxui.view.IndexView;
-import io.devpl.fxui.view.TypeMappingTable;
+import io.devpl.fxui.tools.mybatis.MyBatisXmlToolPane;
+import io.devpl.fxui.utils.FXUtils;
+import io.devpl.fxui.view.DataTypeInfoTableView;
+import io.devpl.fxui.view.FileTreeView;
 import io.fxtras.mvvm.View;
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         BorderPane root = new BorderPane();
 
         LayoutPane layoutPane = new LayoutPane();
 
-        TextField textField = new TextField();
-        Button btn = new Button("AAA");
-
         NavigationMenu menu1 = new NavigationMenu("连接信息", View.load(ConnManageView.class));
-
         NavigationMenu menu = new NavigationMenu("开发工具", null);
-
-        RouterPane routerPane = new RouterPane();
-
-        View.load(IndexView.class);
-
-        // menu.addChild("模拟数据", RouterView.of(new MockGeneratorView()));
-        // menu.addChild("测试控件", RouterView.of(routerPane));
-
-//        menu.addChild("字段管理", RouterView.of(View.load(FieldsManageView.class)));
-
-        layoutPane.addNavigationMenu(menu1);
-        layoutPane.addNavigationMenu(menu);
-
+        menu.addChild("代码生成", RouterView.of(View.load(MyBatisCodeGenerationView.class)));
+        menu.addChild("MyBatis工具", RouterView.of(new MyBatisXmlToolPane()));
+        menu.addChild("领域模型", RouterView.of(View.load(ClassDefView.class)));
+        menu.addChild("类型映射", RouterView.of(new TypeMappingTable()));
+        menu.addChild("数据类型", RouterView.of(new DataTypeInfoTableView()));
+        menu.addChild("字段管理", RouterView.of(View.load(FieldsManageView.class)));
+        menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
+        menu.addChild("表达式引擎", RouterView.of(View.load(ExpressionEngineView.class)));
         layoutPane.expandAllMenu();
 
-        HBox hBox = new HBox();
+        layoutPane.addNavigationMenu(menu1, menu);
 
-        hBox.getChildren().addAll(textField, btn);
-
-        menu.addChild("主界面", RouterView.of(View.load(MainView.class)));
-        menu.addChild("数据类型", RouterView.of(new TypeMappingTable()));
-        menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
-//        Modal modal = Modal.of("数据类型表", typeMappingTable, 700, 500);
-
-        Label label = new Label("hello");
-        hBox.getChildren().add(label);
-        btn.setOnAction(event -> {
-//            String text = textField.getText();
-//            if (text != null && !text.isBlank()) {
-//                int key = Integer.parseInt(text);
-//                routerPane.setCurrentRoute(key);
-//            }
-        });
-
-        root.setTop(hBox);
-
+        root.setTop(topBar());
         root.setCenter(layoutPane);
 
-        Scene scene = new Scene(root, 800, 640);
+        Rectangle2D box = FXUtils.getScreenBox();
+
+        Scene scene = new Scene(root, box.getWidth() * 0.75, box.getHeight() * 0.8);
         stage.setTitle("Devpl");
         stage.setScene(scene);
         stage.show();
+    }
+
+    Stage stage = new Stage();
+
+    /**
+     * 顶部菜单栏
+     *
+     * @return MenuBar
+     */
+    public MenuBar topBar() {
+        MenuBar menuBar = new MenuBar();
+
+        Menu fileMenu = new Menu("File");
+        MenuItem menuItem_open = new MenuItem("Open");
+
+        FileTreeView fileTreeView = new FileTreeView(new File("D:/Temp"));
+
+        menuItem_open.setOnAction(event -> {
+            if (stage.getScene() == null) {
+                stage.setScene(new Scene(fileTreeView));
+            }
+            stage.show();
+        });
+
+        MenuItem menuItem_import = new MenuItem("Import");
+        fileMenu.getItems().addAll(menuItem_open, menuItem_import);
+
+        Menu helpMenu = new Menu("Help");
+        MenuItem menuItem_about = new MenuItem("关于");
+        helpMenu.getItems().addAll(menuItem_about);
+
+        menuBar.getMenus().addAll(fileMenu, helpMenu);
+        return menuBar;
     }
 
     public static void main(String[] args) {

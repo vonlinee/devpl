@@ -30,7 +30,8 @@ public abstract class View implements SceneGraphAccessor {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public View() {}
+    public View() {
+    }
 
     protected void setRoot(Node root) {
         this.root = root;
@@ -69,7 +70,7 @@ public abstract class View implements SceneGraphAccessor {
      * @param <T>   View
      * @return Root Node
      */
-    public static <T> Parent load(Class<T> clazz) {
+    public static <T extends View> Parent load(Class<T> clazz) {
         return (Parent) loadImpl(clazz).getRoot();
     }
 

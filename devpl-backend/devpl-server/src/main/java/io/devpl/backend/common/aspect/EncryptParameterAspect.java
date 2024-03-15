@@ -3,7 +3,7 @@ package io.devpl.backend.common.aspect;
 import io.devpl.backend.common.annotation.Encrypt;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.utils.EncryptUtils;
+import io.devpl.common.utils.EncryptUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

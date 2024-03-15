@@ -1,18 +1,17 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.fxui.bridge.MyBatisPlusGenerator;
+import io.devpl.fxui.controller.TableCustomizationView;
 import io.devpl.fxui.model.*;
 import io.devpl.fxui.utils.*;
 import io.devpl.sdk.util.StringUtils;
-import io.devpl.fxui.bridge.MyBatisPlusGenerator;
-import io.devpl.fxui.common.ProgressDialog;
-import io.devpl.fxui.controller.TableCustomizationView;
-import io.fxtras.utils.EventUtils;
 import io.fxtras.Alerts;
 import io.fxtras.PropertyBinder;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
 import io.fxtras.mvvm.View;
+import io.fxtras.utils.EventUtils;
 import io.fxtras.utils.StageManager;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -101,7 +100,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public CheckBox useTableNameAliasCheckbox;
     @FXML
-    public CheckBox addMapperAnnotationChcekBox;
+    public CheckBox addMapperAnnotationCheckBox;
     @FXML
     public CheckBox chbEnableSwagger;
 
@@ -110,12 +109,10 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     private final ProjectConfiguration projectConfig = new ProjectConfiguration();
 
-    // 进度回调
-    private final ProgressDialog progressDialog = new ProgressDialog();
-
     /**
      * 保存哪些表需要进行代码生成
      * 存放的key:TableCodeGenConfig#getUniqueKey()
+     *
      * @see TableGeneration#getUniqueKey()
      */
     private final Map<String, TableGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
@@ -145,7 +142,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
         });
         // 连接列表
         cboxConnection.setOnMouseClicked(event -> Platform.runLater(() -> cboxConnection.getItems()
-                .setAll(AppConfig.listConnectionInfo().stream().map(ConnectionConfig::getUniqueKey).toList())));
+            .setAll(AppConfig.listConnectionInfo().stream().map(ConnectionConfig::getUniqueKey).toList())));
 
         tblcTableName.setCellValueFactory(new PropertyValueFactory<>("tableName"));
         tblcTableName.setCellFactory(param -> {
@@ -220,6 +217,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     /**
      * 刷新表信息
+     *
      * @param connectionName 连接名称
      */
     private void refreshTables(String connectionName, String dbName) {
@@ -253,16 +251,17 @@ public class MyBatisCodeGenerationView extends FxmlView {
     }
 
     CodeGenerationResultDialog dialog = new CodeGenerationResultDialog();
+    MyBatisPlusGenerator generator = new MyBatisPlusGenerator();
 
     /**
      * 代码生成
      * 使用mybatis-plus-generator
+     *
      * @param context 参数
      */
     private void generate(CodeGenContext context) {
-        MyBatisPlusGenerator mbpgGenerator = new MyBatisPlusGenerator();
         try {
-            List<File> files = mbpgGenerator.generate(context);
+            List<File> files = generator.generate(context);
             dialog.addGeneratedFiles(files);
             dialog.show();
         } catch (Exception exception) {
@@ -272,6 +271,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     /**
      * 检查并创建不存在的文件夹
+     *
      * @return 是否创建成功
      */
     private boolean checkDirs(ProjectConfiguration config) {
@@ -302,6 +302,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     /**
      * 添加一个表到需要进行代码生成的表
+     *
      * @param tableInfo
      */
     public void addTable(TableGeneration tableInfo) {
@@ -315,30 +316,33 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     /**
      * 校验配置项
+     *
      * @param projectConfig 项目配置
      */
     private String validateConfig(ProjectConfiguration projectConfig) {
         return Validator.target(projectConfig)
-                .hasText(ProjectConfiguration::getProjectRootFolder, "项目根目录为空")
-                .hasText(ProjectConfiguration::getMapperPackageName, "Mapper接口包名为空")
-                .hasText(ProjectConfiguration::getEntityPackageName, "实体类包名为空")
-                .hasText(ProjectConfiguration::getEntityPackageFolder, "实体类所在目录为空")
-                .hasText(ProjectConfiguration::getMapperXmlPackage, "映射XML文件包名为空")
-                .getErrorMessages();
+            .hasText(ProjectConfiguration::getProjectRootFolder, "项目根目录为空")
+            .hasText(ProjectConfiguration::getMapperPackageName, "Mapper接口包名为空")
+            .hasText(ProjectConfiguration::getEntityPackageName, "实体类包名为空")
+            .hasText(ProjectConfiguration::getEntityPackageFolder, "实体类所在目录为空")
+            .hasText(ProjectConfiguration::getMapperXmlPackage, "映射XML文件包名为空")
+            .getErrorMessages();
     }
 
     /**
      * 选择项目文件夹
+     *
      * @param event 事件
      */
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
-                .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+            .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
     }
 
     /**
      * 保存配置
+     *
      * @param actionEvent 事件
      */
     @FXML
@@ -362,6 +366,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
     /**
      * 加载配置信息，填充到界面上
+     *
      * @param projectConfig 配置信息
      */
     public void loadConfig(ProjectConfiguration projectConfig) {
