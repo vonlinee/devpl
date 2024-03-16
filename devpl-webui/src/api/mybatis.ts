@@ -25,7 +25,7 @@ export const getMapperStatementParams = (content: string, options: any) => {
  * 获取Mapper中的参数
  */
 export const apiGetMapperStatementValueTypes = () => {
-  return http.get("/api/tools/mybatis/ms/param/datatypes")
+  return http.get("/api/tools/mybatis/ms/param/datatype/list")
 }
 
 /**

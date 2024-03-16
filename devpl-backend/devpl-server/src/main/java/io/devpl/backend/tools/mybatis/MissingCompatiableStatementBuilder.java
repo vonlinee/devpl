@@ -44,7 +44,7 @@ public class MissingCompatiableStatementBuilder extends XMLStatementBuilder {
             clazz = super.resolveClass(alias);
         } catch (Exception exception) {
             // 手动忽略不存在的类型
-            // logger.error("cannot resolve calss", exception);
+            // logger.error("cannot resolve class", exception);
         }
         clazz = (Class<? extends T>) Integer.class;
         return clazz;

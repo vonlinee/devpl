@@ -2,7 +2,6 @@ package io.devpl.backend.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.devpl.backend.domain.MsParamNode;
-import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
@@ -77,14 +76,6 @@ public interface MyBatisService {
      * @return 参数信息
      */
     List<ParamMeta> getParamMetadata(String statement);
-
-    /**
-     * 根据参数名称推断参数类型
-     *
-     * @param paramName 参数名称
-     * @return 参数数据类型
-     */
-    MSParamDataType inferType(String paramName);
 
     String getContent(String projectId, String msId);
 
