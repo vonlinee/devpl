@@ -7,15 +7,20 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * 单个对象字段校验
+ *
+ * @param <T>
+ */
 public class Validator<T> {
 
     private final T bean;
 
-    private final List<String> errerMessages;
+    private final List<String> errorMessages;
 
     Validator(T bean) {
         this.bean = bean;
-        this.errerMessages = new ArrayList<>();
+        this.errorMessages = new ArrayList<>();
     }
 
     public static <T> Validator<T> target(T target) {
@@ -24,26 +29,26 @@ public class Validator<T> {
 
     public Validator<T> assertTrue(boolean expression, String message) {
         if (!expression) {
-            errerMessages.add(message);
+            errorMessages.add(message);
         }
         return this;
     }
 
     public <V> Validator<T> assertTrue(Function<T, V> column, Predicate<V> condition, String message) {
         if (!condition.test(column.apply(bean))) {
-            errerMessages.add(message);
+            errorMessages.add(message);
         }
         return this;
     }
 
     public Validator<T> hasText(Function<T, String> column, String message) {
         if (!StringUtils.hasText(column.apply(bean))) {
-            errerMessages.add(message);
+            errorMessages.add(message);
         }
         return this;
     }
 
     public String getErrorMessages() {
-        return String.join(";\n", errerMessages);
+        return String.join(";\n", errorMessages);
     }
 }

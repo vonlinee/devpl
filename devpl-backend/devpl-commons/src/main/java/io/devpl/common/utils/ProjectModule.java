@@ -1,11 +1,9 @@
-package io.devpl.backend.domain;
+package io.devpl.common.utils;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Setter
 @Getter
@@ -16,6 +14,9 @@ public class ProjectModule {
      */
     private String name;
 
+    /**
+     * groupId，同Maven的groupId概念
+     */
     private String groupId;
 
     /**
@@ -28,12 +29,20 @@ public class ProjectModule {
      */
     private String version;
 
+    /**
+     * 打包方式
+     */
     private String packageWay;
 
     /**
      * 根路径，项目目录
      */
     private String rootPath;
+
+    /**
+     * 包名列表
+     */
+    private Set<String> packageNames;
 
     /**
      * 子模块
@@ -62,6 +71,16 @@ public class ProjectModule {
 
     public boolean hasModules() {
         return modules != null && !modules.isEmpty();
+    }
+
+    public void addPackageNames(String... packageNames) {
+        if (this.packageNames == null) {
+            this.packageNames = new HashSet<>();
+        }
+        if (packageNames == null || packageNames.length == 0) {
+            return;
+        }
+        this.packageNames.addAll(Arrays.asList(packageNames));
     }
 
     public void merge(ProjectModule module) {

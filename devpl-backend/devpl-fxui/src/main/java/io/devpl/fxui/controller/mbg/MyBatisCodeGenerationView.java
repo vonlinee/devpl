@@ -1,6 +1,9 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.common.utils.MavenProjectAnalyser;
+import io.devpl.common.utils.ProjectAnalyser;
+import io.devpl.common.utils.ProjectModule;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.fxui.controller.TableCustomizationView;
 import io.devpl.fxui.model.*;
@@ -25,9 +28,10 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -329,6 +333,8 @@ public class MyBatisCodeGenerationView extends FxmlView {
             .getErrorMessages();
     }
 
+    ProjectAnalyser analyser = new MavenProjectAnalyser();
+
     /**
      * 选择项目文件夹
      *
@@ -337,7 +343,24 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
-            .ifPresent(file -> projectFolderField.setText(file.getAbsolutePath()));
+            .ifPresent(file -> {
+                ProjectModule module = analyser.analyse(file);
+
+                try {
+
+
+                    Files.walkFileTree(file.toPath(), new SimpleFileVisitor<>() {
+                        @Override
+                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                            return super.preVisitDirectory(dir, attrs);
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                projectFolderField.setText(file.getAbsolutePath());
+            });
     }
 
     /**

@@ -1,6 +1,5 @@
-package io.devpl.backend.tools;
+package io.devpl.common.utils;
 
-import io.devpl.backend.domain.ProjectModule;
 import io.devpl.sdk.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,8 +12,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class MavenProjectAnalyser implements ProjectAnalyser {
+
+    @Override
+    public boolean isProjectRootDirectory(File entryFile) {
+        try (Stream<Path> stream = Files.list(entryFile.toPath())) {
+            return stream.anyMatch(path -> path.toString().endsWith("pom.xml"));
+        } catch (IOException e) {
+            return false;
+        }
+    }
 
     /**
      * 解析本地项目模块信息

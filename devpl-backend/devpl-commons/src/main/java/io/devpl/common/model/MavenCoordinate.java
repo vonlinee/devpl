@@ -1,4 +1,4 @@
-package io.devpl.fxui.utils.maven;
+package io.devpl.common.model;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,9 +1,13 @@
 package io.fxtras.svg.browser;
 
+import io.fxtras.control.SplitPane;
 import io.fxtras.svg.SVGImage;
 import io.fxtras.svg.SVGLoader;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Orientation;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -22,13 +26,13 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * A sample browser.
- *
- * @version 1.0
+ * SVG 浏览器
  */
 public class SVGBrowser extends Application {
     private Stage stage = null;
@@ -38,6 +42,11 @@ public class SVGBrowser extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private Image newImage(String name) {
+        URL url = this.getClass().getResource(name);
+        return new Image(Objects.requireNonNull(url, "image url is null").toString());
     }
 
     @Override
@@ -53,59 +62,60 @@ public class SVGBrowser extends Application {
         menuBar.getMenus().add(fileMenu);
 
         MenuItem openItem = new MenuItem("Open");
-        fileMenu.getItems().add(openItem);
+        openItem.setOnAction(t -> open());
+
         MenuItem saveItem = new MenuItem("Save Image");
-        fileMenu.getItems().add(saveItem);
         saveItem.setOnAction(t -> save());
 
         MenuItem exitItem = new MenuItem("Exit");
-        fileMenu.getItems().add(exitItem);
         exitItem.setOnAction(t -> {
             stage.close();
             System.exit(0);
         });
-
-        openItem.setOnAction(t -> open());
+        fileMenu.getItems().addAll(openItem, saveItem, exitItem);
 
         ToolBar toolBar = new ToolBar();
-        URL url = this.getClass().getResource("zoomIn.png");
-        Image img = new Image(url.toString());
-        Button zoomIn = new Button("", new ImageView(img));
-        toolBar.getItems().add(zoomIn);
 
-        zoomIn.setOnAction(t -> zoomIn());
-
-        url = this.getClass().getResource("zoomOut.png");
-        img = new Image(url.toString());
-        Button zoomOut = new Button("", new ImageView(img));
-        toolBar.getItems().add(zoomOut);
-
-        zoomOut.setOnAction(t -> zoomOut());
+        toolBar.getItems().addAll(newImageButton("zoomIn.png", t -> zoomIn()), newImageButton("zoomOut.png", t -> zoomOut()));
 
         VBox vBox = new VBox();
-        vBox.getChildren().add(menuBar);
-        vBox.getChildren().add(toolBar);
-        vBox.getChildren().add(tabPane);
+        vBox.getChildren().addAll(menuBar, toolBar, tabPane);
 
         stage.setScene(new Scene(vBox, 600, 600));
         stage.show();
     }
 
+    private Button newImageButton(String name, EventHandler<ActionEvent> actionEventEventHandler) {
+        Button zoomOut = new Button("", new ImageView(newImage(name)));
+        zoomOut.setOnAction(actionEventEventHandler);
+        return zoomOut;
+    }
+
+    /**
+     * 缩小
+     */
     private void zoomIn() {
         SVGImage image = getSelectedImage();
         if (image != null) {
+            // 调用无效
             // image.scale(1.2d);
-            image.setScaleX(1.2d);
-            image.setScaleY(1.2d);
+            double scaledWidth = image.getScaledWidth() * 0.9;
+            double scaledHeight = image.getScaledHeight() * 0.9;
+            image.setScaleX(scaledWidth);
+            image.setScaleY(scaledHeight);
         }
     }
 
+    /**
+     * 增大
+     */
     private void zoomOut() {
         SVGImage image = getSelectedImage();
         if (image != null) {
-            // image.scale(0.8d);
-            image.setScaleX(0.8d);
-            image.setScaleY(0.8d);
+            double scaledWidth = image.getScaledWidth() * 1.1;
+            double scaledHeight = image.getScaledHeight() * 1.1;
+            image.setScaleX(scaledWidth);
+            image.setScaleY(scaledHeight);
         }
     }
 
@@ -137,8 +147,7 @@ public class SVGBrowser extends Application {
             return;
         }
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG Files", "*.png"),
-            new ExtensionFilter("JPEG Files", "*.jpg", ".jpeg"));
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("PNG Files", "*.png"), new ExtensionFilter("JPEG Files", "*.jpg", ".jpeg"));
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.setTitle("Save as Image");
         File file = fileChooser.showSaveDialog(stage);
@@ -171,14 +180,22 @@ public class SVGBrowser extends Application {
         svgImage.snapshot(ext, file);
     }
 
+    /**
+     * 上一次选择的目录
+     */
+    File lastDir;
+    FileChooser fileChooser = new FileChooser();
+
     private void open() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.setInitialDirectory(lastDir == null ? new File(System.getProperty("user.dir")) : lastDir);
         fileChooser.setTitle("Open SVG File");
         File file = fileChooser.showOpenDialog(stage);
         if (file == null) {
             return;
         }
+
+        lastDir = file.getParentFile();
+
         try {
             SVGImage image = SVGLoader.load(file.toURI().toURL());
             if (image == null) {
@@ -197,12 +214,25 @@ public class SVGBrowser extends Application {
                 content.setMinWidth(newBounds.getWidth());
                 content.setMinHeight(newBounds.getHeight());
             });
+
+            VBox box = new VBox();
+
+            SplitPane splitPane = new SplitPane();
+            splitPane.setOrientation(Orientation.VERTICAL);
             ScrollPane scrollPane = new ScrollPane(content);
             scrollPane.setPannable(true);
             scrollPane.setFitToHeight(true);
             scrollPane.setFitToWidth(true);
             scrollPane.setPrefSize(500, 500);
-            Tab tab = new Tab(file.getName(), scrollPane);
+
+            box.getChildren().addAll(scrollPane);
+
+            TextArea textArea = new TextArea();
+            textArea.setText(Files.readString(file.toPath()));
+
+            splitPane.getItems().addAll(scrollPane, textArea);
+
+            Tab tab = new Tab(file.getName(), splitPane);
             content.allowLayoutChildren(false);
             content.setOnScroll(event -> {
                 double zoomFactor = 1.05;
@@ -225,8 +255,7 @@ public class SVGBrowser extends Application {
                     node.setScaleY(node.getScaleY() * zoomFactor);
 
                     Point2D posInZoomTarget = node.parentToLocal(new Point2D(event.getX(), event.getY()));
-                    Point2D adjustment = node.getLocalToParentTransform()
-                        .deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
+                    Point2D adjustment = node.getLocalToParentTransform().deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
                     scrollPane.layout();
                     scrollPane.setViewportBounds(groupBounds);
 

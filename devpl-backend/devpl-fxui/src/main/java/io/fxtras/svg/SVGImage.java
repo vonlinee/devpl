@@ -361,6 +361,7 @@ public class SVGImage extends Group {
 
     /**
      * Scale the image. Return the initial SVGImage.
+     * TODO 调用scale方法无效 JDK17
      *
      * @param scale the scale factor
      * @return the new image

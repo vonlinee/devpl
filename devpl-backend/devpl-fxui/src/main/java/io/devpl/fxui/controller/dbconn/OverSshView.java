@@ -7,7 +7,7 @@ import io.devpl.fxui.model.DatabaseInfo;
 import io.fxtras.Alerts;
 import io.fxtras.mvvm.FxmlView;
 import io.fxtras.mvvm.FxmlBinder;
-import io.devpl.fxui.utils.ssh.JSchUtils;
+import io.devpl.fxui.utils.JSchUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

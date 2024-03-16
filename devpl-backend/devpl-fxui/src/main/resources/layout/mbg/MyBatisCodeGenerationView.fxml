@@ -33,7 +33,7 @@
         <RowConstraints vgrow="NEVER"/>
       </rowConstraints>
       <Label text="项目根目录" GridPane.rowIndex="0"/>
-      <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="0">
+      <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="0">
         <TextField fx:id="projectFolderField"/>
         <Button mnemonicParsing="false" onAction="#chooseProjectFolder" text="选择"/>
       </HBox>

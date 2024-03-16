@@ -13,7 +13,7 @@ import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.PathUtils;
-import io.devpl.backend.utils.ProjectUtils;
+import io.devpl.common.utils.ProjectUtils;
 import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataLoader;

@@ -1,6 +1,6 @@
 package io.devpl.backend;
 
-import io.devpl.backend.utils.ProjectUtils;
+import io.devpl.common.utils.ProjectUtils;
 import org.junit.Test;
 
 public class ProjectUtilsTest {

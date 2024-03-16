@@ -1,7 +1,4 @@
-package io.devpl.backend.utils;
-
-import io.devpl.backend.domain.ProjectModule;
-import io.devpl.backend.tools.MavenProjectAnalyser;
+package io.devpl.common.utils;
 
 import java.io.File;
 import java.io.IOException;

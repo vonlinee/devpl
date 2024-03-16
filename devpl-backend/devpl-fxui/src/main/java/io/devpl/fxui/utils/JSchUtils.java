@@ -1,10 +1,9 @@
-package io.devpl.fxui.utils.ssh;
+package io.devpl.fxui.utils;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.fxui.model.DatabaseInfo;
-import io.devpl.fxui.utils.NumberUtils;
 import io.devpl.sdk.util.StringUtils;
 import io.fxtras.Alerts;
 import org.slf4j.Logger;
