@@ -1,5 +1,6 @@
 package io.devpl.fxui.tools.mybatis;
 
+import io.devpl.common.ParseResult;
 import io.devpl.sdk.TreeNode;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlSource;

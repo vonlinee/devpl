@@ -1,4 +1,4 @@
-package io.fxtras;
+package io.fxtras.utils;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;

@@ -1,4 +1,4 @@
-package io.devpl.fxui.controller.mbg;
+package io.devpl.common;
 
 /**
  * 项目布局：确定什么文件该存放在什么位置

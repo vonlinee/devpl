@@ -1,4 +1,4 @@
-package io.devpl.fxui.common;
+package io.fxtras.utils;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

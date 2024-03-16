@@ -1,8 +1,8 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.common.utils.JSONUtils;
-import io.devpl.fxui.common.HBoxBuilder;
-import io.devpl.fxui.common.VBoxBuilder;
+import io.fxtras.utils.HBoxBuilder;
+import io.fxtras.utils.VBoxBuilder;
 import io.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.fxui.utils.AppConfig;

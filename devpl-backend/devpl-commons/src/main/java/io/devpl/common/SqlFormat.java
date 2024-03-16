@@ -1,4 +1,4 @@
-package io.devpl.fxui.tools.mybatis;
+package io.devpl.common;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;

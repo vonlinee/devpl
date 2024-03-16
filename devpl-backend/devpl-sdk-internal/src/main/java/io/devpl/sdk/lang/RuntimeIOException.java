@@ -14,6 +14,14 @@ public class RuntimeIOException extends RuntimeException {
         super(exception);
     }
 
+    public RuntimeIOException(String message, IOException exception) {
+        super(message, exception);
+    }
+
+    public RuntimeIOException(String message, IOException exception, Object... args) {
+        super(message.formatted(args), exception);
+    }
+
     public static RuntimeIOException wrap(IOException ioe) {
         return new RuntimeIOException(ioe);
     }

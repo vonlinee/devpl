@@ -1,4 +1,4 @@
-package io.devpl.fxui.tools.mybatis;
+package io.devpl.common;
 
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;

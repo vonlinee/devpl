@@ -1,4 +1,4 @@
-package io.devpl.fxui.controller.template;
+package io.devpl.common;
 
 import org.apache.velocity.runtime.parser.node.ASTDirective;
 import org.apache.velocity.runtime.parser.node.ASTReference;
@@ -6,9 +6,9 @@ import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
 
 /**
- * https://lists.apache.org/thread/oymlqgqnnc6wqrfwrynkooqf89oxx993
+ * <a href="https://lists.apache.org/thread/oymlqgqnnc6wqrfwrynkooqf89oxx993">...</a>
  * <p>
- * https://stackoverflow.com/questions/18572610/how-can-i-see-all-variables-available-inside-a-velocity-template
+ * <a href="https://stackoverflow.com/questions/18572610/how-can-i-see-all-variables-available-inside-a-velocity-template">...</a>
  */
 public class VariableExtractor extends BaseVisitor {
 

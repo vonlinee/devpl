@@ -1,4 +1,4 @@
-package io.devpl.fxui.controller.template;
+package io.devpl.common;
 
 /**
  * 提取模板中的所有变量

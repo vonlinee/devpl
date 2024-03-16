@@ -1,5 +1,6 @@
 package io.devpl.fxui.controller.template;
 
+import io.devpl.common.VelocityTemplateAnalyzer;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
 import io.fxtras.mvvm.FxmlBinder;

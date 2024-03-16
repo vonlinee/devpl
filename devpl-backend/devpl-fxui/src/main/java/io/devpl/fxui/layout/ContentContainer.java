@@ -2,7 +2,6 @@ package io.devpl.fxui.layout;
 
 import io.devpl.fxui.components.ContentRegion;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Region;
 
 /**

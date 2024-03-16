@@ -1,6 +1,8 @@
 package io.devpl.fxui.tools.mybatis;
 
 import io.devpl.codegen.type.CommonJavaType;
+import io.devpl.common.ParseResult;
+import io.devpl.common.SqlFormat;
 import io.devpl.fxui.utils.DBUtils;
 import io.devpl.fxui.utils.NumberUtils;
 import io.devpl.fxui.utils.TypeUtils;

@@ -1,4 +1,4 @@
-package io.devpl.fxui.controller.template;
+package io.devpl.common;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.runtime.parser.node.*;

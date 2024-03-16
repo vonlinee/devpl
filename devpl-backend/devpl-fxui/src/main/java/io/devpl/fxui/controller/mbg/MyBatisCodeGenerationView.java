@@ -1,20 +1,20 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.common.MavenProjectLayout;
 import io.devpl.common.utils.MavenProjectAnalyser;
 import io.devpl.common.utils.ProjectAnalyser;
-import io.devpl.common.utils.ProjectModule;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
 import io.devpl.fxui.controller.TableCustomizationView;
 import io.devpl.fxui.model.*;
 import io.devpl.fxui.utils.*;
 import io.devpl.sdk.util.StringUtils;
 import io.fxtras.Alerts;
-import io.fxtras.PropertyBinder;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
 import io.fxtras.mvvm.View;
 import io.fxtras.utils.EventUtils;
+import io.fxtras.utils.PropertyBinder;
 import io.fxtras.utils.StageManager;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -28,10 +28,9 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
@@ -112,6 +111,8 @@ public class MyBatisCodeGenerationView extends FxmlView {
      * 项目配置项
      */
     private final ProjectConfiguration projectConfig = new ProjectConfiguration();
+
+    TextInputDialog configSaveDialog;
 
     /**
      * 保存哪些表需要进行代码生成
@@ -307,7 +308,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     /**
      * 添加一个表到需要进行代码生成的表
      *
-     * @param tableInfo
+     * @param tableInfo 表信息
      */
     public void addTable(TableGeneration tableInfo) {
         String key = tableInfo.getUniqueKey();
@@ -344,23 +345,41 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public void chooseProjectFolder(ActionEvent event) {
         FileChooserDialog.showDirectoryDialog(getStage(event))
             .ifPresent(file -> {
-                ProjectModule module = analyser.analyse(file);
-
-                try {
-
-
-                    Files.walkFileTree(file.toPath(), new SimpleFileVisitor<>() {
-                        @Override
-                        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                            return super.preVisitDirectory(dir, attrs);
-                        }
-                    });
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (!analyser.isProjectRootDirectory(file)) {
+                    Alerts.error("目录%s不是项目根目录", file.getAbsolutePath()).showAndWait();
+                    return;
                 }
-
-                projectFolderField.setText(file.getAbsolutePath());
+                try {
+                    Set<String> packageNames = new HashSet<>(analyser.getPackageNames(file));
+                    String parentPackage = findMinLengthString(packageNames);
+                    if (parentPackage == null || parentPackage.isBlank()) {
+                        parentPackage = "org.example";
+                    }
+                    txfParentPackageName.setText(parentPackage);
+                    modelTargetPackage.setText(parentPackage + ".entity");
+                    mapperTargetPackage.setText(parentPackage + ".mapper");
+                    txfMapperPackageName.setText(parentPackage + ".mapper");
+                    projectFolderField.setText(file.getAbsolutePath());
+                } catch (Exception exception) {
+                    Alerts.error(exception.getMessage()).showAndWait();
+                }
             });
+    }
+
+    static String findMinLengthString(Set<String> stringSet) {
+        if (stringSet == null || stringSet.isEmpty()) {
+            return null; // 或者抛出一个异常，取决于你的需求
+        }
+        String minLengthString = null;
+        int minLength = Integer.MAX_VALUE;
+        for (String str : stringSet) {
+            int length = str.length();
+            if (length < minLength) {
+                minLength = length;
+                minLengthString = str;
+            }
+        }
+        return minLengthString;
     }
 
     /**
@@ -370,15 +389,17 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     @FXML
     public void saveCodeGenConfig(ActionEvent actionEvent) {
-        String errMsgs = validateConfig(this.projectConfig);
-        if (StringUtils.hasText(errMsgs)) {
-            Alerts.error(errMsgs).show();
+        String errMsg = validateConfig(this.projectConfig);
+        if (StringUtils.hasText(errMsg)) {
+            Alerts.error(errMsg).show();
             return;
         }
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("保存代码生成配置");
-        dialog.setContentText("输入配置名称:");
-        Optional<String> resultOptional = dialog.showAndWait();
+        if (configSaveDialog == null) {
+            configSaveDialog = new TextInputDialog();
+            configSaveDialog.setTitle("保存代码生成配置");
+            configSaveDialog.setContentText("输入配置名称:");
+        }
+        Optional<String> resultOptional = configSaveDialog.showAndWait();
         if (resultOptional.isPresent()) {
             this.projectConfig.setName(resultOptional.get());
         } else {

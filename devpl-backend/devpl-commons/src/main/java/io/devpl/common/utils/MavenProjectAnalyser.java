@@ -1,5 +1,6 @@
 package io.devpl.common.utils;
 
+import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class MavenProjectAnalyser implements ProjectAnalyser {
@@ -25,6 +28,68 @@ public class MavenProjectAnalyser implements ProjectAnalyser {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    @Override
+    public Path getSourceRoot(Path projectRoot) {
+        return projectRoot.resolve(Path.of("src/main/java"));
+    }
+
+    @Override
+    public Path getResourceRoot(Path projectRoot) {
+        return projectRoot.resolve(Path.of("src/main/resources"));
+    }
+
+    @Override
+    public Set<String> getPackageNames(File projectRoot) {
+        Path sourceRootPath = getSourceRoot(projectRoot.toPath());
+        if (!Files.exists(sourceRootPath)) {
+            throw new RuntimeIOException("路径不存在", null);
+        }
+        try {
+            return extractPackageNames(sourceRootPath);
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
+        }
+    }
+
+    public static Set<String> extractPackageNames(Path sourceRootPath) throws IOException {
+        Set<String> packageNames = new HashSet<>();
+        try (Stream<Path> stream = Files.walk(sourceRootPath)) {
+            stream.filter(path -> Files.isDirectory(path) && !path.equals(sourceRootPath))
+                .forEach(path -> {
+                    String packageName = extractPackageName(path, sourceRootPath);
+                    if (packageName != null && !packageName.isEmpty()) {
+                        packageNames.add(packageName);
+                    }
+                });
+        }
+        return packageNames;
+    }
+
+    private static String extractPackageName(Path dir, Path sourceRootPath) {
+        String fileName = dir.getFileName().toString();
+        int lastIndex = fileName.lastIndexOf('.');
+        if (lastIndex == -1) {
+            return null; // Invalid Java file name (no extension)
+        }
+        String className = fileName.substring(0, lastIndex);
+        String relativePath = dir.getParent().relativize(sourceRootPath).toString();
+        if (relativePath.isEmpty()) {
+            return ""; // Top-level package (no subdirectories)
+        }
+        relativePath = relativePath.replace(File.separatorChar, '.');
+        return relativePath + "." + className.substring(0, className.lastIndexOf('$')); // Exclude inner classes
+    }
+
+    public static void main(String[] args) {
+
+        MavenProjectAnalyser analyser = new MavenProjectAnalyser();
+
+        Set<String> packageNames = analyser.getPackageNames(new File("C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\devpl-fxui"));
+
+        System.out.println(packageNames);
+
     }
 
     /**

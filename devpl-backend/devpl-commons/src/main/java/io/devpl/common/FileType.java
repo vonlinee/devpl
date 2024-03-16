@@ -1,4 +1,4 @@
-package io.devpl.fxui.controller.mbg;
+package io.devpl.common;
 
 public enum FileType {
 

@@ -1,4 +1,4 @@
-package io.devpl.fxui.common;
+package io.fxtras.utils;
 
 import javafx.scene.Node;
 

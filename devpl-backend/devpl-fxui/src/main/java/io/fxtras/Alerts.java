@@ -60,6 +60,15 @@ public final class Alerts {
         return alert;
     }
 
+    public static Alert error(String message, Object... args) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setWidth(400);
+        alert.setHeight(400);
+        alert.setResizable(true);
+        alert.setContentText(message.formatted(args));
+        return alert;
+    }
+
     public static Alert exception(String header, Throwable throwable) {
         final StringWriter sw = new StringWriter();
         try (PrintWriter pw = new PrintWriter(sw, true)) {
