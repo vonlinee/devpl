@@ -393,13 +393,13 @@ public class SVGLoader implements SVGTags {
     public static SVGImage load(URL url, LoaderParameters params) throws SVGParsingException {
         SVGLoader loader = new SVGLoader(url, params);
         SVGImage img = loader.loadImpl();
-        if (params.centerImage) {
+        if (params.centerImage && img != null) {
             double theWidth = img.getLayoutBounds().getWidth();
             double theHeight = img.getLayoutBounds().getHeight();
             img.setTranslateX(-theWidth / 2);
             img.setTranslateY(-theHeight / 2);
         }
-        if (params.styleSheets != null) {
+        if (params.styleSheets != null && img != null) {
             img.getStylesheets().add(params.styleSheets);
         }
         return img;
@@ -465,13 +465,13 @@ public class SVGLoader implements SVGTags {
 
     private SVGImage loadImplInJFX() throws IOException {
         context.effectsSupported = Platform.isSupported(ConditionalFeature.EFFECT);
-        SAXParserFactory saxfactory = SAXParserFactory.newInstance();
+        SAXParserFactory saxFactory = SAXParserFactory.newInstance();
         try {
             // see https://stackoverflow.com/questions/10257576/how-to-ignore-inline-dtd-when-parsing-xml-file-in-java
-            saxfactory.setFeature("http://xml.org/sax/features/resolve-dtd-uris", false);
-            saxfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-            saxfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-            SAXParser parser = saxfactory.newSAXParser();
+            saxFactory.setFeature("http://xml.org/sax/features/resolve-dtd-uris", false);
+            saxFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+            saxFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            SAXParser parser = saxFactory.newSAXParser();
             XMLTreeHandler handler = new XMLTreeHandler();
             if (content.url != null) {
                 parser.parse(content.url.openStream(), handler);
@@ -535,6 +535,9 @@ public class SVGLoader implements SVGTags {
             String id = xmlNode.getAttributeValue(ID);
             SymbolSpec symbol = new SymbolSpec(xmlNode);
             Viewbox viewbox = ParserUtils.parseViewbox(xmlNode, viewport);
+            if (viewbox == null) {
+                return;
+            }
             symbol.setViewbox(viewbox);
             if (xmlNode.hasAttribute(PRESERVE_ASPECT_RATIO)) {
                 boolean preserve = ParserUtils.getPreserveAspectRatio(xmlNode.getAttributeValue(PRESERVE_ASPECT_RATIO));
@@ -559,12 +562,7 @@ public class SVGLoader implements SVGTags {
         for (XMLNode childNode : xmlNode.getChildren()) {
             String name = childNode.getName();
             switch (name) {
-                case ANIMATE:
-                case ANIMATE_MOTION:
-                case ANIMATE_TRANSFORM:
-                case SET:
-                    animations.add(childNode);
-                    break;
+                case ANIMATE, ANIMATE_MOTION, ANIMATE_TRANSFORM, SET -> animations.add(childNode);
             }
         }
         return animations;
@@ -579,12 +577,13 @@ public class SVGLoader implements SVGTags {
             List<? extends Node> nodes = null;
             SpanGroup spanGroup = null;
             String name = childNode.getName();
+            Node node;
             switch (name) {
                 case STYLE:
                     manageSVGStyle(childNode);
                     break;
                 case RECT:
-                    Node node = SVGShapeBuilder.buildRect(childNode, null, null, viewport);
+                    node = SVGShapeBuilder.buildRect(childNode, null, null, viewport);
                     addNamedNode(childNode, node);
                     animations = lookForAnimations(childNode, node, viewport);
                     nodes = ParserUtils.createNodeList(node);
@@ -694,14 +693,12 @@ public class SVGLoader implements SVGTags {
                     break;
             }
             if (nodes != null) {
-                for (Node node : nodes) {
-                    group.getChildren().add(node);
-                    addStyles(group, node, childNode, false);
+                for (Node node1 : nodes) {
+                    group.getChildren().add(node1);
+                    addStyles(group, node1, childNode, false);
                     if (!animations.isEmpty()) {
-                        List<Animation> animationsList = AnimationBuilder.buildAnimations(childNode, node, animations, viewport);
-                        if (animationsList != null) {
-                            context.addAnimations(animationsList);
-                        }
+                        List<Animation> animationsList = AnimationBuilder.buildAnimations(childNode, node1, animations, viewport);
+                        context.addAnimations(animationsList);
                     }
                 }
             } else if (spanGroup != null) {

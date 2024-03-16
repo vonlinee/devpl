@@ -71,20 +71,20 @@ public class AnimationBuilder implements SVGTags {
     /**
      * Build a "rect" element.
      *
-     * @param xmlNode  the node
-     * @param node     the node
-     * @param xmlAnims the animations specifications
-     * @param viewport the viewport
+     * @param xmlNode       the node
+     * @param node          the node
+     * @param xmlAnimations the animations specifications
+     * @param viewport      the viewport
      * @return the corresponding transitions
      */
-    public static List<Animation> buildAnimations(XMLNode xmlNode, Node node, List<XMLNode> xmlAnims, Viewport viewport) {
+    public static List<Animation> buildAnimations(XMLNode xmlNode, Node node, List<XMLNode> xmlAnimations, Viewport viewport) {
         ParallelTransition parallel = null;
         List<Animation> transitionsList = new ArrayList<>();
-        if (xmlAnims.size() > 1) {
+        if (xmlAnimations.size() > 1) {
             parallel = new ParallelTransition(node);
             transitionsList.add(parallel);
         }
-        for (XMLNode xmlAnim : xmlAnims) {
+        for (XMLNode xmlAnim : xmlAnimations) {
             String name = xmlAnim.getName();
             switch (name) {
                 case ANIMATE:
@@ -145,215 +145,156 @@ public class AnimationBuilder implements SVGTags {
             case G:
                 Group group = (Group) node;
                 switch (attrName) {
-                    case X:
-                        value = group.translateXProperty();
-                        break;
-                    case Y:
-                        value = group.translateYProperty();
-                        break;
-                    case OPACITY:
-                        value = group.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case X -> value = group.translateXProperty();
+                    case Y -> value = group.translateYProperty();
+                    case OPACITY -> value = group.opacityProperty();
+                    case VISIBILITY -> {
                         value = group.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
+                    }
                 }
                 break;
             case RECT:
                 Rectangle rect = (Rectangle) node;
                 switch (attrName) {
-                    case X:
-                        value = rect.xProperty();
-                        break;
-                    case Y:
-                        value = rect.yProperty();
-                        break;
-                    case WIDTH:
-                        value = rect.widthProperty();
-                        break;
-                    case HEIGHT:
-                        value = rect.heightProperty();
-                        break;
-                    case OPACITY:
-                        value = rect.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case X -> value = rect.xProperty();
+                    case Y -> value = rect.yProperty();
+                    case WIDTH -> value = rect.widthProperty();
+                    case HEIGHT -> value = rect.heightProperty();
+                    case OPACITY -> value = rect.opacityProperty();
+                    case VISIBILITY -> {
                         value = rect.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case FILL:
+                    }
+                    case FILL -> {
                         value = rect.fillProperty();
                         animateType = ANIMATE_FILL;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = rect.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
             case IMAGE:
                 ImageView imgView = (ImageView) node;
                 switch (attrName) {
-                    case X:
-                        value = imgView.xProperty();
-                        break;
-                    case Y:
-                        value = imgView.yProperty();
-                        break;
-                    case WIDTH:
-                        value = imgView.fitWidthProperty();
-                        break;
-                    case HEIGHT:
-                        value = imgView.fitHeightProperty();
-                        break;
-                    case OPACITY:
-                        value = imgView.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case X -> value = imgView.xProperty();
+                    case Y -> value = imgView.yProperty();
+                    case WIDTH -> value = imgView.fitWidthProperty();
+                    case HEIGHT -> value = imgView.fitHeightProperty();
+                    case OPACITY -> value = imgView.opacityProperty();
+                    case VISIBILITY -> {
                         value = imgView.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
+                    }
                 }
                 break;
             case CIRCLE:
                 Circle circle = (Circle) node;
                 switch (attrName) {
-                    case CX:
-                        value = circle.centerXProperty();
-                        break;
-                    case CY:
-                        value = circle.centerYProperty();
-                        break;
-                    case R:
-                        value = circle.radiusProperty();
-                        break;
-                    case OPACITY:
-                        value = circle.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case CX -> value = circle.centerXProperty();
+                    case CY -> value = circle.centerYProperty();
+                    case R -> value = circle.radiusProperty();
+                    case OPACITY -> value = circle.opacityProperty();
+                    case VISIBILITY -> {
                         value = circle.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case FILL:
+                    }
+                    case FILL -> {
                         value = circle.fillProperty();
                         animateType = ANIMATE_FILL;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = circle.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
             case ELLIPSE:
                 Ellipse ellipse = (Ellipse) node;
                 switch (attrName) {
-                    case CX:
-                        value = ellipse.centerXProperty();
-                        break;
-                    case CY:
-                        value = ellipse.centerYProperty();
-                        break;
-                    case RX:
-                        value = ellipse.radiusXProperty();
-                        break;
-                    case RY:
-                        value = ellipse.radiusYProperty();
-                        break;
-                    case OPACITY:
-                        value = ellipse.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case CX -> value = ellipse.centerXProperty();
+                    case CY -> value = ellipse.centerYProperty();
+                    case RX -> value = ellipse.radiusXProperty();
+                    case RY -> value = ellipse.radiusYProperty();
+                    case OPACITY -> value = ellipse.opacityProperty();
+                    case VISIBILITY -> {
                         value = ellipse.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case FILL:
+                    }
+                    case FILL -> {
                         value = ellipse.fillProperty();
                         animateType = ANIMATE_FILL;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = ellipse.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
             case LINE:
                 Line line = (Line) node;
                 switch (attrName) {
-                    case X1:
-                        value = line.startXProperty();
-                        break;
-                    case Y1:
-                        value = line.startYProperty();
-                        break;
-                    case X2:
-                        value = line.endXProperty();
-                        break;
-                    case Y2:
-                        value = line.endYProperty();
-                        break;
-                    case OPACITY:
-                        value = line.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case X1 -> value = line.startXProperty();
+                    case Y1 -> value = line.startYProperty();
+                    case X2 -> value = line.endXProperty();
+                    case Y2 -> value = line.endYProperty();
+                    case OPACITY -> value = line.opacityProperty();
+                    case VISIBILITY -> {
                         value = line.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = line.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
             case POLYGON:
                 Polygon polygon = (Polygon) node;
                 switch (attrName) {
-                    case OPACITY:
-                        value = polygon.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case OPACITY -> value = polygon.opacityProperty();
+                    case VISIBILITY -> {
                         value = polygon.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case FILL:
+                    }
+                    case FILL -> {
                         value = polygon.fillProperty();
                         animateType = ANIMATE_FILL;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = polygon.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
             case POLYLINE:
                 Polyline polyline = (Polyline) node;
                 switch (attrName) {
-                    case OPACITY:
-                        value = polyline.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case OPACITY -> value = polyline.opacityProperty();
+                    case VISIBILITY -> {
                         value = polyline.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = polyline.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
             case PATH:
+                assert node instanceof SVGPath;
                 SVGPath thePath = (SVGPath) node;
                 switch (attrName) {
-                    case OPACITY:
-                        value = thePath.opacityProperty();
-                        break;
-                    case VISIBILITY:
+                    case OPACITY -> value = thePath.opacityProperty();
+                    case VISIBILITY -> {
                         value = thePath.opacityProperty();
                         animateType = ANIMATE_VISIBILITY;
-                        break;
-                    case STROKE:
+                    }
+                    case STROKE -> {
                         value = thePath.strokeProperty();
                         animateType = ANIMATE_STROKE;
-                        break;
+                    }
                 }
                 break;
         }
@@ -384,8 +325,7 @@ public class AnimationBuilder implements SVGTags {
                 KeyValue toValue = new KeyValue(value, toVisible ? 1 : 0, Interpolator.DISCRETE);
                 KeyFrame fromFrame = new KeyFrame(beginDur, fromValue);
                 KeyFrame toFrame = new KeyFrame(duration, toValue);
-                Timeline timeline = new Timeline(fromFrame, toFrame);
-                animation = timeline;
+                animation = new Timeline(fromFrame, toFrame);
             } else if (animateType == ANIMATE_STROKE) {
                 Color fromColor = getFromColorArgument(xmlAnim);
                 Color toColor = getToColorArgument(xmlAnim);
@@ -506,7 +446,7 @@ public class AnimationBuilder implements SVGTags {
         }
         Transition transition = null;
         switch (type) {
-            case TYPE_ROTATE:
+            case TYPE_ROTATE -> {
                 RotateTransition rotate;
                 if (parallel != null) {
                     rotate = new RotateTransition(duration);
@@ -523,8 +463,8 @@ public class AnimationBuilder implements SVGTags {
                 if (!toArgs.isEmpty()) {
                     rotate.setToAngle(toArgs.get(0));
                 }
-                break;
-            case TYPE_TRANSLATE:
+            }
+            case TYPE_TRANSLATE -> {
                 TranslateTransition translate;
                 if (parallel != null) {
                     translate = new TranslateTransition(duration);
@@ -545,8 +485,8 @@ public class AnimationBuilder implements SVGTags {
                 } else if (toArgs.size() == 1) {
                     translate.setToX(toArgs.get(0));
                 }
-                break;
-            case TYPE_SCALE:
+            }
+            case TYPE_SCALE -> {
                 ScaleTransition scale;
                 if (parallel != null) {
                     scale = new ScaleTransition(duration);
@@ -569,7 +509,7 @@ public class AnimationBuilder implements SVGTags {
                     scale.setToX(toArgs.get(0));
                     scale.setToY(toArgs.get(1));
                 }
-                break;
+            }
         }
         if (transition != null) {
             if (xmlAnim.hasAttribute(REPEAT_COUNT)) {

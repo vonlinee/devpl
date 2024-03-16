@@ -1,6 +1,6 @@
 package io.devpl.backend.common;
 
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 
 import java.io.InputStream;
 import java.util.List;

@@ -1,5 +1,6 @@
 package io.devpl.fxui.controller.dbconn;
 
+import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.event.DeleteConnEvent;
 import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ConnectionRegistry;
@@ -35,8 +36,6 @@ public class ConnManageView extends FxmlView {
     @FXML
     public TableColumn<ConnectionConfig, String> tblcDbType;
     @FXML
-    public TableColumn<ConnectionConfig, String> tblcProtocol;
-    @FXML
     public TableColumn<ConnectionConfig, String> tblcHostname;
     @FXML
     public TableColumn<ConnectionConfig, String> tblcPort;
@@ -58,14 +57,11 @@ public class ConnManageView extends FxmlView {
             return row;
         });
         tblvConnectionList.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        tblcDbType.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDriver().name()));
+        tblcDbType.setCellValueFactory(new PropertyValueFactory<>("dbType"));
         tblcHostname.setCellValueFactory(new PropertyValueFactory<>("host"));
         tblcPort.setCellValueFactory(new PropertyValueFactory<>("port"));
         tblcDatabaseName.setCellValueFactory(new PropertyValueFactory<>("dbName"));
         tblcConnectionName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getConnectionName()));
-        tblcProtocol.setCellValueFactory(param -> new SimpleStringProperty(param.getValue()
-            .getDriver()
-            .getSubProtocol()));
         fillConnectionInfo();
     }
 

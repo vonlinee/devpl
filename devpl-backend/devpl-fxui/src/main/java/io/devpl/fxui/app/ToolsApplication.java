@@ -16,14 +16,16 @@ import javafx.util.StringConverter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 文件合并工具
+ */
 public class ToolsApplication extends Application {
 
-    List<Class<?>> list = new ArrayList<>();
+    List<Class<? extends View>> list = new ArrayList<>();
 
     @Override
     public void init() throws Exception {
         super.init();
-
         list.add(FileHelperView.class);
     }
 
@@ -31,18 +33,18 @@ public class ToolsApplication extends Application {
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
 
-        ListView<Class<?>> listView = new ListView<>();
-
+        ListView<Class<? extends View>> listView = new ListView<>();
         listView.setCellFactory(TextFieldListCell.forListView(new StringConverter<>() {
             @Override
-            public String toString(Class<?> object) {
+            public String toString(Class<? extends View> object) {
                 return object.getName();
             }
 
             @Override
-            public Class<?> fromString(String string) {
+            @SuppressWarnings("unchecked")
+            public Class<? extends View> fromString(String string) {
                 try {
-                    return Class.forName(string);
+                    return (Class<? extends View>) Class.forName(string);
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -56,7 +58,7 @@ public class ToolsApplication extends Application {
         Button button = new Button("Open");
 
         button.setOnAction(event -> {
-            Class<?> selectedItem = listView.getSelectionModel().getSelectedItem();
+            Class<? extends View> selectedItem = listView.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 Modal.show("", View.load(selectedItem));
             }

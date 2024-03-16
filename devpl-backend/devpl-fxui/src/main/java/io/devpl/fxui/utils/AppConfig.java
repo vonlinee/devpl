@@ -8,10 +8,14 @@ import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.sdk.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 本应用所有的数据库操作都在此
@@ -64,20 +68,21 @@ public class AppConfig {
 
     public static List<ConnectionConfig> listConnectionInfo() {
         try (Connection conn = getConnection()) {
-            String sql = "select * from database_connection";
+            String sql = "select * from rdbms_connection_info";
             ResultSet rs = DBUtils.executeQuery(conn, sql);
             List<ConnectionConfig> results = new ArrayList<>();
             while (rs.next()) {
                 ConnectionConfig item = new ConnectionConfig();
-                item.setId(rs.getString("id"));
+                item.setId(rs.getLong("id"));
                 item.setPort(rs.getString("port"));
                 item.setDbName(rs.getString("db_name"));
-                item.setConnectionName(rs.getString("conn_name"));
+                item.setConnectionName(rs.getString("connection_name"));
+                item.setDriverClassName(rs.getString("driver_class_name"));
                 item.setHost(rs.getString("host"));
                 item.setDbType(rs.getString("db_type"));
                 item.setUsername(rs.getString("username"));
                 item.setPassword(rs.getString("password"));
-                item.setEncoding("utf-8");
+                item.setEncoding(StandardCharsets.UTF_8.name());
                 results.add(item);
             }
             return results;
@@ -93,7 +98,7 @@ public class AppConfig {
      * @return 删除条数
      */
     public static int deleteConnectionById(List<ConnectionConfig> connectionInfos) {
-        String sql = "DELETE FROM connection_config WHERE id IN ";
+        String sql = "DELETE FROM rdbms_connection_info WHERE id IN ";
         StringJoiner stringJoiner = new StringJoiner(",", "(", ")");
         for (ConnectionConfig connectionInfo : connectionInfos) {
             stringJoiner.add("'" + connectionInfo.getId() + "'");
@@ -104,8 +109,8 @@ public class AppConfig {
 
     public static void saveConnectionConfig(ConnectionConfig config) {
         String sql = "INSERT INTO connection_config " + "(id, name, host, port, db_type, db_name, username, password)\n" + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-        if (!StringUtils.hasText(config.getId())) {
-            config.setId(UUID.randomUUID().toString());
+        if (config.getId() != null) {
+
         }
         if (!StringUtils.hasText(config.getConnectionName())) {
             String connectionName = config.getHost() + "_" + config.getPort();

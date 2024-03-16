@@ -1,6 +1,6 @@
 package io.devpl.backend.common;
 
-import io.devpl.backend.domain.FileNode;
+import io.devpl.common.model.FileNode;
 import io.devpl.backend.utils.SecurityUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;

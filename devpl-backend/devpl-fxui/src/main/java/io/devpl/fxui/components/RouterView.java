@@ -3,7 +3,7 @@ package io.devpl.fxui.components;
 import javafx.scene.Node;
 
 /**
- * TODO 懒加载
+ * 路由视图
  */
 public class RouterView {
 
