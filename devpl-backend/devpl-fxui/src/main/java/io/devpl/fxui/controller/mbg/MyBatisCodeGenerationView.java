@@ -42,6 +42,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @FxmlBinder(location = "layout/mbg/MyBatisCodeGenerationView.fxml", label = "MyBatis代码生成")
 public class MyBatisCodeGenerationView extends FxmlView {
 
+    /**
+     * 项目配置项
+     */
+    private final ProjectConfiguration projectConfig = new ProjectConfiguration();
+    /**
+     * 保存哪些表需要进行代码生成
+     * 存放的key:TableCodeGenConfig#getUniqueKey()
+     *
+     * @see TableGeneration#getUniqueKey()
+     */
+    private final Map<String, TableGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
     @FXML
     public TableView<TableGeneration> tblvTableCustomization;
     @FXML
@@ -63,7 +74,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     @FXML
     public TextField modelTargetPackage;
     @FXML
-    public TextField mapperTargetPackage;
+    public TextField txfXmlMapperPackageName; // Xml Mapper文件包名
     @FXML
     public TextField txfMapperPackageName;  // DAO接口包名
     @FXML
@@ -106,21 +117,26 @@ public class MyBatisCodeGenerationView extends FxmlView {
     public CheckBox addMapperAnnotationCheckBox;
     @FXML
     public CheckBox chbEnableSwagger;
-
-    /**
-     * 项目配置项
-     */
-    private final ProjectConfiguration projectConfig = new ProjectConfiguration();
-
     TextInputDialog configSaveDialog;
+    CodeGenerationResultDialog dialog = new CodeGenerationResultDialog();
+    MyBatisPlusGenerator generator = new MyBatisPlusGenerator();
+    ProjectAnalyser analyser = new MavenProjectAnalyser();
 
-    /**
-     * 保存哪些表需要进行代码生成
-     * 存放的key:TableCodeGenConfig#getUniqueKey()
-     *
-     * @see TableGeneration#getUniqueKey()
-     */
-    private final Map<String, TableGeneration> tableConfigsToBeGenerated = new ConcurrentHashMap<>(10);
+    static String findMinLengthString(Set<String> stringSet) {
+        if (stringSet == null || stringSet.isEmpty()) {
+            return null; // 或者抛出一个异常，取决于你的需求
+        }
+        String minLengthString = null;
+        int minLength = Integer.MAX_VALUE;
+        for (String str : stringSet) {
+            int length = str.length();
+            if (length < minLength) {
+                minLength = length;
+                minLengthString = str;
+            }
+        }
+        return minLengthString;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -209,7 +225,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
         PropertyBinder.bind(modelTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setEntityPackageName);
         PropertyBinder.bind(txfParentPackageName.textProperty(), projectConfig, ProjectConfiguration::setParentPackage);
         PropertyBinder.bind(txfMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperPackageName);
-        PropertyBinder.bind(mapperTargetPackage.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
+        PropertyBinder.bind(txfXmlMapperPackageName.textProperty(), projectConfig, ProjectConfiguration::setMapperXmlPackage);
 
         chobProjectLayout.getItems().addAll("MAVEN");
         chobProjectLayout.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -249,14 +265,16 @@ public class MyBatisCodeGenerationView extends FxmlView {
             Alerts.error("选择的数据表为空").show();
             return;
         }
+        String errMsg = validateConfig(this.projectConfig);
+        if (StringUtils.hasText(errMsg)) {
+            Alerts.error(errMsg).show();
+            return;
+        }
         CodeGenContext context = new CodeGenContext();
         context.setProjectConfiguration(this.projectConfig);
         context.setTargetedTables(new HashMap<>(tableConfigsToBeGenerated));
         generate(context);
     }
-
-    CodeGenerationResultDialog dialog = new CodeGenerationResultDialog();
-    MyBatisPlusGenerator generator = new MyBatisPlusGenerator();
 
     /**
      * 代码生成
@@ -266,9 +284,8 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     private void generate(CodeGenContext context) {
         try {
-            List<File> files = generator.generate(context);
-            dialog.addGeneratedFiles(files);
-            dialog.show();
+            generator.generate(context);
+            dialog.showDirectory(new File(context.getProjectConfiguration().getProjectRootFolder()));
         } catch (Exception exception) {
             Alerts.exception("生成失败", exception).showAndWait();
         }
@@ -334,8 +351,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
             .getErrorMessages();
     }
 
-    ProjectAnalyser analyser = new MavenProjectAnalyser();
-
     /**
      * 选择项目文件夹
      *
@@ -357,29 +372,13 @@ public class MyBatisCodeGenerationView extends FxmlView {
                     }
                     txfParentPackageName.setText(parentPackage);
                     modelTargetPackage.setText(parentPackage + ".entity");
-                    mapperTargetPackage.setText(parentPackage + ".mapper");
+                    txfXmlMapperPackageName.setText(parentPackage + ".mapper");
                     txfMapperPackageName.setText(parentPackage + ".mapper");
                     projectFolderField.setText(file.getAbsolutePath());
                 } catch (Exception exception) {
                     Alerts.error(exception.getMessage()).showAndWait();
                 }
             });
-    }
-
-    static String findMinLengthString(Set<String> stringSet) {
-        if (stringSet == null || stringSet.isEmpty()) {
-            return null; // 或者抛出一个异常，取决于你的需求
-        }
-        String minLengthString = null;
-        int minLength = Integer.MAX_VALUE;
-        for (String str : stringSet) {
-            int length = str.length();
-            if (length < minLength) {
-                minLength = length;
-                minLengthString = str;
-            }
-        }
-        return minLengthString;
     }
 
     /**
@@ -418,6 +417,6 @@ public class MyBatisCodeGenerationView extends FxmlView {
         modelTargetPackage.setText(projectConfig.getEntityPackageName());
         txfParentPackageName.setText(projectConfig.getParentPackage());
         txfMapperPackageName.setText(projectConfig.getMapperPackageName());
-        mapperTargetPackage.setText(projectConfig.getMapperXmlPackage());
+        txfXmlMapperPackageName.setText(projectConfig.getMapperXmlPackage());
     }
 }

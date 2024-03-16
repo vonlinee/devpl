@@ -1,6 +1,7 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.fxui.utils.Helper;
+import io.devpl.fxui.view.FileGenerationResultView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -16,6 +17,8 @@ import java.util.List;
 public class CodeGenerationResultDialog extends Dialog<Void> {
 
     TableView<File> fileTableView = new TableView<>();
+
+    FileGenerationResultView view = new FileGenerationResultView(null);
 
     public CodeGenerationResultDialog() {
         DialogPane dialogPane = new DialogPane();
@@ -69,9 +72,9 @@ public class CodeGenerationResultDialog extends Dialog<Void> {
         });
         fileTableView.getColumns().add(columnOperation);
 
-        ScrollPane scrollPane = new ScrollPane(fileTableView);
+//        ScrollPane scrollPane = new ScrollPane(fileTableView);
 
-        dialogPane.setContent(scrollPane);
+        dialogPane.setContent(view);
         this.setDialogPane(dialogPane);
         dialogPane.getButtonTypes().add(new ButtonType("确认", ButtonBar.ButtonData.OK_DONE));
         setOnCloseRequest(event -> fileTableView.getItems().clear());
@@ -79,5 +82,10 @@ public class CodeGenerationResultDialog extends Dialog<Void> {
 
     public void addGeneratedFiles(List<File> files) {
         fileTableView.getItems().addAll(files);
+    }
+
+    public void showDirectory(File dir) {
+        this.view.setRoot(dir);
+        this.show();
     }
 }

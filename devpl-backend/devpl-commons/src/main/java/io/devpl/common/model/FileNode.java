@@ -80,7 +80,7 @@ public class FileNode {
             this.name = name;
             int i = name.lastIndexOf(".");
             if (i >= 0) {
-                this.extension = name.substring(i);
+                this.extension = name.substring(i + 1);
             }
         } else {
             this.name = "Unknown";

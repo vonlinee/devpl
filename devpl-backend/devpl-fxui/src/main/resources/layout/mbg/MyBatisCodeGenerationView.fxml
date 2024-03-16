@@ -50,7 +50,7 @@
       </TextField>
       <!--映射XML文件包名-->
       <Label text="映射XML文件包名" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-      <TextField fx:id="mapperTargetPackage" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <TextField fx:id="txfXmlMapperPackageName" GridPane.columnIndex="1" GridPane.rowIndex="4">
       </TextField>
 
       <GridPane GridPane.columnSpan="4" GridPane.rowIndex="5">

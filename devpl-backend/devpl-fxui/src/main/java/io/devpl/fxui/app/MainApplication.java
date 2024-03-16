@@ -29,6 +29,8 @@ import java.io.IOException;
 
 public class MainApplication extends Application {
 
+    Stage stage = new Stage();
+
     @Override
     public void start(Stage stage) throws IOException {
         BorderPane root = new BorderPane();
@@ -45,7 +47,6 @@ public class MainApplication extends Application {
         menu.addChild("字段管理", RouterView.of(View.load(FieldsManageView.class)));
         menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
         menu.addChild("表达式引擎", RouterView.of(View.load(ExpressionEngineView.class)));
-        layoutPane.expandAllMenu();
 
         layoutPane.addNavigationMenu(menu1, menu);
 
@@ -54,13 +55,13 @@ public class MainApplication extends Application {
 
         Rectangle2D box = FXUtils.getScreenBox();
 
+        layoutPane.expandAllMenu();
+
         Scene scene = new Scene(root, box.getWidth() * 0.75, box.getHeight() * 0.8);
         stage.setTitle("Devpl");
         stage.setScene(scene);
         stage.show();
     }
-
-    Stage stage = new Stage();
 
     /**
      * 顶部菜单栏
@@ -69,12 +70,10 @@ public class MainApplication extends Application {
      */
     public MenuBar topBar() {
         MenuBar menuBar = new MenuBar();
-
         Menu fileMenu = new Menu("File");
         MenuItem menuItem_open = new MenuItem("Open");
 
         FileTreeView fileTreeView = new FileTreeView(new File("D:/Temp"));
-
         menuItem_open.setOnAction(event -> {
             if (stage.getScene() == null) {
                 stage.setScene(new Scene(fileTreeView));
