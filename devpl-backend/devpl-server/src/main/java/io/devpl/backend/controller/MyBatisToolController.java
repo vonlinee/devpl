@@ -60,7 +60,7 @@ public class MyBatisToolController {
     /**
      * 获取Mapper Statement的可选的参数值类型枚举
      */
-    @GetMapping("/ms/param/datatypes")
+    @GetMapping("/ms/param/datatype/list")
     public Result<List<SelectOptionVO>> getDataTypes() {
         return Result.ok(ArrayUtils.toList(MSParamDataType.values(), i -> new SelectOptionVO(i.name(), i.getQualifier(), i.getQualifier())));
     }
