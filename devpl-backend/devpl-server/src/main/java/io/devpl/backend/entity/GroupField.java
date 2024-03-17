@@ -33,6 +33,12 @@ public class GroupField {
     @TableField(value = "field_id")
     private Long fieldId;
 
+    /**
+     * 排序号
+     */
+    @TableField(value = "order_num")
+    private Integer orderNum;
+
     // 非数据库字段
 
     @TableField(exist = false)
