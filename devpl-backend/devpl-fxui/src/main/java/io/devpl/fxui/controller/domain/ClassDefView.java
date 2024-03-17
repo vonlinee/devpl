@@ -1,11 +1,11 @@
 package io.devpl.fxui.controller.domain;
 
+import io.devpl.fxui.controller.fields.FieldParseToolView;
 import io.devpl.fxui.controls.Modal;
 import io.devpl.fxui.tools.filestructure.FieldItem;
 import io.devpl.fxui.tools.filestructure.JavaFileStrucutreTreeView;
 import io.devpl.fxui.tools.filestructure.MethodItem;
 import io.devpl.fxui.tools.filestructure.TopLevelClassItem;
-import io.devpl.fxui.controller.fields.FieldParseToolView;
 import io.fxtras.mvvm.FxmlBinder;
 import io.fxtras.mvvm.FxmlView;
 import io.fxtras.mvvm.View;
@@ -53,8 +53,6 @@ public class ClassDefView extends FxmlView {
 
     @FXML
     public void showFieldImportModal(ActionEvent actionEvent) {
-        Modal.show(actionEvent, fieldParseToolView, event -> {
-            System.out.println(fieldParseToolView.getFields());
-        });
+        Modal.show(actionEvent, "字段解析", fieldParseToolView, event -> System.out.println(fieldParseToolView.getFields()));
     }
 }

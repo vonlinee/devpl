@@ -26,12 +26,12 @@ public class SqlParseView extends FieldParseView {
 
     @Override
     public String getParseableText() {
-        return textArea.getContent();
+        return textArea.getText();
     }
 
     @Override
     public void fillSampleText() {
-        textArea.setContent(getSampleText(), true);
+        textArea.setText(getSampleText(), true);
     }
 
     @Override

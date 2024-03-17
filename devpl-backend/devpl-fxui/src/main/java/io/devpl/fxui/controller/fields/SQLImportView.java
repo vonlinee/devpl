@@ -49,7 +49,7 @@ public class SQLImportView extends FxmlView {
     @FXML
     public void parseColumns(ActionEvent actionEvent) {
 
-        String text = codeEditor.getContent();
+        String text = codeEditor.getText();
         if (!StringUtils.hasText(text)) {
             Alerts.warn("待解析SQL为空!").showAndWait();
             return;

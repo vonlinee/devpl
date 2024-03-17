@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
+ * 代码编辑器，支持语法高亮
  * <a href="https://tun6.com/projects/code_mirror/api/#api_doc">...</a>
  */
 public interface CodeEditor {
@@ -19,13 +20,20 @@ public interface CodeEditor {
      *
      * @return 编辑器文本
      */
-    String getContent();
+    String getText();
+
+    /**
+     * @param text 文本
+     */
+    default void setText(String text) {
+        setText(text, false);
+    }
 
     /**
      * @param newContent 文本
      * @param markClean  是否清除之前的文本
      */
-    void setContent(String newContent, boolean markClean);
+    void setText(String newContent, boolean markClean);
 
     /**
      * doc.isClean(?generation: integer) → boolean
@@ -87,7 +95,7 @@ public interface CodeEditor {
     /**
      * 回调
      *
-     * @param runnable
+     * @param runnable 执行逻辑
      */
     void runWhenReady(Runnable runnable);
 

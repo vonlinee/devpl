@@ -64,7 +64,7 @@ public class TemplateInfoTableView extends TableView<TemplateInfo> {
                 if (file.exists()) {
                     String content = FileUtils.readToString(file);
                     if (StringUtils.hasText(content)) {
-                        editor.setContent(content, true);
+                        editor.setText(content, true);
                         dialog.setTitle(item.getTemplatePath());
                         Optional<ButtonType> buttonTypeOptional = dialog.showAndWait();
                         if (buttonTypeOptional.isPresent()) {
@@ -86,7 +86,7 @@ public class TemplateInfoTableView extends TableView<TemplateInfo> {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.getDialogPane().setContent(editor.getView());
         dialog.setOnCloseRequest(event -> {
-            editor.setContent("", true);
+            editor.setText("", true);
             // TODO 添加模板编辑保存功能
         });
         return dialog;

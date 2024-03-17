@@ -33,7 +33,7 @@ public class JavaImportView extends FxmlView {
     @FXML
     public void chooseFile(ActionEvent actionEvent) {
         FileChooserDialog.showFileOpenDialog(getStage(actionEvent)).ifPresent(file -> {
-            editor.setContent(FileUtils.readToString(file), true);
+            editor.setText(FileUtils.readToString(file), true);
         });
     }
 

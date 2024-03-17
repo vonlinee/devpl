@@ -2,8 +2,8 @@ package io.devpl.fxui.controller.fields;
 
 import io.devpl.common.interfaces.FieldParser;
 import io.devpl.common.interfaces.impl.FieldInfoMap;
-import io.fxtras.utils.FXUtils;
 import io.devpl.fxui.model.FieldNode;
+import io.fxtras.utils.FXUtils;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 
@@ -73,6 +73,11 @@ abstract class FieldParseView extends Region {
         return nodes;
     }
 
+    /**
+     * 自定义解析器
+     *
+     * @return 字段解析器
+     */
     protected FieldParser getFieldParser() {
         return FieldParser.EMPTY;
     }

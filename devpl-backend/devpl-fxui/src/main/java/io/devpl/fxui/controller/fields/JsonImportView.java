@@ -38,6 +38,8 @@ public class JsonImportView extends FxmlView {
 
     CodeEditor codeEditor;
 
+    Gson gson = new Gson();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         chbJsonSpec.getItems().addAll("JSON", "JSON5", "HJSON");
@@ -51,11 +53,12 @@ public class JsonImportView extends FxmlView {
 
     /**
      * 解析字段
+     *
      * @param event
      */
     public void parseFieldsFromInput(FieldImportEvent event) {
         try {
-            List<FieldSpec> list = extractFieldsFromJson(codeEditor.getContent());
+            List<FieldSpec> list = extractFieldsFromJson(codeEditor.getText());
             publish("AddFields", list);
         } catch (Exception exception) {
             Alerts.exception("解析异常", exception).showAndWait();
@@ -63,10 +66,9 @@ public class JsonImportView extends FxmlView {
         }
     }
 
-    Gson gson = new Gson();
-
     /**
      * 解析JSON
+     *
      * @param input json文本
      * @return 字段列表
      */
@@ -79,6 +81,7 @@ public class JsonImportView extends FxmlView {
 
     /**
      * 提取所有的Key，不提取值
+     *
      * @param fieldList
      * @param jsonElement
      */
@@ -111,7 +114,7 @@ public class JsonImportView extends FxmlView {
 
     @FXML
     public void showJsonTree(ActionEvent actionEvent) {
-        String text = codeEditor.getContent();
+        String text = codeEditor.getText();
         if (!StringUtils.hasText(text)) {
             return;
         }
@@ -140,6 +143,7 @@ public class JsonImportView extends FxmlView {
 
     /**
      * 选择JSON文件
+     *
      * @param actionEvent 事件
      */
     @FXML
@@ -148,8 +152,8 @@ public class JsonImportView extends FxmlView {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json", ".json"));
         File file = fileChooser.showOpenDialog(getStage(actionEvent));
         if (file != null) {
-            codeEditor.setContent("", true);
-            codeEditor.setContent(FileUtils.readToString(file), false);
+            codeEditor.setText("", true);
+            codeEditor.setText(FileUtils.readToString(file), false);
         }
     }
 }

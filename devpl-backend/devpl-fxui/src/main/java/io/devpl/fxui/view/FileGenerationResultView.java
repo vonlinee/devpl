@@ -19,7 +19,7 @@ public class FileGenerationResultView extends SplitPane {
         treeView.setOnNodeClickHandler(f -> {
             File file = new File(f.getAbsolutePath());
             try {
-                editor.setContent(Files.readString(file.toPath()), false);
+                editor.setText(Files.readString(file.toPath()), false);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

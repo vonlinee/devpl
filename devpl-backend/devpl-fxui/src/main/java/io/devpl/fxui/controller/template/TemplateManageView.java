@@ -91,7 +91,7 @@ public class TemplateManageView extends FxmlView {
         chooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("仅支持vm文件", "vm"));
         file = chooser.showOpenDialog(getStage(actionEvent));
         if (file != null) {
-            codeEditor.setContent(FileUtils.readToString(file), false);
+            codeEditor.setText(FileUtils.readToString(file), false);
         }
     }
 }

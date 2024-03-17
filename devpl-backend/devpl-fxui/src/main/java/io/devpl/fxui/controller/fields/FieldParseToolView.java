@@ -9,6 +9,9 @@ import javafx.scene.layout.HBox;
 
 import java.util.List;
 
+/**
+ * 字段解析
+ */
 public class FieldParseToolView extends BorderPane {
 
     FieldTreeTable treeTable;
@@ -27,7 +30,6 @@ public class FieldParseToolView extends BorderPane {
         root.getItems().addAll(tabPane, treeTable);
 
         Button btnGetSample = new Button("获取示例");
-
         Button btnParse = new Button("解析");
         Button btnGenFile = new Button("生成");
 

@@ -103,12 +103,12 @@ public class CodeMirrorEditor implements CodeEditor {
     }
 
     @Override
-    public String getContent() {
+    public String getText() {
         return (String) webView.getEngine().executeScript("codeMirror.getValue();");
     }
 
     @Override
-    public void setContent(String newContent, boolean markClean) {
+    public void setText(String newContent, boolean markClean) {
         String escapedContent = JsString.quote(newContent);
         Platform.runLater(() -> {
             webView.getEngine().executeScript("codeMirror.setValue(" + escapedContent + ");");
