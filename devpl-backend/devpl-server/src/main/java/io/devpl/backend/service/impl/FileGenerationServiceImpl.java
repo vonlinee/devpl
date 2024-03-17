@@ -2,7 +2,6 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
-import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.domain.vo.FileGenerationResult;
@@ -10,6 +9,7 @@ import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.backend.utils.PathUtils;
+import io.devpl.common.model.FileNode;
 import io.devpl.common.utils.ProjectUtils;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
@@ -61,8 +61,9 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         FileGenerationResult result = new FileGenerationResult(null);
         // 生成代码
         final String parentDirectory = DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
-        for (Long tableId : param.getTableIds()) {
-            result.addRootDir(this.generateForTable(tableId, parentDirectory));
+        List<TableGeneration> tableGenerations = tableService.listByIds(param.getTableIds());
+        for (TableGeneration tableGeneration : tableGenerations) {
+            result.addRootDir(this.generateForTable(tableGeneration, parentDirectory));
         }
         return result;
     }
@@ -70,22 +71,34 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     /**
      * 生成某个表的文件
      *
-     * @param tableId gen_table主键
+     * @param table           table_file_generation信息
+     * @param parentDirectory 根目录
      * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
      * @see TableGenerationService#importSingleTable(TableImportParam)
      */
     @Override
-    public String generateForTable(Long tableId, String parentDirectory) {
-        List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(tableId);
+    public String generateForTable(TableGeneration table, String parentDirectory) {
+        List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(table.getId());
+        if (CollectionUtils.isEmpty(fileToBeGenerated)) {
+            return parentDirectory;
+        }
+
         // 数据模型
-        Map<String, Object> dataModel = prepareDataModel(tableId);
+        Map<String, Object> dataModel = prepareDataModel(table);
 
         StringBuilder sb = new StringBuilder();
 
-        final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templateService.listByIds(CollectionUtils.toSet(fileToBeGenerated, TableFileGeneration::getTemplateId)), TemplateInfo::getTemplateId);
+        Set<Long> templateIds = CollectionUtils.toSet(fileToBeGenerated, TableFileGeneration::getTemplateId);
+
+        // 使用的模板列表
+        List<TemplateInfo> templates = templateService.listByIds(templateIds);
+
+        final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templates, TemplateInfo::getTemplateId);
 
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
+
+            templateFileGenerationService.saveTemplateArguments(tfg, dataModel);
 
             String saveLocation = PathUtils.of(parentDirectory, tfg.getSavePath(), tfg.getFileName());
 
@@ -120,15 +133,14 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     }
 
     /**
-     * 获取渲染的数据模型
+     * 获取单个表渲染的数据模型
      *
-     * @param tableId 表ID
+     * @param table 表信息
      */
     @Override
-    public Map<String, Object> prepareDataModel(Long tableId) {
+    public Map<String, Object> prepareDataModel(TableGeneration table) {
         // 表信息
-        TableGeneration table = tableService.getById(tableId);
-        List<TableGenerationField> fieldList = tableFieldService.listByTableId(tableId);
+        List<TableGenerationField> fieldList = tableFieldService.listByTableId(table.getId());
         table.setFieldList(fieldList);
 
         // 数据模型

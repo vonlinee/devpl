@@ -3,6 +3,7 @@ package io.devpl.backend.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.backend.entity.TemplateArgument;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +18,7 @@ public interface TemplateArgumentService extends IService<TemplateArgument> {
      * @param generationId 生成ID
      * @param argumentsMap 模板参数
      */
-    void initialize(Long templateId, Long generationId, Map<String, Object> argumentsMap);
+    List<TemplateArgument> initialize(Long templateId, Long generationId, Map<String, Object> argumentsMap);
 
     /**
      * 将模板参数值序列化为字符串

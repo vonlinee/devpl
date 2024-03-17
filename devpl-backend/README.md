@@ -53,13 +53,7 @@ TODO
 简化代码
 去掉@RequestBody注解，默认都是JSON形式数据
 
-
-
-
-
 # 日志转SQL
-
-
 
 ```plain
 ==>  Preparing: SELECT id,project_name,project_code,project_package,project_path,modify_project_name,modify_project_code,modify_project_package,exclusions,modify_suffix,version,backend_path,frontend_path,status,build_tool,update_time,create_time FROM project_info WHERE id=?
@@ -69,16 +63,6 @@ TODO
 <==      Total: 1
 ```
 
-
-
-
-
-
-
-
-
-
-
 # 数据库迁移工具 TODO
 
 1.表结构转换
@@ -87,10 +71,8 @@ https://blog.csdn.net/TIME_1981/article/details/128468035
 
 2.数据转换
 
-
-
-
-
+解析javadoc
+https://github.com/tangcent/easy-api
 
 
 

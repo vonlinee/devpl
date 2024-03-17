@@ -1,7 +1,6 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
 import io.devpl.backend.domain.param.TableFileGenParam;
@@ -9,6 +8,7 @@ import io.devpl.backend.domain.vo.FileGenerationResult;
 import io.devpl.backend.entity.TableFileGeneration;
 import io.devpl.backend.entity.TargetGenerationFile;
 import io.devpl.backend.service.*;
+import io.devpl.common.model.FileNode;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 代码生成控制器
+ * 代码生成器
  */
 @RestController
 @RequestMapping("/api/codegen")
@@ -31,7 +31,7 @@ public class CodeGenerationController {
     CodeGenerationService codeGenerationService;
 
     /**
-     * 生成代码（自定义目录）
+     * 生成代码
      *
      * @param param 文件生成参数
      * @return 所有生成的根目录

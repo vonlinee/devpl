@@ -1,8 +1,9 @@
 package io.devpl.backend.service;
 
-import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.vo.FileGenerationResult;
+import io.devpl.backend.entity.TableGeneration;
+import io.devpl.common.model.FileNode;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public interface FileGenerationService {
      * @param projectRootPath 项目根路径
      * @return 生成文件的根目录
      */
-    String generateForTable(Long tableId, String projectRootPath);
+    String generateForTable(TableGeneration table, String parentDirectory);
 
     /**
      * 获取代码生成绝对路径
@@ -40,9 +41,9 @@ public interface FileGenerationService {
     /**
      * 获取渲染的数据模型
      *
-     * @param tableId 表ID
+     * @param table 表信息
      */
-    Map<String, Object> prepareDataModel(Long tableId);
+    Map<String, Object> prepareDataModel(TableGeneration table);
 
     /**
      * 获取生成结果，文件树

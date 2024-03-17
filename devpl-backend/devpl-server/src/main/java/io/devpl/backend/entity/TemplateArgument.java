@@ -29,7 +29,9 @@ public class TemplateArgument {
     private Long templateId;
 
     /**
-     * 模板ID
+     * 生成ID，关联存放生成信息的表的主键
+     *
+     * @see TableFileGeneration#id
      */
     @TableField(value = "generation_id")
     private Long generationId;

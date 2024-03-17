@@ -17,7 +17,7 @@ import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
 import io.devpl.backend.utils.PathUtils;
 import io.devpl.backend.utils.SqlFormat;
-import io.devpl.backend.utils.XmlNode;
+import io.devpl.backend.tools.mybatis.XmlNode;
 import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;

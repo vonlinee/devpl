@@ -1,4 +1,4 @@
-package ${package.Controller};
+package ${package}.${moduleName}.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 #if(${restControllerStyle})

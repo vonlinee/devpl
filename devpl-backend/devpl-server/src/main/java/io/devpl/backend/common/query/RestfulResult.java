@@ -1,5 +1,7 @@
 package io.devpl.backend.common.query;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -22,6 +24,7 @@ public abstract class RestfulResult<T> {
     /**
      * 堆栈信息，仅在开发及测试阶段使用
      */
+    @JsonIgnore
     private String stackTrace;
 
     public final int getCode() {

@@ -13,13 +13,13 @@ import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.jdbc.JdbcDriverManager;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.utils.DBUtils;
-import io.devpl.common.utils.EncryptUtils;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
+import io.devpl.common.utils.EncryptUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -121,7 +121,11 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
         if (dataSourceId.intValue() == -1) {
             return DBType.MYSQL.name();
         } else {
-            return getById(dataSourceId).getDbType();
+            RdbmsConnectionInfo connectionInfo = getById(dataSourceId);
+            if (connectionInfo != null) {
+                return connectionInfo.getDbType();
+            }
+            return null;
         }
     }
 

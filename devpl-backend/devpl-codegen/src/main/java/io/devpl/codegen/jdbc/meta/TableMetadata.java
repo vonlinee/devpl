@@ -1,10 +1,7 @@
 package io.devpl.codegen.jdbc.meta;
 
-import io.devpl.codegen.jdbc.JdbcUtils;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
 
 /**

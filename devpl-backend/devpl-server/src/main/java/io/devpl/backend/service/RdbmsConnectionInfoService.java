@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.util.List;
 
 /**
- * 数据源管理
+ * 关系型数据库连接信息管理
  */
 public interface RdbmsConnectionInfoService extends BaseService<RdbmsConnectionInfo> {
 

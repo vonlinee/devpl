@@ -1,4 +1,4 @@
-package io.devpl.backend.utils;
+package io.devpl.backend.tools.mybatis;
 
 import io.devpl.common.utils.XMLUtils;
 import org.apache.ibatis.parsing.PropertyParser;

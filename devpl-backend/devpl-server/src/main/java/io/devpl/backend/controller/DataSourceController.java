@@ -3,6 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DBTableDataParam;
+import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.backend.domain.param.DbConnInfoListParam;
 import io.devpl.backend.domain.vo.DBTableDataVO;
 import io.devpl.backend.domain.vo.DataSourceVO;
@@ -233,5 +234,16 @@ public class DataSourceController {
             log.error("获取数据库表数据失败", e);
             return Result.error("获取数据库表数据失败 " + e.getMessage());
         }
+    }
+
+    /**
+     * 同步表元数据
+     *
+     * @return 是否成功
+     */
+    @PostMapping("/metadata/table/sync")
+    public Result<Boolean> syncTableMetadata(DataSourceMetadataSyncParam param) {
+        dataSourceService.syncTableMetadata(param);
+        return Result.ok();
     }
 }

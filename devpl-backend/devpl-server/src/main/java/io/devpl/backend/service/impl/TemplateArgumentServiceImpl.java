@@ -21,7 +21,7 @@ public class TemplateArgumentServiceImpl extends ServiceImpl<TemplateArgumentMap
      * @param argumentsMap 模板参数
      */
     @Override
-    public void initialize(Long templateId, Long generationId, Map<String, Object> argumentsMap) {
+    public List<TemplateArgument> initialize(Long templateId, Long generationId, Map<String, Object> argumentsMap) {
         final LocalDateTime now = LocalDateTime.now();
         List<TemplateArgument> arguments = new ArrayList<>();
         for (Map.Entry<String, Object> entry : argumentsMap.entrySet()) {
@@ -34,7 +34,7 @@ public class TemplateArgumentServiceImpl extends ServiceImpl<TemplateArgumentMap
             argument.setUpdateTime(now);
             arguments.add(argument);
         }
-        saveBatch(arguments);
+        return arguments;
     }
 
     @Override
