@@ -1,5 +1,7 @@
 package io.devpl.backend.dao;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.GroupField;
@@ -22,6 +24,18 @@ public interface FieldGroupMapper extends MyBatisPlusMapper<FieldGroup> {
     List<GroupField> selectGroupFieldsById(Long groupId);
 
     /**
+     * 查询组的字段列表
+     *
+     * @return 组的字段列表
+     */
+    @Select(value = """
+        SELECT fg.*, count(gf.field_id) AS field_count FROM field_group fg
+        LEFT JOIN  group_field gf ON fg.id = gf.group_id
+        GROUP BY fg.id
+        """)
+    Page<FieldGroup> selectFieldGroupList(IPage<FieldGroup> page);
+
+    /**
      * 获取字段组的最大ID
      *
      * @return 字段组的最大ID
@@ -34,5 +48,5 @@ public interface FieldGroupMapper extends MyBatisPlusMapper<FieldGroup> {
         select * from field_group
         where group_name like concat('%', #{groupName}, '%')
         """)
-    List<FieldGroup> selectFieldGroups(@Param("groupName") String grouoName);
+    List<FieldGroup> selectFieldGroups(@Param("groupName") String groupName);
 }

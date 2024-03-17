@@ -61,6 +61,17 @@ type FieldInfo = {
   leaf?: boolean
 }
 
+
+type GroupField = {
+  id: number,
+
+  groupId: number,
+
+  fieldId: number,
+
+  fieldKey: string
+}
+
 /**
  * 字段组信息
  */
@@ -72,5 +83,13 @@ type FieldGroup = {
   /**
    * 字段组名称
    */
-  groupName: string
+  groupName: string,
+  /**
+   * 字段数量
+   */
+  fieldCount: number,
+  /**
+   * 字段组关联的字段列表
+   */
+  fileds: GroupField[]
 }

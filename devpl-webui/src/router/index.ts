@@ -62,7 +62,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "TargetFile",
         component: () => import("@/views/generator/targetfile/index.vue"),
         meta: {
-          title: "目标文件",
+          title: "文件类型",
           icon: "icon-fire",
         },
       },

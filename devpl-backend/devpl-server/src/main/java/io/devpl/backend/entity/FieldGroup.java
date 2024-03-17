@@ -37,6 +37,12 @@ public class FieldGroup implements Serializable {
     private String groupName;
 
     /**
+     * 字段数量
+     */
+    @TableField(exist = false)
+    private Integer fieldCount;
+
+    /**
      * 该组的字段列表
      */
     @TableField(exist = false)

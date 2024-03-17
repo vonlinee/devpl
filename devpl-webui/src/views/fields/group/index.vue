@@ -5,12 +5,18 @@
   </el-card>
   <el-table border row-key="id" :data="tableData" height="100%">
     <el-table-column type="selection" width="35" align="center"></el-table-column>
-    <el-table-column prop="groupName" label="组名称"></el-table-column>
+    <el-table-column prop="groupName" label="组名称">
+      <template #default="scope">
+        <span>{{ scope.row.groupName }}</span>
+        <span style="margin-left: 5px; color: red;">({{ scope.row.fieldCount || 0 }}个字段)</span>
+      </template>
+    </el-table-column>
     <el-table-column label="操作" width="500" fixed="right">
       <template #default="scope">
         <el-button link @click="javaPojoGenModal.show(scope.row.id)">Java</el-button>
         <el-button link @click="showTableCreatorModal(scope.row)">SQL</el-button>
         <el-button link>转为模型</el-button>
+        <el-button link @click="otherModal.show(scope.row.id)">其他</el-button>
         <el-button link @click="showFieldGroupEditModal(scope.row)">编辑</el-button>
         <el-button link @click="removeFieldGroup(scope.row.id)">删除</el-button>
       </template>
@@ -24,6 +30,8 @@
   <FieldGroupImport ref="importFieldGroupModal" @finished="onParseFinished"></FieldGroupImport>
 
   <JavaPojoGen ref="javaPojoGenModal"></JavaPojoGen>
+
+  <Other ref="otherModal"></Other>
 
   <FieldGroupEdit ref="fieldGroupEditModalRef"></FieldGroupEdit>
 
@@ -39,6 +47,7 @@ import {
   apiPageFieldGroup
 } from "@/api/fields";
 import JavaPojoGen from "@/views/fields/group/JavaPojoGen.vue";
+import Other from "@/views/fields/group/Other.vue";
 import { Message } from "@/hooks/message";
 import FieldGroupEdit from "@/views/fields/group/FieldGroupEdit.vue";
 import TableCreatorModal from "@/views/fields/group/TableCreatorModal.vue";
@@ -46,6 +55,7 @@ import TableCreatorModal from "@/views/fields/group/TableCreatorModal.vue";
 const importFieldGroupModal = ref();
 const tableData = ref<FieldGroup[]>([]);
 const javaPojoGenModal = ref();
+const otherModal = ref();
 const fieldGroupEditModalRef = ref();
 const tableCreatorModalRef = ref();
 

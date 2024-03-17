@@ -2,6 +2,7 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.backend.dao.FieldGroupMapper;
 import io.devpl.backend.domain.enums.CrudMode;
 import io.devpl.backend.domain.param.FieldGroupListParam;
@@ -36,8 +37,7 @@ public class FieldGroupServiceImpl implements FieldGroupService {
 
     @Override
     public IPage<FieldGroup> listPage(FieldGroupListParam param) {
-        LambdaQueryWrapper<FieldGroup> qw = new LambdaQueryWrapper<>();
-        return fieldGroupMapper.selectPage(param, qw);
+        return fieldGroupMapper.selectFieldGroupList(param.asPage());
     }
 
     @Override
