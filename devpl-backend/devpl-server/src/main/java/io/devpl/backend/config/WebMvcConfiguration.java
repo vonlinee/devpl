@@ -175,7 +175,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ConfigurableServletWebServerFactory webServerFactory() {
+    public ConfigurableServletWebServerFactory servletWebServerFactory() {
         TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory();
         HashSet<ErrorPage> errorPages = new HashSet<>();
         errorPages.add(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));

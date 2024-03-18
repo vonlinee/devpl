@@ -36,7 +36,7 @@ public class FieldInfoController {
      */
     @GetMapping(value = "/page")
     public ListResult<FieldInfo> listPage(FieldInfoListParam param) {
-        return ListResult.ok(fieldInfoService.selectPage(param));
+        return ListResult.ok(fieldInfoService.listFieldInfoPages(param));
     }
 
     /**

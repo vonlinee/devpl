@@ -17,7 +17,7 @@ public class FieldGroupParam {
     private FieldGroup group;
 
     /**
-     * 字段信息
+     * 该字段组关联的字段信息
      */
     private List<FieldInfo> fields;
 

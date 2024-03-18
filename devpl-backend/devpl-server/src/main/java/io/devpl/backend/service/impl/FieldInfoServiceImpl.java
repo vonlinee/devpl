@@ -70,7 +70,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     }
 
     @Override
-    public IPage<FieldInfo> selectPage(FieldInfoListParam param) {
+    public IPage<FieldInfo> listFieldInfoPages(FieldInfoListParam param) {
         String[] excludeKeys = StringUtils.split(param.getExcludedKeys(), ",");
         LambdaQueryWrapper<FieldInfo> qw = new LambdaQueryWrapper<>();
         qw.notIn(StringUtils.hasText(param.getExcludedKeys()), FieldInfo::getFieldKey, Arrays.asList(excludeKeys));
@@ -82,6 +82,8 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
             });
         }
         qw.eq(StringUtils.hasText(param.getDataType()), FieldInfo::getDataType, param.getDataType());
+        qw.like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey());
+        qw.like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName());
         qw.orderBy(true, false, FieldInfo::getCreateTime);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
@@ -100,7 +102,6 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         if (types.length != 2) {
             return result.fail("参数错误");
         }
-
         final String content = param.getContent();
         FieldParser parser = FieldParser.EMPTY;
         if ("pl".equalsIgnoreCase(types[0])) {
@@ -142,7 +143,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     }
 
     /**
-     * 填充树形结构，适配前端组件的树形字段，填充结果如下
+     * 填充树形结构，适配前端组件的树形字段，填充结果大概像下面这样
      * 1
      * ---101
      * ---102
@@ -209,8 +210,21 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         if (fieldInfoList.isEmpty()) {
             return true;
         }
+        // 限制字段名称只能使用合法的java语言标识符
         fieldInfoList.removeIf(f -> !javaIdentifierPattern.matcher(f.getFieldKey()).matches());
+        fieldInfoList.forEach(this::fillAbsentFieldValue);
         return saveBatch(fieldInfoList);
+    }
+
+    /**
+     * 填充字段信息的默认值
+     *
+     * @param fieldInfo 字段信息
+     */
+    private void fillAbsentFieldValue(FieldInfo fieldInfo) {
+        if (!StringUtils.hasText(fieldInfo.getDefaultValue())) {
+            fieldInfo.setDefaultValue(fieldInfo.getLiteralValue());
+        }
     }
 
     /**

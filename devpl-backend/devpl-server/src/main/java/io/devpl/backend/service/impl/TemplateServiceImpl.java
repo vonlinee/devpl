@@ -16,10 +16,15 @@ import io.devpl.backend.service.TemplateService;
 import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateException;
+import io.devpl.codegen.template.beetl.BeetlTemplateEngine;
+import io.devpl.codegen.template.enjoy.JFinalEnjoyTemplateEngine;
+import io.devpl.codegen.template.freemarker.FreeMarkerTemplateEngine;
+import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +56,16 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     TemplateInfoMapper templateInfoMapper;
     @Resource
     CodeGenProperties codeGenProperties;
-    @Resource
-    TemplateEngine templateEngine;
+
+    Map<TemplateEngineType, TemplateEngine> templateEngineMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        templateEngineMap.put(TemplateEngineType.BEETL, new BeetlTemplateEngine());
+        templateEngineMap.put(TemplateEngineType.VELOCITY, new VelocityTemplateEngine());
+        templateEngineMap.put(TemplateEngineType.FREE_MARKER, new FreeMarkerTemplateEngine());
+        templateEngineMap.put(TemplateEngineType.ENJOY, new JFinalEnjoyTemplateEngine());
+    }
 
     /**
      * p
@@ -91,18 +104,26 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     }
 
     @Override
-    public void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) {
+    public void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
         if (StringUtils.hasText(templateInfo.getContent())) {
-            renderTemplateString(templateInfo.getContent(), dataModel, out);
+            TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
+            if (engineType == null) {
+                throw new TemplateException("未注册的模板类型" + templateInfo.getProvider());
+            }
+            TemplateEngine engine = templateEngineMap.get(engineType);
+            if (engine == null) {
+                throw new TemplateException("未找到模板引擎实现" + templateInfo.getProvider());
+            }
+            renderTemplateString(engine, templateInfo.getContent(), dataModel, out);
         }
     }
 
-    private void renderTemplateString(String templateContent, Map<String, Object> dataModel, Writer out) {
+    private void renderTemplateString(TemplateEngine engine, String templateContent, Map<String, Object> dataModel, Writer out) {
         try {
             // 渲染模板
-            Template template = templateEngine.getTemplate(templateContent, true);
+            Template template = engine.getTemplate(templateContent, true);
             if (template.exists()) {
-                template.render(templateEngine, dataModel, out);
+                template.render(engine, dataModel, out);
             }
         } catch (TemplateException e) {
             // 去掉某些堆栈信息
@@ -123,13 +144,13 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      * @param dataModel 数据模型
      */
     @Override
-    public String render(String content, Map<String, Object> dataModel) {
+    public String render(TemplateEngine engine, String content, Map<String, Object> dataModel) {
         if (CollectionUtils.isEmpty(dataModel)) {
             return content;
         }
         StringWriter sw = new StringWriter();
         try {
-            renderTemplateString(content, dataModel, sw);
+            renderTemplateString(engine, content, dataModel, sw);
         } catch (TemplateException exception) {
             throw new BusinessException("渲染模板失败，请检查模板语法", exception);
         }

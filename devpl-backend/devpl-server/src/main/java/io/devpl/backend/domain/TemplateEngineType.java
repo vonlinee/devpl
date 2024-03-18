@@ -55,4 +55,13 @@ public enum TemplateEngineType {
         }
         return null;
     }
+
+    public static TemplateEngineType findByProvider(String provider) {
+        for (TemplateEngineType type : values()) {
+            if (type.provider.equalsIgnoreCase(provider)) {
+                return type;
+            }
+        }
+        return null;
+    }
 }

@@ -38,7 +38,11 @@ public class GroupFieldServiceImpl extends ServiceImpl<GroupFieldMapper, GroupFi
         // 要新增的
         Set<Long> idsToInsert = CollectionUtils.removeAll(new HashSet<>(fieldIds), existedFieldIds);
         if (!CollectionUtils.isEmpty(idsToInsert)) {
-            saveBatch(idsToInsert.stream().map(fieldId -> new GroupField(groupId, fieldId)).toList());
+            List<GroupField> list = CollectionUtils.toList(idsToInsert, id -> new GroupField(groupId, id));
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setOrderNum(i++);
+            }
+            saveBatch(list);
         }
         // 要删除的
         HashSet<Long> idsToBeDelete = CollectionUtils.removeAll(new HashSet<>(existedFieldIds), fieldIds);

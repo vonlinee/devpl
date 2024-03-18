@@ -9,24 +9,24 @@
           <vxe-button type="text" content="按钮2"></vxe-button>
           <vxe-button type="text" content="按钮3"></vxe-button>
         </template>
-      </vxe-button> -->
+</vxe-button> -->
     </template>
   </vxe-toolbar>
 
   <vxe-table ref="tableRef" border show-overflow :data="tableData" :column-config="{ resizable: true }" :height="height"
     :edit-config="{ trigger: 'click', mode: 'row' }">
     <vxe-column type="seq" width="60"></vxe-column>
-    <vxe-column field="paramKey" title="参数Key" :edit-render="{}">
+    <vxe-column field="paramKey" title="参数Key" :edit-render="{}" width="180">
       <template #edit="{ row }">
         <vxe-input v-model="row.paramKey" type="text"></vxe-input>
       </template>
     </vxe-column>
-    <vxe-column field="paramName" title="参数名称" :edit-render="{}">
+    <vxe-column field="paramName" title="参数名称" :edit-render="{}" width="180">
       <template #edit="{ row }">
         <vxe-input v-model="row.paramName" type="text"></vxe-input>
       </template>
     </vxe-column>
-    <vxe-column field="dataType" title="数据类型" :edit-render="{}">
+    <vxe-column field="dataType" title="数据类型" :edit-render="{}" width="160">
       <template #default="{ row }">
         <span>{{ row.dataType }}</span>
       </template>

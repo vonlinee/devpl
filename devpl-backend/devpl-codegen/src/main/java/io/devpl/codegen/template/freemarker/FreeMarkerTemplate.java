@@ -1,14 +1,15 @@
 package io.devpl.codegen.template.freemarker;
 
-import freemarker.template.TemplateException;
 import io.devpl.codegen.template.Template;
-import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateEngine;
+import io.devpl.codegen.template.TemplateException;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * FreeMarker 模板
+ */
 class FreeMarkerTemplate implements Template {
 
     freemarker.template.Template template;
@@ -33,11 +34,11 @@ class FreeMarkerTemplate implements Template {
     }
 
     @Override
-    public void render(TemplateEngine engine, Object arguments, Writer writer) {
+    public void render(TemplateEngine engine, Object arguments, Writer writer) throws TemplateException {
         try {
             template.process(arguments, writer);
-        } catch (IOException | TemplateException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new TemplateException(e);
         }
     }
 }

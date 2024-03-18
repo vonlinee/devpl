@@ -13,6 +13,7 @@ import io.devpl.codegen.template.model.JavaFileTemplateArguments;
 import io.devpl.common.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
@@ -66,6 +67,10 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         model.addSuperInterfaces(Serializable.class);
         model.setPackageName(param.getPackageName());
         model.setClassName(param.getClassName());
+
+        if (param.useLombok()) {
+            model.addAnnotation(Data.class);
+        }
 
         List<FieldData> fieldDataList = new ArrayList<>();
 

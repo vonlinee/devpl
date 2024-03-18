@@ -21,7 +21,7 @@ public interface FieldInfoService extends BaseService<FieldInfo> {
 
     List<FieldInfo> listFields(FieldInfoListParam param);
 
-    IPage<FieldInfo> selectPage(FieldInfoListParam param);
+    IPage<FieldInfo> listFieldInfoPages(FieldInfoListParam param);
 
     FieldParseResult parseFields(FieldParseParam param) throws FieldParseException;
 
