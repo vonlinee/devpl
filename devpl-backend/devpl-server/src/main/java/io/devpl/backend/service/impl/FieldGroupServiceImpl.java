@@ -2,7 +2,6 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.devpl.backend.dao.FieldGroupMapper;
 import io.devpl.backend.domain.enums.CrudMode;
 import io.devpl.backend.domain.param.FieldGroupListParam;
@@ -54,6 +53,8 @@ public class FieldGroupServiceImpl implements FieldGroupService {
         }
         fieldGroup.setGroupName("组" + (maxGroupId + 1));
         int affectedRows = fieldGroupMapper.insert(fieldGroup);
+
+        // 处理字段组相关的字段信息
         if (!CollectionUtils.isEmpty(param.getFields())) {
             fieldInfoService.batchSetFieldValue(param.getFields(), true, true, false);
             fieldInfoService.saveFieldsInfos(param.getFields(), true);

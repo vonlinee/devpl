@@ -1,8 +1,8 @@
 package io.devpl.common.interfaces.impl;
 
 import de.marhali.json5.*;
-import io.devpl.common.interfaces.FieldParser;
 import io.devpl.common.exception.FieldParseException;
+import io.devpl.common.interfaces.FieldParser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -32,6 +32,7 @@ public class Json5FieldParser implements FieldParser {
                     Map<String, Object> fieldInfo = new HashMap<>();
                     fieldInfo.put(FIELD_NAME, entry.getKey());
 
+                    // 类型推断
                     Json5Element value = entry.getValue();
                     if (value.isJson5Primitive()) {
                         Json5Primitive primitive = value.getAsJson5Primitive();
@@ -43,6 +44,8 @@ public class Json5FieldParser implements FieldParser {
                             fieldInfo.put(FIELD_TYPE, "Number");
                         }
                     }
+
+                    fieldInfo.put(FIELD_VALUE, String.valueOf(value));
 
                     Json5Comment comment = obj.getComment(entry.getKey());
                     if (comment != null) {

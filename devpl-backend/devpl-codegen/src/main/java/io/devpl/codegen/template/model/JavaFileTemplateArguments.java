@@ -100,6 +100,11 @@ public class JavaFileTemplateArguments implements TemplateArguments {
         if (this.annotations == null) {
             this.annotations = new ArraySet<>();
         }
+        if (annotations != null) {
+            for (Class<? extends Annotation> annotation : annotations) {
+                importItems.add(annotation.getName());
+            }
+        }
     }
 
     public final void addSuperInterfaces(String... superInterfaces) {

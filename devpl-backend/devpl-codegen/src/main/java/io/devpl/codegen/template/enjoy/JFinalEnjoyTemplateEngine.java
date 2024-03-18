@@ -1,7 +1,9 @@
 package io.devpl.codegen.template.enjoy;
 
 import com.jfinal.template.Engine;
-import io.devpl.codegen.template.*;
+import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.Template;
+import io.devpl.codegen.template.TemplateException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -11,11 +13,11 @@ import java.util.Map;
 /**
  * enjoy 模板引擎实现文件输出
  */
-public class EnjoyTemplateEngine extends AbstractTemplateEngine {
+public class JFinalEnjoyTemplateEngine extends AbstractTemplateEngine {
 
     private final Engine engine;
 
-    public EnjoyTemplateEngine() {
+    public JFinalEnjoyTemplateEngine() {
         engine = Engine.createIfAbsent("codegen", Engine::setToClassPathSourceFactory);
     }
 

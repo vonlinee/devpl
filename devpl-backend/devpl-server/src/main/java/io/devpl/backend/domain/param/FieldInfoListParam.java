@@ -22,4 +22,14 @@ public class FieldInfoListParam extends PageParam {
      * 数据类型ID
      */
     private String dataType;
+
+    /**
+     * 字段key模糊搜索
+     */
+    private String fieldKey;
+
+    /**
+     * 字段name模糊搜索
+     */
+    private String fieldName;
 }

@@ -67,9 +67,8 @@
 
   <vxe-modal title="全局模板参数" v-model="globalTempParamModalRef" width="80%" show-footer>
     <template-param-table ref="templateParamTableRef"></template-param-table>
-
     <template #footer="scope">
-      <el-button @click="submitTemplateParams">确定</el-button>
+      <el-button type="primary" @click="submitTemplateParams">确定</el-button>
     </template>
   </vxe-modal>
 </template>
