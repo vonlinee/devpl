@@ -15,12 +15,12 @@ public class TableMetadata {
     /**
      * TABLE_CAT String => table catalog (may be null)
      */
-    private String tableCat;
+    private String tableCatalog;
 
     /**
      * TABLE_SCHEM String => table schema (maybe null)
      */
-    private String tableSchem;
+    private String tableSchema;
 
     /**
      * TABLE_NAME String => table name
@@ -41,12 +41,12 @@ public class TableMetadata {
     /**
      * String => the types catalog (maybe null)
      */
-    private String typeCat;
+    private String typeCatalog;
 
     /**
      * String => the types schema (maybe null)
      */
-    private String typeSchem;
+    private String typeSchema;
 
     /**
      * TYPE_NAME String => type name (maybe null)
@@ -56,27 +56,27 @@ public class TableMetadata {
     /**
      * SELF_REFERENCING_COL_NAME String => name of the designated "identifier" column of a typed table (maybe null)
      */
-    private String selfReferencingColName;
+    private String selfReferencingColumnName;
 
     /**
      * REF_GENERATION String => specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (maybe null)
      */
     private String refGeneration;
 
-    public String getTableCat() {
-        return tableCat;
+    public String getTableCatalog() {
+        return tableCatalog;
     }
 
-    public void setTableCat(String tableCat) {
-        this.tableCat = tableCat;
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
     }
 
-    public String getTableSchem() {
-        return tableSchem;
+    public String getTableSchema() {
+        return tableSchema;
     }
 
-    public void setTableSchem(String tableSchem) {
-        this.tableSchem = tableSchem;
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
     }
 
     public String getTableName() {
@@ -103,20 +103,20 @@ public class TableMetadata {
         this.remarks = remarks;
     }
 
-    public String getTypeCat() {
-        return typeCat;
+    public String getTypeCatalog() {
+        return typeCatalog;
     }
 
-    public void setTypeCat(String typeCat) {
-        this.typeCat = typeCat;
+    public void setTypeCatalog(String typeCatalog) {
+        this.typeCatalog = typeCatalog;
     }
 
-    public String getTypeSchem() {
-        return typeSchem;
+    public String getTypeSchema() {
+        return typeSchema;
     }
 
-    public void setTypeSchem(String typeSchem) {
-        this.typeSchem = typeSchem;
+    public void setTypeSchema(String typeSchema) {
+        this.typeSchema = typeSchema;
     }
 
     public String getTypeName() {
@@ -127,12 +127,12 @@ public class TableMetadata {
         this.typeName = typeName;
     }
 
-    public String getSelfReferencingColName() {
-        return selfReferencingColName;
+    public String getSelfReferencingColumnName() {
+        return selfReferencingColumnName;
     }
 
-    public void setSelfReferencingColName(String selfReferencingColName) {
-        this.selfReferencingColName = selfReferencingColName;
+    public void setSelfReferencingColumnName(String selfReferencingColumnName) {
+        this.selfReferencingColumnName = selfReferencingColumnName;
     }
 
     public String getRefGeneration() {
@@ -145,7 +145,7 @@ public class TableMetadata {
 
     @Override
     public String toString() {
-        return "TableMetadata{" + "tableCat='" + tableCat + '\'' + ", tableSchem='" + tableSchem + '\'' + ", tableName='" + tableName + '\'' + ", tableType='" + tableType + '\'' + ", remarks='" + remarks + '\'' + ", typeCat='" + typeCat + '\'' + ", typeSchem='" + typeSchem + '\'' + ", typeName='" + typeName + '\'' + ", selfReferencingColName='" + selfReferencingColName + '\'' + ", refGeneration='" + refGeneration + '\'' + '}';
+        return "TableMetadata{" + "tableCat='" + tableCatalog + '\'' + ", tableSchem='" + tableSchema + '\'' + ", tableName='" + tableName + '\'' + ", tableType='" + tableType + '\'' + ", remarks='" + remarks + '\'' + ", typeCat='" + typeCatalog + '\'' + ", typeSchem='" + typeSchema + '\'' + ", typeName='" + typeName + '\'' + ", selfReferencingColName='" + selfReferencingColumnName + '\'' + ", refGeneration='" + refGeneration + '\'' + '}';
     }
 
     @Override
@@ -153,24 +153,24 @@ public class TableMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TableMetadata that = (TableMetadata) o;
-        return Objects.equals(tableCat, that.tableCat) && Objects.equals(tableSchem, that.tableSchem) && Objects.equals(tableName, that.tableName) && Objects.equals(tableType, that.tableType) && Objects.equals(remarks, that.remarks) && Objects.equals(typeCat, that.typeCat) && Objects.equals(typeSchem, that.typeSchem) && Objects.equals(typeName, that.typeName) && Objects.equals(selfReferencingColName, that.selfReferencingColName) && Objects.equals(refGeneration, that.refGeneration);
+        return Objects.equals(tableCatalog, that.tableCatalog) && Objects.equals(tableSchema, that.tableSchema) && Objects.equals(tableName, that.tableName) && Objects.equals(tableType, that.tableType) && Objects.equals(remarks, that.remarks) && Objects.equals(typeCatalog, that.typeCatalog) && Objects.equals(typeSchema, that.typeSchema) && Objects.equals(typeName, that.typeName) && Objects.equals(selfReferencingColumnName, that.selfReferencingColumnName) && Objects.equals(refGeneration, that.refGeneration);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tableCat, tableSchem, tableName, tableType, remarks, typeCat, typeSchem, typeName, selfReferencingColName, refGeneration);
+        return Objects.hash(tableCatalog, tableSchema, tableName, tableType, remarks, typeCatalog, typeSchema, typeName, selfReferencingColumnName, refGeneration);
     }
 
     public void initialize(ResultSet resultSet) throws SQLException {
-        this.tableCat = resultSet.getString("TABLE_CAT");
-        this.tableSchem = resultSet.getString("TABLE_SCHEM");
+        this.tableCatalog = resultSet.getString("TABLE_CAT");
+        this.tableSchema = resultSet.getString("TABLE_SCHEM");
         this.tableName = resultSet.getString("TABLE_NAME");
         this.tableType = resultSet.getString("TABLE_TYPE");
         this.remarks = resultSet.getString("REMARKS");
-        this.typeCat = resultSet.getString("TYPE_CAT");
-        this.tableSchem = resultSet.getString("TYPE_SCHEM");
+        this.typeCatalog = resultSet.getString("TYPE_CAT");
+        this.tableSchema = resultSet.getString("TYPE_SCHEM");
         this.typeName = resultSet.getString("TYPE_NAME");
-        this.selfReferencingColName = resultSet.getString("SELF_REFERENCING_COL_NAME");
+        this.selfReferencingColumnName = resultSet.getString("SELF_REFERENCING_COL_NAME");
         this.refGeneration = resultSet.getString("REF_GENERATION");
     }
 }

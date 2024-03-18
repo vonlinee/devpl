@@ -216,7 +216,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             TableGeneration tableGeneration = new TableGeneration();
             tableGeneration.setTableName(tm.getTableName());
             tableGeneration.setTableComment(tm.getRemarks());
-            tableGeneration.setDatabaseName(tm.getTableSchem());
+            tableGeneration.setDatabaseName(tm.getTableSchema());
             tableList.add(tableGeneration);
         }
         return tableList;

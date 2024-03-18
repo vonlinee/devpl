@@ -13,12 +13,12 @@ public class ColumnMetadata {
     /**
      * TABLE_CAT String => table catalog (maybe null)
      */
-    private String tableCat;
+    private String tableCatalog;
 
     /**
      * TABLE_SCHEM String => table schema (maybe null)
      */
-    private String tableSchem;
+    private String tableSchema;
 
     /**
      * TABLE_NAME String => table name
@@ -60,9 +60,16 @@ public class ColumnMetadata {
     private Integer decimalDigits;
 
     /**
+     * Numeric Precision Radix.
+     * radix means binary, decimal, hexidecimal, etc.
+     * Numeric Precision means how many digits are in the representation of the number
+     * Scale: how many digits are after the radix point
+     * <p>
      * NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)
+     * <p>
+     * <a href="https://stackoverflow.com/questions/28835640/what-does-numeric-precision-radix-mean-in-the-sql-server-metadata">what-does-numeric-precision-radix-mean-in-the-sql-server-metadata</a>
      */
-    private Integer numPrecRadix;
+    private Integer numericPrecisionRadix;
 
     /**
      * NULLABLE int => is NULL allowed.
@@ -117,7 +124,7 @@ public class ColumnMetadata {
      * empty string --- if the nullability for the column is unknown
      *
      * @see <a href="https://stackoverflow.com/questions/26490427/jdbc-getcolumns-differences-between-is-nullable-and-nullable">JDBC getColumns differences between "IS_NULLABLE" and "NULLABLE"</a>
-     * @see ColumnMetadata#nullable
+     * @see ColumnMetadata#nullable https://stackoverflow.com/questions/26490427/jdbc-getcolumns-differences-between-is-nullable-and-nullable
      */
     private String isNullable;
 
@@ -159,7 +166,7 @@ public class ColumnMetadata {
      * NO --- if this not a generated column
      * empty string --- if it cannot be determined whether this is a generated column
      */
-    private String isGeneratedcolumn;
+    private String isGeneratedColumn;
 
     /**
      * 不同数据库平台的数据类型名称
@@ -178,20 +185,20 @@ public class ColumnMetadata {
         this.platformDataType = platformDataType;
     }
 
-    public String getTableCat() {
-        return tableCat;
+    public String getTableCatalog() {
+        return tableCatalog;
     }
 
-    public void setTableCat(String tableCat) {
-        this.tableCat = tableCat;
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
     }
 
-    public String getTableSchem() {
-        return tableSchem;
+    public String getTableSchema() {
+        return tableSchema;
     }
 
-    public void setTableSchem(String tableSchem) {
-        this.tableSchem = tableSchem;
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
     }
 
     public String getTableName() {
@@ -250,12 +257,12 @@ public class ColumnMetadata {
         this.decimalDigits = decimalDigits;
     }
 
-    public Integer getNumPrecRadix() {
-        return numPrecRadix;
+    public Integer getNumericPrecisionRadix() {
+        return numericPrecisionRadix;
     }
 
-    public void setNumPrecRadix(Integer numPrecRadix) {
-        this.numPrecRadix = numPrecRadix;
+    public void setNumericPrecisionRadix(Integer numericPrecisionRadix) {
+        this.numericPrecisionRadix = numericPrecisionRadix;
     }
 
     public Integer getNullable() {
@@ -385,22 +392,22 @@ public class ColumnMetadata {
         this.isAutoincrement = isAutoincrement;
     }
 
-    public String getIsGeneratedcolumn() {
-        return isGeneratedcolumn;
+    public String getIsGeneratedColumn() {
+        return isGeneratedColumn;
     }
 
-    public void setIsGeneratedcolumn(String isGeneratedcolumn) {
-        this.isGeneratedcolumn = isGeneratedcolumn;
+    public void setIsGeneratedColumn(String isGeneratedColumn) {
+        this.isGeneratedColumn = isGeneratedColumn;
     }
 
     @Override
     public String toString() {
-        return "ColumnMetadata{" + "tableCat='" + tableCat + '\'' + ", tableSchem='" + tableSchem + '\'' + ", tableName='" + tableName + '\'' + ", columnName='" + columnName + '\'' + ", dataType=" + dataType + ", typeName='" + typeName + '\'' + ", columnSize=" + columnSize + ", bufferLength=" + bufferLength + ", decimalDigits='" + decimalDigits + '\'' + ", numPrecRadix=" + numPrecRadix + ", nullable=" + nullable + ", remarks='" + remarks + '\'' + ", columnDef='" + columnDef + '\'' + ", sqlDataType=" + sqlDataType + ", sqlDatetimeSub=" + sqlDatetimeSub + ", charOctetLength=" + charOctetLength + ", ordinalPosition=" + ordinalPosition + ", isNullable='" + isNullable + '\'' + ", scopeCatalog='" + scopeCatalog + '\'' + ", scopeSchema='" + scopeSchema + '\'' + ", scopeTable='" + scopeTable + '\'' + ", sourceDataType='" + sourceDataType + '\'' + ", isAutoincrement='" + isAutoincrement + '\'' + ", isGeneratedcolumn='" + isGeneratedcolumn + '\'' + '}';
+        return "ColumnMetadata{" + "tableCat='" + tableCatalog + '\'' + ", tableSchem='" + tableSchema + '\'' + ", tableName='" + tableName + '\'' + ", columnName='" + columnName + '\'' + ", dataType=" + dataType + ", typeName='" + typeName + '\'' + ", columnSize=" + columnSize + ", bufferLength=" + bufferLength + ", decimalDigits='" + decimalDigits + '\'' + ", numPrecRadix=" + numericPrecisionRadix + ", nullable=" + nullable + ", remarks='" + remarks + '\'' + ", columnDef='" + columnDef + '\'' + ", sqlDataType=" + sqlDataType + ", sqlDatetimeSub=" + sqlDatetimeSub + ", charOctetLength=" + charOctetLength + ", ordinalPosition=" + ordinalPosition + ", isNullable='" + isNullable + '\'' + ", scopeCatalog='" + scopeCatalog + '\'' + ", scopeSchema='" + scopeSchema + '\'' + ", scopeTable='" + scopeTable + '\'' + ", sourceDataType='" + sourceDataType + '\'' + ", isAutoincrement='" + isAutoincrement + '\'' + ", isGeneratedcolumn='" + isGeneratedColumn + '\'' + '}';
     }
 
     public void initialize(ResultSet resultSet) throws SQLException {
-        this.tableCat = resultSet.getString("TABLE_CAT");
-        this.tableSchem = resultSet.getString("TABLE_SCHEM");
+        this.tableCatalog = resultSet.getString("TABLE_CAT");
+        this.tableSchema = resultSet.getString("TABLE_SCHEM");
         this.tableName = resultSet.getString("TABLE_NAME");
         this.columnName = resultSet.getString("COLUMN_NAME");
         this.dataType = resultSet.getInt("DATA_TYPE");
@@ -408,7 +415,7 @@ public class ColumnMetadata {
         this.columnSize = resultSet.getInt("COLUMN_SIZE");
         this.bufferLength = resultSet.getInt("BUFFER_LENGTH");
         this.decimalDigits = resultSet.getInt("DECIMAL_DIGITS");
-        this.numPrecRadix = resultSet.getInt("NUM_PREC_RADIX");
+        this.numericPrecisionRadix = resultSet.getInt("NUM_PREC_RADIX");
         this.nullable = resultSet.getInt("NULLABLE");
         this.remarks = resultSet.getString("REMARKS");
         this.columnDef = resultSet.getString("COLUMN_DEF");
@@ -422,6 +429,6 @@ public class ColumnMetadata {
         this.scopeTable = resultSet.getString("SCOPE_TABLE");
         this.sourceDataType = resultSet.getShort("SOURCE_DATA_TYPE");
         this.isAutoincrement = resultSet.getString("IS_AUTOINCREMENT");
-        this.isGeneratedcolumn = resultSet.getString("IS_GENERATEDCOLUMN");
+        this.isGeneratedColumn = resultSet.getString("IS_GENERATEDCOLUMN");
     }
 }

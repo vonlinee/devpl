@@ -2,8 +2,6 @@ package io.devpl.codegen.samples;
 
 import io.devpl.codegen.core.AutoGenerator;
 import io.devpl.codegen.core.FastAutoGenerator;
-import io.devpl.codegen.samples.ui.GenerationResultView;
-import io.devpl.codegen.samples.ui.UIHelper;
 import io.devpl.codegen.util.InternalUtils;
 
 import java.io.File;
@@ -28,9 +26,7 @@ public class MySQLGenerator {
                 builder.mapperBuilder().enableFileOverride();
                 builder.controllerBuilder().enableFileOverride();
             })
-            .packageConfig(builder -> {
-                builder.parent("com.lancoo.examuniv");
-            })
+            .packageConfig(builder -> builder.parent("com.lancoo.examuniv"))
             .execute();
 
         generator.open();

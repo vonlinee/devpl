@@ -9,11 +9,11 @@ public class FunctionMetadata implements Serializable {
     /**
      * FUNCTION_CAT String => function catalog (maybe null)
      **/
-    private String functionCat;
+    private String functionCatalog;
     /**
      * FUNCTION_SCHEM String => function schema (maybe null)
      **/
-    private String functionSchem;
+    private String functionSchema;
     /**
      * FUNCTION_NAME String => function name. This is the name used to invoke the function
      **/
@@ -33,8 +33,8 @@ public class FunctionMetadata implements Serializable {
 
     public void initialize(ResultSet resultSet) {
         try {
-            this.functionCat = resultSet.getString(1);
-            this.functionSchem = resultSet.getString(2);
+            this.functionCatalog = resultSet.getString(1);
+            this.functionSchema = resultSet.getString(2);
             this.functionName = resultSet.getString(3);
             this.remarks = resultSet.getString(4);
             this.functionType = resultSet.getShort(5);
@@ -44,20 +44,20 @@ public class FunctionMetadata implements Serializable {
         }
     }
 
-    public String getFunctionCat() {
-        return functionCat;
+    public String getFunctionCatalog() {
+        return functionCatalog;
     }
 
-    public void setFunctionCat(String functionCat) {
-        this.functionCat = functionCat;
+    public void setFunctionCatalog(String functionCatalog) {
+        this.functionCatalog = functionCatalog;
     }
 
-    public String getFunctionSchem() {
-        return functionSchem;
+    public String getFunctionSchema() {
+        return functionSchema;
     }
 
-    public void setFunctionSchem(String functionSchem) {
-        this.functionSchem = functionSchem;
+    public void setFunctionSchema(String functionSchema) {
+        this.functionSchema = functionSchema;
     }
 
     public String getFunctionName() {
@@ -95,8 +95,8 @@ public class FunctionMetadata implements Serializable {
     @Override
     public String toString() {
         return "FunctionMetadata{" +
-               "functionCat='" + functionCat + '\'' +
-               ", functionSchem='" + functionSchem + '\'' +
+               "functionCat='" + functionCatalog + '\'' +
+               ", functionSchem='" + functionSchema + '\'' +
                ", functionName='" + functionName + '\'' +
                ", remarks='" + remarks + '\'' +
                ", functionType=" + functionType +

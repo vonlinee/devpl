@@ -11,12 +11,12 @@ public class ColumnPrivilegesMetadata {
     /**
      * TABLE_CAT String => table catalog (may be null)
      */
-    private String tableCat;
+    private String tableCatalog;
 
     /**
      * TABLE_SCHEM String => table schema (maybe null)
      */
-    private String tableSchem;
+    private String tableSchema;
 
     /**
      * TABLE_NAME String => table name
@@ -48,20 +48,20 @@ public class ColumnPrivilegesMetadata {
      */
     private String isGrantable;
 
-    public String getTableCat() {
-        return tableCat;
+    public String getTableCatalog() {
+        return tableCatalog;
     }
 
-    public void setTableCat(String tableCat) {
-        this.tableCat = tableCat;
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
     }
 
-    public String getTableSchem() {
-        return tableSchem;
+    public String getTableSchema() {
+        return tableSchema;
     }
 
-    public void setTableSchem(String tableSchem) {
-        this.tableSchem = tableSchem;
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
     }
 
     public String getTableName() {
@@ -115,8 +115,8 @@ public class ColumnPrivilegesMetadata {
     @Override
     public String toString() {
         return "ColumnPrivileges{" +
-            "tableCat='" + tableCat + '\'' +
-            ", tableSchem='" + tableSchem + '\'' +
+            "tableCat='" + tableCatalog + '\'' +
+            ", tableSchem='" + tableSchema + '\'' +
             ", tableName='" + tableName + '\'' +
             ", columnName='" + columnName + '\'' +
             ", grantor='" + grantor + '\'' +
@@ -127,9 +127,9 @@ public class ColumnPrivilegesMetadata {
     }
 
     public void initialize(ResultSet resultSet) throws SQLException {
-        setTableCat(resultSet.getString(1));
+        setTableCatalog(resultSet.getString(1));
 
-        this.tableSchem = resultSet.getString(2);
+        this.tableSchema = resultSet.getString(2);
         setTableName(resultSet.getString(3));
         setColumnName(resultSet.getString(4));
         setGrantor(resultSet.getString(5));

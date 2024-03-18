@@ -16,11 +16,11 @@ public class IndexMetadata {
     /**
      * TABLE_CAT String => table catalog (may be null)
      **/
-    private String tableCat;
+    private String tableCatalog;
     /**
      * TABLE_SCHEM String => table schema (maybe null)
      **/
-    private String tableSchem;
+    private String tableSchema;
     /**
      * TABLE_NAME String => table name
      **/
@@ -71,8 +71,8 @@ public class IndexMetadata {
     private String filterCondition;
 
     public void initialize(ResultSet resultSet) throws SQLException {
-        this.tableCat = resultSet.getString(1);
-        this.tableSchem = resultSet.getString(2);
+        this.tableCatalog = resultSet.getString(1);
+        this.tableSchema = resultSet.getString(2);
         this.tableName = resultSet.getString(3);
         this.nonUnique = resultSet.getBoolean(4);
         this.indexQualifier = resultSet.getString(5);

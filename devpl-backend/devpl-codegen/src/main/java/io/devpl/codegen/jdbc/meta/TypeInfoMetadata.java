@@ -59,7 +59,7 @@ public class TypeInfoMetadata {
     /**
      * FIXED_PREC_SCALE boolean => can it be a money value.
      **/
-    private boolean fixedPrecScale;
+    private boolean fixedPrecisionScale;
     /**
      * AUTO_INCREMENT boolean => can it be used for an auto-increment value.
      **/
@@ -87,7 +87,7 @@ public class TypeInfoMetadata {
     /**
      * NUM_PREC_RADIX int => usually 2 or 10
      **/
-    private int numPrecRadix;
+    private int numericPrecisionRadix;
 
     public void initialize(ResultSet resultSet) {
         try {
@@ -101,14 +101,14 @@ public class TypeInfoMetadata {
             this.caseSensitive = resultSet.getBoolean(8);
             this.searchable = resultSet.getShort(9);
             this.unsignedAttribute = resultSet.getBoolean(10);
-            this.fixedPrecScale = resultSet.getBoolean(11);
+            this.fixedPrecisionScale = resultSet.getBoolean(11);
             this.autoIncrement = resultSet.getBoolean(12);
             this.localTypeName = resultSet.getString(13);
             this.minimumScale = resultSet.getShort(14);
             this.maximumScale = resultSet.getShort(15);
             this.sqlDataType = resultSet.getInt(16);
             this.sqlDatetimeSub = resultSet.getInt(17);
-            this.numPrecRadix = resultSet.getInt(18);
+            this.numericPrecisionRadix = resultSet.getInt(18);
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
@@ -194,12 +194,12 @@ public class TypeInfoMetadata {
         this.unsignedAttribute = unsignedAttribute;
     }
 
-    public boolean isFixedPrecScale() {
-        return fixedPrecScale;
+    public boolean isFixedPrecisionScale() {
+        return fixedPrecisionScale;
     }
 
-    public void setFixedPrecScale(boolean fixedPrecScale) {
-        this.fixedPrecScale = fixedPrecScale;
+    public void setFixedPrecisionScale(boolean fixedPrecisionScale) {
+        this.fixedPrecisionScale = fixedPrecisionScale;
     }
 
     public boolean isAutoIncrement() {
@@ -250,11 +250,11 @@ public class TypeInfoMetadata {
         this.sqlDatetimeSub = sqlDatetimeSub;
     }
 
-    public int getNumPrecRadix() {
-        return numPrecRadix;
+    public int getNumericPrecisionRadix() {
+        return numericPrecisionRadix;
     }
 
-    public void setNumPrecRadix(int numPrecRadix) {
-        this.numPrecRadix = numPrecRadix;
+    public void setNumericPrecisionRadix(int numericPrecisionRadix) {
+        this.numericPrecisionRadix = numericPrecisionRadix;
     }
 }

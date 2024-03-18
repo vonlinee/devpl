@@ -14,14 +14,14 @@ public class SchemaMetadata {
     /**
      * TABLE_SCHEM String => schema name
      */
-    private String tableSchem;
+    private String tableSchema;
     /**
      * TABLE_CATALOG String => catalog name (may be null)
      */
     private String tableCatalog;
 
     public void initialize(ResultSet resultSet) throws SQLException {
-        this.tableSchem = resultSet.getString("TABLE_SCHEM");
+        this.tableSchema = resultSet.getString("TABLE_SCHEM");
         this.tableCatalog = resultSet.getString("TABLE_CATALOG");
     }
 }

@@ -94,7 +94,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
                     }
                     TableMetadata table = new TableMetadata();
                     if (query.getDatabaseNameResultSetColumnName() != null) {
-                        table.setTableSchem(rs.getString(query.getDatabaseNameResultSetColumnName()));
+                        table.setTableSchema(rs.getString(query.getDatabaseNameResultSetColumnName()));
                     }
                     table.setTableName(tableName);
                     table.setRemarks(rs.getString(query.getTableCommentResultSetColumnName()));
@@ -141,9 +141,9 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
                     cmd.setPlatformDataType(fieldType);
                     cmd.setRemarks(rs.getString(query.getColumnCommentResultSetColumnName()));
-                    cmd.setTableSchem(rs.getString(query.getDatabaseNameResultSetColumnName()));
+                    cmd.setTableSchema(rs.getString(query.getDatabaseNameResultSetColumnName()));
                     cmd.setTableName(rs.getString(query.getTableNameResultSetColumnName()));
-                    cmd.setTableCat(rs.getString(query.getTableCatalogResultSetColumnName()));
+                    cmd.setTableCatalog(rs.getString(query.getTableCatalogResultSetColumnName()));
                     // 主键
                     // String key = rs.getString(query.fieldKey());
                     // field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
