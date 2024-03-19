@@ -117,8 +117,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             try {
                 // 渲染模板
                 Template template;
-                if (engine instanceof FreeMarkerTemplateEngine) {
-                    template = engine.getTemplate(templateInfo.getTemplateName(), false);
+                if (templateInfo.isFileTemplate()) {
+                    template = engine.getTemplate(templateInfo.getTemplatePath(), false);
                 } else {
                     template = engine.getTemplate(templateInfo.getContent(), true);
                 }
@@ -195,26 +195,29 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public void migrateTemplates() {
         String templateLocation = codeGenProperties.getTemplateLocation();
-        log.info("开始进行模板迁移");
-        Path rootDir = Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
-        if (!Files.exists(rootDir)) {
+        final Path targetLocation = Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
+        log.info("开始进行模板迁移{}", targetLocation.toAbsolutePath());
+        if (!Files.exists(targetLocation)) {
             try {
-                Files.createDirectories(rootDir);
+                Files.createDirectories(targetLocation);
             } catch (IOException e) {
-                log.error("模板迁移至{}失败", rootDir, e);
+                log.error("模板迁移至{}失败", targetLocation, e);
                 return;
             }
         }
-        URL codegenDir = this.getClass().getResource("/codegen");
+        URL codegenDir = this.getClass().getClassLoader().getResource(codeGenProperties.getTemplateDirectory());
         if (codegenDir != null) {
-            File codegenFile = new File(codegenDir.getPath());
-            Path path = codegenFile.toPath();
+            File templateDir = new File(codegenDir.getPath());
 
-            Path templateLocationDir = Path.of(path.toString(), "templates");
+            if (!templateDir.exists()) {
+                log.error("模板迁移至{}失败，目录{}不存在", targetLocation, templateDir.getAbsolutePath());
+                return;
+            }
 
+            Path path = templateDir.toPath();
             try {
                 List<Path> templateFilePaths = new ArrayList<>();
-                Path start = Files.walkFileTree(templateLocationDir, new FileVisitor<>() {
+                Path start = Files.walkFileTree(path, new FileVisitor<>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                         return FileVisitResult.CONTINUE;
@@ -237,8 +240,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     }
                 });
 
-
-                Map<String, TemplateInfo> map = CollectionUtils.toMap(listInternalTemplates(), TemplateInfo::getTemplatePath);
+                List<TemplateInfo> internalTemplates = listInternalTemplates();
+                Map<String, TemplateInfo> map = CollectionUtils.toMap(internalTemplates, TemplateInfo::getTemplatePath);
 
                 LocalDateTime now = LocalDateTime.now();
                 List<TemplateInfo> templateInfos = new ArrayList<>();

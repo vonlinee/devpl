@@ -2,51 +2,99 @@
   生成配置
  -->
 <template>
-  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="150">
+  <el-drawer
+    v-model="visible"
+    title="编辑代码生成配置"
+    :size="1200"
+    :z-index="150"
+  >
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="basic">
-        <TableGenerationConfigForm ref="generatorRef" @handle="handleResult"></TableGenerationConfigForm>
+        <TableGenerationConfigForm
+          ref="generatorRef"
+          @handle="handleResult"
+        ></TableGenerationConfigForm>
       </el-tab-pane>
       <el-tab-pane label="文件类型" name="target">
         <el-table border :data="generationFiles">
           <el-table-column label="文件名" prop="fileName" width="280">
             <template #default="scope">
               <span v-if="!scope.row.editing">{{ scope.row.fileName }}</span>
-              <el-input v-if="scope.row.editing" v-model="scope.row.fileName"></el-input>
+              <el-input
+                v-if="scope.row.editing"
+                v-model="scope.row.fileName"
+              ></el-input>
             </template>
           </el-table-column>
           <el-table-column label="模板" prop="templateId" width="200">
             <template #default="scope">
-              <span v-if="!scope.row.editing">{{ scope.row.templateName }}</span>
-              <template-selector v-if="scope.row.editing"
-                :current="scope.row.templateName ? scope.row.templateId : null" :options="templateOptions"
-                :on-handle-value-change="(val) => (scope.row.templateId = val)"></template-selector>
+              <span v-if="!scope.row.editing">{{
+                scope.row.templateName
+              }}</span>
+              <template-selector
+                v-if="scope.row.editing"
+                :current="scope.row.templateName ? scope.row.templateId : null"
+                :options="templateOptions"
+                :on-handle-value-change="(val) => (scope.row.templateId = val)"
+              ></template-selector>
             </template>
           </el-table-column>
-          <el-table-column label="保存路径(相对路径)" prop="savePath" show-overflow-tooltip>
+          <el-table-column
+            label="保存路径(相对路径)"
+            prop="savePath"
+            show-overflow-tooltip
+          >
             <template #default="scope">
               <span v-if="!scope.row.editing">{{ scope.row.savePath }}</span>
-              <el-input v-if="scope.row.editing" v-model="scope.row.savePath"></el-input>
+              <el-input
+                v-if="scope.row.editing"
+                v-model="scope.row.savePath"
+              ></el-input>
             </template>
           </el-table-column>
 
-          <el-table-column fixed="right" label="操作" align="center" width="150px">
+          <el-table-column
+            fixed="right"
+            label="操作"
+            align="center"
+            width="150px"
+          >
             <template #default="scope">
-              <el-button link type="primary" @click.prevent="saveOrFireEdit(scope.row)">
+              <el-button
+                link
+                type="primary"
+                @click.prevent="saveOrFireEdit(scope.row)"
+              >
                 {{ scope.row.editing ? "保存" : "编辑" }}
               </el-button>
-              <el-button link type="primary" @click.prevent="deleteRow(scope.$index)">
+              <el-button
+                link
+                type="primary"
+                @click.prevent="deleteRow(scope.$index)"
+              >
                 删除
               </el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-button class="mt-4" style="width: 100%" @click="onAddItem">新增</el-button>
+        <el-button class="mt-4" style="width: 100%" @click="onAddItem"
+          >新增</el-button
+        >
       </el-tab-pane>
 
+      <!-- 项目设置 -->
+      <el-tab-pane label="项目设置" name="project"> </el-tab-pane>
+
       <el-tab-pane label="属性设置" name="field">
-        <vxe-table ref="fieldTable" border row-key class="sortable-row-gen" :data="fieldList"
-          :checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+        <vxe-table
+          ref="fieldTable"
+          border
+          row-key
+          class="sortable-row-gen"
+          :data="fieldList"
+          :checkbox-config="{ checkStrictly: true }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
+        >
           <vxe-column type="seq" width="50" align="center"></vxe-column>
           <vxe-column width="30" title="拖动">
             <template #default>
@@ -55,28 +103,50 @@
               </span>
             </template>
             <template #header>
-              <el-tooltip class="item" effect="dark" content="按住后可以上下拖动排序" placement="top-start">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="按住后可以上下拖动排序"
+                placement="top-start"
+              >
                 <i class="vxe-icon-question-circle-fill"></i>
               </el-tooltip>
             </template>
           </vxe-column>
           <vxe-column field="fieldName" title="字段名"></vxe-column>
-          <vxe-column field="fieldComment" title="说明" :edit-render="{ name: 'input' }" show-overflow></vxe-column>
+          <vxe-column
+            field="fieldComment"
+            title="说明"
+            :edit-render="{ name: 'input' }"
+            show-overflow
+          ></vxe-column>
           <vxe-column field="fieldType" title="字段类型"></vxe-column>
-          <vxe-column field="attrName" title="属性名" :edit-render="{ name: 'input' }"></vxe-column>
+          <vxe-column
+            field="attrName"
+            title="属性名"
+            :edit-render="{ name: 'input' }"
+          ></vxe-column>
           <vxe-column field="attrType" title="属性类型">
             <template #default="{ row }">
               <vxe-select v-model="row.attrType" transfer>
-                <vxe-option v-for="item in typeList" :key="item.value" :value="item.value"
-                  :label="item.label"></vxe-option>
+                <vxe-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
           <vxe-column field="autoFill" title="自动填充">
             <template #default="{ row }">
               <vxe-select v-model="row.autoFill" transfer>
-                <vxe-option v-for="item in fillList" :key="item.value" :value="item.value"
-                  :label="item.label"></vxe-option>
+                <vxe-option
+                  v-for="item in fillList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
@@ -89,8 +159,14 @@
       </el-tab-pane>
 
       <el-tab-pane label="表单配置" name="form">
-        <vxe-table ref="formTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
-          :edit-config="{ trigger: 'click', mode: 'cell' }">
+        <vxe-table
+          ref="formTable"
+          border
+          row-key
+          :data="fieldList"
+          :checkbox-config="{ checkStrictly: true }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
+        >
           <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
           <vxe-column field="fieldComment" title="说明"></vxe-column>
           <vxe-column field="formItem" title="表单显示" width="80">
@@ -103,23 +179,46 @@
               <vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
             </template>
           </vxe-column>
-          <vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
+          <vxe-column
+            field="formValidator"
+            title="表单效验"
+            :edit-render="{ name: 'input' }"
+          ></vxe-column>
           <vxe-column field="formType" title="表单类型" width="120">
             <template #default="{ row }">
               <vxe-select v-model="row.formType" transfer>
-                <vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
-                  :label="item.label"></vxe-option>
+                <vxe-option
+                  v-for="item in formTypeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
-          <vxe-column field="formDict" title="表单字典类型" width="140" :edit-render="{ name: 'input' }"></vxe-column>
+          <vxe-column
+            field="formDict"
+            title="表单字典类型"
+            width="140"
+            :edit-render="{ name: 'input' }"
+          ></vxe-column>
         </vxe-table>
       </el-tab-pane>
       <el-tab-pane label="列表配置" name="grid">
-        <vxe-table ref="gridTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
-          :edit-config="{ trigger: 'click', mode: 'cell' }">
+        <vxe-table
+          ref="gridTable"
+          border
+          row-key
+          :data="fieldList"
+          :checkbox-config="{ checkStrictly: true }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
+        >
           <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
-          <vxe-column field="fieldComment" title="说明" show-overflow></vxe-column>
+          <vxe-column
+            field="fieldComment"
+            title="说明"
+            show-overflow
+          ></vxe-column>
           <vxe-column field="gridItem" title="列表显示" width="80">
             <template #default="{ row }">
               <vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
@@ -133,39 +232,84 @@
         </vxe-table>
       </el-tab-pane>
       <el-tab-pane label="查询配置" name="query">
-        <vxe-table ref="queryTable" :border="true" row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
-          :edit-config="{ trigger: 'click', mode: 'cell' }">
+        <vxe-table
+          ref="queryTable"
+          :border="true"
+          row-key
+          :data="fieldList"
+          :checkbox-config="{ checkStrictly: true }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
+        >
           <vxe-column field="attrName" title="属性名" width="150"></vxe-column>
-          <vxe-column field="fieldComment" title="说明" show-overflow></vxe-column>
-          <vxe-column field="queryItem" title="查询显示" width="80" align="center">
+          <vxe-column
+            field="fieldComment"
+            title="说明"
+            show-overflow
+          ></vxe-column>
+          <vxe-column
+            field="queryItem"
+            title="查询显示"
+            width="80"
+            align="center"
+          >
             <template #default="{ row }">
               <vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
             </template>
           </vxe-column>
-          <vxe-column field="queryType" title="查询方式" width="80" align="center">
+          <vxe-column
+            field="queryType"
+            title="查询方式"
+            width="80"
+            align="center"
+          >
             <template #default="{ row }">
               <vxe-select v-model="row.queryType" transfer>
-                <vxe-option v-for="item in queryList" :key="item.value" :value="item.value"
-                  :label="item.label"></vxe-option>
+                <vxe-option
+                  v-for="item in queryList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
-          <vxe-column field="queryFormType" title="查询表单类型" width="160" align="center">
+          <vxe-column
+            field="queryFormType"
+            title="查询表单类型"
+            width="160"
+            align="center"
+          >
             <template #default="{ row }">
               <vxe-select v-model="row.queryFormType" transfer>
-                <vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
-                  :label="item.label"></vxe-option>
+                <vxe-option
+                  v-for="item in formTypeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                ></vxe-option>
               </vxe-select>
             </template>
           </vxe-column>
         </vxe-table>
       </el-tab-pane>
       <el-tab-pane label="模板参数" name="templateArguments">
-        <MonacoEditor language="json" ref="templateArgumentsDataRef" height="600px"></MonacoEditor>
+        <MonacoEditor
+          language="json"
+          ref="templateArgumentsDataRef"
+          height="600px"
+        ></MonacoEditor>
       </el-tab-pane>
     </el-tabs>
     <template #footer>
-      <div style="height: 100%; width: 100%; display: flex; align-items: center;justify-content:center;">
+      <div
+        style="
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
         <el-button type="primary" @click="submitHandle()">保存配置</el-button>
         <el-button type="success" @click="generateCode()">生成代码</el-button>
       </div>
@@ -191,7 +335,11 @@ import {
   ElTooltip,
 } from "element-plus/es"
 import Sortable from "sortablejs"
-import { apiGetGenTableById, apiUpdateGenTableFields, useTableSubmitApi } from "@/api/table"
+import {
+  apiGetGenTableById,
+  apiUpdateGenTableFields,
+  useTableSubmitApi,
+} from "@/api/table"
 import { VxeTableInstance } from "vxe-table"
 import {
   apiListGenerationFiles,
@@ -211,7 +359,7 @@ import { Message } from "@/hooks/message"
 const resultDialogRef = ref()
 const templateArgumentsDataRef = ref()
 const generatorRef = ref()
-const activeName = ref('basic')
+const activeName = ref("basic")
 const fieldTable = ref<VxeTableInstance>()
 const formTable = ref<VxeTableInstance>()
 const gridTable = ref<VxeTableInstance>()
@@ -253,7 +401,7 @@ const onAddItem = () => {
     fileName: "",
     savePath: "",
     editing: true,
-    deleted: false
+    deleted: false,
   })
 }
 
@@ -351,10 +499,12 @@ const getTable = (id: number) => {
     // 初始化基本信息
     generatorRef.value.init(res.data)
     // 模板参数
-    templateArgumentsDataRef.value.setText(JSON.stringify(res.data?.templateArguments, null, 2))
-    
-    console.log(templateArgumentsDataRef.value);
-    
+    templateArgumentsDataRef.value.setText(
+      JSON.stringify(res.data?.templateArguments, null, 2)
+    )
+
+    console.log(templateArgumentsDataRef.value)
+
     // 字段列表
     fieldList.value = res.data?.fieldList as TableGenerationField[]
   })
@@ -376,7 +526,7 @@ const getFieldTypeList = async () => {
 
 /**
  * 根目录
- * @param res 
+ * @param res
  */
 const handleResult = (res: FileGenerationResult) => {
   if (res) {
@@ -390,32 +540,16 @@ const handleResult = (res: FileGenerationResult) => {
  */
 const submitHandle = () => {
   if (!generatorRef.value.isValid()) {
-    return;
+    return
   }
 
   // 保存基本配置信息
-  const dataForm = generatorRef.value.getFormData()
+  const dataForm: TableGeneration = generatorRef.value.getFormData()
+
+  dataForm.fieldList = fieldList.value
+  dataForm.generationFiles = generationFiles.value
   useTableSubmitApi(dataForm).then(() => {
     Message.info("操作成功")
-    visible.value = false
-  })
-
-  // 保存字段信息
-  apiUpdateGenTableFields(tableId.value, fieldList.value).then(() => {
-    apiSaveGenerationFileConfig(
-      tableId.value,
-      generationFiles.value || []
-    ).then((res) => {
-      if (res.data) {
-        ElMessage.success({
-          message: "操作成功",
-          duration: 500,
-          onClose: () => {
-            emit("refreshDataList")
-          },
-        })
-      }
-    })
   })
 }
 

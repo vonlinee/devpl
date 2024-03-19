@@ -9,6 +9,7 @@ import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
+import io.devpl.backend.service.TableFileGenerationService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
@@ -32,6 +33,8 @@ public class TableController {
     TableGenerationFieldService tableFieldService;
     @Resource
     RdbmsConnectionInfoService rdbmsConnectionInfoService;
+    @Resource
+    TableFileGenerationService tableFileGenerationService;
 
     /**
      * 分页
@@ -57,13 +60,22 @@ public class TableController {
     }
 
     /**
-     * 修改
+     * 修改表生成基本信息及字段信息
      *
      * @param table 表信息
      */
-    @PutMapping
-    public Result<Boolean> update(@RequestBody TableGeneration table) {
-        return Result.ok(tableService.updateById(table));
+    @PutMapping("/edit")
+    public Result<Boolean> editTableGeneration(@RequestBody TableGeneration table) {
+        tableService.updateById(table);
+        // 保存字段信息
+        if (!CollectionUtils.isEmpty(table.getFieldList())) {
+            tableFieldService.updateTableField(table.getId(), table.getFieldList());
+        }
+        // 保存生成的文件信息
+        if (!CollectionUtils.isEmpty(table.getGenerationFiles())) {
+            tableFileGenerationService.updateBatchById(table.getGenerationFiles());
+        }
+        return Result.ok(true);
     }
 
     /**
@@ -121,13 +133,13 @@ public class TableController {
                 }
             }
         }
-
+        int count = 0;
         for (TableImportInfo table : param.getTables()) {
             table.setProjectId(param.getProjectId());
             table.setDbType(param.getDbType());
-            tableService.importSingleTable(table);
+            count += tableService.importSingleTable(table) ? 1 : 0;
         }
-        return Result.ok();
+        return Result.ok(count);
     }
 
     /**

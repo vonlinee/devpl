@@ -2,7 +2,7 @@
  * 表生成信息
  */
 type TableGeneration = {
-  id: number
+  id: number | string
   tableName: string
   /**
    * 表类型
@@ -14,10 +14,29 @@ type TableGeneration = {
    */
   connectionName: string
   tableComment: string
+
+  baseclassId: string
+  generatorType: number
+  formLayout: number
+  backendPath: string
+  frontendPath: string
+  packageName: string
+  email: string
+  author: string
+  version: string
+  moduleName: string
+  functionName: string
+  className: string
+  tableComment: string
+  tableName: string
   /**
    * 字段列表
    */
   fieldList: TableGenerationField[]
+  /**
+   * 表需要生成的文件
+   */
+  generationFiles?: TableFileGeneration[]
   /**
    * 模板参数 JSON字符串
    */
@@ -46,8 +65,7 @@ type TableGenerationField = {
   gridItem: boolean
 }
 
-public class TableImportInfo {
-
+class TableImportInfo {
   /**
    * 数据源 ID
    */

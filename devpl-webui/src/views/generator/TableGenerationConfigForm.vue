@@ -1,14 +1,26 @@
 <template>
-  <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
+  <el-form
+    ref="dataFormRef"
+    :model="dataForm"
+    :rules="dataRules"
+    label-width="120px"
+  >
     <el-row>
       <el-col :span="12">
         <el-form-item label="表名" prop="tableName">
-          <el-input v-model="dataForm.tableName" disabled placeholder="表名"></el-input>
+          <el-input
+            v-model="dataForm.tableName"
+            disabled
+            placeholder="表名"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="说明" prop="tableComment">
-          <el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
+          <el-input
+            v-model="dataForm.tableComment"
+            placeholder="说明"
+          ></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -20,8 +32,18 @@
       </el-col>
       <el-col :span="12">
         <el-form-item prop="baseclassId" label="继承">
-          <el-select v-model="dataForm.baseclassId" placeholder="继承" style="width: 100%" clearable>
-            <el-option v-for="item in baseClassList" :key="item.id" :label="item.code" :value="item.id"></el-option>
+          <el-select
+            v-model="dataForm.baseclassId"
+            placeholder="继承"
+            style="width: 100%"
+            clearable
+          >
+            <el-option
+              v-for="item in baseClassList"
+              :key="item.id"
+              :label="item.code"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-col>
@@ -29,19 +51,28 @@
     <el-row>
       <el-col :span="12">
         <el-form-item label="模块名" prop="moduleName">
-          <el-input v-model="dataForm.moduleName" placeholder="模块名"></el-input>
+          <el-input
+            v-model="dataForm.moduleName"
+            placeholder="模块名"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="功能名" prop="functionName">
-          <el-input v-model="dataForm.functionName" placeholder="功能名"></el-input>
+          <el-input
+            v-model="dataForm.functionName"
+            placeholder="功能名"
+          ></el-input>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="12">
         <el-form-item label="项目包名" prop="packageName">
-          <el-input v-model="dataForm.packageName" placeholder="项目包名"></el-input>
+          <el-input
+            v-model="dataForm.packageName"
+            placeholder="项目包名"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -81,10 +112,16 @@
       </el-col>
     </el-row>
     <el-form-item label="后端生成路径" prop="backendPath">
-      <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
+      <el-input
+        v-model="dataForm.backendPath"
+        placeholder="后端生成路径"
+      ></el-input>
     </el-form-item>
     <el-form-item label="前端生成路径" prop="frontendPath">
-      <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
+      <el-input
+        v-model="dataForm.frontendPath"
+        placeholder="前端生成路径"
+      ></el-input>
     </el-form-item>
   </el-form>
 </template>
@@ -105,7 +142,7 @@ const baseClassList = ref<any[]>([])
 /**
  * 基本信息表单
  */
-const dataForm = reactive({
+const dataForm = reactive<TableGeneration>({
   id: "",
   baseclassId: "",
   generatorType: 1,
@@ -121,6 +158,10 @@ const dataForm = reactive({
   className: "",
   tableComment: "",
   tableName: "",
+  fieldList: [],
+  tableType: "",
+  connectionName: "",
+  templateArguments: {},
 })
 
 const getBaseClassList = () => {
@@ -164,7 +205,6 @@ const dataRules = ref({
   ],
 })
 
-
 defineExpose({
   /**
    * 初始化
@@ -183,7 +223,7 @@ defineExpose({
   /**
    * 获取表单数据
    */
-  getFormData() {
+  getFormData() : TableGeneration {
     return dataForm
   },
   /**
@@ -214,7 +254,7 @@ defineExpose({
         })
       })
     })
-  }
+  },
 })
 </script>
 

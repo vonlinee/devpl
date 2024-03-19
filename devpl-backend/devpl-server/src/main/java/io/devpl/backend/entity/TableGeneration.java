@@ -131,6 +131,12 @@ public class TableGeneration {
     private List<TableGenerationField> fieldList;
 
     /**
+     * 生成的文件列表
+     */
+    @TableField(exist = false)
+    private List<TableFileGeneration> generationFiles;
+
+    /**
      * 连接名称
      */
     @TableField(exist = false)

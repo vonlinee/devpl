@@ -50,7 +50,8 @@ devpl:
         codegen:
             root: /Temp # 代码生成根目录
     codegen:
-        template-location: /Temp # 模板存放根目录，不配置默认user.dir
+        template:
+            local-location: ${user.home}/Temp # 模板存放根目录，支持SpringEL表达式
     package:
         entity: io.devpl.backend.entity # 实体类包名
     db:

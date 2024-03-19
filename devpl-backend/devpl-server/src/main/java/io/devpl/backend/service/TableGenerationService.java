@@ -57,7 +57,7 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
     /**
      * 导入单个表
      */
-    void importSingleTable(TableImportInfo param);
+    boolean importSingleTable(TableImportInfo param);
 
     /**
      * 初始化表要生成的文件

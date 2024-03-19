@@ -132,7 +132,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @param param TableImportParam
      */
     @Override
-    public void importSingleTable(TableImportInfo param) {
+    public boolean importSingleTable(TableImportInfo param) {
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
         // 根据项目信息，生成表生成的相关信息，可选
@@ -140,7 +140,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         if (param.getProjectId() != null) {
             projectInfo = projectService.getById(param.getProjectId());
         }
-
         try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
             DatabaseMetadataLoader loader = dataSourceService.getDatabaseMetadataLoader(connection, param.getDbType());
@@ -154,7 +153,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 }
             }
             if (table == null) {
-                return;
+                return false;
             }
 
             table.setDatasourceId(datasourceId);
@@ -217,6 +216,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             log.error("导入表失败", exception);
             throw new RuntimeSQLException(exception);
         }
+        return true;
     }
 
     private List<TableGeneration> prepareTables(List<TableMetadata> tablesMetadata) {

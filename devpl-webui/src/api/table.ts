@@ -24,8 +24,13 @@ export const apiListGenTables = (page: number, limit: number, params: any) => {
   })
 }
 
-export const useTableSubmitApi = (dataForm: any) => {
-  return http.put("/api/filegen/table", dataForm)
+/**
+ * 保存表信息
+ * @param dataForm 
+ * @returns 
+ */
+export const useTableSubmitApi = (dataForm: TableGeneration) => {
+  return http.put("/api/filegen/table/edit", dataForm)
 }
 
 export const apiRemoveGenTableByIds = (ids: Keys) => {
