@@ -1,0 +1,18 @@
+Controller
+查询方法（使用 query 做前缀）
+新增方法（使用 add 做前缀）
+删除方法（使用 delete 做前缀）
+修改方法（使用 modify 做前缀）
+Service
+分页查询方法（使用 page 做前缀）
+查询单个对象方法（使用 get 做前缀）
+查询多个对象方法（使用 list 做前缀）
+统计数量方法（使用 count 做前缀）
+新增方法（使用 save / insert 做前缀）
+删除方法（使用 remove / delete 做前缀）
+修改方法（使用 update 做前缀）
+DAO
+查询方法（使用 select 做前缀）
+新增方法（使用 insert 做前缀）
+删除方法（使用 delete 做前缀）
+修改方法（使用 update 做前缀）

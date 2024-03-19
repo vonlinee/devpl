@@ -805,6 +805,15 @@
     "isobject" "^3.0.0"
     "static-extend" "^0.1.1"
 
+"clipboard@^2.0.10":
+  "integrity" "sha512-C+0bbOqkezLIsmWSvlsXS0Q0bmkugu7jcfMIACB+RDEntIzQIkdr148we28AfSloQLRdZlYL/QYyrq05j/3Faw=="
+  "resolved" "https://registry.npmmirror.com/clipboard/-/clipboard-2.0.11.tgz"
+  "version" "2.0.11"
+  dependencies:
+    "good-listener" "^1.2.2"
+    "select" "^1.1.2"
+    "tiny-emitter" "^2.0.0"
+
 "clone@^2.1.1":
   "integrity" "sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w=="
   "resolved" "https://registry.npmmirror.com/clone/-/clone-2.1.2.tgz"
@@ -977,6 +986,11 @@
   "integrity" "sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ=="
   "resolved" "https://registry.npmmirror.com/delayed-stream/-/delayed-stream-1.0.0.tgz"
   "version" "1.0.0"
+
+"delegate@^3.1.2":
+  "integrity" "sha512-IofjkYBZaZivn0V8nnsMJGBr4jVLxHDheKSW88PyxS5QC4Vo9ZbZVvhzlSxY87fVq3STR6r+4cGepyHkcWOQSw=="
+  "resolved" "https://registry.npmmirror.com/delegate/-/delegate-3.2.0.tgz"
+  "version" "3.2.0"
 
 "dir-glob@^3.0.1":
   "integrity" "sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA=="
@@ -1530,6 +1544,13 @@
     "ignore" "^5.2.0"
     "merge2" "^1.4.1"
     "slash" "^3.0.0"
+
+"good-listener@^1.2.2":
+  "integrity" "sha512-goW1b+d9q/HIwbVYZzZ6SsTr4IgE+WA44A0GmPIQstuOrgsFcT7VEJ48nmr9GaRtNu0XTKacFLGnBPAM6Afouw=="
+  "resolved" "https://registry.npmmirror.com/good-listener/-/good-listener-1.2.2.tgz"
+  "version" "1.2.2"
+  dependencies:
+    "delegate" "^3.1.2"
 
 "graceful-fs@^4.1.6", "graceful-fs@^4.2.0":
   "integrity" "sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA=="
@@ -2420,6 +2441,11 @@
     "immutable" "^4.0.0"
     "source-map-js" ">=0.6.2 <2.0.0"
 
+"select@^1.1.2":
+  "integrity" "sha512-OwpTSOfy6xSs1+pwcNrv0RBMOzI39Lp3qQKUTPVVPRjCdNa5JH/oPRiqsesIskK8TVgmRiHwO4KXlV2Li9dANA=="
+  "resolved" "https://registry.npmmirror.com/select/-/select-1.1.2.tgz"
+  "version" "1.1.2"
+
 "semver@^7.3.5", "semver@^7.3.7":
   "integrity" "sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g=="
   "resolved" "https://registry.npmmirror.com/semver/-/semver-7.3.7.tgz"
@@ -2662,6 +2688,11 @@
   "resolved" "https://registry.npmmirror.com/text-table/-/text-table-0.2.0.tgz"
   "version" "0.2.0"
 
+"tiny-emitter@^2.0.0":
+  "integrity" "sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q=="
+  "resolved" "https://registry.npmmirror.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz"
+  "version" "2.1.0"
+
 "to-fast-properties@^2.0.0":
   "integrity" "sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog=="
   "resolved" "https://registry.npmmirror.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz"
@@ -2892,6 +2923,13 @@
     "@vue/runtime-dom" "3.4.13"
     "@vue/server-renderer" "3.4.13"
     "@vue/shared" "3.4.13"
+
+"vue3-json-viewer@^2.2.2":
+  "integrity" "sha512-56l3XDGggnpwEqZieXsSMhNT4NhtO6d7zuSAxHo4i0UVxymyY2jRb7UMQOU1ztChKALZCAzX7DlgrsnEhxu77A=="
+  "resolved" "https://registry.npmmirror.com/vue3-json-viewer/-/vue3-json-viewer-2.2.2.tgz"
+  "version" "2.2.2"
+  dependencies:
+    "clipboard" "^2.0.10"
 
 "vxe-table@^4.5.18":
   "integrity" "sha512-YQJhYjLsB7OqHFQJ0X6jO8uMuerqgGCzvh+wYk14dUqGMv96tBwv5LhHDW7odW7OnUkVrp3mZIRmvq33r/0djQ=="

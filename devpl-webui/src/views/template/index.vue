@@ -32,11 +32,12 @@
       <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
         <template #default="scope">
           <el-text class="mx-1" type="primary" style="cursor: pointer" @click="showTemplateEditDialog(scope.row)">{{
-            scope.row.templateName }}
+      scope.row.templateName }}
           </el-text>
         </template>
       </el-table-column>
-      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px" align="center"></el-table-column>
+      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
+        align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
         width="300px"></el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">

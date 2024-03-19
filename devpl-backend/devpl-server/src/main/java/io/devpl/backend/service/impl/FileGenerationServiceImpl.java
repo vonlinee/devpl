@@ -78,13 +78,18 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      */
     @Override
     public String generateForTable(TableGeneration table, String parentDirectory) {
+        // 单张表需要生成的文件列表
         List<TableFileGeneration> fileToBeGenerated = tableFileGenerationService.listByTableId(table.getId());
         if (CollectionUtils.isEmpty(fileToBeGenerated)) {
             return parentDirectory;
         }
-
+        table.setFieldList(tableFieldService.listByTableId(table.getId()));
         // 数据模型
-        Map<String, Object> dataModel = prepareDataModel(table);
+        Map<String, Object> dataModel = this.prepareDataModel(table);
+
+        table.setTemplateArguments(dataModel);
+
+        tableService.updateById(table);
 
         StringBuilder sb = new StringBuilder();
 
@@ -140,12 +145,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Override
     public Map<String, Object> prepareDataModel(TableGeneration table) {
         // 表信息
-        List<TableGenerationField> fieldList = tableFieldService.listByTableId(table.getId());
-        table.setFieldList(fieldList);
-
         // 数据模型
         Map<String, Object> dataModel = new HashMap<>();
-
         // 获取数据库类型
         dataModel.put("dbType", datasourceService.getDatabaseProductName(table.getDatasourceId()));
         dataModel.put("entity", table.getClassName());

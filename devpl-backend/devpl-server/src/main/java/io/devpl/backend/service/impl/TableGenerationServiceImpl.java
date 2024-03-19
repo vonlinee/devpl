@@ -6,6 +6,7 @@ import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.dao.TableGenerationMapper;
 import io.devpl.backend.domain.TemplateFillStrategy;
+import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.enums.FormLayoutEnum;
 import io.devpl.backend.domain.enums.GeneratorTypeEnum;
 import io.devpl.backend.domain.param.GenTableListParam;
@@ -23,10 +24,12 @@ import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.common.utils.ProjectUtils;
+import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.collection.Lists;
 import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -77,15 +80,41 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         return baseMapper.selectTableNames(dataSourceId);
     }
 
+    /**
+     * 查询已被导入的表信息
+     *
+     * @param dataSourceId 数据源 ID
+     * @param databaseName 数据库名称
+     * @param tableName    表名
+     * @return {@link List}<{@link TableImportInfo}>
+     */
     @Override
-    public ListResult<TableGeneration> selectPage(GenTableListParam query) {
-        return ListResult.ok(baseMapper.selectPage(query,
-            new LambdaQueryWrapper<TableGeneration>().eq(StringUtils.hasText(query.getTableName()), TableGeneration::getTableName, query.getTableName())));
+    public List<TableImportInfo> listImportedTables(@NotNull Long dataSourceId, @Nullable String databaseName, @Nullable String tableName) {
+        return baseMapper.selectImportedTableList(dataSourceId, databaseName, tableName);
     }
 
+    /**
+     * 分页列表查询
+     *
+     * @param query 列表查询参数
+     * @return 分页列表
+     */
     @Override
-    public TableGeneration getByTableName(String tableName) {
-        return baseMapper.selectOneByTableName(tableName);
+    public ListResult<TableGeneration> pageByCondition(GenTableListParam query) {
+        return ListResult.ok(baseMapper.selectListByCondition(query));
+    }
+
+    /**
+     * 获取生成表
+     *
+     * @param dataSourceId 数据源 ID
+     * @param databaseName 数据库名称
+     * @param tableName    表名
+     * @return {@link TableGeneration}
+     */
+    @Override
+    public TableGeneration getGenerationTable(Long dataSourceId, String databaseName, String tableName) {
+        return baseMapper.selectOne(dataSourceId, databaseName, tableName);
     }
 
     @Override
@@ -99,15 +128,20 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         return tableFileGenerationService.removeByTableIds(ids, false);
     }
 
+    /**
+     * 导入表
+     *
+     * @param param 参数
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void importTable(TableImportParam param) {
-        if (!CollectionUtils.isEmpty(param.getTableNameList())) {
+        if (!CollectionUtils.isEmpty(param.getTables())) {
             // 已经导入的表名
-            List<String> tableNamesImported = this.listTableNames(param.getDataSourceId());
-            param.getTableNameList().removeAll(tableNamesImported);
-            for (String tableName : param.getTableNameList()) {
-                param.setTableName(tableName);
+            List<String> tableNamesImported = this.listImportedTables(param.getDataSourceId());
+            param.getTables().removeAll(tableNamesImported);
+            for (TableImportInfo table : param.getTables()) {
+//                param.setTableName(tableName);
                 this.importSingleTable(param);
             }
         } else {
@@ -125,7 +159,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
         // 查询表是否存在
-        TableGeneration table = this.getByTableName(tableName);
+        TableGeneration table = this.getGenerationTable(param.getDataSourceId(), param.getDatabaseName(), param.getTableName());
         // 表存在
         if (table != null) {
             return;

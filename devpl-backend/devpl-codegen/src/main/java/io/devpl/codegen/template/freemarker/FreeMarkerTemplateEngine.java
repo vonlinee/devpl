@@ -1,17 +1,17 @@
 package io.devpl.codegen.template.freemarker;
 
 import freemarker.template.Configuration;
-import io.devpl.codegen.template.*;
+import io.devpl.codegen.template.AbstractTemplateEngine;
+import io.devpl.codegen.template.Template;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Freemarker 模板引擎实现文件输出
+ *
+ * @see freemarker.cache.TemplateLoader
  */
 public class FreeMarkerTemplateEngine extends AbstractTemplateEngine {
 
@@ -20,7 +20,13 @@ public class FreeMarkerTemplateEngine extends AbstractTemplateEngine {
     public FreeMarkerTemplateEngine() {
         configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
-        configuration.setClassForTemplateLoading(FreeMarkerTemplateEngine.class, "/");
+        // FreeMarker 加载模板目录主要可以通过三种方式来实现，分别是基于文件系统、基于 Web 项目以及基于类路径。
+        // 指定加载模板的类
+        try {
+            configuration.setDirectoryForTemplateLoading(new File("/"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

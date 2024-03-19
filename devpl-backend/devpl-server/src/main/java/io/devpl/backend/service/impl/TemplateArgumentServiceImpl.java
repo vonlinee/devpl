@@ -37,6 +37,10 @@ public class TemplateArgumentServiceImpl extends ServiceImpl<TemplateArgumentMap
         return arguments;
     }
 
+    public boolean isSimpleType(Object value) {
+        return value instanceof Number || value instanceof String;
+    }
+
     @Override
     public String serialize(Object value) {
         String valueString = String.valueOf(value);

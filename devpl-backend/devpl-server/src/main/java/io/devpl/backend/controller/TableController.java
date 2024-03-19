@@ -37,7 +37,7 @@ public class TableController {
      */
     @GetMapping("/page")
     public ListResult<TableGeneration> page(GenTableListParam param) {
-        return tableService.selectPage(param);
+        return tableService.pageByCondition(param);
     }
 
     /**

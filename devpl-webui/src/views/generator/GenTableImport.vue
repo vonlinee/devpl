@@ -16,7 +16,8 @@
             </el-form-item>
 
             <el-form-item label="数据库" prop="datasourceId">
-              <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList" filterable clearable>
+              <el-select v-model="dataForm.databaseName" style="width: 100%" @change="getTableList" filterable
+                clearable>
                 <el-option v-for="databaseName in dataForm.databaseNames" :key="databaseName" :label="databaseName"
                   :value="databaseName"></el-option>
               </el-select>
@@ -37,7 +38,8 @@
           <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
           <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center"
             width="200"></el-table-column>
-          <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="300"></el-table-column>
+          <el-table-column prop="tableName" label="表名" header-align="center" align="center"
+            width="300"></el-table-column>
           <el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
         </el-table>
       </div>
@@ -63,6 +65,11 @@ const dataFormRef = ref()
 const loading = ref(false)
 
 type FormData = {
+  /**
+   * 选择的表信息
+   */
+  selectedTables: TableImportInfo[]
+
   tableNameListSelections: any[]
   datasourceId?: number,
   /**
@@ -82,6 +89,7 @@ type FormData = {
  * 表单
  */
 const dataForm = reactive<FormData>({
+  selectedTables: [],
   tableNameListSelections: [] as any,
   databaseName: "",
   datasourceId: 0,
@@ -96,8 +104,14 @@ const dataForm = reactive<FormData>({
 
 // 多选
 const selectionChangeHandle = (selections: any[]) => {
-  dataForm.tableNameListSelections = selections.map(
-    (item: any) => item["tableName"]
+  dataForm.selectedTables = selections.map(
+    (item: any) => {
+      return {
+        dataSourceId: item["tableName"],
+        tableName: item["tableName"],
+        databaseName: item["databaseName"],
+      } as TableImportInfo
+    }
   )
 }
 
@@ -166,7 +180,7 @@ const submitHandle = () => {
   }
   if (dataForm.datasourceId != undefined) {
     visible.value = false
-    emit("handleSelection", dataForm.datasourceId, tableNameList)
+    emit("handleSelection", dataForm.datasourceId, dataForm.databaseName, dataForm.selectedTables)
   }
 }
 defineExpose({

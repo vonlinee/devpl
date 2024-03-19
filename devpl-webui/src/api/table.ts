@@ -40,12 +40,14 @@ export const apiRemoveGenTableByIds = (ids: Keys) => {
  */
 export const apiImportTables = (
   datasourceId: number,
-  tableNameList: string[],
+  tables: TableImportInfo[],
+  databaseName?: string,
   projectId?: number
 ) => {
   return http.post("/api/filegen/table/import", {
-    dataSourceId: datasourceId,
-    tableNameList: tableNameList,
+    datasourceId: datasourceId,
+    databaseName: databaseName,
+    tables: tables,
     projectId: projectId,
   })
 }

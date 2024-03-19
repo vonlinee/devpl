@@ -32,6 +32,8 @@
   <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="500px"
     @selection-change="selectionChangeHandle">
     <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+    <el-table-column prop="connectionName" label="连接名" header-align="center" align="center"
+      width="150"></el-table-column>
     <el-table-column prop="databaseName" label="数据库名" header-align="center" align="center" width="150"
       show-overflow-tooltip></el-table-column>
     <el-table-column prop="tableName" label="表名" header-align="center" align="center" width="200"
@@ -71,6 +73,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 import { useDownloadApi } from "@/api/generator"
 import { apiListSelectableProjects } from "@/api/project"
 import { useRouter } from "vue-router"
+import { Message } from "@/hooks/message"
 
 const state: DataTableOption = reactive({
   queryForm: {
@@ -167,14 +170,11 @@ const syncHandle = (row: any) => {
  * @param dataSourceId 数据源ID 
  * @param tableNames 导入的表名称
  */
-const handTableSelection = (dataSourceId: number, tableNames: string[]) => {
-  if (dataSourceId != undefined) {
-    apiImportTables(dataSourceId, tableNames, project.value?.projectId)
+const handTableSelection = (datasourceId: number, tables: TableImportInfo[], databaseName?: string) => {
+  if (tables != undefined) {
+    apiImportTables(datasourceId, tables, databaseName, project.value?.projectId)
       .then(() => {
-        ElMessage.success({
-          message: "操作成功",
-          duration: 500,
-        })
+        Message.info("导入成功")
       })
       .then(() => getDataList())
   }

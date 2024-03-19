@@ -22,12 +22,14 @@ import { isWindows } from "./utils/tool"
 import contextmenu from "v-contextmenu"
 import "v-contextmenu/dist/themes/default.css"
 
+import JsonViewer from 'vue3-json-viewer'
 
 const app = createApp(App)
 
 // 创建 Pinia 实例
 const pinia: Pinia = createPinia()
 
+app.use(JsonViewer)
 app.use(contextmenu)
 app.use(pinia)
 app.use(router)

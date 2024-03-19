@@ -1,11 +1,13 @@
 package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import io.devpl.backend.common.JsonTypeHandler;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据表
@@ -20,18 +22,27 @@ public class TableGeneration {
      */
     @TableId(type = IdType.AUTO)
     private Long id;
+
+    /**
+     * 数据源ID
+     */
+    private Long datasourceId;
+
     /**
      * 数据库名
      */
     private String databaseName;
+
     /**
      * 表名
      */
     private String tableName;
+
     /**
      * 实体类名称
      */
     private String className;
+
     /**
      * 功能名
      */
@@ -76,26 +87,46 @@ public class TableGeneration {
      * 表单布局
      */
     private Integer formLayout;
-    /**
-     * 数据源ID
-     */
-    private Long datasourceId;
+
     /**
      * 基类ID
      */
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private Long baseclassId;
+
+    /**
+     * 逻辑删除字段
+     */
+    @TableField(value = "is_deleted")
+    private Boolean deleted;
+
     /**
      * 创建时间
      */
     private LocalDateTime createTime;
+
     /**
      * 更新时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 数据模型
+     */
+    @TableField(value = "template_arguments", typeHandler = JsonTypeHandler.class)
+    private Map<String, Object> templateArguments;
+
+    // 非数据库字段
+
     /**
      * 字段列表
      */
     @TableField(exist = false)
     private List<TableGenerationField> fieldList;
+
+    /**
+     * 连接名称
+     */
+    @TableField(exist = false)
+    private String connectionName;
 }

@@ -114,7 +114,21 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             if (engine == null) {
                 throw new TemplateException("未找到模板引擎实现" + templateInfo.getProvider());
             }
-            renderTemplateString(engine, templateInfo.getContent(), dataModel, out);
+            try {
+                // 渲染模板
+                Template template;
+                if (engine instanceof FreeMarkerTemplateEngine) {
+                    template = engine.getTemplate(templateInfo.getTemplateName(), false);
+                } else {
+                    template = engine.getTemplate(templateInfo.getContent(), true);
+                }
+                if (template.exists()) {
+                    template.render(engine, dataModel, out);
+                }
+            } catch (TemplateException e) {
+                // TODO 渲染失败，去掉某些堆栈信息
+                IOUtils.writeQuietly(out, e.getMessage());
+            }
         }
     }
 
@@ -159,9 +173,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Override
     public IPage<TemplateInfo> listPageTemplates(TemplateInfoListParam param) {
-        return templateInfoMapper.selectPage(param, new LambdaQueryWrapper<TemplateInfo>()
-            .eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType())
-            .like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName()));
+        return templateInfoMapper.selectPage(param, new LambdaQueryWrapper<TemplateInfo>().eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType()).like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName()));
     }
 
     @Override

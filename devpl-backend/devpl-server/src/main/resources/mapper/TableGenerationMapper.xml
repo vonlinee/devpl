@@ -2,4 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.TableGenerationMapper">
 
+    <select id="selectListByCondition" resultType="io.devpl.backend.entity.TableGeneration">
+        SELECT tg.id, database_name, table_name, class_name, table_comment, ci.connection_name
+        FROM table_generation tg
+        LEFT JOIN rdbms_connection_info ci ON tg.datasource_id = ci.id
+        WHERE tg.is_deleted = 0
+        <if test="param.tableName != null and param.tableName != ''">
+            AND INSTR(`table_name`, #{param.tableName}) <![CDATA[ >= ]]> 0
+        </if>
+    </select>
+
+    <select id="selectOne" resultType="io.devpl.backend.entity.TableGeneration">
+        SELECT *
+        FROM table_generation
+        WHERE datasource_id = #{tableName}
+        AND table_name = #{tableName}
+        <if test="databaseName != null and databaseName != ''">
+            AND `database_name` = #{databaseName}
+        </if>
+    </select>
+    <select id="selectImportedTableList" resultType="io.devpl.backend.domain.bo.TableImportInfo">
+        SELECT datasource_id, database_name, table_name
+        FROM table_generation
+        WHERE datasource_id = #{dataSourceId}
+        <if test="tableName != null and tableName != ''">
+            AND INSTR(`table_name`, #{param.tableName}) <![CDATA[ >= ]]> 0
+        </if>
+        <if test="databaseName != null and databaseName != ''">
+            AND INSTR(`database_name`, #{databaseName}) <![CDATA[ >= ]]> 0
+        </if>
+        <if test="dataSourceId != null and dataSourceId != ''">
+            AND datasource_id = #{dataSourceId})
+        </if>
+    </select>
 </mapper>

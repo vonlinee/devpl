@@ -5,7 +5,7 @@
   <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="150">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="basic">
-        <generator ref="generatorRef" @handle="handleResult"></generator>
+        <TableGenerationConfigForm ref="generatorRef" @handle="handleResult"></TableGenerationConfigForm>
       </el-tab-pane>
       <el-tab-pane label="文件类型" name="target">
         <el-table border :data="generationFiles">
@@ -18,8 +18,8 @@
           <el-table-column label="模板" prop="templateId" width="200">
             <template #default="scope">
               <span v-if="!scope.row.editing">{{ scope.row.templateName }}</span>
-              <template-selector v-if="scope.row.editing" :current="scope.row.templateName ? scope.row.templateId : null"
-                :options="templateOptions"
+              <template-selector v-if="scope.row.editing"
+                :current="scope.row.templateName ? scope.row.templateId : null" :options="templateOptions"
                 :on-handle-value-change="(val) => (scope.row.templateId = val)"></template-selector>
             </template>
           </el-table-column>
@@ -160,6 +160,9 @@
           </vxe-column>
         </vxe-table>
       </el-tab-pane>
+      <el-tab-pane label="模板参数" name="templateArguments">
+        <MonacoEditor language="json" ref="templateArgumentsDataRef" height="600px"></MonacoEditor>
+      </el-tab-pane>
     </el-tabs>
     <template #footer>
       <div style="height: 100%; width: 100%; display: flex; align-items: center;justify-content:center;">
@@ -174,6 +177,8 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, reactive, ref } from "vue"
+import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+
 import {
   ElMessage,
   TabsPaneContext,
@@ -186,7 +191,7 @@ import {
   ElTooltip,
 } from "element-plus/es"
 import Sortable from "sortablejs"
-import { apiGetGenTableById, apiUpdateGenTableFields } from "@/api/table"
+import { apiGetGenTableById, apiUpdateGenTableFields, useTableSubmitApi } from "@/api/table"
 import { VxeTableInstance } from "vxe-table"
 import {
   apiListGenerationFiles,
@@ -194,7 +199,7 @@ import {
   apiSaveGenerationFileConfig,
   apiSaveOrUpdateGenerationFiles,
 } from "@/api/generator"
-import Generator from "./generator.vue"
+import TableGenerationConfigForm from "./TableGenerationConfigForm.vue"
 import TemplateSelector from "./TemplateSelector.vue"
 import CodeGenResult from "@/views/generator/CodeGenResult.vue"
 import { apiListSelectableTemplates } from "@/api/template"
@@ -204,6 +209,7 @@ import { Message } from "@/hooks/message"
  * 展示生成结果弹窗Ref
  */
 const resultDialogRef = ref()
+const templateArgumentsDataRef = ref()
 const generatorRef = ref()
 const activeName = ref('basic')
 const fieldTable = ref<VxeTableInstance>()
@@ -317,8 +323,10 @@ const init = (id: number) => {
 
   nextTick(() => generatorRef.value.init(id))
 
-  rowDrop()
   getTable(id)
+
+  rowDrop()
+
   getFieldTypeList()
 }
 
@@ -340,6 +348,14 @@ const rowDrop = () => {
 
 const getTable = (id: number) => {
   apiGetGenTableById(id).then((res) => {
+    // 初始化基本信息
+    generatorRef.value.init(res.data)
+    // 模板参数
+    templateArgumentsDataRef.value.setText(JSON.stringify(res.data?.templateArguments, null, 2))
+    
+    console.log(templateArgumentsDataRef.value);
+    
+    // 字段列表
     fieldList.value = res.data?.fieldList as TableGenerationField[]
   })
 
@@ -373,12 +389,18 @@ const handleResult = (res: FileGenerationResult) => {
  * 确定按钮，表单提交
  */
 const submitHandle = () => {
-
-  // 保存基本配置信息
-  if (!generatorRef.value.save()) {
-    return
+  if (!generatorRef.value.isValid()) {
+    return;
   }
 
+  // 保存基本配置信息
+  const dataForm = generatorRef.value.getFormData()
+  useTableSubmitApi(dataForm).then(() => {
+    Message.info("操作成功")
+    visible.value = false
+  })
+
+  // 保存字段信息
   apiUpdateGenTableFields(tableId.value, fieldList.value).then(() => {
     apiSaveGenerationFileConfig(
       tableId.value,

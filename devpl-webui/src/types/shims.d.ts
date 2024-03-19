@@ -13,3 +13,8 @@ declare module "*.vue" {
 }
 
 declare module "v-contextmenu"
+
+/**
+ * 声明'vue3-json-viewer'模块
+ */
+declare module 'vue3-json-viewer';

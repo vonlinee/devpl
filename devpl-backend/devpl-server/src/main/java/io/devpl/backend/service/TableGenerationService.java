@@ -3,6 +3,7 @@ package io.devpl.backend.service;
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.domain.param.GenTableListParam;
+import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.codegen.template.TemplateArgumentsMap;
@@ -25,9 +26,25 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
      */
     List<String> listTableNames(Long dataSourceId);
 
-    ListResult<TableGeneration> selectPage(GenTableListParam param);
+    List<TableImportInfo> listImportedTables(Long dataSourceId, String databaseName, String tableName);
 
-    TableGeneration getByTableName(String tableName);
+    /**
+     * 分页列表查询
+     *
+     * @param param 列表查询参数
+     * @return 分页列表
+     */
+    ListResult<TableGeneration> pageByCondition(GenTableListParam param);
+
+    /**
+     * 获取生成表信息
+     *
+     * @param dataSourceId 数据源 ID
+     * @param databaseName 数据库名称
+     * @param tableName    表名
+     * @return {@link TableGeneration}
+     */
+    TableGeneration getGenerationTable(Long dataSourceId, String databaseName, String tableName);
 
     /**
      * 删除表

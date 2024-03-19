@@ -1,5 +1,6 @@
 package io.devpl.backend.domain.param;
 
+import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.codegen.db.DBType;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,9 @@ import lombok.Setter;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * 表导入参数
+ */
 @Getter
 @Setter
 public class TableImportParam {
@@ -20,16 +24,20 @@ public class TableImportParam {
     private Long dataSourceId;
 
     /**
+     * 数据库名称
+     */
+    private String databaseName;
+
+    /**
      * 单个导入时使用
      */
     @Nullable
     private String tableName;
 
     /**
-     * 批量导入时使用
+     * 要导入的表信息
      */
-    @Nullable
-    private List<String> tableNameList;
+    private List<TableImportInfo> tables;
 
     /**
      * 导入选项

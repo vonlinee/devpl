@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
+import io.devpl.backend.common.JsonTypeHandler;
 import io.devpl.backend.common.ValueEnum;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.type.*;
@@ -22,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -41,9 +43,8 @@ public class MyBatisPlusConfiguration implements InitializingBean {
     @Bean
     public ConfigurationCustomizer customConfiguration(DataSource dataSource) {
         return configuration -> {
-//            TypeHandlerRegistry registry = configuration.getTypeHandlerRegistry();
-//            registry.register(Boolean.class, null, new BooleanTypeHandlerWrapper(registry.getTypeHandler(Boolean.class)));
-//            registry.register(boolean.class, null, new BooleanTypeHandlerWrapper(registry.getTypeHandler(boolean.class)));
+            TypeHandlerRegistry registry = configuration.getTypeHandlerRegistry();
+            registry.register(Map.class, JdbcType.VARCHAR, new JsonTypeHandler());
         };
     }
 

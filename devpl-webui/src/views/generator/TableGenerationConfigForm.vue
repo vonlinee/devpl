@@ -91,17 +91,20 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { ElMessage } from "element-plus/es"
 import { apiListBaseClass } from "@/api/model"
 import { useDownloadApi, apiFileGenerate } from "@/api/generator"
 import { apiGetGenTableById, useTableSubmitApi } from "@/api/table"
 
 // 事件 emit
-const emit = defineEmits(["refreshDataList", "handle"])
+const emit = defineEmits(["handle"])
 
 const visible = ref(false)
 const dataFormRef = ref()
 const baseClassList = ref<any[]>([])
+
+/**
+ * 基本信息表单
+ */
 const dataForm = reactive({
   id: "",
   baseclassId: "",
@@ -120,17 +123,6 @@ const dataForm = reactive({
   tableName: "",
 })
 
-const init = (id: number) => {
-  visible.value = true
-  dataForm.id = ""
-  // 重置表单数据
-  if (dataFormRef.value) {
-    dataFormRef.value.resetFields()
-  }
-  getBaseClassList()
-  getTable(id)
-}
-
 const getBaseClassList = () => {
   apiListBaseClass().then((res) => {
     baseClassList.value = res.data
@@ -141,15 +133,13 @@ const getBaseClassList = () => {
  * 获取表信息
  * @param id 生成的表ID
  */
-const getTable = (id: number) => {
-  apiGetGenTableById(id).then((res) => {
-    Object.assign(dataForm, res.data)
-    // 填充默认值
-    if (dataForm.tableComment == null || dataForm.tableComment == "") {
-      dataForm.tableComment =
-        res.data?.tableName == undefined ? "" : res.data?.tableName
-    }
-  })
+const getTable = (table: TableGeneration) => {
+  Object.assign(dataForm, table)
+  // 填充默认值
+  if (dataForm.tableComment == null || dataForm.tableComment == "") {
+    dataForm.tableComment =
+      table?.tableName == undefined ? "" : table?.tableName
+  }
 }
 
 const dataRules = ref({
@@ -176,33 +166,32 @@ const dataRules = ref({
 
 
 defineExpose({
-  init,
-  // 保存
-  save() {
-    dataFormRef.value.validate((valid: boolean) => {
-      if (!valid) {
-        return false
-      }
-      useTableSubmitApi(dataForm).then(() => {
-        ElMessage.success({
-          message: "操作成功",
-          duration: 500,
-          onClose: () => {
-            visible.value = false
-            emit("refreshDataList")
-          },
-        })
-      })
-    })
+  /**
+   * 初始化
+   */
+  init(tableData: TableGeneration) {
+    visible.value = true
+    dataForm.id = ""
+    // 重置表单数据
+    if (dataFormRef.value) {
+      dataFormRef.value.resetFields()
+    }
+    getBaseClassList()
+    getTable(tableData)
+  },
+
+  /**
+   * 获取表单数据
+   */
+  getFormData() {
+    return dataForm
   },
   /**
    * 表单是否校验通过
    * @returns 是否校验通过
    */
   isValid() {
-    dataFormRef.value.validate((valid: boolean) => {
-      return valid
-    })
+    return dataFormRef.value.validate((valid: boolean) => valid)
   },
   // 生成代码
   generate() {
@@ -210,17 +199,14 @@ defineExpose({
       if (!valid) {
         return false
       }
-
       // 先保存配置信息
       useTableSubmitApi(dataForm).then((res) => {
-
         // 生成代码，zip压缩包
         if (dataForm.generatorType === 0) {
           useDownloadApi([dataForm.id])
           visible.value = false
           return
         }
-
         // 生成代码，自定义路径
         apiFileGenerate([dataForm.id]).then((res) => {
           visible.value = false
