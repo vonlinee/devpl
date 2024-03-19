@@ -1,13 +1,13 @@
 package io.devpl.backend.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @TableName(value = "field_info")
-public final class FieldInfo extends DBEntity implements Serializable {
+public final class FieldInfo implements Serializable {
 
     /**
      * 主键ID
@@ -96,6 +96,28 @@ public final class FieldInfo extends DBEntity implements Serializable {
      */
     @TableField(exist = false)
     private boolean leaf = true;
+
+    /**
+     * 更新时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 是否逻辑删除
+     */
+    @TableField(value = "is_deleted")
+    private Boolean deleted;
 
     /**
      * 嵌套的字段列表

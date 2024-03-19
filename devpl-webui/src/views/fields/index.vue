@@ -99,6 +99,7 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
     <el-table-column prop="dataType" label="数据类型"></el-table-column>
     <el-table-column prop="defaultValue" label="默认值" show-overflow-tooltip></el-table-column>
     <el-table-column prop="description" label="描述信息" show-overflow-tooltip></el-table-column>
+    <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" align="center" fixed="right" width="130">
       <template #default="{ row }">
         <el-button link @click="showSaveOrUpdateModal(row)">编辑</el-button>
