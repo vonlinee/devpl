@@ -24,15 +24,16 @@
     <select id="selectImportedTableList" resultType="io.devpl.backend.domain.bo.TableImportInfo">
         SELECT datasource_id, database_name, table_name
         FROM table_generation
-        WHERE datasource_id = #{dataSourceId}
-        <if test="tableName != null and tableName != ''">
-            AND INSTR(`table_name`, #{param.tableName}) <![CDATA[ >= ]]> 0
-        </if>
-        <if test="databaseName != null and databaseName != ''">
-            AND INSTR(`database_name`, #{databaseName}) <![CDATA[ >= ]]> 0
-        </if>
-        <if test="dataSourceId != null and dataSourceId != ''">
-            AND datasource_id = #{dataSourceId})
-        </if>
+        <where>
+            <if test="dataSourceId != null">
+                AND datasource_id = #{dataSourceId}
+            </if>
+            <if test="tableName != null and tableName != ''">
+                AND INSTR(table_name, #{param.tableName}) <![CDATA[ >= ]]> 0
+            </if>
+            <if test="databaseName != null and databaseName != ''">
+                AND INSTR(database_name, #{databaseName}) <![CDATA[ >= ]]> 0
+            </if>
+        </where>
     </select>
 </mapper>

@@ -99,9 +99,6 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
     public FieldParseResult parseFields(FieldParseParam param) throws FieldParseException {
         FieldParseResult result = new FieldParseResult();
         final String[] types = param.getType().split(">");
-        if (types.length != 2) {
-            return result.fail("参数错误");
-        }
         final String content = param.getContent();
         FieldParser parser = FieldParser.EMPTY;
         if ("pl".equalsIgnoreCase(types[0])) {
@@ -122,8 +119,9 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
                 parser = new HtmlTableContentFieldParser(columnMapping);
             }
         } else if ("sql".equalsIgnoreCase(types[0])) {
-            if ("dml".equalsIgnoreCase(types[1])) {
-
+            if ("ddl".equalsIgnoreCase(types[1])) {
+                String dbType = types[2];
+                parser = new DDLFieldParser(dbType);
             } else if ("qml".equalsIgnoreCase(types[1])) {
                 parser = new SqlFieldParser(param.getDbType());
             }

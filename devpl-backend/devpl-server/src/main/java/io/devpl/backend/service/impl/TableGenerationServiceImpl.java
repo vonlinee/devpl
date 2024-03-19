@@ -10,7 +10,6 @@ import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.enums.FormLayoutEnum;
 import io.devpl.backend.domain.enums.GeneratorTypeEnum;
 import io.devpl.backend.domain.param.GenTableListParam;
-import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.PathUtils;
@@ -25,7 +24,6 @@ import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.common.utils.ProjectUtils;
 import io.devpl.sdk.annotations.NotNull;
-import io.devpl.sdk.collection.Lists;
 import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -83,9 +81,9 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     /**
      * 查询已被导入的表信息
      *
-     * @param dataSourceId 数据源 ID
-     * @param databaseName 数据库名称
-     * @param tableName    表名
+     * @param dataSourceId 数据源 ID，精确匹配
+     * @param databaseName 数据库名称，模糊匹配
+     * @param tableName    表名，模糊匹配
      * @return {@link List}<{@link TableImportInfo}>
      */
     @Override
@@ -129,42 +127,14 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     }
 
     /**
-     * 导入表
-     *
-     * @param param 参数
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void importTable(TableImportParam param) {
-        if (!CollectionUtils.isEmpty(param.getTables())) {
-            // 已经导入的表名
-            List<String> tableNamesImported = this.listImportedTables(param.getDataSourceId());
-            param.getTables().removeAll(tableNamesImported);
-            for (TableImportInfo table : param.getTables()) {
-//                param.setTableName(tableName);
-                this.importSingleTable(param);
-            }
-        } else {
-            this.importSingleTable(param);
-        }
-    }
-
-    /**
      * 导入单个表
      *
      * @param param TableImportParam
      */
     @Override
-    public void importSingleTable(TableImportParam param) {
+    public void importSingleTable(TableImportInfo param) {
         String tableName = param.getTableName();
         Long datasourceId = param.getDataSourceId();
-        // 查询表是否存在
-        TableGeneration table = this.getGenerationTable(param.getDataSourceId(), param.getDatabaseName(), param.getTableName());
-        // 表存在
-        if (table != null) {
-            return;
-        }
-
         // 根据项目信息，生成表生成的相关信息，可选
         ProjectInfo projectInfo = null;
         if (param.getProjectId() != null) {
@@ -173,16 +143,21 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
         try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
-
             DatabaseMetadataLoader loader = dataSourceService.getDatabaseMetadataLoader(connection, param.getDbType());
             List<TableGeneration> tables = prepareTables(loader.getTables(null, null, tableName, null));
-            table = Lists.first(tables, t -> Objects.equals(t.getTableName(), tableName));
+            // 查询表是否存在
+            TableGeneration table = null;
+            for (TableGeneration tg : tables) {
+                if (Objects.equals(tg.getTableName(), tableName)) {
+                    table = tg;
+                    break;
+                }
+            }
             if (table == null) {
                 return;
             }
 
             table.setDatasourceId(datasourceId);
-
             // 保存表信息
             // 项目信息
             Map<String, String> globalTemplateParamsMap = templateParamService.getGlobalTemplateParamValuesMap();
@@ -251,6 +226,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             tableGeneration.setTableName(tm.getTableName());
             tableGeneration.setTableComment(tm.getRemarks());
             tableGeneration.setDatabaseName(tm.getTableSchema());
+            tableGeneration.setTableType(tm.getTableType());
             tableList.add(tableGeneration);
         }
         return tableList;

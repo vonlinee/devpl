@@ -17,7 +17,7 @@ export const useDownloadApi = (tableIds: any[]): void => {
  */
 export const apiFileGenerate = (tableIds: any[]) => {
   return http.post<FileGenerationResult>("/api/codegen/file", {
-    tableIds: tableIds
+    tableIds: tableIds,
   })
 }
 
@@ -58,21 +58,26 @@ export const apiListGenerationFiles = (tableId: number) => {
  * 保存或更新生成文件信息
  * @param tableId
  */
-export const apiSaveOrUpdateGenerationFiles = (files: TableFileGeneration[]) => {
+export const apiSaveOrUpdateGenerationFiles = (
+  files: TableFileGeneration[]
+) => {
   return http.post<TableFileGeneration[]>("/api/codegen/genfiles/config", {
-    fileInfoList: files
+    fileInfoList: files,
   })
 }
 
 /**
  * 保存或更新生成文件信息
  * @param tableId
- * @param files 
+ * @param files
  */
-export const apiRemoveGenerationFiles = (tableId: number, files: TableFileGeneration[]) => {
+export const apiRemoveGenerationFiles = (
+  tableId: number,
+  files: TableFileGeneration[]
+) => {
   return http.delete<TableFileGeneration[]>("/api/codegen/genfiles/remove", {
     tableId: tableId,
-    fileInfoList: files
+    fileInfoList: files,
   })
 }
 
@@ -130,4 +135,13 @@ export const apiSaveGeneratorConfig = (content: string) => {
  */
 export const apiCodeGenJavaPojo = (param: any) => {
   return http.post<string>("/api/codegen/java/pojo", param)
+}
+
+/**
+ * 获取示例文本
+ */
+export const apiGetSampleText = (name: string) => {
+  return http.get("/api/codegen/sample/text", {
+    name: name
+  })
 }

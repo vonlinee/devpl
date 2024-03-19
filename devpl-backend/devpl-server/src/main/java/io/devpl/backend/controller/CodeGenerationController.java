@@ -191,4 +191,15 @@ public class CodeGenerationController {
         }
         return Result.ok(codeGenerationService.generateJavaPojoClass(param));
     }
+
+    /**
+     * 获取生成结果的文件树
+     *
+     * @param name 示例文本ID
+     * @return 该目录下的文件列表，树形结构
+     */
+    @GetMapping("/sample/text")
+    public Result<String> getSampleText(String name) {
+        return Result.ok();
+    }
 }

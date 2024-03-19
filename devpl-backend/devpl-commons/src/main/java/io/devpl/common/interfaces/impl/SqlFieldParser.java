@@ -11,8 +11,8 @@ import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 import com.alibaba.druid.wall.WallCheckResult;
 import com.alibaba.druid.wall.WallProvider;
 import com.alibaba.druid.wall.spi.MySqlWallProvider;
-import io.devpl.common.interfaces.FieldParser;
 import io.devpl.common.exception.FieldParseException;
+import io.devpl.common.interfaces.FieldParser;
 import io.devpl.common.model.SelectColumn;
 import io.devpl.common.model.SelectTable;
 import io.devpl.sdk.util.StringUtils;
@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 从Sql中解析字段
+ * 从查询Sql中解析字段
  * <a href="https://juejin.cn/post/7083280831602982919">...</a>
  */
 public class SqlFieldParser implements FieldParser, SQLASTVisitor {

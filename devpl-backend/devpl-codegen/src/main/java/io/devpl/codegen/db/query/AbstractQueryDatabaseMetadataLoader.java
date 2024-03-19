@@ -97,6 +97,9 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
                         table.setTableSchema(rs.getString(query.getDatabaseNameResultSetColumnName()));
                     }
                     table.setTableName(tableName);
+                    if (query.getTableTypeResultSetColumnName() != null) {
+                        table.setTableType(rs.getString(query.getTableTypeResultSetColumnName()));
+                    }
                     table.setRemarks(rs.getString(query.getTableCommentResultSetColumnName()));
                     tableList.add(table);
                 }

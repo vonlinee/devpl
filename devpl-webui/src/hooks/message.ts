@@ -17,6 +17,20 @@ export namespace Message {
     })
   }
 
+    /**
+   * 展示warn信息
+   * @param content 消息文本
+   * @param onClose 消息提示弹窗关闭的回调
+   */
+    export function warn(content: string, onClose?: () => void) {
+      ElMessage({
+        type: "warn",
+        message: content,
+        duration: DEFAULT_DURATION,
+        onClose: onClose,
+      })
+    }
+
   /**
    * 展示error信息
    * @param content 消息文本

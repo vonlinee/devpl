@@ -122,7 +122,7 @@ defineExpose({
     } else if (tabName == "other") {
       categoryName = otherInputType.value
     } else if (tabName == "sql") {
-      categoryName = tabName
+      categoryName = sqlOptions.sqlType + ">" + sqlOptions.dbType
     } else if (tabName == "json") {
       categoryName = jsonInputType.value
     }

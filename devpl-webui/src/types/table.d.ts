@@ -4,6 +4,10 @@
 type TableGeneration = {
   id: number
   tableName: string
+  /**
+   * 表类型
+   */
+  tableType: string
   className: string
   /**
    * 连接名称

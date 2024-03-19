@@ -173,8 +173,8 @@ const syncHandle = (row: any) => {
 const handTableSelection = (datasourceId: number, tables: TableImportInfo[], databaseName?: string) => {
   if (tables != undefined) {
     apiImportTables(datasourceId, tables, databaseName, project.value?.projectId)
-      .then(() => {
-        Message.info("导入成功")
+      .then((res) => {
+        Message.info("导入" + res.data + "个表")
       })
       .then(() => getDataList())
   }

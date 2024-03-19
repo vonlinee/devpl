@@ -18,6 +18,7 @@ public interface FieldParser {
 
     /**
      * 从文本解析字段信息
+     * TODO 将返回值改成 FieldInfo类
      *
      * @param content 文本内容，任意内容，可以是SQL
      * @return 字段列表，每个Map代表一个字段信息，包括3个字段：name, type, description

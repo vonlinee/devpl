@@ -22,11 +22,11 @@ public interface ProjectArchetype {
     }
 
     /**
-     * 返回绝对路径
+     * 返回相对于项目根路径的相对路径
      *
      * @param filename 文件名
      * @param ext      文件扩展名
-     * @return 文件存放位置
+     * @return 文件存放位置，相对路径
      */
     String locate(String filename, String ext);
 }

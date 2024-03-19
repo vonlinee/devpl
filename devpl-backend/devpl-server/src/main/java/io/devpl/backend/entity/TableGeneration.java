@@ -39,6 +39,12 @@ public class TableGeneration {
     private String tableName;
 
     /**
+     * 表类型
+     */
+    @TableField(exist = false)
+    private String tableType;
+
+    /**
      * 实体类名称
      */
     private String className;

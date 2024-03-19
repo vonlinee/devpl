@@ -37,6 +37,7 @@ export const apiRemoveGenTableByIds = (ids: Keys) => {
  * @param datasourceId
  * @param tableNameList
  * @param projectId
+ * @returns 导入表的个数
  */
 export const apiImportTables = (
   datasourceId: number,
@@ -44,8 +45,8 @@ export const apiImportTables = (
   databaseName?: string,
   projectId?: number
 ) => {
-  return http.post("/api/filegen/table/import", {
-    datasourceId: datasourceId,
+  return http.post<number>("/api/filegen/table/import", {
+    dataSourceId: datasourceId,
     databaseName: databaseName,
     tables: tables,
     projectId: projectId,

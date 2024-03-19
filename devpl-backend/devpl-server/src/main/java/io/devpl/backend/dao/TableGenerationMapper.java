@@ -51,5 +51,5 @@ public interface TableGenerationMapper extends MyBatisPlusMapper<TableGeneration
      * @param tableName    表名
      * @return {@link List}<{@link TableImportInfo}>
      */
-    List<TableImportInfo> selectImportedTableList(Long dataSourceId, String databaseName, String tableName);
+    List<TableImportInfo> selectImportedTableList(@Param("dataSourceId") Long dataSourceId, @Param("databaseName") String databaseName, @Param("tableName") String tableName);
 }

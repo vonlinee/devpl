@@ -12,14 +12,17 @@ import com.alibaba.druid.sql.dialect.mysql.ast.MySqlPrimaryKey;
 import com.alibaba.druid.sql.dialect.mysql.ast.MySqlUnique;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
 import com.alibaba.druid.stat.TableStat;
+import io.devpl.codegen.db.IndexInfo;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
 
-    //保存索引信息
-    private List<Index> indices = new ArrayList<>();
+    /**
+     * 保存索引信息
+     */
+    private final List<IndexInfo> indices = new ArrayList<>();
 
     @Override
     public boolean visit(SQLColumnDefinition x) {
@@ -92,7 +95,7 @@ public class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
     private void addIndex(MySqlKey x) {
         SQLIndexDefinition indexDefinition = x.getIndexDefinition();
         List<String> indexColumns = indexDefinition.getColumns().stream().map(v -> SQLUtils.normalize(v.getExpr().toString())).collect(Collectors.toList());
-        Index index = new Index(
+        IndexInfo index = new IndexInfo(
             getOrDef(indexDefinition.getName(), "")
             , getOrDef(indexDefinition.getType(), "")
             , getOrDef(indexDefinition.getOptions().getComment(), "")
@@ -107,40 +110,10 @@ public class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
     /**
      * 获取索引信息
      *
-     * @return
+     * @return 索引信息
      */
-    public List<Index> getIndices() {
+    public List<IndexInfo> getIndices() {
         return new ArrayList<>(indices);
-    }
-
-    public static class Index {
-        private String name;
-        private String type;
-        private String comment;
-        private List<String> columns;
-
-        private Index(String name, String type, String comment, List<String> columns) {
-            this.name = name;
-            this.type = type;
-            this.comment = comment;
-            this.columns = columns;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public List<String> getColumns() {
-            return columns;
-        }
     }
 }
 

@@ -15,8 +15,8 @@ public class FieldParseParam {
      * 输入类型，针对不同的输入采用不同的解析策略
      * json
      * sql
-     * 1.ddl
-     * 2.qml
+     * 1.ddl>具体的数据库类型，例如 sql>ddl>mysql
+     * 2.qml>具体的数据库类型，例如 sql>qml>mysql
      * html
      * 1.html-table-dom
      * 2.html-table-text

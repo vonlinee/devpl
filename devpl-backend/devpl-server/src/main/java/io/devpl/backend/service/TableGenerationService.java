@@ -55,14 +55,9 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
     boolean batchRemoveTablesById(Long[] ids);
 
     /**
-     * 导入表
-     */
-    void importTable(TableImportParam param);
-
-    /**
      * 导入单个表
      */
-    void importSingleTable(TableImportParam param);
+    void importSingleTable(TableImportInfo param);
 
     /**
      * 初始化表要生成的文件

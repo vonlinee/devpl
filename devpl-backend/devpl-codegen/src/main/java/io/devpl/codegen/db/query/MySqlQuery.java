@@ -28,7 +28,7 @@ public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
      */
     @Override
     public String getTableQuerySql(String catalog, String schemaName, String tableName, boolean likeMatch) {
-        StringBuilder sql = new StringBuilder("select table_schema, table_name, table_comment from information_schema.tables ");
+        StringBuilder sql = new StringBuilder("select table_schema, table_name, table_type, table_comment from information_schema.tables ");
 
         if (schemaName == null || schemaName.isEmpty()) {
             // schemaName为空表示不过滤数据库
@@ -59,6 +59,11 @@ public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getTableNameResultSetColumnName() {
         return "table_name";
+    }
+
+    @Override
+    public String getTableTypeResultSetColumnName() {
+        return "table_type";
     }
 
     @Override

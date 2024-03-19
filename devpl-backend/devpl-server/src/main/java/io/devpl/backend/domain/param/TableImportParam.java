@@ -50,9 +50,14 @@ public class TableImportParam {
     @Nullable
     private Long projectId;
 
+    /**
+     * 数据库类型
+     * 后端填充
+     */
     private DBType dbType;
 
     /**
+     * 数据源连接信息
      * 后端填充
      */
     private RdbmsConnectionInfo connInfo;

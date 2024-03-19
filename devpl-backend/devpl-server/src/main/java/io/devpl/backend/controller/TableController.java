@@ -2,6 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
@@ -11,10 +12,12 @@ import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
+import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据表管理
@@ -90,7 +93,7 @@ public class TableController {
      * @param param 数据源ID
      */
     @PostMapping("/import")
-    public Result<String> tableImport(@RequestBody TableImportParam param) {
+    public Result<Integer> tableImport(@RequestBody TableImportParam param) {
         RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) {
             return Result.error("数据源不存在");
@@ -101,7 +104,29 @@ public class TableController {
         }
         param.setConnInfo(connInfo);
         param.setDbType(dbType);
-        tableService.importTable(param);
+        if (!CollectionUtils.isEmpty(param.getTables())) {
+            List<TableImportInfo> tables = param.getTables();
+            // 过滤重复导入的表信息
+            Map<Long, List<TableImportInfo>> groupByDsId = CollectionUtils.groupingBy(tables, TableImportInfo::getDataSourceId);
+            for (Map.Entry<Long, List<TableImportInfo>> entry : groupByDsId.entrySet()) {
+                List<TableImportInfo> tablesOfSingleDataSource = entry.getValue();
+                Map<String, List<TableImportInfo>> groupByDatabaseName = CollectionUtils.groupingBy(tablesOfSingleDataSource, TableImportInfo::getDatabaseName);
+                for (Map.Entry<String, List<TableImportInfo>> dbEntry : groupByDatabaseName.entrySet()) {
+                    List<TableImportInfo> importedTables = tableService.listImportedTables(entry.getKey(), dbEntry.getKey(), null);
+                    for (TableImportInfo table : dbEntry.getValue()) {
+                        if (importedTables.contains(table)) {
+                            param.getTables().remove(table);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (TableImportInfo table : param.getTables()) {
+            table.setProjectId(param.getProjectId());
+            table.setDbType(param.getDbType());
+            tableService.importSingleTable(table);
+        }
         return Result.ok();
     }
 

@@ -59,7 +59,7 @@ export const useDataSourceSubmitApi = (dataForm: any) => {
  * @param tableNamePattern
  * @returns
  */
-export const useDataSourceTableListApi = (
+export const apiListDataSourceTables = (
   id: number,
   databaseName?: string,
   tableNamePattern?: string

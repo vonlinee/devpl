@@ -37,6 +37,15 @@ public interface AbstractQuery {
     String getTableNameResultSetColumnName();
 
     /**
+     * 表类型 ResultSet 列名
+     *
+     * @return 表类型 ResultSet 列名
+     */
+    default String getTableTypeResultSetColumnName() {
+        return null;
+    }
+
+    /**
      * 数据库名称
      */
     String getDatabaseNameResultSetColumnName();
