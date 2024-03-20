@@ -2,14 +2,14 @@ package io.devpl.backend.service;
 
 import io.devpl.backend.common.mvc.BaseService;
 import io.devpl.backend.common.query.ListResult;
-import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.domain.bo.TableImportInfo;
-import io.devpl.backend.domain.param.TableImportParam;
+import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.codegen.template.TemplateArgumentsMap;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据表
@@ -68,11 +68,25 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
     void initTargetGenerationFiles(TableGeneration table, TemplateArgumentsMap params);
 
     /**
+     * 获取渲染的数据模型
+     *
+     * @param table 表信息
+     */
+    Map<String, Object> prepareDataModel(TableGeneration table);
+
+    /**
+     * 初始化表生成的模板参数
+     *
+     * @param table 表生成信息
+     */
+    void initTableTemplateArguments(TableGeneration table);
+
+    /**
      * 同步数据库表
      *
      * @param id 表ID
      */
-    void sync(Long id);
+    boolean sync(Long id);
 
     /**
      * 根据数据源，获取指定数据表

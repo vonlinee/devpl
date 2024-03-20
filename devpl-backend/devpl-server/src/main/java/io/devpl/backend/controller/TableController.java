@@ -91,32 +91,27 @@ public class TableController {
     }
 
     /**
-     * 同步表结构
+     * 同步表生成配置
      *
      * @param id 表ID
      */
     @PostMapping("/sync/{id}")
-    public Result<String> sync(@PathVariable("id") Long id) {
-        tableService.sync(id);
-        return Result.ok();
+    public Result<Boolean> syncTable(@PathVariable("id") Long id) {
+        return Result.ok(tableService.sync(id));
     }
 
     /**
-     * 导入数据源中的表到gen_table
+     * 导入数据源中的表到 table_generation
      *
      * @param param 数据源ID
      */
     @PostMapping("/import")
     public Result<Integer> tableImport(@RequestBody TableImportParam param) {
         RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(param.getDataSourceId());
-        if (connInfo == null) {
-            return Result.error("数据源不存在");
-        }
-        DBType dbType = DBType.getValue(connInfo.getDbType());
-        if (dbType == null) {
-            return Result.error("数据库类型" + connInfo.getDbType() + "不存在");
-        }
+        if (connInfo == null) return Result.error("数据源不存在");
         param.setConnInfo(connInfo);
+        DBType dbType = DBType.getValue(connInfo.getDbType());
+        if (dbType == null) return Result.error("数据库类型" + connInfo.getDbType() + "不存在");
         param.setDbType(dbType);
         if (!CollectionUtils.isEmpty(param.getTables())) {
             List<TableImportInfo> tables = param.getTables();

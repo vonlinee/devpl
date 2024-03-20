@@ -5,7 +5,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * 支持的数据库类型,主要用于分页方言
- * 抄自com.baomidou.mybatisplus.annotation.DbType
+ * 抄自 com.baomidou.mybatisplus.annotation.DbType
+ *
+ * @see com.alibaba.druid.DbType
+ * @see JDBCDriver
  */
 @Getter
 public enum DBType {

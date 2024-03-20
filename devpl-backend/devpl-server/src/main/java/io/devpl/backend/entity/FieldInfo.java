@@ -2,8 +2,7 @@ package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -14,8 +13,7 @@ import java.util.List;
 /**
  * 字段信息表
  */
-@Getter
-@Setter
+@Data
 @TableName(value = "field_info")
 public final class FieldInfo implements Serializable {
 

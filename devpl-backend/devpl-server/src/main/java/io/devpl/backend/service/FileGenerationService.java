@@ -24,8 +24,8 @@ public interface FileGenerationService {
     /**
      * 生成某个表的所有文件
      *
-     * @param tableId         gen_table主键
-     * @param projectRootPath 项目根路径
+     * @param table           TableGeneration
+     * @param parentDirectory 项目根路径
      * @return 生成文件的根目录
      */
     String generateForTable(TableGeneration table, String parentDirectory);
@@ -37,13 +37,6 @@ public interface FileGenerationService {
      * @return 文件绝对路径
      */
     String getAbsolutePath(String path);
-
-    /**
-     * 获取渲染的数据模型
-     *
-     * @param table 表信息
-     */
-    Map<String, Object> prepareDataModel(TableGeneration table);
 
     /**
      * 获取生成结果，文件树

@@ -2,8 +2,7 @@ package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.devpl.backend.common.JsonTypeHandler;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.Map;
 /**
  * 数据表
  */
-@Getter
-@Setter
+@Data
 @TableName("table_generation")
 public class TableGeneration {
 
