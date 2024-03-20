@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.Writer;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -114,4 +115,12 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 模板变量列表
      */
     List<TemplateVariableMetadata> introspect(TemplateInfo templateInfo);
+
+    /**
+     * 按 模板ID 查询模板 ID 和名称 Map
+     *
+     * @param templateIds 模板 ID
+     * @return {@link Map}<{@link Long}, {@link String}>
+     */
+    Map<Long, String> listIdAndNameMapByIds(Collection<Long> templateIds);
 }

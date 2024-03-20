@@ -47,7 +47,7 @@ public class TableController {
     }
 
     /**
-     * 获取表信息
+     * 获取表信息及相关的所有数据
      *
      * @param id 表ID
      */
@@ -56,6 +56,8 @@ public class TableController {
         TableGeneration table = tableService.getById(id);
         // 获取表的字段
         table.setFieldList(tableFieldService.listByTableId(table.getId()));
+        // 获取表生成的文件
+        table.setGenerationFiles(tableFileGenerationService.listByTableId(table.getId()));
         return Result.ok(table);
     }
 

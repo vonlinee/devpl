@@ -1,6 +1,8 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.common.query.ListResult;
@@ -62,6 +64,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     TemplateEngine templateEngine;
     @Resource
     DataSourceService dataSourceService;
+    @Resource
+    TemplateService templateService;
 
     @Override
     public List<TableGeneration> listGenTables(Collection<String> tableNames) {
@@ -210,8 +214,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             this.initTargetGenerationFiles(table, params);
 
             List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, param.getDbType(), connection, table);
-            // 初始化字段数据并保存列数据
-            tableFieldService.saveBatch(tableFieldList);
+            if (!CollectionUtils.isEmpty(tableFieldList)) {
+                // 初始化字段数据并保存列数据
+                tableFieldService.saveBatch(tableFieldList);
+            }
         } catch (SQLException exception) {
             log.error("导入表失败", exception);
             throw new RuntimeSQLException(exception);
@@ -242,29 +248,62 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         List<TargetGenerationFile> targetGenFiles = targetGenFileService.listDefaultGeneratedFileTypes();
         List<TableFileGeneration> list = new ArrayList<>();
 
+        List<TemplateFileGeneration> templateFileGenerations = new ArrayList<>();
+
+        IdentityHashMap<TableFileGeneration, TemplateFileGeneration> map = new IdentityHashMap<>();
+
+        Map<Long, String> templateIdNameMap = templateService.listIdAndNameMapByIds(CollectionUtils.toSet(targetGenFiles, TargetGenerationFile::getTemplateId));
+
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(TableFileGeneration.class);
+
         for (TargetGenerationFile targetGenFile : targetGenFiles) {
-
-            TemplateFileGeneration templateFileGen = new TemplateFileGeneration();
-            templateFileGen.setTemplateId(targetGenFile.getTemplateId());
-            templateFileGen.setDataFillStrategy(TemplateFillStrategy.DB_TABLE.getId());
-            templateFileGen.setBuiltin(false);
-            templateFileGen.setTemplateName(targetGenFile.getTemplateName());
-            templateFileGenerationService.save(templateFileGen);
-
             TableFileGeneration tableFileGen = new TableFileGeneration();
             tableFileGen.setTableId(table.getId());
-            tableFileGen.setGenerationId(templateFileGen.getId());
-
             // 需替换参数变量
             if (StringUtils.hasText(targetGenFile.getFileName())) {
-                tableFileGen.setFileName(templateEngine.evaluate(targetGenFile.getFileName(), params));
+                tableFileGen.setFileName(targetGenFile.getFileName());
             }
             if (StringUtils.hasText(targetGenFile.getSavePath())) {
-                tableFileGen.setSavePath(PathUtils.toRelative(templateEngine.evaluate(targetGenFile.getSavePath(), params)));
+                tableFileGen.setSavePath(targetGenFile.getSavePath());
             }
             list.add(tableFileGen);
+
+            // 模板文件生成信息
+            TemplateFileGeneration templateFileGen = new TemplateFileGeneration();
+            templateFileGen.setDataFillStrategy(TemplateFillStrategy.DB_TABLE.getId());
+            templateFileGen.setBuiltin(false);
+            templateFileGen.setTemplateId(targetGenFile.getTemplateId());
+            templateFileGen.setTemplateName(templateIdNameMap.get(targetGenFile.getTemplateId()));
+            templateFileGen.setConfigTableName(tableInfo.getTableName());
+
+            if (StringUtils.hasText(targetGenFile.getFileName())) {
+                templateFileGen.setFileName(templateEngine.evaluate(targetGenFile.getFileName(), params));
+            }
+            if (StringUtils.hasText(targetGenFile.getSavePath())) {
+                templateFileGen.setSavePath(PathUtils.toRelative(templateEngine.evaluate(targetGenFile.getSavePath(), params)));
+            }
+
+            map.put(tableFileGen, templateFileGen);
+            templateFileGenerations.add(templateFileGen);
+        }
+
+        templateFileGenerationService.saveBatch(templateFileGenerations);
+        // 关联ID
+        for (TableFileGeneration tfg : list) {
+            TemplateFileGeneration templateFileGeneration = map.get(tfg);
+            if (templateFileGeneration != null) {
+                tfg.setGenerationId(templateFileGeneration.getId());
+            }
         }
         tableFileGenerationService.saveBatch(list);
+
+        for (TableFileGeneration tfg : list) {
+            TemplateFileGeneration templateFileGeneration = map.get(tfg);
+            if (templateFileGeneration != null) {
+                templateFileGeneration.setConfigTableId(tfg.getId());
+            }
+        }
+        templateFileGenerationService.updateBatchById(templateFileGenerations);
     }
 
     /**

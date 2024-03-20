@@ -19,7 +19,7 @@ public interface FileGenerationService {
      * @param param FileGenerationParam
      * @return FileGenerationResult
      */
-    FileGenerationResult generateFile(FileGenerationParam param);
+    FileGenerationResult generateFiles(FileGenerationParam param);
 
     /**
      * 生成某个表的所有文件

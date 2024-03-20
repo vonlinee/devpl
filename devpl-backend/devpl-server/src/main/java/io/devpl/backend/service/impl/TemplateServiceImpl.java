@@ -20,6 +20,8 @@ import io.devpl.codegen.template.beetl.BeetlTemplateEngine;
 import io.devpl.codegen.template.enjoy.JFinalEnjoyTemplateEngine;
 import io.devpl.codegen.template.freemarker.FreeMarkerTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
+import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.annotations.Nullable;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
@@ -29,7 +31,6 @@ import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -123,32 +124,41 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         render(templateInfo, dataModel, out);
     }
 
+    /**
+     * 渲染单个模板，支持多种类型的模板渲染
+     *
+     * @param templateInfo 模板信息
+     * @param dataModel    模板参数
+     * @param out          输出位置
+     */
     @Override
     public void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
-        if (StringUtils.hasText(templateInfo.getContent())) {
-            TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
-            if (engineType == null) {
-                throw new TemplateException("未注册的模板类型" + templateInfo.getProvider());
-            }
-            TemplateEngine engine = templateEngineMap.get(engineType);
-            if (engine == null) {
-                throw new TemplateException("未找到模板引擎实现" + templateInfo.getProvider());
-            }
-            try {
-                // 渲染模板
-                Template template;
-                if (templateInfo.isFileTemplate()) {
-                    template = engine.getTemplate(templateInfo.getTemplatePath(), false);
-                } else {
-                    template = engine.getTemplate(templateInfo.getContent(), true);
+        TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
+        if (engineType == null) {
+            throw new TemplateException("未注册的模板类型" + templateInfo.getProvider());
+        }
+        TemplateEngine engine = templateEngineMap.get(engineType);
+        if (engine == null) {
+            throw new TemplateException("未找到模板引擎实现" + templateInfo.getProvider());
+        }
+        try {
+            // 渲染模板
+            Template template = Template.UNKNOWN;
+            if (templateInfo.isFileTemplate()) {
+                File file = new File(templateInfo.getTemplatePath());
+                if (file.exists()) {
+                    String templateContent = FileUtils.readStringQuietly(file);
+                    template = engine.getTemplate(templateContent, true);
                 }
-                if (template.exists()) {
-                    template.render(engine, dataModel, out);
-                }
-            } catch (TemplateException e) {
-                // TODO 渲染失败，去掉某些堆栈信息
-                IOUtils.writeQuietly(out, e.getMessage());
+            } else {
+                template = engine.getTemplate(templateInfo.getContent(), true);
             }
+            if (template.exists()) {
+                template.render(engine, dataModel, out);
+            }
+        } catch (TemplateException e) {
+            // TODO 渲染失败，去掉某些堆栈信息
+            IOUtils.writeQuietly(out, e.getMessage());
         }
     }
 
@@ -193,7 +203,10 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     @Override
     public IPage<TemplateInfo> listPageTemplates(TemplateInfoListParam param) {
-        return templateInfoMapper.selectPage(param, new LambdaQueryWrapper<TemplateInfo>().eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType()).like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName()));
+        LambdaQueryWrapper<TemplateInfo> qw = new LambdaQueryWrapper<>();
+        qw.eq(StringUtils.hasText(param.getTemplateType()), TemplateInfo::getProvider, param.getTemplateType());
+        qw.like(StringUtils.hasText(param.getTemplateName()), TemplateInfo::getTemplateName, param.getTemplateName());
+        return templateInfoMapper.selectPage(param, qw);
     }
 
     @Override
@@ -219,8 +232,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     }
 
     /**
-     * 模板迁移
-     * 启动时进行
+     * 启动时进行模板迁移
      */
     @Override
     public void migrateTemplates() {
@@ -338,5 +350,27 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public List<TemplateVariableMetadata> introspect(TemplateInfo templateInfo) {
         return Collections.emptyList();
+    }
+
+    /**
+     * 按 模板ID 查询模板 ID 和名称 Map
+     *
+     * @param templateIds 模板 ID
+     * @return {@link Map}<{@link Long}, {@link String}>
+     */
+    @Override
+    public Map<Long, String> listIdAndNameMapByIds(@Nullable Collection<Long> templateIds) {
+        LambdaQueryWrapper<TemplateInfo> qw = new LambdaQueryWrapper<>();
+        qw.select(TemplateInfo::getTemplateId, TemplateInfo::getTemplateName);
+        qw.in(templateIds != null && !templateIds.isEmpty(), TemplateInfo::getTemplateId, templateIds);
+        List<TemplateInfo> list = list(qw);
+        if (list.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        HashMap<Long, String> map = new HashMap<>();
+        for (TemplateInfo templateInfo : list) {
+            map.put(templateInfo.getTemplateId(), templateInfo.getTemplateName());
+        }
+        return map;
     }
 }

@@ -11,7 +11,13 @@
     </resultMap>
 
     <select id="selectListByTableId" resultType="io.devpl.backend.entity.TableFileGeneration">
-        SELECT tfg.*, tfg1.template_id, tfg1.template_name
+        SELECT tfg.id,
+               tfg.table_id,
+               tfg.generation_id,
+               tfg1.file_name,
+               tfg1.save_path,
+               tfg1.template_id,
+               tfg1.template_name
         FROM table_file_generation tfg
                  LEFT JOIN template_file_generation tfg1 ON tfg.generation_id = tfg1.id
         WHERE tfg.is_deleted = 0

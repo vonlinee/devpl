@@ -4,7 +4,6 @@ import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.param.FileGenerationParam;
-import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.domain.vo.FileGenerationResult;
 import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
@@ -39,7 +38,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private DomainModelService baseClassService;
     @Resource
-    private TableGenerationService tableService;
+    private TableGenerationService tableGenerationService;
     @Resource
     private TableGenerationFieldService tableFieldService;
     @Resource
@@ -57,12 +56,18 @@ public class FileGenerationServiceImpl implements FileGenerationService {
     @Resource
     private CodeGenProperties codeGenProperties;
 
+    /**
+     * 生成文件
+     *
+     * @param param 参数
+     * @return {@link FileGenerationResult}
+     */
     @Override
-    public FileGenerationResult generateFile(FileGenerationParam param) {
+    public FileGenerationResult generateFiles(FileGenerationParam param) {
         FileGenerationResult result = new FileGenerationResult(null);
         // 生成代码
         final String parentDirectory = DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
-        List<TableGeneration> tableGenerations = tableService.listByIds(param.getTableIds());
+        List<TableGeneration> tableGenerations = tableGenerationService.listByIds(param.getTableIds());
         for (TableGeneration tableGeneration : tableGenerations) {
             result.addRootDir(this.generateForTable(tableGeneration, parentDirectory));
         }
@@ -84,40 +89,40 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         if (CollectionUtils.isEmpty(fileToBeGenerated)) {
             return parentDirectory;
         }
+        table.setGenerationFiles(fileToBeGenerated);
         table.setFieldList(tableFieldService.listByTableId(table.getId()));
-        // 数据模型
+        // 单个表数据模型
         Map<String, Object> dataModel = this.prepareDataModel(table);
+        // 全局模板参数
+        for (TemplateParam param : templateParamService.getGlobalTemplateParams()) {
+            Object val = dataModel.get(param.getParamKey());
+            if (val != null) {
+                // 覆盖
+            } else {
+                dataModel.put(param.getParamKey(), param.getParamValue());
+            }
+        }
 
         table.setTemplateArguments(dataModel);
+        // 保存表生成信息
+        tableGenerationService.updateById(table);
 
-        tableService.updateById(table);
-
-        StringBuilder sb = new StringBuilder();
-
+        // 使用的模板ID
         Set<Long> templateIds = CollectionUtils.toSet(fileToBeGenerated, TableFileGeneration::getTemplateId);
-
         // 使用的模板列表
         List<TemplateInfo> templates = templateService.listByIds(templateIds);
 
         final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templates, TemplateInfo::getTemplateId);
 
+        // 生成该表需要生成的所有文件
         for (TableFileGeneration tfg : fileToBeGenerated) {
             dataModel.put("templateName", tfg.getTemplateName());
-
-            templateFileGenerationService.saveTemplateArguments(tfg, dataModel);
-
-            String saveLocation = PathUtils.of(parentDirectory, tfg.getSavePath(), tfg.getFileName());
-
-            saveLocation = this.getAbsolutePath(saveLocation);
-            sb.append("模板").append(tfg.getTemplateName()).append("\t => ").append(saveLocation).append("\n");
+            templateFileGenerationService.saveTemplateFileGenerationArguments(tfg, dataModel);
+            String saveLocation = this.getAbsolutePath(PathUtils.of(parentDirectory, tfg.getSavePath(), tfg.getFileName()));
             File file = new File(saveLocation);
-
             FileUtils.createFileQuietly(file, true);
             if (file.exists()) {
-                sb.append("\t创建文件成功 ").append(file.getAbsolutePath()).append("\n");
-
                 TemplateInfo templateInfo = templateInfoMap.get(tfg.getTemplateId());
-
                 if (templateInfo != null) {
                     try (Writer writer = new FileWriter(file)) {
                         templateService.render(templateInfo, dataModel, writer);
@@ -127,9 +132,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
                 }
             }
         }
-
-        log.info("生成日志 \n{}", sb);
-
         return parentDirectory;
     }
 
@@ -149,9 +151,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 数据模型
         Map<String, Object> dataModel = new HashMap<>();
         // 获取数据库类型
-        dataModel.put("dbType", datasourceService.getDatabaseProductName(table.getDatasourceId()));
         dataModel.put("entity", table.getClassName());
-
         // 包名配置
         Map<String, Object> packageConfig = new HashMap<>();
         packageConfig.put("Controller", table.getPackageName() + ".controller");
@@ -161,14 +161,15 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         packageConfig.put("ServiceImpl", table.getPackageName() + ".service.impl");
 
         dataModel.put("package", packageConfig);
-
         // 表配置信息
         Map<String, Object> tableConfig = new HashMap<>();
         tableConfig.put("entityPath", table.getTableName());
+        tableConfig.put("comment", table.getTableComment());
         tableConfig.put("controllerName", table.getClassName() + ".Controller");
         dataModel.put("table", tableConfig);
 
         // 项目信息
+        // 包路径
         dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
@@ -188,7 +189,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
 
         // 设置基类信息
         setBaseClass(dataModel, table);
-
         // 导入的包列表
         Set<String> importList = new HashSet<>();
         dataModel.put("importList", importList);
@@ -203,11 +203,6 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 前后端生成路径
         dataModel.put("backendPath", table.getBackendPath());
         dataModel.put("frontendPath", table.getFrontendPath());
-
-        // 全局模板参数
-        for (TemplateParam param : templateParamService.getGlobalTemplateParams()) {
-            dataModel.put(param.getParamKey(), param.getParamValue());
-        }
 
         return dataModel;
     }

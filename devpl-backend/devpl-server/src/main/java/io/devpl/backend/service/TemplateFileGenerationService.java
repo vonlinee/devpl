@@ -9,11 +9,10 @@ import java.util.Map;
 public interface TemplateFileGenerationService extends IService<TemplateFileGeneration> {
 
     /**
-     * TODO 渲染模板文件
+     * 保存模板文件的模板参数
      *
-     * @param id 生成ID
+     * @param generation 表生成信息
+     * @param arguments  单个模板参数
      */
-    void generate(Long id);
-
-    void saveTemplateArguments(TableFileGeneration generation, Map<String, Object> arguments);
+    boolean saveTemplateFileGenerationArguments(TableFileGeneration generation, Map<String, Object> arguments);
 }

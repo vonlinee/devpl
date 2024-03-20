@@ -44,11 +44,11 @@ const emits = defineEmits([
   // 点击预览按钮，预览模板
   "handlePreview",
   // 选择的模板变化
-  "handleValueChange",
+  "valueChange",
 ])
 
 function onSelectedValueChange(value: number) {
-  emits("handleValueChange", value)
+  emits("valueChange", value)
 }
 
 /**

@@ -9,12 +9,15 @@ import java.util.List;
 
 /**
  * 表文件生成记录表
- *
- * @author vonlinee vonlinee@163.com
- * @since 1.0.0 2023-11-24
  **/
 @Mapper
 public interface TableFileGenerationMapper extends BaseMapper<TableFileGeneration> {
 
+    /**
+     * 按表 ID 查询列表
+     *
+     * @param tableId 表 ID
+     * @return {@link List}<{@link TableFileGeneration}>
+     */
     List<TableFileGeneration> selectListByTableId(@Param("tableId") Long tableId);
 }

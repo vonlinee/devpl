@@ -38,7 +38,7 @@ public class CodeGenerationController {
      */
     @PostMapping("/file")
     public FileGenerationResult generatorCode(@RequestBody FileGenerationParam param) {
-        return fileGenService.generateFile(param);
+        return fileGenService.generateFiles(param);
     }
 
     /**
@@ -121,7 +121,7 @@ public class CodeGenerationController {
      */
     @PostMapping("/genfiles/config")
     public Result<Boolean> updateFilesToBeGenerated(@RequestBody TableFileGenParam param) {
-        return Result.ok(tableFileGenerationService.updateFilesToBeGenerated(param));
+        return Result.ok(tableFileGenerationService.updateGeneratedFiles(param));
     }
 
     /**
@@ -136,7 +136,7 @@ public class CodeGenerationController {
             for (TableFileGeneration tfg : param.getFileInfoList()) {
                 tfg.setDeleted(true);
             }
-            return Result.ok(tableFileGenerationService.updateFilesToBeGenerated(param));
+            return Result.ok(tableFileGenerationService.updateGeneratedFiles(param));
         }
         return Result.ok(tableFileGenerationService.removeBatchByIds(param.getFileInfoList()));
     }

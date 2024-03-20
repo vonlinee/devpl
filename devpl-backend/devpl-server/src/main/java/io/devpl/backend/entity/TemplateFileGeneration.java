@@ -10,9 +10,6 @@ import lombok.Setter;
 /**
  * 模板文件生成关联表
  * 通过模板进行文件生成
- *
- * @author vonlinee vonlinee@163.com
- * @since 1.0.0 2023-11-25
  */
 @Getter
 @Setter
@@ -77,4 +74,10 @@ public class TemplateFileGeneration {
      */
     @TableField(value = "config_table_name")
     private String configTableName;
+
+    /**
+     * 模板参数，存储JSON文本
+     */
+    @TableField(value = "template_arguments")
+    private String templateArguments;
 }
