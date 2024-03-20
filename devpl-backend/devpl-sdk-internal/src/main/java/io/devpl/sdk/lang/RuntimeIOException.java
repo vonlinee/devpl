@@ -11,7 +11,7 @@ import java.io.IOException;
 public class RuntimeIOException extends RuntimeException {
 
     public RuntimeIOException(IOException exception) {
-        super(exception);
+        super(exception.getMessage(), exception);
     }
 
     public RuntimeIOException(String message, IOException exception) {

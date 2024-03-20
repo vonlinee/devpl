@@ -1,4 +1,4 @@
-package io.devpl.backend.utils;
+package io.devpl.codegen.jdbc;
 
 import java.lang.annotation.*;
 import java.sql.Types;

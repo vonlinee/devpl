@@ -29,6 +29,9 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
+      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
+        align="center">
+      </el-table-column>
       <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
         <template #default="scope">
           <el-text class="mx-1" type="primary" style="cursor: pointer" @click="showTemplateEditDialog(scope.row)">{{
@@ -36,8 +39,6 @@
           </el-text>
         </template>
       </el-table-column>
-      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
-        align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center" align="center"
         width="300px"></el-table-column>
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">

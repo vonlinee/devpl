@@ -2,6 +2,7 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
+import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.param.FileGenerationParam;
 import io.devpl.backend.domain.param.TableImportParam;
 import io.devpl.backend.domain.vo.FileGenerationResult;
@@ -74,7 +75,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
      * @param table           table_file_generation信息
      * @param parentDirectory 根目录
      * @return 生成文件的根目录 目录自定义 codeGenRootDir为根路径，前端不可见
-     * @see TableGenerationService#importSingleTable(TableImportParam)
+     * @see TableGenerationService#importSingleTable(TableImportInfo)
      */
     @Override
     public String generateForTable(TableGeneration table, String parentDirectory) {

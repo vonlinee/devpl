@@ -16,6 +16,7 @@ import io.devpl.backend.service.TemplateDirectiveService;
 import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.codegen.type.SimpleDataType;
+import io.devpl.sdk.util.StringUtils;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -47,14 +48,12 @@ public class TemplateController {
      * @param templateInfo 模板信息
      * @return 是否成功
      */
-    @PostMapping(value = "/upload")
-    public Result<Boolean> uploadTemplate(TemplateInfo templateInfo) {
+    @PostMapping(value = "/add")
+    public Result<Boolean> addTemplate(@RequestBody TemplateInfo templateInfo) {
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
-        if (templateInfo.isFileTemplate()) {
-            Assert.hasText(templateInfo.getTemplatePath(), "文件路径不能为空");
-        } else {
-            Assert.hasText(templateInfo.getContent(), "模板内容不能为空");
+        if (templateInfo.isFileTemplate() && StringUtils.isBlank(templateInfo.getContent())) {
+            return Result.error("模板内容不能为空");
         }
         return Result.ok(templateService.addTemplate(templateInfo));
     }

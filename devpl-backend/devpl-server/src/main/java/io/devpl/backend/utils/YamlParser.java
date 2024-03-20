@@ -2,7 +2,7 @@ package io.devpl.backend.utils;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import org.apache.commons.collections.list.GrowthList;
+import io.devpl.sdk.collection.GrowthList;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,7 +227,7 @@ public class YamlParser {
         if (parent.containsKey(key)) {
             return (List<Object>) parent.get(key);
         } else {
-            List<Object> child = new GrowthList(16);
+            List<Object> child = new GrowthList<>(16);
             parent.put(key, child);
             return child;
         }

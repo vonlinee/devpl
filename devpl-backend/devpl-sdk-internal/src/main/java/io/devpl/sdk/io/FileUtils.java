@@ -267,6 +267,17 @@ public abstract class FileUtils {
     /**
      * 以UTF8编码读取文件内容为字符串
      *
+     * @param path 文件路径
+     * @return 文件内容
+     * @throws IOException IOException
+     */
+    public static String readUTF8String(Path path) throws IOException {
+        return readString(path.toFile(), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 以UTF8编码读取文件内容为字符串
+     *
      * @param file 文件对象
      * @return 文件内容
      * @throws IOException IOException
@@ -1948,5 +1959,20 @@ public abstract class FileUtils {
      */
     public static File newFile(String parent, String... children) {
         return new File(parent, StringUtils.join(File.separatorChar, children));
+    }
+
+    /**
+     * 递归复制整个文件夹内容（包括所有子目录）
+     *
+     * @param source 原目录
+     * @param target 存放目录
+     */
+    public static boolean copyDirectories(File source, File target) {
+        try {
+            org.apache.commons.io.FileUtils.copyDirectory(source, target);
+        } catch (IOException e) {
+            throw RuntimeIOException.wrap(e);
+        }
+        return true;
     }
 }

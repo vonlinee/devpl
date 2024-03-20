@@ -30,8 +30,8 @@ export function apiListTemplateTypes() {
  * 新增模板
  * @param params
  */
-export function apiAddTemplate(params: object) {
-  return http.post("/api/codegen/template/save", params);
+export function apiAddTemplate(params: TemplateInfo) {
+  return http.post("/api/codegen/template/add", params);
 }
 
 /**

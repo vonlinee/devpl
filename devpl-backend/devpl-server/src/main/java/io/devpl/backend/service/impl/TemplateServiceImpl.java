@@ -21,8 +21,10 @@ import io.devpl.codegen.template.enjoy.JFinalEnjoyTemplateEngine;
 import io.devpl.codegen.template.freemarker.FreeMarkerTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.sdk.io.FileUtils;
+import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
 import io.devpl.sdk.util.CollectionUtils;
+import io.devpl.sdk.util.IdUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -35,11 +37,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -94,6 +92,28 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         templateInfo.setUpdateTime(LocalDateTime.now());
         templateInfo.setCreateTime(LocalDateTime.now());
         templateInfo.setDeleted(false);
+        if (templateInfo.isFileTemplate() && StringUtils.hasText(templateInfo.getContent())) {
+            // 将模板保存到本地文件
+            String extension = FilenameUtils.getExtension(templateInfo.getTemplateName());
+            if (extension == null || extension.isEmpty()) {
+                extension = "";
+            } else {
+                extension = "." + extension;
+            }
+            TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
+            if (engineType != null) {
+                extension = "." + engineType.getExtension();
+            }
+            String templateFileName = templateInfo.getTemplateName() + "_" + IdUtils.simple32UUID() + extension;
+            Path dir = getTemplateSaveLocation(null, "custom");
+            Path path = Paths.get(dir.toString(), templateFileName);
+            if (!Files.exists(path)) {
+                FileUtils.createFileQuietly(path, true);
+            }
+            File file = path.toFile();
+            FileUtils.writeString(file, templateInfo.getContent());
+            templateInfo.setTemplatePath(formatTemplatePath(file.getAbsolutePath()));
+        }
         return templateInfoMapper.insert(templateInfo) == 1;
     }
 
@@ -188,6 +208,16 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         return list(qw);
     }
 
+    public Path getTemplateSaveLocation(String templateLocation, String dir) {
+        if (templateLocation == null) {
+            templateLocation = codeGenProperties.getTemplateLocation();
+        }
+        if (dir == null) {
+            return Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
+        }
+        return Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory(), dir);
+    }
+
     /**
      * 模板迁移
      * 启动时进行
@@ -195,8 +225,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public void migrateTemplates() {
         String templateLocation = codeGenProperties.getTemplateLocation();
-        final Path targetLocation = Path.of(templateLocation, "devpl", codeGenProperties.getTemplateDirectory());
-        log.info("开始进行模板迁移{}", targetLocation.toAbsolutePath());
+        final Path targetLocation = getTemplateSaveLocation(templateLocation, null);
         if (!Files.exists(targetLocation)) {
             try {
                 Files.createDirectories(targetLocation);
@@ -208,16 +237,18 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         URL codegenDir = this.getClass().getClassLoader().getResource(codeGenProperties.getTemplateDirectory());
         if (codegenDir != null) {
             File templateDir = new File(codegenDir.getPath());
-
             if (!templateDir.exists()) {
                 log.error("模板迁移至{}失败，目录{}不存在", targetLocation, templateDir.getAbsolutePath());
                 return;
             }
 
-            Path path = templateDir.toPath();
+            if (!FileUtils.copyDirectories(templateDir, targetLocation.toFile())) {
+                return;
+            }
+            log.info("复制模板 {} -> {}", templateDir, targetLocation.toFile());
             try {
                 List<Path> templateFilePaths = new ArrayList<>();
-                Path start = Files.walkFileTree(path, new FileVisitor<>() {
+                Path start = Files.walkFileTree(targetLocation, new FileVisitor<>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                         return FileVisitResult.CONTINUE;
@@ -246,8 +277,9 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                 LocalDateTime now = LocalDateTime.now();
                 List<TemplateInfo> templateInfos = new ArrayList<>();
                 for (Path templateFile : templateFilePaths) {
-                    final String templatePath = formatTemplatePath(FileUtils.getRelativePathString(templateFile, start));
                     // 同一个路径表示唯一一个模板
+                    // 路径都是本地文件路径
+                    final String templatePath = formatTemplatePath(templateFile.toAbsolutePath().toString());
                     TemplateInfo templateInfo = map.get(templatePath);
                     if (templateInfo == null) {
                         templateInfo = new TemplateInfo();
@@ -266,12 +298,17 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                     templateInfo.setType(1);
                     templateInfo.setUpdateTime(now);
                     templateInfo.setRemark("");
-                    try {
-                        templateInfo.setContent(FileUtils.readString(templateFile.toFile(), StandardCharsets.UTF_8));
-                    } catch (IOException e) {
-                        log.error("读取文件失败 {} ", templateFile);
-                    }
 
+                    /**
+                     * 如果是字符串模板，读取文件内容保存到数据库
+                     */
+                    if (templateInfo.isStringTemplate()) {
+                        try {
+                            templateInfo.setContent(FileUtils.readUTF8String(templateFile));
+                        } catch (IOException e) {
+                            log.error("读取文件失败 {} ", templateFile);
+                        }
+                    }
                     templateInfos.add(templateInfo);
                 }
                 saveOrUpdateBatch(templateInfos);
@@ -281,6 +318,12 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         }
     }
 
+    /**
+     * 将路径全部统一用/进行分割
+     *
+     * @param templatePath 模板路径
+     * @return 用/进行分割的路径
+     */
     @Override
     public String formatTemplatePath(String templatePath) {
         return templatePath.replace("\\", "/").replace("\\\\", "/");

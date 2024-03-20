@@ -1,6 +1,5 @@
 package io.devpl.codegen.template.freemarker;
 
-import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -26,7 +25,7 @@ public class FreeMarkerTemplateEngine extends AbstractTemplateEngine {
         configuration.setDefaultEncoding(StandardCharsets.UTF_8.name());
         // FreeMarker 加载模板目录主要可以通过三种方式来实现，分别是基于文件系统、基于 Web 项目以及基于类路径。
         // 指定加载模板的类
-        configuration.setTemplateLoader(new ClassTemplateLoader());
+        // configuration.setTemplateLoader();
         try {
             configuration.setDirectoryForTemplateLoading(new File("/"));
         } catch (IOException e) {
