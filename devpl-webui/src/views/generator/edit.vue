@@ -221,6 +221,7 @@ import TemplateSelector from "./TemplateSelector.vue"
 import CodeGenResult from "@/views/generator/CodeGenResult.vue"
 import { apiListSelectableTemplates } from "@/api/template"
 import { Message } from "@/hooks/message"
+import { apiListDataTypeOptions } from "@/api/datatype"
 
 /**
  * 展示生成结果弹窗Ref
@@ -280,7 +281,7 @@ const dataFormRef = ref()
 
 const sortable = ref() as any
 
-const typeList = ref([]) as any
+const typeList = ref<SelectOptionVO[]>([])
 const tableId = ref()
 const generationFiles = ref<TableFileGeneration[]>()
 const fieldList = ref<TableGenerationField[]>([])
@@ -322,7 +323,7 @@ const refreshGeneratedFiles = (tableId: number) => {
 }
 
 const onTemplateChange = (row: TableFileGeneration, newValue: number) => {
-  console.log(row);
+  
 }
 
 /**
@@ -390,14 +391,25 @@ const getTable = (id: number) => {
   })
 }
 
+/**
+ * 获取Java字段数据类型
+ */
 const getFieldTypeList = async () => {
-  // typeList.value = []
-  // // 获取数据
-  // const { data } = await useFieldTypeListApi()
-  // // 设置属性类型值
-  // data.forEach((item: any) => typeList.value.push({ label: item, value: item }))
-  // // 增加Object类型
-  // typeList.value.push({ label: "Object", value: "Object" })
+  typeList.value = []
+  // 获取数据
+  const { data } = await apiListDataTypeOptions("java")
+  // 设置属性类型值
+  data.forEach((item: any) => typeList.value.push({
+    key: item.value,
+    label: item.value,
+    value: item.value
+  }))
+  // 增加Object类型
+  typeList.value.push({
+    label: "java.lang.Object", 
+    value: "java.lang.Object",
+    key: "java.lang.Object"
+  })
 }
 
 /**

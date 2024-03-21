@@ -19,7 +19,11 @@ type TemplateInfo = {
   /**
    * 模板ID
    */
-  templateId?: number
+  id?: number
+  /**
+   * 模板ID
+   */
+  templateId?: string
   /**
    * 模板名称
    */

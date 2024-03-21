@@ -1,6 +1,7 @@
 package io.devpl.sdk.util;
 
-import org.jetbrains.annotations.Nullable;
+import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.*;
@@ -71,15 +72,28 @@ public abstract class CollectionUtils {
         return list.stream().collect(Collectors.groupingBy(classifier));
     }
 
+    /**
+     * 对list进行排序
+     *
+     * @param list       list集合
+     * @param comparator 元素比较器
+     * @param <E>        元素类型
+     * @return 排序，集合为null则返回空集合
+     */
+    @NotNull
     public static <E> List<E> sort(List<E> list, Comparator<E> comparator) {
-        return list.stream().sorted(comparator).collect(Collectors.toList());
+        if (list == null) {
+            return Collections.emptyList();
+        }
+        list.sort(comparator);
+        return list;
     }
 
-    public static <E, T extends Comparable<T>> List<E> sortBy(List<E> list, Function<E, T> keyExtractor) {
+    public static <E, T extends Comparable<T>> List<E> sortBy(Collection<E> list, Function<E, T> keyExtractor) {
         return sortBy(list, keyExtractor, true);
     }
 
-    public static <E, T extends Comparable<T>> List<E> sortBy(List<E> list, Function<E, T> keyExtractor, boolean asc) {
+    public static <E, T extends Comparable<T>> List<E> sortBy(Collection<E> list, Function<E, T> keyExtractor, boolean asc) {
         return list.stream().sorted(asc ? Comparator.comparing(keyExtractor) : Comparator.comparing(keyExtractor).reversed()).collect(Collectors.toList());
     }
 
@@ -91,8 +105,33 @@ public abstract class CollectionUtils {
         return sumInt(list, true, mapper);
     }
 
-    public static <E, T> List<T> toList(Collection<E> list, Function<E, T> mapper) {
-        return list.stream().map(mapper).collect(Collectors.toList());
+    /**
+     * 将集合元素映射为 list
+     * 仅仅支持单次映射
+     *
+     * @param collection 原集合
+     * @param mapper     映射
+     * @param <E>        原集合元素类型
+     * @param <T>        映射后的集合元素类型
+     * @return 映射后的集合
+     */
+    public static <E, T> List<T> toList(Collection<E> collection, Function<E, T> mapper) {
+        return collection.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    /**
+     * 将集合元素映射为 list
+     * 仅仅支持2次映射
+     *
+     * @param collection 原集合
+     * @param mapper1    映射1
+     * @param mapper2    映射2
+     * @param <E>        原集合元素类型
+     * @param <T>        映射后的集合元素类型
+     * @return 映射后的集合
+     */
+    public static <E, T, F> List<F> toList(Collection<E> collection, Function<E, T> mapper1, Function<T, F> mapper2) {
+        return collection.stream().map(mapper1).map(mapper2).collect(Collectors.toList());
     }
 
     /**
@@ -112,22 +151,44 @@ public abstract class CollectionUtils {
         return collection.stream().map(mapper).flatMap(Collection::stream).toList();
     }
 
-    public static <E, T> Set<T> toSet(List<E> list, Function<E, T> mapper) {
+    public static <E, T> Set<T> toSet(Collection<E> list, Function<E, T> mapper) {
         if (isEmpty(list)) {
             return Collections.emptySet();
         }
         return list.stream().map(mapper).collect(Collectors.toSet());
     }
 
-    public static <E, T> Set<T> toSet(List<E> list, Function<E, T> mapper, Predicate<? super T> condition) {
+    public static <E, T> Set<T> toSet(Collection<E> list, Function<E, T> mapper, Predicate<? super T> condition) {
         return list.stream().map(mapper).filter(condition).collect(Collectors.toSet());
     }
 
-    public static <E, K, V> Map<K, V> toMap(List<E> list, Function<? super E, ? extends K> keyMapper, Function<? super E, ? extends V> valueMapper) {
+    public static <E, K, V> Map<K, V> toMap(Collection<E> list, Function<? super E, ? extends K> keyMapper, Function<? super E, ? extends V> valueMapper) {
         return list.stream().collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
-    public static <E, K> Map<K, E> toMap(List<E> list, Function<? super E, ? extends K> keyMapper) {
+    /**
+     * 对枚举类进行映射
+     *
+     * @param enumClass   枚举类类型
+     * @param keyMapper   key
+     * @param valueMapper value
+     * @param <E>         枚举类类型
+     * @param <K>         key类型
+     * @param <V>         value类型
+     * @return Map
+     */
+    public static <E extends Enum<E>, K, V> Map<K, V> toMap(Class<E> enumClass, Function<E, ? extends K> keyMapper, Function<E, ? extends V> valueMapper) {
+        return toMap(EnumSet.allOf(enumClass), keyMapper, valueMapper);
+    }
+
+    /**
+     * 将单列集合映射为map
+     *
+     * @param list      列表
+     * @param keyMapper 键映射器
+     * @return {@link Map}<{@link K}, {@link E}>
+     */
+    public static <E, K> Map<K, E> toMap(Collection<E> list, Function<? super E, ? extends K> keyMapper) {
         return list.stream().collect(Collectors.toMap(keyMapper, Function.identity()));
     }
 
@@ -245,15 +306,23 @@ public abstract class CollectionUtils {
      * 集合添加多个元素，支持数组和可变参数
      *
      * @param intColl int集合
-     * @param ints    新加的元素
+     * @param nums    新加的元素
      */
-    public static void addAll(Collection<Integer> intColl, int[] ints) {
-        if (intColl == null || ints == null || ints.length == 0) {
+    public static void addAll(Collection<Integer> intColl, int[] nums) {
+        if (intColl == null || nums == null || nums.length == 0) {
             return;
         }
-        addAll(intColl, ArrayUtils.toIntegerArray(ints));
+        addAll(intColl, ArrayUtils.toIntegerArray(nums));
     }
 
+    /**
+     * 将集合先做一层映射，然后按条件统计映射后的集合元素
+     *
+     * @param collection 集合
+     * @param condition  条件
+     * @param <E>        集合元素类型
+     * @return 统计数量，返回Int
+     */
     public static <E, T> long count(Collection<E> collection, Function<E, T> key, Predicate<T> condition) {
         return collection.stream().map(key).filter(condition).count();
     }
@@ -274,7 +343,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * 按条件统计某个字段
+     * 按条件统计元素个数
      *
      * @param collection 集合
      * @param condition  条件
@@ -292,7 +361,7 @@ public abstract class CollectionUtils {
      * 将集合平铺
      *
      * @param collection 集合，元素也为集合
-     * @param collector  Collector
+     * @param collector  Collector, 平铺后的集合类型, {@link Collectors#toList()} {@link Collectors#toSet()}
      * @param <E>        集合元素类型
      * @param <R>        平铺后的集合类型
      * @return 平铺后的集合
@@ -301,11 +370,18 @@ public abstract class CollectionUtils {
         return collection.stream().flatMap(Collection::stream).collect(collector);
     }
 
-    public static <E> boolean anyMatch(List<E> patrolTeams, Predicate<E> condition) {
-        if (isEmpty(patrolTeams)) {
+    /**
+     * 是否有任何一个元素能匹配指定的条件
+     *
+     * @param collection 巡逻队
+     * @param condition  条件
+     * @return boolean
+     */
+    public static <E> boolean anyMatch(Collection<E> collection, Predicate<E> condition) {
+        if (isEmpty(collection)) {
             return false;
         }
-        for (E team : patrolTeams) {
+        for (E team : collection) {
             if (condition.test(team)) {
                 return true;
             }

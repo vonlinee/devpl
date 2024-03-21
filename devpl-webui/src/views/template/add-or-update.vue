@@ -2,7 +2,7 @@
   <vxe-modal
     v-model="visible"
     draggable
-    :title="!dataForm.templateId ? '新增' : '修改'"
+    :title="!dataForm.id ? '新增' : '修改'"
     :mask-closable="false"
     width="75%"
     :z-index="2000"
@@ -126,7 +126,7 @@ function templateTypeChange(val: any) {
  * 表单数据
  */
 const dataForm = reactive<TemplateInfo>({
-  templateId: undefined,
+  id: undefined,
   templateName: "",
   templatePath: "",
   content: "",
@@ -161,8 +161,8 @@ function onFileListChange(event: Event) {
  */
 const init = (row?: TemplateInfo) => {
   visible.value = true
-  if (row != undefined && row.templateId != undefined) {
-    dataForm.templateId = row.templateId
+  if (row != undefined && row.id != undefined) {
+    dataForm.id = row.id
     dataForm.content = row.content
     dataForm.type = row.type
     dataForm.typeName = assignTemplateTypeName(row.type)
@@ -179,7 +179,7 @@ const init = (row?: TemplateInfo) => {
 }
 
 function onClosed() {
-  dataForm.templateId = undefined
+  dataForm.id = undefined
 }
 
 const fileUpload = ref()
@@ -230,7 +230,7 @@ const submitHandle = () => {
     if (isBlank(dataForm.content)) {
       dataForm.content = monacoEditorRef.value.getText()
     }
-    if (dataForm.templateId) {
+    if (dataForm.id) {
       dataForm.content = monacoEditorRef.value.getText()
       // 编辑
       apiUpdateTemplate(toRaw(dataForm)).then((res) => {

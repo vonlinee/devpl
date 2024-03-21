@@ -48,7 +48,7 @@
           <el-button type="primary" link @click="openTemplateVarTableModal(scope.row)">参数表
           </el-button>
           <!-- v-if="!scope.row.internal"  -->
-          <el-button type="primary" link @click="deleteBatchHandle(scope.row.templateId)" style="color: red;">
+          <el-button type="primary" link @click="deleteBatchHandle(scope.row.id)" style="color: red;">
             删除
           </el-button>
         </template>
@@ -97,7 +97,7 @@ const state: DataTableOption = reactive({
     templateName: "",
     templateType: ""
   },
-  primaryKey: "templateId",
+  primaryKey: "id",
   isPage: true,
   queryPage: apiListTemplatesByPage,
   removeByIds: apiBatchRemoveTemplateByIds

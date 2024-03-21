@@ -22,11 +22,14 @@ import io.devpl.codegen.template.freemarker.FreeMarkerTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.annotations.Nullable;
+import io.devpl.sdk.annotations.Readonly;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
+import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.IdUtils;
+import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -37,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.net.URL;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -113,7 +115,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             }
             File file = path.toFile();
             FileUtils.writeString(file, templateInfo.getContent());
-            templateInfo.setTemplatePath(formatTemplatePath(file.getAbsolutePath()));
+            templateInfo.setTemplateFilePath(formatTemplatePath(file.getAbsolutePath()));
         }
         return templateInfoMapper.insert(templateInfo) == 1;
     }
@@ -145,7 +147,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             // 渲染模板
             Template template = Template.UNKNOWN;
             if (templateInfo.isFileTemplate()) {
-                File file = new File(templateInfo.getTemplatePath());
+                File file = new File(templateInfo.getTemplateFilePath());
                 if (file.exists()) {
                     String templateContent = FileUtils.readStringQuietly(file);
                     template = engine.getTemplate(templateContent, true);
@@ -233,6 +235,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
 
     /**
      * 启动时进行模板迁移
+     * 将 {@link CodeGenProperties#getTemplateDirectory()} 的目录下的所有模板文件移到 {@link CodeGenProperties#getTemplateLocation()} 目录下
+     * 目录层级不变，同时更新模板信息
      */
     @Override
     public void migrateTemplates() {
@@ -245,93 +249,162 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                 log.error("模板迁移至{}失败", targetLocation, e);
                 return;
             }
+        } else {
+            FileUtils.deleteDirectory(targetLocation);
         }
-        URL codegenDir = this.getClass().getClassLoader().getResource(codeGenProperties.getTemplateDirectory());
-        if (codegenDir != null) {
-            File templateDir = new File(codegenDir.getPath());
-            if (!templateDir.exists()) {
-                log.error("模板迁移至{}失败，目录{}不存在", targetLocation, templateDir.getAbsolutePath());
-                return;
-            }
-
-            if (!FileUtils.copyDirectories(templateDir, targetLocation.toFile())) {
-                return;
-            }
+        File templateDir = ResourceUtils.getClassPathFile(codeGenProperties.getTemplateDirectory());
+        if (templateDir == null || !templateDir.exists()) {
+            log.error("模板迁移至{}失败，目录{}不存在", targetLocation, codeGenProperties.getTemplateDirectory());
+            return;
+        }
+        try {
             log.info("复制模板 {} -> {}", templateDir, targetLocation.toFile());
-            try {
-                List<Path> templateFilePaths = new ArrayList<>();
-                Path start = Files.walkFileTree(targetLocation, new FileVisitor<>() {
-                    @Override
-                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                        return FileVisitResult.CONTINUE;
-                    }
+            List<Path> templateFilePaths = findTemplateFiles(targetLocation);
 
-                    @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                        templateFilePaths.add(file);
-                        return FileVisitResult.CONTINUE;
-                    }
+            updateTemplateOfDB(templateFilePaths);
 
-                    @Override
-                    public FileVisitResult visitFileFailed(Path file, IOException exc) {
-                        return FileVisitResult.CONTINUE;
-                    }
-
-                    @Override
-                    public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
-
-                List<TemplateInfo> internalTemplates = listInternalTemplates();
-                Map<String, TemplateInfo> map = CollectionUtils.toMap(internalTemplates, TemplateInfo::getTemplatePath);
-
-                LocalDateTime now = LocalDateTime.now();
-                List<TemplateInfo> templateInfos = new ArrayList<>();
-                for (Path templateFile : templateFilePaths) {
-                    // 同一个路径表示唯一一个模板
-                    // 路径都是本地文件路径
-                    final String templatePath = formatTemplatePath(templateFile.toAbsolutePath().toString());
-                    TemplateInfo templateInfo = map.get(templatePath);
-                    if (templateInfo == null) {
-                        templateInfo = new TemplateInfo();
-                    }
-                    String extName = FileUtils.getExtensionName(templateFile, null);
-                    for (TemplateEngineType provider : TemplateEngineType.values()) {
-                        if (provider.getExtension().equals(extName)) {
-                            templateInfo.setProvider(provider.getProvider());
-                            break;
-                        }
-                    }
-                    templateInfo.setInternal(true);
-                    templateInfo.setTemplateName(FileUtils.getFileName(templateFile));
-                    templateInfo.setDeleted(false);
-                    templateInfo.setTemplatePath(templatePath);
-                    templateInfo.setType(1);
-                    templateInfo.setUpdateTime(now);
-                    templateInfo.setRemark("");
-
-                    /**
-                     * 如果是字符串模板，读取文件内容保存到数据库
-                     */
-                    if (templateInfo.isStringTemplate()) {
-                        try {
-                            templateInfo.setContent(FileUtils.readUTF8String(templateFile));
-                        } catch (IOException e) {
-                            log.error("读取文件失败 {} ", templateFile);
-                        }
-                    }
-                    templateInfos.add(templateInfo);
-                }
-                saveOrUpdateBatch(templateInfos);
-            } catch (IOException e) {
-                log.error("模板迁移失败", e);
+            // 复制模板文件到本地文件目录
+            if (!FileUtils.copyDirectories(templateDir, targetLocation)) {
+                log.error("模板迁移至{}失败，复制文件失败", targetLocation);
             }
+        } catch (Exception e) {
+            log.error("模板迁移失败", e);
         }
     }
 
     /**
+     * 比较存在的模板和数据库记录的模板信息
+     *
+     * @param templateFilePaths 所有模板文件
+     */
+    private void updateTemplateOfDB(List<Path> templateFilePaths) {
+        // 库中已存在的模板
+        List<TemplateInfo> internalTemplates = listInternalTemplates();
+        final StringBuilder sb = new StringBuilder();
+        if (!CollectionUtils.isEmpty(internalTemplates)) {
+            // 绝对路径
+            final Map<String, String> providerMap = TemplateEngineType.toExtensionProviderMap();
+            // 待删除的模板
+            final List<TemplateInfo> templateInfoToRemove = new ArrayList<>();
+            // 项目目录下的模板信息 key-平台独立的文件绝对路径（数据库存储的字段） value
+            Map<String, Path> templateFilePathMap = CollectionUtils.toMap(templateFilePaths, p -> formatTemplatePath(p.toAbsolutePath().toString()));
+            final Iterator<TemplateInfo> iterator = internalTemplates.iterator();
+            while (iterator.hasNext()) {
+                TemplateInfo templateInfo = iterator.next();
+                // 都是文件模板
+                if (templateInfo.isFileTemplate() && !StringUtils.hasText(templateInfo.getTemplateFilePath())) {
+                    iterator.remove();
+                    templateInfoToRemove.add(templateInfo);
+                }
+
+                // 数据库中记录的模板在本地模板文件中不存在
+                if (!templateFilePathMap.containsKey(templateInfo.getTemplateFilePath())) {
+                    iterator.remove();
+                    templateInfoToRemove.add(templateInfo);
+                }
+            }
+            // 待更新的模板
+            final List<TemplateInfo> templateInfoToUpdate = new ArrayList<>();
+            // 待新增的模板
+            final List<TemplateInfo> templateInfoToSave = new ArrayList<>();
+            // 数据库的模板信息
+            Map<String, TemplateInfo> pathToTemplateInfoMap = CollectionUtils.toMap(internalTemplates, TemplateInfo::getTemplateFilePath);
+            for (Map.Entry<String, Path> entry : templateFilePathMap.entrySet()) {
+                // 统一路径
+                if (pathToTemplateInfoMap.containsKey(entry.getKey())) {
+                    TemplateInfo templateInfo = pathToTemplateInfoMap.get(entry.getKey());
+                    templateInfo = initTemplateInfo(entry.getValue(), providerMap, templateInfo);
+                    if (templateInfo != null) {
+                        templateInfoToUpdate.add(templateInfo);
+                    }
+                } else {
+                    // // 不存在，新增 新增的模板
+                    TemplateInfo templateInfo = initTemplateInfo(entry.getValue(), providerMap, null);
+                    if (templateInfo == null) {
+                        continue;
+                    }
+                    templateInfoToSave.add(templateInfo);
+                }
+            }
+            sb.append("更新").append(this.updateBatchById(templateInfoToUpdate) ? templateInfoToUpdate.size() : 0).append("个,");
+            sb.append("删除").append(this.removeBatchByIds(templateInfoToRemove) ? templateInfoToRemove.size() : 0).append("个,");
+            sb.append("保存").append(this.saveBatch(templateInfoToSave) ? templateInfoToSave.size() : 0).append("个");
+
+            List<TemplateInfo> templateInfos = initTemplateInfoList(templateFilePaths);
+            sb.append("保存").append(this.saveBatch(templateInfos) ? templateInfos.size() : 0).append("个");
+        }
+        log.info("模板迁移结果: {}", sb);
+    }
+
+    public List<Path> findTemplateFiles(Path start) {
+        List<Path> templateFilePaths = new ArrayList<>();
+        try {
+            Files.walkFileTree(start, new FileVisitor<>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    templateFilePaths.add(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeIOException(e);
+        }
+        return templateFilePaths;
+    }
+
+    @Nullable
+    private TemplateInfo initTemplateInfo(Path templateFile, @Readonly Map<String, String> templateProviderMap, @Nullable TemplateInfo templateInfo) {
+        String extName = FileUtils.getExtensionName(templateFile, null);
+        if (!templateProviderMap.containsKey(extName)) {
+            return null;
+        }
+        // 同一个路径表示唯一一个模板
+        // 路径都是本地文件路径
+        if (templateInfo == null) {
+            templateInfo = new TemplateInfo();
+        }
+        templateInfo.setProvider(templateProviderMap.get(extName));
+        templateInfo.setTemplateId(UUID.randomUUID().toString());
+        templateInfo.setInternal(true);
+        templateInfo.setTemplateName(FileUtils.getFileName(templateFile));
+        templateInfo.setDeleted(false);
+        templateInfo.setTemplateFilePath(formatTemplatePath(templateFile.toAbsolutePath().toString()));
+        templateInfo.setType(1);
+        templateInfo.setUpdateTime(LocalDateTime.now());
+        templateInfo.setRemark("");
+        return templateInfo;
+    }
+
+    private List<TemplateInfo> initTemplateInfoList(List<Path> templateFilePaths) {
+        List<TemplateInfo> templateInfos = new ArrayList<>();
+        final Map<String, String> providerMap = TemplateEngineType.toExtensionProviderMap();
+        for (Path templateFile : templateFilePaths) {
+            TemplateInfo templateInfo = initTemplateInfo(templateFile, providerMap, null);
+            if (templateInfo != null) {
+                templateInfos.add(templateInfo);
+            }
+        }
+        return templateInfos;
+    }
+
+    /**
      * 将路径全部统一用/进行分割
+     * 统一不同操作系统的存储路径
      *
      * @param templatePath 模板路径
      * @return 用/进行分割的路径
@@ -361,15 +434,15 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
     @Override
     public Map<Long, String> listIdAndNameMapByIds(@Nullable Collection<Long> templateIds) {
         LambdaQueryWrapper<TemplateInfo> qw = new LambdaQueryWrapper<>();
-        qw.select(TemplateInfo::getTemplateId, TemplateInfo::getTemplateName);
-        qw.in(templateIds != null && !templateIds.isEmpty(), TemplateInfo::getTemplateId, templateIds);
+        qw.select(TemplateInfo::getId, TemplateInfo::getTemplateName);
+        qw.in(templateIds != null && !templateIds.isEmpty(), TemplateInfo::getId, templateIds);
         List<TemplateInfo> list = list(qw);
         if (list.isEmpty()) {
             return Collections.emptyMap();
         }
         HashMap<Long, String> map = new HashMap<>();
         for (TemplateInfo templateInfo : list) {
-            map.put(templateInfo.getTemplateId(), templateInfo.getTemplateName());
+            map.put(templateInfo.getId(), templateInfo.getTemplateName());
         }
         return map;
     }

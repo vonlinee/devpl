@@ -52,7 +52,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Value(value = "${server.servlet.context-path:}")
     private String contextPath;
 
-    @Value(value = "${spring.profiles.active}")
+    @Value(value = "${spring.profiles.active:}")
     private String activeProfile;
 
     @Bean

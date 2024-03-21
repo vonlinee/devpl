@@ -101,7 +101,7 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 使用的模板列表
         List<TemplateInfo> templates = templateService.listByIds(templateIds);
 
-        final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templates, TemplateInfo::getTemplateId);
+        final Map<Long, TemplateInfo> templateInfoMap = CollectionUtils.toMap(templates, TemplateInfo::getId);
 
         // 生成该表需要生成的所有文件
         for (TableFileGeneration tfg : table.getGenerationFiles()) {

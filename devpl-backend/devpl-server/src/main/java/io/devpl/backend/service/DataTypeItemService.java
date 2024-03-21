@@ -44,7 +44,13 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
 
     List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
 
-    List<SelectOptionVO> getSelectableTypes(String typeGroup);
+    /**
+     * 获取某个分组可选择的类型列表，包含名称和ID
+     *
+     * @param typeGroupId 类型分组，为空则获取所有
+     * @return 选项列表VO
+     */
+    List<SelectOptionVO> getSelectableTypes(String typeGroupId);
 
     List<SelectOptionVO> getSelectableTypeGroups();
 

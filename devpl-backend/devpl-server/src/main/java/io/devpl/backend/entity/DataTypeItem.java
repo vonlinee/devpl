@@ -2,6 +2,7 @@ package io.devpl.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.devpl.sdk.annotations.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
@@ -23,7 +24,7 @@ public class DataTypeItem {
     private Long id;
 
     /**
-     * 类型分组名称
+     * 类型分组ID
      */
     @TableField(value = "type_group_id")
     private String typeGroupId;
@@ -35,16 +36,23 @@ public class DataTypeItem {
     private Long categoryId;
 
     /**
-     * 类型ID
+     * 类型Key，单个类型组内唯一，一般是简写形式
      */
     @TableField(value = "type_key")
     private String typeKey;
 
     /**
-     * 类型名称
+     * 类型Key，限定名称，例如 java.util.Date , java.util.List<java.util.Date> (集合类ing)
      */
-    @TableField(value = "type_name")
-    private String typeName;
+    @Nullable
+    @TableField(value = "full_type_key")
+    private String fullTypeKey;
+
+    /**
+     * 类型名称 中文名称
+     */
+    @TableField(value = "locale_type_name")
+    private String localeTypeName;
 
     /**
      * 该数据类型的值类型
@@ -80,7 +88,7 @@ public class DataTypeItem {
      * 是否内部定义的数据类型，内部定义的不可删除
      */
     @TableField(value = "internal")
-    private boolean internal;
+    private Boolean internal;
 
     /**
      * 创建时间
@@ -117,9 +125,7 @@ public class DataTypeItem {
     private String remark;
 
     /**
-     * 数据类型操作
-     * 1不可删除
-     * 2不可修改
+     * 数据类型操作 1不可删除 2不可修改
      */
     @TableField(value = "operation")
     private Integer operation;

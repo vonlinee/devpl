@@ -116,7 +116,7 @@ export const apiDeleteDataTypeGroupByIds = (groups: any[]) => {
  * 数据类型选项
  * @param typeGroupId
  */
-export const apiListDataTypeOptions = (typeGroupId?: string) => {
+export const apiListDataTypeOptions = (typeGroupId: string) => {
   return http.get("/api/datatype/options", {
     typeGroupId: typeGroupId || "",
   })

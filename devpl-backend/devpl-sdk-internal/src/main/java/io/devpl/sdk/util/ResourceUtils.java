@@ -1,5 +1,6 @@
 package io.devpl.sdk.util;
 
+import io.devpl.sdk.annotations.Nullable;
 import io.devpl.sdk.validation.Assert;
 
 import java.io.*;
@@ -447,8 +448,7 @@ public final class ResourceUtils {
             throw new FileNotFoundException(file.getAbsolutePath() + " doesnot exists");
         }
         try {
-            return file.toURI()
-                .toURL();
+            return file.toURI().toURL();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -488,5 +488,43 @@ public final class ResourceUtils {
             throw new FileNotFoundException(file.getAbsolutePath() + " doesn't exists");
         }
         return new BufferedInputStream(new FileInputStream(file));
+    }
+
+    /**
+     * 获取类路径下的文件，通过 {@link ClassLoader#getResource(String)} 获取
+     *
+     * @param path 类路径，不以/开头
+     * @return {@link File}
+     */
+    public static File getClassPathFile(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        URL resource = getClassLoader().getResource(path);
+        if (resource == null) {
+            return null;
+        }
+        return toFile(resource);
+    }
+
+    /**
+     * 将URL对象转为文件对象
+     *
+     * @param url 资源url
+     * @return 文件对象File
+     */
+    @Nullable
+    public static File toFile(URL url) {
+        if (url == null) {
+            return null;
+        }
+        if ("file".equals(url.getProtocol())) {
+            return new File(url.getFile());
+        }
+        // 其他协议
+        return null;
     }
 }

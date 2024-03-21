@@ -19,10 +19,16 @@ import org.apache.ibatis.type.JdbcType;
 public class TemplateInfo extends DBEntity {
 
     /**
+     * 主键
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
+    /**
      * 模板ID
      */
-    @TableId(value = "template_id", type = IdType.AUTO)
-    private Long templateId;
+    @TableField(value = "template_id")
+    private String templateId;
 
     /**
      * 模板名称：唯一
@@ -37,10 +43,10 @@ public class TemplateInfo extends DBEntity {
     private Integer type;
 
     /**
-     * 模板存放路径，相对路径
+     * 本地文件模板存放路径，相对路径
      */
-    @TableField(value = "path")
-    private String templatePath;
+    @TableField(value = "template_file_path")
+    private String templateFilePath;
 
     /**
      * 模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容

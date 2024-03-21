@@ -1,7 +1,7 @@
 package io.devpl.sdk.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -70,11 +70,17 @@ public final class ArrayUtils {
      *
      * @param nums 元素列表
      */
-    public static int @NotNull [] toIntArray(int @Nullable ... nums) {
+    public static int @NotNull [] toIntArray(@Nullable int... nums) {
         if (nums == null) return new int[0];
         return nums;
     }
 
+    /**
+     * 将基本类型int数组转为Integer数组
+     *
+     * @param intArr int arr
+     * @return {@link Integer[]}
+     */
     public static Integer[] toIntegerArray(int... intArr) {
         Integer[] res = new Integer[intArr.length];
         for (int i = 0; i < intArr.length; i++) {

@@ -8,9 +8,19 @@
         <result property="templateId" column="template_id"/>
         <result property="savePath" column="save_path"/>
     </resultMap>
+    <delete id="deleteByIds">
+        DELETE FROM template_info
+        WHERE
+        <choose>
+            <when test="ids != null and ids.size() != 0">
+                template_id IN <foreach collection="ids" item="id" separator="," open="(" close=")">#{id}</foreach>
+            </when>
+            <otherwise>1 != 1</otherwise>
+        </choose>
+    </delete>
 
     <select id="selectTemplateIdAndNames" resultType="io.devpl.backend.domain.vo.TemplateSelectVO">
-        SELECT template_id, template_name, remark
+        SELECT id AS template_id, template_name, remark
         FROM template_info
     </select>
 </mapper>

@@ -152,12 +152,14 @@ public class DataTypeController {
     }
 
     /**
+     * 获取某个分组可选择的类型列表，包含名称和ID
+     *
      * @param typeGroupId 类型分组，为空则获取所有
      * @return 选项VO
      */
     @GetMapping("/options")
     public Result<List<SelectOptionVO>> getSelectableTypes(
-        @RequestParam(name = "typeGroupId", required = false) String typeGroupId) {
+        @RequestParam(name = "typeGroupId") String typeGroupId) {
         return Result.ok(dataTypeService.getSelectableTypes(typeGroupId));
     }
 

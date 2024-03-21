@@ -106,7 +106,7 @@ function deleteHandle(rowIndex: number) {
  * @param row
  */
 function fillTemplateName(templateId: number, row: TargetGenFile) {
-  const targetOption = templateOptions.value.filter(option => option.templateId == templateId)[0];
+  const targetOption = templateOptions.value.filter(option => option.id == templateId)[0];
   if (targetOption) {
     row.templateId = templateId
     row.templateName = targetOption.templateName
@@ -196,8 +196,8 @@ const previewTemplate = (event : MouseEvent, row: TargetGenFile) => {
         </a>
         <el-select v-if="scope.row.editing" v-model="scope.row.templateName" class="m-2" placeholder="选择模板" filterable
           @change="(val) => fillTemplateName(val, scope.row)">
-          <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
-            :value="item.templateId!">
+          <el-option v-for="item in templateOptions" :key="item.id" :label="item.templateName"
+            :value="item.id!">
           </el-option>
         </el-select>
       </template>

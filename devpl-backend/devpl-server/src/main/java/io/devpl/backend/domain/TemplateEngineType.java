@@ -1,5 +1,8 @@
 package io.devpl.backend.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 模板引擎类型
  */
@@ -63,5 +66,13 @@ public enum TemplateEngineType {
             }
         }
         return null;
+    }
+
+    public static Map<String, String> toExtensionProviderMap() {
+        Map<String, String> map = new HashMap<>();
+        for (TemplateEngineType value : values()) {
+            map.put(value.getExtension(), value.getProvider());
+        }
+        return map;
     }
 }

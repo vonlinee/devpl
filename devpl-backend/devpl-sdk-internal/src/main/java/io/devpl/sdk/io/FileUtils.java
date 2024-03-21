@@ -755,6 +755,10 @@ public abstract class FileUtils {
         }
     }
 
+    public static void deleteDirectory(Path directory) {
+        del(directory);
+    }
+
     /**
      * Clean a directory without deleting it.
      *
@@ -1974,5 +1978,25 @@ public abstract class FileUtils {
             throw RuntimeIOException.wrap(e);
         }
         return true;
+    }
+
+    /**
+     * 递归复制整个文件夹内容（包括所有子目录）
+     *
+     * @param source 原目录
+     * @param target 存放目录
+     */
+    public static boolean copyDirectories(File source, Path target) {
+        return copyDirectories(source, target.toFile());
+    }
+
+    /**
+     * 递归复制整个文件夹内容（包括所有子目录）
+     *
+     * @param source 原目录
+     * @param target 存放目录
+     */
+    public static boolean copyDirectories(Path source, Path target) {
+        return copyDirectories(source.toFile(), target.toFile());
     }
 }

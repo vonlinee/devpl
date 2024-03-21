@@ -21,7 +21,19 @@ public interface DataTypeItemMapper extends MyBatisPlusMapper<DataTypeItem> {
         return DataTypeItem.class;
     }
 
-    List<DataTypeItem> listByCondition(@Param("param") DataTypeItem DataTypeItem);
+    /**
+     * 查询数据类型列表
+     *
+     * @param dataTypeItem 类型分组ID
+     * @return 数据类型列表
+     */
+    List<DataTypeItem> listByCondition(@Param("param") DataTypeItem dataTypeItem);
 
-    List<DataTypeItem> listByGroupId(@Param("typeGroupId") String typeGroup);
+    /**
+     * 查询单个组内所有的数据类型
+     *
+     * @param typeGroupId 类型分组ID MySQL忽略大小写
+     * @return 数据类型列表
+     */
+    List<DataTypeItem> listByGroupId(@Param("typeGroupId") String typeGroupId);
 }

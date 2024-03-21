@@ -61,7 +61,7 @@ public class DevToolsController {
 
         List<SelectOptionVO> dataTypes = dataTypeService.getSelectableTypes("MySQL");
 
-        Set<String> dataTypeLabels = dataTypes.stream().map(SelectOptionVO::getKey).map(String::valueOf).map(String::toLowerCase).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
+        Set<String> dataTypeLabels = dataTypes.stream().map(vo -> String.valueOf(vo.getKey()).toLowerCase()).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
         for (GroupField groupField : groupFields) {
             ColumnInfoVO column = new ColumnInfoVO();
             column.setColumnName(CaseFormat.camelToUnderline(groupField.getFieldName()));

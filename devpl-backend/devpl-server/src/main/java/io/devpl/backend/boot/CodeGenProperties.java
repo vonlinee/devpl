@@ -12,6 +12,7 @@ public class CodeGenProperties {
 
     /**
      * 模板目录(项目的resources目录)，存放内置模板
+     * 类路径下的目录，不以/开头
      */
     @Value("${devpl.codegen.template-dir:codegen/templates}")
     private String templateDirectory;

@@ -67,7 +67,7 @@ public class TemplateController {
      */
     @PostMapping(value = "/persist")
     public Result<Boolean> saveOrUpdateById(@RequestBody TemplateInfo templateInfo) {
-        return Result.ok(templateInfo.getTemplateId() == null ? templateService.addTemplate(templateInfo) : templateService.updateById(templateInfo));
+        return Result.ok(templateInfo.getId() == null ? templateService.addTemplate(templateInfo) : templateService.updateById(templateInfo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class TemplateController {
      */
     @PutMapping(value = "/update")
     public Result<Boolean> update(@RequestBody TemplateInfo templateInfo) {
-        Assert.notNull(templateInfo.getTemplateId(), "模板ID为空");
+        Assert.notNull(templateInfo.getId(), "模板ID为空");
         Assert.notNull(templateInfo.getType(), "模板类型为空");
         Assert.isTrue(templateInfo.getType() == 1 || templateInfo.getType() == 2, "模板类型参数错误");
         return Result.ok(templateService.updateById(templateInfo));

@@ -337,9 +337,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      */
     @Override
     public Map<String, Object> prepareDataModel(TableGeneration table) {
-        // 表信息
         // 数据模型
-        Map<String, Object> dataModel = new HashMap<>();
+        final Map<String, Object> dataModel = new HashMap<>();
         // 获取数据库类型
         dataModel.put("entity", table.getClassName());
         // 包名配置
@@ -376,7 +375,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
         // 设置字段分类
         setFieldTypeList(dataModel, table);
-
         // 设置基类信息
         setBaseClass(dataModel, table);
         // 导入的包列表

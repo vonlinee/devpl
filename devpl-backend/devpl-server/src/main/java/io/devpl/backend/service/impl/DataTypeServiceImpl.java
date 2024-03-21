@@ -19,6 +19,7 @@ import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.DataTypeItemService;
+import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -104,7 +105,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         LambdaQueryWrapper<DataTypeItem> qw = new LambdaQueryWrapper<>();
         qw.eq(StringUtils.hasText(param.getTypeGroupId()), DataTypeItem::getTypeGroupId, param.getTypeGroupId());
         qw.eq(StringUtils.hasText(param.getTypeKey()), DataTypeItem::getTypeKey, param.getTypeKey());
-        qw.like(StringUtils.hasText(param.getTypeName()), DataTypeItem::getTypeName, param.getTypeName());
+        qw.like(StringUtils.hasText(param.getTypeName()), DataTypeItem::getLocaleTypeName, param.getTypeName());
         qw.orderBy(true, true, DataTypeItem::getTypeGroupId);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }
@@ -157,16 +158,28 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         return dataTypeMappingMapper.listAllMappableDataTypes(typeId);
     }
 
+    /**
+     * 获取某个分组可选择的类型列表，包含名称和ID
+     *
+     * @param typeGroupId 类型分组，为空则获取所有
+     * @return 选项列表VO
+     */
     @Override
-    public List<SelectOptionVO> getSelectableTypes(String typeGroup) {
-        List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByGroupId(typeGroup);
+    public List<SelectOptionVO> getSelectableTypes(@NotNull String typeGroupId) {
+        List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByGroupId(typeGroupId);
         List<SelectOptionVO> result = new ArrayList<>();
         for (DataTypeItem item : dataTypeItems) {
-            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeGroupId() + item.getTypeName(), item.getTypeKey()));
+            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeGroupId() + ">" + item.getLocaleTypeName(),
+                StringUtils.whenBlank(item.getFullTypeKey(), item.getTypeKey())));
         }
         return result;
     }
 
+    /**
+     * 获取类型分组下拉列表
+     *
+     * @return 类型分组下拉列表
+     */
     @Override
     public List<SelectOptionVO> getSelectableTypeGroups() {
         List<DataTypeGroupVO> dataTypeGroupVOS = dataTypeGroupMapper.selectAllGroups();

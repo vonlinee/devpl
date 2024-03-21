@@ -13,7 +13,7 @@ public class TemplateSelectVO {
     /**
      * 模板ID
      */
-    private Integer templateId;
+    private Long templateId;
 
     /**
      * 模板名称

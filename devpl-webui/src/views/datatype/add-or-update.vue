@@ -4,7 +4,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :mask-closable="false"
     :z-index="1000"
-    :width="600"
+    :width="800"
     :show-footer="true"
     @close="resetFields"
   >
@@ -12,7 +12,8 @@
       ref="dataFormRef"
       :model="dataForm"
       :rules="dataRules"
-      label-width="80px"
+      label-width="110px"
+      label-position="left"
       @keyup.enter="submitHandle()"
     >
       <el-form-item label="类型分组" prop="typeGroupId">
@@ -42,7 +43,10 @@
       <el-form-item label="类型Key" prop="typeKey">
         <el-input v-model="dataForm.typeKey"></el-input>
       </el-form-item>
-      <el-form-item label="类型名称" prop="typeName">
+      <el-form-item label="类型Key(限定)" prop="fullTypeKey">
+        <el-input v-model="dataForm.fullTypeKey"></el-input>
+      </el-form-item>
+      <el-form-item label="类型名称" prop="localeTypeName">
         <el-input v-model="dataForm.typeName"></el-input>
       </el-form-item>
       <el-form-item label="长度范围">
