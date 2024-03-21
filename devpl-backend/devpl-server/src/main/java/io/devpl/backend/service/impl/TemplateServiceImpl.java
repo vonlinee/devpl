@@ -259,14 +259,12 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         }
         try {
             log.info("复制模板 {} -> {}", templateDir, targetLocation.toFile());
-            List<Path> templateFilePaths = findTemplateFiles(targetLocation);
-
-            updateTemplateOfDB(templateFilePaths);
-
             // 复制模板文件到本地文件目录
             if (!FileUtils.copyDirectories(templateDir, targetLocation)) {
                 log.error("模板迁移至{}失败，复制文件失败", targetLocation);
             }
+
+            updateTemplateOfDB(findTemplateFiles(targetLocation));
         } catch (Exception e) {
             log.error("模板迁移失败", e);
         }
@@ -318,7 +316,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
                         templateInfoToUpdate.add(templateInfo);
                     }
                 } else {
-                    // // 不存在，新增 新增的模板
+                    // 不存在，新增模板信息
                     TemplateInfo templateInfo = initTemplateInfo(entry.getValue(), providerMap, null);
                     if (templateInfo == null) {
                         continue;
@@ -329,7 +327,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             sb.append("更新").append(this.updateBatchById(templateInfoToUpdate) ? templateInfoToUpdate.size() : 0).append("个,");
             sb.append("删除").append(this.removeBatchByIds(templateInfoToRemove) ? templateInfoToRemove.size() : 0).append("个,");
             sb.append("保存").append(this.saveBatch(templateInfoToSave) ? templateInfoToSave.size() : 0).append("个");
-
+        } else {
             List<TemplateInfo> templateInfos = initTemplateInfoList(templateFilePaths);
             sb.append("保存").append(this.saveBatch(templateInfos) ? templateInfos.size() : 0).append("个");
         }
@@ -445,5 +443,18 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             map.put(templateInfo.getId(), templateInfo.getTemplateName());
         }
         return map;
+    }
+
+    @Override
+    public TemplateInfo getTemplateInfoById(Long templateId) {
+        TemplateInfo templateInfo = getById(templateId);
+        if (templateInfo == null) {
+            return null;
+        }
+
+        if (templateInfo.isFileTemplate() && StringUtils.hasText(templateInfo.getTemplateFilePath())) {
+
+        }
+        return templateInfo;
     }
 }

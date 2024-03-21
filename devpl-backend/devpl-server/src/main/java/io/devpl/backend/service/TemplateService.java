@@ -123,4 +123,12 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return {@link Map}<{@link Long}, {@link String}>
      */
     Map<Long, String> listIdAndNameMapByIds(Collection<Long> templateIds);
+
+    /**
+     * 根据ID获取模板信息
+     *
+     * @param templateId 模板ID
+     * @return 模板信息
+     */
+    TemplateInfo getTemplateInfoById(Long templateId);
 }

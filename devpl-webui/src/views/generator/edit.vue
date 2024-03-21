@@ -21,8 +21,8 @@
               <span v-if="!scope.row.editing">{{ scope.row.templateName }}</span>
               <el-select v-if="scope.row.editing" v-model="scope.row.templateId" placeholder="选择模板" filterable
                 @change="(val: number) => onTemplateChange(scope.row.templateId, val)">
-                <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
-                  :value="item.templateId">
+                <el-option v-for="item in templateOptions" :key="item.id" :label="item.templateName"
+                  :value="item.id">
                 </el-option>
               </el-select>
             </template>

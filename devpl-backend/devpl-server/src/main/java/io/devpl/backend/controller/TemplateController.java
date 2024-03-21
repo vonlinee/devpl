@@ -144,8 +144,8 @@ public class TemplateController {
      * @return 列表
      */
     @GetMapping(value = "/info/{templateId}")
-    public Result<TemplateInfo> getTemplateById(@PathVariable(value = "templateId") Integer templateId) {
-        return Result.ok(templateService.getById(templateId));
+    public Result<TemplateInfo> getTemplateById(@PathVariable(value = "templateId") Long templateId) {
+        return Result.ok(templateService.getTemplateInfoById(templateId));
     }
 
     /**
