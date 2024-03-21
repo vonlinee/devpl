@@ -451,9 +451,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         if (templateInfo == null) {
             return null;
         }
-
         if (templateInfo.isFileTemplate() && StringUtils.hasText(templateInfo.getTemplateFilePath())) {
-
+            templateInfo.setContent(FileUtils.readUTF8StringQuietly(new File(templateInfo.getTemplateFilePath())));
         }
         return templateInfo;
     }

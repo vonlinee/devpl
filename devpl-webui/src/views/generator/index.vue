@@ -54,7 +54,7 @@
   </el-pagination>
 
   <gen-table-import ref="importRef" @handle-selection="handTableSelection"></gen-table-import>
-  <edit ref="editRef" @refresh-data-list="getDataList"></edit>
+  <table-config ref="editRef" @refresh-data-list="getDataList"></table-config>
 </template>
 
 <script setup lang="ts">
@@ -62,7 +62,7 @@ import { onMounted, reactive, ref, h } from "vue"
 import { DataTableOption } from "@/hooks/interface"
 import { useCrud } from "@/hooks"
 import GenTableImport from "./GenTableImport.vue"
-import Edit from "./edit.vue"
+import TableConfig from "./TableConfig.vue"
 import {
   apiImportTables,
   apiListGenTables,

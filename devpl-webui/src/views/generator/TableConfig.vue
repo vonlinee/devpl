@@ -2,7 +2,7 @@
   生成配置
  -->
 <template>
-  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="150">
+  <el-drawer v-model="visible" title="编辑代码生成配置" :size="1200" :z-index="150" @close="handleDrawerClose">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="基本信息" name="basic">
         <TableGenerationConfigForm ref="generatorRef" @handle="handleResult"></TableGenerationConfigForm>
@@ -243,6 +243,13 @@ const handleClick = (tab: TabsPaneContext) => {
   }
 }
 
+/**
+ * 抽屉关闭
+ */
+const handleDrawerClose = () => {
+  emit("refreshDataList")
+}
+
 const templateOptions = ref<TemplateSelectVO[]>()
 
 onMounted(() => {
@@ -376,6 +383,10 @@ const rowDrop = () => {
   })
 }
 
+/**
+ * 获取表的所有配置数据
+ * @param id 
+ */
 const getTable = (id: number) => {
   apiGetGenTableById(id).then((res) => {
     // 初始化基本信息
@@ -433,11 +444,12 @@ const submitHandle = () => {
 
   // 保存基本配置信息
   const dataForm: TableGeneration = generatorRef.value.getFormData()
-
   dataForm.fieldList = fieldList.value
   dataForm.generationFiles = generationFiles.value
   useTableSubmitApi(dataForm).then(() => {
     Message.info("操作成功")
+    // 刷新配置信息
+    getTable(dataForm.id as number)
   })
 }
 

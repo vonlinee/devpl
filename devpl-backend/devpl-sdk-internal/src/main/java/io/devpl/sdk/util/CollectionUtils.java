@@ -463,4 +463,32 @@ public abstract class CollectionUtils {
     public static <E, T> T[] toArray(Collection<E> collection, Function<E, T> mapper, IntFunction<T[]> array) {
         return collection.stream().map(mapper).toArray(array);
     }
+
+    /**
+     * 合并两个Map对象
+     *
+     * @param target map1
+     * @param source map2
+     * @param <K>    key类型
+     * @param <V>    value类型
+     */
+    public static <K, V> void merge(Map<K, V> target, Map<K, V> source) {
+        if (target == null || isEmpty(source)) {
+            return;
+        }
+        // 合并为null的值
+        for (Map.Entry<K, V> entry : target.entrySet()) {
+            if (entry.getValue() == null) {
+                V val = source.get(entry.getKey());
+                if (val != null) {
+                    entry.setValue(val);
+                }
+            }
+        }
+        for (Map.Entry<K, V> entry : source.entrySet()) {
+            if (!target.containsKey(entry.getKey())) {
+                target.put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
 }

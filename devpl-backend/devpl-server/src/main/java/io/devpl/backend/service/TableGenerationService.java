@@ -6,6 +6,8 @@ import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.codegen.template.TemplateArgumentsMap;
+import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.annotations.Readonly;
 
 import java.util.Collection;
 import java.util.List;
@@ -79,7 +81,8 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
      *
      * @param table 表生成信息
      */
-    void initTableTemplateArguments(TableGeneration table);
+    @NotNull
+    Map<String, Object> initTableTemplateArguments(@Readonly TableGeneration table);
 
     /**
      * 同步数据库表

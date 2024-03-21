@@ -27,6 +27,7 @@ import io.devpl.codegen.template.TemplateArgumentsMap;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.common.utils.ProjectUtils;
 import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.annotations.Readonly;
 import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -227,7 +228,11 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 table.setFieldList(tableFieldList);
             }
 
-            this.initTableTemplateArguments(table);
+            Map<String, Object> dataModel = this.initTableTemplateArguments(table);
+
+            table.setTemplateArguments(dataModel);
+
+            updateById(table);
         } catch (SQLException exception) {
             throw new RuntimeSQLException(exception);
         }
@@ -336,7 +341,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @param table 表信息
      */
     @Override
-    public Map<String, Object> prepareDataModel(TableGeneration table) {
+    @NotNull
+    public Map<String, Object> prepareDataModel(@Readonly TableGeneration table) {
         // 数据模型
         final Map<String, Object> dataModel = new HashMap<>();
         // 获取数据库类型
@@ -354,8 +360,15 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         Map<String, Object> tableConfig = new HashMap<>();
         tableConfig.put("entityPath", table.getTableName());
         tableConfig.put("comment", table.getTableComment());
-        tableConfig.put("controllerName", table.getClassName() + ".Controller");
+        tableConfig.put("name", table.getTableName());
+
+        tableConfig.put("controllerName", table.getClassName() + "Controller");
+        tableConfig.put("serviceName", "I" + table.getClassName() + "Service");
+        tableConfig.put("serviceImplName", table.getClassName() + "ServiceImpl");
+        tableConfig.put("mapperName", table.getClassName() + "Mapper");
         dataModel.put("table", tableConfig);
+
+        dataModel.put("superServiceClass", "IService");
 
         // 项目信息
         // 包路径
@@ -391,7 +404,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         // 前后端生成路径
         dataModel.put("backendPath", table.getBackendPath());
         dataModel.put("frontendPath", table.getFrontendPath());
-
         return dataModel;
     }
 
@@ -399,9 +411,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * 初始化表的模板参数
      *
      * @param table 表生成配置
+     * @return 参数列表
      */
     @Override
-    public void initTableTemplateArguments(TableGeneration table) {
+    public Map<String, Object> initTableTemplateArguments(@Readonly TableGeneration table) {
         // 单个表数据模型
         Map<String, Object> dataModel = this.prepareDataModel(table);
         // 全局模板参数
@@ -413,9 +426,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 dataModel.put(param.getParamKey(), param.getParamValue());
             }
         }
-        table.setTemplateArguments(dataModel);
-        // 保存表生成信息
-        this.updateById(table);
+        return dataModel;
     }
 
     @Override

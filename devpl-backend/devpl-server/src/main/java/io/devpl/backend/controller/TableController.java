@@ -35,6 +35,8 @@ public class TableController {
     RdbmsConnectionInfoService rdbmsConnectionInfoService;
     @Resource
     TableFileGenerationService tableFileGenerationService;
+    @Resource
+    TableGenerationService tableGenerationService;
 
     /**
      * 分页
@@ -68,7 +70,6 @@ public class TableController {
      */
     @PutMapping("/edit")
     public Result<Boolean> editTableGeneration(@RequestBody TableGeneration table) {
-        tableService.updateById(table);
         // 保存字段信息
         if (!CollectionUtils.isEmpty(table.getFieldList())) {
             tableFieldService.updateTableField(table.getId(), table.getFieldList());
@@ -77,6 +78,12 @@ public class TableController {
         if (!CollectionUtils.isEmpty(table.getGenerationFiles())) {
             tableFileGenerationService.updateBatchById(table.getGenerationFiles());
         }
+
+        // 更新表信息
+        Map<String, Object> dataModel = tableGenerationService.initTableTemplateArguments(table);
+        CollectionUtils.merge(dataModel, table.getTemplateArguments());
+        table.setTemplateArguments(dataModel);
+        tableService.updateById(table);
         return Result.ok(true);
     }
 

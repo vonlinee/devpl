@@ -10,8 +10,8 @@ import {
   apiListGenFiles,
   apiSaveOrUpdateGenFile
 } from "@/api/generator";
-import { ElMessage } from "element-plus/es";
 import TemplateViewer from "@/views/template/TemplateViewer.vue";
+import { Message } from "@/hooks/message";
 
 const tableRef = ref();
 const templateContentEditorRef = ref();
@@ -74,10 +74,7 @@ function saveHandle(row: TargetGenFile, event: Event) {
 
   apiSaveOrUpdateGenFile(row).then((res) => {
     if (res.data) {
-      ElMessage.info({
-        message: "保存成功",
-        duration: 500
-      });
+      Message.info("保存成功")
     }
     row.editing = false;
   });
@@ -106,7 +103,7 @@ function deleteHandle(rowIndex: number) {
  * @param row
  */
 function fillTemplateName(templateId: number, row: TargetGenFile) {
-  const targetOption = templateOptions.value.filter(option => option.id == templateId)[0];
+  const targetOption = templateOptions.value.filter(option => option.templateId == templateId)[0];
   if (targetOption) {
     row.templateId = templateId
     row.templateName = targetOption.templateName
@@ -127,7 +124,6 @@ const handleRowClicked = (row: TargetGenFile, column: any, event: Event) => {
   if (column.no == 2 || column.no == 3) {
     return
   }
-
   if (row.id != undefined) {
     if (expandedRowKeys.value.includes(row.id)) {
       expandedRowKeys.value = expandedRowKeys.value.filter((val: number) => val !== row.id);
@@ -196,8 +192,8 @@ const previewTemplate = (event : MouseEvent, row: TargetGenFile) => {
         </a>
         <el-select v-if="scope.row.editing" v-model="scope.row.templateName" class="m-2" placeholder="选择模板" filterable
           @change="(val) => fillTemplateName(val, scope.row)">
-          <el-option v-for="item in templateOptions" :key="item.id" :label="item.templateName"
-            :value="item.id!">
+          <el-option v-for="item in templateOptions" :key="item.templateId" :label="item.templateName"
+            :value="item.templateId!">
           </el-option>
         </el-select>
       </template>

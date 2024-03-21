@@ -280,10 +280,24 @@ public abstract class FileUtils {
      *
      * @param file 文件对象
      * @return 文件内容
-     * @throws IOException IOException
+     * @throws RuntimeIOException IOException
      */
     public static String readUTF8String(File file) throws IOException {
         return readString(file, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 以UTF8编码读取文件内容为字符串，不抛出任何异常，仅返回空
+     *
+     * @param file 文件对象
+     * @return 文件内容
+     */
+    public static String readUTF8StringQuietly(File file) {
+        try {
+            return readString(file, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**

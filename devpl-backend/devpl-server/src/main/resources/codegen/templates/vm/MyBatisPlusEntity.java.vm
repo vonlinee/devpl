@@ -4,7 +4,6 @@ package ${package.Entity};
 import ${pkg};
 #end
 import lombok.Data;
-import lombok.Setter;
 
 /**
  * <p>
@@ -15,7 +14,7 @@ import lombok.Setter;
  * @since ${date}
  */
 @Data
-@TableName("${schemaName}${table.name}")
+@TableName("${table.name}")
 public class ${entity} implements Serializable {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${fieldList})
@@ -38,10 +37,6 @@ public class ${entity} implements Serializable {
 ## 主键
   #if(${field.keyIdentityFlag})
     @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
-  #elseif(!$null.isNull(${idType}) && "$!idType" != "")
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-  #elseif(${field.convert})
-    @TableId("${field.annotationColumnName}")
   #end
 ## 普通字段
 #elseif(${field.fill})

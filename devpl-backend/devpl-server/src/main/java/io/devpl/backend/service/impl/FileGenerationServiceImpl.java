@@ -86,10 +86,11 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         table.setGenerationFiles(fileToBeGenerated);
         table.setFieldList(tableFieldService.listByTableId(table.getId()));
 
+        // 重新生成配置参数
         if (CollectionUtils.isEmpty(table.getTemplateArguments())) {
-            tableGenerationService.initTableTemplateArguments(table);
+            table.setTemplateArguments(tableGenerationService.initTableTemplateArguments(table));
+            tableGenerationService.updateById(table);
         }
-
         doGenerateForTable(table, parentDirectory);
         return parentDirectory;
     }
