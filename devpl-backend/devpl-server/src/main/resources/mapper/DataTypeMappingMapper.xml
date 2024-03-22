@@ -26,4 +26,31 @@
             </if>
         </where>
     </select>
+    <select id="selectUnMappedTypeList" resultType="io.devpl.backend.entity.DataTypeItem">
+        SELECT dt.id, dt.locale_type_name
+        FROM data_type_item dt
+                 LEFT JOIN data_type_mapping dtm ON dt.id = dtm.id
+        WHERE dtm.id IS NULL
+    </select>
+    <select id="selectExcludeByTypeId" resultType="io.devpl.backend.entity.DataTypeItem">
+        SELECT id, locale_type_name
+        FROM data_type_item
+        WHERE type_group_id != #{excludeTypeGroupId} /*不在同一组内*/
+        <if test="excludeIds != null and excludeIds.size() > 0">
+            AND id NOT IN
+            <foreach item="item" index="index" collection="excludeIds" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            /*过滤已有的映射关系*/
+        </if>
+    </select>
+
+    <select id="selectMappedDataTypeIds" resultType="long">
+        SELECT DISTINCT another_type_id
+        FROM data_type_mapping
+        WHERE type_id = #{typeId}
+        <if test="groupId != null">
+            AND group_id = #{groupId}
+        </if>
+    </select>
 </mapper>

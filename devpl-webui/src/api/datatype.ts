@@ -128,3 +128,19 @@ export const apiListDataTypeOptions = (typeGroupId: string) => {
 export const apiListTypeGroupOptions = () => {
   return http.get("/api/datatype/group/options")
 }
+
+/**
+ * 数据类型组选择下拉列表
+ */
+export const apiListTypeMappingGroupOptions = () => {
+  return http.get("/api/datatype/mapping/group/options")
+}
+
+/**
+ * 数据类型组选择下拉列表
+ */
+export const apiListMappableAnotherTypeOptions = (typeId: number) => {
+  return http.get("/api/datatype/mapping/another/options", {
+    typeId: typeId
+  })
+}

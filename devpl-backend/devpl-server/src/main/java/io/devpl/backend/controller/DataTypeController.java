@@ -13,8 +13,10 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.service.DataTypeItemService;
+import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.backend.utils.BusinessUtils;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,8 @@ public class DataTypeController {
 
     @Resource
     DataTypeItemService dataTypeService;
+    @Resource
+    DataTypeMappingService dataTypeMappingService;
 
     /**
      * 保存数据类型信息
@@ -165,10 +169,47 @@ public class DataTypeController {
     }
 
     /**
+     * 数据类型组列表
+     *
      * @return 选项VO
      */
     @GetMapping("/group/options")
     public Result<List<SelectOptionVO>> getSelectableTypeGroups() {
         return Result.ok(dataTypeService.getSelectableTypeGroups());
+    }
+
+    /**
+     * 数据类型映射分组列表
+     *
+     * @return 选项VO
+     */
+    @GetMapping("/mapping/group/options")
+    public Result<List<SelectOptionVO>> listSelectableTypeMappingGroups() {
+        return Result.ok(dataTypeMappingService.listMappingGroupOptions());
+    }
+
+    /**
+     * 查询没有映射过的数据类型选项列表
+     *
+     * @return 选项VO
+     */
+    @GetMapping("/mapping/primary/options")
+    public Result<List<SelectOptionVO>> listSelectablePrimaryTypeOptions() {
+        return Result.ok(dataTypeMappingService.listSelectablePrimaryTypeOptions());
+    }
+
+    /**
+     * 查询某个类型可以被添加映射关系的其他数据类型
+     * 和该类型不属于同一个类型分组，且去除已经添加过该类型的映射关系的数据类型
+     *
+     * @return 选项VO
+     */
+    @GetMapping("/mapping/another/options")
+    public Result<List<SelectOptionVO>> listSelectableAnotherTypeOptions(@NotNull(message = "主数据类型ID为空") Long typeId) {
+        DataTypeItem dataType = dataTypeService.getById(typeId);
+        if (dataType == null) {
+            return Result.error("数据类型不存在");
+        }
+        return Result.ok(dataTypeMappingService.listSelectableAnotherTypeOptions(dataType));
     }
 }

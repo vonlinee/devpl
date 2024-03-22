@@ -38,7 +38,7 @@ public class JdbcDatabaseMetadataLoaderTest {
             DatabaseMetadataLoader loader = AbstractQueryDatabaseMetadataLoader.getQuery(DBType.MYSQL);
             loader.setConnection(connection);
 
-            List<ColumnMetadata> columns = loader.getColumns(null, "devpl", null, null);
+            List<ColumnMetadata> columns = loader.getColumns(null, "devpl", "data_type_item", null);
 
             System.out.println(columns);
 

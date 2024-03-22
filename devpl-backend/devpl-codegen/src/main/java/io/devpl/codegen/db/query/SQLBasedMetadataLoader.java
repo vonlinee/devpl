@@ -84,7 +84,6 @@ public class SQLBasedMetadataLoader extends AbstractDatabaseIntrospector {
         }
     }
 
-
     protected void filter(List<TableGeneration> tableList, List<TableGeneration> includeTableList, List<TableGeneration> excludeTableList) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         boolean isInclude = !strategyConfig.getInclude().isEmpty();

@@ -105,6 +105,7 @@ public class MySqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader imp
             	SRS_ID
             FROM
             	information_schema.`COLUMNS`
+            WHERE 1 = 1
             """;
 
         StringBuilder sqlBuilder = new StringBuilder(sql);
@@ -132,13 +133,34 @@ public class MySqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader imp
                 cmd.setColumnName(rs.getString("COLUMN_NAME"));
                 cmd.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
                 cmd.setColumnDef(rs.getString("COLUMN_DEFAULT"));
-                cmd.setIsNullable(rs.getString("IS_NULLABLE"));
+                cmd.setNullableDescription(rs.getString("IS_NULLABLE"));
                 // dataType
                 cmd.setPlatformDataType(rs.getString("DATA_TYPE"));
-
                 // 比如 varchar(255)
-                cmd.setDataTypeIdentifier(rs.getString("COLUMN_TYPE"));
+                cmd.setDataTypeDescriptor(rs.getString("COLUMN_TYPE"));
+                // 字段注释
                 cmd.setRemarks(rs.getString("COLUMN_COMMENT"));
+
+                String columnKey = rs.getString("COLUMN_KEY");
+                if (columnKey != null && columnKey.contains("PRI")) {
+                    cmd.setPrimaryKey(true);
+                }
+                cmd.setColumnKey(columnKey);
+                cmd.setCharsetName(rs.getString("CHARACTER_SET_NAME"));
+                cmd.setCollationName(rs.getString("COLLATION_NAME"));
+
+                String extra = rs.getString("EXTRA");
+                if (extra != null) {
+                    if (extra.contains("auto_increment")) {
+                        cmd.setAutoIncrement("YES");
+                    }
+                }
+
+                cmd.setCharOctetLength(rs.getInt("CHARACTER_OCTET_LENGTH"));
+
+                cmd.addAttribute("characterMaximumLength", rs.getInt("CHARACTER_MAXIMUM_LENGTH"));
+                cmd.addAttribute("extra", extra);
+                cmd.addAttribute("generationExpression", rs.getString("GENERATION_EXPRESSION"));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

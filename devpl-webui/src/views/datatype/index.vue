@@ -3,11 +3,14 @@
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
         <el-form-item>
-          <el-select v-model="state.queryForm.typeGroupId" placeholder="类型分组">
+          <el-select v-model="state.queryForm.typeGroupId" placeholder="类型分组" clearable @change="getDataList">
             <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
               :value="item.typeGroupId">
             </el-option>
           </el-select>
+          <el-button><el-icon>
+              <Plus />
+            </el-icon></el-button>
         </el-form-item>
         <el-form-item>
           <el-input v-model="state.queryForm.typeKey" placeholder="类型Key"></el-input>
@@ -36,12 +39,13 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
-      <el-table-column prop="typeGroupId" label="类型分组" header-align="center" align="center"
-        width="150">
+      <el-table-column prop="typeGroupId" label="类型分组" header-align="center" align="center" width="150">
       </el-table-column>
-      <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center" width="180" show-overflow-tooltip>
+      <el-table-column prop="typeKey" label="类型Key" header-align="center" align="center" width="180"
+        show-overflow-tooltip>
       </el-table-column>
-      <el-table-column prop="fullTypeKey" label="类型限定Key" header-align="center" align="center" width="180" show-overflow-tooltip>
+      <el-table-column prop="fullTypeKey" label="类型限定Key" header-align="center" align="center" width="180"
+        show-overflow-tooltip>
       </el-table-column>
       <el-table-column prop="localeTypeName" label="类型名称" header-align="center" align="center"></el-table-column>
       <el-table-column prop="defaultValue" label="默认值" header-align="center" align="center"></el-table-column>
@@ -50,7 +54,8 @@
       <el-table-column label="操作" fixed="right" header-align="center" align="center" width="150">
         <template #default="scope">
           <el-button type="primary" link @click="addOrUpdateHandle(scope.row)">编辑</el-button>
-          <el-button v-if="!scope.row.internal" type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
+          <el-button v-if="!scope.row.internal" type="primary" link
+            @click="deleteBatchHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +83,8 @@ import { ElButton, ElSelect } from "element-plus"
 import { apiListAllDataTypeGroups, apiListDataTypes } from "@/api/datatype"
 import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue"
 import TypeGroupManager from "./TypeGroupManager.vue"
+import { Plus } from "@element-plus/icons"
+import ElIcon from "element-plus"
 
 const typeMappingTableRef = ref()
 const typeGroupManagerRef = ref()

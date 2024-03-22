@@ -4,9 +4,6 @@ import io.devpl.codegen.db.DatabaseDialect;
 
 /**
  * 表数据查询抽象类
- *
- * @author hubin
- * @since 2018-01-16
  */
 public abstract class AbstractDbQuery implements DatabaseDialect {
 

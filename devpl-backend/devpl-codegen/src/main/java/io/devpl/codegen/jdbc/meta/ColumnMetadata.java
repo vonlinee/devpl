@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * metadata of a column in a database table
@@ -85,7 +87,6 @@ public class ColumnMetadata {
      * -- SETTER --
      * JDBC使用 setter/getter 方法来确定字段
      *
-     * @param nullable 是否可为null
      * @see java.sql.DatabaseMetaData#columnNoNulls
      * @see java.sql.DatabaseMetaData#columnNullable
      * @see java.sql.DatabaseMetaData#columnNullableUnknown
@@ -135,7 +136,7 @@ public class ColumnMetadata {
      * @see <a href="https://stackoverflow.com/questions/26490427/jdbc-getcolumns-differences-between-is-nullable-and-nullable">JDBC getColumns differences between "IS_NULLABLE" and "NULLABLE"</a>
      * @see ColumnMetadata#nullable https://stackoverflow.com/questions/26490427/jdbc-getcolumns-differences-between-is-nullable-and-nullable
      */
-    private String isNullable;
+    private String nullableDescription;
 
     /**
      * SCOPE_CATALOG String => catalog of table that is the scope
@@ -167,7 +168,7 @@ public class ColumnMetadata {
      * NO --- if the column is not auto incremented
      * empty string --- if it cannot be determined whether the column is auto incremented
      */
-    private String isAutoincrement;
+    private String autoIncrement;
 
     /**
      * IS_GENERATEDCOLUMN String => Indicates whether this is a generated column
@@ -175,7 +176,7 @@ public class ColumnMetadata {
      * NO --- if this not a generated column
      * empty string --- if it cannot be determined whether this is a generated column
      */
-    private String isGeneratedColumn;
+    private String generatedColumn;
 
     // =========================================== 非JDBC获取的元数据信息 ===============================
 
@@ -183,7 +184,7 @@ public class ColumnMetadata {
      * 此字段并不是jdbc元数据中可获取的值
      * 数据类型，平台独立的数据类型，比如MySQL bigint(19) unsigned
      */
-    private String dataTypeIdentifier;
+    private String dataTypeDescriptor;
 
     /**
      * 不同数据库平台的数据类型名称
@@ -195,12 +196,50 @@ public class ColumnMetadata {
     private String platformDataType;
 
     /**
+     * 编码名称，一般字符类型才有值
+     */
+    private String charsetName;
+
+    /**
+     * 排序规则名称
+     */
+    private String collationName;
+
+    /**
+     * 列的索引类型
+     */
+    private String columnKey;
+
+    /**
+     * 是否是主键
+     */
+    private boolean primaryKey;
+
+    /**
+     * 携带额外的数据
+     */
+    private Map<String, Object> attributes;
+
+    /**
      * isAutoincrement cannot be null
      *
      * @return if this column is autoincrement, true, or else false
      */
-    public boolean isAutoIncrement() {
-        return "YES".equals(isAutoincrement);
+    public final boolean isAutoIncrement() {
+        return "YES".equals(autoIncrement);
+    }
+
+    /**
+     * 添加额外属性
+     *
+     * @param name  属性名
+     * @param value 属性值
+     */
+    public final void addAttribute(String name, Object value) {
+        if (attributes == null) {
+            attributes = new HashMap<>();
+        }
+        attributes.put(name, value);
     }
 
     public void initialize(ResultSet resultSet) throws SQLException {
@@ -221,12 +260,12 @@ public class ColumnMetadata {
         this.sqlDatetimeSub = resultSet.getInt("SQL_DATETIME_SUB");
         this.charOctetLength = resultSet.getInt("CHAR_OCTET_LENGTH");
         this.ordinalPosition = resultSet.getInt("ORDINAL_POSITION");
-        this.isNullable = resultSet.getString("IS_NULLABLE");
+        this.nullableDescription = resultSet.getString("IS_NULLABLE");
         this.scopeCatalog = resultSet.getString("SCOPE_CATALOG");
         this.scopeSchema = resultSet.getString("SCOPE_SCHEMA");
         this.scopeTable = resultSet.getString("SCOPE_TABLE");
         this.sourceDataType = resultSet.getShort("SOURCE_DATA_TYPE");
-        this.isAutoincrement = resultSet.getString("IS_AUTOINCREMENT");
-        this.isGeneratedColumn = resultSet.getString("IS_GENERATEDCOLUMN");
+        this.autoIncrement = resultSet.getString("IS_AUTOINCREMENT");
+        this.generatedColumn = resultSet.getString("IS_GENERATEDCOLUMN");
     }
 }

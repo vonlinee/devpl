@@ -4,8 +4,12 @@
 <template>
   <vxe-modal v-model="modalShowRef" title="类型映射表" width="70%">
     <vxe-form :data="formData">
-      <vxe-form-item>
-        <vxe-button status="primary" content="类型映射规则分组"></vxe-button>
+      <vxe-form-item title="规则分组" field="groupId">
+        <template #default="{ data }">
+          <el-select v-model="data.groupId">
+            <el-option v-for="g in mappingGroups" :label="g.label" :value="g.value" :key="g.key"></el-option>
+          </el-select>
+        </template>
       </vxe-form-item>
       <vxe-form-item title="类型组" field="name" :item-render="{}" span="10">
         <template #default="{ data }">
@@ -27,15 +31,23 @@
 
     <!-- 表格 -->
     <vxe-table ref="table" :height="528" border :data="tableData" @cell-dblclick="cellDbClickHandler">
-      <vxe-column title="主类型" width="10%" align="center" field="typeName"></vxe-column>
+      <vxe-column title="主类型" width="20%" align="center" field="typeName">
+        <template #default="{ row }">
+          <el-select v-if="row.editing" v-model="row.typeId">
+            <el-option v-for="g in mappingGroups" :label="g.label" :value="g.value" :key="g.key"></el-option>
+          </el-select>
+        </template>
+      </vxe-column>
       <vxe-column field="name" title="映射类型" align="center" :edit-render="{}">
         <template #default="{ row }">
-          <span>{{ row.typeGroupId }}</span>
+          <div>{{ row.typeGroupId }} <el-icon :size="16" style="align-self: flex-end;">
+              <Edit />
+            </el-icon></div>
         </template>
       </vxe-column>
       <vxe-column title="操作">
         <template #default="{ row }">
-          <vxe-button type="text" status="primary" content="编辑"></vxe-button>
+          <vxe-button type="text" status="primary" content="编辑" @click="row.editing = !row.editing"></vxe-button>
           <vxe-button type="text" status="danger" content="删除" @click="removeDataTypeMapping(row)"></vxe-button>
         </template>
       </vxe-column>
@@ -61,11 +73,12 @@ import {
   apiAddDataTypeMapping,
   apiListAllDataTypeMappings,
   apiListAllMappableDataTypes,
+  apiListTypeMappingGroupOptions,
 } from "@/api/datatype"
 import { Message } from "@/hooks/message"
 import { reactive, ref } from "vue"
 import { VxeTableDefines } from "vxe-table/types/table"
-
+import { Edit } from '@element-plus/icons'
 
 const table = ref()
 
@@ -112,7 +125,7 @@ interface DataTypeSelectVO {
 // 编辑时的可选择的下拉列表
 const mappableDataTypes = ref<DataTypeSelectVO[]>([])
 
-
+const mappingGroups = ref<SelectOptionVO[]>([])
 const tableData = ref<DataTypeMapping[]>([])
 
 const queryAllDataTypeMappings = () => {
@@ -200,6 +213,7 @@ const showModal = () => {
 
   addNewMapping()
 
+
   // getSelctableDataTypes()
   // modal1ShowRef.value = true
   // loading.value = false
@@ -209,6 +223,11 @@ const showModal = () => {
 defineExpose({
   show: () => {
     modalShowRef.value = true
+
+    apiListTypeMappingGroupOptions().then((res) => {
+      mappingGroups.value = res.data
+    })
+
     queryAllDataTypeMappings()
   },
 })

@@ -3,16 +3,15 @@
 
   <button @click="modal.show()">11111</button>
 
-  <Child></Child>
-
+  <el-icon :size="20">
+    <Edit />
+  </el-icon>
 </template>
 
 <script lang="ts" setup>
 
 import { onMounted, ref } from "vue";
-import HeightFixedRegion from "@/components/HeightFixedRegion.vue";
-import Modal from "@/components/Modal.vue";
-import Child from "./Child.vue";
+
 const modal = ref()
 
 onMounted(() => {
