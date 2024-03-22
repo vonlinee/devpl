@@ -6,6 +6,7 @@ import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
+import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.entity.TemplateVariableMetadata;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateException;
@@ -131,4 +132,12 @@ public interface TemplateService extends IService<TemplateInfo> {
      * @return 模板信息
      */
     TemplateInfo getTemplateInfoById(Long templateId);
+
+    /**
+     * 解析模板参数
+     *
+     * @param templateId 模板ID
+     * @return 模板参数列表
+     */
+    List<TemplateParam> parseTemplateVariables(Long templateId);
 }

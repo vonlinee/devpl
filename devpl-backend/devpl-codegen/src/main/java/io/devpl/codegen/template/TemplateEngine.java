@@ -16,6 +16,8 @@ import java.util.Properties;
 public interface TemplateEngine {
 
     /**
+     * 设置属性
+     *
      * @param properties 配置参数
      */
     default void setProperties(Properties properties) {
@@ -170,7 +172,7 @@ public interface TemplateEngine {
      *
      * @param nameOrTemplate 模板名称或者字符串模板
      * @param st             是否是字符串模板, 为true，则将nameOrTemplate参数视为模板文本，为false则将nameOrTemplate参数视为模板名称，不用程序自己来判断是否是模板名称还是模板字符串
-     * @return 模板实例，如果不存在，返回 {@link Template.UNKNOWN}
+     * @return 模板实例，如果不存在，返回 {@link Template#UNKNOWN}
      * @see Template
      */
     @NotNull

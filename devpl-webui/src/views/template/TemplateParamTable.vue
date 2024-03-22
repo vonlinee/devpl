@@ -3,13 +3,13 @@
     <template #buttons>
       <vxe-button content="查询" status="primary" @click="queryList"></vxe-button>
       <vxe-button content="新增" status="primary" @click="onAddItem"></vxe-button>
-      <!-- <vxe-button content="下拉按钮">
+      <vxe-button content="下拉按钮">
         <template #dropdowns>
           <vxe-button type="text" content="按钮1"></vxe-button>
           <vxe-button type="text" content="按钮2"></vxe-button>
           <vxe-button type="text" content="按钮3"></vxe-button>
         </template>
-</vxe-button> -->
+      </vxe-button>
     </template>
   </vxe-toolbar>
 
@@ -86,6 +86,7 @@ const onAddItem = () => {
     paramValue: "",
     defaultValue: "",
     dataTypeId: "",
+    id: 0
   })
 }
 

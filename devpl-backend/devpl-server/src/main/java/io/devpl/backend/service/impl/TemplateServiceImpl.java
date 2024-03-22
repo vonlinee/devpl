@@ -11,6 +11,7 @@ import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.TemplateInfo;
+import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.entity.TemplateVariableMetadata;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.codegen.template.Template;
@@ -455,5 +456,13 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             templateInfo.setContent(FileUtils.readUTF8StringQuietly(new File(templateInfo.getTemplateFilePath())));
         }
         return templateInfo;
+    }
+
+    @Override
+    public List<TemplateParam> parseTemplateVariables(Long templateId) {
+
+
+
+        return null;
     }
 }

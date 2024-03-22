@@ -1,4 +1,4 @@
-package io.devpl.common.model;
+package io.devpl.codegen.parser.sql;
 
 import lombok.Getter;
 import lombok.Setter;

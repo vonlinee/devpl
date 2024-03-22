@@ -9,6 +9,7 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.CustomDirective;
+import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.service.DataTypeItemService;
@@ -243,5 +244,15 @@ public class TemplateController {
     @DeleteMapping(value = "/directive/custom/remove")
     public boolean removeCustomTemplateDirective(@RequestBody CustomTemplateDirectiveParam param) {
         return templateDirectiveService.removeCustomDirective(param);
+    }
+
+    /**
+     * 获取自定义指令列表
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/parse")
+    public Result<List<TemplateParam>> parseTemplateVariables(Long templateId) {
+        return Result.ok(templateService.parseTemplateVariables(templateId));
     }
 }

@@ -2,13 +2,13 @@
   <el-card>
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
-        <el-input v-model="state.queryForm.templateName" placeholder="模板名称"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-select v-model="state.queryForm.templateType" clearable>
+        <el-select v-model="state.queryForm.templateType" clearable @change="handleTemplateTypeChange">
           <el-option v-for="templateType in templateTypes" :key="templateType.provider" :value="templateType.provider"
             :label="templateType.providerName"></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="state.queryForm.templateName" placeholder="模板名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="resetForm">重置</el-button>
@@ -29,8 +29,7 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border height="450px"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px"
-        align="center">
+      <el-table-column prop="provider" label="技术类型" header-align="center" width="200px" align="center">
       </el-table-column>
       <el-table-column prop="templateName" label="模板名称" header-align="center" align="center">
         <template #default="scope">
@@ -88,14 +87,14 @@ import {
   apiListTemplateTypes,
   apiSaveOrUpdateTemplateParams
 } from "@/api/template";
-import TemplateVarTable from "@/views/template/TemplateVarTable.vue";
-import TemplateParamTable from "@/views/template/TemplateParamTable.vue";
+import TemplateVarTable from "./TemplateVarTable.vue";
+import TemplateParamTable from "./TemplateParamTable.vue";
 import { Message } from "@/hooks/message";
 
 const state: DataTableOption = reactive({
   queryForm: {
     templateName: "",
-    templateType: ""
+    templateType: "Velocity"
   },
   primaryKey: "id",
   isPage: true,
@@ -110,6 +109,10 @@ const {
   currentChangeHandle,
   deleteBatchHandle
 } = useCrud(state);
+
+const handleTemplateTypeChange = () => {
+  getDataList();
+}
 
 const templateParamTableRef = ref();
 const addOrUpdateRef = ref();

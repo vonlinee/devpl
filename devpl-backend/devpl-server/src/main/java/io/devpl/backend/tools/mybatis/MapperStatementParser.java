@@ -1,6 +1,6 @@
 package io.devpl.backend.tools.mybatis;
 
-import io.devpl.codegen.parser.sql.SqlStatementType;
+import io.devpl.codegen.db.SqlStatementType;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
 

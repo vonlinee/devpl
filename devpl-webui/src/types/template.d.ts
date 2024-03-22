@@ -81,6 +81,7 @@ type TemplateSelectVO = {
  * 模板参数
  */
 type TemplateParam = {
+  id: number
   /**
    * 参数key
    */

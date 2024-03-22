@@ -18,6 +18,8 @@ public class ColumnInfo {
     private String dataType;
     private String dataTypeDefinition;
     private String charsetDefinition;
+    private String defaultExpression;
+    private boolean hasDefaultExpression;
     private ColumnMetadata metadata;
     private Map<String, Object> attributes;
 }

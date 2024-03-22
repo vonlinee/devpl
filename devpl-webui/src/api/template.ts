@@ -121,3 +121,14 @@ export function apiDeleteCustomTemplateDirective(param: CustomDirective) {
 export const apiListTemplateParamValueDataTypeOptions = () => {
   return http.get("/api/codegen/template/param/datatypes")
 }
+
+/**
+ * 解析模板变量列表
+ * @param templateId 模板ID 
+ * @returns 
+ */
+export const apiParseTemplateVariables = (templateId: number) => {
+  return http.get("/api/codegen/template/parse", {
+    templateId: templateId
+  })
+}

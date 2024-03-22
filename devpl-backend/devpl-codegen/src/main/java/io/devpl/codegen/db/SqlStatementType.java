@@ -1,4 +1,4 @@
-package io.devpl.codegen.parser.sql;
+package io.devpl.codegen.db;
 
 public enum SqlStatementType {
     INSERT,

@@ -4,6 +4,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.runtime.parser.node.*;
 
 /**
+ * Velocity
  * <a href="https://developer.aliyun.com/article/64918">...</a>
  */
 public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Template> {
@@ -23,7 +24,7 @@ public class VelocityTemplateAnalyzer implements TemplateVariableAnalyzer<Templa
         // SimpleNode是所有节点的父类
         if (data instanceof SimpleNode sn) {
             VariableExtractor.extract(sn, data);
-            // recursive(sn);
+            recursive(sn);
         } else {
             throw new RuntimeException(String.valueOf(data.getClass()));
         }

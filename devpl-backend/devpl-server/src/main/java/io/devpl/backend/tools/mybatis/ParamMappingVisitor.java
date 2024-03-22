@@ -13,7 +13,7 @@ import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.codegen.parser.java.CompilationUnitVisitor;
 import io.devpl.codegen.parser.java.JavaASTUtils;
 import io.devpl.codegen.parser.java.MetaField;
-import io.devpl.codegen.parser.sql.SqlStatementType;
+import io.devpl.codegen.db.SqlStatementType;
 import io.devpl.sdk.util.StringUtils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
