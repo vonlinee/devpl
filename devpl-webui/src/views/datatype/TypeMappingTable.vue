@@ -2,97 +2,56 @@
   类型映射配置表
  -->
 <template>
-  <vxe-modal v-model="modalShowRef" title="类型映射表" width="60%">
+  <vxe-modal v-model="modalShowRef" title="类型映射表" width="70%">
     <vxe-form :data="formData">
+      <vxe-form-item>
+        <vxe-button status="primary" content="类型映射规则分组"></vxe-button>
+      </vxe-form-item>
       <vxe-form-item title="类型组" field="name" :item-render="{}" span="10">
         <template #default="{ data }">
-          <vxe-input
-            v-model="data.name"
-            placeholder="请输入名称"
-            clearable
-          ></vxe-input>
+          <vxe-input v-model="data.name" placeholder="请输入类型组名称" clearable></vxe-input>
         </template>
       </vxe-form-item>
       <vxe-form-item title="类型ID" field="name" :item-render="{}" span="10">
         <template #default="{ data }">
-          <vxe-input
-            v-model="data.name"
-            placeholder="请输入名称"
-            clearable
-          ></vxe-input>
+          <vxe-input v-model="data.name" placeholder="请输入类型ID" clearable></vxe-input>
         </template>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button
-          status="primary"
-          content="查询"
-          @click="queryAllDataTypeMappings"
-        ></vxe-button>
+        <vxe-button status="primary" content="查询" @click="queryAllDataTypeMappings"></vxe-button>
       </vxe-form-item>
       <vxe-form-item>
-        <vxe-button
-          status="primary"
-          content="新增"
-          @click="showModal"
-        ></vxe-button>
+        <vxe-button status="primary" content="新增" @click="showModal"></vxe-button>
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-table
-      :height="528"
-      :border="true"
-      :data="tableData"
-      @cell-dblclick="cellDbClickHandler"
-    >
-      <vxe-column
-        title="主类型"
-        width="10%"
-        align="center"
-        field="typeName"
-      ></vxe-column>
-      <vxe-column
-        field="name"
-        title="映射类型"
-        align="center"
-        :edit-render="{}"
-      >
+    <!-- 表格 -->
+    <vxe-table ref="table" :height="528" border :data="tableData" @cell-dblclick="cellDbClickHandler">
+      <vxe-column title="主类型" width="10%" align="center" field="typeName"></vxe-column>
+      <vxe-column field="name" title="映射类型" align="center" :edit-render="{}">
         <template #default="{ row }">
           <span>{{ row.typeGroupId }}</span>
         </template>
       </vxe-column>
+      <vxe-column title="操作">
+        <template #default="{ row }">
+          <vxe-button type="text" status="primary" content="编辑"></vxe-button>
+          <vxe-button type="text" status="danger" content="删除" @click="removeDataTypeMapping(row)"></vxe-button>
+        </template>
+      </vxe-column>
     </vxe-table>
 
-    <vxe-pager
-      v-model:current-page="pageVo.currentPage"
-      v-model:page-size="pageVo.pageSize"
-      :total="pageVo.total"
-    />
+    <vxe-pager v-model:current-page="pageVo.currentPage" v-model:page-size="pageVo.pageSize" :total="pageVo.total" />
   </vxe-modal>
 
-  <vxe-modal
-    v-model="modal1ShowRef"
-    title="选择映射的数据类型"
-    :mask="true"
-    :show-footer="true"
-  >
-    <vxe-table
-      ref="tableRef"
-      :height="400"
-      :border="true"
-      :data="mappableDataTypes"
-    >
+  <vxe-modal v-model="modal1ShowRef" title="选择映射的数据类型" :mask="true" :show-footer="true">
+    <vxe-table ref="tableRef" :height="400" :border="true" :data="mappableDataTypes">
       <vxe-column type="checkbox" width="40" align="center"></vxe-column>
-      <vxe-column
-        field="typeGroupId"
-        title="数据类型组"
-        align="center"
-      ></vxe-column>
-      <vxe-column field="typeName" title="数据类型" align="center"></vxe-column>
+      <vxe-column field="typeGroupId" title="数据类型组" align="center"></vxe-column>
+      <vxe-column field="localeTypeName" title="数据类型" align="center"></vxe-column>
     </vxe-table>
     <template #footer>
-      <vxe-button type="text" status="success" @click="getSelectEvent"
-        >确定</vxe-button
-      >
+      <vxe-button type="text" status="success" @click="getSelectEvent">确定</vxe-button>
     </template>
   </vxe-modal>
 </template>
@@ -106,6 +65,9 @@ import {
 import { Message } from "@/hooks/message"
 import { reactive, ref } from "vue"
 import { VxeTableDefines } from "vxe-table/types/table"
+
+
+const table = ref()
 
 const modalShowRef = ref()
 const modal1ShowRef = ref()
@@ -150,19 +112,34 @@ interface DataTypeSelectVO {
 // 编辑时的可选择的下拉列表
 const mappableDataTypes = ref<DataTypeSelectVO[]>([])
 
-interface RowVO {
-  typeId: number | undefined
-  typeName: string
-  anotherTypeId: string | undefined
-}
 
-const tableData = ref<RowVO[]>([])
+const tableData = ref<DataTypeMapping[]>([])
 
 const queryAllDataTypeMappings = () => {
   apiListAllDataTypeMappings(undefined, undefined).then((res) => {
     tableData.value = res.data
     pageVo.value.total = res.total || 0
   })
+}
+
+const addNewMapping = () => {
+  tableData.value.push({
+    typeId: undefined,
+    typeName: "",
+    anotherTypeId: undefined,
+    groupId: 0,
+    groupName: "",
+    typeKey: undefined,
+    anotherTypeKey: undefined
+  })
+}
+
+/**
+ * 删除数据类型映射关系
+ * @param mapping 
+ */
+const removeDataTypeMapping = (mapping: DataTypeMapping) => {
+  table.value.remove(mapping)
 }
 
 const tableRef = ref()
@@ -220,10 +197,13 @@ const cellDbClickHandler = (
 }
 
 const showModal = () => {
-  getSelctableDataTypes()
-  modal1ShowRef.value = true
-  loading.value = false
-  modal1ShowRef.value = true
+
+  addNewMapping()
+
+  // getSelctableDataTypes()
+  // modal1ShowRef.value = true
+  // loading.value = false
+  // modal1ShowRef.value = true
 }
 
 defineExpose({

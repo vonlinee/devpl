@@ -18,13 +18,25 @@ import java.util.List;
 @Service
 public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<TableGenerationFieldMapper, TableGenerationField> implements TableGenerationFieldService {
 
+    /**
+     * 根据 table id 查询列表
+     *
+     * @param tableId 表ID
+     * @return 字段列表
+     */
     @Override
     public List<TableGenerationField> listByTableId(Long tableId) {
-        return baseMapper.getByTableId(tableId);
+        return baseMapper.selectListByTableId(tableId);
     }
 
+    /**
+     * 根据 table id 批量删除
+     *
+     * @param tableIds 表ID列表
+     * @return 是否成功
+     */
     @Override
-    public boolean deleteBatchTableIds(Long[] tableIds) {
+    public boolean deleteBatchByTableIds(Long[] tableIds) {
         return baseMapper.deleteBatchTableIds(tableIds) > 0;
     }
 
@@ -58,9 +70,7 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<Tabl
             field.setAttrName(CaseFormat.toCamelCase(field.getFieldName()));
             // 获取字段对应的类型
 
-            // TODO 对接数据类型映射关系
-            field.setAttrType("String");
-            field.setPackageName("");
+            field.setAttrType(mappingSqlTypeToJavaType(field.getFieldType()));
 
             field.setAutoFill(AutoFillEnum.DEFAULT.name());
             field.setFormItem(true);
@@ -69,7 +79,29 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<Tabl
             field.setQueryFormType("text");
             field.setFormType(FormType.TEXT.getText());
             field.setSort(index++);
+
+            System.out.println(field);
         }
         return tableFieldList;
+    }
+
+    /**
+     * TODO  暂时写死 对接数据类型映射关系
+     *
+     * @param sqlType sql数据类型
+     * @return
+     */
+    private String mappingSqlTypeToJavaType(String sqlType) {
+        String javaType = "String";
+        if ("varchar".equalsIgnoreCase(sqlType)) {
+            javaType = "String";
+        } else if ("int".equalsIgnoreCase(sqlType)) {
+            javaType = "Integer";
+        } else if ("bigint".equalsIgnoreCase(sqlType)) {
+            javaType = "Long";
+        } else if ("datetime".equalsIgnoreCase(sqlType)) {
+            javaType = "LocalDateTime";
+        }
+        return javaType;
     }
 }

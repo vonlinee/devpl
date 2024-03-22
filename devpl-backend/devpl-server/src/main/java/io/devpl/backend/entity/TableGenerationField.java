@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
 /**
  * 生成配置信息-表字段
  */
-@Getter
-@Setter
+@Data
 @TableName("table_generation_field")
 public class TableGenerationField {
 

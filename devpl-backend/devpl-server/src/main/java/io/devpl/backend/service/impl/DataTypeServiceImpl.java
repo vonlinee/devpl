@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.backend.dao.DataTypeGroupMapper;
 import io.devpl.backend.dao.DataTypeItemMapper;
+import io.devpl.backend.dao.DataTypeMappingGroupMapper;
 import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
@@ -43,6 +44,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     DataTypeItemMapper dataTypeItemMapper;
     DataTypeMappingMapper dataTypeMappingMapper;
     DataTypeMappingService dataTypeMappingService;
+    DataTypeMappingGroupMapper dataTypeMappingGroupMapper;
 
     @Override
     public boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems) {
@@ -81,18 +83,19 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     @Override
     public boolean saveDataTypeGroup(DataTypeGroup typeGroup) {
         DataTypeGroup dataTypeGroup = dataTypeGroupMapper.selectById(typeGroup.getId());
+        boolean res;
         if (dataTypeGroup == null) {
             typeGroup.setCreateTime(LocalDateTime.now());
             typeGroup.setUpdateTime(typeGroup.getCreateTime());
-            dataTypeGroupMapper.insert(typeGroup);
+            res = dataTypeGroupMapper.insert(typeGroup) > 0;
         } else {
             dataTypeGroup.setGroupId(typeGroup.getGroupId());
             dataTypeGroup.setGroupName(typeGroup.getGroupName());
             dataTypeGroup.setInternal(typeGroup.getInternal());
             dataTypeGroup.setUpdateTime(LocalDateTime.now());
-            dataTypeGroupMapper.updateById(typeGroup);
+            res = dataTypeGroupMapper.updateById(typeGroup) > 0;
         }
-        return true;
+        return res;
     }
 
     @Override

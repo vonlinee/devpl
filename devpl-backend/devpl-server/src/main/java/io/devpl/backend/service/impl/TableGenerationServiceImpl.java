@@ -133,7 +133,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         // 删除表
         baseMapper.deleteBatchIds(Arrays.asList(ids));
         // 删除列
-        tableFieldService.deleteBatchTableIds(ids);
+        tableFieldService.deleteBatchByTableIds(ids);
         // 删除生成的文件信息
         return tableFileGenerationService.removeByTableIds(ids, false);
     }

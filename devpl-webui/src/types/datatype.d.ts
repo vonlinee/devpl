@@ -69,3 +69,37 @@ type DataTypeMappingGroup = {
    */
   remark: string
 }
+
+/**
+ * 数据类型映射
+ */
+type DataTypeMapping = {
+  /**
+   * 分组ID
+   */
+  groupId: number
+  /**
+   * 分组名称
+   */
+  groupName: string
+  /**
+   * 主类型
+   */
+  typeId: number | undefined
+  /**
+   * 主类型名称
+   */
+  typeName: string
+  /**
+   * 类型 Key
+   */
+  typeKey: string | undefined
+  /**
+   * 映射类型名称
+   */
+  anotherTypeId: number | undefined
+  /**
+   * 映射类型 Key
+   */
+  anotherTypeKey: string | undefined
+}

@@ -24,54 +24,24 @@ public class ${entity} implements Serializable {
 #end
 #if("$!field.fieldComment" != "")
     /**
-     * ${field.comment}
+     * ${field.fieldComment}
      */
 #end
 #if(${field.primaryKey})
 ## 主键
   #if(${field.primaryKey})
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
+    @TableId(value = "${field.fieldName}", type = IdType.AUTO)
   #end
 ## 普通字段
-#elseif(${field.fill})
+#else
 ## -----   存在字段填充设置   -----
   #if(${field.convert})
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.autoFill})
-  #else
+    @TableField(value = "${field.fieldName}", fill = FieldFill.${field.autoFill})
+  #elseif(${field.fill})
     @TableField(fill = FieldFill.${field.autoFill})
   #end
-#elseif(${field.convert})
-    @TableField("${field.annotationColumnName}")
-#end
-## 逻辑删除注解
-#if(${field.logicDeleteField})
-    @TableLogic
+    @TableField(value = "${field.fieldName}")
 #end
     private ${field.attrType} ${field.attrName};
-#end
-## ----------  END 字段循环遍历  ----------
-#if(!${entityLombokModel})
-#foreach($field in ${table.fieldList})
-  #if(${field.propertyType.equals("boolean")})
-    #set($getprefix="is")
-  #else
-    #set($getprefix="get")
-  #end
-
-    public ${field.propertyType} ${getprefix}${field.capitalName}() {
-        return ${field.propertyName};
-    }
-
-  #if(${chainModel})
-    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-  #else
-    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-  #end
-        this.${field.propertyName} = ${field.propertyName};
-  #if(${chainModel})
-        return this;
-  #end
-    }
-#end
 #end
 }

@@ -19,7 +19,13 @@ public interface TableGenerationFieldService extends BaseService<TableGeneration
      */
     List<TableGenerationField> listByTableId(Long tableId);
 
-    boolean deleteBatchTableIds(Long[] tableIds);
+    /**
+     * 根据 table id 批量删除
+     *
+     * @param tableIds 表ID列表
+     * @return 是否成功
+     */
+    boolean deleteBatchByTableIds(Long[] tableIds);
 
     /**
      * 修改表字段数据
