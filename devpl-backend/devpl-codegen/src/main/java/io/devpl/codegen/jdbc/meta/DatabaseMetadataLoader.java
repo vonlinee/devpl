@@ -13,9 +13,8 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      * 设置数据库连接
      *
      * @param connection 数据库连接对象，必须是有效的连接
-     * @return 是否设置成功
      */
-    boolean setConnection(Connection connection);
+    void setConnection(Connection connection);
 
     /**
      * 关系型数据库中没有catalog的概念

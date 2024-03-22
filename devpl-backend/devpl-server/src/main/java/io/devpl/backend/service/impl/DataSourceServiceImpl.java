@@ -26,7 +26,9 @@ public class DataSourceServiceImpl implements DataSourceService {
         if (dbType == null) {
             return new JdbcDatabaseMetadataLoader(connection);
         }
-        return new AbstractQueryDatabaseMetadataLoader(connection, dbType);
+        DatabaseMetadataLoader loader = AbstractQueryDatabaseMetadataLoader.getQuery(dbType);
+        loader.setConnection(connection);
+        return loader;
     }
 
     @Override

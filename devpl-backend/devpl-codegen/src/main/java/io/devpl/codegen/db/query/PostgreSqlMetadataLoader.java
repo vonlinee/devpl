@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * PostgreSql查询
  */
-public class PostgreSqlQuery extends AbstractQueryBase implements AbstractQuery {
+public class PostgreSqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader  implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {

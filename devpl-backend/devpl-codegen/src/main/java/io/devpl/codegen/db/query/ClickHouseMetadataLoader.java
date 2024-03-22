@@ -11,7 +11,7 @@ import java.util.List;
  * @author ratelfu
  * @since 2021-03-10
  */
-public class ClickHouseQuery extends AbstractQueryBase implements AbstractQuery {
+public class ClickHouseMetadataLoader extends AbstractQueryDatabaseMetadataLoader implements SqlMetadataQuery {
 
     @Override
     public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {

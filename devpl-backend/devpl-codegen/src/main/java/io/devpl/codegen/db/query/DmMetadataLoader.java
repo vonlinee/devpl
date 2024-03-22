@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 达梦8 查询
  */
-public class DmQuery extends AbstractQueryBase implements AbstractQuery {
+public class DmMetadataLoader extends AbstractQueryDatabaseMetadataLoader implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {

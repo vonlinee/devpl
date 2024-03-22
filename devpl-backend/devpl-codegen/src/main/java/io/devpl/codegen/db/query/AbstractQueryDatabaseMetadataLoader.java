@@ -14,93 +14,116 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 通过不同平台的各自的sql进行查询
  *
- * @see AbstractQuery
+ * @see SqlMetadataQuery
  */
 @Slf4j
-public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoader {
+public abstract class AbstractQueryDatabaseMetadataLoader extends ConnectionHolder implements DatabaseMetadataLoader, SqlMetadataQuery {
 
-    AbstractQuery query;
-    DBType dbType;
-    Connection connection;
-
-    public AbstractQueryDatabaseMetadataLoader(Connection connection, DBType dbType) {
-        this.connection = connection;
-        this.dbType = dbType;
-        this.query = getQuery(dbType);
-    }
-
-    private AbstractQuery getQuery(DBType dbType) {
-        AbstractQuery dbQuery = null;
+    public static DatabaseMetadataLoader getQuery(DBType dbType) {
+        DatabaseMetadataLoader dbQuery = null;
         if (dbType == DBType.MYSQL) {
-            dbQuery = new MySqlQuery();
+            dbQuery = new MySqlMetadataLoader();
         } else if (dbType == DBType.ORACLE) {
-            dbQuery = new OracleQuery();
+            dbQuery = new OracleMetadataLoader();
         } else if (dbType == DBType.POSTGRE_SQL) {
-            dbQuery = new PostgreSqlQuery();
+            dbQuery = new PostgreSqlMetadataLoader();
         } else if (dbType == DBType.SQL_SERVER) {
-            dbQuery = new SQLServerQuery();
+            dbQuery = new SQLServerMetadataLoader();
         } else if (dbType == DBType.DM) {
-            dbQuery = new DmQuery();
+            dbQuery = new DmMetadataLoader();
         } else if (dbType == DBType.CLICK_HOUSE) {
-            dbQuery = new ClickHouseQuery();
+            dbQuery = new ClickHouseMetadataLoader();
         }
-
-        if (dbQuery != null) {
-            dbQuery.setConnection(connection);
-            ConnectionHolder ch = (ConnectionHolder) dbQuery;
-            ch.setConnectionSupplier(() -> connection);
-        }
-
         return dbQuery;
     }
 
-    @Override
-    public boolean setConnection(Connection connection) {
-        this.connection = connection;
-        return true;
+    /**
+     * 查询列表
+     *
+     * @param sql      sql
+     * @param consumer 结果处理
+     * @param <R>      单行数据类型
+     * @return 数据集
+     * @throws SQLException 执行出错
+     */
+    final <R> R query(CharSequence sql, Function<ResultSet, R> consumer) throws SQLException {
+        Connection connection = getUsableConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sql))) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return consumer.apply(resultSet);
+            }
+        }
+    }
+
+    /**
+     * 查询列表
+     *
+     * @param sql      sql
+     * @param consumer 结果处理
+     * @param <R>      单行数据类型
+     * @return 数据集
+     * @throws SQLException 执行出错
+     */
+    final <R> List<R> queryList(CharSequence sql, Function<ResultSet, R> consumer) throws SQLException {
+        Connection connection = getUsableConnection();
+        List<R> list = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sql))) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    list.add(consumer.apply(resultSet));
+                }
+            }
+        }
+        return list;
+    }
+
+    final <R> R query(CharSequence sql, BiFunction<Connection, ResultSet, R> consumer) throws SQLException {
+        Connection connection = getUsableConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sql))) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return consumer.apply(connection, resultSet);
+            }
+        }
     }
 
     @Override
-    public List<String> getCatalogs() {
+    public List<String> getCatalogs() throws SQLException {
         return null;
     }
 
     @Override
-    public List<String> getDatabaseNames() throws SQLException {
-        return query.getDatabaseNames();
-    }
-
-    @Override
-    public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws RuntimeSQLException {
+    public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
         List<TableMetadata> tableList = new ArrayList<>();
 
-        String tableQuerySql = query.getTableQuerySql(catalog, schemaPattern, tableNamePattern, true);
+        String tableQuerySql = this.getTableQuerySql(catalog, schemaPattern, tableNamePattern, true);
 
         if (log.isDebugEnabled()) {
             log.debug("search catalog: {}, schema: {}, tableName: {}, retrieve metadata of tables with sql: {}", catalog, schemaPattern, tableNamePattern, tableQuerySql);
         }
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(tableQuerySql)) {
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement(tableQuerySql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 // 查询数据
                 while (rs.next()) {
-                    String tableName = rs.getString(query.getTableNameResultSetColumnName());
+                    String tableName = rs.getString(this.getTableNameResultSetColumnName());
                     if (StringUtils.hasText(tableNamePattern) && !tableName.contains(tableNamePattern)) {
                         continue;
                     }
                     TableMetadata table = new TableMetadata();
-                    if (query.getDatabaseNameResultSetColumnName() != null) {
-                        table.setTableSchema(rs.getString(query.getDatabaseNameResultSetColumnName()));
+                    if (this.getDatabaseNameResultSetColumnName() != null) {
+                        table.setTableSchema(rs.getString(this.getDatabaseNameResultSetColumnName()));
                     }
                     table.setTableName(tableName);
-                    if (query.getTableTypeResultSetColumnName() != null) {
-                        table.setTableType(rs.getString(query.getTableTypeResultSetColumnName()));
+                    if (this.getTableTypeResultSetColumnName() != null) {
+                        table.setTableType(rs.getString(this.getTableTypeResultSetColumnName()));
                     }
-                    table.setRemarks(rs.getString(query.getTableCommentResultSetColumnName()));
+                    table.setRemarks(rs.getString(this.getTableCommentResultSetColumnName()));
                     tableList.add(table);
                 }
             }
@@ -111,7 +134,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     }
 
     @Override
-    public List<String> getTableTypes() throws RuntimeSQLException {
+    public List<String> getTableTypes() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -122,31 +145,28 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
      * @return sql, 用于获取表信息
      */
     String getTableFieldQuerySql(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) {
-        return query.getTableFieldsQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern, true);
+        return this.getTableFieldsQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern, true);
     }
 
     @Override
     public List<ColumnMetadata> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
-
         List<ColumnMetadata> columnsMetadata = new ArrayList<>();
-
         String tableFieldsSql = getTableFieldQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern);
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement(tableFieldsSql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     ColumnMetadata cmd = new ColumnMetadata();
-                    cmd.setColumnName(rs.getString(query.getColumnNameResultSetColumnName()));
-                    String fieldType = rs.getString(query.getColumnDataTypeResultSetColumnName());
+                    cmd.setColumnName(rs.getString(this.getColumnNameResultSetColumnName()));
+                    String fieldType = rs.getString(this.getColumnDataTypeResultSetColumnName());
                     if (fieldType.contains(" ")) {
                         fieldType = fieldType.substring(0, fieldType.indexOf(" "));
                     }
 
                     cmd.setPlatformDataType(fieldType);
-                    cmd.setRemarks(rs.getString(query.getColumnCommentResultSetColumnName()));
-                    cmd.setTableSchema(rs.getString(query.getDatabaseNameResultSetColumnName()));
-                    cmd.setTableName(rs.getString(query.getTableNameResultSetColumnName()));
-                    cmd.setTableCatalog(rs.getString(query.getTableCatalogResultSetColumnName()));
+                    cmd.setRemarks(rs.getString(this.getColumnCommentResultSetColumnName()));
+                    cmd.setTableSchema(rs.getString(this.getDatabaseNameResultSetColumnName()));
+                    cmd.setTableName(rs.getString(this.getTableNameResultSetColumnName()));
+                    cmd.setTableCatalog(rs.getString(this.getTableCatalogResultSetColumnName()));
                     // 主键
                     // String key = rs.getString(query.fieldKey());
                     // field.setPrimaryKey(StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key));
@@ -162,14 +182,14 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     public List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException {
         String tableFieldsSql = getTableFieldQuerySql(catalog, schema, table, null);
         List<PrimaryKeyMetadata> primaryKeyMetadata = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql)) {
+        try (PreparedStatement preparedStatement = getConnection().prepareStatement(tableFieldsSql)) {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
                     // 主键
-                    String key = rs.getString(query.getPrimaryKeyResultSetColumnName());
+                    String key = rs.getString(this.getPrimaryKeyResultSetColumnName());
                     if (StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key)) {
                         PrimaryKeyMetadata pkm = new PrimaryKeyMetadata();
-                        pkm.setColumnName(rs.getString(query.getColumnNameResultSetColumnName()));
+                        pkm.setColumnName(rs.getString(this.getColumnNameResultSetColumnName()));
                         primaryKeyMetadata.add(pkm);
                     }
                 }
@@ -184,7 +204,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
     }
 
     @Override
-    public List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws RuntimeSQLException {
+    public List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -195,11 +215,11 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
     @Override
     public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
-        return query.getDataTypes(databaseName, tableName);
+        return this.getDataTypes(databaseName, tableName);
     }
 
     @Override
     public void close() {
-        JdbcUtils.closeQuietly(this.connection);
+        JdbcUtils.closeQuietly(this.getConnection());
     }
 }

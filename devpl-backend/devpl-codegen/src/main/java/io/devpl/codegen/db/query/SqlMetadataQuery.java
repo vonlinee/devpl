@@ -3,22 +3,13 @@ package io.devpl.codegen.db.query;
 import io.devpl.codegen.db.DBType;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.List;
 
 /**
  * Query
  */
-public interface AbstractQuery {
-
-    /**
-     * 设置数据库连接
-     *
-     * @param connection 数据库连接
-     */
-    void setConnection(Connection connection);
+public interface SqlMetadataQuery {
 
     /**
      * 数据库类型
@@ -90,11 +81,7 @@ public interface AbstractQuery {
      *
      * @return 所有数据库名称
      */
-    default List<String> getDatabaseNames() throws SQLException {
-        throw new SQLFeatureNotSupportedException("not supported for this platform");
-    }
+    List<String> getDatabaseNames() throws SQLException;
 
-    default List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
-        throw new SQLFeatureNotSupportedException("not supported for this platform");
-    }
+    List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
 }

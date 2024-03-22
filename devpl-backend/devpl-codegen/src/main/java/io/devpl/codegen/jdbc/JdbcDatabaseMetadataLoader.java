@@ -26,9 +26,8 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
     }
 
     @Override
-    public boolean setConnection(Connection connection) {
+    public void setConnection(Connection connection) {
         this.connection = connection;
-        return true;
     }
 
     private DatabaseMetaData getDatabaseMetaData() throws SQLException {

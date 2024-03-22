@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Oracle查询
  */
-public class OracleQuery extends AbstractQueryBase implements AbstractQuery {
+public class OracleMetadataLoader extends AbstractQueryDatabaseMetadataLoader implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {

@@ -28,14 +28,13 @@ import java.util.stream.Collectors;
 /**
  * 使用SQL查询的尝试来获取元数据信息
  */
-@Deprecated
-public class SQLQuery extends AbstractDatabaseIntrospector {
+public class SQLBasedMetadataLoader extends AbstractDatabaseIntrospector {
 
-    static final Logger log = LoggerFactory.getLogger(SQLQuery.class);
+    static final Logger log = LoggerFactory.getLogger(SQLBasedMetadataLoader.class);
 
     protected final DbQueryDecorator dbQuery;
 
-    public SQLQuery(@NotNull Context context) {
+    public SQLBasedMetadataLoader(@NotNull Context context) {
         setContext(context);
         this.dbQuery = new DbQueryDecorator(context.getDataSourceConfig(), context.getStrategyConfig());
     }

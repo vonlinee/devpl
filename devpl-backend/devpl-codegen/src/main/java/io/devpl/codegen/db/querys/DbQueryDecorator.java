@@ -19,13 +19,6 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/**
- * DbQuery 装饰器
- *
- * @author nieqiurong 2020/9/17.
- * @author hubin
- * @since 3.5.0
- */
 public class DbQueryDecorator extends AbstractDbQuery {
     private final DatabaseDialect dbQuery;
     private final Connection connection;

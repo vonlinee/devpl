@@ -1,6 +1,7 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
 
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * MySQL查询
  */
-public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
+public class MySqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {
@@ -78,19 +79,71 @@ public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
 
     @Override
     public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
-        StringBuilder sql = new StringBuilder("select table_catalog, table_schema, table_name, column_name, data_type, column_comment, column_key from information_schema.columns where 1 = 1");
+        String sql = """
+            SELECT
+            	TABLE_CATALOG,
+            	TABLE_SCHEMA,
+            	TABLE_NAME,
+            	COLUMN_NAME,
+            	ORDINAL_POSITION,
+            	COLUMN_DEFAULT,
+            	IS_NULLABLE,
+            	DATA_TYPE,
+            	CHARACTER_MAXIMUM_LENGTH,
+            	CHARACTER_OCTET_LENGTH,
+            	NUMERIC_PRECISION,
+            	NUMERIC_SCALE,
+            	DATETIME_PRECISION,
+            	CHARACTER_SET_NAME,
+            	COLLATION_NAME,
+            	COLUMN_TYPE,
+            	COLUMN_KEY,
+            	EXTRA,
+            	`PRIVILEGES`,
+            	COLUMN_COMMENT,
+            	GENERATION_EXPRESSION,
+            	SRS_ID
+            FROM
+            	information_schema.`COLUMNS`
+            """;
 
+        StringBuilder sqlBuilder = new StringBuilder(sql);
         if (schema != null && !schema.isEmpty()) {
-            sql.append(" and table_schema = '").append(schema).append("' ");
+            sqlBuilder.append(" and table_schema = '").append(schema).append("' ");
         }
 
         if (tableName != null && !tableName.isEmpty()) {
-            sql.append(" and table_name = '").append(tableName).append("' ");
+            sqlBuilder.append(" and table_name = '").append(tableName).append("' ");
         }
 
-        sql.append(" order by ordinal_position");
+        sqlBuilder.append(" order by ordinal_position");
+        return sqlBuilder.toString();
+    }
 
-        return sql.toString();
+    @Override
+    public List<ColumnMetadata> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
+        String sql = getTableFieldQuerySql(catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        return queryList(sql, rs -> {
+            ColumnMetadata cmd = new ColumnMetadata();
+            try {
+                cmd.setTableCatalog(rs.getString("TABLE_CATALOG"));
+                cmd.setTableSchema(rs.getString("TABLE_SCHEMA"));
+                cmd.setTableName(rs.getString("TABLE_NAME"));
+                cmd.setColumnName(rs.getString("COLUMN_NAME"));
+                cmd.setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
+                cmd.setColumnDef(rs.getString("COLUMN_DEFAULT"));
+                cmd.setIsNullable(rs.getString("IS_NULLABLE"));
+                // dataType
+                cmd.setPlatformDataType(rs.getString("DATA_TYPE"));
+
+                // 比如 varchar(255)
+                cmd.setDataTypeIdentifier(rs.getString("COLUMN_TYPE"));
+                cmd.setRemarks(rs.getString("COLUMN_COMMENT"));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return cmd;
+        });
     }
 
     @Override
@@ -111,6 +164,11 @@ public class MySqlQuery extends AbstractQueryBase implements AbstractQuery {
     @Override
     public String getPrimaryKeyResultSetColumnName() {
         return "column_key";
+    }
+
+    @Override
+    public List<String> getCatalogs() throws SQLException {
+        return null;
     }
 
     @Override
