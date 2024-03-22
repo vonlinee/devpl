@@ -35,12 +35,12 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
      * @return 数据类型列表
      */
     @Select(value = """
-        SELECT A.id AS type_id, dtg.group_id AS type_group_id, A.type_key, A.type_name, false as mapped
-        FROM data_type_item A
-                 LEFT JOIN (SELECT DISTINCT type_id FROM data_type_mapping) B ON A.id = B.type_id
-                 LEFT JOIN data_type_group dtg on A.type_group_id = dtg.group_id
-        WHERE type_id IS NULL
-        """)
+            SELECT A.id AS type_id, dtg.group_id AS type_group_id, A.type_key, A.locale_type_name, false as mapped
+            FROM data_type_item A
+                     LEFT JOIN (SELECT DISTINCT type_id FROM data_type_mapping) B ON A.id = B.type_id
+                     LEFT JOIN data_type_group dtg on A.type_group_id = dtg.group_id
+            WHERE B.type_id IS NULL
+            """)
     List<DataTypeMappingVO> listAllUnMappedDataTypes();
 
     /**

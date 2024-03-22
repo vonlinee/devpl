@@ -34,7 +34,6 @@ public class SqlServerQuery extends AbstractDbQuery {
             "where (xtype='U' or xtype='v')) a where 1=1 ";
     }
 
-
     @Override
     public String tableFieldsSql() {
         return "SELECT  cast(a.name AS VARCHAR(500)) AS TABLE_NAME,cast(b.name AS VARCHAR(500)) AS COLUMN_NAME, "

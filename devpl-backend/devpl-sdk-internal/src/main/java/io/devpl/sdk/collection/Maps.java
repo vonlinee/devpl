@@ -948,11 +948,50 @@ public final class Maps {
         return (int) Math.ceil(expectedSize / (double) DEFAULT_LOAD_FACTOR);
     }
 
+    /**
+     * 先对Map进行判空，然后再进行get操作
+     *
+     * @param map map
+     * @param key map key
+     * @param <K> Key类型
+     * @param <V> Value类型
+     * @return 为null则返回null
+     */
     public static <K, V> V get(Map<K, V> map, K key) {
+        return getOrDefault(map, key, null);
+    }
+
+    /**
+     * 先对Map进行判空，然后再进行get操作
+     *
+     * @param map map
+     * @param key map key
+     * @param <K> Key类型
+     * @param <V> Value类型
+     * @return 为null则返回null
+     */
+    public static <K, V> V getOrDefault(Map<K, V> map, K key, V defaults) {
+        if (map == null || map.isEmpty()) {
+            return defaults;
+        }
+        if (key == null) {
+            return defaults;
+        }
         return map.get(key);
     }
 
+    /**
+     * 获取Map的值
+     *
+     * @param map    Map
+     * @param key    key
+     * @param mapper 映射
+     * @return {@link R}
+     */
     public static <K, V, R> R get(Map<K, V> map, K key, Function<V, R> mapper) {
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
         V value = map.get(key);
         return mapper.apply(value);
     }

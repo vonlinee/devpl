@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * 数据库元数据加载程序
+ */
 public interface DatabaseMetadataLoader extends AutoCloseable {
 
     /**
@@ -83,6 +86,14 @@ public interface DatabaseMetadataLoader extends AutoCloseable {
      */
     List<String> getSQLKeywords() throws SQLException;
 
+    /**
+     * 获取数据类型
+     *
+     * @param databaseName 数据库名称
+     * @param tableName    表名
+     * @return {@link List}<{@link String}>
+     * @throws SQLException SQL异常
+     */
     List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
 
     /**

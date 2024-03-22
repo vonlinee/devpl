@@ -9,6 +9,7 @@ import io.devpl.backend.dao.DataTypeItemMapper;
 import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
+import io.devpl.backend.domain.param.DataTypeMappingAddParam;
 import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
@@ -25,7 +26,6 @@ import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -131,12 +131,12 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     /**
      * 添加数据类型映射关系
      *
-     * @param dataTypeIdMapping 数据类型ID映射关系
+     * @param param 数据类型映射关系 添加参数
      */
     @Override
-    public void addDataTypeMapping(MultiValueMap<Long, Long> dataTypeIdMapping) {
-        // TODO 待完成
-        List<DataTypeMapping> existedTypeMappings = dataTypeMappingMapper.selectListByIds(dataTypeIdMapping.keySet());
+    public boolean addDataTypeMapping(DataTypeMappingAddParam param) {
+
+        return true;
     }
 
     @Override

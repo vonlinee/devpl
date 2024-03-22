@@ -2,6 +2,7 @@ package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.ConnectionHolder;
+import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.*;
 import io.devpl.sdk.util.StringUtils;
@@ -15,10 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO 重构
  * 通过不同平台的各自的sql进行查询
  *
- * @see io.devpl.codegen.jdbc.JdbcDatabaseMetadataLoader
+ * @see AbstractQuery
  */
 @Slf4j
 public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoader {
@@ -112,7 +112,7 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
     @Override
     public List<String> getTableTypes() throws RuntimeSQLException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -180,17 +180,17 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
     @Override
     public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern, String functionNamePattern) throws SQLException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<ColumnPrivilegesMetadata> getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws RuntimeSQLException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<String> getSQLKeywords() throws SQLException {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -200,13 +200,6 @@ public class AbstractQueryDatabaseMetadataLoader implements DatabaseMetadataLoad
 
     @Override
     public void close() {
-        if (connection != null) {
-            try {
-                if (!connection.isClosed()) {
-                    connection.close();
-                }
-            } catch (SQLException ignored) {
-            }
-        }
+        JdbcUtils.closeQuietly(this.connection);
     }
 }

@@ -22,36 +22,26 @@ public class ${entity} implements Serializable {
 #if(${field.keyFlag})
 #set($keyPropertyName=${field.propertyName})
 #end
-#if("$!field.comment" != "")
-  #if(${springdoc})
-    @Schema(description = "${field.comment}")
-  #elseif(${swagger})
-    @ApiModelProperty("${field.comment}")
-  #else
+#if("$!field.fieldComment" != "")
     /**
      * ${field.comment}
      */
-  #end
 #end
-#if(${field.keyFlag})
+#if(${field.primaryKey})
 ## 主键
-  #if(${field.keyIdentityFlag})
+  #if(${field.primaryKey})
     @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
   #end
 ## 普通字段
 #elseif(${field.fill})
 ## -----   存在字段填充设置   -----
   #if(${field.convert})
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.autoFill})
   #else
-    @TableField(fill = FieldFill.${field.fill})
+    @TableField(fill = FieldFill.${field.autoFill})
   #end
 #elseif(${field.convert})
     @TableField("${field.annotationColumnName}")
-#end
-## 乐观锁注解
-#if(${field.versionField})
-    @Version
 #end
 ## 逻辑删除注解
 #if(${field.logicDeleteField})

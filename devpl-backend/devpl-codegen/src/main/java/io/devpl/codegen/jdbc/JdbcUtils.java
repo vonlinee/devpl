@@ -7,6 +7,7 @@ import io.devpl.sdk.util.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -18,7 +19,10 @@ import java.util.regex.Pattern;
 /**
  * JDBC工具类
  */
-public class JdbcUtils {
+public final class JdbcUtils {
+
+    private JdbcUtils() {
+    }
 
     /**
      * Constant that indicates an unknown (or unspecified) SQL type.
@@ -282,9 +286,9 @@ public class JdbcUtils {
      */
     public static boolean isNumeric(int sqlType) {
         return (Types.BIT == sqlType || Types.BIGINT == sqlType || Types.DECIMAL == sqlType ||
-            Types.DOUBLE == sqlType || Types.FLOAT == sqlType || Types.INTEGER == sqlType ||
-            Types.NUMERIC == sqlType || Types.REAL == sqlType || Types.SMALLINT == sqlType ||
-            Types.TINYINT == sqlType);
+                Types.DOUBLE == sqlType || Types.FLOAT == sqlType || Types.INTEGER == sqlType ||
+                Types.NUMERIC == sqlType || Types.REAL == sqlType || Types.SMALLINT == sqlType ||
+                Types.TINYINT == sqlType);
     }
 
     /**
@@ -496,5 +500,99 @@ public class JdbcUtils {
             list.add(rscmd);
         }
         return list;
+    }
+
+    /**
+     * 关闭数据库连接，不抛出任何异常
+     *
+     * @param connection 数据库连接
+     */
+    public static void closeQuietly(Connection connection) {
+        if (connection == null) {
+            return;
+        }
+        try {
+            if (!connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLRecoverableException e) {
+            // skip
+        } catch (Exception e) {
+            log.error("error when close connection", e);
+        }
+    }
+
+    /**
+     * 关闭Statement，不抛出任何异常
+     *
+     * @param stmt Statement
+     */
+    public static void closeQuietly(Statement stmt) {
+        if (stmt == null) {
+            return;
+        }
+        try {
+            stmt.close();
+        } catch (Exception e) {
+            boolean printError = !(e instanceof SQLRecoverableException)
+                                 || !"Closed Connection".equals(e.getMessage());
+            if (printError) {
+                log.debug("close statement error", e);
+            }
+        }
+    }
+
+    /**
+     * 关闭ResultSet，不抛出任何异常
+     *
+     * @param resultSet Statement
+     */
+    public static void closeQuietly(ResultSet resultSet) {
+        if (resultSet == null) {
+            return;
+        }
+        try {
+            resultSet.close();
+        } catch (Exception e) {
+            log.debug("close result set error", e);
+        }
+    }
+
+    /**
+     * 关闭Closeable，不抛出任何异常
+     *
+     * @param x Closeable
+     */
+    public static void closeQuietly(Closeable x) {
+        if (x == null) {
+            return;
+        }
+        try {
+            x.close();
+        } catch (Exception e) {
+            log.debug("close error", e);
+        }
+    }
+
+    public static void closeQuietly(Blob x) {
+        if (x == null) {
+            return;
+        }
+        try {
+            x.free();
+        } catch (Exception e) {
+            log.debug("close error", e);
+        }
+    }
+
+    public static void closeQuietly(Clob x) {
+        if (x == null) {
+            return;
+        }
+        try {
+            x.free();
+        } catch (Exception e) {
+            log.debug("close error", e);
+        }
     }
 }

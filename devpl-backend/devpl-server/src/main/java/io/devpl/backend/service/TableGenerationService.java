@@ -98,5 +98,5 @@ public interface TableGenerationService extends BaseService<TableGeneration> {
      * @param databaseName     数据库名称，如果为空，则获取数据源下的所有数据库的表信息
      * @param tableNamePattern 表名，模糊匹配
      */
-    List<TableGeneration> getGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern);
+    List<TableGeneration> listGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern);
 }

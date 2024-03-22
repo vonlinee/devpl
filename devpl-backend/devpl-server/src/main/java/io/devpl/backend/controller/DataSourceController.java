@@ -205,7 +205,7 @@ public class DataSourceController {
         @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
-            return ListResult.ok(tableService.getGenerationTargetTables(id, databaseName, tableNamePattern));
+            return ListResult.ok(tableService.listGenerationTargetTables(id, databaseName, tableNamePattern));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ListResult.error("数据源配置错误，请检查数据源配置！");

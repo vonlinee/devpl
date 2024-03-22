@@ -51,3 +51,21 @@ type DataTypeSelectOption = {
    */
   value: any
 }
+
+/**
+ * 数据类型映射分组
+ */
+type DataTypeMappingGroup = {
+  /**
+   * 主键ID
+   */
+  id: number
+  /**
+   * 数据类型映射分组名称
+   */
+  groupName: string
+  /**
+   * 备注信息
+   */
+  remark: string
+}

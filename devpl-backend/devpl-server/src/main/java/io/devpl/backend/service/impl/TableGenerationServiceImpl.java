@@ -239,6 +239,12 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         return true;
     }
 
+    /**
+     * 根据数据表的元数据初始化表生成配置数据
+     *
+     * @param tablesMetadata 数据表元数据
+     * @return 表生成配置数据
+     */
     private List<TableGeneration> prepareTables(List<TableMetadata> tablesMetadata) {
         List<TableGeneration> tableList = new ArrayList<>();
         for (TableMetadata tm : tablesMetadata) {
@@ -363,12 +369,17 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         tableConfig.put("name", table.getTableName());
 
         tableConfig.put("controllerName", table.getClassName() + "Controller");
-        tableConfig.put("serviceName", "I" + table.getClassName() + "Service");
+        tableConfig.put("serviceName", table.getClassName() + "Service");
         tableConfig.put("serviceImplName", table.getClassName() + "ServiceImpl");
         tableConfig.put("mapperName", table.getClassName() + "Mapper");
         dataModel.put("table", tableConfig);
 
         dataModel.put("superServiceClass", "IService");
+        dataModel.put("superMapperClass", "BaseMapper");
+        dataModel.put("superMapperClassPackage", "com.baomidou.mybatisplus.core.mapper.BaseMapper");
+        dataModel.put("superServiceImplClassPackage", "com.baomidou.mybatisplus.extension.service.impl.ServiceImpl");
+        dataModel.put("superServiceImplClass", "ServiceImpl");
+        dataModel.put("superServiceClassPackage", "com.baomidou.mybatisplus.extension.service.IService");
 
         // 项目信息
         // 包路径
@@ -479,8 +490,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     /**
      * 读取数据源元数据，获取表的所有字段
      *
-     * @param dbType 数据库类型
-     * @param table  表信息
+     * @param dbType     数据库类型
+     * @param table      表信息
+     * @param loader     元数据加载类
+     * @param connection 连接
      * @return 表的所有字段信息
      */
     private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataLoader loader, DBType dbType, Connection connection, TableGeneration table) {
@@ -519,7 +532,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @return 表信息列表
      */
     @Override
-    public List<TableGeneration> getGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern) {
+    public List<TableGeneration> listGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern) {
         List<TableGeneration> tableList = new ArrayList<>();
         DBType dbType = DBType.MYSQL;
         if (!rdbmsConnectionInfoService.isSystemDataSource(datasourceId)) {

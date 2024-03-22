@@ -1,18 +1,21 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.config.*;
-import io.devpl.codegen.template.model.EntityTemplateArguments;
+import io.devpl.codegen.config.DataSourceConfig;
+import io.devpl.codegen.config.StrategyConfig;
+import io.devpl.codegen.config.TypeConverter;
+import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.core.Context;
 import io.devpl.codegen.core.TableGeneration;
-import io.devpl.codegen.db.converts.MySqlTypeConverter;
-import io.devpl.codegen.db.converts.TypeConverts;
-import io.devpl.codegen.core.ColumnGeneration;
-import io.devpl.codegen.db.querys.DbQueryDecorator;
-import io.devpl.codegen.db.querys.H2Query;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.db.converts.MySqlTypeConverter;
+import io.devpl.codegen.db.converts.TypeConverts;
+import io.devpl.codegen.db.querys.DbQueryDecorator;
+import io.devpl.codegen.db.querys.H2Query;
 import io.devpl.codegen.jdbc.JdbcUtils;
+import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -54,7 +57,7 @@ public class SQLQuery extends AbstractDatabaseIntrospector {
             dbQuery.execute(dbQuery.tablesSql(), result -> {
                 String tableName = result.getStringResult(dbQuery.tableName());
                 if (StringUtils.hasText(tableName)) {
-                    TableGeneration tableInfo = new TableGeneration(null);
+                    TableGeneration tableInfo = new TableGeneration(new TableMetadata());
                     String tableComment = result.getTableComment();
                     // 跳过视图
                     if (!(strategyConfig.isSkipView() && tableComment.toUpperCase().contains("VIEW"))) {

@@ -88,7 +88,7 @@ export const apiListAllDataTypeMappings = (
   typeId: number | undefined = undefined,
   typeGroupId: number | undefined = undefined
 ) => {
-  return http.get("/api/datatype/mapping/all", {
+  return http.get("/api/datatype/mapping/list", {
     typeId: typeId,
     typeGroupId: typeGroupId,
   })

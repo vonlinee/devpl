@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 数据表管理
+ * 文件生成表管理
  */
 @RestController
 @RequestMapping("/api/filegen/table")

@@ -103,10 +103,9 @@ import {
   apiListAllDataTypeMappings,
   apiListAllMappableDataTypes,
 } from "@/api/datatype"
+import { Message } from "@/hooks/message"
 import { reactive, ref } from "vue"
 import { VxeTableDefines } from "vxe-table/types/table"
-
-import { useMessage } from "@/hooks/useElMessage"
 
 const modalShowRef = ref()
 const modal1ShowRef = ref()
@@ -161,10 +160,8 @@ const tableData = ref<RowVO[]>([])
 
 const queryAllDataTypeMappings = () => {
   apiListAllDataTypeMappings(undefined, undefined).then((res) => {
-    if (res.code == 200) {
-      tableData.value = res.data
-      pageVo.value.total = res.total || 0
-    }
+    tableData.value = res.data
+    pageVo.value.total = res.total || 0
   })
 }
 
@@ -184,11 +181,9 @@ const getSelectEvent = () => {
       })
     }
     apiAddDataTypeMapping(list).then((res) => {
-      if (res.code == 200) {
-        useMessage(modal1ShowRef).info("保存成功")
-        // 刷新列表
-        queryAllDataTypeMappings()
-      }
+      Message.info("保存成功")
+      // 刷新列表
+      queryAllDataTypeMappings()
     })
   }
 }
@@ -205,9 +200,7 @@ const getSelctableDataTypes = (id: number | undefined = undefined) => {
   }
   if (f) {
     apiListAllMappableDataTypes(id).then((res) => {
-      if (res.code == 200) {
-        mappableDataTypes.value = res.data
-      }
+      mappableDataTypes.value = res.data
     })
   }
 }

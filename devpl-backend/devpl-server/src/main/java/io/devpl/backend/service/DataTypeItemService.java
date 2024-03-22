@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
+import io.devpl.backend.domain.param.DataTypeMappingAddParam;
 import io.devpl.backend.domain.param.DataTypeMappingParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
@@ -11,7 +12,6 @@ import io.devpl.backend.domain.vo.DataTypeMappingVO;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
-import org.springframework.util.MultiValueMap;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,10 +38,16 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
 
     boolean addDataTypeMapping(List<DataTypeMappingParam> params);
 
-    void addDataTypeMapping(MultiValueMap<Long, Long> dataTypeIdMapping);
+    boolean addDataTypeMapping(DataTypeMappingAddParam param);
 
     List<DataTypeMappingListVO> listDataTypeMappings(Long typeId);
 
+    /**
+     * 查询某个类型映射的所有其他类型
+     *
+     * @param typeId 主类型ID
+     * @return 映射的数据类型
+     */
     List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
 
     /**
@@ -52,6 +58,11 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
      */
     List<SelectOptionVO> getSelectableTypes(String typeGroupId);
 
+    /**
+     * 查询所有类型分组列表
+     *
+     * @return 类型分组列表
+     */
     List<SelectOptionVO> getSelectableTypeGroups();
 
     /**

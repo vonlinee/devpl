@@ -13,6 +13,7 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.service.DataTypeItemService;
+import io.devpl.backend.utils.BusinessUtils;
 import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -130,13 +131,13 @@ public class DataTypeController {
     }
 
     /**
-     * 查询所有数据类型之间的映射关系
+     * 分页查询所有数据类型之间的映射关系
      *
      * @return 类型分组信息
      */
-    @GetMapping("/mapping/all")
+    @GetMapping("/mapping/list")
     public ListResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingParam param) {
-        return ListResult.ok(dataTypeService.listDataTypeMappings(param.getTypeId()));
+        return ListResult.ok(BusinessUtils.startPage(param, () -> dataTypeService.listDataTypeMappings(param.getTypeId())));
     }
 
     /**
