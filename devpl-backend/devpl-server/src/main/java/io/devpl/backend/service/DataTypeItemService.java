@@ -38,6 +38,12 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
 
     boolean addDataTypeMapping(List<DataTypeMappingParam> params);
 
+    /**
+     * 添加数据类型映射关系
+     *
+     * @param param 数据类型映射关系参数
+     * @return 是否成功
+     */
     boolean addDataTypeMapping(DataTypeMappingAddParam param);
 
     List<DataTypeMappingListVO> listDataTypeMappings(Long typeId);

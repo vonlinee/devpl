@@ -20,6 +20,7 @@ import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.DataTypeItemService;
+import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -28,9 +29,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * 数据类型 Service
@@ -43,6 +42,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     DataTypeGroupMapper dataTypeGroupMapper;
     DataTypeItemMapper dataTypeItemMapper;
     DataTypeMappingMapper dataTypeMappingMapper;
+    DataTypeMappingService dataTypeMappingService;
 
     @Override
     public boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems) {
@@ -135,8 +135,29 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      */
     @Override
     public boolean addDataTypeMapping(DataTypeMappingAddParam param) {
+        if (param.getTypeId() == null || CollectionUtils.isEmpty(param.getAnotherTypeIds())) {
+            return true;
+        }
+        param.getAnotherTypeIds().remove(param.getTypeId());
+        if (param.getAnotherTypeIds().isEmpty()) {
+            return true;
+        }
+        // 查询所有数据类型信息
+        Set<Long> ids = new HashSet<>(param.getAnotherTypeIds());
+        ids.add(param.getTypeId());
 
-        return true;
+        List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByIds(ids);
+        Map<Long, DataTypeItem> dataTypeItemMap = CollectionUtils.toMap(dataTypeItems, DataTypeItem::getId);
+
+        List<DataTypeMapping> mappings = new ArrayList<>();
+        for (Long anotherTypeId : param.getAnotherTypeIds()) {
+            DataTypeMapping mapping = new DataTypeMapping(param.getTypeId(), anotherTypeId);
+            mapping.setTypeKey(dataTypeItemMap.get(param.getTypeId()).getTypeKey());
+            mapping.setAnotherTypeKey(dataTypeItemMap.get(anotherTypeId).getTypeKey());
+            mapping.setGroupId(param.getGroupId());
+            mappings.add(mapping);
+        }
+        return dataTypeMappingService.saveBatch(mappings);
     }
 
     @Override

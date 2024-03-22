@@ -5,6 +5,7 @@ import io.devpl.backend.entity.DataTypeItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,4 +37,12 @@ public interface DataTypeItemMapper extends MyBatisPlusMapper<DataTypeItem> {
      * @return 数据类型列表
      */
     List<DataTypeItem> listByGroupId(@Param("typeGroupId") String typeGroupId);
+
+    /**
+     * 根据主键ID列表查询
+     *
+     * @param ids 主键ID列表
+     * @return 数据类型列表，全部字段
+     */
+    List<DataTypeItem> listByIds(@Param("ids") Collection<Long> ids);
 }

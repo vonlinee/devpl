@@ -1,5 +1,6 @@
 package io.devpl.backend.domain.param;
 
+import io.devpl.backend.entity.DataTypeItem;
 import lombok.Data;
 
 import java.util.List;
@@ -17,11 +18,15 @@ public class DataTypeMappingAddParam {
 
     /**
      * 主数据类型
+     *
+     * @see DataTypeItem#getId()
      */
     private Long typeId;
 
     /**
      * 映射数据类型
+     *
+     * @see DataTypeItem#getId()
      */
-    private List<Long> anotherTypeId;
+    private List<Long> anotherTypeIds;
 }
