@@ -18,9 +18,15 @@ import java.util.List;
 
 public interface DataTypeItemService extends IService<DataTypeItem> {
 
+    /**
+     * 保存数据类型
+     *
+     * @param dataTypeItems 数据类型项
+     * @return boolean
+     */
     boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems);
 
-    boolean save(DataTypeItem dataTypeItem);
+    boolean saveDataType(DataTypeItem dataTypeItem);
 
     boolean update(DataTypeItem dataTypeItem);
 

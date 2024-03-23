@@ -32,4 +32,9 @@ public class FieldInfoListParam extends PageParam {
      * 字段name模糊搜索
      */
     private String fieldName;
+
+    /**
+     * 类型组ID
+     */
+    private String typeGroupId;
 }

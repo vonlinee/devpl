@@ -1,42 +1,18 @@
 <template>
-  <vxe-modal
-    v-model="visible"
-    :title="!dataForm.id ? '新增' : '修改'"
-    :mask-closable="false"
-    :z-index="1000"
-    :width="800"
-    :show-footer="true"
-    @close="resetFields"
-  >
-    <el-form
-      ref="dataFormRef"
-      :model="dataForm"
-      :rules="dataRules"
-      label-width="110px"
-      label-position="left"
-      @keyup.enter="submitHandle()"
-    >
+  <vxe-modal v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :mask-closable="false" :z-index="1000" :width="800"
+    :show-footer="true" @close="resetFields">
+    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="110px" label-position="left"
+      @keyup.enter="submitHandle()">
       <el-form-item label="类型分组" prop="typeGroupId">
-        <el-select
-          v-model="dataForm.typeGroupId"
-          placeholder="选择类型组"
-          style="width: 100%"
-        >
-          <el-option
-            v-for="item in typeGroupOptions"
-            :key="item.typeGroupId"
-            :label="item.typeGroupId"
-            :value="item.typeGroupId"
-          >
+        <el-select v-model="dataForm.typeGroupId" placeholder="选择类型组" style="width: 100%">
+          <el-option v-for="item in typeGroupOptions" :key="item.typeGroupId" :label="item.typeGroupId"
+            :value="item.typeGroupId">
             <span style="float: left">{{ item.typeGroupId }}</span>
-            <span
-              style="
+            <span style="
                 float: right;
                 color: var(--el-text-color-secondary);
                 font-size: 13px;
-              "
-              >{{ item.typeGroupName }}</span
-            >
+              ">{{ item.typeGroupName }}</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -47,13 +23,10 @@
         <el-input v-model="dataForm.fullTypeKey"></el-input>
       </el-form-item>
       <el-form-item label="类型名称" prop="localeTypeName">
-        <el-input v-model="dataForm.typeName"></el-input>
+        <el-input v-model="dataForm.localeTypeName"></el-input>
       </el-form-item>
       <el-form-item label="长度范围">
-        <range-number
-          v-model:min-value="dataForm.minLength"
-          v-model:max-value="dataForm.maxLength"
-        >
+        <range-number v-model:min-value="dataForm.minLength" v-model:max-value="dataForm.maxLength">
         </range-number>
       </el-form-item>
       <el-form-item label="精度" prop="precision">
@@ -63,13 +36,8 @@
         <el-input v-model="dataForm.defaultValue"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input
-          v-model="dataForm.remark"
-          type="textarea"
-          show-word-limit
-          maxlength="50"
-          :autosize="{ minRows: 3, maxRows: 4 }"
-        ></el-input>
+        <el-input v-model="dataForm.remark" type="textarea" show-word-limit maxlength="50"
+          :autosize="{ minRows: 3, maxRows: 4 }"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -111,7 +79,8 @@ interface FormVO {
   id: number | string | undefined
   typeGroupId: string
   typeKey: string
-  typeName: string
+  fullTypeKey: string
+  localeTypeName: string
   defaultValue: string
   minLength: number
   maxLength: number
@@ -126,7 +95,8 @@ const dataForm = reactive<FormVO>({
   id: undefined,
   typeGroupId: "",
   typeKey: "",
-  typeName: "",
+  fullTypeKey: "",
+  localeTypeName: "",
   defaultValue: "",
   minLength: 0,
   maxLength: 0,
@@ -139,7 +109,7 @@ const resetForm = () => {
   dataForm.id = undefined
   dataForm.typeGroupId = ""
   dataForm.typeKey = ""
-  dataForm.typeName = ""
+  dataForm.localeTypeName = ""
   dataForm.defaultValue = ""
   dataForm.minLength = 0
   dataForm.maxLength = 0

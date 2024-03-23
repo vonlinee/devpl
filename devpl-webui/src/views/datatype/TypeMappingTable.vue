@@ -2,7 +2,7 @@
   类型映射配置表
  -->
 <template>
-  <vxe-modal v-model="modalShowRef" title="类型映射表" width="70%">
+  <vxe-modal v-model="modalShowRef" title="类型映射表" width="70%" :draggable="false">
     <vxe-form :data="formData">
       <vxe-form-item title="规则分组" field="groupId">
         <template #default="{ data }">
@@ -153,7 +153,6 @@ import {
 import { Message } from "@/hooks/message"
 import { reactive, ref, toRaw } from "vue"
 import { VxeTableDefines } from "vxe-table/types/table"
-import { Edit } from "@element-plus/icons"
 import DataTypeSelectModal from "./DataTypeSelectModal.vue"
 
 const table = ref()

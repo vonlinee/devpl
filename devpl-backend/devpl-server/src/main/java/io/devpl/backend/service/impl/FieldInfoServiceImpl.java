@@ -84,6 +84,7 @@ public class FieldInfoServiceImpl extends ServiceImpl<FieldInfoMapper, FieldInfo
         qw.eq(StringUtils.hasText(param.getDataType()), FieldInfo::getDataType, param.getDataType());
         qw.like(StringUtils.hasText(param.getFieldKey()), FieldInfo::getFieldKey, param.getFieldKey());
         qw.like(StringUtils.hasText(param.getFieldName()), FieldInfo::getFieldName, param.getFieldName());
+        qw.eq(StringUtils.hasText(param.getTypeGroupId()), FieldInfo::getTypeGroupId, param.getTypeGroupId());
         qw.orderBy(true, false, FieldInfo::getCreateTime);
         return baseMapper.selectPage(new Page<>(param.getPageIndex(), param.getPageSize()), qw);
     }

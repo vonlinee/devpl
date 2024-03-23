@@ -22,6 +22,11 @@ public class TableGeneration {
     private Long id;
 
     /**
+     * 项目ID
+     */
+    private Long projectId;
+
+    /**
      * 数据源ID
      */
     private Long datasourceId;

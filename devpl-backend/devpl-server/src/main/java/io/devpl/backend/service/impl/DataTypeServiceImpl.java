@@ -49,11 +49,11 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
 
     @Override
     public boolean saveDataTypes(Collection<DataTypeItem> dataTypeItems) {
-        return crudService.saveOrUpdateBatch(dataTypeItems);
+        return this.saveOrUpdateBatch(dataTypeItems);
     }
 
     @Override
-    public boolean save(DataTypeItem dataTypeItem) {
+    public boolean saveDataType(DataTypeItem dataTypeItem) {
         return dataTypeItemMapper.insert(dataTypeItem) > 0;
     }
 

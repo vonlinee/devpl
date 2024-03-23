@@ -7,6 +7,7 @@
     title="类型映射"
     width="80%"
     show-footer
+    :draggable="false"
     @confirm="submit($event)"
   >
     <el-row>
@@ -36,7 +37,7 @@
             <template #default="{ data }">
               <vxe-input
                 v-model="data.typeKeyPattern"
-                placeholder="请输入类型名称"
+                placeholder="输入类型Key搜索"
                 clearable
               ></vxe-input>
             </template>
@@ -49,7 +50,7 @@
             <template #default="{ data }">
               <vxe-input
                 v-model="data.typeNamePattern"
-                placeholder="请输入类型名称"
+                placeholder="输入类型名称搜索"
                 clearable
               ></vxe-input>
             </template>
@@ -128,7 +129,7 @@
             <template #default="{ data }">
               <vxe-input
                 v-model="data.typeKeyPattern"
-                placeholder="请输入类型名称"
+                placeholder="输入类型Key搜索"
                 clearable
               ></vxe-input>
             </template>
@@ -141,7 +142,7 @@
             <template #default="{ data }">
               <vxe-input
                 v-model="data.typeNamePattern"
-                placeholder="请输入类型名称"
+                placeholder="输入类型名称搜索"
                 clearable
               ></vxe-input>
             </template>

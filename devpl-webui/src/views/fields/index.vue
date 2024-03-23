@@ -13,6 +13,7 @@ import SaveOrUpdateField from "@/views/fields/SaveOrUpdateField.vue"
 import { useCrud } from "@/hooks"
 import { DataTableOption } from "@/hooks/interface"
 import { Message } from "@/hooks/message"
+import { apiListTypeGroupOptions } from "@/api/datatype"
 
 /**
  * 表格数据模型
@@ -29,7 +30,7 @@ interface RowVO {
 
 const fieldImportModalRef = ref()
 const saveOrUpdateFieldModal = ref()
-
+const typeGroupOptions = ref()
 const showSaveOrUpdateModal = (row?: RowVO) => {
   saveOrUpdateFieldModal.value.show(row)
 }
@@ -40,6 +41,10 @@ const removeEvent = async (row: RowVO) => {
 
 onMounted(() => {
   getDataList()
+
+  apiListTypeGroupOptions().then((res) => {
+    typeGroupOptions.value = res.data
+  })
 })
 
 const option: DataTableOption = reactive({
@@ -47,6 +52,7 @@ const option: DataTableOption = reactive({
   queryForm: {
     fieldKey: "",
     fieldName: "",
+    typeGroupId: ""
   },
   queryPage: apiListFields,
   removeByIds: apiDeleteFieldByIds,
@@ -72,6 +78,11 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
   <el-card>
     <el-form :inline="true" :model="option.queryForm" @keyup.enter="getDataList()">
       <div class="query-form">
+        <el-form-item :show-message="false">
+          <el-select v-model="option.queryForm.typeGroupId" placeholder="选择类型分组" @change="getDataList">
+            <el-option v-for="g in typeGroupOptions" :label="g.label" :value="g.value" :key="g.key"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="字段Key" :show-message="false">
           <el-input v-model="option.queryForm.fieldKey"></el-input>
         </el-form-item>
@@ -102,8 +113,8 @@ const handleFieldParseFinished = (parsedFields: FieldInfo[]) => {
     <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
     <el-table-column label="操作" align="center" fixed="right" width="130">
       <template #default="{ row }">
-        <el-button link @click="showSaveOrUpdateModal(row)">编辑</el-button>
-        <el-button link @click="removeEvent(row)">删除</el-button>
+        <vxe-button type="text" status="primary" @click="showSaveOrUpdateModal(row)">编辑</vxe-button>
+        <vxe-button type="text" status="danger" @click="removeEvent(row)">删除</vxe-button>
       </template>
     </el-table-column>
   </el-table>

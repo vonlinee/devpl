@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 数据类型对应关系关联表
+ * 数据类型对应关系分组
  */
 @Getter
 @Setter

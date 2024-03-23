@@ -9,6 +9,7 @@ import io.devpl.backend.domain.vo.DataTypeMappingVO;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
+import io.devpl.backend.entity.DataTypeMappingGroup;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.backend.utils.BusinessUtils;
@@ -48,7 +49,7 @@ public class DataTypeController {
      */
     @PostMapping("/saveOrUpdateBatch")
     public Result<Boolean> addDataTypes(@RequestBody DataTypeAddParam param) {
-        return Result.ok(dataTypeService.saveDataTypes(param.getDataTypeItems()));
+        return Result.ok(dataTypeService.saveOrUpdateBatch(param.getDataTypeItems()));
     }
 
     /**
@@ -185,6 +186,16 @@ public class DataTypeController {
     @GetMapping("/mapping/group/options")
     public Result<List<SelectOptionVO>> listSelectableTypeMappingGroups() {
         return Result.ok(dataTypeMappingService.listMappingGroupOptions());
+    }
+
+    /**
+     * 新增数据类型映射分组
+     *
+     * @return 是否成功
+     */
+    @PostMapping("/mapping/group/add")
+    public Result<Boolean> addDataTypeMappingGroup(@RequestBody DataTypeMappingGroup group) {
+        return Result.ok(dataTypeMappingService.addTypeMappingGroup(group));
     }
 
     /**

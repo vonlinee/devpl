@@ -8,8 +8,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Slf4j
 @EnableAsync
@@ -25,6 +29,26 @@ public class DevplMain8088 extends SpringBootServletInitializer {
             .main(DevplMain8088.class)
             .build();
         ConfigurableApplicationContext context = app.run(args);
+
+        println(context);
+    }
+
+    public static void println(ConfigurableApplicationContext context) {
+        Environment env = context.getEnvironment();
+        try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            String port = env.getProperty("server.port");
+            String contextPath = env.getProperty("server.servlet.context-path", "");
+            System.out.printf("""
+                    ----------------------------------------------------------
+                    Application Devpl is running! Access URLs:
+                    Local: 		http://localhost:%s%s
+                    External: 	http://%s:%s%s
+                    ----------------------------------------------------------
+                    %n""", port, contextPath, ip, port, contextPath);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -77,11 +77,9 @@ import { DataTableOption } from "@/hooks/interface"
 import { useCrud } from "@/hooks"
 import AddOrUpdate from "./add-or-update.vue"
 import { ElButton, ElSelect } from "element-plus"
-import { apiListAllDataTypeGroups, apiListDataTypes } from "@/api/datatype"
+import { apiListAllDataTypeGroups, apiListDataTypes, apiListTypeGroupOptions } from "@/api/datatype"
 import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue"
 import TypeGroupManager from "./TypeGroupManager.vue"
-import { Plus } from "@element-plus/icons"
-import ElIcon from "element-plus"
 
 const typeMappingTableRef = ref()
 const typeGroupManagerRef = ref()

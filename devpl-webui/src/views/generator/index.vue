@@ -1,16 +1,13 @@
 <template>
   <el-card>
-    <el-form>
-      <el-form-item label="选择项目">
-        <el-select v-model="state.queryForm.projectId">
+    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
+      <el-form-item>
+        <el-select v-model="state.queryForm.projectId" placeholder="选择项目" clearable>
           <el-option v-for="project in projects" :key="project.projectId" :value="project.projectId"
-            :label="project.projectName"></el-option>
+            :label="project.projectName">
+          </el-option>
         </el-select>
       </el-form-item>
-    </el-form>
-  </el-card>
-  <el-card>
-    <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
         <el-input v-model="state.queryForm.tableName" placeholder="表名"></el-input>
       </el-form-item>
