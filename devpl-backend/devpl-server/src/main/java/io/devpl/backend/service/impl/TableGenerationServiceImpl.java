@@ -3,13 +3,17 @@ package io.devpl.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import io.devpl.backend.common.StrictStringKeyMap;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.common.query.ListResult;
+import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.dao.TableGenerationMapper;
 import io.devpl.backend.domain.TemplateFillStrategy;
 import io.devpl.backend.domain.bo.TableImportInfo;
+import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.domain.enums.FormLayoutEnum;
+import io.devpl.backend.domain.enums.FormType;
 import io.devpl.backend.domain.enums.GeneratorTypeEnum;
 import io.devpl.backend.domain.param.GenTableListParam;
 import io.devpl.backend.entity.*;
@@ -28,6 +32,7 @@ import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.common.utils.ProjectUtils;
 import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.annotations.Readonly;
+import io.devpl.sdk.collection.CaseInsensitiveKeyMap;
 import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -74,6 +79,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     DomainModelService domainModelService;
     @Resource
     TemplateArgumentService templateArgumentService;
+    @Resource
+    DataTypeMappingMapper dataTypeMappingMapper;
 
     @Override
     public List<TableGeneration> listGenTables(Collection<String> tableNames) {
@@ -239,6 +246,59 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             throw new RuntimeSQLException(exception);
         }
         return true;
+    }
+
+    /**
+     * 初始化表字段信息
+     *
+     * @param table          表信息
+     * @param tableFieldList 表字段列表
+     * @return {@link List}<{@link TableGenerationField}>
+     */
+    public List<TableGenerationField> initTableFields(TableGeneration table, List<TableGenerationField> tableFieldList) {
+        // 字段类型、属性类型映射
+        StrictStringKeyMap<String> dtMappingMap = new StrictStringKeyMap<>();
+        List<DataTypeMapping> mappings = dataTypeMappingMapper.selectListByTypeGroupId(table.getDataTypeMappingRuleGroupId(), "MySQL", "JAVA");
+        dtMappingMap.putAll(CollectionUtils.toMap(mappings, DataTypeMapping::getTypeKey, DataTypeMapping::getAnotherTypeKey));
+
+        int index = 0;
+        for (TableGenerationField field : tableFieldList) {
+            // 关联表和字段
+            field.setTableId(table.getId());
+
+            field.setAttrName(CaseFormat.toCamelCase(field.getFieldName()));
+            // 获取字段对应的类型
+            field.setAttrType(dtMappingMap.getOrDefault(field.getFieldType(), "String"));
+
+            field.setAutoFill(AutoFillEnum.DEFAULT.name());
+            field.setFormItem(true);
+            field.setGridItem(true);
+            field.setQueryType("=");
+            field.setQueryFormType("text");
+            field.setFormType(FormType.TEXT.getText());
+            field.setSort(index++);
+        }
+        return tableFieldList;
+    }
+
+    /**
+     * TODO  暂时写死 对接数据类型映射关系
+     *
+     * @param sqlType sql数据类型
+     * @return
+     */
+    private String mappingSqlTypeToJavaType(String sqlType) {
+        String javaType = "String";
+        if ("varchar".equalsIgnoreCase(sqlType)) {
+            javaType = "String";
+        } else if ("int".equalsIgnoreCase(sqlType)) {
+            javaType = "Integer";
+        } else if ("bigint".equalsIgnoreCase(sqlType)) {
+            javaType = "Long";
+        } else if ("datetime".equalsIgnoreCase(sqlType)) {
+            javaType = "LocalDateTime";
+        }
+        return javaType;
     }
 
     /**
@@ -464,11 +524,14 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         List<TableGenerationField> tableFieldList = tableFieldService.listByTableId(id);
         Map<String, TableGenerationField> tableFieldMap = CollectionUtils.toMap(tableFieldList, TableGenerationField::getFieldName);
         // 初始化字段数据 同步表结构字段
-        tableFieldService.initTableFields(table, tableFields).forEach(field -> {
+        tableFields = this.initTableFields(table, tableFields);
+
+        List<TableGenerationField> fields = new ArrayList<>();
+        for (TableGenerationField field : tableFields) {
             // 新增字段
             if (!tableFieldMap.containsKey(field.getFieldName())) {
-                tableFieldService.save(field);
-                return;
+                fields.add(field);
+                continue;
             }
             // 修改字段
             TableGenerationField tgf = tableFieldMap.get(field.getFieldName());
@@ -476,8 +539,10 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             tgf.setFieldComment(field.getFieldComment());
             tgf.setFieldType(field.getFieldType());
             tgf.setAttrType(field.getAttrType());
-            tableFieldService.updateById(tgf);
-        });
+
+            fields.add(tgf);
+        }
+        tableFieldService.saveOrUpdateBatch(fields);
 
         // 删除数据库表中没有的字段
         List<String> dbTableFieldNameList = CollectionUtils.toList(tableFields, TableGenerationField::getFieldName);
@@ -516,7 +581,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 tgf.setPrimaryKey(primaryKeyMetadataMap.containsKey(column.getColumnName()));
                 tableFieldList.add(tgf);
             }
-            tableFieldList = tableFieldService.initTableFields(table, tableFieldList);
+            tableFieldList = this.initTableFields(table, tableFieldList);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }

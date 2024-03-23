@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.0.35, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: devpl
 -- ------------------------------------------------------
--- Server version	8.0.35
+-- Server version	5.7.36-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,36 +21,36 @@
 
 DROP TABLE IF EXISTS `column_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `column_metadata` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `table_id` bigint unsigned DEFAULT NULL COMMENT '所属表的ID',
-  `table_cat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'table catalog (maybe null)',
-  `table_schem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'table schema (maybe null)',
-  `table_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表名称',
-  `column_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '列名称',
-  `data_type` int DEFAULT NULL COMMENT 'SQL type from java.sql.Type',
-  `type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据源独立的类型名称, for a UDT the type name is fully qualified',
-  `column_size` int DEFAULT NULL COMMENT '列大小,有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
-  `buffer_length` int DEFAULT NULL COMMENT '暂未使用(jdbc specification4.3)',
-  `decimal_digits` int DEFAULT NULL COMMENT '小数位数',
-  `num_prec_radix` int DEFAULT NULL COMMENT 'NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)',
-  `nullable` int unsigned DEFAULT NULL COMMENT '是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.',
-  `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '该列的描述信息，可为null',
-  `column_def` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)',
-  `sql_data_type` int DEFAULT NULL COMMENT 'unused',
-  `sql_datetime_sub` int DEFAULT NULL COMMENT 'unused',
-  `char_octet_length` int DEFAULT NULL COMMENT '字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column',
-  `ordinal_position` int DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
-  `is_nullable` tinyint unsigned DEFAULT NULL COMMENT 'ISO rules are used to determine the nullability for a column. YES --- if the column can include NULLs NO --- if the column cannot include NULLs empty string --- if the nullability for the column is unknown',
-  `scope_catalog` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
-  `scope_schema` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-  `scope_table` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-  `source_data_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
-  `is_autoincrement` tinyint unsigned DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
-  `is_generated` tinyint unsigned DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `table_id` bigint(20) unsigned DEFAULT NULL COMMENT '所属表的ID',
+  `table_cat` varchar(255) DEFAULT NULL COMMENT 'table catalog (maybe null)',
+  `table_schem` varchar(255) DEFAULT NULL COMMENT 'table schema (maybe null)',
+  `table_name` varchar(255) DEFAULT NULL COMMENT '表名称',
+  `column_name` varchar(255) DEFAULT NULL COMMENT '列名称',
+  `data_type` int(11) DEFAULT NULL COMMENT 'SQL type from java.sql.Type',
+  `type_name` varchar(255) DEFAULT NULL COMMENT '数据源独立的类型名称, for a UDT the type name is fully qualified',
+  `column_size` int(11) DEFAULT NULL COMMENT '列大小,有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
+  `buffer_length` int(11) DEFAULT NULL COMMENT '暂未使用(jdbc specification4.3)',
+  `decimal_digits` int(11) DEFAULT NULL COMMENT '小数位数',
+  `num_prec_radix` int(11) DEFAULT NULL COMMENT 'NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)',
+  `nullable` int(10) unsigned DEFAULT NULL COMMENT '是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '该列的描述信息，可为null',
+  `column_def` varchar(255) DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)',
+  `sql_data_type` int(11) DEFAULT NULL COMMENT 'unused',
+  `sql_datetime_sub` int(11) DEFAULT NULL COMMENT 'unused',
+  `char_octet_length` int(11) DEFAULT NULL COMMENT '字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column',
+  `ordinal_position` int(11) DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
+  `is_nullable` tinyint(3) unsigned DEFAULT NULL COMMENT 'ISO rules are used to determine the nullability for a column. YES --- if the column can include NULLs NO --- if the column cannot include NULLs empty string --- if the nullability for the column is unknown',
+  `scope_catalog` varchar(255) DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
+  `scope_schema` varchar(255) DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+  `scope_table` varchar(255) DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+  `source_data_type` varchar(255) DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
+  `is_autoincrement` tinyint(3) unsigned DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
+  `is_generated` tinyint(3) unsigned DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据库表列信息记录表（对应JDBC的ColumnMetadata）';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库表列信息记录表（对应JDBC的ColumnMetadata）';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,15 +68,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `custom_directive`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `custom_directive` (
-  `directive_id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '指令ID',
-  `directive_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '指令名称',
-  `source_code` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '实现部分代码',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '状态',
-  `remark` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `directive_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '指令ID',
+  `directive_name` varchar(255) DEFAULT NULL COMMENT '指令名称',
+  `source_code` text COMMENT '实现部分代码',
+  `status` varchar(255) DEFAULT NULL COMMENT '状态',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`directive_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='自定义指令记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='自定义指令记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,17 +95,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_type_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_category` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '分组ID',
-  `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '分类名称',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `group_id` varchar(255) DEFAULT NULL COMMENT '分组ID',
+  `category_name` varchar(255) DEFAULT NULL COMMENT '分类名称',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `is_deleted` tinyint DEFAULT '0' COMMENT '是否逻辑删除',
+  `is_deleted` tinyint(4) DEFAULT '0' COMMENT '是否逻辑删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='数据类型分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='数据类型分类表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,18 +124,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_type_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_group` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '分组ID',
-  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '分组名称',
-  `internal` tinyint DEFAULT '0' COMMENT '是否内置类型分组，内置类型分组不可更改',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `group_id` varchar(255) DEFAULT NULL COMMENT '分组ID',
+  `group_name` varchar(255) DEFAULT NULL COMMENT '分组名称',
+  `internal` tinyint(4) DEFAULT '0' COMMENT '是否内置类型分组，内置类型分组不可更改',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
-  `is_deleted` tinyint DEFAULT '0' COMMENT '是否逻辑删除',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
+  `is_deleted` tinyint(4) DEFAULT '0' COMMENT '是否逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据类型分组';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型分组';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,29 +154,29 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_type_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_item` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `type_group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型分组ID',
-  `category_id` bigint unsigned DEFAULT NULL COMMENT '分类ID，为空则未进行分类',
-  `type_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型ID，全局唯一',
-  `type_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型Key，单个类型组内唯一',
-  `full_type_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型Key，限定名称',
-  `locale_type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型名称，中文名称',
-  `value_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '该数据类型的值类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `type_group_id` varchar(255) DEFAULT NULL COMMENT '类型分组ID',
+  `category_id` bigint(20) unsigned DEFAULT NULL COMMENT '分类ID，为空则未进行分类',
+  `type_id` varchar(100) DEFAULT NULL COMMENT '类型ID，全局唯一',
+  `type_key` varchar(255) DEFAULT NULL COMMENT '类型Key，单个类型组内唯一',
+  `full_type_key` varchar(255) DEFAULT NULL COMMENT '类型Key，限定名称',
+  `locale_type_name` varchar(255) DEFAULT NULL COMMENT '类型名称，中文名称',
+  `value_type` varchar(255) DEFAULT NULL COMMENT '该数据类型的值类型',
   `min_length` double DEFAULT NULL COMMENT '最小长度',
   `max_length` double DEFAULT NULL COMMENT '最大长度',
-  `default_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型默认值',
-  `precision` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '精度',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '描述信息',
+  `default_value` varchar(255) DEFAULT NULL COMMENT '类型默认值',
+  `precision` varchar(255) DEFAULT NULL COMMENT '精度',
+  `remark` varchar(255) DEFAULT NULL COMMENT '描述信息',
   `operation` tinyint(1) DEFAULT '-1' COMMENT '操作',
   `internal` tinyint(1) DEFAULT '0' COMMENT '是否系统内部定义，不可删除',
-  `is_deleted` tinyint unsigned DEFAULT '0' COMMENT '是否删除',
+  `is_deleted` tinyint(3) unsigned DEFAULT '0' COMMENT '是否删除',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `unk_type` (`type_group_id`,`type_key`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ CREATE TABLE `data_type_item` (
 
 LOCK TABLES `data_type_item` WRITE;
 /*!40000 ALTER TABLE `data_type_item` DISABLE KEYS */;
-INSERT INTO `data_type_item` VALUES (144,'JSON',NULL,NULL,'Number',NULL,'JSON数字类型','8990',10,50,'0','3434','JavaScript 中的双精度浮点型格式',NULL,1,0,NULL,'2023-10-21 10:20:55'),(145,'JSON',NULL,NULL,'String',NULL,'字符串','555',NULL,NULL,'\"\"','','双引号包裹的 Unicode 字符和反斜杠转义字符',NULL,1,0,NULL,'2023-10-21 10:06:05'),(146,'JSON',NULL,NULL,'Array',NULL,'JSON数字类型',NULL,NULL,NULL,'0','','有序的值序列，参考网站：https://www.w3cschool.c',NULL,1,0,NULL,NULL),(147,'JSON',NULL,NULL,'null',NULL,'NULL类型',NULL,0,0,'null','','空',NULL,1,0,NULL,NULL),(187,'JSON',NULL,NULL,'Boolean',NULL,'布尔型',NULL,0,0,'false','','true 或 false',NULL,1,0,NULL,NULL),(227,'JSON',NULL,NULL,'Object',NULL,'对象',NULL,0,0,'{}','','无序的键:值对集合',NULL,1,0,NULL,NULL),(267,'JSON',NULL,NULL,'Value',NULL,'值类型',NULL,0,0,'','','可以是字符串，数字，true 或 false，null 等等',-1,1,0,NULL,NULL),(268,'JSON',NULL,NULL,'Whitespace',NULL,'空格',NULL,0,0,'','','可用于任意符号对之间',-1,1,0,NULL,NULL),(269,'JDBC',NULL,NULL,'BIT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(270,'JDBC',NULL,NULL,'TINYINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(271,'JDBC',NULL,NULL,'SMALLINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(272,'JDBC',NULL,NULL,'INTEGER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(273,'JDBC',NULL,NULL,'BIGINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(274,'JDBC',NULL,NULL,'FLOAT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(275,'JDBC',NULL,NULL,'REAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(276,'JDBC',NULL,NULL,'DOUBLE',NULL,'双精度浮点',NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,'2023-12-29 16:46:10'),(277,'JDBC',NULL,NULL,'NUMERIC',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(278,'JDBC',NULL,NULL,'DECIMAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(279,'JDBC',NULL,NULL,'CHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(280,'JDBC',NULL,NULL,'VARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(281,'JDBC',NULL,NULL,'LONGVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(282,'JDBC',NULL,NULL,'DATE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(283,'JDBC',NULL,NULL,'TIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(284,'JDBC',NULL,NULL,'TIMESTAMP',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(285,'JDBC',NULL,NULL,'BINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(286,'JDBC',NULL,NULL,'VARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(287,'JDBC',NULL,NULL,'LONGVARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(288,'JDBC',NULL,NULL,'NULL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(289,'JDBC',NULL,NULL,'OTHER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(290,'JDBC',NULL,NULL,'JAVA_OBJECT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(291,'JDBC',NULL,NULL,'DISTINCT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(292,'JDBC',NULL,NULL,'STRUCT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(293,'JDBC',NULL,NULL,'ARRAY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(294,'JDBC',NULL,NULL,'BLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(295,'JDBC',NULL,NULL,'CLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(296,'JDBC',NULL,NULL,'REF',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(297,'JDBC',NULL,NULL,'DATALINK',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(298,'JDBC',NULL,NULL,'BOOLEAN',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(299,'JDBC',NULL,NULL,'ROWID',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(300,'JDBC',NULL,NULL,'NCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(301,'JDBC',NULL,NULL,'NVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(302,'JDBC',NULL,NULL,'LONGNVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(303,'JDBC',NULL,NULL,'NCLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(304,'JDBC',NULL,NULL,'SQLXML',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(305,'JDBC',NULL,NULL,'REF_CURSOR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(306,'JDBC',NULL,NULL,'TIME_WITH_TIMEZONE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(307,'JDBC',NULL,NULL,'TIMESTAMP_WITH_TIMEZONE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(308,'JAVA',NULL,NULL,'long','long','字符串',NULL,0,0,'','','',-1,0,0,NULL,'2024-03-23 14:26:09'),(309,'MyBatisMS',NULL,NULL,'Numeric',NULL,'数值类型',NULL,0,0,'','','数值类型',-1,0,0,NULL,NULL),(310,'MyBatisMS',NULL,NULL,'String',NULL,'字符串类型',NULL,0,0,'','','字符串类型',-1,0,0,NULL,NULL),(311,'JAVA',NULL,NULL,'int','int','整数',NULL,0,0,'0',NULL,NULL,-1,1,0,'2023-12-30 11:56:07','2024-03-23 14:36:33'),(312,'JAVA',NULL,NULL,'double','double','双精度浮点数',NULL,0,0,'0.0',NULL,NULL,-1,1,0,'2023-12-30 11:56:29','2024-03-23 14:36:26'),(313,'JAVA',NULL,NULL,'char','char','字符型',NULL,0,0,'‘ ’',NULL,NULL,-1,0,0,'2023-12-30 11:57:10','2024-03-23 14:36:18'),(314,'MySQL',NULL,NULL,'TINYINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(315,'MySQL',NULL,NULL,'SMALLINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(316,'MySQL',NULL,NULL,'MEDIUMINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(317,'MySQL',NULL,NULL,'INT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(318,'MySQL',NULL,NULL,'INTEGER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(319,'MySQL',NULL,NULL,'BIGINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(320,'MySQL',NULL,NULL,'FLOAT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(321,'MySQL',NULL,NULL,'DOUBLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(322,'MySQL',NULL,NULL,'REAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(324,'MySQL',NULL,NULL,'DECIMAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(325,'MySQL',NULL,NULL,'NUMERIC',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(326,'MySQL',NULL,NULL,'BIT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(327,'MySQL',NULL,NULL,'DATE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(328,'MySQL',NULL,NULL,'DATETIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(329,'MySQL',NULL,NULL,'TIMESTAMP',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(330,'MySQL',NULL,NULL,'TIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(331,'MySQL',NULL,NULL,'YEAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(332,'MySQL',NULL,NULL,'CHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(333,'MySQL',NULL,NULL,'VARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(334,'MySQL',NULL,NULL,'TINYTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(335,'MySQL',NULL,NULL,'TEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(336,'MySQL',NULL,NULL,'MEDIUMTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(337,'MySQL',NULL,NULL,'LONGTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(338,'MySQL',NULL,NULL,'VARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(339,'MySQL',NULL,NULL,'TINYBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(340,'MySQL',NULL,NULL,'BLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(341,'MySQL',NULL,NULL,'MEDIUMBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(342,'MySQL',NULL,NULL,'LONGBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(343,'MySQL',NULL,NULL,'ENUM',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(344,'MySQL',NULL,NULL,'SET',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(345,'MySQL',NULL,NULL,'SPATIAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(346,'MySQL',NULL,NULL,'JSON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于存储和检索JSON数据',-1,0,0,NULL,NULL),(347,'MySQL',NULL,NULL,'GEOMETRY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(348,'MySQL',NULL,NULL,'POINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(349,'MySQL',NULL,NULL,'LINESTRING',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(350,'MySQL',NULL,NULL,'POLYGON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(351,'MySQL',NULL,NULL,'MULTIPOINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(352,'MySQL',NULL,NULL,'MULTILINESTRING',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(353,'MySQL',NULL,NULL,'MULTIPOLYGON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(354,'MySQL',NULL,NULL,'GEOMETRYCOLLECTION',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(355,'JAVA',NULL,NULL,'LocalDateTime','java.util.LocalDateTime','java8日期时间类型',NULL,0,0,'LocalDateTime.now()','','',-1,0,0,'2024-03-23 14:35:09','2024-03-23 14:36:46');
+INSERT INTO `data_type_item` VALUES (144,'JSON',NULL,NULL,'Number',NULL,'JSON数字类型','8990',10,50,'0','3434','JavaScript 中的双精度浮点型格式',NULL,1,0,NULL,'2023-10-21 10:20:55'),(145,'JSON',NULL,NULL,'String',NULL,'字符串','555',NULL,NULL,'\"\"','','双引号包裹的 Unicode 字符和反斜杠转义字符',NULL,1,0,NULL,'2023-10-21 10:06:05'),(146,'JSON',NULL,NULL,'Array',NULL,'JSON数字类型',NULL,NULL,NULL,'0','','有序的值序列，参考网站：https://www.w3cschool.c',NULL,1,0,NULL,NULL),(147,'JSON',NULL,NULL,'null',NULL,'NULL类型',NULL,0,0,'null','','空',NULL,1,0,NULL,NULL),(187,'JSON',NULL,NULL,'Boolean',NULL,'布尔型',NULL,0,0,'false','','true 或 false',NULL,1,0,NULL,NULL),(227,'JSON',NULL,NULL,'Object',NULL,'对象',NULL,0,0,'{}','','无序的键:值对集合',NULL,1,0,NULL,NULL),(267,'JSON',NULL,NULL,'Value',NULL,'值类型',NULL,0,0,'','','可以是字符串，数字，true 或 false，null 等等',-1,1,0,NULL,NULL),(268,'JSON',NULL,NULL,'Whitespace',NULL,'空格',NULL,0,0,'','','可用于任意符号对之间',-1,1,0,NULL,NULL),(269,'JDBC',NULL,NULL,'BIT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(270,'JDBC',NULL,NULL,'TINYINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(271,'JDBC',NULL,NULL,'SMALLINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(272,'JDBC',NULL,NULL,'INTEGER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(273,'JDBC',NULL,NULL,'BIGINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(274,'JDBC',NULL,NULL,'FLOAT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(275,'JDBC',NULL,NULL,'REAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(276,'JDBC',NULL,NULL,'DOUBLE',NULL,'双精度浮点',NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,'2023-12-29 16:46:10'),(277,'JDBC',NULL,NULL,'NUMERIC',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(278,'JDBC',NULL,NULL,'DECIMAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(279,'JDBC',NULL,NULL,'CHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(280,'JDBC',NULL,NULL,'VARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(281,'JDBC',NULL,NULL,'LONGVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(282,'JDBC',NULL,NULL,'DATE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(283,'JDBC',NULL,NULL,'TIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(284,'JDBC',NULL,NULL,'TIMESTAMP',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(285,'JDBC',NULL,NULL,'BINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(286,'JDBC',NULL,NULL,'VARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(287,'JDBC',NULL,NULL,'LONGVARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(288,'JDBC',NULL,NULL,'NULL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(289,'JDBC',NULL,NULL,'OTHER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(290,'JDBC',NULL,NULL,'JAVA_OBJECT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(291,'JDBC',NULL,NULL,'DISTINCT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(292,'JDBC',NULL,NULL,'STRUCT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(293,'JDBC',NULL,NULL,'ARRAY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(294,'JDBC',NULL,NULL,'BLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(295,'JDBC',NULL,NULL,'CLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(296,'JDBC',NULL,NULL,'REF',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(297,'JDBC',NULL,NULL,'DATALINK',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(298,'JDBC',NULL,NULL,'BOOLEAN',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(299,'JDBC',NULL,NULL,'ROWID',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(300,'JDBC',NULL,NULL,'NCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(301,'JDBC',NULL,NULL,'NVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(302,'JDBC',NULL,NULL,'LONGNVARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(303,'JDBC',NULL,NULL,'NCLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(304,'JDBC',NULL,NULL,'SQLXML',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(305,'JDBC',NULL,NULL,'REF_CURSOR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(306,'JDBC',NULL,NULL,'TIME_WITH_TIMEZONE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(307,'JDBC',NULL,NULL,'TIMESTAMP_WITH_TIMEZONE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,1,0,NULL,NULL),(308,'JAVA',NULL,NULL,'String','java.lang.String','字符串',NULL,0,0,'','','',-1,0,0,NULL,'2024-03-21 10:04:51'),(309,'MyBatisMS',NULL,NULL,'Numeric',NULL,'数值类型',NULL,0,0,'','','数值类型',-1,0,0,NULL,NULL),(310,'MyBatisMS',NULL,NULL,'String',NULL,'字符串类型',NULL,0,0,'','','字符串类型',-1,0,0,NULL,NULL),(311,'JAVA',NULL,NULL,'int','int','整数',NULL,0,0,NULL,NULL,NULL,-1,1,0,'2023-12-30 11:56:07','2023-12-30 11:56:07'),(312,'JAVA',NULL,NULL,'double','double','双精度浮点数',NULL,0,0,NULL,NULL,NULL,-1,1,0,'2023-12-30 11:56:29','2023-12-30 11:56:29'),(313,'JAVA',NULL,NULL,'char',NULL,'字符型',NULL,0,0,NULL,NULL,NULL,-1,0,0,'2023-12-30 11:57:10',NULL),(314,'MySQL',NULL,NULL,'TINYINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(315,'MySQL',NULL,NULL,'SMALLINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(316,'MySQL',NULL,NULL,'MEDIUMINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(317,'MySQL',NULL,NULL,'INT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(318,'MySQL',NULL,NULL,'INTEGER',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(319,'MySQL',NULL,NULL,'BIGINT','BIGINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,'2024-03-23 23:30:31'),(320,'MySQL',NULL,NULL,'FLOAT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(321,'MySQL',NULL,NULL,'DOUBLE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(322,'MySQL',NULL,NULL,'REAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(324,'MySQL',NULL,NULL,'DECIMAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(325,'MySQL',NULL,NULL,'NUMERIC',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(326,'MySQL',NULL,NULL,'BIT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,'2024-03-23 23:30:37'),(327,'MySQL',NULL,NULL,'DATE',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(328,'MySQL',NULL,NULL,'DATETIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(329,'MySQL',NULL,NULL,'TIMESTAMP',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(330,'MySQL',NULL,NULL,'TIME',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(331,'MySQL',NULL,NULL,'YEAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(332,'MySQL',NULL,NULL,'CHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(333,'MySQL',NULL,NULL,'VARCHAR',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(334,'MySQL',NULL,NULL,'TINYTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(335,'MySQL',NULL,NULL,'TEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(336,'MySQL',NULL,NULL,'MEDIUMTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(337,'MySQL',NULL,NULL,'LONGTEXT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(338,'MySQL',NULL,NULL,'VARBINARY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(339,'MySQL',NULL,NULL,'TINYBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(340,'MySQL',NULL,NULL,'BLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(341,'MySQL',NULL,NULL,'MEDIUMBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(342,'MySQL',NULL,NULL,'LONGBLOB',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(343,'MySQL',NULL,NULL,'ENUM',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(344,'MySQL',NULL,NULL,'SET',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-1,0,0,NULL,NULL),(345,'MySQL',NULL,NULL,'SPATIAL',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(346,'MySQL',NULL,NULL,'JSON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于存储和检索JSON数据',-1,0,0,NULL,NULL),(347,'MySQL',NULL,NULL,'GEOMETRY',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(348,'MySQL',NULL,NULL,'POINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(349,'MySQL',NULL,NULL,'LINESTRING',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(350,'MySQL',NULL,NULL,'POLYGON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(351,'MySQL',NULL,NULL,'MULTIPOINT',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(352,'MySQL',NULL,NULL,'MULTILINESTRING',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(353,'MySQL',NULL,NULL,'MULTIPOLYGON',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL),(354,'MySQL',NULL,NULL,'GEOMETRYCOLLECTION',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'用于地理空间数据',-1,0,0,NULL,NULL);
 /*!40000 ALTER TABLE `data_type_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,16 +195,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_type_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_mapping` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` bigint DEFAULT NULL COMMENT '数据类型映射分组ID',
-  `type_id` bigint DEFAULT NULL COMMENT '主数据类型ID',
-  `type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型Key',
-  `another_type_id` bigint DEFAULT NULL COMMENT '映射数据类型id',
-  `another_type_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '映射数据类型key',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_id` bigint(20) DEFAULT NULL COMMENT '数据类型映射分组ID',
+  `type_id` bigint(20) DEFAULT NULL COMMENT '主数据类型ID',
+  `type_key` varchar(100) DEFAULT NULL COMMENT '类型Key',
+  `another_type_id` bigint(20) DEFAULT NULL COMMENT '映射数据类型id',
+  `another_type_key` varchar(100) DEFAULT NULL COMMENT '映射数据类型key',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据类型映射关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据类型映射关系表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +213,7 @@ CREATE TABLE `data_type_mapping` (
 
 LOCK TABLES `data_type_mapping` WRITE;
 /*!40000 ALTER TABLE `data_type_mapping` DISABLE KEYS */;
-INSERT INTO `data_type_mapping` VALUES (1,NULL,145,NULL,NULL,NULL),(2,NULL,146,NULL,NULL,NULL),(3,NULL,147,NULL,NULL,NULL);
+INSERT INTO `data_type_mapping` VALUES (19,1,145,'String',312,'double'),(20,1,145,'String',311,'int'),(21,1,145,'String',308,'String'),(22,1,328,'DATETIME',311,'int');
 /*!40000 ALTER TABLE `data_type_mapping` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,13 +223,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `data_type_mapping_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_type_mapping_group` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据类型映射分组名称',
-  `remark` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_name` varchar(50) DEFAULT NULL COMMENT '数据类型映射分组名称',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='数据类型映射关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='数据类型映射关系表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +238,7 @@ CREATE TABLE `data_type_mapping_group` (
 
 LOCK TABLES `data_type_mapping_group` WRITE;
 /*!40000 ALTER TABLE `data_type_mapping_group` DISABLE KEYS */;
-INSERT INTO `data_type_mapping_group` VALUES (1,'系统内置','系统内置');
+INSERT INTO `data_type_mapping_group` VALUES (1,'系统默认',NULL);
 /*!40000 ALTER TABLE `data_type_mapping_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,14 +248,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `database_backup_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `database_backup_history` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `save_location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '保存位置',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `save_location` varchar(255) DEFAULT NULL COMMENT '保存位置',
   `backup_time` datetime DEFAULT NULL COMMENT '备份时间',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=249 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据库备份历史记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=300 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库备份历史记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,7 +264,7 @@ CREATE TABLE `database_backup_history` (
 
 LOCK TABLES `database_backup_history` WRITE;
 /*!40000 ALTER TABLE `database_backup_history` DISABLE KEYS */;
-INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06'),(4,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql','2023-10-22 11:55:34','2023-10-22 11:55:34'),(5,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153037.sql','2023-10-22 15:30:38','2023-10-22 15:30:37'),(6,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153202.sql','2023-10-22 15:32:03','2023-10-22 15:32:03'),(7,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022164904.sql','2023-10-22 16:49:05','2023-10-22 16:49:04'),(8,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171500.sql','2023-10-22 17:15:01','2023-10-22 17:15:01'),(9,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171931.sql','2023-10-22 17:19:32','2023-10-22 17:19:31'),(10,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029104903.sql','2023-10-29 10:49:04','2023-10-29 10:49:04'),(11,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105536.sql','2023-10-29 10:55:37','2023-10-29 10:55:37'),(12,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105648.sql','2023-10-29 10:56:49','2023-10-29 10:56:48'),(13,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105734.sql','2023-10-29 10:57:35','2023-10-29 10:57:35'),(14,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231126235505.sql','2023-11-26 23:55:06','2023-11-26 23:55:05'),(15,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231127083537.sql','2023-11-27 08:35:38','2023-11-27 08:35:37'),(16,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231129224003.sql','2023-11-29 22:40:04','2023-11-29 22:40:03'),(17,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083043.sql','2023-11-30 08:30:44','2023-11-30 08:30:44'),(18,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083056.sql','2023-11-30 08:30:57','2023-11-30 08:30:56'),(19,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083129.sql','2023-11-30 08:31:29','2023-11-30 08:31:29'),(20,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083815.sql','2023-11-30 08:38:15','2023-11-30 08:38:15'),(21,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085439.sql','2023-11-30 08:54:39','2023-11-30 08:54:39'),(22,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085719.sql','2023-11-30 08:57:20','2023-11-30 08:57:19'),(23,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085758.sql','2023-11-30 08:57:59','2023-11-30 08:57:58'),(24,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130092615.sql','2023-11-30 09:26:16','2023-11-30 09:26:15'),(25,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130131336.sql','2023-11-30 13:13:37','2023-11-30 13:13:37'),(26,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130134030.sql','2023-11-30 13:40:30','2023-11-30 13:40:30'),(27,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130135130.sql','2023-11-30 13:51:31','2023-11-30 13:51:30'),(28,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130140521.sql','2023-11-30 14:05:22','2023-11-30 14:05:21'),(29,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130154808.sql','2023-11-30 15:48:09','2023-11-30 15:48:08'),(30,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130154831.sql','2023-11-30 15:48:32','2023-11-30 15:48:31'),(31,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155555.sql','2023-11-30 15:55:56','2023-11-30 15:55:56'),(32,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155651.sql','2023-11-30 15:56:51','2023-11-30 15:56:51'),(33,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155713.sql','2023-11-30 15:57:13','2023-11-30 15:57:13'),(34,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155925.sql','2023-11-30 15:59:25','2023-11-30 15:59:25'),(35,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130162848.sql','2023-11-30 16:28:49','2023-11-30 16:28:49'),(36,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130200647.sql','2023-11-30 20:06:48','2023-11-30 20:06:48'),(37,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130204757.sql','2023-11-30 20:47:58','2023-11-30 20:47:58'),(38,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130213137.sql','2023-11-30 21:31:38','2023-11-30 21:31:38'),(39,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130223844.sql','2023-11-30 22:38:46','2023-11-30 22:38:45'),(40,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224124.sql','2023-11-30 22:41:25','2023-11-30 22:41:25'),(41,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224324.sql','2023-11-30 22:43:25','2023-11-30 22:43:25'),(42,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224820.sql','2023-11-30 22:48:21','2023-11-30 22:48:21'),(43,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201101235.sql','2023-12-01 10:12:36','2023-12-01 10:12:36'),(44,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201102448.sql','2023-12-01 10:24:49','2023-12-01 10:24:48'),(45,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201103136.sql','2023-12-01 10:31:36','2023-12-01 10:31:36'),(46,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201103305.sql','2023-12-01 10:33:06','2023-12-01 10:33:05'),(47,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201112126.sql','2023-12-01 11:21:27','2023-12-01 11:21:27'),(48,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201112902.sql','2023-12-01 11:29:03','2023-12-01 11:29:02'),(49,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113000.sql','2023-12-01 11:30:01','2023-12-01 11:30:00'),(50,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113045.sql','2023-12-01 11:30:46','2023-12-01 11:30:45'),(51,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113521.sql','2023-12-01 11:35:22','2023-12-01 11:35:22'),(52,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113550.sql','2023-12-01 11:35:51','2023-12-01 11:35:50'),(53,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201114518.sql','2023-12-01 11:45:18','2023-12-01 11:45:18'),(54,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201115635.sql','2023-12-01 11:56:35','2023-12-01 11:56:35'),(55,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201135857.sql','2023-12-01 13:58:58','2023-12-01 13:58:57'),(56,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201140128.sql','2023-12-01 14:01:28','2023-12-01 14:01:28'),(57,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201140437.sql','2023-12-01 14:04:37','2023-12-01 14:04:37'),(58,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141327.sql','2023-12-01 14:13:55','2023-12-01 14:14:22'),(59,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141539.sql','2023-12-01 14:15:40','2023-12-01 14:15:39'),(60,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141558.sql','2023-12-01 14:15:59','2023-12-01 14:15:58'),(61,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201142033.sql','2023-12-01 14:20:34','2023-12-01 14:20:34'),(62,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201142150.sql','2023-12-01 14:21:51','2023-12-01 14:21:50'),(63,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201153538.sql','2023-12-01 15:35:38','2023-12-01 15:35:38'),(64,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201153836.sql','2023-12-01 15:38:37','2023-12-01 15:38:37'),(65,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201155422.sql','2023-12-01 15:54:23','2023-12-01 15:54:23'),(66,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201161020.sql','2023-12-01 16:10:21','2023-12-01 16:10:20'),(67,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201161353.sql','2023-12-01 16:13:54','2023-12-01 16:13:53'),(68,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201162449.sql','2023-12-01 16:24:50','2023-12-01 16:24:49'),(69,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201162610.sql','2023-12-01 16:26:11','2023-12-01 16:26:10'),(70,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201163058.sql','2023-12-01 16:30:59','2023-12-01 16:30:59'),(71,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201164602.sql','2023-12-01 16:46:03','2023-12-01 16:46:02'),(72,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201165344.sql','2023-12-01 16:53:45','2023-12-01 16:53:45'),(73,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201170012.sql','2023-12-01 17:00:12','2023-12-01 17:00:12'),(74,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201171338.sql','2023-12-01 17:13:39','2023-12-01 17:13:39'),(75,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201171604.sql','2023-12-01 17:16:05','2023-12-01 17:16:04'),(76,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201172016.sql','2023-12-01 17:20:17','2023-12-01 17:20:17'),(77,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201172855.sql','2023-12-01 17:28:56','2023-12-01 17:28:55'),(78,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202095316.sql','2023-12-02 09:53:17','2023-12-02 09:53:16'),(79,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202102603.sql','2023-12-02 10:26:04','2023-12-02 10:26:04'),(80,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202102913.sql','2023-12-02 10:29:14','2023-12-02 10:29:14'),(81,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202104454.sql','2023-12-02 10:44:55','2023-12-02 10:44:54'),(82,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202110552.sql','2023-12-02 11:05:53','2023-12-02 11:05:53'),(83,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231207221704.sql','2023-12-07 22:17:05','2023-12-07 22:17:05'),(84,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231211144044.sql','2023-12-11 14:40:45','2023-12-11 14:40:45'),(85,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231211144445.sql','2023-12-11 14:44:46','2023-12-11 14:44:46'),(86,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231212151028.sql','2023-12-12 15:10:31','2023-12-12 15:10:31'),(87,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231212203603.sql','2023-12-12 20:36:05','2023-12-12 20:36:04'),(88,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152642.sql','2024-02-03 15:26:43','2024-02-03 15:26:43'),(89,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152745.sql','2024-02-03 15:27:46','2024-02-03 15:27:45'),(90,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152845.sql','2024-02-03 15:28:46','2024-02-03 15:28:46'),(91,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153141.sql','2024-02-03 15:31:42','2024-02-03 15:31:42'),(92,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153337.sql','2024-02-03 15:33:38','2024-02-03 15:33:37'),(93,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153402.sql','2024-02-03 15:34:02','2024-02-03 15:34:02'),(94,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153646.sql','2024-02-03 15:36:47','2024-02-03 15:36:47'),(95,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203155544.sql','2024-02-03 15:55:44','2024-02-03 15:55:44'),(96,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160138.sql','2024-02-03 16:01:39','2024-02-03 16:01:38'),(97,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160603.sql','2024-02-03 16:06:04','2024-02-03 16:06:03'),(98,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160701.sql','2024-02-03 16:07:02','2024-02-03 16:07:02'),(99,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203161941.sql','2024-02-03 16:19:42','2024-02-03 16:19:41'),(100,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203163547.sql','2024-02-03 16:35:47','2024-02-03 16:35:47'),(101,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203163554.sql','2024-02-03 16:35:55','2024-02-03 16:35:54'),(102,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203200721.sql','2024-02-03 20:07:22','2024-02-03 20:07:21'),(103,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204082955.sql','2024-02-04 08:29:56','2024-02-04 08:29:56'),(104,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204093426.sql','2024-02-04 09:34:26','2024-02-04 09:34:26'),(105,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204103329.sql','2024-02-04 10:33:30','2024-02-04 10:33:30'),(106,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204104026.sql','2024-02-04 10:40:27','2024-02-04 10:40:26'),(107,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204110635.sql','2024-02-04 11:06:36','2024-02-04 11:06:35'),(108,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204111540.sql','2024-02-04 11:15:41','2024-02-04 11:15:41'),(109,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114352.sql','2024-02-04 11:43:53','2024-02-04 11:43:53'),(110,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114509.sql','2024-02-04 11:45:10','2024-02-04 11:45:09'),(111,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114557.sql','2024-02-04 11:45:57','2024-02-04 11:45:57'),(112,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204124044.sql','2024-02-04 12:40:45','2024-02-04 12:40:44'),(113,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131438.sql','2024-02-04 13:14:39','2024-02-04 13:14:38'),(114,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131642.sql','2024-02-04 13:16:43','2024-02-04 13:16:43'),(115,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131745.sql','2024-02-04 13:17:45','2024-02-04 13:17:45'),(116,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131849.sql','2024-02-04 13:18:49','2024-02-04 13:18:49'),(117,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204145140.sql','2024-02-04 14:51:41','2024-02-04 14:51:40'),(118,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204151244.sql','2024-02-04 15:12:45','2024-02-04 15:12:45'),(119,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204152019.sql','2024-02-04 15:20:19','2024-02-04 15:20:19'),(120,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153016.sql','2024-02-04 15:30:17','2024-02-04 15:30:16'),(121,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153325.sql','2024-02-04 15:33:26','2024-02-04 15:33:25'),(122,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153819.sql','2024-02-04 15:38:20','2024-02-04 15:38:19'),(123,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207151458.sql','2024-02-07 15:14:59','2024-02-07 15:14:59'),(124,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207160533.sql','2024-02-07 16:05:33','2024-02-07 16:05:33'),(125,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207224531.sql','2024-02-07 22:45:31','2024-02-07 22:45:31'),(126,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240210221545.sql','2024-02-10 22:15:46','2024-02-10 22:15:46'),(127,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211005445.sql','2024-02-11 00:54:46','2024-02-11 00:54:45'),(128,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010121.sql','2024-02-11 01:01:22','2024-02-11 01:01:22'),(129,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010223.sql','2024-02-11 01:02:24','2024-02-11 01:02:24'),(130,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010353.sql','2024-02-11 01:03:54','2024-02-11 01:03:53'),(131,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010629.sql','2024-02-11 01:06:30','2024-02-11 01:06:29'),(132,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010724.sql','2024-02-11 01:07:24','2024-02-11 01:07:24'),(133,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010737.sql','2024-02-11 01:07:37','2024-02-11 01:07:37'),(134,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010904.sql','2024-02-11 01:09:04','2024-02-11 01:09:04'),(135,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211145226.sql','2024-02-11 14:52:27','2024-02-11 14:52:26'),(136,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211160733.sql','2024-02-11 16:07:34','2024-02-11 16:07:34'),(137,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211174859.sql','2024-02-11 17:49:00','2024-02-11 17:48:59'),(138,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211181601.sql','2024-02-11 18:16:01','2024-02-11 18:16:01'),(139,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211182141.sql','2024-02-11 18:21:42','2024-02-11 18:21:42'),(140,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211183308.sql','2024-02-11 18:33:09','2024-02-11 18:33:08'),(141,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211211959.sql','2024-02-11 21:20:00','2024-02-11 21:20:00'),(142,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211233923.sql','2024-02-11 23:39:24','2024-02-11 23:39:24'),(143,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212002001.sql','2024-02-12 00:20:02','2024-02-12 00:20:02'),(144,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212002957.sql','2024-02-12 00:29:58','2024-02-12 00:29:58'),(145,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003312.sql','2024-02-12 00:33:13','2024-02-12 00:33:12'),(146,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003536.sql','2024-02-12 00:35:37','2024-02-12 00:35:36'),(147,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003711.sql','2024-02-12 00:37:12','2024-02-12 00:37:11'),(148,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004107.sql','2024-02-12 00:41:07','2024-02-12 00:41:07'),(149,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004151.sql','2024-02-12 00:41:51','2024-02-12 00:41:51'),(150,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004515.sql','2024-02-12 00:45:15','2024-02-12 00:45:15'),(151,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004618.sql','2024-02-12 00:46:18','2024-02-12 00:46:18'),(152,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004742.sql','2024-02-12 00:47:43','2024-02-12 00:47:42'),(153,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004854.sql','2024-02-12 00:48:55','2024-02-12 00:48:54'),(154,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212005451.sql','2024-02-12 00:54:52','2024-02-12 00:54:51'),(155,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212120117.sql','2024-02-12 12:01:18','2024-02-12 12:01:17'),(156,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184006.sql','2024-02-12 18:40:07','2024-02-12 18:40:06'),(157,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184202.sql','2024-02-12 18:42:03','2024-02-12 18:42:02'),(158,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184627.sql','2024-02-12 18:46:28','2024-02-12 18:46:27'),(159,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235320.sql','2024-02-12 23:53:21','2024-02-12 23:53:20'),(160,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235510.sql','2024-02-12 23:55:11','2024-02-12 23:55:10'),(161,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235636.sql','2024-02-12 23:56:37','2024-02-12 23:56:36'),(162,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235922.sql','2024-02-12 23:59:23','2024-02-12 23:59:23'),(163,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235934.sql','2024-02-12 23:59:35','2024-02-12 23:59:34'),(164,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000037.sql','2024-02-13 00:00:37','2024-02-13 00:00:37'),(165,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000217.sql','2024-02-13 00:02:17','2024-02-13 00:02:17'),(166,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000353.sql','2024-02-13 00:03:54','2024-02-13 00:03:54'),(167,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001425.sql','2024-02-13 00:14:26','2024-02-13 00:14:26'),(168,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001524.sql','2024-02-13 00:15:24','2024-02-13 00:15:24'),(169,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001615.sql','2024-02-13 00:16:16','2024-02-13 00:16:16'),(170,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002503.sql','2024-02-13 00:25:04','2024-02-13 00:25:03'),(171,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002844.sql','2024-02-13 00:28:45','2024-02-13 00:28:44'),(172,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002933.sql','2024-02-13 00:29:34','2024-02-13 00:29:34'),(173,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213091634.sql','2024-02-13 09:16:34','2024-02-13 09:16:34'),(174,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213204853.sql','2024-02-13 20:48:54','2024-02-13 20:48:53'),(175,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213204946.sql','2024-02-13 20:49:47','2024-02-13 20:49:47'),(176,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213205006.sql','2024-02-13 20:50:07','2024-02-13 20:50:06'),(177,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213212607.sql','2024-02-13 21:26:08','2024-02-13 21:26:07'),(178,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240214173516.sql','2024-02-14 17:35:17','2024-02-14 17:35:16'),(179,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240214182504.sql','2024-02-14 18:25:05','2024-02-14 18:25:04'),(180,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215180149.sql','2024-02-15 18:01:50','2024-02-15 18:01:49'),(181,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215182847.sql','2024-02-15 18:28:48','2024-02-15 18:28:48'),(182,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215183218.sql','2024-02-15 18:32:19','2024-02-15 18:32:18'),(183,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215183359.sql','2024-02-15 18:33:59','2024-02-15 18:33:59'),(184,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215211243.sql','2024-02-15 21:12:44','2024-02-15 21:12:43'),(185,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215211734.sql','2024-02-15 21:17:35','2024-02-15 21:17:34'),(186,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224048.sql','2024-02-15 22:40:49','2024-02-15 22:40:48'),(187,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224140.sql','2024-02-15 22:41:41','2024-02-15 22:41:41'),(188,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224217.sql','2024-02-15 22:42:18','2024-02-15 22:42:17'),(189,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224313.sql','2024-02-15 22:43:14','2024-02-15 22:43:13'),(190,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225238.sql','2024-02-15 22:52:38','2024-02-15 22:52:38'),(191,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225409.sql','2024-02-15 22:54:10','2024-02-15 22:54:09'),(192,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225421.sql','2024-02-15 22:54:22','2024-02-15 22:54:21'),(193,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215230435.sql','2024-02-15 23:04:36','2024-02-15 23:04:35'),(194,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215230510.sql','2024-02-15 23:05:10','2024-02-15 23:05:10'),(195,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215231202.sql','2024-02-15 23:12:03','2024-02-15 23:12:03'),(196,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215231253.sql','2024-02-15 23:12:54','2024-02-15 23:12:54'),(197,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240216171500.sql','2024-02-16 17:15:01','2024-02-16 17:15:00'),(198,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217204435.sql','2024-02-17 20:44:36','2024-02-17 20:44:35'),(199,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215023.sql','2024-02-17 21:50:24','2024-02-17 21:50:24'),(200,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215411.sql','2024-02-17 21:54:12','2024-02-17 21:54:11'),(201,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215515.sql','2024-02-17 21:55:16','2024-02-17 21:55:16'),(202,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217221652.sql','2024-02-17 22:16:52','2024-02-17 22:16:52'),(203,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217221705.sql','2024-02-17 22:17:06','2024-02-17 22:17:05'),(204,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222028.sql','2024-02-17 22:20:28','2024-02-17 22:20:28'),(205,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222242.sql','2024-02-17 22:22:43','2024-02-17 22:22:42'),(206,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222346.sql','2024-02-17 22:23:47','2024-02-17 22:23:47'),(207,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222739.sql','2024-02-17 22:27:39','2024-02-17 22:27:39'),(208,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222919.sql','2024-02-17 22:29:20','2024-02-17 22:29:19'),(209,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217223015.sql','2024-02-17 22:30:16','2024-02-17 22:30:16'),(210,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240218090224.sql','2024-02-18 09:02:25','2024-02-18 09:02:24'),(211,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219144642.sql','2024-02-19 14:46:43','2024-02-19 14:46:42'),(212,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145229.sql','2024-02-19 14:52:29','2024-02-19 14:52:29'),(213,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145409.sql','2024-02-19 14:54:10','2024-02-19 14:54:09'),(214,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145526.sql','2024-02-19 14:55:27','2024-02-19 14:55:26'),(215,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145647.sql','2024-02-19 14:56:48','2024-02-19 14:56:47'),(216,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145738.sql','2024-02-19 14:57:39','2024-02-19 14:57:39'),(217,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219150734.sql','2024-02-19 15:07:34','2024-02-19 15:07:34'),(218,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219151203.sql','2024-02-19 15:12:04','2024-02-19 15:12:04'),(219,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219151619.sql','2024-02-19 15:16:20','2024-02-19 15:16:20'),(220,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219152114.sql','2024-02-19 15:21:15','2024-02-19 15:21:14'),(221,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322115618.sql','2024-03-22 11:56:19','2024-03-22 11:56:18'),(222,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322140022.sql','2024-03-22 14:00:22','2024-03-22 14:00:22'),(223,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142529.sql','2024-03-22 14:25:30','2024-03-22 14:25:29'),(224,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142716.sql','2024-03-22 14:27:17','2024-03-22 14:27:16'),(225,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142800.sql','2024-03-22 14:28:00','2024-03-22 14:28:00'),(226,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142955.sql','2024-03-22 14:29:56','2024-03-22 14:29:55'),(227,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143031.sql','2024-03-22 14:30:32','2024-03-22 14:30:31'),(228,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143040.sql','2024-03-22 14:30:41','2024-03-22 14:30:40'),(229,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143313.sql','2024-03-22 14:33:14','2024-03-22 14:33:13'),(230,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143644.sql','2024-03-22 14:36:45','2024-03-22 14:36:44'),(231,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143718.sql','2024-03-22 14:37:18','2024-03-22 14:37:18'),(232,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322154220.sql','2024-03-22 15:42:21','2024-03-22 15:42:20'),(233,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322193019.sql','2024-03-22 19:30:19','2024-03-22 19:30:19'),(234,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322194043.sql','2024-03-22 19:40:44','2024-03-22 19:40:43'),(235,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323140254.sql','2024-03-23 14:02:55','2024-03-23 14:02:54'),(236,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323141430.sql','2024-03-23 14:14:30','2024-03-23 14:14:30'),(237,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323141457.sql','2024-03-23 14:14:58','2024-03-23 14:14:57'),(238,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323143455.sql','2024-03-23 14:34:55','2024-03-23 14:34:55'),(239,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145053.sql','2024-03-23 14:50:54','2024-03-23 14:50:53'),(240,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145124.sql','2024-03-23 14:51:25','2024-03-23 14:51:24'),(241,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145415.sql','2024-03-23 14:54:16','2024-03-23 14:54:15'),(242,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145539.sql','2024-03-23 14:55:39','2024-03-23 14:55:39'),(243,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145607.sql','2024-03-23 14:56:08','2024-03-23 14:56:07'),(244,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145628.sql','2024-03-23 14:56:29','2024-03-23 14:56:28'),(245,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323145652.sql','2024-03-23 14:56:52','2024-03-23 14:56:52'),(246,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323151035.sql','2024-03-23 15:10:35','2024-03-23 15:10:35'),(247,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323151614.sql','2024-03-23 15:16:15','2024-03-23 15:16:14'),(248,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323182725.sql','2024-03-23 18:27:26','2024-03-23 18:27:25');
+INSERT INTO `database_backup_history` VALUES (1,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022102818.sql','2023-10-22 10:28:19','2023-10-22 10:28:18'),(2,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103801.sql','2023-10-22 10:38:01','2023-10-22 10:38:01'),(3,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022103906.sql','2023-10-22 10:39:06','2023-10-22 10:39:06'),(4,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022115533.sql','2023-10-22 11:55:34','2023-10-22 11:55:34'),(5,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153037.sql','2023-10-22 15:30:38','2023-10-22 15:30:37'),(6,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022153202.sql','2023-10-22 15:32:03','2023-10-22 15:32:03'),(7,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022164904.sql','2023-10-22 16:49:05','2023-10-22 16:49:04'),(8,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171500.sql','2023-10-22 17:15:01','2023-10-22 17:15:01'),(9,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231022171931.sql','2023-10-22 17:19:32','2023-10-22 17:19:31'),(10,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029104903.sql','2023-10-29 10:49:04','2023-10-29 10:49:04'),(11,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105536.sql','2023-10-29 10:55:37','2023-10-29 10:55:37'),(12,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105648.sql','2023-10-29 10:56:49','2023-10-29 10:56:48'),(13,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231029105734.sql','2023-10-29 10:57:35','2023-10-29 10:57:35'),(14,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231126235505.sql','2023-11-26 23:55:06','2023-11-26 23:55:05'),(15,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231127083537.sql','2023-11-27 08:35:38','2023-11-27 08:35:37'),(16,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231129224003.sql','2023-11-29 22:40:04','2023-11-29 22:40:03'),(17,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083043.sql','2023-11-30 08:30:44','2023-11-30 08:30:44'),(18,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083056.sql','2023-11-30 08:30:57','2023-11-30 08:30:56'),(19,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083129.sql','2023-11-30 08:31:29','2023-11-30 08:31:29'),(20,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130083815.sql','2023-11-30 08:38:15','2023-11-30 08:38:15'),(21,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085439.sql','2023-11-30 08:54:39','2023-11-30 08:54:39'),(22,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085719.sql','2023-11-30 08:57:20','2023-11-30 08:57:19'),(23,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130085758.sql','2023-11-30 08:57:59','2023-11-30 08:57:58'),(24,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130092615.sql','2023-11-30 09:26:16','2023-11-30 09:26:15'),(25,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130131336.sql','2023-11-30 13:13:37','2023-11-30 13:13:37'),(26,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130134030.sql','2023-11-30 13:40:30','2023-11-30 13:40:30'),(27,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130135130.sql','2023-11-30 13:51:31','2023-11-30 13:51:30'),(28,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130140521.sql','2023-11-30 14:05:22','2023-11-30 14:05:21'),(29,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130154808.sql','2023-11-30 15:48:09','2023-11-30 15:48:08'),(30,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130154831.sql','2023-11-30 15:48:32','2023-11-30 15:48:31'),(31,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155555.sql','2023-11-30 15:55:56','2023-11-30 15:55:56'),(32,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155651.sql','2023-11-30 15:56:51','2023-11-30 15:56:51'),(33,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155713.sql','2023-11-30 15:57:13','2023-11-30 15:57:13'),(34,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130155925.sql','2023-11-30 15:59:25','2023-11-30 15:59:25'),(35,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130162848.sql','2023-11-30 16:28:49','2023-11-30 16:28:49'),(36,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130200647.sql','2023-11-30 20:06:48','2023-11-30 20:06:48'),(37,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130204757.sql','2023-11-30 20:47:58','2023-11-30 20:47:58'),(38,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130213137.sql','2023-11-30 21:31:38','2023-11-30 21:31:38'),(39,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130223844.sql','2023-11-30 22:38:46','2023-11-30 22:38:45'),(40,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224124.sql','2023-11-30 22:41:25','2023-11-30 22:41:25'),(41,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224324.sql','2023-11-30 22:43:25','2023-11-30 22:43:25'),(42,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231130224820.sql','2023-11-30 22:48:21','2023-11-30 22:48:21'),(43,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201101235.sql','2023-12-01 10:12:36','2023-12-01 10:12:36'),(44,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201102448.sql','2023-12-01 10:24:49','2023-12-01 10:24:48'),(45,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201103136.sql','2023-12-01 10:31:36','2023-12-01 10:31:36'),(46,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201103305.sql','2023-12-01 10:33:06','2023-12-01 10:33:05'),(47,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201112126.sql','2023-12-01 11:21:27','2023-12-01 11:21:27'),(48,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201112902.sql','2023-12-01 11:29:03','2023-12-01 11:29:02'),(49,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113000.sql','2023-12-01 11:30:01','2023-12-01 11:30:00'),(50,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113045.sql','2023-12-01 11:30:46','2023-12-01 11:30:45'),(51,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113521.sql','2023-12-01 11:35:22','2023-12-01 11:35:22'),(52,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201113550.sql','2023-12-01 11:35:51','2023-12-01 11:35:50'),(53,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201114518.sql','2023-12-01 11:45:18','2023-12-01 11:45:18'),(54,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201115635.sql','2023-12-01 11:56:35','2023-12-01 11:56:35'),(55,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201135857.sql','2023-12-01 13:58:58','2023-12-01 13:58:57'),(56,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201140128.sql','2023-12-01 14:01:28','2023-12-01 14:01:28'),(57,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201140437.sql','2023-12-01 14:04:37','2023-12-01 14:04:37'),(58,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141327.sql','2023-12-01 14:13:55','2023-12-01 14:14:22'),(59,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141539.sql','2023-12-01 14:15:40','2023-12-01 14:15:39'),(60,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201141558.sql','2023-12-01 14:15:59','2023-12-01 14:15:58'),(61,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201142033.sql','2023-12-01 14:20:34','2023-12-01 14:20:34'),(62,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201142150.sql','2023-12-01 14:21:51','2023-12-01 14:21:50'),(63,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201153538.sql','2023-12-01 15:35:38','2023-12-01 15:35:38'),(64,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201153836.sql','2023-12-01 15:38:37','2023-12-01 15:38:37'),(65,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201155422.sql','2023-12-01 15:54:23','2023-12-01 15:54:23'),(66,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201161020.sql','2023-12-01 16:10:21','2023-12-01 16:10:20'),(67,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201161353.sql','2023-12-01 16:13:54','2023-12-01 16:13:53'),(68,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201162449.sql','2023-12-01 16:24:50','2023-12-01 16:24:49'),(69,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201162610.sql','2023-12-01 16:26:11','2023-12-01 16:26:10'),(70,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201163058.sql','2023-12-01 16:30:59','2023-12-01 16:30:59'),(71,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201164602.sql','2023-12-01 16:46:03','2023-12-01 16:46:02'),(72,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201165344.sql','2023-12-01 16:53:45','2023-12-01 16:53:45'),(73,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201170012.sql','2023-12-01 17:00:12','2023-12-01 17:00:12'),(74,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201171338.sql','2023-12-01 17:13:39','2023-12-01 17:13:39'),(75,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201171604.sql','2023-12-01 17:16:05','2023-12-01 17:16:04'),(76,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201172016.sql','2023-12-01 17:20:17','2023-12-01 17:20:17'),(77,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231201172855.sql','2023-12-01 17:28:56','2023-12-01 17:28:55'),(78,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202095316.sql','2023-12-02 09:53:17','2023-12-02 09:53:16'),(79,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202102603.sql','2023-12-02 10:26:04','2023-12-02 10:26:04'),(80,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202102913.sql','2023-12-02 10:29:14','2023-12-02 10:29:14'),(81,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202104454.sql','2023-12-02 10:44:55','2023-12-02 10:44:54'),(82,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231202110552.sql','2023-12-02 11:05:53','2023-12-02 11:05:53'),(83,'D:\\Develop\\Code\\Github\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231207221704.sql','2023-12-07 22:17:05','2023-12-07 22:17:05'),(84,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231211144044.sql','2023-12-11 14:40:45','2023-12-11 14:40:45'),(85,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231211144445.sql','2023-12-11 14:44:46','2023-12-11 14:44:46'),(86,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231212151028.sql','2023-12-12 15:10:31','2023-12-12 15:10:31'),(87,'E:\\Workspace\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20231212203603.sql','2023-12-12 20:36:05','2023-12-12 20:36:04'),(88,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152642.sql','2024-02-03 15:26:43','2024-02-03 15:26:43'),(89,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152745.sql','2024-02-03 15:27:46','2024-02-03 15:27:45'),(90,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203152845.sql','2024-02-03 15:28:46','2024-02-03 15:28:46'),(91,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153141.sql','2024-02-03 15:31:42','2024-02-03 15:31:42'),(92,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153337.sql','2024-02-03 15:33:38','2024-02-03 15:33:37'),(93,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153402.sql','2024-02-03 15:34:02','2024-02-03 15:34:02'),(94,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203153646.sql','2024-02-03 15:36:47','2024-02-03 15:36:47'),(95,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203155544.sql','2024-02-03 15:55:44','2024-02-03 15:55:44'),(96,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160138.sql','2024-02-03 16:01:39','2024-02-03 16:01:38'),(97,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160603.sql','2024-02-03 16:06:04','2024-02-03 16:06:03'),(98,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203160701.sql','2024-02-03 16:07:02','2024-02-03 16:07:02'),(99,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203161941.sql','2024-02-03 16:19:42','2024-02-03 16:19:41'),(100,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203163547.sql','2024-02-03 16:35:47','2024-02-03 16:35:47'),(101,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203163554.sql','2024-02-03 16:35:55','2024-02-03 16:35:54'),(102,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240203200721.sql','2024-02-03 20:07:22','2024-02-03 20:07:21'),(103,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204082955.sql','2024-02-04 08:29:56','2024-02-04 08:29:56'),(104,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204093426.sql','2024-02-04 09:34:26','2024-02-04 09:34:26'),(105,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204103329.sql','2024-02-04 10:33:30','2024-02-04 10:33:30'),(106,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204104026.sql','2024-02-04 10:40:27','2024-02-04 10:40:26'),(107,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204110635.sql','2024-02-04 11:06:36','2024-02-04 11:06:35'),(108,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204111540.sql','2024-02-04 11:15:41','2024-02-04 11:15:41'),(109,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114352.sql','2024-02-04 11:43:53','2024-02-04 11:43:53'),(110,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114509.sql','2024-02-04 11:45:10','2024-02-04 11:45:09'),(111,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204114557.sql','2024-02-04 11:45:57','2024-02-04 11:45:57'),(112,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204124044.sql','2024-02-04 12:40:45','2024-02-04 12:40:44'),(113,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131438.sql','2024-02-04 13:14:39','2024-02-04 13:14:38'),(114,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131642.sql','2024-02-04 13:16:43','2024-02-04 13:16:43'),(115,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131745.sql','2024-02-04 13:17:45','2024-02-04 13:17:45'),(116,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204131849.sql','2024-02-04 13:18:49','2024-02-04 13:18:49'),(117,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204145140.sql','2024-02-04 14:51:41','2024-02-04 14:51:40'),(118,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204151244.sql','2024-02-04 15:12:45','2024-02-04 15:12:45'),(119,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204152019.sql','2024-02-04 15:20:19','2024-02-04 15:20:19'),(120,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153016.sql','2024-02-04 15:30:17','2024-02-04 15:30:16'),(121,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153325.sql','2024-02-04 15:33:26','2024-02-04 15:33:25'),(122,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240204153819.sql','2024-02-04 15:38:20','2024-02-04 15:38:19'),(123,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207151458.sql','2024-02-07 15:14:59','2024-02-07 15:14:59'),(124,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207160533.sql','2024-02-07 16:05:33','2024-02-07 16:05:33'),(125,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240207224531.sql','2024-02-07 22:45:31','2024-02-07 22:45:31'),(126,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240210221545.sql','2024-02-10 22:15:46','2024-02-10 22:15:46'),(127,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211005445.sql','2024-02-11 00:54:46','2024-02-11 00:54:45'),(128,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010121.sql','2024-02-11 01:01:22','2024-02-11 01:01:22'),(129,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010223.sql','2024-02-11 01:02:24','2024-02-11 01:02:24'),(130,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010353.sql','2024-02-11 01:03:54','2024-02-11 01:03:53'),(131,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010629.sql','2024-02-11 01:06:30','2024-02-11 01:06:29'),(132,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010724.sql','2024-02-11 01:07:24','2024-02-11 01:07:24'),(133,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010737.sql','2024-02-11 01:07:37','2024-02-11 01:07:37'),(134,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211010904.sql','2024-02-11 01:09:04','2024-02-11 01:09:04'),(135,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211145226.sql','2024-02-11 14:52:27','2024-02-11 14:52:26'),(136,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211160733.sql','2024-02-11 16:07:34','2024-02-11 16:07:34'),(137,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211174859.sql','2024-02-11 17:49:00','2024-02-11 17:48:59'),(138,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211181601.sql','2024-02-11 18:16:01','2024-02-11 18:16:01'),(139,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211182141.sql','2024-02-11 18:21:42','2024-02-11 18:21:42'),(140,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211183308.sql','2024-02-11 18:33:09','2024-02-11 18:33:08'),(141,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211211959.sql','2024-02-11 21:20:00','2024-02-11 21:20:00'),(142,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240211233923.sql','2024-02-11 23:39:24','2024-02-11 23:39:24'),(143,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212002001.sql','2024-02-12 00:20:02','2024-02-12 00:20:02'),(144,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212002957.sql','2024-02-12 00:29:58','2024-02-12 00:29:58'),(145,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003312.sql','2024-02-12 00:33:13','2024-02-12 00:33:12'),(146,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003536.sql','2024-02-12 00:35:37','2024-02-12 00:35:36'),(147,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212003711.sql','2024-02-12 00:37:12','2024-02-12 00:37:11'),(148,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004107.sql','2024-02-12 00:41:07','2024-02-12 00:41:07'),(149,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004151.sql','2024-02-12 00:41:51','2024-02-12 00:41:51'),(150,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004515.sql','2024-02-12 00:45:15','2024-02-12 00:45:15'),(151,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004618.sql','2024-02-12 00:46:18','2024-02-12 00:46:18'),(152,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004742.sql','2024-02-12 00:47:43','2024-02-12 00:47:42'),(153,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212004854.sql','2024-02-12 00:48:55','2024-02-12 00:48:54'),(154,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212005451.sql','2024-02-12 00:54:52','2024-02-12 00:54:51'),(155,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212120117.sql','2024-02-12 12:01:18','2024-02-12 12:01:17'),(156,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184006.sql','2024-02-12 18:40:07','2024-02-12 18:40:06'),(157,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184202.sql','2024-02-12 18:42:03','2024-02-12 18:42:02'),(158,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212184627.sql','2024-02-12 18:46:28','2024-02-12 18:46:27'),(159,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235320.sql','2024-02-12 23:53:21','2024-02-12 23:53:20'),(160,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235510.sql','2024-02-12 23:55:11','2024-02-12 23:55:10'),(161,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235636.sql','2024-02-12 23:56:37','2024-02-12 23:56:36'),(162,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235922.sql','2024-02-12 23:59:23','2024-02-12 23:59:23'),(163,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240212235934.sql','2024-02-12 23:59:35','2024-02-12 23:59:34'),(164,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000037.sql','2024-02-13 00:00:37','2024-02-13 00:00:37'),(165,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000217.sql','2024-02-13 00:02:17','2024-02-13 00:02:17'),(166,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213000353.sql','2024-02-13 00:03:54','2024-02-13 00:03:54'),(167,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001425.sql','2024-02-13 00:14:26','2024-02-13 00:14:26'),(168,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001524.sql','2024-02-13 00:15:24','2024-02-13 00:15:24'),(169,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213001615.sql','2024-02-13 00:16:16','2024-02-13 00:16:16'),(170,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002503.sql','2024-02-13 00:25:04','2024-02-13 00:25:03'),(171,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002844.sql','2024-02-13 00:28:45','2024-02-13 00:28:44'),(172,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213002933.sql','2024-02-13 00:29:34','2024-02-13 00:29:34'),(173,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213091634.sql','2024-02-13 09:16:34','2024-02-13 09:16:34'),(174,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213204853.sql','2024-02-13 20:48:54','2024-02-13 20:48:53'),(175,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213204946.sql','2024-02-13 20:49:47','2024-02-13 20:49:47'),(176,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213205006.sql','2024-02-13 20:50:07','2024-02-13 20:50:06'),(177,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240213212607.sql','2024-02-13 21:26:08','2024-02-13 21:26:07'),(178,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240214173516.sql','2024-02-14 17:35:17','2024-02-14 17:35:16'),(179,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240214182504.sql','2024-02-14 18:25:05','2024-02-14 18:25:04'),(180,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215180149.sql','2024-02-15 18:01:50','2024-02-15 18:01:49'),(181,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215182847.sql','2024-02-15 18:28:48','2024-02-15 18:28:48'),(182,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215183218.sql','2024-02-15 18:32:19','2024-02-15 18:32:18'),(183,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215183359.sql','2024-02-15 18:33:59','2024-02-15 18:33:59'),(184,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215211243.sql','2024-02-15 21:12:44','2024-02-15 21:12:43'),(185,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215211734.sql','2024-02-15 21:17:35','2024-02-15 21:17:34'),(186,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224048.sql','2024-02-15 22:40:49','2024-02-15 22:40:48'),(187,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224140.sql','2024-02-15 22:41:41','2024-02-15 22:41:41'),(188,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224217.sql','2024-02-15 22:42:18','2024-02-15 22:42:17'),(189,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215224313.sql','2024-02-15 22:43:14','2024-02-15 22:43:13'),(190,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225238.sql','2024-02-15 22:52:38','2024-02-15 22:52:38'),(191,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225409.sql','2024-02-15 22:54:10','2024-02-15 22:54:09'),(192,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215225421.sql','2024-02-15 22:54:22','2024-02-15 22:54:21'),(193,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215230435.sql','2024-02-15 23:04:36','2024-02-15 23:04:35'),(194,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215230510.sql','2024-02-15 23:05:10','2024-02-15 23:05:10'),(195,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215231202.sql','2024-02-15 23:12:03','2024-02-15 23:12:03'),(196,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240215231253.sql','2024-02-15 23:12:54','2024-02-15 23:12:54'),(197,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240216171500.sql','2024-02-16 17:15:01','2024-02-16 17:15:00'),(198,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217204435.sql','2024-02-17 20:44:36','2024-02-17 20:44:35'),(199,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215023.sql','2024-02-17 21:50:24','2024-02-17 21:50:24'),(200,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215411.sql','2024-02-17 21:54:12','2024-02-17 21:54:11'),(201,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217215515.sql','2024-02-17 21:55:16','2024-02-17 21:55:16'),(202,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217221652.sql','2024-02-17 22:16:52','2024-02-17 22:16:52'),(203,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217221705.sql','2024-02-17 22:17:06','2024-02-17 22:17:05'),(204,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222028.sql','2024-02-17 22:20:28','2024-02-17 22:20:28'),(205,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222242.sql','2024-02-17 22:22:43','2024-02-17 22:22:42'),(206,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222346.sql','2024-02-17 22:23:47','2024-02-17 22:23:47'),(207,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222739.sql','2024-02-17 22:27:39','2024-02-17 22:27:39'),(208,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217222919.sql','2024-02-17 22:29:20','2024-02-17 22:29:19'),(209,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240217223015.sql','2024-02-17 22:30:16','2024-02-17 22:30:16'),(210,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240218090224.sql','2024-02-18 09:02:25','2024-02-18 09:02:24'),(211,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219144642.sql','2024-02-19 14:46:43','2024-02-19 14:46:42'),(212,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145229.sql','2024-02-19 14:52:29','2024-02-19 14:52:29'),(213,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145409.sql','2024-02-19 14:54:10','2024-02-19 14:54:09'),(214,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145526.sql','2024-02-19 14:55:27','2024-02-19 14:55:26'),(215,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145647.sql','2024-02-19 14:56:48','2024-02-19 14:56:47'),(216,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219145738.sql','2024-02-19 14:57:39','2024-02-19 14:57:39'),(217,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219150734.sql','2024-02-19 15:07:34','2024-02-19 15:07:34'),(218,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219151203.sql','2024-02-19 15:12:04','2024-02-19 15:12:04'),(219,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219151619.sql','2024-02-19 15:16:20','2024-02-19 15:16:20'),(220,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240219152114.sql','2024-02-19 15:21:15','2024-02-19 15:21:14'),(221,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322115618.sql','2024-03-22 11:56:19','2024-03-22 11:56:18'),(222,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322140022.sql','2024-03-22 14:00:22','2024-03-22 14:00:22'),(223,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142529.sql','2024-03-22 14:25:30','2024-03-22 14:25:29'),(224,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142716.sql','2024-03-22 14:27:17','2024-03-22 14:27:16'),(225,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142800.sql','2024-03-22 14:28:00','2024-03-22 14:28:00'),(226,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322142955.sql','2024-03-22 14:29:56','2024-03-22 14:29:55'),(227,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143031.sql','2024-03-22 14:30:32','2024-03-22 14:30:31'),(228,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143040.sql','2024-03-22 14:30:41','2024-03-22 14:30:40'),(229,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143313.sql','2024-03-22 14:33:14','2024-03-22 14:33:13'),(230,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143644.sql','2024-03-22 14:36:45','2024-03-22 14:36:44'),(231,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322143718.sql','2024-03-22 14:37:18','2024-03-22 14:37:18'),(232,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322154220.sql','2024-03-22 15:42:21','2024-03-22 15:42:20'),(233,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322193019.sql','2024-03-22 19:30:19','2024-03-22 19:30:19'),(234,'D:\\Develop\\Code\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322194043.sql','2024-03-22 19:40:44','2024-03-22 19:40:43'),(235,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322213236.sql','2024-03-22 21:32:37','2024-03-22 21:32:36'),(236,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322224707.sql','2024-03-22 22:47:07','2024-03-22 22:47:07'),(237,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322225112.sql','2024-03-22 22:51:12','2024-03-22 22:51:12'),(238,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322225521.sql','2024-03-22 22:55:22','2024-03-22 22:55:21'),(239,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322225846.sql','2024-03-22 22:58:47','2024-03-22 22:58:46'),(240,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240322231144.sql','2024-03-22 23:11:44','2024-03-22 23:11:44'),(241,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323002703.sql','2024-03-23 00:27:04','2024-03-23 00:27:03'),(242,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323002919.sql','2024-03-23 00:29:20','2024-03-23 00:29:20'),(243,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323003015.sql','2024-03-23 00:30:15','2024-03-23 00:30:15'),(244,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323003407.sql','2024-03-23 00:34:07','2024-03-23 00:34:07'),(245,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323003420.sql','2024-03-23 00:34:21','2024-03-23 00:34:20'),(246,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323100018.sql','2024-03-23 10:00:18','2024-03-23 10:00:18'),(247,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323100322.sql','2024-03-23 10:03:23','2024-03-23 10:03:22'),(248,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323100422.sql','2024-03-23 10:04:23','2024-03-23 10:04:22'),(249,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323100542.sql','2024-03-23 10:05:42','2024-03-23 10:05:42'),(250,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323101712.sql','2024-03-23 10:17:13','2024-03-23 10:17:12'),(251,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323101756.sql','2024-03-23 10:17:56','2024-03-23 10:17:56'),(252,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323104212.sql','2024-03-23 10:42:13','2024-03-23 10:42:13'),(253,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323104513.sql','2024-03-23 10:45:13','2024-03-23 10:45:13'),(254,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323105922.sql','2024-03-23 10:59:22','2024-03-23 10:59:22'),(255,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323110244.sql','2024-03-23 11:02:44','2024-03-23 11:02:44'),(256,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323110906.sql','2024-03-23 11:09:07','2024-03-23 11:09:06'),(257,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323112054.sql','2024-03-23 11:20:54','2024-03-23 11:20:54'),(258,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323113332.sql','2024-03-23 11:33:33','2024-03-23 11:33:32'),(259,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323114324.sql','2024-03-23 11:43:25','2024-03-23 11:43:24'),(260,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323114432.sql','2024-03-23 11:44:32','2024-03-23 11:44:32'),(261,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323114449.sql','2024-03-23 11:44:49','2024-03-23 11:44:49'),(262,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323115219.sql','2024-03-23 11:52:20','2024-03-23 11:52:19'),(263,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323115544.sql','2024-03-23 11:55:45','2024-03-23 11:55:44'),(264,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323115753.sql','2024-03-23 11:57:53','2024-03-23 11:57:53'),(265,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323121742.sql','2024-03-23 12:17:42','2024-03-23 12:17:42'),(266,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323122032.sql','2024-03-23 12:20:33','2024-03-23 12:20:32'),(267,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323122150.sql','2024-03-23 12:21:51','2024-03-23 12:21:50'),(268,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323124945.sql','2024-03-23 12:49:45','2024-03-23 12:49:45'),(269,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323125110.sql','2024-03-23 12:51:11','2024-03-23 12:51:11'),(270,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323130243.sql','2024-03-23 13:02:44','2024-03-23 13:02:43'),(271,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131003.sql','2024-03-23 13:10:04','2024-03-23 13:10:03'),(272,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131119.sql','2024-03-23 13:11:19','2024-03-23 13:11:19'),(273,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131214.sql','2024-03-23 13:12:14','2024-03-23 13:12:14'),(274,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131500.sql','2024-03-23 13:15:01','2024-03-23 13:15:00'),(275,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131655.sql','2024-03-23 13:16:56','2024-03-23 13:16:55'),(276,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323131735.sql','2024-03-23 13:17:35','2024-03-23 13:17:35'),(277,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323132053.sql','2024-03-23 13:20:54','2024-03-23 13:20:54'),(278,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323132441.sql','2024-03-23 13:24:41','2024-03-23 13:24:41'),(279,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323132519.sql','2024-03-23 13:25:20','2024-03-23 13:25:19'),(280,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323132851.sql','2024-03-23 13:28:51','2024-03-23 13:28:51'),(281,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323133102.sql','2024-03-23 13:31:02','2024-03-23 13:31:02'),(282,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323133703.sql','2024-03-23 13:37:03','2024-03-23 13:37:03'),(283,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323134131.sql','2024-03-23 13:41:32','2024-03-23 13:41:31'),(284,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323134517.sql','2024-03-23 13:45:17','2024-03-23 13:45:17'),(285,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323205526.sql','2024-03-23 20:55:26','2024-03-23 20:55:26'),(286,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323210233.sql','2024-03-23 21:02:34','2024-03-23 21:02:33'),(287,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323210456.sql','2024-03-23 21:04:56','2024-03-23 21:04:56'),(288,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323210535.sql','2024-03-23 21:05:36','2024-03-23 21:05:35'),(289,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323211322.sql','2024-03-23 21:13:23','2024-03-23 21:13:22'),(290,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323212432.sql','2024-03-23 21:24:32','2024-03-23 21:24:32'),(291,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323212639.sql','2024-03-23 21:26:39','2024-03-23 21:26:39'),(292,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323213952.sql','2024-03-23 21:39:52','2024-03-23 21:39:52'),(293,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323214044.sql','2024-03-23 21:40:44','2024-03-23 21:40:44'),(294,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323214306.sql','2024-03-23 21:43:07','2024-03-23 21:43:06'),(295,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323215245.sql','2024-03-23 21:52:45','2024-03-23 21:52:45'),(296,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323225549.sql','2024-03-23 22:55:50','2024-03-23 22:55:49'),(297,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240323233007.sql','2024-03-23 23:30:08','2024-03-23 23:30:08'),(298,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240324000158.sql','2024-03-24 00:01:59','2024-03-24 00:01:58'),(299,'C:\\Users\\vonline\\Documents\\GitHub\\devpl-backend\\devpl-backend\\db\\backup\\devpl-20240324000406.sql','2024-03-24 00:04:07','2024-03-24 00:04:06');
 /*!40000 ALTER TABLE `database_backup_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,15 +274,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `database_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `database_metadata` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `database_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '保存位置',
-  `database_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据库类型',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `database_name` varchar(255) DEFAULT NULL COMMENT '保存位置',
+  `database_type` varchar(100) DEFAULT NULL COMMENT '数据库类型',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '备份时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='数据库源数据记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据库源数据记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,12 +300,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `field_constraint`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `field_constraint` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `type` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '约束类型(PK主键约束，FK外键约束，UK唯一约束)',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `type` varchar(100) DEFAULT NULL COMMENT '约束类型(PK主键约束，FK外键约束，UK唯一约束)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='字段约束记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字段约束记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,14 +323,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `field_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `field_group` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '组ID',
-  `parent_id` bigint DEFAULT NULL COMMENT '父组ID',
-  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '组名称',
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '组类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '组ID',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父组ID',
+  `group_name` varchar(255) DEFAULT NULL COMMENT '组名称',
+  `type` varchar(255) DEFAULT NULL COMMENT '组类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字段组信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段组信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,6 +339,7 @@ CREATE TABLE `field_group` (
 
 LOCK TABLES `field_group` WRITE;
 /*!40000 ALTER TABLE `field_group` DISABLE KEYS */;
+INSERT INTO `field_group` VALUES (87,NULL,'组2',NULL),(103,NULL,'组88',NULL);
 /*!40000 ALTER TABLE `field_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -348,25 +349,25 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `field_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `field_info` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `parent_id` bigint unsigned DEFAULT NULL COMMENT '父级字段主键ID',
-  `field_key` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字段ID',
-  `field_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段名',
-  `type_group_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型分组ID',
-  `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据类型',
-  `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '注释信息',
-  `description` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '描述信息',
-  `literal_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字面值',
-  `default_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '默认值',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `parent_id` bigint(20) unsigned DEFAULT NULL COMMENT '父级字段主键ID',
+  `field_key` varchar(36) NOT NULL COMMENT '字段ID',
+  `field_name` varchar(100) DEFAULT NULL COMMENT '字段名',
+  `type_group_id` varchar(255) DEFAULT NULL COMMENT '类型分组ID',
+  `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型',
+  `comment` varchar(255) DEFAULT NULL COMMENT '注释信息',
+  `description` varchar(100) DEFAULT NULL COMMENT '描述信息',
+  `literal_value` varchar(100) DEFAULT NULL COMMENT '字面值',
+  `default_value` varchar(100) DEFAULT NULL COMMENT '默认值',
   `optional` tinyint(1) DEFAULT '1' COMMENT '是否可选',
   `temporary` tinyint(1) DEFAULT '0' COMMENT '是否是临时字段(允许重名)',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字段信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=175 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,7 +376,7 @@ CREATE TABLE `field_info` (
 
 LOCK TABLES `field_info` WRITE;
 /*!40000 ALTER TABLE `field_info` DISABLE KEYS */;
-INSERT INTO `field_info` VALUES (3,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,0,0,'2024-01-28 16:16:31','2024-01-28 16:16:31',0),(4,0,'typeName','typeName',NULL,'String',NULL,'类型名称\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(6,0,'comment','comment','JDBC','Integer',NULL,'字段注释信息，相比description字段比较简短',NULL,NULL,0,0,'2024-01-28 16:16:31','2024-01-28 16:26:30',0),(7,0,'maxLength','maxLength',NULL,'Integer',NULL,'最大长度\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(9,0,'precision','precision',NULL,'String',NULL,'精度 precision是mysql关键字\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(14,0,'typeGroupName','typeGroupName',NULL,'String',NULL,'类型分组名称\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(16,0,'operation','operation',NULL,'Integer',NULL,'数据类型操作\r1不可删除\r2不可修改\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(19,0,'id','id','JAVA','Long',NULL,'主键ID\n2323',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:32',0),(20,0,'fieldKey','fieldKey','JAVA','String',NULL,'字段Key\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:27',0),(22,0,'dataType','dataType','JSON','String',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:34:27',0),(23,0,'description','description','JDBC','String',NULL,'描述信息\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:33',0),(24,0,'defaultValue','defaultValue','JAVA','String',NULL,'默认值\r',NULL,'ssdd',0,0,'2023-12-30 09:42:04','2023-12-31 09:50:38',0),(25,0,'updateTime','updateTime','JAVA','LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:48',0),(26,0,'createTime','createTime','JAVA','LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:52',0),(27,0,'deleted','deleted','JAVA','Boolean',NULL,'是否逻辑删除\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:56',0),(28,0,'type','type','JAVA','String',NULL,'输入类型 JSON/SQL/\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:51:01',0),(29,0,'content','content','JAVA','String',NULL,'待解析的文本\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:51:05',0),(30,0,'id','id',NULL,'Long',NULL,'id\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(31,0,'columnType','columnType','JAVA','String',NULL,'字段类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:10',0),(32,0,'attrType','attrType',NULL,'String',NULL,'属性类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(33,0,'packageName','packageName',NULL,'String',NULL,'属性包名\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(34,0,'mysqlSqlType','mysqlSqlType',NULL,'String',NULL,'MySQL数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(35,0,'jsonType','jsonType',NULL,'String',NULL,'JSON数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(36,0,'createTime','createTime',NULL,'Date',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(37,0,'id','id',NULL,'Integer',NULL,'主键ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(38,0,'templateId','templateId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(39,0,'generationId','generationId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(40,0,'varKey','varKey',NULL,'String',NULL,'参数key, 一般为出现在模板中的变量名,单个模板内唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(41,0,'value','value',NULL,'String',NULL,'参数值\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(42,0,'dataTypeId','dataTypeId',NULL,'Long',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(43,0,'updateTime','updateTime',NULL,'LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(44,0,'createTime','createTime',NULL,'LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(45,0,'templateName','templateName',NULL,'String',NULL,'模板名称：唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(46,0,'type','type',NULL,'Integer',NULL,'模板类型: 1-文件模板 2-字符串模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(47,0,'templatePath','templatePath',NULL,'String',NULL,'模板存放路径，相对路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(48,0,'content','content',NULL,'String',NULL,'模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(49,0,'provider','provider',NULL,'String',NULL,'技术提供方，例如Apache Velocity, Apache FreeMarker\r\r@see io.devpl.backend.domain.TemplateProvider\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(50,0,'remark','remark',NULL,'String',NULL,'备注信息\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(51,0,'internal','internal',NULL,'Boolean',NULL,'是否内置模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(52,0,'generatorPath','generatorPath',NULL,'String',NULL,'生成代码的路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(53,0,'id','id',NULL,'Integer',NULL,'主键ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(54,0,'templateId','templateId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(55,0,'generationId','generationId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(56,0,'varKey','varKey',NULL,'String',NULL,'参数key, 一般为出现在模板中的变量名,单个模板内唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(57,0,'value','value',NULL,'String',NULL,'参数值\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(58,0,'dataTypeId','dataTypeId',NULL,'Long',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(59,0,'updateTime','updateTime',NULL,'LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(60,0,'createTime','createTime',NULL,'LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(61,0,'templateName','templateName',NULL,'String',NULL,'模板名称：唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(62,0,'type','type',NULL,'Integer',NULL,'模板类型: 1-文件模板 2-字符串模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(63,0,'templatePath','templatePath',NULL,'String',NULL,'模板存放路径，相对路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(64,0,'content','content',NULL,'String',NULL,'模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(65,0,'provider','provider',NULL,'String',NULL,'技术提供方，例如Apache Velocity, Apache FreeMarker\r\r@see io.devpl.backend.domain.TemplateProvider\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(67,0,'internal','internal',NULL,'Boolean',NULL,'是否内置模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(68,0,'generatorPath','generatorPath',NULL,'String',NULL,'生成代码的路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(69,0,'name','name',NULL,'String',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(70,0,'label','label',NULL,'String',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(71,0,'key','key',NULL,'Integer',NULL,'这里的ID无意义，只是作为一个唯一的序号\r前端树形表格组件使用\rvxe-table使用id字段，react使用key字段\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(72,0,'parentId','parentId',NULL,'Integer',NULL,'父节点ID\r前端树形表格组件使用\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(73,0,'parentKey','parentKey',NULL,'Integer',NULL,'父节点ID\r前端树形表格组件使用\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(74,0,'leaf','leaf',NULL,'boolean',NULL,'是否叶子结点\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(75,0,'children','children',NULL,'List<ParamNode>',NULL,'子节点\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(76,0,'valueType','valueType',NULL,'MapperStatementParamValueType',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(77,0,'groupId','groupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(78,0,'groupName','groupName',NULL,'String',NULL,'类型分组名称\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(79,0,'pageIndex',NULL,NULL,'String',NULL,'pageIndex',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(80,0,'pageSize',NULL,NULL,'String',NULL,'pageSize',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(81,0,'fieldName',NULL,NULL,'String',NULL,'fieldName',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(82,0,'timestamp',NULL,NULL,'String',NULL,'timestamp',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(83,0,'sysId','sysId',NULL,'String',NULL,'系统ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(84,0,'sysName','sysName',NULL,'String',NULL,'系统名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(85,0,'modelId','modelId',NULL,'String',NULL,'模块ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(86,0,'modelName','modelName',NULL,'String',NULL,'模块名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(87,0,'userId','userId',NULL,'String',NULL,'用户ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(88,0,'userName','userName',NULL,'String',NULL,'用户名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(89,0,'operationTime','operationTime',NULL,'String',NULL,'操作时间（yyyy-MM-dd HH:mm:ss）',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(90,0,'operationTerminal','operationTerminal',NULL,'String',NULL,'操作终端',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(91,0,'operationType','operationType',NULL,'String',NULL,'操作类型',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(92,0,'operationContent','operationContent',NULL,'String',NULL,'操作描述',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(93,0,'schoolId','schoolId',NULL,'String',NULL,'学校ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(94,0,'typeKey','typeKey',NULL,'String',NULL,'类型ID\r',NULL,NULL,0,0,'2024-01-28 19:59:47','2024-01-28 19:59:47',0),(95,0,'minLength','minLength',NULL,'Integer',NULL,'最小长度\r',NULL,NULL,0,0,'2024-01-28 19:59:47','2024-01-28 19:59:47',0),(96,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:15:34','2024-01-28 20:15:34',0),(97,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:15:34','2024-01-28 20:15:34',0),(98,0,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(99,0,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(100,0,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(101,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(102,0,'fieldName','fieldName',NULL,'String',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(103,0,'dataType','dataType',NULL,'String',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(104,0,'comment','comment',NULL,'String',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(105,0,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(106,0,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(107,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(108,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(109,0,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(110,0,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(111,0,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(112,0,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(113,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(114,0,'fieldName','fieldName',NULL,'String',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(115,0,'dataType','dataType',NULL,'String',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(116,0,'comment','comment',NULL,'String',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(117,0,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(118,0,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(119,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(120,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(121,0,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(122,NULL,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(127,NULL,'dataType','dataType',NULL,'null',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(174,NULL,'id','id','JAVA','NULL',NULL,'','1',NULL,1,0,'2024-03-18 11:55:47','2024-03-23 15:01:55',0);
+INSERT INTO `field_info` VALUES (3,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,0,0,'2024-01-28 16:16:31','2024-01-28 16:16:31',0),(4,0,'typeName','typeName',NULL,'String',NULL,'类型名称\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(6,0,'comment','comment','JDBC','Integer',NULL,'字段注释信息，相比description字段比较简短',NULL,NULL,0,0,'2024-01-28 16:16:31','2024-01-28 16:26:30',0),(7,0,'maxLength','maxLength',NULL,'Integer',NULL,'最大长度\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(9,0,'precision','precision',NULL,'String',NULL,'精度 precision是mysql关键字\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(14,0,'typeGroupName','typeGroupName',NULL,'String',NULL,'类型分组名称\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(16,0,'operation','operation',NULL,'Integer',NULL,'数据类型操作\r1不可删除\r2不可修改\r',NULL,NULL,0,0,'2024-01-28 19:55:19','2024-01-28 19:55:19',0),(19,0,'id','id','JAVA','Long',NULL,'主键ID\n2323',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:32',0),(20,0,'fieldKey','fieldKey','JAVA','String',NULL,'字段Key\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:27',0),(22,0,'dataType','dataType','JSON','String',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:34:27',0),(23,0,'description','description','JDBC','String',NULL,'描述信息\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:33',0),(24,0,'defaultValue','defaultValue','JAVA','String',NULL,'默认值\r',NULL,'ssdd',0,0,'2023-12-30 09:42:04','2023-12-31 09:50:38',0),(25,0,'updateTime','updateTime','JAVA','LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:48',0),(26,0,'createTime','createTime','JAVA','LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:52',0),(27,0,'deleted','deleted','JAVA','Boolean',NULL,'是否逻辑删除\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:50:56',0),(28,0,'type','type','JAVA','String',NULL,'输入类型 JSON/SQL/\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:51:01',0),(29,0,'content','content','JAVA','String',NULL,'待解析的文本\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 09:51:05',0),(30,0,'id','id',NULL,'Long',NULL,'id\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(31,0,'columnType','columnType','JAVA','String',NULL,'字段类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-31 10:10:10',0),(32,0,'attrType','attrType',NULL,'String',NULL,'属性类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(33,0,'packageName','packageName',NULL,'String',NULL,'属性包名\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(34,0,'mysqlSqlType','mysqlSqlType',NULL,'String',NULL,'MySQL数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(35,0,'jsonType','jsonType',NULL,'String',NULL,'JSON数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(36,0,'createTime','createTime',NULL,'Date',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(37,0,'id','id',NULL,'Integer',NULL,'主键ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(38,0,'templateId','templateId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(39,0,'generationId','generationId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(40,0,'varKey','varKey',NULL,'String',NULL,'参数key, 一般为出现在模板中的变量名,单个模板内唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(41,0,'value','value',NULL,'String',NULL,'参数值\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(42,0,'dataTypeId','dataTypeId',NULL,'Long',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(43,0,'updateTime','updateTime',NULL,'LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(44,0,'createTime','createTime',NULL,'LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(45,0,'templateName','templateName',NULL,'String',NULL,'模板名称：唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(46,0,'type','type',NULL,'Integer',NULL,'模板类型: 1-文件模板 2-字符串模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(47,0,'templatePath','templatePath',NULL,'String',NULL,'模板存放路径，相对路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(48,0,'content','content',NULL,'String',NULL,'模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(49,0,'provider','provider',NULL,'String',NULL,'技术提供方，例如Apache Velocity, Apache FreeMarker\r\r@see io.devpl.backend.domain.TemplateProvider\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(50,0,'remark','remark',NULL,'String',NULL,'备注信息\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(51,0,'internal','internal',NULL,'Boolean',NULL,'是否内置模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(52,0,'generatorPath','generatorPath',NULL,'String',NULL,'生成代码的路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(53,0,'id','id',NULL,'Integer',NULL,'主键ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(54,0,'templateId','templateId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(55,0,'generationId','generationId',NULL,'Long',NULL,'模板ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(56,0,'varKey','varKey',NULL,'String',NULL,'参数key, 一般为出现在模板中的变量名,单个模板内唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(57,0,'value','value',NULL,'String',NULL,'参数值\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(58,0,'dataTypeId','dataTypeId',NULL,'Long',NULL,'数据类型\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(59,0,'updateTime','updateTime',NULL,'LocalDateTime',NULL,'更新时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(60,0,'createTime','createTime',NULL,'LocalDateTime',NULL,'创建时间\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(61,0,'templateName','templateName',NULL,'String',NULL,'模板名称：唯一\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(62,0,'type','type',NULL,'Integer',NULL,'模板类型: 1-文件模板 2-字符串模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(63,0,'templatePath','templatePath',NULL,'String',NULL,'模板存放路径，相对路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(64,0,'content','content',NULL,'String',NULL,'模板内容: 如果为空则读取templatePath指定路径的文件作为模板内容\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(65,0,'provider','provider',NULL,'String',NULL,'技术提供方，例如Apache Velocity, Apache FreeMarker\r\r@see io.devpl.backend.domain.TemplateProvider\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(67,0,'internal','internal',NULL,'Boolean',NULL,'是否内置模板\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(68,0,'generatorPath','generatorPath',NULL,'String',NULL,'生成代码的路径\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(69,0,'name','name',NULL,'String',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(70,0,'label','label',NULL,'String',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(71,0,'key','key',NULL,'Integer',NULL,'这里的ID无意义，只是作为一个唯一的序号\r前端树形表格组件使用\rvxe-table使用id字段，react使用key字段\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(72,0,'parentId','parentId',NULL,'Integer',NULL,'父节点ID\r前端树形表格组件使用\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(73,0,'parentKey','parentKey',NULL,'Integer',NULL,'父节点ID\r前端树形表格组件使用\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(74,0,'leaf','leaf',NULL,'boolean',NULL,'是否叶子结点\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(75,0,'children','children',NULL,'List<ParamNode>',NULL,'子节点\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(76,0,'valueType','valueType',NULL,'MapperStatementParamValueType',NULL,'',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(77,0,'groupId','groupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(78,0,'groupName','groupName',NULL,'String',NULL,'类型分组名称\r',NULL,NULL,0,0,'2023-12-30 09:42:04','2023-12-30 09:42:04',0),(79,0,'pageIndex',NULL,NULL,'String',NULL,'pageIndex',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(80,0,'pageSize',NULL,NULL,'String',NULL,'pageSize',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(81,0,'fieldName',NULL,NULL,'String',NULL,'fieldName',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(82,0,'timestamp',NULL,NULL,'String',NULL,'timestamp',NULL,NULL,0,0,'2023-12-31 11:22:22','2023-12-31 11:22:22',0),(83,0,'sysId','sysId',NULL,'String',NULL,'系统ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(84,0,'sysName','sysName',NULL,'String',NULL,'系统名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(85,0,'modelId','modelId',NULL,'String',NULL,'模块ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(86,0,'modelName','modelName',NULL,'String',NULL,'模块名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(87,0,'userId','userId',NULL,'String',NULL,'用户ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(88,0,'userName','userName',NULL,'String',NULL,'用户名称',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(89,0,'operationTime','operationTime',NULL,'String',NULL,'操作时间（yyyy-MM-dd HH:mm:ss）',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(90,0,'operationTerminal','operationTerminal',NULL,'String',NULL,'操作终端',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(91,0,'operationType','operationType',NULL,'String',NULL,'操作类型',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(92,0,'operationContent','operationContent',NULL,'String',NULL,'操作描述',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(93,0,'schoolId','schoolId',NULL,'String',NULL,'学校ID',NULL,NULL,0,0,'2024-01-22 16:01:30','2024-01-22 16:01:30',0),(94,0,'typeKey','typeKey',NULL,'String',NULL,'类型ID\r',NULL,NULL,0,0,'2024-01-28 19:59:47','2024-01-28 19:59:47',0),(95,0,'minLength','minLength',NULL,'Integer',NULL,'最小长度\r',NULL,NULL,0,0,'2024-01-28 19:59:47','2024-01-28 19:59:47',0),(96,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:15:34','2024-01-28 20:15:34',0),(97,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:15:34','2024-01-28 20:15:34',0),(98,0,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(99,0,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(100,0,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(101,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(102,0,'fieldName','fieldName',NULL,'String',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(103,0,'dataType','dataType',NULL,'String',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(104,0,'comment','comment',NULL,'String',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(105,0,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(106,0,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(107,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(108,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(109,0,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:29:33','2024-01-28 20:29:33',0),(110,0,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(111,0,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(112,0,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(113,0,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(114,0,'fieldName','fieldName',NULL,'String',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(115,0,'dataType','dataType',NULL,'String',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(116,0,'comment','comment',NULL,'String',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(117,0,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(118,0,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(119,0,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(120,0,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(121,0,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:37:13','2024-01-28 20:37:13',0),(122,NULL,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(123,NULL,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(124,NULL,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(125,NULL,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(126,NULL,'fieldName','fieldName',NULL,'Integer',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(127,NULL,'dataType','dataType',NULL,'null',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(128,NULL,'comment','comment',NULL,'Array',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(129,NULL,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(130,NULL,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(131,NULL,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(132,NULL,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(133,NULL,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:55:59','2024-01-28 20:55:59',0),(134,NULL,'id','id',NULL,'Long',NULL,'主键ID\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(135,NULL,'parentId','parentId',NULL,'Long',NULL,'父级字段主键ID\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(136,NULL,'fieldKey','fieldKey',NULL,'String',NULL,'字段Key，区分大小写\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(137,NULL,'typeGroupId','typeGroupId',NULL,'String',NULL,'类型分组ID\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(138,NULL,'fieldName','fieldName',NULL,'Integer',NULL,'字段名，中文名\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(139,NULL,'dataType','dataType',NULL,'null',NULL,'数据类型\r\r@see DataTypeItem#getTypeKey()\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(140,NULL,'comment','comment',NULL,'Array',NULL,'字段注释信息，相比description字段比较简短\r\r@see FieldInfo#description\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(141,NULL,'description','description',NULL,'String',NULL,'描述信息\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(142,NULL,'defaultValue','defaultValue',NULL,'String',NULL,'默认值\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(143,NULL,'temporary','temporary',NULL,'Boolean',NULL,'是否临时字段，可被删除\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(144,NULL,'optional','optional',NULL,'Boolean',NULL,'是否可选字段\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(145,NULL,'children','children',NULL,'List<FieldInfo>',NULL,'嵌套的字段列表\r',NULL,NULL,1,0,'2024-01-28 20:56:59','2024-01-28 20:56:59',0),(146,NULL,'pageIndex','pageIndex','JDBC','String',NULL,'pageIndex',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-02-29 21:52:54',0),(147,NULL,'pageSize','pageSize',NULL,'String',NULL,'pageSize',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-01-29 15:59:34',0),(148,NULL,'excludedKeys','excludedKeys',NULL,'String',NULL,'excludedKeys',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-01-29 15:59:34',0),(149,NULL,'keyword','keyword',NULL,'String',NULL,'keyword',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-01-29 15:59:34',0),(150,NULL,'dataType','dataType',NULL,'String',NULL,'dataType',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-01-29 15:59:34',0),(151,NULL,'timestamp','timestamp',NULL,'String',NULL,'timestamp',NULL,NULL,1,0,'2024-01-29 15:59:34','2024-01-29 15:59:34',0),(152,NULL,'equipTotalNum','equipTotalNum',NULL,'Number',NULL,' 设备总数','null',NULL,1,0,'2024-03-18 09:27:34','2024-03-18 09:27:34',0),(153,NULL,'schoolId','schoolId',NULL,'String',NULL,'null','null',NULL,1,0,'2024-03-18 09:27:34','2024-03-18 09:27:34',0),(154,NULL,'selectLevel','selectLevel',NULL,'Number',NULL,' 查询层级，9所有单个学校，10全部学校综合值','null',NULL,1,0,'2024-03-18 09:27:34','2024-03-18 09:27:34',0),(155,NULL,'roomTotalNum','roomTotalNum',NULL,'Number',NULL,' 教室总数','null',NULL,1,0,'2024-03-18 09:27:34','2024-03-18 09:27:34',0),(156,NULL,'roomTypeLevelName','roomTypeLevelName',NULL,'String',NULL,' 教室类型名称','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(157,NULL,'roomNum','roomNum',NULL,'Number',NULL,' 教室数','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(158,NULL,'addRoomNum','addRoomNum',NULL,'Number',NULL,' 今年本类型新增教室数','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(159,NULL,'schoolId','schoolId',NULL,'String',NULL,'null','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(160,NULL,'selectLevel','selectLevel',NULL,'Number',NULL,' 查询层级，9所有单个学校，10全部学校综合值','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(161,NULL,'roomTypeLevel','roomTypeLevel',NULL,'Number',NULL,' 教室类型编号','null',NULL,1,0,'2024-03-18 09:38:57','2024-03-18 09:38:57',0),(162,NULL,'addEquipNum','addEquipNum',NULL,'Number',NULL,' 今年新增设备数','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 09:50:17',0),(163,NULL,'equipType','equipType',NULL,'Number',NULL,' 设备类型编号','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 09:50:17',0),(164,NULL,'schoolId','schoolId',NULL,'String',NULL,'null','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 09:50:17',0),(165,NULL,'selectLevel','selectLevel','JSON','Object',NULL,' 查询层级，9所有单个学校，10全部学校综合值','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 11:47:05',0),(166,NULL,'equipTypeName','equipTypeName',NULL,'String',NULL,' 设备类型名称','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 09:50:17',0),(167,NULL,'equipNum','equipNum',NULL,'Number',NULL,' 设备数','null',NULL,1,0,'2024-03-18 09:50:17','2024-03-18 09:50:17',0),(168,NULL,'schoolId','schoolId','JSON','String',NULL,'null','null',NULL,1,0,'2024-03-18 09:56:46','2024-03-18 11:42:09',0),(169,NULL,'tdUseRate','tdUseRate',NULL,'Number',NULL,' 近30天使用率','null',NULL,1,0,'2024-03-18 09:56:46','2024-03-18 09:56:46',0),(170,NULL,'selectLevel','selectLevel',NULL,'Number',NULL,' 查询层级，9所有单个学校，10全部学校综合值','null',NULL,1,0,'2024-03-18 09:56:46','2024-03-18 09:56:46',0),(171,NULL,'sdUseRate','sdUseRate',NULL,'Number',NULL,' 近7天使用率','null',NULL,1,0,'2024-03-18 09:56:46','2024-03-18 09:56:46',0),(172,NULL,'id','id',NULL,'Number',NULL,'null','1',NULL,1,0,'2024-03-18 11:52:25','2024-03-18 11:52:25',0),(173,NULL,'id','id',NULL,'Numeric',NULL,'','1',NULL,1,0,'2024-03-18 11:53:13','2024-03-18 11:53:13',0),(174,NULL,'id','id',NULL,'Numeric',NULL,'','1',NULL,1,0,'2024-03-18 11:55:47','2024-03-18 11:55:47',0);
 /*!40000 ALTER TABLE `field_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -385,18 +386,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `gen_field_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gen_field_type` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `mysql_sql_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'MySQL SQL数据类型',
-  `column_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段类型',
-  `attr_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '属性类型',
-  `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '属性包名',
-  `json_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'JSON数据类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `mysql_sql_type` varchar(100) DEFAULT NULL COMMENT 'MySQL SQL数据类型',
+  `column_type` varchar(200) DEFAULT NULL COMMENT '字段类型',
+  `attr_type` varchar(200) DEFAULT NULL COMMENT '属性类型',
+  `package_name` varchar(200) DEFAULT NULL COMMENT '属性包名',
+  `json_type` varchar(100) DEFAULT NULL COMMENT 'JSON数据类型',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `column_type` (`column_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字段类型管理';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段类型管理';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -410,19 +411,42 @@ INSERT INTO `gen_field_type` VALUES (1,NULL,'datetime','Date','java.util.Date',N
 UNLOCK TABLES;
 
 --
+-- Table structure for table `generator_config`
+--
+
+DROP TABLE IF EXISTS `generator_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `generator_config` (
+  `name` text,
+  `value` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成配置信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `generator_config`
+--
+
+LOCK TABLES `generator_config` WRITE;
+/*!40000 ALTER TABLE `generator_config` DISABLE KEYS */;
+INSERT INTO `generator_config` VALUES ('蓝鸽','{\"name\":\"蓝鸽\",\"projectRootFolder\":\"D:\\\\Temp\",\"parentPackage\":\"com.lancoo.campuspotrait\",\"entityPackageName\":\"entity\",\"entityPackageFolder\":\"src/main/java\",\"mapperPackageName\":\"mapper\",\"mapperFolder\":\"src/main/java\",\"mapperXmlPackage\":\"mapping\",\"mapperXmlFolder\":\"src/main/resources\",\"authors\":null,\"projectLayout\":null}');
+/*!40000 ALTER TABLE `generator_config` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `group_field`
 --
 
 DROP TABLE IF EXISTS `group_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_field` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` bigint NOT NULL COMMENT '组ID',
-  `field_id` bigint NOT NULL COMMENT '字段ID',
-  `order_num` int DEFAULT '0' COMMENT '排序号',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_id` bigint(20) NOT NULL COMMENT '组ID',
+  `field_id` bigint(20) NOT NULL COMMENT '字段ID',
+  `order_num` int(11) DEFAULT '0' COMMENT '排序号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='字段和组关联信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字段和组关联信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -431,7 +455,7 @@ CREATE TABLE `group_field` (
 
 LOCK TABLES `group_field` WRITE;
 /*!40000 ALTER TABLE `group_field` DISABLE KEYS */;
-INSERT INTO `group_field` VALUES (1,11,23,0),(2,11,24,0),(3,11,25,0),(4,27,19,0),(5,27,20,0),(6,27,21,0),(7,27,22,0),(8,27,77,0),(9,27,23,0),(10,27,24,0),(11,27,25,0),(12,27,26,0),(13,27,27,0),(14,27,28,0),(15,27,29,0),(16,27,31,0),(17,27,32,0),(18,27,33,0),(19,27,50,0),(20,27,51,0),(21,27,52,0),(22,27,54,0),(23,27,55,0),(24,27,56,0),(25,27,57,0),(26,27,58,0),(27,27,61,0),(28,27,63,0),(29,26,20,0),(30,26,21,0),(31,26,22,0),(32,26,23,0),(33,26,24,0),(34,34,19,0),(35,34,20,0),(37,34,22,0),(38,34,23,0),(39,34,24,0),(40,34,25,0),(41,34,26,0),(42,34,27,0),(43,34,28,0),(44,37,83,0),(45,37,84,0),(46,37,85,0),(47,37,86,0),(48,37,87,0),(49,37,88,0),(50,37,89,0),(51,37,90,0),(52,37,91,0),(53,37,92,0),(54,37,93,0),(55,40,83,0),(56,40,84,0),(57,40,85,0),(58,40,86,0),(59,40,87,0),(60,40,88,0),(61,40,89,0),(62,40,90,0),(63,40,92,0),(64,40,93,0),(65,40,50,0),(66,40,91,0),(67,52,3,0),(68,52,6,0),(69,61,94,0),(70,61,95,0),(71,64,96,0),(72,64,97,0),(73,66,98,0),(74,66,99,0),(75,66,100,0),(76,66,101,0),(77,66,102,0),(78,66,103,0),(79,66,104,0),(80,66,105,0),(81,66,106,0),(82,66,107,0),(83,66,108,0),(84,66,109,0),(85,67,110,0),(86,67,111,0),(87,67,112,0),(88,67,113,0),(89,67,114,0),(90,67,115,0),(91,67,116,0),(92,67,117,0),(93,67,118,0),(94,67,119,0),(95,67,120,0),(96,67,121,0),(97,68,128,0),(98,68,129,0),(99,68,130,0),(100,68,131,0),(101,68,132,0),(102,68,133,0),(103,68,122,0),(104,68,123,0),(105,68,124,0),(106,68,125,0),(107,68,126,0),(108,68,127,0),(109,79,134,0),(110,79,135,0),(111,79,136,0),(112,79,137,0),(113,79,138,0),(114,79,139,0),(115,79,140,0),(116,79,141,0),(117,79,142,0),(118,79,143,0),(119,79,144,0),(120,79,145,0),(121,88,146,0),(122,88,147,0),(123,88,148,0),(124,88,149,0),(125,88,150,0),(126,88,151,0),(137,94,152,0),(138,94,153,0),(139,94,154,2),(140,94,155,0),(141,95,160,0),(142,95,161,0),(143,95,156,2),(144,95,157,0),(145,95,158,4),(146,95,159,0),(147,96,162,0),(148,96,163,0),(149,96,164,2),(150,96,165,0),(151,96,166,4),(152,96,167,0),(153,97,168,0),(154,97,169,0),(155,97,170,2),(156,97,171,0),(157,98,172,0),(158,99,173,0),(159,100,174,0);
+INSERT INTO `group_field` VALUES (1,11,23,0),(2,11,24,0),(3,11,25,0),(4,27,19,0),(5,27,20,0),(6,27,21,0),(7,27,22,0),(8,27,77,0),(9,27,23,0),(10,27,24,0),(11,27,25,0),(12,27,26,0),(13,27,27,0),(14,27,28,0),(15,27,29,0),(16,27,31,0),(17,27,32,0),(18,27,33,0),(19,27,50,0),(20,27,51,0),(21,27,52,0),(22,27,54,0),(23,27,55,0),(24,27,56,0),(25,27,57,0),(26,27,58,0),(27,27,61,0),(28,27,63,0),(29,26,20,0),(30,26,21,0),(31,26,22,0),(32,26,23,0),(33,26,24,0),(34,34,19,0),(35,34,20,0),(37,34,22,0),(38,34,23,0),(39,34,24,0),(40,34,25,0),(41,34,26,0),(42,34,27,0),(43,34,28,0),(44,37,83,0),(45,37,84,0),(46,37,85,0),(47,37,86,0),(48,37,87,0),(49,37,88,0),(50,37,89,0),(51,37,90,0),(52,37,91,0),(53,37,92,0),(54,37,93,0),(55,40,83,0),(56,40,84,0),(57,40,85,0),(58,40,86,0),(59,40,87,0),(60,40,88,0),(61,40,89,0),(62,40,90,0),(63,40,92,0),(64,40,93,0),(65,40,50,0),(66,40,91,0),(67,52,3,0),(68,52,6,0),(69,61,94,0),(70,61,95,0),(71,64,96,0),(72,64,97,0),(73,66,98,0),(74,66,99,0),(75,66,100,0),(76,66,101,0),(77,66,102,0),(78,66,103,0),(79,66,104,0),(80,66,105,0),(81,66,106,0),(82,66,107,0),(83,66,108,0),(84,66,109,0),(85,67,110,0),(86,67,111,0),(87,67,112,0),(88,67,113,0),(89,67,114,0),(90,67,115,0),(91,67,116,0),(92,67,117,0),(93,67,118,0),(94,67,119,0),(95,67,120,0),(96,67,121,0),(97,68,128,0),(98,68,129,0),(99,68,130,0),(100,68,131,0),(101,68,132,0),(102,68,133,0),(103,68,122,0),(104,68,123,0),(105,68,124,0),(106,68,125,0),(107,68,126,0),(108,68,127,0),(109,79,134,0),(110,79,135,0),(111,79,136,0),(112,79,137,0),(113,79,138,0),(114,79,139,0),(115,79,140,0),(116,79,141,0),(117,79,142,0),(118,79,143,0),(119,79,144,0),(120,79,145,0),(121,88,146,0),(122,88,147,0),(123,88,148,0),(124,88,149,0),(125,88,150,0),(126,88,151,0),(127,87,146,0),(128,87,147,0),(129,87,148,0),(130,87,149,0),(131,87,150,0),(132,87,151,0),(133,87,137,0),(134,87,138,0),(135,87,141,0),(136,87,142,0),(137,94,152,0),(138,94,153,0),(139,94,154,2),(140,94,155,0),(141,95,160,0),(142,95,161,0),(143,95,156,2),(144,95,157,0),(145,95,158,4),(146,95,159,0),(147,96,162,0),(148,96,163,0),(149,96,164,2),(150,96,165,0),(151,96,166,4),(152,96,167,0),(153,97,168,0),(154,97,169,0),(155,97,170,2),(156,97,171,0),(157,98,172,0),(158,99,173,0),(159,100,174,0);
 /*!40000 ALTER TABLE `group_field` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -441,20 +465,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mapped_statement_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mapped_statement_item` (
-  `id` varchar(26) COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键ID',
-  `project_root` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目根路径',
-  `belong_file` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '所属文件路径',
-  `statement_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '语句ID',
-  `statement_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '语句类型',
-  `namespace` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '命名空间',
-  `param_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数类型',
-  `result_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '结果类型',
-  `statement` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '语句内容',
+  `id` varchar(26) NOT NULL COMMENT '主键ID',
+  `project_root` varchar(500) DEFAULT NULL COMMENT '项目根路径',
+  `belong_file` varchar(500) DEFAULT NULL COMMENT '所属文件路径',
+  `statement_id` varchar(100) DEFAULT NULL COMMENT '语句ID',
+  `statement_type` varchar(100) DEFAULT NULL COMMENT '语句类型',
+  `namespace` varchar(100) DEFAULT NULL COMMENT '命名空间',
+  `param_type` varchar(100) DEFAULT NULL COMMENT '参数类型',
+  `result_type` varchar(100) DEFAULT NULL COMMENT '结果类型',
+  `statement` text COMMENT '语句内容',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否逻辑删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='MyBatis Mapper语句记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='MyBatis Mapper语句记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -473,17 +497,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mapped_statement_param_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mapped_statement_param_mapping` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `mapped_statement_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Mapper语句ID',
-  `param_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数key',
-  `param_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数类型',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `mapped_statement_id` varchar(100) DEFAULT NULL COMMENT 'Mapper语句ID',
+  `param_name` varchar(100) DEFAULT NULL COMMENT '参数key',
+  `param_type` varchar(100) DEFAULT NULL COMMENT '参数类型',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='MyBatis Mapper标签参数映射';
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COMMENT='MyBatis Mapper标签参数映射';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,16 +526,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mock_constraint`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mock_constraint` (
-  `id` bigint DEFAULT NULL COMMENT '主键ID',
-  `constraint_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '约束类型',
-  `expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '约束表达式',
-  `table` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `column` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `related_table` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `related_column` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据模拟约束';
+  `id` bigint(20) DEFAULT NULL COMMENT '主键ID',
+  `constraint_type` varchar(100) DEFAULT NULL COMMENT '约束类型',
+  `expression` varchar(100) DEFAULT NULL COMMENT '约束表达式',
+  `table` varchar(100) DEFAULT NULL,
+  `column` varchar(100) DEFAULT NULL,
+  `related_table` varchar(100) DEFAULT NULL,
+  `related_column` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据模拟约束';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -529,13 +553,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mock_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mock_field` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` bigint unsigned DEFAULT NULL COMMENT '模型ID',
-  `field_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段key',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_id` bigint(20) unsigned DEFAULT NULL COMMENT '模型ID',
+  `field_key` varchar(100) DEFAULT NULL COMMENT '字段key',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='数据模拟字段表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据模拟字段表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -553,12 +577,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mock_field_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `mock_field_group` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `group_id` bigint unsigned DEFAULT NULL COMMENT '模型ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `group_id` bigint(20) unsigned DEFAULT NULL COMMENT '模型ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='数据模拟字段组信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='数据模拟字段组信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -576,13 +600,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `model_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `model_field` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `model_id` bigint unsigned DEFAULT NULL COMMENT '模型ID',
-  `field_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `model_id` bigint(20) unsigned DEFAULT NULL COMMENT '模型ID',
+  `field_id` varchar(100) DEFAULT NULL COMMENT '字段ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='模型字段关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模型字段关联表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -601,18 +625,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `model_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `model_info` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '基类包名',
-  `code` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '基类编码',
-  `fields` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `package_name` varchar(200) DEFAULT NULL COMMENT '基类包名',
+  `code` varchar(200) DEFAULT NULL COMMENT '基类编码',
+  `fields` varchar(500) DEFAULT NULL COMMENT '基类字段，多个用英文逗号分隔',
+  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='领域模型信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='领域模型信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -631,28 +655,28 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `project_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project_info` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `project_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目名，如果是模块则为模块名',
-  `project_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目标识',
-  `project_package` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目包名',
-  `project_path` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目路径',
-  `modify_project_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '变更项目名',
-  `modify_project_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '变更标识',
-  `modify_project_package` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '变更包名',
-  `exclusions` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '排除文件',
-  `modify_suffix` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '变更文件',
-  `modify_tmp_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '变更临时路径',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `project_name` varchar(100) DEFAULT NULL COMMENT '项目名，如果是模块则为模块名',
+  `project_code` varchar(100) DEFAULT NULL COMMENT '项目标识',
+  `project_package` varchar(100) DEFAULT NULL COMMENT '项目包名',
+  `project_path` varchar(200) DEFAULT NULL COMMENT '项目路径',
+  `modify_project_name` varchar(100) DEFAULT NULL COMMENT '变更项目名',
+  `modify_project_code` varchar(100) DEFAULT NULL COMMENT '变更标识',
+  `modify_project_package` varchar(100) DEFAULT NULL COMMENT '变更包名',
+  `exclusions` varchar(200) DEFAULT NULL COMMENT '排除文件',
+  `modify_suffix` varchar(200) DEFAULT NULL COMMENT '变更文件',
+  `modify_tmp_path` varchar(100) DEFAULT NULL COMMENT '变更临时路径',
   `status` tinyint(1) DEFAULT NULL COMMENT '项目状态',
-  `version` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '版本',
-  `backend_path` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '后端项目路径',
-  `frontend_path` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '前端项目路径',
+  `version` varchar(200) DEFAULT NULL COMMENT '版本',
+  `backend_path` varchar(200) DEFAULT NULL COMMENT '后端项目路径',
+  `frontend_path` varchar(200) DEFAULT NULL COMMENT '前端项目路径',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `build_tool` tinyint(1) DEFAULT NULL COMMENT '构建工具 1-Maven，2-Gradle',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='项目信息';
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='项目信息';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -671,13 +695,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `province_city_district`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `province_city_district` (
-  `id` int NOT NULL COMMENT '地区代码',
-  `pid` int DEFAULT NULL COMMENT '当前地区的上一级地区代码',
-  `name` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '地区名称',
+  `id` int(11) NOT NULL COMMENT '地区代码',
+  `pid` int(11) DEFAULT NULL COMMENT '当前地区的上一级地区代码',
+  `name` varchar(10) DEFAULT NULL COMMENT '地区名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC COMMENT='省市县数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='省市县数据表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -696,25 +720,25 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rdbms_connection_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rdbms_connection_info` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `db_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据库类型',
-  `host` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'IP地址',
-  `port` int DEFAULT '3306' COMMENT '端口号',
-  `driver_class_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '驱动类名',
-  `db_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据库名称',
-  `connection_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '连接名',
-  `connection_url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'URL',
-  `username` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '用户名',
-  `password` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '密码',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `db_type` varchar(200) DEFAULT NULL COMMENT '数据库类型',
+  `host` varchar(100) DEFAULT NULL COMMENT 'IP地址',
+  `port` int(11) DEFAULT '3306' COMMENT '端口号',
+  `driver_class_name` varchar(100) DEFAULT NULL COMMENT '驱动类名',
+  `db_name` varchar(100) DEFAULT NULL COMMENT '数据库名称',
+  `connection_name` varchar(200) NOT NULL COMMENT '连接名',
+  `connection_url` varchar(500) DEFAULT NULL COMMENT 'URL',
+  `username` varchar(200) DEFAULT NULL COMMENT '用户名',
+  `password` varchar(200) DEFAULT NULL COMMENT '密码',
   `driver_props` json DEFAULT NULL COMMENT '驱动属性',
-  `driver_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '驱动类型',
+  `driver_type` varchar(200) DEFAULT NULL COMMENT '驱动类型',
   `is_deleted` tinyint(1) DEFAULT NULL COMMENT '是否逻辑删除',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据源连接信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据源连接信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -723,7 +747,7 @@ CREATE TABLE `rdbms_connection_info` (
 
 LOCK TABLES `rdbms_connection_info` WRITE;
 /*!40000 ALTER TABLE `rdbms_connection_info` DISABLE KEYS */;
-INSERT INTO `rdbms_connection_info` VALUES (0,'mysql','localhost',3306,'com.mysql.jdbc.Driver','devpl','默认数据源','jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useAffectedRows=true&allowMultiQueries=true','root','ha1OPkEUX39v7wx2PCXJww==','{\"useUnicode\": \"true\", \"serverTimezone\": \"Asia/Shanghai\", \"useAffectedRows\": \"true\", \"allowMultiQueries\": \"true\", \"characterEncoding\": \"UTF-8\", \"nullCatalogMeansCurrent\": \"true\"}','MYSQL5',0,'2024-03-23 18:27:24','2024-03-23 18:27:24'),(2,'MYSQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver',NULL,'devpl','jdbc:mysql://127.0.0.1:3306/devpl?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL5',0,'2023-09-22 15:52:53','2023-11-16 21:44:09'),(9,'MySQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver','','mysql_learn','jdbc:mysql://127.0.0.1:3306/mysql_learn','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL8',0,'2023-10-28 22:46:29','2023-10-28 22:46:29'),(10,'MySQL','127.0.0.1',3306,'com.mysql.jdbc.Driver','world','world','jdbc:mysql://127.0.0.1:3306','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL8',0,'2023-10-29 20:48:32','2023-10-29 20:48:32'),(11,'MySQL','192.168.122.200',3306,'com.mysql.cj.jdbc.Driver','','192.168.122.200','jdbc:mysql://192.168.122.200:3306/lgdb_exam_management?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','xpkTmyb1ldRA+jXPYLAThQ==',NULL,'MYSQL8',0,'2024-02-19 15:01:58','2024-02-19 15:01:58');
+INSERT INTO `rdbms_connection_info` VALUES (0,'mysql','localhost',3306,'com.mysql.jdbc.Driver','devpl','默认数据源','jdbc:mysql://localhost:3306/devpl?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&useAffectedRows=true&allowMultiQueries=true','root','ha1OPkEUX39v7wx2PCXJww==','{\"useUnicode\": \"true\", \"serverTimezone\": \"Asia/Shanghai\", \"useAffectedRows\": \"true\", \"allowMultiQueries\": \"true\", \"characterEncoding\": \"UTF-8\", \"nullCatalogMeansCurrent\": \"true\"}','MYSQL5',0,'2024-03-24 00:04:05','2024-03-24 00:04:05'),(2,'MYSQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver',NULL,'devpl','jdbc:mysql://127.0.0.1:3306/devpl?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL5',0,'2023-09-22 15:52:53','2023-11-16 21:44:09'),(9,'MySQL','127.0.0.1',3306,'com.mysql.cj.jdbc.Driver','','mysql_learn','jdbc:mysql://127.0.0.1:3306/mysql_learn','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL8',0,'2023-10-28 22:46:29','2023-10-28 22:46:29'),(10,'MySQL','127.0.0.1',3306,'com.mysql.jdbc.Driver','world','world','jdbc:mysql://127.0.0.1:3306','root','ha1OPkEUX39v7wx2PCXJww==',NULL,'MYSQL8',0,'2023-10-29 20:48:32','2023-10-29 20:48:32'),(11,'MySQL','192.168.122.200',3306,'com.mysql.cj.jdbc.Driver','','192.168.122.200','jdbc:mysql://192.168.122.200:3306/lgdb_exam_management?useUnicode=true&characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8','root','xpkTmyb1ldRA+jXPYLAThQ==',NULL,'MYSQL8',0,'2024-02-19 15:01:58','2024-02-19 15:01:58');
 /*!40000 ALTER TABLE `rdbms_connection_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -733,18 +757,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `table_file_generation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_file_generation` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `table_id` bigint DEFAULT NULL COMMENT '表ID',
-  `generation_id` bigint DEFAULT NULL COMMENT '文件生成ID',
-  `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称',
-  `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '保存路径',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
+  `generation_id` bigint(20) DEFAULT NULL COMMENT '文件生成ID',
+  `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
+  `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1133 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='表文件生成记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=1163 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='表文件生成记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -762,33 +786,34 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `table_generation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_generation` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `project_id` bigint DEFAULT NULL COMMENT '项目ID',
-  `datasource_id` bigint DEFAULT NULL COMMENT '数据源ID',
-  `database_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据库名称',
-  `table_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表名',
-  `class_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类名',
-  `table_comment` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '说明',
-  `author` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '作者',
-  `email` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '邮箱',
-  `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目包名',
-  `version` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '项目版本号',
-  `generator_type` tinyint DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
-  `backend_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '后端生成路径',
-  `frontend_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '前端生成路径',
-  `module_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模块名',
-  `function_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '功能名',
-  `form_layout` tinyint DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
-  `baseclass_id` bigint DEFAULT NULL COMMENT '基类ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `datasource_id` bigint(20) DEFAULT NULL COMMENT '数据源ID',
+  `database_name` varchar(50) DEFAULT NULL COMMENT '数据库名称',
+  `table_name` varchar(200) DEFAULT NULL COMMENT '表名',
+  `class_name` varchar(200) DEFAULT NULL COMMENT '类名',
+  `table_comment` varchar(200) DEFAULT NULL COMMENT '说明',
+  `author` varchar(200) DEFAULT NULL COMMENT '作者',
+  `email` varchar(200) DEFAULT NULL COMMENT '邮箱',
+  `package_name` varchar(200) DEFAULT NULL COMMENT '项目包名',
+  `version` varchar(200) DEFAULT NULL COMMENT '项目版本号',
+  `generator_type` tinyint(4) DEFAULT NULL COMMENT '生成方式  0：zip压缩包   1：自定义目录',
+  `backend_path` varchar(500) DEFAULT NULL COMMENT '后端生成路径',
+  `frontend_path` varchar(500) DEFAULT NULL COMMENT '前端生成路径',
+  `data_type_mapping_group_id` int(5) DEFAULT NULL COMMENT '数据类型映射规则分组ID',
+  `module_name` varchar(200) DEFAULT NULL COMMENT '模块名',
+  `function_name` varchar(200) DEFAULT NULL COMMENT '功能名',
+  `form_layout` tinyint(4) DEFAULT NULL COMMENT '表单布局  1：一列   2：两列',
+  `baseclass_id` bigint(20) DEFAULT NULL COMMENT '基类ID',
   `template_arguments` json DEFAULT NULL COMMENT '模板参数',
-  `is_deleted` tinyint DEFAULT '0' COMMENT '是否逻辑删除',
+  `is_deleted` tinyint(4) DEFAULT '0' COMMENT '是否逻辑删除',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `project_id` bigint(20) DEFAULT NULL COMMENT '数据源ID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `table_name` (`table_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='代码生成表';
+) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -806,34 +831,34 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `table_generation_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_generation_field` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `table_id` bigint DEFAULT NULL COMMENT '表ID',
-  `field_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段名称',
-  `field_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段类型',
-  `data_type_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据类型名称，简写形式',
-  `full_data_type_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据类型名称，限定名称',
-  `field_comment` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '字段说明',
-  `attr_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '属性名',
-  `attr_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '属性类型',
-  `package_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '属性包名',
-  `sort` int DEFAULT NULL COMMENT '排序',
-  `auto_fill` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
-  `primary_key` tinyint DEFAULT NULL COMMENT '主键 0：否  1：是',
-  `base_field` tinyint DEFAULT NULL COMMENT '基类字段 0：否  1：是',
-  `form_item` tinyint DEFAULT NULL COMMENT '表单项 0：否  1：是',
-  `form_required` tinyint DEFAULT NULL COMMENT '表单必填 0：否  1：是',
-  `form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表单类型',
-  `form_dict` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表单字典类型',
-  `form_validator` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表单效验',
-  `grid_item` tinyint DEFAULT NULL COMMENT '列表项 0：否  1：是',
-  `grid_sort` tinyint DEFAULT NULL COMMENT '列表排序 0：否  1：是',
-  `query_item` tinyint DEFAULT NULL COMMENT '查询项 0：否  1：是',
-  `query_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '查询方式',
-  `query_form_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '查询表单类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `table_id` bigint(20) DEFAULT NULL COMMENT '表ID',
+  `field_name` varchar(200) DEFAULT NULL COMMENT '字段名称',
+  `field_type` varchar(200) DEFAULT NULL COMMENT '字段类型',
+  `data_type_name` varchar(100) DEFAULT NULL COMMENT '数据类型名称，简写形式',
+  `full_data_type_name` varchar(100) DEFAULT NULL COMMENT '数据类型名称，限定名称',
+  `field_comment` varchar(512) DEFAULT NULL COMMENT '字段说明',
+  `attr_name` varchar(200) DEFAULT NULL COMMENT '属性名',
+  `attr_type` varchar(200) DEFAULT NULL COMMENT '属性类型',
+  `package_name` varchar(200) DEFAULT NULL COMMENT '属性包名',
+  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `auto_fill` varchar(20) DEFAULT NULL COMMENT '自动填充  DEFAULT、INSERT、UPDATE、INSERT_UPDATE',
+  `primary_key` tinyint(4) DEFAULT NULL COMMENT '主键 0：否  1：是',
+  `base_field` tinyint(4) DEFAULT NULL COMMENT '基类字段 0：否  1：是',
+  `form_item` tinyint(4) DEFAULT NULL COMMENT '表单项 0：否  1：是',
+  `form_required` tinyint(4) DEFAULT NULL COMMENT '表单必填 0：否  1：是',
+  `form_type` varchar(200) DEFAULT NULL COMMENT '表单类型',
+  `form_dict` varchar(200) DEFAULT NULL COMMENT '表单字典类型',
+  `form_validator` varchar(200) DEFAULT NULL COMMENT '表单效验',
+  `grid_item` tinyint(4) DEFAULT NULL COMMENT '列表项 0：否  1：是',
+  `grid_sort` tinyint(4) DEFAULT NULL COMMENT '列表排序 0：否  1：是',
+  `query_item` tinyint(4) DEFAULT NULL COMMENT '查询项 0：否  1：是',
+  `query_type` varchar(200) DEFAULT NULL COMMENT '查询方式',
+  `query_form_type` varchar(200) DEFAULT NULL COMMENT '查询表单类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2376 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='代码生成表字段';
+) ENGINE=InnoDB AUTO_INCREMENT=2456 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='代码生成表字段';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -851,21 +876,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `table_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `table_metadata` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `table_cat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表catalog值，可为null',
-  `table_schem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表schema值，可为null',
-  `table_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表名称',
-  `table_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '表类型. 常见类型包括"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".',
-  `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '该表的描述文本',
-  `type_cat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'the types catalog (maybe null)',
-  `type_schem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'the types schema (maybe null)',
-  `type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '类型名称',
-  `self_referencing_col_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'name of the designated "identifier" column of a typed table (may be null)',
-  `ref_generation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (may be null)',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `table_cat` varchar(255) DEFAULT NULL COMMENT '表catalog值，可为null',
+  `table_schem` varchar(255) DEFAULT NULL COMMENT '表schema值，可为null',
+  `table_name` varchar(255) DEFAULT NULL COMMENT '表名称',
+  `table_type` varchar(20) DEFAULT NULL COMMENT '表类型. 常见类型包括"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM".',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '该表的描述文本',
+  `type_cat` varchar(255) DEFAULT NULL COMMENT 'the types catalog (maybe null)',
+  `type_schem` varchar(255) DEFAULT NULL COMMENT 'the types schema (maybe null)',
+  `type_name` varchar(255) DEFAULT NULL COMMENT '类型名称',
+  `self_referencing_col_name` varchar(255) DEFAULT NULL COMMENT 'name of the designated "identifier" column of a typed table (may be null)',
+  `ref_generation` varchar(255) DEFAULT NULL COMMENT 'specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (may be null)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='数据库表信息记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='数据库表信息记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -883,18 +908,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `target_generation_file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `target_generation_file` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `type_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件类型名称',
-  `template_id` bigint DEFAULT NULL COMMENT '模板ID',
-  `file_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称',
-  `save_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '保存路径',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `type_name` varchar(100) DEFAULT NULL COMMENT '文件类型名称',
+  `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `file_name` varchar(500) DEFAULT NULL COMMENT '文件名称',
+  `save_path` varchar(500) DEFAULT NULL COMMENT '保存路径',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
   `builtin` tinyint(1) DEFAULT '0' COMMENT '是否内置',
-  `default_target` tinyint unsigned DEFAULT NULL COMMENT '是否默认在代码生成中生成此类型的文件',
+  `default_target` tinyint(3) unsigned DEFAULT NULL COMMENT '是否默认在代码生成中生成此类型的文件',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='目标生成文件类型表';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='目标生成文件类型表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -903,7 +928,7 @@ CREATE TABLE `target_generation_file` (
 
 LOCK TABLES `target_generation_file` WRITE;
 /*!40000 ALTER TABLE `target_generation_file` DISABLE KEYS */;
-INSERT INTO `target_generation_file` VALUES (1,'Controller.java',36,'#toCamelCase(${tableName})Controller.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/','Controller文件',1,1),(2,'Convert.java',420,'#toCamelCase(${tableName})Convert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/','',1,0),(3,'Mapper.java',43,'#toCamelCase(${tableName})Mappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/mapper/','MyBatis Mapper文件',1,1),(4,'Entity.java',42,'#toCamelCase(${tableName}).java','${backendPath}/src/main/java/${packagePath}/${moduleName}/entity/','',1,1),(5,'Service.java',44,'#toCamelCase(${tableName})Service.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/','',1,1),(6,'ServiceImpl.java',48,'#toCamelCase(${tableName})ServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/impl/','',1,1),(8,'api.ts',342,'#toCamelCase(${tableName})Api.ts','${frontendPath}/src/main/java/${packagePath}/${moduleName}/controller/','',1,0),(10,'Mapper.xml',41,'#toCamelCase(${tableName})Mapper.xml','${backendPath}/src/main/resource/mapper/','',1,1),(11,'VO.java',311,'#toCamelCase(${tableName})VO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/domain/','',1,0);
+INSERT INTO `target_generation_file` VALUES (1,'Controller.java',75,'#toCamelCase(${tableName})Controller.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/','Controller文件',1,1),(2,'Convert.java',95,'#toCamelCase(${tableName})Convert.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/','',1,0),(3,'Mapper.java',92,'#toCamelCase(${tableName})Mappr.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/mapper/','MyBatis Mapper文件',1,1),(4,'Entity.java',50,'#toCamelCase(${tableName}).java','${backendPath}/src/main/java/${packagePath}/${moduleName}/entity/','',1,1),(5,'Service.java',60,'#toCamelCase(${tableName})Service.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/','',1,1),(6,'ServiceImpl.java',84,'#toCamelCase(${tableName})ServiceImpl.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/service/impl/','',1,1),(8,'api.ts',342,'#toCamelCase(${tableName})Api.ts','${frontendPath}/src/main/java/${packagePath}/${moduleName}/controller/','',1,0),(10,'Mapper.xml',67,'#toCamelCase(${tableName})Mapper.xml','${backendPath}/src/main/resource/mapper/','',1,1),(11,'VO.java',93,'#toCamelCase(${tableName})VO.java','${backendPath}/src/main/java/${packagePath}/${moduleName}/domain/','',1,0);
 /*!40000 ALTER TABLE `target_generation_file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -913,18 +938,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `template_argument`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_argument` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `template_id` bigint DEFAULT NULL COMMENT '模板ID',
-  `generation_id` bigint DEFAULT NULL COMMENT '模板文件生成ID',
-  `var_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
-  `value` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数值',
-  `data_type_id` bigint DEFAULT NULL COMMENT '数据类型',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `generation_id` bigint(20) DEFAULT NULL COMMENT '模板文件生成ID',
+  `var_key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `value` varchar(500) DEFAULT NULL COMMENT '参数值',
+  `data_type_id` bigint(20) DEFAULT NULL COMMENT '数据类型',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3575 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='模板参数表，模板实际的参数值';
+) ENGINE=InnoDB AUTO_INCREMENT=3575 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板参数表，模板实际的参数值';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -943,21 +968,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `template_file_generation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_file_generation` (
-  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `file_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '文件名称',
-  `template_id` bigint DEFAULT NULL COMMENT '模板ID',
-  `template_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模板名称',
-  `config_table_id` bigint DEFAULT NULL COMMENT '配置表主键ID',
-  `config_table_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '配置表名称',
-  `fill_strategy` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据填充策略',
-  `save_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '保存路径',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `file_name` varchar(100) DEFAULT NULL COMMENT '文件名称',
+  `template_id` bigint(20) DEFAULT NULL COMMENT '模板ID',
+  `template_name` varchar(255) DEFAULT NULL COMMENT '模板名称',
+  `config_table_id` bigint(20) DEFAULT NULL COMMENT '配置表主键ID',
+  `config_table_name` varchar(100) DEFAULT NULL COMMENT '配置表名称',
+  `fill_strategy` varchar(100) DEFAULT NULL COMMENT '数据填充策略',
+  `save_path` varchar(100) DEFAULT NULL COMMENT '保存路径',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
   `builtin` tinyint(1) DEFAULT '0' COMMENT '是否内置',
   `template_arguments` json DEFAULT NULL COMMENT '模板参数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='基于模板的文件生成记录表(每行对应一个生成的文件)';
+) ENGINE=InnoDB AUTO_INCREMENT=1157 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='基于模板的文件生成记录表(每行对应一个生成的文件)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -975,22 +1000,22 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `template_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_info` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `template_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模板ID',
-  `template_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模板名称',
-  `type` tinyint DEFAULT NULL COMMENT '模板类型',
-  `provider` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '技术提供方',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '字符串模板内容',
-  `template_file_path` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '模板文件路径',
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `template_id` varchar(36) DEFAULT NULL COMMENT '模板ID',
+  `template_name` varchar(100) DEFAULT NULL COMMENT '模板名称',
+  `type` tinyint(4) DEFAULT NULL COMMENT '模板类型',
+  `provider` varchar(36) DEFAULT NULL COMMENT '技术提供方',
+  `content` text COMMENT '字符串模板内容',
+  `template_file_path` varchar(500) DEFAULT NULL COMMENT '模板文件路径',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注信息',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除状态',
   `is_internal` tinyint(1) DEFAULT '0' COMMENT '是否系统内置模板，不可删除修改',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='模板记录表';
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板记录表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -999,7 +1024,7 @@ CREATE TABLE `template_info` (
 
 LOCK TABLES `template_info` WRITE;
 /*!40000 ALTER TABLE `template_info` DISABLE KEYS */;
-INSERT INTO `template_info` VALUES (1,'db6b8e3e-d812-4a8c-a316-9ea4fba68fe8','controller.java.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/controller.java.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(2,'f269d3f6-f012-4971-901d-88c8ec59528a','entity.java.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/entity.java.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(3,'25000f17-a8ee-4c8e-833b-8f2b32a6b3ac','entity.kt.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/entity.kt.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(4,'2725a3a3-69ac-4645-b363-9e927ad92ffc','mapper.java.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/mapper.java.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(5,'dc9ed579-34b2-4cba-a30c-9dc89d33f1b3','mapper.xml.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/mapper.xml.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(6,'65042661-695d-46b8-b100-232ac99f5282','service.java.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/service.java.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(7,'21e84ac5-75f0-4481-84d2-39c3a0c6801d','serviceImpl.java.btl',1,'Beetl',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/btl/serviceImpl.java.btl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(8,'4363c0c8-4a8d-4d6b-8422-d4195f6096ab','controller.java.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/controller.java.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(9,'a2800df8-7455-4c0f-85ad-e96f21517927','entity.java.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/entity.java.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(10,'ed2fc038-0987-4b31-b10a-edd3d8376dcb','entity.kt.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/entity.kt.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(11,'58644df8-14b5-463d-94fa-cfc05311479f','mapper.java.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/mapper.java.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(12,'e19ba377-9c5b-4017-9963-b6b624de66b6','mapper.xml.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/mapper.xml.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(13,'2c424d14-8282-469b-afd4-c13bc273df39','service.java.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/service.java.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(14,'ada1eb96-67ec-439a-978c-4ba5d303f3c7','serviceImpl.java.ej',1,'Enjoy',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ej/serviceImpl.java.ej','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(15,'56deafc0-7e71-4bec-862c-68c778c814bc','add-or-update.vue.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/add-or-update.vue.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(16,'f607d475-a14c-42ed-9b40-1bf2674a2835','api.ts.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/api.ts.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(17,'d8cfd5dc-cb88-4120-af11-19c7e5f7ec27','controller.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/controller.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(18,'93923435-84eb-4d86-8b98-8eda1ffd0002','Controller1.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Controller1.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(19,'f176f0a1-6162-46e6-bb04-ab3112931b46','Convert.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Convert.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(20,'7678865b-8f0a-498c-ada9-feddd98bb04e','Dao.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Dao.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(21,'227c1011-79bc-499b-8cd0-ddaabf95dc51','Dao.xml.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Dao.xml.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(22,'1657c2a6-8c06-4bb9-bcf3-e9428a6d68b1','entity.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/entity.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(23,'8ded4aa1-b9dd-4e76-a0ff-64e693b6353a','entity.kt.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/entity.kt.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(24,'30732217-e0ec-4caa-867f-d978c522175d','Entity1.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Entity1.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(25,'b770f6f2-92fd-46cc-bbdd-d99761af583c','index.vue.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/index.vue.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(26,'f9866ce3-b0a6-4f66-83c1-167d4fcaae96','mapper.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/mapper.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(27,'c1932068-62fd-45b7-a967-d0c62e6d823d','mapper.xml.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/mapper.xml.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(28,'6d25eb57-3411-4319-86cf-c384f566f5af','menu.sql.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/menu.sql.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(29,'0b0ad680-0ef8-4d9a-9a5f-2e6d60d10c56','Query.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Query.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(30,'e9733656-19c1-404a-98ad-82060a287c5e','service.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/service.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(31,'71452d15-f947-4ccd-88ef-42a5d28c77d5','Service1.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/Service1.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(32,'84777082-7460-4a9c-8982-56b3851ee387','serviceImpl.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/serviceImpl.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(33,'b2d17788-ccfa-42ad-a399-eb054f870fd1','ServiceImpl1.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/ServiceImpl1.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(34,'a06fa958-c4ed-49f5-92dc-57d601e79b6b','VO.java.ftl',1,'FreeMarker',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/ftl/VO.java.ftl','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(35,'e1272299-4ab3-4804-a652-e724898efb6b','ApiResponse.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/ApiResponse.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(36,'4578676f-d0f7-4d06-b6c1-73a76077cb02','Controller.java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/Controller.java.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(37,'d196a5e0-1f30-4371-a300-73e9ad782888','easypoi.pojo.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/easypoi.pojo.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(38,'90fe68a7-7652-4845-a3d3-a24f528a5be8','entity.kt.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/entity.kt.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(39,'0a3d185f-6209-4ab2-b18d-b107e2df29ba','jackson.response.pojo.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/jackson.response.pojo.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(40,'8ee78e6d-cfdd-4b0b-a60a-d2ef6077fa64','java.pojo.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/java.pojo.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(41,'456b1ef2-16f5-4d2e-83d5-80c39d801c39','MyBatisMapperXml.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MyBatisMapperXml.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(42,'7e1ceabb-250c-4ac0-878a-38d992114079','MyBatisPlusEntity.java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MyBatisPlusEntity.java.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(43,'5865d765-06be-42e9-bc2e-52beabeacab4','MyBatisPlusMapper.java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MyBatisPlusMapper.java.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(44,'71f4a9c3-f642-4aec-9bbd-6368c82a813f','MyBatisPlusService.java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MyBatisPlusService.java.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(45,'25fea2dd-7509-41df-be5b-c4779bcc74c9','MySQLDDL.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MySQLDDL.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(46,'e172d68b-8bdd-44ec-bbb4-b2a461caf1fa','pojo-java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/pojo-java.vm','',0,1,'2024-03-21 19:35:45','2024-03-23 15:16:15'),(48,'92aa329d-e86c-40bb-acdf-a1a736863cb0','MyBatisPlusServiceImpl.java.vm',1,'Velocity',NULL,'C:/Users/lenovo/Temp/devpl/codegen/templates/vm/MyBatisPlusServiceImpl.java.vm','',0,1,'2024-03-22 09:03:05','2024-03-23 15:16:15');
+INSERT INTO `template_info` VALUES (49,'374c2531-09e9-45d9-92f4-968703073ec3','add-or-update.vue.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/add-or-update.vue.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(50,'774d2148-aadd-48c4-bcaa-1dfdce64a7d5','MyBatisPlusEntity.java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MyBatisPlusEntity.java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(51,'8c1a264d-01f9-4d03-9b0c-8d3e6d7ef586','service.java.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/service.java.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(52,'f343e992-e788-40eb-9a89-795b1a86a140','mapper.xml.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/mapper.xml.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(53,'5e017aa3-b075-447c-bda0-b0609be5d58d','entity.kt.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/entity.kt.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(54,'45626e31-d4c7-437f-ba19-b390fdf64fc2','entity.kt.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/entity.kt.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(55,'a4897c6c-cd73-4ae8-aa08-2e0ab5810da9','controller.java.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/controller.java.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(56,'3d229df2-2e4f-4cf7-a910-65ec5adb56df','service.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/service.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(57,'ee7b8db7-00ea-463f-ad20-d16367384cb9','entity.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/entity.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(58,'083858b9-6b79-4b99-aaa4-4a1a6040a6c1','pojo-java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/pojo-java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(59,'70e50707-44cb-47ea-84f9-fd04c4c6df3a','controller.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/controller.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(60,'9520806e-d4d3-4346-951c-895cc4f242f1','MyBatisPlusService.java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MyBatisPlusService.java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(61,'4bbc8176-6932-4955-9711-b0c04b836fb0','jackson.response.pojo.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/jackson.response.pojo.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(62,'b0866a51-351b-473d-9c6a-127544212338','mapper.xml.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/mapper.xml.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(63,'dffe7005-52de-4258-aee1-a06e6b010dac','entity.java.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/entity.java.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(64,'d5ff8253-c2a0-4c6b-8efb-887fdd78c547','entity.kt.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/entity.kt.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(65,'7c1059a0-9137-4aaf-8711-ae3e1f93b69b','Entity1.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Entity1.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(66,'2251366f-3272-44e3-8fe8-0f569b7a1a8b','java.pojo.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/java.pojo.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(67,'e287c9b8-4931-414f-9f0a-d688a1e35de6','MyBatisMapperXml.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MyBatisMapperXml.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(68,'5116f0e3-8f87-43b9-bf1d-c95ea5bd1d46','ServiceImpl1.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/ServiceImpl1.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(69,'44b3ea99-113d-4fc8-9a83-656f5255e60f','Dao.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Dao.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(70,'d39a7f93-2d25-4cd8-ba65-48cce63b859f','ApiResponse.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/ApiResponse.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(71,'18f87a61-b369-4160-898a-a7eda9fdb363','serviceImpl.java.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/serviceImpl.java.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(72,'d6e481a1-3ecf-455a-ba19-243d9feb47f6','controller.java.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/controller.java.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(73,'b62ba39e-837d-4f44-a2fc-fa8c62490d96','mapper.java.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/mapper.java.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(74,'bc42fc37-a917-409e-b9a9-9d4ca4239dad','mapper.xml.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/mapper.xml.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(75,'1014c406-5aab-45dc-a1a0-3bb0c21c041e','Controller.java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/Controller.java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(76,'95764621-522e-4ad6-b147-f800fdb691ad','serviceImpl.java.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/serviceImpl.java.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(77,'ba204076-830c-46c3-a093-fc4bea785d39','entity.java.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/entity.java.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(78,'75545807-9749-42ff-9284-5b7edf676b02','MySQLDDL.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MySQLDDL.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(79,'792f70ab-8bd7-4a1e-8a15-6c3990d56d94','api.ts.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/api.ts.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(80,'394064df-17a5-43f0-8a32-7f14ce311f1f','mapper.java.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/mapper.java.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(81,'e598b6ca-907f-4a83-ab82-205b51402c49','Query.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Query.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(82,'d65419eb-c39e-4aa3-a61a-8fd5307e9359','serviceImpl.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/serviceImpl.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(83,'3e2fc393-a279-467f-bc17-b509118913d6','mapper.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/mapper.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(84,'941df4da-c184-4e63-a313-d63687919889','MyBatisPlusServiceImpl.java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MyBatisPlusServiceImpl.java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(85,'a833bd8f-d76c-418f-8d28-cc99384b3855','service.java.ej',1,'Enjoy',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ej/service.java.ej','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(86,'7ffedc2d-130b-4a46-a353-645795bdbef9','Controller1.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Controller1.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(87,'01a7a6ee-fc15-416f-9903-79afca46514b','index.vue.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/index.vue.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(88,'ccf9dea4-9f5e-4b15-81a9-146675692342','menu.sql.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/menu.sql.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(89,'d9f483be-5f24-4d24-9e20-ea2b41c3e49f','easypoi.pojo.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/easypoi.pojo.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(90,'c09c7e30-6920-41cc-8a03-3c2bb4137d2c','entity.kt.btl',1,'Beetl',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/btl/entity.kt.btl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(91,'1cb42198-532a-44bf-af9a-a592a159d56d','Service1.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Service1.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(92,'210e320f-827d-4bb3-97be-6ce1e7f0c491','MyBatisPlusMapper.java.vm',1,'Velocity',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/vm/MyBatisPlusMapper.java.vm','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(93,'a48309ff-1ca4-41ec-b090-9543cc0f3c0f','VO.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/VO.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(94,'6367c8a5-bec0-4696-bb3b-1cca6435338c','Dao.xml.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Dao.xml.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59'),(95,'7c27bc82-9668-46a8-96a1-97584767d4bb','Convert.java.ftl',1,'FreeMarker',NULL,'C:/Users/vonline/Temp/devpl/codegen/templates/ftl/Convert.java.ftl','',0,1,'2024-03-22 21:32:38','2024-03-24 00:01:59');
 /*!40000 ALTER TABLE `template_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1009,20 +1034,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `template_param`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_param` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `template_id` int DEFAULT NULL COMMENT '模板ID,为空表示全局模板参数',
-  `param_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
-  `param_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数名',
-  `param_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
-  `data_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '数据类型',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `template_id` int(11) DEFAULT NULL COMMENT '模板ID,为空表示全局模板参数',
+  `param_key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `param_name` varchar(100) DEFAULT NULL COMMENT '参数名',
+  `param_value` varchar(100) DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
+  `data_type` varchar(100) DEFAULT NULL COMMENT '数据类型',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除状态',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='模板参数元数据表(实参)';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板参数元数据表(实参)';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1041,20 +1066,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `template_variable_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `template_variable_metadata` (
-  `id` int NOT NULL COMMENT '主键ID',
-  `template_id` int DEFAULT NULL COMMENT '模板ID',
-  `key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数名',
-  `default_value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
-  `data_type_id` bigint DEFAULT NULL COMMENT '数据类型ID，关联data_type_item#id字段',
-  `remark` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注信息',
+  `id` int(11) NOT NULL COMMENT '主键ID',
+  `template_id` int(11) DEFAULT NULL COMMENT '模板ID',
+  `key` varchar(100) DEFAULT NULL COMMENT '参数key, 一般为出现在模板中的变量名,单个模板内唯一',
+  `name` varchar(100) DEFAULT NULL COMMENT '参数名',
+  `default_value` varchar(100) DEFAULT NULL COMMENT '参数值,默认参数值, 未提供该参数时使用此值',
+  `data_type_id` bigint(20) DEFAULT NULL COMMENT '数据类型ID，关联data_type_item#id字段',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注信息',
   `is_deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除状态',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC COMMENT='模板参数元数据表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='模板参数元数据表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1075,4 +1100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-23 18:27:26
+-- Dump completed on 2024-03-24  0:04:06

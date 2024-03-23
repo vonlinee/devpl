@@ -101,8 +101,7 @@ public class MySqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader imp
             	EXTRA,
             	`PRIVILEGES`,
             	COLUMN_COMMENT,
-            	GENERATION_EXPRESSION,
-            	SRS_ID
+            	GENERATION_EXPRESSION
             FROM
             	information_schema.`COLUMNS`
             WHERE 1 = 1

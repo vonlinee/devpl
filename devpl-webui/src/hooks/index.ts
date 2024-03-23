@@ -2,6 +2,7 @@ import { DataTableOption } from "@/hooks/interface";
 import http from "@/utils/http";
 import { isReactive, onMounted, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Message } from "./message";
 
 /**
  * CRUD Hooks
@@ -205,7 +206,7 @@ export const useCrud = (options: DataTableOption) => {
     } else {
       data = option.dataListSelections ? option.dataListSelections : [];
       if (data.length === 0) {
-        ElMessage.warning("请选择删除记录");
+        Message.warn("请选择删除记录");
         return;
       }
     }
@@ -218,13 +219,13 @@ export const useCrud = (options: DataTableOption) => {
         if (!option.deleteUrl) {
           if (option.removeByIds) {
             option.removeByIds(data).then((res) => {
-              ElMessage.success("删除成功");
+              Message.info("删除成功")
               query();
             });
           }
         } else {
           http.delete(option.deleteUrl, data).then(() => {
-            ElMessage.success("删除成功");
+            Message.info("删除成功")
             query();
           });
         }

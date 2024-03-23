@@ -22,6 +22,7 @@
             v-model="data.typeGroupId"
             @change="queryAllDataTypeMappings"
             style="z-index: 9999"
+            clearable
           >
             <el-option
               v-for="g in typeGroupOptions"

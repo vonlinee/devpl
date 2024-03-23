@@ -37,7 +37,7 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
      * @return 类型映射列表
      */
     List<DataTypeMapping> selectListByTypeGroupId(
-        @Param("groupId") Long groupId,
+        @Param("groupId") Number groupId,
         @Param("typeGroupId") String typeGroupId,
         @Param("anotherTypeGroupId") String anotherTypeGroupId);
 

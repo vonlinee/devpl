@@ -14,25 +14,29 @@
         C.type_id AS another_type_id,
         C.locale_type_name AS another_type_name,
         C.type_group_id AS another_group_id,
-        C.type_key AS another_type_key
+        C.type_key AS another_type_key,
+        C.type_group_id AS another_type_group_id
         FROM
         (
         SELECT dtm.*, dt.locale_type_name, dt.type_group_id, dt.full_type_key
         FROM data_type_mapping dtm
         LEFT JOIN data_type_item dt ON dtm.type_id = dt.id
-        <if test="param.typeKeyPattern != null and param.typeKeyPattern != ''">
-            AND INSTR(dt.type_key, #{param.typeKeyPattern}) <![CDATA[ > ]]> 0
-        </if>
-        <if test="param.typeGroupId != null">
-            AND dt.type_group_id = #{param.typeGroupId}
-        </if>
+        <where>
+            <if test="param.typeKeyPattern != null and param.typeKeyPattern != ''">
+                AND INSTR(dt.type_key, #{param.typeKeyPattern}) <![CDATA[ > ]]> 0
+            </if>
+            <if test="param.typeGroupId != null and param.typeGroupId != ''">
+                AND dt.type_group_id = #{param.typeGroupId}
+            </if>
+        </where>
         ) A
         LEFT JOIN
-        (SELECT dt.id AS type_id, dt.locale_type_name, dt.type_key, dt.full_type_key, dt.type_group_id, dtg.group_id,
+        (SELECT dtm.id, dt.id AS type_id, dt.locale_type_name, dt.type_key, dt.full_type_key, dt.type_group_id, dtg.group_id,
         dtg.group_name
         FROM data_type_mapping dtm
         LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id
-        LEFT JOIN data_type_group dtg ON dt.type_group_id = dtg.group_id) C ON A.another_type_id = C.type_id
+        LEFT JOIN data_type_group dtg ON dt.type_group_id = dtg.group_id) C
+            ON A.id = C.id AND A.another_type_id = C.type_id
         <where>
             <if test="param.groupId != null">
                 AND A.group_id = #{param.groupId}
@@ -95,12 +99,12 @@
         SELECT *
         FROM (SELECT dtm.*, dt.type_group_id
               FROM data_type_mapping dtm
-                       LEFT JOIN data_type_item dt ON dtm.type_id = dt.id
-              WHERE type_group_id = #{typeGroupId}) A
+                       LEFT JOIN data_type_item dt ON dtm.type_id = dt.id) A
                  JOIN (SELECT dtm.*, dt.type_group_id
                        FROM data_type_mapping dtm
-                                LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id
-                       WHERE type_group_id = #{anotherTypeGroupId}) B
-                      ON A.id = B.another_type_id
+                                LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id) B
+                      ON A.id = B.id
+        WHERE A.type_group_id = #{typeGroupId}
+          AND B.type_group_id = #{anotherTypeGroupId}
     </select>
 </mapper>

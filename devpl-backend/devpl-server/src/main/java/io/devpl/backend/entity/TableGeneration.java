@@ -122,6 +122,7 @@ public class TableGeneration {
     /**
      * 数据类型映射规则分组 1-默认
      */
+    @TableField(value = "data_type_mapping_group_id")
     private Integer dataTypeMappingRuleGroupId = 1;
 
     /**
