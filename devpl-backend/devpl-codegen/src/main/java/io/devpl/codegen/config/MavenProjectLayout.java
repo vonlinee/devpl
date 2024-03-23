@@ -1,4 +1,4 @@
-package io.devpl.common;
+package io.devpl.codegen.config;
 
 /**
  * Maven项目结构
@@ -23,10 +23,5 @@ public class MavenProjectLayout implements ProjectLayout {
     @Override
     public String locate(Object... args) {
         return null;
-    }
-
-    @Override
-    public boolean check(Object... args) {
-        return false;
     }
 }

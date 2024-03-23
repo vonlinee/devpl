@@ -1,4 +1,4 @@
-package io.devpl.common;
+package io.devpl.codegen.config;
 
 /**
  * 项目布局：确定什么文件该存放在什么位置
@@ -22,12 +22,4 @@ public interface ProjectLayout {
      * @return 存放的目录
      */
     String locate(Object... args);
-
-    /**
-     * 检查参数是否合法
-     *
-     * @param args 定义成可变参数增加灵活性
-     * @return 是否可以调用locate方法
-     */
-    boolean check(Object... args);
 }

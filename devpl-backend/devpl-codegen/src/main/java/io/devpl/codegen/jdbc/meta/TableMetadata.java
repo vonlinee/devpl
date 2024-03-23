@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * 仅包含表的元数据信息，且所有字段和DatabaseMetaData#getTables返回值一致

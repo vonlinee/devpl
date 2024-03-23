@@ -70,13 +70,17 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
             List<String> catalogs = JdbcUtils.getCatalogs(dbmd);
             List<String> schemas = JdbcUtils.getSchemaNames(dbmd, null);
 
-            log.info("catalogs {}", catalogs);
-            log.info("schemas {}", schemas);
+            log.info("catalogs {}\nschemas {}", catalogs, schemas);
 
             log.info("支持的表类型 {}", supportedTableTypes);
             // 获取表的元数据信息（不包含表的字段）
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);
-            List<TableMetadata> tableMetadataList = JdbcUtils.toBeans(resultSet, TableMetadata::new);
+            List<TableMetadata> tableMetadataList = new ArrayList<>();
+            while (resultSet.next()) {
+                TableMetadata tmd = new TableMetadata();
+                tmd.initialize(resultSet);
+                tableMetadataList.add(tmd);
+            }
 
             // 需要反向生成或排除的表信息
             List<TableGeneration> includeTableList = new ArrayList<>();
@@ -168,18 +172,26 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
     protected void introspectTableColumns(DatabaseMetaData dbmd, TableGeneration tableInfo, String catalog, String schema) {
         String tableName = tableInfo.getName();
         // 主键信息
-        final List<PrimaryKeyMetadata> primaryKeys;
+        final List<PrimaryKeyMetadata> primaryKeys = new ArrayList<>();
         try (ResultSet rs = dbmd.getPrimaryKeys(catalog, schema, tableName)) {
-            primaryKeys = JdbcUtils.toBeans(rs, PrimaryKeyMetadata::new);
+            while (rs.next()) {
+                PrimaryKeyMetadata pkmd = new PrimaryKeyMetadata();
+                pkmd.initialize(rs);
+                primaryKeys.add(pkmd);
+            }
         } catch (SQLException e) {
             throw new RuntimeException("读取表主键信息:" + tableName + "错误:", e);
         }
         tableInfo.setPrimaryKeys(primaryKeys);
 
         // 列信息
-        List<ColumnMetadata> columnMetadataList;
+        List<ColumnMetadata> columnMetadataList = new ArrayList<>();
         try (ResultSet resultSet = dbmd.getColumns(catalog, schema, tableName, "%")) {
-            columnMetadataList = JdbcUtils.toBeans(resultSet, ColumnMetadata::new);
+            while (resultSet.next()) {
+                ColumnMetadata cmd = new ColumnMetadata();
+                cmd.initialize(resultSet);
+                columnMetadataList.add(cmd);
+            }
         } catch (SQLException e) {
             throw new RuntimeException("读取表字段信息:" + tableName + "错误:", e);
         }

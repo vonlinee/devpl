@@ -1,9 +1,11 @@
 package io.devpl.codegen.core;
 
-import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
+import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.codegen.type.JavaType;
+import lombok.Data;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Objects;
 /**
  * 表字段信息
  */
+@Data
 public class ColumnGeneration {
 
     /**
@@ -26,6 +29,7 @@ public class ColumnGeneration {
      * 是否做注解转换，模板参数
      * 添加@TableName注解
      */
+    @Setter
     private boolean convert;
     /**
      * 是否主键
@@ -51,7 +55,11 @@ public class ColumnGeneration {
     private final ColumnMetadata metadata;
     /**
      * 字段类型
+     * -- SETTER --
+     *
+     * @param columnType 字段类型
      */
+    @Setter
     private JavaType columnType;
     /**
      * 字段注释
@@ -60,12 +68,14 @@ public class ColumnGeneration {
     /**
      * 填充
      */
+    @Setter
     private String fill;
     /**
      * 是否关键字
      *
      * @since 3.3.2
      */
+    @Setter
     private boolean keyWords;
     /**
      * 数据库字段（关键字含转义符号）
@@ -161,10 +171,6 @@ public class ColumnGeneration {
         this.isLogicDeleteField = logicDelete;
     }
 
-    public void setKeyWords(boolean keyWords) {
-        this.keyWords = keyWords;
-    }
-
     /**
      * 是否为逻辑删除字段
      *
@@ -195,10 +201,6 @@ public class ColumnGeneration {
 
     public boolean isConvert() {
         return convert;
-    }
-
-    public void setConvert(boolean convert) {
-        this.convert = convert;
     }
 
     public boolean isKeyFlag() {
@@ -233,13 +235,6 @@ public class ColumnGeneration {
         return columnType;
     }
 
-    /**
-     * @param columnType 字段类型
-     */
-    public void setColumnType(JavaType columnType) {
-        this.columnType = columnType;
-    }
-
     public String getComment() {
         return comment;
     }
@@ -251,10 +246,6 @@ public class ColumnGeneration {
 
     public String getFill() {
         return fill;
-    }
-
-    public void setFill(String fill) {
-        this.fill = fill;
     }
 
     public boolean isKeyWords() {

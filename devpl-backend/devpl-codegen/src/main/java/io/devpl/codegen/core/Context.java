@@ -62,7 +62,7 @@ public class Context {
      *
      * @since 3.5.3
      */
-    private DatabaseIntrospector databaseIntrospector;
+    private DatabaseIntrospector introspector;
 
     /**
      * 插件
@@ -181,7 +181,7 @@ public class Context {
             String[] tableTypes = skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"};
             String schemaPattern = dataSourceConfig.getSchemaName();
 
-            List<TableGeneration> tableInfos = this.databaseIntrospector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
+            List<TableGeneration> tableInfos = this.introspector.getTables(null, schemaPattern, tableNamePattern, tableTypes);
             if (!tableInfos.isEmpty()) {
                 this.targetTables.addAll(tableInfos);
             }
@@ -199,7 +199,7 @@ public class Context {
     }
 
     public void setDatabaseIntrospection(DatabaseIntrospector databaseIntrospector) {
-        this.databaseIntrospector = databaseIntrospector;
+        this.introspector = databaseIntrospector;
         if (databaseIntrospector != null) {
             databaseIntrospector.setContext(this);
         }

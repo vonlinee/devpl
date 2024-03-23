@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.codegen.jdbc.meta.TableMetadata;
-import io.devpl.common.MavenProjectLayout;
+import io.devpl.codegen.config.MavenProjectLayout;
 import io.devpl.common.utils.MavenProjectAnalyser;
 import io.devpl.common.utils.ProjectAnalyser;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;

@@ -214,7 +214,6 @@ public class AutoGenerator {
      * @param introspectedTable 表信息
      */
     void generateFiles(TableGeneration introspectedTable) {
-
         List<GeneratedFile> generatedFiles = prepareGeneratedFiles(introspectedTable);
         log.info("文件个数{}", generatedFiles.size());
 
@@ -253,10 +252,10 @@ public class AutoGenerator {
      *
      * @param customFiles 自定义模板文件列表
      * @param tableInfo   表信息
-     * @param objectMap   渲染数据
+     * @param dataModel   渲染数据
      * @since 3.5.3
      */
-    public void outputCustomFile(List<CustomFile> customFiles, TableGeneration tableInfo, Map<String, Object> objectMap) {
+    public void outputCustomFile(List<CustomFile> customFiles, TableGeneration tableInfo, Map<String, Object> dataModel) {
         String entityName = tableInfo.getEntityName();
         String parentPath = context.getPathInfo(OutputFile.PARENT);
         customFiles.forEach(file -> {
@@ -266,7 +265,7 @@ public class AutoGenerator {
                 filePath = filePath.replaceAll("\\.", "\\" + File.separator);
             }
             String fileName = filePath + File.separator + entityName + file.getFileName();
-            outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
+            outputFile(new File(fileName), dataModel, file.getTemplatePath(), file.isFileOverride());
         });
     }
 
@@ -321,8 +320,7 @@ public class AutoGenerator {
                 // 全局判断【默认】
                 boolean exist = file.exists();
                 if (!exist) {
-                    File parentFile = file.getParentFile();
-                    InternalUtils.forceMkdir(parentFile);
+                    InternalUtils.forceMkdir(file.getParentFile());
                 }
                 if (callback != null) {
                     callback.writeFile(file);

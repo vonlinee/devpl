@@ -1,6 +1,6 @@
 package io.devpl.fxui.model;
 
-import io.devpl.common.ProjectLayout;
+import io.devpl.codegen.config.ProjectLayout;
 import lombok.Data;
 
 /**
