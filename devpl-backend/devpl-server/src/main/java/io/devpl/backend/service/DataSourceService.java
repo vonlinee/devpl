@@ -8,6 +8,13 @@ import java.sql.Connection;
 
 public interface DataSourceService {
 
+    /**
+     * 获取数据库元数据加载器实例
+     *
+     * @param connection 数据库连接
+     * @param dbType     数据库类型
+     * @return DatabaseMetadataLoader
+     */
     DatabaseMetadataLoader getDatabaseMetadataLoader(Connection connection, DBType dbType);
 
     void syncTableMetadata(DataSourceMetadataSyncParam param);

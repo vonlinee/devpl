@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.DataTypeMappingMapper">
 
-    <select id="selectMappingsByPrimaryType" parameterType="io.devpl.backend.domain.param.DataTypeMappingListParam" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
+    <select id="selectMappingsByPrimaryType" parameterType="io.devpl.backend.domain.param.DataTypeMappingListParam"
+            resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
         SELECT
         A.id,
         A.group_id,
@@ -45,7 +46,7 @@
             resultType="io.devpl.backend.entity.DataTypeItem">
         SELECT dt.id, dt.locale_type_name, type_group_id, dt.type_key
         FROM data_type_item dt
-                 LEFT JOIN data_type_mapping dtm ON dt.id = dtm.id
+        LEFT JOIN data_type_mapping dtm ON dt.id = dtm.id
         WHERE dtm.id IS NULL
         <if test="param.typeGroupId != null and param.typeGroupId != ''">
             AND dt.type_group_id = #{param.typeGroupId}
@@ -87,5 +88,19 @@
         <if test="groupId != null">
             AND group_id = #{groupId}
         </if>
+    </select>
+
+    <!--一个类型组到另一个类型组所有的数据类型映射-->
+    <select id="selectListByTypeGroupId" resultType="io.devpl.backend.entity.DataTypeMapping">
+        SELECT *
+        FROM (SELECT dtm.*, dt.type_group_id
+              FROM data_type_mapping dtm
+                       LEFT JOIN data_type_item dt ON dtm.type_id = dt.id
+              WHERE type_group_id = #{typeGroupId}) A
+                 JOIN (SELECT dtm.*, dt.type_group_id
+                       FROM data_type_mapping dtm
+                                LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id
+                       WHERE type_group_id = #{anotherTypeGroupId}) B
+                      ON A.id = B.another_type_id
     </select>
 </mapper>

@@ -34,8 +34,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Override
     public void syncTableMetadata(DataSourceMetadataSyncParam param) {
         try (Connection connection = connectionInfoService.getConnection(param.getDataSourceId())) {
-            DatabaseMetadataLoader loader = getDatabaseMetadataLoader(connection, DBType.MYSQL);
-
+            DatabaseMetadataLoader loader = new JdbcDatabaseMetadataLoader(connection);
             List<TableMetadata> tableMetadataList = loader.getTables(param.getDatabaseName(), null, param.getTableName(), null);
 
 

@@ -1,6 +1,5 @@
 package io.devpl.backend.dao;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.devpl.backend.common.mvc.MyBatisPlusMapper;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingListParam;
@@ -8,13 +7,10 @@ import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
-import io.devpl.sdk.validation.Assert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +27,19 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
      * @return 映射类型列表
      */
     List<DataTypeMappingListVO> selectMappingsByPrimaryType(@Param("param") DataTypeMappingListParam param);
+
+    /**
+     * 根据类型分组查询，查询某个类型分组到另外一个类型分组所有的映射关系
+     * 一对一映射
+     *
+     * @param typeGroupId        类型分组
+     * @param anotherTypeGroupId 另一个类型分组
+     * @return 类型映射列表
+     */
+    List<DataTypeMapping> selectListByTypeGroupId(
+        @Param("groupId") Long groupId,
+        @Param("typeGroupId") String typeGroupId,
+        @Param("anotherTypeGroupId") String anotherTypeGroupId);
 
     /**
      * 查询所有没有设置过类型映射的数据类型

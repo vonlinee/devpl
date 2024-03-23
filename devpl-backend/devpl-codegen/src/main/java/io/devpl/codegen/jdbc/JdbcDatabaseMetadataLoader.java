@@ -62,7 +62,12 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
 
     @Override
     public List<String> getDatabaseNames() throws SQLException {
-        return null;
+        ResultSet schemas = databaseMetaData.getSchemas();
+        List<String> databaseNames = new ArrayList<>();
+        while (schemas.next()) {
+            databaseNames.add(schemas.getString("TABLE_SCHEM"));
+        }
+        return databaseNames;
     }
 
     /**

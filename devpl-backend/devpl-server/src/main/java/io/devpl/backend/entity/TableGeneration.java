@@ -120,6 +120,11 @@ public class TableGeneration {
     private LocalDateTime updateTime;
 
     /**
+     * 数据类型映射规则分组 1-默认
+     */
+    private Integer dataTypeMappingRuleGroupId = 1;
+
+    /**
      * 数据模型
      */
     @TableField(value = "template_arguments", typeHandler = JsonTypeHandler.class)

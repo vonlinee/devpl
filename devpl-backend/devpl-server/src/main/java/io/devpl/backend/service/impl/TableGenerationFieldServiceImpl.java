@@ -1,13 +1,18 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
+import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.dao.TableGenerationFieldMapper;
 import io.devpl.backend.domain.enums.AutoFillEnum;
 import io.devpl.backend.domain.enums.FormType;
+import io.devpl.backend.domain.param.DataTypeMappingListParam;
+import io.devpl.backend.domain.vo.DataTypeMappingListVO;
+import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.codegen.core.CaseFormat;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +22,9 @@ import java.util.List;
  */
 @Service
 public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<TableGenerationFieldMapper, TableGenerationField> implements TableGenerationFieldService {
+
+    @Resource
+    DataTypeMappingMapper dataTypeMappingMapper;
 
     /**
      * 根据 table id 查询列表
@@ -60,6 +68,7 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<Tabl
     @Override
     public List<TableGenerationField> initTableFields(TableGeneration table, List<TableGenerationField> tableFieldList) {
         // 字段类型、属性类型映射
+        List<DataTypeMapping> mappings = dataTypeMappingMapper.selectListByTypeGroupId("MySQL", "JAVA");
 
         int index = 0;
         for (TableGenerationField field : tableFieldList) {
@@ -79,8 +88,6 @@ public class TableGenerationFieldServiceImpl extends MyBatisPlusServiceImpl<Tabl
             field.setQueryFormType("text");
             field.setFormType(FormType.TEXT.getText());
             field.setSort(index++);
-
-            System.out.println(field);
         }
         return tableFieldList;
     }

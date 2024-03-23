@@ -221,6 +221,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             // 初始化该表需要生成的文件列表
             this.initTargetGenerationFiles(table, params);
 
+            // 加载所有字段信息
             List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, param.getDbType(), connection, table);
             if (!CollectionUtils.isEmpty(tableFieldList)) {
                 // 初始化字段数据并保存列数据
@@ -515,7 +516,6 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
                 tableFieldList.add(tgf);
             }
-
             tableFieldList = tableFieldService.initTableFields(table, tableFieldList);
         } catch (Exception exception) {
             throw new RuntimeException(exception);
