@@ -126,6 +126,7 @@ public final class ClassUtils {
      * @param clazz 指定类
      * @param <T>   类型
      * @return 对象
+     * @throws RuntimeReflectiveOperationException 反射操作失败
      */
     public static <T> T instantiate(Class<T> clazz) {
         try {

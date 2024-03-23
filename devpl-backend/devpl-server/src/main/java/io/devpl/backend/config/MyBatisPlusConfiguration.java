@@ -101,6 +101,11 @@ public class MyBatisPlusConfiguration implements InitializingBean {
         };
     }
 
+    /**
+     * 通用字段填充逻辑
+     *
+     * @return MetaObjectHandler
+     */
     @Bean
     public MetaObjectHandler commonFieldFillHandler() {
         return new MetaObjectHandler() {

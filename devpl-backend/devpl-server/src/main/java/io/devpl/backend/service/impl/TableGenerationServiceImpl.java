@@ -222,6 +222,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
             this.initTargetGenerationFiles(table, params);
 
             List<TableGenerationField> tableFieldList = this.loadTableGenerationFields(loader, param.getDbType(), connection, table);
+
             if (!CollectionUtils.isEmpty(tableFieldList)) {
                 // 初始化字段数据并保存列数据
                 tableFieldService.saveBatch(tableFieldList);
@@ -512,10 +513,8 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
                 tgf.setFieldType(column.getPlatformDataType());
                 tgf.setFieldComment(column.getRemarks());
                 tgf.setPrimaryKey(primaryKeyMetadataMap.containsKey(column.getColumnName()));
-
                 tableFieldList.add(tgf);
             }
-
             tableFieldList = tableFieldService.initTableFields(table, tableFieldList);
         } catch (Exception exception) {
             throw new RuntimeException(exception);

@@ -24,14 +24,6 @@ public abstract class GeneratedFile {
     private String name;
 
     /**
-     * 初始化文件信息
-     *
-     * @param context 代码生成上下文
-     */
-    public void initialize(Context context) {
-    }
-
-    /**
      * 输出文件内容到指定Writer
      *
      * @param writer  输出位置

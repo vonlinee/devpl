@@ -40,12 +40,12 @@ public class DevplMain8088 extends SpringBootServletInitializer {
             String port = env.getProperty("server.port");
             String contextPath = env.getProperty("server.servlet.context-path", "");
             System.out.printf("""
-                    ----------------------------------------------------------
-                    Application Devpl is running! Access URLs:
-                    Local: 		http://localhost:%s%s
-                    External: 	http://%s:%s%s
-                    ----------------------------------------------------------
-                    %n""", port, contextPath, ip, port, contextPath);
+                ----------------------------------------------------------
+                Application Devpl is running! Access URLs:
+                > Local: 		http://localhost:%s%s
+                > External: 	http://%s:%s%s
+                ----------------------------------------------------------
+                %n""", port, contextPath, ip, port, contextPath);
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

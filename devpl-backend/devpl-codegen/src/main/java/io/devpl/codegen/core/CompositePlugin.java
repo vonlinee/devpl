@@ -10,7 +10,7 @@ import java.util.Properties;
  * implements the rule that if any plugin returns "false" from a method, then no
  * subsequent plugin is called.
  */
-abstract class CompositePlugin implements Plugin {
+public abstract class CompositePlugin implements Plugin {
 
     /**
      * 插件列表
@@ -28,7 +28,7 @@ abstract class CompositePlugin implements Plugin {
         }
     }
 
-    public void addPlugin(Plugin plugin) {
+    public final void addPlugin(Plugin plugin) {
         plugins.add(plugin);
     }
 

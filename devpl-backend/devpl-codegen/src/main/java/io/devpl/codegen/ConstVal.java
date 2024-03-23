@@ -18,7 +18,6 @@ public interface ConstVal {
 
     String JAVA_SUFFIX = ".java";
     String KT_SUFFIX = ".kt";
-    String XML_SUFFIX = ".xml";
 
     /**
      * 实体模板路径
