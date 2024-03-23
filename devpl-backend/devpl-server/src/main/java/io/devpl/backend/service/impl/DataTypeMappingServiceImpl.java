@@ -1,12 +1,16 @@
 package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageInfo;
 import io.devpl.backend.dao.DataTypeMappingGroupMapper;
 import io.devpl.backend.dao.DataTypeMappingMapper;
+import io.devpl.backend.domain.param.DataTypeListParam;
+import io.devpl.backend.domain.param.DataTypeMappingAddParam;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import io.devpl.backend.service.DataTypeMappingService;
+import io.devpl.backend.utils.BusinessUtils;
 import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -26,14 +30,14 @@ public class DataTypeMappingServiceImpl extends ServiceImpl<DataTypeMappingMappe
     }
 
     @Override
-    public List<SelectOptionVO> listSelectablePrimaryTypeOptions() {
-        return CollectionUtils.toList(baseMapper.selectUnMappedTypeList(), d -> new SelectOptionVO(d.getId(), d.getLocaleTypeName(), d.getId()));
+    public PageInfo<DataTypeItem> listSelectablePrimaryTypes(DataTypeListParam param) {
+        return BusinessUtils.startPageInfo(param, p -> baseMapper.selectUnMappedTypeList(p));
     }
 
     @Override
-    public List<SelectOptionVO> listSelectableAnotherTypeOptions(DataTypeItem typeItem) {
-        Set<Long> excludeTypeIds = baseMapper.selectMappedDataTypeIds(null, typeItem.getId());
-        List<DataTypeItem> dataTypeItems = baseMapper.selectExcludeByTypeId(typeItem.getTypeGroupId(), excludeTypeIds);
-        return CollectionUtils.toList(dataTypeItems, d -> new SelectOptionVO(d.getId(), d.getLocaleTypeName(), d.getId()));
+    public PageInfo<DataTypeItem> listSelectableAnotherTypes(DataTypeListParam param) {
+        Set<Long> excludeTypeIds = baseMapper.selectMappedDataTypeIds(param.getGroupId(), param.getExcludeTypeId());
+        param.setExcludeIds(excludeTypeIds);
+        return BusinessUtils.startPageInfo(param, p -> baseMapper.selectExcludeByTypeId(param));
     }
 }

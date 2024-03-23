@@ -52,19 +52,23 @@ export const apiSaveDataTypeItems = (dataTypeItem: any[]) => {
   })
 }
 
-export interface DataTypeMappingParam {
-  typeId: number
-  anotherTypeId: number | undefined
+export interface DataTypeMappingAddParam {
+  /**
+   * 映射类型分组ID
+   */
+  groupId?: number
+  typeId?: number
+  anotherTypeIds?: number[]
+  type?: DataTypeItem
+  anotherTypes?: DataTypeItem[]
 }
 
 /**
  * 添加数据类型映射关系
  * @returns
  */
-export const apiAddDataTypeMapping = (dataTypeItem: DataTypeMappingParam[]) => {
-  return http.post("/api/datatype/mapping", {
-    mappings: dataTypeItem,
-  })
+export const apiAddDataTypeMapping = (param: DataTypeMappingAddParam) => {
+  return http.post("/api/datatype/mapping/add", param)
 }
 
 /**
@@ -84,14 +88,8 @@ export const apiListAllMappableDataTypes = (
  * 添加数据类型映射关系
  * @returns
  */
-export const apiListAllDataTypeMappings = (
-  typeId: number | undefined = undefined,
-  typeGroupId: number | undefined = undefined
-) => {
-  return http.get("/api/datatype/mapping/list", {
-    typeId: typeId,
-    typeGroupId: typeGroupId,
-  })
+export const apiListAllDataTypeMappings = (param: any) => {
+  return http.get("/api/datatype/mapping/list", param)
 }
 
 /**
@@ -108,7 +106,7 @@ export const apiSaveOrUpdateDataTypeGroups = (groups: any[]) => {
  */
 export const apiDeleteDataTypeGroupByIds = (groups: any[]) => {
   return http.delete("/api/datatype/group/remove", {
-    groups: groups
+    groups: groups,
   })
 }
 
@@ -125,8 +123,10 @@ export const apiListDataTypeOptions = (typeGroupId: string) => {
 /**
  * 数据类型组选择下拉列表
  */
-export const apiListTypeGroupOptions = () => {
-  return http.get("/api/datatype/group/options")
+export const apiListTypeGroupOptions = (excludeTypeGroupId?: string) => {
+  return http.get("/api/datatype/group/options", {
+    excludeTypeGroupId: excludeTypeGroupId,
+  })
 }
 
 /**
@@ -137,10 +137,36 @@ export const apiListTypeMappingGroupOptions = () => {
 }
 
 /**
+ * 主类型列表
+ */
+export const apiListSelectablePrimaryTypeOptions = (
+  param: DataTypeListParam
+) => {
+  return http.get("/api/datatype/mapping/primary/options", param)
+}
+
+/**
  * 数据类型组选择下拉列表
  */
-export const apiListMappableAnotherTypeOptions = (typeId: number) => {
-  return http.get("/api/datatype/mapping/another/options", {
-    typeId: typeId
-  })
+export const apiListMappableAnotherTypeOptions = (param: DataTypeListParam) => {
+  return http.get("/api/datatype/mapping/another/options", param)
+}
+
+
+/**
+ * 数据类型组选择下拉列表
+ */
+export const apiRemoveDataMappingById = (id : number) => {
+  return http.delete(`/api/datatype/mapping/remove?id=${id}`)
+}
+
+export type DataTypeListParam = {
+  page?: number
+  limit?: number
+  typeId?: number
+  typeGroupId?: string
+  typeKey?: string
+  typeName?: string
+  excludeTypeGroupId?: string
+  excludeIds?: number[]
 }

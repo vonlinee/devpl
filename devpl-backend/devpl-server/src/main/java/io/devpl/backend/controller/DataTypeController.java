@@ -2,10 +2,7 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.param.DataTypeAddParam;
-import io.devpl.backend.domain.param.DataTypeGroupParam;
-import io.devpl.backend.domain.param.DataTypeListParam;
-import io.devpl.backend.domain.param.DataTypeMappingParam;
+import io.devpl.backend.domain.param.*;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
@@ -15,8 +12,8 @@ import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.backend.utils.BusinessUtils;
+import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,23 +122,25 @@ public class DataTypeController {
     }
 
     /**
-     * 添加数据类型映射关系
-     *
-     * @return 类型分组信息
-     */
-    @PostMapping("/mapping")
-    public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingParam param) {
-        return Result.ok(dataTypeService.addDataTypeMapping(param.getMappings()));
-    }
-
-    /**
      * 分页查询所有数据类型之间的映射关系
+     * 查询主数据类型
      *
      * @return 类型分组信息
      */
     @GetMapping("/mapping/list")
-    public ListResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingParam param) {
-        return ListResult.ok(BusinessUtils.startPage(param, () -> dataTypeService.listDataTypeMappings(param.getTypeId())));
+    public ListResult<DataTypeMappingListVO> listAllDataTypeMappings(DataTypeMappingListParam param) {
+        // TODO 查询某个类型 被哪些类型映射
+        return ListResult.ok(BusinessUtils.startPageInfo(param, p -> dataTypeService.listDataTypeMappings(param)));
+    }
+
+    /**
+     * 根据ID删除
+     *
+     * @return 是否成功
+     */
+    @DeleteMapping("/mapping/remove")
+    public boolean removeMappingById(@RequestParam("id") Long id) {
+        return dataTypeMappingService.removeById(id);
     }
 
     /**
@@ -174,8 +173,8 @@ public class DataTypeController {
      * @return 选项VO
      */
     @GetMapping("/group/options")
-    public Result<List<SelectOptionVO>> getSelectableTypeGroups() {
-        return Result.ok(dataTypeService.getSelectableTypeGroups());
+    public Result<List<SelectOptionVO>> getSelectableTypeGroups(String excludeTypeGroupId) {
+        return Result.ok(dataTypeService.getSelectableTypeGroups(excludeTypeGroupId));
     }
 
     /**
@@ -189,13 +188,29 @@ public class DataTypeController {
     }
 
     /**
+     * 数据类型映射分组列表
+     *
+     * @return 选项VO
+     */
+    @PostMapping("/mapping/add")
+    public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingAddParam param) {
+        if (param.getGroupId() == null) {
+            return Result.error("类型映射规则分组为空");
+        }
+        if (param.getTypeId() == null || CollectionUtils.isEmpty(param.getAnotherTypeIds())) {
+            return Result.error("主类型或者映射类型为空");
+        }
+        return Result.ok(dataTypeService.addDataTypeMapping(param));
+    }
+
+    /**
      * 查询没有映射过的数据类型选项列表
      *
      * @return 选项VO
      */
     @GetMapping("/mapping/primary/options")
-    public Result<List<SelectOptionVO>> listSelectablePrimaryTypeOptions() {
-        return Result.ok(dataTypeMappingService.listSelectablePrimaryTypeOptions());
+    public ListResult<DataTypeItem> listSelectablePrimaryTypeOptions(DataTypeListParam param) {
+        return ListResult.ok(dataTypeMappingService.listSelectablePrimaryTypes(param));
     }
 
     /**
@@ -205,11 +220,12 @@ public class DataTypeController {
      * @return 选项VO
      */
     @GetMapping("/mapping/another/options")
-    public Result<List<SelectOptionVO>> listSelectableAnotherTypeOptions(@NotNull(message = "主数据类型ID为空") Long typeId) {
-        DataTypeItem dataType = dataTypeService.getById(typeId);
+    public ListResult<DataTypeItem> listSelectableAnotherTypeOptions(DataTypeListParam param) {
+        DataTypeItem dataType = dataTypeService.getById(param.getExcludeTypeId());
         if (dataType == null) {
-            return Result.error("数据类型不存在");
+            return ListResult.error("数据类型不存在");
         }
-        return Result.ok(dataTypeMappingService.listSelectableAnotherTypeOptions(dataType));
+        param.setExcludeTypeGroupId(dataType.getTypeGroupId());
+        return ListResult.ok(dataTypeMappingService.listSelectableAnotherTypes(param));
     }
 }

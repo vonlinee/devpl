@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingAddParam;
-import io.devpl.backend.domain.param.DataTypeMappingParam;
+import io.devpl.backend.domain.param.DataTypeMappingListParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
@@ -34,10 +34,6 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
 
     Page<DataTypeItem> selectPage(DataTypeListParam param);
 
-    boolean addDataTypeMapping(Long typeId, Long anotherTypeId);
-
-    boolean addDataTypeMapping(List<DataTypeMappingParam> params);
-
     /**
      * 添加数据类型映射关系
      *
@@ -46,7 +42,21 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
      */
     boolean addDataTypeMapping(DataTypeMappingAddParam param);
 
-    List<DataTypeMappingListVO> listDataTypeMappings(Long typeId);
+    /**
+     * 手动分页
+     *
+     * @param param 查询参数
+     * @return 统计数量
+     */
+    long countDataType(DataTypeMappingListParam param);
+
+    /**
+     * 查询数据类型映射关系列表
+     *
+     * @param param 查询参数
+     * @return 数据类型映射关系列表
+     */
+    List<DataTypeMappingListVO> listDataTypeMappings(DataTypeMappingListParam param);
 
     /**
      * 查询某个类型映射的所有其他类型
@@ -69,7 +79,7 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
      *
      * @return 类型分组列表
      */
-    List<SelectOptionVO> getSelectableTypeGroups();
+    List<SelectOptionVO> getSelectableTypeGroups(String excludeTypeGroupId);
 
     /**
      * 删除类型分组

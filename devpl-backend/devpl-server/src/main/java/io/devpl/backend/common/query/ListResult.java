@@ -1,6 +1,7 @@
 package io.devpl.backend.common.query;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -31,12 +32,20 @@ public class ListResult<T> extends RestfulResult<List<T>> implements Serializabl
         return new ListResult<>(page.getRecords(), page.getTotal());
     }
 
+    public static <T> ListResult<T> ok(PageInfo<T> pageInfo) {
+        return new ListResult<>(pageInfo.getList(), pageInfo.getTotal());
+    }
+
     public static <T> ListResult<T> ok(List<T> list, long total) {
         return new ListResult<>(list, total);
     }
 
     public static <T> ListResult<T> ok(List<T> list) {
         return new ListResult<>(list, list.size());
+    }
+
+    public static <T> ListResult<T> ok(long total, List<T> list) {
+        return new ListResult<>(list, total);
     }
 
     public static <T> ListResult<T> error(String message) {

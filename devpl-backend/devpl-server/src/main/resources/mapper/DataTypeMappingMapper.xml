@@ -2,43 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.devpl.backend.dao.DataTypeMappingMapper">
 
-    <select id="listDataTypeMappings" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
-        SELECT A.type_id,
-        B.locale_type_name,
-        B.type_group_id,
+    <select id="selectMappingsByPrimaryType" parameterType="io.devpl.backend.domain.param.DataTypeMappingListParam" resultType="io.devpl.backend.domain.vo.DataTypeMappingListVO">
+        SELECT
+        A.id,
+        A.group_id,
+        A.type_id,
+        A.type_key,
+        A.locale_type_name AS type_name,
+        A.type_group_id,
+        C.type_id AS another_type_id,
         C.locale_type_name AS another_type_name,
-        C.type_group_id AS another_group_id
-        FROM data_type_mapping A
-        LEFT JOIN (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
-        FROM data_type_item
-        LEFT JOIN data_type_group
-        ON data_type_item.type_group_id = data_type_group.group_id) B
-        ON A.type_id = B.id
+        C.type_group_id AS another_group_id,
+        C.type_key AS another_type_key
+        FROM
+        (
+        SELECT dtm.*, dt.locale_type_name, dt.type_group_id, dt.full_type_key
+        FROM data_type_mapping dtm
+        LEFT JOIN data_type_item dt ON dtm.type_id = dt.id
+        <if test="param.typeKeyPattern != null and param.typeKeyPattern != ''">
+            AND INSTR(dt.type_key, #{param.typeKeyPattern}) <![CDATA[ > ]]> 0
+        </if>
+        <if test="param.typeGroupId != null">
+            AND dt.type_group_id = #{param.typeGroupId}
+        </if>
+        ) A
         LEFT JOIN
-        (SELECT data_type_item.*, data_type_group.group_id, data_type_group.group_name
-        FROM data_type_item
-        LEFT JOIN data_type_group
-        ON data_type_item.type_group_id = data_type_group.group_id) C
-        ON A.another_type_id = C.id
+        (SELECT dt.id AS type_id, dt.locale_type_name, dt.type_key, dt.full_type_key, dt.type_group_id, dtg.group_id,
+        dtg.group_name
+        FROM data_type_mapping dtm
+        LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id
+        LEFT JOIN data_type_group dtg ON dt.type_group_id = dtg.group_id) C ON A.another_type_id = C.type_id
         <where>
-            <if test="typeId != null">
-                AND A.type_id = #{typeId}
+            <if test="param.groupId != null">
+                AND A.group_id = #{param.groupId}
+            </if>
+            <if test="param.typeId != null">
+                AND A.type_id = #{param.typeId}
             </if>
         </where>
     </select>
-    <select id="selectUnMappedTypeList" resultType="io.devpl.backend.entity.DataTypeItem">
-        SELECT dt.id, dt.locale_type_name
+    <select id="selectUnMappedTypeList" parameterType="io.devpl.backend.domain.param.DataTypeListParam"
+            resultType="io.devpl.backend.entity.DataTypeItem">
+        SELECT dt.id, dt.locale_type_name, type_group_id, dt.type_key
         FROM data_type_item dt
                  LEFT JOIN data_type_mapping dtm ON dt.id = dtm.id
         WHERE dtm.id IS NULL
+        <if test="param.typeGroupId != null and param.typeGroupId != ''">
+            AND dt.type_group_id = #{param.typeGroupId}
+        </if>
+        <if test="param.typeNamePattern != null and param.typeNamePattern != ''">
+            AND INSTR(dt.locale_type_name, #{param.typeNamePattern}) <![CDATA[  > 0 ]]>
+        </if>
+        <if test="param.typeKeyPattern != null and param.typeKeyPattern != ''">
+            AND INSTR(dt.type_key, #{param.typeKeyPattern}) <![CDATA[  > 0 ]]>
+        </if>
     </select>
-    <select id="selectExcludeByTypeId" resultType="io.devpl.backend.entity.DataTypeItem">
-        SELECT id, locale_type_name
+    <select id="selectExcludeByTypeId" parameterType="io.devpl.backend.domain.param.DataTypeListParam"
+            resultType="io.devpl.backend.entity.DataTypeItem">
+        SELECT id, locale_type_name, type_group_id, type_key
         FROM data_type_item
-        WHERE type_group_id != #{excludeTypeGroupId} /*不在同一组内*/
-        <if test="excludeIds != null and excludeIds.size() > 0">
+        WHERE type_group_id != #{param.excludeTypeGroupId} /*不在同一组内*/
+        <if test="param.typeGroupId != null and param.typeGroupId != ''">
+            AND type_group_id = #{param.typeGroupId}
+        </if>
+        <if test="param.typeNamePattern != null and param.typeNamePattern != ''">
+            AND INSTR(locale_type_name, #{param.typeNamePattern}) <![CDATA[  > 0 ]]>
+        </if>
+        <if test="param.typeKeyPattern != null and param.typeKeyPattern != ''">
+            AND INSTR(type_key, #{param.typeKeyPattern}) <![CDATA[  > 0 ]]>
+        </if>
+        <if test="param.excludeIds != null and param.excludeIds.size() > 0">
             AND id NOT IN
-            <foreach item="item" index="index" collection="excludeIds" open="(" close=")" separator=",">
+            <foreach item="item" index="index" collection="param.excludeIds" open="(" close=")" separator=",">
                 #{item}
             </foreach>
             /*过滤已有的映射关系*/
@@ -48,7 +83,7 @@
     <select id="selectMappedDataTypeIds" resultType="long">
         SELECT DISTINCT another_type_id
         FROM data_type_mapping
-        WHERE type_id = #{typeId}
+        WHERE another_type_id IS NOT NULL AND type_id = #{typeId}
         <if test="groupId != null">
             AND group_id = #{groupId}
         </if>

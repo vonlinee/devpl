@@ -11,7 +11,7 @@ import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingAddParam;
-import io.devpl.backend.domain.param.DataTypeMappingParam;
+import io.devpl.backend.domain.param.DataTypeMappingListParam;
 import io.devpl.backend.domain.vo.DataTypeGroupVO;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
@@ -23,6 +23,7 @@ import io.devpl.backend.service.CrudService;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.collection.Sets;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -116,24 +117,6 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     /**
      * 添加数据类型映射关系
      *
-     * @param typeId        数据类型ID
-     * @param anotherTypeId 另一个数据类型ID
-     */
-    @Override
-    public boolean addDataTypeMapping(Long typeId, Long anotherTypeId) {
-        DataTypeMapping dataTypeMapping = new DataTypeMapping(typeId, anotherTypeId);
-        return SqlHelper.retBool(dataTypeMappingMapper.insert(dataTypeMapping));
-    }
-
-    @Override
-    public boolean addDataTypeMapping(List<DataTypeMappingParam> params) {
-        List<DataTypeMapping> list = CollectionUtils.toList(params, i -> new DataTypeMapping(i.getTypeId(), i.getAnotherTypeId()));
-        return crudService.saveBatch(list);
-    }
-
-    /**
-     * 添加数据类型映射关系
-     *
      * @param param 数据类型映射关系 添加参数
      */
     @Override
@@ -146,9 +129,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
             return true;
         }
         // 查询所有数据类型信息
-        Set<Long> ids = new HashSet<>(param.getAnotherTypeIds());
-        ids.add(param.getTypeId());
-
+        Set<Long> ids = Sets.newSet(param.getAnotherTypeIds(), param.getTypeId());
         List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByIds(ids);
         Map<Long, DataTypeItem> dataTypeItemMap = CollectionUtils.toMap(dataTypeItems, DataTypeItem::getId);
 
@@ -160,12 +141,30 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
             mapping.setGroupId(param.getGroupId());
             mappings.add(mapping);
         }
+
+        // TODO 重复由前端过滤
+
         return dataTypeMappingService.saveBatch(mappings);
     }
 
     @Override
-    public List<DataTypeMappingListVO> listDataTypeMappings(Long typeId) {
-        return dataTypeMappingMapper.listDataTypeMappings(typeId);
+    public long countDataType(DataTypeMappingListParam param) {
+        LambdaQueryWrapper<DataTypeItem> qw = new LambdaQueryWrapper<>();
+        qw.like(StringUtils.hasText(param.getTypeKeyPattern()), DataTypeItem::getTypeKey, param.getTypeKeyPattern());
+        qw.eq(StringUtils.hasText(param.getTypeGroupId()), DataTypeItem::getTypeGroupId, param.getTypeGroupId());
+        return baseMapper.selectCount(qw);
+    }
+
+    /**
+     * 查询数据类型映射关系列表
+     * 根据主类型查询列表及其映射的类型列表
+     *
+     * @param param 查询参数
+     * @return 数据类型映射关系列表
+     */
+    @Override
+    public List<DataTypeMappingListVO> listDataTypeMappings(DataTypeMappingListParam param) {
+        return dataTypeMappingMapper.selectMappingsByPrimaryType(param);
     }
 
     /**
@@ -205,10 +204,13 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      * @return 类型分组下拉列表
      */
     @Override
-    public List<SelectOptionVO> getSelectableTypeGroups() {
+    public List<SelectOptionVO> getSelectableTypeGroups(String excludeTypeGroupId) {
         List<DataTypeGroupVO> dataTypeGroupVOS = dataTypeGroupMapper.selectAllGroups();
         List<SelectOptionVO> result = new ArrayList<>();
         for (DataTypeGroupVO group : dataTypeGroupVOS) {
+            if (StringUtils.hasText(excludeTypeGroupId) && Objects.equals(group.getTypeGroupId(), excludeTypeGroupId)) {
+                continue;
+            }
             result.add(new SelectOptionVO(group.getId(), group.getTypeGroupId(), group.getTypeGroupId()));
         }
         return result;

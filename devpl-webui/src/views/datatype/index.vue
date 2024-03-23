@@ -8,9 +8,6 @@
               :value="item.typeGroupId">
             </el-option>
           </el-select>
-          <el-button><el-icon>
-              <Plus />
-            </el-icon></el-button>
         </el-form-item>
         <el-form-item>
           <el-input v-model="state.queryForm.typeKey" placeholder="类型Key"></el-input>

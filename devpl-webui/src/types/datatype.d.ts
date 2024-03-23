@@ -3,6 +3,16 @@
  */
 type TypeNameAny = "any"
 
+/**
+ * 单个数据类型
+ */
+type DataTypeItem = {
+  id: number
+  typeId: number
+  typeKey: string
+  localeTypeName: string,
+  typeGroupId: string
+}
 
 /**
  * 类型分组
@@ -74,6 +84,10 @@ type DataTypeMappingGroup = {
  * 数据类型映射
  */
 type DataTypeMapping = {
+  /**
+   * 主键ID
+   */
+  id?: number
   /**
    * 分组ID
    */

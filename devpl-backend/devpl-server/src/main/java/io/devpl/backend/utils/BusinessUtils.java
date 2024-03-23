@@ -51,6 +51,8 @@ public final class BusinessUtils {
 
     /**
      * 分页查询
+     * 注意: PageHelper分页插件的页码是从1开始的
+     * 开启reasonable功能，则用户传入的页数已经大于了总页数，则会将自动修改为总页数pages
      *
      * @param param    分页参数
      * @param supplier 数据查询逻辑
@@ -61,7 +63,7 @@ public final class BusinessUtils {
      * @see PageParam
      */
     public static <C extends Collection<T>, T, P extends PageParam> PageInfo<T> startPageInfo(P param, Function<P, C> supplier) {
-        try (Page<T> page = PageHelper.startPage(param.getPage(), param.getPageSize(), true, false, false)) {
+        try (Page<T> page = PageHelper.startPage(param.getPage(), param.getPageSize(), true, true, false)) {
             supplier.apply(param);
             return new PageInfo<>(page);
         }

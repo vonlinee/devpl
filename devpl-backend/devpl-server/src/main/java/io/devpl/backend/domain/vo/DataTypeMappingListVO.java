@@ -10,11 +10,19 @@ import lombok.Setter;
 @Setter
 public class DataTypeMappingListVO {
 
+    private Long id;
+
+    private Long groupId;
+
+    // 主类型
     private Long typeId;
     private String typeGroupId;
     private String typeName;
+    private String typeKey;
 
+    // 映射数据类型
     private Long anotherTypeId;
-    private String anotherGroupId;
+    private String anotherTypeKey;
+    private String anotherTypeGroupId;
     private String anotherTypeName;
 }
