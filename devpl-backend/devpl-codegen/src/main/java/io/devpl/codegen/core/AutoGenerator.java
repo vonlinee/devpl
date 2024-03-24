@@ -2,6 +2,7 @@ package io.devpl.codegen.core;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
+import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.codegen.util.InternalUtils;
@@ -10,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
@@ -30,7 +31,7 @@ public class AutoGenerator {
     /**
      * 配置信息
      */
-    protected Context context;
+    protected ContextImpl context;
     /**
      * 注入配置
      */
@@ -135,7 +136,7 @@ public class AutoGenerator {
      * @since 3.5.0
      */
     public AutoGenerator config(Context context) {
-        this.context = context;
+        this.context = (ContextImpl) context;
         return this;
     }
 
@@ -175,8 +176,12 @@ public class AutoGenerator {
         // 获取所有的表信息
         List<TableGeneration> tableInfoList = context.introspectTables(tableNamePattern);
 
-        for (TableGeneration introspectedTable : tableInfoList) {
-            generateFiles(introspectedTable);
+        if (tableInfoList.isEmpty()) {
+            log.warn("待生成的表为空");
+        } else {
+            for (TableGeneration introspectedTable : tableInfoList) {
+                generateFiles(introspectedTable);
+            }
         }
         return this;
     }
@@ -189,11 +194,9 @@ public class AutoGenerator {
         this.templateConfig = Optional.ofNullable(templateConfig).orElse(new TemplateConfig.Builder().build());
         this.packageConfig = Optional.ofNullable(packageConfig).orElse(new PackageConfig.Builder().build());
         this.injectionConfig = Optional.ofNullable(injectionConfig).orElse(new InjectionConfig.Builder().build());
-        context = new Context(packageConfig, dataSourceConfig, strategyConfig, templateConfig, globalConfig, injectionConfig);
+        context = new ContextImpl(packageConfig, dataSourceConfig, strategyConfig, templateConfig, globalConfig, injectionConfig);
 
         context.initialize();
-        // 初始化Context组件
-        context.setDatabaseIntrospection(ClassUtils.instantiate(dataSourceConfig.getDatabaseQueryClass()));
     }
 
     /**
@@ -211,37 +214,39 @@ public class AutoGenerator {
     /**
      * 生成文件
      *
-     * @param introspectedTable 表信息
+     * @param tables 表信息
      */
-    void generateFiles(TableGeneration introspectedTable) {
-        List<GeneratedFile> generatedFiles = prepareGeneratedFiles(introspectedTable);
+    void generateFiles(TableGeneration tables) {
+        List<GeneratedFile> generatedFiles = prepareGeneratedFiles(tables);
         log.info("文件个数{}", generatedFiles.size());
 
         // 数据初始化完毕
         try {
             // 填充模板参数
-            log.info("填充模板参数");
-            Map<String, Object> templateArgumentsMap = this.prepareTemplateArguments(context, introspectedTable);
+            Map<String, Object> templateArgumentsMap = this.prepareTemplateArguments(context, tables);
             InjectionConfig injectionConfig = context.getInjectionConfig();
             if (injectionConfig != null) {
                 // 添加自定义属性
-                injectionConfig.beforeOutputFile(introspectedTable, templateArgumentsMap);
+                injectionConfig.beforeOutputFile(tables, templateArgumentsMap);
                 // 输出自定义文件
-                outputCustomFile(injectionConfig.getCustomFiles(), introspectedTable, templateArgumentsMap);
+                outputCustomFile(injectionConfig.getCustomFiles(), tables, templateArgumentsMap);
             }
+
+            final StrategyConfig strategyConfig = context.getStrategyConfig();
+
             // entity
-            outputFile(OutputFile.ENTITY, introspectedTable.getEntityName(), templateArgumentsMap, context.getStrategyConfig().entity().isFileOverride());
+            outputFile(OutputFile.ENTITY, tables.getEntityName(), templateArgumentsMap, strategyConfig.entity().isFileOverride());
 
             // mapper and xml
-            outputFile(OutputFile.MAPPER, introspectedTable.getMapperName(), templateArgumentsMap, context.getStrategyConfig().mapper().isFileOverride());
-            outputFile(OutputFile.MAPPER_XML, introspectedTable.getXmlName(), templateArgumentsMap, context.getStrategyConfig().mapper().isFileOverride());
+            outputFile(OutputFile.MAPPER, tables.getMapperName(), templateArgumentsMap, strategyConfig.mapper().isFileOverride());
+            outputFile(OutputFile.MAPPER_XML, tables.getXmlName(), templateArgumentsMap, strategyConfig.mapper().isFileOverride());
 
             // service
-            outputFile(OutputFile.SERVICE, introspectedTable.getServiceName(), templateArgumentsMap, context.getStrategyConfig().service().isFileOverride());
-            outputFile(OutputFile.SERVICE_IMPL, introspectedTable.getServiceImplName(), templateArgumentsMap, context.getStrategyConfig().service().isFileOverride());
+            outputFile(OutputFile.SERVICE, tables.getServiceName(), templateArgumentsMap, strategyConfig.service().isFileOverride());
+            outputFile(OutputFile.SERVICE_IMPL, tables.getServiceImplName(), templateArgumentsMap, strategyConfig.service().isFileOverride());
 
             // controller
-            outputFile(OutputFile.CONTROLLER, introspectedTable.getControllerName(), templateArgumentsMap, context.getStrategyConfig().controller().isFileOverride());
+            outputFile(OutputFile.CONTROLLER, tables.getControllerName(), templateArgumentsMap, strategyConfig.controller().isFileOverride());
         } catch (Exception e) {
             throw new RuntimeException("无法创建文件，请检查配置信息！", e);
         }
@@ -272,7 +277,7 @@ public class AutoGenerator {
     public void outputFile(OutputFile fileType, String fileName, Map<String, Object> arguments, boolean override) {
         String path = context.getPathInfo(fileType);
         if (StringUtils.hasText(fileName) && StringUtils.hasText(path)) {
-            getTemplateFilePath(template -> template.getEntityTemplatePath(context.useKotlin())).ifPresent((entity) -> {
+            getTemplateFilePath(template -> fileType.getTemplate()).ifPresent((entity) -> {
                 String entityFile = String.format((path + File.separator + "%s" + suffixJavaOrKt()), fileName);
                 outputFile(new File(entityFile), arguments, entity, override);
             });
@@ -296,13 +301,15 @@ public class AutoGenerator {
     protected Optional<String> getTemplateFilePath(Function<TemplateConfig, String> function) {
         String filePath = function.apply(context.getTemplateConfig());
         if (StringUtils.hasText(filePath)) {
-            return Optional.of(getPathOfTemplateFile(filePath, templateEngine.getTemplateFileExtension()));
+            String extension = templateEngine.getTemplateFileExtension();
+            /**
+             * 模板存放目录，不同的模板引擎分开存放 template/模板文件扩展名/具体的模板
+             */
+            filePath = filePath.formatted(extension.substring(1));
+            filePath = filePath.endsWith(extension) ? filePath : filePath + extension;
+            return Optional.of(filePath);
         }
         return Optional.empty();
-    }
-
-    public String getPathOfTemplateFile(String filePath, String templateFileExtension) {
-        return filePath.endsWith(templateFileExtension) ? filePath : filePath + templateFileExtension;
     }
 
     /**
@@ -325,8 +332,9 @@ public class AutoGenerator {
                 if (callback != null) {
                     callback.writeFile(file);
                 }
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    templateEngine.render(templatePath, objectMap, fos);
+                try (FileWriter fw = new FileWriter(file)) {
+                    Template template = templateEngine.getTemplate(templatePath, false);
+                    template.render(templateEngine, objectMap, fw);
                     log.debug("模板:" + templatePath + ";  文件:" + file);
                 }
             } catch (Exception exception) {
@@ -358,7 +366,7 @@ public class AutoGenerator {
      * @param tableInfo 表信息对象
      * @return ignore
      */
-    public Map<String, Object> prepareTemplateArguments(Context context, TableGeneration tableInfo) {
+    public Map<String, Object> prepareTemplateArguments(ContextImpl context, TableGeneration tableInfo) {
         StrategyConfig strategyConfig = context.getStrategyConfig();
         Map<String, Object> objectMap = new HashMap<>(100);
 

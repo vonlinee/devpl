@@ -132,3 +132,12 @@ export const apiParseTemplateVariables = (templateId: number) => {
     templateId: templateId
   })
 }
+
+/**
+ * 获取模板内容
+ * @param templateId 模板ID 
+ * @returns 
+ */
+export const apiGetTemplateContentById = (templateId: number) => {
+  return http.get<string>(`/api/codegen/template/info/content/${templateId}`)
+}

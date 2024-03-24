@@ -9,9 +9,6 @@ import java.util.function.Supplier;
 
 /**
  * 全局配置
- *
- * @author hubin
- * @since 2016-12-02
  */
 public class GlobalConfig {
 

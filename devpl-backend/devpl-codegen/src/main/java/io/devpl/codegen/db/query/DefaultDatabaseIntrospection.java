@@ -67,11 +67,6 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
             // 数据库支持的表类型
             List<String> supportedTableTypes = JdbcUtils.getSupportedTableTypes(dbmd);
 
-            List<String> catalogs = JdbcUtils.getCatalogs(dbmd);
-            List<String> schemas = JdbcUtils.getSchemaNames(dbmd, null);
-
-            log.info("catalogs {}\nschemas {}", catalogs, schemas);
-
             log.info("支持的表类型 {}", supportedTableTypes);
             // 获取表的元数据信息（不包含表的字段）
             ResultSet resultSet = dbmd.getTables(catalog, schemaPattern, tableNamePattern, tableTypes);

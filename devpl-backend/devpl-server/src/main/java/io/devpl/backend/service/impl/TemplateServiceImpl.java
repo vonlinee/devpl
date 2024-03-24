@@ -455,12 +455,13 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         if (templateInfo.isFileTemplate() && StringUtils.hasText(templateInfo.getTemplateFilePath())) {
             templateInfo.setContent(FileUtils.readUTF8StringQuietly(new File(templateInfo.getTemplateFilePath())));
         }
+        // 不暴露真实文件夹路径
+        templateInfo.setTemplateFilePath("");
         return templateInfo;
     }
 
     @Override
     public List<TemplateParam> parseTemplateVariables(Long templateId) {
-
 
 
         return null;

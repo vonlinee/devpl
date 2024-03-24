@@ -14,7 +14,7 @@ import java.util.Properties;
 final class PluginManager extends CompositePlugin {
 
     @Override
-    public void setContext(Context context) {
+    public void setContext(ContextImpl context) {
         throw new UnsupportedOperationException();
     }
 

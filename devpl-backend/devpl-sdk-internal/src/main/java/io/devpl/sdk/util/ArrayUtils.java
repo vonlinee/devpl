@@ -63,6 +63,14 @@ public final class ArrayUtils {
         return java.util.Arrays.asList(elements);
     }
 
+    public static <E, T> List<E> asList(T[] arr, Function<T, E> mapper) {
+        List<E> list = new ArrayList<>();
+        for (T t : arr) {
+            list.add(mapper.apply(t));
+        }
+        return list;
+    }
+
     // ================================ 基本类型数组和包装类型数组之间的转换 start ===============================================
 
     /**

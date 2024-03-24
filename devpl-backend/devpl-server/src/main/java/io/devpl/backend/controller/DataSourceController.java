@@ -5,10 +5,7 @@ import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DBTableDataParam;
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.backend.domain.param.DbConnInfoListParam;
-import io.devpl.backend.domain.vo.DBTableDataVO;
-import io.devpl.backend.domain.vo.DataSourceVO;
-import io.devpl.backend.domain.vo.DriverTypeVO;
-import io.devpl.backend.domain.vo.TestConnVO;
+import io.devpl.backend.domain.vo.*;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.service.DataSourceService;
@@ -16,6 +13,7 @@ import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.db.JDBCDriver;
+import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -137,10 +135,7 @@ public class DataSourceController {
      * @return 数据库名称列表
      */
     @GetMapping(value = "/table/names")
-    public Result<List<String>> getTableNames(
-        @RequestParam(value = "dataSourceId") Long id,
-        @RequestParam(value = "databaseName", required = false) String dbName,
-        @RequestParam(value = "pattern", required = false) String tableNamePattern) {
+    public Result<List<String>> getTableNames(@RequestParam(value = "dataSourceId") Long id, @RequestParam(value = "databaseName", required = false) String dbName, @RequestParam(value = "pattern", required = false) String tableNamePattern) {
         RdbmsConnectionInfo connInfo = datasourceService.getConnectionInfo(id);
         if (connInfo == null) {
             return Result.error("资源不存在");
@@ -154,7 +149,7 @@ public class DataSourceController {
      * @return 数据库类型列表
      */
     @GetMapping(value = "/drivers")
-    public ListResult<DriverTypeVO> getSupportedDbTypes() {
+    public ListResult<DriverTypeVO> getSupportedDriverTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
         for (DBType dbType : DBType.values()) {
             JDBCDriver[] drivers = dbType.getDrivers();
@@ -165,6 +160,17 @@ public class DataSourceController {
             }
         }
         return ListResult.ok(result);
+    }
+
+    /**
+     * 获取支持的所有数据库类型列表
+     *
+     * @return 数据库类型列表
+     */
+    @GetMapping(value = "/dbtypes")
+    public Result<List<SelectOptionVO>> getSupportedDBTypes() {
+        return Result.ok(ArrayUtils.asList(DBType.values(),
+            dbType -> new SelectOptionVO(dbType.name(), dbType.getName(), dbType.name())));
     }
 
     /**
@@ -199,10 +205,7 @@ public class DataSourceController {
      * @param id 数据源ID
      */
     @GetMapping("/table/list")
-    public ListResult<TableGeneration> tableList(
-        @RequestParam(value = "dataSourceId") Long id,
-        @RequestParam(value = "databaseName", required = false) String databaseName,
-        @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
+    public ListResult<TableGeneration> tableList(@RequestParam(value = "dataSourceId") Long id, @RequestParam(value = "databaseName", required = false) String databaseName, @RequestParam(value = "tableNamePattern", required = false) String tableNamePattern) {
         try {
             // 根据数据源，获取全部数据表
             return ListResult.ok(tableService.listGenerationTargetTables(id, databaseName, tableNamePattern));

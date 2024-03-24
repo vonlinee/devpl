@@ -4,7 +4,7 @@ import io.devpl.codegen.config.DataSourceConfig;
 import io.devpl.codegen.config.StrategyConfig;
 import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.core.ColumnGeneration;
-import io.devpl.codegen.core.Context;
+import io.devpl.codegen.core.ContextImpl;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DBType;
@@ -34,7 +34,7 @@ public class SQLBasedMetadataLoader extends AbstractDatabaseIntrospector {
 
     protected final DbQueryDecorator dbQuery;
 
-    public SQLBasedMetadataLoader(@NotNull Context context) {
+    public SQLBasedMetadataLoader(@NotNull ContextImpl context) {
         setContext(context);
         this.dbQuery = new DbQueryDecorator(context.getDataSourceConfig(), context.getStrategyConfig());
     }

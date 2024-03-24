@@ -192,7 +192,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByGroupId(typeGroupId);
         List<SelectOptionVO> result = new ArrayList<>();
         for (DataTypeItem item : dataTypeItems) {
-            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeGroupId() + ">" + item.getLocaleTypeName(),
+            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeKey(),
                 StringUtils.whenBlank(item.getFullTypeKey(), item.getTypeKey())));
         }
         return result;

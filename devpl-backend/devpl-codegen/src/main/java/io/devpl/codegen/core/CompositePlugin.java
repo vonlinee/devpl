@@ -22,7 +22,7 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
-    public void setContext(Context context) {
+    public void setContext(ContextImpl context) {
         for (Plugin plugin : plugins) {
             plugin.setContext(context);
         }
@@ -47,13 +47,12 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
-    public List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> generatedFiles) {
+    public void generateFiles(GenerationUnit unit, List<GeneratedFile> generatedFiles) {
         for (Plugin plugin : plugins) {
-            List<GeneratedFile> currentFiles = plugin.generateFiles(unit, generatedFiles);
+            List<GeneratedFile> currentFiles = plugin.generateFiles(unit);
             if (currentFiles != generatedFiles && currentFiles != null && !currentFiles.isEmpty()) {
                 generatedFiles.addAll(currentFiles);
             }
         }
-        return generatedFiles;
     }
 }

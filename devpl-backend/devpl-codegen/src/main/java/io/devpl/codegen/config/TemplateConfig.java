@@ -85,9 +85,9 @@ public class TemplateConfig {
      * @return this
      * @since 3.3.2
      */
-    public TemplateConfig disable(@NotNull TargetFileType... templateTypes) {
+    public TemplateConfig disable(@NotNull BuiltinTargetFile... templateTypes) {
         if (templateTypes != null) {
-            for (TargetFileType templateType : templateTypes) {
+            for (BuiltinTargetFile templateType : templateTypes) {
                 switch (templateType) {
                     case ENTITY -> {
                         this.entity = null;
@@ -114,7 +114,7 @@ public class TemplateConfig {
      * @return this
      */
     public TemplateConfig disable() {
-        return disable(TargetFileType.values());
+        return disable(BuiltinTargetFile.values());
     }
 
     public String getService() {
@@ -168,7 +168,7 @@ public class TemplateConfig {
          *
          * @return this
          */
-        public Builder disable(@NotNull TargetFileType... templateTypes) {
+        public Builder disable(@NotNull BuiltinTargetFile... templateTypes) {
             this.templateConfig.disable(templateTypes);
             return this;
         }

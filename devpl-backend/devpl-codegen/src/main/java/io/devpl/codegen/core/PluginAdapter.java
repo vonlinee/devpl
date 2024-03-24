@@ -10,11 +10,11 @@ import java.util.Properties;
  */
 public abstract class PluginAdapter implements Plugin {
 
-    protected Context context;
+    protected ContextImpl context;
     protected Properties properties;
 
     @Override
-    public void setContext(Context context) {
+    public void setContext(ContextImpl context) {
         this.context = context;
     }
 

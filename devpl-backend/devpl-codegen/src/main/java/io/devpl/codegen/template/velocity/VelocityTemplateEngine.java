@@ -5,6 +5,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.context.InternalContextAdapter;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
@@ -43,6 +44,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
 
     private VelocityEngine createEngine() {
         Properties properties = new Properties();
+        // 当前类的同级目录下的 velocity.properties 文件
         try (InputStream is = this.getClass().getResourceAsStream("velocity.properties")) {
             properties.load(is);
         } catch (IOException e) {
@@ -55,13 +57,18 @@ public class VelocityTemplateEngine implements TemplateEngine {
          * VelocityStringResourceRepository repository = (VelocityStringResourceRepository) engine.getApplicationAttribute("devpl");
          */
         engine.setApplicationAttribute("devpl", stringTemplates);
+        // 模板资源管理器
+        engine.setProperty(RuntimeConstants.RESOURCE_MANAGER_CLASS, VelocityResourceManager.class.getName());
 
-        /**
-         * 注册自定义指令
-         */
-        registerDirective(new CamelCaseDirective());
-
+        registerDirectives();
         return engine;
+    }
+
+    /**
+     * 注册自定义指令
+     */
+    private void registerDirectives() {
+        registerDirective(new CamelCaseDirective());
     }
 
     @Override

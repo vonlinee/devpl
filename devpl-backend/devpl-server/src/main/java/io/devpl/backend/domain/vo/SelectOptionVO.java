@@ -2,6 +2,8 @@ package io.devpl.backend.domain.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 下拉选择VO
  * 结合前端组件使用
@@ -29,5 +31,11 @@ public class SelectOptionVO {
         this.key = key;
         this.label = label;
         this.value = value;
+    }
+
+    public SelectOptionVO(Object klv) {
+        this.key = klv;
+        this.label = String.valueOf(klv);
+        this.value = klv;
     }
 }

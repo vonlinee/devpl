@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.core.Context;
+import io.devpl.codegen.core.ContextImpl;
 import io.devpl.codegen.core.TableGeneration;
 import io.devpl.codegen.core.ColumnGeneration;
 
@@ -16,7 +16,7 @@ public interface DatabaseIntrospector {
      *
      * @param context 上下文对象
      */
-    void setContext(Context context);
+    void setContext(ContextImpl context);
 
     /**
      * 获取表信息

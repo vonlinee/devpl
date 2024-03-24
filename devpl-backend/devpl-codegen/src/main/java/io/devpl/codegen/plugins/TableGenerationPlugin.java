@@ -2,13 +2,13 @@ package io.devpl.codegen.plugins;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.config.*;
-import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.core.*;
 import io.devpl.codegen.db.DbColumnType;
 import io.devpl.codegen.db.IKeyWordsHandler;
 import io.devpl.codegen.db.IdType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.strategy.FieldFillStrategy;
+import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
 import io.devpl.sdk.util.StringUtils;
@@ -251,31 +251,33 @@ public class TableGenerationPlugin extends PluginAdapter {
     }
 
     @Override
-    public List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> files) {
+    public List<GeneratedFile> generateFiles(GenerationUnit unit) {
         if (!(unit instanceof TableGeneration tg)) {
             return Collections.emptyList();
         }
         StrategyConfig strategyConfig = context.getStrategyConfig();
 
+        List<GeneratedFile> files = new ArrayList<>();
+
         // Controller
         Map<String, Object> objectMap = strategyConfig.controller().renderData(tg);
-        TemplateGeneratedFile controllerJavaFile = new TemplateGeneratedFile();
+        TemplateGeneratedFile controllerJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.CONTROLLER);
         files.add(controllerJavaFile);
 
         // Mapper
-        TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile();
+        TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.MAPPER);
         Map<String, Object> mapperData = strategyConfig.mapper().renderData(tg);
         objectMap.putAll(mapperData);
         files.add(mapperJavaFile);
 
         // Service
-        TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile();
+        TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.SERVICE);
         Map<String, Object> serviceData = strategyConfig.service().renderData(tg);
         objectMap.putAll(serviceData);
         files.add(serviceJavaFile);
 
         // Entity
-        TemplateGeneratedFile entityJavaFile = new TemplateGeneratedFile();
+        TemplateGeneratedFile entityJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.ENTITY);
         Map<String, Object> entityData = strategyConfig.entity().renderData(tg);
         objectMap.putAll(entityData);
         files.add(entityJavaFile);
@@ -295,6 +297,9 @@ public class TableGenerationPlugin extends PluginAdapter {
         objectMap.put("table", tg);
         objectMap.put("entity", tg.getEntityName());
 
+        for (GeneratedFile file : files) {
+            file.setContext(context);
+        }
         return files;
     }
 
@@ -308,8 +313,7 @@ public class TableGenerationPlugin extends PluginAdapter {
 
             });
         }
-
-        return new TemplateGeneratedFile();
+        return new TemplateGeneratedFile(null);
     }
 
     /**

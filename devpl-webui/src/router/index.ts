@@ -150,7 +150,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "DomainModel",
         component: () => import("@/views/model/index.vue"),
         meta: {
-          title: "模型管理",
+          title: "模型信息",
           icon: "icon-cluster",
         },
       },

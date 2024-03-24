@@ -22,37 +22,37 @@ public interface ConstVal {
     /**
      * 实体模板路径
      */
-    String TEMPLATE_ENTITY_JAVA = "/templates/entity.java";
+    String TEMPLATE_ENTITY_JAVA = "/templates/%s/entity.java";
 
     /**
      * 实体模板路径(kotlin模板)
      */
-    String TEMPLATE_ENTITY_KT = "/templates/entity.kt";
+    String TEMPLATE_ENTITY_KT = "/templates/%s/entity.kt";
 
     /**
      * 控制器模板路径
      */
-    String TEMPLATE_CONTROLLER = "/templates/controller.java";
+    String TEMPLATE_CONTROLLER = "/templates/%s/controller.java";
 
     /**
      * Mapper模板路径
      */
-    String TEMPLATE_MAPPER = "/templates/mapper.java";
+    String TEMPLATE_MAPPER = "/templates/%s/mapper.java";
 
     /**
      * MapperXml模板路径
      */
-    String TEMPLATE_XML = "/templates/mapper.xml";
+    String TEMPLATE_XML = "/templates/%s/mapper.xml";
 
     /**
      * Service模板路径
      */
-    String TEMPLATE_SERVICE = "/templates/service.java";
+    String TEMPLATE_SERVICE = "/templates/%s/service.java";
 
     /**
      * ServiceImpl模板路径
      */
-    String TEMPLATE_SERVICE_IMPL = "/templates/serviceImpl.java";
+    String TEMPLATE_SERVICE_IMPL = "/templates/%s/serviceImpl.java";
 
     String SUPER_MAPPER_CLASS = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
     String SUPER_SERVICE_CLASS = "com.baomidou.mybatisplus.extension.service.IService";

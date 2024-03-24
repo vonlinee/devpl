@@ -9,7 +9,6 @@ import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;
 import io.devpl.backend.entity.CustomDirective;
-import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.entity.TemplateInfo;
 import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.service.DataTypeItemService;
@@ -17,11 +16,13 @@ import io.devpl.backend.service.TemplateDirectiveService;
 import io.devpl.backend.service.TemplateParamService;
 import io.devpl.backend.service.TemplateService;
 import io.devpl.codegen.type.SimpleDataType;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.sdk.validation.Assert;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -147,6 +148,21 @@ public class TemplateController {
     @GetMapping(value = "/info/{templateId}")
     public Result<TemplateInfo> getTemplateById(@PathVariable(value = "templateId") Long templateId) {
         return Result.ok(templateService.getTemplateInfoById(templateId));
+    }
+
+    /**
+     * 根据ID获取模板信息 - 模板内容(文件模板)
+     *
+     * @return 列表
+     */
+    @GetMapping(value = "/info/content/{templateId}")
+    public Result<String> getTemplateContent(@PathVariable(value = "templateId") Long templateId) {
+        TemplateInfo templateInfo = templateService.getById(templateId);
+        String content = "";
+        if (templateInfo != null) {
+            content = FileUtils.readUTF8StringQuietly(new File(templateInfo.getTemplateFilePath()));
+        }
+        return Result.ok(content);
     }
 
     /**

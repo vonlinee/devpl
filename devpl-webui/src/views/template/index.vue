@@ -150,7 +150,7 @@ function showTemplateEditDialog(templateInfo: any) {
   } else {
     // 字符串模板
   }
-  templateContentEditorRef.value.init(templateInfo.templateName, content);
+  templateContentEditorRef.value.init(templateInfo);
 }
 
 const submitTemplateParams = () => {

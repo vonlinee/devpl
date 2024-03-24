@@ -1,8 +1,8 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.backend.domain.param.Model2DDLParam;
 import io.devpl.backend.domain.param.FieldsToTableParam;
+import io.devpl.backend.domain.param.Model2DDLParam;
 import io.devpl.backend.domain.vo.ColumnInfoVO;
 import io.devpl.backend.domain.vo.TableCreateInitVO;
 import io.devpl.backend.entity.GroupField;
@@ -58,7 +58,6 @@ public class DevToolsController {
         List<GroupField> groupFields = fieldGroupService.listGroupFieldsById(param.getGroupId());
         List<ColumnInfoVO> columns = new ArrayList<>();
 
-
         for (GroupField groupField : groupFields) {
             ColumnInfoVO column = new ColumnInfoVO();
             column.setColumnName(CaseFormat.camelToUnderline(groupField.getFieldName()));
@@ -74,7 +73,7 @@ public class DevToolsController {
             }
         }
         vo.setColumns(columns);
-        vo.setDataTypes(dataTypeService.getSelectableTypes("MySQL"));
+        vo.setDataTypes(dataTypeService.getSelectableTypes(param.getDbType()));
         return Result.ok(vo);
     }
 

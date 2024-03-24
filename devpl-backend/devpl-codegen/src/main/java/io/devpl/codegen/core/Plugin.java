@@ -43,9 +43,15 @@ public interface Plugin extends ContextAware {
     /**
      * @param unit  生成单元
      * @param files 总的文件信息
+     */
+    default void generateFiles(GenerationUnit unit, List<GeneratedFile> files) {
+    }
+
+    /**
+     * @param unit 生成单元
      * @return 由当前Plugin处理后的文件信息
      */
-    default List<GeneratedFile> generateFiles(GenerationUnit unit, List<GeneratedFile> files) {
+    default List<GeneratedFile> generateFiles(GenerationUnit unit) {
         return Collections.emptyList();
     }
 

@@ -1,6 +1,6 @@
 package io.devpl.codegen.jdbc;
 
-import io.devpl.codegen.core.Context;
+import io.devpl.codegen.core.ContextImpl;
 import io.devpl.codegen.core.ColumnGeneration;
 import io.devpl.codegen.db.DbColumnType;
 
@@ -30,7 +30,7 @@ public interface JavaTypeResolver {
      *
      * @param context The current Context
      */
-    void setContext(Context context);
+    void setContext(ContextImpl context);
 
     /**
      * The generator will supply a list to this method. The implementation class may add strings to the list that will
