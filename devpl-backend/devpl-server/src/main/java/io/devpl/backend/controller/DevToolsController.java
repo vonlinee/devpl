@@ -2,15 +2,14 @@ package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.Model2DDLParam;
-import io.devpl.backend.domain.param.TableCreatorParam;
+import io.devpl.backend.domain.param.FieldsToTableParam;
 import io.devpl.backend.domain.vo.ColumnInfoVO;
-import io.devpl.backend.domain.vo.SelectOptionVO;
+import io.devpl.backend.domain.vo.TableCreateInitVO;
 import io.devpl.backend.entity.GroupField;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldGroupService;
 import io.devpl.codegen.core.CaseFormat;
-import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 开发工具控制器
@@ -55,14 +51,14 @@ public class DevToolsController {
      * @return DDL
      */
     @PostMapping(value = "/table/create/columns")
-    public Result<List<ColumnInfoVO>> getCreateTableColumns(@RequestBody TableCreatorParam param) {
+    public Result<TableCreateInitVO> initCreateTableColumns(@RequestBody FieldsToTableParam param) {
+
+        TableCreateInitVO vo = new TableCreateInitVO();
 
         List<GroupField> groupFields = fieldGroupService.listGroupFieldsById(param.getGroupId());
         List<ColumnInfoVO> columns = new ArrayList<>();
 
-        List<SelectOptionVO> dataTypes = dataTypeService.getSelectableTypes("MySQL");
 
-        Set<String> dataTypeLabels = dataTypes.stream().map(vo -> String.valueOf(vo.getKey()).toLowerCase()).sorted().collect(Collectors.toCollection(LinkedHashSet::new));
         for (GroupField groupField : groupFields) {
             ColumnInfoVO column = new ColumnInfoVO();
             column.setColumnName(CaseFormat.camelToUnderline(groupField.getFieldName()));
@@ -77,11 +73,9 @@ public class DevToolsController {
                 column.setDataType("bigint");
             }
         }
-
-        if (!CollectionUtils.isEmpty(columns)) {
-            columns.get(0).setDataTypes(dataTypeLabels);
-        }
-        return Result.ok(columns);
+        vo.setColumns(columns);
+        vo.setDataTypes(dataTypeService.getSelectableTypes("MySQL"));
+        return Result.ok(vo);
     }
 
     /**
@@ -91,7 +85,7 @@ public class DevToolsController {
      * @return DDL
      */
     @PostMapping(value = "/table/create/ddl")
-    public String getCreateTableDDL(@RequestBody TableCreatorParam param) {
+    public String getCreateTableDDL(@RequestBody FieldsToTableParam param) {
         return devToolsService.getCreateTableDDL(param);
     }
 }

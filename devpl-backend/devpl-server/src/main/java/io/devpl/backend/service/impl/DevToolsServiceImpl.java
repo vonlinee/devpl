@@ -3,7 +3,7 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.FieldParseParam;
 import io.devpl.backend.domain.param.Model2DDLParam;
-import io.devpl.backend.domain.param.TableCreatorParam;
+import io.devpl.backend.domain.param.FieldsToTableParam;
 import io.devpl.backend.domain.vo.ColumnInfoVO;
 import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldInfoService;
@@ -42,7 +42,7 @@ public class DevToolsServiceImpl implements DevToolsService {
      * @return DDL参数
      */
     @Override
-    public String getCreateTableDDL(TableCreatorParam param) {
+    public String getCreateTableDDL(FieldsToTableParam param) {
         List<ColumnInfoVO> columns = param.getColumns();
         List<Field> fields = new ArrayList<>();
         for (ColumnInfoVO column : columns) {

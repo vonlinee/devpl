@@ -7,15 +7,34 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * 字段信息转成表信息参数
+ */
 @Data
-public class TableCreatorParam {
+public class FieldsToTableParam {
 
+    /**
+     * 字段组ID
+     */
     @Nullable
     private Long groupId;
 
+    /**
+     * 表名称
+     */
     private String tableName;
 
+    /**
+     * 表编码
+     */
     private String charset;
+
+    /**
+     * 数据库类型
+     *
+     * @see io.devpl.codegen.db.DBType
+     */
+    private String dbType;
 
     /**
      * 是否使用引号包裹表名和列名
@@ -26,6 +45,9 @@ public class TableCreatorParam {
      */
     private Boolean dropTable = false;
 
+    /**
+     * 字段列表
+     */
     private List<FieldInfo> fields;
 
     /**
