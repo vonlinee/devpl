@@ -1,13 +1,13 @@
 package io.devpl.backend.controller;
 
 import io.devpl.backend.common.query.Result;
-import io.devpl.common.model.FileNode;
 import io.devpl.backend.domain.param.FileDownloadParam;
 import io.devpl.backend.domain.param.MultiFileUploadParam;
 import io.devpl.backend.domain.param.SingleFileUploadParam;
 import io.devpl.backend.domain.vo.FileUploadVO;
 import io.devpl.backend.service.FileStorageService;
 import io.devpl.backend.service.FileUploadService;
+import io.devpl.common.model.FileNode;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -56,8 +56,7 @@ public class FileController {
     @ResponseBody
     @PostMapping(value = "/upload/multiple", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result<FileUploadVO> uploadFile(MultiFileUploadParam param) {
-        fileUploadService.uploadMultiFiles(param);
-        return Result.ok();
+        return Result.ok(fileUploadService.uploadMultiFiles(param));
     }
 
     /**

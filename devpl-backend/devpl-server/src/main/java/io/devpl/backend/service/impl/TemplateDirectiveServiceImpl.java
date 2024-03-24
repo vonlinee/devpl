@@ -50,35 +50,26 @@ public class TemplateDirectiveServiceImpl implements TemplateDirectiveService {
         directive.setStatus("");
 
         if (StringUtils.hasText(param.getSourceCode())) {
-
             // TODO
-
             String className = "CustomTemplateDirective" + directiveNumber.incrementAndGet();
-
             String packageName = "org.example.directive";
-
             String packageDeclaration = """
                 package %s;
 
                 import io.devpl.codegen.template.TemplateDirective;
 
                 """.formatted(packageName);
-
             final String code = packageDeclaration + "\n" + param.getSourceCode().replace("CustomTemplateDirective", className);
-
             CompilationResult result = dynamicJavaCompiler.compile(packageName + "." + className, code);
-
-            Class<?> clazz = result.getClass(className);
-
-            Object instance = ClassUtils.instantiate(clazz);
-
-            if (instance instanceof TemplateDirective td) {
-                String directiveName = td.getName();
-
-                System.out.println(directiveName);
+            Class<?> clazz = result.getClass(packageName + "." + className);
+            if (clazz != null) {
+                Object instance = ClassUtils.instantiate(clazz);
+                if (instance instanceof TemplateDirective td) {
+                    String directiveName = td.getName();
+                    System.out.println(directiveName);
+                }
             }
         }
-
         return crudService.saveOrUpdate(directive);
     }
 

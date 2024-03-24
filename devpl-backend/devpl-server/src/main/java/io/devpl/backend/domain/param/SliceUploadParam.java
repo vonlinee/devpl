@@ -3,7 +3,7 @@ package io.devpl.backend.domain.param;
 import jakarta.validation.constraints.Min;
 
 /**
- * 分片上传参数
+ * 文件分片上传参数
  */
 public class SliceUploadParam extends FileUploadParam {
 

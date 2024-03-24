@@ -36,8 +36,8 @@ mybatis-plus:
         cache-enabled: false # 关闭或开启 Mybatis 二级缓存，默认为 true。
         call-setters-on-nulls: true
         jdbc-type-for-null: 'null'
-        # log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 不输出日志
-        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台输出日志
+        log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 不输出日志
+        # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 控制台输出日志
     configuration-properties:
         prefix:
         blobType: BLOB

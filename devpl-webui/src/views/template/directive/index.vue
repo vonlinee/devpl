@@ -23,10 +23,14 @@
     </el-form>
   </el-card>
 
-  <el-table :data="state.dataList" style="width: 100%" height="600px">
+  <el-table
+    :data="state.dataList"
+    :border="true"
+    style="width: 100%"
+    height="600px"
+  >
     <el-table-column prop="directiveName" label="指令名称" width="180" />
-    <el-table-column prop="sourceCode" label="源码" />
-    <el-table-column prop="remark" label="备注信息" width="180" />
+    <el-table-column prop="remark" label="备注信息" />
 
     <el-table-column
       label="操作"
@@ -35,10 +39,15 @@
       align="center"
     >
       <template #default="scope">
-        <el-button link @click="saveOrUpdateRef.show(scope.row)"
-          >编辑</el-button
+        <vxe-button
+          type="text"
+          status="primary"
+          @click="saveOrUpdateRef.show(scope.row)"
+          >编辑</vxe-button
         >
-        <el-button link @click="remove(scope.row)">删除</el-button>
+        <vxe-button type="text" status="danger" @click="remove(scope.row)"
+          >删除</vxe-button
+        >
       </template>
     </el-table-column>
   </el-table>

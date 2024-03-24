@@ -18,6 +18,8 @@ open module devpl.sdk.internal {
     exports io.devpl.sdk.validation;
     exports io.devpl.sdk.collection;
 
+    // 第三方依赖
     requires org.apache.commons.io;
     requires org.apache.commons.collections4;
+    requires com.github.f4b6a3.ulid;
 }

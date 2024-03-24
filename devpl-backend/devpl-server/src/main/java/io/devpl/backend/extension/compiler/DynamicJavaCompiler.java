@@ -72,11 +72,11 @@ public class DynamicJavaCompiler {
                 }
             }, TemplateDirective.class.getName(), JavaFileObject.Kind.SOURCE);
 
-            javaFileObjects.add(templateDirectiveJfo);
+            if (templateDirectiveJfo != null) {
+                javaFileObjects.add(templateDirectiveJfo);
+            }
         } catch (IOException e) {
-
             result.setFailed(true);
-
             return result;
         }
 

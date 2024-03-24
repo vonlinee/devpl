@@ -14,7 +14,12 @@ import java.util.List;
 public class FileUploadVO {
 
     /**
-     * 文件路径
+     * 上传后的文件路径
+     */
+    private String path;
+
+    /**
+     * 文件路径列表
      */
     private List<String> pathList = new ArrayList<>();
 

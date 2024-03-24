@@ -1,5 +1,6 @@
 package io.devpl.backend.domain.param;
 
+import io.devpl.backend.domain.vo.FileUploadVO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,13 @@ public class FileDownloadParam {
      * 下载或访问，true时设置为APPLICATION_OCTET_STREAM + Content-Disposition: attachment
      */
     private boolean download = false;
+
+    /**
+     * 单文件下载路径
+     *
+     * @see FileUploadVO#getPath()
+     */
+    private String path;
 
     /**
      * 文件下载路径列表

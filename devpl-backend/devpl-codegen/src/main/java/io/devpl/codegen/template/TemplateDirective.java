@@ -17,6 +17,7 @@ public interface TemplateDirective {
      * 参数类型，指令所需的参数类型列表
      *
      * @return 参数类型列表
+     * @see TemplateDirective#render(Object[])
      */
     Class<?>[] getParameterTypes();
 

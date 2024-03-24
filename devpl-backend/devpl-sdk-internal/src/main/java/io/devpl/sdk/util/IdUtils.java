@@ -1,5 +1,7 @@
 package io.devpl.sdk.util;
 
+import com.github.f4b6a3.ulid.UlidCreator;
+
 import java.util.UUID;
 
 /**
@@ -46,6 +48,6 @@ public final class IdUtils {
      * @return ULID
      */
     public static String simpleULID() {
-        throw new UnsupportedOperationException("TODO");
+        return UlidCreator.getUlid().toString();
     }
 }

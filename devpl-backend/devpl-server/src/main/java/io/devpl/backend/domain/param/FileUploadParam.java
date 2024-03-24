@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 public class FileUploadParam {
 
     /**
+     * 一般会有一个根目录
      * 存放子目录名称
      */
     @NotBlank(message = "保存子目录不能为空")
