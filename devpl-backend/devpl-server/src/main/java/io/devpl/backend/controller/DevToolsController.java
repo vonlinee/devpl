@@ -10,6 +10,7 @@ import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldGroupService;
 import io.devpl.codegen.core.CaseFormat;
+import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -77,8 +78,9 @@ public class DevToolsController {
             }
         }
 
-        columns.get(0).setDataTypes(dataTypeLabels);
-
+        if (!CollectionUtils.isEmpty(columns)) {
+            columns.get(0).setDataTypes(dataTypeLabels);
+        }
         return Result.ok(columns);
     }
 

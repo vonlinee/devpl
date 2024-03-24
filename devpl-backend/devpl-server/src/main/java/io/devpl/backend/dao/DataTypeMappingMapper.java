@@ -32,6 +32,7 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
      * 根据类型分组查询，查询某个类型分组到另外一个类型分组所有的映射关系
      * 一对一映射
      *
+     * @param groupId            类型映射分组
      * @param typeGroupId        类型分组
      * @param anotherTypeGroupId 另一个类型分组
      * @return 类型映射列表

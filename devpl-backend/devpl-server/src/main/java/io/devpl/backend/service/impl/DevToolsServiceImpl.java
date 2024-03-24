@@ -55,7 +55,7 @@ public class DevToolsServiceImpl implements DevToolsService {
                 field.setName(column.getColumnName());
             }
             field.setComment(column.getRemarks());
-            field.setPrimaryKey(column.getPrimaryKey());
+            field.setPrimaryKey(column.getPrimaryKey() != null && column.getPrimaryKey());
             field.setType(column.getDataType());
             fields.add(field);
         }
