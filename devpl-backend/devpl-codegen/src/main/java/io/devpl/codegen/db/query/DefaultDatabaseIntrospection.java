@@ -100,7 +100,6 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
                 tableList.add(table);
             }
             // 过滤表
-
             if (isExclude || isInclude) {
                 Set<String> tableNames;
                 if (isExclude) {
@@ -120,7 +119,7 @@ public class DefaultDatabaseIntrospection extends AbstractDatabaseIntrospector {
                     }
                 }
                 if (!notExistTables.isEmpty()) {
-                    log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
+                    log.warn("表[{}]在数据库{}中不存在！！！", String.join(",", notExistTables.values()), catalog);
                 }
                 // 需要反向生成的表信息
                 if (isExclude) {

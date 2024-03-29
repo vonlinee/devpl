@@ -177,6 +177,7 @@ public class ContextImpl implements Context {
     /**
      * 获取表信息
      *
+     * @param tableNamePattern 表名匹配模式
      * @return 表信息
      */
     public List<TableGeneration> introspectTables(String tableNamePattern) {

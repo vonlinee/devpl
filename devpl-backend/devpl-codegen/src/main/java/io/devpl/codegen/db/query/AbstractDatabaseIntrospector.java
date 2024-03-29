@@ -1,16 +1,16 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.core.ContextImpl;
+import io.devpl.codegen.core.Context;
 
 /**
  * 数据库查询抽象类
  */
 public abstract class AbstractDatabaseIntrospector implements DatabaseIntrospector {
 
-    protected ContextImpl context;
+    protected Context context;
 
     @Override
-    public void setContext(ContextImpl context) {
+    public void setContext(Context context) {
         this.context = context;
     }
 }
