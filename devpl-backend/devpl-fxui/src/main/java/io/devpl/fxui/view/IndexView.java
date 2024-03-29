@@ -1,7 +1,7 @@
 package io.devpl.fxui.view;
 
-import io.fxtras.mvvm.FxmlBinder;
-import io.fxtras.mvvm.FxmlView;
+import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
+import io.devpl.fxui.fxtras.mvvm.FxmlView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

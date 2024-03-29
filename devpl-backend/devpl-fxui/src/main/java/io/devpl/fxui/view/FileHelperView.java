@@ -1,8 +1,8 @@
 package io.devpl.fxui.view;
 
-import io.fxtras.mvvm.FxmlBinder;
+import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
 import io.devpl.fxui.utils.Helper;
-import io.fxtras.mvvm.FxmlView;
+import io.devpl.fxui.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;

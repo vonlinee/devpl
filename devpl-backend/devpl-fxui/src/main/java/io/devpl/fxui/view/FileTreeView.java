@@ -2,11 +2,11 @@ package io.devpl.fxui.view;
 
 import io.devpl.common.model.FileNode;
 import io.devpl.common.utils.FileComparator;
-import io.fxtras.svg.SVGLoader;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import org.girod.javafx.svgimage.SVGLoader;
 
 import java.io.File;
 import java.util.Arrays;

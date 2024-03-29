@@ -26,11 +26,6 @@ public class MySQLGenerator {
                 builder.mapperBuilder().enableFileOverride();
                 builder.controllerBuilder().enableFileOverride();
             })
-//            .templateConfig(builder -> {
-//                builder.controller("")
-//                    .entity("")
-//                    .service("");
-//            })
             .packageConfig(builder -> builder.parent("com.lancoo.examuniv"))
             .execute();
 

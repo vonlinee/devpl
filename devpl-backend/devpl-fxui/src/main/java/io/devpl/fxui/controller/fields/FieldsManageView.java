@@ -1,8 +1,8 @@
 package io.devpl.fxui.controller.fields;
 
-import io.fxtras.mvvm.FxmlBinder;
-import io.fxtras.mvvm.FxmlView;
-import io.fxtras.mvvm.View;
+import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
+import io.devpl.fxui.fxtras.mvvm.FxmlView;
+import io.devpl.fxui.fxtras.mvvm.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

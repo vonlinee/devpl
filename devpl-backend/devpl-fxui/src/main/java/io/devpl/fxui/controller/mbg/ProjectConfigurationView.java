@@ -1,13 +1,13 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.common.utils.JSONUtils;
-import io.fxtras.utils.HBoxBuilder;
-import io.fxtras.utils.VBoxBuilder;
-import io.fxtras.utils.EventUtils;
+import io.devpl.fxui.fxtras.utils.HBoxBuilder;
+import io.devpl.fxui.fxtras.utils.VBoxBuilder;
+import io.devpl.fxui.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.ProjectConfiguration;
 import io.devpl.fxui.utils.AppConfig;
-import io.fxtras.mvvm.FxmlBinder;
-import io.fxtras.mvvm.FxmlView;
+import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
+import io.devpl.fxui.fxtras.mvvm.FxmlView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

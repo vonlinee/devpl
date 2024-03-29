@@ -5,7 +5,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import io.devpl.fxui.model.DatabaseInfo;
 import io.devpl.sdk.util.StringUtils;
-import io.fxtras.Alerts;
+import io.devpl.fxui.fxtras.Alerts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,7 +5,7 @@ import io.devpl.sdk.util.ResourceUtils;
 import io.devpl.sdk.util.StringUtils;
 import io.devpl.fxui.editor.CodeMirrorEditor;
 import io.devpl.fxui.editor.LanguageMode;
-import io.fxtras.utils.EventUtils;
+import io.devpl.fxui.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.TemplateInfo;
 import javafx.application.Platform;
 import javafx.scene.control.*;

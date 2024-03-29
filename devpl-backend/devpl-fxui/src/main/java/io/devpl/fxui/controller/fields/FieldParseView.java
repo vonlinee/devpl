@@ -3,7 +3,7 @@ package io.devpl.fxui.controller.fields;
 import io.devpl.common.interfaces.FieldParser;
 import io.devpl.common.interfaces.impl.FieldInfoMap;
 import io.devpl.fxui.model.FieldNode;
-import io.fxtras.utils.FXUtils;
+import io.devpl.fxui.fxtras.utils.FXUtils;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
 

@@ -6,7 +6,7 @@ import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.fxui.model.FieldNode;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
-import io.fxtras.utils.FXUtils;
+import io.devpl.fxui.fxtras.utils.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.SplitPane;

@@ -42,8 +42,8 @@ public class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
             attr = new HashMap<>();
             column.setAttributes(attr);
         }
-        //其他属性
-        //attr.put("sqlSegment", x.toString());
+        // 其他属性
+        // attr.put("sqlSegment", x.toString());
         if (Objects.nonNull(x.getComment())) {
             attr.put("comment", SQLUtils.normalize(x.getComment().toString()));
         }
@@ -96,15 +96,15 @@ public class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
         SQLIndexDefinition indexDefinition = x.getIndexDefinition();
         List<String> indexColumns = indexDefinition.getColumns().stream().map(v -> SQLUtils.normalize(v.getExpr().toString())).collect(Collectors.toList());
         IndexInfo index = new IndexInfo(
-            getOrDef(indexDefinition.getName(), "")
-            , getOrDef(indexDefinition.getType(), "")
-            , getOrDef(indexDefinition.getOptions().getComment(), "")
+            getOrDefault(indexDefinition.getName(), "")
+            , getOrDefault(indexDefinition.getType(), "")
+            , getOrDefault(indexDefinition.getOptions().getComment(), "")
             , indexColumns);
         this.indices.add(index);
     }
 
-    private String getOrDef(Object obj, String def) {
-        return Objects.isNull(obj) ? def : SQLUtils.normalize(String.valueOf(obj));
+    private String getOrDefault(Object obj, String defaultValue) {
+        return Objects.isNull(obj) ? defaultValue : SQLUtils.normalize(String.valueOf(obj));
     }
 
     /**

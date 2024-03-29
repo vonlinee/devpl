@@ -1,6 +1,5 @@
 package io.devpl.fxui.tools.filestructure;
 
-import io.fxtras.svg.SVGImage;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -8,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
+import org.girod.javafx.svgimage.SVGImage;
 
 public class JavaElementItem extends TreeItem<String> {
 

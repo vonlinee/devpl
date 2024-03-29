@@ -1,7 +1,7 @@
 package io.devpl.fxui.tools.filestructure;
 
 import io.devpl.fxui.controller.fields.FieldsManageView;
-import io.fxtras.utils.StageManager;
+import io.devpl.fxui.fxtras.utils.StageManager;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;

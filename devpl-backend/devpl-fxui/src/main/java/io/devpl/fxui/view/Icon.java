@@ -1,9 +1,9 @@
 package io.devpl.fxui.view;
 
 import io.devpl.fxui.utils.FXUtils;
-import io.fxtras.svg.SVGImage;
-import io.fxtras.svg.SVGLoader;
 import javafx.scene.layout.Region;
+import org.girod.javafx.svgimage.SVGImage;
+import org.girod.javafx.svgimage.SVGLoader;
 
 import java.net.URL;
 import java.util.Objects;

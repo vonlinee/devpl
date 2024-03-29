@@ -1,8 +1,8 @@
 package io.devpl.fxui.tools;
 
-import io.fxtras.svg.SVGImage;
-import io.fxtras.svg.SVGLoader;
 import javafx.scene.Node;
+import org.girod.javafx.svgimage.SVGImage;
+import org.girod.javafx.svgimage.SVGLoader;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignW;
@@ -25,7 +25,7 @@ public final class IconMap {
         return FontIcon.of(ikon);
     }
 
-    public static Node winodwClose() {
+    public static Node windowClose() {
         return new FontIcon(MaterialDesignW.WINDOW_CLOSE);
     }
 }

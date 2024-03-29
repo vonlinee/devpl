@@ -1,8 +1,8 @@
 package io.devpl.fxui.view;
 
 import io.devpl.fxui.components.TextRegion;
-import io.fxtras.mvvm.FxmlBinder;
-import io.fxtras.mvvm.FxmlView;
+import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
+import io.devpl.fxui.fxtras.mvvm.FxmlView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 

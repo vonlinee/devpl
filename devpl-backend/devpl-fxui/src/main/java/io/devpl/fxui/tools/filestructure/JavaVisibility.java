@@ -2,7 +2,7 @@ package io.devpl.fxui.tools.filestructure;
 
 import io.devpl.fxui.tools.IconKey;
 import io.devpl.fxui.tools.IconMap;
-import io.fxtras.svg.SVGImage;
+import org.girod.javafx.svgimage.SVGImage;
 
 /**
  * Java 可见性枚举
