@@ -9,6 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <description>已废弃, 使用WEB开发界面</description>
     <artifactId>devpl-fxui</artifactId>
 
     <properties>
