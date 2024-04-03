@@ -2,7 +2,6 @@ package io.devpl.codegen.config;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.core.Context;
-import io.devpl.codegen.core.ContextImpl;
 import io.devpl.codegen.core.TemplateBasedTargetFile;
 
 /**

@@ -3,8 +3,7 @@ package io.devpl.codegen.jdbc;
 import java.sql.SQLException;
 
 /**
- * 包装SQLException为RuntimeException
- * 数据库访问异常
+ * 包装SQLException为RuntimeException 数据库访问异常
  *
  * @see SQLException
  */

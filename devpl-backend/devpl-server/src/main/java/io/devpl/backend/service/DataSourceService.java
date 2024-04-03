@@ -2,7 +2,7 @@ package io.devpl.backend.service;
 
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 
 import java.sql.Connection;
 
@@ -15,7 +15,7 @@ public interface DataSourceService {
      * @param dbType     数据库类型
      * @return DatabaseMetadataLoader
      */
-    DatabaseMetadataLoader getDatabaseMetadataLoader(Connection connection, DBType dbType);
+    DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DBType dbType);
 
     void syncTableMetadata(DataSourceMetadataSyncParam param);
 }

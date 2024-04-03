@@ -1,7 +1,5 @@
 package io.devpl.codegen.jdbc.meta;
 
-import lombok.Data;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -10,8 +8,7 @@ import java.sql.SQLException;
  *
  * @see java.sql.DatabaseMetaData#getIndexInfo(String, String, String, boolean, boolean)
  */
-@Data
-public class IndexMetadata {
+public class IndexMetadata implements JdbcMetadataObject {
 
     /**
      * TABLE_CAT String => table catalog (may be null)
@@ -27,6 +24,8 @@ public class IndexMetadata {
     private String tableName;
     /**
      * NON_UNIQUE boolean => Can index values be non-unique. false when TYPE is tableIndexStatistic
+     *
+     * @see IndexMetadata#type
      **/
     private boolean nonUnique;
     /**
@@ -55,14 +54,20 @@ public class IndexMetadata {
     private String columnName;
     /**
      * ASC_OR_DESC String => column sort sequence, "A" => ascending, "D" => descending, may be null if sort sequence is not supported; null when TYPE is tableIndexStatistic
+     *
+     * @see IndexMetadata#type
      **/
     private String ascOrDesc;
     /**
      * CARDINALITY long => When TYPE is tableIndexStatistic, then this is the number of rows in the table; otherwise, it is the number of unique values in the index.
+     *
+     * @see IndexMetadata#type
      **/
     private long cardinality;
     /**
      * PAGES long => When TYPE is tableIndexStatistic then this is the number of pages used for the table, otherwise it is the number of pages used for the current index.
+     *
+     * @see IndexMetadata#type
      **/
     private long pages;
     /**
@@ -70,6 +75,7 @@ public class IndexMetadata {
      **/
     private String filterCondition;
 
+    @Override
     public void initialize(ResultSet resultSet) throws SQLException {
         this.tableCatalog = resultSet.getString(1);
         this.tableSchema = resultSet.getString(2);
@@ -84,5 +90,109 @@ public class IndexMetadata {
         this.cardinality = resultSet.getShort(11);
         this.pages = resultSet.getShort(12);
         this.filterCondition = resultSet.getString(13);
+    }
+
+    public String getTableCatalog() {
+        return tableCatalog;
+    }
+
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
+    }
+
+    public String getTableSchema() {
+        return tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public boolean isNonUnique() {
+        return nonUnique;
+    }
+
+    public void setNonUnique(boolean nonUnique) {
+        this.nonUnique = nonUnique;
+    }
+
+    public String getIndexQualifier() {
+        return indexQualifier;
+    }
+
+    public void setIndexQualifier(String indexQualifier) {
+        this.indexQualifier = indexQualifier;
+    }
+
+    public String getIndexName() {
+        return indexName;
+    }
+
+    public void setIndexName(String indexName) {
+        this.indexName = indexName;
+    }
+
+    public short getType() {
+        return type;
+    }
+
+    public void setType(short type) {
+        this.type = type;
+    }
+
+    public short getOrdinalPosition() {
+        return ordinalPosition;
+    }
+
+    public void setOrdinalPosition(short ordinalPosition) {
+        this.ordinalPosition = ordinalPosition;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public String getAscOrDesc() {
+        return ascOrDesc;
+    }
+
+    public void setAscOrDesc(String ascOrDesc) {
+        this.ascOrDesc = ascOrDesc;
+    }
+
+    public long getCardinality() {
+        return cardinality;
+    }
+
+    public void setCardinality(long cardinality) {
+        this.cardinality = cardinality;
+    }
+
+    public long getPages() {
+        return pages;
+    }
+
+    public void setPages(long pages) {
+        this.pages = pages;
+    }
+
+    public String getFilterCondition() {
+        return filterCondition;
+    }
+
+    public void setFilterCondition(String filterCondition) {
+        this.filterCondition = filterCondition;
     }
 }

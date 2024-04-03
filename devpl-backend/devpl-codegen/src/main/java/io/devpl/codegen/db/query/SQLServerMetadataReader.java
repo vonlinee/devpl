@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * SQLServer查询
  */
-public class SQLServerMetadataLoader extends AbstractQueryDatabaseMetadataLoader  implements SqlMetadataQuery {
+public class SQLServerMetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {

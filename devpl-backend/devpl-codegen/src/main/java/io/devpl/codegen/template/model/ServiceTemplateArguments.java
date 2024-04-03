@@ -13,7 +13,7 @@ import java.util.function.Function;
 /**
  * Service属性配置
  */
-public class ServiceTemplateArguments extends JavaFileTemplateArguments implements TableInitializer {
+public class ServiceTemplateArguments extends JavaFileTemplateArguments implements TemplateDataModelBean {
 
     /**
      * 自定义继承的Service类全称，带包名

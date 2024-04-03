@@ -2,10 +2,15 @@ package io.devpl.codegen.samples;
 
 import io.devpl.codegen.core.AutoGenerator;
 import io.devpl.codegen.core.FastAutoGenerator;
+import io.devpl.codegen.samples.ui.GenerationResultView;
+import io.devpl.codegen.samples.ui.UIHelper;
 import io.devpl.codegen.util.InternalUtils;
 
 import java.io.File;
 
+/**
+ * 如果 src/main/ 下也有模板文件，优先使用 src/test 下的资源文件
+ */
 public class MySQLGenerator {
 
     public static void main(String[] args) {
@@ -26,9 +31,9 @@ public class MySQLGenerator {
                 builder.mapperBuilder().enableFileOverride();
                 builder.controllerBuilder().enableFileOverride();
             })
-            .packageConfig(builder -> builder.parent("com.lancoo.examuniv"))
+            .packageConfig(builder -> builder.parentPackageName("com.lancoo.examuniv"))
             .execute();
 
-        generator.open();
+        generator.show(rootDir -> UIHelper.showFrame("生成结果", new GenerationResultView(new File(rootDir)), 800, 600));
     }
 }

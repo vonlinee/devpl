@@ -20,25 +20,26 @@ import java.util.function.Function;
 /**
  * 通过不同平台的各自的sql进行查询
  *
+ * @see ConnectionHolder
  * @see SqlMetadataQuery
  */
 @Slf4j
-public abstract class AbstractQueryDatabaseMetadataLoader extends ConnectionHolder implements DatabaseMetadataLoader, SqlMetadataQuery {
+public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHolder implements DatabaseMetadataReader, SqlMetadataQuery {
 
-    public static DatabaseMetadataLoader getQuery(DBType dbType) {
-        DatabaseMetadataLoader dbQuery = null;
+    public static DatabaseMetadataReader getQuery(DBType dbType) {
+        DatabaseMetadataReader dbQuery = null;
         if (dbType == DBType.MYSQL) {
-            dbQuery = new MySqlMetadataLoader();
+            dbQuery = new MySqlMetadataReader();
         } else if (dbType == DBType.ORACLE) {
-            dbQuery = new OracleMetadataLoader();
+            dbQuery = new OracleMetadataReader();
         } else if (dbType == DBType.POSTGRE_SQL) {
-            dbQuery = new PostgreSqlMetadataLoader();
+            dbQuery = new PostgreSqlMetadataReader();
         } else if (dbType == DBType.SQL_SERVER) {
-            dbQuery = new SQLServerMetadataLoader();
+            dbQuery = new SQLServerMetadataReader();
         } else if (dbType == DBType.DM) {
-            dbQuery = new DmMetadataLoader();
+            dbQuery = new DmMetadataReader();
         } else if (dbType == DBType.CLICK_HOUSE) {
-            dbQuery = new ClickHouseMetadataLoader();
+            dbQuery = new ClickHouseMetadataReader();
         }
         return dbQuery;
     }

@@ -16,12 +16,12 @@ import java.util.List;
  *
  * @see DatabaseMetaData
  */
-public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
+public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
 
     Connection connection;
     DatabaseMetaData databaseMetaData;
 
-    public JdbcDatabaseMetadataLoader(Connection connection) {
+    public JdbcDatabaseMetadataReader(Connection connection) {
         this.connection = connection;
     }
 
@@ -77,7 +77,7 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
      * @param catalog          catalog
      * @param schemaPattern    schema, 对于mysql，schema和database可以理解为等价的.
      * @param tableNamePattern 表名称pattern
-     * @param types            表类型 {@link JdbcDatabaseMetadataLoader#getTableTypes()}
+     * @param types            表类型 {@link JdbcDatabaseMetadataReader#getTableTypes()}
      * @return 表元数据
      * @throws SQLException 数据库操作异常
      * @see DatabaseMetaData#getTables(String, String, String, String[])
@@ -168,7 +168,7 @@ public class JdbcDatabaseMetadataLoader implements DatabaseMetadataLoader {
 
     @Override
     public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
-                                     String functionNamePattern) throws SQLException {
+                                               String functionNamePattern) throws SQLException {
         ResultSet rs = databaseMetaData.getFunctions(catalog, schemaPattern, functionNamePattern);
         List<FunctionMetadata> functionMetadataList = new ArrayList<>();
         while (rs.next()) {

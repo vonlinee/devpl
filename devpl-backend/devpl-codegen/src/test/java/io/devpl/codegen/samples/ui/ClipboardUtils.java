@@ -25,7 +25,7 @@ public class ClipboardUtils {
     }
 
     static class FileTransferable implements Transferable {
-        private DataFlavor[] dataFlavors = new DataFlavor[]{DataFlavor.javaFileListFlavor};
+        private final DataFlavor[] dataFlavors = new DataFlavor[]{DataFlavor.javaFileListFlavor};
 
         private List<File> _files = new ArrayList<>();
 

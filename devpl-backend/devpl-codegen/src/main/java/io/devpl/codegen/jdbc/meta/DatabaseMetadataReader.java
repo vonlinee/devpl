@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 数据库元数据加载程序
  */
-public interface DatabaseMetadataLoader extends AutoCloseable {
+public interface DatabaseMetadataReader extends AutoCloseable {
 
     /**
      * 设置数据库连接

@@ -1,8 +1,6 @@
-package io.devpl.codegen.jdbc;
+package io.devpl.codegen.core;
 
-import io.devpl.codegen.core.ContextImpl;
-import io.devpl.codegen.core.ColumnGeneration;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.type.DataType;
 
 import java.util.List;
 import java.util.Properties;
@@ -30,7 +28,7 @@ public interface JavaTypeResolver {
      *
      * @param context The current Context
      */
-    void setContext(ContextImpl context);
+    void setContext(Context context);
 
     /**
      * The generator will supply a list to this method. The implementation class may add strings to the list that will
@@ -50,7 +48,7 @@ public interface JavaTypeResolver {
      * is returned, we will set the type to Object and issue a
      * warning unless the column is ignored or otherwise overridden
      */
-    DbColumnType calculateJavaType(ColumnGeneration introspectedColumn);
+    DataType calculateJavaType(ColumnGeneration introspectedColumn);
 
     /**
      * Calculates and returns the JDBC type name that should be associated with

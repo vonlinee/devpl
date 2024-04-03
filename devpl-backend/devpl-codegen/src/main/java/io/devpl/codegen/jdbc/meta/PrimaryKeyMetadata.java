@@ -1,15 +1,12 @@
 package io.devpl.codegen.jdbc.meta;
 
-import lombok.Data;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
  * 主键
  */
-@Data
-public class PrimaryKeyMetadata {
+public class PrimaryKeyMetadata implements JdbcMetadataObject {
 
     /**
      * String => table catalog (may be null)
@@ -48,14 +45,61 @@ public class PrimaryKeyMetadata {
      * @throws SQLException SQLException
      * @see java.sql.DatabaseMetaData#getPrimaryKeys(String, String, String)
      */
+    @Override
     public void initialize(ResultSet resultSet) throws SQLException {
-        setTableCatalog(resultSet.getString(1));
-
+        this.tableCatalog = resultSet.getString(1);
         this.tableSchema = resultSet.getString(2);
-        setTableName(resultSet.getString(3));
-        setColumnName(resultSet.getString(4));
-        setPrimaryKeySequenceNumber(resultSet.getShort(5));
-
+        this.tableName = resultSet.getString(3);
+        this.columnName = resultSet.getString(4);
+        this.primaryKeySequenceNumber = resultSet.getShort(5);
         this.primaryKeyName = resultSet.getString(6);
+    }
+
+    public String getTableCatalog() {
+        return tableCatalog;
+    }
+
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
+    }
+
+    public String getTableSchema() {
+        return tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
+    public Short getPrimaryKeySequenceNumber() {
+        return primaryKeySequenceNumber;
+    }
+
+    public void setPrimaryKeySequenceNumber(Short primaryKeySequenceNumber) {
+        this.primaryKeySequenceNumber = primaryKeySequenceNumber;
+    }
+
+    public String getPrimaryKeyName() {
+        return primaryKeyName;
+    }
+
+    public void setPrimaryKeyName(String primaryKeyName) {
+        this.primaryKeyName = primaryKeyName;
     }
 }

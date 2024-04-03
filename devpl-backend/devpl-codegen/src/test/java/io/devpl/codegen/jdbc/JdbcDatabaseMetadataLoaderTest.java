@@ -2,9 +2,9 @@ package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.config.DataSourceConfig;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataLoader;
+import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class JdbcDatabaseMetadataLoaderTest {
     public void test1() throws IOException {
         try (Connection connection = getConnection()) {
 
-            DatabaseMetadataLoader loader = AbstractQueryDatabaseMetadataLoader.getQuery(DBType.MYSQL);
+            DatabaseMetadataReader loader = AbstractQueryDatabaseMetadataReader.getQuery(DBType.MYSQL);
             loader.setConnection(connection);
 
             List<ColumnMetadata> columns = loader.getColumns(null, "devpl", "data_type_item", null);
@@ -50,7 +50,7 @@ public class JdbcDatabaseMetadataLoaderTest {
     @Test
     public void test2() throws IOException {
         try (Connection connection = getConnection()) {
-            DatabaseMetadataLoader loader = AbstractQueryDatabaseMetadataLoader.getQuery(DBType.MYSQL);
+            DatabaseMetadataReader loader = AbstractQueryDatabaseMetadataReader.getQuery(DBType.MYSQL);
             loader.setConnection(connection);
             List<String> columns = loader.getDataTypes(null, null);
 

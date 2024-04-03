@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * MySQL查询
  */
-public class MySqlMetadataLoader extends AbstractQueryDatabaseMetadataLoader implements SqlMetadataQuery {
+public class MySqlMetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 
     @Override
     public DBType dbType() {

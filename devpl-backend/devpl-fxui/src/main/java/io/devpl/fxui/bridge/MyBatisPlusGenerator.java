@@ -76,7 +76,7 @@ public class MyBatisPlusGenerator {
                 autoGenerator.packageConfig(builder -> {
                     // 包配置(PackageConfig)
                     String parentPackage = projectConfiguration.getParentPackage();
-                    builder.parent(parentPackage); // 设置父包名
+                    builder.parentPackageName(parentPackage); // 设置父包名
                     builder.moduleName(""); // 设置父包模块名
                     builder.entity("entity");  // Entity 包名
                     builder.service("service");  // Service 包名

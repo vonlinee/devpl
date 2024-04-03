@@ -24,7 +24,7 @@ import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataLoader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateArgumentsMap;
@@ -32,7 +32,6 @@ import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.common.utils.ProjectUtils;
 import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.annotations.Readonly;
-import io.devpl.sdk.collection.CaseInsensitiveKeyMap;
 import io.devpl.sdk.collection.Maps;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.CollectionUtils;
@@ -161,7 +160,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         }
         try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, null)) {
             // 从数据库获取表信息
-            DatabaseMetadataLoader loader = dataSourceService.getDatabaseMetadataLoader(connection, param.getDbType());
+            DatabaseMetadataReader loader = dataSourceService.getDatabaseMetadataLoader(connection, param.getDbType());
             List<TableGeneration> tables = prepareTables(loader.getTables(null, null, tableName, null));
             // 查询表是否存在
             TableGeneration table = null;
@@ -563,7 +562,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @param connection 连接
      * @return 表的所有字段信息
      */
-    private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataLoader loader, DBType dbType, Connection connection, TableGeneration table) {
+    private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataReader loader, DBType dbType, Connection connection, TableGeneration table) {
         List<TableGenerationField> tableFieldList = new ArrayList<>();
         try {
             if (loader == null) {
@@ -609,7 +608,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
         try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, databaseName, StringUtils.hasLength(databaseName))) {
             // 根据数据源，获取全部数据表
-            try (DatabaseMetadataLoader loader = dataSourceService.getDatabaseMetadataLoader(connection, dbType)) {
+            try (DatabaseMetadataReader loader = dataSourceService.getDatabaseMetadataLoader(connection, dbType)) {
                 List<TableMetadata> tables = loader.getTables(null, databaseName, tableNamePattern, null);
                 List<TableGeneration> tgs = this.prepareTables(tables);
                 for (TableGeneration tg : tgs) {

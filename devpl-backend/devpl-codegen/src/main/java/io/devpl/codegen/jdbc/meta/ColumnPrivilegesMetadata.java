@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * @see java.sql.DatabaseMetaData#getColumnPrivileges(String, String, String, String)
  */
-public class ColumnPrivilegesMetadata {
+public class ColumnPrivilegesMetadata implements JdbcMetadataObject {
 
     /**
      * TABLE_CAT String => table catalog (may be null)
@@ -115,17 +115,18 @@ public class ColumnPrivilegesMetadata {
     @Override
     public String toString() {
         return "ColumnPrivileges{" +
-            "tableCat='" + tableCatalog + '\'' +
-            ", tableSchem='" + tableSchema + '\'' +
-            ", tableName='" + tableName + '\'' +
-            ", columnName='" + columnName + '\'' +
-            ", grantor='" + grantor + '\'' +
-            ", grantee='" + grantee + '\'' +
-            ", privilege='" + privilege + '\'' +
-            ", isGrantable='" + isGrantable + '\'' +
-            '}';
+               "tableCat='" + tableCatalog + '\'' +
+               ", tableSchem='" + tableSchema + '\'' +
+               ", tableName='" + tableName + '\'' +
+               ", columnName='" + columnName + '\'' +
+               ", grantor='" + grantor + '\'' +
+               ", grantee='" + grantee + '\'' +
+               ", privilege='" + privilege + '\'' +
+               ", isGrantable='" + isGrantable + '\'' +
+               '}';
     }
 
+    @Override
     public void initialize(ResultSet resultSet) throws SQLException {
         setTableCatalog(resultSet.getString(1));
 

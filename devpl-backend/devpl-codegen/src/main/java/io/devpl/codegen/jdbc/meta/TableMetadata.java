@@ -1,7 +1,5 @@
 package io.devpl.codegen.jdbc.meta;
 
-import lombok.Data;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,8 +9,7 @@ import java.sql.SQLException;
  *
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
-@Data
-public class TableMetadata {
+public class TableMetadata implements JdbcMetadataObject {
 
     /**
      * TABLE_CAT String => table catalog (may be null)
@@ -65,6 +62,7 @@ public class TableMetadata {
      */
     private String refGeneration;
 
+    @Override
     public void initialize(ResultSet resultSet) throws SQLException {
         this.tableCatalog = resultSet.getString("TABLE_CAT");
         this.tableSchema = resultSet.getString("TABLE_SCHEM");
@@ -76,5 +74,85 @@ public class TableMetadata {
         this.typeName = resultSet.getString("TYPE_NAME");
         this.selfReferencingColumnName = resultSet.getString("SELF_REFERENCING_COL_NAME");
         this.refGeneration = resultSet.getString("REF_GENERATION");
+    }
+
+    public String getTableCatalog() {
+        return tableCatalog;
+    }
+
+    public void setTableCatalog(String tableCatalog) {
+        this.tableCatalog = tableCatalog;
+    }
+
+    public String getTableSchema() {
+        return tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getTableType() {
+        return tableType;
+    }
+
+    public void setTableType(String tableType) {
+        this.tableType = tableType;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getTypeCatalog() {
+        return typeCatalog;
+    }
+
+    public void setTypeCatalog(String typeCatalog) {
+        this.typeCatalog = typeCatalog;
+    }
+
+    public String getTypeSchema() {
+        return typeSchema;
+    }
+
+    public void setTypeSchema(String typeSchema) {
+        this.typeSchema = typeSchema;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getSelfReferencingColumnName() {
+        return selfReferencingColumnName;
+    }
+
+    public void setSelfReferencingColumnName(String selfReferencingColumnName) {
+        this.selfReferencingColumnName = selfReferencingColumnName;
+    }
+
+    public String getRefGeneration() {
+        return refGeneration;
+    }
+
+    public void setRefGeneration(String refGeneration) {
+        this.refGeneration = refGeneration;
     }
 }

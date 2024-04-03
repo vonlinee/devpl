@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FunctionMetadata implements Serializable {
+public class FunctionMetadata implements JdbcMetadataObject, Serializable {
 
     /**
      * FUNCTION_CAT String => function catalog (maybe null)
@@ -27,21 +27,18 @@ public class FunctionMetadata implements Serializable {
      **/
     private short functionType;
     /**
-     * SPECIFIC_NAME String => the name which uniquely identifies this function within its schema. This is a user specified, or DBMS generated, name that may be different then the FUNCTION_NAME for example with overload functions
+     * SPECIFIC_NAME String => the name which uniquely identifies this function within its schema. This is a user specified, or DBMS generated, name that may be different from the FUNCTION_NAME for example with overload functions
      **/
     private String specificName;
 
-    public void initialize(ResultSet resultSet) {
-        try {
-            this.functionCatalog = resultSet.getString(1);
-            this.functionSchema = resultSet.getString(2);
-            this.functionName = resultSet.getString(3);
-            this.remarks = resultSet.getString(4);
-            this.functionType = resultSet.getShort(5);
-            this.specificName = resultSet.getString(6);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public void initialize(ResultSet resultSet) throws SQLException {
+        this.functionCatalog = resultSet.getString(1);
+        this.functionSchema = resultSet.getString(2);
+        this.functionName = resultSet.getString(3);
+        this.remarks = resultSet.getString(4);
+        this.functionType = resultSet.getShort(5);
+        this.specificName = resultSet.getString(6);
     }
 
     public String getFunctionCatalog() {

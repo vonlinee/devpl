@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * @see DatabaseMetaData#getTypeInfo()
  */
-public class TypeInfoMetadata {
+public class TypeInfoMetadata implements JdbcMetadataObject {
 
     /**
      * TYPE_NAME String => Type name
@@ -89,29 +89,26 @@ public class TypeInfoMetadata {
      **/
     private int numericPrecisionRadix;
 
-    public void initialize(ResultSet resultSet) {
-        try {
-            this.typeName = resultSet.getString(1);
-            this.dataType = resultSet.getInt(2);
-            this.precision = resultSet.getInt(3);
-            this.literalPrefix = resultSet.getString(4);
-            this.literalSuffix = resultSet.getString(5);
-            this.createParams = resultSet.getString(6);
-            this.nullable = resultSet.getShort(7);
-            this.caseSensitive = resultSet.getBoolean(8);
-            this.searchable = resultSet.getShort(9);
-            this.unsignedAttribute = resultSet.getBoolean(10);
-            this.fixedPrecisionScale = resultSet.getBoolean(11);
-            this.autoIncrement = resultSet.getBoolean(12);
-            this.localTypeName = resultSet.getString(13);
-            this.minimumScale = resultSet.getShort(14);
-            this.maximumScale = resultSet.getShort(15);
-            this.sqlDataType = resultSet.getInt(16);
-            this.sqlDatetimeSub = resultSet.getInt(17);
-            this.numericPrecisionRadix = resultSet.getInt(18);
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
-        }
+    @Override
+    public void initialize(ResultSet resultSet) throws SQLException {
+        this.typeName = resultSet.getString(1);
+        this.dataType = resultSet.getInt(2);
+        this.precision = resultSet.getInt(3);
+        this.literalPrefix = resultSet.getString(4);
+        this.literalSuffix = resultSet.getString(5);
+        this.createParams = resultSet.getString(6);
+        this.nullable = resultSet.getShort(7);
+        this.caseSensitive = resultSet.getBoolean(8);
+        this.searchable = resultSet.getShort(9);
+        this.unsignedAttribute = resultSet.getBoolean(10);
+        this.fixedPrecisionScale = resultSet.getBoolean(11);
+        this.autoIncrement = resultSet.getBoolean(12);
+        this.localTypeName = resultSet.getString(13);
+        this.minimumScale = resultSet.getShort(14);
+        this.maximumScale = resultSet.getShort(15);
+        this.sqlDataType = resultSet.getInt(16);
+        this.sqlDatetimeSub = resultSet.getInt(17);
+        this.numericPrecisionRadix = resultSet.getInt(18);
     }
 
     public String getTypeName() {
