@@ -4,7 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl;
 import io.devpl.common.utils.JSONUtils;
 import io.devpl.fxui.model.ConnectionConfig;
-import io.devpl.fxui.model.ProjectConfiguration;
+import io.devpl.codegen.generator.config.ProjectConfiguration;
 import io.devpl.sdk.util.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 

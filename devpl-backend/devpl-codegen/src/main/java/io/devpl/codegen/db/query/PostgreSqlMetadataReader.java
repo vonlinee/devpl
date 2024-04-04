@@ -32,10 +32,10 @@ public class PostgreSqlMetadataReader extends AbstractQueryDatabaseMetadataReade
     @Override
     public String getTableFieldsQuerySql(String catalog, String schema, String tableName, String column, boolean likeMatch) {
         return "select t2.attname as columnName, pg_type.typname as dataType, col_description(t2.attrelid,t2.attnum) as columnComment,"
-            + "(CASE t3.contype WHEN 'p' THEN 'PRI' ELSE '' END) as columnKey "
-            + "from pg_class as t1, pg_attribute as t2 inner join pg_type on pg_type.oid = t2.atttypid "
-            + "left join pg_constraint t3 on t2.attnum = t3.conkey[1] and t2.attrelid = t3.conrelid "
-            + "where t1.relname = '%s' and t2.attrelid = t1.oid and t2.attnum>0";
+               + "(CASE t3.contype WHEN 'p' THEN 'PRI' ELSE '' END) as columnKey "
+               + "from pg_class as t1, pg_attribute as t2 inner join pg_type on pg_type.oid = t2.atttypid "
+               + "left join pg_constraint t3 on t2.attnum = t3.conkey[1] and t2.attrelid = t3.conrelid "
+               + "where t1.relname = '%s' and t2.attrelid = t1.oid and t2.attnum>0";
     }
 
 

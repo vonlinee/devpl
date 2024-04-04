@@ -1,6 +1,6 @@
 package io.devpl.codegen.jdbc;
 
-import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.generator.config.CaseFormat;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.NumberUtils;

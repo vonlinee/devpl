@@ -21,6 +21,9 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
     Connection connection;
     DatabaseMetaData databaseMetaData;
 
+    public JdbcDatabaseMetadataReader() {
+    }
+
     public JdbcDatabaseMetadataReader(Connection connection) {
         this.connection = connection;
     }
@@ -62,7 +65,7 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
 
     @Override
     public List<String> getDatabaseNames() throws SQLException {
-        ResultSet schemas = databaseMetaData.getSchemas();
+        ResultSet schemas = getDatabaseMetaData().getSchemas();
         List<String> databaseNames = new ArrayList<>();
         while (schemas.next()) {
             databaseNames.add(schemas.getString("TABLE_SCHEM"));
@@ -154,7 +157,7 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
 
     @Override
     public List<String> getSQLKeywords() throws SQLException {
-        String sqlKeywords = databaseMetaData.getSQLKeywords();
+        String sqlKeywords = getDatabaseMetaData().getSQLKeywords();
         if (sqlKeywords == null || sqlKeywords.isEmpty()) {
             return Collections.emptyList();
         }
@@ -167,9 +170,8 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
     }
 
     @Override
-    public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
-                                               String functionNamePattern) throws SQLException {
-        ResultSet rs = databaseMetaData.getFunctions(catalog, schemaPattern, functionNamePattern);
+    public List<FunctionMetadata> getFunctions(String catalog, String schemaPattern, String functionNamePattern) throws SQLException {
+        ResultSet rs = getDatabaseMetaData().getFunctions(catalog, schemaPattern, functionNamePattern);
         List<FunctionMetadata> functionMetadataList = new ArrayList<>();
         while (rs.next()) {
             FunctionMetadata fm = new FunctionMetadata();

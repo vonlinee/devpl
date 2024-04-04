@@ -1,10 +1,10 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.config.BaseBuilder;
-import io.devpl.codegen.config.StrategyConfig;
-import io.devpl.codegen.config.TemplateDataModelBean;
-import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.generator.config.BaseBuilder;
+import io.devpl.codegen.generator.config.StrategyConfiguration;
+import io.devpl.codegen.generator.config.TemplateDataModelBean;
+import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -127,8 +127,8 @@ public class MapperTemplateArguments extends JavaFileTemplateArguments implement
 
         private final MapperTemplateArguments mapper = new MapperTemplateArguments();
 
-        public Builder(StrategyConfig strategyConfig) {
-            super(strategyConfig);
+        public Builder(StrategyConfiguration strategyConfiguration) {
+            super(strategyConfiguration);
         }
 
         /**

@@ -22,7 +22,7 @@
 
 ```java
 FastAutoGenerator.create("url","username","password")
-    .globalConfig(builder->{
+    .globalConfiguration(builder->{
     builder.author("baomidou") // 设置作者
     .enableSwagger() // 开启 swagger 模式
     .outputDir("D://"); // 指定输出目录
@@ -32,7 +32,7 @@ FastAutoGenerator.create("url","username","password")
     .moduleName("system") // 设置父包模块名
     .pathInfo(Collections.singletonMap(OutputFile.xml,"D://")); // 设置mapperXml生成路径
     })
-    .strategyConfig(builder->{
+    .strategyConfiguration(builder->{
     builder.addInclude("t_simple") // 设置需要生成的表名
     .addTablePrefix("t_","c_"); // 设置过滤表前缀
     })
@@ -45,11 +45,11 @@ FastAutoGenerator.create("url","username","password")
 ```java
 FastAutoGenerator.create("url","username","password")
     // 全局配置
-    .globalConfig((scanner,builder)->builder.author(scanner.apply("请输入作者名称？")))
+    .globalConfiguration((scanner,builder)->builder.author(scanner.apply("请输入作者名称？")))
     // 包配置
     .packageConfig((scanner,builder)->builder.parent(scanner.apply("请输入包名？")))
     // 策略配置
-    .strategyConfig(builder->builder.addInclude("t_simple"))
+    .strategyConfiguration(builder->builder.addInclude("t_simple"))
     /*
         模板引擎配置，默认 Velocity 可选模板引擎 Beetl 或 Freemarker 或 Enjoy
        .templateEngine(new BeetlTemplateEngine())

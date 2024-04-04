@@ -1,6 +1,6 @@
 package io.devpl.codegen.template.velocity;
 
-import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.generator.config.CaseFormat;
 
 /**
  * userdirective=aaa.bbb.ccc.XxxDirective

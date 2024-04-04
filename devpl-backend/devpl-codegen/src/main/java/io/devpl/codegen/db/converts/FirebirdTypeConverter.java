@@ -15,16 +15,13 @@
  */
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * MYSQL 数据库字段类型转换
- *
- * @author hubin, hanchunlin
- * @since 2017-01-20
  */
 public class FirebirdTypeConverter implements TypeConverter {
     public static final FirebirdTypeConverter INSTANCE = new FirebirdTypeConverter();
@@ -36,7 +33,7 @@ public class FirebirdTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static ColumnJavaType toDateType(GlobalConfig config, String type) {
+    public static ColumnJavaType toDateType(GlobalConfiguration config, String type) {
         return switch (config.getDateType()) {
             case ONLY_DATE -> DbColumnType.DATE;
             case SQL_PACK -> switch (type) {
@@ -57,7 +54,7 @@ public class FirebirdTypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("cstring", "text").then(DbColumnType.STRING))
             .test(TypeConverts.contains("short").then(DbColumnType.SHORT))

@@ -1,16 +1,9 @@
 package io.devpl.backend.service.impl;
 
 import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
-import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.dao.TableGenerationFieldMapper;
-import io.devpl.backend.domain.enums.AutoFillEnum;
-import io.devpl.backend.domain.enums.FormType;
-import io.devpl.backend.entity.DataTypeMapping;
-import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.entity.TableGenerationField;
 import io.devpl.backend.service.TableGenerationFieldService;
-import io.devpl.codegen.core.CaseFormat;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

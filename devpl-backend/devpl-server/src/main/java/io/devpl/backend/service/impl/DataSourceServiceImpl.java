@@ -37,7 +37,6 @@ public class DataSourceServiceImpl implements DataSourceService {
             DatabaseMetadataReader loader = new JdbcDatabaseMetadataReader(connection);
             List<TableMetadata> tableMetadataList = loader.getTables(param.getDatabaseName(), null, param.getTableName(), null);
 
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

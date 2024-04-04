@@ -1,7 +1,7 @@
 package io.devpl.codegen.samples;
 
-import io.devpl.codegen.core.AutoGenerator;
-import io.devpl.codegen.core.FastAutoGenerator;
+import io.devpl.codegen.generator.AutoGenerator;
+import io.devpl.codegen.generator.FastAutoGenerator;
 import io.devpl.codegen.samples.ui.GenerationResultView;
 import io.devpl.codegen.samples.ui.UIHelper;
 import io.devpl.codegen.util.InternalUtils;
@@ -24,8 +24,8 @@ public class MySQLGenerator {
                     .outputDir("D://Temp//codegen"); // 指定输出目录
             }).strategyConfig(builder -> {
                 builder.addInclude("template_info");
-//                builder.addInclude("graduation_resit_exam_application");
-//                builder.addInclude("graduation_resit_exam_review");
+                builder.addInclude("graduation_resit_exam_application");
+                builder.addInclude("graduation_resit_exam_review");
                 builder.entityBuilder().enableFileOverride();
                 builder.serviceBuilder().enableFileOverride();
                 builder.mapperBuilder().enableFileOverride();
@@ -33,7 +33,6 @@ public class MySQLGenerator {
             })
             .packageConfig(builder -> builder.parentPackageName("com.lancoo.examuniv"))
             .execute();
-
         generator.show(rootDir -> UIHelper.showFrame("生成结果", new GenerationResultView(new File(rootDir)), 800, 600));
     }
 }

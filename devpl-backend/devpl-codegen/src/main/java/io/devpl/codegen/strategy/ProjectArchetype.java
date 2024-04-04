@@ -1,16 +1,30 @@
 package io.devpl.codegen.strategy;
 
+import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.config.PropertyHolder;
+
 /**
  * 项目骨架
  */
-public interface ProjectArchetype {
+public abstract class ProjectArchetype extends PropertyHolder {
+
+    /**
+     * 项目根目录
+     */
+    protected String rootDir;
+
+    /**
+     * 模块名称
+     */
+    protected String moduleName;
 
     /**
      * 根目录
      *
      * @param rootDir 根目录
      */
-    default void setRootDirectory(String rootDir) {
+    public final void setRootDirectory(String rootDir) {
+        this.rootDir = rootDir;
     }
 
     /**
@@ -18,15 +32,15 @@ public interface ProjectArchetype {
      *
      * @param module 模块名称
      */
-    default void setModuleName(String module) {
+    public final void setModuleName(String module) {
+        this.moduleName = module;
     }
 
     /**
      * 返回相对于项目根路径的相对路径
      *
-     * @param filename 文件名
-     * @param ext      文件扩展名
+     * @param file 文件信息
      * @return 文件存放位置，相对路径
      */
-    String locate(String filename, String ext);
+    public abstract String locate(GeneratedFile file);
 }

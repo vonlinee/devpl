@@ -1,5 +1,8 @@
 package io.devpl.codegen.util;
 
+import io.devpl.codegen.ConstVal;
+import io.devpl.sdk.util.StringUtils;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -142,5 +145,23 @@ public abstract class InternalUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 连接路径字符串
+     *
+     * @param parentDir   路径常量字符串
+     * @param packageName 包名
+     * @return 连接后的路径
+     */
+    private static String joinPath(String parentDir, String packageName) {
+        if (!io.devpl.sdk.util.StringUtils.hasText(parentDir)) {
+            parentDir = System.getProperty(ConstVal.JAVA_TMPDIR);
+        }
+        if (!StringUtils.endsWith(parentDir, File.separator)) {
+            parentDir += File.separator;
+        }
+        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
+        return parentDir + packageName;
     }
 }

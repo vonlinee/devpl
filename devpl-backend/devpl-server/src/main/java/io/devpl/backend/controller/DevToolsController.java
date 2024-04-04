@@ -9,7 +9,7 @@ import io.devpl.backend.entity.GroupField;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldGroupService;
-import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.generator.config.CaseFormat;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

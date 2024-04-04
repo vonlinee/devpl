@@ -1,30 +1,12 @@
-/*
- * Copyright (c) 2011-2021, baomidou (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * PostgreSQL 字段类型转换
- *
- * @author hubin, hanchunlin
- * @since 2017-01-20
  */
 public class PostgreSqlTypeConverter implements TypeConverter {
     public static final PostgreSqlTypeConverter INSTANCE = new PostgreSqlTypeConverter();
@@ -36,7 +18,7 @@ public class PostgreSqlTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static ColumnJavaType toDateType(GlobalConfig config, String type) {
+    public static ColumnJavaType toDateType(GlobalConfiguration config, String type) {
         return switch (config.getDateType()) {
             case SQL_PACK -> switch (type) {
                 case "date" -> DbColumnType.DATE_SQL;
@@ -56,7 +38,7 @@ public class PostgreSqlTypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
             .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))

@@ -7,9 +7,6 @@ import java.util.List;
 
 /**
  * ClickHouse 表数据查询
- *
- * @author ratelfu
- * @since 2021-03-10
  */
 public class ClickHouseMetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 

@@ -1,8 +1,11 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.config.*;
-import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.generator.TableGeneration;
+import io.devpl.codegen.generator.config.BaseBuilder;
+import io.devpl.codegen.generator.config.NamingStrategy;
+import io.devpl.codegen.generator.config.StrategyConfiguration;
+import io.devpl.codegen.generator.config.TemplateDataModelBean;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -92,8 +95,8 @@ public class ControllerTemplateArguments extends JavaFileTemplateArguments imple
 
         private final ControllerTemplateArguments controller = new ControllerTemplateArguments();
 
-        public Builder(@NotNull StrategyConfig strategyConfig) {
-            super(strategyConfig);
+        public Builder(@NotNull StrategyConfiguration strategyConfiguration) {
+            super(strategyConfiguration);
         }
 
         /**

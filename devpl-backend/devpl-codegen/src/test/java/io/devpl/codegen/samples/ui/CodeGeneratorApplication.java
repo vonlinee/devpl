@@ -2,6 +2,7 @@ package io.devpl.codegen.samples.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class CodeGeneratorApplication extends JFrame {
 
@@ -9,6 +10,9 @@ public class CodeGeneratorApplication extends JFrame {
     TextEditor textEditor;
 
     public CodeGeneratorApplication() throws HeadlessException {
+
+        UIHelper.setLookAndFeel();
+
         setTitle("代码生成器");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,17 +23,22 @@ public class CodeGeneratorApplication extends JFrame {
 
         Container contentPane = getContentPane();
 
+        JSplitPane splitPane = new JSplitPane();
+
         contentPane.setLayout(layout);
 
         textEditor = new TextEditor();
 
-        contentPane.add(fileTreeView, BorderLayout.WEST);
+        splitPane.setLeftComponent(fileTreeView);
+        splitPane.setRightComponent(textEditor);
+
+        contentPane.add(splitPane, BorderLayout.CENTER);
 
         fileTreeView.setNodeSelectionHandler(file -> {
             textEditor.setText(UIHelper.readString(file));
         });
 
-        contentPane.add(textEditor, BorderLayout.CENTER);
+        fileTreeView.setRootDirectory(new File("D:/Temp"));
 
         UIHelper.center(this);
     }

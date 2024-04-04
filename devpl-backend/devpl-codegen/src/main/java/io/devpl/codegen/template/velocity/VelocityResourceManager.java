@@ -22,14 +22,20 @@ public class VelocityResourceManager extends ResourceManagerImpl {
          * @see org.apache.velocity.runtime.resource.loader.FileResourceLoader#init(ExtProperties)
          */
         List<String> paths = new ArrayList<>();
-
         rs.setProperty(RuntimeConstants.RESOURCE_LOADER_PATHS, paths);
-
         super.initialize(rs);
-
-        System.out.println(this);
     }
 
+    /**
+     * @param resourceName The name of the resource to retrieve.
+     * @param resourceType The type of resource (<code>RESOURCE_TEMPLATE</code>, <code>RESOURCE_CONTENT</code>, etc.).
+     * @param encoding     The character encoding to use.
+     * @return
+     * @throws ResourceNotFoundException
+     * @throws ParseErrorException
+     * @see ResourceManagerImpl#RESOURCE_TEMPLATE
+     * @see ResourceManagerImpl#RESOURCE_CONTENT
+     */
     @Override
     public Resource getResource(String resourceName, int resourceType, String encoding) throws ResourceNotFoundException, ParseErrorException {
         return super.getResource(resourceName, resourceType, encoding);

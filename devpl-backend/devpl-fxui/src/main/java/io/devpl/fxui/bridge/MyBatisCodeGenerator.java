@@ -1,5 +1,6 @@
 package io.devpl.fxui.bridge;
 
+import io.devpl.codegen.generator.config.ProjectConfiguration;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.common.StringKey;

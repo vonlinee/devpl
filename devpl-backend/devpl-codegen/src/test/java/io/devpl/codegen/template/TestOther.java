@@ -1,6 +1,6 @@
 package io.devpl.codegen.template;
 
-import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.generator.config.CaseFormat;
 import io.devpl.codegen.jdbc.meta.TypeInfoMetadata;
 
 import java.lang.reflect.Field;

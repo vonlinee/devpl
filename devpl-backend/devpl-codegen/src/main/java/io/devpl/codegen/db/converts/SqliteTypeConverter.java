@@ -1,25 +1,22 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * SQLite 字段类型转换
- *
- * @author chen_wj, hanchunlin
- * @since 2019-05-08
  */
 public class SqliteTypeConverter implements TypeConverter {
     public static final SqliteTypeConverter INSTANCE = new SqliteTypeConverter();
 
     /**
      * @inheritDoc
-     * @see MySqlTypeConverter#toDateType(GlobalConfig, String)
+     * @see MySqlTypeConverter#toDateType(GlobalConfiguration, String)
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
             .test(TypeConverts.containsAny("tinyint(1)", "boolean").then(DbColumnType.BOOLEAN))

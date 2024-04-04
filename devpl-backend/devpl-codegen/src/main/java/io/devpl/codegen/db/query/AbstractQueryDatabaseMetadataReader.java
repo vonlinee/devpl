@@ -5,7 +5,6 @@ import io.devpl.codegen.jdbc.ConnectionHolder;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.*;
-import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -113,7 +112,7 @@ public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHold
                 // 查询数据
                 while (rs.next()) {
                     String tableName = rs.getString(this.getTableNameResultSetColumnName());
-                    if (StringUtils.hasText(tableNamePattern) && !tableName.contains(tableNamePattern)) {
+                    if (tableNamePattern != null && !tableName.contains(tableNamePattern)) {
                         continue;
                     }
                     TableMetadata table = new TableMetadata();
@@ -188,7 +187,7 @@ public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHold
                 while (rs.next()) {
                     // 主键
                     String key = rs.getString(this.getPrimaryKeyResultSetColumnName());
-                    if (StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key)) {
+                    if (key != null && !key.isEmpty() && "PRI".equalsIgnoreCase(key)) {
                         PrimaryKeyMetadata pkm = new PrimaryKeyMetadata();
                         pkm.setColumnName(rs.getString(this.getColumnNameResultSetColumnName()));
                         primaryKeyMetadata.add(pkm);
@@ -219,7 +218,6 @@ public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHold
         return this.getDataTypes(databaseName, tableName);
     }
 
-    @Override
     public void close() {
         JdbcUtils.closeQuietly(this.getConnection());
     }

@@ -1,15 +1,18 @@
 package io.devpl.fxui.bridge;
 
-import io.devpl.codegen.config.DateType;
-import io.devpl.codegen.config.OutputFile;
+import io.devpl.codegen.generator.FastAutoGenerator;
+import io.devpl.codegen.generator.config.DateType;
+import io.devpl.codegen.generator.config.OutputFile;
+import io.devpl.codegen.generator.config.ProjectConfiguration;
 import io.devpl.codegen.template.model.ControllerTemplateArguments;
 import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
-import io.devpl.codegen.core.ActionCallback;
-import io.devpl.codegen.core.FastAutoGenerator;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
-import io.devpl.fxui.model.*;
+import io.devpl.fxui.model.CodeGenContext;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.model.TableGeneration;
 import io.devpl.sdk.util.CollectionUtils;
 
 import java.io.File;
@@ -57,19 +60,12 @@ public class MyBatisPlusGenerator {
 
                 autoGenerator.globalConfig(builder -> {
                     builder.author(""); // 设置作者名 默认值:作者
-                    builder.disableOpenDir(); // 不打卡生成目录
+                    builder.disableOpenDir(); // 不打开生成目录
                     // .enableSwagger() // 开启 swagger 模式
                     // .enableSpringdoc()  // 开启 springdoc 模式  @Schema注解
                     builder.dateType(DateType.TIME_PACK);  // 时间策略
                     builder.commentDatePattern("yyyy-MM-dd HH:mm:ss");// 注释日期 默认值: yyyy-MM-dd
                     builder.outputDir(outputRootDir); // 指定输出根目录 默认值: windows:D:// linux or mac : /tmp
-
-                    builder.setActionCallback(new ActionCallback() {
-                        @Override
-                        public void writeFile(File file) {
-                            list.add(file);
-                        }
-                    });
                 });
 
                 // 包名配置

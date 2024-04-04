@@ -1,15 +1,12 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * DM 字段类型转换
- *
- * @author halower, hanchunlin, daiby
- * @since 2019-06-27
  */
 public class DmTypeConverter implements TypeConverter {
     public static final DmTypeConverter INSTANCE = new DmTypeConverter();
@@ -43,7 +40,7 @@ public class DmTypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "text").then(DbColumnType.STRING))
             .test(TypeConverts.contains("number").then(DmTypeConverter::toNumberType))

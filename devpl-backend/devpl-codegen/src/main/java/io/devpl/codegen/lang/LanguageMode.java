@@ -1,6 +1,6 @@
 package io.devpl.codegen.lang;
 
-import io.devpl.codegen.core.CaseFormat;
+import io.devpl.codegen.generator.config.CaseFormat;
 
 import java.lang.reflect.Modifier;
 

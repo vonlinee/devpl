@@ -1,14 +1,12 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * ClickHouse 字段类型转换
- *
- * @author urzeye
  */
 public class ClickHouseTypeConverter implements TypeConverter {
 
@@ -44,7 +42,7 @@ public class ClickHouseTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static ColumnJavaType toDateType(GlobalConfig config, String type) {
+    public static ColumnJavaType toDateType(GlobalConfiguration config, String type) {
         return switch (config.getDateType()) {
             case SQL_PACK -> {
                 if ("date".equals(type)) {
@@ -63,7 +61,7 @@ public class ClickHouseTypeConverter implements TypeConverter {
     }
 
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration globalConfiguration, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny(INTEGER_TYPE).then(DbColumnType.INTEGER))
             .test(TypeConverts.containsAny(BIGINTEGER_TYPE).then(DbColumnType.BIG_INTEGER))
@@ -73,7 +71,7 @@ public class ClickHouseTypeConverter implements TypeConverter {
             .test(TypeConverts.contains("float64").then(DbColumnType.DOUBLE))
             .test(TypeConverts.contains("map").then(DbColumnType.MAP))
             .test(TypeConverts.contains("array").then(DbColumnType.OBJECT))
-            .test(TypeConverts.containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfig, fieldType)))
+            .test(TypeConverts.containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfiguration, fieldType)))
             .test(TypeConverts.containsAny(STRING_TYPE).then(DbColumnType.STRING))
             .or(DbColumnType.STRING);
     }

@@ -1,7 +1,7 @@
 package io.devpl.codegen.type;
 
+import io.devpl.codegen.generator.config.DateType;
 import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.db.DbColumnType;
 
 import java.sql.Types;

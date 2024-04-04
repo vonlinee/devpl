@@ -1,5 +1,9 @@
 package io.devpl.codegen.samples.ui;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.intellijthemes.FlatArcIJTheme;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -36,17 +40,31 @@ public class UIHelper {
         return "";
     }
 
-    public static void setLookAndFeel() {
+    /**
+     * <a href="https://www.formdev.com/flatlaf/">...</a>
+     */
+    private static void initialize() {
+        FlatLightLaf.install();
+        FlatArcIJTheme.install();
         try {
-            // 设置外观
-            // 跨平台外观
-            // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            // 和系统一样的外观
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
         }
+    }
+
+    public static void setLookAndFeel() {
+        initialize();
+//        try {
+//            // 设置外观
+//            // 跨平台外观
+//            // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+//            // 和系统一样的外观
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
+//                 IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public static void center(JFrame frame) {

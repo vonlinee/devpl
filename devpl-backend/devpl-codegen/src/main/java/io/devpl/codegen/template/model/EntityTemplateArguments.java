@@ -1,8 +1,8 @@
 package io.devpl.codegen.template.model;
 
-import io.devpl.codegen.config.*;
-import io.devpl.codegen.core.TableGeneration;
+import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.db.IdType;
+import io.devpl.codegen.generator.config.*;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -86,8 +86,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
 
     /**
      * 乐观锁属性名称(实体字段)
-     *
-     * @since 3.5.0
      */
     private String versionPropertyName;
 
@@ -302,9 +300,9 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
 
         private final EntityTemplateArguments entity = new EntityTemplateArguments();
 
-        public Builder(StrategyConfig strategyConfig) {
-            super(strategyConfig);
-            this.entity.nameConvert = new DefaultNameConvert(strategyConfig);
+        public Builder(StrategyConfiguration strategyConfiguration) {
+            super(strategyConfiguration);
+            this.entity.nameConvert = new DefaultNameConvert(strategyConfiguration);
         }
 
         /**

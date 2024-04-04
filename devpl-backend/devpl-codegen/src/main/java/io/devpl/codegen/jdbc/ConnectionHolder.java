@@ -37,7 +37,7 @@ public abstract class ConnectionHolder {
         this.connectionSupplier = connectionSupplier;
     }
 
-    public final void setConnection(@Nullable Connection connection) {
+    public void setConnection(@Nullable Connection connection) {
         this.connection = connection;
     }
 

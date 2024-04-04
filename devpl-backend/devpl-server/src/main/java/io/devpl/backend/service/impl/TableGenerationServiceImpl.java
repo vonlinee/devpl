@@ -20,8 +20,8 @@ import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.backend.utils.PathUtils;
-import io.devpl.codegen.core.CaseFormat;
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.generator.config.CaseFormat;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
@@ -608,13 +608,12 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
         try (Connection connection = rdbmsConnectionInfoService.getConnection(datasourceId, databaseName, StringUtils.hasLength(databaseName))) {
             // 根据数据源，获取全部数据表
-            try (DatabaseMetadataReader loader = dataSourceService.getDatabaseMetadataLoader(connection, dbType)) {
-                List<TableMetadata> tables = loader.getTables(null, databaseName, tableNamePattern, null);
-                List<TableGeneration> tgs = this.prepareTables(tables);
-                for (TableGeneration tg : tgs) {
-                    tg.setDatasourceId(datasourceId);
-                    tableList.add(tg);
-                }
+            DatabaseMetadataReader loader = dataSourceService.getDatabaseMetadataLoader(connection, dbType);
+            List<TableMetadata> tables = loader.getTables(null, databaseName, tableNamePattern, null);
+            List<TableGeneration> tgs = this.prepareTables(tables);
+            for (TableGeneration tg : tgs) {
+                tg.setDatasourceId(datasourceId);
+                tableList.add(tg);
             }
         } catch (Exception e) {
             throw RuntimeSQLException.wrap(e);

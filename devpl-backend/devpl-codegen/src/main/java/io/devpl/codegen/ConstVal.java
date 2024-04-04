@@ -37,12 +37,12 @@ public interface ConstVal {
     /**
      * Mapper模板路径
      */
-    String TEMPLATE_MAPPER = "/templates/%s/mapper.java";
+    String TEMPLATE_MAPPER_JAVA = "/templates/%s/mapper.java";
 
     /**
      * MapperXml模板路径
      */
-    String TEMPLATE_XML = "/templates/%s/mapper.xml";
+    String TEMPLATE_MAPPER_XML = "/templates/%s/mapper.xml";
 
     /**
      * Service模板路径

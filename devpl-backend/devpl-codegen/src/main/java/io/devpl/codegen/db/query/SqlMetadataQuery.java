@@ -83,5 +83,13 @@ public interface SqlMetadataQuery {
      */
     List<String> getDatabaseNames() throws SQLException;
 
+    /**
+     * 获取数据类型列表
+     *
+     * @param databaseName 数据库名称
+     * @param tableName    表名称
+     * @return 数据类型列表
+     * @throws SQLException SQLException
+     */
     List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
 }

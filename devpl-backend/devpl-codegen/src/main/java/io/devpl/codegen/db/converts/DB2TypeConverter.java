@@ -1,15 +1,12 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * DB2 字段类型转换
- *
- * @author zhanyao, hanchunlin
- * @since 2018-05-16
  */
 public class DB2TypeConverter implements TypeConverter {
     public static final DB2TypeConverter INSTANCE = new DB2TypeConverter();
@@ -18,7 +15,7 @@ public class DB2TypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig config, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
             .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))

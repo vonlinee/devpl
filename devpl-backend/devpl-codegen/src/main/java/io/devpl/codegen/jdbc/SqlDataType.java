@@ -1,8 +1,8 @@
 package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.type.DataType;
-import io.devpl.sdk.lang.ByteArray;
 import io.devpl.codegen.util.TypeHelper;
+import io.devpl.sdk.lang.ByteArray;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

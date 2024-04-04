@@ -1,5 +1,6 @@
 package io.devpl.fxui.model;
 
+import io.devpl.codegen.generator.config.ProjectConfiguration;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,10 +1,10 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.TypeConverter;
-import io.devpl.codegen.util.BranchBuilder;
-import io.devpl.codegen.util.Selector;
 import io.devpl.codegen.db.ColumnJavaType;
 import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.generator.config.TypeConverter;
+import io.devpl.codegen.util.BranchBuilder;
+import io.devpl.codegen.util.Selector;
 
 /**
  * 该注册器负责注册并查询类型注册器

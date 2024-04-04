@@ -2,7 +2,6 @@ package io.devpl.codegen.template.beetl;
 
 import io.devpl.codegen.template.AbstractTemplateEngine;
 import io.devpl.codegen.template.Template;
-import io.devpl.codegen.template.TemplateArguments;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.resource.ClasspathResourceLoader;

@@ -163,7 +163,7 @@ public interface TemplateEngine {
     /**
      * 获取模板文件后缀名
      *
-     * @return 模板文件后缀名
+     * @return 模板文件后缀名，不为空
      */
     String getTemplateFileExtension();
 

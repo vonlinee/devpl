@@ -19,6 +19,5 @@ public class TableInfo {
     private List<ColumnInfo> columns;
 
     private List<IndexInfo> indexes;
-
     private List<Map.Entry<String, String>> options;
 }

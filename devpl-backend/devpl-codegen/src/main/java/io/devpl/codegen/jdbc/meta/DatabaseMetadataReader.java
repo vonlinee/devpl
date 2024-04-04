@@ -1,13 +1,18 @@
 package io.devpl.codegen.jdbc.meta;
 
+import io.devpl.codegen.generator.config.JdbcConfiguration;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 /**
- * 数据库元数据加载程序
+ * 元数据查询数据库信息.
+ * FAQ:
+ * 1.Mysql无法读取表注释: 链接增加属性 remarks=true&useInformationSchema=true 或者通过{@link JdbcConfiguration.Builder#addConnectionProperty(String, String)}设置
+ * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true {@link JdbcConfiguration.Builder#addConnectionProperty(String, String)}
  */
-public interface DatabaseMetadataReader extends AutoCloseable {
+public interface DatabaseMetadataReader {
 
     /**
      * 设置数据库连接
@@ -67,8 +72,7 @@ public interface DatabaseMetadataReader extends AutoCloseable {
      * @return 函数信息
      * @throws SQLException 访问数据库出错
      */
-    List<FunctionMetadata> getFunctions(String catalog, String schemaPattern,
-                                        String functionNamePattern) throws SQLException;
+    List<FunctionMetadata> getFunctions(String catalog, String schemaPattern, String functionNamePattern) throws SQLException;
 
     /**
      * @param catalog           catalog
@@ -94,11 +98,4 @@ public interface DatabaseMetadataReader extends AutoCloseable {
      * @throws SQLException SQL异常
      */
     List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
-
-    /**
-     * 数据清理操作
-     */
-    @Override
-    default void close() {
-    }
 }

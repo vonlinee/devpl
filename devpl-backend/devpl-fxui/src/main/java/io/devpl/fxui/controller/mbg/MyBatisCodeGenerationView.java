@@ -1,7 +1,7 @@
 package io.devpl.fxui.controller.mbg;
 
+import io.devpl.codegen.generator.config.ProjectConfiguration;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
-import io.devpl.codegen.config.MavenProjectLayout;
 import io.devpl.common.utils.MavenProjectAnalyser;
 import io.devpl.common.utils.ProjectAnalyser;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
@@ -229,9 +229,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
 
         chobProjectLayout.getItems().addAll("MAVEN");
         chobProjectLayout.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if ("MAVEN".equalsIgnoreCase(newValue)) {
-                this.projectConfig.setProjectLayout(new MavenProjectLayout());
-            }
+
         });
         chobProjectLayout.getSelectionModel().selectFirst();
     }

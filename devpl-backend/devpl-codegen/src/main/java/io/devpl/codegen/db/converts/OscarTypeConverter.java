@@ -1,32 +1,29 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.config.GlobalConfig;
-import io.devpl.codegen.config.TypeConverter;
 import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.config.DateType;
 import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.generator.config.DateType;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
+import io.devpl.codegen.generator.config.TypeConverter;
 
 /**
  * KingbaseES 字段类型转换
- *
- * @author kingbase, hanchunlin
- * @since 2019-10-12
  */
 public class OscarTypeConverter implements TypeConverter {
     public static final OscarTypeConverter INSTANCE = new OscarTypeConverter();
 
     /**
-     * @param globalConfig 全局配置
-     * @param fieldType    字段类型
+     * @param globalConfiguration 全局配置
+     * @param fieldType           字段类型
      * @return 返回对应的字段类型
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public ColumnJavaType processTypeConvert(GlobalConfiguration globalConfiguration, String fieldType) {
         return TypeConverts.use(fieldType)
             .test(TypeConverts.containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(DbColumnType.STRING))
             .test(TypeConverts.containsAny("bigint", "int8").then(DbColumnType.LONG))
             .test(TypeConverts.containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(DbColumnType.INTEGER))
-            .test(TypeConverts.containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfig, p)))
+            .test(TypeConverts.containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfiguration, p)))
             .test(TypeConverts.containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
             .test(TypeConverts.containsAny("decimal", "numeric", "number").then(DbColumnType.BIG_DECIMAL))
             .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
@@ -43,7 +40,7 @@ public class OscarTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    private ColumnJavaType toDateType(GlobalConfig config, String type) {
+    private ColumnJavaType toDateType(GlobalConfiguration config, String type) {
         DateType dateType = config.getDateType();
         if (dateType == DateType.SQL_PACK) {
             return switch (type) {
