@@ -33,7 +33,7 @@
         <el-button type="danger" @click="typeGroupManagerRef.show()">类型分组</el-button>
       </el-form-item>
     </el-form>
-    <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
+    <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" height="500px"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="40"></el-table-column>
       <el-table-column prop="typeGroupId" label="类型分组" header-align="center" align="center" width="150">
