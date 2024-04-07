@@ -3,6 +3,9 @@ package io.devpl.codegen.generator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @see TableGeneration 以表作为代码生成的对象
+ */
 public interface GenerationTarget {
 
     /**

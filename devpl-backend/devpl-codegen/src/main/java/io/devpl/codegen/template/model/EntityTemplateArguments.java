@@ -57,8 +57,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
 
     /**
      * 【实体】是否为链式模型（默认 false）
-     *
-     * @since 3.3.2
      */
     private boolean chain;
 
@@ -115,26 +113,18 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
     private NamingStrategy columnNamingStrategy = NamingStrategy.NO_CHANGE;
     /**
      * 开启 ActiveRecord 模式（默认 false）
-     *
-     * @since 3.5.0
      */
     private boolean activeRecord;
     /**
      * 指定生成的主键的ID类型
-     *
-     * @since 3.5.0
      */
     private IdType idType;
     /**
      * 转换输出文件名称
-     *
-     * @since 3.5.0
      */
     private Function<String, String> converterFileName = (entityName -> entityName);
     /**
      * 是否覆盖已有文件（默认 false）
-     *
-     * @since 3.5.2
      */
     private boolean fileOverride;
 
@@ -183,7 +173,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
      *
      * @param fieldName 字段名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchSuperEntityColumns(String fieldName) {
         // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
@@ -195,7 +184,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
      *
      * @param fieldName 字段名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchIgnoreColumns(String fieldName) {
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
@@ -228,10 +216,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
 
     public boolean isLombok() {
         return lombok;
-    }
-
-    public boolean isBooleanColumnRemoveIsPrefix() {
-        return booleanColumnRemoveIsPrefix;
     }
 
     public boolean isTableFieldAnnotationEnable() {
@@ -282,10 +266,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
         return converterFileName;
     }
 
-    public boolean isFileOverride() {
-        return fileOverride;
-    }
-
     @Override
     @NotNull
     public Map<String, Object> renderData(@NotNull TableGeneration tableInfo) {
@@ -312,237 +292,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
         }
 
         /**
-         * 自定义继承的Entity类全称
-         *
-         * @param clazz 类
-         * @return this
-         */
-        public Builder superClass(@NotNull Class<?> clazz) {
-            return superClass(clazz.getName());
-        }
-
-        /**
-         * 自定义继承的Entity类全称，带包名
-         *
-         * @param superEntityClass 类全称
-         * @return this
-         */
-        public Builder superClass(String superEntityClass) {
-            this.entity.superClass = superEntityClass;
-            return this;
-        }
-
-        /**
-         * 禁用生成serialVersionUID
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder disableSerialVersionUID() {
-            this.entity.generateSerialVersionUID = false;
-            return this;
-        }
-
-        /**
-         * 开启生成字段常量
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableColumnConstant() {
-            this.entity.columnConstant = true;
-            return this;
-        }
-
-        /**
-         * 开启链式模型
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableChainModel() {
-            this.entity.chain = true;
-            return this;
-        }
-
-        /**
-         * 开启lombok模型
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableLombok() {
-            this.entity.lombok = true;
-            return this;
-        }
-
-        /**
-         * 开启Boolean类型字段移除is前缀
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableRemoveIsPrefix() {
-            this.entity.booleanColumnRemoveIsPrefix = true;
-            return this;
-        }
-
-        /**
-         * 开启生成实体时生成字段注解
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableTableFieldAnnotation() {
-            this.entity.tableFieldAnnotationEnable = true;
-            return this;
-        }
-
-        /**
-         * 开启 ActiveRecord 模式
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder enableActiveRecord() {
-            this.entity.activeRecord = true;
-            return this;
-        }
-
-        /**
-         * 设置乐观锁数据库表字段名称
-         *
-         * @param versionColumnName 乐观锁数据库字段名称
-         * @return this
-         */
-        public Builder versionColumnName(String versionColumnName) {
-            this.entity.versionColumnName = versionColumnName;
-            return this;
-        }
-
-        /**
-         * 设置乐观锁实体属性字段名称
-         *
-         * @param versionPropertyName 乐观锁实体属性字段名称
-         * @return this
-         */
-        public Builder versionPropertyName(String versionPropertyName) {
-            this.entity.versionPropertyName = versionPropertyName;
-            return this;
-        }
-
-        /**
-         * 逻辑删除数据库字段名称
-         *
-         * @param logicDeleteColumnName 逻辑删除字段名称
-         * @return this
-         */
-        public Builder logicDeleteColumnName(String logicDeleteColumnName) {
-            this.entity.logicDeleteColumnName = logicDeleteColumnName;
-            return this;
-        }
-
-        /**
-         * 逻辑删除实体属性名称
-         *
-         * @param logicDeletePropertyName 逻辑删除实体属性名称
-         * @return this
-         */
-        public Builder logicDeletePropertyName(String logicDeletePropertyName) {
-            this.entity.logicDeletePropertyName = logicDeletePropertyName;
-            return this;
-        }
-
-        /**
-         * 数据库表映射到实体的命名策略
-         *
-         * @param namingStrategy 数据库表映射到实体的命名策略
-         * @return this
-         */
-        public Builder naming(NamingStrategy namingStrategy) {
-            this.entity.tableNamingStrategy = namingStrategy;
-            return this;
-        }
-
-        /**
-         * 数据库表字段映射到实体的命名策略
-         *
-         * @param namingStrategy 数据库表字段映射到实体的命名策略
-         * @return this
-         */
-        public Builder columnNaming(NamingStrategy namingStrategy) {
-            this.entity.columnNamingStrategy = namingStrategy;
-            return this;
-        }
-
-        /**
-         * 添加父类公共字段
-         *
-         * @param superEntityColumns 父类字段(数据库字段列名)
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addSuperEntityColumns(@NotNull String... superEntityColumns) {
-            return addSuperEntityColumns(Arrays.asList(superEntityColumns));
-        }
-
-        public Builder addSuperEntityColumns(@NotNull List<String> superEntityColumnList) {
-            this.entity.superEntityColumns.addAll(superEntityColumnList);
-            return this;
-        }
-
-        /**
-         * 添加忽略字段
-         *
-         * @param ignoreColumns 需要忽略的字段(数据库字段列名)
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addIgnoreColumns(@NotNull String... ignoreColumns) {
-            return addIgnoreColumns(Arrays.asList(ignoreColumns));
-        }
-
-        public Builder addIgnoreColumns(@NotNull List<String> ignoreColumnList) {
-            this.entity.ignoreColumns.addAll(ignoreColumnList);
-            return this;
-        }
-
-        /**
-         * 添加表字段填充
-         *
-         * @param tableFills 填充字段
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addTableFills(@NotNull FieldFillStrategy... tableFills) {
-            return addTableFills(Arrays.asList(tableFills));
-        }
-
-        /**
-         * 添加表字段填充
-         *
-         * @param tableFillList 填充字段集合
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder addTableFills(@NotNull List<FieldFillStrategy> tableFillList) {
-            this.entity.tableFillList.addAll(tableFillList);
-            return this;
-        }
-
-        /**
-         * 指定生成的主键的ID类型
-         *
-         * @param idType ID类型
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder idType(IdType idType) {
-            this.entity.idType = idType;
-            return this;
-        }
-
-        /**
          * 转换输出文件名称
          *
          * @param converter 　转换处理
@@ -551,27 +300,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
          */
         public Builder convertFileName(@NotNull Function<String, String> converter) {
             this.entity.converterFileName = converter;
-            return this;
-        }
-
-        /**
-         * 格式化文件名称
-         *
-         * @param format 　格式
-         * @return this
-         * @since 3.5.0
-         */
-        public Builder formatFileName(String format) {
-            return convertFileName((entityName) -> String.format(format, entityName));
-        }
-
-        /**
-         * 覆盖已有文件
-         *
-         * @since 3.5.3
-         */
-        public Builder enableFileOverride() {
-            this.entity.fileOverride = true;
             return this;
         }
 

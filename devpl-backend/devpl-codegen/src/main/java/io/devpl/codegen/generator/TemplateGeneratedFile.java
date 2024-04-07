@@ -45,7 +45,6 @@ public class TemplateGeneratedFile extends GeneratedFile {
     public TemplateGeneratedFile(TemplateBasedTargetFile targetFile) {
         Objects.requireNonNull(targetFile, "target file type cannot be null");
         this.targetFile = targetFile;
-        targetFile.initialize(this);
     }
 
     @Override

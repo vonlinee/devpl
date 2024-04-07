@@ -4,19 +4,22 @@ import io.devpl.codegen.template.TemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
 public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
 
-    TemplateBasedTargetFile targetFile;
+    List<TemplateBasedTargetFile> targetFiles;
     TemplateEngine templateEngine;
 
-    public TemplateBasedTableFileGenerator(TemplateBasedTargetFile targetFile) {
+    public TemplateBasedTableFileGenerator() {
         super();
-        this.targetFile = targetFile;
+    }
+
+    public <T extends TemplateBasedTargetFile> void addTargetFile(T targetFile) {
+        this.targetFiles.add(targetFile);
     }
 
     @Override
@@ -24,15 +27,21 @@ public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator 
         if (target instanceof TableGeneration) {
             this.tableGeneration = (TableGeneration) target;
         }
-        this.targetFile.initialize(target);
+        for (TemplateBasedTargetFile targetFile : this.targetFiles) {
+            targetFile.initialize(target);
+        }
     }
 
     @Override
     public List<GeneratedFile> getGeneratedFiles() {
-        TemplateGeneratedFile file = new TemplateGeneratedFile();
-        file.setTargetFile(targetFile);
-        file.setTemplate(targetFile.getTemplate());
-        file.setTemplateEngine(this.templateEngine);
-        return Collections.singletonList(file);
+        List<GeneratedFile> generatedFiles = new ArrayList<>();
+        for (TemplateBasedTargetFile targetFile : targetFiles) {
+            TemplateGeneratedFile file = new TemplateGeneratedFile();
+            file.setTargetFile(targetFile);
+            file.setTemplate(targetFile.getTemplate());
+            file.setTemplateEngine(this.templateEngine);
+            generatedFiles.add(file);
+        }
+        return generatedFiles;
     }
 }

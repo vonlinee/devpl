@@ -2,7 +2,7 @@ package io.devpl.codegen.generator;
 
 /**
  * 生成目标文件类型
- * 相当于一个初始化模板，初始化生成文件的数据
+ * 相当于一个初始化模板，初始化文件的数据
  */
 public interface TargetFile {
 
@@ -37,7 +37,16 @@ public interface TargetFile {
     /**
      * 文件扩展名
      *
+     * @param target 生成目标
      * @return 文件扩展名
      */
-    String getExtension();
+    String getExtension(GenerationTarget target);
+
+    /**
+     * 文件名
+     *
+     * @param target 生成目标
+     * @return 该文件类型默认的文件名模板
+     */
+    String getFilename(GenerationTarget target);
 }

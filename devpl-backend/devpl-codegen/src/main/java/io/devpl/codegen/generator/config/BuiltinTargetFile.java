@@ -1,8 +1,11 @@
 package io.devpl.codegen.generator.config;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.generator.*;
-import io.devpl.codegen.template.TemplateEngine;
+import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.GenerationTarget;
+import io.devpl.codegen.generator.TemplateBasedTargetFile;
+
+import java.util.Map;
 
 /**
  * 内置的生成文件目标类型
@@ -14,8 +17,18 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
      */
     ENTITY_JAVA(ConstVal.TEMPLATE_ENTITY_JAVA) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.JAVA_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     /**
@@ -23,8 +36,18 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
      */
     ENTITY_KOTLIN(ConstVal.TEMPLATE_ENTITY_KT) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.KT_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     /**
@@ -32,32 +55,82 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
      */
     SERVICE(ConstVal.TEMPLATE_SERVICE) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.JAVA_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     SERVICE_IMPL(ConstVal.TEMPLATE_SERVICE_IMPL) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.JAVA_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     CONTROLLER(ConstVal.TEMPLATE_CONTROLLER) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.JAVA_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     MAPPER(ConstVal.TEMPLATE_MAPPER_JAVA) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.JAVA_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     },
     MAPPER_XML(ConstVal.TEMPLATE_MAPPER_XML) {
         @Override
-        public String getExtension() {
+        public Map<String, Object> getTemplateArguments(GenerationTarget target) {
+            return null;
+        }
+
+        @Override
+        public String getExtension(GenerationTarget target) {
             return ConstVal.XML_SUFFIX;
+        }
+
+        @Override
+        public String getFilename(GenerationTarget target) {
+            return null;
         }
     };
 
@@ -77,10 +150,7 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
     @Override
     public void initialize(GeneratedFile file) {
-        if (file instanceof TemplateGeneratedFile tgf) {
-            tgf.setTemplate(this.template);
-        }
-        file.setExtension(this.getExtension());
+
     }
 
     @Override
@@ -91,13 +161,5 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
     @Override
     public String getTemplate() {
         return template;
-    }
-
-    @Override
-    public FileGenerator getFileGenerator(Context context) {
-        TemplateBasedTableFileGenerator generator = new TemplateBasedTableFileGenerator(this);
-        TemplateEngine templateEngine = context.getObject(TemplateEngine.class);
-        generator.setTemplateEngine(templateEngine);
-        return generator;
     }
 }

@@ -153,7 +153,6 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
             return Collections.emptyList();
         }
         final TableGeneration tg = (TableGeneration) unit;
-
         StrategyConfiguration strategyConfiguration = context.getObject(StrategyConfiguration.class);
         PackageConfiguration packageConfig = context.getObject(PackageConfiguration.class);
 
@@ -165,6 +164,7 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
         final List<GeneratedFile> files = new ArrayList<>();
 
         Map<String, Object> objectMap = strategyConfiguration.controller().renderData(tg);
+        strategyConfiguration.entity().renderData(tg);
         // 单表的所有模板参数
         final TemplateArgumentsMap argumentsOfSingleTable = new TemplateArgumentsMap(objectMap);
         // Controller

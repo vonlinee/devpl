@@ -3,6 +3,7 @@ package io.devpl.codegen.generator;
 import io.devpl.codegen.generator.config.TableConfiguration;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
+import io.devpl.codegen.template.TemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -170,11 +171,22 @@ public class TableGeneration implements GenerationTarget {
         if (targetFiles == null || targetFiles.isEmpty()) {
             return Collections.emptyList();
         }
-        List<FileGenerator> generators = new ArrayList<>();
+
+        TemplateEngine templateEngine = context.getObject(TemplateEngine.class);
+
+        final List<FileGenerator> generators = new ArrayList<>();
         for (TargetFile targetFile : targetFiles) {
-            FileGenerator fileGenerator = targetFile.getFileGenerator(context);
-            fileGenerator.initialize(this);
-            generators.add(fileGenerator);
+            if (targetFile instanceof TemplateBasedTargetFile ttf) {
+                TemplateBasedTableFileGenerator tfg = new TemplateBasedTableFileGenerator();
+                tfg.setTemplateEngine(templateEngine);
+                generators.add(tfg);
+                tfg.initialize(this);
+                generators.add(tfg);
+            } else {
+                FileGenerator generator = targetFile.getFileGenerator(context);
+                generator.initialize(this);
+                generators.add(generator);
+            }
         }
         return generators;
     }
