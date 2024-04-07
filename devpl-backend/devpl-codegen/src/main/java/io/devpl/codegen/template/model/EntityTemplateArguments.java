@@ -1,8 +1,10 @@
 package io.devpl.codegen.template.model;
 
-import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.db.IdType;
-import io.devpl.codegen.generator.config.*;
+import io.devpl.codegen.generator.TableGeneration;
+import io.devpl.codegen.generator.config.NameConverter;
+import io.devpl.codegen.generator.config.NamingStrategy;
+import io.devpl.codegen.generator.config.TemplateDataModelBean;
 import io.devpl.codegen.strategy.FieldFillStrategy;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -164,9 +166,16 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
 //        }).collect(Collectors.toSet()));
     }
 
+    /**
+     * 未指定以 naming 策略为准
+     *
+     * @return NamingStrategy
+     */
     public NamingStrategy getColumnNamingStrategy() {
-        // 未指定以 naming 策略为准
-        return Optional.ofNullable(columnNamingStrategy).orElse(tableNamingStrategy);
+        if (columnNamingStrategy == null) {
+            return tableNamingStrategy;
+        }
+        return columnNamingStrategy;
     }
 
     /**
@@ -192,7 +201,6 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
-    @NotNull
     public NameConverter getNameConvert() {
         return nameConvert;
     }
@@ -296,24 +304,11 @@ public class EntityTemplateArguments extends JavaFileTemplateArguments implement
         return data;
     }
 
-    public static class Builder extends BaseBuilder {
+    public static class Builder {
 
         private final EntityTemplateArguments entity = new EntityTemplateArguments();
 
-        public Builder(StrategyConfiguration strategyConfiguration) {
-            super(strategyConfiguration);
-            this.entity.nameConvert = new DefaultNameConvert(strategyConfiguration);
-        }
-
-        /**
-         * 名称转换实现
-         *
-         * @param nameConvert 名称转换实现
-         * @return this
-         */
-        public Builder nameConvert(NameConverter nameConvert) {
-            this.entity.nameConvert = nameConvert;
-            return this;
+        public Builder() {
         }
 
         /**

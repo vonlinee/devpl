@@ -1,10 +1,8 @@
 package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.generator.config.BaseBuilder;
-import io.devpl.codegen.generator.config.StrategyConfiguration;
-import io.devpl.codegen.generator.config.TemplateDataModelBean;
 import io.devpl.codegen.generator.TableGeneration;
+import io.devpl.codegen.generator.config.TemplateDataModelBean;
 import io.devpl.codegen.util.ClassUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,12 +80,11 @@ public class ServiceTemplateArguments extends JavaFileTemplateArguments implemen
         return data;
     }
 
-    public static class Builder extends BaseBuilder {
+    public static class Builder {
 
         private final ServiceTemplateArguments service = new ServiceTemplateArguments();
 
-        public Builder(@NotNull StrategyConfiguration strategyConfiguration) {
-            super(strategyConfiguration);
+        public Builder() {
         }
 
         /**

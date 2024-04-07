@@ -66,4 +66,13 @@ public abstract class GeneratedFile {
      * @return 文件绝对路径
      */
     public abstract String getAbsolutePath();
+
+    /**
+     * 文件扩展名
+     *
+     * @return 扩展名
+     */
+    public String getExtension() {
+        return extension;
+    }
 }

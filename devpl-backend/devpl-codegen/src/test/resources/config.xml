@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+    PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+    "codegen-config.dtd" >
+<generatorConfiguration>
+    <!-- 引入配置文件 -->
+    <properties resource="generator.properties"/>
+
+    <context id="context1" targetRuntime="MyBatis3"
+             contextImpl="io.devpl.codegen.generator.RdbmsTableGenerationContext">
+        <!-- 配置内置的或者自定义的Plugin -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <!-- 注释产生配置 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接信息 -->
+        <jdbcConnection driverClass="${jdbc.driverClassName}"
+                        connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}"/>
+
+        <!-- 生成Model对象路径配置 -->
+        <javaModelGenerator targetPackage="my.mybatis.generator.auto.entity"
+                            targetProject="src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成sqlXML文件路径配置 -->
+        <sqlMapGenerator targetPackage="my.mybatis.generator.auto.entity.xml"
+                         targetProject="src\main\java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成DAO的类文件路径配置 -->
+        <javaClientGenerator targetPackage="my.mybatis.generator.auto.dao"
+                             targetProject="src\main\java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--要生成哪些表 -->
+        <table tableName="template_info" domainObjectName="TemplateInfo"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false"/>
+    </context>
+</generatorConfiguration>

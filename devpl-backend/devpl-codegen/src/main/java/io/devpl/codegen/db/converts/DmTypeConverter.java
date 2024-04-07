@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.TypeConverter;
 
@@ -11,13 +11,13 @@ import io.devpl.codegen.generator.config.TypeConverter;
 public class DmTypeConverter implements TypeConverter {
     public static final DmTypeConverter INSTANCE = new DmTypeConverter();
 
-    private static ColumnJavaType toNumberType(String typeName) {
+    private static JavaFieldDataType toNumberType(String typeName) {
         if (typeName.matches("number\\([0-9]\\)")) {
-            return DbColumnType.INTEGER;
+            return DbFieldDataType.INTEGER;
         } else if (typeName.matches("number\\(1[0-8]\\)")) {
-            return DbColumnType.LONG;
+            return DbFieldDataType.LONG;
         }
-        return DbColumnType.BIG_DECIMAL;
+        return DbFieldDataType.BIG_DECIMAL;
     }
 
     /**
@@ -40,21 +40,21 @@ public class DmTypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
+    public JavaFieldDataType convert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("char", "text").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("char", "text").then(DbFieldDataType.STRING))
             .test(TypeConverts.contains("number").then(DmTypeConverter::toNumberType))
-            .test(TypeConverts.containsAny("numeric", "dec", "money").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.containsAny("bit", "bool").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.contains("bigint").then(DbColumnType.BIG_INTEGER))
-            .test(TypeConverts.containsAny("int", "byte").then(DbColumnType.INTEGER))
-            .test(TypeConverts.contains("binary").then(DbColumnType.BYTE_ARRAY))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.containsAny("double", "real").then(DbColumnType.DOUBLE))
-            .test(TypeConverts.containsAny("date", "time").then(DbColumnType.DATE))
-            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.contains("image").then(DbColumnType.BYTE_ARRAY))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.containsAny("numeric", "dec", "money").then(DbFieldDataType.BIG_DECIMAL))
+            .test(TypeConverts.containsAny("bit", "bool").then(DbFieldDataType.BOOLEAN))
+            .test(TypeConverts.contains("bigint").then(DbFieldDataType.BIG_INTEGER))
+            .test(TypeConverts.containsAny("int", "byte").then(DbFieldDataType.INTEGER))
+            .test(TypeConverts.contains("binary").then(DbFieldDataType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbFieldDataType.FLOAT))
+            .test(TypeConverts.containsAny("double", "real").then(DbFieldDataType.DOUBLE))
+            .test(TypeConverts.containsAny("date", "time").then(DbFieldDataType.DATE))
+            .test(TypeConverts.contains("clob").then(DbFieldDataType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbFieldDataType.BLOB))
+            .test(TypeConverts.contains("image").then(DbFieldDataType.BYTE_ARRAY))
+            .or(DbFieldDataType.STRING);
     }
 }

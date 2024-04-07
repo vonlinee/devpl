@@ -122,7 +122,6 @@ public class AppConfig {
         List<ProjectConfiguration> results = new ArrayList<>();
         List<Map<String, Object>> list = template.queryForList("select * from generator_config");
         for (Map<String, Object> map : list) {
-            ProjectConfiguration item = new ProjectConfiguration();
             Object value = map.get("value");
             if (value != null) {
                 results.add(JSONUtils.parseObject(value.toString(), ProjectConfiguration.class));

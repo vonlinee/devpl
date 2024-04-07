@@ -30,7 +30,11 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
         StrategyConfiguration strategyConfiguration = context.getObject(StrategyConfiguration.class);
         EntityTemplateArguments entity = strategyConfiguration.entity();
 
-        String entityName = entity.getNameConvert().entityNameConvert(tg);
+        NameConverter converter = entity.getNameConvert();
+        if (converter == null) {
+            converter = new DefaultNameConvert(strategyConfiguration);
+        }
+        String entityName = converter.entityNameConvert(tg);
         tg.setEntityName(entity.getConverterFileName().apply(entityName));
         tg.setMapperName(strategyConfiguration.mapper().getConverterMapperFileName().apply(entityName));
         tg.setXmlName(strategyConfiguration.mapper().getConverterXmlFileName().apply(entityName));
@@ -61,8 +65,6 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
 
     /**
      * 导包处理
-     *
-     * @since 3.5.0
      */
     public void importPackage(TableGeneration tableGeneration) {
         List<String> importPackages = new ArrayList<>();
@@ -112,7 +114,6 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
             if (null != getFieldFill(field, entity)) {
                 // 填充字段
                 importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-                // TODO 好像default的不用处理也行,这个做优化项目.
                 importPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
             }
             if (field.isVersionField()) {
@@ -130,8 +131,9 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
         if (StringUtils.isBlank(column.getFill())) {
             for (FieldFillStrategy tf : entity.getTableFillList()) {
                 // 忽略大写字段问题
-                if (tf instanceof ColumnFill && tf.getName()
-                    .equalsIgnoreCase(column.getName()) || tf instanceof PropertyFill && tf.getName().equals(column.getPropertyName())) {
+                if (tf instanceof ColumnFill && tf.getName().equalsIgnoreCase(column.getName())
+                    || tf instanceof PropertyFill
+                       && tf.getName().equals(column.getPropertyName())) {
                     column.setFill(tf.getFieldFill().name());
                     break;
                 }
@@ -141,22 +143,22 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
     }
 
     @Override
-    public boolean shouldGenerate(GenerationUnit unit) {
+    public boolean shouldGenerate(GenerationTarget unit) {
         return unit instanceof TableGeneration;
     }
 
     @Override
-    public int getPriority() {
-        return Integer.MIN_VALUE;
-    }
-
-    @Override
-    public List<GeneratedFile> generateFiles(GenerationUnit unit) {
-        if (!(unit instanceof TableGeneration tg)) {
+    public List<GeneratedFile> generateFiles(GenerationTarget unit) {
+        if (!support(unit)) {
             return Collections.emptyList();
         }
+        final TableGeneration tg = (TableGeneration) unit;
+
         StrategyConfiguration strategyConfiguration = context.getObject(StrategyConfiguration.class);
         PackageConfiguration packageConfig = context.getObject(PackageConfiguration.class);
+
+        final String parentPackageName = packageConfig.getParent();
+
         // 全局配置信息
         GlobalConfiguration globalConfiguration = context.getObject(GlobalConfiguration.class);
 
@@ -170,13 +172,13 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
         controllerJavaFile.setTemplateArguments(argumentsOfSingleTable);
         controllerJavaFile.setFilename(tg.getControllerName());
         controllerJavaFile.setExtension(ConstVal.JAVA_SUFFIX);
-        controllerJavaFile.setTargetPackageName(packageConfig.getParent() + "." + packageConfig.getController());
+        controllerJavaFile.setTargetPackageName(parentPackageName + "." + packageConfig.getController());
         // Mapper.java
         TemplateGeneratedFile mapperJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.MAPPER);
         mapperJavaFile.setTemplateArguments(argumentsOfSingleTable);
         mapperJavaFile.setFilename(tg.getMapperName());
         mapperJavaFile.setExtension(ConstVal.JAVA_SUFFIX);
-        mapperJavaFile.setTargetPackageName(packageConfig.getParent() + "." + packageConfig.getMapper());
+        mapperJavaFile.setTargetPackageName(parentPackageName + "." + packageConfig.getMapper());
         // Mapper.xml
         TemplateGeneratedFile mapperXmlFile = new TemplateGeneratedFile(BuiltinTargetFile.MAPPER_XML);
         mapperXmlFile.setTemplateArguments(argumentsOfSingleTable);
@@ -188,19 +190,19 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
         serviceJavaFile.setFilename(tg.getServiceName());
         serviceJavaFile.setExtension(ConstVal.JAVA_SUFFIX);
         serviceJavaFile.setTemplateArguments(argumentsOfSingleTable);
-        serviceJavaFile.setTargetPackageName(packageConfig.getParent() + "." + packageConfig.getService());
+        serviceJavaFile.setTargetPackageName(parentPackageName + "." + packageConfig.getService());
         // ServiceImpl
         TemplateGeneratedFile serviceImplJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.SERVICE_IMPL);
         serviceImplJavaFile.setFilename(tg.getServiceName());
         serviceImplJavaFile.setExtension(ConstVal.JAVA_SUFFIX);
         serviceImplJavaFile.setTemplateArguments(argumentsOfSingleTable);
-        serviceImplJavaFile.setTargetPackageName(packageConfig.getParent() + "." + packageConfig.getServiceImpl());
+        serviceImplJavaFile.setTargetPackageName(parentPackageName + "." + packageConfig.getServiceImpl());
         // Entity
         TemplateGeneratedFile entityJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.ENTITY_JAVA);
         entityJavaFile.setFilename(tg.getEntityName());
         entityJavaFile.setExtension(ConstVal.JAVA_SUFFIX);
         entityJavaFile.setTemplateArguments(argumentsOfSingleTable);
-        entityJavaFile.setTargetPackageName(packageConfig.getParent() + "." + packageConfig.getEntity());
+        entityJavaFile.setTargetPackageName(parentPackageName + "." + packageConfig.getEntity());
 
         Map<String, Object> mapperData = strategyConfiguration.mapper().renderData(tg);
         objectMap.putAll(mapperData);

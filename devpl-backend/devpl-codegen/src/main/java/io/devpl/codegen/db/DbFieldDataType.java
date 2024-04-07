@@ -3,7 +3,7 @@ package io.devpl.codegen.db;
 /**
  * 表字段类型
  */
-public enum DbColumnType implements ColumnJavaType {
+public enum DbFieldDataType implements JavaFieldDataType {
     // 基本类型
     BASE_BYTE("byte", null),
     BASE_SHORT("short", null),
@@ -58,7 +58,7 @@ public enum DbColumnType implements ColumnJavaType {
      */
     private final String qualifier;
 
-    DbColumnType(String type, String qualifier) {
+    DbFieldDataType(String type, String qualifier) {
         this.type = type;
         this.qualifier = qualifier;
     }

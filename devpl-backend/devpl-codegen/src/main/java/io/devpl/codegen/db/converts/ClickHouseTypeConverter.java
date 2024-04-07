@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.TypeConverter;
 
@@ -42,37 +42,37 @@ public class ClickHouseTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static ColumnJavaType toDateType(GlobalConfiguration config, String type) {
+    public static JavaFieldDataType toDateType(GlobalConfiguration config, String type) {
         return switch (config.getDateType()) {
             case SQL_PACK -> {
                 if ("date".equals(type)) {
-                    yield DbColumnType.DATE_SQL;
+                    yield DbFieldDataType.DATE_SQL;
                 }
-                yield DbColumnType.TIMESTAMP;
+                yield DbFieldDataType.TIMESTAMP;
             }
             case TIME_PACK -> {
                 if ("date".equals(type)) {
-                    yield DbColumnType.LOCAL_DATE;
+                    yield DbFieldDataType.LOCAL_DATE;
                 }
-                yield DbColumnType.LOCAL_DATE_TIME;
+                yield DbFieldDataType.LOCAL_DATE_TIME;
             }
-            default -> DbColumnType.DATE;
+            default -> DbFieldDataType.DATE;
         };
     }
 
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfiguration globalConfiguration, String fieldType) {
+    public JavaFieldDataType convert(GlobalConfiguration globalConfiguration, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny(INTEGER_TYPE).then(DbColumnType.INTEGER))
-            .test(TypeConverts.containsAny(BIGINTEGER_TYPE).then(DbColumnType.BIG_INTEGER))
-            .test(TypeConverts.containsAny(BIGDECIMAL_TYPE).then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.containsAny(LONG_TYPE).then(DbColumnType.LONG))
-            .test(TypeConverts.contains("float32").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("float64").then(DbColumnType.DOUBLE))
-            .test(TypeConverts.contains("map").then(DbColumnType.MAP))
-            .test(TypeConverts.contains("array").then(DbColumnType.OBJECT))
+            .test(TypeConverts.containsAny(INTEGER_TYPE).then(DbFieldDataType.INTEGER))
+            .test(TypeConverts.containsAny(BIGINTEGER_TYPE).then(DbFieldDataType.BIG_INTEGER))
+            .test(TypeConverts.containsAny(BIGDECIMAL_TYPE).then(DbFieldDataType.BIG_DECIMAL))
+            .test(TypeConverts.containsAny(LONG_TYPE).then(DbFieldDataType.LONG))
+            .test(TypeConverts.contains("float32").then(DbFieldDataType.FLOAT))
+            .test(TypeConverts.contains("float64").then(DbFieldDataType.DOUBLE))
+            .test(TypeConverts.contains("map").then(DbFieldDataType.MAP))
+            .test(TypeConverts.contains("array").then(DbFieldDataType.OBJECT))
             .test(TypeConverts.containsAny("date", "datetime", "datetime64").then(t -> toDateType(globalConfiguration, fieldType)))
-            .test(TypeConverts.containsAny(STRING_TYPE).then(DbColumnType.STRING))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.containsAny(STRING_TYPE).then(DbFieldDataType.STRING))
+            .or(DbFieldDataType.STRING);
     }
 }

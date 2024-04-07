@@ -4,6 +4,8 @@ import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateArguments;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.sdk.io.FileUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +18,8 @@ import java.util.Objects;
 /**
  * 基于模板的生成文件信息
  */
+@Getter
+@Setter
 public class TemplateGeneratedFile extends GeneratedFile {
 
     /**
@@ -78,18 +82,6 @@ public class TemplateGeneratedFile extends GeneratedFile {
         return null;
     }
 
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    public TemplateEngine getTemplateEngine() {
-        return templateEngine;
-    }
-
     public void setTemplateEngine(TemplateEngine templateEngine) {
         Objects.requireNonNull(templateEngine, "template engine must not be null");
         this.templateEngine = templateEngine;
@@ -99,11 +91,11 @@ public class TemplateGeneratedFile extends GeneratedFile {
         }
     }
 
-    public void setTemplateArguments(TemplateArguments templateArguments) {
+    public final void setTemplateArguments(TemplateArguments templateArguments) {
         this.templateArguments = templateArguments;
     }
 
-    public void setTargetFile(TemplateBasedTargetFile targetFile) {
+    public final void setTargetFile(TemplateBasedTargetFile targetFile) {
         this.targetFile = targetFile;
     }
 }

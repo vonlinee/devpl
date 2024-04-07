@@ -1,14 +1,12 @@
 package io.devpl.codegen.generator;
 
+import io.devpl.codegen.generator.config.TableConfiguration;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
  */
 @Setter
 @Getter
-public class TableGeneration implements GenerationUnit {
+public class TableGeneration implements GenerationTarget {
 
     /**
      * 包导入信息
@@ -31,13 +29,21 @@ public class TableGeneration implements GenerationUnit {
      */
     private List<ColumnGeneration> columns = new ArrayList<>();
     /**
+     * 目标生成文件
+     */
+    private List<TargetFile> targetFiles;
+    /**
      * 是否转换
      */
     private boolean convert;
     /**
+     * 表配置信息
+     */
+    private TableConfiguration tableConfiguration;
+    /**
      * 表名称
      */
-    private final String name;
+    private String name;
     /**
      * 表注释
      */
@@ -86,6 +92,14 @@ public class TableGeneration implements GenerationUnit {
      * 表信息
      */
     private final TableMetadata metadata;
+    /**
+     * 数据模型
+     */
+    private Map<String, Object> dataModel = new HashMap<>();
+
+    public TableGeneration() {
+        this(null);
+    }
 
     /**
      * 构造方法
@@ -94,7 +108,9 @@ public class TableGeneration implements GenerationUnit {
      */
     public TableGeneration(TableMetadata metadata) {
         this.metadata = metadata;
-        this.name = metadata.getTableName();
+        if (metadata != null) {
+            this.name = metadata.getTableName();
+        }
     }
 
     /**
@@ -147,5 +163,19 @@ public class TableGeneration implements GenerationUnit {
      */
     public boolean hasPrimaryKey() {
         return this.primaryKeys != null && !this.primaryKeys.isEmpty();
+    }
+
+    @Override
+    public List<FileGenerator> calculateGenerators(Context context) {
+        if (targetFiles == null || targetFiles.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<FileGenerator> generators = new ArrayList<>();
+        for (TargetFile targetFile : targetFiles) {
+            FileGenerator fileGenerator = targetFile.getFileGenerator(context);
+            fileGenerator.initialize(this);
+            generators.add(fileGenerator);
+        }
+        return generators;
     }
 }

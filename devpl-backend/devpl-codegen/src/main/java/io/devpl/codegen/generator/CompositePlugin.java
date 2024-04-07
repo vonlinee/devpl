@@ -38,9 +38,9 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
-    public void initialize(GenerationUnit unit) {
+    public void initialize(GenerationTarget target) {
         for (Plugin plugin : plugins) {
-            plugin.initialize(unit);
+            plugin.initialize(target);
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
-    public void generateFiles(GenerationUnit unit, List<GeneratedFile> generatedFiles) {
+    public void generateFiles(GenerationTarget unit, List<GeneratedFile> generatedFiles) {
         for (Plugin plugin : plugins) {
             List<GeneratedFile> currentFiles = plugin.generateFiles(unit);
             if (currentFiles != generatedFiles && currentFiles != null && !currentFiles.isEmpty()) {
@@ -62,7 +62,7 @@ public abstract class CompositePlugin implements Plugin {
     }
 
     @Override
-    public boolean shouldGenerate(GenerationUnit unit) {
+    public boolean shouldGenerate(GenerationTarget unit) {
         int count = 0;
         for (Plugin plugin : plugins) {
             if (!plugin.shouldGenerate(unit)) {

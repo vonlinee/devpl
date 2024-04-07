@@ -12,55 +12,56 @@ import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.codegen.util.ClassUtils;
+import io.devpl.codegen.util.Utils;
 import io.devpl.codegen.util.Messages;
 import io.devpl.codegen.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * 配置汇总 传递给文件生成工具
  * 单个数据库实例对应一个Context
- *
- * @see org.mybatis.generator.config.Context
  */
+@Getter
+@Setter
 public class RdbmsTableGenerationContext extends Context {
 
-    private final Logger log = LoggerFactory.getLogger(RdbmsTableGenerationContext.class);
-
-    private final List<TableConfiguration> tableConfigurations;
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
     /**
-     * 模板路径配置信息
+     * 包配置信息
      */
-    private final TemplateConfiguration templateConfiguration;
+    private PackageConfiguration packageConfig;
+    /**
+     * 数据库配置信息
+     */
+    private JdbcConfiguration jdbcConfiguration;
+    /**
+     * 策略配置信息
+     */
+    private StrategyConfiguration strategyConfiguration;
+    /**
+     * 全局配置信息
+     */
+    private GlobalConfiguration globalConfiguration;
+    /**
+     * 生成的文件类型
+     */
+    private Map<String, TargetFile> targetFileTypeMap = new HashMap<>();
     /**
      * 数据库表信息
      */
     private final List<TableGeneration> targetTables = new ArrayList<>();
     /**
-     * 包配置信息
+     * 表配置信息
      */
-    private final PackageConfiguration packageConfig;
-    /**
-     * 数据库配置信息
-     */
-    private final JdbcConfiguration jdbcConfiguration;
-    /**
-     * 策略配置信息
-     */
-    private final StrategyConfiguration strategyConfiguration;
-    /**
-     * 全局配置信息
-     */
-    private GlobalConfiguration globalConfiguration;
+    private List<TableConfiguration> tableConfigurations;
     /**
      * 用于定位文件位置
      */
@@ -72,21 +73,29 @@ public class RdbmsTableGenerationContext extends Context {
      * @param packageConfig         包配置
      * @param jdbcConfiguration     数据源配置
      * @param strategyConfiguration 表配置
-     * @param templateConfiguration 模板配置
      * @param globalConfiguration   全局配置
      */
-    public RdbmsTableGenerationContext(PackageConfiguration packageConfig, JdbcConfiguration jdbcConfiguration, StrategyConfiguration strategyConfiguration, TemplateConfiguration templateConfiguration, GlobalConfiguration globalConfiguration) {
-        this.jdbcConfiguration = jdbcConfiguration;
-        this.strategyConfiguration = strategyConfiguration;
-        this.globalConfiguration = globalConfiguration;
-        this.templateConfiguration = templateConfiguration;
-        this.packageConfig = packageConfig;
-
+    public RdbmsTableGenerationContext(JdbcConfiguration jdbcConfiguration, PackageConfiguration packageConfig, StrategyConfiguration strategyConfiguration, GlobalConfiguration globalConfiguration) {
+        this.jdbcConfiguration = Objects.requireNonNull(jdbcConfiguration, "连接配置不能为空");
+        this.strategyConfiguration = Utils.ifNull(strategyConfiguration, StrategyConfiguration.builder().build());
+        this.packageConfig = Utils.ifNull(packageConfig, PackageConfiguration.builder().build());
+        this.globalConfiguration = Utils.ifNull(globalConfiguration, GlobalConfiguration.builder().build());
         this.tableConfigurations = new ArrayList<>();
     }
 
-    public void addTableConfiguration(TableConfiguration tc) {
+    public RdbmsTableGenerationContext() {
+    }
+
+    public RdbmsTableGenerationContext(JdbcConfiguration jdbcConfiguration) {
+        this(jdbcConfiguration, null, null, null);
+    }
+
+    public final void addTableConfiguration(TableConfiguration tc) {
         tableConfigurations.add(tc);
+    }
+
+    public final void addTableConfiguration(String fullQualifiedTableName) {
+        tableConfigurations.add(TableConfiguration.of(fullQualifiedTableName));
     }
 
     /**
@@ -97,13 +106,10 @@ public class RdbmsTableGenerationContext extends Context {
         super.initialize();
         putObject(this.jdbcConfiguration);
         putObject(this.globalConfiguration);
-        putObject(this.templateConfiguration);
         putObject(this.packageConfig);
         putObject(this.strategyConfiguration);
         putObject(this.projectArchetype);
-
-        // 为了兼容之前逻辑，默认采用 Velocity 引擎
-        this.putObject(TemplateEngine.class, new VelocityTemplateEngine());
+        putObject(TemplateEngine.class, new VelocityTemplateEngine());
 
         addPlugin(new TableFileGenerationPlugin());
         addPlugin(new MyBatisPlusPlugin());
@@ -117,39 +123,53 @@ public class RdbmsTableGenerationContext extends Context {
     /**
      * 获取表信息
      *
-     * @param tableNamePattern 表名匹配模式
+     * @param tc 表配置信息
      * @return 表信息
      */
-    public List<TableGeneration> introspectTables(String tableNamePattern) {
-        // 是否跳过视图
-        boolean skipView = strategyConfiguration.isSkipView();
-        // 查询的表类型
-        String[] tableTypes = skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"};
-        String schemaPattern = jdbcConfiguration.getSchemaName();
-        DatabaseMetadataReader reader = ClassUtils.instantiate(jdbcConfiguration.getDatabaseQueryClass());
-        log.info("introspect table using {}", reader);
-        return introspectTables(null, schemaPattern, tableNamePattern, tableTypes);
-    }
-
     public List<TableGeneration> introspectTables(TableConfiguration tc) {
         // 是否跳过视图
         boolean skipView = strategyConfiguration.isSkipView();
         // 查询的表类型
         String[] tableTypes = skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"};
+        // 数据源连接配置的 schema 信息
         String schemaPattern = jdbcConfiguration.getSchemaName();
         DatabaseMetadataReader reader = ClassUtils.instantiate(jdbcConfiguration.getDatabaseQueryClass());
         log.info("introspect table using {}", reader);
-        return introspectTables(null, schemaPattern, tc.getTableName(), tableTypes);
+
+        return introspectTables(tc.getCatalog(), tc.getSchema(), tc.getTableName(), tableTypes);
     }
 
+    /**
+     * Introspect tables based on the configuration specified in the
+     * constructor. This method is long-running.
+     *
+     * @param callback                 a progress callback if progress information is desired, or
+     *                                 <code>null</code>
+     * @param warnings                 any warning generated from this method will be added to the
+     *                                 List. Warnings are always Strings.
+     * @param fullyQualifiedTableNames a set of table names to generate. The elements of the set must
+     *                                 be Strings that exactly match what's specified in the
+     *                                 configuration. For example, if table name = "foo" and schema =
+     *                                 "bar", then the fully qualified table name is "foo.bar". If
+     *                                 the Set is null or empty, then all tables in the configuration
+     *                                 will be used for code generation.
+     * @throws SQLException         if some error arises while introspecting the specified
+     *                              database tables.
+     * @throws InterruptedException if the progress callback reports a cancel
+     */
     public void introspectTables(ProgressCallback callback, List<String> warnings, Set<String> fullyQualifiedTableNames) throws SQLException, InterruptedException {
         try (Connection connection = jdbcConfiguration.getConnection()) {
             for (TableConfiguration tc : tableConfigurations) {
-                String tableName = StringUtils.composeFullyQualifiedTableName(tc.getCatalog(), tc.getSchema(), tc.getTableName(), '.');
-                if (fullyQualifiedTableNames != null && !fullyQualifiedTableNames.isEmpty() && !fullyQualifiedTableNames.contains(tableName)) {
+                String tableName = StringUtils.composeFullyQualifiedTableName(
+                    tc.getCatalog(),
+                    tc.getSchema(),
+                    tc.getTableName(), '.');
+                if (fullyQualifiedTableNames != null
+                    && !fullyQualifiedTableNames.isEmpty()
+                    && !fullyQualifiedTableNames.contains(tableName)) {
                     continue;
                 }
-                if (!tc.areAnyStatementsEnabled()) {
+                if (!tc.isAnyStatementsEnabled()) {
                     warnings.add(Messages.getString("Warning.0", tableName)); //$NON-NLS-1$
                     continue;
                 }
@@ -290,23 +310,78 @@ public class RdbmsTableGenerationContext extends Context {
      * @param files 存放结果
      */
     @Override
-    public final void generateFiles(List<GeneratedFile> files) {
-        // 获取表过滤
-        String tableNamePattern = null;
-        if (strategyConfiguration.getLikeTable() != null) {
-            tableNamePattern = strategyConfiguration.getLikeTable().getValue();
+    public final void generateFiles(ProgressCallback callback, List<GeneratedFile> files, List<String> warnings) throws InterruptedException {
+        if (tableConfigurations == null || tableConfigurations.isEmpty()) {
+            log.warn("Context {}表为空", getId());
+            return;
+        }
+
+        for (PluginConfiguration pluginConfiguration : getPluginConfigurations()) {
+            Plugin plugin = ObjectFactory.createPlugin(this, pluginConfiguration);
+            if (plugin.validate(warnings)) {
+                addPlugin(plugin);
+            } else {
+                warnings.add(Messages.getString("Warning.24", pluginConfiguration.getConfigurationType(), getId()));
+            }
         }
         // 获取所有的表信息
-        List<TableGeneration> tableGenerations = this.introspectTables(tableNamePattern);
-        if (!tableGenerations.isEmpty()) {
-            this.targetTables.addAll(tableGenerations);
-            final Plugin rootPlugin = getPlugins();
-            for (TableGeneration tableGeneration : tableGenerations) {
-                rootPlugin.initialize(tableGeneration);
+        this.targetTables.clear();
+        for (TableConfiguration tc : tableConfigurations) {
+
+            String tableName = StringUtils.composeFullyQualifiedTableName(tc.getCatalog(), tc
+                .getSchema(), tc.getTableName(), '.');
+
+            callback.startTask(Messages.getString("Progress.1", tableName));
+
+            List<TableGeneration> tables = this.introspectTables(tc);
+
+            // 确定文件类型
+            Set<String> targetFileTypeNames = tc.getTargetFiles();
+            Map<String, TargetFile> targetFileTypeMap = getTargetFileTypeMap();
+            List<TargetFile> targetFiles;
+            if (targetFileTypeNames == null || targetFileTypeNames.isEmpty()) {
+                // 未配置则默认使用 Context 所有文件类型
+                targetFiles = new ArrayList<>(targetFileTypeMap.values());
+            } else {
+                targetFileTypeNames.removeIf(targetFileTypeName -> !targetFileTypeMap.containsKey(targetFileTypeName));
+                targetFiles = targetFileTypeNames.stream().map(targetFileTypeMap::get).toList();
             }
-            for (TableGeneration tableGeneration : tableGenerations) {
-                rootPlugin.generateFiles(tableGeneration, files);
+            for (TableGeneration table : tables) {
+                table.setTargetFiles(targetFiles);
+                table.setTableConfiguration(tc);
             }
+
+            this.targetTables.addAll(tables);
+            callback.checkCancel();
         }
+        if (this.targetTables.isEmpty()) {
+            return;
+        }
+
+        // 初始化插件
+        final Plugin rootPlugin = getPlugins();
+        for (TableGeneration table : this.targetTables) {
+            rootPlugin.initialize(table);
+        }
+
+        // 生成每张表的文件
+        for (TableGeneration tableGeneration : this.targetTables) {
+            List<FileGenerator> generators = tableGeneration.calculateGenerators(this);
+            List<GeneratedFile> generatedFilesOfSingleTable = new ArrayList<>();
+            for (FileGenerator generator : generators) {
+                generatedFilesOfSingleTable.addAll(generator.getGeneratedFiles());
+            }
+            rootPlugin.generateFiles(tableGeneration, generatedFilesOfSingleTable);
+        }
+    }
+
+    @Override
+    public void validate(List<String> errors) {
+
+    }
+
+    @Override
+    public void registerTargetFile(TargetFile targetFile) {
+        targetFileTypeMap.put(targetFile.getName(), targetFile);
     }
 }

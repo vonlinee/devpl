@@ -46,7 +46,14 @@ public class ColumnGeneration {
      * 是否为乐观锁字段
      */
     private boolean isVersionField;
-
+    /**
+     * 长度
+     */
+    private int length;
+    /**
+     * 精度
+     */
+    private int scale;
     /**
      * 列的元数据信息
      */
@@ -59,6 +66,10 @@ public class ColumnGeneration {
      * 字段注释
      */
     private String comment;
+    /**
+     * JDBC类型代码
+     */
+    private int jdbcType;
     /**
      * 填充
      */
@@ -282,5 +293,9 @@ public class ColumnGeneration {
             return Objects.equals(this.name, cg.name);
         }
         return false;
+    }
+
+    public int getJdbcType() {
+        return jdbcType;
     }
 }

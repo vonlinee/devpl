@@ -5,7 +5,7 @@ import io.devpl.sdk.util.StringUtils;
 
 import java.util.List;
 
-public class ColumnOverride {
+public class ColumnOverride extends PropertyHolder {
 
     private final String columnName;
 

@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
+import io.devpl.codegen.db.JavaFieldDataType;
 import io.devpl.codegen.db.DBType;
 import io.devpl.codegen.generator.config.TypeConverter;
 import io.devpl.codegen.util.BranchBuilder;
@@ -40,7 +40,7 @@ public class TypeConverts {
      * @param param 参数
      * @return 返回选择器
      */
-    static Selector<String, ColumnJavaType> use(String param) {
+    static Selector<String, JavaFieldDataType> use(String param) {
         return new Selector<>(param.toLowerCase());
     }
 
@@ -51,14 +51,14 @@ public class TypeConverts {
      * @return 返回分支构建器
      * @see #containsAny(CharSequence...)
      */
-    static BranchBuilder<String, ColumnJavaType> contains(CharSequence value) {
+    static BranchBuilder<String, JavaFieldDataType> contains(CharSequence value) {
         return BranchBuilder.of(s -> s.contains(value));
     }
 
     /**
      * @see #contains(CharSequence)
      */
-    static BranchBuilder<String, ColumnJavaType> containsAny(CharSequence... values) {
+    static BranchBuilder<String, JavaFieldDataType> containsAny(CharSequence... values) {
         return BranchBuilder.of(s -> {
             for (CharSequence value : values) {
                 if (s.contains(value)) {

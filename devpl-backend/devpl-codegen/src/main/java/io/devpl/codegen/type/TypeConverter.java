@@ -1,7 +1,7 @@
 package io.devpl.codegen.type;
 
 import io.devpl.codegen.generator.config.GlobalConfiguration;
-import io.devpl.codegen.db.ColumnJavaType;
+import io.devpl.codegen.db.JavaFieldDataType;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 
 /**
@@ -19,5 +19,5 @@ public interface TypeConverter {
      * @param metaInfo     字段元数据信息
      * @return 子类类型
      */
-    ColumnJavaType convert(GlobalConfiguration globalConfiguration, ColumnMetadata metaInfo);
+    JavaFieldDataType convert(GlobalConfiguration globalConfiguration, ColumnMetadata metaInfo);
 }

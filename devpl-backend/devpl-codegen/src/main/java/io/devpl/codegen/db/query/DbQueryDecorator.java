@@ -29,10 +29,10 @@ public class DbQueryDecorator extends AbstractDbQuery {
     private final String schema;
     private final Logger logger;
 
-    public DbQueryDecorator(@NotNull JdbcConfiguration dataSourceConfig, @NotNull StrategyConfiguration strategyConfiguration) {
-        AbstractDbQuery iDbQuery = dataSourceConfig.getDbQuery();
+    public DbQueryDecorator(@NotNull JdbcConfiguration jdbcConfiguration, @NotNull StrategyConfiguration strategyConfiguration) {
+        AbstractDbQuery iDbQuery = jdbcConfiguration.getDbQuery();
         if (null == iDbQuery) {
-            DBType dbType = JdbcUtils.getDbType(dataSourceConfig.getUrl());
+            DBType dbType = JdbcUtils.getDbType(jdbcConfiguration.getConnectionUrl());
             // 默认 MYSQL
             AbstractDbQuery dialect = DbQueryRegistry.getDbQuery(dbType);
             if (dialect == null) {
@@ -41,10 +41,10 @@ public class DbQueryDecorator extends AbstractDbQuery {
             iDbQuery = dialect;
         }
         this.dbQuery = iDbQuery;
-        this.connection = dataSourceConfig.getConnection();
-        this.dbType = dataSourceConfig.getDbType();
+        this.connection = jdbcConfiguration.getConnection();
+        this.dbType = jdbcConfiguration.getDbType();
         this.strategyConfiguration = strategyConfiguration;
-        this.schema = dataSourceConfig.getSchemaName();
+        this.schema = jdbcConfiguration.getSchemaName();
         this.logger = LoggerFactory.getLogger(dbQuery.getClass());
     }
 

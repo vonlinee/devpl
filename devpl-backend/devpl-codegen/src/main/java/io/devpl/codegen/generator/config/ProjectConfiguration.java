@@ -1,13 +1,17 @@
 package io.devpl.codegen.generator.config;
 
 import io.devpl.codegen.strategy.ProjectArchetype;
-import lombok.Data;
+import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
+import io.devpl.codegen.util.Utils;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 项目配置
  */
-@Data
-public class ProjectConfiguration {
+@Getter
+@Setter
+public class ProjectConfiguration extends PropertyHolder {
 
     /**
      * 配置名称
@@ -53,9 +57,102 @@ public class ProjectConfiguration {
      * 映射XML文件存放目录
      */
     private String mapperXmlFolder;
-
     /**
      * 项目结构
      */
     private ProjectArchetype projectArchetype;
+
+    private ProjectConfiguration(Builder builder) {
+        this.name = builder.name;
+        this.projectRootFolder = builder.projectRootFolder;
+        this.parentPackage = builder.parentPackage;
+        this.entityPackageName = builder.entityPackageName;
+        this.entityPackageFolder = builder.entityPackageFolder;
+        this.mapperPackageName = builder.mapperPackageName;
+        this.mapperFolder = builder.mapperFolder;
+        this.mapperXmlPackage = builder.mapperXmlPackage;
+        this.mapperXmlFolder = builder.mapperXmlFolder;
+        this.projectArchetype = builder.projectArchetype;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String name;
+        private String projectRootFolder;
+        private String parentPackage;
+        private String entityPackageName;
+        private String entityPackageFolder;
+        private String mapperPackageName;
+        private String mapperFolder;
+        private String mapperXmlPackage;
+        private String mapperXmlFolder;
+        private ProjectArchetype projectArchetype;
+
+        private Builder() {
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withProjectRootFolder(String projectRootFolder) {
+            this.projectRootFolder = projectRootFolder;
+            return this;
+        }
+
+        public Builder withParentPackage(String parentPackage) {
+            this.parentPackage = parentPackage;
+            return this;
+        }
+
+        public Builder withEntityPackageName(String entityPackageName) {
+            this.entityPackageName = entityPackageName;
+            return this;
+        }
+
+        public Builder withEntityPackageFolder(String entityPackageFolder) {
+            this.entityPackageFolder = entityPackageFolder;
+            return this;
+        }
+
+        public Builder withMapperPackageName(String mapperPackageName) {
+            this.mapperPackageName = mapperPackageName;
+            return this;
+        }
+
+        public Builder withMapperFolder(String mapperFolder) {
+            this.mapperFolder = mapperFolder;
+            return this;
+        }
+
+        public Builder withMapperXmlPackage(String mapperXmlPackage) {
+            this.mapperXmlPackage = mapperXmlPackage;
+            return this;
+        }
+
+        public Builder withMapperXmlFolder(String mapperXmlFolder) {
+            this.mapperXmlFolder = mapperXmlFolder;
+            return this;
+        }
+
+        public Builder withProjectArchetype(ProjectArchetype projectArchetype) {
+            this.projectArchetype = projectArchetype;
+            return this;
+        }
+
+        public ProjectConfiguration build() {
+
+            if (projectArchetype == null) {
+                projectArchetype = new SimpleMavenProjectArchetype();
+            }
+
+            this.parentPackage = Utils.ifNull(this.parentPackage, "D:/Temp");
+
+            return new ProjectConfiguration(this);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.TypeConverter;
 
@@ -23,13 +23,13 @@ public class OracleTypeConverter implements TypeConverter {
      * @param typeName 类型名称
      * @return 返回列类型
      */
-    private static ColumnJavaType toNumberType(String typeName) {
+    private static JavaFieldDataType toNumberType(String typeName) {
         if (typeName.matches("number\\([0-9]\\)")) {
-            return DbColumnType.INTEGER;
+            return DbFieldDataType.INTEGER;
         } else if (typeName.matches("number\\(1[0-8]\\)")) {
-            return DbColumnType.LONG;
+            return DbFieldDataType.LONG;
         }
-        return DbColumnType.BIG_DECIMAL;
+        return DbFieldDataType.BIG_DECIMAL;
     }
 
     /**
@@ -39,11 +39,11 @@ public class OracleTypeConverter implements TypeConverter {
      * @return 时间类型
      * @see GlobalConfiguration#getDateType()
      */
-    protected static ColumnJavaType toDateType(GlobalConfiguration config) {
+    protected static JavaFieldDataType toDateType(GlobalConfiguration config) {
         return switch (config.getDateType()) {
-            case ONLY_DATE -> DbColumnType.DATE;
-            case SQL_PACK -> DbColumnType.TIMESTAMP;
-            case TIME_PACK -> DbColumnType.LOCAL_DATE_TIME;
+            case ONLY_DATE -> DbFieldDataType.DATE;
+            case SQL_PACK -> DbFieldDataType.TIMESTAMP;
+            case TIME_PACK -> DbFieldDataType.LOCAL_DATE_TIME;
         };
     }
 
@@ -55,14 +55,14 @@ public class OracleTypeConverter implements TypeConverter {
      * @return 返回的对应的列类型
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
+    public JavaFieldDataType convert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("char", "clob").then(DbColumnType.STRING))
+            .test(TypeConverts.containsAny("char", "clob").then(DbFieldDataType.STRING))
             .test(TypeConverts.containsAny("date", "timestamp").then(p -> toDateType(config)))
             .test(TypeConverts.contains("number").then(OracleTypeConverter::toNumberType))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BLOB))
-            .test(TypeConverts.containsAny("binary", "raw").then(DbColumnType.BYTE_ARRAY))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.contains("float").then(DbFieldDataType.FLOAT))
+            .test(TypeConverts.contains("blob").then(DbFieldDataType.BLOB))
+            .test(TypeConverts.containsAny("binary", "raw").then(DbFieldDataType.BYTE_ARRAY))
+            .or(DbFieldDataType.STRING);
     }
 }

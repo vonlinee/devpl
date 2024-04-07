@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * 关键字处理接口
  */
-public interface IKeyWordsHandler {
+public interface ColumnKeyWordsHandler {
 
     /**
      * 获取关键字

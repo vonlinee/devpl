@@ -80,4 +80,11 @@ public interface ProgressCallback {
      */
     default void checkCancel() throws InterruptedException {
     }
+
+    default void terminated() {
+
+    }
+
+    class NoOp implements ProgressCallback {
+    }
 }

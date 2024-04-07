@@ -1,7 +1,10 @@
 package io.devpl.codegen.generator;
 
+import io.devpl.codegen.generator.config.PluginConfiguration;
 import io.devpl.codegen.util.DefaultContextObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,12 +13,20 @@ import java.util.Objects;
  */
 public abstract class Context extends DefaultContextObject {
 
+    /**
+     * 唯一ID
+     */
     private String id;
 
     /**
      * 插件
      */
     private PluginManager plugins;
+
+    /**
+     * 插件配置列表
+     */
+    private List<PluginConfiguration> pluginConfigurations = new ArrayList<>();
 
     public final void setId(String id) {
         this.id = Objects.requireNonNull(id, "id must not be null");
@@ -28,6 +39,8 @@ public abstract class Context extends DefaultContextObject {
     @Override
     public void initialize() {
         this.plugins = new PluginManager();
+        this.pluginConfigurations = new ArrayList<>();
+        this.setId(this.toString());
     }
 
     /**
@@ -35,7 +48,21 @@ public abstract class Context extends DefaultContextObject {
      *
      * @param files 所有生成的文件
      */
-    public abstract void generateFiles(List<GeneratedFile> files);
+    public abstract void generateFiles(ProgressCallback callback, List<GeneratedFile> files, List<String> errors) throws InterruptedException;
+
+    /**
+     * 注册生成的目标文件
+     *
+     * @param targetFile 目标文件
+     */
+    public abstract void registerTargetFile(TargetFile targetFile);
+
+    /**
+     * 校验配置项
+     *
+     * @param errors 存放错误信息
+     */
+    public abstract void validate(List<String> errors);
 
     public final void addPlugin(Plugin plugin) {
         Objects.requireNonNull(plugin, "plugin instance cannot be null");
@@ -45,5 +72,14 @@ public abstract class Context extends DefaultContextObject {
 
     public final Plugin getPlugins() {
         return plugins;
+    }
+
+    public final void addPluginConfiguration(PluginConfiguration pluginConfiguration) {
+        Objects.requireNonNull(pluginConfiguration, "plugin configuration cannot be null");
+        pluginConfigurations.add(pluginConfiguration);
+    }
+
+    public List<PluginConfiguration> getPluginConfigurations() {
+        return pluginConfigurations == null ? Collections.emptyList() : pluginConfigurations;
     }
 }

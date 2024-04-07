@@ -3,7 +3,7 @@ package io.devpl.codegen.util;
 public interface ContextObject {
 
     /**
-     * 初始化操作
+     * 上下文初始化
      */
     default void initialize() {
     }

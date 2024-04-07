@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.config.DateType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.TypeConverter;
@@ -18,19 +18,19 @@ public class OscarTypeConverter implements TypeConverter {
      * @return 返回对应的字段类型
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfiguration globalConfiguration, String fieldType) {
+    public JavaFieldDataType convert(GlobalConfiguration globalConfiguration, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(DbColumnType.STRING))
-            .test(TypeConverts.containsAny("bigint", "int8").then(DbColumnType.LONG))
-            .test(TypeConverts.containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("CHARACTER", "char", "varchar", "text", "character varying").then(DbFieldDataType.STRING))
+            .test(TypeConverts.containsAny("bigint", "int8").then(DbFieldDataType.LONG))
+            .test(TypeConverts.containsAny("int", "int1", "int2", "int3", "int4", "tinyint", "integer").then(DbFieldDataType.INTEGER))
             .test(TypeConverts.containsAny("date", "time", "timestamp").then(p -> toDateType(globalConfiguration, p)))
-            .test(TypeConverts.containsAny("bit", "boolean").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.containsAny("decimal", "numeric", "number").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.contains("clob").then(DbColumnType.CLOB))
-            .test(TypeConverts.contains("blob").then(DbColumnType.BYTE_ARRAY))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.containsAny("double", "real", "float4", "float8").then(DbColumnType.DOUBLE))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.containsAny("bit", "boolean").then(DbFieldDataType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric", "number").then(DbFieldDataType.BIG_DECIMAL))
+            .test(TypeConverts.contains("clob").then(DbFieldDataType.CLOB))
+            .test(TypeConverts.contains("blob").then(DbFieldDataType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbFieldDataType.FLOAT))
+            .test(TypeConverts.containsAny("double", "real", "float4", "float8").then(DbFieldDataType.DOUBLE))
+            .or(DbFieldDataType.STRING);
     }
 
     /**
@@ -40,22 +40,22 @@ public class OscarTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    private ColumnJavaType toDateType(GlobalConfiguration config, String type) {
+    private JavaFieldDataType toDateType(GlobalConfiguration config, String type) {
         DateType dateType = config.getDateType();
         if (dateType == DateType.SQL_PACK) {
             return switch (type) {
-                case "date" -> DbColumnType.DATE_SQL;
-                case "time" -> DbColumnType.TIME;
-                default -> DbColumnType.TIMESTAMP;
+                case "date" -> DbFieldDataType.DATE_SQL;
+                case "time" -> DbFieldDataType.TIME;
+                default -> DbFieldDataType.TIMESTAMP;
             };
         } else if (dateType == DateType.TIME_PACK) {
             return switch (type) {
-                case "date" -> DbColumnType.LOCAL_DATE;
-                case "time" -> DbColumnType.LOCAL_TIME;
-                default -> DbColumnType.LOCAL_DATE_TIME;
+                case "date" -> DbFieldDataType.LOCAL_DATE;
+                case "time" -> DbFieldDataType.LOCAL_TIME;
+                default -> DbFieldDataType.LOCAL_DATE_TIME;
             };
         }
-        return DbColumnType.DATE;
+        return DbFieldDataType.DATE;
     }
 
 }

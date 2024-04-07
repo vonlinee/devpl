@@ -15,8 +15,6 @@ public class PackageConfiguration {
 
     /**
      * 包配置信息
-     *
-     * @since 3.5.0
      */
     private final Map<String, String> packageInfo = new HashMap<>();
     /**
@@ -57,11 +55,6 @@ public class PackageConfiguration {
      * Controller包名
      */
     private String controller = "controller";
-
-    /**
-     * 路径配置信息
-     */
-    private Map<OutputFile, String> pathInfo;
 
     private PackageConfiguration() {
     }
@@ -156,12 +149,6 @@ public class PackageConfiguration {
             this.packageConfig = new PackageConfiguration();
         }
 
-        public Builder(@NotNull String parent, @NotNull String moduleName) {
-            this();
-            this.packageConfig.parent = parent;
-            this.packageConfig.moduleName = moduleName;
-        }
-
         /**
          * 指定父包名
          *
@@ -251,17 +238,6 @@ public class PackageConfiguration {
         }
 
         /**
-         * 路径配置信息
-         *
-         * @param pathInfo 路径配置信息
-         * @return this
-         */
-        public Builder pathInfo(@NotNull Map<OutputFile, String> pathInfo) {
-            this.packageConfig.pathInfo = pathInfo;
-            return this;
-        }
-
-        /**
          * 连接父子包名
          *
          * @param subPackage 子包名
@@ -272,17 +248,6 @@ public class PackageConfiguration {
             return this.packageConfig.joinPackage(subPackage);
         }
 
-        /**
-         * 构建包配置对象
-         * <p>当指定{@link #parentPackageName(String)} 与 {@link #moduleName(String)}时,其他模块名字会加上这两个作为前缀</p>
-         * <p>
-         * 例如:
-         * <p>当设置 {@link #parentPackageName(String)},那么entity的配置为 {@link #getParent()}.{@link #getEntity()}</p>
-         * <p>当设置 {@link #parentPackageName(String)}与{@link #moduleName(String)},那么entity的配置为 {@link #getParent()}.{@link #getModuleName()}.{@link #getEntity()} </p>
-         * </p>
-         *
-         * @return 包配置对象
-         */
         public PackageConfiguration build() {
             return this.packageConfig;
         }

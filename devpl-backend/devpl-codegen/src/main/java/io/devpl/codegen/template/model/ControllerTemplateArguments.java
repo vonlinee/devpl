@@ -2,9 +2,7 @@ package io.devpl.codegen.template.model;
 
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.generator.TableGeneration;
-import io.devpl.codegen.generator.config.BaseBuilder;
 import io.devpl.codegen.generator.config.NamingStrategy;
-import io.devpl.codegen.generator.config.StrategyConfiguration;
 import io.devpl.codegen.generator.config.TemplateDataModelBean;
 import io.devpl.codegen.util.ClassUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -91,12 +89,12 @@ public class ControllerTemplateArguments extends JavaFileTemplateArguments imple
         return data;
     }
 
-    public static class Builder extends BaseBuilder {
+    public static class Builder  {
 
         private final ControllerTemplateArguments controller = new ControllerTemplateArguments();
 
-        public Builder(@NotNull StrategyConfiguration strategyConfiguration) {
-            super(strategyConfiguration);
+        public Builder() {
+
         }
 
         /**

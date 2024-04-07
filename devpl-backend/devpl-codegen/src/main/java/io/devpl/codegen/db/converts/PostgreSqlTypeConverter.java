@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.TypeConverter;
 
@@ -18,19 +18,19 @@ public class PostgreSqlTypeConverter implements TypeConverter {
      * @param type   类型
      * @return 返回对应的列类型
      */
-    public static ColumnJavaType toDateType(GlobalConfiguration config, String type) {
+    public static JavaFieldDataType toDateType(GlobalConfiguration config, String type) {
         return switch (config.getDateType()) {
             case SQL_PACK -> switch (type) {
-                case "date" -> DbColumnType.DATE_SQL;
-                case "time" -> DbColumnType.TIME;
-                default -> DbColumnType.TIMESTAMP;
+                case "date" -> DbFieldDataType.DATE_SQL;
+                case "time" -> DbFieldDataType.TIME;
+                default -> DbFieldDataType.TIMESTAMP;
             };
             case TIME_PACK -> switch (type) {
-                case "date" -> DbColumnType.LOCAL_DATE;
-                case "time" -> DbColumnType.LOCAL_TIME;
-                default -> DbColumnType.LOCAL_DATE_TIME;
+                case "date" -> DbFieldDataType.LOCAL_DATE;
+                case "time" -> DbFieldDataType.LOCAL_TIME;
+                default -> DbFieldDataType.LOCAL_DATE_TIME;
             };
-            default -> DbColumnType.DATE;
+            default -> DbFieldDataType.DATE;
         };
     }
 
@@ -38,18 +38,18 @@ public class PostgreSqlTypeConverter implements TypeConverter {
      * @inheritDoc
      */
     @Override
-    public ColumnJavaType processTypeConvert(GlobalConfiguration config, String fieldType) {
+    public JavaFieldDataType convert(GlobalConfiguration config, String fieldType) {
         return TypeConverts.use(fieldType)
-            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbColumnType.STRING))
-            .test(TypeConverts.contains("bigint").then(DbColumnType.LONG))
-            .test(TypeConverts.contains("int").then(DbColumnType.INTEGER))
+            .test(TypeConverts.containsAny("char", "text", "json", "enum").then(DbFieldDataType.STRING))
+            .test(TypeConverts.contains("bigint").then(DbFieldDataType.LONG))
+            .test(TypeConverts.contains("int").then(DbFieldDataType.INTEGER))
             .test(TypeConverts.containsAny("date", "time").then(t -> toDateType(config, t)))
-            .test(TypeConverts.contains("bit").then(DbColumnType.BOOLEAN))
-            .test(TypeConverts.containsAny("decimal", "numeric").then(DbColumnType.BIG_DECIMAL))
-            .test(TypeConverts.contains("bytea").then(DbColumnType.BYTE_ARRAY))
-            .test(TypeConverts.contains("float").then(DbColumnType.FLOAT))
-            .test(TypeConverts.contains("double").then(DbColumnType.DOUBLE))
-            .test(TypeConverts.contains("boolean").then(DbColumnType.BOOLEAN))
-            .or(DbColumnType.STRING);
+            .test(TypeConverts.contains("bit").then(DbFieldDataType.BOOLEAN))
+            .test(TypeConverts.containsAny("decimal", "numeric").then(DbFieldDataType.BIG_DECIMAL))
+            .test(TypeConverts.contains("bytea").then(DbFieldDataType.BYTE_ARRAY))
+            .test(TypeConverts.contains("float").then(DbFieldDataType.FLOAT))
+            .test(TypeConverts.contains("double").then(DbFieldDataType.DOUBLE))
+            .test(TypeConverts.contains("boolean").then(DbFieldDataType.BOOLEAN))
+            .or(DbFieldDataType.STRING);
     }
 }

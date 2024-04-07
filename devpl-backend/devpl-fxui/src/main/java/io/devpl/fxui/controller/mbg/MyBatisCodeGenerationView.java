@@ -45,7 +45,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
     /**
      * 项目配置项
      */
-    private final ProjectConfiguration projectConfig = new ProjectConfiguration();
+    private final ProjectConfiguration projectConfig = ProjectConfiguration.builder().build();
     /**
      * 保存哪些表需要进行代码生成
      * 存放的key:TableCodeGenConfig#getUniqueKey()
@@ -282,7 +282,7 @@ public class MyBatisCodeGenerationView extends FxmlView {
      */
     private void generate(CodeGenContext context) {
         try {
-            generator.generate(context);
+            // generator.generate(context);
             dialog.showDirectory(new File(context.getProjectConfiguration().getProjectRootFolder()));
         } catch (Exception exception) {
             Alerts.exception("生成失败", exception).showAndWait();

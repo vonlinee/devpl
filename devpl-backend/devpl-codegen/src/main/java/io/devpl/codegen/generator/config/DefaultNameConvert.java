@@ -1,9 +1,9 @@
 package io.devpl.codegen.generator.config;
 
-import io.devpl.codegen.generator.TableGeneration;
-import io.devpl.sdk.util.StringUtils;
-
 import java.util.Set;
+
+import io.devpl.codegen.generator.TableGeneration;
+import io.devpl.codegen.util.StringUtils;
 
 /**
  * 默认名称转换接口类

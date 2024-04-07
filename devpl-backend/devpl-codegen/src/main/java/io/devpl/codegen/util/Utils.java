@@ -6,14 +6,14 @@ import io.devpl.sdk.util.StringUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Properties;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * 仅在此模块内部使用
  */
-public abstract class InternalUtils {
+public abstract class Utils {
 
     /**
      * 获取桌面目录
@@ -163,5 +163,66 @@ public abstract class InternalUtils {
         }
         packageName = packageName.replaceAll("\\.", "\\" + File.separator);
         return parentDir + packageName;
+    }
+
+    /**
+     * 打开指定输出文件目录
+     *
+     * @param outDir 输出文件目录
+     * @throws IOException 执行命令出错
+     */
+    public static void openDirectory(String outDir) throws IOException {
+        String osName = System.getProperty("os.name");
+        if (osName != null) {
+            if (osName.contains("Mac")) {
+                Runtime.getRuntime().exec("open " + outDir);
+            } else if (osName.contains("Windows")) {
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
+            }
+        }
+    }
+
+    public static <T> T ifNull(T obj, Supplier<T> supplier) {
+        if (obj == null) {
+            return supplier.get();
+        }
+        return obj;
+    }
+
+    public static <T> T ifNull(T obj, T defaultValue) {
+        if (obj == null) {
+            return defaultValue;
+        }
+        return obj;
+    }
+
+    public static String ifBlank(String str, String defaultValue) {
+        if (str == null || str.isEmpty() || str.isBlank()) {
+            return defaultValue;
+        }
+        return str;
+    }
+
+    public static void removeSafely(List<?> list, Object obj) {
+        if (list == null || obj == null) {
+            return;
+        }
+        if (list == Collections.emptyList()) {
+            return;
+        }
+        /**
+         * 不可变集合，不进行删除
+         * @see List#of()
+         */
+        if (list.getClass().getName().contains("Immutable")) {
+            return;
+        }
+        if (obj instanceof Integer index) {
+            if (index < list.size()) {
+                list.remove((int) index);
+            }
+        } else {
+            list.remove(obj);
+        }
     }
 }

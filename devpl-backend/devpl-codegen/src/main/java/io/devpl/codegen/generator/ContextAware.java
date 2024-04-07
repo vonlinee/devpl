@@ -7,6 +7,5 @@ public interface ContextAware {
      *
      * @param context 上下文对象
      */
-    default void setContext(Context context) {
-    }
+    void setContext(Context context);
 }

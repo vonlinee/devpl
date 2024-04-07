@@ -4,7 +4,7 @@ import io.devpl.codegen.template.model.ControllerTemplateArguments;
 import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.template.model.MapperTemplateArguments;
 import io.devpl.codegen.template.model.ServiceTemplateArguments;
-import io.devpl.codegen.util.InternalUtils;
+import io.devpl.codegen.util.Utils;
 import io.devpl.sdk.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * 策略配置项
  */
-public class StrategyConfiguration extends ConfigurationHolder {
+public class StrategyConfiguration extends PropertyHolder {
 
     /**
      * 过滤表前缀
@@ -50,10 +50,10 @@ public class StrategyConfiguration extends ConfigurationHolder {
      * 当{@link #enableSqlFilter}为true时，正则表达式无效.
      */
     private final Set<String> exclude = new HashSet<>();
-    private final EntityTemplateArguments.Builder entityBuilder = new EntityTemplateArguments.Builder(this);
-    private final ControllerTemplateArguments.Builder controllerBuilder = new ControllerTemplateArguments.Builder(this);
-    private final MapperTemplateArguments.Builder mapperBuilder = new MapperTemplateArguments.Builder(this);
-    private final ServiceTemplateArguments.Builder serviceBuilder = new ServiceTemplateArguments.Builder(this);
+    private final EntityTemplateArguments.Builder entityBuilder = new EntityTemplateArguments.Builder();
+    private final ControllerTemplateArguments.Builder controllerBuilder = new ControllerTemplateArguments.Builder();
+    private final MapperTemplateArguments.Builder mapperBuilder = new MapperTemplateArguments.Builder();
+    private final ServiceTemplateArguments.Builder serviceBuilder = new ServiceTemplateArguments.Builder();
     /**
      * 是否大写命名（默认 false）
      */
@@ -305,13 +305,12 @@ public class StrategyConfiguration extends ConfigurationHolder {
         this.include.addAll(tableNames);
     }
 
-    public static class Builder extends BaseBuilder {
+    public static class Builder {
 
         private final StrategyConfiguration strategyConfiguration;
 
         public Builder() {
-            super(new StrategyConfiguration());
-            strategyConfiguration = super.build();
+            strategyConfiguration = new StrategyConfiguration();
         }
 
         /**
@@ -440,7 +439,7 @@ public class StrategyConfiguration extends ConfigurationHolder {
          * @return this
          */
         public Builder addInclude(List<String> includes) {
-            InternalUtils.notEmpty(includes, "表名为空");
+            Utils.notEmpty(includes, "表名为空");
             this.strategyConfiguration.addIncludedTables(includes);
             return this;
         }
@@ -452,7 +451,7 @@ public class StrategyConfiguration extends ConfigurationHolder {
          * @return this
          */
         public Builder addInclude(String includes) {
-            InternalUtils.notBlank(includes, "表名[%s]为空", includes);
+            Utils.notBlank(includes, "表名[%s]为空", includes);
             if (includes.contains(",")) {
                 this.strategyConfiguration.addIncludedTables(includes.split(","));
             } else {
@@ -495,6 +494,10 @@ public class StrategyConfiguration extends ConfigurationHolder {
         public Builder notLikeTable(@NotNull LikeTable notLikeTable) {
             this.strategyConfiguration.notLikeTable = notLikeTable;
             return this;
+        }
+
+        public StrategyConfiguration build() {
+            return this.strategyConfiguration;
         }
     }
 }

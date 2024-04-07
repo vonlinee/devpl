@@ -1,8 +1,8 @@
 package io.devpl.codegen.type;
 
 import io.devpl.codegen.generator.config.DateType;
-import io.devpl.codegen.db.ColumnJavaType;
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.JavaFieldDataType;
+import io.devpl.codegen.db.DbFieldDataType;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -15,44 +15,44 @@ import java.util.Map;
  */
 public class TypeRegistry {
 
-    private static final Map<Integer, ColumnJavaType> typeMap = new HashMap<>();
+    private static final Map<Integer, JavaFieldDataType> typeMap = new HashMap<>();
 
     static {
         // byte[]
-        typeMap.put(Types.BINARY, DbColumnType.BYTE_ARRAY);
-        typeMap.put(Types.BLOB, DbColumnType.BYTE_ARRAY);
-        typeMap.put(Types.LONGVARBINARY, DbColumnType.BYTE_ARRAY);
-        typeMap.put(Types.VARBINARY, DbColumnType.BYTE_ARRAY);
+        typeMap.put(Types.BINARY, DbFieldDataType.BYTE_ARRAY);
+        typeMap.put(Types.BLOB, DbFieldDataType.BYTE_ARRAY);
+        typeMap.put(Types.LONGVARBINARY, DbFieldDataType.BYTE_ARRAY);
+        typeMap.put(Types.VARBINARY, DbFieldDataType.BYTE_ARRAY);
         // byte
-        typeMap.put(Types.TINYINT, DbColumnType.BYTE);
+        typeMap.put(Types.TINYINT, DbFieldDataType.BYTE);
         // long
-        typeMap.put(Types.BIGINT, DbColumnType.LONG);
+        typeMap.put(Types.BIGINT, DbFieldDataType.LONG);
         // boolean
-        typeMap.put(Types.BIT, DbColumnType.BOOLEAN);
-        typeMap.put(Types.BOOLEAN, DbColumnType.BOOLEAN);
+        typeMap.put(Types.BIT, DbFieldDataType.BOOLEAN);
+        typeMap.put(Types.BOOLEAN, DbFieldDataType.BOOLEAN);
         // short
-        typeMap.put(Types.SMALLINT, DbColumnType.SHORT);
+        typeMap.put(Types.SMALLINT, DbFieldDataType.SHORT);
         // string
-        typeMap.put(Types.CHAR, DbColumnType.STRING);
-        typeMap.put(Types.CLOB, DbColumnType.STRING);
-        typeMap.put(Types.VARCHAR, DbColumnType.STRING);
-        typeMap.put(Types.LONGVARCHAR, DbColumnType.STRING);
-        typeMap.put(Types.LONGNVARCHAR, DbColumnType.STRING);
-        typeMap.put(Types.NCHAR, DbColumnType.STRING);
-        typeMap.put(Types.NCLOB, DbColumnType.STRING);
-        typeMap.put(Types.NVARCHAR, DbColumnType.STRING);
+        typeMap.put(Types.CHAR, DbFieldDataType.STRING);
+        typeMap.put(Types.CLOB, DbFieldDataType.STRING);
+        typeMap.put(Types.VARCHAR, DbFieldDataType.STRING);
+        typeMap.put(Types.LONGVARCHAR, DbFieldDataType.STRING);
+        typeMap.put(Types.LONGNVARCHAR, DbFieldDataType.STRING);
+        typeMap.put(Types.NCHAR, DbFieldDataType.STRING);
+        typeMap.put(Types.NCLOB, DbFieldDataType.STRING);
+        typeMap.put(Types.NVARCHAR, DbFieldDataType.STRING);
         // date
-        typeMap.put(Types.DATE, DbColumnType.DATE);
+        typeMap.put(Types.DATE, DbFieldDataType.DATE);
         // timestamp
-        typeMap.put(Types.TIMESTAMP, DbColumnType.TIMESTAMP);
+        typeMap.put(Types.TIMESTAMP, DbFieldDataType.TIMESTAMP);
         // double
-        typeMap.put(Types.FLOAT, DbColumnType.DOUBLE);
-        typeMap.put(Types.REAL, DbColumnType.DOUBLE);
+        typeMap.put(Types.FLOAT, DbFieldDataType.DOUBLE);
+        typeMap.put(Types.REAL, DbFieldDataType.DOUBLE);
         // int
-        typeMap.put(Types.INTEGER, DbColumnType.INTEGER);
+        typeMap.put(Types.INTEGER, DbFieldDataType.INTEGER);
         // bigDecimal
-        typeMap.put(Types.NUMERIC, DbColumnType.BIG_DECIMAL);
-        typeMap.put(Types.DECIMAL, DbColumnType.BIG_DECIMAL);
+        typeMap.put(Types.NUMERIC, DbFieldDataType.BIG_DECIMAL);
+        typeMap.put(Types.DECIMAL, DbFieldDataType.BIG_DECIMAL);
         // TODO 类型需要补充完整
     }
 
@@ -72,44 +72,44 @@ public class TypeRegistry {
         switch (jdbcType) {
             case Types.BIT -> {
                 if (length > 1) {
-                    columnType = DbColumnType.BYTE_ARRAY;
+                    columnType = DbFieldDataType.BYTE_ARRAY;
                 } else {
-                    columnType = DbColumnType.BOOLEAN;
+                    columnType = DbFieldDataType.BOOLEAN;
                 }
             }
             case Types.DATE -> columnType = switch (dateType) {
-                case SQL_PACK -> DbColumnType.DATE_SQL;
-                case TIME_PACK -> DbColumnType.LOCAL_DATE;
-                default -> DbColumnType.DATE;
+                case SQL_PACK -> DbFieldDataType.DATE_SQL;
+                case TIME_PACK -> DbFieldDataType.LOCAL_DATE;
+                default -> DbFieldDataType.DATE;
             };
             case Types.TIME -> {
                 if (dateType == DateType.TIME_PACK) {
-                    columnType = DbColumnType.LOCAL_TIME;
+                    columnType = DbFieldDataType.LOCAL_TIME;
                 } else {
-                    columnType = DbColumnType.TIME;
+                    columnType = DbFieldDataType.TIME;
                 }
             }
             case Types.DECIMAL, Types.NUMERIC -> {
                 if (scale > 0 || length > 18) {
                     columnType = typeMap.get(jdbcType);
                 } else if (length > 9) {
-                    columnType = DbColumnType.LONG;
+                    columnType = DbFieldDataType.LONG;
                 } else if (length > 4) {
-                    columnType = DbColumnType.INTEGER;
+                    columnType = DbFieldDataType.INTEGER;
                 } else {
-                    columnType = DbColumnType.SHORT;
+                    columnType = DbFieldDataType.SHORT;
                 }
             }
             case Types.TIMESTAMP -> {
                 if (dateType == DateType.TIME_PACK) {
-                    columnType = DbColumnType.LOCAL_DATE_TIME;
+                    columnType = DbFieldDataType.LOCAL_DATE_TIME;
                 } else if (dateType == DateType.ONLY_DATE) {
-                    columnType = DbColumnType.DATE;
+                    columnType = DbFieldDataType.DATE;
                 } else {
-                    columnType = DbColumnType.TIMESTAMP;
+                    columnType = DbFieldDataType.TIMESTAMP;
                 }
             }
-            default -> columnType = typeMap.getOrDefault(jdbcType, DbColumnType.OBJECT);
+            default -> columnType = typeMap.getOrDefault(jdbcType, DbFieldDataType.OBJECT);
         }
         return columnType;
     }

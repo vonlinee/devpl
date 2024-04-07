@@ -1,6 +1,6 @@
 package io.devpl.codegen.generator.plugins;
 
-import io.devpl.codegen.db.DbColumnType;
+import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.ColumnGeneration;
 import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.DateType;
@@ -23,7 +23,7 @@ public class TypeHandlerPlugin extends TableGenerationPlugin {
             ColumnMetadata cmd = column.getColumnMetadata();
             JavaType columnType;
             if (cmd.getDataType() == null || cmd.getColumnSize() == null || cmd.getDecimalDigits() == null) {
-                columnType = DbColumnType.STRING;
+                columnType = DbFieldDataType.STRING;
             } else {
                 columnType = TypeRegistry.getColumnType(cmd.getDataType(), cmd.getColumnSize(), dateType, cmd.getDecimalDigits());
             }

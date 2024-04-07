@@ -1,38 +1,54 @@
 package io.devpl.codegen.samples;
 
-import io.devpl.codegen.generator.AutoGenerator;
-import io.devpl.codegen.generator.FastAutoGenerator;
-import io.devpl.codegen.samples.ui.GenerationResultView;
-import io.devpl.codegen.samples.ui.UIHelper;
-import io.devpl.codegen.util.InternalUtils;
+import io.devpl.codegen.generator.CodeGenerator;
+import io.devpl.codegen.generator.ConfigurationParser;
+import io.devpl.codegen.generator.RdbmsTableGenerationContext;
+import io.devpl.codegen.generator.config.Configuration;
+import io.devpl.codegen.generator.config.JdbcConfiguration;
+import io.devpl.codegen.generator.config.xml.XMLParserException;
+import io.devpl.codegen.util.Utils;
+import org.junit.Test;
+import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * 如果 src/main/ 下也有模板文件，优先使用 src/test 下的资源文件
  */
 public class MySQLGenerator {
 
-    public static void main(String[] args) {
-        AutoGenerator generator = FastAutoGenerator
-            // 配置数据源
-            .create(new File(InternalUtils.getDesktopDirectory(), "codegen.properties"))
-            // 全局配置
-            .globalConfig(builder -> {
-                builder.author("author") // 设置作者
-                    .commentDatePattern("yyyy-MM-dd hh:mm:ss")   // 注释日期
-                    .outputDir("D://Temp//codegen"); // 指定输出目录
-            }).strategyConfig(builder -> {
-                builder.addInclude("template_info");
-                builder.addInclude("graduation_resit_exam_application");
-                builder.addInclude("graduation_resit_exam_review");
-                builder.entityBuilder().enableFileOverride();
-                builder.serviceBuilder().enableFileOverride();
-                builder.mapperBuilder().enableFileOverride();
-                builder.controllerBuilder().enableFileOverride();
-            })
-            .packageConfig(builder -> builder.parentPackageName("com.lancoo.examuniv"))
-            .execute();
-        generator.show(rootDir -> UIHelper.showFrame("生成结果", new GenerationResultView(new File(rootDir)), 800, 600));
+    @Test
+    public void test1() throws XMLParserException, IOException {
+        List<String> warnings = new ArrayList<>();
+        String configFile = MyBatisGeneratorTest.class.getClassLoader().getResource("config.xml").getFile();
+        File configurationFile = new File(configFile);
+        ConfigurationParser cp = new ConfigurationParser(warnings);
+        Configuration config = cp.parseConfiguration(configurationFile);
+        DefaultShellCallback shellCallback = new DefaultShellCallback(true);
+    }
+
+    /**
+     * @see org.mybatis.generator.config.Context
+     */
+    @Test
+    public void test2() {
+        File file = new File(Utils.getDesktopDirectory(), "codegen.properties");
+        Properties properties = Utils.loadProperties(file);
+        JdbcConfiguration jdbcConfiguration = JdbcConfiguration.builder(properties).build();
+
+        Configuration configuration = new Configuration();
+        RdbmsTableGenerationContext context = new RdbmsTableGenerationContext(jdbcConfiguration);
+
+        context.addTableConfiguration("table_file_generation");
+
+        configuration.addContext(context);
+
+        CodeGenerator generator = new CodeGenerator(configuration);
+
+        generator.generateFiles(null);
     }
 }

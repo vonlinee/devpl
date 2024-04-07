@@ -18,6 +18,14 @@ public abstract class PropertyHolder {
         return properties.getProperty(name);
     }
 
+    public String getProperty(String name, String defaultValue) {
+        return properties.getProperty(name, defaultValue);
+    }
+
+    public boolean containsKey(String name) {
+        return properties.containsKey(name);
+    }
+
     public Properties getProperties() {
         return properties;
     }

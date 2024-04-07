@@ -1,33 +1,36 @@
 package io.devpl.codegen.generator.config;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import io.devpl.codegen.db.ColumnKeyWordsHandler;
 import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.db.IKeyWordsHandler;
 import io.devpl.codegen.db.query.AbstractDbQuery;
 import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
-import io.devpl.codegen.util.InternalUtils;
+import io.devpl.codegen.util.Utils;
 import io.devpl.sdk.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * 数据库配置
  */
-public class JdbcConfiguration extends ConfigurationHolder {
-
+@Setter
+@Getter
+public class JdbcConfiguration extends PropertyHolder {
     /**
      * 数据库连接属性
      */
-    private final Map<String, String> connectionProperties = new HashMap<>();
+    private final Properties connectionProperties = new Properties();
     /**
      * 数据库信息查询
      */
@@ -37,18 +40,17 @@ public class JdbcConfiguration extends ConfigurationHolder {
      */
     private String schemaName;
     /**
-     * 类型转换
-     */
-    private TypeConverter typeConvert;
-    /**
      * 关键字处理器
      */
-    private IKeyWordsHandler keyWordsHandler;
+    private ColumnKeyWordsHandler keyWordsHandler;
     /**
      * 驱动连接的URL
      */
-    private String url;
-
+    private String connectionUrl;
+    /**
+     * 同用户名
+     */
+    private String userId;
     /**
      * 数据库连接用户名
      */
@@ -64,6 +66,8 @@ public class JdbcConfiguration extends ConfigurationHolder {
      */
     private DataSource dataSource;
 
+    private String driverClassName;
+
     /**
      * 数据库连接
      *
@@ -75,7 +79,7 @@ public class JdbcConfiguration extends ConfigurationHolder {
      */
     private Class<? extends DatabaseMetadataReader> databaseQueryClass = JdbcDatabaseMetadataReader.class;
 
-    private JdbcConfiguration() {
+    public JdbcConfiguration() {
     }
 
     /**
@@ -92,7 +96,7 @@ public class JdbcConfiguration extends ConfigurationHolder {
      */
     @NotNull
     public DBType getDbType() {
-        return JdbcUtils.getDbType(this.url);
+        return JdbcUtils.getDbType(this.connectionUrl);
     }
 
     /**
@@ -111,7 +115,8 @@ public class JdbcConfiguration extends ConfigurationHolder {
                         connection = dataSource.getConnection();
                     } else {
                         Properties properties = new Properties();
-                        connectionProperties.forEach(properties::setProperty);
+
+                        connectionProperties.forEach((k, v) -> properties.setProperty((String) k, (String) v));
                         properties.put("user", username);
                         properties.put("password", password);
                         // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
@@ -124,8 +129,11 @@ public class JdbcConfiguration extends ConfigurationHolder {
                                 properties.put("remarks", "true");
                                 properties.put("remarksReporting", "true");
                             }
+                            default -> {
+
+                            }
                         }
-                        this.connection = DriverManager.getConnection(url, properties);
+                        this.connection = DriverManager.getConnection(connectionUrl, properties);
                     }
                 }
             }
@@ -166,13 +174,13 @@ public class JdbcConfiguration extends ConfigurationHolder {
     }
 
     @Nullable
-    public IKeyWordsHandler getKeyWordsHandler() {
+    public ColumnKeyWordsHandler getKeyWordsHandler() {
         return keyWordsHandler;
     }
 
     @NotNull
-    public String getUrl() {
-        return url;
+    public String getConnectionUrl() {
+        return connectionUrl;
     }
 
     @Nullable
@@ -196,20 +204,17 @@ public class JdbcConfiguration extends ConfigurationHolder {
 
     /**
      * 数据库配置构建者
-     *
-     * @author nieqiurong 2020/10/10.
-     * @since 3.5.0
      */
-    public static class Builder {
+    public static final class Builder {
 
-        private final JdbcConfiguration dataSourceConfig;
+        private final JdbcConfiguration jdbcConfiguration;
 
         private Builder() {
-            this.dataSourceConfig = new JdbcConfiguration();
+            this.jdbcConfiguration = new JdbcConfiguration();
         }
 
         private Builder(Properties properties) {
-            this.dataSourceConfig = new JdbcConfiguration();
+            this.jdbcConfiguration = new JdbcConfiguration();
             initialize(properties);
         }
 
@@ -217,9 +222,9 @@ public class JdbcConfiguration extends ConfigurationHolder {
             String url = (String) properties.get("url");
             String username = (String) properties.get("username");
             String password = (String) properties.get("password");
-            this.dataSourceConfig.url = InternalUtils.requireNonEmpty(url, "url is empty");
-            this.dataSourceConfig.username = InternalUtils.requireNonEmpty(username, "username is empty");
-            this.dataSourceConfig.password = InternalUtils.requireNonEmpty(password, "password is empty");
+            this.jdbcConfiguration.connectionUrl = Utils.requireNonEmpty(url, "url is empty");
+            this.jdbcConfiguration.username = Utils.requireNonEmpty(username, "username is empty");
+            this.jdbcConfiguration.password = Utils.requireNonEmpty(password, "password is empty");
         }
 
         /**
@@ -232,11 +237,11 @@ public class JdbcConfiguration extends ConfigurationHolder {
         public Builder(@NotNull String url, String username, String password) {
             this();
             if (!StringUtils.hasText(url)) {
-                throw new RuntimeException("无法创建文件，请正确输入 url 配置信息！");
+                throw new IllegalArgumentException("无法创建文件，请正确输入 url 配置信息！");
             }
-            this.dataSourceConfig.url = url;
-            this.dataSourceConfig.username = username;
-            this.dataSourceConfig.password = password;
+            this.jdbcConfiguration.connectionUrl = url;
+            this.jdbcConfiguration.username = username;
+            this.jdbcConfiguration.password = password;
         }
 
         /**
@@ -246,42 +251,19 @@ public class JdbcConfiguration extends ConfigurationHolder {
          */
         public Builder(@NotNull DataSource dataSource) {
             this();
-            this.dataSourceConfig.dataSource = dataSource;
-            try {
-                Connection conn = dataSource.getConnection();
-                this.dataSourceConfig.url = conn.getMetaData().getURL();
+            this.jdbcConfiguration.dataSource = dataSource;
+            try (Connection conn = dataSource.getConnection()) {
+                this.jdbcConfiguration.connectionUrl = conn.getMetaData().getURL();
                 try {
-                    this.dataSourceConfig.schemaName = conn.getSchema();
+                    this.jdbcConfiguration.schemaName = conn.getSchema();
                 } catch (Throwable exception) {
-                    // ignore  如果使用低版本的驱动，这里由于是1.7新增的方法，所以会报错，如果驱动太低，需要自行指定了。
+                    // ignore 如果使用低版本的驱动，这里由于是1.7新增的方法，所以会报错，如果驱动太低，需要自行指定了。
                 }
-                this.dataSourceConfig.connection = conn;
-                this.dataSourceConfig.username = conn.getMetaData().getUserName();
+                this.jdbcConfiguration.connection = conn;
+                this.jdbcConfiguration.username = conn.getMetaData().getUserName();
             } catch (SQLException ex) {
                 throw new RuntimeException("构建数据库配置对象失败!", ex);
             }
-        }
-
-        /**
-         * 设置数据库查询实现
-         *
-         * @param dbQuery 数据库查询实现
-         * @return this
-         */
-        public Builder dbQuery(@NotNull AbstractDbQuery dbQuery) {
-            this.dataSourceConfig.dbQuery = dbQuery;
-            return this;
-        }
-
-        /**
-         * 设置数据库schema
-         *
-         * @param schemaName 数据库schema
-         * @return this
-         */
-        public Builder schema(@NotNull String schemaName) {
-            this.dataSourceConfig.schemaName = schemaName;
-            return this;
         }
 
         /**
@@ -290,10 +272,9 @@ public class JdbcConfiguration extends ConfigurationHolder {
          * @param key   属性名
          * @param value 属性值
          * @return this
-         * @since 3.5.3
          */
         public Builder addConnectionProperty(@NotNull String key, @NotNull String value) {
-            this.dataSourceConfig.connectionProperties.put(key, value);
+            this.jdbcConfiguration.connectionProperties.put(key, value);
             return this;
         }
 
@@ -303,7 +284,7 @@ public class JdbcConfiguration extends ConfigurationHolder {
          * @return 数据库配置
          */
         public JdbcConfiguration build() {
-            return this.dataSourceConfig;
+            return this.jdbcConfiguration;
         }
     }
 }
