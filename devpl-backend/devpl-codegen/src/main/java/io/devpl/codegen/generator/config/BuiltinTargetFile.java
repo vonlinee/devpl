@@ -95,7 +95,7 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
     @Override
     public FileGenerator getFileGenerator(Context context) {
-        TemplateBasedFileGenerator generator = new TemplateBasedFileGenerator(this);
+        TemplateBasedTableFileGenerator generator = new TemplateBasedTableFileGenerator(this);
         TemplateEngine templateEngine = context.getObject(TemplateEngine.class);
         generator.setTemplateEngine(templateEngine);
         return generator;

@@ -9,13 +9,12 @@ import java.util.List;
 
 @Setter
 @Getter
-public class TemplateBasedFileGenerator implements FileGenerator {
+public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
 
     TemplateBasedTargetFile targetFile;
-    TableGeneration tableGeneration;
     TemplateEngine templateEngine;
 
-    public TemplateBasedFileGenerator(TemplateBasedTargetFile targetFile) {
+    public TemplateBasedTableFileGenerator(TemplateBasedTargetFile targetFile) {
         super();
         this.targetFile = targetFile;
     }
