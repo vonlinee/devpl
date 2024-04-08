@@ -1,6 +1,5 @@
 package org.apache.ddlutils.model;
 
-
 import org.apache.ddlutils.jdbc.JdbcTypeCategoryEnum;
 import org.apache.ddlutils.util.BiMap;
 import org.apache.ddlutils.util.MultiValueMap;

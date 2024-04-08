@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,19 +38,19 @@ public class MckoiModelReader extends JdbcModelReader {
         setDefaultSchemaPattern(null);
     }
 
+    // Mckoi does not currently return unique indices in the metadata, so we have to query
+    // internal tables to get this info
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        // Mckoi does not currently return unique indices in the metadata, so we have to query
-        // internal tables to get this info
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        String query = """
+            SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name
+            FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo
+            WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?
+            """;
 
-        Table table = super.readTable(metaData, values);
+        for (Table table : tables) {
 
-        if (table != null) {
-            String query = """
-                SELECT uniqueColumns.column, uniqueColumns.seq_no, uniqueInfo.name
-                FROM SYS_INFO.sUSRUniqueColumns uniqueColumns, SYS_INFO.sUSRUniqueInfo uniqueInfo
-                WHERE uniqueColumns.un_id = uniqueInfo.id AND uniqueInfo.table = ?
-                """;
             if (table.getSchema() != null) {
                 query = query + " AND uniqueInfo.schema = ?";
             }
@@ -68,12 +69,14 @@ public class MckoiModelReader extends JdbcModelReader {
                     indexValues.put("COLUMN_NAME", resultSet.getString(1));
                     indexValues.put("ORDINAL_POSITION", resultSet.getShort(2));
                     indexValues.put("INDEX_NAME", resultSet.getString(3));
-                    readIndex(metaData, indexValues, indices);
+
+                    Map<String, Index> knownIndex = new LinkedHashMap<>();
+
                 }
             }
             table.addIndices(indices.values());
         }
-        return table;
+        return tables;
     }
 
     @Override

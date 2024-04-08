@@ -1927,7 +1927,6 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
         try {
             JdbcModelReader reader = getModelReader();
             Database model = reader.getDatabase(connection, name, catalog, schema, tableTypes);
-
             postprocessModelFromDatabase(model);
             if ((model.getName() == null) || (model.getName().isEmpty())) {
                 model.setName(MODEL_DEFAULT_NAME);
@@ -1948,13 +1947,10 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
         // around them which we'll remove now
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table table = model.getTable(tableIdx);
-
             for (int columnIdx = 0; columnIdx < table.getColumnCount(); columnIdx++) {
                 Column column = table.getColumn(columnIdx);
-
                 if (TypeMap.isTextType(column.getTypeCode()) || TypeMap.isDateTimeType(column.getTypeCode())) {
                     String defaultValue = column.getDefaultValue();
-
                     if ((defaultValue != null) && (defaultValue.length() >= 2) && defaultValue.startsWith("'") && defaultValue.endsWith("'")) {
                         defaultValue = defaultValue.substring(1, defaultValue.length() - 1);
                         column.setDefaultValue(defaultValue);

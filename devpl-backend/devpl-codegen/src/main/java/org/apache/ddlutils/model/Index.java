@@ -1,6 +1,5 @@
 package org.apache.ddlutils.model;
 
-
 import java.io.Serializable;
 
 /**

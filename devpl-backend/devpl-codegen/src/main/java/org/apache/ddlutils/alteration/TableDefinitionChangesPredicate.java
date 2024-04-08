@@ -1,12 +1,11 @@
 package org.apache.ddlutils.alteration;
 
-
 import org.apache.ddlutils.model.Table;
 
 import java.util.List;
 
 /**
- * Defines a predicate that allows platforms to state whether all of the given table definition
+ * Defines a predicate that allows platforms to state whether all the given table definition
  * changes (i.e. column changes and primary key changes) are supported by the platform or not.
  */
 public interface TableDefinitionChangesPredicate {

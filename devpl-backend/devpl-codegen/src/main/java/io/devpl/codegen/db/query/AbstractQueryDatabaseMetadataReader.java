@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -215,7 +216,7 @@ public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHold
 
     @Override
     public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
-        return this.getDataTypes(databaseName, tableName);
+        return Collections.emptyList();
     }
 
     public void close() {

@@ -28,16 +28,14 @@ public class InterbaseModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             determineExtraColumnInfo(table);
             determineAutoIncrementColumns(table);
             adjustColumns(table);
         }
-
-        return table;
+        return tables;
     }
 
     @Override
@@ -84,11 +82,10 @@ public class InterbaseModelReader extends JdbcModelReader {
     protected void determineExtraColumnInfo(Table table) throws SQLException {
         final String query =
             "SELECT a.RDB$FIELD_NAME, a.RDB$DEFAULT_SOURCE, b.RDB$FIELD_PRECISION, b.RDB$FIELD_SCALE," +
-            " b.RDB$FIELD_TYPE, b.RDB$FIELD_SUB_TYPE FROM RDB$RELATION_FIELDS a, RDB$FIELDS b" +
-            " WHERE a.RDB$RELATION_NAME=? AND a.RDB$FIELD_SOURCE=b.RDB$FIELD_NAME";
+                " b.RDB$FIELD_TYPE, b.RDB$FIELD_SUB_TYPE FROM RDB$RELATION_FIELDS a, RDB$FIELDS b" +
+                " WHERE a.RDB$RELATION_NAME=? AND a.RDB$FIELD_SOURCE=b.RDB$FIELD_NAME";
 
         PreparedStatement prepStmt = null;
-
         try {
             prepStmt = getConnection().prepareStatement(query);
             prepStmt.setString(1, getPlatform().isDelimitedIdentifierModeOn() ? table.getName() : table.getName().toUpperCase());
@@ -264,7 +261,7 @@ public class InterbaseModelReader extends JdbcModelReader {
     protected boolean isInternalPrimaryKeyIndex(DatabaseMetaDataWrapper metaData, Table table, Index index) throws SQLException {
         final String query =
             "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-            "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
+                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -287,7 +284,7 @@ public class InterbaseModelReader extends JdbcModelReader {
     protected boolean isInternalForeignKeyIndex(DatabaseMetaDataWrapper metaData, Table table, ForeignKey fk, Index index) throws SQLException {
         final String query =
             "SELECT RDB$CONSTRAINT_NAME FROM RDB$RELATION_CONSTRAINTS " +
-            "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
+                "WHERE RDB$RELATION_NAME=? AND RDB$CONSTRAINT_TYPE=? AND RDB$CONSTRAINT_NAME=? AND RDB$INDEX_NAME=?";
 
         String tableName = getPlatform().getSqlBuilder().getTableName(table);
         String indexName = getPlatform().getSqlBuilder().getIndexName(index);
@@ -333,11 +330,11 @@ public class InterbaseModelReader extends JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                Map values = readColumns(tableData, getColumnsForTable());
-                String tableName = (String) values.get("TABLE_NAME");
+                PojoMap values = readColumns(tableData, getColumnsForTable());
+                String tableName = values.getString("TABLE_NAME");
 
                 if ((tableName != null) && (tableName.length() > 0)) {
-                    schema = (String) values.get("TABLE_SCHEM");
+                    schema = values.getString("TABLE_SCHEM");
                     found = true;
 
                     if (getPlatform().isDelimitedIdentifierModeOn()) {

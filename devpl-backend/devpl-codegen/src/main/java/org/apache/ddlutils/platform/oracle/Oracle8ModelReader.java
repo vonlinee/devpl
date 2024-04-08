@@ -13,6 +13,7 @@ import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.*;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,21 +57,20 @@ public class Oracle8ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        String tableName = (String) values.get("TABLE_NAME");
-
-        // system table ?
-        if (tableName.indexOf('$') > 0) {
-            return null;
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        Iterator<Table> iterator = tables.iterator();
+        while (iterator.hasNext()) {
+            Table table = iterator.next();
+            String tableName = table.getName();
+            // system table ?
+            if (tableName.indexOf('$') > 0) {
+                iterator.remove();
+            } else {
+                determineAutoIncrementColumns(table);
+            }
         }
-
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
-            determineAutoIncrementColumns(table);
-        }
-
-        return table;
+        return tables;
     }
 
     @Override
@@ -229,8 +229,8 @@ public class Oracle8ModelReader extends JdbcModelReader {
 
         final String query =
             "SELECT a.INDEX_NAME, a.INDEX_TYPE, a.UNIQUENESS, b.COLUMN_NAME, b.COLUMN_POSITION FROM USER_INDEXES a, USER_IND_COLUMNS b WHERE " +
-            "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
-            "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
+                "a.TABLE_NAME=? AND a.GENERATED=? AND a.TABLE_TYPE=? AND a.TABLE_NAME=b.TABLE_NAME AND a.INDEX_NAME=b.INDEX_NAME AND " +
+                "a.INDEX_NAME NOT IN (SELECT DISTINCT c.CONSTRAINT_NAME FROM USER_CONSTRAINTS c WHERE c.CONSTRAINT_TYPE=? AND c.TABLE_NAME=a.TABLE_NAME)";
         final String queryWithSchema =
             query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
 

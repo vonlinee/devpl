@@ -1,6 +1,5 @@
 package org.apache.ddlutils.alteration;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
@@ -116,7 +115,6 @@ public class ModelComparator {
      */
     public List<ModelChange> compare(Database sourceModel, Database targetModel) {
         Database intermediateModel = _cloneHelper.clone(sourceModel);
-
         return compareModels(sourceModel, intermediateModel, targetModel);
     }
 

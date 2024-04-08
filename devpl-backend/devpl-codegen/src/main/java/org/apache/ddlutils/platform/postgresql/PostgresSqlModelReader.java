@@ -9,7 +9,9 @@ import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Reads a database model from a PostgresSql database.
@@ -28,14 +30,12 @@ public class PostgresSqlModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             // PostgresSQL also returns unique indexes for pk and non-pk auto-increment columns
             // which are of the form "[table]_[column]_key"
-            HashMap<String, Index> uniquesByName = new HashMap<>();
-
+            Map<String, Index> uniquesByName = new HashMap<>();
             for (int indexIdx = 0; indexIdx < table.getIndexCount(); indexIdx++) {
                 Index index = table.getIndex(indexIdx);
 
@@ -56,7 +56,7 @@ public class PostgresSqlModelReader extends JdbcModelReader {
                 }
             }
         }
-        return table;
+        return tables;
     }
 
     @Override

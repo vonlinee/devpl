@@ -1,11 +1,22 @@
 package io.devpl.codegen.template;
 
 import io.devpl.codegen.generator.config.CaseFormat;
+import io.devpl.codegen.jdbc.meta.ForeignKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TypeInfoMetadata;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 
 public class TestOther {
+
+    @Test
+    public void test3() {
+        StringBuilder sb = new StringBuilder();
+        for (Field declaredField : ForeignKeyMetadata.class.getDeclaredFields()) {
+            sb.append(declaredField.getName()).append("\t\t").append("=\t").append(";\n");
+        }
+        System.out.println(sb);
+    }
 
     public static void test1() {
         StringBuilder sb = new StringBuilder();

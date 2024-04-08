@@ -7,6 +7,7 @@ import org.apache.ddlutils.platform.JdbcModelReader;
 import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.SQLException;
+import java.util.Collection;
 
 /**
  * Reads a database model from a HsqlDb database.
@@ -24,9 +25,9 @@ public class HsqlDbModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Table table = super.readTable(metaData, values);
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             // For at least version 1.7.2 we have to determine the auto-increment columns
             // from a result set metadata because the database does not put this info
             // into the database metadata
@@ -34,7 +35,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
             // our search to those columns
             determineAutoIncrementFromResultSetMetaData(table, table.getPrimaryKeyColumns());
         }
-        return table;
+        return tables;
     }
 
     @Override

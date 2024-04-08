@@ -3,6 +3,7 @@ package io.devpl.codegen.jdbc.meta;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -71,6 +72,24 @@ public interface DatabaseMetadataReader {
     List<PrimaryKeyMetadata> getPrimaryKeys(String catalog, String schema, String table) throws SQLException;
 
     /**
+     * 外键
+     *
+     * @param catalog   catalog
+     * @param schema    schema
+     * @param tableName table name
+     * @return ForeignKeyMetadata
+     * @throws SQLException
+     */
+    default List<ForeignKeyMetadata> getForeignKeys(String catalog, String schema, String tableName) throws SQLException {
+        throw new UnsupportedOperationException("");
+    }
+
+    default List<IndexMetadata> getIndices(String catalog, String schema, String table,
+                                           boolean unique, boolean approximate) throws SQLException {
+        throw new UnsupportedOperationException("");
+    }
+
+    /**
      * 获取数据库的函数信息
      *
      * @param catalog             数据库目录
@@ -106,7 +125,31 @@ public interface DatabaseMetadataReader {
      */
     List<String> getDataTypes(String databaseName, String tableName) throws SQLException;
 
+    /**
+     * 获取结果集的列元数据信息
+     *
+     * @param rs 结果集
+     * @return 结果集的列元数据信息
+     */
     default List<ResultSetColumnMetadata> getResultSetColumns(ResultSet rs) {
         return Collections.emptyList();
+    }
+
+    /**
+     * Retrieves the string that can be used to escape wildcard characters.
+     * This is the string that can be used to escape '_' or '%' in
+     * the catalog search parameters that are a pattern (and therefore use one
+     * of the wildcard characters).
+     *
+     * <P>The '_' character represents any single character;
+     * the '%' character represents any sequence of zero or
+     * more characters.
+     *
+     * @return the string used to escape wildcard characters
+     * @throws SQLException if a database access error occurs
+     * @see DatabaseMetaData#getSearchStringEscape()
+     */
+    default String getSearchStringEscape() throws SQLException {
+        throw new UnsupportedOperationException("");
     }
 }

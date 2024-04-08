@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.io.converters.ConversionException;
 import org.apache.ddlutils.model.TypeMap;
 
@@ -61,7 +60,6 @@ public class DefaultValueHelper {
         boolean value;
         Object result;
         try {
-            // TODO 支持更多可以转换成boolean类型的值进行转换
             value = Boolean.parseBoolean(defaultValue);
         } catch (ConversionException ex) {
             return defaultValue;

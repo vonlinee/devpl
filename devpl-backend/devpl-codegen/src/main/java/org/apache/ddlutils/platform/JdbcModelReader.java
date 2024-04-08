@@ -1,7 +1,7 @@
 package org.apache.ddlutils.platform;
 
 import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
+import io.devpl.codegen.jdbc.meta.*;
 import org.apache.ddlutils.Const;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
@@ -17,11 +17,12 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.text.Collator;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * utility class to create a Database model from a live database.
  */
-public class JdbcModelReader {
+public class JdbcModelReader implements DatabaseModelReader {
     /**
      * The Log to which logging calls will be made.
      */
@@ -414,6 +415,11 @@ public class JdbcModelReader {
         return getDatabase(connection, name, null, null, null);
     }
 
+    @Override
+    public final void setConnection(Connection connection) {
+        this._connection = Objects.requireNonNull(connection, "connection cannot be null");
+    }
+
     /**
      * Reads the database model from the given connection.
      *
@@ -425,6 +431,7 @@ public class JdbcModelReader {
      * @param tableTypes The table types to process; use <code>null</code> or an empty list for the default ones
      * @return The database model
      */
+    @Override
     public Database getDatabase(Connection connection, String name, String catalog, String schema, String[] tableTypes) throws SQLException {
         Database db = new Database(name);
         final String _catalog = getCatalogForSearch(connection, name, catalog, schema, tableTypes);
@@ -483,6 +490,40 @@ public class JdbcModelReader {
     }
 
     /**
+     * Matches the characters not allowed in search strings.
+     */
+    private final Pattern searchStringPattern = Pattern.compile("[_%]");
+
+
+    /**
+     * Escape a string literal so that it can be used as a search pattern.
+     *
+     * @param literalString The string to escape.
+     * @return A string that can be properly used as a search string.
+     * @throws SQLException If an error occurred retrieving the metadata
+     */
+    public String escapeForSearch(DatabaseMetadataReader reader, String literalString) throws SQLException {
+        String escape = reader.getSearchStringEscape();
+        if (Objects.equals(escape, "")) {
+            // No escape string, so nothing to do...
+            return literalString;
+        } else {
+            // with Java 5, we would just use Matcher.quoteReplacement
+            StringBuilder quotedEscape = new StringBuilder();
+            for (int idx = 0; idx < escape.length(); idx++) {
+                char c = escape.charAt(idx);
+                switch (c) {
+                    case '\\' -> quotedEscape.append("\\\\");
+                    case '$' -> quotedEscape.append("\\$");
+                    default -> quotedEscape.append(c);
+                }
+            }
+            quotedEscape.append("$0");
+            return searchStringPattern.matcher(literalString).replaceAll(quotedEscape.toString());
+        }
+    }
+
+    /**
      * Reads the tables from the database metadata.
      *
      * @param catalog       The catalog to access in the database; use <code>null</code> for the default value
@@ -493,23 +534,78 @@ public class JdbcModelReader {
      * @return The tables
      */
     protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
-        DatabaseMetaDataWrapper wrapper = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(_connection, catalog, schemaPattern, tableTypes));
-        wrapper.setMetaData(_connection.getMetaData());
-        wrapper.setCatalog(Utils.withDefaults(catalog, getDefaultCatalogPattern()));
-        wrapper.setSchemaPattern(Utils.withDefaults(schemaPattern, getDefaultSchemaPattern()));
-        wrapper.setTableTypes(Utils.withDefaults(tableTypes, getDefaultTableTypes()));
-        try (ResultSet tableData = wrapper.getTables(getDefaultTablePattern())) {
-            List<Table> tables = new ArrayList<>();
-            while (tableData.next()) {
-                PojoMap values = readColumns(tableData, getColumnsForTable());
-                Table table = readTable(wrapper, values);
-                if (table != null) {
-                    tables.add(table);
-                }
-            }
-            sortTables(tables);
-            return tables;
+        DatabaseMetadataReader reader = createDatabaseMetadataReader(_connection, catalog, schemaPattern, tableTypes);
+        catalog = Utils.withDefaults(catalog, getDefaultCatalogPattern());
+        schemaPattern = Utils.withDefaults(schemaPattern, getDefaultSchemaPattern());
+        tableTypes = Utils.withDefaults(tableTypes, getDefaultTableTypes());
+
+        List<Table> tables = new ArrayList<>();
+
+        List<TableMetadata> tableMetadatas = reader.getTables(catalog, schemaPattern, null, tableTypes);
+        for (TableMetadata tmd : tableMetadatas) {
+            Table table = new Table();
+            table.setName(tmd.getTableName());
+            table.setType(tmd.getTableType());
+            table.setCatalog(tmd.getTableCatalog());
+            table.setDescription(tmd.getRemarks());
+
+            tables.add(table);
         }
+
+        for (Table table : tables) {
+            String escapedTableName = escapeForSearch(reader, table.getName());
+            // read columns of table
+            table.addColumns(readColumns(reader, table.getCatalog(), table.getSchema(), escapedTableName));
+            // 主键
+            List<String> pkNames = new ArrayList<>();
+            List<PrimaryKeyMetadata> primaryKeys = reader.getPrimaryKeys(table.getCatalog(), table.getSchema(), escapedTableName);
+            for (PrimaryKeyMetadata primaryKey : primaryKeys) {
+                pkNames.add(primaryKey.getColumnName());
+            }
+            for (String primaryKey : pkNames) {
+                table.findColumn(primaryKey, true).setPrimaryKey(true);
+            }
+
+            Map<String, ForeignKey> knownFks = new LinkedHashMap<>();
+            // 外键
+            List<ForeignKeyMetadata> foreignKeys = reader.getForeignKeys(table.getCatalog(), table.getSchema(), table.getName());
+            for (ForeignKeyMetadata fmd : foreignKeys) {
+                String fkName = fmd.getForiegnKeyName();
+                ForeignKey fk = knownFks.get(fkName);
+                if (fk == null) {
+                    fk = new ForeignKey();
+                    fk.setName(fkName);
+                    fk.setForeignTableName(fmd.getPrimaryKeyTableName());
+                    CascadeActionEnum onUpdateAction = convertAction(fmd.getUpdateRule());
+                    CascadeActionEnum onDeleteAction = convertAction(fmd.getDeleteRule());
+                    if (onUpdateAction == null) {
+                        onUpdateAction = getPlatformInfo().getDefaultOnUpdateAction();
+                    }
+                    if (onDeleteAction == null) {
+                        onDeleteAction = getPlatformInfo().getDefaultOnDeleteAction();
+                    }
+                    fk.setOnUpdate(onUpdateAction);
+                    fk.setOnDelete(onDeleteAction);
+                    knownFks.put(fkName, fk);
+                }
+
+                Reference ref = new Reference();
+                ref.setForeignColumnName(fmd.getPrimaryKeyColumnName());
+                ref.setLocalColumnName(fmd.getForiegnKeyColumnName());
+                if (fmd.getKeySequence() != null) {
+                    ref.setSequenceValue(Integer.parseInt(fmd.getKeySequence()));
+                }
+                fk.addReference(ref);
+            }
+            table.addForeignKeys(knownFks.values());
+
+            // 索引
+            Map<String, Index> knownIndices = new LinkedHashMap<>();
+            readIndices(reader, table, knownIndices);
+            table.addIndices(knownIndices.values());
+        }
+        sortTables(tables);
+        return tables;
     }
 
     protected void sortTables(List<Table> tables) {
@@ -522,40 +618,6 @@ public class JdbcModelReader {
     }
 
     /**
-     * Reads the next table from the metadata.
-     *
-     * @param metaData The database meta data
-     * @param values   The table metadata values as defined by {@link #getColumnsForTable()}
-     * @return The table or <code>null</code> if the result set row did not contain a valid table
-     */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        String tableName = (String) values.get("TABLE_NAME");
-        if (StringUtils.isEmpty(tableName)) {
-            return null;
-        }
-        Table table = new Table();
-        table.setName(tableName);
-        table.setType((String) values.get("TABLE_TYPE"));
-        table.setCatalog((String) values.get("TABLE_CAT"));
-        table.setSchema((String) values.get("TABLE_SCHEM"));
-        table.setDescription((String) values.get("REMARKS"));
-
-        table.addColumns(readColumns(metaData, tableName));
-        table.addForeignKeys(readForeignKeys(metaData, tableName));
-        table.addIndices(readIndices(metaData, tableName));
-
-        Collection<String> primaryKeys = readPrimaryKeyNames(metaData, tableName);
-        for (String primaryKey : primaryKeys) {
-            table.findColumn(primaryKey, true).setPrimaryKey(true);
-        }
-
-        if (getPlatformInfo().isSystemIndicesReturned()) {
-            removeSystemIndices(metaData, table);
-        }
-        return table;
-    }
-
-    /**
      * Removes system indices (generated by the database for primary and foreign keys)
      * from the table.
      *
@@ -564,7 +626,6 @@ public class JdbcModelReader {
      */
     protected void removeSystemIndices(DatabaseMetaDataWrapper metaData, Table table) throws SQLException {
         removeInternalPrimaryKeyIndex(metaData, table);
-
         for (int fkIdx = 0; fkIdx < table.getForeignKeyCount(); fkIdx++) {
             removeInternalForeignKeyIndex(metaData, table, table.getForeignKey(fkIdx));
         }
@@ -704,6 +765,48 @@ public class JdbcModelReader {
         } finally {
             closeResultSet(columnData);
         }
+    }
+
+    /**
+     * @param reader    DatabaseMetadataReader
+     * @param catalog   catalog
+     * @param schema    schema
+     * @param tableName table name
+     * @return columns
+     * @throws SQLException SQLException
+     */
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        List<Column> columns = new ArrayList<>();
+        List<ColumnMetadata> columnMetadatas = reader.getColumns(catalog, schema, tableName, getDefaultColumnPattern());
+        for (ColumnMetadata cmd : columnMetadatas) {
+            Column column = new Column();
+            column.setName(cmd.getColumnName());
+            column.setTypeCode(cmd.getDataType());
+            column.setDefaultValue(cmd.getColumnDef());
+            Integer precision = cmd.getNumericPrecisionRadix();
+            if (precision != null) {
+                column.setPrecisionRadix(precision);
+            }
+            // we're setting the size after the precision and radix in case
+            // the database prefers to return them in the size value
+            Integer columnSize = cmd.getColumnSize();
+            if (columnSize == null) {
+                column.setSize(_defaultSizes.get(column.getTypeCode()));
+            } else {
+                column.setSize(String.valueOf(columnSize));
+            }
+            Integer scale = cmd.getDecimalDigits();
+            if (scale != null) {
+                // if there is a scale value, set it after the size (which probably did not contain
+                // a scale specification)
+                column.setScale(scale);
+            }
+            column.setRequired("NO".equalsIgnoreCase(cmd.getNullableDescription().trim()));
+            String description = cmd.getRemarks();
+            column.setDescription(description);
+            columns.add(column);
+        }
+        return columns;
     }
 
     /**
@@ -883,6 +986,38 @@ public class JdbcModelReader {
     }
 
     /**
+     * @throws SQLException
+     * @see JdbcModelReader#readTables(String, String, String[])
+     */
+    protected void readIndices(DatabaseMetadataReader reader, Table table, Map<String, Index> knownIndices) throws SQLException {
+        List<IndexMetadata> indices = reader.getIndices(table.getCatalog(), table.getSchema(), table.getName(), false, false);
+        for (IndexMetadata imd : indices) {
+            short indexType = imd.getType();
+            // we're ignoring statistic indices
+            if (indexType == -1 || indexType == DatabaseMetaData.tableIndexStatistic) {
+                continue;
+            }
+            String indexName = imd.getIndexName();
+            if (indexName != null) {
+                Index index = knownIndices.get(indexName);
+                if (index == null) {
+                    if (imd.isNonUnique()) {
+                        index = new NonUniqueIndex();
+                    } else {
+                        index = new UniqueIndex();
+                    }
+                    index.setName(indexName);
+                    knownIndices.put(indexName, index);
+                }
+                IndexColumn indexColumn = new IndexColumn();
+                indexColumn.setName(imd.getColumnName());
+                indexColumn.setOrdinalPosition(imd.getOrdinalPosition());
+                index.addColumn(indexColumn);
+            }
+        }
+    }
+
+    /**
      * Reads the next index spec from the result set.
      *
      * @param metaData     The database meta data
@@ -1037,9 +1172,8 @@ public class JdbcModelReader {
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;
         ResultSet columnData = null;
-
         try {
-            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(connection, null, null, null));
+            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
             metaData.setMetaData(connection.getMetaData());
             metaData.setCatalog(getDefaultCatalogPattern());
             metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);

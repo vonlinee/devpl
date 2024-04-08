@@ -1,6 +1,7 @@
 package org.apache.ddlutils.platform.sybase;
 
 
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
@@ -50,46 +51,46 @@ public class SybaseModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             // Sybase does not return the auto-increment status via the database metadata
             determineAutoIncrementFromResultSetMetaData(table, table.getColumns());
         }
-        return table;
+        return tables;
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Column column = super.readColumn(metaData, values);
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        Collection<Column> columns = super.readColumns(reader, catalog, schema, tableName);
+        for (Column column : columns) {
+            if ((column.getTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
+                // Back-mapping to BIGINT
+                column.setTypeCode(Types.BIGINT);
+            } else if (column.getDefaultValue() != null) {
+                if (column.getTypeCode() == Types.TIMESTAMP) {
+                    // Sybase maintains the default values for DATE/TIME jdbc types, so we have to
+                    // migrate the default value to TIMESTAMP
+                    Matcher matcher = _isoDatePattern.matcher(column.getDefaultValue());
+                    Timestamp timestamp = null;
 
-        if ((column.getTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
-            // Back-mapping to BIGINT
-            column.setTypeCode(Types.BIGINT);
-        } else if (column.getDefaultValue() != null) {
-            if (column.getTypeCode() == Types.TIMESTAMP) {
-                // Sybase maintains the default values for DATE/TIME jdbc types, so we have to
-                // migrate the default value to TIMESTAMP
-                Matcher matcher = _isoDatePattern.matcher(column.getDefaultValue());
-                Timestamp timestamp = null;
-
-                if (matcher.matches()) {
-                    timestamp = new Timestamp(Date.valueOf(matcher.group(1)).getTime());
-                } else {
-                    matcher = _isoTimePattern.matcher(column.getDefaultValue());
                     if (matcher.matches()) {
-                        timestamp = new Timestamp(Time.valueOf(matcher.group(1)).getTime());
+                        timestamp = new Timestamp(Date.valueOf(matcher.group(1)).getTime());
+                    } else {
+                        matcher = _isoTimePattern.matcher(column.getDefaultValue());
+                        if (matcher.matches()) {
+                            timestamp = new Timestamp(Time.valueOf(matcher.group(1)).getTime());
+                        }
                     }
+                    if (timestamp != null) {
+                        column.setDefaultValue(timestamp.toString());
+                    }
+                } else if (TypeMap.isTextType(column.getTypeCode())) {
+                    column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
                 }
-                if (timestamp != null) {
-                    column.setDefaultValue(timestamp.toString());
-                }
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
-                column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
             }
         }
-        return column;
+        return columns;
     }
 
     @Override

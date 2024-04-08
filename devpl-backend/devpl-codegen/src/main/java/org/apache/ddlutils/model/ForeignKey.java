@@ -1,6 +1,5 @@
 package org.apache.ddlutils.model;
 
-
 import org.apache.ddlutils.util.ListOrderedSet;
 import org.apache.ddlutils.util.StringUtils;
 

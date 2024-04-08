@@ -1,5 +1,6 @@
 package org.apache.ddlutils.platform.mssql;
 
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
@@ -8,9 +9,10 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -52,34 +54,35 @@ public class MSSqlModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        String tableName = (String) values.get("TABLE_NAME");
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
 
-        for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
-            if (knownSystemTable.equals(tableName)) {
-                return null;
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+
+        Iterator<Table> iterator = tables.iterator();
+        while (iterator.hasNext()) {
+            Table table = iterator.next();
+            String tableName = table.getName();
+            for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
+                if (knownSystemTable.equals(tableName)) {
+                    iterator.remove();
+                    break;
+                }
             }
-        }
-
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
             // Sql Server does not return the auto-increment status via the database metadata
             determineAutoIncrementFromResultSetMetaData(table, table.getColumns());
-
             // TODO: Replace this manual filtering using named pks once they are available
             //       This is then probably of interest to every platform
             for (int idx = 0; idx < table.getIndexCount(); ) {
                 Index index = table.getIndex(idx);
 
-                if (index.isUnique() && existsPKWithName(metaData, table, index.getName())) {
-                    table.removeIndex(idx);
-                } else {
-                    idx++;
-                }
+//                if (index.isUnique() && existsPKWithName(metaData, table, index.getName())) {
+//                    table.removeIndex(idx);
+//                } else {
+//                    idx++;
+//                }
             }
         }
-        return table;
+        return tables;
     }
 
     @Override
@@ -117,49 +120,49 @@ public class MSSqlModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Column column = super.readColumn(metaData, values);
-        String defaultValue = column.getDefaultValue();
-
-        // Sql Server tends to surround the returned default value with one or two sets of parentheses
-        if (defaultValue != null) {
-            while (defaultValue.startsWith("(") && defaultValue.endsWith(")")) {
-                defaultValue = defaultValue.substring(1, defaultValue.length() - 1);
-            }
-
-            if (column.getTypeCode() == Types.TIMESTAMP) {
-                // Sql Server maintains the default values for DATE/TIME jdbc types, so we have to
-                // migrate the default value to TIMESTAMP
-                Matcher matcher = _isoDatePattern.matcher(defaultValue);
-                Timestamp timestamp = null;
-
-                if (matcher.matches()) {
-                    timestamp = new Timestamp(Date.valueOf(matcher.group(1)).getTime());
-                } else {
-                    matcher = _isoTimePattern.matcher(defaultValue);
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        Collection<Column> columns = super.readColumns(reader, catalog, schema, tableName);
+        for (Column column : columns) {
+            String defaultValue = column.getDefaultValue();
+            // Sql Server tends to surround the returned default value with one or two sets of parentheses
+            if (defaultValue != null) {
+                while (defaultValue.startsWith("(") && defaultValue.endsWith(")")) {
+                    defaultValue = defaultValue.substring(1, defaultValue.length() - 1);
+                }
+                if (column.getTypeCode() == Types.TIMESTAMP) {
+                    // Sql Server maintains the default values for DATE/TIME jdbc types, so we have to
+                    // migrate the default value to TIMESTAMP
+                    Matcher matcher = _isoDatePattern.matcher(defaultValue);
+                    Timestamp timestamp = null;
 
                     if (matcher.matches()) {
-                        timestamp = new Timestamp(Time.valueOf(matcher.group(1)).getTime());
-                    }
-                }
-                if (timestamp != null) {
-                    defaultValue = timestamp.toString();
-                }
-            } else if (column.getTypeCode() == Types.DECIMAL) {
-                // For some reason, Sql Server 2005 always returns DECIMAL default values with a dot
-                // even if the scale is 0, so we remove the dot
-                if ((column.getScale() == 0) && defaultValue.endsWith(".")) {
-                    defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
-                }
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
-                defaultValue = unescape(defaultValue, "'", "''");
-            }
+                        timestamp = new Timestamp(Date.valueOf(matcher.group(1)).getTime());
+                    } else {
+                        matcher = _isoTimePattern.matcher(defaultValue);
 
-            column.setDefaultValue(defaultValue);
+                        if (matcher.matches()) {
+                            timestamp = new Timestamp(Time.valueOf(matcher.group(1)).getTime());
+                        }
+                    }
+                    if (timestamp != null) {
+                        defaultValue = timestamp.toString();
+                    }
+                } else if (column.getTypeCode() == Types.DECIMAL) {
+                    // For some reason, Sql Server 2005 always returns DECIMAL default values with a dot
+                    // even if the scale is 0, so we remove the dot
+                    if ((column.getScale() == 0) && defaultValue.endsWith(".")) {
+                        defaultValue = defaultValue.substring(0, defaultValue.length() - 1);
+                    }
+                } else if (TypeMap.isTextType(column.getTypeCode())) {
+                    defaultValue = unescape(defaultValue, "'", "''");
+                }
+
+                column.setDefaultValue(defaultValue);
+            }
+            if ((column.getTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
+                column.setTypeCode(Types.BIGINT);
+            }
         }
-        if ((column.getTypeCode() == Types.DECIMAL) && (column.getSizeAsInt() == 19) && (column.getScale() == 0)) {
-            column.setTypeCode(Types.BIGINT);
-        }
-        return column;
+        return columns;
     }
 }

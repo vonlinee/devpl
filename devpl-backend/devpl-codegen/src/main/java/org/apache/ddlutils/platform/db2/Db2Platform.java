@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.db2;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;

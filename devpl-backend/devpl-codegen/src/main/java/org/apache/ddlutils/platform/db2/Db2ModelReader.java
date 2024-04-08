@@ -1,5 +1,6 @@
 package org.apache.ddlutils.platform.db2;
 
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
@@ -14,7 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +49,6 @@ public class Db2ModelReader extends JdbcModelReader {
         super(platform);
         setDefaultCatalogPattern(null);
         setDefaultSchemaPattern(null);
-
         try {
             _db2TimePattern = Pattern.compile("'(\\d{2}).(\\d{2}).(\\d{2})'");
             _db2TimestampPattern = Pattern.compile("'(\\d{4}-\\d{2}-\\d{2})-(\\d{2}).(\\d{2}).(\\d{2})(\\.\\d{1,8})?'");
@@ -56,77 +58,69 @@ public class Db2ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        String tableName = (String) values.get("TABLE_NAME");
-
-        for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
-            if (knownSystemTable.equals(tableName)) {
-                return null;
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        Iterator<Table> iterator = tables.iterator();
+        while (iterator.hasNext()) {
+            Table table = iterator.next();
+            for (String knownSystemTable : KNOWN_SYSTEM_TABLES) {
+                if (knownSystemTable.equals(table.getName())) {
+                    iterator.remove();
+                    break;
+                }
             }
         }
-
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+        for (Table table : tables) {
             // Db2 does not return the auto-increment status via the database metadata
             determineAutoIncrementColumns(table);
         }
-        return table;
+        return tables;
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Column column = super.readColumn(metaData, values);
-
-        if (column.getDefaultValue() != null) {
-            if (column.getTypeCode() == Types.TIME) {
-                Matcher matcher = _db2TimePattern.matcher(column.getDefaultValue());
-
-                // Db2 returns "HH24.MI.SS"
-                if (matcher.matches()) {
-
-                    String newDefault = "'" +
-                                        // the hour
-                                        matcher.group(1) + ":" +
-                                        // the minute
-                                        matcher.group(2) + ":" +
-                                        // the second
-                                        matcher.group(3) + "'";
-
-                    column.setDefaultValue(newDefault);
-                }
-            } else if (column.getTypeCode() == Types.TIMESTAMP) {
-                Matcher matcher = _db2TimestampPattern.matcher(column.getDefaultValue());
-
-                // Db2 returns "YYYY-MM-DD-HH24.MI.SS.FF"
-                if (matcher.matches()) {
-                    StringBuilder newDefault = new StringBuilder();
-
-                    newDefault.append("'");
-                    // group 1 is the date which has the correct format
-                    newDefault.append(matcher.group(1));
-                    newDefault.append(" ");
-                    // the hour
-                    newDefault.append(matcher.group(2));
-                    newDefault.append(":");
-                    // the minute
-                    newDefault.append(matcher.group(3));
-                    newDefault.append(":");
-                    // the second
-                    newDefault.append(matcher.group(4));
-                    // optionally, the fraction
-                    if ((matcher.groupCount() >= 5) && (matcher.group(5) != null)) {
-                        newDefault.append(matcher.group(5));
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        Collection<Column> columns = super.readColumns(reader, catalog, schema, tableName);
+        for (Column column : columns) {
+            if (column.getDefaultValue() != null) {
+                if (column.getTypeCode() == Types.TIME) {
+                    Matcher matcher = _db2TimePattern.matcher(column.getDefaultValue());
+                    // Db2 returns "HH24.MI.SS"
+                    if (matcher.matches()) {
+                        // the hour minute second
+                        String newDefault = "'" + matcher.group(1) + ":" + matcher.group(2) + ":" + matcher.group(3) + "'";
+                        column.setDefaultValue(newDefault);
                     }
-                    newDefault.append("'");
+                } else if (column.getTypeCode() == Types.TIMESTAMP) {
+                    Matcher matcher = _db2TimestampPattern.matcher(column.getDefaultValue());
+                    // Db2 returns "YYYY-MM-DD-HH24.MI.SS.FF"
+                    if (matcher.matches()) {
+                        StringBuilder newDefault = new StringBuilder();
+                        newDefault.append("'");
+                        // group 1 is the date which has the correct format
+                        newDefault.append(matcher.group(1));
+                        newDefault.append(" ");
+                        // the hour
+                        newDefault.append(matcher.group(2));
+                        newDefault.append(":");
+                        // the minute
+                        newDefault.append(matcher.group(3));
+                        newDefault.append(":");
+                        // the second
+                        newDefault.append(matcher.group(4));
+                        // optionally, the fraction
+                        if ((matcher.groupCount() >= 5) && (matcher.group(5) != null)) {
+                            newDefault.append(matcher.group(5));
+                        }
+                        newDefault.append("'");
 
-                    column.setDefaultValue(newDefault.toString());
+                        column.setDefaultValue(newDefault.toString());
+                    }
+                } else if (TypeMap.isTextType(column.getTypeCode())) {
+                    column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
                 }
-            } else if (TypeMap.isTextType(column.getTypeCode())) {
-                column.setDefaultValue(unescape(column.getDefaultValue(), "'", "''"));
             }
         }
-        return column;
+        return columns;
     }
 
     /**
@@ -136,7 +130,6 @@ public class Db2ModelReader extends JdbcModelReader {
      */
     protected void determineAutoIncrementColumns(Table table) throws SQLException {
         final String query = "SELECT COLNAME FROM SYSCAT.COLUMNS WHERE TABNAME = ? AND IDENTITY = 'Y' AND HIDDEN != 'S'";
-
         try (PreparedStatement stmt = getConnection().prepareStatement(query)) {
             stmt.setString(1, table.getName());
             ResultSet rs = stmt.executeQuery();

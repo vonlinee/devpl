@@ -28,14 +28,12 @@ public class FirebirdModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             determineAutoIncrementColumns(table);
         }
-
-        return table;
+        return tables;
     }
 
     @Override
@@ -264,7 +262,7 @@ public class FirebirdModelReader extends JdbcModelReader {
         ResultSet tableData = null;
         ResultSet columnData = null;
         try {
-            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(connection, null, null, null));
+            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
             metaData.setMetaData(connection.getMetaData());
             metaData.setCatalog(getDefaultCatalogPattern());
             metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);

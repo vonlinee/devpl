@@ -1,6 +1,6 @@
 package org.apache.ddlutils.platform.mysql;
 
-
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;
@@ -8,10 +8,10 @@ import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Collection;
 
 /**
  * Reads a database model from a MySql database.
@@ -29,30 +29,30 @@ public class MySqlModelReader extends JdbcModelReader {
         setDefaultTablePattern(null);
     }
 
+    // TODO This needs some more work, since table names can be case-sensitive or lowercase
+    //      depending on the platform (really cute).
+    //      See http://dev.mysql.com/doc/refman/4.1/en/name-case-sensitivity.html for more info.
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        // TODO This needs some more work, since table names can be case-sensitive or lowercase
-        //      depending on the platform (really cute).
-        //      See http://dev.mysql.com/doc/refman/4.1/en/name-case-sensitivity.html for more info.
-
-        Table table = super.readTable(metaData, values);
-
-        if (table != null) {
+    protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
+        Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
+        for (Table table : tables) {
             determineAutoIncrementFromResultSetMetaData(table, table.getPrimaryKeyColumns());
         }
-        return table;
+        return tables;
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
-        Column column = super.readColumn(metaData, values);
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        Collection<Column> columns = super.readColumns(reader, catalog, schema, tableName);
+        for (Column column : columns) {
 
-        // MySQL converts illegal date/time/timestamp values to "0000-00-00 00:00:00", but this
-        // is an illegal ISO value, so we replace it with NULL
-        if ((column.getTypeCode() == Types.TIMESTAMP) && "0000-00-00 00:00:00".equals(column.getDefaultValue())) {
-            column.setDefaultValue(null);
+            // MySQL converts illegal date/time/timestamp values to "0000-00-00 00:00:00", but this
+            // is an illegal ISO value, so we replace it with NULL
+            if ((column.getTypeCode() == Types.TIMESTAMP) && "0000-00-00 00:00:00".equals(column.getDefaultValue())) {
+                column.setDefaultValue(null);
+            }
         }
-        return column;
+        return columns;
     }
 
     @Override

@@ -1,10 +1,8 @@
 package io.devpl.common.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class MavenCoordinate {
 
     private String groupId;
@@ -14,4 +12,6 @@ public class MavenCoordinate {
     private String version;
 
     private String packaging;
+
+    private String scope;
 }

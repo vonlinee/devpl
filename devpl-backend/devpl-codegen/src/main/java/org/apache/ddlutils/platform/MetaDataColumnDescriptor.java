@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.util.JdbcUtils;
 
 import java.sql.ResultSet;

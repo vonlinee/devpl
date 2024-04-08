@@ -402,7 +402,6 @@ public class DatabaseDataIO {
         if (_determineSchema) {
             try (Connection connection = platform.borrowConnection()) {
                 // TODO: Remove this once we have full support for schemas
-
                 schema = platform.getModelReader().determineSchemaOf(connection, _schemaPattern, tables[0]);
             } catch (SQLException ex) {
                 // ignored

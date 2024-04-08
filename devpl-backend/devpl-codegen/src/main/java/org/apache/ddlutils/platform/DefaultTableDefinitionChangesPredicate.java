@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Table;
 
@@ -32,7 +31,6 @@ public class DefaultTableDefinitionChangesPredicate implements TableDefinitionCh
      */
     protected boolean isSupported(Table intermediateTable, TableChange change) {
         if (change instanceof AddColumnChange addColumnChange) {
-
             return addColumnChange.isAtEnd() &&
                    (!addColumnChange.getNewColumn().isRequired() ||
                     (addColumnChange.getNewColumn().getDefaultValue() != null) ||

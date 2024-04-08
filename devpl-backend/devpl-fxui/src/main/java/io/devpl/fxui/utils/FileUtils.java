@@ -1,5 +1,6 @@
 package io.devpl.fxui.utils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -40,6 +41,7 @@ public class FileUtils {
     /**
      * Converts an array of file extensions to suffixes for use
      * with IOFileFilters.
+     *
      * @param extensions an array of extensions. Format: {"java", "xml"}
      * @return an array of suffixes. Format: {".java", ".xml"}
      */
@@ -65,6 +67,7 @@ public class FileUtils {
      * not a directory then an IOException is thrown.
      * If the directory cannot be created (or the file already exists but is not a directory)
      * then an IOException is thrown.
+     *
      * @param directory directory to create, must not be {@code null}.
      * @throws IOException       if the directory was not created along with all its parent directories.
      * @throws IOException       if the given file object is not a directory.
@@ -97,6 +100,7 @@ public class FileUtils {
 
     /**
      * Calls {@link File#mkdirs()} and throws an exception on failure.
+     *
      * @param directory the receiver for {@code mkdirs()}, may be null.
      * @return the given file, may be null.
      * @throws IOException       if the directory was not created along with all its parent directories.
@@ -123,6 +127,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input.
      * @return the given directory.
@@ -137,6 +142,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} exists and throws an {@link IllegalArgumentException} if it doesn't.
+     *
      * @param file          The {@code File} to check.
      * @param fileParamName The parameter name to use in the exception message in case of {@code null} input.
      * @return the given file.
@@ -153,6 +159,7 @@ public class FileUtils {
 
     /**
      * Requires that the given {@code File} is a directory.
+     *
      * @param directory The {@code File} to check.
      * @param name      The parameter name to use in the exception message in case of null input or if the file is not a directory.
      * @return the given directory.
@@ -167,4 +174,11 @@ public class FileUtils {
         return directory;
     }
 
+    public static void open(File file) {
+        try {
+            Desktop.getDesktop().open(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

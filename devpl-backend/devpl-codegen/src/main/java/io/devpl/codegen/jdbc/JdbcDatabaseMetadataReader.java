@@ -156,6 +156,30 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
     }
 
     @Override
+    public List<ForeignKeyMetadata> getForeignKeys(String catalog, String schema, String tableName) throws SQLException {
+        ResultSet resultSet = getDatabaseMetaData().getImportedKeys(catalog, schema, tableName);
+        List<ForeignKeyMetadata> foreignKeyMetadata = new ArrayList<>();
+        while (resultSet.next()) {
+            ForeignKeyMetadata fm = new ForeignKeyMetadata();
+            fm.initialize(resultSet);
+            foreignKeyMetadata.add(fm);
+        }
+        return foreignKeyMetadata;
+    }
+
+    @Override
+    public List<IndexMetadata> getIndices(String catalog, String schema, String table, boolean unique, boolean approximate) throws SQLException {
+        ResultSet resultSet = getDatabaseMetaData().getIndexInfo(catalog, schema, table, unique, approximate);
+        List<IndexMetadata> indexMetadata = new ArrayList<>();
+        while (resultSet.next()) {
+            IndexMetadata index = new IndexMetadata();
+            index.initialize(resultSet);
+            indexMetadata.add(index);
+        }
+        return indexMetadata;
+    }
+
+    @Override
     public List<String> getSQLKeywords() throws SQLException {
         String sqlKeywords = getDatabaseMetaData().getSQLKeywords();
         if (sqlKeywords == null || sqlKeywords.isEmpty()) {
@@ -166,7 +190,12 @@ public class JdbcDatabaseMetadataReader implements DatabaseMetadataReader {
 
     @Override
     public List<String> getDataTypes(String databaseName, String tableName) throws SQLException {
-        return null;
+        return Collections.emptyList();
+    }
+
+    @Override
+    public String getSearchStringEscape() throws SQLException {
+        return getDatabaseMetaData().getSearchStringEscape();
     }
 
     @Override
