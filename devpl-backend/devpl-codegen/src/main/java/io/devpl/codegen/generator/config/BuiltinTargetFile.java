@@ -3,6 +3,7 @@ package io.devpl.codegen.generator.config;
 import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.generator.GeneratedFile;
 import io.devpl.codegen.generator.GenerationTarget;
+import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.TemplateBasedTargetFile;
 
 import java.util.Map;
@@ -28,7 +29,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getEntityName();
+            }
+            return "";
         }
     },
     /**
@@ -47,7 +51,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getEntityName();
+            }
+            return "";
         }
     },
     /**
@@ -66,7 +73,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getServiceName();
+            }
+            return "";
         }
     },
     SERVICE_IMPL(ConstVal.TEMPLATE_SERVICE_IMPL) {
@@ -82,7 +92,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getServiceImplName();
+            }
+            return "";
         }
     },
     CONTROLLER(ConstVal.TEMPLATE_CONTROLLER) {
@@ -98,7 +111,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getControllerName();
+            }
+            return "";
         }
     },
     MAPPER(ConstVal.TEMPLATE_MAPPER_JAVA) {
@@ -114,7 +130,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getMapperName();
+            }
+            return "";
         }
     },
     MAPPER_XML(ConstVal.TEMPLATE_MAPPER_XML) {
@@ -130,7 +149,10 @@ public enum BuiltinTargetFile implements TemplateBasedTargetFile {
 
         @Override
         public String getFilename(GenerationTarget target) {
-            return null;
+            if (target instanceof TableGeneration tg) {
+                return tg.getMapperName();
+            }
+            return "";
         }
     };
 

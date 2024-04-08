@@ -1,13 +1,13 @@
 package io.devpl.codegen.generator;
 
-import io.devpl.codegen.template.TemplateEngine;
-
 import java.util.Map;
 
 /**
  * 给予模板的生成文件类型
  * 指定模板信息
  * 单个类型，单个模板文件
+ *
+ * @see TemplateBasedTableFileGenerator
  */
 public interface TemplateBasedTargetFile extends TargetFile {
 
@@ -34,9 +34,6 @@ public interface TemplateBasedTargetFile extends TargetFile {
      */
     @Override
     default FileGenerator getFileGenerator(Context context) {
-        TemplateBasedTableFileGenerator generator = new TemplateBasedTableFileGenerator();
-        TemplateEngine templateEngine = context.getObject(TemplateEngine.class);
-        generator.setTemplateEngine(templateEngine);
-        return generator;
+        return new TemplateBasedTableFileGenerator();
     }
 }

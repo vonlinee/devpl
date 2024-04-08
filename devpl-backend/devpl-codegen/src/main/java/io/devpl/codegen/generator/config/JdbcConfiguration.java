@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import io.devpl.codegen.db.ColumnKeyWordsHandler;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractDbQuery;
 import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcUtils;
@@ -95,7 +95,7 @@ public class JdbcConfiguration extends PropertyHolder {
      * @return 类型枚举值
      */
     @NotNull
-    public DBType getDbType() {
+    public DBTypeEnum getDbType() {
         return JdbcUtils.getDbType(this.connectionUrl);
     }
 
@@ -150,18 +150,18 @@ public class JdbcConfiguration extends PropertyHolder {
      */
     @Nullable
     protected String getDefaultSchemaName() {
-        DBType dbType = getDbType();
+        DBTypeEnum dbType = getDbType();
         String schema = null;
-        if (DBType.POSTGRE_SQL == dbType) {
+        if (DBTypeEnum.POSTGRE_SQL == dbType) {
             // pg 默认 schema=public
             schema = "public";
-        } else if (DBType.KINGBASE_ES == dbType) {
+        } else if (DBTypeEnum.KINGBASE_ES == dbType) {
             // king base 默认 schema=PUBLIC
             schema = "PUBLIC";
-        } else if (DBType.DB2 == dbType) {
+        } else if (DBTypeEnum.DB2 == dbType) {
             // db2 默认 schema=current schema
             schema = "current schema";
-        } else if (DBType.ORACLE == dbType) {
+        } else if (DBTypeEnum.ORACLE == dbType) {
             // oracle 默认 schema=username
             schema = this.username.toUpperCase();
         }

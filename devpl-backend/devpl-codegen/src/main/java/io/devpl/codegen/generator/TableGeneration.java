@@ -171,22 +171,24 @@ public class TableGeneration implements GenerationTarget {
         if (targetFiles == null || targetFiles.isEmpty()) {
             return Collections.emptyList();
         }
-
-        TemplateEngine templateEngine = context.getObject(TemplateEngine.class);
-
         final List<FileGenerator> generators = new ArrayList<>();
+        final List<TemplateBasedTargetFile> templateBasedTargetFiles = new ArrayList<>();
         for (TargetFile targetFile : targetFiles) {
             if (targetFile instanceof TemplateBasedTargetFile ttf) {
-                TemplateBasedTableFileGenerator tfg = new TemplateBasedTableFileGenerator();
-                tfg.setTemplateEngine(templateEngine);
-                generators.add(tfg);
-                tfg.initialize(this);
-                generators.add(tfg);
+                templateBasedTargetFiles.add(ttf);
             } else {
                 FileGenerator generator = targetFile.getFileGenerator(context);
                 generator.initialize(this);
                 generators.add(generator);
             }
+        }
+        if (!templateBasedTargetFiles.isEmpty()) {
+            TemplateBasedTableFileGenerator tfg = new TemplateBasedTableFileGenerator();
+            tfg.setTemplateEngine(context.getObject(TemplateEngine.class));
+            tfg.addTargetFiles(templateBasedTargetFiles);
+            tfg.initialize(this);
+
+            generators.add(tfg);
         }
         return generators;
     }

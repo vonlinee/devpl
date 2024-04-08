@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.sdk.util.StringUtils;
 
@@ -15,8 +15,8 @@ import java.util.List;
 public class OracleMetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 
     @Override
-    public DBType dbType() {
-        return DBType.ORACLE;
+    public DBTypeEnum dbType() {
+        return DBTypeEnum.ORACLE;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package io.devpl.codegen.generator.plugins;
 
 import io.devpl.codegen.db.ColumnKeyWordsHandler;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.keywords.MySqlKeyWordsHandler;
 import io.devpl.codegen.db.keywords.PostgreSqlKeyWordsHandler;
 import io.devpl.codegen.generator.ColumnGeneration;
@@ -18,10 +18,10 @@ public class KeywordsHandlerPlugin extends TableGenerationPlugin {
         JdbcConfiguration jdbcConfiguration = context.getObject(JdbcConfiguration.class);
         ColumnKeyWordsHandler keyWordsHandler = jdbcConfiguration.getKeyWordsHandler();
         if (keyWordsHandler == null) {
-            DBType dbType = jdbcConfiguration.getDbType();
-            if (dbType == DBType.MYSQL) {
+            DBTypeEnum dbType = jdbcConfiguration.getDbType();
+            if (dbType == DBTypeEnum.MYSQL) {
                 keyWordsHandler = new MySqlKeyWordsHandler();
-            } else if (dbType == DBType.POSTGRE_SQL) {
+            } else if (dbType == DBTypeEnum.POSTGRE_SQL) {
                 keyWordsHandler = new PostgreSqlKeyWordsHandler();
             } else {
                 return;

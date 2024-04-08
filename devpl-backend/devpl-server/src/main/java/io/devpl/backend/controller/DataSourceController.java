@@ -11,7 +11,7 @@ import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.validation.Assert;
@@ -151,7 +151,7 @@ public class DataSourceController {
     @GetMapping(value = "/drivers")
     public ListResult<DriverTypeVO> getSupportedDriverTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
-        for (DBType dbType : DBType.values()) {
+        for (DBTypeEnum dbType : DBTypeEnum.values()) {
             JDBCDriver[] drivers = dbType.getDrivers();
             if (drivers != null) {
                 for (JDBCDriver driver : drivers) {
@@ -169,7 +169,7 @@ public class DataSourceController {
      */
     @GetMapping(value = "/dbtypes")
     public Result<List<SelectOptionVO>> getSupportedDBTypes() {
-        return Result.ok(ArrayUtils.asList(DBType.values(),
+        return Result.ok(ArrayUtils.asList(DBTypeEnum.values(),
             dbType -> new SelectOptionVO(dbType.name(), dbType.getName(), dbType.name())));
     }
 

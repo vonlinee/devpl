@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.converts;
 
 import io.devpl.codegen.db.JavaFieldDataType;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.generator.config.TypeConverter;
 import io.devpl.codegen.util.BranchBuilder;
 import io.devpl.codegen.util.Selector;
@@ -17,7 +17,7 @@ public class TypeConverts {
      * @param dbType 数据库类型
      * @return 返回转换器
      */
-    public static TypeConverter getTypeConvert(DBType dbType) {
+    public static TypeConverter getTypeConvert(DBTypeEnum dbType) {
         return switch (dbType) {
             case ORACLE -> OracleTypeConverter.INSTANCE;
             case DB2 -> DB2TypeConverter.INSTANCE;

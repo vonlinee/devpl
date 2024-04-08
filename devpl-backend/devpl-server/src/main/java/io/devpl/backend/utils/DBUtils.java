@@ -1,7 +1,6 @@
 package io.devpl.backend.utils;
 
-import io.devpl.codegen.db.DBType;
-import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,6 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,66 +98,66 @@ public class DBUtils {
      * @param jdbcUrl 连接地址
      * @return ignore
      */
-    public static DBType inferDBType(String jdbcUrl) {
+    public static DBTypeEnum inferDBType(String jdbcUrl) {
         if (!StringUtils.hasText(jdbcUrl)) {
             throw new RuntimeException("Error: The jdbcUrl is Null, Cannot read database type");
         }
         String url = jdbcUrl.toLowerCase();
         if (url.contains(":mysql:") || url.contains(":cobar:")) {
-            return DBType.MYSQL;
+            return DBTypeEnum.MYSQL;
         } else if (url.contains(":mariadb:")) {
-            return DBType.MARIADB;
+            return DBTypeEnum.MARIADB;
         } else if (url.contains(":oracle:")) {
-            return DBType.ORACLE;
+            return DBTypeEnum.ORACLE;
         } else if (url.contains(":sqlserver:") || url.contains(":microsoft:")) {
-            return DBType.SQL_SERVER2005;
+            return DBTypeEnum.SQL_SERVER2005;
         } else if (url.contains(":sqlserver2012:")) {
-            return DBType.SQL_SERVER;
+            return DBTypeEnum.SQL_SERVER;
         } else if (url.contains(":postgresql:")) {
-            return DBType.POSTGRE_SQL;
+            return DBTypeEnum.POSTGRE_SQL;
         } else if (url.contains(":hsqldb:")) {
-            return DBType.HSQL;
+            return DBTypeEnum.HSQL;
         } else if (url.contains(":db2:")) {
-            return DBType.DB2;
+            return DBTypeEnum.DB2;
         } else if (url.contains(":sqlite:")) {
-            return DBType.SQLITE;
+            return DBTypeEnum.SQLITE;
         } else if (url.contains(":h2:")) {
-            return DBType.H2;
+            return DBTypeEnum.H2;
         } else if (regexFind(":dm\\d*:", url)) {
-            return DBType.DM;
+            return DBTypeEnum.DM;
         } else if (url.contains(":xugu:")) {
-            return DBType.XU_GU;
+            return DBTypeEnum.XU_GU;
         } else if (regexFind(":kingbase\\d*:", url)) {
-            return DBType.KINGBASE_ES;
+            return DBTypeEnum.KINGBASE_ES;
         } else if (url.contains(":phoenix:")) {
-            return DBType.PHOENIX;
+            return DBTypeEnum.PHOENIX;
         } else if (jdbcUrl.contains(":zenith:")) {
-            return DBType.GAUSS;
+            return DBTypeEnum.GAUSS;
         } else if (jdbcUrl.contains(":gbase:")) {
-            return DBType.GBASE;
+            return DBTypeEnum.GBASE;
         } else if (jdbcUrl.contains(":clickhouse:")) {
-            return DBType.CLICK_HOUSE;
+            return DBTypeEnum.CLICK_HOUSE;
         } else if (jdbcUrl.contains(":oscar:")) {
-            return DBType.OSCAR;
+            return DBTypeEnum.OSCAR;
         } else if (jdbcUrl.contains(":sybase:")) {
-            return DBType.SYBASE;
+            return DBTypeEnum.SYBASE;
         } else if (jdbcUrl.contains(":oceanbase:")) {
-            return DBType.OCEAN_BASE;
+            return DBTypeEnum.OCEAN_BASE;
         } else if (url.contains(":highgo:")) {
-            return DBType.HIGH_GO;
+            return DBTypeEnum.HIGH_GO;
         } else if (url.contains(":cubrid:")) {
-            return DBType.CUBRID;
+            return DBTypeEnum.CUBRID;
         } else if (url.contains(":goldilocks:")) {
-            return DBType.GOLDILOCKS;
+            return DBTypeEnum.GOLDILOCKS;
         } else if (url.contains(":csiidb:")) {
-            return DBType.CSIIDB;
+            return DBTypeEnum.CSIIDB;
         } else if (url.contains(":sap:")) {
-            return DBType.SAP_HANA;
+            return DBTypeEnum.SAP_HANA;
         } else if (url.contains(":impala:")) {
-            return DBType.IMPALA;
+            return DBTypeEnum.IMPALA;
         } else {
             logger.warn("The jdbcUrl is " + jdbcUrl + ", Mybatis Plus Cannot Read Database type or The Database's Not Supported!");
-            return DBType.OTHER;
+            return DBTypeEnum.OTHER;
         }
     }
 

@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.jdbc.ConnectionHolder;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
@@ -25,19 +25,19 @@ import java.util.function.Function;
 @Slf4j
 public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHolder implements DatabaseMetadataReader, SqlMetadataQuery {
 
-    public static DatabaseMetadataReader getQuery(DBType dbType) {
+    public static DatabaseMetadataReader getQuery(DBTypeEnum dbType) {
         DatabaseMetadataReader dbQuery = null;
-        if (dbType == DBType.MYSQL) {
+        if (dbType == DBTypeEnum.MYSQL) {
             dbQuery = new MySqlMetadataReader();
-        } else if (dbType == DBType.ORACLE) {
+        } else if (dbType == DBTypeEnum.ORACLE) {
             dbQuery = new OracleMetadataReader();
-        } else if (dbType == DBType.POSTGRE_SQL) {
+        } else if (dbType == DBTypeEnum.POSTGRE_SQL) {
             dbQuery = new PostgreSqlMetadataReader();
-        } else if (dbType == DBType.SQL_SERVER) {
+        } else if (dbType == DBTypeEnum.SQL_SERVER) {
             dbQuery = new SQLServerMetadataReader();
-        } else if (dbType == DBType.DM) {
+        } else if (dbType == DBTypeEnum.DM) {
             dbQuery = new DmMetadataReader();
-        } else if (dbType == DBType.CLICK_HOUSE) {
+        } else if (dbType == DBTypeEnum.CLICK_HOUSE) {
             dbQuery = new ClickHouseMetadataReader();
         }
         return dbQuery;

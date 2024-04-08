@@ -1,9 +1,10 @@
 package io.devpl.common.interfaces.impl;
 
-import com.alibaba.druid.DbType;
 import io.devpl.codegen.db.ColumnInfo;
 import io.devpl.codegen.db.TableInfo;
+import io.devpl.codegen.parser.sql.CreateTableParseResult;
 import io.devpl.codegen.parser.sql.DruidSqlParser;
+import io.devpl.codegen.parser.sql.SqlParser;
 import io.devpl.common.exception.FieldParseException;
 import io.devpl.common.interfaces.FieldParser;
 
@@ -19,16 +20,18 @@ import java.util.Map;
 public class DDLFieldParser implements FieldParser {
 
     private final String dbType;
+    private final SqlParser sqlParser;
 
     public DDLFieldParser(String dbType) {
         this.dbType = dbType;
+        this.sqlParser = DruidSqlParser.createSqlParser(dbType);
     }
 
     @Override
     public List<Map<String, Object>> parse(String sql) throws FieldParseException {
+        CreateTableParseResult result = sqlParser.parseCreateTableSql(dbType, sql);
 
-        DbType dbTypeEnum = DbType.of(dbType);
-        TableInfo tableInfo = DruidSqlParser.parseDDL(sql, dbTypeEnum);
+        TableInfo tableInfo = result.getTableInfo();
 
         // SQL 注入
 //        WallProvider provider = new MySqlWallProvider();

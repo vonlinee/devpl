@@ -5,21 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Setter
 @Getter
-public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
+class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
 
-    List<TemplateBasedTargetFile> targetFiles;
-    TemplateEngine templateEngine;
+    private List<TemplateBasedTargetFile> targetFiles;
+    private TemplateEngine templateEngine;
 
     public TemplateBasedTableFileGenerator() {
         super();
+        this.targetFiles = new ArrayList<>();
     }
 
     public <T extends TemplateBasedTargetFile> void addTargetFile(T targetFile) {
         this.targetFiles.add(targetFile);
+    }
+
+    public <T extends TemplateBasedTargetFile> void addTargetFiles(Collection<T> targetFiles) {
+        this.targetFiles.addAll(targetFiles);
     }
 
     @Override

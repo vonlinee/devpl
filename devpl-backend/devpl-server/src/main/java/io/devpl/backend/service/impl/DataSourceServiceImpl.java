@@ -3,7 +3,7 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
@@ -22,7 +22,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     RdbmsConnectionInfoService connectionInfoService;
 
     @Override
-    public DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DBType dbType) {
+    public DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DBTypeEnum dbType) {
         if (dbType == null) {
             return new JdbcDatabaseMetadataReader(connection);
         }

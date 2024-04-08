@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ public interface SqlMetadataQuery {
     /**
      * 数据库类型
      */
-    DBType dbType();
+    DBTypeEnum dbType();
 
     /**
      * 表信息查询 SQL

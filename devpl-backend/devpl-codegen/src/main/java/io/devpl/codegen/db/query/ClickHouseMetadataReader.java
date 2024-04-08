@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.StringUtils;
 
 import java.util.List;
@@ -16,8 +16,8 @@ public class ClickHouseMetadataReader extends AbstractQueryDatabaseMetadataReade
     }
 
     @Override
-    public DBType dbType() {
-        return DBType.CLICK_HOUSE;
+    public DBTypeEnum dbType() {
+        return DBTypeEnum.CLICK_HOUSE;
     }
 
     /**

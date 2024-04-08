@@ -38,4 +38,5 @@ open module devpl.codegen {
 	requires org.mybatis.generator;
 	requires java.desktop;
 	requires java.annotation;
+    requires ant;
 }

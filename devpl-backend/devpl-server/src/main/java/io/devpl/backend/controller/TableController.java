@@ -12,7 +12,7 @@ import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableFileGenerationService;
 import io.devpl.backend.service.TableGenerationFieldService;
 import io.devpl.backend.service.TableGenerationService;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -117,7 +117,7 @@ public class TableController {
         RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(param.getDataSourceId());
         if (connInfo == null) return Result.error("数据源不存在");
         param.setConnInfo(connInfo);
-        DBType dbType = DBType.getValue(connInfo.getDbType());
+        DBTypeEnum dbType = DBTypeEnum.getValue(connInfo.getDbType());
         if (dbType == null) return Result.error("数据库类型" + connInfo.getDbType() + "不存在");
         param.setDbType(dbType);
         if (!CollectionUtils.isEmpty(param.getTables())) {

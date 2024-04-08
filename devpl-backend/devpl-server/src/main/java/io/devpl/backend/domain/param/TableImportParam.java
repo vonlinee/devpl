@@ -2,7 +2,7 @@ package io.devpl.backend.domain.param;
 
 import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +54,7 @@ public class TableImportParam {
      * 数据库类型
      * 后端填充
      */
-    private DBType dbType;
+    private DBTypeEnum dbType;
 
     /**
      * 数据源连接信息

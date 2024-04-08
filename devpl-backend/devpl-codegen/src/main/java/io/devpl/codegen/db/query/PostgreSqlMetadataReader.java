@@ -1,6 +1,6 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.StringUtils;
 
 import java.sql.SQLException;
@@ -12,8 +12,8 @@ import java.util.List;
 public class PostgreSqlMetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 
     @Override
-    public DBType dbType() {
-        return DBType.POSTGRE_SQL;
+    public DBTypeEnum dbType() {
+        return DBTypeEnum.POSTGRE_SQL;
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Properties;
  * 数据库驱动类型
  * 连接URL格式：jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]...
  *
- * @see DBType
+ * @see DBTypeEnum
  */
 public enum JDBCDriver {
 

@@ -1,6 +1,6 @@
 package io.devpl.backend.jdbc;
 
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -109,7 +109,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     private void registerDrivers(File rootDir) {
         // 数据库类型 - 版本 - 驱动jar包
         // 例如 mysql - 8.0.18 - mysql-connector-java-8.0.18.jar
-        File[] files = rootDir.listFiles(file -> file.isDirectory() && DBType.getValue(file.getName(), null) != null);
+        File[] files = rootDir.listFiles(file -> file.isDirectory() && DBTypeEnum.getValue(file.getName(), null) != null);
         if (files == null || files.length == 0) {
             return;
         }
@@ -167,10 +167,10 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
      * @return 驱动类的全限定类名
      */
     private JDBCDriver getBestMatchedDriverType(String dbTypeName, String version, File driverJarFile) {
-        DBType[] dbTypes = DBType.values();
-        for (DBType dbType : dbTypes) {
+        DBTypeEnum[] dbTypes = DBTypeEnum.values();
+        for (DBTypeEnum dbType : dbTypes) {
             if (dbType.name().equalsIgnoreCase(dbTypeName)) {
-                if (dbType == DBType.MYSQL && version.startsWith("8")) {
+                if (dbType == DBTypeEnum.MYSQL && version.startsWith("8")) {
                     return dbType.getDriver(1);
                 }
                 return dbType.getDriver();

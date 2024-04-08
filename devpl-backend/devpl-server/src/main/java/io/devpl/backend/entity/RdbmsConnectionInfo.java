@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import io.devpl.codegen.db.DBType;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.PropertiesUtils;
 import lombok.Getter;
@@ -170,7 +170,7 @@ public class RdbmsConnectionInfo implements Serializable {
                 for (int i = left; i < right; i++) {
                     if (connectionUrlCharArray[i] == ':') {
                         String dbType = new String(connectionUrlCharArray, left, i - left);
-                        DBType dbTypeEnum = DBType.getValue(dbType, DBType.MYSQL);
+                        DBTypeEnum dbTypeEnum = DBTypeEnum.getValue(dbType, DBTypeEnum.MYSQL);
                         this.setDbType(dbTypeEnum.name().toLowerCase());
                         this.setDriverClassName(dbTypeEnum.getDriverClassName());
 
