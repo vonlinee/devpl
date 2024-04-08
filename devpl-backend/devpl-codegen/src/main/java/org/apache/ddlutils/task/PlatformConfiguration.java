@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformFactory;
 import org.apache.ddlutils.PlatformUtils;
@@ -9,8 +8,6 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * Encloses the platform configuration for the Ant tasks.
- *
- * @version $Revision: 329426 $
  */
 public class PlatformConfiguration {
     /**

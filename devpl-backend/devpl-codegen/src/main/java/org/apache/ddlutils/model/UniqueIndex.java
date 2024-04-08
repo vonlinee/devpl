@@ -9,8 +9,6 @@ import java.util.Objects;
  * Provides compatibility with Torque-style xml with separate &lt;index&gt; and
  * &lt;unique&gt; tags, but adds no functionality.  All indexes are treated the
  * same by the Table.
- *
- *
  */
 public class UniqueIndex extends IndexImplBase {
     /**

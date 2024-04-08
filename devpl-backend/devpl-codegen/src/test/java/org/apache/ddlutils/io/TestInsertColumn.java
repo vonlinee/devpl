@@ -1,9 +1,8 @@
 package org.apache.ddlutils.io;
 
-
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 
 import java.math.BigDecimal;

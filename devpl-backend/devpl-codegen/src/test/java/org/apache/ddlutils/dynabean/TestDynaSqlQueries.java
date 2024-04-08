@@ -3,6 +3,8 @@ package org.apache.ddlutils.dynabean;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableClass;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.ModelBasedResultSetIterator;
 import org.apache.ddlutils.util.DatabaseTestHelper;

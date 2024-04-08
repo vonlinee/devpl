@@ -17,7 +17,6 @@ import java.util.List;
  * This sub-task does not require schema files. Therefore, the <code>fileset</code> sub element and
  * the <code>schemaFile</code> attribute of the enclosing task can be omitted.
  *
- * @version $Revision: 231306 $
  * @ant.task name="createDatabase"
  */
 public class CreateDatabaseCommand extends DatabaseCommand {

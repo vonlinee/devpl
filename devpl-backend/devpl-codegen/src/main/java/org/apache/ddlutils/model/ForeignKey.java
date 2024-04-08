@@ -12,8 +12,6 @@ import java.util.Objects;
 
 /**
  * Represents a database foreign key.
- *
- *
  */
 public class ForeignKey extends SchemaObject implements Serializable {
     /**

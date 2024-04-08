@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestPlatformBase;
 
 import java.util.regex.Matcher;
@@ -8,8 +7,6 @@ import java.util.regex.Pattern;
 
 /**
  * Tests the Microsoft SQL Server platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestMSSqlPlatform extends TestPlatformBase {
 

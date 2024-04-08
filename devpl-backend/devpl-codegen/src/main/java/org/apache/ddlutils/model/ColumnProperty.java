@@ -1,6 +1,4 @@
-package org.apache.ddlutils.dynabean;
-
-import org.apache.ddlutils.model.Column;
+package org.apache.ddlutils.model;
 
 /**
  * A SqlDynaProperty which maps to a persistent Column in a database.

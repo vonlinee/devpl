@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.model.TableObject;
 
 /**
  * Marks classes that can receive dyna beans read by the {@link org.apache.ddlutils.io.DataReader}.

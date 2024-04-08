@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.oracle;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
@@ -40,5 +39,4 @@ public class Oracle10ModelReader extends Oracle8ModelReader {
         }
         return deletedObj ? null : super.readTable(metaData, values);
     }
-
 }

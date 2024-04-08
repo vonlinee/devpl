@@ -12,7 +12,6 @@ import java.util.StringTokenizer;
  * A parameter consists of a name-value pair and an optional list of platforms for which the
  * parameter shall be used.
  *
- * @version $Revision: 231306 $
  * @ant.type name="parameter"
  */
 public class Parameter {
@@ -43,7 +42,6 @@ public class Parameter {
      * for details on the parameters supported by the individual platforms.
      *
      * @param name The name
-     * @ant.required
      */
     public void setName(String name) {
         _name = name;

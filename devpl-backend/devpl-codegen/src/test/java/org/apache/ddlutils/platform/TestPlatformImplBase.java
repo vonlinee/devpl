@@ -2,10 +2,10 @@ package org.apache.ddlutils.platform;
 
 
 import org.apache.ddlutils.TestBase;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableClass;
+import org.apache.ddlutils.model.TableObject;
 
 import java.util.Map;
 

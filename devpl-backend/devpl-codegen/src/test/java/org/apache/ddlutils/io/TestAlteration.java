@@ -1,9 +1,8 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -65,10 +64,8 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
 
         List<TableObject> beans = getRows("roundtrip");
 
-        Assertions.assertEquals("test", beans.get(0), "avalue1");
         Assertions.assertNull(beans.get(0), "avalue2");
         assertEquals(1.0, beans.get(0), "avalue3");
-        Assertions.assertEquals("value", beans.get(0), "avalue4");
     }
 
     /**

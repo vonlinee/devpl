@@ -1,8 +1,5 @@
 package org.apache.ddlutils.util;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 /**
  * 内部使用
  * 参数检查
@@ -20,13 +17,6 @@ public class Utils {
             return null;
         }
         return clazz.getDeclaredConstructor().newInstance();
-    }
-
-    public static void closeQuietly(Closeable closeable) {
-        try {
-            if (closeable != null) closeable.close();
-        } catch (IOException ignored) {
-        }
     }
 
     public static boolean isBlank(String str) {

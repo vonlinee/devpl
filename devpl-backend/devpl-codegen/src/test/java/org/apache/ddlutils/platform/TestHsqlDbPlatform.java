@@ -1,12 +1,10 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestPlatformBase;
+import org.junit.Test;
 
 /**
  * Tests the Hsqldb platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestHsqlDbPlatform extends TestPlatformBase {
 
@@ -17,6 +15,7 @@ public class TestHsqlDbPlatform extends TestPlatformBase {
     /**
      * Tests the column types.
      */
+    @Test
     public void testColumnTypes() throws Exception {
         assertEqualsIgnoringWhitespaces("DROP TABLE \"coltype\" IF EXISTS;\n" + //
                                         "CREATE TABLE \"coltype\"\n" + //

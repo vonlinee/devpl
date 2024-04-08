@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.SqlBuilder;
 
@@ -9,8 +8,6 @@ import java.io.StringWriter;
 
 /**
  * Base class for builder tests.
- *
- *
  */
 public abstract class TestPlatformBase extends TestBase {
     /**

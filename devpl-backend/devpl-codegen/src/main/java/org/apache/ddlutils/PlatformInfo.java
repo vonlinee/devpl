@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.util.MultiValueMap;
 import org.slf4j.Logger;
@@ -232,8 +231,8 @@ public class PlatformInfo {
         _typesWithPrecisionAndScale.add(Types.DECIMAL);
         _typesWithPrecisionAndScale.add(Types.NUMERIC);
 
-        _supportedOnUpdateActions.addAll(CascadeActionEnum.getEnumList());
-        _supportedOnDeleteActions.addAll(CascadeActionEnum.getEnumList());
+        _supportedOnUpdateActions.addAll(Arrays.asList(CascadeActionEnum.values()));
+        _supportedOnDeleteActions.addAll(Arrays.asList(CascadeActionEnum.values()));
     }
 
     // properties influencing the definition of columns

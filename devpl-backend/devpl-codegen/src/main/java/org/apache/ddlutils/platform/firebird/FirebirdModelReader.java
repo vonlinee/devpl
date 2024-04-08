@@ -5,8 +5,8 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.*;
 import java.util.*;
@@ -193,7 +193,6 @@ public class FirebirdModelReader extends JdbcModelReader {
 
         Map<String, Index> indices = new ListOrderedMap<>();
         PreparedStatement stmt = null;
-
         try {
             stmt = getConnection().prepareStatement(query);
 
@@ -264,10 +263,8 @@ public class FirebirdModelReader extends JdbcModelReader {
     public String determineSchemaOf(Connection connection, String schemaPattern, Table table) throws SQLException {
         ResultSet tableData = null;
         ResultSet columnData = null;
-
         try {
-            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
-
+            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(connection, null, null, null));
             metaData.setMetaData(connection.getMetaData());
             metaData.setCatalog(getDefaultCatalogPattern());
             metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);

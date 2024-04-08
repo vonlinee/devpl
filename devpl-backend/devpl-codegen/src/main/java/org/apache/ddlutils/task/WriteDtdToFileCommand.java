@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.DataDtdWriter;
 import org.apache.ddlutils.model.Database;
 import org.apache.tools.ant.BuildException;
@@ -25,7 +24,6 @@ public class WriteDtdToFileCommand extends Command {
      * Specifies the name of the file to write the DTD to.
      *
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;

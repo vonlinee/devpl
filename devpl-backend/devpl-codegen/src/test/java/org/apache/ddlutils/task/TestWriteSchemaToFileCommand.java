@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.util.DatabaseTestHelper;
@@ -20,7 +19,6 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
     @BeforeEach
     public void setup() throws Exception {
         System.setProperty(JDBC_PROPERTIES_PROPERTY, DatabaseTestHelper.getAbsolutePath("jdbc.properties.mysql57"));
-
         initDataSource();
     }
 

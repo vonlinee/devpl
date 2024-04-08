@@ -1,9 +1,8 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,8 +12,6 @@ import java.util.Map;
  * Contains parameters used in the table creation. Note that the definition
  * order is retained (per table), so if a parameter should be applied before
  * some other parameter, then add it before the other one.
- *
- * @version $Revision: 331006 $
  */
 public class CreationParameters {
     /**

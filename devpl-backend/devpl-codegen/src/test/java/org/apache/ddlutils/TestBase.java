@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.junit.jupiter.api.Assertions;

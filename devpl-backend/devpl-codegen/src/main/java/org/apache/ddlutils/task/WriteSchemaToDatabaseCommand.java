@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.CreationParameters;
@@ -9,8 +8,6 @@ import org.apache.tools.ant.BuildException;
 /**
  * Parses the schema XML files specified for the enclosing task, and creates the corresponding
  * schema in the database.
- *
- * @ant.task name="writeSchemaToDatabase"
  */
 public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationParameters {
     /**

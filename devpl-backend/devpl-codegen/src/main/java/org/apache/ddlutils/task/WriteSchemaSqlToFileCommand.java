@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.platform.CreationParameters;
@@ -17,8 +16,6 @@ import java.sql.SQLException;
  * database specific and hence this subtask requires that for the enclosing task, either a
  * data source is specified (via the <code>database</code> sub element) or the
  * <code>databaseType</code> attribute is used to specify the database type.
- *
- * @ant.task name="writeSchemaSqlToFile"
  */
 public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationParameters {
     /**
@@ -38,7 +35,6 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
      * Specifies the name of the file to write the SQL commands to.
      *
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;

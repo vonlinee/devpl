@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.hsqldb;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
@@ -17,8 +16,6 @@ import java.sql.Types;
 
 /**
  * The platform implementation for the HsqlDb database.
- *
- * @version $Revision: 231306 $
  */
 public class HsqlDbPlatform extends PlatformImplBase {
 

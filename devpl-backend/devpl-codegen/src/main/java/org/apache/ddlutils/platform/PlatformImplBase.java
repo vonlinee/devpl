@@ -1,18 +1,14 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
-import org.apache.ddlutils.dynabean.ColumnProperty;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.JdbcSupport;
 import org.apache.ddlutils.util.JdbcUtils;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.SqlTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +23,6 @@ import java.util.*;
 
 /**
  * Base class for platform implementations.
- *
- * @version $Revision: 231110 $
  */
 public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     /**
@@ -1505,7 +1499,6 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     @Override
     public void insert(Database model, Collection<TableObject> dynaBeans) throws DatabaseOperationException {
         Connection connection = borrowConnection();
-
         try {
             insert(connection, model, dynaBeans);
         } finally {

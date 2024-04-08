@@ -1,7 +1,7 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestBase;
+import org.junit.Test;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -29,6 +29,7 @@ public class TestDatabaseMetaDataWrapper extends TestBase {
     /**
      * Tests the {@link DatabaseMetaDataWrapper#escapeForSearch(String)} method (see DDLUTILS-246).
      */
+    @Test
     public void testEscapeSearchString() throws Exception {
         DatabaseMetaData metaData = createMockDatabaseMetaData(new InvocationHandler() {
             /**

@@ -1,11 +1,10 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.util.StringUtils;
 import org.junit.jupiter.api.Assertions;

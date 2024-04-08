@@ -13,7 +13,7 @@ public enum DBTypeEnum implements DBType {
      */
     AXION("Axion"),
     /**
-     *
+     * Cloudscape
      */
     CLOUDSCAPE("Cloudscape"),
     /**

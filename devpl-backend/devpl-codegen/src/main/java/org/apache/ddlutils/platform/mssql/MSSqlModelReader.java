@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.mssql;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;

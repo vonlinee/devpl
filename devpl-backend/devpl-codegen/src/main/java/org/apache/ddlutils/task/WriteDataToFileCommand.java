@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.model.Database;
 import org.apache.tools.ant.BuildException;
 
@@ -32,7 +31,6 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
      * Specifies the file to write the data XML to.
      *
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;

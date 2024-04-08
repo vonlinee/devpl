@@ -1,11 +1,7 @@
 package org.apache.ddlutils;
 
-
 import junit.framework.TestSuite;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
-import org.apache.ddlutils.dynabean.ColumnProperty;
 import org.apache.ddlutils.io.BinaryObjectsHelper;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.io.DataToDatabaseSink;

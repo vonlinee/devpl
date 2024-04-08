@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.util.NestableRuntimeException;
 
 /**

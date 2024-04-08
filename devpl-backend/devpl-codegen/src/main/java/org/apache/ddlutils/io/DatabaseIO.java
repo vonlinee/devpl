@@ -14,8 +14,6 @@ import java.io.*;
 
 /**
  * This class provides functions to read and write database models from/to XML.
- *
- *
  */
 public class DatabaseIO {
     /**

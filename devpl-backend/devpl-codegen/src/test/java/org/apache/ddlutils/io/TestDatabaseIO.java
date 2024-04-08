@@ -1,6 +1,5 @@
 package org.apache.ddlutils.io;
 
-
 import junit.framework.TestCase;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.StringUtils;
@@ -318,7 +317,7 @@ public class TestDatabaseIO extends TestCase {
                 </database>""");
 
             fail();
-        } catch (DdlUtilsXMLException ex) {
+        } catch (DdlUtilsXMLException ignored) {
         }
     }
 
@@ -337,7 +336,7 @@ public class TestDatabaseIO extends TestCase {
                 </database>""");
 
             fail();
-        } catch (DdlUtilsXMLException ex) {
+        } catch (DdlUtilsXMLException ignored) {
         }
     }
 
@@ -962,7 +961,7 @@ public class TestDatabaseIO extends TestCase {
 
         Table anotherTable = model.getTable(1);
 
-        assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.getEnumList().size(), 0, anotherTable);
+        assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.values().length, 0, anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false, anotherTable.getColumn(0));
 
         int idx = 0;
@@ -1048,7 +1047,7 @@ public class TestDatabaseIO extends TestCase {
 
         Table anotherTable = model.getTable(1);
 
-        assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.getEnumList().size(), 0, anotherTable);
+        assertEquals("AnotherTable", "And another table", 1, 0, 0, CascadeActionEnum.values().length, 0, anotherTable);
         assertEquals("Some_ID", Types.VARCHAR, 16, 0, null, "The foreign key", null, false, false, false, anotherTable.getColumn(0));
 
         int idx = 0;

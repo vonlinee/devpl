@@ -1,17 +1,10 @@
 package org.apache.ddlutils.platform;
 
-
-import org.apache.ddlutils.DatabaseOperationException;
-import org.apache.ddlutils.jdbc.RdbmsMetadataReader;
-import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
-import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
-import org.apache.ddlutils.jdbc.meta.TableMetadata;
-import org.apache.ddlutils.util.JdbcUtils;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -19,7 +12,17 @@ import java.util.regex.Pattern;
 /**
  * Wrapper class for database metadata that stores additional info.
  */
-public class DatabaseMetaDataWrapper implements RdbmsMetadataReader {
+public class DatabaseMetaDataWrapper {
+
+    DatabaseMetadataReader reader;
+
+    public DatabaseMetaDataWrapper(DatabaseMetadataReader reader) {
+        this.reader = reader;
+    }
+
+    public DatabaseMetaDataWrapper() {
+    }
+
     /**
      * Matches the characters not allowed in search strings.
      */
@@ -100,14 +103,8 @@ public class DatabaseMetaDataWrapper implements RdbmsMetadataReader {
      *
      * @return The table types
      */
-    @Override
-    public String[] getTableTypes() {
-        if (_tableTypes == null) {
-            return null;
-        }
-        String[] result = new String[_tableTypes.length];
-        System.arraycopy(_tableTypes, 0, result, 0, _tableTypes.length);
-        return result;
+    public List<String> getTableTypes() throws SQLException {
+        return reader.getTableTypes();
     }
 
     /**
@@ -121,39 +118,6 @@ public class DatabaseMetaDataWrapper implements RdbmsMetadataReader {
         } else {
             _tableTypes = new String[types.length];
             System.arraycopy(types, 0, _tableTypes, 0, types.length);
-        }
-    }
-
-    @Override
-    public List<TableMetadata> getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
-        ResultSet resultSet = _metaData.getTables(catalog, schemaPattern, tableNamePattern, types);
-        List<TableMetadata> tableMetadataList = new ArrayList<>();
-        while (resultSet.next()) {
-            TableMetadata tmd = new TableMetadata();
-            tmd.initialize(resultSet);
-            tableMetadataList.add(tmd);
-        }
-        return tableMetadataList;
-    }
-
-    @Override
-    public List<ColumnMetadata> getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException {
-        ResultSet resultSet = _metaData.getColumns(catalog, schemaPattern, tableNamePattern, columnNamePattern);
-        List<ColumnMetadata> columnMetadataList = new ArrayList<>();
-        while (resultSet.next()) {
-            ColumnMetadata cmd = new ColumnMetadata();
-            cmd.initialize(resultSet);
-            columnMetadataList.add(cmd);
-        }
-        return columnMetadataList;
-    }
-
-    @Override
-    public List<ResultSetColumnMetadata> getResultSetColumns(ResultSet rs) {
-        try {
-            return JdbcUtils.getColumnMetadata(rs);
-        } catch (SQLException e) {
-            throw new DatabaseOperationException("cannot get metadata from result set", e);
         }
     }
 
@@ -195,7 +159,7 @@ public class DatabaseMetaDataWrapper implements RdbmsMetadataReader {
      * @see DatabaseMetaData#getTables(java.lang.String, java.lang.String, java.lang.String, java.lang.String[])
      */
     public ResultSet getTables(String tableNamePattern) throws SQLException {
-        return _metaData.getTables(getCatalog(), getSchemaPattern(), tableNamePattern, getTableTypes());
+        return _metaData.getTables(getCatalog(), getSchemaPattern(), tableNamePattern, getTableTypes().toArray(String[]::new));
     }
 
     /**

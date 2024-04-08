@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the PostgreSQL platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestPostgresqlPlatform extends TestPlatformBase {
 

@@ -1,6 +1,6 @@
 package org.apache.ddlutils.util;
 
-import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
+import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 
 import javax.sql.DataSource;
 import java.sql.*;

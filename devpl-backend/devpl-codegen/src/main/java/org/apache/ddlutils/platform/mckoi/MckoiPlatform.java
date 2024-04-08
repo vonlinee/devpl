@@ -8,8 +8,8 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.*;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.JdbcUtils;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -20,8 +20,6 @@ import java.util.Map;
 
 /**
  * The Mckoi database platform implementation.
- *
- * @version $Revision: 231306 $
  */
 public class MckoiPlatform extends PlatformImplBase {
 

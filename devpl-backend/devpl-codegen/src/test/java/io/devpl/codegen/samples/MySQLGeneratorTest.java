@@ -19,7 +19,7 @@ import java.util.Properties;
 /**
  * 如果 src/main/ 下也有模板文件，优先使用 src/test 下的资源文件
  */
-public class MySQLGenerator {
+public class MySQLGeneratorTest {
 
     @Test
     public void test1() throws XMLParserException, IOException {

@@ -1,10 +1,9 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.dom4j.Document;
 import org.dom4j.Element;

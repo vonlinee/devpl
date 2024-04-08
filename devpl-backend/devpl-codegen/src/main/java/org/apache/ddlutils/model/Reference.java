@@ -1,14 +1,11 @@
 package org.apache.ddlutils.model;
 
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Represents a reference between a column in the local table and a column in another table.
- *
- *
  */
 public class Reference implements Serializable {
     /**

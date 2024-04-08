@@ -1,9 +1,9 @@
 package org.apache.ddlutils.io;
 
-
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 
 import java.io.Reader;
@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Performs roundtrip datatype tests.
  */
-public class TestDatatypes extends TestAgainstLiveDatabaseBase {
-    // TODO: special columns (java_object, array, distinct, ...)
+public class TestDataTypes extends TestAgainstLiveDatabaseBase {
 
     /**
      * Parameterized test case pattern.
@@ -32,7 +33,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
      * @return The tests
      */
     public static Test suite() throws Exception {
-        return getTests(TestDatatypes.class);
+        return getTests(TestDataTypes.class);
     }
 
     /**
@@ -66,7 +67,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
 
     /**
      * Performs a data type test. In short, we're testing creation of a database, insertion of values
-     * into it, and reading the model back. In addition we also check that DdlUtils does not try to
+     * into it, and reading the model back. In addition, we also check that DdlUtils does not try to
      * alter the new database when using the <code>alterTables</code>/<code>getAlterTablesSql</code>
      * methods of the {@link org.apache.ddlutils.Platform} with the read-back model.
      *
@@ -81,7 +82,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
         insertRow("roundtrip", new Object[]{(1), inserted1});
         insertRow("roundtrip", new Object[]{(2), inserted2});
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals(expected1, beans.get(0), "avalue");
         assertEquals(expected2, beans.get(1), "avalue");
@@ -103,9 +104,9 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
 
         String dataSql = stringWriter.toString();
 
-        assertTrue((dataSql != null) && (dataSql.length() > 0));
+        assertTrue((dataSql != null) && (!dataSql.isEmpty()));
 
-        getPlatform().dropTables(getModel(), false);
+        getPlatform().dropModel(getModel(), false);
 
         createDatabase(modelXml);
 
@@ -744,7 +745,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                 </database>""";
 
         // we would use Calendar but that might give Locale problems
-        performDataTypeTest(modelXml, new Date(105, 0, 1), null, new Date(100, 0, 1));
+        performDataTypeTest(modelXml, Date.from(Instant.from(LocalDate.of(105, 0, 1))), null, new Date(100, 0, 1));
     }
 
     /**
@@ -762,7 +763,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                 </database>""";
 
         // we would use Calendar but that might give Locale problems
-        performDataTypeTest(modelXml, new Time(03, 47, 15), null);
+        performDataTypeTest(modelXml, new Time(3, 47, 15), null);
     }
 
     /**
@@ -837,8 +838,8 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                   </table>
                 </database>""";
 
-        HashMap value1 = new HashMap();
-        ArrayList value2 = new ArrayList<>();
+        HashMap<String, String> value1 = new HashMap<>();
+        List<String> value2 = new ArrayList<>();
 
         value1.put("test", "some value");
         value2.add("some other value");
@@ -864,7 +865,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                   </table>
                 </database>""";
 
-        TreeSet value1 = new TreeSet();
+        TreeSet<String> value1 = new TreeSet<>();
         String value2 = "a value, nothing special";
 
         value1.add("o look, a value !");
@@ -890,7 +891,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                   </table>
                 </database>""";
 
-        HashMap value = new HashMap();
+        HashMap<String, String> value = new HashMap<>();
 
         value.put("test1", "some value");
         value.put(null, "some other value");
@@ -916,7 +917,7 @@ public class TestDatatypes extends TestAgainstLiveDatabaseBase {
                   </table>
                 </database>""";
 
-        HashMap value = new HashMap();
+        HashMap<String, String> value = new HashMap<>();
 
         value.put("test1", "some value");
         value.put(null, "some other value");

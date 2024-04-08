@@ -1,12 +1,9 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the Firebird platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestFirebirdPlatform extends TestPlatformBase {
 

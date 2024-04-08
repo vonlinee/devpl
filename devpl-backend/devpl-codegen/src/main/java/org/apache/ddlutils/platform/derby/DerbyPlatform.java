@@ -22,8 +22,6 @@ import java.util.Map;
 
 /**
  * The platform implementation for Derby.
- *
- * @version $Revision: 231306 $
  */
 public class DerbyPlatform extends CloudscapePlatform {
 

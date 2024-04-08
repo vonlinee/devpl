@@ -1,12 +1,13 @@
 package org.apache.ddlutils.platform;
 
-
+import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.Const;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.apache.ddlutils.util.Utils;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,7 @@ import java.text.Collator;
 import java.util.*;
 
 /**
- * An utility class to create a Database model from a live database.
+ * utility class to create a Database model from a live database.
  */
 public class JdbcModelReader {
     /**
@@ -492,7 +493,11 @@ public class JdbcModelReader {
      * @return The tables
      */
     protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
-        DatabaseMetaDataWrapper wrapper = createDatabaseMetadataWrapper(_connection, catalog, schemaPattern, tableTypes);
+        DatabaseMetaDataWrapper wrapper = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(_connection, catalog, schemaPattern, tableTypes));
+        wrapper.setMetaData(_connection.getMetaData());
+        wrapper.setCatalog(Utils.withDefaults(catalog, getDefaultCatalogPattern()));
+        wrapper.setSchemaPattern(Utils.withDefaults(schemaPattern, getDefaultSchemaPattern()));
+        wrapper.setTableTypes(Utils.withDefaults(tableTypes, getDefaultTableTypes()));
         try (ResultSet tableData = wrapper.getTables(getDefaultTablePattern())) {
             List<Table> tables = new ArrayList<>();
             while (tableData.next()) {
@@ -512,13 +517,8 @@ public class JdbcModelReader {
         tables.sort((obj1, obj2) -> collator.compare(obj1.getName().toUpperCase(), obj2.getName().toUpperCase()));
     }
 
-    DatabaseMetaDataWrapper createDatabaseMetadataWrapper(Connection connection, String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
-        DatabaseMetaDataWrapper wrapper = new DatabaseMetaDataWrapper();
-        wrapper.setMetaData(connection.getMetaData());
-        wrapper.setCatalog(Utils.withDefaults(catalog, getDefaultCatalogPattern()));
-        wrapper.setSchemaPattern(Utils.withDefaults(schemaPattern, getDefaultSchemaPattern()));
-        wrapper.setTableTypes(Utils.withDefaults(tableTypes, getDefaultTableTypes()));
-        return wrapper;
+    protected DatabaseMetadataReader createDatabaseMetadataReader(Connection connection, String catalog, String schemaPattern, String[] tableTypes) {
+        return new JdbcDatabaseMetadataReader(connection);
     }
 
     /**
@@ -545,7 +545,6 @@ public class JdbcModelReader {
         table.addIndices(readIndices(metaData, tableName));
 
         Collection<String> primaryKeys = readPrimaryKeyNames(metaData, tableName);
-
         for (String primaryKey : primaryKeys) {
             table.findColumn(primaryKey, true).setPrimaryKey(true);
         }
@@ -1040,8 +1039,7 @@ public class JdbcModelReader {
         ResultSet columnData = null;
 
         try {
-            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
-
+            DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper(createDatabaseMetadataReader(connection, null, null, null));
             metaData.setMetaData(connection.getMetaData());
             metaData.setCatalog(getDefaultCatalogPattern());
             metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);

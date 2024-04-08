@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.oracle;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
@@ -9,8 +8,8 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.*;
 import java.util.Collection;

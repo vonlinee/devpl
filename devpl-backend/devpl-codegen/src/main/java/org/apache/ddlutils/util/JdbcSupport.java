@@ -1,6 +1,5 @@
 package org.apache.ddlutils.util;
 
-
 import org.apache.ddlutils.DatabaseOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -17,8 +16,6 @@ import java.util.Set;
  * JdbcSupport is an abstract base class for objects which need to
  * perform JDBC operations. It contains a number of useful methods
  * for implementation inheritance.
- *
- *
  */
 public abstract class JdbcSupport {
     /**

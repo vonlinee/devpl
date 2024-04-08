@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.tools.ant.BuildException;
@@ -9,6 +8,7 @@ import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Task for performing operations on a live database. Sub-tasks e.g. create the
@@ -40,14 +40,12 @@ import java.util.ArrayList;
  * </pre>
  * This Ant build file snippet essentially creates a database, creates tables, foreign keys
  * etc. int it and then writes data into the newly created tables.
- *
- * @ant.task name="ddlToDatabase"
  */
 public class DdlToDatabaseTask extends DatabaseTaskBase {
     /**
      * The input files.
      */
-    private final ArrayList<FileSet> _fileSets = new ArrayList<>();
+    private final List<FileSet> _fileSets = new ArrayList<>();
     /**
      * A single schema file to read.
      */

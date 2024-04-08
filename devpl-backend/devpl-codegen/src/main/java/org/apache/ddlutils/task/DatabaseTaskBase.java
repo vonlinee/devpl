@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Database;
@@ -13,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 /**
  * Base class for DdlUtils Ant tasks that operate on a database.
- *
- * @ant.task ignore="true"
  */
 public abstract class DatabaseTaskBase extends Task {
     /**
@@ -29,7 +26,7 @@ public abstract class DatabaseTaskBase extends Task {
     /**
      * The sub-tasks to execute.
      */
-    private final ArrayList<Command> _commands = new ArrayList<>();
+    private final List<Command> _commands = new ArrayList<>();
     /**
      * The log.
      */
@@ -230,8 +227,8 @@ public abstract class DatabaseTaskBase extends Task {
      *
      * @return The commands
      */
-    protected Iterator<Command> getCommands() {
-        return _commands.iterator();
+    protected List<Command> getCommands() {
+        return _commands;
     }
 
     /**
@@ -267,7 +264,6 @@ public abstract class DatabaseTaskBase extends Task {
             // For Ant, we're forcing DdlUtils to do logging via log4j to the console
             Properties props = new Properties();
             String level = (_verbosity == null ? Level.INFO.toString() : _verbosity.getValue()).toUpperCase();
-
             props.setProperty("log4j.rootCategory", level + ",A");
             props.setProperty("log4j.appender.A", "org.apache.log4j.ConsoleAppender");
             props.setProperty("log4j.appender.A.layout", "org.apache.log4j.PatternLayout");
@@ -287,9 +283,7 @@ public abstract class DatabaseTaskBase extends Task {
      * @param model The database model
      */
     protected void executeCommands(Database model) throws BuildException {
-        for (Iterator<Command> it = getCommands(); it.hasNext(); ) {
-            Command cmd = it.next();
-
+        for (Command cmd : getCommands()) {
             if (cmd.isRequiringModel() && (model == null)) {
                 throw new BuildException("No database model specified");
             }
@@ -303,7 +297,6 @@ public abstract class DatabaseTaskBase extends Task {
     @Override
     public void execute() throws BuildException {
         initLogging();
-
         if (!hasCommands()) {
             _log.info("No sub tasks specified, so there is nothing to do.");
             return;
@@ -313,7 +306,6 @@ public abstract class DatabaseTaskBase extends Task {
         try {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
             AntClassLoader newClassLoader = new AntClassLoader(getClass().getClassLoader(), true);
-
             // we're changing the thread classloader so that we can access resources
             // from the classpath used to load this task's class
             Thread.currentThread().setContextClassLoader(newClassLoader);

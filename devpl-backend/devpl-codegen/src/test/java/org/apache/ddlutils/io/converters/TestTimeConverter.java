@@ -1,6 +1,5 @@
 package org.apache.ddlutils.io.converters;
 
-
 import junit.framework.TestCase;
 
 import java.sql.Time;
@@ -9,8 +8,6 @@ import java.util.Calendar;
 
 /**
  * Tests the {@link TimeConverter}.
- *
- * @version $Revision: 1.0 $
  */
 public class TestTimeConverter extends TestCase {
     /**
@@ -18,13 +15,11 @@ public class TestTimeConverter extends TestCase {
      */
     private TimeConverter _timeConverter;
 
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         _timeConverter = new TimeConverter();
     }
-
 
     @Override
     protected void tearDown() throws Exception {
@@ -45,10 +40,10 @@ public class TestTimeConverter extends TestCase {
         cal.set(Calendar.MINUTE, 15);
         cal.set(Calendar.SECOND, 59);
 
-        Object result = _timeConverter.fromString(textRep, Types.TIME);
+        Time result = _timeConverter.fromString(textRep, Types.TIME);
 
-        assertTrue(result instanceof Time);
-        assertEquals(cal.getTimeInMillis(), ((Time) result).getTime());
+        assertNotNull(result);
+        assertEquals(cal.getTimeInMillis(), result.getTime());
     }
 
     /**
@@ -63,10 +58,10 @@ public class TestTimeConverter extends TestCase {
         cal.set(Calendar.HOUR, 2);
         cal.set(Calendar.MINUTE, 15);
 
-        Object result = _timeConverter.fromString(textRep, Types.TIME);
+        Time result = _timeConverter.fromString(textRep, Types.TIME);
 
-        assertTrue(result instanceof Time);
-        assertEquals(cal.getTimeInMillis(), ((Time) result).getTime());
+        assertNotNull(result);
+        assertEquals(cal.getTimeInMillis(), result.getTime());
     }
 
     /**
@@ -80,10 +75,10 @@ public class TestTimeConverter extends TestCase {
         cal.clear();
         cal.set(Calendar.HOUR, 2);
 
-        Object result = _timeConverter.fromString(textRep, Types.TIME);
+        Time result = _timeConverter.fromString(textRep, Types.TIME);
 
-        assertTrue(result instanceof Time);
-        assertEquals(cal.getTimeInMillis(), ((Time) result).getTime());
+        assertNotNull(result);
+        assertEquals(cal.getTimeInMillis(), result.getTime());
     }
 
     /**
@@ -99,10 +94,10 @@ public class TestTimeConverter extends TestCase {
         cal.set(Calendar.MINUTE, 45);
         cal.set(Calendar.SECOND, 9);
 
-        Object result = _timeConverter.fromString(textRep, Types.TIME);
+        Time result = _timeConverter.fromString(textRep, Types.TIME);
 
-        assertTrue(result instanceof Time);
-        assertEquals(cal.getTimeInMillis(), ((Time) result).getTime());
+        assertNotNull(result);
+        assertEquals(cal.getTimeInMillis(), result.getTime());
     }
 
     /**
@@ -120,8 +115,7 @@ public class TestTimeConverter extends TestCase {
      * Tests converting a null.
      */
     public void testConvertFromStringWithNullTextRep() {
-        String textRep = null;
-        Object result = _timeConverter.fromString(textRep, Types.TIME);
+        Object result = _timeConverter.fromString(null, Types.TIME);
 
         assertNull(result);
     }

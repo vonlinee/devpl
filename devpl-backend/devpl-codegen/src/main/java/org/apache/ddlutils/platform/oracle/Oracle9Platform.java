@@ -1,12 +1,9 @@
 package org.apache.ddlutils.platform.oracle;
 
-
 import java.sql.Types;
 
 /**
  * The platform for Oracle 9.
- *
- * @version $Revision: 231306 $
  */
 public class Oracle9Platform extends Oracle8Platform {
     /**

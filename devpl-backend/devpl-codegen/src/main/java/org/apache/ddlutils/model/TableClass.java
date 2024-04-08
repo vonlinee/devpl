@@ -1,6 +1,4 @@
-package org.apache.ddlutils.dynabean;
-
-import org.apache.ddlutils.model.Table;
+package org.apache.ddlutils.model;
 
 import java.util.ArrayList;
 import java.util.List;

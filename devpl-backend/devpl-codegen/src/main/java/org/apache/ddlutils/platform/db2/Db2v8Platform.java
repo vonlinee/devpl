@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.db2;
 
-
 /**
  * The DB2 platform implementation for DB2 v8 and above.
  */

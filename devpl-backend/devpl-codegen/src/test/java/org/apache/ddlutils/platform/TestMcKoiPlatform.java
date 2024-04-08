@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the McKoi platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestMcKoiPlatform extends TestPlatformBase {
 

@@ -1,9 +1,5 @@
 package org.apache.ddlutils.model;
 
-
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,30 +40,6 @@ public enum CascadeActionEnum {
      */
     NONE("none", 5);
 
-    /**
-     * The integer value for the enum value for a cascade action.
-     */
-    public static final int VALUE_CASCADE = 1;
-    /**
-     * The integer value for the enum value for a set-null action.
-     */
-    public static final int VALUE_SET_NULL = 2;
-    /**
-     * The integer value for the enum value for a set-null action.
-     */
-    public static final int VALUE_SET_DEFAULT = 3;
-    /**
-     * The integer value for the enum value for a restrict action.
-     */
-    public static final int VALUE_RESTRICT = 4;
-    /**
-     * The integer value for the enum value for no-action.
-     */
-    public static final int VALUE_NONE = 5;
-    /**
-     * Version id for this class as relevant for serialization.
-     */
-    private static final long serialVersionUID = -6378050861446415790L;
     private final String defaultTextRep;
     private final int value;
 
@@ -95,40 +67,6 @@ public enum CascadeActionEnum {
                 return item;
             }
         }
-        return null;
-    }
-
-    /**
-     * Returns the enum value that corresponds to the given integer
-     * representation.
-     *
-     * @param intValue The integer value
-     * @return The enum value
-     */
-    public static CascadeActionEnum getEnum(int intValue) {
-        for (CascadeActionEnum item : CascadeActionEnum.values()) {
-            if (Objects.equals(item.value, intValue)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns a list of all enum values.
-     *
-     * @return The list of enum values
-     */
-    public static List<CascadeActionEnum> getEnumList() {
-        return Arrays.asList(values());
-    }
-
-    /**
-     * Returns an iterator of all enum values.
-     *
-     * @return The iterator
-     */
-    public static Iterator<CascadeActionEnum> iterator() {
         return null;
     }
 

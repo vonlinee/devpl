@@ -1,12 +1,11 @@
 package org.apache.ddlutils.platform.interbase;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.*;
 import java.util.*;
@@ -317,7 +316,6 @@ public class InterbaseModelReader extends JdbcModelReader {
 
         try {
             DatabaseMetaDataWrapper metaData = new DatabaseMetaDataWrapper();
-
             metaData.setMetaData(connection.getMetaData());
             metaData.setCatalog(getDefaultCatalogPattern());
             metaData.setSchemaPattern(schemaPattern == null ? getDefaultSchemaPattern() : schemaPattern);

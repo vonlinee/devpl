@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.model.Database;
 import org.apache.tools.ant.BuildException;
@@ -11,8 +10,6 @@ import java.io.FileWriter;
 /**
  * Reads the schema of the live database (as specified in the enclosing task), and writes
  * it as XML to a file.
- *
- * @ant.task name="writeSchemaToFile"
  */
 public class WriteSchemaToFileCommand extends Command {
     /**
@@ -24,7 +21,6 @@ public class WriteSchemaToFileCommand extends Command {
      * Specifies the name of the file to write the schema XML to.
      *
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
@@ -41,7 +37,6 @@ public class WriteSchemaToFileCommand extends Command {
         try {
             FileWriter outputWriter = new FileWriter(_outputFile);
             DatabaseIO dbIO = new DatabaseIO();
-
             dbIO.write(model, outputWriter);
             outputWriter.close();
             _log.info("Written schema to " + _outputFile.getAbsolutePath());

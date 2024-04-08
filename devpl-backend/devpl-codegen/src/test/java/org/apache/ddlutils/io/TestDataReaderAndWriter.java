@@ -1,10 +1,9 @@
 package org.apache.ddlutils.io;
 
-
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.util.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

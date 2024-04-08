@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests the Derby platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestDerbyPlatform extends TestPlatformBase {
 

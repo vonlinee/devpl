@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.interbase;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.Column;
@@ -20,8 +19,6 @@ import java.util.List;
 
 /**
  * The platform implementation for the Interbase database.
- *
- * @version $Revision: 231306 $
  */
 public class InterbasePlatform extends PlatformImplBase {
 

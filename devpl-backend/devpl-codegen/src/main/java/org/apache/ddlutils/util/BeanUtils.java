@@ -1,6 +1,6 @@
 package org.apache.ddlutils.util;
 
-import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.model.TableObject;
 
 import javax.sql.DataSource;
 import java.beans.BeanDescriptor;

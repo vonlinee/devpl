@@ -10,9 +10,6 @@ import java.util.StringTokenizer;
  * Specifies a parameter for the creation of the tables. These are usually platform specific.
  * Note that parameters are only applied when creating new tables, not when altering existing ones.
  * Note also that if no table name is specified, the parameter is used for all created tables.
- *
- * @version $Revision: 231306 $
- * @ant.type name="parameter"
  */
 public class TableSpecificParameter extends Parameter {
     // TODO: Some wildcard/regular expression mechanism would be useful

@@ -5,11 +5,7 @@ import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.model.TypeMap;
+import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.*;
 import org.apache.ddlutils.util.StringUtils;
 
@@ -22,8 +18,6 @@ import java.util.List;
 
 /**
  * The platform implementation for Sybase.
- *
- * @version $Revision: 231306 $
  */
 public class SybasePlatform extends PlatformImplBase {
 

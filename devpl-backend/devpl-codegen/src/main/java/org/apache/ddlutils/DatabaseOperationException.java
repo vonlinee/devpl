@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import java.io.Serial;
 
 /**

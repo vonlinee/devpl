@@ -2,7 +2,6 @@ package org.apache.ddlutils.model;
 
 import junit.framework.TestCase;
 
-
 /**
  * Test case for DDLUTILS-6.
  */
@@ -28,7 +27,7 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     private NonUniqueIndex _nonUniqueIndex;
 
-
+    @Override
     public void setUp() {
         _testedTable = new Table();
 
@@ -54,7 +53,6 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     public void testGetPrimaryKeyColumns() {
         Column[] primaryKeyColumns = _testedTable.getPrimaryKeyColumns();
-
         assertEquals(1, primaryKeyColumns.length);
         assertSame(_column1, primaryKeyColumns[0]);
     }
@@ -64,7 +62,6 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     public void testGetColumns() {
         Column[] columns = _testedTable.getColumns();
-
         assertEquals(2, columns.length);
         assertSame(_column1, columns[0]);
         assertSame(_column2, columns[1]);
@@ -75,7 +72,6 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     public void testGetNonUniqueIndices() {
         Index[] nonUniqueIndices = _testedTable.getNonUniqueIndices();
-
         assertEquals(1, nonUniqueIndices.length);
         assertSame(_nonUniqueIndex, nonUniqueIndices[0]);
     }
@@ -85,7 +81,6 @@ public class TestArrayAccessAtTable extends TestCase {
      */
     public void testGetUniqueIndices() {
         Index[] uniqueIndices = _testedTable.getUniqueIndices();
-
         assertEquals(1, uniqueIndices.length);
         assertSame(_uniqueIndex, uniqueIndices[0]);
     }

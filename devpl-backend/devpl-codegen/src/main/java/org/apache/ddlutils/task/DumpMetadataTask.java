@@ -1,19 +1,14 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.PrettyPrintingXmlWriter;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.util.JdbcUtils;
 import org.apache.ddlutils.util.ListOrderedSet;
-import org.apache.ddlutils.util.Utils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
@@ -21,8 +16,6 @@ import java.util.*;
 
 /**
  * A simple helper task that dumps information about a database using JDBC.
- *
- * @ant.task name="dumpMetadata"
  */
 public class DumpMetadataTask extends Task {
     /**
@@ -88,7 +81,6 @@ public class DumpMetadataTask extends Task {
      * Specifies the output file to which the database metadata is written to.
      *
      * @param outputFile The output file
-     * @ant.required
      */
     public void setOutputFile(File outputFile) {
         _outputFile = outputFile;
@@ -161,14 +153,12 @@ public class DumpMetadataTask extends Task {
      *                   By default, all types of tables are read.
      */
     public void setTableTypes(String tableTypes) {
-        ArrayList<String> types = new ArrayList<>();
+        List<String> types = new ArrayList<>();
 
         if (tableTypes != null) {
             StringTokenizer tokenizer = new StringTokenizer(tableTypes, ",");
-
             while (tokenizer.hasMoreTokens()) {
                 String token = tokenizer.nextToken().trim();
-
                 if (!token.isEmpty()) {
                     types.add(token);
                 }
@@ -203,7 +193,6 @@ public class DumpMetadataTask extends Task {
             log("No data source specified, so there is nothing to do.", Project.MSG_INFO);
             return;
         }
-
         OutputStream output = System.out;
         if (_outputFile != null) {
             try {
@@ -218,15 +207,16 @@ public class DumpMetadataTask extends Task {
             xmlWriter.writeDocumentStart();
             xmlWriter.writeElementStart(null, "metadata");
             xmlWriter.writeAttribute(null, "driverClassName", _dataSource.getDriverClassName());
-
             dumpMetaData(xmlWriter, connection.getMetaData());
-
             xmlWriter.writeDocumentEnd();
         } catch (Exception ex) {
             throw new BuildException(ex);
         } finally {
             if (_outputFile != null && output != null) {
-                Utils.closeQuietly(output);
+                try {
+                    output.close();
+                } catch (IOException ignored) {
+                }
             }
         }
     }
@@ -242,7 +232,6 @@ public class DumpMetadataTask extends Task {
         // do not follow the bean naming standard
         Method[] methods = metaData.getClass().getMethods();
         Set<String> filtered = new HashSet<>(Arrays.asList(IGNORED_PROPERTY_METHODS));
-
         for (Method method : methods) {
             // only no-arg methods that return something and that are not defined in Object
             // we also filter certain methods
@@ -303,11 +292,9 @@ public class DumpMetadataTask extends Task {
      */
     private void addArrayProperty(PrettyPrintingXmlWriter xmlWriter, String name, Object[] values) {
         String propName = name;
-
         if (propName.endsWith("s")) {
             propName = propName.substring(0, propName.length() - 1);
         }
-
         xmlWriter.writeElementStart(null, propName + "s");
         for (Object value : values) {
             addProperty(xmlWriter, "value", value);
@@ -331,7 +318,6 @@ public class DumpMetadataTask extends Task {
 
         try {
             ResultSetMetaData metaData = result.getMetaData();
-
             xmlWriter.writeElementStart(null, propName + "s");
             try {
                 while (result.next()) {
@@ -388,7 +374,6 @@ public class DumpMetadataTask extends Task {
         ResultSet result = null;
         try {
             result = op.getResultSet();
-
             if (name != null) {
                 xmlWriter.writeElementStart(null, name);
             }

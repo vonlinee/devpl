@@ -3,8 +3,6 @@ package org.apache.ddlutils.platform.oracle;
 
 /**
  * The platform for Oracle 10.
- *
- * @version $Revision: 231306 $
  */
 public class Oracle10Platform extends Oracle9Platform {
     /**

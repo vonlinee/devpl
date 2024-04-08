@@ -2,9 +2,9 @@ package org.apache.ddlutils;
 
 
 import org.apache.ddlutils.alteration.ModelChange;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.*;
 import org.apache.ddlutils.util.PojoMap;
 
@@ -16,8 +16,6 @@ import java.util.List;
 /**
  * A platform encapsulates the database-related functionality such as performing queries
  * and manipulations. It also contains a sql builder that is specific to this platform.
- *
- * @version $Revision: 231110 $
  */
 public interface Platform {
     /**

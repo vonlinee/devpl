@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.util.BeanUtils;
 import org.apache.ddlutils.util.Utils;
@@ -77,7 +76,6 @@ public class TestSummaryCreatorTask extends Task {
      */
     private List<File> getInputFiles() {
         List<File> result = new ArrayList<>();
-
         for (FileSet fileSet : _fileSets) {
             File fileSetDir = fileSet.getDir(getProject());
             DirectoryScanner scanner = fileSet.getDirectoryScanner(getProject());
@@ -85,7 +83,6 @@ public class TestSummaryCreatorTask extends Task {
 
             for (int idx = 0; (files != null) && (idx < files.length); idx++) {
                 File file = new File(fileSetDir, files[idx]);
-
                 if (file.isFile() && file.canRead()) {
                     result.add(file);
                 }
@@ -101,9 +98,7 @@ public class TestSummaryCreatorTask extends Task {
      */
     private Document processInputFiles() throws IOException {
         Document summaryDoc = DocumentHelper.createDocument();
-
         summaryDoc.addElement("summary");
-
         for (File file : getInputFiles()) {
             processInputFile(summaryDoc, file);
         }

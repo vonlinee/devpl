@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import junit.framework.Test;
 import org.apache.ddlutils.model.Database;
 

@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.oracle;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;

@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.mysql;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -14,8 +13,6 @@ import java.sql.Types;
 
 /**
  * The platform implementation for MySQL.
- *
- * @version $Revision: 231306 $
  */
 public class MySqlPlatform extends PlatformImplBase {
 

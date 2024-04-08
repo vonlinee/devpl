@@ -1,6 +1,5 @@
 package org.apache.ddlutils.io;
 
-
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 

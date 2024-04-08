@@ -13,8 +13,6 @@ import java.sql.*;
 
 /**
  * The platform for the Axion database.
- *
- * @version $Revision: 231306 $
  */
 public class AxionPlatform extends PlatformImplBase {
     /**

@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the Interbase platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestInterbasePlatform extends TestPlatformBase {
 

@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the MaxDB platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestMaxDbPlatform extends TestPlatformBase {
 

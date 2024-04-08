@@ -19,8 +19,6 @@ import java.util.Collection;
 
 /**
  * The platform implementation for the Microsoft SQL Server database.
- *
- * @version $Revision: 231306 $
  */
 public class MSSqlPlatform extends PlatformImplBase {
 

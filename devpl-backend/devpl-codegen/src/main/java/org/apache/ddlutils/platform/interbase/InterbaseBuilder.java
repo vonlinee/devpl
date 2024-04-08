@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.interbase;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
@@ -14,8 +13,6 @@ import java.sql.Types;
 
 /**
  * The SQL Builder for the Interbase database.
- *
- * @version $Revision: 231306 $
  */
 public class InterbaseBuilder extends SqlBuilder {
     /**
@@ -34,7 +31,6 @@ public class InterbaseBuilder extends SqlBuilder {
 
         // creating generator and trigger for auto-increment
         Column[] columns = table.getAutoIncrementColumns();
-
         for (Column column : columns) {
             writeAutoIncrementCreateStmts(database, table, column);
         }
@@ -53,7 +49,6 @@ public class InterbaseBuilder extends SqlBuilder {
     public void dropTable(Table table) throws IOException {
         // dropping generators for auto-increment
         Column[] columns = table.getAutoIncrementColumns();
-
         for (Column column : columns) {
             writeAutoIncrementDropStmts(table, column);
         }

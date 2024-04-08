@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.mssql;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;

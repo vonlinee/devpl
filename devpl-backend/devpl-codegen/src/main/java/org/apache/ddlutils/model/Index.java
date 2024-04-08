@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 /**
  * Represents an index definition for a table which may be either unique or non-unique.
- *
- *
  */
 public interface Index extends Serializable {
     /**

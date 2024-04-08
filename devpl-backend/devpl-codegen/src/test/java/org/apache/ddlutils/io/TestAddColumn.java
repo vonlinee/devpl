@@ -1,9 +1,8 @@
 package org.apache.ddlutils.io;
 
-
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 
 import java.math.BigDecimal;
@@ -105,12 +104,12 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "avalue");
         } else {
-            Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+            Object avalue = beans.get(0).getColumnValue("avalue");
 
             assertTrue((avalue == null) || Objects.equals(1, avalue));
         }
@@ -150,9 +149,9 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue1 = ((TableObject) beans.get(0)).getColumnValue("avalue1");
-        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue1 = beans.get(0).getColumnValue("avalue1");
+        Object avalue2 = beans.get(0).getColumnValue("avalue2");
 
         assertTrue((avalue1 == null) || Objects.equals(1, avalue1));
         assertTrue((avalue2 == null) || Objects.equals(1, avalue2));
@@ -186,7 +185,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals(new BigDecimal(2), beans.get(0), "avalue");
     }
@@ -272,12 +271,12 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "avalue");
         } else {
-            Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+            Object avalue = beans.get(0).getColumnValue("avalue");
 
             assertTrue((avalue == null) || Objects.equals(1, avalue));
         }
@@ -311,8 +310,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue = beans.get(0).getColumnValue("avalue");
 
         assertTrue((avalue == null) || "sometext".equals(avalue));
     }
@@ -350,8 +349,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue3 = ((TableObject) beans.get(0)).getColumnValue("avalue3");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue3 = beans.get(0).getColumnValue("avalue3");
 
         assertEquals((Object) "test", beans.get(0), "avalue1");
         assertEquals((3), beans.get(0), "avalue2");
@@ -387,7 +386,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             // Mckoi uses null to initialize the new pk column
@@ -485,7 +484,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((Object) null, beans.get(0), "pk1");
@@ -527,7 +526,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((Object) null, beans.get(0), "pk1");
@@ -573,7 +572,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), beans.get(0), "pk1");
@@ -615,7 +614,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), beans.get(0), "pk1");
@@ -676,10 +675,10 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
-        assertEquals((-1), ((TableObject) beans.get(0)).getColumnValue("pk1"));
-        assertEquals((2), ((TableObject) beans.get(0)).getColumnValue("avalue"));
+        assertEquals((-1), beans.get(0).getColumnValue("pk1"));
+        assertEquals((2), beans.get(0).getColumnValue("avalue"));
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "pk2");
         } else {
@@ -718,7 +717,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), beans.get(0), "pk1");
@@ -765,7 +764,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), beans.get(0), "pk1");
@@ -812,7 +811,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), beans.get(0), "pk1");
@@ -859,7 +858,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((Object) null, beans.get(0), "avalue");
     }
@@ -899,8 +898,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue = beans.get(0).getColumnValue("avalue");
 
         assertTrue((avalue == null) || Objects.equals(1, avalue));
     }
@@ -940,7 +939,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -980,8 +979,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue = beans.get(0).getColumnValue("avalue");
 
         assertTrue((avalue == null) || Double.valueOf(2).equals(avalue));
     }
@@ -1021,7 +1020,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((1), beans.get(0), "pk");
         assertEquals((1), beans.get(0), "avalue");
@@ -1062,7 +1061,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((Object) "sometext", beans.get(0), "avalue");
     }
@@ -1104,7 +1103,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1146,7 +1145,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((Object) null, beans.get(0), "avalue");
     }
@@ -1186,8 +1185,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue = beans.get(0).getColumnValue("avalue");
 
         assertTrue((avalue == null) || Objects.equals(1, avalue));
     }
@@ -1227,7 +1226,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1267,8 +1266,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue = beans.get(0).getColumnValue("avalue");
 
         assertTrue((avalue == null) || Double.valueOf(2).equals(avalue));
     }
@@ -1308,14 +1307,14 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((1), beans.get(0), "pk");
         assertEquals((1), beans.get(0), "avalue");
     }
 
     /**
-     * Tests the addition of an unique index and a required column with a default value.
+     * Tests the addition of a unique index and a required column with a default value.
      */
     public void testAddUniqueIndexAndRequiredColumnWithDefault() {
         if (!getPlatformInfo().isIndicesSupported()) {
@@ -1349,7 +1348,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((Object) "sometext", beans.get(0), "avalue");
     }
@@ -1392,7 +1391,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1434,7 +1433,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1480,7 +1479,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertEquals((Object) null, beans.get(0), "avalue2");
@@ -1527,8 +1526,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue2 = beans.get(0).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertTrue((avalue2 == null) || Objects.equals(1, avalue2));
@@ -1575,7 +1574,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1621,8 +1620,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue2 = beans.get(0).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertTrue((avalue2 == null) || Double.valueOf(2).equals(avalue2));
@@ -1669,7 +1668,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((1), beans.get(0), "pk");
         assertEquals((2), beans.get(0), "avalue1");
@@ -1717,7 +1716,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertEquals((Object) "sometext", beans.get(0), "avalue2");
@@ -1766,7 +1765,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1813,7 +1812,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertEquals((Object) null, beans.get(0), "avalue2");
@@ -1860,8 +1859,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue2 = beans.get(0).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertTrue((avalue2 == null) || Objects.equals(1, avalue2));
@@ -1908,7 +1907,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -1954,8 +1953,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
-        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans = getRows("roundtrip");
+        Object avalue2 = beans.get(0).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertTrue((avalue2 == null) || Double.valueOf(2).equals(avalue2));
@@ -2002,7 +2001,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((1), beans.get(0), "pk");
         assertEquals((2), beans.get(0), "avalue1");
@@ -2050,7 +2049,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertEquals((2), beans.get(0), "avalue1");
         assertEquals((Object) "sometext", beans.get(0), "avalue2");
@@ -2100,7 +2099,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -2148,7 +2147,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans = getRows("roundtrip");
+        List<TableObject> beans = getRows("roundtrip");
 
         assertTrue(beans.isEmpty());
     }
@@ -2191,8 +2190,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((Object) "text", beans1.get(0), "pk");
         assertEquals((1), beans2.get(0), "pk");
@@ -2241,9 +2240,9 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
-        Object avalue = ((TableObject) beans2.get(0)).getColumnValue("avalue");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
+        Object avalue = beans2.get(0).getColumnValue("avalue");
 
         assertEquals((1), beans1.get(0), "pk");
         assertEquals((2), beans2.get(0), "pk");
@@ -2294,8 +2293,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals(new BigDecimal(1), beans1.get(0), "pk");
         assertTrue(beans2.isEmpty());
@@ -2339,9 +2338,9 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
-        Object avalue = ((TableObject) beans2.get(0)).getColumnValue("avalue");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
+        Object avalue = beans2.get(0).getColumnValue("avalue");
 
         assertEquals(1.0, beans1.get(0), "pk");
         assertEquals((2), beans2.get(0), "pk");
@@ -2390,8 +2389,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((1), beans1.get(0), "pk");
         assertEquals((2), beans2.get(0), "pk");
@@ -2436,8 +2435,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((Object) "moretext", beans1.get(0), "pk");
         assertEquals((1), beans2.get(0), "pk");
@@ -2492,8 +2491,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals(2.0, beans1.get(0), "pk2");
@@ -2582,8 +2581,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((1), beans1.get(0), "pk");
         assertEquals((2), beans1.get(0), "avalue");
@@ -2631,8 +2630,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals(1.0, beans1.get(0), "pk");
         assertEquals((2), beans1.get(0), "avalue");
@@ -2774,9 +2773,9 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
-        Object avalue2 = ((TableObject) beans2.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
+        Object avalue2 = beans2.get(0).getColumnValue("avalue2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals((1), beans1.get(0), "pk2");
@@ -2871,9 +2870,9 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         alterDatabase(model2Xml);
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
-        Object avalue2 = ((TableObject) beans2.get(0)).getColumnValue("avalue2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
+        Object avalue2 = beans2.get(0).getColumnValue("avalue2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals(2.0, beans1.get(0), "pk2");
@@ -2931,8 +2930,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals((1), beans1.get(0), "pk2");
@@ -2984,8 +2983,8 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         alterDatabase(model2Xml);
 
-        List beans1 = getRows("roundtrip1");
-        List beans2 = getRows("roundtrip2");
+        List<TableObject> beans1 = getRows("roundtrip1");
+        List<TableObject> beans2 = getRows("roundtrip2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals((Object) "sometext", beans1.get(0), "pk2");

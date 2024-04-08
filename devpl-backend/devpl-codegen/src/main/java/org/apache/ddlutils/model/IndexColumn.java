@@ -9,8 +9,6 @@ import java.util.Objects;
 
 /**
  * Represents a column of an index in the database model.
- *
- *
  */
 public class IndexColumn extends SchemaObject implements Serializable {
     /**

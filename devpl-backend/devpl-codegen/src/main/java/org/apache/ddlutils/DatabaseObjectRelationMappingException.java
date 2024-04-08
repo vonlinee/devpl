@@ -1,6 +1,4 @@
-package org.apache.ddlutils.dynabean;
-
-import org.apache.ddlutils.DdlUtilsException;
+package org.apache.ddlutils;
 
 import java.io.Serial;
 

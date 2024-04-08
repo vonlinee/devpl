@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.util.ListOrderedSet;
 
 import java.util.Iterator;

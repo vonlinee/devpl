@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.CloneHelper;
@@ -11,8 +10,6 @@ import org.apache.tools.ant.BuildException;
 
 /**
  * Sub task for dropping tables.
- *
- * @ant.task name="dropTables"
  */
 public class DropTablesCommand extends DatabaseCommand {
     /**

@@ -15,8 +15,6 @@ import java.sql.Types;
 
 /**
  * The SapDB platform implementation.
- *
- * @version $Revision: 231306 $
  */
 public class SapDbPlatform extends PlatformImplBase {
 

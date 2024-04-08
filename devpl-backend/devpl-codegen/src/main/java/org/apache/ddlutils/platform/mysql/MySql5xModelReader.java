@@ -1,11 +1,9 @@
 package org.apache.ddlutils.platform.mysql;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
-import org.apache.ddlutils.util.CollectionUtils;
 import org.apache.ddlutils.util.PojoMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -58,16 +56,18 @@ public class MySql5xModelReader extends MySqlModelReader {
     protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
         Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);
 
-        if (CollectionUtils.isEmpty(tables)) {
+        if (tableTypes == null || tableTypes.length == 0) {
             return tables;
         }
 
         StringBuilder sb = new StringBuilder();
-        Set<String> wrappedDbNames = CollectionUtils.toSet(tables, table -> {
+
+        HashSet<String> wrappedDbNames = new HashSet<>();
+        for (Table table : tables) {
             sb.setLength(0);
             sb.append("'").append(table.getCatalog()).append("'");
-            return sb.toString();
-        });
+            wrappedDbNames.add(sb.toString());
+        }
 
         String schemaNameInCondition = wrappedDbNames.stream().collect(Collectors.joining(",", "(", ")"));
 
@@ -77,7 +77,7 @@ public class MySql5xModelReader extends MySqlModelReader {
          */
         Map<String, String> tableRemarkMap = getTableRemarks(schemaNameInCondition);
 
-        if (!CollectionUtils.isEmpty(tableRemarkMap)) {
+        if (!tableRemarkMap.isEmpty()) {
             for (Table table : tables) {
                 table.setDescription(tableRemarkMap.get(table.getName()));
             }

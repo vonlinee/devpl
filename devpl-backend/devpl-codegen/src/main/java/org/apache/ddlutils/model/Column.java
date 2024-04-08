@@ -13,8 +13,6 @@ import java.sql.Types;
 
 /**
  * Represents a column in the database model.
- *
- *
  */
 public class Column extends SchemaObject {
     /**

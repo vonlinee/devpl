@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.maxdb;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.ForeignKey;

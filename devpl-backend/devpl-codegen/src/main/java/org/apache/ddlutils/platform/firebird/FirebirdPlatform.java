@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.firebird;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.model.CascadeActionEnum;
@@ -18,8 +17,6 @@ import java.util.Set;
 /**
  * The platform implementation for the Firebird database.
  * It is assumed that the database is configured with sql dialect 3!
- *
- * @version $Revision: 231306 $
  */
 public class FirebirdPlatform extends PlatformImplBase {
 

@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests the Axion platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestAxionPlatform extends TestPlatformBase {
 

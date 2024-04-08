@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the Oracle 8 platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestOracle8Platform extends TestPlatformBase {
 

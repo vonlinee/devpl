@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.firebird;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
@@ -12,8 +11,6 @@ import java.sql.Types;
 
 /**
  * The SQL Builder for the FireBird database.
- *
- * @version $Revision: 231306 $
  */
 public class FirebirdBuilder extends SqlBuilder {
     /**

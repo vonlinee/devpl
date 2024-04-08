@@ -1,11 +1,10 @@
 package org.apache.ddlutils.task;
 
-
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.io.DataSink;
 import org.apache.ddlutils.io.DataSinkException;
+import org.apache.ddlutils.model.TableClass;
+import org.apache.ddlutils.model.TableObject;
 import org.junit.Test;
 
 import java.io.File;

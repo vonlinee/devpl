@@ -1,9 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.dynabean.TableClassCache;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
-import org.apache.ddlutils.dynabean.DatabaseObjectRelationMappingException;
+import org.apache.ddlutils.DatabaseObjectRelationMappingException;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serial;
@@ -17,8 +14,6 @@ import java.util.regex.PatternSyntaxException;
  * Represents the database model, i.e. the tables in the database. It also
  * contains the corresponding dyna classes for creating dyna beans for the
  * objects stored in the tables.
- *
- *
  */
 public class Database extends SchemaObject implements Serializable {
     /**
@@ -67,7 +62,6 @@ public class Database extends SchemaObject implements Serializable {
      */
     public void mergeWith(Database otherDb) throws ModelException {
         CloneHelper cloneHelper = new CloneHelper();
-
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
             Table table = otherDb.getTable(tableIdx);
 
@@ -81,10 +75,8 @@ public class Database extends SchemaObject implements Serializable {
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
             Table otherTable = otherDb.getTable(tableIdx);
             Table localTable = findTable(otherTable.getName());
-
             for (int fkIdx = 0; fkIdx < otherTable.getForeignKeyCount(); fkIdx++) {
                 ForeignKey fk = otherTable.getForeignKey(fkIdx);
-
                 localTable.addForeignKey(cloneHelper.clone(fk, localTable, this, false));
             }
         }

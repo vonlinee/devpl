@@ -1,14 +1,11 @@
 package org.apache.ddlutils.platform.mysql;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.platform.DBType;
 import org.apache.ddlutils.platform.DBTypeEnum;
 
 /**
  * The platform implementation for MySQL 5 and above.
- *
- * @version $Revision: 231306 $
  */
 public class MySql5xPlatform extends MySqlPlatform {
 

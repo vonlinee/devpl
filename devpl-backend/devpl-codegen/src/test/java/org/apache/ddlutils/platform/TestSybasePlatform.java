@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the Sybase platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestSybasePlatform extends TestPlatformBase {
 

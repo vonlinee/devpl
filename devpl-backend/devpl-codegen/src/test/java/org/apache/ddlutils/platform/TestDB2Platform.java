@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the DB2 platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestDB2Platform extends TestPlatformBase {
 

@@ -5,8 +5,6 @@ import org.apache.ddlutils.TestPlatformBase;
 
 /**
  * Tests the Cloudscape platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestCloudscapePlatform extends TestPlatformBase {
 

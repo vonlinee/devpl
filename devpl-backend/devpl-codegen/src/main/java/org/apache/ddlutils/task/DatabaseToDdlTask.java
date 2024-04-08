@@ -7,6 +7,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.tools.ant.BuildException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -34,8 +35,6 @@ import java.util.StringTokenizer;
  * &lt;/databaseToDdl&gt;
  * </pre>
  * This reads the schema and data from the database and writes them to XML files.
- *
- * @ant.task name="databaseToDdl"
  */
 public class DatabaseToDdlTask extends DatabaseTaskBase {
     /**
@@ -201,7 +200,7 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
         }
 
         StringTokenizer tokenizer = new StringTokenizer(_tableTypes, ",");
-        ArrayList<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
 
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken().trim();

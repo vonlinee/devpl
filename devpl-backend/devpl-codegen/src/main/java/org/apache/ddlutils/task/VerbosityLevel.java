@@ -1,13 +1,10 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.slf4j.event.Level;
 
 /**
  * Helper class that defines the possible values for the verbosity attribute.
- *
- * @ant.task ignore="true"
  */
 public class VerbosityLevel extends EnumeratedAttribute {
     /**

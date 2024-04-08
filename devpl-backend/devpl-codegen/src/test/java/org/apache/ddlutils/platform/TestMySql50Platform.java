@@ -1,11 +1,10 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableObject;
 import org.apache.ddlutils.platform.mysql.MySql5xModelReader;
 import org.apache.ddlutils.platform.mysql.MySql5xPlatform;
 import org.apache.ddlutils.util.PojoMap;
@@ -19,8 +18,6 @@ import java.util.List;
 
 /**
  * Tests the MySQL platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 

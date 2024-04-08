@@ -1,6 +1,5 @@
 package org.apache.ddlutils.model;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 
 /**

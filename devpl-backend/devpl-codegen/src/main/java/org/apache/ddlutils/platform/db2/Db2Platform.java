@@ -15,8 +15,6 @@ import java.sql.Types;
 
 /**
  * The DB2 platform implementation.
- *
- * @version $Revision: 231306 $
  */
 public class Db2Platform extends PlatformImplBase {
     /**

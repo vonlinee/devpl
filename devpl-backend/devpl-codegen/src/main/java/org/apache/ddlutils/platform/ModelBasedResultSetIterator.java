@@ -1,13 +1,7 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.DatabaseOperationException;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
-import org.apache.ddlutils.dynabean.ColumnProperty;
-import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.ListOrderedMap;
 import org.apache.ddlutils.util.Utils;
 

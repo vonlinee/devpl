@@ -1,13 +1,11 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestPlatformBase;
 import org.apache.ddlutils.model.Database;
+import org.junit.Test;
 
 /**
  * Tests the MySQL platform.
- *
- * @version $Revision: 231110 $
  */
 public class TestMySqlPlatform extends TestPlatformBase {
 
@@ -19,6 +17,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
     /**
      * Tests the column types.
      */
+    @Test
     public void testColumnTypes() throws Exception {
         assertEqualsIgnoringWhitespaces(
             """
@@ -64,6 +63,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
     /**
      * Tests the column constraints.
      */
+    @Test
     public void testColumnConstraints() throws Exception {
         // MySql-specfic schema
         final String schema =
@@ -101,6 +101,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
     /**
      * Tests the table constraints.
      */
+    @Test
     public void testTableConstraints() throws Exception {
         assertEqualsIgnoringWhitespaces(
             """
@@ -142,6 +143,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
     /**
      * Tests the usage of creation parameters.
      */
+    @Test
     public void testCreationParameters1() throws Exception {
         // MySql-specfic schema
         final String schema =
@@ -191,6 +193,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
     /**
      * Tests the proper escaping of character sequences where MySQL requires it.
      */
+    @Test
     public void testCharacterEscaping() throws Exception {
         // MySql-specific schema
         final String schema =

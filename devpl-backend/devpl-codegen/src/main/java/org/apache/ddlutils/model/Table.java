@@ -1,6 +1,5 @@
 package org.apache.ddlutils.model;
 
-
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serial;
@@ -12,8 +11,6 @@ import java.util.Objects;
 
 /**
  * Represents a table in the database model.
- *
- *
  */
 public class Table extends SchemaObject {
     /**

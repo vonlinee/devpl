@@ -4,14 +4,10 @@ package org.apache.ddlutils.platform.postgresql;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.ColumnProperty;
-import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.*;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.JdbcUtils;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 import java.sql.*;
@@ -19,8 +15,6 @@ import java.util.Map;
 
 /**
  * The platform implementation for PostgresSql.
- *
- * @version $Revision: 231306 $
  */
 public class PostgreSqlPlatform extends PlatformImplBase {
 

@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.tools.ant.Project;

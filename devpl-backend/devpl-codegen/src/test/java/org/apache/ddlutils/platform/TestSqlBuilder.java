@@ -1,9 +1,9 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +17,7 @@ public class TestSqlBuilder extends TestBase {
     /**
      * Tests the {@link SqlBuilder#getUpdateSql(Table, Map, boolean)} method.
      */
+    @Test
     public void testUpdateSql1() {
         final String modelXml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
@@ -33,7 +34,7 @@ public class TestSqlBuilder extends TestBase {
         Map<String, Object> map = new HashMap<>();
 
         map.put("name", "ddlutils");
-        map.put("id", (0));
+        map.put("id", 0);
 
         platform.setDelimitedIdentifierModeOn(true);
 
@@ -45,6 +46,7 @@ public class TestSqlBuilder extends TestBase {
     /**
      * Tests the {@link SqlBuilder#getUpdateSql(Table, Map, Map, boolean)} method.
      */
+    @Test
     public void testUpdateSql2() {
         final String modelXml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
@@ -61,10 +63,10 @@ public class TestSqlBuilder extends TestBase {
         Map<String, Object> oldMap = new HashMap<>();
         Map<String, Object> newMap = new HashMap<>();
 
-        oldMap.put("id", (0));
+        oldMap.put("id", 0);
 
         newMap.put("name", "ddlutils");
-        newMap.put("id", (1));
+        newMap.put("id", 1);
 
         platform.setDelimitedIdentifierModeOn(true);
 

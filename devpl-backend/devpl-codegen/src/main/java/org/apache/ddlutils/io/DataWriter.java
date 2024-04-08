@@ -1,11 +1,11 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.TableObject;
-import org.apache.ddlutils.dynabean.TableClass;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.model.TableClass;
+import org.apache.ddlutils.model.TableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

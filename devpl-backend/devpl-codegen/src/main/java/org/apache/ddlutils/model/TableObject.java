@@ -1,4 +1,4 @@
-package org.apache.ddlutils.dynabean;
+package org.apache.ddlutils.model;
 
 import org.apache.ddlutils.util.PojoMap;
 

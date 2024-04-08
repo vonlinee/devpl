@@ -3,7 +3,6 @@ package org.apache.ddlutils.io;
 
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.Platform;
-import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

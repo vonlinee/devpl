@@ -11,8 +11,6 @@ import java.net.URL;
 /**
  * An entity resolver that matches the specific database dtds to the one that comes
  * with DdlUtils, and that can handle file url.
- *
- *
  */
 public class LocalEntityResolver implements EntityResolver {
     /**

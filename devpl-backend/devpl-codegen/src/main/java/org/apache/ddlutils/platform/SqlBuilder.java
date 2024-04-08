@@ -4,8 +4,8 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -876,7 +876,6 @@ public abstract class SqlBuilder {
         addSep = false;
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
             if (oldColumnValues.containsKey(column.getName())) {
                 if (addSep) {
                     buffer.append(" AND ");
@@ -1684,12 +1683,12 @@ public abstract class SqlBuilder {
         }
         if (action != getPlatformInfo().getDefaultOnDeleteAction()) {
             print(" ON DELETE ");
-            switch (action.getValue()) {
-                case CascadeActionEnum.VALUE_CASCADE -> print("CASCADE");
-                case CascadeActionEnum.VALUE_SET_NULL -> print("SET NULL");
-                case CascadeActionEnum.VALUE_SET_DEFAULT -> print("SET DEFAULT");
-                case CascadeActionEnum.VALUE_RESTRICT -> print("RESTRICT");
-                case CascadeActionEnum.VALUE_NONE -> print("NO ACTION");
+            switch (action) {
+                case CASCADE -> print("CASCADE");
+                case SET_NULL -> print("SET NULL");
+                case SET_DEFAULT -> print("SET DEFAULT");
+                case RESTRICT -> print("RESTRICT");
+                case NONE -> print("NO ACTION");
                 default ->
                     throw new ModelException("Unsupported cascade value '" + action + "' for onDelete in foreign key in table " + table.getName());
             }
@@ -1704,7 +1703,6 @@ public abstract class SqlBuilder {
      */
     protected void writeForeignKeyOnUpdateAction(Table table, ForeignKey foreignKey) throws IOException {
         CascadeActionEnum action = foreignKey.getOnUpdate();
-
         if (!getPlatformInfo().isActionSupportedForOnUpdate(action)) {
             if (getPlatform().isDefaultOnUpdateActionUsedIfUnsupported()) {
                 _log.info("The platform does not support the " + action + " action for onUpdate; using " + getPlatformInfo().getDefaultOnUpdateAction() + " instead");
@@ -1715,21 +1713,17 @@ public abstract class SqlBuilder {
         }
         if (action != getPlatformInfo().getDefaultOnUpdateAction()) {
             print(" ON UPDATE ");
-            switch (action.getValue()) {
-                case CascadeActionEnum.VALUE_CASCADE -> print("CASCADE");
-                case CascadeActionEnum.VALUE_SET_NULL -> print("SET NULL");
-                case CascadeActionEnum.VALUE_SET_DEFAULT -> print("SET DEFAULT");
-                case CascadeActionEnum.VALUE_RESTRICT -> print("RESTRICT");
-                case CascadeActionEnum.VALUE_NONE -> print("NO ACTION");
+            switch (action) {
+                case CASCADE -> print("CASCADE");
+                case SET_NULL -> print("SET NULL");
+                case SET_DEFAULT -> print("SET DEFAULT");
+                case RESTRICT -> print("RESTRICT");
+                case NONE -> print("NO ACTION");
                 default ->
                     throw new ModelException("Unsupported cascade value '" + action + "' for onUpdate in foreign key in table " + table.getName());
             }
         }
     }
-
-    //
-    // Helper methods
-    //
 
     /**
      * Prints an SQL comment to the current stream.

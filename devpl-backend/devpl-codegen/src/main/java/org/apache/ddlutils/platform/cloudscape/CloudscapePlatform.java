@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.cloudscape;
 
-
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.platform.DBType;
 import org.apache.ddlutils.platform.DBTypeEnum;
@@ -10,8 +9,6 @@ import java.sql.Types;
 
 /**
  * The Cloudscape platform implementation.
- *
- * @version $Revision: 231306 $
  */
 public class CloudscapePlatform extends PlatformImplBase {
 

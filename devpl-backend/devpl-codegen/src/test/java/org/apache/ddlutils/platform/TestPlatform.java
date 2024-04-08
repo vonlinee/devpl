@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform;
 
-
 /**
  * Platform implementation that makes the base functionality available without
  * overriding anything.
@@ -16,11 +15,6 @@ public class TestPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return new DBType() {
-            @Override
-            public String getName() {
-                return "TestPlatform";
-            }
-        };
+        return () -> "TestPlatform";
     }
 }

@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.model.Database;
@@ -11,6 +10,7 @@ import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Inserts the data defined by the data XML file(s) into the database. This requires the schema
@@ -24,14 +24,12 @@ import java.util.ArrayList;
  * simply use some unique values for their columns. DdlUtils then will automatically use the real
  * primary key values when inserting the data. Note though that not every database supports the
  * retrieval of auto-increment values which is necessary for this to work.
- *
- * @ant.task name="writeDataToDatabase"
  */
 public class WriteDataToDatabaseCommand extends ConvertingDatabaseCommand {
     /**
      * The input files.
      */
-    private final ArrayList<FileSet> _fileSets = new ArrayList<>();
+    private final List<FileSet> _fileSets = new ArrayList<>();
     /**
      * A single data file to insert.
      */

@@ -1,6 +1,6 @@
-package org.apache.ddlutils.dynabean;
+package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.DatabaseObjectRelationMappingException;
 import org.apache.ddlutils.util.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
