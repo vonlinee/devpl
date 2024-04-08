@@ -5,7 +5,7 @@ import org.apache.ddlutils.Const;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.apache.ddlutils.util.Utils;
@@ -496,7 +496,7 @@ public class JdbcModelReader {
         try (ResultSet tableData = wrapper.getTables(getDefaultTablePattern())) {
             List<Table> tables = new ArrayList<>();
             while (tableData.next()) {
-                ContextMap values = readColumns(tableData, getColumnsForTable());
+                PojoMap values = readColumns(tableData, getColumnsForTable());
                 Table table = readTable(wrapper, values);
                 if (table != null) {
                     tables.add(table);
@@ -528,7 +528,7 @@ public class JdbcModelReader {
      * @param values   The table metadata values as defined by {@link #getColumnsForTable()}
      * @return The table or <code>null</code> if the result set row did not contain a valid table
      */
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
         if (StringUtils.isEmpty(tableName)) {
             return null;
@@ -697,7 +697,7 @@ public class JdbcModelReader {
             List<Column> columns = new ArrayList<>();
 
             while (columnData.next()) {
-                ContextMap values = readColumns(columnData, getColumnsForColumn());
+                PojoMap values = readColumns(columnData, getColumnsForColumn());
 
                 columns.add(readColumn(metaData, values));
             }
@@ -714,7 +714,7 @@ public class JdbcModelReader {
      * @param values   The column metadata values as defined by {@link #getColumnsForColumn()}
      * @return The column
      */
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Column column = new Column();
 
         column.setName((String) values.get("COLUMN_NAME"));
@@ -765,7 +765,7 @@ public class JdbcModelReader {
 
         try (ResultSet pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName))) {
             while (pkData.next()) {
-                ContextMap values = readColumns(pkData, getColumnsForPK());
+                PojoMap values = readColumns(pkData, getColumnsForPK());
 
                 pks.add(readPrimaryKeyName(metaData, values));
             }
@@ -780,7 +780,7 @@ public class JdbcModelReader {
      * @param values   The primary key metadata values as defined by {@link #getColumnsForPK()}
      * @return The primary key name
      */
-    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected String readPrimaryKeyName(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         return (String) values.get("COLUMN_NAME");
     }
 
@@ -795,7 +795,7 @@ public class JdbcModelReader {
         Map<String, ForeignKey> fks = new LinkedHashMap<>();
         try (ResultSet fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName))) {
             while (fkData.next()) {
-                ContextMap values = readColumns(fkData, getColumnsForFK());
+                PojoMap values = readColumns(fkData, getColumnsForFK());
                 readForeignKey(metaData, values, fks);
             }
         }
@@ -809,7 +809,7 @@ public class JdbcModelReader {
      * @param values   The foreign key metadata as defined by {@link #getColumnsForFK()}
      * @param knownFks The already read foreign keys for the current table
      */
-    protected void readForeignKey(DatabaseMetaDataWrapper metaData, ContextMap values, Map<String, ForeignKey> knownFks) throws SQLException {
+    protected void readForeignKey(DatabaseMetaDataWrapper metaData, PojoMap values, Map<String, ForeignKey> knownFks) throws SQLException {
         String fkName = (String) values.get("FK_NAME");
         ForeignKey fk = knownFks.get(fkName);
 
@@ -876,7 +876,7 @@ public class JdbcModelReader {
 
         try (ResultSet indexData = metaData.getIndices(metaData.escapeForSearch(tableName), false, false)) {
             while (indexData.next()) {
-                ContextMap values = readColumns(indexData, getColumnsForIndex());
+                PojoMap values = readColumns(indexData, getColumnsForIndex());
                 readIndex(metaData, values, indices);
             }
         }
@@ -890,7 +890,7 @@ public class JdbcModelReader {
      * @param values       The index metadata as defined by {@link #getColumnsForIndex()}
      * @param knownIndices The already read indices for the current table
      */
-    protected void readIndex(DatabaseMetaDataWrapper metaData, ContextMap values, Map<String, Index> knownIndices) throws SQLException {
+    protected void readIndex(DatabaseMetaDataWrapper metaData, PojoMap values, Map<String, Index> knownIndices) throws SQLException {
         short indexType = values.getShort("TYPE", Short.MIN_VALUE);
         // we're ignoring statistic indices
         if (indexType == -1 || indexType == DatabaseMetaData.tableIndexStatistic) {
@@ -926,8 +926,8 @@ public class JdbcModelReader {
      * @param columnDescriptors The descriptors of the columns to read
      * @return The read values keyed by the column name
      */
-    protected ContextMap readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
-        ContextMap values = new ContextMap();
+    protected PojoMap readColumns(ResultSet resultSet, List<MetaDataColumnDescriptor> columnDescriptors) throws SQLException {
+        PojoMap values = new PojoMap();
         for (MetaDataColumnDescriptor descriptor : columnDescriptors) {
             values.put(descriptor.getName(), descriptor.readColumn(resultSet));
         }
@@ -1059,7 +1059,7 @@ public class JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                ContextMap values = readColumns(tableData, getColumnsForTable());
+                PojoMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = values.getString("TABLE_NAME");
 
                 if ((tableName != null) && (!tableName.isEmpty())) {

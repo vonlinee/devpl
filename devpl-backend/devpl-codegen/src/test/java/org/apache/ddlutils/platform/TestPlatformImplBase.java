@@ -2,8 +2,8 @@ package org.apache.ddlutils.platform;
 
 
 import org.apache.ddlutils.TestBase;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
+import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.dynabean.TableClass;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 
@@ -35,10 +35,10 @@ public class TestPlatformImplBase extends TestBase {
         Database database = parseDatabaseFromString(schema);
         PlatformImplBase platform = new TestPlatform();
         Table table = database.getTable(0);
-        SqlDynaClass clz = SqlDynaClass.newInstance(table);
-        SqlDynaBean db = new SqlDynaBean(SqlDynaClass.newInstance(table));
+        TableClass clz = TableClass.newInstance(table);
+        TableObject db = new TableObject(TableClass.newInstance(table));
 
-        db.set("name", "name");
+        db.setColumnValue("name", "name");
 
         Map<String, Object> map = platform.toColumnValues(clz.getSqlDynaProperties(), db);
 

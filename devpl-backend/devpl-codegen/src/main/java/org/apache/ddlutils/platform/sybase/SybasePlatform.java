@@ -5,7 +5,7 @@ import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -164,13 +164,13 @@ public class SybasePlatform extends PlatformImplBase {
     }
 
     @Override
-    public List<SqlDynaBean> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
+    public List<TableObject> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, parameters, queryHints, start, end);
     }
 
     @Override
-    public List<SqlDynaBean> fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
+    public List<TableObject> fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.fetch(model, sql, queryHints, start, end);
     }

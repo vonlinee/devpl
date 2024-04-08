@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.Platform;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * The queued objects for batch insertion.
      */
-    private final List<SqlDynaBean> _batchQueue = new ArrayList<>();
+    private final List<TableObject> _batchQueue = new ArrayList<>();
     /**
      * Stores the tables that are target of a foreign key.
      */
@@ -244,7 +244,7 @@ public class DataToDatabaseSink implements DataSink {
     }
 
     @Override
-    public void addBean(SqlDynaBean bean) throws DataSinkException {
+    public void addBean(TableObject bean) throws DataSinkException {
         Table table = _model.getDynaClassFor(bean).getTable();
         Identity origIdentity = buildIdentityFromPKs(table, bean);
 
@@ -291,7 +291,7 @@ public class DataToDatabaseSink implements DataSink {
 
         if (_ensureFkOrder && _fkTables.contains(table)) {
             Identity newIdentity = buildIdentityFromPKs(table, bean);
-            ArrayList<SqlDynaBean> finishedObjs = new ArrayList<>();
+            ArrayList<TableObject> finishedObjs = new ArrayList<>();
 
             _identityMap.put(origIdentity, newIdentity);
 
@@ -319,7 +319,7 @@ public class DataToDatabaseSink implements DataSink {
                         finishedObjs.add(waitingObj.getObject());
                     }
                 }
-                for (SqlDynaBean finishedObj : finishedObjs) {
+                for (TableObject finishedObj : finishedObjs) {
                     Table tableForObj = _model.getDynaClassFor(finishedObj).getTable();
                     Identity objIdentity = buildIdentityFromPKs(tableForObj, finishedObj);
 
@@ -343,7 +343,7 @@ public class DataToDatabaseSink implements DataSink {
      * @param table The table
      * @param bean  The bean
      */
-    private void insertBeanIntoDatabase(Table table, SqlDynaBean bean) throws DataSinkException {
+    private void insertBeanIntoDatabase(Table table, TableObject bean) throws DataSinkException {
         if (_useBatchMode) {
             _batchQueue.add(bean);
             if (_batchQueue.size() >= _batchSize) {
@@ -385,7 +385,7 @@ public class DataToDatabaseSink implements DataSink {
      * @param table The table of the bean
      * @param bean  The bean
      */
-    private void insertSingleBeanIntoDatabase(Table table, SqlDynaBean bean) throws DataSinkException {
+    private void insertSingleBeanIntoDatabase(Table table, TableObject bean) throws DataSinkException {
         try {
             boolean needTwoStepInsert = false;
             ForeignKey selfRefFk = null;
@@ -417,12 +417,12 @@ public class DataToDatabaseSink implements DataSink {
                 for (int idx = 0; idx < selfRefFk.getReferenceCount(); idx++) {
                     String columnName = selfRefFk.getReference(idx).getLocalColumnName();
 
-                    fkValues.add(bean.get(columnName));
-                    bean.set(columnName, null);
+                    fkValues.add(bean.getColumnValue(columnName));
+                    bean.setColumnValue(columnName, null);
                 }
                 _platform.insert(_connection, _model, bean);
                 for (int idx = 0; idx < selfRefFk.getReferenceCount(); idx++) {
-                    bean.set(selfRefFk.getReference(idx).getLocalColumnName(), fkValues.get(idx));
+                    bean.setColumnValue(selfRefFk.getReference(idx).getLocalColumnName(), fkValues.get(idx));
                 }
                 _platform.update(_connection, _model, bean);
             } else {
@@ -485,12 +485,12 @@ public class DataToDatabaseSink implements DataSink {
      * @param bean  The bean
      * @return The identity
      */
-    private Identity buildIdentityFromPKs(Table table, SqlDynaBean bean) {
+    private Identity buildIdentityFromPKs(Table table, TableObject bean) {
         Identity identity = new Identity(table);
         Column[] pkColumns = table.getPrimaryKeyColumns();
 
         for (Column pkColumn : pkColumns) {
-            identity.setColumnValue(pkColumn.getName(), bean.get(pkColumn.getName()));
+            identity.setColumnValue(pkColumn.getName(), bean.getColumnValue(pkColumn.getName()));
         }
         return identity;
     }
@@ -504,12 +504,12 @@ public class DataToDatabaseSink implements DataSink {
      * @param bean        The bean
      * @return The identity
      */
-    private Identity buildIdentityFromFK(Table owningTable, ForeignKey fk, SqlDynaBean bean) {
+    private Identity buildIdentityFromFK(Table owningTable, ForeignKey fk, TableObject bean) {
         Identity identity = new Identity(fk.getForeignTable(), getFKName(owningTable, fk));
 
         for (int idx = 0; idx < fk.getReferenceCount(); idx++) {
             Reference reference = fk.getReference(idx);
-            Object value = bean.get(reference.getLocalColumnName());
+            Object value = bean.getColumnValue(reference.getLocalColumnName());
 
             if (value == null) {
                 return null;
@@ -527,8 +527,8 @@ public class DataToDatabaseSink implements DataSink {
      * @param fkName   The name of the foreign key
      * @param identity The target identity
      */
-    private void updateFKColumns(SqlDynaBean bean, String fkName, Identity identity) {
-        Table sourceTable = bean.getDynaClass().getTable();
+    private void updateFKColumns(TableObject bean, String fkName, Identity identity) {
+        Table sourceTable = bean.getTableClass().getTable();
         Table targetTable = identity.getTable();
         ForeignKey fk = null;
 
@@ -548,7 +548,7 @@ public class DataToDatabaseSink implements DataSink {
                 Column sourceColumn = curRef.getLocalColumn();
                 Column targetColumn = curRef.getForeignColumn();
 
-                bean.set(sourceColumn.getName(), identity.getColumnValue(targetColumn.getName()));
+                bean.setColumnValue(sourceColumn.getName(), identity.getColumnValue(targetColumn.getName()));
             }
         }
     }

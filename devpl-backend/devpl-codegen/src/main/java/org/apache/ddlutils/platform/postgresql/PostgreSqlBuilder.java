@@ -8,7 +8,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ public class PostgreSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
+    public void createTable(Database database, Table table, PojoMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
 

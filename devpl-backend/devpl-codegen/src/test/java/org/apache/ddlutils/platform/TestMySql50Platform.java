@@ -2,13 +2,13 @@ package org.apache.ddlutils.platform;
 
 
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.mysql.MySql5xModelReader;
 import org.apache.ddlutils.platform.mysql.MySql5xPlatform;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -57,17 +57,15 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
                 sqlBuilder.dropTable(table);
 
-                ContextMap parameters = new ContextMap();
+                PojoMap parameters = new PojoMap();
 
                 sqlBuilder.createTable(database, table, parameters);
 
-                SqlDynaBean dynaBean = database.createDynaBeanFor(table);
-
-                List<SqlDynaBean> list = platform.fetch(database, "SELECT * FROM field_info");
+                List<TableObject> list = platform.fetch(database, "SELECT * FROM field_info");
 
                 System.out.println(list);
 
-                SqlDynaBean bean = database.createDynaBeanFor(database.getTable(0));
+                TableObject bean = database.createDynaBeanFor(database.getTable(0));
 
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);

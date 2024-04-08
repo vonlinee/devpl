@@ -2,9 +2,9 @@ package org.apache.ddlutils.platform;
 
 
 import org.apache.ddlutils.DatabaseOperationException;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
-import org.apache.ddlutils.dynabean.SqlDynaProperty;
+import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.dynabean.TableClass;
+import org.apache.ddlutils.dynabean.ColumnProperty;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 /**
  * This is an iterator that is specifically targeted at traversing result sets.
  */
-public class ModelBasedResultSetIterator implements Iterator<SqlDynaBean> {
+public class ModelBasedResultSetIterator implements Iterator<TableObject> {
     /**
      * Maps column names to properties.
      */
@@ -36,7 +36,7 @@ public class ModelBasedResultSetIterator implements Iterator<SqlDynaBean> {
     /**
      * The dyna class to use for creating beans.
      */
-    private SqlDynaClass _dynaClass;
+    private TableClass _dynaClass;
     /**
      * Whether the case of identifiers matters.
      */
@@ -135,10 +135,10 @@ public class ModelBasedResultSetIterator implements Iterator<SqlDynaBean> {
         if (singleKnownTable && (tableName != null)) {
             _dynaClass = model.getDynaClassFor(tableName);
         } else {
-            SqlDynaProperty[] props = new SqlDynaProperty[_columnsToProperties.size()];
+            ColumnProperty[] props = new ColumnProperty[_columnsToProperties.size()];
             int idx = 0;
             for (Iterator<String> it = _columnsToProperties.values().iterator(); it.hasNext(); idx++) {
-                props[idx] = new SqlDynaProperty(it.next());
+                props[idx] = new ColumnProperty(it.next());
             }
             throw new UnsupportedOperationException();
             // _dynaClass = new BasicDynaClass("result", BasicDynaBean.class, props);
@@ -177,16 +177,16 @@ public class ModelBasedResultSetIterator implements Iterator<SqlDynaBean> {
     }
 
     @Override
-    public SqlDynaBean next() throws DatabaseOperationException {
+    public TableObject next() throws DatabaseOperationException {
         advanceIfNecessary();
         if (_isAtEnd) {
             throw new NoSuchElementException("No more elements in the result set");
         } else {
             try {
-                SqlDynaBean bean = _dynaClass.newInstance();
+                TableObject bean = _dynaClass.newInstance();
                 Table table = null;
                 if (bean != null) {
-                    SqlDynaClass dynaClass = bean.getDynaClass();
+                    TableClass dynaClass = bean.getTableClass();
                     table = dynaClass.getTable();
                 }
                 for (Map.Entry<String, String> entry : _columnsToProperties.entrySet()) {
@@ -197,7 +197,7 @@ public class ModelBasedResultSetIterator implements Iterator<SqlDynaBean> {
                         curTable = _preparedQueryHints.get(_caseSensitive ? columnName : columnName.toLowerCase());
                     }
                     Object value = _platform.getObjectFromResultSet(_resultSet, columnName, curTable);
-                    bean.set(propName, value);
+                    bean.setColumnValue(propName, value);
                 }
                 _needsAdvancing = true;
                 return bean;

@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.platform.DBTypeEnum;
 
 import java.math.BigDecimal;
@@ -110,7 +110,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "avalue");
         } else {
-            Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+            Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
             assertTrue((avalue == null) || Objects.equals(1, avalue));
         }
@@ -185,7 +185,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         // we cannot be sure whether the default algorithm is used (which will apply the
         // default value even to existing columns with NULL in it) or the database supports
         // it directly (in which case it might still be NULL)
-        Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
         assertTrue((avalue == null) || Double.valueOf(2).equals(avalue));
     }
@@ -242,7 +242,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "avalue");
         } else {
-            Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+            Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
             assertTrue((avalue == null) || Objects.equals(1, avalue));
         }
@@ -284,7 +284,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         // we cannot be sure whether the default algorithm is used (which will apply the
         // default value even to existing columns with NULL in it) or the database supports
         // it directly (in which case it might still be NULL)
-        Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
@@ -549,7 +549,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         } else {
             assertEquals((-1), beans.get(0), "pk1");
         }
-        assertEquals((2), ((SqlDynaBean) beans.get(0)).get("avalue"));
+        assertEquals((2), ((TableObject) beans.get(0)).getColumnValue("avalue"));
     }
 
     /**
@@ -824,7 +824,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
         List beans = getRows("roundtrip");
-        Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
@@ -1108,7 +1108,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
         List beans = getRows("roundtrip");
-        Object avalue = ((SqlDynaBean) beans.get(0)).get("avalue");
+        Object avalue = ((TableObject) beans.get(0)).getColumnValue("avalue");
 
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
@@ -1432,7 +1432,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
         List beans = getRows("roundtrip");
-        Object avalue2 = ((SqlDynaBean) beans.get(0)).get("avalue2");
+        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
@@ -1763,7 +1763,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         assertEquals(getAdjustedModel(), readModelFromDatabase("roundtriptest"));
 
         List beans = getRows("roundtrip");
-        Object avalue2 = ((SqlDynaBean) beans.get(0)).get("avalue2");
+        Object avalue2 = ((TableObject) beans.get(0)).getColumnValue("avalue2");
 
         assertEquals((2), beans.get(0), "avalue1");
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
@@ -2097,8 +2097,8 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
 
         List beans1 = getRows("roundtrip1");
         List beans2 = getRows("roundtrip2");
-        Object pk1 = ((SqlDynaBean) beans1.get(0)).get("pk");
-        Object avalue = ((SqlDynaBean) beans2.get(0)).get("avalue");
+        Object pk1 = ((TableObject) beans1.get(0)).getColumnValue("pk");
+        Object avalue = ((TableObject) beans2.get(0)).getColumnValue("avalue");
 
         assertEquals((1), beans2.get(0), "pk");
         if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
@@ -2647,8 +2647,8 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
 
         List beans1 = getRows("roundtrip1");
         List beans2 = getRows("roundtrip2");
-        Object pk2 = ((SqlDynaBean) beans1.get(0)).get("pk2");
-        Object avalue2 = ((SqlDynaBean) beans2.get(0)).get("avalue2");
+        Object pk2 = ((TableObject) beans1.get(0)).getColumnValue("pk2");
+        Object avalue2 = ((TableObject) beans2.get(0)).getColumnValue("avalue2");
 
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals((2), beans2.get(0), "pk");

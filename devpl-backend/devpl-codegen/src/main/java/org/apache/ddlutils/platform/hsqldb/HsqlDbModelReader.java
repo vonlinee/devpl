@@ -5,7 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.SQLException;
 
@@ -25,7 +25,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
         if (table != null) {
             // For at least version 1.7.2 we have to determine the auto-increment columns
@@ -39,7 +39,7 @@ public class HsqlDbModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (TypeMap.isTextType(column.getTypeCode()) &&

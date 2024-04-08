@@ -2,7 +2,7 @@ package org.apache.ddlutils.platform;
 
 
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 
 import java.util.HashMap;
@@ -28,8 +28,8 @@ public class CreationParameters {
      * @param table The table
      * @return The parameters
      */
-    public ContextMap getParametersFor(Table table) {
-        ContextMap result = new ContextMap(new LinkedHashMap<>());
+    public PojoMap getParametersFor(Table table) {
+        PojoMap result = new PojoMap(new LinkedHashMap<>());
         Map<String, Object> globalParams = _parametersPerTable.get(null);
         Map<String, Object> tableParams = _parametersPerTable.get(table.getName());
         if (globalParams != null) {

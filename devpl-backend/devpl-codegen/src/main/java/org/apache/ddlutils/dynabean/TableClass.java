@@ -1,33 +1,29 @@
 package org.apache.ddlutils.dynabean;
 
-
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SqlDynaClass is a DynaClass which is associated with a persistent
- * Table in a Database.
- *
- *
+ * TableClass is associated with a persistent Table in a Database.
+ * mapping a table in database to a java object
  */
-public class SqlDynaClass {
+public class TableClass {
     /**
      * The table for which this dyna class is defined.
      */
     private final Table _table;
     protected String name;
-    protected SqlDynaProperty[] properties;
+    protected ColumnProperty[] properties;
     /**
      * The primary key dyna properties.
      */
-    private SqlDynaProperty[] _primaryKeyProperties;
+    private ColumnProperty[] _primaryKeyProperties;
     /**
      * The non-primary key dyna properties.
      */
-    private SqlDynaProperty[] _nonPrimaryKeyProperties;
+    private ColumnProperty[] _nonPrimaryKeyProperties;
 
     /**
      * Creates a new dyna class instance for the given table that has the given properties.
@@ -35,9 +31,8 @@ public class SqlDynaClass {
      * @param table      The table
      * @param properties The dyna properties
      */
-    public SqlDynaClass(Table table, SqlDynaProperty[] properties) {
-        if (table != null)
-            this.name = table.getName();
+    public TableClass(Table table, ColumnProperty[] properties) {
+        if (table != null) this.name = table.getName();
         this.properties = properties;
         _table = table;
     }
@@ -49,18 +44,16 @@ public class SqlDynaClass {
      * @param table The table
      * @return The dyna class for the table
      */
-    public static SqlDynaClass newInstance(Table table) {
-        List<SqlDynaProperty> properties = new ArrayList<>();
-
+    public static TableClass newInstance(Table table) {
+        List<ColumnProperty> properties = new ArrayList<>();
         if (table != null) {
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
-                properties.add(new SqlDynaProperty(table.getColumn(idx)));
+                properties.add(new ColumnProperty(table.getColumn(idx)));
             }
         }
-
-        SqlDynaProperty[] array = new SqlDynaProperty[properties.size()];
+        ColumnProperty[] array = new ColumnProperty[properties.size()];
         properties.toArray(array);
-        return new SqlDynaClass(table, array);
+        return new TableClass(table, array);
     }
 
     /**
@@ -89,8 +82,8 @@ public class SqlDynaClass {
      *
      * @return The properties
      */
-    public SqlDynaProperty[] getSqlDynaProperties() {
-        SqlDynaProperty[] props = this.properties;
+    public ColumnProperty[] getSqlDynaProperties() {
+        ColumnProperty[] props = this.properties;
         return swallowCopy(props);
     }
 
@@ -99,7 +92,7 @@ public class SqlDynaClass {
      *
      * @return The properties
      */
-    public SqlDynaProperty[] getPrimaryKeyProperties() {
+    public ColumnProperty[] getPrimaryKeyProperties() {
         if (_primaryKeyProperties == null) {
             initPrimaryKeys();
         }
@@ -118,7 +111,7 @@ public class SqlDynaClass {
      *
      * @return The properties
      */
-    public SqlDynaProperty[] getNonPrimaryKeyProperties() {
+    public ColumnProperty[] getNonPrimaryKeyProperties() {
         if (_nonPrimaryKeyProperties == null) {
             initPrimaryKeys();
         }
@@ -132,22 +125,22 @@ public class SqlDynaClass {
      * Initializes the primary key and non-primary key property arrays.
      */
     protected void initPrimaryKeys() {
-        List<SqlDynaProperty> pkProps = new ArrayList<>();
-        List<SqlDynaProperty> nonPkProps = new ArrayList<>();
-        SqlDynaProperty[] properties = this.properties;
+        List<ColumnProperty> pkProps = new ArrayList<>();
+        List<ColumnProperty> nonPkProps = new ArrayList<>();
+        ColumnProperty[] properties = this.properties;
 
-        for (SqlDynaProperty sqlProperty : properties) {
+        for (ColumnProperty sqlProperty : properties) {
             if (sqlProperty.isPrimaryKey()) {
                 pkProps.add(sqlProperty);
             } else {
                 nonPkProps.add(sqlProperty);
             }
         }
-        _primaryKeyProperties = pkProps.toArray(new SqlDynaProperty[0]);
-        _nonPrimaryKeyProperties = nonPkProps.toArray(new SqlDynaProperty[0]);
+        _primaryKeyProperties = pkProps.toArray(new ColumnProperty[0]);
+        _nonPrimaryKeyProperties = nonPkProps.toArray(new ColumnProperty[0]);
     }
 
-    public SqlDynaProperty[] getDynaProperties() {
+    public ColumnProperty[] getDynaProperties() {
         return this.properties;
     }
 
@@ -155,13 +148,13 @@ public class SqlDynaClass {
         return name;
     }
 
-    public SqlDynaBean newInstance() {
-        return new SqlDynaBean(this);
+    public TableObject newInstance() {
+        return new TableObject(this);
     }
 
-    public SqlDynaProperty getDynaProperty(String attrName) {
+    public ColumnProperty getDynaProperty(String attrName) {
         if (this.properties != null) {
-            for (SqlDynaProperty property : this.properties) {
+            for (ColumnProperty property : this.properties) {
                 if (property.getName().equalsIgnoreCase(attrName)) {
                     return property;
                 }

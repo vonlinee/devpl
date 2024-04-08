@@ -4,13 +4,13 @@ package org.apache.ddlutils.platform.postgresql;
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.alteration.*;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaProperty;
+import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.dynabean.ColumnProperty;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.*;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.JdbcUtils;
 
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class PostgreSqlPlatform extends PlatformImplBase {
      * @param parameters          Additional parameters for the operation
      * @param createDb            Whether to create or drop the database
      */
-    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
+    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, PojoMap parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
         if (JDBCDriverTypeEnum.POSTGRE_SQL.getDriverClassName().equals(jdbcDriverClassName)) {
             int slashPos = connectionUrl.lastIndexOf('/');
             if (slashPos < 0) {
@@ -130,7 +130,7 @@ public class PostgreSqlPlatform extends PlatformImplBase {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, PojoMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually
         // the template1 database because it usually exists)
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, parameters, true);
@@ -144,9 +144,9 @@ public class PostgreSqlPlatform extends PlatformImplBase {
     }
 
     @Override
-    protected void setObject(PreparedStatement statement, int sqlIndex, SqlDynaBean dynaBean, SqlDynaProperty property) throws SQLException {
+    protected void setObject(PreparedStatement statement, int sqlIndex, TableObject dynaBean, ColumnProperty property) throws SQLException {
         int typeCode = property.getColumn().getTypeCode();
-        Object value = dynaBean.get(property.getName());
+        Object value = dynaBean.getColumnValue(property.getName());
 
         // PostgreSQL doesn't like setNull for BYTEA columns
         if (value == null) {

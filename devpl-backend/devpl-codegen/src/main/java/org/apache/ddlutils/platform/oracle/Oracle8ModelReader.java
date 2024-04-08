@@ -9,7 +9,7 @@ import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 
 import java.sql.*;
@@ -57,7 +57,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         String tableName = (String) values.get("TABLE_NAME");
 
         // system table ?
@@ -75,7 +75,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -250,7 +250,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
             }
 
             ResultSet rs = stmt.executeQuery();
-            ContextMap values = new ContextMap();
+            PojoMap values = new PojoMap();
 
             while (rs.next()) {
                 values.put("INDEX_NAME", rs.getString(1));

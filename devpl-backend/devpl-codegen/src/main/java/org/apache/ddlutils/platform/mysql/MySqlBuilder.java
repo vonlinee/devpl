@@ -8,7 +8,7 @@ import org.apache.ddlutils.model.ForeignKey;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TypeMap;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -76,7 +76,7 @@ public class MySqlBuilder extends SqlBuilder {
     }
 
     @Override
-    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, PojoMap parameters) throws IOException {
         if (parameters != null) {
             print(" ");
             // MySql supports additional table creation options which are appended

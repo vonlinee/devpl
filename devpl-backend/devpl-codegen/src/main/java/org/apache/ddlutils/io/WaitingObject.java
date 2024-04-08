@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.util.ListOrderedSet;
 
 import java.util.Iterator;
@@ -15,7 +15,7 @@ public class WaitingObject {
     /**
      * The object that is waiting for insertion.
      */
-    private final SqlDynaBean _obj;
+    private final TableObject _obj;
     /**
      * The original identity of the waiting object.
      */
@@ -31,7 +31,7 @@ public class WaitingObject {
      * @param obj         The object that is waiting
      * @param objIdentity The (original) identity of the object
      */
-    public WaitingObject(SqlDynaBean obj, Identity objIdentity) {
+    public WaitingObject(TableObject obj, Identity objIdentity) {
         _obj = obj;
         _objIdentity = objIdentity;
     }
@@ -41,7 +41,7 @@ public class WaitingObject {
      *
      * @return The object
      */
-    public SqlDynaBean getObject() {
+    public TableObject getObject() {
         return _obj;
     }
 

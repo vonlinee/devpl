@@ -5,7 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 
 import java.sql.*;
@@ -29,7 +29,7 @@ public class InterbaseModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -55,7 +55,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(getDefaultTablePattern(), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ContextMap values = readColumns(columnData, getColumnsForColumn());
+                    PojoMap values = readColumns(columnData, getColumnsForColumn());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         columns.add(readColumn(metaData, values));
@@ -65,7 +65,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(metaData.escapeForSearch(tableName), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ContextMap values = readColumns(columnData, getColumnsForColumn());
+                    PojoMap values = readColumns(columnData, getColumnsForColumn());
 
                     columns.add(readColumn(metaData, values));
                 }
@@ -211,7 +211,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 pkData = metaData.getPrimaryKeys(getDefaultTablePattern());
                 while (pkData.next()) {
-                    ContextMap values = readColumns(pkData, getColumnsForPK());
+                    PojoMap values = readColumns(pkData, getColumnsForPK());
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         pks.add(readPrimaryKeyName(metaData, values));
                     }
@@ -219,7 +219,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
                 while (pkData.next()) {
-                    ContextMap values = readColumns(pkData, getColumnsForPK());
+                    PojoMap values = readColumns(pkData, getColumnsForPK());
 
                     pks.add(readPrimaryKeyName(metaData, values));
                 }
@@ -242,7 +242,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 fkData = metaData.getForeignKeys(getDefaultTablePattern());
                 while (fkData.next()) {
-                    ContextMap values = readColumns(fkData, getColumnsForFK());
+                    PojoMap values = readColumns(fkData, getColumnsForFK());
 
                     if (tableName.equals(values.get("FKTABLE_NAME"))) {
                         readForeignKey(metaData, values, fks);
@@ -251,7 +251,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
                 while (fkData.next()) {
-                    ContextMap values = readColumns(fkData, getColumnsForFK());
+                    PojoMap values = readColumns(fkData, getColumnsForFK());
 
                     readForeignKey(metaData, values, fks);
                 }

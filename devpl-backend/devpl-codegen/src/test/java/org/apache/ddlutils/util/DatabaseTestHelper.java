@@ -2,7 +2,7 @@ package org.apache.ddlutils.util;
 
 import junit.framework.AssertionFailedError;
 import org.apache.ddlutils.Platform;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -59,9 +59,9 @@ public class DatabaseTestHelper {
             Table table = model.getTable(idx);
             Column[] pkCols = table.getPrimaryKeyColumns();
 
-            for (Iterator<SqlDynaBean> it = origDbPlatform.query(model, buildQueryString(origDbPlatform, table, null, null), new Table[]{table}); it.hasNext(); ) {
-                SqlDynaBean obj = it.next();
-                Collection<SqlDynaBean> result = testedDbPlatform.fetch(model, buildQueryString(origDbPlatform, table, pkCols, obj), new Table[]{table});
+            for (Iterator<TableObject> it = origDbPlatform.query(model, buildQueryString(origDbPlatform, table, null, null), new Table[]{table}); it.hasNext(); ) {
+                TableObject obj = it.next();
+                Collection<TableObject> result = testedDbPlatform.fetch(model, buildQueryString(origDbPlatform, table, pkCols, obj), new Table[]{table});
 
                 if (result.isEmpty()) {
                     if (_log.isDebugEnabled()) {
@@ -79,7 +79,7 @@ public class DatabaseTestHelper {
                         debugMsg.append("Row ");
                         debugMsg.append(obj.toString());
                         debugMsg.append(" is present more than once in the second database:\n");
-                        for (SqlDynaBean dynaBean : result) {
+                        for (TableObject dynaBean : result) {
                             debugMsg.append("  ");
                             debugMsg.append(dynaBean.toString());
                         }
@@ -88,7 +88,7 @@ public class DatabaseTestHelper {
                         throw new AssertionFailedError(failureMsg);
                     }
                 } else {
-                    SqlDynaBean otherObj = result.iterator().next();
+                    TableObject otherObj = result.iterator().next();
 
                     if (!obj.equals(otherObj)) {
                         if (_log.isDebugEnabled()) {
@@ -116,7 +116,7 @@ public class DatabaseTestHelper {
      * @param whereValues    The optional column value that make up the WHERE clause
      * @return The query string
      */
-    private String buildQueryString(Platform targetPlatform, Table table, Column[] whereCols, SqlDynaBean whereValues) {
+    private String buildQueryString(Platform targetPlatform, Table table, Column[] whereCols, TableObject whereValues) {
         StringBuilder result = new StringBuilder();
         result.append("SELECT * FROM ");
         if (targetPlatform.isDelimitedIdentifierModeOn()) {
@@ -129,7 +129,7 @@ public class DatabaseTestHelper {
         if ((whereCols != null) && (whereCols.length > 0)) {
             result.append(" WHERE ");
             for (int idx = 0; idx < whereCols.length; idx++) {
-                Object value = (whereValues == null ? null : whereValues.get(whereCols[idx].getName()));
+                Object value = (whereValues == null ? null : whereValues.getColumnValue(whereCols[idx].getName()));
 
                 if (idx > 0) {
                     result.append(" AND ");

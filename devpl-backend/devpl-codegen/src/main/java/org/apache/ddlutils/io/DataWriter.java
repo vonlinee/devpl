@@ -1,8 +1,8 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
+import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.dynabean.TableClass;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
@@ -98,15 +98,15 @@ public class DataWriter extends PrettyPrintingXmlWriter {
      *
      * @param bean The bean to write
      */
-    public void write(SqlDynaBean bean) throws DataWriterException {
-        SqlDynaClass dynaClass = bean.getDynaClass();
+    public void write(TableObject bean) throws DataWriterException {
+        TableClass dynaClass = bean.getTableClass();
         Table table = dynaClass.getTable();
         TableXmlWriter tableWriter = new TableXmlWriter(table);
         List<ColumnXmlWriter> columnWriters = new ArrayList<>();
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-            Object value = bean.get(column.getName());
+            Object value = bean.getColumnValue(column.getName());
             SqlTypeConverter converter = _converterConf.getRegisteredConverter(table, column);
             String valueAsText = null;
 
@@ -130,9 +130,9 @@ public class DataWriter extends PrettyPrintingXmlWriter {
      *
      * @param beans The beans iterator
      */
-    public void write(Iterator<SqlDynaBean> beans) throws DataWriterException {
+    public void write(Iterator<TableObject> beans) throws DataWriterException {
         while (beans.hasNext()) {
-            SqlDynaBean bean = beans.next();
+            TableObject bean = beans.next();
             if (bean != null) {
                 write(bean);
             }
@@ -144,7 +144,7 @@ public class DataWriter extends PrettyPrintingXmlWriter {
      *
      * @param beans The beans
      */
-    public void write(Collection<SqlDynaBean> beans) throws DataWriterException {
+    public void write(Collection<TableObject> beans) throws DataWriterException {
         write(beans.iterator());
     }
 }

@@ -1,10 +1,9 @@
 package org.apache.ddlutils.model;
 
-
-import org.apache.ddlutils.dynabean.DynaClassCache;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
-import org.apache.ddlutils.dynabean.SqlDynaClass;
-import org.apache.ddlutils.dynabean.SqlDynaException;
+import org.apache.ddlutils.dynabean.TableClassCache;
+import org.apache.ddlutils.dynabean.TableObject;
+import org.apache.ddlutils.dynabean.TableClass;
+import org.apache.ddlutils.dynabean.DatabaseObjectRelationMappingException;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serial;
@@ -43,7 +42,7 @@ public class Database extends SchemaObject implements Serializable {
     /**
      * The dyna class cache for this model.
      */
-    private transient DynaClassCache _dynaClassCache = null;
+    private transient TableClassCache _tableClassCache = null;
 
     /**
      * Creates an empty model without a name.
@@ -448,11 +447,11 @@ public class Database extends SchemaObject implements Serializable {
      *
      * @return The dyna class cache
      */
-    private DynaClassCache getDynaClassCache() {
-        if (_dynaClassCache == null) {
-            _dynaClassCache = new DynaClassCache();
+    private TableClassCache getDynaClassCache() {
+        if (_tableClassCache == null) {
+            _tableClassCache = new TableClassCache();
         }
-        return _dynaClassCache;
+        return _tableClassCache;
     }
 
     /**
@@ -460,29 +459,29 @@ public class Database extends SchemaObject implements Serializable {
      * has been added or removed to a table.
      */
     public void resetDynaClassCache() {
-        _dynaClassCache = null;
+        _tableClassCache = null;
     }
 
     /**
-     * Returns the {@link org.apache.ddlutils.dynabean.SqlDynaClass} for the given table name. If it does not
+     * Returns the {@link TableClass} for the given table name. If it does not
      * exist yet, a new one will be created based on the Table definition.
      *
      * @param tableName The name of the table to create the bean for
      * @return The <code>SqlDynaClass</code> for the indicated table or <code>null</code>
      * if the model contains no such table
      */
-    public SqlDynaClass getDynaClassFor(String tableName) {
+    public TableClass getDynaClassFor(String tableName) {
         Table table = findTable(tableName);
         return table != null ? getDynaClassCache().getDynaClass(table) : null;
     }
 
     /**
-     * Returns the {@link org.apache.ddlutils.dynabean.SqlDynaClass} for the given dyna bean.
+     * Returns the {@link TableClass} for the given dyna bean.
      *
      * @param bean The dyna bean
      * @return The <code>SqlDynaClass</code> for the given bean
      */
-    public SqlDynaClass getDynaClassFor(SqlDynaBean bean) {
+    public TableClass getDynaClassFor(TableObject bean) {
         return getDynaClassCache().getDynaClass(bean);
     }
 
@@ -492,8 +491,8 @@ public class Database extends SchemaObject implements Serializable {
      * @param table The table to create the bean for
      * @return The new dyna bean
      */
-    public SqlDynaBean createDynaBeanFor(Table table) throws SqlDynaException {
-        return getDynaClassCache().createNewInstance(table);
+    public TableObject createDynaBeanFor(Table table) throws DatabaseObjectRelationMappingException {
+        return getDynaClassCache().createObject(table);
     }
 
     /**
@@ -504,8 +503,8 @@ public class Database extends SchemaObject implements Serializable {
      * @param caseSensitive Whether case matters for the names
      * @return The new dyna bean
      */
-    public SqlDynaBean createDynaBeanFor(String tableName, boolean caseSensitive) throws SqlDynaException {
-        return getDynaClassCache().createNewInstance(findTable(tableName, caseSensitive));
+    public TableObject createDynaBeanFor(String tableName, boolean caseSensitive) throws DatabaseObjectRelationMappingException {
+        return getDynaClassCache().createObject(findTable(tableName, caseSensitive));
     }
 
     @Override

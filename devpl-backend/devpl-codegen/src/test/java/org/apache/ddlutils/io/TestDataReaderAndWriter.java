@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -41,7 +41,7 @@ public class TestDataReaderAndWriter {
      * @param encoding The encoding in which to write the xml
      * @return The xml output as raw bytes
      */
-    private byte[] writeBean(Database model, SqlDynaBean bean, String encoding) {
+    private byte[] writeBean(Database model, TableObject bean, String encoding) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataWriter dataWriter = new DataWriter(output, encoding);
 
@@ -59,8 +59,8 @@ public class TestDataReaderAndWriter {
      * @param dataXml The raw xml data
      * @return The read dyna beans
      */
-    private List<SqlDynaBean> readBeans(Database model, byte[] dataXml) {
-        List<SqlDynaBean> beans = new ArrayList<>();
+    private List<TableObject> readBeans(Database model, byte[] dataXml) {
+        List<TableObject> beans = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setModel(model);
@@ -76,8 +76,8 @@ public class TestDataReaderAndWriter {
      * @param dataXml The xml data
      * @return The read dyna beans
      */
-    private List<SqlDynaBean> readBeans(Database model, String dataXml) {
-        List<SqlDynaBean> beans = new ArrayList<>();
+    private List<TableObject> readBeans(Database model, String dataXml) {
+        List<TableObject> beans = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setModel(model);
@@ -94,12 +94,12 @@ public class TestDataReaderAndWriter {
      * @param encoding        The encoding to use for the data xml
      * @param expectedDataXml The expected xml generated for the bean
      */
-    private void roundtripTest(Database model, SqlDynaBean bean, String encoding, String expectedDataXml) throws UnsupportedEncodingException {
+    private void roundtripTest(Database model, TableObject bean, String encoding, String expectedDataXml) throws UnsupportedEncodingException {
         byte[] xmlData = writeBean(model, bean, encoding);
 
         Assertions.assertEquals(expectedDataXml, new String(xmlData, encoding));
 
-        List<SqlDynaBean> beans = readBeans(model, xmlData);
+        List<TableObject> beans = readBeans(model, xmlData);
 
         Assertions.assertEquals(1, beans.size());
         Assertions.assertEquals(bean, beans.get(0));
@@ -132,7 +132,7 @@ public class TestDataReaderAndWriter {
                 </index>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <data>
               <author author_id='1' name='Ernest Hemingway'/>
               <author author_id='2' name='William Shakespeare'/>
@@ -155,36 +155,36 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(5, beans.size());
 
-        SqlDynaBean obj1 = beans.get(0);
-        SqlDynaBean obj2 = beans.get(1);
-        SqlDynaBean obj3 = beans.get(2);
-        SqlDynaBean obj4 = beans.get(3);
-        SqlDynaBean obj5 = beans.get(4);
+        TableObject obj1 = beans.get(0);
+        TableObject obj2 = beans.get(1);
+        TableObject obj3 = beans.get(2);
+        TableObject obj4 = beans.get(3);
+        TableObject obj5 = beans.get(4);
 
-        Assertions.assertEquals("author", obj1.getDynaClass().getName());
-        Assertions.assertEquals("1", obj1.get("author_id").toString());
-        Assertions.assertEquals("Ernest Hemingway", obj1.get("name").toString());
-        Assertions.assertEquals("author", obj2.getDynaClass().getName());
-        Assertions.assertEquals("2", obj2.get("author_id").toString());
-        Assertions.assertEquals("William Shakespeare", obj2.get("name").toString());
-        Assertions.assertEquals("book", obj3.getDynaClass().getName());
-        Assertions.assertEquals("1", obj3.get("book_id").toString());
-        Assertions.assertEquals("1", obj3.get("author_id").toString());
-        Assertions.assertEquals("0684830493", obj3.get("isbn").toString());
-        Assertions.assertEquals("Old Man And The Sea", obj3.get("title").toString());
-        Assertions.assertEquals("1952-01-01", obj3.get("issue_date").toString());    // parsed as a java.sql.Date
-        Assertions.assertEquals("book", obj4.getDynaClass().getName());
-        Assertions.assertEquals("2", obj4.get("book_id").toString());
-        Assertions.assertEquals("2", obj4.get("author_id").toString());
-        Assertions.assertEquals("0198321465", obj4.get("isbn").toString());
-        Assertions.assertEquals("Macbeth", obj4.get("title").toString());
-        Assertions.assertEquals("1606-01-01", obj4.get("issue_date").toString());    // parsed as a java.sql.Date
-        Assertions.assertEquals("book", obj5.getDynaClass().getName());
-        Assertions.assertEquals("3", obj5.get("book_id").toString());
-        Assertions.assertEquals("2", obj5.get("author_id").toString());
-        Assertions.assertEquals("0140707026", obj5.get("isbn").toString());
-        Assertions.assertEquals("A Midsummer Night's Dream", obj5.get("title").toString());
-        Assertions.assertEquals("1595-01-01", obj5.get("issue_date").toString());    // parsed as a java.sql.Date
+        Assertions.assertEquals("author", obj1.getTableClass().getName());
+        Assertions.assertEquals("1", obj1.getColumnValue("author_id").toString());
+        Assertions.assertEquals("Ernest Hemingway", obj1.getColumnValue("name").toString());
+        Assertions.assertEquals("author", obj2.getTableClass().getName());
+        Assertions.assertEquals("2", obj2.getColumnValue("author_id").toString());
+        Assertions.assertEquals("William Shakespeare", obj2.getColumnValue("name").toString());
+        Assertions.assertEquals("book", obj3.getTableClass().getName());
+        Assertions.assertEquals("1", obj3.getColumnValue("book_id").toString());
+        Assertions.assertEquals("1", obj3.getColumnValue("author_id").toString());
+        Assertions.assertEquals("0684830493", obj3.getColumnValue("isbn").toString());
+        Assertions.assertEquals("Old Man And The Sea", obj3.getColumnValue("title").toString());
+        Assertions.assertEquals("1952-01-01", obj3.getColumnValue("issue_date").toString());    // parsed as a java.sql.Date
+        Assertions.assertEquals("book", obj4.getTableClass().getName());
+        Assertions.assertEquals("2", obj4.getColumnValue("book_id").toString());
+        Assertions.assertEquals("2", obj4.getColumnValue("author_id").toString());
+        Assertions.assertEquals("0198321465", obj4.getColumnValue("isbn").toString());
+        Assertions.assertEquals("Macbeth", obj4.getColumnValue("title").toString());
+        Assertions.assertEquals("1606-01-01", obj4.getColumnValue("issue_date").toString());    // parsed as a java.sql.Date
+        Assertions.assertEquals("book", obj5.getTableClass().getName());
+        Assertions.assertEquals("3", obj5.getColumnValue("book_id").toString());
+        Assertions.assertEquals("2", obj5.getColumnValue("author_id").toString());
+        Assertions.assertEquals("0140707026", obj5.getColumnValue("isbn").toString());
+        Assertions.assertEquals("A Midsummer Night's Dream", obj5.getColumnValue("title").toString());
+        Assertions.assertEquals("1595-01-01", obj5.getColumnValue("issue_date").toString());    // parsed as a java.sql.Date
     }
 
     /**
@@ -213,7 +213,7 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<SqlDynaBean> beans = new ArrayList<>();
+            List<TableObject> beans = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
@@ -222,11 +222,11 @@ public class TestDataReaderAndWriter {
 
             Assertions.assertEquals(1, beans.size());
 
-            SqlDynaBean obj = beans.get(0);
+            TableObject obj = beans.get(0);
 
-            Assertions.assertEquals("test", obj.getDynaClass().getName());
-            Assertions.assertEquals("1", obj.get("id").toString());
-            Assertions.assertEquals("foo", obj.get("value").toString());
+            Assertions.assertEquals("test", obj.getTableClass().getName());
+            Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+            Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
         } finally {
             tmpFile.delete();
         }
@@ -258,7 +258,7 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<SqlDynaBean> beans = new ArrayList<>();
+            List<TableObject> beans = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
@@ -267,11 +267,11 @@ public class TestDataReaderAndWriter {
 
             Assertions.assertEquals(1, beans.size());
 
-            SqlDynaBean obj = beans.get(0);
+            TableObject obj = beans.get(0);
 
-            Assertions.assertEquals("test", obj.getDynaClass().getName());
-            Assertions.assertEquals("1", obj.get("id").toString());
-            Assertions.assertEquals("foo", obj.get("value").toString());
+            Assertions.assertEquals("test", obj.getTableClass().getName());
+            Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+            Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
         } finally {
             tmpFile.delete();
         }
@@ -303,7 +303,7 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<SqlDynaBean> beans = new ArrayList<>();
+            List<TableObject> beans = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
@@ -312,11 +312,11 @@ public class TestDataReaderAndWriter {
 
             Assertions.assertEquals(1, beans.size());
 
-            SqlDynaBean obj = beans.get(0);
+            TableObject obj = beans.get(0);
 
-            Assertions.assertEquals("test", obj.getDynaClass().getName());
-            Assertions.assertEquals("1", obj.get("id").toString());
-            Assertions.assertEquals("foo", obj.get("value").toString());
+            Assertions.assertEquals("test", obj.getTableClass().getName());
+            Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+            Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
         } finally {
             tmpFile.delete();
         }
@@ -335,7 +335,7 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <data>
               <test id='1'>
                 <value>foo</value>
@@ -349,23 +349,23 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(3, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("id").toString());
-        Assertions.assertEquals("foo", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
 
         obj = beans.get(1);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("2", obj.get("id").toString());
-        Assertions.assertEquals("bar", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("2", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("bar", obj.getColumnValue("value").toString());
 
         obj = beans.get(2);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("3", obj.get("id").toString());
-        Assertions.assertEquals("baz", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("3", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("baz", obj.getColumnValue("value").toString());
     }
 
     /**
@@ -381,18 +381,18 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <someRandomName>
               <test id='1' value='foo'/>
             </someRandomName>""");
 
         Assertions.assertEquals(1, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("id").toString());
-        Assertions.assertEquals("foo", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
     }
 
     /**
@@ -408,7 +408,7 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <data>
               <test id='1' value='foo'/>
               <other id='2' value='bar'/>
@@ -417,17 +417,17 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(2, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("id").toString());
-        Assertions.assertEquals("foo", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
 
         obj = beans.get(1);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("3", obj.get("id").toString());
-        Assertions.assertEquals("baz", obj.get("value").toString());
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("3", obj.getColumnValue("id").toString());
+        Assertions.assertEquals("baz", obj.getColumnValue("value").toString());
     }
 
     /**
@@ -443,18 +443,18 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <data>
               <test id='1' value1='foo'/>
             </data>""");
 
         Assertions.assertEquals(1, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("id").toString());
-        Assertions.assertNull(obj.get("value"));
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+        Assertions.assertNull(obj.getColumnValue("value"));
     }
 
     /**
@@ -470,7 +470,7 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<SqlDynaBean> beans = readBeans(model, """
+        List<TableObject> beans = readBeans(model, """
             <data>
               <test id='1'>
                 <value2>foo</value2>
@@ -479,11 +479,11 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(1, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("id").toString());
-        Assertions.assertNull(obj.get("value"));
+        Assertions.assertEquals("test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("id").toString());
+        Assertions.assertNull(obj.getColumnValue("value"));
     }
 
     /**
@@ -505,7 +505,7 @@ public class TestDataReaderAndWriter {
               <Test Id='2' value='baz'/>
             </data>""";
 
-        List<SqlDynaBean> beans = new ArrayList<>();
+        List<TableObject> beans = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setCaseSensitive(true);
@@ -515,11 +515,11 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(1, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("Test", obj.getDynaClass().getName());
-        Assertions.assertEquals("2", obj.get("Id").toString());
-        Assertions.assertNull(obj.get("Value"));
+        Assertions.assertEquals("Test", obj.getTableClass().getName());
+        Assertions.assertEquals("2", obj.getColumnValue("Id").toString());
+        Assertions.assertNull(obj.getColumnValue("Value"));
     }
 
     /**
@@ -542,7 +542,7 @@ public class TestDataReaderAndWriter {
               <Test id='3' Value='baz'/>
             </data>""";
 
-        List<SqlDynaBean> beans = new ArrayList<>();
+        List<TableObject> beans = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setCaseSensitive(false);
@@ -552,23 +552,23 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(3, beans.size());
 
-        SqlDynaBean obj = beans.get(0);
+        TableObject obj = beans.get(0);
 
-        Assertions.assertEquals("Test", obj.getDynaClass().getName());
-        Assertions.assertEquals("1", obj.get("Id").toString());
-        Assertions.assertEquals("foo", obj.get("Value").toString());
+        Assertions.assertEquals("Test", obj.getTableClass().getName());
+        Assertions.assertEquals("1", obj.getColumnValue("Id").toString());
+        Assertions.assertEquals("foo", obj.getColumnValue("Value").toString());
 
         obj = beans.get(1);
 
-        Assertions.assertEquals("Test", obj.getDynaClass().getName());
-        Assertions.assertEquals("2", obj.get("Id").toString());
-        Assertions.assertEquals("bar", obj.get("Value").toString());
+        Assertions.assertEquals("Test", obj.getTableClass().getName());
+        Assertions.assertEquals("2", obj.getColumnValue("Id").toString());
+        Assertions.assertEquals("bar", obj.getColumnValue("Value").toString());
 
         obj = beans.get(2);
 
-        Assertions.assertEquals("Test", obj.getDynaClass().getName());
-        Assertions.assertEquals("3", obj.get("Id").toString());
-        Assertions.assertEquals("baz", obj.get("Value").toString());
+        Assertions.assertEquals("Test", obj.getTableClass().getName());
+        Assertions.assertEquals("3", obj.getColumnValue("Id").toString());
+        Assertions.assertEquals("baz", obj.getColumnValue("Value").toString());
     }
 
     /**
@@ -586,10 +586,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Special Characters: \u0001\u0009\u0010";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
 
         String encoded = base64Encode(testedValue);
@@ -620,10 +620,10 @@ public class TestDataReaderAndWriter {
         // \t = \u0009
         String testedValue = "Some Special Characters: \u0001\t\u0010";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "ISO-8859-1", "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <value " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(testedValue) + "</value>\n" + "  </test>\n" + "</data>\n");
     }
@@ -651,17 +651,17 @@ public class TestDataReaderAndWriter {
         String testedValue4 = "<![CDATA[" + StringUtils.repeat("b \n", 1000) + "]]>";
         String testedValue5 = "<<![CDATA[" + StringUtils.repeat("b \n", 500) + "]]>><![CDATA[" + StringUtils.repeat("c \n", 500) + "]]>";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value1", testedValue1);
-        bean.set("value2", testedValue2);
-        bean.set("value3", testedValue3);
-        bean.set("value4", testedValue4);
-        bean.set("value5", testedValue5);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value1", testedValue1);
+        bean.setColumnValue("value2", testedValue2);
+        bean.setColumnValue("value3", testedValue3);
+        bean.setColumnValue("value4", testedValue4);
+        bean.setColumnValue("value5", testedValue5);
 
         byte[] xmlData = writeBean(model, bean, "UTF-8");
-        List<SqlDynaBean> beans = readBeans(model, xmlData);
+        List<TableObject> beans = readBeans(model, xmlData);
 
         Assertions.assertEquals(1, beans.size());
         Assertions.assertEquals(bean, beans.get(0));
@@ -676,10 +676,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table id=\"1\" value=\"" + testedValue + "\">\n" + "    <table-name>" + tableName + "</table-name>\n" + "  </table>\n" + "</data>\n");
     }
@@ -699,10 +699,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table table-name=\"test$\" id=\"1\" value=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -716,10 +716,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table id=\"1\" value=\"" + testedValue + "\">\n" + "    <table-name>" + tableName + "</table-name>\n" + "  </table>\n" + "</data>\n");
     }
@@ -748,11 +748,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table table-name=\"test&amp;table\" id=\"1\" value=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -781,11 +781,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table table-name=\"test&lt;table\" id=\"1\" value=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -814,11 +814,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
@@ -852,11 +852,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
@@ -891,10 +891,10 @@ public class TestDataReaderAndWriter {
 
         modelIO.setValidateXml(true);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <table table-name=\"table\" id=\"1\" value=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -915,10 +915,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\" value=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -939,10 +939,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <value>" + testedValue + "</value>\n" + "  </test>\n" + "</data>\n");
     }
@@ -962,10 +962,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("the value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("the value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column column-name=\"the value\">" + testedValue + "</column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -986,10 +986,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("the value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("the value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
@@ -1011,10 +1011,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column>\n" + "      <column-name>" + columnName + "</column-name>\n" + "      <column-value>" + testedValue + "</column-value>\n" + "    </column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1029,10 +1029,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='500' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column>\n" + "      <column-name>" + columnName + "</column-name>\n" + "      <column-value>" + testedValue + "</column-value>\n" + "    </column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1047,10 +1047,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column>\n" + "      <column-name>" + columnName + "</column-name>\n" + "      <column-value>" + testedValue + "</column-value>\n" + "    </column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1071,10 +1071,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("the value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("the value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column column-name=\"the value\" " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(testedValue) + "</column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1089,10 +1089,10 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "the\u0000value";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column>\n" + "      <column-name>" + columnName + "</column-name>\n" + "      <column-value " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(testedValue) + "</column-value>\n" + "    </column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1122,11 +1122,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = StringUtils.repeat("the\u0000value", 40);
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column>\n" + "      <column-name " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(columnName) + "</column-name>\n" + "      <column-value " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(testedValue) + "</column-value>\n" + "    </column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1146,10 +1146,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("value", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("value", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <value " + DatabaseIO.BASE64_ATTR_NAME + "=\"true\">" + base64Encode(testedValue) + "</value>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1178,11 +1178,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
             <data>
@@ -1220,11 +1220,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column column-name=\"foo&amp;bar\">" + testedValue + "</column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1253,11 +1253,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column column-name=\"foo&lt;bar\">" + testedValue + "</column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1286,11 +1286,11 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
         String testedValue = "Some Text";
 
-        bean.set("id", (1));
-        bean.set(columnName, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(columnName, testedValue);
 
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
@@ -1317,10 +1317,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("column", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("column", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\" column=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -1340,10 +1340,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("column-name", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("column-name", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\" column-name=\"" + testedValue + "\" />\n" + "</data>\n");
     }
@@ -1363,10 +1363,10 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set("table-name", testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue("table-name", testedValue);
 
         roundtripTest(model, bean, "UTF-8", "<?xml version='1.0' encoding='UTF-8'?>\n" + "<data>\n" + "  <test id=\"1\">\n" + "    <column column-name=\"table-name\">" + testedValue + "</column>\n" + "  </test>\n" + "</data>\n");
     }
@@ -1386,10 +1386,10 @@ public class TestDataReaderAndWriter {
             </database>""".formatted(DatabaseIO.BASE64_ATTR_NAME));
         String testedValue = "Some Text";
 
-        SqlDynaBean bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createDynaBeanFor(model.getTable(0));
 
-        bean.set("id", (1));
-        bean.set(DatabaseIO.BASE64_ATTR_NAME, testedValue);
+        bean.setColumnValue("id", (1));
+        bean.setColumnValue(DatabaseIO.BASE64_ATTR_NAME, testedValue);
 
         roundtripTest(model, bean, "UTF-8", """
             <?xml version='1.0' encoding='UTF-8'?>
@@ -1408,14 +1408,14 @@ public class TestDataReaderAndWriter {
         /**
          * Stores the read objects.
          */
-        private final List<SqlDynaBean> readObjects;
+        private final List<TableObject> readObjects;
 
         /**
          * Creates a new test data sink using the given list as the backing store.
          *
          * @param readObjects The list to store the read object
          */
-        private TestDataSink(List<SqlDynaBean> readObjects) {
+        private TestDataSink(List<TableObject> readObjects) {
             this.readObjects = readObjects;
         }
 
@@ -1430,7 +1430,7 @@ public class TestDataReaderAndWriter {
          * {@inheritDoc}
          */
         @Override
-        public void addBean(SqlDynaBean bean) throws DataSinkException {
+        public void addBean(TableObject bean) throws DataSinkException {
             readObjects.add(bean);
         }
 

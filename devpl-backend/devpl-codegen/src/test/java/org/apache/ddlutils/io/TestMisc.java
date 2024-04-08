@@ -2,7 +2,7 @@ package org.apache.ddlutils.io;
 
 
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DBTypeEnum;
@@ -136,7 +136,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc1");
+        List<TableObject> beans = getRows("misc1");
 
         if (isSybase) {
             assertEquals(new BigDecimal(10), beans.get(0), "pk");
@@ -276,7 +276,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc1");
+        List<TableObject> beans = getRows("misc1");
 
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "pk");
@@ -396,11 +396,11 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc");
+        List<TableObject> beans = getRows("misc");
 
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "pk");
-            assertNull(beans.get(0).get("fk"));
+            assertNull(beans.get(0).getColumnValue("fk"));
             assertEquals(new BigDecimal(2), beans.get(1), "pk");
             assertEquals(new BigDecimal(1), beans.get(1), "fk");
             assertEquals(new BigDecimal(3), beans.get(2), "pk");
@@ -409,7 +409,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals(new BigDecimal(4), beans.get(3), "fk");
         } else {
             assertEquals((1), beans.get(0), "pk");
-            assertNull(beans.get(0).get("fk"));
+            assertNull(beans.get(0).getColumnValue("fk"));
             assertEquals((2), beans.get(1), "pk");
             assertEquals((1), beans.get(1), "fk");
             assertEquals((3), beans.get(2), "pk");
@@ -511,11 +511,11 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc");
+        List<TableObject> beans = getRows("misc");
 
         if (isSybase) {
             assertEquals(new BigDecimal(10), beans.get(0), "pk");
-            assertNull(beans.get(0).get("fk"));
+            assertNull(beans.get(0).getColumnValue("fk"));
             assertEquals(new BigDecimal(11), beans.get(1), "pk");
             assertEquals(new BigDecimal(10), beans.get(1), "fk");
             assertEquals(new BigDecimal(12), beans.get(2), "pk");
@@ -524,7 +524,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals(new BigDecimal(13), beans.get(3), "fk");
         } else {
             assertEquals((10), beans.get(0), "pk");
-            assertNull(beans.get(0).get("fk"));
+            assertNull(beans.get(0).getColumnValue("fk"));
             assertEquals((11), beans.get(1), "pk");
             assertEquals((10), beans.get(1), "fk");
             assertEquals((12), beans.get(2), "pk");
@@ -599,14 +599,14 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc", "id");
+        List<TableObject> beans = getRows("misc", "id");
 
         assertEquals(12, beans.size());
         if (isSybase) {
             assertEquals(new BigDecimal(1), beans.get(0), "id");
-            assertNull(beans.get(0).get("parent_id"));
+            assertNull(beans.get(0).getColumnValue("parent_id"));
             assertEquals(new BigDecimal(2), beans.get(1), "id");
-            assertNull(beans.get(1).get("parent_id"));
+            assertNull(beans.get(1).getColumnValue("parent_id"));
             assertEquals(new BigDecimal(3), beans.get(2), "id");
             assertEquals(new BigDecimal(2), beans.get(2), "parent_id");
             assertEquals(new BigDecimal(4), beans.get(3), "id");
@@ -614,7 +614,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals(new BigDecimal(5), beans.get(4), "id");
             assertEquals(new BigDecimal(3), beans.get(4), "parent_id");
             assertEquals(new BigDecimal(6), beans.get(5), "id");
-            assertNull(beans.get(5).get("parent_id"));
+            assertNull(beans.get(5).getColumnValue("parent_id"));
             assertEquals(new BigDecimal(7), beans.get(6), "id");
             assertEquals(new BigDecimal(1), beans.get(6), "parent_id");
             assertEquals(new BigDecimal(8), beans.get(7), "id");
@@ -624,14 +624,14 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals(new BigDecimal(10), beans.get(9), "id");
             assertEquals(new BigDecimal(4), beans.get(9), "parent_id");
             assertEquals(new BigDecimal(11), beans.get(10), "id");
-            assertNull(beans.get(10).get("parent_id"));
+            assertNull(beans.get(10).getColumnValue("parent_id"));
             assertEquals(new BigDecimal(12), beans.get(11), "id");
             assertEquals(new BigDecimal(11), beans.get(11), "parent_id");
         } else {
             assertEquals((1), beans.get(0), "id");
-            assertNull(beans.get(0).get("parent_id"));
+            assertNull(beans.get(0).getColumnValue("parent_id"));
             assertEquals((2), beans.get(1), "id");
-            assertNull(beans.get(1).get("parent_id"));
+            assertNull(beans.get(1).getColumnValue("parent_id"));
             assertEquals((3), beans.get(2), "id");
             assertEquals((2), beans.get(2), "parent_id");
             assertEquals((4), beans.get(3), "id");
@@ -639,7 +639,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals((5), beans.get(4), "id");
             assertEquals((3), beans.get(4), "parent_id");
             assertEquals((6), beans.get(5), "id");
-            assertNull(beans.get(5).get("parent_id"));
+            assertNull(beans.get(5).getColumnValue("parent_id"));
             assertEquals((7), beans.get(6), "id");
             assertEquals((1), beans.get(6), "parent_id");
             assertEquals((8), beans.get(7), "id");
@@ -649,7 +649,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             assertEquals((10), beans.get(9), "id");
             assertEquals((4), beans.get(9), "parent_id");
             assertEquals((11), beans.get(10), "id");
-            assertNull(beans.get(10).get("parent_id"));
+            assertNull(beans.get(10).getColumnValue("parent_id"));
             assertEquals((12), beans.get(11), "id");
             assertEquals((11), beans.get(11), "parent_id");
         }
@@ -723,7 +723,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<SqlDynaBean> beans = getRows("misc", "id");
+        List<TableObject> beans = getRows("misc", "id");
 
         assertEquals(6, beans.size());
         if (isSybase) {
@@ -1072,8 +1072,8 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         insertRow("roundtrip2", new Object[]{"foo", (1)});
         insertRow("roundtrip2", new Object[]{"bar", (2)});
 
-        List<SqlDynaBean> beans1 = getRows("roundtrip1", "pk1");
-        List<SqlDynaBean> beans2 = getRows("roundtrip2", "pk1");
+        List<TableObject> beans1 = getRows("roundtrip1", "pk1");
+        List<TableObject> beans2 = getRows("roundtrip2", "pk1");
 
         assertEquals(2, beans1.size());
         assertEquals(2, beans2.size());
@@ -1121,7 +1121,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         insertRow("Roundtrip", new Object[]{(1), "foo"});
 
-        List<SqlDynaBean> beans = getRows("Roundtrip");
+        List<TableObject> beans = getRows("Roundtrip");
 
         assertEquals(1, beans.size());
         assertEquals((1), beans.get(0), "Pk");

@@ -8,7 +8,7 @@ import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.SQLException;
 import java.sql.Types;
@@ -30,7 +30,7 @@ public class MySqlModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         // TODO This needs some more work, since table names can be case-sensitive or lowercase
         //      depending on the platform (really cute).
         //      See http://dev.mysql.com/doc/refman/4.1/en/name-case-sensitivity.html for more info.
@@ -44,7 +44,7 @@ public class MySqlModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         // MySQL converts illegal date/time/timestamp values to "0000-00-00 00:00:00", but this

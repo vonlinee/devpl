@@ -11,15 +11,15 @@ import java.util.Set;
 /**
  * 替代Map<String, Object>
  */
-public class ContextMap implements Map<String, Object> {
+public final class PojoMap implements Map<String, Object> {
 
     private final Map<String, Object> map;
 
-    public ContextMap() {
+    public PojoMap() {
         this(new HashMap<>());
     }
 
-    public ContextMap(Map<String, Object> map) {
+    public PojoMap(Map<String, Object> map) {
         this.map = map;
     }
 

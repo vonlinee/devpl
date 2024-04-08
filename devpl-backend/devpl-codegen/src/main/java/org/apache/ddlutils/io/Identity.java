@@ -2,7 +2,7 @@ package org.apache.ddlutils.io;
 
 
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class Identity {
     /**
      * The identity columns and their values.
      */
-    private final ContextMap _columnValues = new ContextMap();
+    private final PojoMap _columnValues = new PojoMap();
     /**
      * The optional foreign key name whose referenced object this identity represents.
      */

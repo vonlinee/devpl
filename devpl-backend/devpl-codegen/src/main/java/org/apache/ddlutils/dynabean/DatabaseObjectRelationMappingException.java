@@ -1,6 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 
 import java.io.Serial;
@@ -8,7 +7,7 @@ import java.io.Serial;
 /**
  * This exception is thrown when something dealing with sql dyna beans or classes failed.
  */
-public class SqlDynaException extends DdlUtilsException {
+public class DatabaseObjectRelationMappingException extends DdlUtilsException {
     /**
      * Constant for serializing instances of this class.
      */
@@ -18,7 +17,7 @@ public class SqlDynaException extends DdlUtilsException {
     /**
      * Creates a new empty exception object.
      */
-    public SqlDynaException() {
+    public DatabaseObjectRelationMappingException() {
         super();
     }
 
@@ -27,7 +26,7 @@ public class SqlDynaException extends DdlUtilsException {
      *
      * @param msg The exception message
      */
-    public SqlDynaException(String msg) {
+    public DatabaseObjectRelationMappingException(String msg) {
         super(msg);
     }
 
@@ -36,7 +35,7 @@ public class SqlDynaException extends DdlUtilsException {
      *
      * @param baseEx The base exception
      */
-    public SqlDynaException(Throwable baseEx) {
+    public DatabaseObjectRelationMappingException(Throwable baseEx) {
         super(baseEx);
     }
 
@@ -46,7 +45,7 @@ public class SqlDynaException extends DdlUtilsException {
      * @param msg    The exception message
      * @param baseEx The base exception
      */
-    public SqlDynaException(String msg, Throwable baseEx) {
+    public DatabaseObjectRelationMappingException(String msg, Throwable baseEx) {
         super(msg, baseEx);
     }
 

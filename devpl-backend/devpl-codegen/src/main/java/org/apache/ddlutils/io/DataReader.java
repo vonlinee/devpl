@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 import org.apache.ddlutils.io.converters.SqlTypeConverter;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
@@ -271,7 +271,7 @@ public class DataReader {
         if (table == null) {
             _log.warn("Data XML contains an element " + elemQName + " at location " + location + " but there is no table defined with this name. This element will be ignored.");
         } else {
-            SqlDynaBean bean = _model.createDynaBeanFor(table);
+            TableObject bean = _model.createDynaBeanFor(table);
 
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
                 Column column = table.getColumn(idx);
@@ -412,10 +412,10 @@ public class DataReader {
      * @param column The column definition
      * @param value  The value as a string
      */
-    private void setColumnValue(SqlDynaBean bean, Table table, Column column, String value) throws DdlUtilsXMLException {
+    private void setColumnValue(TableObject bean, Table table, Column column, String value) throws DdlUtilsXMLException {
         SqlTypeConverter converter = _converterConf.getRegisteredConverter(table, column);
         Object propValue = (converter != null ? converter.fromString(value, column.getTypeCode()) : value);
-        bean.set(column.getName(), propValue);
+        bean.setColumnValue(column.getName(), propValue);
     }
 
     /**

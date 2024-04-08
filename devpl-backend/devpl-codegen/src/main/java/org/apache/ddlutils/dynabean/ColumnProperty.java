@@ -1,6 +1,5 @@
 package org.apache.ddlutils.dynabean;
 
-
 import org.apache.ddlutils.model.Column;
 
 /**
@@ -8,16 +7,16 @@ import org.apache.ddlutils.model.Column;
  * The Column describes additional relational metadata
  * for the property such as whether the property is a primary key column,
  * an autoIncrement column and the SQL type etc.
- *
- *
  */
-public class SqlDynaProperty {
+public class ColumnProperty {
 
     /**
-     * The column for which this dyna property is defined.
+     * The column for which this property is defined.
      */
     private final Column _column;
-
+    /**
+     * The column name
+     */
     private String name;
     private Class<?> type;
 
@@ -26,12 +25,12 @@ public class SqlDynaProperty {
      *
      * @param column The column
      */
-    public SqlDynaProperty(Column column) {
+    public ColumnProperty(Column column) {
         this.name = column.getName();
         _column = column;
     }
 
-    public SqlDynaProperty(String columnName) {
+    public ColumnProperty(String columnName) {
         this.name = columnName;
         this._column = new Column();
         this._column.setName(columnName);
@@ -43,7 +42,7 @@ public class SqlDynaProperty {
      * @param column The column
      * @param type   The type of the property
      */
-    public SqlDynaProperty(Column column, Class<?> type) {
+    public ColumnProperty(Column column, Class<?> type) {
         this.name = column.getName();
         this.type = type;
         _column = column;

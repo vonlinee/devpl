@@ -4,7 +4,7 @@ package org.apache.ddlutils.platform.mysql;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class MySql5xBuilder extends MySqlBuilder {
     }
 
     @Override
-    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, PojoMap parameters) throws IOException {
         print(" Engine = InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT= '" + table.getDescription() + "'");
     }
 
@@ -39,11 +39,11 @@ public class MySql5xBuilder extends MySqlBuilder {
     }
 
     @Override
-    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, ContextMap contextMap) throws IOException {
+    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, PojoMap param) throws IOException {
         print(" COMMENT '");
         print(column.getDescription());
         print("' ");
 
-        super.writeColumnDefStmtEnding(table, column, columnIndex, contextMap);
+        super.writeColumnDefStmtEnding(table, column, columnIndex, param);
     }
 }

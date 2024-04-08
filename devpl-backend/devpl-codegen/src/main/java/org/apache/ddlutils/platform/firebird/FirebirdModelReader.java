@@ -5,7 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 
 import java.sql.*;
@@ -28,7 +28,7 @@ public class FirebirdModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Table readTable(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Table readTable(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Table table = super.readTable(metaData, values);
 
         if (table != null) {
@@ -52,7 +52,7 @@ public class FirebirdModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(getDefaultTablePattern(), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ContextMap values = readColumns(columnData, getColumnsForColumn());
+                    PojoMap values = readColumns(columnData, getColumnsForColumn());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         columns.add(readColumn(metaData, values));
@@ -62,7 +62,7 @@ public class FirebirdModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(metaData.escapeForSearch(tableName), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    ContextMap values = readColumns(columnData, getColumnsForColumn());
+                    PojoMap values = readColumns(columnData, getColumnsForColumn());
 
                     columns.add(readColumn(metaData, values));
                 }
@@ -75,7 +75,7 @@ public class FirebirdModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, PojoMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getTypeCode() == Types.FLOAT) {
@@ -133,7 +133,7 @@ public class FirebirdModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 pkData = metaData.getPrimaryKeys(getDefaultTablePattern());
                 while (pkData.next()) {
-                    ContextMap values = readColumns(pkData, getColumnsForPK());
+                    PojoMap values = readColumns(pkData, getColumnsForPK());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         pks.add(readPrimaryKeyName(metaData, values));
@@ -142,7 +142,7 @@ public class FirebirdModelReader extends JdbcModelReader {
             } else {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
                 while (pkData.next()) {
-                    ContextMap values = readColumns(pkData, getColumnsForPK());
+                    PojoMap values = readColumns(pkData, getColumnsForPK());
 
                     pks.add(readPrimaryKeyName(metaData, values));
                 }
@@ -165,7 +165,7 @@ public class FirebirdModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 fkData = metaData.getForeignKeys(getDefaultTablePattern());
                 while (fkData.next()) {
-                    ContextMap values = readColumns(fkData, getColumnsForFK());
+                    PojoMap values = readColumns(fkData, getColumnsForFK());
 
                     if (tableName.equals(values.get("FKTABLE_NAME"))) {
                         readForeignKey(metaData, values, fks);
@@ -174,7 +174,7 @@ public class FirebirdModelReader extends JdbcModelReader {
             } else {
                 fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
                 while (fkData.next()) {
-                    ContextMap values = readColumns(fkData, getColumnsForFK());
+                    PojoMap values = readColumns(fkData, getColumnsForFK());
 
                     readForeignKey(metaData, values, fks);
                 }
@@ -202,7 +202,7 @@ public class FirebirdModelReader extends JdbcModelReader {
             ResultSet indexData = stmt.executeQuery();
 
             while (indexData.next()) {
-                ContextMap values = readColumns(indexData, getColumnsForIndex());
+                PojoMap values = readColumns(indexData, getColumnsForIndex());
 
                 // we have to reverse the meaning of the unique flag; also, null means false
                 values.add("NON_UNIQUE", (values.get("NON_UNIQUE") == null) || Boolean.FALSE.equals(values.get("NON_UNIQUE")) ? Boolean.TRUE : Boolean.FALSE);
@@ -285,7 +285,7 @@ public class FirebirdModelReader extends JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                ContextMap values = readColumns(tableData, getColumnsForTable());
+                PojoMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = (String) values.get("TABLE_NAME");
 
                 if ((tableName != null) && (!tableName.isEmpty())) {

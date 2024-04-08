@@ -1,7 +1,7 @@
 package org.apache.ddlutils.io;
 
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 
 /**
  * Marks classes that can receive dyna beans read by the {@link org.apache.ddlutils.io.DataReader}.
@@ -17,7 +17,7 @@ public interface DataSink {
      *
      * @param bean The dyna bean to add
      */
-    void addBean(SqlDynaBean bean) throws DataSinkException;
+    void addBean(TableObject bean) throws DataSinkException;
 
     /**
      * Notifies the sink that all beans have been added.

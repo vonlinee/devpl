@@ -1,6 +1,6 @@
 package org.apache.ddlutils.util;
 
-import org.apache.ddlutils.dynabean.SqlDynaBean;
+import org.apache.ddlutils.dynabean.TableObject;
 
 import javax.sql.DataSource;
 import java.beans.BeanDescriptor;
@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class BeanUtils {
 
-    public static void copyProperties(SqlDynaBean answer, Object source) throws InvocationTargetException, IllegalAccessException {
+    public static void copyProperties(TableObject answer, Object source) throws InvocationTargetException, IllegalAccessException {
 
     }
 

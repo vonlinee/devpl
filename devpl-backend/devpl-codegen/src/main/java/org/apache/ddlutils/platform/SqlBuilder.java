@@ -4,7 +4,7 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.ListOrderedMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.slf4j.Logger;
@@ -363,13 +363,13 @@ public abstract class SqlBuilder {
 
     /**
      * Outputs the DDL to create the given temporary table. Per default this is simply
-     * a call to {@link #createTable(Database, Table, ContextMap)}.
+     * a call to {@link #createTable(Database, Table, PojoMap)}.
      *
      * @param database   The database model
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void createTemporaryTable(Database database, Table table, ContextMap parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, PojoMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
@@ -458,7 +458,7 @@ public abstract class SqlBuilder {
      * @param table    The table
      */
     public void createTable(Database database, Table table) throws IOException {
-        createTable(database, table, new ContextMap());
+        createTable(database, table, new PojoMap());
     }
 
     /**
@@ -469,7 +469,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
+    public void createTable(Database database, Table table, PojoMap parameters) throws IOException {
         writeTableComment(table);
         beforeCreateTableStmtStart(database, table, parameters);
         writeTableCreationStmt(database, table, parameters);
@@ -482,7 +482,7 @@ public abstract class SqlBuilder {
         }
     }
 
-    protected void beforeCreateTableStmtStart(Database database, Table table, ContextMap parameters) throws IOException {
+    protected void beforeCreateTableStmtStart(Database database, Table table, PojoMap parameters) throws IOException {
 
     }
 
@@ -1102,7 +1102,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmt(Database database, Table table, ContextMap parameters) throws IOException {
+    protected void writeTableCreationStmt(Database database, Table table, PojoMap parameters) throws IOException {
         print("CREATE TABLE ");
         printlnIdentifier(getTableName(table));
         println("(");
@@ -1130,7 +1130,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, PojoMap parameters) throws IOException {
         printEndOfStatement();
     }
 
@@ -1139,7 +1139,7 @@ public abstract class SqlBuilder {
      *
      * @param table The table
      */
-    protected void writeColumns(Table table, ContextMap parameters) throws IOException {
+    protected void writeColumns(Table table, PojoMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             Column column = table.getColumn(idx);
@@ -1148,7 +1148,7 @@ public abstract class SqlBuilder {
         }
     }
 
-    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, ContextMap contextMap) throws IOException {
+    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, PojoMap param) throws IOException {
         if (columnIndex < table.getColumnCount() - 1) {
             println(",");
         }

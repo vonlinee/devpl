@@ -5,7 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -27,12 +27,10 @@ public class FirebirdBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
+    public void createTable(Database database, Table table, PojoMap parameters) throws IOException {
         super.createTable(database, table, parameters);
-
         // creating generator and trigger for auto-increment
         Column[] columns = table.getAutoIncrementColumns();
-
         for (Column column : columns) {
             writeAutoIncrementCreateStmts(database, table, column);
         }

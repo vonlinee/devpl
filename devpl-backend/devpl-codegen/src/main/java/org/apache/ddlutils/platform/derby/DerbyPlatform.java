@@ -12,7 +12,7 @@ import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
 import org.apache.ddlutils.platform.JDBCDriverTypeEnum;
 import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -54,7 +54,7 @@ public class DerbyPlatform extends CloudscapePlatform {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, PojoMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
         if (JDBCDriverTypeEnum.DERBY.getDriverClassName().equals(jdbcDriverClassName) ||
             JDBCDriverTypeEnum.DERBY_EMBED.getDriverClassName().equals(jdbcDriverClassName)) {

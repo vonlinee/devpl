@@ -7,7 +7,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Index;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.SqlBuilder;
-import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.PojoMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -29,7 +29,7 @@ public class InterbaseBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
+    public void createTable(Database database, Table table, PojoMap parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment
