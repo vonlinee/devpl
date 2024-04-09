@@ -925,6 +925,25 @@ public abstract class FileUtils {
         return readLines(file, encoding.name());
     }
 
+    public static Stream<String> lines(File file) throws IOException {
+        return Files.lines(file.toPath(), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 不抛出异常版本的 readLines
+     *
+     * @param file     文件
+     * @param encoding 编码
+     * @return 文件的所有行
+     */
+    public static List<String> readLinesQuietly(File file, Charset encoding) {
+        try {
+            return readLines(file, encoding);
+        } catch (Exception exception) {
+            return Collections.emptyList();
+        }
+    }
+
     /**
      * Reads the contents of a file line by line to a List of Strings using the
      * default encoding for the VM. The file is always closed.
@@ -983,7 +1002,7 @@ public abstract class FileUtils {
 
     // IOUtils.lineIterator
     public static LineIterator lineIterator(InputStream input, String encoding) throws IOException {
-        Reader reader = null;
+        Reader reader;
         if (encoding == null) {
             reader = new InputStreamReader(input);
         } else {

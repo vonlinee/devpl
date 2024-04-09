@@ -249,10 +249,12 @@ public class DruidMySqlParser extends DruidSqlParser {
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType);
         SQLStatement statement = parser.parseStatement();
 
-        MySqlInsertStatement insertStmt = (MySqlInsertStatement) statement;
+        if (!(statement instanceof MySqlInsertStatement insertStatement)) {
+            return result;
+        }
 
         // INSERT SQL的表信息
-        SQLExprTableSource tableSource = insertStmt.getTableSource();
+        SQLExprTableSource tableSource = insertStatement.getTableSource();
         SqlTable table = new SqlTable();
         table.setName(tableSource.getTableName());
         table.setCatalog(tableSource.getCatalog());
@@ -261,7 +263,7 @@ public class DruidMySqlParser extends DruidSqlParser {
 
         // INSERT SQL的列信息
         List<InsertColumn> insertColumns = new ArrayList<>();
-        List<SQLExpr> columns = insertStmt.getColumns();
+        List<SQLExpr> columns = insertStatement.getColumns();
         for (SQLExpr column : columns) {
             if (column instanceof SQLIdentifierExpr identifierExpr) {
                 InsertColumn insertColumn = new InsertColumn();
@@ -275,7 +277,7 @@ public class DruidMySqlParser extends DruidSqlParser {
         // 插入语句的值
         List<List<String>> columnValues = new ArrayList<>();
         // 如果是批量插入的insert：insert into tab(id,name) values(1,'a'),(2,'b'),(3,'c');
-        List<SQLInsertStatement.ValuesClause> assignValueClauses = insertStmt.getValuesList();
+        List<SQLInsertStatement.ValuesClause> assignValueClauses = insertStatement.getValuesList();
         if (assignValueClauses != null && assignValueClauses.size() > 1) {   // 批量插入
             for (int j = 0; j < assignValueClauses.size(); j++) {
                 SQLInsertStatement.ValuesClause valueClause = assignValueClauses.get(j);
@@ -289,7 +291,7 @@ public class DruidMySqlParser extends DruidSqlParser {
             }
         } else {
             // 非批量插入
-            List<SQLExpr> sqlExpressions = insertStmt.getValues().getValues();
+            List<SQLExpr> sqlExpressions = insertStatement.getValues().getValues();
             List<String> columnValuesOfOneRow = new ArrayList<>();
             for (SQLExpr sqlExpression : sqlExpressions) {
                 // 处理不同的数据类型
@@ -300,12 +302,12 @@ public class DruidMySqlParser extends DruidSqlParser {
         result.setColumnValues(columnValues);
 
         // 如果是 INTO INTO SELECT 语句，则可以获取 select查询
-        if (insertStmt.getQuery() != null) {
-            SQLSelect select = insertStmt.getQuery();
+        if (insertStatement.getQuery() != null) {
+            SQLSelect select = insertStatement.getQuery();
         }
 
         // ON DUPLICATE UPDATE 部分可以使用下面的语句获取
-        List<SQLExpr> dku = insertStmt.getDuplicateKeyUpdate();
+        List<SQLExpr> dku = insertStatement.getDuplicateKeyUpdate();
         if (dku != null && !dku.isEmpty()) {
 
         }

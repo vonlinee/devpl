@@ -32,10 +32,8 @@ import java.util.NoSuchElementException;
  * @author Niall Pemberton
  * @author Stephen Colebourne
  * @author Sandy McArthur
- * @version $Id: LineIterator.java 437567 2006-08-28 06:39:07Z bayard $
- * @since Commons IO 1.2
  */
-public class LineIterator implements Iterator<String> {
+public class LineIterator implements Iterator<String>, AutoCloseable {
 
     /**
      * The reader that is being read.
@@ -155,6 +153,7 @@ public class LineIterator implements Iterator<String> {
      * close the iterator then the <code>Reader</code> remains open. This method can
      * safely be called multiple times.
      */
+    @Override
     public void close() {
         finished = true;
         IOUtils.closeQuietly(bufferedReader);

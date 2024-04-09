@@ -47,7 +47,7 @@ public class JFinalEnjoyTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public String getTemplateFileExtension() {
+    public @NotNull String getTemplateFileExtension() {
         return ".ej";
     }
 }

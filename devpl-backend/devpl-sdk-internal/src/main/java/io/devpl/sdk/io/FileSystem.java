@@ -1,20 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.devpl.sdk.io;
 
 import java.util.Arrays;
@@ -28,8 +11,6 @@ import java.util.Objects;
  * The starting point of any operation is {@link #getCurrent()} which gets you the enum for the file system that matches
  * the OS hosting the running JVM.
  * </p>
- *
- * @since 2.7
  */
 public enum FileSystem {
 
@@ -200,7 +181,7 @@ public enum FileSystem {
         } catch (final SecurityException ex) {
             // we are not allowed to look at this property
             System.err.println("Caught a SecurityException reading the system property '" + property
-                + "'; the SystemUtils property value will default to null.");
+                               + "'; the SystemUtils property value will default to null.");
             return null;
         }
     }
@@ -295,7 +276,7 @@ public enum FileSystem {
      * @return {@code true} if the candidate name is legal
      */
     public boolean isLegalFileName(final CharSequence candidate) {
-        if (candidate == null || candidate.length() == 0 || candidate.length() > maxFileNameLength) {
+        if (candidate == null || candidate.isEmpty() || candidate.length() > maxFileNameLength) {
             return false;
         }
         if (isReservedFileName(candidate)) {

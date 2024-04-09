@@ -3,6 +3,7 @@ package io.devpl.codegen.template.rocker;
 import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.TemplateException;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.OutputStream;
 import java.io.Writer;
@@ -24,7 +25,7 @@ public class RockerTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public String getTemplateFileExtension() {
+    public @NotNull String getTemplateFileExtension() {
         return null;
     }
 }

@@ -4,10 +4,11 @@ import io.devpl.codegen.ConstVal;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.MessageFormat;
+import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -173,14 +174,7 @@ public abstract class Utils {
      * @throws IOException 执行命令出错
      */
     public static void openDirectory(String outDir) throws IOException {
-        String osName = System.getProperty("os.name");
-        if (osName != null) {
-            if (osName.contains("Mac")) {
-                Runtime.getRuntime().exec("open " + outDir);
-            } else if (osName.contains("Windows")) {
-                Runtime.getRuntime().exec(MessageFormat.format("cmd /c start \"\" \"{0}\"", outDir));
-            }
-        }
+        Desktop.getDesktop().open(new File(outDir));
     }
 
     public static <T> T ifNull(T obj, Supplier<T> supplier) {
@@ -243,6 +237,11 @@ public abstract class Utils {
         return sb.toString();
     }
 
+    /**
+     * 清空目录
+     *
+     * @param directory 文件目录
+     */
     public static void cleanDirectoryQuietly(File directory) {
         FileUtils.clean(directory);
     }

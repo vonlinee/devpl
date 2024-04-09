@@ -61,8 +61,6 @@ public class FileDeleteStrategy {
         this.name = name;
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Deletes the file object, which may be a file or a directory.
      * All <code>IOException</code>s are caught and false returned instead.
@@ -74,7 +72,7 @@ public class FileDeleteStrategy {
      * @return true if the file was deleted, or there was no such file
      */
     public boolean deleteQuietly(File fileToDelete) {
-        if (fileToDelete == null || fileToDelete.exists() == false) {
+        if (fileToDelete == null || !fileToDelete.exists()) {
             return true;
         }
         try {
@@ -95,7 +93,7 @@ public class FileDeleteStrategy {
      * @throws IOException          if an error occurs during file deletion
      */
     public void delete(File fileToDelete) throws IOException {
-        if (fileToDelete.exists() && doDelete(fileToDelete) == false) {
+        if (fileToDelete.exists() && !doDelete(fileToDelete)) {
             throw new IOException("Deletion failed: " + fileToDelete);
         }
     }
@@ -120,13 +118,12 @@ public class FileDeleteStrategy {
         return fileToDelete.delete();
     }
 
-    //-----------------------------------------------------------------------
-
     /**
      * Gets a string describing the delete strategy.
      *
      * @return a string describing the delete strategy
      */
+    @Override
     public String toString() {
         return "FileDeleteStrategy[" + name + "]";
     }
@@ -155,6 +152,7 @@ public class FileDeleteStrategy {
          * @throws NullPointerException if the file is null
          * @throws IOException          if an error occurs during file deletion
          */
+        @Override
         protected boolean doDelete(File fileToDelete) throws IOException {
             FileUtils.forceDelete(fileToDelete);
             return true;

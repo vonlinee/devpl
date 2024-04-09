@@ -99,17 +99,21 @@ public final class Resources {
         }
         try {
             return file.toURI().toURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        } catch (MalformedURLException ignored1) {
         }
         return null;
     }
 
+    /**
+     * File对象转为URL
+     *
+     * @param file 文件对象
+     * @return URL
+     */
     private static URL urlOfFile(File file) {
         try {
-            URL url = file.toURI().toURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            return file.toURI().toURL();
+        } catch (MalformedURLException ignored) {
         }
         return null;
     }
@@ -118,6 +122,13 @@ public final class Resources {
         return getProjectResource(name, false);
     }
 
+    /**
+     * 获取本地项目下的文件URL
+     *
+     * @param name    名称
+     * @param ignored 是否忽略不存在的错误，忽略则返回null，不抛出异常
+     * @return URL
+     */
     public static URL getProjectResource(String name, boolean ignored) {
         name = resolveName(name);
         try {
@@ -132,8 +143,6 @@ public final class Resources {
     /**
      * Add a package name prefix if the name is not absolute Remove leading "/"
      * if name is absolute
-     *
-     * @see
      */
     private static String resolveName(String name) {
         if (!name.startsWith("/")) {

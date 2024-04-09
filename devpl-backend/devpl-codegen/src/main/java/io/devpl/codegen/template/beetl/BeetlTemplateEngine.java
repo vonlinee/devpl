@@ -57,7 +57,7 @@ public class BeetlTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public String getTemplateFileExtension() {
+    public @NotNull String getTemplateFileExtension() {
         return ".btl";
     }
 

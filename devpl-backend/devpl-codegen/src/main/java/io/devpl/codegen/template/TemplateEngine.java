@@ -165,6 +165,7 @@ public interface TemplateEngine {
      *
      * @return 模板文件后缀名，不为空
      */
+    @NotNull
     String getTemplateFileExtension();
 
     /**

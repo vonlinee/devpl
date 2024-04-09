@@ -58,6 +58,7 @@ public enum IOCase {
      * The sensitivity flag.
      */
     private final transient boolean sensitive;
+
     /**
      * Constructs a new instance.
      *
@@ -133,7 +134,7 @@ public enum IOCase {
      *
      * @param str1 the first string to compare, not null
      * @param str2 the second string to compare, not null
-     * @return true if equal using the case rules
+     * @return int if equal using the case rules
      * @throws NullPointerException if either string is null
      */
     public int checkCompareTo(final String str1, final String str2) {

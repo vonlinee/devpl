@@ -27,11 +27,11 @@ public class FileCleaningTracker {
     /**
      * Collection of <code>Tracker</code> instances in existence.
      */
-    final Collection<Tracker> /* Tracker */ trackers = new Vector<>(); // synchronized
+    final Collection<Tracker> trackers = new Vector<>(); // synchronized
     /**
      * Queue of <code>Tracker</code> instances being watched.
      */
-    ReferenceQueue<Tracker> /* Tracker */ q = new ReferenceQueue<>();
+    ReferenceQueue<Tracker> q = new ReferenceQueue<>();
     /**
      * Whether to terminate the thread when the tracking is complete.
      */
@@ -53,7 +53,7 @@ public class FileCleaningTracker {
      * @throws NullPointerException if the file is null
      */
     public void track(File file, Object marker) {
-        track(file, marker, (FileDeleteStrategy) null);
+        track(file, marker, null);
     }
 
     /**

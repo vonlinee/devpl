@@ -1,9 +1,10 @@
 package io.devpl.codegen.samples;
 
 import io.devpl.codegen.generator.CodeGenerator;
-import io.devpl.codegen.generator.config.ConfigurationParser;
 import io.devpl.codegen.generator.RdbmsTableGenerationContext;
 import io.devpl.codegen.generator.config.Configuration;
+import io.devpl.codegen.generator.config.ConfigurationParser;
+import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 import io.devpl.codegen.generator.config.xml.XMLParserException;
 import io.devpl.codegen.util.Utils;
@@ -35,7 +36,7 @@ public class MySQLGeneratorTest {
      * @see org.mybatis.generator.config.Context
      */
     @Test
-    public void testPrivateGenerateFiles() {
+    public void testPrivateGenerateFiles() throws IOException {
         File file = new File(Utils.getDesktopDirectory(), "codegen.properties");
         Properties properties = Utils.loadProperties(file);
         JdbcConfiguration jdbcConfiguration = JdbcConfiguration.builder(properties).build();
@@ -50,5 +51,7 @@ public class MySQLGeneratorTest {
         CodeGenerator generator = new CodeGenerator(configuration);
         // 生成文件
         generator.generateFiles(null);
+
+        Utils.openDirectory(context.getObject(GlobalConfiguration.class).getOutputDir());
     }
 }

@@ -4,7 +4,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -557,15 +556,20 @@ public class IOUtils {
      * @throws IOException              if an I/O error occurs, such as if the encoding is invalid
      * @since Commons IO 1.2
      */
-    public static LineIterator lineIterator(InputStream input, String encoding)
-        throws IOException {
-        Reader reader = null;
-        if (encoding == null) {
-            reader = new InputStreamReader(input);
-        } else {
-            reader = new InputStreamReader(input, encoding);
-        }
-        return new LineIterator(reader);
+    public static LineIterator lineIterator(InputStream input, String encoding) throws IOException {
+        return new LineIterator(toReader(input, encoding));
+    }
+
+    /**
+     * create an InputStreamReader
+     *
+     * @param input    the <code>InputStream</code> to read from, not null
+     * @param encoding the encoding to use, null means platform default
+     * @return InputStreamReader
+     * @throws UnsupportedEncodingException encoding is not supported
+     */
+    public static Reader toReader(InputStream input, String encoding) throws IOException {
+        return encoding == null ? new InputStreamReader(input) : new InputStreamReader(input, encoding);
     }
 
     //-----------------------------------------------------------------------
@@ -906,8 +910,7 @@ public class IOUtils {
         if (lineEnding == null) {
             lineEnding = LINE_SEPARATOR;
         }
-        for (Iterator<String> it = lines.iterator(); it.hasNext(); ) {
-            String line = it.next();
+        for (String line : lines) {
             if (line != null) {
                 output.write(line.getBytes());
             }
@@ -1131,7 +1134,7 @@ public class IOUtils {
     public static long copyLarge(Reader input, Writer output) throws IOException {
         char[] buffer = new char[DEFAULT_BUFFER_SIZE];
         long count = 0;
-        int n = 0;
+        int n;
         while (-1 != (n = input.read(buffer))) {
             output.write(buffer, 0, n);
             count += n;
@@ -1228,7 +1231,6 @@ public class IOUtils {
         if (!(input2 instanceof BufferedInputStream)) {
             input2 = new BufferedInputStream(input2);
         }
-
         int ch = input1.read();
         while (-1 != ch) {
             int ch2 = input2.read();

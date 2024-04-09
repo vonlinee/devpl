@@ -116,7 +116,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public String getTemplateFileExtension() {
+    public @NotNull String getTemplateFileExtension() {
         return ".vm";
     }
 

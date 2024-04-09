@@ -1,7 +1,8 @@
 package io.devpl.codegen.generator.file;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.generator.*;
+import io.devpl.codegen.generator.GenerationTarget;
+import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.BuiltinTargetFile;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.PackageConfiguration;
@@ -77,7 +78,7 @@ public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator 
         TemplateGeneratedFile mapperXmlFile = new TemplateGeneratedFile(BuiltinTargetFile.MAPPER_XML);
         mapperXmlFile.setTemplateArguments(argumentsOfSingleTable);
         mapperXmlFile.setFilename(tableGeneration.getMapperName());
-        mapperXmlFile.setExtension(ConstVal.XML);
+        mapperXmlFile.setExtension(ConstVal.XML_SUFFIX);
         mapperXmlFile.setTargetPackageName(packageConfig.getXml());
         // Service
         TemplateGeneratedFile serviceJavaFile = new TemplateGeneratedFile(BuiltinTargetFile.SERVICE);
@@ -132,6 +133,7 @@ public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator 
             if (file instanceof TemplateGeneratedFile tgf) {
                 tgf.setTemplateEngine(templateEngine);
                 tgf.setTargetProject(globalConfiguration.getOutputDir());
+                tgf.setTemplate(String.format(tgf.getTargetFile().getTemplate(), templateEngine.getTemplateFileExtension().substring(1)) + templateEngine.getTemplateFileExtension());
             }
         }
         return files;

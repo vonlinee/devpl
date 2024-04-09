@@ -99,7 +99,7 @@ public class FreeMarkerTemplateEngine extends AbstractTemplateEngine {
     }
 
     @Override
-    public String getTemplateFileExtension() {
+    public @NotNull String getTemplateFileExtension() {
         return ".ftl";
     }
 }

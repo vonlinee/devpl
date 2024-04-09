@@ -56,6 +56,9 @@ public class TemplateGeneratedFile extends GeneratedFile {
     public void write(Writer writer, Charset charset) throws IOException {
         if (writer == null) {
             String absolutePath = getAbsolutePath();
+            if (absolutePath == null) {
+                throw new IOException("the path to save is null");
+            }
             Path path = FileUtils.createFileQuietly(Paths.get(absolutePath), true);
             String savePath = path.toAbsolutePath().toString();
             try (FileWriter fw = new FileWriter(savePath, charset)) {

@@ -9,11 +9,11 @@ import java.io.OutputStream;
  * Utility code for dealing with different endian(字节存储次序) systems.
  * <p>
  * Different computer architectures adopt different conventions for
- * byte ordering. In so-called "Little Endian" architectures (eg Intel),
+ * byte ordering. In so-called "Little Endian" architectures (e.g. Intel),
  * the low-order byte is stored in memory at the lowest address, and
  * subsequent bytes at higher addresses. For "Big Endian" architectures
- * (eg Motorola), the situation is reversed.
- * This class helps you solve this incompatability.
+ * (e.g. Motorola), the situation is reversed.
+ * This class helps you solve this in-compatability.
  * <p>
  * Origin of code: Excalibur
  *
@@ -137,7 +137,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a "int" value to a byte array at a given offset. The value is
+     * Writes an "int" value to a byte array at a given offset. The value is
      * converted to the opposed endian system while writing.
      *
      * @param data   target byte array
@@ -152,7 +152,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "int" value from a byte array at a given offset. The value is
+     * Reads an "int" value from a byte array at a given offset. The value is
      * converted to the opposed endian system while reading.
      *
      * @param data   source byte array
@@ -303,7 +303,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a unsigned short (16-bit) from an InputStream. The value is
+     * Reads an unsigned short (16-bit) from an InputStream. The value is
      * converted to the opposed endian system while reading.
      *
      * @param input source InputStream
@@ -320,7 +320,7 @@ public class EndianUtils {
     }
 
     /**
-     * Writes a "int" value to an OutputStream. The value is
+     * Writes an "int" value to an OutputStream. The value is
      * converted to the opposed endian system while writing.
      *
      * @param output target OutputStream
@@ -336,7 +336,7 @@ public class EndianUtils {
     }
 
     /**
-     * Reads a "int" value from an InputStream. The value is
+     * Reads an "int" value from an InputStream. The value is
      * converted to the opposed endian system while reading.
      *
      * @param input source InputStream
