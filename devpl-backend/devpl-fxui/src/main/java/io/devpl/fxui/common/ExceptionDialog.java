@@ -11,9 +11,10 @@ import javafx.stage.Stage;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.function.Supplier;
 
 /**
- * 单例
+ * 异常弹窗，阻塞用户行为
  */
 public class ExceptionDialog extends Stage {
 
@@ -71,6 +72,14 @@ public class ExceptionDialog extends Stage {
         if (!dialog.isShowing()) {
             dialog.centerOnScreen();
             dialog.show();
+        }
+    }
+
+    public static void wrap(Supplier<?> supplier) {
+        try {
+            supplier.get();
+        } catch (Throwable throwable) {
+            report(throwable);
         }
     }
 }

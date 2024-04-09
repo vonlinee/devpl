@@ -35,7 +35,7 @@ public class SqlFieldParser implements FieldParser {
         SelectSqlParseResult result = parser.parseSelectSql(this.dbType, sql);
         for (SelectColumn selectColumn : result.getSelectColumns()) {
             Map<String, Object> field = new HashMap<>();
-            field.put(FIELD_NAME, selectColumn.getName());
+            field.put(FIELD_NAME, selectColumn.getColumnName());
             // TODO 推断类型
             field.put(FIELD_TYPE, "String");
             field.put(FIELD_DESCRIPTION, "");
