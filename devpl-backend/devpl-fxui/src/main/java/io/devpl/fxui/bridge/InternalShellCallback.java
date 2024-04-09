@@ -51,11 +51,11 @@ public class InternalShellCallback implements ShellCallback {
         // 如果目录实际不存在，那么Files.isDirectory返回false
         if (!Files.isDirectory(targetProjectPath)) {
             log.error("不是目录:{}", targetProjectPath);
-            throw new ShellException(getString("Warning.9", targetProject)); //$NON-NLS-1$
+            throw new ShellException(getString("Warning.9", targetProject));
         }
 
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(targetPackage, "."); //$NON-NLS-1$
+        StringTokenizer st = new StringTokenizer(targetPackage, ".");
         while (st.hasMoreTokens()) {
             sb.append(st.nextToken());
             sb.append(File.separatorChar);
@@ -64,7 +64,7 @@ public class InternalShellCallback implements ShellCallback {
         if (!directory.isDirectory()) {
             boolean rc = directory.mkdirs();
             if (!rc) {
-                throw new ShellException(getString("Warning.10", directory.getAbsolutePath())); //$NON-NLS-1$
+                throw new ShellException(getString("Warning.10", directory.getAbsolutePath()));
             }
         }
         return directory;

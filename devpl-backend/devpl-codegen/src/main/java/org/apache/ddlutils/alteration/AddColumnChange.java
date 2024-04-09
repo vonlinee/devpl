@@ -1,7 +1,7 @@
 package org.apache.ddlutils.alteration;
 
 
-import org.apache.ddlutils.model.CloneHelper;
+import org.apache.ddlutils.model.DefaultModelCopier;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -78,7 +78,7 @@ public class AddColumnChange extends TableChangeImplBase {
     @Override
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
-        Column newColumn = new CloneHelper().clone(_newColumn, true);
+        Column newColumn = new DefaultModelCopier().copy(_newColumn, true);
 
         if (_previousColumnName != null) {
             Column prevColumn = table.findColumn(_previousColumnName, caseSensitive);

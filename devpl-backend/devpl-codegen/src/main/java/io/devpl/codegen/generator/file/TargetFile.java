@@ -1,4 +1,7 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
+
+import io.devpl.codegen.generator.Context;
+import io.devpl.codegen.generator.GenerationTarget;
 
 /**
  * 生成目标文件类型

@@ -61,7 +61,7 @@ public class Database extends SchemaObject implements Serializable {
      * @param otherDb The other database model
      */
     public void mergeWith(Database otherDb) throws ModelException {
-        CloneHelper cloneHelper = new CloneHelper();
+        DefaultModelCopier modelCopier = new DefaultModelCopier();
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
             Table table = otherDb.getTable(tableIdx);
 
@@ -69,7 +69,7 @@ public class Database extends SchemaObject implements Serializable {
                 // TODO: It might make more sense to log a warning and overwrite the table (or merge them) ?
                 throw new ModelException("Cannot merge the models because table " + table.getName() + " already defined in this model");
             } else {
-                addTable(cloneHelper.clone(table, true, false, this, true));
+                addTable(modelCopier.copy(table, true, false, this, true));
             }
         }
         for (int tableIdx = 0; tableIdx < otherDb.getTableCount(); tableIdx++) {
@@ -77,7 +77,7 @@ public class Database extends SchemaObject implements Serializable {
             Table localTable = findTable(otherTable.getName());
             for (int fkIdx = 0; fkIdx < otherTable.getForeignKeyCount(); fkIdx++) {
                 ForeignKey fk = otherTable.getForeignKey(fkIdx);
-                localTable.addForeignKey(cloneHelper.clone(fk, localTable, this, false));
+                localTable.addForeignKey(modelCopier.copy(fk, localTable, this, false));
             }
         }
     }
@@ -439,7 +439,7 @@ public class Database extends SchemaObject implements Serializable {
      *
      * @return The dyna class cache
      */
-    private TableClassCache getDynaClassCache() {
+    private TableClassCache getClassCache() {
         if (_tableClassCache == null) {
             _tableClassCache = new TableClassCache();
         }
@@ -450,7 +450,7 @@ public class Database extends SchemaObject implements Serializable {
      * Resets the dyna class cache. This should be done for instance when a column
      * has been added or removed to a table.
      */
-    public void resetDynaClassCache() {
+    public void resetClassCache() {
         _tableClassCache = null;
     }
 
@@ -462,9 +462,9 @@ public class Database extends SchemaObject implements Serializable {
      * @return The <code>SqlDynaClass</code> for the indicated table or <code>null</code>
      * if the model contains no such table
      */
-    public TableClass getDynaClassFor(String tableName) {
+    public TableClass getClassForTable(String tableName) {
         Table table = findTable(tableName);
-        return table != null ? getDynaClassCache().getDynaClass(table) : null;
+        return table != null ? getClassCache().getDynaClass(table) : null;
     }
 
     /**
@@ -473,8 +473,8 @@ public class Database extends SchemaObject implements Serializable {
      * @param bean The dyna bean
      * @return The <code>SqlDynaClass</code> for the given bean
      */
-    public TableClass getDynaClassFor(TableObject bean) {
-        return getDynaClassCache().getDynaClass(bean);
+    public TableClass getClassForTable(TableObject bean) {
+        return getClassCache().getDynaClass(bean);
     }
 
     /**
@@ -483,20 +483,20 @@ public class Database extends SchemaObject implements Serializable {
      * @param table The table to create the bean for
      * @return The new dyna bean
      */
-    public TableObject createDynaBeanFor(Table table) throws DatabaseObjectRelationMappingException {
-        return getDynaClassCache().createObject(table);
+    public TableObject createObjectForTable(Table table) throws DatabaseObjectRelationMappingException {
+        return getClassCache().createObject(table);
     }
 
     /**
-     * Convenience method that combines {@link #createDynaBeanFor(Table)} and
+     * Convenience method that combines {@link #createObjectForTable(Table)} and
      * {@link #findTable(String, boolean)}.
      *
      * @param tableName     The name of the table to create the bean for
      * @param caseSensitive Whether case matters for the names
      * @return The new dyna bean
      */
-    public TableObject createDynaBeanFor(String tableName, boolean caseSensitive) throws DatabaseObjectRelationMappingException {
-        return getDynaClassCache().createObject(findTable(tableName, caseSensitive));
+    public TableObject createObjectForTable(String tableName, boolean caseSensitive) throws DatabaseObjectRelationMappingException {
+        return getClassCache().createObject(findTable(tableName, caseSensitive));
     }
 
     @Override

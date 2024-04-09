@@ -238,28 +238,27 @@ public class DatabaseToDdlTask extends DatabaseTaskBase {
 
             if ((_includeTableNames != null) || (_includeTableNameRegExp != null) ||
                 (_excludeTableNames != null) || (_excludeTableNameRegExp != null)) {
-                ModelHelper helper = new ModelHelper();
 
                 if (_includeTableNames != null) {
                     Table[] tables = model.findTables(_includeTableNames, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
 
-                    helper.checkForForeignKeysToAndFromTables(model, tables);
+                    ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeAllTablesExcept(tables);
                 } else if (_includeTableNameRegExp != null) {
                     Table[] tables = model.findTables(_includeTableNameRegExp, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
 
-                    helper.checkForForeignKeysToAndFromTables(model, tables);
+                    ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeAllTablesExcept(tables);
                 }
                 if (_excludeTableNames != null) {
                     Table[] tables = model.findTables(_excludeTableNames, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
 
-                    helper.checkForForeignKeysToAndFromTables(model, tables);
+                    ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeTables(tables);
                 } else if (_excludeTableNameRegExp != null) {
                     Table[] tables = model.findTables(_excludeTableNameRegExp, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
 
-                    helper.checkForForeignKeysToAndFromTables(model, tables);
+                    ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeTables(tables);
                 }
             }

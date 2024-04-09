@@ -1,5 +1,7 @@
 package io.devpl.codegen.generator;
 
+import io.devpl.codegen.generator.file.GeneratedFile;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

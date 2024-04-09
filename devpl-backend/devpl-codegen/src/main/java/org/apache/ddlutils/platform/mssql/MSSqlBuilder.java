@@ -6,6 +6,7 @@ import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
 import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -91,7 +92,7 @@ public class MSSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    protected String getValueAsString(Column column, Object value) {
+    protected String getValueAsString(@NotNull Column column, Object value) {
         if (value == null) {
             return "NULL";
         }

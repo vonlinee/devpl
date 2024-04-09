@@ -1,13 +1,14 @@
 package org.apache.ddlutils.model;
 
+import java.util.Objects;
+
 /**
- * A SqlDynaProperty which maps to a persistent Column in a database.
+ * ColumnProperty which maps to a persistent Column in a database to a property of a Java Pojo.
  * The Column describes additional relational metadata
  * for the property such as whether the property is a primary key column,
  * an autoIncrement column and the SQL type etc.
  */
 public class ColumnProperty {
-
     /**
      * The column for which this property is defined.
      */
@@ -16,6 +17,9 @@ public class ColumnProperty {
      * The column name
      */
     private String name;
+    /**
+     * the java property type
+     */
     private Class<?> type;
 
     /**
@@ -68,15 +72,15 @@ public class ColumnProperty {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public final void setName(String name) {
+        this.name = Objects.requireNonNull(name, "name must be not null");
     }
 
     public Class<?> getType() {
         return type;
     }
 
-    public void setType(Class<?> type) {
-        this.type = type;
+    public final void setType(Class<?> type) {
+        this.type = Objects.requireNonNull(type, "type of column must be not null");
     }
 }

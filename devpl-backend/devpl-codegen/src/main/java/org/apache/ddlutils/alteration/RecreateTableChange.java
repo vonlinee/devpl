@@ -1,7 +1,7 @@
 package org.apache.ddlutils.alteration;
 
 
-import org.apache.ddlutils.model.CloneHelper;
+import org.apache.ddlutils.model.DefaultModelCopier;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 
@@ -69,7 +69,7 @@ public class RecreateTableChange extends TableChangeImplBase {
             if ((caseSensitive && curTable.getName().equals(getChangedTableName())) ||
                 (!caseSensitive && curTable.getName().equalsIgnoreCase(getChangedTableName()))) {
                 database.removeTable(tableIdx);
-                database.addTable(tableIdx, new CloneHelper().clone(_targetTable, true, false, database, caseSensitive));
+                database.addTable(tableIdx, new DefaultModelCopier().copy(_targetTable, true, false, database, caseSensitive));
                 break;
             }
         }

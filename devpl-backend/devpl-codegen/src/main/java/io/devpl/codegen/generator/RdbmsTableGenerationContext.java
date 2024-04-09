@@ -1,6 +1,9 @@
 package io.devpl.codegen.generator;
 
 import io.devpl.codegen.generator.config.*;
+import io.devpl.codegen.generator.file.FileGenerator;
+import io.devpl.codegen.generator.file.GeneratedFile;
+import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.generator.plugins.*;
 import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcUtils;
@@ -170,10 +173,10 @@ public class RdbmsTableGenerationContext extends Context {
                     continue;
                 }
                 if (!tc.isAnyStatementsEnabled()) {
-                    warnings.add(Messages.getString("Warning.0", tableName)); //$NON-NLS-1$
+                    warnings.add(Messages.getString("Warning.0", tableName));
                     continue;
                 }
-                callback.startTask(Messages.getString("Progress.1", tableName)); //$NON-NLS-1$
+                callback.startTask(Messages.getString("Progress.1", tableName));
                 List<TableGeneration> tables = introspectTables(tc);
                 if (tables != null) {
                     targetTables.addAll(tables);

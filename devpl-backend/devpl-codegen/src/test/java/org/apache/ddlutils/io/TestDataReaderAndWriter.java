@@ -585,7 +585,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Special Characters: \u0001\u0009\u0010";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -619,7 +619,7 @@ public class TestDataReaderAndWriter {
         // \t = \u0009
         String testedValue = "Some Special Characters: \u0001\t\u0010";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -650,7 +650,7 @@ public class TestDataReaderAndWriter {
         String testedValue4 = "<![CDATA[" + StringUtils.repeat("b \n", 1000) + "]]>";
         String testedValue5 = "<<![CDATA[" + StringUtils.repeat("b \n", 500) + "]]>><![CDATA[" + StringUtils.repeat("c \n", 500) + "]]>";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value1", testedValue1);
@@ -675,7 +675,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -698,7 +698,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -715,7 +715,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -747,7 +747,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -780,7 +780,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -813,7 +813,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -851,7 +851,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -890,7 +890,7 @@ public class TestDataReaderAndWriter {
 
         modelIO.setValidateXml(true);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -914,7 +914,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -938,7 +938,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -961,7 +961,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -985,7 +985,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -1010,7 +1010,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1028,7 +1028,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='500' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1046,7 +1046,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1070,7 +1070,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -1088,7 +1088,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "the\u0000value";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1121,7 +1121,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = StringUtils.repeat("the\u0000value", 40);
 
         bean.setColumnValue("id", (1));
@@ -1145,7 +1145,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -1177,7 +1177,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1219,7 +1219,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1252,7 +1252,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1285,7 +1285,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1316,7 +1316,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("column", testedValue);
@@ -1339,7 +1339,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("column-name", testedValue);
@@ -1362,7 +1362,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("table-name", testedValue);
@@ -1385,7 +1385,7 @@ public class TestDataReaderAndWriter {
             </database>""".formatted(DatabaseIO.BASE64_ATTR_NAME));
         String testedValue = "Some Text";
 
-        TableObject bean = model.createDynaBeanFor(model.getTable(0));
+        TableObject bean = model.createObjectForTable(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(DatabaseIO.BASE64_ATTR_NAME, testedValue);

@@ -1,6 +1,8 @@
 package io.devpl.codegen.generator;
 
 import io.devpl.codegen.generator.config.PluginConfiguration;
+import io.devpl.codegen.generator.file.GeneratedFile;
+import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.util.DefaultContextObject;
 
 import java.util.ArrayList;

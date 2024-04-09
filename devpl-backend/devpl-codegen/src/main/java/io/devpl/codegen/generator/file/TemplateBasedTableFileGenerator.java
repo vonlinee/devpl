@@ -1,6 +1,7 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
 
 import io.devpl.codegen.ConstVal;
+import io.devpl.codegen.generator.*;
 import io.devpl.codegen.generator.config.BuiltinTargetFile;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.PackageConfiguration;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 @Setter
 @Getter
-class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
+public class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
 
     private List<TemplateBasedTargetFile> targetFiles;
     private TemplateEngine templateEngine;
@@ -47,18 +48,8 @@ class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
 
     @Override
     public List<GeneratedFile> getGeneratedFiles() {
-        List<GeneratedFile> generatedFiles = new ArrayList<>();
-        for (TemplateBasedTargetFile targetFile : targetFiles) {
-            TemplateGeneratedFile file = new TemplateGeneratedFile();
-            file.setTargetFile(targetFile);
-            file.setTemplate(targetFile.getTemplate());
-            file.setTemplateEngine(this.templateEngine);
-            generatedFiles.add(file);
-        }
-
         StrategyConfiguration strategyConfiguration = context.getObject(StrategyConfiguration.class);
         PackageConfiguration packageConfig = context.getObject(PackageConfiguration.class);
-
         final String parentPackageName = packageConfig.getParent();
 
         // 全局配置信息
@@ -143,6 +134,6 @@ class TemplateBasedTableFileGenerator extends AbstractTableFileGenerator {
                 tgf.setTargetProject(globalConfiguration.getOutputDir());
             }
         }
-        return generatedFiles;
+        return files;
     }
 }

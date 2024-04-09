@@ -1656,8 +1656,7 @@ public abstract class FileUtils {
      *
      * @param directory 文件夹
      * @return 成功与否
-     * @throws RuntimeException IO异常
-     * @since 3.0.6
+     * @throws RuntimeIOException IO异常
      */
     public static boolean clean(File directory) throws RuntimeIOException {
         if (directory == null || !directory.exists() || !directory.isDirectory()) {

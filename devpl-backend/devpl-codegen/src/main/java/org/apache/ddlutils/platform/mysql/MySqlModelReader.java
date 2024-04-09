@@ -29,9 +29,18 @@ public class MySqlModelReader extends JdbcModelReader {
         setDefaultTablePattern(null);
     }
 
-    // TODO This needs some more work, since table names can be case-sensitive or lowercase
-    //      depending on the platform (really cute).
-    //      See http://dev.mysql.com/doc/refman/4.1/en/name-case-sensitivity.html for more info.
+    /**
+     * TODO This needs some more work, since table names can be case-sensitive or lowercase depending on the platform (really cute).
+     * See <a href="http://dev.mysql.com/doc/refman/4.1/en/name-case-sensitivity.html">...</a> for more info.
+     *
+     * @param catalog       The catalog to access in the database; use <code>null</code> for the default value
+     *                      目录名称，一般都为空.
+     * @param schemaPattern The schema(s) to access in the database; use <code>null</code> for the default value
+     *                      schema:数据库名，对于oracle来说就用户名
+     * @param tableTypes    The table types to process; use <code>null</code> or an empty list for the default ones
+     * @return tables
+     * @throws SQLException error
+     */
     @Override
     protected Collection<Table> readTables(String catalog, String schemaPattern, String[] tableTypes) throws SQLException {
         Collection<Table> tables = super.readTables(catalog, schemaPattern, tableTypes);

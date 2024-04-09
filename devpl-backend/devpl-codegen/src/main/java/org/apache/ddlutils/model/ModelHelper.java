@@ -1,8 +1,6 @@
 package org.apache.ddlutils.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Contains some utility functions for working with the model classes.
@@ -16,7 +14,7 @@ public class ModelHelper {
      * @param tables The tables
      * @throws ModelException If such a foreign key exists
      */
-    public void checkForForeignKeysToAndFromTables(Database model, Table[] tables) throws ModelException {
+    public static void checkForForeignKeysToAndFromTables(Database model, Table[] tables) throws ModelException {
         List<Table> tableList = Arrays.asList(tables);
 
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
@@ -40,7 +38,7 @@ public class ModelHelper {
      * @param model  The database model
      * @param tables The tables
      */
-    public void removeForeignKeysToAndFromTables(Database model, Table[] tables) {
+    public static void removeForeignKeysToAndFromTables(Database model, Table[] tables) {
         List<Table> tableList = Arrays.asList(tables);
 
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
@@ -59,5 +57,37 @@ public class ModelHelper {
                 }
             }
         }
+    }
+
+    /**
+     * 返回一个所有列的值都为null的Map，表示一行数据
+     *
+     * @param table 表
+     * @return key为列名称, value为null
+     */
+    public static Map<String, Object> emptyColumnValueMap(TableClass table) {
+        Map<String, Object> columnValueMap = new HashMap<>();
+        for (ColumnProperty property : table.getProperties()) {
+            columnValueMap.put(property.getName(), null);
+        }
+        return columnValueMap;
+    }
+
+    /**
+     * 根据表名和列名称创建 Table 模型，其他信息都置为空
+     *
+     * @param tableName   表名
+     * @param columnNames 列名称
+     * @return Table
+     */
+    public static Table newTable(String tableName, Set<String> columnNames) {
+        Table table = new Table();
+        table.setName(tableName);
+        for (String columnName : columnNames) {
+            Column column = new Column();
+            column.setName(columnName);
+            table.addColumn(column);
+        }
+        return table;
     }
 }

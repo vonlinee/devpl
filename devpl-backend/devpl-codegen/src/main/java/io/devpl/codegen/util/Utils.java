@@ -1,6 +1,7 @@
 package io.devpl.codegen.util;
 
 import io.devpl.codegen.ConstVal;
+import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.StringUtils;
 
 import java.io.File;
@@ -240,5 +241,9 @@ public abstract class Utils {
             }
         }
         return sb.toString();
+    }
+
+    public static void cleanDirectoryQuietly(File directory) {
+        FileUtils.clean(directory);
     }
 }

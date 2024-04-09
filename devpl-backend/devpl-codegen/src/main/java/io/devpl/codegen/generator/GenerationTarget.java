@@ -1,5 +1,7 @@
 package io.devpl.codegen.generator;
 
+import io.devpl.codegen.generator.file.FileGenerator;
+
 import java.util.List;
 import java.util.Map;
 

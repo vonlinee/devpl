@@ -6,9 +6,9 @@ import io.devpl.codegen.util.Messages;
  * Typesafe enum of different model types.
  */
 public enum ModelType {
-    HIERARCHICAL("hierarchical"), //$NON-NLS-1$
-    FLAT("flat"), //$NON-NLS-1$
-    CONDITIONAL("conditional"); //$NON-NLS-1$
+    HIERARCHICAL("hierarchical"),
+    FLAT("flat"),
+    CONDITIONAL("conditional");
 
     private final String type;
 
@@ -25,7 +25,7 @@ public enum ModelType {
             return CONDITIONAL;
         } else {
             throw new RuntimeException(Messages.getString(
-                "RuntimeError.13", type)); //$NON-NLS-1$
+                "RuntimeError.13", type));
         }
     }
 }

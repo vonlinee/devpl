@@ -1,6 +1,6 @@
 package io.devpl.codegen.strategy;
 
-import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.file.GeneratedFile;
 import io.devpl.codegen.generator.config.PropertyHolder;
 
 import java.io.File;

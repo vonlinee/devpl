@@ -182,7 +182,7 @@ public class TestDynaSqlQueries extends TestAgainstLiveDatabaseBase {
 
         // we're inserting the rows manually via beans since we do want to
         // check the back-reading of the auto-increment columns
-        TableClass dynaClass = getModel().getDynaClassFor("TestTable");
+        TableClass dynaClass = getModel().getClassForTable("TestTable");
         TableObject bean;
         Object id1 = null;
         Object id2 = null;

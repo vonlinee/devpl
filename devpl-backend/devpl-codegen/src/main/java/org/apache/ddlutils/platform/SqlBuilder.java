@@ -4,9 +4,9 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.ListOrderedMap;
 import org.apache.ddlutils.util.PojoMap;
 import org.apache.ddlutils.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +53,7 @@ public abstract class SqlBuilder {
     /**
      * The character sequences that need escaping.
      */
-    private final Map<String, String> _charSequencesToEscape = new ListOrderedMap<>();
+    private final Map<String, String> _charSequencesToEscape = new LinkedHashMap<>();
     /**
      * The current Writer used to output the SQL to.
      */
@@ -724,18 +724,20 @@ public abstract class SqlBuilder {
      * Creates the SQL for inserting an object into the specified table.
      * If values are given then a concrete insert statement is created, otherwise an
      * insert statement usable in a prepared statement is build.
+     * TODO 类型处理
      *
      * @param table           The table
      * @param columnValues    The columns values indexed by the column names
      * @param genPlaceholders Whether to generate value placeholders for a
-     *                        prepared statement
+     *                        prepared statement 生成类似 INSERT INTO (col1, col2) VALUES (?, ?)
      * @return The insertion sql
      */
     public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         StringBuilder builder = new StringBuilder("INSERT INTO ");
-        boolean addComma = false;
         builder.append(getDelimitedIdentifier(getTableName(table)));
         builder.append(" (");
+
+        boolean addComma = false;
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
             if (columnValues.containsKey(column.getName())) {
@@ -764,7 +766,7 @@ public abstract class SqlBuilder {
                     if (addComma) {
                         builder.append(", ");
                     }
-                    builder.append(getValueAsString(column, columnValues.get(column.getName())));
+                    builder.append(getInsertColumnValue(column, columnValues.get(column.getName())));
                     addComma = true;
                 }
             }
@@ -774,6 +776,7 @@ public abstract class SqlBuilder {
     }
 
     /**
+     * 根据主键更新
      * Creates the SQL for updating an object in the specified table.
      * If values are given then a concrete update statement is created, otherwise an
      * update statement usable in a prepared statement is build.
@@ -787,46 +790,51 @@ public abstract class SqlBuilder {
      * @return The update sql
      */
     public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
-        StringBuilder buffer = new StringBuilder("UPDATE ");
+        StringBuilder builder = new StringBuilder("UPDATE ");
         boolean addSep = false;
-        buffer.append(getDelimitedIdentifier(getTableName(table)));
-        buffer.append(" SET ");
+        builder.append(getDelimitedIdentifier(getTableName(table)));
+        builder.append(" SET ");
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
             if (!column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
                 if (addSep) {
-                    buffer.append(", ");
+                    builder.append(", ");
                 }
-                buffer.append(getDelimitedIdentifier(column.getName()));
-                buffer.append(" = ");
+                builder.append(getDelimitedIdentifier(column.getName()));
+                builder.append(" = ");
                 if (genPlaceholders) {
-                    buffer.append("?");
+                    builder.append("?");
                 } else {
-                    buffer.append(getValueAsString(column, columnValues.get(column.getName())));
+                    builder.append(getUpdateColumnValue(column, columnValues.get(column.getName())));
                 }
                 addSep = true;
             }
         }
-        buffer.append(" WHERE ");
+
         addSep = false;
+        StringBuilder whereClause = new StringBuilder();
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
             if (column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
                 if (addSep) {
-                    buffer.append(" AND ");
+                    whereClause.append(" AND ");
                 }
-                buffer.append(getDelimitedIdentifier(column.getName()));
-                buffer.append(" = ");
+                whereClause.append(getDelimitedIdentifier(column.getName()));
+                whereClause.append(" = ");
                 if (genPlaceholders) {
-                    buffer.append("?");
+                    whereClause.append("?");
                 } else {
-                    buffer.append(getValueAsString(column, columnValues.get(column.getName())));
+                    whereClause.append(getValueAsString(column, columnValues.get(column.getName())));
                 }
                 addSep = true;
             }
         }
-        return buffer.toString();
+        if (addSep) {
+            builder.append(" WHERE ");
+            builder.append(whereClause);
+        }
+        return builder.toString();
     }
 
     /**
@@ -929,58 +937,81 @@ public abstract class SqlBuilder {
     }
 
     /**
+     * 获取插入SQL的列赋值子句表达式
+     *
+     * @param column 列信息
+     * @param value  列的值
+     * @return 列赋值子句表达式
+     */
+    public String getInsertColumnValue(Column column, Object value) {
+        if (value == null) {
+            return "NULL";
+        }
+        return getValueAsString(column, value);
+    }
+
+    public String getUpdateColumnValue(Column column, Object value) {
+        if (value == null) {
+            return "NULL";
+        }
+        return getValueAsString(column, value);
+    }
+
+    public String getValueQuoteToken() {
+        return getPlatformInfo().getValueQuoteToken();
+    }
+
+    /**
      * Generates the string representation of the given value.
+     * TODO: Handle binary types (BINARY, VARBINARY, LONGVARBINARY, BLOB)
      *
      * @param column The column
      * @param value  The value
      * @return The string representation
      */
-    protected String getValueAsString(Column column, Object value) {
-        if (value == null) {
-            return "NULL";
-        }
+    protected String getValueAsString(@NotNull Column column, Object value) {
         StringBuilder result = new StringBuilder();
-        // TODO: Handle binary types (BINARY, VARBINARY, LONGVARBINARY, BLOB)
+
+        String valueQuoteToken = getValueQuoteToken();
         switch (column.getTypeCode()) {
             case Types.DATE -> {
-                result.append(getPlatformInfo().getValueQuoteToken());
-                if (!(value instanceof String) && (getValueDateFormat() != null)) {
-                    // TODO: Can the format method handle java.sql.Date properly ?
+                result.append(valueQuoteToken);
+                if (!(value instanceof String) && getValueDateFormat() != null) {
                     result.append(getValueDateFormat().format(value));
                 } else {
                     result.append(value);
                 }
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
             }
             case Types.TIME -> {
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
                 if (!(value instanceof String)) {
                     result.append(formatTime(value));
                 } else {
                     result.append(value);
                 }
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
             }
             case Types.TIMESTAMP -> {
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
                 // TODO: SimpleDateFormat does not support nano seconds so we would
                 //       need a custom date formatter for timestamps
                 result.append(value);
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
             }
             case Types.REAL, Types.NUMERIC, Types.FLOAT, Types.DOUBLE, Types.DECIMAL -> {
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(getValueQuoteToken());
                 if (!(value instanceof String) && (getValueNumberFormat() != null)) {
                     result.append(getValueNumberFormat().format(value));
                 } else {
                     result.append(value);
                 }
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
             }
             default -> {
-                result.append(getPlatformInfo().getValueQuoteToken());
-                result.append(escapeStringValue(value.toString()));
-                result.append(getPlatformInfo().getValueQuoteToken());
+                result.append(valueQuoteToken);
+                result.append(escapeStringValue(String.valueOf(value)));
+                result.append(valueQuoteToken);
             }
         }
         return result.toString();

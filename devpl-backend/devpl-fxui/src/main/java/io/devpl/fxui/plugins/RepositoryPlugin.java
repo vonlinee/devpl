@@ -13,7 +13,7 @@ public class RepositoryPlugin extends PluginAdapter {
     private String annotation = "@Mapper";
 
     public RepositoryPlugin() {
-        annotationRepository = new FullyQualifiedJavaType("org.springframework.stereotype.Repository"); //$NON-NLS-1$
+        annotationRepository = new FullyQualifiedJavaType("org.springframework.stereotype.Repository");
     }
 
     @Override

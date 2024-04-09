@@ -22,46 +22,32 @@ public class MapperTemplateArguments extends JavaFileTemplateArguments implement
     private String superClass = ConstVal.SUPER_MAPPER_CLASS;
     /**
      * Mapper标记注解
-     *
-     * @since 3.5.3
      */
     private Class<? extends Annotation> mapperAnnotationClass;
     /**
-     * 是否开启BaseResultMap（默认 false）
-     *
-     * @since 3.5.0
+     * 是否开启BaseResultMap（默认 true）
      */
-    private boolean baseResultMap;
+    private boolean baseResultMap = true;
     /**
      * 是否开启baseColumnList（默认 false）
-     *
-     * @since 3.5.0
      */
     private boolean baseColumnList;
     /**
      * 转换输出Mapper文件名称
-     *
-     * @since 3.5.0
      */
     private Function<String, String> converterMapperFileName = (entityName -> entityName + ConstVal.MAPPER);
     /**
      * 转换输出Xml文件名称
-     *
-     * @since 3.5.0
      */
     private Function<String, String> converterXmlFileName = (entityName -> entityName + ConstVal.MAPPER);
     /**
      * 是否覆盖已有文件（默认 false）
-     *
-     * @since 3.5.2
      */
     private boolean fileOverride;
     /**
      * 设置缓存实现类
      * org.apache.ibatis.cache.Cache;
      * org.apache.ibatis.cache.decorators.LoggingCache;
-     *
-     * @since 3.5.0
      */
     private Class<?> cache;
 
@@ -94,10 +80,6 @@ public class MapperTemplateArguments extends JavaFileTemplateArguments implement
         return converterXmlFileName;
     }
 
-//    public Class<? extends Cache> getCache() {
-//        return this.cache == null ? LoggingCache.class : this.cache;
-//    }
-
     public boolean isFileOverride() {
         return fileOverride;
     }
@@ -112,11 +94,6 @@ public class MapperTemplateArguments extends JavaFileTemplateArguments implement
         data.put("baseResultMap", this.baseResultMap);
         data.put("baseColumnList", this.baseColumnList);
         data.put("superMapperClassPackage", this.superClass);
-        if (this.cache != null) {
-//            Class<? extends Cache> cacheClass = this.getCache();
-//            data.put("cache", cacheClass);
-//            data.put("cacheClassName", cacheClass.getName());
-        }
         data.put("superMapperClass", ClassUtils.getSimpleName(this.superClass));
         return data;
     }

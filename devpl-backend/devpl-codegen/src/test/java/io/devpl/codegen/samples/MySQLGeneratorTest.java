@@ -1,7 +1,7 @@
 package io.devpl.codegen.samples;
 
 import io.devpl.codegen.generator.CodeGenerator;
-import io.devpl.codegen.generator.ConfigurationParser;
+import io.devpl.codegen.generator.config.ConfigurationParser;
 import io.devpl.codegen.generator.RdbmsTableGenerationContext;
 import io.devpl.codegen.generator.config.Configuration;
 import io.devpl.codegen.generator.config.JdbcConfiguration;

@@ -127,7 +127,7 @@ public class ModelBasedResultSetIterator implements Iterator<TableObject> {
             _columnsToProperties.put(columnName, propName);
         }
         if (singleKnownTable && (tableName != null)) {
-            _dynaClass = model.getDynaClassFor(tableName);
+            _dynaClass = model.getClassForTable(tableName);
         } else {
             ColumnProperty[] props = new ColumnProperty[_columnsToProperties.size()];
             int idx = 0;

@@ -1,10 +1,10 @@
 package io.devpl.codegen.generator.config;
 
 import io.devpl.codegen.ConstVal;
-import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.file.GeneratedFile;
 import io.devpl.codegen.generator.GenerationTarget;
 import io.devpl.codegen.generator.TableGeneration;
-import io.devpl.codegen.generator.TemplateBasedTargetFile;
+import io.devpl.codegen.generator.file.TemplateBasedTargetFile;
 
 import java.util.Map;
 

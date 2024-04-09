@@ -1,20 +1,17 @@
 package io.devpl.codegen.generator.plugins;
 
-import io.devpl.codegen.ConstVal;
 import io.devpl.codegen.db.IdType;
-import io.devpl.codegen.generator.*;
+import io.devpl.codegen.generator.ColumnGeneration;
+import io.devpl.codegen.generator.GenerationTarget;
+import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.*;
 import io.devpl.codegen.strategy.FieldFillStrategy;
-import io.devpl.codegen.template.TemplateArgumentsMap;
-import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.sdk.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 优先级最高
@@ -145,14 +142,5 @@ public class TableFileGenerationPlugin extends TableGenerationPlugin {
     @Override
     public boolean shouldGenerate(GenerationTarget unit) {
         return unit instanceof TableGeneration;
-    }
-
-    @Override
-    public List<GeneratedFile> generateFiles(GenerationTarget unit) {
-        if (!support(unit)) {
-            return Collections.emptyList();
-        }
-
-        return Collections.emptyList();
     }
 }

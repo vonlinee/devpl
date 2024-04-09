@@ -1,7 +1,11 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
 
+import io.devpl.codegen.generator.*;
 import io.devpl.codegen.generator.config.TableConfiguration;
 
+/**
+ * 基于实际的数据库的表来生成文件
+ */
 public abstract class AbstractTableFileGenerator implements FileGenerator, ContextAware {
 
     Context context;

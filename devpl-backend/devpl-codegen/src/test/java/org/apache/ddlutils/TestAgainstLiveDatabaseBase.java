@@ -460,7 +460,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     protected void alterDatabase(Database desiredModel) throws DatabaseOperationException {
         try {
             _model = desiredModel;
-            _model.resetDynaClassCache();
+            _model.resetClassCache();
 
             Database liveModel = readModelFromDatabase(desiredModel.getName());
 
@@ -508,7 +508,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected TableObject insertRow(String tableName, Object[] columnValues) {
         Table table = getModel().findTable(tableName);
-        TableObject bean = getModel().createDynaBeanFor(table);
+        TableObject bean = getModel().createObjectForTable(table);
 
         for (int idx = 0; (idx < table.getColumnCount()) && (idx < columnValues.length); idx++) {
             Column column = table.getColumn(idx);
@@ -529,7 +529,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected TableObject updateRow(String tableName, TableObject oldBean, Object[] columnValues) {
         Table table = getModel().findTable(tableName);
-        TableObject bean = getModel().createDynaBeanFor(table);
+        TableObject bean = getModel().createObjectForTable(table);
 
         for (int idx = 0; (idx < table.getColumnCount()) && (idx < columnValues.length); idx++) {
             Column column = table.getColumn(idx);
@@ -548,7 +548,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected void deleteRow(String tableName, Object[] pkColumnValues) {
         Table table = getModel().findTable(tableName);
-        TableObject bean = getModel().createDynaBeanFor(table);
+        TableObject bean = getModel().createObjectForTable(table);
         Column[] pkColumns = table.getPrimaryKeyColumns();
 
         for (int idx = 0; (idx < pkColumns.length) && (idx < pkColumnValues.length); idx++) {
@@ -752,7 +752,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      * @return The adjusted model
      */
     protected Database adjustModel(Database sourceModel) {
-        Database model = new CloneHelper().clone(sourceModel);
+        Database model = new DefaultModelCopier().copy(sourceModel);
 
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table table = model.getTable(tableIdx);
@@ -847,7 +847,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         if (getPlatform().isDelimitedIdentifierModeOn()) {
             return bean.getColumnValue(propName);
         } else {
-            ColumnProperty[] props = bean.getTableClass().getDynaProperties();
+            ColumnProperty[] props = bean.getTableClass().getOriginProperties();
 
             for (ColumnProperty prop : props) {
                 if (propName.equalsIgnoreCase(prop.getName())) {
@@ -950,7 +950,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
 
         if (value instanceof byte[] && !(expected instanceof byte[])) {
             TableClass dynaClass = dynaBean.getTableClass();
-            Column column = dynaClass.getDynaProperty(attrName).getColumn();
+            Column column = dynaClass.getProperty(attrName).getColumn();
 
             if (TypeMap.isBinaryType(column.getTypeCode())) {
                 value = new BinaryObjectsHelper().deserialize((byte[]) value);

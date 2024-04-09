@@ -3,8 +3,9 @@ package org.apache.ddlutils.platform;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.model.TableObject;
+import org.apache.ddlutils.model.TableClass;
 import org.apache.ddlutils.platform.mysql.MySql5xModelReader;
 import org.apache.ddlutils.platform.mysql.MySql5xPlatform;
 import org.apache.ddlutils.util.PojoMap;
@@ -14,8 +15,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Tests the MySQL platform.
@@ -28,7 +28,7 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
     }
 
     @Test
-    public void testModel() {
+    public void testInsertSqlWithRealTable() {
         MySql5xPlatform platform = new MySql5xPlatform();
 
         MySql5xModelReader reader = new MySql5xModelReader(platform);
@@ -53,11 +53,63 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
                 Table table = database.getTable(0);
 
-                PojoMap parameters = new PojoMap();
+                getLog().info("table => {}", table.getName());
 
+                PojoMap parameters = new PojoMap();
                 sqlBuilder.createTable(database, table, parameters);
 
-                String insertSql = sqlBuilder.getInsertSql(table, new LinkedHashMap<>(), true);
+                TableClass tableClass = TableClass.newInstance(table);
+
+                Map<String, Object> columnValueMap = ModelHelper.emptyColumnValueMap(tableClass);
+                columnValueMap.put("id", "ssdd");
+                String insertSql = sqlBuilder.getInsertSql(table, columnValueMap, false);
+
+                System.out.println(insertSql);
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testUpdateSqlWithRealTable() {
+        MySql5xPlatform platform = new MySql5xPlatform();
+
+        System.out.println(platform.getModelReader());
+
+        JdbcModelReader reader = platform.getModelReader();
+        try (PooledDataSourceWrapper dataSource = new PooledDataSourceWrapper()) {
+            dataSource.setUrl("jdbc:mysql://localhost:3306/devpl?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true");
+            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            dataSource.setUsername("root");
+            dataSource.setPassword("123456");
+
+            platform.setDataSource(dataSource);
+
+            try (Connection connection = dataSource.getConnection()) {
+                Database database = reader.getDatabase(connection, "devpl");
+
+                SqlBuilder sqlBuilder = platform.getSqlBuilder();
+
+                System.out.println("sql builder => " + sqlBuilder.getClass());
+                StringWriter stringWriter = new StringWriter();
+
+                sqlBuilder.setWriter(stringWriter);
+
+                Table table = database.getTable(0);
+
+                getLog().info("table => {}", table.getName());
+
+                PojoMap parameters = new PojoMap();
+                sqlBuilder.createTable(database, table, parameters);
+
+                TableClass tableClass = TableClass.newInstance(table);
+
+                Map<String, Object> columnValueMap = ModelHelper.emptyColumnValueMap(tableClass);
+                columnValueMap.put("id", "ssdd");
+                String insertSql = sqlBuilder.getUpdateSql(table, columnValueMap, false);
 
                 System.out.println(insertSql);
             } catch (SQLException | IOException e) {

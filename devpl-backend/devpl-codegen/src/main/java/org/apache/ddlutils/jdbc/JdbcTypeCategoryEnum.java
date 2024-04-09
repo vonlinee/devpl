@@ -1,6 +1,5 @@
 package org.apache.ddlutils.jdbc;
 
-
 /**
  * Represents the different categories of jdbc types.
  */

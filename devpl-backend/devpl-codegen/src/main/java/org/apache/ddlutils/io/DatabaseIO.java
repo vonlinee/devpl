@@ -413,7 +413,7 @@ public class DatabaseIO {
             } else if (isSameAs(attrQName, QNAME_ATTRIBUTE_DESCRIPTION)) {
                 column.setDescription(xmlReader.getAttributeValue(idx));
             } else if (isSameAs(attrQName, QNAME_ATTRIBUTE_JAVA_NAME)) {
-                column.setJavaName(xmlReader.getAttributeValue(idx));
+                column.setPropertyName(xmlReader.getAttributeValue(idx));
             }
         }
         consumeRestOfElement(xmlReader);
@@ -825,7 +825,7 @@ public class DatabaseIO {
         writeAttribute(xmlWriter, QNAME_ATTRIBUTE_DEFAULT, column.getDefaultValue());
         writeAttribute(xmlWriter, QNAME_ATTRIBUTE_AUTO_INCREMENT, String.valueOf(column.isAutoIncrement()));
         writeAttribute(xmlWriter, QNAME_ATTRIBUTE_DESCRIPTION, column.getDescription());
-        writeAttribute(xmlWriter, QNAME_ATTRIBUTE_JAVA_NAME, column.getJavaName());
+        writeAttribute(xmlWriter, QNAME_ATTRIBUTE_JAVA_NAME, column.getPropertyName());
         writeElementEnd(xmlWriter);
     }
 

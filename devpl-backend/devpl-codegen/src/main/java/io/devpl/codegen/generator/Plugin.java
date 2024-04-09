@@ -1,5 +1,7 @@
 package io.devpl.codegen.generator;
 
+import io.devpl.codegen.generator.file.GeneratedFile;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;

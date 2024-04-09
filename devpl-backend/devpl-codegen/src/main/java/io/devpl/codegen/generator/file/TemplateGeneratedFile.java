@@ -1,4 +1,4 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
 
 import io.devpl.codegen.template.Template;
 import io.devpl.codegen.template.TemplateArguments;

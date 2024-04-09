@@ -1,6 +1,10 @@
 package io.devpl.codegen.generator;
 
 import io.devpl.codegen.generator.config.TableConfiguration;
+import io.devpl.codegen.generator.file.FileGenerator;
+import io.devpl.codegen.generator.file.TargetFile;
+import io.devpl.codegen.generator.file.TemplateBasedTableFileGenerator;
+import io.devpl.codegen.generator.file.TemplateBasedTargetFile;
 import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateEngine;
@@ -179,6 +183,9 @@ public class TableGeneration implements GenerationTarget {
             } else {
                 FileGenerator generator = targetFile.getFileGenerator(context);
                 generator.initialize(this);
+                if (generator instanceof ContextAware aware) {
+                    aware.setContext(context);
+                }
                 generators.add(generator);
             }
         }
@@ -187,7 +194,7 @@ public class TableGeneration implements GenerationTarget {
             tfg.setTemplateEngine(context.getObject(TemplateEngine.class));
             tfg.addTargetFiles(templateBasedTargetFiles);
             tfg.initialize(this);
-
+            tfg.setContext(context);
             generators.add(tfg);
         }
         return generators;

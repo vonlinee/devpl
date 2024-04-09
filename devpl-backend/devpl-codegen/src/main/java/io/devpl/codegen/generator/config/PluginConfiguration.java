@@ -12,7 +12,7 @@ public class PluginConfiguration extends TypedPropertyHolder {
 
     public void validate(List<String> errors, String contextId) {
         if (!StringUtils.hasText(getConfigurationType())) {
-            errors.add(Messages.getString("ValidationError.17", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.17",
                 contextId));
         }
     }

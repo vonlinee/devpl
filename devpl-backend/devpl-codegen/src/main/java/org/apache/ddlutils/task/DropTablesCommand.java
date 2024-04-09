@@ -2,8 +2,8 @@ package org.apache.ddlutils.task;
 
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
-import org.apache.ddlutils.model.CloneHelper;
 import org.apache.ddlutils.model.Database;
+import org.apache.ddlutils.model.DefaultModelCopier;
 import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
 import org.apache.tools.ant.BuildException;
@@ -59,14 +59,12 @@ public class DropTablesCommand extends DatabaseCommand {
         Platform platform = getPlatform();
         Database targetModel = new Database();
 
-        if ((_tableNames != null) || (_tableNameRegExp != null)) {
-            targetModel = new CloneHelper().clone(model);
+        if (_tableNames != null || _tableNameRegExp != null) {
+            targetModel = new DefaultModelCopier().copy(model);
             targetModel.initialize();
-
             Table[] tables = _tableNames != null ? targetModel.findTables(_tableNames, task.isUseDelimitedSqlIdentifiers())
                 : targetModel.findTables(_tableNameRegExp, task.isUseDelimitedSqlIdentifiers());
-
-            new ModelHelper().removeForeignKeysToAndFromTables(targetModel, tables);
+            ModelHelper.removeForeignKeysToAndFromTables(targetModel, tables);
             targetModel.removeTables(tables);
         }
         try {

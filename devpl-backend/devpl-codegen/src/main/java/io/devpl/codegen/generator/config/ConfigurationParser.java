@@ -1,5 +1,6 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.config;
 
+import io.devpl.codegen.generator.XmlConstants;
 import io.devpl.codegen.generator.config.Configuration;
 import io.devpl.codegen.generator.config.ParserEntityResolver;
 import io.devpl.codegen.generator.config.xml.GeneratorConfigurationParser;
@@ -119,7 +120,7 @@ public class ConfigurationParser {
                 XmlConstants.GENERATOR_CONFIG_PUBLIC_ID)) {
                 config = parseGeneratorConfiguration(rootNode);
             } else {
-                throw new XMLParserException(Messages.getString("RuntimeError.5")); //$NON-NLS-1$
+                throw new XMLParserException(Messages.getString("RuntimeError.5"));
             }
 
             if (!parseErrors.isEmpty()) {

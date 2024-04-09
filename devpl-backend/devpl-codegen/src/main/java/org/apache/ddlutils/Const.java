@@ -4,5 +4,5 @@ public interface Const {
 
     String YES = "YES";
     String NO = "NO";
-    String UNKNOWN = "";
+    String UNKNOWN = "UNKNOWN";
 }

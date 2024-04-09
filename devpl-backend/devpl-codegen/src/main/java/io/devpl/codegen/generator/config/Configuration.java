@@ -1,7 +1,7 @@
 package io.devpl.codegen.generator.config;
 
 import io.devpl.codegen.generator.Context;
-import io.devpl.codegen.generator.TargetFile;
+import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.util.Messages;
 import io.devpl.codegen.util.StringUtils;
 import lombok.Getter;
@@ -57,13 +57,13 @@ public class Configuration extends PropertyHolder implements PropertyObject {
         List<String> errors = new ArrayList<>();
         for (String classPathEntry : classPathEntries) {
             if (!StringUtils.hasText(classPathEntry)) {
-                errors.add(Messages.getString("ValidationError.19")); //$NON-NLS-1$
+                errors.add(Messages.getString("ValidationError.19"));
                 // only need to state this error once
                 break;
             }
         }
         if (contexts.isEmpty()) {
-            errors.add(Messages.getString("ValidationError.11")); //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.11"));
         } else {
             for (Context context : contexts) {
                 context.putObject(this.projectConfiguration);

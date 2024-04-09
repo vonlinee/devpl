@@ -1,7 +1,7 @@
 package org.apache.ddlutils.alteration;
 
 
-import org.apache.ddlutils.model.CloneHelper;
+import org.apache.ddlutils.model.DefaultModelCopier;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 
@@ -38,7 +38,7 @@ public class AddTableChange implements ModelChange {
 
     @Override
     public void apply(Database database, boolean caseSensitive) {
-        Table table = new CloneHelper().clone(_newTable, true, false, database, caseSensitive);
+        Table table = new DefaultModelCopier().copy(_newTable, true, false, database, caseSensitive);
 
         database.addTable(table);
     }

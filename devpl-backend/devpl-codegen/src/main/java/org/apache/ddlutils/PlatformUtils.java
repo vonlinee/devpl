@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.platform.DBType;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.JDBCDriverType;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 /**
  * Utility functions for dealing with database platforms.
- *
- * @version $Revision: 279421 $
  */
 public class PlatformUtils {
 

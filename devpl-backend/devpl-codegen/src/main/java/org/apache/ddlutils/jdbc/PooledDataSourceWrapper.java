@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class PooledDataSourceWrapper implements DataSource, AutoCloseable {
 
-    DataSource dataSource;
+    private DataSource dataSource;
 
     private String url;
     private String driverClassName;

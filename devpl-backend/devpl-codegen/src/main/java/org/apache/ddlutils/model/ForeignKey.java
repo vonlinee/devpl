@@ -334,7 +334,6 @@ public class ForeignKey extends SchemaObject implements Serializable {
             HashSet<Reference> otherRefs = new HashSet<>(otherFk._references);
             for (Reference curLocalRef : _references) {
                 boolean found = false;
-
                 for (Iterator<Reference> otherIt = otherRefs.iterator(); otherIt.hasNext(); ) {
                     Reference curOtherRef = otherIt.next();
                     if (curLocalRef.equalsIgnoreCase(curOtherRef)) {

@@ -1,6 +1,6 @@
 package io.devpl.fxui.controller.fields;
 
-import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
+import org.apache.ddlutils.platform.mysql.InfoSchemaColumn;
 import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.fxui.utils.Helper;
 import io.devpl.sdk.util.StringUtils;

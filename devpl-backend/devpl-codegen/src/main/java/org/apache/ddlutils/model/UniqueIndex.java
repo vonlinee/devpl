@@ -77,7 +77,6 @@ public class UniqueIndex extends IndexImplBase {
     @Override
     public String toVerboseString() {
         StringBuilder result = new StringBuilder();
-
         result.append("Unique index [");
         result.append(getName());
         result.append("] columns:");
@@ -85,7 +84,6 @@ public class UniqueIndex extends IndexImplBase {
             result.append(" ");
             result.append(getColumn(idx).toString());
         }
-
         return result.toString();
     }
 }

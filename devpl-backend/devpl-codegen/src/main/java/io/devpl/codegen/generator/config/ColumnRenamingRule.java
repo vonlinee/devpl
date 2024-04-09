@@ -55,7 +55,7 @@ public class ColumnRenamingRule {
 
     public void validate(List<String> errors, String tableName) {
         if (!StringUtils.hasText(searchString)) {
-            errors.add(Messages.getString("ValidationError.14", tableName)); //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.14", tableName));
         }
     }
 }

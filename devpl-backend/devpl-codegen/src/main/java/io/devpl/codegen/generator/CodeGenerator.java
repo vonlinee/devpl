@@ -3,7 +3,8 @@ package io.devpl.codegen.generator;
 import io.devpl.codegen.generator.config.Configuration;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.PropertyHolder;
-import io.devpl.sdk.io.FileUtils;
+import io.devpl.codegen.generator.file.GeneratedFile;
+import io.devpl.codegen.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,7 @@ public class CodeGenerator extends PropertyHolder {
                 // 清空文件夹
                 GlobalConfiguration config = context.getObject(GlobalConfiguration.class);
                 String outputDir = config.getOutputDir();
-                FileUtils.clean(new File(outputDir));
+                Utils.cleanDirectoryQuietly(new File(outputDir));
             }
             writeFiles(generatedFiles);
         }

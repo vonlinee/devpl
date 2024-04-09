@@ -1,4 +1,4 @@
-package io.devpl.codegen.db.dialect.mysql;
+package org.apache.ddlutils.platform.mysql;
 
 import lombok.Data;
 

@@ -77,7 +77,7 @@ public class ObjectFactory {
             Class<?> clazz = externalClassForName(type);
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(Messages.getString("RuntimeError.6", type), e); //$NON-NLS-1$
+            throw new RuntimeException(Messages.getString("RuntimeError.6", type), e);
         }
 
         return answer;
@@ -126,7 +126,7 @@ public class ObjectFactory {
             Class<?> clazz = internalClassForName(type);
             answer = clazz.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(Messages.getString("RuntimeError.6", type), e); //$NON-NLS-1$
+            throw new RuntimeException(Messages.getString("RuntimeError.6", type), e);
         }
         return answer;
     }
@@ -137,7 +137,7 @@ public class ObjectFactory {
 
         if (config != null && config.getConfigurationType() != null) {
             type = config.getConfigurationType();
-            if ("DEFAULT".equalsIgnoreCase(type)) { //$NON-NLS-1$
+            if ("DEFAULT".equalsIgnoreCase(type)) {
                 type = JavaTypeResolverDefaultImpl.class.getName();
             }
         } else {

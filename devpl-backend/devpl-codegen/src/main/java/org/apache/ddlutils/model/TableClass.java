@@ -2,6 +2,7 @@ package org.apache.ddlutils.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * TableClass is associated with a persistent Table in a Database.
@@ -9,17 +10,23 @@ import java.util.List;
  */
 public class TableClass {
     /**
-     * The table for which this dyna class is defined.
+     * The table for which this class is defined.
      */
     private final Table _table;
+    /**
+     * class name
+     */
     protected String name;
+    /**
+     * property list of a java pojo class
+     */
     protected ColumnProperty[] properties;
     /**
-     * The primary key dyna properties.
+     * The primary key properties.
      */
     private ColumnProperty[] _primaryKeyProperties;
     /**
-     * The non-primary key dyna properties.
+     * The non-primary key properties.
      */
     private ColumnProperty[] _nonPrimaryKeyProperties;
 
@@ -30,7 +37,8 @@ public class TableClass {
      * @param properties The dyna properties
      */
     public TableClass(Table table, ColumnProperty[] properties) {
-        if (table != null) this.name = table.getName();
+        Objects.requireNonNull(table, "table must not be null");
+        this.name = table.getName();
         this.properties = properties;
         _table = table;
     }
@@ -63,9 +71,6 @@ public class TableClass {
         return _table;
     }
 
-    // Helper methods
-    //-------------------------------------------------------------------------
-
     /**
      * Returns the table name for which this dyna class is defined.
      *
@@ -78,11 +83,12 @@ public class TableClass {
     /**
      * Returns the properties of this dyna class.
      *
-     * @return The properties
+     * @return The properties copy
      */
-    public ColumnProperty[] getSqlDynaProperties() {
-        ColumnProperty[] props = this.properties;
-        return swallowCopy(props);
+    public ColumnProperty[] getProperties() {
+        ColumnProperty[] result = new ColumnProperty[this.properties.length];
+        System.arraycopy(this.properties, 0, result, 0, this.properties.length);
+        return result;
     }
 
     /**
@@ -98,7 +104,7 @@ public class TableClass {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T[] swallowCopy(T[] src) {
+    private <T> T[] swallowCopy(T[] src) {
         Object[] result = new Object[src.length];
         System.arraycopy(src, 0, result, 0, src.length);
         return (T[]) result;
@@ -116,9 +122,6 @@ public class TableClass {
         return swallowCopy(_nonPrimaryKeyProperties);
     }
 
-    // Implementation methods
-    //-------------------------------------------------------------------------
-
     /**
      * Initializes the primary key and non-primary key property arrays.
      */
@@ -126,7 +129,6 @@ public class TableClass {
         List<ColumnProperty> pkProps = new ArrayList<>();
         List<ColumnProperty> nonPkProps = new ArrayList<>();
         ColumnProperty[] properties = this.properties;
-
         for (ColumnProperty sqlProperty : properties) {
             if (sqlProperty.isPrimaryKey()) {
                 pkProps.add(sqlProperty);
@@ -138,7 +140,11 @@ public class TableClass {
         _nonPrimaryKeyProperties = nonPkProps.toArray(new ColumnProperty[0]);
     }
 
-    public ColumnProperty[] getDynaProperties() {
+    /**
+     * @return origin properties of this table class
+     * @see TableClass#getProperties()
+     */
+    public ColumnProperty[] getOriginProperties() {
         return this.properties;
     }
 
@@ -150,10 +156,10 @@ public class TableClass {
         return new TableObject(this);
     }
 
-    public ColumnProperty getDynaProperty(String attrName) {
+    public ColumnProperty getProperty(String propertyName) {
         if (this.properties != null) {
             for (ColumnProperty property : this.properties) {
-                if (property.getName().equalsIgnoreCase(attrName)) {
+                if (property.getName().equalsIgnoreCase(propertyName)) {
                     return property;
                 }
             }

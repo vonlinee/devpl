@@ -1,4 +1,7 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
+
+import io.devpl.codegen.generator.Context;
+import io.devpl.codegen.generator.GenerationTarget;
 
 import java.util.Map;
 

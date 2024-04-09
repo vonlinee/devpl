@@ -40,7 +40,7 @@ public class TestSqlParser {
                                   and arr.room_id = #{roomId}) as arrstu on seat.id = arrstu.seat_id
             where seat.room_id = #{roomId}
             and seat.is_deleted = 0
-                """;
+            """;
 
         SqlParser parser = DruidSqlParser.createSqlParser(DbType.mysql.name());
 

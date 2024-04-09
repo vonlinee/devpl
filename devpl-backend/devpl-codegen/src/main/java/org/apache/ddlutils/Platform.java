@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.alteration.ModelChange;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -27,6 +26,10 @@ public interface Platform {
         return getDBType().getName();
     }
 
+    /**
+     *  Returns the DBType of the database that this platform is.
+     * @return enum DBType
+     */
     DBType getDBType();
 
     /**

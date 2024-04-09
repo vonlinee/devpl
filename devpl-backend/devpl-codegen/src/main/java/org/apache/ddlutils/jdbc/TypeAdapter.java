@@ -1,4 +1,4 @@
-package io.devpl.codegen.db.dialect;
+package org.apache.ddlutils.jdbc;
 
 import io.devpl.codegen.jdbc.SqlDataType;
 import io.devpl.codegen.type.CommonJavaType;

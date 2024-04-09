@@ -19,7 +19,7 @@ public class ParserEntityResolver implements EntityResolver {
             InputStream is = getClass()
                 .getClassLoader()
                 .getResourceAsStream(
-                    "codegen-config.dtd"); //$NON-NLS-1$
+                    "codegen-config.dtd");
             return new InputSource(is);
         }
         return null;

@@ -24,16 +24,6 @@ package io.devpl.codegen.generator;
  * introspection tasks, 40% generation tasks, and 40% save tasks.
  */
 public interface ProgressCallback {
-    /**
-     * Called to note the start of the introspection phase, and to note the
-     * maximum number of startTask messages that will be sent for the
-     * introspection phase.
-     *
-     * @param totalTasks the maximum number of times startTask will be called for the
-     *                   introspection phase.
-     */
-    default void introspectionStarted(int totalTasks) {
-    }
 
     /**
      * Called to note the start of the generation phase, and to note the maximum

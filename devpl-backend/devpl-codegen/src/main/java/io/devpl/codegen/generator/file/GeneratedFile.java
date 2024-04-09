@@ -1,5 +1,6 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
 
+import io.devpl.codegen.generator.file.TargetFile;
 import lombok.Getter;
 import lombok.Setter;
 

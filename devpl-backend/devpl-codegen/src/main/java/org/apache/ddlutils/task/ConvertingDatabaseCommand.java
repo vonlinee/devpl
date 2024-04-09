@@ -1,13 +1,10 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.io.DataConverterRegistration;
 import org.apache.ddlutils.io.DatabaseDataIO;
 
 /**
  * Base type for database commands that use converters.
- *
- * @ant.type ignore="true"
  */
 public abstract class ConvertingDatabaseCommand extends DatabaseCommand {
     /**

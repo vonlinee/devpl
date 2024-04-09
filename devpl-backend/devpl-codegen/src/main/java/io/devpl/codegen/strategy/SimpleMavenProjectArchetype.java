@@ -1,6 +1,6 @@
 package io.devpl.codegen.strategy;
 
-import io.devpl.codegen.generator.GeneratedFile;
+import io.devpl.codegen.generator.file.GeneratedFile;
 
 import java.io.File;
 import java.nio.file.Path;

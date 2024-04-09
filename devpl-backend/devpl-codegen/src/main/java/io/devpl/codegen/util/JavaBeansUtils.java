@@ -25,9 +25,9 @@ public class JavaBeansUtils {
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         }
         if ("boolean".equals(fullyQualifiedJavaTypeName)) {
-            sb.insert(0, "is"); //$NON-NLS-1$
+            sb.insert(0, "is");
         } else {
-            sb.insert(0, "get"); //$NON-NLS-1$
+            sb.insert(0, "get");
         }
         return sb.toString();
     }
@@ -48,7 +48,7 @@ public class JavaBeansUtils {
             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         }
 
-        sb.insert(0, "set"); //$NON-NLS-1$
+        sb.insert(0, "set");
 
         return sb.toString();
     }

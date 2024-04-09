@@ -92,7 +92,7 @@ public class TestDatabaseIO extends TestCase {
         }
         assertEquals(defaultValue, column.getDefaultValue());
         assertEquals(description, column.getDescription());
-        assertEquals(javaName, column.getJavaName());
+        assertEquals(javaName, column.getPropertyName());
         assertEquals(isPrimaryKey, column.isPrimaryKey());
         assertEquals(isRequired, column.isRequired());
         assertEquals(isAutoIncrement, column.isAutoIncrement());

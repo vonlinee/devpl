@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import io.devpl.codegen.generator.TargetFile;
+import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;

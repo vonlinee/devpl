@@ -200,7 +200,7 @@ public class DataToDatabaseSink implements DataSink {
         if (!_waitingObjects.isEmpty()) {
             if (_log.isDebugEnabled()) {
                 for (WaitingObject obj : _waitingObjects) {
-                    Table table = _model.getDynaClassFor(obj.getObject()).getTable();
+                    Table table = _model.getClassForTable(obj.getObject()).getTable();
                     Identity objId = buildIdentityFromPKs(table, obj.getObject());
 
                     _log.debug("Row " + objId + " is still not written because it depends on these yet unwritten rows");
@@ -244,7 +244,7 @@ public class DataToDatabaseSink implements DataSink {
 
     @Override
     public void addBean(TableObject bean) throws DataSinkException {
-        Table table = _model.getDynaClassFor(bean).getTable();
+        Table table = _model.getClassForTable(bean).getTable();
         Identity origIdentity = buildIdentityFromPKs(table, bean);
 
         if (_ensureFkOrder && (table.getForeignKeyCount() > 0)) {
@@ -319,7 +319,7 @@ public class DataToDatabaseSink implements DataSink {
                     }
                 }
                 for (TableObject finishedObj : finishedObjs) {
-                    Table tableForObj = _model.getDynaClassFor(finishedObj).getTable();
+                    Table tableForObj = _model.getClassForTable(finishedObj).getTable();
                     Identity objIdentity = buildIdentityFromPKs(tableForObj, finishedObj);
 
                     insertBeanIntoDatabase(tableForObj, finishedObj);

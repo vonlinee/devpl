@@ -78,7 +78,7 @@ public class ColumnOverride extends PropertyHolder {
 
     public void validate(List<String> errors, String tableName) {
         if (!StringUtils.hasText(columnName)) {
-            errors.add(Messages.getString("ValidationError.22", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.22",
                 tableName));
         }
     }

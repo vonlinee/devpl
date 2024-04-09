@@ -1,4 +1,4 @@
-package io.devpl.codegen.generator;
+package io.devpl.codegen.generator.file;
 
 import java.io.IOException;
 import java.io.Writer;

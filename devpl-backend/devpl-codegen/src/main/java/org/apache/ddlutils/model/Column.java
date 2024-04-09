@@ -1,8 +1,5 @@
 package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.util.NumberUtils;
-import org.apache.ddlutils.util.StringUtils;
-
 import java.io.Serial;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -19,11 +16,10 @@ public class Column extends SchemaObject {
      */
     @Serial
     private static final long serialVersionUID = -6226348998874210093L;
-
     /**
      * The java name of the column (optional and unused by DdlUtils, for Torque compatibility).
      */
-    private String _javaName;
+    private String _propertyName;
     /**
      * The column's description.
      */
@@ -71,18 +67,18 @@ public class Column extends SchemaObject {
      *
      * @return The java name
      */
-    public String getJavaName() {
-        return _javaName;
+    public String getPropertyName() {
+        return _propertyName;
     }
 
     /**
      * Sets the java name of the column. This property is unused by DdlUtils and only
      * for Torque compatibility.
      *
-     * @param javaName The java name
+     * @param propertyName The java name
      */
-    public void setJavaName(String javaName) {
-        _javaName = javaName;
+    public void setPropertyName(String propertyName) {
+        _propertyName = propertyName;
     }
 
     /**
@@ -267,9 +263,9 @@ public class Column extends SchemaObject {
             _size = size;
             if (pos < 0) {
                 _scale = 0;
-                _sizeAsInt = NumberUtils.parseInt(_size.trim());
+                _sizeAsInt = Integer.parseInt(_size.trim());
             } else {
-                _sizeAsInt = NumberUtils.parseInt(size.substring(0, pos).trim());
+                _sizeAsInt = Integer.parseInt(size.substring(0, pos).trim());
                 _scale = Integer.parseInt(size.substring(pos + 1).trim());
             }
         } else {
@@ -368,7 +364,7 @@ public class Column extends SchemaObject {
      * @return The parsed default value
      */
     public Object getParsedDefaultValue() {
-        if (!StringUtils.isBlank(_defaultValue)) {
+        if (_defaultValue != null && !_defaultValue.isBlank()) {
             try {
                 switch (_typeCode) {
                     case Types.TINYINT, Types.SMALLINT, Types.INTEGER, Types.BIGINT, Types.REAL, Types.DOUBLE, Types.FLOAT -> {
@@ -408,6 +404,6 @@ public class Column extends SchemaObject {
      * @return The string representation
      */
     public String toVerboseString() {
-        return "Column [name=" + getName() + "; javaName=" + getJavaName() + "; type=" + getType() + "; typeCode=" + getTypeCode() + "; size=" + getSize() + "; required=" + isRequired() + "; primaryKey=" + isPrimaryKey() + "; autoIncrement=" + isAutoIncrement() + "; defaultValue=" + getDefaultValue() + "; precisionRadix=" + getPrecisionRadix() + "; scale=" + getScale() + "]";
+        return "Column [name=" + getName() + "; javaName=" + getPropertyName() + "; type=" + getType() + "; typeCode=" + getTypeCode() + "; size=" + getSize() + "; required=" + isRequired() + "; primaryKey=" + isPrimaryKey() + "; autoIncrement=" + isAutoIncrement() + "; defaultValue=" + getDefaultValue() + "; precisionRadix=" + getPrecisionRadix() + "; scale=" + getScale() + "]";
     }
 }

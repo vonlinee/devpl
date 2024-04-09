@@ -1,6 +1,5 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.CreationParameters;
@@ -10,8 +9,6 @@ import java.util.List;
 
 /**
  * Base type for database commands that use creation parameters.
- *
- * @ant.type ignore="true"
  */
 public abstract class DatabaseCommandWithCreationParameters extends DatabaseCommand {
     /**

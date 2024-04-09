@@ -2,8 +2,8 @@ package io.devpl.fxui.utils.office;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import io.devpl.codegen.db.dialect.mysql.InfoSchemaColumn;
-import io.devpl.codegen.db.dialect.mysql.InfoSchemaTable;
+import org.apache.ddlutils.platform.mysql.InfoSchemaColumn;
+import org.apache.ddlutils.platform.mysql.InfoSchemaTable;
 import io.devpl.fxui.utils.DBUtils;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -48,8 +48,8 @@ public class PoiUtils2 {
     public static TableSchemeInfo getTableInfo(String tableName) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/lgdb_campus_intelligent_portrait?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8";
         Properties props = new Properties();
-        props.setProperty("user", "root"); //$NON-NLS-1$
-        props.setProperty("password", "123456"); //$NON-NLS-1$
+        props.setProperty("user", "root");
+        props.setProperty("password", "123456");
         Connection connection = DBUtils.getConnection(url, props);
         final Statement statement = connection.createStatement();
         final ResultSet rs = statement.executeQuery(String.format(sql, tableName));

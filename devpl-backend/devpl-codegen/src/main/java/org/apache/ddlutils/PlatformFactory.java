@@ -1,6 +1,5 @@
 package org.apache.ddlutils;
 
-
 import org.apache.ddlutils.platform.DBType;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.axion.AxionPlatform;
@@ -31,8 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A factory of {@link org.apache.ddlutils.Platform} instances based on a case- * insensitive database name. Note that this is a convenience class as the platforms
  * can also simply be created via their constructors.
- *
- * @version $Revision: 209952 $
  */
 public class PlatformFactory {
 

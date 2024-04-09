@@ -31,7 +31,7 @@ public class TableObject {
     public String toString() {
         StringBuilder result = new StringBuilder();
         TableClass type = getTableClass();
-        ColumnProperty[] props = type.getDynaProperties();
+        ColumnProperty[] props = type.getOriginProperties();
 
         result.append(type.getName());
         result.append(": ");
@@ -72,7 +72,7 @@ public class TableObject {
         if (obj instanceof TableObject other) {
             TableClass dynaClass = getTableClass();
             if (dynaClass.equals(other.getTableClass())) {
-                ColumnProperty[] props = dynaClass.getDynaProperties();
+                ColumnProperty[] props = dynaClass.getOriginProperties();
                 for (ColumnProperty prop : props) {
                     Object value = getColumnValue(prop.getName());
                     Object otherValue = other.getColumnValue(prop.getName());

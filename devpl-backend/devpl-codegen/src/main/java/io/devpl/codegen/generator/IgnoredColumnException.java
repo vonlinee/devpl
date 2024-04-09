@@ -15,7 +15,7 @@ public class IgnoredColumnException extends IgnoredColumn {
     @Override
     public void validate(List<String> errors, String tableName) {
         if (!StringUtils.hasText(columnName)) {
-            errors.add(Messages.getString("ValidationError.26", //$NON-NLS-1$
+            errors.add(Messages.getString("ValidationError.26",
                     tableName));
         }
     }

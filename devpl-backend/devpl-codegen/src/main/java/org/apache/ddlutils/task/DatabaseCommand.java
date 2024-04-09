@@ -1,14 +1,11 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.tools.ant.BuildException;
 
 /**
  * Base type for commands that have the database info embedded.
- *
- * @ant.type ignore="true"
  */
 public abstract class DatabaseCommand extends Command {
     /**

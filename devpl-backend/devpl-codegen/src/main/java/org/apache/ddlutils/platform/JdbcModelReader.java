@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * utility class to create a Database model from a live database.
+ * 通过驱动以及JDBC提供的元数据接口读取数据库元数据，具体看各驱动对元数据的支持程度
  */
 public class JdbcModelReader implements DatabaseModelReader {
     /**
@@ -142,7 +143,7 @@ public class JdbcModelReader implements DatabaseModelReader {
         List<MetaDataColumnDescriptor> result = new ArrayList<>();
 
         result.add(new MetaDataColumnDescriptor("TABLE_NAME", Types.VARCHAR));
-        result.add(new MetaDataColumnDescriptor("TABLE_TYPE", Types.VARCHAR, "UNKNOWN"));
+        result.add(new MetaDataColumnDescriptor("TABLE_TYPE", Types.VARCHAR, Const.UNKNOWN));
         result.add(new MetaDataColumnDescriptor("TABLE_CAT", Types.VARCHAR));
         result.add(new MetaDataColumnDescriptor("TABLE_SCHEM", Types.VARCHAR));
         result.add(new MetaDataColumnDescriptor("REMARKS", Types.VARCHAR));
@@ -160,10 +161,6 @@ public class JdbcModelReader implements DatabaseModelReader {
      */
     protected List<MetaDataColumnDescriptor> initColumnsForColumn() {
         List<MetaDataColumnDescriptor> result = new ArrayList<>();
-
-        // As suggested by Alexandre Borgoltz, we're reading the COLUMN_DEF first because Oracle
-        // has problems otherwise (it seemingly requires a LONG column to be the first to be read)
-        // See also DDLUTILS-29
         result.add(new MetaDataColumnDescriptor("COLUMN_DEF", Types.VARCHAR));
         // we're also reading the table name so that a model reader impl can filter manually
         result.add(new MetaDataColumnDescriptor("TABLE_NAME", Types.VARCHAR));
@@ -174,7 +171,6 @@ public class JdbcModelReader implements DatabaseModelReader {
         result.add(new MetaDataColumnDescriptor("COLUMN_SIZE", Types.VARCHAR));
         result.add(new MetaDataColumnDescriptor("IS_NULLABLE", Types.VARCHAR, Const.YES));
         result.add(new MetaDataColumnDescriptor("REMARKS", Types.VARCHAR));
-
         return result;
     }
 
