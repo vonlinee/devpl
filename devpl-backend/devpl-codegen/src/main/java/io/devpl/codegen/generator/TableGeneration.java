@@ -84,7 +84,7 @@ public class TableGeneration implements GenerationTarget {
     /**
      * 是否有主键
      */
-    private boolean havePrimaryKey;
+    private boolean hasPrimaryKey;
     /**
      * 字段名称集
      */

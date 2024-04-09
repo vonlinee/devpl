@@ -35,20 +35,20 @@ public class MySQLGeneratorTest {
      * @see org.mybatis.generator.config.Context
      */
     @Test
-    public void test2() {
+    public void testPrivateGenerateFiles() {
         File file = new File(Utils.getDesktopDirectory(), "codegen.properties");
         Properties properties = Utils.loadProperties(file);
         JdbcConfiguration jdbcConfiguration = JdbcConfiguration.builder(properties).build();
 
+        // 配置信息
         Configuration configuration = new Configuration();
         RdbmsTableGenerationContext context = new RdbmsTableGenerationContext(jdbcConfiguration);
-
         context.addTableConfiguration("table_file_generation");
 
         configuration.addContext(context);
 
         CodeGenerator generator = new CodeGenerator(configuration);
-
+        // 生成文件
         generator.generateFiles(null);
     }
 }

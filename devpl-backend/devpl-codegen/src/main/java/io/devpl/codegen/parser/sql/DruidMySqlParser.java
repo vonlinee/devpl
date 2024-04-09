@@ -2,30 +2,167 @@ package io.devpl.codegen.parser.sql;
 
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.sql.ast.SQLExpr;
-import com.alibaba.druid.sql.ast.SQLLimit;
-import com.alibaba.druid.sql.ast.SQLOrderBy;
-import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
-import com.alibaba.druid.sql.ast.expr.SQLInSubQueryExpr;
+import com.alibaba.druid.sql.ast.*;
+import com.alibaba.druid.sql.ast.expr.*;
 import com.alibaba.druid.sql.ast.statement.*;
+import com.alibaba.druid.sql.dialect.mysql.ast.MySqlKey;
+import com.alibaba.druid.sql.dialect.mysql.ast.MySqlPrimaryKey;
+import com.alibaba.druid.sql.dialect.mysql.ast.MySqlUnique;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
+import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
 import com.alibaba.druid.sql.parser.SQLParserUtils;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
+import com.alibaba.druid.sql.visitor.SQLASTVisitor;
 import com.alibaba.druid.stat.TableStat;
-import io.devpl.codegen.db.ColumnInfo;
-import io.devpl.codegen.db.TableInfo;
+import com.alibaba.druid.wall.WallCheckResult;
+import com.alibaba.druid.wall.WallProvider;
+import com.alibaba.druid.wall.spi.MySqlWallProvider;
+import io.devpl.codegen.db.IndexInfo;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class DruidMySqlParser extends DruidSqlParser {
+
+    @Override
+    public SelectSqlParseResult parseSelectSql(String dbType, String sql) {
+        WallProvider provider = new MySqlWallProvider();
+        WallCheckResult result = provider.check(sql);
+        SelectSqlVisitor visitor = new SelectSqlVisitor();
+        if (result.getViolations().isEmpty()) {
+            // 无SQL注入风险和错误, 可执行查询
+            List<SQLStatement> sqlStatements = SQLUtils.parseStatements(sql, DbType.mysql);
+            for (SQLStatement stmt : sqlStatements) {
+                stmt.accept(visitor);
+                return visitor.getResult();
+            }
+        }
+        return null;
+    }
+
+    private static class SelectSqlVisitor implements SQLASTVisitor {
+
+        public static final Pattern PARAMETER_PATTERN = Pattern.compile("#\\{[a-zA-z]*}");
+        private static final int PARAMETER_START_INDEX = 2;
+
+        private final List<SQLSelectItem> selectItems = new ArrayList<>();
+
+        /**
+         * 查询的表
+         */
+        private final List<SelectTable> selectTables = new ArrayList<>();
+
+        /**
+         * 查询的列
+         */
+        private final List<SelectColumn> selectColumns = new ArrayList<>();
+
+        /**
+         * 查询的参数
+         */
+        private final List<String> parameters = new ArrayList<>();
+
+        /**
+         * select 语句
+         *
+         * @param x SQLSelectQueryBlock
+         */
+        @Override
+        public void endVisit(SQLSelectQueryBlock x) {
+            computeSelectColumns();
+        }
+
+        @Override
+        public boolean visit(SQLExprTableSource x) {
+            selectTables.add(new SelectTable(x.getTableName(), x.getAlias()));
+            return false;
+        }
+
+        @Override
+        public boolean visit(SQLCharExpr x) {
+            computeParameter(x.toString());
+            return false;
+        }
+
+        @Override
+        public boolean visit(SQLSelectItem x) {
+            selectItems.add(x);
+            return false;
+        }
+
+        @Override
+        public boolean visit(SQLVariantRefExpr x) {
+            computeParameter(x.getName());
+            return false;
+        }
+
+        /**
+         * 访问查询参数表达式, 匹配查询参数
+         *
+         * @param expr 查询参数表达式
+         */
+        protected void computeParameter(String expr) {
+            Matcher matcher = PARAMETER_PATTERN.matcher(expr);
+            if (matcher.find()) {
+                String match = matcher.group();
+                parameters.add(match.substring(PARAMETER_START_INDEX, match.length() - 1));
+            }
+        }
+
+        /**
+         * 计算查询列
+         */
+        protected void computeSelectColumns() {
+            selectItems.forEach(item -> {
+                String alias = item.getAlias();
+                if (item.getExpr() instanceof SQLIdentifierExpr expr) {
+                    selectColumns.add(new SelectColumn(selectTables.get(0).getName(), expr.getName(), alias));
+                } else if (item.getExpr() instanceof SQLAllColumnExpr expr) {
+                    selectColumns.add(new SelectColumn(selectTables.get(0).getName(), expr.toString(), alias));
+                } else if (item.getExpr() instanceof SQLMethodInvokeExpr expr) {
+                    selectColumns.add(new SelectColumn(null, expr.toString(), alias));
+                } else if (item.getExpr() instanceof SQLPropertyExpr expr) {
+                    selectColumns.add(new SelectColumn(getSelectTableNameByAlias(expr.getOwnerName()), expr.getName(), item.getAlias()));
+                }
+            });
+        }
+
+        /**
+         * 根据查询表别名获取查询表名
+         * getSelectTableNameByAlias("t") -> "t_user" or null
+         *
+         * @param alias 查询表别名
+         * @return 查询表名
+         */
+        protected String getSelectTableNameByAlias(String alias) {
+            return getSelectTableByAlias(alias).map(SelectTable::getName).orElse(null);
+        }
+
+        /**
+         * 根据查询表别名获取查询表
+         *
+         * @param alias 查询表别名
+         * @return 查询表
+         */
+        protected Optional<SelectTable> getSelectTableByAlias(String alias) {
+            return selectTables.stream().filter(table -> alias.equals(table.getAlias())).findFirst();
+        }
+
+        public SelectSqlParseResult getResult() {
+            SelectSqlParseResult result = new SelectSqlParseResult();
+            result.setSelectColumns(this.selectColumns);
+            result.setParameters(this.parameters);
+            return result;
+        }
+    }
+
+
     @Override
     public CreateTableParseResult parseCreateTableSql(String dbType, String sql) {
         CreateTableParseResult result = new CreateTableParseResult();
@@ -33,49 +170,49 @@ public class DruidMySqlParser extends DruidSqlParser {
         if (!(parser.parseStatement() instanceof MySqlCreateTableStatement stmt)) {
             return result;
         }
-        TableInfo tableInfo = parseDDL(sql, DbType.of(dbType));
-        result.setTableInfo(tableInfo);
+        CreateSqlTable createSqlTable = parseDDL(sql, DbType.of(dbType));
+        result.setCreateSqlTable(createSqlTable);
         return result;
     }
 
-    public TableInfo parseDDL(String ddl, DbType dbType) {
-        TableInfo tableInfo = new TableInfo();
+    private CreateSqlTable parseDDL(String ddl, DbType dbType) {
+        CreateSqlTable createSqlTable = new CreateSqlTable();
         // 创建解析器
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(ddl, dbType);
         if (!(parser.parseStatement() instanceof MySqlCreateTableStatement stmt)) {
-            return tableInfo;
+            return createSqlTable;
         }
         MySQLColumnVisitor columnVisitor = new MySQLColumnVisitor();
         // 解析
         stmt.accept(columnVisitor);
         // 表名称
-        tableInfo.setName(SQLUtils.normalize(stmt.getTableName(), dbType));
+        createSqlTable.setName(SQLUtils.normalize(stmt.getTableName(), dbType));
         // 表备注
-        tableInfo.setComment(SQLUtils.normalize(String.valueOf(stmt.getComment()), dbType));
+        createSqlTable.setComment(SQLUtils.normalize(String.valueOf(stmt.getComment()), dbType));
         // 表配置信息
         List<Map.Entry<String, String>> options = new ArrayList<>();
         for (SQLAssignItem tableOption : stmt.getTableOptions()) {
             options.add(Map.entry(String.valueOf(tableOption.getTarget()), String.valueOf(tableOption.getValue())));
         }
-        tableInfo.setOptions(options);
+        createSqlTable.setOptions(options);
         // 列信息
-        List<ColumnInfo> columns = new ArrayList<>();
+        List<CreateSqlColumn> columns = new ArrayList<>();
 
-        Map<String, ColumnInfo> columnInfoMap = new HashMap<>();
+        Map<String, CreateSqlColumn> columnInfoMap = new HashMap<>();
         for (TableStat.Column column : columnVisitor.getColumns()) {
-            ColumnInfo columnInfo = new ColumnInfo();
-            columnInfo.setName(column.getName());
-            columnInfo.setFullName(column.getFullName());
-            columnInfo.setTableName(column.getTable());
-            columnInfo.setDataType(column.getDataType());
+            CreateSqlColumn createSqlColumn = new CreateSqlColumn();
+            createSqlColumn.setName(column.getName());
+            createSqlColumn.setFullName(column.getFullName());
+            createSqlColumn.setTableName(column.getTable());
+            createSqlColumn.setDataType(column.getDataType());
             // 字段注释信息
             Map<String, Object> attributes = column.getAttributes();
             if (attributes != null) {
-                columnInfo.setComment(String.valueOf(attributes.getOrDefault("comment", "")));
-                columnInfo.setAttributes(attributes);
+                createSqlColumn.setComment(String.valueOf(attributes.getOrDefault("comment", "")));
+                createSqlColumn.setAttributes(attributes);
             }
-            columnInfoMap.put(column.getName(), columnInfo);
-            columns.add(columnInfo);
+            columnInfoMap.put(column.getName(), createSqlColumn);
+            columns.add(createSqlColumn);
         }
 
         List<SQLColumnDefinition> columnDefinitions = stmt.getColumnDefinitions();
@@ -84,18 +221,18 @@ public class DruidMySqlParser extends DruidSqlParser {
             String columnName = cd.getColumnName();
             columnName = columnName.substring(1, columnName.length() - 1);
 
-            ColumnInfo columnInfo = columnInfoMap.get(columnName);
-            if (columnInfo != null) {
+            CreateSqlColumn createSqlColumn = columnInfoMap.get(columnName);
+            if (createSqlColumn != null) {
                 // 完整的数据类型定义
-                columnInfo.setDataTypeDefinition(String.valueOf(cd.getDataType()));
-                columnInfo.setCharsetDefinition(String.valueOf(cd.getCharsetExpr()));
+                createSqlColumn.setDataTypeDefinition(String.valueOf(cd.getDataType()));
+                createSqlColumn.setCharsetDefinition(String.valueOf(cd.getCharsetExpr()));
             }
         }
 
-        tableInfo.setColumns(columns);
+        createSqlTable.setColumns(columns);
         // 索引信息
-        tableInfo.setIndexes(columnVisitor.getIndices());
-        return tableInfo;
+        createSqlTable.setIndexes(columnVisitor.getIndices());
+        return createSqlTable;
     }
 
     /**
@@ -258,5 +395,105 @@ public class DruidMySqlParser extends DruidSqlParser {
         SQLExprTableSource source = alter.getTableSource();
         String tableName = source.toString();
         return result;
+    }
+
+    private static class MySQLColumnVisitor extends MySqlSchemaStatVisitor {
+
+        /**
+         * 保存索引信息
+         */
+        private final List<IndexInfo> indices = new ArrayList<>();
+
+        @Override
+        public boolean visit(SQLColumnDefinition x) {
+            String tableName = null;
+            SQLObject parent = x.getParent();
+            if (parent instanceof SQLCreateTableStatement) {
+                tableName = SQLUtils.normalize(((SQLCreateTableStatement) parent).getTableName());
+            }
+            if (Objects.isNull(tableName)) {
+                return true;
+            }
+            String columnName = SQLUtils.normalize(x.getName().toString());
+            TableStat.Column column = this.addColumn(tableName, columnName);
+            column.setDataType(x.getDataType().getName());
+            Map<String, Object> attr = column.getAttributes();
+            if (Objects.isNull(attr)) {
+                attr = new HashMap<>();
+                column.setAttributes(attr);
+            }
+            // 其他属性
+            // attr.put("sqlSegment", x.toString());
+            if (Objects.nonNull(x.getComment())) {
+                attr.put("comment", SQLUtils.normalize(x.getComment().toString()));
+            }
+            attr.put("unsigned", ((SQLDataTypeImpl) x.getDataType()).isUnsigned());
+            if (Objects.nonNull(x.getDefaultExpr())) {
+                attr.put("defaultValue", SQLUtils.normalize(x.getDefaultExpr().toString()));
+            }
+            List<Object> typeArgs = new ArrayList<>();
+            attr.put("typeArgs", typeArgs);
+            for (SQLExpr argument : x.getDataType().getArguments()) {
+                if (argument instanceof SQLIntegerExpr) {
+                    Number number = ((SQLIntegerExpr) argument).getNumber();
+                    typeArgs.add(number);
+                }
+            }
+            for (Object item : x.getConstraints()) {
+                if (item instanceof SQLPrimaryKey) {
+                    column.setPrimaryKey(true);
+                } else if (item instanceof SQLUnique) {
+                    column.setUnique(true);
+                } else if (item instanceof SQLNotNullConstraint) {
+                    attr.put("notnull", true);
+                } else if (item instanceof SQLNullConstraint) {
+                    attr.put("notnull", false);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean visit(MySqlKey x) {
+            addIndex(x);
+            return false;
+        }
+
+        @Override
+        public boolean visit(MySqlUnique x) {
+            addIndex(x);
+            return false;
+        }
+
+        @Override
+        public boolean visit(MySqlPrimaryKey x) {
+            addIndex(x);
+            return false;
+        }
+
+
+        private void addIndex(MySqlKey x) {
+            SQLIndexDefinition indexDefinition = x.getIndexDefinition();
+            List<String> indexColumns = indexDefinition.getColumns().stream().map(v -> SQLUtils.normalize(v.getExpr().toString())).collect(Collectors.toList());
+            IndexInfo index = new IndexInfo(
+                getOrDefault(indexDefinition.getName(), "")
+                , getOrDefault(indexDefinition.getType(), "")
+                , getOrDefault(indexDefinition.getOptions().getComment(), "")
+                , indexColumns);
+            this.indices.add(index);
+        }
+
+        private String getOrDefault(Object obj, String defaultValue) {
+            return Objects.isNull(obj) ? defaultValue : SQLUtils.normalize(String.valueOf(obj));
+        }
+
+        /**
+         * 获取索引信息
+         *
+         * @return 索引信息
+         */
+        public List<IndexInfo> getIndices() {
+            return new ArrayList<>(indices);
+        }
     }
 }

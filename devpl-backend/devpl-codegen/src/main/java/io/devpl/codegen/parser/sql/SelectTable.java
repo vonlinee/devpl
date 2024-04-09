@@ -8,17 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SelectTable {
-
-    /**
-     * 数据库名称
-     */
-    private String databaseName;
-
-    /**
-     * 表名称
-     */
-    protected String name;
+public class SelectTable extends SqlTable {
 
     /**
      * 查询表用到的别名
@@ -29,7 +19,6 @@ public class SelectTable {
      * 是否是临时表
      */
     private boolean temporary;
-
 
     public SelectTable(String name, String alias) {
         this.name = name;

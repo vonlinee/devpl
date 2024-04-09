@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -52,18 +53,13 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
                 Table table = database.getTable(0);
 
-                sqlBuilder.dropTable(table);
-
                 PojoMap parameters = new PojoMap();
 
                 sqlBuilder.createTable(database, table, parameters);
 
-                List<TableObject> list = platform.fetch(database, "SELECT * FROM field_info");
+                String insertSql = sqlBuilder.getInsertSql(table, new LinkedHashMap<>(), true);
 
-                System.out.println(list);
-
-                TableObject bean = database.createDynaBeanFor(database.getTable(0));
-
+                System.out.println(insertSql);
             } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }

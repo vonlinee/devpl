@@ -1,6 +1,6 @@
 package org.apache.ddlutils.platform.firebird;
 
-
+import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
@@ -34,6 +34,20 @@ public class FirebirdModelReader extends JdbcModelReader {
             determineAutoIncrementColumns(table);
         }
         return tables;
+    }
+
+    @Override
+    protected Collection<Column> readColumns(DatabaseMetadataReader reader, String catalog, String schema, String tableName) throws SQLException {
+        if (getPlatform().isDelimitedIdentifierModeOn()) {
+            // Jaybird has a problem when delimited identifiers are used as
+            // it is not able to find the columns for the table
+            // So we have to filter manually below
+            catalog = getDefaultTablePattern();
+            schema = getDefaultColumnPattern();
+        } else {
+            catalog = escapeForSearch(reader, tableName);
+        }
+        return super.readColumns(reader, catalog, schema, tableName);
     }
 
     @Override
@@ -188,16 +202,13 @@ public class FirebirdModelReader extends JdbcModelReader {
         // Jaybird is not able to read indices when delimited identifiers are turned on,
         // so we gather the data manually using Firebird's system tables
         final String query = "SELECT a.RDB$INDEX_NAME INDEX_NAME, b.RDB$RELATION_NAME TABLE_NAME, b.RDB$UNIQUE_FLAG NON_UNIQUE, " + "a.RDB$FIELD_POSITION ORDINAL_POSITION, a.RDB$FIELD_NAME COLUMN_NAME, 3 INDEX_TYPE " + "FROM RDB$INDEX_SEGMENTS a, RDB$INDICES b WHERE a.RDB$INDEX_NAME=b.RDB$INDEX_NAME AND b.RDB$RELATION_NAME = ?";
-
-        Map<String, Index> indices = new ListOrderedMap<>();
+        Map<String, Index> indices = new LinkedHashMap<>();
         PreparedStatement stmt = null;
         try {
             stmt = getConnection().prepareStatement(query);
-
             stmt.setString(1, getPlatform().isDelimitedIdentifierModeOn() ? tableName : tableName.toUpperCase());
 
             ResultSet indexData = stmt.executeQuery();
-
             while (indexData.next()) {
                 PojoMap values = readColumns(indexData, getColumnsForIndex());
 

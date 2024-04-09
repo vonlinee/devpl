@@ -9,8 +9,14 @@ import java.util.List;
 @Setter
 public class InsertSqlParseResult {
 
+    /**
+     * 插入语句涉及到的表
+     */
     private SqlTable table;
 
+    /**
+     * 插入的列
+     */
     private List<InsertColumn> insertColumns;
 
     /**

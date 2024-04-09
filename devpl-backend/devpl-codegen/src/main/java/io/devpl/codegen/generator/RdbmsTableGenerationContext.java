@@ -12,9 +12,9 @@ import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.codegen.util.ClassUtils;
-import io.devpl.codegen.util.Utils;
 import io.devpl.codegen.util.Messages;
 import io.devpl.codegen.util.StringUtils;
+import io.devpl.codegen.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -315,7 +315,6 @@ public class RdbmsTableGenerationContext extends Context {
             log.warn("Context {}表为空", getId());
             return;
         }
-
         for (PluginConfiguration pluginConfiguration : getPluginConfigurations()) {
             Plugin plugin = ObjectFactory.createPlugin(this, pluginConfiguration);
             if (plugin.validate(warnings)) {
@@ -327,7 +326,6 @@ public class RdbmsTableGenerationContext extends Context {
         // 获取所有的表信息
         this.targetTables.clear();
         for (TableConfiguration tc : tableConfigurations) {
-
             String tableName = StringUtils.composeFullyQualifiedTableName(tc.getCatalog(), tc
                 .getSchema(), tc.getTableName(), '.');
 
@@ -335,7 +333,7 @@ public class RdbmsTableGenerationContext extends Context {
 
             List<TableGeneration> tables = this.introspectTables(tc);
 
-            // 确定文件类型
+            // 从配置中确定文件类型
             Set<String> targetFileTypeNames = tc.getTargetFiles();
             Map<String, TargetFile> targetFileTypeMap = getTargetFileTypeMap();
             List<TargetFile> targetFiles;
@@ -372,6 +370,9 @@ public class RdbmsTableGenerationContext extends Context {
                 generatedFilesOfSingleTable.addAll(generator.getGeneratedFiles());
             }
             rootPlugin.generateFiles(tableGeneration, generatedFilesOfSingleTable);
+
+            // 添加到总的需要生成的文件列表中
+            files.addAll(generatedFilesOfSingleTable);
         }
     }
 

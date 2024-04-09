@@ -1,6 +1,5 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
@@ -396,12 +395,10 @@ public class DatabaseDataIO {
     private void writeDataForTableToXML(Platform platform, Database model, Table table, DataWriter writer) {
         Table[] tables = {table};
         StringBuilder query = new StringBuilder();
-
         query.append("SELECT ");
         String schema = null;
         if (_determineSchema) {
             try (Connection connection = platform.borrowConnection()) {
-                // TODO: Remove this once we have full support for schemas
                 schema = platform.getModelReader().determineSchemaOf(connection, _schemaPattern, tables[0]);
             } catch (SQLException ex) {
                 // ignored
@@ -409,7 +406,6 @@ public class DatabaseDataIO {
         }
 
         Column[] columns = tables[0].getColumns();
-
         for (int columnIdx = 0; columnIdx < columns.length; columnIdx++) {
             if (columnIdx > 0) {
                 query.append(",");

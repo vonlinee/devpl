@@ -10,9 +10,11 @@ public abstract class AbstractTableFileGenerator implements FileGenerator, Conte
 
     @Override
     public void initialize(GenerationTarget target) {
-        if (!(target instanceof TableGeneration)) {
+        if (!(target instanceof TableGeneration tg)) {
             return;
         }
+        this.tableGeneration = tg;
+        this.tableConfiguration = tg.getTableConfiguration();
     }
 
     @Override

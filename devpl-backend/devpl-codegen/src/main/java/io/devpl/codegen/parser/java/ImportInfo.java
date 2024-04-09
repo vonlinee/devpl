@@ -49,10 +49,10 @@ public class ImportInfo {
     }
 
     /**
-     * 如果为null，如果该文件语法正确，那么则在同一包下，不用显示import
+     * 为null时，如果该文件语法正确，那么则在同一包下，不用显示import
      *
-     * @param typeName
-     * @return
+     * @param typeName 类型名称
+     * @return 类型名称
      */
     public String get(SimpleName typeName) {
         String fullTypeName = importedIdentifierMap.get(typeName.getIdentifier());

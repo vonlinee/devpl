@@ -1,22 +1,25 @@
-package io.devpl.codegen.db;
+package io.devpl.codegen.parser.sql;
 
+import io.devpl.codegen.db.IndexInfo;
 import io.devpl.codegen.jdbc.meta.TableMetadata;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * 表信息
+ * ddl sql相关的表信息
  */
-@Data
-public class TableInfo {
+@Getter
+@Setter
+public class CreateSqlTable extends SqlTable {
 
     private String name;
     private String comment;
 
     private TableMetadata metadata;
-    private List<ColumnInfo> columns;
+    private List<CreateSqlColumn> columns;
 
     private List<IndexInfo> indexes;
     private List<Map.Entry<String, String>> options;

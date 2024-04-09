@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateColumn {
+public class UpdateColumn extends SqlColumn {
 
-    private String tableName;
-    private String columnName;
     private String value;
 }

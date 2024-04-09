@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 文件合并工具
  */
-public class ToolsApplication1 extends Application {
+public class TextHandleApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -36,7 +36,7 @@ public class ToolsApplication1 extends Application {
         btn1.setOnAction(event -> {
             String text = input.getText();
             String[] lines = text.split("\n");
-            List<String> leftLines = Arrays.stream(lines).filter(l -> l != null && l.length() != 0).toList();
+            List<String> leftLines = Arrays.stream(lines).filter(l -> l != null && !l.isEmpty()).toList();
             output.setText(String.join("\n", leftLines));
         });
 
@@ -44,7 +44,7 @@ public class ToolsApplication1 extends Application {
         btn2.setOnAction(event -> {
             String text = input.getText();
             String[] lines = text.split("\n");
-            List<String> leftLines = new ArrayList<>(Arrays.stream(lines).filter(l -> l != null && l.length() != 0).toList());
+            List<String> leftLines = new ArrayList<>(Arrays.stream(lines).filter(l -> l != null && !l.isEmpty()).toList());
             for (int i = 0; i < leftLines.size(); i++) {
                 leftLines.set(i, (i + 1) + "." + leftLines.get(i));
             }

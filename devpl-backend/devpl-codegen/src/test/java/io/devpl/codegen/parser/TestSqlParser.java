@@ -1,10 +1,7 @@
 package io.devpl.codegen.parser;
 
 import com.alibaba.druid.DbType;
-import io.devpl.codegen.parser.sql.DruidMySqlParser;
-import io.devpl.codegen.parser.sql.DruidSqlParser;
-import io.devpl.codegen.parser.sql.InsertSqlParseResult;
-import io.devpl.codegen.parser.sql.SelectSqlParser;
+import io.devpl.codegen.parser.sql.*;
 import org.junit.Test;
 
 public class TestSqlParser {
@@ -15,7 +12,7 @@ public class TestSqlParser {
     }
 
     @Test
-    public void testQuerySqlParse() {
+    public void testParseSelectSql() {
         String sql = """
             SELECT seat.id,
                    seat.`row`,
@@ -45,12 +42,11 @@ public class TestSqlParser {
             and seat.is_deleted = 0
                 """;
 
-        SelectSqlParser parser = new SelectSqlParser(DbType.mysql.name());
+        SqlParser parser = DruidSqlParser.createSqlParser(DbType.mysql.name());
 
-        parser.parse(sql);
+        SelectSqlParseResult result = parser.parseSelectSql(null, sql);
 
-        System.out.println(parser);
-
+        System.out.println(result);
     }
 
     @Test
@@ -60,7 +56,6 @@ public class TestSqlParser {
             (`id`, `school_id`, `type`, `type_name`, `count`, `create_time`, `update_time`)
             VALUES (1, 'S-305003', 5, '教学资源', 1, '2024-04-07 16:29:42', '2024-04-07 16:29:42');
             """;
-
 
         DruidSqlParser parser = new DruidMySqlParser();
 

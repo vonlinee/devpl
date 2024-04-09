@@ -5,10 +5,12 @@ import io.devpl.codegen.generator.TargetFile;
 import io.devpl.codegen.util.Messages;
 import io.devpl.codegen.util.StringUtils;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
 @Getter
 public class Configuration extends PropertyHolder implements PropertyObject {
 
@@ -17,8 +19,17 @@ public class Configuration extends PropertyHolder implements PropertyObject {
      * 项目配置信息
      */
     private ProjectConfiguration projectConfiguration;
+
+    /**
+     * 需要通过反射创建的类，全限定类名
+     */
     private final List<String> classPathEntries;
-    private List<TargetFile> targetFiles;
+    private final List<TargetFile> targetFiles;
+
+    /**
+     * 是否在生成文件之前先清空根目录
+     * 注意，不要设置为根目录，防止清空不相关的文件夹
+     */
     private boolean clearBeforeWriteFiles = true;
 
     public Configuration() {

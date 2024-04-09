@@ -10,9 +10,9 @@ import lombok.Setter;
 @Getter
 public class SqlTable {
 
-    private String name;
+    protected String name;
 
-    private String catalog;
+    protected String catalog;
 
-    private String schema;
+    protected String schema;
 }

@@ -34,17 +34,18 @@ public class MavenTool extends BorderPane {
 
     private static final String MAVEN_HOME = System.getenv("MAVEN_HOME");
 
+    /**
+     * Maven配置文件settings.xml中配置的本地仓库地址
+     */
     private static String localRepository;
 
     static {
         Path settingXml = Path.of(MAVEN_HOME, "conf", "settings.xml");
-
         try (InputStream is = Files.newInputStream(settingXml)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(is);
             doc.getDocumentElement().normalize();
-
             Node localRepositoryNode = doc.getElementsByTagName("localRepository").item(0);
             localRepository = localRepositoryNode.getTextContent();
         } catch (IOException | SAXException | ParserConfigurationException e) {
@@ -87,7 +88,6 @@ public class MavenTool extends BorderPane {
                 List<MavenCoordinate> coordinates = parse(text);
                 if (coordinates.size() == 1) {
                     MavenCoordinate coordinate = coordinates.get(0);
-
                     if (coordinate.getVersion() == null) {
                         coordinate.setVersion("");
                     }

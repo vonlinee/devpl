@@ -35,9 +35,6 @@ import java.util.Optional;
 
 /**
  * <a href="https://houbb.github.io/2020/05/29/java-ast-06-comments">...</a>
- *
- * @author wangliang
- * Created On 2022-12-29 10:11:33
  */
 public class JavaParserUtils {
 

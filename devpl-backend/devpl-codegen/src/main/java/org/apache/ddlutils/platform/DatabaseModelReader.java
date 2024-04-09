@@ -8,9 +8,16 @@ import java.sql.SQLException;
 public interface DatabaseModelReader {
 
     /**
+     * get jdbc connection
+     *
+     * @return 数据库连接
+     */
+    Connection getConnection();
+
+    /**
      * set database connection to read database model from live connection.
      *
-     * @param connection database connection
+     * @param connection 数据库连接
      */
     void setConnection(Connection connection);
 

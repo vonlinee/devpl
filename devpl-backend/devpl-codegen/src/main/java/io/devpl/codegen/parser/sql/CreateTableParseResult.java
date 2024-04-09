@@ -1,6 +1,5 @@
 package io.devpl.codegen.parser.sql;
 
-import io.devpl.codegen.db.TableInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,5 +7,8 @@ import lombok.Setter;
 @Getter
 public class CreateTableParseResult {
 
-    TableInfo tableInfo;
+    /**
+     * 表信息
+     */
+    private CreateSqlTable createSqlTable;
 }

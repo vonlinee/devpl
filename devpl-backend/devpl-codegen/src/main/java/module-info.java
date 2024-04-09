@@ -21,6 +21,7 @@ open module devpl.codegen {
     exports io.devpl.codegen.util;
     exports io.devpl.codegen.db.dialect;
     exports io.devpl.codegen.generator.config.xml;
+    exports io.devpl.codegen.parser.sql;
 
     requires org.jetbrains.annotations;
     requires org.slf4j;

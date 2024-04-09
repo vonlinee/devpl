@@ -8,18 +8,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SelectColumn {
-    protected String table;
-    protected String name;
+public class SelectColumn extends SqlColumn {
+
     protected String alias;
 
+    public SelectColumn() {
+    }
+
     public SelectColumn(String table, String name, String alias) {
-        this.table = table;
-        this.name = name;
+        this.tableName = table;
+        this.columnName = name;
         this.alias = alias;
     }
 
-    public boolean isSelectAll() {
-        return "*".equals(name);
+    public final boolean isSelectAll() {
+        return "*".equals(columnName);
     }
 }

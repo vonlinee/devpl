@@ -6,6 +6,15 @@ package io.devpl.codegen.parser.sql;
 public interface SqlParser {
 
     /**
+     * 解析 select sql
+     *
+     * @param dbType 数据库类型
+     * @param sql    sql语句
+     * @return 解析结果
+     */
+    SelectSqlParseResult parseSelectSql(String dbType, String sql);
+
+    /**
      * 解析 create table sql
      *
      * @param dbType 数据库类型

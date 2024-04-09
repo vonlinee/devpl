@@ -399,7 +399,8 @@ public class JdbcModelReader implements DatabaseModelReader {
      *
      * @return The connection or <code>null</code> if there is no active connection
      */
-    protected Connection getConnection() {
+    @Override
+    public Connection getConnection() {
         return _connection;
     }
 
@@ -541,8 +542,8 @@ public class JdbcModelReader implements DatabaseModelReader {
 
         List<Table> tables = new ArrayList<>();
 
-        List<TableMetadata> tableMetadatas = reader.getTables(catalog, schemaPattern, null, tableTypes);
-        for (TableMetadata tmd : tableMetadatas) {
+        List<TableMetadata> tableMetadataList = reader.getTables(catalog, schemaPattern, null, tableTypes);
+        for (TableMetadata tmd : tableMetadataList) {
             Table table = new Table();
             table.setName(tmd.getTableName());
             table.setType(tmd.getTableType());
@@ -953,7 +954,6 @@ public class JdbcModelReader implements DatabaseModelReader {
      */
     protected CascadeActionEnum convertAction(Short jdbcActionValue) {
         CascadeActionEnum action = null;
-
         if (jdbcActionValue != null) {
             action = switch (jdbcActionValue) {
                 case DatabaseMetaData.importedKeyCascade -> CascadeActionEnum.CASCADE;

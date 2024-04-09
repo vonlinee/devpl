@@ -1,15 +1,17 @@
-package io.devpl.codegen.db;
+package io.devpl.codegen.parser.sql;
 
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Map;
 
 /**
  * 列信息
  */
-@Data
-public class ColumnInfo {
+@Getter
+@Setter
+public class CreateSqlColumn extends SqlColumn {
 
     private String name;
     private String fullName;

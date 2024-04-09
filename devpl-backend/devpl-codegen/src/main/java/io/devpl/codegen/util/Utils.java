@@ -225,4 +225,20 @@ public abstract class Utils {
             list.remove(obj);
         }
     }
+
+    /**
+     * 将可能是多行的字符串转为一行，换行符直接去掉
+     *
+     * @param str 字符串
+     * @return 单行字符串
+     */
+    public static String toSingleLine(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : str.toCharArray()) {
+            if (c != '\n' && c != '\r') {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }

@@ -638,7 +638,7 @@ public abstract class SqlBuilder {
         // we're dropping the external foreign keys first
         for (int idx = database.getTableCount() - 1; idx >= 0; idx--) {
             Table table = database.getTable(idx);
-            if ((table.getName() != null) && (table.getName().length() > 0)) {
+            if (table.getName() != null && !table.getName().isEmpty()) {
                 dropForeignKeys(table);
             }
         }
@@ -649,7 +649,7 @@ public abstract class SqlBuilder {
         //       * alter the tables first to drop the internal foreign keys
         for (int idx = database.getTableCount() - 1; idx >= 0; idx--) {
             Table table = database.getTable(idx);
-            if ((table.getName() != null) && (table.getName().length() > 0)) {
+            if ((table.getName() != null) && !table.getName().isEmpty()) {
                 writeTableComment(table);
                 dropTable(table);
             }
@@ -732,49 +732,45 @@ public abstract class SqlBuilder {
      * @return The insertion sql
      */
     public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
-        StringBuilder buffer = new StringBuilder("INSERT INTO ");
+        StringBuilder builder = new StringBuilder("INSERT INTO ");
         boolean addComma = false;
-
-        buffer.append(getDelimitedIdentifier(getTableName(table)));
-        buffer.append(" (");
-
+        builder.append(getDelimitedIdentifier(getTableName(table)));
+        builder.append(" (");
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
             if (columnValues.containsKey(column.getName())) {
                 if (addComma) {
-                    buffer.append(", ");
+                    builder.append(", ");
                 }
-                buffer.append(getDelimitedIdentifier(column.getName()));
+                builder.append(getDelimitedIdentifier(column.getName()));
                 addComma = true;
             }
         }
-        buffer.append(") VALUES (");
+        builder.append(") VALUES (");
         if (genPlaceholders) {
             addComma = false;
             for (int idx = 0; idx < columnValues.size(); idx++) {
                 if (addComma) {
-                    buffer.append(", ");
+                    builder.append(", ");
                 }
-                buffer.append("?");
+                builder.append("?");
                 addComma = true;
             }
         } else {
             addComma = false;
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
                 Column column = table.getColumn(idx);
-
                 if (columnValues.containsKey(column.getName())) {
                     if (addComma) {
-                        buffer.append(", ");
+                        builder.append(", ");
                     }
-                    buffer.append(getValueAsString(column, columnValues.get(column.getName())));
+                    builder.append(getValueAsString(column, columnValues.get(column.getName())));
                     addComma = true;
                 }
             }
         }
-        buffer.append(")");
-        return buffer.toString();
+        builder.append(")");
+        return builder.toString();
     }
 
     /**
@@ -793,13 +789,11 @@ public abstract class SqlBuilder {
     public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("UPDATE ");
         boolean addSep = false;
-
         buffer.append(getDelimitedIdentifier(getTableName(table)));
         buffer.append(" SET ");
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
             if (!column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
                 if (addSep) {
                     buffer.append(", ");
@@ -818,7 +812,6 @@ public abstract class SqlBuilder {
         addSep = false;
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
             if (column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
                 if (addSep) {
                     buffer.append(" AND ");
@@ -849,48 +842,47 @@ public abstract class SqlBuilder {
      * @return The update sql
      */
     public String getUpdateSql(Table table, Map<String, Object> oldColumnValues, Map<String, Object> newColumnValues, boolean genPlaceholders) {
-        StringBuilder buffer = new StringBuilder("UPDATE ");
+        StringBuilder builder = new StringBuilder("UPDATE ");
         boolean addSep = false;
-
-        buffer.append(getDelimitedIdentifier(getTableName(table)));
-        buffer.append(" SET ");
+        builder.append(getDelimitedIdentifier(getTableName(table)));
+        builder.append(" SET ");
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
 
             if (newColumnValues.containsKey(column.getName())) {
                 if (addSep) {
-                    buffer.append(", ");
+                    builder.append(", ");
                 }
-                buffer.append(getDelimitedIdentifier(column.getName()));
-                buffer.append(" = ");
+                builder.append(getDelimitedIdentifier(column.getName()));
+                builder.append(" = ");
                 if (genPlaceholders) {
-                    buffer.append("?");
+                    builder.append("?");
                 } else {
-                    buffer.append(getValueAsString(column, newColumnValues.get(column.getName())));
+                    builder.append(getValueAsString(column, newColumnValues.get(column.getName())));
                 }
                 addSep = true;
             }
         }
-        buffer.append(" WHERE ");
+        builder.append(" WHERE ");
         addSep = false;
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
             if (oldColumnValues.containsKey(column.getName())) {
                 if (addSep) {
-                    buffer.append(" AND ");
+                    builder.append(" AND ");
                 }
-                buffer.append(getDelimitedIdentifier(column.getName()));
-                buffer.append(" = ");
+                builder.append(getDelimitedIdentifier(column.getName()));
+                builder.append(" = ");
                 if (genPlaceholders) {
-                    buffer.append("?");
+                    builder.append("?");
                 } else {
-                    buffer.append(getValueAsString(column, oldColumnValues.get(column.getName())));
+                    builder.append(getValueAsString(column, oldColumnValues.get(column.getName())));
                 }
                 addSep = true;
             }
         }
-        return buffer.toString();
+        return builder.toString();
     }
 
     /**

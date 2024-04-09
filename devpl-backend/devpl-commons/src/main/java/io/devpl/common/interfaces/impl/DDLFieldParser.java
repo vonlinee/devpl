@@ -1,7 +1,7 @@
 package io.devpl.common.interfaces.impl;
 
-import io.devpl.codegen.db.ColumnInfo;
-import io.devpl.codegen.db.TableInfo;
+import io.devpl.codegen.parser.sql.CreateSqlColumn;
+import io.devpl.codegen.parser.sql.CreateSqlTable;
 import io.devpl.codegen.parser.sql.CreateTableParseResult;
 import io.devpl.codegen.parser.sql.DruidSqlParser;
 import io.devpl.codegen.parser.sql.SqlParser;
@@ -31,7 +31,7 @@ public class DDLFieldParser implements FieldParser {
     public List<Map<String, Object>> parse(String sql) throws FieldParseException {
         CreateTableParseResult result = sqlParser.parseCreateTableSql(dbType, sql);
 
-        TableInfo tableInfo = result.getTableInfo();
+        CreateSqlTable createSqlTable = result.getCreateSqlTable();
 
         // SQL 注入
 //        WallProvider provider = new MySqlWallProvider();
@@ -44,11 +44,11 @@ public class DDLFieldParser implements FieldParser {
 //            }
 //        }
         List<Map<String, Object>> list = new ArrayList<>();
-        for (ColumnInfo columnInfo : tableInfo.getColumns()) {
+        for (CreateSqlColumn createSqlColumn : createSqlTable.getColumns()) {
             Map<String, Object> field = new HashMap<>();
-            field.put(FIELD_NAME, columnInfo.getName());
-            field.put(FIELD_TYPE, columnInfo.getDataType());
-            field.put(FIELD_DESCRIPTION, columnInfo.getComment());
+            field.put(FIELD_NAME, createSqlColumn.getName());
+            field.put(FIELD_TYPE, createSqlColumn.getDataType());
+            field.put(FIELD_DESCRIPTION, createSqlColumn.getComment());
             list.add(field);
         }
         return list;

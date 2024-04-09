@@ -37,7 +37,7 @@ public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHold
         } else if (dbType == DBTypeEnum.SQL_SERVER) {
             dbQuery = new SQLServerMetadataReader();
         } else if (dbType == DBTypeEnum.DM) {
-            dbQuery = new DmMetadataReader();
+            dbQuery = new Dm8MetadataReader();
         } else if (dbType == DBTypeEnum.CLICK_HOUSE) {
             dbQuery = new ClickHouseMetadataReader();
         }

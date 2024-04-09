@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE generatorConfiguration
+<!DOCTYPE configuration
     PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
     "codegen-config.dtd" >
-<generatorConfiguration>
+<configuration>
     <!-- 引入配置文件 -->
     <properties resource="generator.properties"/>
 
@@ -45,4 +45,4 @@
                enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"/>
     </context>
-</generatorConfiguration>
+</configuration>

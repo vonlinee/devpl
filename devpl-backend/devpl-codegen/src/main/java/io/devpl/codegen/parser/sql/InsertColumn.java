@@ -8,8 +8,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class InsertColumn {
+public class InsertColumn extends SqlColumn {
 
-    private String tableName;
-    private String columnName;
+    private String insertValue;
 }

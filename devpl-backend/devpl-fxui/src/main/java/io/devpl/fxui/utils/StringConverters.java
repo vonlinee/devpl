@@ -23,7 +23,7 @@ public class StringConverters {
 
             @Override
             public T fromString(String string) {
-                if (string == null || string.length() == 0) {
+                if (string == null || string.isEmpty()) {
                     return null;
                 }
                 try {
