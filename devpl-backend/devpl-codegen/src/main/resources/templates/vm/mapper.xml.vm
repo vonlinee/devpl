@@ -19,7 +19,7 @@
         <result column="${field.name}" property="${field.propertyName}" />
 #end
 #foreach($field in ${table.fields})
-#if(!${field.keyFlag})##生成普通字段
+#if(!${field.keyFlag})##生成普通字段(非主键)
         <result column="${field.name}" property="${field.propertyName}" />
 #end
 #end

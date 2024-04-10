@@ -179,7 +179,7 @@ public class DataSourceController {
      * @param entity 数据库连接信息
      * @return 是否成功
      */
-    @PostMapping("/datasource/update")
+    @PostMapping("/update")
     public boolean save(@RequestBody RdbmsConnectionInfo entity) {
         if (entity.getId() != null) {
             datasourceService.updateOne(entity);

@@ -6,12 +6,16 @@ import java.nio.charset.Charset;
 
 /**
  * XML 文件
+ *
+ * @see org.mybatis.generator.api.GeneratedXmlFile
  */
 public class GeneratedXmlFile extends GeneratedFile {
 
+    TargetFile targetFile;
+
     @Override
     public TargetFile getFileType() {
-        return null;
+        return targetFile;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class GeneratedXmlFile extends GeneratedFile {
 
     @Override
     public String getAbsolutePath() {
-        return null;
+        return "";
     }
 
     @Override

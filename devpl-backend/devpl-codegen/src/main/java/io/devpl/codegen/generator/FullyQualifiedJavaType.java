@@ -3,11 +3,8 @@ package io.devpl.codegen.generator;
 import io.devpl.codegen.type.DataType;
 import io.devpl.codegen.util.Messages;
 import io.devpl.codegen.util.StringUtils;
-import org.mybatis.generator.api.dom.java.PrimitiveTypeWrapper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType>, DataType {
 
@@ -67,6 +64,12 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         parse(fullTypeSpecification);
     }
 
+    public FullyQualifiedJavaType(Class<?> clazz) {
+        super();
+        typeArguments = new ArrayList<>();
+        parse(clazz.getName());
+    }
+
     public boolean isExplicitlyImported() {
         return explicitlyImported;
     }
@@ -82,11 +85,10 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             sb.append('?');
             if (boundedWildcard) {
                 if (extendsBoundedWildcard) {
-                    sb.append(" extends "); 
+                    sb.append(" extends ");
                 } else {
-                    sb.append(" super "); 
+                    sb.append(" super ");
                 }
-
                 sb.append(baseQualifiedName);
             }
         } else {
@@ -100,7 +102,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 if (first) {
                     first = false;
                 } else {
-                    sb.append(", "); 
+                    sb.append(", ");
                 }
                 sb.append(fqjt.getFullyQualifiedName());
 
@@ -163,9 +165,9 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             sb.append('?');
             if (boundedWildcard) {
                 if (extendsBoundedWildcard) {
-                    sb.append(" extends "); 
+                    sb.append(" extends ");
                 } else {
-                    sb.append(" super "); 
+                    sb.append(" super ");
                 }
 
                 sb.append(baseShortName);
@@ -181,7 +183,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 if (first) {
                     first = false;
                 } else {
-                    sb.append(", "); 
+                    sb.append(", ");
                 }
                 sb.append(fqjt.getShortName());
 
@@ -227,7 +229,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getIntInstance() {
         if (intInstance == null) {
-            intInstance = new FullyQualifiedJavaType("int"); 
+            intInstance = new FullyQualifiedJavaType("int");
         }
 
         return intInstance;
@@ -235,27 +237,27 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getNewListInstance() {
         // always return a new instance because the type may be parameterized
-        return new FullyQualifiedJavaType("java.util.List"); 
+        return new FullyQualifiedJavaType(List.class);
     }
 
     public static FullyQualifiedJavaType getNewHashMapInstance() {
         // always return a new instance because the type may be parameterized
-        return new FullyQualifiedJavaType("java.util.HashMap"); 
+        return new FullyQualifiedJavaType(HashMap.class.getName());
     }
 
     public static FullyQualifiedJavaType getNewArrayListInstance() {
         // always return a new instance because the type may be parameterized
-        return new FullyQualifiedJavaType("java.util.ArrayList"); 
+        return new FullyQualifiedJavaType(ArrayList.class.getName());
     }
 
     public static FullyQualifiedJavaType getNewIteratorInstance() {
         // always return a new instance because the type may be parameterized
-        return new FullyQualifiedJavaType("java.util.Iterator"); 
+        return new FullyQualifiedJavaType(Iterator.class.getName());
     }
 
     public static FullyQualifiedJavaType getStringInstance() {
         if (stringInstance == null) {
-            stringInstance = new FullyQualifiedJavaType("java.lang.String"); 
+            stringInstance = new FullyQualifiedJavaType(String.class.getName());
         }
 
         return stringInstance;
@@ -263,7 +265,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getBooleanPrimitiveInstance() {
         if (booleanPrimitiveInstance == null) {
-            booleanPrimitiveInstance = new FullyQualifiedJavaType("boolean"); 
+            booleanPrimitiveInstance = new FullyQualifiedJavaType("boolean");
         }
 
         return booleanPrimitiveInstance;
@@ -271,7 +273,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getObjectInstance() {
         if (objectInstance == null) {
-            objectInstance = new FullyQualifiedJavaType("java.lang.Object"); 
+            objectInstance = new FullyQualifiedJavaType(Object.class.getName());
         }
 
         return objectInstance;
@@ -279,7 +281,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getDateInstance() {
         if (dateInstance == null) {
-            dateInstance = new FullyQualifiedJavaType("java.util.Date"); 
+            dateInstance = new FullyQualifiedJavaType(Date.class.getName());
         }
 
         return dateInstance;
@@ -287,7 +289,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getCriteriaInstance() {
         if (criteriaInstance == null) {
-            criteriaInstance = new FullyQualifiedJavaType("Criteria"); 
+            criteriaInstance = new FullyQualifiedJavaType("Criteria");
         }
 
         return criteriaInstance;
@@ -295,7 +297,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
 
     public static FullyQualifiedJavaType getGeneratedCriteriaInstance() {
         if (generatedCriteriaInstance == null) {
-            generatedCriteriaInstance = new FullyQualifiedJavaType("GeneratedCriteria"); 
+            generatedCriteriaInstance = new FullyQualifiedJavaType("GeneratedCriteria");
         }
 
         return generatedCriteriaInstance;
@@ -313,14 +315,14 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
     private void parse(String fullTypeSpecification) {
         String spec = fullTypeSpecification.trim();
 
-        if (spec.startsWith("?")) { 
+        if (spec.startsWith("?")) {
             wildcardType = true;
             spec = spec.substring(1).trim();
-            if (spec.startsWith("extends ")) { 
+            if (spec.startsWith("extends ")) {
                 boundedWildcard = true;
                 extendsBoundedWildcard = true;
                 spec = spec.substring(8);  // "extends ".length()
-            } else if (spec.startsWith("super ")) { 
+            } else if (spec.startsWith("super ")) {
                 boundedWildcard = true;
                 extendsBoundedWildcard = false;
                 spec = spec.substring(6);  // "super ".length()
@@ -336,7 +338,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 simpleParse(fullTypeSpecification.substring(0, index));
                 int endIndex = fullTypeSpecification.lastIndexOf('>');
                 if (endIndex == -1) {
-                    throw new RuntimeException(Messages.getString("RuntimeError.22", fullTypeSpecification)); 
+                    throw new RuntimeException(Messages.getString("RuntimeError.22", fullTypeSpecification));
                 }
                 genericParse(fullTypeSpecification.substring(index, endIndex + 1));
             }
@@ -345,13 +347,13 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
             // enough for most cases.  It will not detect an improperly specified
             // array type like byte], but it will detect byte[] and byte[   ]
             // which are both valid
-            isArray = fullTypeSpecification.endsWith("]"); 
+            isArray = fullTypeSpecification.endsWith("]");
         }
     }
 
     private void simpleParse(String typeSpecification) {
         baseQualifiedName = typeSpecification.trim();
-        if (baseQualifiedName.contains(".")) { 
+        if (baseQualifiedName.contains(".")) {
             packageName = getPackage(baseQualifiedName);
             baseShortName = baseQualifiedName.substring(packageName.length() + 1);
             int index = baseShortName.lastIndexOf('.');
@@ -359,43 +361,43 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
                 baseShortName = baseShortName.substring(index + 1);
             }
 
-            
+
             explicitlyImported = !JAVA_LANG.equals(packageName);
         } else {
             baseShortName = baseQualifiedName;
             explicitlyImported = false;
-            packageName = ""; 
+            packageName = "";
 
             switch (baseQualifiedName) {
-                case "byte":  
+                case "byte":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getByteInstance();
                     break;
-                case "short":  
+                case "short":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getShortInstance();
                     break;
-                case "int":  
+                case "int":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getIntegerInstance();
                     break;
-                case "long":  
+                case "long":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getLongInstance();
                     break;
-                case "char":  
+                case "char":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getCharacterInstance();
                     break;
-                case "float":  
+                case "float":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getFloatInstance();
                     break;
-                case "double":  
+                case "double":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getDoubleInstance();
                     break;
-                case "boolean":  
+                case "boolean":
                     primitive = true;
                     primitiveTypeWrapper = PrimitiveTypeWrapper.getBooleanInstance();
                     break;
@@ -411,22 +413,22 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         int lastIndex = genericSpecification.lastIndexOf('>');
         if (lastIndex == -1) {
             // shouldn't happen - should be caught already, but just in case...
-            throw new RuntimeException(Messages.getString("RuntimeError.22", genericSpecification)); 
+            throw new RuntimeException(Messages.getString("RuntimeError.22", genericSpecification));
         }
         String argumentString = genericSpecification.substring(1, lastIndex);
         // need to find "," outside a <> bounds
-        StringTokenizer st = new StringTokenizer(argumentString, ",<>", true); 
+        StringTokenizer st = new StringTokenizer(argumentString, ",<>", true);
         int openCount = 0;
         StringBuilder sb = new StringBuilder();
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
-            if ("<".equals(token)) { 
+            if ("<".equals(token)) {
                 sb.append(token);
                 openCount++;
-            } else if (">".equals(token)) { 
+            } else if (">".equals(token)) {
                 sb.append(token);
                 openCount--;
-            } else if (",".equals(token)) { 
+            } else if (",".equals(token)) {
                 if (openCount == 0) {
                     typeArguments.add(new FullyQualifiedJavaType(sb.toString()));
                     sb.setLength(0);
@@ -439,7 +441,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         }
 
         if (openCount != 0) {
-            throw new RuntimeException(Messages.getString("RuntimeError.22", genericSpecification)); 
+            throw new RuntimeException(Messages.getString("RuntimeError.22", genericSpecification));
         }
 
         String finalType = sb.toString();
@@ -463,6 +465,7 @@ public class FullyQualifiedJavaType implements Comparable<FullyQualifiedJavaType
         return baseQualifiedName.substring(0, index);
     }
 
+    @Override
     public boolean isArray() {
         return isArray;
     }

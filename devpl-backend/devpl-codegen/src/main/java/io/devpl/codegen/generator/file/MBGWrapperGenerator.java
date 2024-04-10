@@ -2,6 +2,9 @@ package io.devpl.codegen.generator.file;
 
 import io.devpl.codegen.generator.GenerationTarget;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -23,5 +26,31 @@ public class MBGWrapperGenerator implements FileGenerator {
     @Override
     public List<GeneratedFile> getGeneratedFiles() {
         return null;
+    }
+
+    static class MBGGeneratedFileWrapper extends GeneratedFile {
+
+        TargetFile targetFile;
+        org.mybatis.generator.api.GeneratedFile file;
+
+        @Override
+        public TargetFile getFileType() {
+            return targetFile;
+        }
+
+        @Override
+        public void write(Writer writer, Charset charset) throws IOException {
+            writer.write(getFormattedContent());
+        }
+
+        @Override
+        public String getFormattedContent() {
+            return file.getFormattedContent();
+        }
+
+        @Override
+        public String getAbsolutePath() {
+            return null;
+        }
     }
 }

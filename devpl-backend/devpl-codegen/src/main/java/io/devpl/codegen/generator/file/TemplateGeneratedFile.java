@@ -9,8 +9,10 @@ import lombok.Setter;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
@@ -65,6 +67,9 @@ public class TemplateGeneratedFile extends GeneratedFile {
                 Template ts = templateEngine.getTemplate(template, false);
                 templateEngine.render(ts, templateArguments, fw);
             }
+        } else {
+            Template ts = templateEngine.getTemplate(template, false);
+            templateEngine.render(ts, templateArguments, writer);
         }
     }
 
@@ -81,7 +86,13 @@ public class TemplateGeneratedFile extends GeneratedFile {
 
     @Override
     public String getFormattedContent() {
-        return null;
+        StringWriter writer = new StringWriter();
+        try {
+            write(writer, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return writer.toString();
     }
 
     public void setTemplateEngine(TemplateEngine templateEngine) {
