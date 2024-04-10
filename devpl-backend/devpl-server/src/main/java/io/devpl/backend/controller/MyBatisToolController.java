@@ -47,6 +47,7 @@ public class MyBatisToolController {
 
     /**
      * 获取Mapper Statement的所有参数名及推断参数类型
+     * 树形结构
      */
     @PostMapping("/ms/params")
     public Result<List<MsParamNode>> getMapperStatementParams(@RequestBody MyBatisParam param) {
@@ -67,6 +68,9 @@ public class MyBatisToolController {
 
     /**
      * 获取Mapper Statement结合输入参数获取sql
+     *
+     * @param param 参数
+     * @return {@link Result}<{@link String}>
      */
     @PostMapping("/ms/sql")
     public Result<String> getSqlOfMappedStatement(@RequestBody GetSqlParam param) {

@@ -127,7 +127,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     if (editConfig == undefined || editConfig?.type === 'input') {
       return (
         <Form.Item style={{ margin: 0 }} name={dataIndex}>
-          <Input ref={inputRef} onPressEnter={save} onBlur={save} onChange={(event : any) => setValue(event.target.value)} />
+          <Input ref={inputRef} onPressEnter={save} onBlur={save} onChange={(event: any) => setValue(event.target.value)} />
         </Form.Item>
       );
     } else if (editConfig?.type === 'select') {
@@ -149,7 +149,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   if (editable) {
 
     if (dataIndex === 'value') {
-      
+
     }
 
     childNode = editing ? (
@@ -221,6 +221,9 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
         width: 200,
         dataIndex: 'value',
         editable: true,
+        editConfig: {
+          type: 'input'
+        },
       },
       {
         align: 'left',
@@ -239,7 +242,7 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
         title: '操作',
         dataIndex: 'operation',
         fixed: 'right',
-        render: (value : any, record: AnyObject, index : any) => {
+        render: (value: any, record: AnyObject, index: any) => {
           return (
             <>
               <ButtonGroup>
@@ -264,6 +267,12 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
       },
     ];
 
+  /**
+   * 添加行
+   * @param value 
+   * @param record 
+   * @param index 
+   */
   function handAdd(value: any, record: AnyObject, index: number) {
     const newData = [...dataSource];
     find(newData, record.key, (item, index, list) => {
@@ -354,7 +363,7 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
       bordered
       pagination={false}
       dataSource={dataSource}
-      scroll={{ y: 'calc(100vh - 400px)' }}
+      scroll={{ y: 'calc(100vh - 200px)' }}
       columns={columns as ColumnTypes}
     />
   );

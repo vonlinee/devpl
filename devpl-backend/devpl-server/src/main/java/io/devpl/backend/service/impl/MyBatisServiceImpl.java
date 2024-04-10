@@ -17,7 +17,6 @@ import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
 import io.devpl.backend.utils.PathUtils;
 import io.devpl.backend.utils.SqlFormat;
-import io.devpl.backend.tools.mybatis.XmlNode;
 import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;
@@ -182,6 +181,11 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
     }
 
+    /**
+     * @param mapperStatement mapper statement 语句 XML
+     * @param inferType       是否开启类型推断
+     * @return 解析结果
+     */
     @Override
     public ParseResult parseMapperStatement(String mapperStatement, boolean inferType) {
         // 直接获取XML中的节点

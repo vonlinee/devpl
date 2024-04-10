@@ -14,6 +14,9 @@ import org.apache.ibatis.scripting.xmltags.*;
 
 import java.util.*;
 
+/**
+ * 通过 mybatis 提供的API解析参数节点
+ */
 @Slf4j
 public class DefaultMappedStatementParamExtractor implements MappedStatementParamExtractor {
 
@@ -48,7 +51,6 @@ public class DefaultMappedStatementParamExtractor implements MappedStatementPara
         }
         return new HashSet<>(result.values());
     }
-
 
     /**
      * 查找MyBatis的MappedStatement中所有出现的变量引用，只能出现文本中出现的变量

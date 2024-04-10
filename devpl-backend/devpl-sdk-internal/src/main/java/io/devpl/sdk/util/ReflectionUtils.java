@@ -188,7 +188,6 @@ public abstract class ReflectionUtils {
         }
     }
 
-
     // Method handling
 
     /**
@@ -200,7 +199,6 @@ public abstract class ReflectionUtils {
      * @param name  the name of the method
      * @return the Method object, or {@code null} if none found
      */
-
     public static Method findMethod(Class<?> clazz, String name) {
         return findMethod(clazz, name, EMPTY_CLASS_ARRAY);
     }
@@ -216,7 +214,6 @@ public abstract class ReflectionUtils {
      *                   (maybe {@code null} to indicate any signature)
      * @return the Method object, or {@code null} if none found
      */
-
     public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
         Assert.notNull(clazz, "Class must not be null");
         Assert.notNull(name, "Method name must not be null");
@@ -249,7 +246,6 @@ public abstract class ReflectionUtils {
      * @return the invocation result, if any
      * @see #invokeMethod(Method, Object, Object[])
      */
-
     public static Object invokeMethod(Method method, Object target) {
         return invokeMethod(method, target, EMPTY_OBJECT_ARRAY);
     }
@@ -265,7 +261,6 @@ public abstract class ReflectionUtils {
      * @param args   the invocation arguments (maybe {@code null})
      * @return the invocation result, if any
      */
-
     public static Object invokeMethod(Method method, Object target, Object... args) {
         try {
             return method.invoke(target, args);
@@ -572,7 +567,6 @@ public abstract class ReflectionUtils {
         }
     }
 
-
     // Field handling
 
     /**
@@ -583,7 +577,6 @@ public abstract class ReflectionUtils {
      * @param name  the name of the field
      * @return the corresponding Field object, or {@code null} if not found
      */
-
     public static Field findField(Class<?> clazz, String name) {
         return findField(clazz, name, null);
     }
@@ -598,7 +591,6 @@ public abstract class ReflectionUtils {
      * @param type  the type of the field (maybe {@code null} if name is specified)
      * @return the corresponding Field object, or {@code null} if not found
      */
-
     public static Field findField(Class<?> clazz, String name, Class<?> type) {
         Assert.notNull(clazz, "Class must not be null");
         Assert.isTrue(name != null || type != null, "Either name or type of the field must be specified");
@@ -649,7 +641,6 @@ public abstract class ReflectionUtils {
      *               (or {@code null} for a static field)
      * @return the field's current value
      */
-
     public static Object getField(Field field, Object target) {
         try {
             return field.get(target);
@@ -791,7 +782,6 @@ public abstract class ReflectionUtils {
             field.setAccessible(true);
         }
     }
-
 
     // Cache handling
 
@@ -976,7 +966,6 @@ public abstract class ReflectionUtils {
         }
     }
 
-
     /**
      * 通过反射, 获得定义 Class 时声明的父类的泛型参数的类型
      * 如: public EmployeeDao extends BaseDao<Employee, String>
@@ -1097,7 +1086,6 @@ public abstract class ReflectionUtils {
         method.setAccessible(true);
         return method.invoke(object, parameters);
     }
-
 
     /**
      * 获取包名
