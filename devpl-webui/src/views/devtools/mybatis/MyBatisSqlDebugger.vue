@@ -176,7 +176,7 @@ function getParams() {
 function getSqlOfMapperStatement(real: boolean) {
   const code = inputRef.value.getText()
   if (!hasText(code)) {
-    ElMessage.warning("输入文本为空!")
+    Message.warn("输入文本为空!")
     return
   }
   apiGetSql(code, msParamTable.value.getFields() || [], real).then((res) => {

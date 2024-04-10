@@ -87,13 +87,6 @@ export const apiParseFields = (param: FieldParseParam) => {
 };
 
 /**
- * 字段组
- */
-type FiledGroup = {
-  groupName: string
-}
-
-/**
  * 查询字段组列表
  * @param pageIndex
  * @param pageSize

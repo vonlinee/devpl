@@ -1,7 +1,7 @@
 import type { InputRef } from 'antd';
-import { Button, Form, Input, Table } from 'antd';
+import { Form, Input } from 'antd';
 import { FormInstance } from 'antd/lib';
-import { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 interface EditableCellProps {
   title: React.ReactNode;
@@ -30,7 +30,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
 
-  const form: FormInstance | null = context ? useContext(context) : null;
+  const form: FormInstance | null = useContext(context);
 
   useEffect(() => {
     if (editing) {
@@ -47,9 +47,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   const save = async () => {
     try {
-      let values = null;
       if (form) {
-        values = await form.validateFields();
+        await form.validateFields();
       }
 
       toggleEdit();

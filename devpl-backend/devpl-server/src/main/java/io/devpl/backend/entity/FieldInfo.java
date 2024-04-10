@@ -123,6 +123,12 @@ public final class FieldInfo implements Serializable {
     @TableField(exist = false)
     private List<FieldInfo> children;
 
+    /**
+     * 字段值
+     */
+    @TableField(exist = false)
+    private Object value;
+
     public String getFieldName() {
         if (fieldName == null || fieldName.isEmpty()) {
             return fieldKey;

@@ -32,7 +32,7 @@ type FieldInfo = {
   description?: string
   /**
    * 字面值, value值的字符串形式
-   * @see value 
+   * @see value
    */
   literalValue?: string
   /**
@@ -91,5 +91,5 @@ type FieldGroup = {
   /**
    * 字段组关联的字段列表
    */
-  fileds: GroupField[]
+  fields: GroupField[]
 }

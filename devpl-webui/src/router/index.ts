@@ -183,26 +183,6 @@ export const menuRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: "/devtools/mocker",
-        name: "数据模拟",
-        component: () => import("@/views/devtools/mocker/index.vue"),
-        meta: {
-          title: "数据模拟",
-          icon: "icon-edit-square",
-          keepAlive: true,
-        },
-      },
-      {
-        path: "/devtools/designer",
-        name: "设计工具",
-        component: () => import("@/views/devtools/designer/index.vue"),
-        meta: {
-          title: "设计工具",
-          icon: "icon-edit-square",
-          keepAlive: true,
-        },
-      },
-      {
         path: "/devtools/collection",
         name: "工具箱",
         component: () => import("@/views/devtools/toolset/index.vue"),

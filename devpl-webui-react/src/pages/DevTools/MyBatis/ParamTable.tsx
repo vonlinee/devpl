@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import type { InputRef } from 'antd';
-import { Button, Form, Input, Select, Table, Tooltip } from 'antd';
-import type { FormInstance } from 'antd/es/form';
-import { AnyObject } from 'antd/es/_util/type';
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import type {InputRef} from 'antd';
+import {Button, Form, Input, Select, Table, Tooltip} from 'antd';
+import type {FormInstance} from 'antd/es/form';
+import {AnyObject} from 'antd/es/_util/type';
+import {MinusOutlined, PlusOutlined} from '@ant-design/icons';
 import ButtonGroup from 'antd/es/button/button-group';
-import { apiListMsDataTypes } from '@/services/tools/mybatis';
+import {apiListMsDataTypes} from '@/services/tools/mybatis';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -37,7 +37,7 @@ interface EditableRowProps {
   index: number;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+const EditableRow: React.FC<EditableRowProps> = ({index, ...props}) => {
   const [form] = Form.useForm();
   return (
     <Form form={form} component={false}>
@@ -64,15 +64,16 @@ interface EditableCellProps {
  * @returns
  */
 const EditableCell: React.FC<EditableCellProps> = ({
-  title,
-  editable,
-  children,
-  dataIndex,
-  record,
-  editConfig,
-  handleSave,
-  ...restProps
-}) => {
+                                                     title,
+                                                     editable,
+                                                     children,
+                                                     dataIndex,
+                                                     record,
+                                                     editConfig,
+                                                     handleSave,
+                                                     ...restProps
+                                                   }) => {
+
   // 编辑状态
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputRef>(null);
@@ -85,13 +86,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   useEffect(() => {
     if (editing) {
-      if (editConfig == undefined || editConfig?.type == 'input') {
+      if (editConfig === undefined || editConfig?.type === 'input') {
         inputRef.current!.focus();
-      } else if (editConfig?.type == 'select') {
+      } else if (editConfig?.type === 'select') {
         setSelectOpen(true);
       }
     } else {
-
       form.setFieldsValue(record)
     }
   }, [editing]);
@@ -101,7 +101,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
    */
   const toggleEdit = () => {
     setEditing(!editing);
-    const obj = { [dataIndex]: record[dataIndex] }
+    const obj = {[dataIndex]: record[dataIndex]}
     form.setFieldsValue(obj);
   };
 
@@ -112,8 +112,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
       }
       const values = await form.validateFields();
       toggleEdit();
-      handleSave({ ...record, ...values });
-      if (editConfig?.type == 'select') {
+      handleSave({...record, ...values});
+      if (editConfig?.type === 'select') {
         setSelectOpen(false);
       }
     } catch (errInfo) {
@@ -121,18 +121,24 @@ const EditableCell: React.FC<EditableCellProps> = ({
     }
   };
 
-  let childNode = children;
+  let childNode: React.ReactNode = children;
 
+
+  /**
+   * 编辑状态时渲染表格
+   * @param editConfig 编辑配置
+   */
   function renderEditingCell(editConfig: CellEditConfig) {
-    if (editConfig == undefined || editConfig?.type === 'input') {
+    if (editConfig === undefined || editConfig?.type === 'input') {
       return (
-        <Form.Item style={{ margin: 0 }} name={dataIndex}>
-          <Input ref={inputRef} onPressEnter={save} onBlur={save} onChange={(event: any) => setValue(event.target.value)} />
+        <Form.Item style={{margin: 0}} name={dataIndex}>
+          <Input ref={inputRef} onPressEnter={save} onBlur={save}
+                 onChange={(event: any) => setValue(event.target.value)}/>
         </Form.Item>
       );
     } else if (editConfig?.type === 'select') {
       return (
-        <Form.Item style={{ margin: 0 }} name={dataIndex}>
+        <Form.Item style={{margin: 0}} name={dataIndex}>
           <Select
             ref={selectRef}
             onBlur={save}
@@ -147,15 +153,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
   }
 
   if (editable) {
-
-    if (dataIndex === 'value') {
-
-    }
-
     childNode = editing ? (
       renderEditingCell(editConfig)
     ) : (
-      <div className="editable-cell-value-wrap" style={{ margin: 0, width: '100%', height: '100%' }} onClick={toggleEdit}>
+      <div className="editable-cell-value-wrap" style={{margin: 0, width: '100%', height: '100%'}} onClick={toggleEdit}>
         {children}
       </div>
     );
@@ -171,7 +172,13 @@ type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
  * 单元格编辑配置
  */
 type CellEditConfig = {
+  /**
+   * 单元格类型
+   */
   type: 'input' | 'select';
+  /**
+   * type = select 时的选项
+   */
   options?: SelectOptionType[];
 };
 
@@ -183,14 +190,14 @@ interface ParamTableProps {
   /**
    * 初始数据
    */
-  initialdataSource: ParamNode[];
+  initialDataSource: ParamNode[];
 }
 
 /**
  * 参数表组件
  * @returns
  */
-const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeight }) => {
+const ParamTable: React.FC<ParamTableProps> = ({initialDataSource, initialHeight}) => {
   const [msDataTypes, setMsDataTypes] = useState<DataTypeVO[]>([]);
 
   useEffect(() => {
@@ -199,79 +206,79 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
     });
   }, []);
 
-  const [dataSource, setDataSource] = useState<ParamNode[]>(initialdataSource);
+  const [dataSource, setDataSource] = useState<ParamNode[]>(initialDataSource);
 
   useEffect(() => {
-    setDataSource(initialdataSource)
-  }, [initialdataSource])
+    setDataSource(initialDataSource)
+  }, [initialDataSource])
 
   const defaultColumns: (ColumnTypes[number] & {
     editable?: boolean;
     dataIndex: string;
     editConfig?: CellEditConfig;
   })[] = [
-      {
-        title: '参数名',
-        dataIndex: 'fieldKey',
-        width: 200,
-        editable: true,
+    {
+      title: '参数名',
+      dataIndex: 'fieldKey',
+      width: 200,
+      editable: true,
+    },
+    {
+      title: '值',
+      width: 200,
+      dataIndex: 'value',
+      editable: true,
+      editConfig: {
+        type: 'input'
       },
-      {
-        title: '值',
-        width: 200,
-        dataIndex: 'value',
-        editable: true,
-        editConfig: {
-          type: 'input'
-        },
+    },
+    {
+      align: 'left',
+      title: '数据类型',
+      width: 200,
+      editable: true,
+      editConfig: {
+        type: 'select',
+        options: msDataTypes,
       },
-      {
-        align: 'left',
-        title: '数据类型',
-        width: 200,
-        editable: true,
-        editConfig: {
-          type: 'select',
-          options: msDataTypes,
-        },
-        dataIndex: 'dataType',
-      },
-      {
-        width: 70,
-        align: 'center',
-        title: '操作',
-        dataIndex: 'operation',
-        fixed: 'right',
-        render: (value: any, record: AnyObject, index: any) => {
-          return (
-            <>
-              <ButtonGroup>
-                <Tooltip title={record.leaf ? '添加相邻节点' : '添加子节点'}>
-                  <Button
-                    shape="circle"
-                    icon={<PlusOutlined />}
-                    size="small"
-                    onClick={() => handAdd(value, record, index)}
-                  ></Button>
-                </Tooltip>
+      dataIndex: 'dataType',
+    },
+    {
+      width: 70,
+      align: 'center',
+      title: '操作',
+      dataIndex: 'operation',
+      fixed: 'right',
+      render: (value: any, record: AnyObject, index: any) => {
+        return (
+          <>
+            <ButtonGroup>
+              <Tooltip title={record.leaf ? '添加相邻节点' : '添加子节点'}>
                 <Button
                   shape="circle"
+                  icon={<PlusOutlined/>}
                   size="small"
-                  icon={<MinusOutlined />}
-                  onClick={() => handleRemoveNode(value, record, index)}
+                  onClick={() => handAdd(value, record, index)}
                 ></Button>
-              </ButtonGroup>
-            </>
-          );
-        },
+              </Tooltip>
+              <Button
+                shape="circle"
+                size="small"
+                icon={<MinusOutlined/>}
+                onClick={() => handleRemoveNode(value, record, index)}
+              ></Button>
+            </ButtonGroup>
+          </>
+        );
       },
-    ];
+    },
+  ];
 
   /**
    * 添加行
-   * @param value 
-   * @param record 
-   * @param index 
+   * @param value
+   * @param record
+   * @param index
    */
   function handAdd(value: any, record: AnyObject, index: number) {
     const newData = [...dataSource];
@@ -363,7 +370,7 @@ const ParamTable: React.FC<ParamTableProps> = ({ initialdataSource, initialHeigh
       bordered
       pagination={false}
       dataSource={dataSource}
-      scroll={{ y: 'calc(100vh - 200px)' }}
+      scroll={{y: 'calc(100vh - 200px)'}}
       columns={columns as ColumnTypes}
     />
   );

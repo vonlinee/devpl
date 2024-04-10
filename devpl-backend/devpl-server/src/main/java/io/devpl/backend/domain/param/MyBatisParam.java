@@ -22,6 +22,12 @@ public class MyBatisParam {
      */
     private Boolean inferByParamName;
 
+    /**
+     * Mapper Statement ID
+     * 例如：org.example.ExampleMapper.selectById
+     */
+    private String mapperStatementId;
+
     public boolean isTypeInferEnabled() {
         return enableTypeInference == null || enableTypeInference;
     }

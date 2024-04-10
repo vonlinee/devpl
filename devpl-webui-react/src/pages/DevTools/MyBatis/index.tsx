@@ -116,7 +116,7 @@ const MyBatisTool = () => {
             </Flex>
           </Allotment.Pane>
           <Allotment.Pane>
-            <ParamTable initialdataSource={paramNodes} initialHeight={height}></ParamTable>
+            <ParamTable initialDataSource={paramNodes} initialHeight={height}></ParamTable>
             <Button onClick={() => fillParamTable()}>解析参数</Button>
             <Button onClick={() => getSqlOfMapperStatement(false)}>预编译sql</Button>
             <Button onClick={() => getSqlOfMapperStatement(true)}>可执行sql</Button>

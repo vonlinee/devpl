@@ -21,6 +21,7 @@ import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;
 import io.devpl.sdk.TreeNode;
+import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
@@ -46,6 +47,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -63,7 +65,6 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -383,26 +384,16 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @return 参数值，将字符串推断为某个数据类型，比如字符串类型的数字，将会转化为数字类型
      */
     public Object getParamValueByType(MsParamNode node) {
-        Object val = node.getValue();
-        if (!(val instanceof String)) {
-            return val;
+        final String literalValue = node.getLiteralValue();
+        if (literalValue == null || literalValue.isEmpty()) {
+            return null;
         }
-        final String literalValue = String.valueOf(val);
         MSParamDataType paramValueType = node.getValueType();
         if (paramValueType == null) {
             paramValueType = MSParamDataType.valueOfTypeName(node.getDataType());
         }
         if (paramValueType == null) {
-            // 根据字符串推断类型，结果只能是简单的类型，不会很复杂
-            if (TypeUtils.isInteger(literalValue)) {
-                paramValueType = MSParamDataType.NUMERIC;
-            } else if (TypeUtils.isDouble(literalValue)) {
-                paramValueType = MSParamDataType.NUMERIC;
-            } else {
-                // 非数字类型的其他类型都可以当做字符串处理
-                // 推断失败
-                paramValueType = MSParamDataType.STRING;
-            }
+            paramValueType = getPramDataType(literalValue);
         }
         // 根据指定的类型进行赋值
         return parseLiteralValue(literalValue, paramValueType);
@@ -416,14 +407,46 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @return 对应类型 {@code paramValueType} 的值
      */
     private Object parseLiteralValue(String literalValue, MSParamDataType paramValueType) {
-        Object val;
+        Object val = null;
         switch (paramValueType) {
             case NUMERIC -> val = Long.parseLong(literalValue);
-            // TODO 转为集合类型
-            case COLLECTION -> val = LocalDateTime.parse(literalValue);
+            case COLLECTION -> {
+                if (literalValue == null) {
+                    val = Collections.emptyList();
+                } else {
+                    String[] items = literalValue.split(",");
+                    List<Object> valueItems = new ArrayList<>();
+                    for (String item : items) {
+                        if (item == null || item.isEmpty()) {
+                            continue;
+                        }
+                        MSParamDataType dataType = getPramDataType(item);
+                        if (dataType == MSParamDataType.NUMERIC) {
+                            valueItems.add(Integer.parseInt(item));
+                        } else if (dataType == MSParamDataType.STRING) {
+                            valueItems.add(item);
+                        }
+                    }
+                    val = valueItems;
+                }
+            }
             default -> val = literalValue;
         }
         return val;
+    }
+
+    @NotNull
+    public MSParamDataType getPramDataType(String literalValue) {
+        MSParamDataType paramValueType = null;
+        // 根据字符串推断类型，结果只能是简单的类型，不会很复杂
+        if (TypeUtils.isInteger(literalValue) || TypeUtils.isDouble(literalValue)) {
+            paramValueType = MSParamDataType.NUMERIC;
+        } else {
+            // 非数字类型的其他类型都可以当做字符串处理
+            // 推断失败
+            paramValueType = MSParamDataType.STRING;
+        }
+        return paramValueType;
     }
 
     @Override
@@ -758,11 +781,11 @@ public class MyBatisServiceImpl implements MyBatisService {
 
             NodeList mapperNodes = document.getElementsByTagName("mapper");
             for (int i = 0; i < mapperNodes.getLength(); i++) {
-                org.w3c.dom.Node item = mapperNodes.item(i);
+                Node item = mapperNodes.item(i);
 
                 NodeList childNodes = item.getChildNodes();
                 for (int j = 0; j < childNodes.getLength(); j++) {
-                    org.w3c.dom.Node msNode = childNodes.item(j);
+                    Node msNode = childNodes.item(j);
                 }
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {

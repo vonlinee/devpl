@@ -51,6 +51,11 @@ public class MsParamNode {
     private Object value;
 
     /**
+     * 参数值 (字面值形式)
+     */
+    private String literalValue;
+
+    /**
      * 参数类型，枚举值
      */
     private String dataType = MSParamDataType.STRING.getQualifier();
