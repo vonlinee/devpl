@@ -1,6 +1,6 @@
 import { createFromIconfontCN } from "@ant-design/icons";
 import * as React from 'react';
-import iconfont from "/public/iconfont.js?url"
+import iconfont from "/public/icons/iconfont.js?url"
 const MyIcon = createFromIconfontCN({
   scriptUrl: iconfont, // 在 iconfont.cn 上生成
 });

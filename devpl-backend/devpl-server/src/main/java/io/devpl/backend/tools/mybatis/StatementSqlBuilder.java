@@ -1,6 +1,5 @@
 package io.devpl.backend.tools.mybatis;
 
-
 import java.sql.Statement;
 
 /**

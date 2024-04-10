@@ -13,7 +13,6 @@ public class ParseResult {
 
     /**
      * 变量表，树形结构
-     *
      * 比如
      * param.name
      * param.age

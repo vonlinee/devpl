@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Input, Row, Col } from "antd";
-import MyIcon from "@/components/icon";
+import MyIcon from "@/components/Icon";
 import "./index.less";
 import iconData from "@/assets/json/iconfont.json";
 
@@ -68,5 +68,3 @@ export default function Icons() {
     </div>
   );
 }
-
-Icons.route = { [MENU_PATH]: "/icons" };

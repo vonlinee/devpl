@@ -75,4 +75,9 @@ public class MsParamNode {
     public boolean isLeaf() {
         return leaf == null || leaf;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+        this.key = id;
+    }
 }

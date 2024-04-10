@@ -1,0 +1,91 @@
+.database-table-container {
+
+  th,
+  .th,
+  td,
+  .td {
+    box-shadow: inset 0 0 0 1px lightgray;
+    padding: 0.25rem;
+  }
+
+  th,
+  .th {
+    padding: 2px 4px;
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+    height: 30px;
+  }
+
+  .resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    // background: rgba(0, 0, 0, 0.5);
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .resizer.resizing {
+    // background: rgb(255, 255, 255);
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .resizer {
+      opacity: 0;
+    }
+
+    *:hover>.resizer {
+      opacity: 1;
+    }
+  }
+
+  // 数据单元格
+  .resultset-data-cell {
+    width: 100%;
+    height: 30px;
+    background-color: white;
+  }
+
+  .resultset-data-cell:focus {
+    // outline: none;
+    border: thick double #32ce83;
+  }
+
+  .resultset-data-cell>div {
+    width: 100%;
+    height: 100%;
+  }
+
+  .resultset-data-cell>div :focus {
+    width: 100%;
+    height: 100%;
+  }
+
+  .resultset-data-cell-noedit {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    // 子元素居左
+    justify-content: baseline;
+  }
+
+  .resultset-data-cell-noedit:focus {
+    width: 100%;
+    height: 100%;
+    // flex-direction: column;
+    border: thick double #32a1ce;
+  }
+
+  .resultset-data-cell>input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    flex: 1;
+    outline: none;
+  }
+}
