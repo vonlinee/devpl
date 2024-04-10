@@ -156,7 +156,7 @@ public interface TemplateEngine {
      * @param directive 指令实现
      * @return 是否成功
      */
-    default boolean registerDirective(TemplateDirective directive) {
+    default <D extends TemplateDirective> boolean registerDirective(D directive) {
         return false;
     }
 

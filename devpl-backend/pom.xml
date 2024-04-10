@@ -16,6 +16,7 @@
         <module>devpl-codegen</module>
         <module>devpl-fxui</module>
         <module>devpl-commons</module>
+        <module>sqltemplate</module>
     </modules>
 
     <properties>

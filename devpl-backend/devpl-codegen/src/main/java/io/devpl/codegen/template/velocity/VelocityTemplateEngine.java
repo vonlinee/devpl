@@ -71,6 +71,12 @@ public class VelocityTemplateEngine implements TemplateEngine {
         registerDirective(new CamelCaseDirective());
     }
 
+    /**
+     * @param template  模板内容，不能为null或者空
+     * @param arguments 模板参数
+     * @param writer    渲染结果
+     * @see RuntimeInstance
+     */
     @Override
     @SuppressWarnings("unchecked")
     public void evaluate(String template, Object arguments, Writer writer) {
@@ -147,13 +153,30 @@ public class VelocityTemplateEngine implements TemplateEngine {
      * @see org.apache.velocity.runtime.directive.RuntimeMacro
      */
     @Override
-    public boolean registerDirective(TemplateDirective directive) {
+    public <D extends TemplateDirective> boolean registerDirective(D directive) {
         RuntimeServices runtimeServices = RuntimeSingleton.getRuntimeServices();
         if (runtimeServices instanceof RuntimeInstance ri) {
             if (directive instanceof Directive td) {
                 ri.addDirective(td);
                 return true;
             }
+
+            // TODO Velocity 针对每个 Directive 都是反射创建对象
+            // 无法包装 TemplateDirective 子类
+            // 能注册的实际运行的指定必须继承 Directive 类
+
+            // TODO 这样做会不会有问题 ?
+            // 在 init 方法里获取到注册的 TemplateDirective 实例
+            // 匿名内部类没有构造函数，不能反射创建
+
+            // 必须继承 Directive 类
+            ri.addDirective(new VelocityTemplateDirectiveWrapper() {
+                @Override
+                public String getName() {
+                    return directive.getName();
+                }
+            });
+            return true;
         }
         return false;
     }
