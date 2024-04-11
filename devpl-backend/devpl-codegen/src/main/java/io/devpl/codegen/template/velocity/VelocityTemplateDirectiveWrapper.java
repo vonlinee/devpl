@@ -1,32 +1,75 @@
 package io.devpl.codegen.template.velocity;
 
 import io.devpl.codegen.template.TemplateDirective;
+import io.devpl.codegen.template.TemplateException;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.exception.TemplateInitException;
 import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.directive.Directive;
+import org.apache.velocity.runtime.parser.node.ASTDirective;
 import org.apache.velocity.runtime.parser.node.Node;
 
-public abstract class VelocityTemplateDirectiveWrapper extends VelocityTemplateDirective {
+public class VelocityTemplateDirectiveWrapper extends VelocityTemplateDirective {
 
+    /**
+     * 实现了TemplateDirective接口，但是并未与任何模板引擎对应的指令实现类有继承关系
+     */
     private TemplateDirective directive;
+    private boolean provideScope = false;
 
     public VelocityTemplateDirectiveWrapper() {
     }
 
     @Override
+    public String getName() {
+        return this.directive.getName();
+    }
+
+    public VelocityTemplateDirectiveWrapper(TemplateDirective directive) {
+        this.directive = directive;
+    }
+
+    /**
+     * @param rs      RuntimeServices
+     * @param context Context
+     * @param node    ASTDirective
+     * @throws TemplateInitException TemplateInitException
+     * @see Directive#init(RuntimeServices, InternalContextAdapter, Node)
+     */
+    @Override
     public void init(RuntimeServices rs, InternalContextAdapter context, Node node) throws TemplateInitException {
-        super.init(rs, context, node);
-        VelocityTemplateDirectiveWrapper wrapper = (VelocityTemplateDirectiveWrapper) rs.getDirective(this.getName());
-        this.directive = wrapper.directive;
+        this.rsvc = rs;
+        if (this.directive == null) {
+            if (node instanceof ASTDirective directiveNode) {
+                String directiveName = directiveNode.getDirectiveName();
+                Directive directiveInstance = rs.getDirective(directiveName);
+                if (directiveInstance instanceof VelocityTemplateDirectiveWrapper tdw) {
+                    this.directive = tdw.getDirective();
+                }
+            }
+        }
+        if (this.directive == null) {
+            throw new TemplateException("cannot initialize template directive");
+        }
+        provideScope = rsvc.isScopeControlEnabled(getScopeName());
     }
 
     @Override
     public Class<?>[] getParameterTypes() {
-        return directive.getParameterTypes();
+        return this.directive.getParameterTypes();
+    }
+
+    @Override
+    public boolean isScopeProvided() {
+        return this.provideScope;
     }
 
     @Override
     public String render(Object[] params) {
-        return directive.render(params);
+        return this.directive.render(params);
+    }
+
+    public final TemplateDirective getDirective() {
+        return this.directive;
     }
 }

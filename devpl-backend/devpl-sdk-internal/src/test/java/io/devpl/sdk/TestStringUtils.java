@@ -1,6 +1,7 @@
 package io.devpl.sdk;
 
 import io.devpl.sdk.util.StringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestStringUtils {
@@ -24,4 +25,12 @@ public class TestStringUtils {
         obj.set("age", 12);
     }
 
+    @Test
+    public void test2() {
+        String str1 = StringUtils.joinWithSeparator("A", "B");
+        String str2 = StringUtils.joinWithSeparator("A", "B", "C", "D");
+
+        Assert.assertEquals(str1, "B");
+        Assert.assertEquals(str2, "BACAD");
+    }
 }

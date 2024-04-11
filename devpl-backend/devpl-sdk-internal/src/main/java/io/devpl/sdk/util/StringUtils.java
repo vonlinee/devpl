@@ -504,8 +504,8 @@ public abstract class StringUtils {
      * @param items     带拼接的字符串
      * @return 拼接后的字符串
      */
-    public static String join(final String separator, String... items) {
-        return join(ArrayUtils.asArrayList(items).iterator(), separator);
+    public static String joinWithSeparator(final String separator, String... items) {
+        return join(Arrays.asList(items), separator);
     }
 
     /**
@@ -524,12 +524,12 @@ public abstract class StringUtils {
     }
 
     /**
-     * 使用指定分隔符拼接字符串
+     * 默认使用英文逗号拼接字符串
      *
      * @param items 字符串列表
      * @return 拼接后的字符串
      */
-    public static String join(String... items) {
+    public static String joinByComma(String... items) {
         return join(ArrayUtils.asArrayList(items).iterator(), DEFAULT_SEPARATOR);
     }
 

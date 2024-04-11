@@ -170,12 +170,7 @@ public class VelocityTemplateEngine implements TemplateEngine {
             // 匿名内部类没有构造函数，不能反射创建
 
             // 必须继承 Directive 类
-            ri.addDirective(new VelocityTemplateDirectiveWrapper() {
-                @Override
-                public String getName() {
-                    return directive.getName();
-                }
-            });
+            ri.addDirective(new VelocityTemplateDirectiveWrapper(directive));
             return true;
         }
         return false;

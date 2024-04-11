@@ -28,7 +28,7 @@ public class RequestTracer implements HandlerInterceptor {
         if (!parameterMap.isEmpty()) {
             sb.append("?");
             for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-                sb.append(entry.getKey()).append("=").append(StringUtils.join(entry.getValue())).append("&");
+                sb.append(entry.getKey()).append("=").append(StringUtils.joinByComma(entry.getValue())).append("&");
             }
         }
 
