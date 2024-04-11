@@ -62,3 +62,110 @@ somthing code
 #end
 ```
 
+
+
+
+
+### 嵌套指令
+
+https://stackoverflow.com/questions/31258825/how-can-i-nest-velocity-custom-directives
+
+对于嵌套指令，下面的语法是错误的
+
+```velocity
+#msg('a_resource','TODAY', #date(1234567890900,'date')))!
+```
+
+解析该模板会报错：
+
+Caused by: org.apache.velocity.exception.ParseErrorException: Encountered "(" at StringTemplate[line 1, column 33]
+Was expecting one of:
+    "," ...
+    "##" ...
+    <WHITESPACE> ...
+    <NEWLINE> ...
+
+正确写法是使用双引号包裹：
+
+```velocity
+#msg('a_resource','TODAY', "#date(1234567890900,'date')"))!
+```
+
+Velocity将用双引号计算任何内容（如变量、方法和此处所需的指令）
+
+
+
+
+
+# Groovy Template Engine
+
+
+
+
+
+
+
+# Moustache
+
+https://github.com/spullara/mustache.java
+
+
+
+
+
+
+
+
+
+# Pebble
+
+https://pebbletemplates.io/
+
+
+
+
+
+
+
+
+
+# HTTL
+
+https://httl.github.io/zh/
+
+
+
+
+
+
+
+
+
+# template-benchmark
+
+https://github.com/mbosecke/template-benchmark
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

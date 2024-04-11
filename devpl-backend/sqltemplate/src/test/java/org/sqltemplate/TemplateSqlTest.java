@@ -6,6 +6,7 @@ import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import org.junit.jupiter.api.Test;
 import org.sqltemplate.directive.ColumnEquals;
+import org.sqltemplate.directive.Where;
 
 import java.io.StringWriter;
 
@@ -19,13 +20,13 @@ public class TemplateSqlTest {
         TemplateEngine templateEngine = new VelocityTemplateEngine();
 
         templateEngine.registerDirective(new ColumnEquals());
+        templateEngine.registerDirective(new Where());
 
         TemplateArgumentsMap argumentsMap = new TemplateArgumentsMap();
         argumentsMap.setValue("name", "zs");
 
         Template template = templateEngine.getTemplate("""
-            SELECT * FROM t_user
-            WHERE #eq($name)
+            #msg('a_resource','TODAY', #date(1234567890900,'date')))!
             """, true);
 
         StringWriter sw = new StringWriter();

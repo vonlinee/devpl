@@ -2,24 +2,20 @@ package org.sqltemplate.directive;
 
 import io.devpl.codegen.template.TemplateDirective;
 
-import java.util.Arrays;
-
-public class ColumnEquals implements TemplateDirective {
+public class Where implements TemplateDirective {
     @Override
     public String getName() {
-        return "eq";
+        return "where";
     }
 
     @Override
     public Class<?>[] getParameterTypes() {
-        return new Class[]{String.class, Object.class};
+        return new Class[0];
     }
 
     @Override
     public String render(Object[] params) {
 
-        System.out.println(Arrays.toString(params));
-
-        return "hello";
+        return null;
     }
 }

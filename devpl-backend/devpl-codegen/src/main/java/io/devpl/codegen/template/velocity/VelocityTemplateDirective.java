@@ -44,11 +44,13 @@ public abstract class VelocityTemplateDirective extends Directive implements Tem
     @Override
     public boolean render(InternalContextAdapter context, Writer writer, Node node) throws IOException, ResourceNotFoundException, ParseErrorException, MethodInvocationException {
         Class<?>[] parameterTypes = getParameterTypes();
-        // 指令参数
-        Object[] directiveArguments = new Object[parameterTypes.length];
         // 获取指令传参 传参的文字文本或者对象
-        for (int i = 0; i < parameterTypes.length; i++) {
-            directiveArguments[i] = node.jjtGetChild(i).value(context);
+        // 指令参数
+        final int childCount = node.jjtGetNumChildren();
+        Object[] directiveArguments = new Object[childCount];
+        for (int i = 0; i < childCount; i++) {
+            Node childNode = node.jjtGetChild(i);
+            directiveArguments[i] = childNode.value(context);
         }
         // 渲染结果
         String renderResult = this.render(directiveArguments);
