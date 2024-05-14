@@ -2,7 +2,7 @@ package io.devpl.codegen.type;
 
 import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.db.JavaFieldDataType;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 
 /**
  * 类型转换处理器

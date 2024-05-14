@@ -5,7 +5,7 @@ import { convertPageParam } from '../utils';
 export async function apiListDataSource(param: PageParams) {
   return request<{
     data: DataSourceListItem[];
-  }>('/api/gen/datasource/page', {
+  }>('/api/datasource/page', {
     method: 'GET',
     params: convertPageParam(param)
   });
@@ -15,7 +15,7 @@ export async function apiListDataSource(param: PageParams) {
  * 保存或更新数据源
  */
 export async function apiSaveOrUpdateDataSource(options?: Record<string, any>) {
-  return request<DataSourceListItem>('/api/gen/datasource', {
+  return request<DataSourceListItem>('/api/datasource', {
     method: 'POST',
     data: options,
   });
@@ -27,7 +27,7 @@ export async function apiSaveOrUpdateDataSource(options?: Record<string, any>) {
  * @returns
  */
 export const apiTestDataSourceConnection = (id: number) => {
-  return request('/api/gen/datasource/test/' + id, {
+  return request('/api/datasource/test/' + id, {
     method: 'GET',
   });
 };
@@ -38,7 +38,7 @@ export const apiTestDataSourceConnection = (id: number) => {
  * @returns
  */
 export const apiTestConnection = (connInfo: DataSourceListItem) => {
-  return request('/api/gen/datasource/connection/test', {
+  return request('/api/datasource/connection/test', {
     method: 'POST',
     params: connInfo,
   });
@@ -50,7 +50,7 @@ export const apiTestConnection = (connInfo: DataSourceListItem) => {
  * @returns
  */
 export const apiGetDataSource = (id: number) => {
-  return request('/api/gen/datasource/' + id);
+  return request('/api/datasource/' + id);
 };
 
 /**
@@ -58,7 +58,7 @@ export const apiGetDataSource = (id: number) => {
  * @returns
  */
 export const apiListAllDataSource = () => {
-  return request('/api/gen/datasource/list', {
+  return request('/api/datasource/list', {
     method: 'GET',
   });
 };
@@ -69,7 +69,7 @@ export const apiListAllDataSource = () => {
  * @returns
  */
 export const apiDelDataSource = (ids: (number | string)[]) => {
-  return request('/api/gen/datasource', {
+  return request('/api/datasource', {
     method: 'DELETE',
     data: ids,
   });
@@ -83,8 +83,12 @@ export const apiDelDataSource = (ids: (number | string)[]) => {
 export const apiListTableNamesOfDataSource = (id: string | number, dbName: string) => {
   return request<{
     data: string[];
-  }>(`/api/gen/datasource/${id}/${dbName}/table/names`, {
+  }>(`/api/datasource/table/names`, {
     method: 'GET',
+    params: {
+      dataSourceId: id,
+      databaseName: dbName
+    }
   });
 };
 
@@ -95,7 +99,7 @@ export const apiListTableNamesOfDataSource = (id: string | number, dbName: strin
 export const apiGetDatabaseNames = (dataForm: any) => {
   return request<{
     data: string[];
-  }>('/api/gen/datasource/dbnames', {
+  }>('/api/datasource/dbnames', {
     method: 'GET',
     params: dataForm,
   });
@@ -108,7 +112,7 @@ export const apiGetDatabaseNames = (dataForm: any) => {
 export const apiGetDatabaseNamesById = (dataSourceId: number) => {
   return request<{
     data: string[];
-  }>(`/api/gen/datasource/dbnames/${dataSourceId}`);
+  }>(`/api/datasource/dbnames/${dataSourceId}`);
 };
 
 /**
@@ -132,7 +136,7 @@ export const apiUploadDriverJar = (file: File) => {
 export const apiListSupportedDbTypes = () => {
   return request<{
     data: DriverTypeVO[];
-  }>('/api/gen/datasource/drivers', {
+  }>('/api/datasource/drivers', {
     method: 'GET',
   });
 };
@@ -144,7 +148,7 @@ export const apiListSupportedDbTypes = () => {
 export const apiListSelectableDataSources = () => {
   return request<{
     data: DataSourceVO[];
-  }>('/api/gen/datasource/list/selectable', {
+  }>('/api/datasource/list/selectable', {
     method: 'GET',
   });
 };
@@ -154,7 +158,7 @@ export const apiListSelectableDataSources = () => {
  * @returns 所有支持的数据库类型
  */
 export const apiListTableNames = (id: number, dbName: string) => {
-  return request(`/api/gen/datasource/${id}/${dbName}/table/names`, {
+  return request(`/api/datasource/${id}/${dbName}/table/names`, {
     method: 'GET',
   });
 };
@@ -164,7 +168,7 @@ export const apiListTableNames = (id: number, dbName: string) => {
  * @returns 所有支持的数据库类型
  */
 export const apiGetTableData = (param: ParamGetDbTableData) => {
-  return request<DBTableDataVO>('/api/gen/datasource/table/data', {
+  return request<DBTableDataVO>('/api/datasource/table/data', {
     method: 'GET',
     params: param,
   });

@@ -1,5 +1,7 @@
 package io.devpl.codegen.db;
 
+import org.apache.ddlutils.platform.JDBCDriverType;
+
 import java.util.Map;
 import java.util.Properties;
 
@@ -9,7 +11,7 @@ import java.util.Properties;
  *
  * @see DBTypeEnum
  */
-public enum JDBCDriver {
+public enum JDBCDriver implements JDBCDriverType {
 
     MYSQL5("com.mysql.jdbc.Driver", "mysql", "MySQL 5"),
     MYSQL8("com.mysql.cj.jdbc.Driver", MYSQL5.subProtocol, "MySQL 8"),
@@ -125,8 +127,9 @@ public enum JDBCDriver {
         return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, parsePortNumber(port), databaseName), props);
     }
 
-    public String getConnectionUrl(String hostname, Integer port, String databaseName, Properties props) {
-        port = port == null ? 3306 : port;
+    @Override
+    public String getConnectionUrl(String hostname, int port, String databaseName, Properties props) {
+        port = port < 0 ? getDefaultPort() : port;
         return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, port, databaseName), props);
     }
 
@@ -178,10 +181,17 @@ public enum JDBCDriver {
         return sb.toString();
     }
 
+    @Override
+    public String getName() {
+        return name();
+    }
+
+    @Override
     public String getDriverClassName() {
         return driverClassName;
     }
 
+    @Override
     public String getSubProtocol() {
         return subProtocol;
     }

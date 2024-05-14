@@ -1,9 +1,9 @@
 package io.devpl.codegen.parser.sql;
 
 import io.devpl.codegen.db.IndexInfo;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 
 import java.util.List;
 import java.util.Map;

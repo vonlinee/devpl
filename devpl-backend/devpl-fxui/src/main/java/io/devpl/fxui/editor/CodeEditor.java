@@ -85,9 +85,6 @@ public interface CodeEditor {
 
     void setMode(LanguageMode mode);
 
-    //TODO add includeJSModules back in later
-//    void includeJSModules(String[] modules, Runnable runnable);
-
     String getTheme();
 
     void setTheme(Theme theme, String... cssFile);

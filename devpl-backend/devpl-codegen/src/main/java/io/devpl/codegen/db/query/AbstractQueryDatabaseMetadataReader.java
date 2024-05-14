@@ -4,8 +4,9 @@ import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.jdbc.ConnectionHolder;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
-import io.devpl.codegen.jdbc.meta.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ddlutils.jdbc.meta.*;
+import org.apache.ddlutils.platform.DBType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,7 @@ import java.util.function.Function;
 @Slf4j
 public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHolder implements DatabaseMetadataReader, SqlMetadataQuery {
 
-    public static DatabaseMetadataReader getQuery(DBTypeEnum dbType) {
+    public static DatabaseMetadataReader getQuery(DBType dbType) {
         DatabaseMetadataReader dbQuery = null;
         if (dbType == DBTypeEnum.MYSQL) {
             dbQuery = new MySqlMetadataReader();

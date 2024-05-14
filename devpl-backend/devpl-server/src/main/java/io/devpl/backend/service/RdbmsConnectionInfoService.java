@@ -9,7 +9,7 @@ import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;

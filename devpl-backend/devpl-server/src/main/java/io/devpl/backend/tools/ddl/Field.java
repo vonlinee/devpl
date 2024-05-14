@@ -57,9 +57,9 @@ public class Field {
     }
 
     public String getSqlType() {
-        ConvertBean convertBean = SqlTypeMapUtil.getInstance().typeConvert(this.type);
-        if (null != convertBean) {
-            return convertBean.getSqlType() + convertBean.getSqlTypeLength();
+        SqlTypeInfo sqlTypeInfo = SqlTypeMapUtil.getInstance().typeConvert(this.type);
+        if (null != sqlTypeInfo) {
+            return sqlTypeInfo.getSqlType() + sqlTypeInfo.getSqlTypeLength();
         }
         /*兜底配置*/
         return getSqlTypeForMapping() + getSqlTypeSize();

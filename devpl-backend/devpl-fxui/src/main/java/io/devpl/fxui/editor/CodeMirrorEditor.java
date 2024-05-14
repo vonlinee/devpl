@@ -1,6 +1,5 @@
 package io.devpl.fxui.editor;
 
-import io.devpl.fxui.utils.ResourceLoader;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.web.WebView;
@@ -8,7 +7,10 @@ import netscape.javascript.JSObject;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -25,6 +27,8 @@ public class CodeMirrorEditor implements CodeEditor {
      * 此变量不能是static
      */
     private ScheduledExecutorService executor;
+
+    static final String CODE_MIRROR_INDEX_HTML = "codemirror/index.html";
 
     /**
      * 自动补全文本
@@ -45,14 +49,17 @@ public class CodeMirrorEditor implements CodeEditor {
     @Override
     public void init(Runnable... runAfterLoading) {
         try {
-            URL resource = ResourceLoader.load("codemirror/index.html");
+            URL resource = getClass().getClassLoader().getResource(CODE_MIRROR_INDEX_HTML);
+            if (resource == null) {
+                throw new RuntimeException("cannot find code mirror index.html");
+            }
             queue.addAll(Arrays.asList(runAfterLoading));
             webView.getEngine().load(resource.toExternalForm());
             webView.getEngine().setOnError(event -> {
                 throw new RuntimeException(event.getException());
             });
             executor = Executors.newSingleThreadScheduledExecutor();
-            ScheduledFuture<?> future = executor.scheduleWithFixedDelay(new Init(), 0, 100, TimeUnit.MILLISECONDS);
+            executor.scheduleWithFixedDelay(new Init(), 0, 100, TimeUnit.MILLISECONDS);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

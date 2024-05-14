@@ -8,8 +8,4 @@ public class MainSetting {
     public static MainSetting getInstance() {
         return mainSetting;
     }
-
-    public MySettingProperties getState() {
-        return myProperties;
-    }
 }

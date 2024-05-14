@@ -3,8 +3,8 @@ package io.devpl.codegen.jdbc;
 import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 import org.junit.Test;
 
 import java.io.IOException;

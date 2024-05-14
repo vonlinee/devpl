@@ -10,6 +10,7 @@ import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.PropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.platform.JDBCDriverType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -174,11 +175,11 @@ public class RdbmsConnectionInfo implements Serializable {
                         this.setDbType(dbTypeEnum.name().toLowerCase());
                         this.setDriverClassName(dbTypeEnum.getDriverClassName());
 
-                        JDBCDriver driverType = dbTypeEnum.getDriver();
+                        JDBCDriverType driverType = dbTypeEnum.getDriver();
                         if (driverType == null) {
                             driverType = JDBCDriver.MYSQL5;
                         }
-                        this.driverType = driverType.name();
+                        this.driverType = driverType.getName();
 
                         left = rightMoveToLetterOrNumber(right, connectionUrlCharArray, i);
                         break;

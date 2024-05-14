@@ -1,8 +1,8 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.sdk.util.StringUtils;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,8 +1,8 @@
 package io.devpl.codegen.template;
 
 import io.devpl.codegen.generator.config.CaseFormat;
-import io.devpl.codegen.jdbc.meta.ForeignKeyMetadata;
-import io.devpl.codegen.jdbc.meta.TypeInfoMetadata;
+import org.apache.ddlutils.jdbc.meta.ForeignKeyMetadata;
+import org.apache.ddlutils.jdbc.meta.TypeInfoMetadata;
 import org.junit.Test;
 
 import java.lang.reflect.Field;

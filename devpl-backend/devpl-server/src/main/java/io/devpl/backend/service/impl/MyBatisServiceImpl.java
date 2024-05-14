@@ -16,7 +16,6 @@ import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
 import io.devpl.backend.utils.PathUtils;
-import io.devpl.backend.utils.SqlFormat;
 import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;
@@ -237,7 +236,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                     sql = sql.substring(index + 1);
                 }
                 sql = sql.replace("\n", "").replace("\t", "");
-                return SqlFormat.mysql(sql);
+                return sql;
             }
         } catch (Exception exception) {
             log.error("获取真实sql出错", exception);
@@ -258,7 +257,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         String resultSql;
         if (param.getReal() == 0) {
             // 预编译sql
-            resultSql = SqlFormat.mysql(boundSql.getSql());
+            resultSql = boundSql.getSql();
         } else {
             resultSql = this.getExecutableSql(ms, boundSql, map);
         }

@@ -1,9 +1,5 @@
 package io.devpl.backend.tools.ddl;
 
-import io.devpl.backend.tools.ddl.Constant;
-import io.devpl.backend.tools.ddl.Field;
-import io.devpl.backend.tools.ddl.MainSetting;
-
 import java.util.Map;
 
 public class MainService {

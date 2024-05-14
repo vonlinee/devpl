@@ -1,8 +1,8 @@
 package io.devpl.codegen.parser.sql;
 
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 
 import java.util.Map;
 

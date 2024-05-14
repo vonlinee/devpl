@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.devpl.sdk.lang.Interpolations;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class MyBatisUtils {
      * <if test="param.username != null and param.username != ''">
      * name = #{param.username}
      * </if>
+     *
      * @param columnName 数据库列名
      * @param paramName  参数名
      * @return 标签文本 <if test=''></if>
@@ -34,15 +36,20 @@ public class MyBatisUtils {
      *
      * @param defaultValueMap key为数据库列名, value为值
      */
-    public static void fillEntity(Object entity, Map<String, String> defaultValueMap, boolean useDbColumnKey) {
+    public static String fillEntity(Object entity, Map<String, String> defaultValueMap, boolean useDbColumnKey) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entity.getClass());
         StringBuilder sb = new StringBuilder();
         for (TableFieldInfo tableFieldInfo : tableInfo.getFieldList()) {
             try {
-                tableFieldInfo.getField().set(entity, defaultValueMap.get(useDbColumnKey ? tableFieldInfo.getColumn() : tableFieldInfo.getProperty()));
+                Field field = tableFieldInfo.getField();
+                if (!field.canAccess(entity)) {
+                    field.setAccessible(true);
+                }
+                field.set(entity, defaultValueMap.get(useDbColumnKey ? tableFieldInfo.getColumn() : tableFieldInfo.getProperty()));
             } catch (IllegalAccessException e) {
                 sb.append(tableFieldInfo.getColumn());
             }
         }
+        return sb.toString();
     }
 }

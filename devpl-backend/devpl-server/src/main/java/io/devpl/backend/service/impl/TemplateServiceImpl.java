@@ -135,7 +135,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      * @param out          输出位置
      */
     @Override
-    public void render(@NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
+    public void render(@NotNull @org.jetbrains.annotations.NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
         TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
         if (engineType == null) {
             throw new TemplateException("未注册的模板类型" + templateInfo.getProvider());

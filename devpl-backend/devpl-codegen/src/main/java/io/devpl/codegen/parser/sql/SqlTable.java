@@ -6,8 +6,8 @@ import lombok.Setter;
 /**
  * sql 中涉及到的表信息
  */
-@Setter
 @Getter
+@Setter
 public class SqlTable {
 
     protected String name;

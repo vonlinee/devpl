@@ -20,31 +20,31 @@ public class SqlTypeMapUtil {
         return sqlTypeMapUtil;
     }
 
-    public ConcurrentHashMap<String, ConvertBean> convertMapInit() {
+    public ConcurrentHashMap<String, SqlTypeInfo> convertMapInit() {
         MySettingProperties properties = MainSetting.getInstance().myProperties;
-        ConcurrentHashMap<String, ConvertBean> convertMap = new ConcurrentHashMap<>();
-        convertMap.put("int", new ConvertBean(properties.getIntType(), properties.getIntDefaultLength()));
-        convertMap.put("Integer", new ConvertBean(properties.getIntType(), properties.getIntDefaultLength()));
-        convertMap.put("long", new ConvertBean(properties.getLongType(), properties.getLongDefaultLength()));
-        convertMap.put("Long", new ConvertBean(properties.getLongType(), properties.getLongDefaultLength()));
-        convertMap.put("double", new ConvertBean(properties.getDoubleType(), properties.getDoubleDefaultLength()));
-        convertMap.put("Double", new ConvertBean(properties.getDoubleType(), properties.getDoubleDefaultLength()));
-        convertMap.put("float", new ConvertBean(properties.getFloatType(), properties.getFloatDefaultLength()));
-        convertMap.put("Float", new ConvertBean(properties.getFloatType(), properties.getFloatDefaultLength()));
-        convertMap.put("boolean", new ConvertBean(properties.getBooleanType(), properties.getBooleanDefaultLength()));
-        convertMap.put("Boolean", new ConvertBean(properties.getBooleanType(), properties.getBooleanDefaultLength()));
-        convertMap.put("Date", new ConvertBean(properties.getDateType(), properties.getDateDefaultLength()));
-        convertMap.put("String", new ConvertBean(properties.getStringType(), properties.getStringDefaultLength()));
-        convertMap.put("char", new ConvertBean(properties.getStringType(), properties.getStringDefaultLength()));
-        convertMap.put("Character", new ConvertBean(properties.getStringType(), properties.getStringDefaultLength()));
-        convertMap.put("BigDecimal", new ConvertBean(properties.getBigDecimalType(), properties.getBigDecimalDefaultLength()));
-        convertMap.put("LocalDate", new ConvertBean(properties.getLocalDateType(), properties.getLocalDateDefaultLength()));
-        convertMap.put("LocalTime", new ConvertBean(properties.getLocalTimeType(), properties.getLocalTimeDefaultLength()));
-        convertMap.put("LocalDateTime", new ConvertBean(properties.getLocalDateTimeType(), properties.getLocalDateTimeDefaultLength()));
+        ConcurrentHashMap<String, SqlTypeInfo> convertMap = new ConcurrentHashMap<>();
+        convertMap.put("int", new SqlTypeInfo(properties.getIntType(), properties.getIntDefaultLength()));
+        convertMap.put("Integer", new SqlTypeInfo(properties.getIntType(), properties.getIntDefaultLength()));
+        convertMap.put("long", new SqlTypeInfo(properties.getLongType(), properties.getLongDefaultLength()));
+        convertMap.put("Long", new SqlTypeInfo(properties.getLongType(), properties.getLongDefaultLength()));
+        convertMap.put("double", new SqlTypeInfo(properties.getDoubleType(), properties.getDoubleDefaultLength()));
+        convertMap.put("Double", new SqlTypeInfo(properties.getDoubleType(), properties.getDoubleDefaultLength()));
+        convertMap.put("float", new SqlTypeInfo(properties.getFloatType(), properties.getFloatDefaultLength()));
+        convertMap.put("Float", new SqlTypeInfo(properties.getFloatType(), properties.getFloatDefaultLength()));
+        convertMap.put("boolean", new SqlTypeInfo(properties.getBooleanType(), properties.getBooleanDefaultLength()));
+        convertMap.put("Boolean", new SqlTypeInfo(properties.getBooleanType(), properties.getBooleanDefaultLength()));
+        convertMap.put("Date", new SqlTypeInfo(properties.getDateType(), properties.getDateDefaultLength()));
+        convertMap.put("String", new SqlTypeInfo(properties.getStringType(), properties.getStringDefaultLength()));
+        convertMap.put("char", new SqlTypeInfo(properties.getStringType(), properties.getStringDefaultLength()));
+        convertMap.put("Character", new SqlTypeInfo(properties.getStringType(), properties.getStringDefaultLength()));
+        convertMap.put("BigDecimal", new SqlTypeInfo(properties.getBigDecimalType(), properties.getBigDecimalDefaultLength()));
+        convertMap.put("LocalDate", new SqlTypeInfo(properties.getLocalDateType(), properties.getLocalDateDefaultLength()));
+        convertMap.put("LocalTime", new SqlTypeInfo(properties.getLocalTimeType(), properties.getLocalTimeDefaultLength()));
+        convertMap.put("LocalDateTime", new SqlTypeInfo(properties.getLocalDateTimeType(), properties.getLocalDateTimeDefaultLength()));
         return convertMap;
     }
 
-    public ConvertBean typeConvert(String javaType) {
+    public SqlTypeInfo typeConvert(String javaType) {
         return null;
     }
 }

@@ -4,12 +4,12 @@ import io.devpl.codegen.db.DbFieldDataType;
 import io.devpl.codegen.generator.ColumnGeneration;
 import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.*;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.template.model.EntityTemplateArguments;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
 import io.devpl.codegen.util.StringUtils;
 import io.devpl.codegen.util.Utils;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 
 public class MyBatisPlusPlugin extends TableGenerationPlugin {
 

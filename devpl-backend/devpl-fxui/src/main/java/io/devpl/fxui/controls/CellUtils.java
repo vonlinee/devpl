@@ -10,6 +10,30 @@ import javafx.util.StringConverter;
 
 public class CellUtils {
 
+    public static <T> TextField createTextField(final Cell<T> cell, final StringConverter<T> converter) {
+        final TextField textField = new TextField(getItemText(cell, converter));
+
+        // Use onAction here rather than onKeyReleased (with check for Enter),
+        // as otherwise we encounter RT-34685
+        textField.setOnAction(event -> {
+            if (converter == null) {
+                throw new IllegalStateException(
+                    "Attempting to convert text input into Object, but provided "
+                    + "StringConverter is null. Be sure to set a StringConverter "
+                    + "in your cell factory.");
+            }
+            cell.commitEdit(converter.fromString(textField.getText()));
+            event.consume();
+        });
+        textField.setOnKeyReleased(t -> {
+            if (t.getCode() == KeyCode.ESCAPE) {
+                cell.cancelEdit();
+                t.consume();
+            }
+        });
+        return textField;
+    }
+
     public static <T> MFXTextField createMFXTextField(final Cell<T> cell, final StringConverter<T> converter) {
         final MFXTextField textField = new MFXTextField(getItemText(cell, converter));
 
@@ -19,8 +43,8 @@ public class CellUtils {
             if (converter == null) {
                 throw new IllegalStateException(
                     "Attempting to convert text input into Object, but provided "
-                        + "StringConverter is null. Be sure to set a StringConverter "
-                        + "in your cell factory.");
+                    + "StringConverter is null. Be sure to set a StringConverter "
+                    + "in your cell factory.");
             }
             cell.commitEdit(converter.fromString(textField.getText()));
             event.consume();

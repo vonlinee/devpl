@@ -3,7 +3,7 @@ package io.devpl.backend.controller;
 import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.MockColumnListParam;
-import io.devpl.backend.domain.vo.MockField;
+import io.devpl.backend.domain.bo.MockField;
 import io.devpl.backend.domain.vo.MockGeneratorVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.service.RdbmsConnectionInfoService;

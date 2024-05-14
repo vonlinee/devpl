@@ -748,6 +748,10 @@ public final class Maps {
         return builder(new HashMap<>());
     }
 
+    public static <K, V> MapBuilder<K, V> builder(Class<K> keyType, Class<V> valueType) {
+        return builder(new HashMap<>());
+    }
+
     public static <KT> MapBuilder<KT, Object> builder(Class<KT> keyType) {
         return builder(new HashMap<>());
     }
@@ -1006,5 +1010,66 @@ public final class Maps {
         }
         R result = mapper.apply(value);
         return result == null ? defaults : result;
+    }
+
+    /**
+     * 将Map根据嵌套层级的key进行扁平化
+     *
+     * @param source    原 map, 例如: {user={age=ls, name=zs}, sex=false}
+     * @param separator 分隔符，例如 .
+     * @return 扁平化的Map，例如: {user.age=ls, user.name=zs, sex=false}
+     */
+    public static Map<String, Object> flattenKeys(Map<String, Object> source, String separator) {
+        return flattenKeys(source, null, separator);
+    }
+
+    /**
+     * 递归将深度嵌套map对象转大map（扁平化）
+     *
+     * @param source     源map
+     * @param parentNode 父节点扁平化之后的名字
+     * @return map
+     */
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> flattenKeys(Map<String, Object> source, String parentNode, String separator) {
+        Map<String, Object> result = new HashMap<>();
+        Set<Map.Entry<String, Object>> set = source.entrySet();
+        String prefix = parentNode != null && !parentNode.isBlank() ? parentNode + separator : "";
+        set.forEach(entity -> {
+            Object value = entity.getValue();
+            String key = entity.getKey();
+            String newKey = prefix + key;
+            if (value instanceof Map) {
+                result.putAll(flattenKeys((Map<String, Object>) value, newKey, separator));
+            } else {
+                result.put(newKey, value);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * 将扁平化的Map转为嵌套Map形式
+     *
+     * @param data key扁平化的map，例如 {"user.name": "zs", "user.age" : 26, "sex": false}
+     * @return 嵌套Map
+     */
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> expandKeys(Map<String, Object> data, String separator) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String[] keys = entry.getKey().split("\\.");
+            Object value = entry.getValue();
+            Map<String, Object> map = result;
+            for (int i = 0; i < keys.length - 1; i++) {
+                String key = keys[i];
+                if (!map.containsKey(key)) {
+                    map.put(key, new LinkedHashMap<>());
+                }
+                map = (Map<String, Object>) map.get(key);
+            }
+            map.put(keys[keys.length - 1], value);
+        }
+        return result;
     }
 }

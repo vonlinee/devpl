@@ -54,9 +54,15 @@ public interface MyBatisService {
     String getSqlOfMappedStatement(GetSqlParam param);
 
     /**
-     * 解析标签
+     * 解析标签文本，得到 MappedStatement实例
      *
-     * @param statement mapper标签
+     * @param statement mapper标签, 例如
+     *                  <select id="listByCondition" resultType="io.devpl.backend.entity.DataTypeItem">
+     *                  SELECT * FROM data_type_item
+     *                  <where>
+     *                  <if test="typeGroupId != null and typeGroupId != ''">AND type_group_id = #{param.typeGroupId} </if>
+     *                  </where>
+     *                  </select>
      * @return MappedStatement实例
      */
     MappedStatement parseMappedStatement(String statement);

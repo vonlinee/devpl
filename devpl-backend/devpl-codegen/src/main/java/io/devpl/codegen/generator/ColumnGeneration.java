@@ -1,10 +1,10 @@
 package io.devpl.codegen.generator;
 
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
 import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.codegen.type.JavaType;
 import lombok.Data;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.PrimaryKeyMetadata;
 
 import java.util.List;
 import java.util.Map;

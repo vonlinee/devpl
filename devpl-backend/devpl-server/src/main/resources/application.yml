@@ -4,6 +4,9 @@ server:
         context-path: /devpl
 
 spring:
+    application:
+        name: Devpl
+        description: Devpl for backend
     profiles:
         active: dev
     datasource:
@@ -30,6 +33,8 @@ mybatis-plus:
     global-config:
         db-config:
             id-type: AUTO
+            capital-mode: off
+            logic-delete-field: is_deleted
         banner: false
     configuration:
         map-underscore-to-camel-case: true

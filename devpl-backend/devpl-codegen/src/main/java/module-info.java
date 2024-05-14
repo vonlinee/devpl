@@ -2,7 +2,6 @@ open module devpl.codegen {
     exports io.devpl.codegen.generator;
     exports io.devpl.codegen.db.query;
     exports io.devpl.codegen.jdbc;
-    exports io.devpl.codegen.jdbc.meta;
     exports io.devpl.codegen.template.velocity;
     exports io.devpl.codegen.template.beetl;
     exports io.devpl.codegen.template.freemarker;
@@ -21,10 +20,6 @@ open module devpl.codegen {
     exports io.devpl.codegen.generator.config.xml;
     exports io.devpl.codegen.parser.sql;
     exports io.devpl.codegen.generator.file;
-    exports org.apache.ddlutils.platform.mysql;
-    exports org.apache.ddlutils.jdbc;
-    exports org.apache.ddlutils.platform;
-    exports org.apache.ddlutils.model;
 
     requires org.jetbrains.annotations;
     requires org.slf4j;
@@ -45,4 +40,5 @@ open module devpl.codegen {
     requires ant;
 
     requires org.jooq;
+    requires apache.ddlutils;
 }

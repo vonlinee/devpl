@@ -2633,4 +2633,39 @@ public abstract class StringUtils {
         }
         return str;
     }
+
+
+    public static String replaceOnce(String text, String searchString, String replacement) {
+        return replace(text, searchString, replacement, 1);
+    }
+
+    public static String replace(String text, String searchString, String replacement, int max) {
+        if (!isEmpty(text) && !isEmpty(searchString) && replacement != null && max != 0) {
+            int start = 0;
+            int end = text.indexOf(searchString, start);
+            if (end == -1) {
+                return text;
+            } else {
+                int replLength = searchString.length();
+                int increase = replacement.length() - replLength;
+                increase = Math.max(increase, 0);
+                increase *= max < 0 ? 16 : (Math.min(max, 64));
+
+                StringBuilder buf;
+                for (buf = new StringBuilder(text.length() + increase); end != -1; end = text.indexOf(searchString, start)) {
+                    buf.append(text, start, end).append(replacement);
+                    start = end + replLength;
+                    --max;
+                    if (max == 0) {
+                        break;
+                    }
+                }
+
+                buf.append(text.substring(start));
+                return buf.toString();
+            }
+        } else {
+            return text;
+        }
+    }
 }

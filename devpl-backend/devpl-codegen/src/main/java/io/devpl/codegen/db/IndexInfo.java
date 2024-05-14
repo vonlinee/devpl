@@ -1,7 +1,7 @@
 package io.devpl.codegen.db;
 
-import io.devpl.codegen.jdbc.meta.IndexMetadata;
 import lombok.Data;
+import org.apache.ddlutils.jdbc.meta.IndexMetadata;
 
 import java.util.List;
 

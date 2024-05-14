@@ -4,6 +4,7 @@ import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ddlutils.platform.JDBCDriverType;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBean {
 
-    private final Map<JDBCDriver, DriverInfo> drivers = new ConcurrentHashMap<>();
+    private final Map<JDBCDriverType, DriverInfo> drivers = new ConcurrentHashMap<>();
 
     @Value("${devpl.db.driver.location:}")
     private String driverLocation;
@@ -83,7 +84,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         String absolutePath = new File("").getAbsolutePath();
         File driverLocationDir;
         if (!StringUtils.hasText(driverLocation)) {
@@ -110,28 +111,28 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
         // 数据库类型 - 版本 - 驱动jar包
         // 例如 mysql - 8.0.18 - mysql-connector-java-8.0.18.jar
         File[] files = rootDir.listFiles(file -> file.isDirectory() && DBTypeEnum.getValue(file.getName(), null) != null);
-        if (files == null || files.length == 0) {
+        if (files == null) {
             return;
         }
-        for (int i = 0; i < files.length; i++) {
+        for (File file : files) {
             // 数据库类型目录
-            String dbTypeName = files[i].getName();
-            File[] versionDirs = files[i].listFiles(File::isDirectory);
-            if (versionDirs == null || versionDirs.length == 0) {
+            String dbTypeName = file.getName();
+            File[] versionDirs = file.listFiles(File::isDirectory);
+            if (versionDirs == null) {
                 continue;
             }
-            for (int v = 0; v < versionDirs.length; v++) {
+            for (File versionDir : versionDirs) {
                 // 版本
-                final String version = versionDirs[v].getName();
+                final String version = versionDir.getName();
                 // 同一个版本应只有一个驱动文件
-                File[] driverFiles = versionDirs[v].listFiles(File::isFile);
+                File[] driverFiles = versionDir.listFiles(File::isFile);
                 if (driverFiles == null || driverFiles.length == 0) {
                     continue;
                 }
                 final File driverJarFile = driverFiles[0];
 
                 // 判断要加载的驱动全限定类名
-                JDBCDriver driverType = getBestMatchedDriverType(dbTypeName, version, driverJarFile);
+                JDBCDriverType driverType = getBestMatchedDriverType(dbTypeName, version, driverJarFile);
                 if (driverType == null) {
                     continue;
                 }
@@ -166,7 +167,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
      * @param driverJarFile 驱动jar文件
      * @return 驱动类的全限定类名
      */
-    private JDBCDriver getBestMatchedDriverType(String dbTypeName, String version, File driverJarFile) {
+    private JDBCDriverType getBestMatchedDriverType(String dbTypeName, String version, File driverJarFile) {
         DBTypeEnum[] dbTypes = DBTypeEnum.values();
         for (DBTypeEnum dbType : dbTypes) {
             if (dbType.name().equalsIgnoreCase(dbTypeName)) {

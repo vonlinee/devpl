@@ -5,10 +5,10 @@ import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
-import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import jakarta.annotation.Resource;
+import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;

@@ -17,6 +17,7 @@
         <module>devpl-fxui</module>
         <module>devpl-commons</module>
         <module>sqltemplate</module>
+        <module>apache-ddlutils</module>
     </modules>
 
     <properties>

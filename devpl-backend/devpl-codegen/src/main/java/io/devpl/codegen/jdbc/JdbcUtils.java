@@ -2,8 +2,9 @@ package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.generator.config.CaseFormat;
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.sdk.util.NumberUtils;
+import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
+import org.apache.ddlutils.platform.DBType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ public final class JdbcUtils {
      * @param connectionUrl 数据库连接地址
      * @return 类型枚举值，如果没找到，则返回 null
      */
-    public static DBTypeEnum getDbType(String connectionUrl) {
+    public static DBType getDbType(String connectionUrl) {
         connectionUrl = connectionUrl.toLowerCase();
         if (connectionUrl.contains(":mysql:") || connectionUrl.contains(":cobar:")) {
             return DBTypeEnum.MYSQL;

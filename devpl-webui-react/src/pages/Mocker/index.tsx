@@ -19,7 +19,7 @@ export default () => {
   const [dataSourceOptions, setDataSourceOptions] = useState<SelectOptionType[]>();
 
   useEffect(() => {
-    apiListSelectableDataSources().then((res) => {
+    apiListSelectableDataSources().then((res : any) => {
       const options = res.data.map((i: any) => {
         return {
           label: i.name,

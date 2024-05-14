@@ -370,7 +370,7 @@ const ParamTable: React.FC<ParamTableProps> = ({initialDataSource, initialHeight
       bordered
       pagination={false}
       dataSource={dataSource}
-      scroll={{y: 'calc(100vh - 200px)'}}
+      scroll={{ y: 'calc(100vh - 600px)' }}
       columns={columns as ColumnTypes}
     />
   );

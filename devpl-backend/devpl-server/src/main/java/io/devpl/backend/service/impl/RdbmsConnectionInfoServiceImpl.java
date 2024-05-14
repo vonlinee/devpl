@@ -17,12 +17,14 @@ import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import io.devpl.common.utils.EncryptUtils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
+import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.JDBCDriverType;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -200,7 +202,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
         }
         entity.setConnectionUrl(getConnectionUrl(entity));
 
-        JDBCDriver driver = dbType.getDriver(0);
+        JDBCDriverType driver = dbType.getDriver(0);
         if (driver != null) {
             entity.setDriverClassName(driver.getDriverClassName());
         }
@@ -399,11 +401,11 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
         } else {
             // 更新
             if (StringUtils.isBlank(connInfo.getDbType()) && StringUtils.hasText(connInfo.getConnectionUrl())) {
-                DBTypeEnum dbType = JdbcUtils.getDbType(connInfo.getConnectionUrl());
+                DBType dbType = JdbcUtils.getDbType(connInfo.getConnectionUrl());
                 if (dbType != null) {
                     connInfo.setDbType(dbType.getName());
                     if (!StringUtils.hasText(connInfo.getDriverClassName())) {
-                        for (JDBCDriver driver : dbType.getSupportedDrivers()) {
+                        for (JDBCDriverType driver : dbType.getSupportedDrivers()) {
                             connInfo.setDriverClassName(driver.getDriverClassName());
                         }
                     }
@@ -431,7 +433,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         try {
             RdbmsConnectionInfo connectionInfo = baseMapper.getByDataSourceId(getSystemDataSourceId());
             if (connectionInfo == null) {

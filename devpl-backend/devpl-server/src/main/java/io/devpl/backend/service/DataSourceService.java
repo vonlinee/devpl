@@ -2,7 +2,7 @@ package io.devpl.backend.service;
 
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 
 import java.sql.Connection;
 

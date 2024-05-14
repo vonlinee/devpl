@@ -190,6 +190,11 @@
             <artifactId>jooq</artifactId>
             <version>3.19.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>apache-ddlutils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

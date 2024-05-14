@@ -9,15 +9,15 @@ import javax.sql.DataSource;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import io.devpl.codegen.db.ColumnKeyWordsHandler;
 import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractDbQuery;
-import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcUtils;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
 import io.devpl.codegen.util.Utils;
 import io.devpl.sdk.util.StringUtils;
 

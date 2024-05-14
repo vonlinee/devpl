@@ -1,8 +1,8 @@
 package io.devpl.backend.domain.vo;
 
-import io.devpl.codegen.jdbc.meta.ResultSetColumnMetadata;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
 
 import java.util.List;
 import java.util.Map;

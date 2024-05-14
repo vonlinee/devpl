@@ -5,11 +5,11 @@ import io.devpl.codegen.generator.file.FileGenerator;
 import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.generator.file.TemplateBasedTableFileGenerator;
 import io.devpl.codegen.generator.file.TemplateBasedTargetFile;
-import io.devpl.codegen.jdbc.meta.PrimaryKeyMetadata;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.codegen.template.TemplateEngine;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.meta.PrimaryKeyMetadata;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 
 import java.util.*;
 import java.util.stream.Collectors;

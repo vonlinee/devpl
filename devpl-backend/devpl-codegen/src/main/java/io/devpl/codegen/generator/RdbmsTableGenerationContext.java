@@ -5,11 +5,8 @@ import io.devpl.codegen.generator.file.FileGenerator;
 import io.devpl.codegen.generator.file.GeneratedFile;
 import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.generator.plugins.*;
-import io.devpl.codegen.jdbc.JdbcDatabaseMetadataReader;
 import io.devpl.codegen.jdbc.JdbcUtils;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.DatabaseMetadataReader;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
+
 import io.devpl.codegen.strategy.ProjectArchetype;
 import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
 import io.devpl.codegen.template.TemplateEngine;
@@ -20,6 +17,10 @@ import io.devpl.codegen.util.StringUtils;
 import io.devpl.codegen.util.Utils;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,9 +5,9 @@ import io.devpl.codegen.generator.ColumnGeneration;
 import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.DateType;
 import io.devpl.codegen.generator.config.GlobalConfiguration;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.codegen.type.JavaType;
 import io.devpl.codegen.type.TypeRegistry;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 
 /**
  * 处理列的数据类型

@@ -1,6 +1,8 @@
 package io.devpl.codegen.db;
 
 import lombok.Getter;
+import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.JDBCDriverType;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @see JDBCDriver
  */
 @Getter
-public enum DBTypeEnum {
+public enum DBTypeEnum implements DBType {
 
     /**
      * MYSQL
@@ -153,19 +155,19 @@ public enum DBTypeEnum {
     /**
      * 支持的驱动列表
      */
-    private final JDBCDriver[] drivers;
+    private final JDBCDriverType[] drivers;
     /**
      * 默认端口号
      */
     private int defaultPort;
 
-    DBTypeEnum(String name, String description, JDBCDriver... drivers) {
+    DBTypeEnum(String name, String description, JDBCDriverType... drivers) {
         this.name = name;
         this.description = description;
         this.drivers = drivers;
     }
 
-    DBTypeEnum(String name, int port, String description, JDBCDriver... drivers) {
+    DBTypeEnum(String name, int port, String description, JDBCDriverType... drivers) {
         this.name = name;
         this.defaultPort = port;
         this.description = description;
@@ -218,17 +220,17 @@ public enum DBTypeEnum {
 
     @Nullable
     public String getDriverClassName(int index) {
-        JDBCDriver driver = getDriver(index);
+        JDBCDriverType driver = getDriver(index);
         return driver == null ? null : driver.getDriverClassName();
     }
 
     @Nullable
-    public JDBCDriver getDriver() {
+    public JDBCDriverType getDriver() {
         return getDriver(0);
     }
 
     @Nullable
-    public JDBCDriver getDriver(int index) {
+    public JDBCDriverType getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;
         }
@@ -238,7 +240,8 @@ public enum DBTypeEnum {
         return drivers[index];
     }
 
-    public JDBCDriver[] getSupportedDrivers() {
+    @Override
+    public JDBCDriverType[] getSupportedDrivers() {
         return drivers == null ? new JDBCDriver[0] : drivers;
     }
 }
