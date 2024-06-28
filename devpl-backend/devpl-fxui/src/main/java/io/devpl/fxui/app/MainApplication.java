@@ -48,6 +48,7 @@ public class MainApplication extends Application {
         menu.addChild("模板管理", RouterView.of(View.load(TemplateManageView.class)));
         menu.addChild("表达式引擎", RouterView.of(View.load(ExpressionEngineView.class)));
         menu.addChild("Maven", RouterView.of(new MavenTool()));
+        menu.addChild("JVM工具", RouterView.of(new JvmTool()));
 
         layoutPane.addNavigationMenu(menu1, menu);
 

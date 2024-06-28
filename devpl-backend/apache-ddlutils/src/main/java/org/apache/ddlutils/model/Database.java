@@ -12,7 +12,7 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * Represents the database model, i.e. the tables in the database. It also
- * contains the corresponding dyna classes for creating dyna beans for the
+ * contains the corresponding dyna classes for creating dyna rows for the
  * objects stored in the tables.
  */
 public class Database extends SchemaObject implements Serializable {
@@ -438,7 +438,7 @@ public class Database extends SchemaObject implements Serializable {
      *
      * @return The dyna class cache
      */
-    private TableModelCache getClassCache() {
+    private TableModelCache getModelCache() {
         if (_tableModelCache == null) {
             _tableModelCache = new TableModelCache();
         }
@@ -449,7 +449,7 @@ public class Database extends SchemaObject implements Serializable {
      * Resets the dyna class cache. This should be done for instance when a column
      * has been added or removed to a table.
      */
-    public void resetClassCache() {
+    public void resetTableModelCache() {
         _tableModelCache = null;
     }
 
@@ -461,9 +461,9 @@ public class Database extends SchemaObject implements Serializable {
      * @return The <code>SqlDynaClass</code> for the indicated table or <code>null</code>
      * if the model contains no such table
      */
-    public TableModel getClassForTable(String tableName) {
+    public TableModel getTableModel(String tableName) {
         Table table = findTable(tableName);
-        return table != null ? getClassCache().getDynaClass(table) : null;
+        return table != null ? getModelCache().getModel(table) : null;
     }
 
     /**
@@ -472,8 +472,8 @@ public class Database extends SchemaObject implements Serializable {
      * @param bean The dyna bean
      * @return The <code>SqlDynaClass</code> for the given bean
      */
-    public TableModel getClassForTable(TableRow bean) {
-        return getClassCache().getDynaClass(bean);
+    public TableModel getTableModel(TableRow bean) {
+        return getModelCache().getModel(bean);
     }
 
     /**
@@ -482,20 +482,20 @@ public class Database extends SchemaObject implements Serializable {
      * @param table The table to create the bean for
      * @return The new dyna bean
      */
-    public TableRow createObjectForTable(Table table) throws DatabaseObjectRelationMappingException {
-        return getClassCache().createObject(table);
+    public TableRow createTableRow(Table table) throws DatabaseObjectRelationMappingException {
+        return getModelCache().createTableRow(table);
     }
 
     /**
-     * Convenience method that combines {@link #createObjectForTable(Table)} and
+     * Convenience method that combines {@link #createTableRow(Table)} and
      * {@link #findTable(String, boolean)}.
      *
      * @param tableName     The name of the table to create the bean for
      * @param caseSensitive Whether case matters for the names
      * @return The new dyna bean
      */
-    public TableRow createObjectForTable(String tableName, boolean caseSensitive) throws DatabaseObjectRelationMappingException {
-        return getClassCache().createObject(findTable(tableName, caseSensitive));
+    public TableRow createTableRow(String tableName, boolean caseSensitive) throws DatabaseObjectRelationMappingException {
+        return getModelCache().createTableRow(findTable(tableName, caseSensitive));
     }
 
     @Override

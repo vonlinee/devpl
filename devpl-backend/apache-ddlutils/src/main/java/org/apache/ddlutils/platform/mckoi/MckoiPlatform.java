@@ -7,7 +7,7 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.*;
 
@@ -59,7 +59,7 @@ public class MckoiPlatform extends PlatformImplBase {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For McKoi, you create databases by simply appending "?create=true" to the connection url
         if (JDBCDriverTypeEnum.MCKOI.getDriverClassName().equals(jdbcDriverClassName)) {
             StringBuilder creationUrl = new StringBuilder();
@@ -135,7 +135,7 @@ public class MckoiPlatform extends PlatformImplBase {
             }
         }
 
-        RowData parameters = (params == null ? null : params.getParametersFor(changedTable));
+        ContextMap parameters = (params == null ? null : params.getParametersFor(changedTable));
 
         sqlBuilder.writeRecreateTableStmt(currentModel, change.getTargetTable(), parameters);
 

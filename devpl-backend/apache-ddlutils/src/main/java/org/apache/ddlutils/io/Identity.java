@@ -1,6 +1,6 @@
 package org.apache.ddlutils.io;
 
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
 
 import java.util.Iterator;
@@ -19,7 +19,7 @@ public class Identity {
     /**
      * The identity columns and their values.
      */
-    private final RowData _columnValues = new RowData();
+    private final ContextMap _columnValues = new ContextMap();
     /**
      * The optional foreign key name whose referenced object this identity represents.
      */

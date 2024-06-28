@@ -1,6 +1,5 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -11,8 +10,6 @@ import java.io.Writer;
 
 /**
  * Generates the DTD for data xml files usable with a specified database model.
- * <p>
- * TODO: Make names (tables, columns) XML-compliant
  */
 public class DataDtdWriter {
     /**

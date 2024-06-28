@@ -4,6 +4,7 @@ package org.apache.ddlutils.platform.sybase;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
@@ -25,13 +26,13 @@ public class SybaseBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
 
     @Override
-    protected void writeTableCreationStmtEnding(Table table, RowData parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
         if (parameters != null) {
             // We support
             // - 'lock'

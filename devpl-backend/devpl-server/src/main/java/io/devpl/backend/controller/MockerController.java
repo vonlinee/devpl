@@ -1,6 +1,5 @@
 package io.devpl.backend.controller;
 
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.MockColumnListParam;
 import io.devpl.backend.domain.bo.MockField;
@@ -9,6 +8,7 @@ import io.devpl.backend.entity.RdbmsConnectionInfo;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.MockerService;
 import jakarta.annotation.Resource;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

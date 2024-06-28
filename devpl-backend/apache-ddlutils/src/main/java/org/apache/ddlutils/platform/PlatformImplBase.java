@@ -8,6 +8,7 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.jdbc.JdbcSupport;
 import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.util.SqlTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -231,7 +232,6 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
             statement = connection.createStatement();
 
             SqlTokenizer tokenizer = new SqlTokenizer(sql);
-
             while (tokenizer.hasMoreStatements()) {
                 String command = tokenizer.getNextStatement();
 
@@ -242,13 +242,11 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
                 }
 
                 commandCount++;
-
                 if (_log.isDebugEnabled()) {
                     _log.debug("About to execute SQL " + command);
                 }
                 try {
                     int results = statement.executeUpdate(command);
-
                     if (_log.isDebugEnabled()) {
                         _log.debug("After execution, " + results + " row(s) have been changed");
                     }
@@ -268,7 +266,6 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
                 // let's display any warnings
                 SQLWarning warning = connection.getWarnings();
-
                 while (warning != null) {
                     _log.warn(warning.toString());
                     warning = warning.getNextWarning();
@@ -301,78 +298,76 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         throw new UnsupportedOperationException("Database creation is not supported for the database platform " + getName());
     }
 
     @Override
     public void createTables(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        createModel(model, dropTablesFirst, continueOnError);
+        createDatabase(model, dropTablesFirst, continueOnError);
     }
 
     @Override
     public void createTables(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        createModel(model, params, dropTablesFirst, continueOnError);
+        createDatabase(model, params, dropTablesFirst, continueOnError);
     }
 
     @Override
     public void createTables(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        createModel(connection, model, dropTablesFirst, continueOnError);
+        createDatabase(connection, model, dropTablesFirst, continueOnError);
     }
 
     @Override
     public void createTables(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        createModel(connection, model, params, dropTablesFirst, continueOnError);
+        createDatabase(connection, model, params, dropTablesFirst, continueOnError);
     }
 
     @Override
     public String getCreateTablesSql(Database model, boolean dropTablesFirst, boolean continueOnError) {
-        return getCreateModelSql(model, dropTablesFirst, continueOnError);
+        return getCreateDatabaseSql(model, dropTablesFirst, continueOnError);
     }
 
     @Override
     public String getCreateTablesSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) {
-        return getCreateModelSql(model, params, dropTablesFirst, continueOnError);
+        return getCreateDatabaseSql(model, params, dropTablesFirst, continueOnError);
     }
 
     @Override
-    public void createModel(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
+    public void createDatabase(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
         Connection connection = borrowConnection();
 
         try {
-            createModel(connection, model, dropTablesFirst, continueOnError);
+            createDatabase(connection, model, dropTablesFirst, continueOnError);
         } finally {
             returnConnection(connection);
         }
     }
 
     @Override
-    public void createModel(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        String sql = getCreateModelSql(model, dropTablesFirst, continueOnError);
+    public void createDatabase(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
+        String sql = getCreateDatabaseSql(model, dropTablesFirst, continueOnError);
 
         evaluateBatch(connection, sql, continueOnError);
     }
 
     @Override
-    public void createModel(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
+    public void createDatabase(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
         Connection connection = borrowConnection();
-
         try {
-            createModel(connection, model, params, dropTablesFirst, continueOnError);
+            createDatabase(connection, model, params, dropTablesFirst, continueOnError);
         } finally {
             returnConnection(connection);
         }
     }
 
     @Override
-    public void createModel(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
-        String sql = getCreateModelSql(model, params, dropTablesFirst, continueOnError);
-
+    public void createDatabase(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException {
+        String sql = getCreateDatabaseSql(model, params, dropTablesFirst, continueOnError);
         evaluateBatch(connection, sql, continueOnError);
     }
 
     @Override
-    public String getCreateModelSql(Database model, boolean dropTablesFirst, boolean continueOnError) {
+    public String getCreateDatabaseSql(Database model, boolean dropTablesFirst, boolean continueOnError) {
         String sql = null;
         try {
             StringWriter buffer = new StringWriter();
@@ -386,12 +381,10 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     @Override
-    public String getCreateModelSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) {
+    public String getCreateDatabaseSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) {
         String sql = null;
-
         try {
             StringWriter buffer = new StringWriter();
-
             getSqlBuilder().setWriter(buffer);
             getSqlBuilder().createTables(model, params, dropTablesFirst);
             sql = buffer.toString();
@@ -989,7 +982,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
         Table changedTable = findChangedTable(currentModel, change);
         Table targetTable = change.getTargetTable();
-        RowData parameters = (params == null ? null : params.getParametersFor(targetTable));
+        ContextMap parameters = (params == null ? null : params.getParametersFor(targetTable));
 
         if (canMigrateData) {
             Table tempTable = getTemporaryTableFor(targetTable);
@@ -1037,11 +1030,11 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     @Override
-    public ModelBasedResultSetIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
+    public TableRowIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         Statement statement = null;
         ResultSet resultSet;
-        ModelBasedResultSetIterator answer = null;
+        TableRowIterator answer = null;
 
         try {
             statement = connection.createStatement();
@@ -1061,11 +1054,11 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     @Override
-    public ModelBasedResultSetIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
+    public TableRowIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         Connection connection = borrowConnection();
         PreparedStatement statement = null;
         ResultSet resultSet;
-        ModelBasedResultSetIterator answer = null;
+        TableRowIterator answer = null;
         try {
             statement = connection.prepareStatement(sql);
             int paramIdx = 1;
@@ -1103,7 +1096,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             int rowIdx = 0;
-            for (ModelBasedResultSetIterator it = createResultSetIterator(model, resultSet, queryHints); ((end < 0) || (rowIdx <= end)) && it.hasNext(); rowIdx++) {
+            for (TableRowIterator it = createResultSetIterator(model, resultSet, queryHints); ((end < 0) || (rowIdx <= end)) && it.hasNext(); rowIdx++) {
                 if (rowIdx >= start) {
                     result.add(it.next());
                 } else {
@@ -1146,7 +1139,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
             resultSet = statement.executeQuery();
 
             int rowIdx = 0;
-            for (ModelBasedResultSetIterator it = createResultSetIterator(model, resultSet, queryHints); ((end < 0) || (rowIdx <= end)) && it.hasNext(); rowIdx++) {
+            for (TableRowIterator it = createResultSetIterator(model, resultSet, queryHints); ((end < 0) || (rowIdx <= end)) && it.hasNext(); rowIdx++) {
                 if (rowIdx >= start) {
                     result.add(it.next());
                 } else {
@@ -1175,9 +1168,8 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      */
     protected String createInsertSql(Database model, TableModel dynaClass, ColumnProperty[] properties, TableRow bean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap<String, Object> columnValues = toColumnValues(properties, bean);
-
-        return _builder.getInsertSql(table, columnValues, bean == null);
+        ResultSetRow columnValues = toColumnValues(properties, bean);
+        return _builder.getInsertSql(table, columnValues, true, bean == null);
     }
 
     /**
@@ -1196,7 +1188,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public String getInsertSql(Database model, TableRow dynaBean) {
-        TableModel tableModel = model.getClassForTable(dynaBean);
+        TableModel tableModel = model.getTableModel(dynaBean);
         ColumnProperty[] properties = tableModel.getProperties();
         if (properties == null || properties.length == 0) {
             _log.info("Cannot insert instances of type " + tableModel + " because it has no properties");
@@ -1253,17 +1245,17 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     @Override
-    public void insert(Connection connection, Database model, TableRow dynaBean) throws DatabaseOperationException {
-        TableModel dynaClass = model.getClassForTable(dynaBean);
-        ColumnProperty[] properties = getPropertiesForInsertion(model, dynaClass, dynaBean);
-        Column[] autoIncrColumns = getRelevantIdentityColumns(model, dynaClass, dynaBean);
+    public void insert(Connection connection, Database model, TableRow row) throws DatabaseOperationException {
+        TableModel tableModel = model.getTableModel(row);
+        ColumnProperty[] properties = getPropertiesForInsertion(model, tableModel, row);
+        Column[] autoIncrColumns = getRelevantIdentityColumns(model, tableModel, row);
 
         if (properties.length == 0 && autoIncrColumns.length == 0) {
-            _log.warn("Cannot insert instances of type " + dynaClass + " because it has no usable properties");
+            _log.warn("Cannot insert instances of type " + tableModel + " because it has no usable properties");
             return;
         }
 
-        String insertSql = createInsertSql(model, dynaClass, properties, null);
+        String insertSql = createInsertSql(model, tableModel, properties, null);
         String queryIdentitySql = null;
 
         if (_log.isDebugEnabled()) {
@@ -1274,28 +1266,26 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
             if (!getPlatformInfo().isLastIdentityValueReadable()) {
                 _log.warn("The database does not support querying for auto-generated column values");
             } else {
-                queryIdentitySql = createSelectLastInsertIdSql(model, dynaClass);
+                queryIdentitySql = createSelectLastInsertIdSql(model, tableModel);
             }
         }
 
         boolean autoCommitMode = false;
-
         try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
             if (!getPlatformInfo().isAutoCommitModeForLastIdentityValueReading()) {
                 autoCommitMode = connection.getAutoCommit();
                 connection.setAutoCommit(false);
             }
-            beforeInsert(connection, dynaClass.getTable());
+            beforeInsert(connection, tableModel.getTable());
 
             for (int idx = 0; idx < properties.length; idx++) {
-                setObject(statement, idx + 1, dynaBean, properties[idx]);
+                setObject(statement, idx + 1, row, properties[idx]);
             }
 
             int count = statement.executeUpdate();
-            afterInsert(connection, dynaClass.getTable());
-
+            afterInsert(connection, tableModel.getTable());
             if (count != 1) {
-                _log.warn("Attempted to insert a single row " + dynaBean + " in table " + dynaClass.getTableName() + " but changed " + count + " row(s)");
+                _log.warn("Attempted to insert a single row " + row + " in table " + tableModel.getTableName() + " but changed " + count + " row(s)");
             }
         } catch (SQLException ex) {
             throw new DatabaseOperationException("Error while inserting into the database: " + ex.getMessage(), ex);
@@ -1326,7 +1316,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
                     // back in the same order as the auto increment columns
                     Object value = getObjectFromResultSet(lastInsertedIds, autoIncrColumns[idx], idx + 1);
 
-                    dynaBean.setColumnValue(autoIncrColumns[idx].getName(), value);
+                    row.setColumnValue(autoIncrColumns[idx].getName(), value);
                 }
             } catch (SQLException ex) {
                 throw new DatabaseOperationException("Error while retrieving the identity column value(s) from the database", ex);
@@ -1364,7 +1354,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
         boolean identityWarningPrinted = false;
 
         for (TableRow dynaBean : dynaBeans) {
-            TableModel curDynaClass = model.getClassForTable(dynaBean);
+            TableModel curDynaClass = model.getTableModel(dynaBean);
 
             if (curDynaClass != dynaClass) {
                 if (dynaClass != null) {
@@ -1498,18 +1488,20 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      * prepared statement is build.
      *
      * @param model       The database model
-     * @param dynaClass   The type
+     * @param tableModel   The type
      * @param primaryKeys The primary keys
      * @param properties  The properties to write
      * @param bean        Optionally the concrete bean to update
      * @return The SQL required to update the instance
      */
-    protected String createUpdateSql(Database model, TableModel dynaClass, ColumnProperty[] primaryKeys, ColumnProperty[] properties, TableRow bean) {
-        Table table = model.findTable(dynaClass.getTableName());
-        HashMap<String, Object> columnValues = toColumnValues(properties, bean);
+    protected String createUpdateSql(Database model, TableModel tableModel, ColumnProperty[] primaryKeys, ColumnProperty[] properties, TableRow bean) {
+        Table table = model.findTable(tableModel.getTableName());
+        ResultSetRow columnValues = toColumnValues(properties, bean);
 
-        columnValues.putAll(toColumnValues(primaryKeys, bean));
-
+        ResultSetRow primaryColumnValues = toColumnValues(primaryKeys, bean);
+        for (int i = 0; i < primaryColumnValues.getColumnCount(); i++) {
+            columnValues.setColumnValue(i, primaryColumnValues.getColumnValue(i));
+        }
         return _builder.getUpdateSql(table, columnValues, bean == null);
     }
 
@@ -1528,8 +1520,8 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      */
     protected String createUpdateSql(Database model, TableModel dynaClass, ColumnProperty[] primaryKeys, ColumnProperty[] properties, TableRow oldBean, TableRow newBean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap<String, Object> oldColumnValues = toColumnValues(primaryKeys, oldBean);
-        HashMap<String, Object> newColumnValues = toColumnValues(properties, newBean);
+        ResultSetRow oldColumnValues = toColumnValues(primaryKeys, oldBean);
+        ResultSetRow newColumnValues = toColumnValues(properties, newBean);
 
         if (primaryKeys.length == 0) {
             _log.info("Cannot update instances of type " + dynaClass + " because it has no primary keys");
@@ -1541,7 +1533,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public String getUpdateSql(Database model, TableRow dynaBean) {
-        TableModel dynaClass = model.getClassForTable(dynaBean);
+        TableModel dynaClass = model.getTableModel(dynaBean);
         ColumnProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
         ColumnProperty[] nonPrimaryKeys = dynaClass.getNonPrimaryKeyProperties();
 
@@ -1555,7 +1547,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public String getUpdateSql(Database model, TableRow oldDynaBean, TableRow newDynaBean) {
-        TableModel dynaClass = model.getClassForTable(oldDynaBean);
+        TableModel dynaClass = model.getTableModel(oldDynaBean);
         ColumnProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
         ColumnProperty[] nonPrimaryKeys = dynaClass.getNonPrimaryKeyProperties();
 
@@ -1569,7 +1561,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public void update(Connection connection, Database model, TableRow dynaBean) throws DatabaseOperationException {
-        TableModel tm = model.getClassForTable(dynaBean);
+        TableModel tm = model.getTableModel(dynaBean);
         ColumnProperty[] primaryKeys = tm.getPrimaryKeyProperties();
 
         if (primaryKeys.length == 0) {
@@ -1624,11 +1616,11 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public void update(Connection connection, Database model, TableRow oldDynaBean, TableRow newDynaBean) throws DatabaseOperationException {
-        TableModel dynaClass = model.getClassForTable(oldDynaBean);
+        TableModel dynaClass = model.getTableModel(oldDynaBean);
         ColumnProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
 
-        if (!dynaClass.getTable().equals(model.getClassForTable(newDynaBean).getTable())) {
-            throw new DatabaseOperationException("The old and new dyna beans need to be for the same table");
+        if (!dynaClass.getTable().equals(model.getTableModel(newDynaBean).getTable())) {
+            throw new DatabaseOperationException("The old and new dyna rows need to be for the same table");
         }
         if (primaryKeys.length == 0) {
             _log.info("Cannot update instances of type " + dynaClass + " because it has no primary keys");
@@ -1712,7 +1704,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
 
     @Override
     public boolean exists(Connection connection, Database model, TableRow dynaBean) {
-        TableModel tableModel = model.getClassForTable(dynaBean);
+        TableModel tableModel = model.getTableModel(dynaBean);
         ColumnProperty[] primaryKeys = tableModel.getPrimaryKeyProperties();
         if (primaryKeys.length == 0) {
             return false;
@@ -1777,14 +1769,14 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      */
     protected String createDeleteSql(Database model, TableModel dynaClass, ColumnProperty[] primaryKeys, TableRow bean) {
         Table table = model.findTable(dynaClass.getTableName());
-        HashMap<String, Object> pkValues = toColumnValues(primaryKeys, bean);
+        ResultSetRow pkValues = toColumnValues(primaryKeys, bean);
 
         return _builder.getDeleteSql(table, pkValues, bean == null);
     }
 
     @Override
     public String getDeleteSql(Database model, TableRow dynaBean) {
-        TableModel dynaClass = model.getClassForTable(dynaBean);
+        TableModel dynaClass = model.getTableModel(dynaBean);
         ColumnProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
         if (primaryKeys.length == 0) {
             _log.warn("Cannot delete instances of type " + dynaClass + " because it has no primary keys");
@@ -1810,7 +1802,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
         PreparedStatement statement = null;
 
         try {
-            TableModel dynaClass = model.getClassForTable(dynaBean);
+            TableModel dynaClass = model.getTableModel(dynaBean);
             ColumnProperty[] primaryKeys = dynaClass.getPrimaryKeyProperties();
 
             if (primaryKeys.length == 0) {
@@ -1919,11 +1911,10 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      * @param bean       The bean
      * @return The values indexed by the column names
      */
-    protected HashMap<String, Object> toColumnValues(ColumnProperty[] properties, TableRow bean) {
-        HashMap<String, Object> result = new HashMap<>();
-
+    protected ResultSetRow toColumnValues(ColumnProperty[] properties, TableRow bean) {
+        ResultSetRow result = new ResultSetRow();
         for (ColumnProperty property : properties) {
-            result.put(property.getName(), bean == null ? null : bean.getColumnValue(property.getName()));
+            result.addColumn(property.getName(), bean == null ? null : bean.getColumnValue(property.getName()));
         }
         return result;
     }
@@ -1983,11 +1974,11 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
     }
 
     /**
-     * Helper method esp. for the {@link ModelBasedResultSetIterator} class that retrieves
+     * Helper method esp. for the {@link TableRowIterator} class that retrieves
      * the value for a column from the given result set. If a table was specified,
      * and it contains the column, then the jdbc type defined for the column is used for extracting
      * the value, otherwise the object directly retrieved from the result set is returned.<br/>
-     * The method is defined here rather than in the {@link ModelBasedResultSetIterator} class
+     * The method is defined here rather than in the {@link TableRowIterator} class
      * so that concrete platforms can modify its behavior.
      *
      * @param resultSet  The result set
@@ -2131,7 +2122,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      *                   given result set (optional)
      * @return The iterator
      */
-    protected ModelBasedResultSetIterator createResultSetIterator(Database model, ResultSet resultSet, Table[] queryHints) {
-        return new ModelBasedResultSetIterator(this, model, resultSet, queryHints, true);
+    protected TableRowIterator createResultSetIterator(Database model, ResultSet resultSet, Table[] queryHints) {
+        return new TableRowIterator(this, model, resultSet, queryHints, true);
     }
 }

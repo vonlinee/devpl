@@ -4,7 +4,8 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.OrderedMap;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.sql.*;
 import java.util.*;
@@ -51,7 +52,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(getDefaultTablePattern(), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    RowData values = readColumns(columnData, getColumnsForColumn());
+                    ContextMap values = readColumns(columnData, getColumnsForColumn());
 
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         columns.add(readColumn(metaData, values));
@@ -61,7 +62,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 columnData = metaData.getColumns(metaData.escapeForSearch(tableName), getDefaultColumnPattern());
 
                 while (columnData.next()) {
-                    RowData values = readColumns(columnData, getColumnsForColumn());
+                    ContextMap values = readColumns(columnData, getColumnsForColumn());
 
                     columns.add(readColumn(metaData, values));
                 }
@@ -206,7 +207,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 pkData = metaData.getPrimaryKeys(getDefaultTablePattern());
                 while (pkData.next()) {
-                    RowData values = readColumns(pkData, getColumnsForPK());
+                    ContextMap values = readColumns(pkData, getColumnsForPK());
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         pks.add(readPrimaryKeyName(metaData, values));
                     }
@@ -214,7 +215,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 pkData = metaData.getPrimaryKeys(metaData.escapeForSearch(tableName));
                 while (pkData.next()) {
-                    RowData values = readColumns(pkData, getColumnsForPK());
+                    ContextMap values = readColumns(pkData, getColumnsForPK());
 
                     pks.add(readPrimaryKeyName(metaData, values));
                 }
@@ -227,7 +228,7 @@ public class InterbaseModelReader extends JdbcModelReader {
 
     @Override
     protected Collection readForeignKeys(DatabaseMetaDataWrapper metaData, String tableName) throws SQLException {
-        Map fks = new ListOrderedMap<>();
+        Map fks = new OrderedMap<>();
         ResultSet fkData = null;
 
         try {
@@ -237,7 +238,7 @@ public class InterbaseModelReader extends JdbcModelReader {
                 // So we have to filter manually below
                 fkData = metaData.getForeignKeys(getDefaultTablePattern());
                 while (fkData.next()) {
-                    RowData values = readColumns(fkData, getColumnsForFK());
+                    ContextMap values = readColumns(fkData, getColumnsForFK());
 
                     if (tableName.equals(values.get("FKTABLE_NAME"))) {
                         readForeignKey(metaData, values, fks);
@@ -246,7 +247,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             } else {
                 fkData = metaData.getForeignKeys(metaData.escapeForSearch(tableName));
                 while (fkData.next()) {
-                    RowData values = readColumns(fkData, getColumnsForFK());
+                    ContextMap values = readColumns(fkData, getColumnsForFK());
 
                     readForeignKey(metaData, values, fks);
                 }
@@ -329,7 +330,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             String schema = null;
 
             while (!found && tableData.next()) {
-                RowData values = readColumns(tableData, getColumnsForTable());
+                ContextMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = values.getString("TABLE_NAME");
 
                 if ((tableName != null) && (tableName.length() > 0)) {

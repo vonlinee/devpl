@@ -12,7 +12,7 @@ public enum JavaVisibility {
     PUBLIC(IconKey.JAVA_PUBLIC),
     PRIVATE(IconKey.JAVA_PRIVATE),
     PROTECTED(IconKey.JAVA_PROTECTED),
-    PACKAGE_VISIABLE(IconKey.JAVA_PLOCAL);
+    PACKAGE_VISIBLE(IconKey.JAVA_PLOCAL);
 
     /**
      * 对应展示的图标

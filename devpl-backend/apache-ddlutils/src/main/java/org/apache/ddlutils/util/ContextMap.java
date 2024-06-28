@@ -1,4 +1,4 @@
-package org.apache.ddlutils.model;
+package org.apache.ddlutils.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,24 +11,25 @@ import java.util.Set;
 /**
  * 替代Map<String, Object>
  */
-public final class RowData implements Map<String, Object> {
+public final class ContextMap implements Map<String, Object> {
 
     private final Map<String, Object> map;
 
-    public RowData() {
+    public ContextMap() {
         this(new HashMap<>());
     }
 
-    public RowData(Map<String, Object> map) {
+    public ContextMap(Map<String, Object> map) {
         this.map = map;
-    }
-
-    public <V> void add(String key, V value) {
-        this.map.put(key, value);
     }
 
     public String getString(String key) {
         return (String) map.get(key);
+    }
+
+    public String getString(String key, String defaultValue) {
+        Object val = map.get(key);
+        return val == null ? defaultValue : (String) val;
     }
 
     public boolean getBoolean(String key) {
@@ -37,6 +38,10 @@ public final class RowData implements Map<String, Object> {
             return bv;
         }
         return false;
+    }
+
+    public short getShort(String key) {
+        return getShort(key, 0);
     }
 
     public short getShort(String key, int defaultValue) {
@@ -121,5 +126,10 @@ public final class RowData implements Map<String, Object> {
     @Override
     public Set<Entry<String, Object>> entrySet() {
         return map.entrySet();
+    }
+
+    public ContextMap add(String key, Object value) {
+        this.put(key, value);
+        return this;
     }
 }

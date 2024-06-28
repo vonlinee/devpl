@@ -1,12 +1,14 @@
 package io.devpl.codegen.db.query;
 
 import io.devpl.codegen.db.DBTypeEnum;
+import org.apache.ddlutils.platform.DBType;
 
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DbQueryRegistry {
 
-    private static final EnumMap<DBTypeEnum, AbstractDbQuery> registry = new EnumMap<>(DBTypeEnum.class);
+    private static final Map<DBType, AbstractDbQuery> registry = new HashMap<>();
 
     static {
         registry.put(DBTypeEnum.ORACLE, new OracleQuery());
@@ -28,7 +30,7 @@ public class DbQueryRegistry {
         registry.put(DBTypeEnum.SYBASE, new SybaseQuery());
     }
 
-    public static AbstractDbQuery getDbQuery(DBTypeEnum dBType) {
+    public static AbstractDbQuery getDbQuery(DBType dBType) {
         return registry.get(dBType);
     }
 }

@@ -34,11 +34,9 @@ public class WriteSchemaToFileCommand extends Command {
         if (_outputFile.exists() && !_outputFile.canWrite()) {
             throw new DdlUtilsTaskException("Cannot overwrite output file " + _outputFile.getAbsolutePath());
         }
-        try {
-            FileWriter outputWriter = new FileWriter(_outputFile);
+        try (FileWriter outputWriter = new FileWriter(_outputFile)) {
             DatabaseIO dbIO = new DatabaseIO();
             dbIO.write(model, outputWriter);
-            outputWriter.close();
             _log.info("Written schema to " + _outputFile.getAbsolutePath());
         } catch (Exception ex) {
             handleException(ex, "Failed to write to output file " + _outputFile.getAbsolutePath());

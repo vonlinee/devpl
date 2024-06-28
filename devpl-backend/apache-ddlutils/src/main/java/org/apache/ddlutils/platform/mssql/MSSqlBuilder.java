@@ -4,6 +4,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ public class MSSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         turnOnQuotation();
         super.createTable(database, table, parameters);
     }
@@ -95,9 +96,7 @@ public class MSSqlBuilder extends SqlBuilder {
         if (value == null) {
             return "NULL";
         }
-
         StringBuilder result = new StringBuilder();
-
         switch (column.getTypeCode()) {
             case Types.REAL, Types.NUMERIC, Types.FLOAT, Types.DOUBLE, Types.DECIMAL -> {
                 // SQL Server does not want quotes around the value
@@ -219,17 +218,17 @@ public class MSSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    public String getDeleteSql(Table table, Map<String, Object> pkValues, boolean genPlaceholders) {
+    public String getDeleteSql(Table table, ResultSetRow pkValues, boolean genPlaceholders) {
         return getQuotationOnStatement() + super.getDeleteSql(table, pkValues, genPlaceholders);
     }
 
     @Override
-    public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
-        return getQuotationOnStatement() + super.getInsertSql(table, columnValues, genPlaceholders);
+    public String getInsertSql(Table table, ResultSetRow columnValues, boolean genColumnName, boolean genPlaceholders) {
+        return getQuotationOnStatement() + super.getInsertSql(table, columnValues, genColumnName, genPlaceholders);
     }
 
     @Override
-    public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, ResultSetRow columnValues, boolean genPlaceholders) {
         return getQuotationOnStatement() + super.getUpdateSql(table, columnValues, genPlaceholders);
     }
 

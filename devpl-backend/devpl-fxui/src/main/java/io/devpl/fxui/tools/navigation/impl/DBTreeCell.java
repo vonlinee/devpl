@@ -1,6 +1,5 @@
 package io.devpl.fxui.tools.navigation.impl;
 
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.fxui.fxtras.utils.EventUtils;
 import io.devpl.fxui.model.ConnectionConfig;
 import io.devpl.fxui.model.ConnectionRegistry;
@@ -13,6 +12,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 import org.kordamp.ikonli.materialdesign2.MaterialDesignT;
 
 import java.sql.Connection;

@@ -1,6 +1,7 @@
 package org.apache.ddlutils.task;
 
 import junit.framework.Test;
+import org.apache.ddlutils.model.TableRow;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Tests the writeDataToDatabase sub task.
+ * Tests the writeDataToDatabase sub-task.
  */
 public class TestWriteDataToDatabaseCommand extends TestTaskBase {
     /**
@@ -45,7 +46,7 @@ public class TestWriteDataToDatabaseCommand extends TestTaskBase {
             subTask.setUseBatchMode(useBatchMode);
             subTask.setEnsureForeignKeyOrder(ensureFkOrder);
             task.addWriteDataToDatabase(subTask);
-            task.setModelName("roundtriptest");
+            task.setDatabaseName("roundtriptest");
             task.execute();
         } finally {
             if (writer != null) {
@@ -66,34 +67,36 @@ public class TestWriteDataToDatabaseCommand extends TestTaskBase {
      */
     public void testSimple() throws Exception {
         final String modelXml =
-            "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-            "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" +
-            "  <table name='roundtrip'>\n" +
-            "    <column name='pk' type='VARCHAR' size='32' primaryKey='true' required='true'/>\n" +
-            "    <column name='avalue' type='INTEGER'/>\n" +
-            "  </table>\n" +
-            "</database>";
+            """
+                <?xml version='1.0' encoding='ISO-8859-1'?>
+                <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
+                  <table name='roundtrip'>
+                    <column name='pk' type='VARCHAR' size='32' primaryKey='true' required='true'/>
+                    <column name='avalue' type='INTEGER'/>
+                  </table>
+                </database>""";
         final String dataXml =
-            "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-            "<data>\n" +
-            "  <roundtrip pk='val1' avalue='1'/>\n" +
-            "  <roundtrip pk='val2' avalue='2'/>\n" +
-            "  <roundtrip pk='val3' avalue='3'/>\n" +
-            "</data>";
+            """
+                <?xml version='1.0' encoding='ISO-8859-1'?>
+                <data>
+                  <roundtrip pk='val1' avalue='1'/>
+                  <roundtrip pk='val2' avalue='2'/>
+                  <roundtrip pk='val3' avalue='3'/>
+                </data>""";
 
         createDatabase(modelXml);
 
         runTask(getDatabaseToDdlTaskInstance(), dataXml, false, false);
 
-        List beans = getRows("roundtrip", "pk");
+        List<TableRow> rows = getRows("roundtrip", "pk");
 
-        assertEquals(3, beans.size());
-        assertEquals((Object) "val1", beans.get(0), "pk");
-        assertEquals((1), beans.get(0), "avalue");
-        assertEquals((Object) "val2", beans.get(1), "pk");
-        assertEquals((2), beans.get(1), "avalue");
-        assertEquals((Object) "val3", beans.get(2), "pk");
-        assertEquals((3), beans.get(2), "avalue");
+        assertEquals(3, rows.size());
+        assertEquals((Object) "val1", rows.get(0), "pk");
+        assertEquals((1), rows.get(0), "avalue");
+        assertEquals((Object) "val2", rows.get(1), "pk");
+        assertEquals((2), rows.get(1), "avalue");
+        assertEquals((Object) "val3", rows.get(2), "pk");
+        assertEquals((3), rows.get(2), "avalue");
     }
 
     /**
@@ -101,15 +104,16 @@ public class TestWriteDataToDatabaseCommand extends TestTaskBase {
      */
     public void testBatchMode() throws Exception {
         final String modelXml =
-            "<?xml version='1.0' encoding='ISO-8859-1'?>\n" +
-            "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" +
-            "  <table name='roundtrip'>\n" +
-            "    <column name='pk' type='VARCHAR' size='32' primaryKey='true' required='true'/>\n" +
-            "    <column name='avalue' type='INTEGER'/>\n" +
-            "  </table>\n" +
-            "</database>";
+            """
+                <?xml version='1.0' encoding='ISO-8859-1'?>
+                <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
+                  <table name='roundtrip'>
+                    <column name='pk' type='VARCHAR' size='32' primaryKey='true' required='true'/>
+                    <column name='avalue' type='INTEGER'/>
+                  </table>
+                </database>""";
 
-        StringBuffer dataXml = new StringBuffer();
+        StringBuilder dataXml = new StringBuilder();
         final int numObjs = 2000;
 
         dataXml.append("<?xml version='1.0' encoding='ISO-8859-1'?>\n<data>");
@@ -126,12 +130,12 @@ public class TestWriteDataToDatabaseCommand extends TestTaskBase {
 
         runTask(getDatabaseToDdlTaskInstance(), dataXml.toString(), true, false);
 
-        List beans = getRows("roundtrip", "avalue");
+        List<TableRow> rows = getRows("roundtrip", "avalue");
 
-        assertEquals(numObjs, beans.size());
+        assertEquals(numObjs, rows.size());
         for (int idx = 0; idx < numObjs; idx++) {
-            assertEquals((Object) ("val" + idx), beans.get(idx), "pk");
-            assertEquals((idx), beans.get(idx), "avalue");
+            assertEquals((Object) ("val" + idx), rows.get(idx), "pk");
+            assertEquals((idx), rows.get(idx), "avalue");
         }
     }
 }

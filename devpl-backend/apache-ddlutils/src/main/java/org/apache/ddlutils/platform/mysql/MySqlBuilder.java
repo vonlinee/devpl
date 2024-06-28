@@ -1,10 +1,10 @@
 package org.apache.ddlutils.platform.mysql;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -72,7 +72,7 @@ public class MySqlBuilder extends SqlBuilder {
     }
 
     @Override
-    protected void writeTableCreationStmtEnding(Table table, RowData parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
         if (parameters != null) {
             print(" ");
             // MySql supports additional table creation options which are appended
@@ -178,7 +178,6 @@ public class MySqlBuilder extends SqlBuilder {
     protected void writeCastExpression(Column sourceColumn, Column targetColumn) throws IOException {
         boolean sizeChanged = ColumnDefinitionChange.isSizeChanged(getPlatformInfo(), sourceColumn, targetColumn);
         boolean typeChanged = ColumnDefinitionChange.isTypeChanged(getPlatformInfo(), sourceColumn, targetColumn);
-
         if (sizeChanged || typeChanged) {
             String nativeType = getNativeType(targetColumn);
             String targetNativeType = switch (targetColumn.getTypeCode()) {

@@ -4,7 +4,7 @@ import org.apache.ddlutils.DdlUtilsTaskException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -66,8 +66,8 @@ public class CreateDatabaseCommand extends DatabaseCommand {
      * @param platformName The name of the platform
      * @return The filtered parameters
      */
-    private RowData getFilteredParameters(String platformName) {
-        RowData parameters = new RowData(new LinkedHashMap<>());
+    private ContextMap getFilteredParameters(String platformName) {
+        ContextMap parameters = new ContextMap(new LinkedHashMap<>());
         for (Parameter param : _parameters) {
             if (param.isForPlatform(platformName)) {
                 parameters.add(param.getName(), param.getValue());

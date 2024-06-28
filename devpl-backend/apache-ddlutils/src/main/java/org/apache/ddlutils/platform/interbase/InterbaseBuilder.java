@@ -3,6 +3,7 @@ package org.apache.ddlutils.platform.interbase;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -22,7 +23,7 @@ public class InterbaseBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         super.createTable(database, table, parameters);
 
         // creating generator and trigger for auto-increment

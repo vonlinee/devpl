@@ -4,6 +4,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ContextMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,7 @@ public class MckoiModelReader extends JdbcModelReader {
                 }
 
                 ResultSet resultSet = stmt.executeQuery();
-                RowData indexValues = new RowData();
+                ContextMap indexValues = new ContextMap();
 
                 indexValues.put("NON_UNIQUE", Boolean.FALSE);
                 while (resultSet.next()) {
@@ -76,7 +77,7 @@ public class MckoiModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, RowData values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
         if (column.getSize() != null) {
             if (column.getSizeAsInt() <= 0) {

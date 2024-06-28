@@ -14,15 +14,15 @@ import java.io.StringWriter;
 import java.util.function.Supplier;
 
 /**
- * 异常弹窗，阻塞用户行为
+ * 单例异常弹窗，阻塞用户行为
  */
-public class ExceptionDialog extends Stage {
+public final class ExceptionDialog extends Stage {
 
     private static final ExceptionDialog dialog = new ExceptionDialog();
 
     private final TextArea contentArea = new TextArea();
 
-    Throwable throwable;
+    private transient Throwable throwable;
 
     private ExceptionDialog() {
         initModality(Modality.APPLICATION_MODAL);
@@ -67,7 +67,12 @@ public class ExceptionDialog extends Stage {
         contentArea.appendText(throwable.getMessage());
     }
 
-    public static void report(Throwable throwable) {
+    /**
+     * 展示异常弹窗
+     *
+     * @param throwable 异常信息
+     */
+    public static void show(Throwable throwable) {
         dialog.setText(throwable);
         if (!dialog.isShowing()) {
             dialog.centerOnScreen();
@@ -79,7 +84,7 @@ public class ExceptionDialog extends Stage {
         try {
             supplier.get();
         } catch (Throwable throwable) {
-            report(throwable);
+            show(throwable);
         }
     }
 }

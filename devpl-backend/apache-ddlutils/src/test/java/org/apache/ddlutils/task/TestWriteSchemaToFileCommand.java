@@ -37,7 +37,7 @@ public class TestWriteSchemaToFileCommand extends TestTaskBase {
 
             getLog().info("写入文件" + tmpFile.getAbsolutePath());
             task.addWriteSchemaToFile(subTask);
-            task.setModelName(expectedModel.getName());
+            task.setDatabaseName(expectedModel.getName());
             task.execute();
 
             assertEquals(expectedModel, new DatabaseIO().read(tmpFile), isUseDelimitedIdentifiers());

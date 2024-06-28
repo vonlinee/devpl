@@ -2,6 +2,7 @@ package org.apache.ddlutils.util;
 
 import junit.framework.AssertionFailedError;
 import org.apache.ddlutils.Platform;
+import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
@@ -156,5 +157,14 @@ public class DatabaseTestHelper {
             }
         }
         return result.toString();
+    }
+
+    public static PooledDataSourceWrapper mysqlDataSource() {
+        PooledDataSourceWrapper dataSource = new PooledDataSourceWrapper();
+        dataSource.setUrl("jdbc:mysql://localhost:3306/devpl?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUsername("root");
+        dataSource.setPassword("123456");
+        return dataSource;
     }
 }

@@ -15,6 +15,14 @@ public class PlatformConfiguration {
      */
     private String _databaseType;
     /**
+     * the jdbc connection url
+     */
+    private String jdbcConnectionUrl;
+    /**
+     * the driver class name
+     */
+    private String driverClassName;
+    /**
      * The data source to use for accessing the database.
      */
     private PooledDataSourceWrapper _dataSource;
@@ -182,10 +190,10 @@ public class PlatformConfiguration {
                 if (_dataSource == null) {
                     throw new DdlUtilsTaskException("No database specified.");
                 }
-                _databaseType = new PlatformUtils().determineDatabaseType(_dataSource.getDriverClassName(),
+                _databaseType = PlatformUtils.determineDatabaseType(_dataSource.getDriverClassName(),
                     _dataSource.getUrl());
                 if (_databaseType == null) {
-                    _databaseType = new PlatformUtils().determineDatabaseType(_dataSource);
+                    _databaseType = PlatformUtils.determineDatabaseType(_dataSource);
                 }
             }
             try {
@@ -200,7 +208,10 @@ public class PlatformConfiguration {
             _platform.setDelimitedIdentifierModeOn(isUseDelimitedSqlIdentifiers());
             _platform.setForeignKeysSorted(isSortForeignKeys());
         }
-
         return _platform;
+    }
+
+    public void setPlatform(Platform platform) {
+        this._platform = platform;
     }
 }

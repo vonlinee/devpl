@@ -1,26 +1,25 @@
 package org.apache.ddlutils.io;
 
-
 import org.apache.ddlutils.model.TableRow;
 
 /**
- * Marks classes that can receive dyna beans read by the {@link org.apache.ddlutils.io.DataReader}.
+ * Marks classes that can receive table rows read by the {@link org.apache.ddlutils.io.DataReader}.
  */
 public interface DataSink {
     /**
-     * Notifies the sink that beans will be added.
+     * Notifies the sink that rows will be added.
      */
     void start() throws DataSinkException;
 
     /**
-     * Adds a dyna bean.
+     * Adds a table row.
      *
-     * @param bean The dyna bean to add
+     * @param row The table row to add
      */
-    void addBean(TableRow bean) throws DataSinkException;
+    void addRow(TableRow row) throws DataSinkException;
 
     /**
-     * Notifies the sink that all beans have been added.
+     * Notifies the sink that all rows have been added.
      */
     void end() throws DataSinkException;
 }

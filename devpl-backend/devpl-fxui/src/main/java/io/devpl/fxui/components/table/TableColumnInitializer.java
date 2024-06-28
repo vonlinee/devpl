@@ -15,14 +15,14 @@ import java.util.*;
  * 初始化表的列
  * @param <R>
  */
-public class TableColumninitializer<R> {
+public class TableColumnInitializer<R> {
 
     public <C> List<TableColumn<R, C>> initColumns(Class<R> rowClass, boolean order) {
         Field[] declaredFields = rowClass.getDeclaredFields();
         List<TableColumn<R, C>> columnsToBeAdd = new ArrayList<>();
         Map<String, Integer> tableColumnOrderMap = order ? new HashMap<>() : null;
         for (Field declaredField : declaredFields) {
-            FXTableViewColumn tvc = declaredField.getAnnotation(FXTableViewColumn.class);
+            TableViewColumn tvc = declaredField.getAnnotation(TableViewColumn.class);
             if (tvc == null) {
                 continue;
             }

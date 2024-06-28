@@ -65,5 +65,4 @@ public class WriteDataToFileCommand extends ConvertingDatabaseCommand {
             handleException(ex, ex.getMessage());
         }
     }
-
 }

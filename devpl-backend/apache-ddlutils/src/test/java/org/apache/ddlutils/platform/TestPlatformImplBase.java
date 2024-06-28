@@ -1,11 +1,8 @@
 package org.apache.ddlutils.platform;
 
-
 import org.apache.ddlutils.TestBase;
-import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.model.TableModel;
-import org.apache.ddlutils.model.TableRow;
+import org.apache.ddlutils.model.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
@@ -21,6 +18,7 @@ public class TestPlatformImplBase extends TestBase {
     /**
      * Test the toColumnValues method.
      */
+    @Test
     public void testToColumnValues() {
         final String schema =
             """
@@ -35,15 +33,15 @@ public class TestPlatformImplBase extends TestBase {
         Database database = parseDatabaseFromString(schema);
         PlatformImplBase platform = new TestPlatform();
         Table table = database.getTable(0);
-        TableModel clz = TableModel.newInstance(table);
-        TableRow db = new TableRow(TableModel.newInstance(table));
+        TableModel clz = TableModel.of(table);
+        TableRow db = new TableRow(TableModel.of(table));
 
         db.setColumnValue("name", "name");
 
-        Map<String, Object> map = platform.toColumnValues(clz.getProperties(), db);
+        ResultSetRow map = platform.toColumnValues(clz.getProperties(), db);
 
         assertEquals("name",
-            map.get("name"));
-        assertTrue(map.containsKey("id"));
+            map.getColumnValue("name"));
+        assertTrue(map.hasColumn("id"));
     }
 }

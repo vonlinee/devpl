@@ -7,6 +7,7 @@ import org.apache.ddlutils.alteration.*;
 import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.*;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.io.IOException;
 import java.sql.*;
@@ -76,7 +77,7 @@ public class PostgreSqlPlatform extends PlatformImplBase {
      * @param parameters          Additional parameters for the operation
      * @param createDb            Whether to create or drop the database
      */
-    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
+    private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
         if (JDBCDriverTypeEnum.POSTGRE_SQL.getDriverClassName().equals(jdbcDriverClassName)) {
             int slashPos = connectionUrl.lastIndexOf('/');
             if (slashPos < 0) {
@@ -123,7 +124,7 @@ public class PostgreSqlPlatform extends PlatformImplBase {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // With PostgreSQL, you create a database by executing "CREATE DATABASE" in an existing database (usually
         // the template1 database because it usually exists)
         createOrDropDatabase(jdbcDriverClassName, connectionUrl, username, password, parameters, true);

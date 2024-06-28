@@ -135,31 +135,31 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc1");
+        List<TableRow> rows = getRows("misc1");
 
         if (isSybase) {
-            assertEquals(new BigDecimal(10), beans.get(0), "pk");
-            assertEquals(new BigDecimal(12), beans.get(1), "pk");
-            assertEquals(new BigDecimal(13), beans.get(2), "pk");
+            assertEquals(new BigDecimal(10), rows .get(0), "pk");
+            assertEquals(new BigDecimal(12), rows.get(1), "pk");
+            assertEquals(new BigDecimal(13), rows.get(2), "pk");
         } else {
-            assertEquals((10), beans.get(0), "pk");
-            assertEquals((12), beans.get(1), "pk");
-            assertEquals((13), beans.get(2), "pk");
+            assertEquals((10), rows .get(0), "pk");
+            assertEquals((12), rows.get(1), "pk");
+            assertEquals((13), rows.get(2), "pk");
         }
-        assertEquals((1), beans.get(0), "avalue");
-        assertEquals((2), beans.get(1), "avalue");
-        assertEquals((3), beans.get(2), "avalue");
+        assertEquals((1), rows .get(0), "avalue");
+        assertEquals((2), rows.get(1), "avalue");
+        assertEquals((3), rows.get(2), "avalue");
 
-        beans = getRows("misc2");
+        rows = getRows("misc2");
 
-        assertEquals((1), beans.get(0), "pk");
-        assertEquals((2), beans.get(1), "pk");
+        assertEquals((1), rows .get(0), "pk");
+        assertEquals((2), rows.get(1), "pk");
         if (isSybase) {
-            assertEquals(new BigDecimal(10), beans.get(0), "fk");
-            assertEquals(new BigDecimal(13), beans.get(1), "fk");
+            assertEquals(new BigDecimal(10), rows .get(0), "fk");
+            assertEquals(new BigDecimal(13), rows.get(1), "fk");
         } else {
-            assertEquals((10), beans.get(0), "fk");
-            assertEquals((13), beans.get(1), "fk");
+            assertEquals((10), rows .get(0), "fk");
+            assertEquals((13), rows.get(1), "fk");
         }
     }
 
@@ -275,31 +275,31 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc1");
+        List<TableRow> rows = getRows("misc1");
 
         if (isSybase) {
-            assertEquals(new BigDecimal(1), beans.get(0), "pk");
-            assertEquals(new BigDecimal(2), beans.get(1), "pk");
-            assertEquals(new BigDecimal(3), beans.get(2), "pk");
+            assertEquals(new BigDecimal(1), rows .get(0), "pk");
+            assertEquals(new BigDecimal(2), rows.get(1), "pk");
+            assertEquals(new BigDecimal(3), rows.get(2), "pk");
         } else {
-            assertEquals((1), beans.get(0), "pk");
-            assertEquals((2), beans.get(1), "pk");
-            assertEquals((3), beans.get(2), "pk");
+            assertEquals((1), rows .get(0), "pk");
+            assertEquals((2), rows.get(1), "pk");
+            assertEquals((3), rows.get(2), "pk");
         }
-        assertEquals((1), beans.get(0), "avalue");
-        assertEquals((2), beans.get(1), "avalue");
-        assertEquals((3), beans.get(2), "avalue");
+        assertEquals((1), rows .get(0), "avalue");
+        assertEquals((2), rows.get(1), "avalue");
+        assertEquals((3), rows.get(2), "avalue");
 
-        beans = getRows("misc2");
+        rows = getRows("misc2");
 
-        assertEquals((1), beans.get(0), "pk");
-        assertEquals((2), beans.get(1), "pk");
+        assertEquals((1), rows .get(0), "pk");
+        assertEquals((2), rows.get(1), "pk");
         if (isSybase) {
-            assertEquals(new BigDecimal(1), beans.get(0), "fk");
-            assertEquals(new BigDecimal(3), beans.get(1), "fk");
+            assertEquals(new BigDecimal(1), rows .get(0), "fk");
+            assertEquals(new BigDecimal(3), rows.get(1), "fk");
         } else {
-            assertEquals((1), beans.get(0), "fk");
-            assertEquals((3), beans.get(1), "fk");
+            assertEquals((1), rows .get(0), "fk");
+            assertEquals((3), rows.get(1), "fk");
         }
     }
 
@@ -395,26 +395,26 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc");
+        List<TableRow> rows = getRows("misc");
 
         if (isSybase) {
-            assertEquals(new BigDecimal(1), beans.get(0), "pk");
-            assertNull(beans.get(0).getColumnValue("fk"));
-            assertEquals(new BigDecimal(2), beans.get(1), "pk");
-            assertEquals(new BigDecimal(1), beans.get(1), "fk");
-            assertEquals(new BigDecimal(3), beans.get(2), "pk");
-            assertEquals(new BigDecimal(2), beans.get(2), "fk");
-            assertEquals(new BigDecimal(4), beans.get(3), "pk");
-            assertEquals(new BigDecimal(4), beans.get(3), "fk");
+            assertEquals(new BigDecimal(1), rows .get(0), "pk");
+            assertNull(rows .get(0).getColumnValue("fk"));
+            assertEquals(new BigDecimal(2), rows.get(1), "pk");
+            assertEquals(new BigDecimal(1), rows.get(1), "fk");
+            assertEquals(new BigDecimal(3), rows.get(2), "pk");
+            assertEquals(new BigDecimal(2), rows.get(2), "fk");
+            assertEquals(new BigDecimal(4), rows.get(3), "pk");
+            assertEquals(new BigDecimal(4), rows.get(3), "fk");
         } else {
-            assertEquals((1), beans.get(0), "pk");
-            assertNull(beans.get(0).getColumnValue("fk"));
-            assertEquals((2), beans.get(1), "pk");
-            assertEquals((1), beans.get(1), "fk");
-            assertEquals((3), beans.get(2), "pk");
-            assertEquals((2), beans.get(2), "fk");
-            assertEquals((4), beans.get(3), "pk");
-            assertEquals((4), beans.get(3), "fk");
+            assertEquals((1), rows .get(0), "pk");
+            assertNull(rows .get(0).getColumnValue("fk"));
+            assertEquals((2), rows.get(1), "pk");
+            assertEquals((1), rows.get(1), "fk");
+            assertEquals((3), rows.get(2), "pk");
+            assertEquals((2), rows.get(2), "fk");
+            assertEquals((4), rows.get(3), "pk");
+            assertEquals((4), rows.get(3), "fk");
         }
     }
 
@@ -510,26 +510,26 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc");
+        List<TableRow> rows = getRows("misc");
 
         if (isSybase) {
-            assertEquals(new BigDecimal(10), beans.get(0), "pk");
-            assertNull(beans.get(0).getColumnValue("fk"));
-            assertEquals(new BigDecimal(11), beans.get(1), "pk");
-            assertEquals(new BigDecimal(10), beans.get(1), "fk");
-            assertEquals(new BigDecimal(12), beans.get(2), "pk");
-            assertEquals(new BigDecimal(11), beans.get(2), "fk");
-            assertEquals(new BigDecimal(13), beans.get(3), "pk");
-            assertEquals(new BigDecimal(13), beans.get(3), "fk");
+            assertEquals(new BigDecimal(10), rows .get(0), "pk");
+            assertNull(rows .get(0).getColumnValue("fk"));
+            assertEquals(new BigDecimal(11), rows.get(1), "pk");
+            assertEquals(new BigDecimal(10), rows.get(1), "fk");
+            assertEquals(new BigDecimal(12), rows.get(2), "pk");
+            assertEquals(new BigDecimal(11), rows.get(2), "fk");
+            assertEquals(new BigDecimal(13), rows.get(3), "pk");
+            assertEquals(new BigDecimal(13), rows.get(3), "fk");
         } else {
-            assertEquals((10), beans.get(0), "pk");
-            assertNull(beans.get(0).getColumnValue("fk"));
-            assertEquals((11), beans.get(1), "pk");
-            assertEquals((10), beans.get(1), "fk");
-            assertEquals((12), beans.get(2), "pk");
-            assertEquals((11), beans.get(2), "fk");
-            assertEquals((13), beans.get(3), "pk");
-            assertEquals((13), beans.get(3), "fk");
+            assertEquals((10), rows .get(0), "pk");
+            assertNull(rows .get(0).getColumnValue("fk"));
+            assertEquals((11), rows.get(1), "pk");
+            assertEquals((10), rows.get(1), "fk");
+            assertEquals((12), rows.get(2), "pk");
+            assertEquals((11), rows.get(2), "fk");
+            assertEquals((13), rows.get(3), "pk");
+            assertEquals((13), rows.get(3), "fk");
         }
     }
 
@@ -598,59 +598,59 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc", "id");
+        List<TableRow> rows = getRows("misc", "id");
 
-        assertEquals(12, beans.size());
+        assertEquals(12, rows.size());
         if (isSybase) {
-            assertEquals(new BigDecimal(1), beans.get(0), "id");
-            assertNull(beans.get(0).getColumnValue("parent_id"));
-            assertEquals(new BigDecimal(2), beans.get(1), "id");
-            assertNull(beans.get(1).getColumnValue("parent_id"));
-            assertEquals(new BigDecimal(3), beans.get(2), "id");
-            assertEquals(new BigDecimal(2), beans.get(2), "parent_id");
-            assertEquals(new BigDecimal(4), beans.get(3), "id");
-            assertEquals(new BigDecimal(1), beans.get(3), "parent_id");
-            assertEquals(new BigDecimal(5), beans.get(4), "id");
-            assertEquals(new BigDecimal(3), beans.get(4), "parent_id");
-            assertEquals(new BigDecimal(6), beans.get(5), "id");
-            assertNull(beans.get(5).getColumnValue("parent_id"));
-            assertEquals(new BigDecimal(7), beans.get(6), "id");
-            assertEquals(new BigDecimal(1), beans.get(6), "parent_id");
-            assertEquals(new BigDecimal(8), beans.get(7), "id");
-            assertEquals(new BigDecimal(7), beans.get(7), "parent_id");
-            assertEquals(new BigDecimal(9), beans.get(8), "id");
-            assertEquals(new BigDecimal(6), beans.get(8), "parent_id");
-            assertEquals(new BigDecimal(10), beans.get(9), "id");
-            assertEquals(new BigDecimal(4), beans.get(9), "parent_id");
-            assertEquals(new BigDecimal(11), beans.get(10), "id");
-            assertNull(beans.get(10).getColumnValue("parent_id"));
-            assertEquals(new BigDecimal(12), beans.get(11), "id");
-            assertEquals(new BigDecimal(11), beans.get(11), "parent_id");
+            assertEquals(new BigDecimal(1), rows .get(0), "id");
+            assertNull(rows .get(0).getColumnValue("parent_id"));
+            assertEquals(new BigDecimal(2), rows.get(1), "id");
+            assertNull(rows.get(1).getColumnValue("parent_id"));
+            assertEquals(new BigDecimal(3), rows.get(2), "id");
+            assertEquals(new BigDecimal(2), rows.get(2), "parent_id");
+            assertEquals(new BigDecimal(4), rows.get(3), "id");
+            assertEquals(new BigDecimal(1), rows.get(3), "parent_id");
+            assertEquals(new BigDecimal(5), rows.get(4), "id");
+            assertEquals(new BigDecimal(3), rows.get(4), "parent_id");
+            assertEquals(new BigDecimal(6), rows.get(5), "id");
+            assertNull(rows.get(5).getColumnValue("parent_id"));
+            assertEquals(new BigDecimal(7), rows.get(6), "id");
+            assertEquals(new BigDecimal(1), rows.get(6), "parent_id");
+            assertEquals(new BigDecimal(8), rows.get(7), "id");
+            assertEquals(new BigDecimal(7), rows.get(7), "parent_id");
+            assertEquals(new BigDecimal(9), rows.get(8), "id");
+            assertEquals(new BigDecimal(6), rows.get(8), "parent_id");
+            assertEquals(new BigDecimal(10), rows.get(9), "id");
+            assertEquals(new BigDecimal(4), rows.get(9), "parent_id");
+            assertEquals(new BigDecimal(11), rows.get(10), "id");
+            assertNull(rows.get(10).getColumnValue("parent_id"));
+            assertEquals(new BigDecimal(12), rows.get(11), "id");
+            assertEquals(new BigDecimal(11), rows.get(11), "parent_id");
         } else {
-            assertEquals((1), beans.get(0), "id");
-            assertNull(beans.get(0).getColumnValue("parent_id"));
-            assertEquals((2), beans.get(1), "id");
-            assertNull(beans.get(1).getColumnValue("parent_id"));
-            assertEquals((3), beans.get(2), "id");
-            assertEquals((2), beans.get(2), "parent_id");
-            assertEquals((4), beans.get(3), "id");
-            assertEquals((1), beans.get(3), "parent_id");
-            assertEquals((5), beans.get(4), "id");
-            assertEquals((3), beans.get(4), "parent_id");
-            assertEquals((6), beans.get(5), "id");
-            assertNull(beans.get(5).getColumnValue("parent_id"));
-            assertEquals((7), beans.get(6), "id");
-            assertEquals((1), beans.get(6), "parent_id");
-            assertEquals((8), beans.get(7), "id");
-            assertEquals((7), beans.get(7), "parent_id");
-            assertEquals((9), beans.get(8), "id");
-            assertEquals((6), beans.get(8), "parent_id");
-            assertEquals((10), beans.get(9), "id");
-            assertEquals((4), beans.get(9), "parent_id");
-            assertEquals((11), beans.get(10), "id");
-            assertNull(beans.get(10).getColumnValue("parent_id"));
-            assertEquals((12), beans.get(11), "id");
-            assertEquals((11), beans.get(11), "parent_id");
+            assertEquals((1), rows .get(0), "id");
+            assertNull(rows .get(0).getColumnValue("parent_id"));
+            assertEquals((2), rows.get(1), "id");
+            assertNull(rows.get(1).getColumnValue("parent_id"));
+            assertEquals((3), rows.get(2), "id");
+            assertEquals((2), rows.get(2), "parent_id");
+            assertEquals((4), rows.get(3), "id");
+            assertEquals((1), rows.get(3), "parent_id");
+            assertEquals((5), rows.get(4), "id");
+            assertEquals((3), rows.get(4), "parent_id");
+            assertEquals((6), rows.get(5), "id");
+            assertNull(rows.get(5).getColumnValue("parent_id"));
+            assertEquals((7), rows.get(6), "id");
+            assertEquals((1), rows.get(6), "parent_id");
+            assertEquals((8), rows.get(7), "id");
+            assertEquals((7), rows.get(7), "parent_id");
+            assertEquals((9), rows.get(8), "id");
+            assertEquals((6), rows.get(8), "parent_id");
+            assertEquals((10), rows.get(9), "id");
+            assertEquals((4), rows.get(9), "parent_id");
+            assertEquals((11), rows.get(10), "id");
+            assertNull(rows.get(10).getColumnValue("parent_id"));
+            assertEquals((12), rows.get(11), "id");
+            assertEquals((11), rows.get(11), "parent_id");
         }
     }
 
@@ -722,47 +722,47 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{stringReader});
 
-        List<TableRow> beans = getRows("misc", "id");
+        List<TableRow> rows = getRows("misc", "id");
 
-        assertEquals(6, beans.size());
+        assertEquals(6, rows.size());
         if (isSybase) {
-            assertEquals(new BigDecimal(1), beans.get(0), "id");
-            assertEquals(new BigDecimal(2), beans.get(0), "left_id");
-            assertEquals(new BigDecimal(3), beans.get(0), "right_id");
-            assertEquals(new BigDecimal(2), beans.get(1), "id");
-            assertEquals(new BigDecimal(5), beans.get(1), "left_id");
-            assertEquals(new BigDecimal(4), beans.get(1), "right_id");
-            assertEquals(new BigDecimal(3), beans.get(2), "id");
-            assertEquals(new BigDecimal(2), beans.get(2), "left_id");
-            assertEquals(new BigDecimal(4), beans.get(2), "right_id");
-            assertEquals(new BigDecimal(4), beans.get(3), "id");
-            assertEquals(new BigDecimal(6), beans.get(3), "left_id");
-            assertEquals((Object) null, beans.get(3), "right_id");
-            assertEquals(new BigDecimal(5), beans.get(4), "id");
-            assertEquals((Object) null, beans.get(4), "left_id");
-            assertEquals(new BigDecimal(6), beans.get(4), "right_id");
-            assertEquals(new BigDecimal(6), beans.get(5), "id");
-            assertEquals((Object) null, beans.get(5), "left_id");
-            assertEquals((Object) null, beans.get(5), "right_id");
+            assertEquals(new BigDecimal(1), rows .get(0), "id");
+            assertEquals(new BigDecimal(2), rows .get(0), "left_id");
+            assertEquals(new BigDecimal(3), rows .get(0), "right_id");
+            assertEquals(new BigDecimal(2), rows.get(1), "id");
+            assertEquals(new BigDecimal(5), rows.get(1), "left_id");
+            assertEquals(new BigDecimal(4), rows.get(1), "right_id");
+            assertEquals(new BigDecimal(3), rows.get(2), "id");
+            assertEquals(new BigDecimal(2), rows.get(2), "left_id");
+            assertEquals(new BigDecimal(4), rows.get(2), "right_id");
+            assertEquals(new BigDecimal(4), rows.get(3), "id");
+            assertEquals(new BigDecimal(6), rows.get(3), "left_id");
+            assertEquals((Object) null, rows.get(3), "right_id");
+            assertEquals(new BigDecimal(5), rows.get(4), "id");
+            assertEquals((Object) null, rows.get(4), "left_id");
+            assertEquals(new BigDecimal(6), rows.get(4), "right_id");
+            assertEquals(new BigDecimal(6), rows.get(5), "id");
+            assertEquals((Object) null, rows.get(5), "left_id");
+            assertEquals((Object) null, rows.get(5), "right_id");
         } else {
-            assertEquals((1), beans.get(0), "id");
-            assertEquals((2), beans.get(0), "left_id");
-            assertEquals((3), beans.get(0), "right_id");
-            assertEquals((2), beans.get(1), "id");
-            assertEquals((5), beans.get(1), "left_id");
-            assertEquals((4), beans.get(1), "right_id");
-            assertEquals((3), beans.get(2), "id");
-            assertEquals((2), beans.get(2), "left_id");
-            assertEquals((4), beans.get(2), "right_id");
-            assertEquals((4), beans.get(3), "id");
-            assertEquals((6), beans.get(3), "left_id");
-            assertEquals((Object) null, beans.get(3), "right_id");
-            assertEquals((5), beans.get(4), "id");
-            assertEquals((Object) null, beans.get(4), "left_id");
-            assertEquals((6), beans.get(4), "right_id");
-            assertEquals((6), beans.get(5), "id");
-            assertEquals((Object) null, beans.get(5), "left_id");
-            assertEquals((Object) null, beans.get(5), "right_id");
+            assertEquals((1), rows .get(0), "id");
+            assertEquals((2), rows .get(0), "left_id");
+            assertEquals((3), rows .get(0), "right_id");
+            assertEquals((2), rows.get(1), "id");
+            assertEquals((5), rows.get(1), "left_id");
+            assertEquals((4), rows.get(1), "right_id");
+            assertEquals((3), rows.get(2), "id");
+            assertEquals((2), rows.get(2), "left_id");
+            assertEquals((4), rows.get(2), "right_id");
+            assertEquals((4), rows.get(3), "id");
+            assertEquals((6), rows.get(3), "left_id");
+            assertEquals((Object) null, rows.get(3), "right_id");
+            assertEquals((5), rows.get(4), "id");
+            assertEquals((Object) null, rows.get(4), "left_id");
+            assertEquals((6), rows.get(4), "right_id");
+            assertEquals((6), rows.get(5), "id");
+            assertEquals((Object) null, rows.get(5), "left_id");
+            assertEquals((Object) null, rows.get(5), "right_id");
         }
     }
 
@@ -1120,11 +1120,11 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
 
         insertRow("Roundtrip", new Object[]{(1), "foo"});
 
-        List<TableRow> beans = getRows("Roundtrip");
+        List<TableRow> rows = getRows("Roundtrip");
 
-        assertEquals(1, beans.size());
-        assertEquals((1), beans.get(0), "Pk");
-        assertEquals((Object) "foo", beans.get(0), "Avalue");
+        assertEquals(1, rows.size());
+        assertEquals((1), rows .get(0), "Pk");
+        assertEquals((Object) "foo", rows .get(0), "Avalue");
 
         Table table = getModel().findTable("Roundtrip", getPlatform().isDelimitedIdentifierModeOn());
         StringBuilder query = new StringBuilder();
@@ -1150,10 +1150,10 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
             }
         }
 
-        beans = getPlatform().fetch(getModel(), query.toString(), new Table[]{table});
+        rows = getPlatform().fetch(getModel(), query.toString(), new Table[]{table});
 
-        assertEquals(1, beans.size());
-        assertEquals((1), beans.get(0), "Pk");
-        assertEquals((Object) "foo", beans.get(0), "Avalue");
+        assertEquals(1, rows.size());
+        assertEquals((1), rows .get(0), "Pk");
+        assertEquals((Object) "foo", rows .get(0), "Avalue");
     }
 }

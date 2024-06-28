@@ -82,10 +82,10 @@ public class TestDataTypes extends TestAgainstLiveDatabaseBase {
         insertRow("roundtrip", new Object[]{(1), inserted1});
         insertRow("roundtrip", new Object[]{(2), inserted2});
 
-        List<TableRow> beans = getRows("roundtrip");
+        List<TableRow> rows = getRows("roundtrip");
 
-        assertEquals(expected1, beans.get(0), "avalue");
-        assertEquals(expected2, beans.get(1), "avalue");
+        assertEquals(expected1, rows .get(0), "avalue");
+        assertEquals(expected2, rows.get(1), "avalue");
 
         Database modelFromDb = readModelFromDatabase("roundtriptest");
 
@@ -112,10 +112,10 @@ public class TestDataTypes extends TestAgainstLiveDatabaseBase {
 
         dataIO.writeDataToDatabase(getPlatform(), getModel(), new Reader[]{new StringReader(dataSql)});
 
-        beans = getRows("roundtrip");
+        rows = getRows("roundtrip");
 
-        assertEquals(expected1, beans.get(0), "avalue");
-        assertEquals(expected2, beans.get(1), "avalue");
+        assertEquals(expected1, rows .get(0), "avalue");
+        assertEquals(expected2, rows.get(1), "avalue");
     }
 
     /**

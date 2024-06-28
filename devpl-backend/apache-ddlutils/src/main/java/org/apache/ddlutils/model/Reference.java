@@ -107,7 +107,7 @@ public class Reference implements Serializable {
      */
     public void setForeignColumn(Column foreignColumn) {
         _foreignColumn = foreignColumn;
-        _foreignColumnName = (foreignColumn == null ? null : foreignColumn.getName());
+        _foreignColumnName = foreignColumn == null ? null : foreignColumn.getName();
     }
 
     /**

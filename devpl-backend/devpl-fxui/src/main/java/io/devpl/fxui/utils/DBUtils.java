@@ -1,14 +1,14 @@
 package io.devpl.fxui.utils;
 
 import io.devpl.codegen.db.JDBCDriver;
-import io.devpl.codegen.jdbc.meta.ColumnMetadata;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.*;
+import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

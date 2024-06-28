@@ -13,6 +13,9 @@ import java.util.logging.Logger;
  */
 public final class PooledDataSourceWrapper implements DataSource, AutoCloseable {
 
+    /**
+     * 如果为null，则使用驱动进行连接
+     */
     private DataSource dataSource;
 
     private String url;

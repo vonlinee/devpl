@@ -3,7 +3,7 @@ package org.apache.ddlutils.platform.axion;
 
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.platform.DBType;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.JDBCDriverTypeEnum;
@@ -50,7 +50,7 @@ public class AxionPlatform extends PlatformImplBase {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // Axion will create the database automatically when connecting for the first time
         if (JDBCDriverTypeEnum.AXION.getDriverClassName().equals(jdbcDriverClassName)) {
             try {

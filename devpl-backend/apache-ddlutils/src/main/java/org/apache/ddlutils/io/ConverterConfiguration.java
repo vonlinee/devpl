@@ -27,8 +27,6 @@ public class ConverterConfiguration {
      */
     public ConverterConfiguration() {
         NumberConverter numberConverter = new NumberConverter();
-        ByteArrayBase64Converter binaryConverter = new ByteArrayBase64Converter();
-
         registerConverter(Types.DATE, new DateConverter());
         registerConverter(Types.TIME, new TimeConverter());
         registerConverter(Types.TIMESTAMP, new TimestampConverter());
@@ -43,6 +41,8 @@ public class ConverterConfiguration {
         registerConverter(Types.REAL, numberConverter);
         registerConverter(Types.SMALLINT, numberConverter);
         registerConverter(Types.TINYINT, numberConverter);
+
+        ByteArrayBase64Converter binaryConverter = new ByteArrayBase64Converter();
         registerConverter(Types.BINARY, binaryConverter);
         registerConverter(Types.VARBINARY, binaryConverter);
         registerConverter(Types.LONGVARBINARY, binaryConverter);
@@ -79,7 +79,6 @@ public class ConverterConfiguration {
      */
     public SqlTypeConverter getRegisteredConverter(Table table, Column column) {
         SqlTypeConverter result = _convertersPerPath.get(table.getName() + "/" + column.getName());
-
         if (result == null) {
             result = _convertersPerType.get(column.getTypeCode());
         }

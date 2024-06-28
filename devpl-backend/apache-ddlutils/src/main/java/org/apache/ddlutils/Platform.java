@@ -2,7 +2,7 @@ package org.apache.ddlutils;
 
 import org.apache.ddlutils.alteration.ModelChange;
 import org.apache.ddlutils.model.Database;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TableRow;
 import org.apache.ddlutils.platform.*;
@@ -292,7 +292,7 @@ public interface Platform {
      * @param password            The password for creating the database
      * @param parameters          Additional parameters relevant to database creation (which are platform specific)
      */
-    default void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    default void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
     }
 
     /**
@@ -314,7 +314,7 @@ public interface Platform {
      * @param model           The database model
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Database, boolean, boolean)} instead.
+     * @deprecated Use {@link #createDatabase(Database, boolean, boolean)} instead.
      */
     void createTables(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
@@ -325,7 +325,7 @@ public interface Platform {
      * @param model           The database model
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Connection, Database, boolean, boolean)} instead.
+     * @deprecated Use {@link #createDatabase(Connection, Database, boolean, boolean)} instead.
      */
     void createTables(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
@@ -336,7 +336,7 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Database, CreationParameters, boolean, boolean)} instead.
+     * @deprecated Use {@link #createDatabase(Database, CreationParameters, boolean, boolean)} instead.
      */
     void createTables(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
@@ -348,7 +348,7 @@ public interface Platform {
      * @param params          The parameters used in the creation
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
-     * @deprecated Use {@link #createModel(Connection, Database, CreationParameters, boolean, boolean)} instead.
+     * @deprecated Use {@link #createDatabase(Connection, Database, CreationParameters, boolean, boolean)} instead.
      */
     void createTables(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
@@ -359,7 +359,6 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
-     * @deprecated Use {@link #getCreateModelSql(Database, boolean, boolean)} instead.
      */
     String getCreateTablesSql(Database model, boolean dropTablesFirst, boolean continueOnError);
 
@@ -371,7 +370,6 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
-     * @deprecated Use {@link #getCreateModelSql(Database, CreationParameters, boolean, boolean)} instead.
      */
     String getCreateTablesSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError);
 
@@ -382,7 +380,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createDatabase(Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Creates the tables defined in the database model.
@@ -392,7 +390,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createDatabase(Connection connection, Database model, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Creates the tables defined in the database model.
@@ -402,7 +400,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createDatabase(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Creates the tables defined in the database model.
@@ -413,7 +411,7 @@ public interface Platform {
      * @param dropTablesFirst Whether to drop the tables prior to creating them (anew)
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      */
-    void createModel(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
+    void createDatabase(Connection connection, Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError) throws DatabaseOperationException;
 
     /**
      * Returns the SQL for creating the tables defined in the database model.
@@ -423,7 +421,7 @@ public interface Platform {
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
      */
-    String getCreateModelSql(Database model, boolean dropTablesFirst, boolean continueOnError);
+    String getCreateDatabaseSql(Database model, boolean dropTablesFirst, boolean continueOnError);
 
     /**
      * Returns the SQL for creating the tables defined in the database model.
@@ -434,7 +432,7 @@ public interface Platform {
      * @param continueOnError Whether to continue executing the sql commands when an error occurred
      * @return The SQL statements
      */
-    String getCreateModelSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError);
+    String getCreateDatabaseSql(Database model, CreationParameters params, boolean dropTablesFirst, boolean continueOnError);
 
     /**
      * Returns the necessary changes to apply to the current database to make it the desired one.
@@ -819,9 +817,9 @@ public interface Platform {
      *
      * @param model The database model to use
      * @param sql   The sql query to perform
-     * @return An iterator for the dyna beans resulting from the query
+     * @return An iterator for the dyna rows resulting from the query
      */
-    default ModelBasedResultSetIterator query(Database model, String sql) throws DatabaseOperationException {
+    default TableRowIterator query(Database model, String sql) throws DatabaseOperationException {
         return query(model, sql, (Table[]) null);
     }
 
@@ -831,9 +829,9 @@ public interface Platform {
      * @param model      The database model to use
      * @param sql        The sql query to perform
      * @param parameters The query parameter values
-     * @return An iterator for the dyna beans resulting from the query
+     * @return An iterator for the dyna rows resulting from the query
      */
-    default ModelBasedResultSetIterator query(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException {
+    default TableRowIterator query(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException {
         return query(model, sql, parameters, null);
     }
 
@@ -843,9 +841,9 @@ public interface Platform {
      * @param model      The database model to use
      * @param sql        The sql query to perform
      * @param queryHints The tables that are queried (optional)
-     * @return An iterator for the dyna beans resulting from the query
+     * @return An iterator for the dyna rows resulting from the query
      */
-    ModelBasedResultSetIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
+    TableRowIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException;
 
     /**
      * Performs the given parameterized SQL query returning an iterator over the results.
@@ -854,71 +852,71 @@ public interface Platform {
      * @param sql        The sql query to perform
      * @param parameters The query parameter values
      * @param queryHints The tables that are queried (optional)
-     * @return An iterator for the dyna beans resulting from the query
+     * @return An iterator for the dyna rows resulting from the query
      */
-    ModelBasedResultSetIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException;
+    TableRowIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException;
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
-     * In contrast to the {@link #query(Database, String)} method all beans will be
+     * Queries for a list of dyna rows representing rows of the given query.
+     * In contrast to the {@link #query(Database, String)} method all rows will be
      * materialized and the connection will be closed before returning the beans.
      *
      * @param model The database model to use
      * @param sql   The sql query
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     default List<TableRow> fetch(Database model, String sql) throws DatabaseOperationException {
         return fetch(model, sql, (Table[]) null, 0, -1);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
+     * Queries for a list of dyna rows representing rows of the given query.
      * In contrast to the {@link #query(Database, String, Collection)} method
-     * all beans will be materialized and the connection will be closed before
+     * all rows will be materialized and the connection will be closed before
      * returning the beans.
      *
      * @param model      The database model to use
      * @param sql        The parameterized query
      * @param parameters The parameter values
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     default List<TableRow> fetch(Database model, String sql, Collection<?> parameters) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, 0, -1);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
-     * In contrast to the {@link #query(Database, String)} method all beans will be
+     * Queries for a list of dyna rows representing rows of the given query.
+     * In contrast to the {@link #query(Database, String)} method all rows will be
      * materialized and the connection will be closed before returning the beans.
      *
-     * @param model      The database model to use
+     * @param database      The database model to use
      * @param sql        The sql query
      * @param queryHints The tables that are queried (optional)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
-    default List<TableRow> fetch(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
-        return fetch(model, sql, queryHints, 0, -1);
+    default List<TableRow> fetch(Database database, String sql, Table[] queryHints) throws DatabaseOperationException {
+        return fetch(database, sql, queryHints, 0, -1);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
+     * Queries for a list of dyna rows representing rows of the given query.
      * In contrast to the {@link #query(Database, String, Collection)} method
-     * all beans will be materialized and the connection will be closed before
+     * all rows will be materialized and the connection will be closed before
      * returning the beans.
      *
      * @param model      The database model to use
      * @param sql        The parameterized query
      * @param parameters The parameter values
      * @param queryHints The tables that are queried (optional)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     default List<TableRow> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         return fetch(model, sql, parameters, queryHints, 0, -1);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
-     * In contrast to the {@link #query(Database, String)} method all beans will be
+     * Queries for a list of dyna rows representing rows of the given query.
+     * In contrast to the {@link #query(Database, String)} method all rows will be
      * materialized and the connection will be closed before returning the beans.
      * Also, the two int parameters specify which rows of the result set to use.
      * If there are more rows than desired, they will be ignored (and not read
@@ -928,16 +926,16 @@ public interface Platform {
      * @param sql   The sql query
      * @param start Row number to start from (0 for first row)
      * @param end   Row number to stop at (inclusively; -1 for last row)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     default List<TableRow> fetch(Database model, String sql, int start, int end) throws DatabaseOperationException {
         return fetch(model, sql, (Table[]) null, start, end);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
+     * Queries for a list of dyna rows representing rows of the given query.
      * In contrast to the {@link #query(Database, String, Collection)} method all
-     * beans will be materialized and the connection will be closed before returning
+     * rows will be materialized and the connection will be closed before returning
      * the beans. Also, the two int parameters specify which rows of the result set
      * to use. If there are more rows than desired, they will be ignored (and not
      * read from the database).
@@ -947,16 +945,16 @@ public interface Platform {
      * @param parameters The parameter values
      * @param start      Row number to start from (0 for first row)
      * @param end        Row number to stop at (inclusively; -1 for last row)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     default List<TableRow> fetch(Database model, String sql, Collection<?> parameters, int start, int end) throws DatabaseOperationException {
         return fetch(model, sql, parameters, null, start, end);
     }
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
+     * Queries for a list of dyna rows representing rows of the given query.
      * In contrast to the {@link #query(Database, String, Table[])} method all
-     * beans will be materialized and the connection will be closed before
+     * rows will be materialized and the connection will be closed before
      * returning the beans. Also, the two int parameters specify which rows of
      * the result set to use. If there are more rows than desired, they will be
      * ignored (and not read from the database).
@@ -966,14 +964,14 @@ public interface Platform {
      * @param queryHints The tables that are queried (optional)
      * @param start      Row number to start from (0 for first row)
      * @param end        Row number to stop at (inclusively; -1 for last row)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     List<TableRow> fetch(Database model, String sql, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
     /**
-     * Queries for a list of dyna beans representing rows of the given query.
+     * Queries for a list of dyna rows representing rows of the given query.
      * In contrast to the {@link #query(Database, String, Collection, Table[])}
-     * method all beans will be materialized and the connection will be closed
+     * method all rows will be materialized and the connection will be closed
      * before returning the beans. Also, the two int parameters specify which
      * rows of the result set to use. If there are more rows than desired, they
      * will be ignored (and not read from the database).
@@ -984,7 +982,7 @@ public interface Platform {
      * @param queryHints The tables that are queried (optional)
      * @param start      Row number to start from (0 for first row)
      * @param end        Row number to stop at (inclusively; -1 for last row)
-     * @return The dyna beans resulting from the query
+     * @return The dyna rows resulting from the query
      */
     List<TableRow> fetch(Database model, String sql, Collection<?> parameters, Table[] queryHints, int start, int end) throws DatabaseOperationException;
 
@@ -1057,19 +1055,19 @@ public interface Platform {
     void insert(Connection connection, Database model, TableRow dynaBean) throws DatabaseOperationException;
 
     /**
-     * Inserts the given beans in the database, assuming the primary key values are specified.
-     * Note that a batch insert is used for subsequent beans of the same type.
+     * Inserts the given rows in the database, assuming the primary key values are specified.
+     * Note that a batch insert is used for subsequent rows of the same type.
      * Also, the properties for the primary keys are not updated in the beans. Hence, you should
      * not use this method when the primary key values are defined by the database (via a sequence
      * or identity constraint).
      *
      * @param model     The database model to use
-     * @param dynaBeans The beans to insert
+     * @param dynaBeans The rows to insert
      */
     void insert(Database model, Collection<TableRow> dynaBeans) throws DatabaseOperationException;
 
     /**
-     * Inserts the given beans. Note that a batch insert is used for subsequent beans of the same type.
+     * Inserts the given beans. Note that a batch insert is used for subsequent rows of the same type.
      * Also, the properties for the primary keys are not updated in the beans.  Hence, you should
      * not use this method when the primary key values are defined by the database (via a sequence
      * or identity constraint).

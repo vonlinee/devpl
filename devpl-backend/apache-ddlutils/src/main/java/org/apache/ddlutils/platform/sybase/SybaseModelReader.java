@@ -6,6 +6,7 @@ import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class SybaseModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected void readIndex(DatabaseMetaDataWrapper metaData, RowData values, Map<String, Index> knownIndices) throws SQLException {
+    protected void readIndex(DatabaseMetaDataWrapper metaData, ContextMap values, Map<String, Index> knownIndices) throws SQLException {
         if (getPlatform().isDelimitedIdentifierModeOn()) {
             String indexName = (String) values.get("INDEX_NAME");
 

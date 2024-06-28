@@ -1,7 +1,6 @@
 package io.devpl.fxui.controller.mbg;
 
 import io.devpl.codegen.generator.config.ProjectConfiguration;
-import io.devpl.codegen.jdbc.meta.TableMetadata;
 import io.devpl.common.utils.MavenProjectAnalyser;
 import io.devpl.common.utils.ProjectAnalyser;
 import io.devpl.fxui.bridge.MyBatisPlusGenerator;
@@ -26,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.TextAlignment;
+import org.apache.ddlutils.jdbc.meta.TableMetadata;
 
 import java.io.File;
 import java.net.URL;

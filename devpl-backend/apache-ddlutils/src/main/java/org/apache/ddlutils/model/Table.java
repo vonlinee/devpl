@@ -148,6 +148,13 @@ public class Table extends SchemaObject {
         return _columns.toArray(new Column[0]);
     }
 
+    public Table() {
+    }
+
+    public Table(String name) {
+        this.setName(name);
+    }
+
     /**
      * Adds the given column.
      *

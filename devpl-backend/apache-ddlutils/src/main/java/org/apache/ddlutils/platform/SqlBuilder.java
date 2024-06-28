@@ -4,6 +4,7 @@ import org.apache.ddlutils.DdlUtilsException;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -359,13 +360,13 @@ public abstract class SqlBuilder {
 
     /**
      * Outputs the DDL to create the given temporary table. Per default this is simply
-     * a call to {@link #createTable(Database, Table, RowData)}.
+     * a call to {@link #createTable(Database, Table, ContextMap)}.
      *
      * @param database   The database model
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void createTemporaryTable(Database database, Table table, RowData parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, ContextMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 
@@ -454,7 +455,7 @@ public abstract class SqlBuilder {
      * @param table    The table
      */
     public void createTable(Database database, Table table) throws IOException {
-        createTable(database, table, new RowData());
+        createTable(database, table, new ContextMap());
     }
 
     /**
@@ -465,7 +466,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         writeTableComment(table);
         beforeCreateTableStmtStart(database, table, parameters);
         writeTableCreationStmt(database, table, parameters);
@@ -478,7 +479,15 @@ public abstract class SqlBuilder {
         }
     }
 
-    protected void beforeCreateTableStmtStart(Database database, Table table, RowData parameters) throws IOException {
+    /**
+     * before create table start
+     *
+     * @param database   database
+     * @param table      table
+     * @param parameters param
+     * @throws IOException error
+     */
+    protected void beforeCreateTableStmtStart(Database database, Table table, ContextMap parameters) throws IOException {
 
     }
 
@@ -720,34 +729,37 @@ public abstract class SqlBuilder {
      * Creates the SQL for inserting an object into the specified table.
      * If values are given then a concrete insert statement is created, otherwise an
      * insert statement usable in a prepared statement is build.
-     * TODO 类型处理
      *
      * @param table           The table
      * @param columnValues    The columns values indexed by the column names
      * @param genPlaceholders Whether to generate value placeholders for a
-     *                        prepared statement 生成类似 INSERT INTO (col1, col2) VALUES (?, ?)
+     *                        prepared statement, for example: INSERT INTO table(col1, col2) VALUES (?, ?)
      * @return The insertion sql
      */
-    public String getInsertSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
+    public String getInsertSql(Table table, ResultSetRow columnValues, boolean genColumnName, boolean genPlaceholders) {
         StringBuilder builder = new StringBuilder("INSERT INTO ");
         builder.append(getDelimitedIdentifier(getTableName(table)));
+        // insert columns
         builder.append(" (");
-
         boolean addComma = false;
-        for (int idx = 0; idx < table.getColumnCount(); idx++) {
-            Column column = table.getColumn(idx);
-            if (columnValues.containsKey(column.getName())) {
-                if (addComma) {
-                    builder.append(", ");
+        if (genColumnName) {
+            for (int idx = 0; idx < table.getColumnCount(); idx++) {
+                Column column = table.getColumn(idx);
+                if (columnValues.hasColumn(column.getName())) {
+                    if (addComma) {
+                        builder.append(", ");
+                    }
+                    builder.append(getDelimitedIdentifier(column.getName()));
+                    addComma = true;
                 }
-                builder.append(getDelimitedIdentifier(column.getName()));
-                addComma = true;
             }
+            builder.append(")");
         }
-        builder.append(") VALUES (");
+
+        builder.append(" VALUES (");
         if (genPlaceholders) {
             addComma = false;
-            for (int idx = 0; idx < columnValues.size(); idx++) {
+            for (int idx = 0; idx < columnValues.getColumnCount(); idx++) {
                 if (addComma) {
                     builder.append(", ");
                 }
@@ -758,11 +770,11 @@ public abstract class SqlBuilder {
             addComma = false;
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
                 Column column = table.getColumn(idx);
-                if (columnValues.containsKey(column.getName())) {
+                if (columnValues.hasColumn(column.getName())) {
                     if (addComma) {
                         builder.append(", ");
                     }
-                    builder.append(getInsertColumnValue(column, columnValues.get(column.getName())));
+                    builder.append(getInsertColumnValue(column, columnValues.getColumnValue(column.getName())));
                     addComma = true;
                 }
             }
@@ -785,7 +797,7 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map<String, Object> columnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, ResultSetRow columnValues, boolean genPlaceholders) {
         StringBuilder builder = new StringBuilder("UPDATE ");
         boolean addSep = false;
         builder.append(getDelimitedIdentifier(getTableName(table)));
@@ -793,7 +805,7 @@ public abstract class SqlBuilder {
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-            if (!column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
+            if (!column.isPrimaryKey() && columnValues.hasColumn(column.getName())) {
                 if (addSep) {
                     builder.append(", ");
                 }
@@ -802,7 +814,7 @@ public abstract class SqlBuilder {
                 if (genPlaceholders) {
                     builder.append("?");
                 } else {
-                    builder.append(getUpdateColumnValue(column, columnValues.get(column.getName())));
+                    builder.append(getUpdateColumnValue(column, columnValues.getColumnValue(column.getName())));
                 }
                 addSep = true;
             }
@@ -812,7 +824,7 @@ public abstract class SqlBuilder {
         StringBuilder whereClause = new StringBuilder();
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-            if (column.isPrimaryKey() && columnValues.containsKey(column.getName())) {
+            if (column.isPrimaryKey() && columnValues.hasColumn(column.getName())) {
                 if (addSep) {
                     whereClause.append(" AND ");
                 }
@@ -821,7 +833,7 @@ public abstract class SqlBuilder {
                 if (genPlaceholders) {
                     whereClause.append("?");
                 } else {
-                    whereClause.append(getValueAsString(column, columnValues.get(column.getName())));
+                    whereClause.append(getValueAsString(column, columnValues.getColumnValue(column.getName())));
                 }
                 addSep = true;
             }
@@ -845,7 +857,7 @@ public abstract class SqlBuilder {
      *                        prepared statement (both for the pk values and the object values)
      * @return The update sql
      */
-    public String getUpdateSql(Table table, Map<String, Object> oldColumnValues, Map<String, Object> newColumnValues, boolean genPlaceholders) {
+    public String getUpdateSql(Table table, ResultSetRow oldColumnValues, ResultSetRow newColumnValues, boolean genPlaceholders) {
         StringBuilder builder = new StringBuilder("UPDATE ");
         boolean addSep = false;
         builder.append(getDelimitedIdentifier(getTableName(table)));
@@ -853,8 +865,7 @@ public abstract class SqlBuilder {
 
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
-            if (newColumnValues.containsKey(column.getName())) {
+            if (newColumnValues.hasColumn(column.getName())) {
                 if (addSep) {
                     builder.append(", ");
                 }
@@ -863,7 +874,7 @@ public abstract class SqlBuilder {
                 if (genPlaceholders) {
                     builder.append("?");
                 } else {
-                    builder.append(getValueAsString(column, newColumnValues.get(column.getName())));
+                    builder.append(getValueAsString(column, newColumnValues.getColumnValue(column.getName())));
                 }
                 addSep = true;
             }
@@ -872,7 +883,7 @@ public abstract class SqlBuilder {
         addSep = false;
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-            if (oldColumnValues.containsKey(column.getName())) {
+            if (oldColumnValues.hasColumn(column.getName())) {
                 if (addSep) {
                     builder.append(" AND ");
                 }
@@ -881,7 +892,7 @@ public abstract class SqlBuilder {
                 if (genPlaceholders) {
                     builder.append("?");
                 } else {
-                    builder.append(getValueAsString(column, oldColumnValues.get(column.getName())));
+                    builder.append(getValueAsString(column, oldColumnValues.getColumnValue(column.getName())));
                 }
                 addSep = true;
             }
@@ -903,7 +914,7 @@ public abstract class SqlBuilder {
      *                        prepared statement
      * @return The delete sql
      */
-    public String getDeleteSql(Table table, Map<String, Object> pkValues, boolean genPlaceholders) {
+    public String getDeleteSql(Table table, ResultSetRow pkValues, boolean genPlaceholders) {
         StringBuilder buffer = new StringBuilder("DELETE FROM ");
         boolean addSep = false;
 
@@ -914,7 +925,7 @@ public abstract class SqlBuilder {
             Column[] pkCols = table.getPrimaryKeyColumns();
 
             for (Column column : pkCols) {
-                if (pkValues.containsKey(column.getName())) {
+                if (pkValues.hasColumn(column.getName())) {
                     if (addSep) {
                         buffer.append(" AND ");
                     }
@@ -923,7 +934,7 @@ public abstract class SqlBuilder {
                     if (genPlaceholders) {
                         buffer.append("?");
                     } else {
-                        buffer.append(getValueAsString(column, pkValues.get(column.getName())));
+                        buffer.append(getValueAsString(column, pkValues.getColumnValue(column.getName())));
                     }
                     addSep = true;
                 }
@@ -967,7 +978,6 @@ public abstract class SqlBuilder {
      */
     protected String getValueAsString(@NotNull Column column, Object value) {
         StringBuilder result = new StringBuilder();
-
         String valueQuoteToken = getValueQuoteToken();
         switch (column.getTypeCode()) {
             case Types.DATE -> {
@@ -989,11 +999,7 @@ public abstract class SqlBuilder {
                 result.append(valueQuoteToken);
             }
             case Types.TIMESTAMP -> {
-                result.append(valueQuoteToken);
-                // TODO: SimpleDateFormat does not support nano seconds so we would
-                //       need a custom date formatter for timestamps
-                result.append(value);
-                result.append(valueQuoteToken);
+                result.append(valueQuoteToken).append(value).append(valueQuoteToken);
             }
             case Types.REAL, Types.NUMERIC, Types.FLOAT, Types.DOUBLE, Types.DECIMAL -> {
                 result.append(getValueQuoteToken());
@@ -1096,7 +1102,7 @@ public abstract class SqlBuilder {
      */
     protected void writeTableComment(Table table) throws IOException {
         printLineComment("-----------------------------------------------------------------------");
-        printLineComment(getTableName(table));
+        printLineComment("table structure of " + getTableName(table));
         printLineComment("-----------------------------------------------------------------------");
         println();
     }
@@ -1120,7 +1126,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmt(Database database, Table table, RowData parameters) throws IOException {
+    protected void writeTableCreationStmt(Database database, Table table, ContextMap parameters) throws IOException {
         print("CREATE TABLE ");
         printlnIdentifier(getTableName(table));
         println("(");
@@ -1148,7 +1154,7 @@ public abstract class SqlBuilder {
      * @param table      The table
      * @param parameters Additional platform-specific parameters for the table creation
      */
-    protected void writeTableCreationStmtEnding(Table table, RowData parameters) throws IOException {
+    protected void writeTableCreationStmtEnding(Table table, ContextMap parameters) throws IOException {
         printEndOfStatement();
     }
 
@@ -1157,7 +1163,7 @@ public abstract class SqlBuilder {
      *
      * @param table The table
      */
-    protected void writeColumns(Table table, RowData parameters) throws IOException {
+    protected void writeColumns(Table table, ContextMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             printIndent();
             Column column = table.getColumn(idx);
@@ -1166,7 +1172,16 @@ public abstract class SqlBuilder {
         }
     }
 
-    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, RowData param) throws IOException {
+    /**
+     * column definition is at the end
+     *
+     * @param table       table
+     * @param column      column
+     * @param columnIndex column index
+     * @param param       param
+     * @throws IOException error
+     */
+    protected void writeColumnDefStmtEnding(Table table, Column column, int columnIndex, ContextMap param) throws IOException {
         if (columnIndex < table.getColumnCount() - 1) {
             println(",");
         }

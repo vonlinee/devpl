@@ -2,8 +2,7 @@ package org.apache.ddlutils.platform;
 
 import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.model.*;
-import org.apache.ddlutils.util.ListOrderedMap;
-import org.apache.ddlutils.util.Utils;
+import org.apache.ddlutils.util.OrderedMap;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -14,11 +13,11 @@ import java.util.NoSuchElementException;
 /**
  * This is an iterator that is specifically targeted at traversing result sets.
  */
-public class ModelBasedResultSetIterator implements Iterator<TableRow> {
+public class TableRowIterator implements Iterator<TableRow> {
     /**
      * Maps column names to properties.
      */
-    private final Map<String, String> _columnsToProperties = new ListOrderedMap<>();
+    private final Map<String, String> _columnsToProperties = new OrderedMap<>();
     /**
      * The platform.
      */
@@ -30,7 +29,7 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
     /**
      * The dyna class to use for creating beans.
      */
-    private TableModel _dynaClass;
+    private TableModel tableModel;
     /**
      * Whether the case of identifiers matters.
      */
@@ -63,7 +62,7 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
      * @param cleanUpAfterFinish Whether to close the statement and connection after finishing
      *                           the iteration, upon on exception, or when this iterator is garbage collected
      */
-    public ModelBasedResultSetIterator(PlatformImplBase platform, Database model, ResultSet resultSet, Table[] queryHints, boolean cleanUpAfterFinish) throws DatabaseOperationException {
+    public TableRowIterator(PlatformImplBase platform, Database model, ResultSet resultSet, Table[] queryHints, boolean cleanUpAfterFinish) throws DatabaseOperationException {
         if (resultSet != null) {
             _platform = platform;
             _resultSet = resultSet;
@@ -83,7 +82,6 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
 
     /**
      * Initializes this iterator from the result set metadata.
-     * TODO
      *
      * @param model The database model
      */
@@ -93,31 +91,29 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
         boolean singleKnownTable = true;
         for (int idx = 1; idx <= metaData.getColumnCount(); idx++) {
             String columnName = metaData.getColumnName(idx);
-            String tableOfColumn = metaData.getTableName(idx);
+            String tableNameOfColumn = metaData.getTableName(idx);
             Table table = null;
-
-            if (!Utils.isBlank(tableOfColumn)) {
+            if (tableNameOfColumn != null && tableNameOfColumn.length() > 1 && !tableNameOfColumn.isBlank()) {
                 // jConnect might return a table name enclosed in quotes
-                if (tableOfColumn.startsWith("\"") && tableOfColumn.endsWith("\"") && (tableOfColumn.length() > 1)) {
-                    tableOfColumn = tableOfColumn.substring(1, tableOfColumn.length() - 1);
+                if (tableNameOfColumn.startsWith("\"") && tableNameOfColumn.endsWith("\"")) {
+                    tableNameOfColumn = tableNameOfColumn.substring(1, tableNameOfColumn.length() - 1);
                 }
                 // the JDBC driver gave us enough metadata info
-                table = model.findTable(tableOfColumn, _caseSensitive);
+                table = model.findTable(tableNameOfColumn, _caseSensitive);
             }
             if (table == null) {
                 // not enough info in the metadata of the result set, lets try the
                 // user-supplied query hints
                 table = _preparedQueryHints.get(_caseSensitive ? columnName : columnName.toLowerCase());
-                tableOfColumn = (table == null ? null : table.getName());
+                tableNameOfColumn = table == null ? null : table.getName();
             }
             if (tableName == null) {
-                tableName = tableOfColumn;
-            } else if (!tableName.equals(tableOfColumn)) {
+                tableName = tableNameOfColumn;
+            } else if (!tableName.equals(tableNameOfColumn)) {
                 singleKnownTable = false;
             }
 
             String propName = columnName;
-
             if (table != null) {
                 Column column = table.findColumn(columnName, _caseSensitive);
                 if (column != null) {
@@ -126,16 +122,12 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
             }
             _columnsToProperties.put(columnName, propName);
         }
-        if (singleKnownTable && (tableName != null)) {
-            _dynaClass = model.getClassForTable(tableName);
+        if (singleKnownTable && tableName != null) {
+            // get table model from cache
+            tableModel = model.getTableModel(tableName);
         } else {
-            ColumnProperty[] props = new ColumnProperty[_columnsToProperties.size()];
-            int idx = 0;
-            for (Iterator<String> it = _columnsToProperties.values().iterator(); it.hasNext(); idx++) {
-                props[idx] = new ColumnProperty(it.next());
-            }
-            throw new UnsupportedOperationException();
-            // _dynaClass = new BasicDynaClass("result", BasicDynaBean.class, props);
+            ColumnProperty[] props = _columnsToProperties.values().stream().map(ColumnProperty::new).toArray(ColumnProperty[]::new);
+            tableModel = new TableModel(new Table(), props);
         }
     }
 
@@ -177,12 +169,8 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
             throw new NoSuchElementException("No more elements in the result set");
         } else {
             try {
-                TableRow bean = _dynaClass.newInstance();
-                Table table = null;
-                if (bean != null) {
-                    TableModel dynaClass = bean.getTableModel();
-                    table = dynaClass.getTable();
-                }
+                TableRow row = tableModel.createRow();
+                Table table = tableModel.getTable();
                 for (Map.Entry<String, String> entry : _columnsToProperties.entrySet()) {
                     String columnName = entry.getKey();
                     String propName = entry.getValue();
@@ -191,10 +179,10 @@ public class ModelBasedResultSetIterator implements Iterator<TableRow> {
                         curTable = _preparedQueryHints.get(_caseSensitive ? columnName : columnName.toLowerCase());
                     }
                     Object value = _platform.getObjectFromResultSet(_resultSet, columnName, curTable);
-                    bean.setColumnValue(propName, value);
+                    row.setColumnValue(propName, value);
                 }
                 _needsAdvancing = true;
-                return bean;
+                return row;
             } catch (Exception ex) {
                 cleanUp();
                 throw new DatabaseOperationException("Exception while reading the row from the result set", ex);

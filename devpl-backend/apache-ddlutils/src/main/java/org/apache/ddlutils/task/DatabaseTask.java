@@ -8,6 +8,7 @@ import org.apache.ddlutils.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,29 +29,9 @@ public abstract class DatabaseTask extends Task {
      */
     protected Logger _log = LoggerFactory.getLogger(getClass());
     /**
-     * the environment when task is executing.
-     */
-    private TaskEnvironment environment;
-    /**
-     * Whether to use simple logging (that the Ant task configures itself via the {@link #_verbosity} setting.
-     */
-    private boolean _simpleLogging = true;
-    /**
      * The verbosity of the task's debug output.
      */
     private VerbosityLevel _verbosity;
-
-    /**
-     * Specifies whether simple logging (configured by the task via the <code>verbosity</code>
-     * setting) shall be used, or whether logging is configured outside the task
-     * (e.g. via a log4j properties file).
-     *
-     * @param simpleLogging Whether to use simple logging or not
-     *                      Per default, simple logging is enabled.
-     */
-    public void setSimpleLogging(boolean simpleLogging) {
-        _simpleLogging = simpleLogging;
-    }
 
     /**
      * Specifies the verbosity of the task's debug output.
@@ -83,17 +64,9 @@ public abstract class DatabaseTask extends Task {
      *             Per default, DdlUtils tries to determine the database type via JDBC.
      */
     public void setDatabaseType(String type) {
-        if ((type != null) && (!type.isEmpty())) {
+        if (!StringUtils.isEmpty(type)) {
             _platformConf.setDatabaseType(type);
         }
-    }
-
-    public TaskEnvironment getEnvironment() {
-        return environment;
-    }
-
-    public void setEnvironment(TaskEnvironment environment) {
-        this.environment = environment;
     }
 
     /**
@@ -101,7 +74,7 @@ public abstract class DatabaseTask extends Task {
      *
      * @return The data source
      */
-    public PooledDataSourceWrapper getDataSource() {
+    public DataSource getDataSource() {
         return _platformConf.getDataSource();
     }
 
@@ -255,6 +228,10 @@ public abstract class DatabaseTask extends Task {
      */
     protected Platform getPlatform() {
         return _platformConf.getPlatform();
+    }
+
+    public void setPlatform(Platform platform) {
+        _platformConf.setPlatform(platform);
     }
 
     /**

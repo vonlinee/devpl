@@ -5,6 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.io.IOException;
 
@@ -52,10 +53,9 @@ public class PostgreSqlBuilder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         for (int idx = 0; idx < table.getColumnCount(); idx++) {
             Column column = table.getColumn(idx);
-
             if (column.isAutoIncrement()) {
                 createAutoIncrementSequence(table, column);
             }

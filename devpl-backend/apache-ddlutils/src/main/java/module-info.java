@@ -10,4 +10,5 @@ module apache.ddlutils {
     exports org.apache.ddlutils.jdbc.meta;
     exports org.apache.ddlutils;
     exports org.apache.ddlutils.alteration;
+    exports org.apache.ddlutils.util;
 }

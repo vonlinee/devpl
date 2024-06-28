@@ -5,12 +5,15 @@ package org.apache.ddlutils.model;
  */
 public class TableRow {
 
+    /**
+     * relational table model
+     */
     private final TableModel tableModel;
 
     /**
      * all data of columns in this table
      */
-    private final RowData rowData = new RowData();
+    private final ResultSetRow rowData;
 
     /**
      * Creates a new dyna bean of the given class.
@@ -19,6 +22,10 @@ public class TableRow {
      */
     public TableRow(TableModel tableModel) {
         this.tableModel = tableModel;
+        this.rowData = new ResultSetRow();
+        for (ColumnProperty property : this.tableModel.getProperties()) {
+            this.rowData.addColumn(property.getName(), null);
+        }
     }
 
     public TableModel getTableModel() {
@@ -48,15 +55,15 @@ public class TableRow {
      * @return 属性值
      */
     public Object getColumnValue(String name) {
-        return rowData.get(name);
+        return rowData.getColumnValue(name);
     }
 
     /**
      * @param name  属性名
      * @param value 属性值
      */
-    public void setColumnValue(String name, Object value) {
-        rowData.put(name, value);
+    public final void setColumnValue(String name, Object value) {
+        rowData.setColumnValue(name, value);
     }
 
     @Override
@@ -85,5 +92,9 @@ public class TableRow {
             }
         }
         return false;
+    }
+
+    public ResultSetRow getRowData() {
+        return rowData;
     }
 }

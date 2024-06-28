@@ -1,5 +1,7 @@
 package org.apache.ddlutils.model;
 
+import org.apache.ddlutils.util.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,16 +52,12 @@ public class TableModel {
      * @param table The table
      * @return The dyna class for the table
      */
-    public static TableModel newInstance(Table table) {
-        List<ColumnProperty> properties = new ArrayList<>();
-        if (table != null) {
-            for (Column column : table.getColumns()) {
-                properties.add(new ColumnProperty(column));
-            }
+    public static TableModel of(Table table) {
+        ColumnProperty[] properties = new ColumnProperty[table.getColumnCount()];
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            properties[i] = new ColumnProperty(table.getColumn(i));
         }
-        ColumnProperty[] array = new ColumnProperty[properties.size()];
-        properties.toArray(array);
-        return new TableModel(table, array);
+        return new TableModel(table, properties);
     }
 
     /**
@@ -100,14 +98,7 @@ public class TableModel {
         if (_primaryKeyProperties == null) {
             initPrimaryKeys();
         }
-        return swallowCopy(_primaryKeyProperties);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> T[] swallowCopy(T[] src) {
-        Object[] result = new Object[src.length];
-        System.arraycopy(src, 0, result, 0, src.length);
-        return (T[]) result;
+        return Utils.swallowCopy(_primaryKeyProperties);
     }
 
     /**
@@ -119,7 +110,7 @@ public class TableModel {
         if (_nonPrimaryKeyProperties == null) {
             initPrimaryKeys();
         }
-        return swallowCopy(_nonPrimaryKeyProperties);
+        return Utils.swallowCopy(_nonPrimaryKeyProperties);
     }
 
     /**
@@ -152,10 +143,6 @@ public class TableModel {
         return name;
     }
 
-    public TableRow newInstance() {
-        return new TableRow(this);
-    }
-
     public ColumnProperty getProperty(String propertyName) {
         if (this.properties != null) {
             for (ColumnProperty property : this.properties) {
@@ -165,5 +152,14 @@ public class TableModel {
             }
         }
         return null;
+    }
+
+    /**
+     * create an empty row
+     *
+     * @return empty row, all column values is null.
+     */
+    public TableRow createRow() {
+        return new TableRow(this);
     }
 }

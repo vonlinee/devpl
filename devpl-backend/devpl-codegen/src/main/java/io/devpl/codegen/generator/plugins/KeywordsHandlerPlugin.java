@@ -7,6 +7,7 @@ import io.devpl.codegen.db.keywords.PostgreSqlKeyWordsHandler;
 import io.devpl.codegen.generator.ColumnGeneration;
 import io.devpl.codegen.generator.TableGeneration;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
+import org.apache.ddlutils.platform.DBType;
 
 /**
  * sql列名称关键字处理
@@ -18,7 +19,7 @@ public class KeywordsHandlerPlugin extends TableGenerationPlugin {
         JdbcConfiguration jdbcConfiguration = context.getObject(JdbcConfiguration.class);
         ColumnKeyWordsHandler keyWordsHandler = jdbcConfiguration.getKeyWordsHandler();
         if (keyWordsHandler == null) {
-            DBTypeEnum dbType = jdbcConfiguration.getDbType();
+            DBType dbType = jdbcConfiguration.getDbType();
             if (dbType == DBTypeEnum.MYSQL) {
                 keyWordsHandler = new MySqlKeyWordsHandler();
             } else if (dbType == DBTypeEnum.POSTGRE_SQL) {

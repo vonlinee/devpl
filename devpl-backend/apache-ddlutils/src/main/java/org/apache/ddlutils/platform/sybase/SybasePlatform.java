@@ -117,7 +117,6 @@ public class SybasePlatform extends PlatformImplBase {
                         len = stream.read(buf);
                         if (len > 0) {
                             byte[] newResult = new byte[result.length + len];
-
                             System.arraycopy(result, 0, newResult, 0, result.length);
                             System.arraycopy(buf, 0, newResult, result.length, len);
                             result = newResult;
@@ -170,13 +169,13 @@ public class SybasePlatform extends PlatformImplBase {
     }
 
     @Override
-    public ModelBasedResultSetIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
+    public TableRowIterator query(Database model, String sql, Collection<?> parameters, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, parameters, queryHints);
     }
 
     @Override
-    public ModelBasedResultSetIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
+    public TableRowIterator query(Database model, String sql, Table[] queryHints) throws DatabaseOperationException {
         setTextSize(MAX_TEXT_SIZE);
         return super.query(model, sql, queryHints);
     }

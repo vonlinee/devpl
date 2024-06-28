@@ -43,7 +43,7 @@ public class DatabaseToDdlTask extends DatabaseTask {
     /**
      * The name of the model read from the database.
      */
-    private String _modelName = "unnamed";
+    private String databaseName = "unnamed";
     /**
      * The names of the tables to read.
      */
@@ -66,12 +66,12 @@ public class DatabaseToDdlTask extends DatabaseTask {
      * for the <code>writeSchemaToFile</code> sub-task as it ensures that the generated
      * XML defines a valid model.
      *
-     * @param modelName The model name. Use <code>null</code> or an empty string for the default name
+     * @param databaseName The database name. Use <code>null</code> or an empty string for the default name
      *                  By default, DldUtils uses the schema name returned from the database
      *                  or <code>"default"</code> if no schema name was returned by the database.
      */
-    public void setModelName(String modelName) {
-        _modelName = modelName;
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
     }
 
     /**
@@ -228,13 +228,13 @@ public class DatabaseToDdlTask extends DatabaseTask {
             throw new DdlUtilsTaskException("No database specified.");
         }
         try {
-            Database model = getPlatform().readModelFromDatabase(_modelName,
+            Database model = getPlatform().readModelFromDatabase(databaseName,
                 getPlatformConfiguration().getCatalogPattern(),
                 getPlatformConfiguration().getSchemaPattern(),
                 getTableTypes());
 
-            if ((_includeTableNames != null) || (_includeTableNameRegExp != null) ||
-                (_excludeTableNames != null) || (_excludeTableNameRegExp != null)) {
+            if (_includeTableNames != null || _includeTableNameRegExp != null ||
+                _excludeTableNames != null || _excludeTableNameRegExp != null) {
 
                 if (_includeTableNames != null) {
                     Table[] tables = model.findTables(_includeTableNames, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());

@@ -21,7 +21,7 @@ public class ConnectionConfigServiceImpl implements ConnectionConfigService {
         try (Connection connection = AppConfig.getConnection()) {
             return DBUtils.queryBeanList(connection, sql, ConnectionConfig.class);
         } catch (Exception exception) {
-            ExceptionDialog.report(exception);
+            ExceptionDialog.show(exception);
         }
         return Collections.emptyList();
     }
@@ -34,7 +34,7 @@ public class ConnectionConfigServiceImpl implements ConnectionConfigService {
         try (Connection connection = AppConfig.getConnection()) {
             return DBUtils.insert(connection, sql) > 0;
         } catch (Exception exception) {
-            ExceptionDialog.report(exception);
+            ExceptionDialog.show(exception);
         }
         return false;
     }

@@ -3,7 +3,7 @@ package org.apache.ddlutils;
 import java.io.Serial;
 
 /**
- * This exception is thrown when something dealing with sql dyna beans or classes failed.
+ * This exception is thrown when something dealing with sql dyna rows or classes failed.
  */
 public class DatabaseObjectRelationMappingException extends DdlUtilsException {
     /**

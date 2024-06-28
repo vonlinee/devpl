@@ -21,7 +21,6 @@ public class RemovePrimaryKeyChange extends TableChangeBase {
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
         Column[] pkCols = table.getPrimaryKeyColumns();
-
         for (Column pkCol : pkCols) {
             pkCol.setPrimaryKey(false);
         }

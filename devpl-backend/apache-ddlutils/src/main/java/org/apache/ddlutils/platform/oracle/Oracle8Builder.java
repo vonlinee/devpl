@@ -5,6 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.alteration.ColumnDefinitionChange;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.SqlBuilder;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class Oracle8Builder extends SqlBuilder {
     }
 
     @Override
-    public void createTable(Database database, Table table, RowData parameters) throws IOException {
+    public void createTable(Database database, Table table, ContextMap parameters) throws IOException {
         // lets create any sequences
         Column[] columns = table.getAutoIncrementColumns();
 
@@ -171,7 +172,7 @@ public class Oracle8Builder extends SqlBuilder {
     }
 
     @Override
-    protected void createTemporaryTable(Database database, Table table, RowData parameters) throws IOException {
+    protected void createTemporaryTable(Database database, Table table, ContextMap parameters) throws IOException {
         createTable(database, table, parameters);
     }
 

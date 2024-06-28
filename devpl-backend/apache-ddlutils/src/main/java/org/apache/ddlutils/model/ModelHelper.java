@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Contains some utility functions for working with the model classes.
  */
-public class ModelHelper {
+public final class ModelHelper {
     /**
      * Determines whether one of the tables in the list has a foreign key to a table outside the list,
      * or a table outside the list has a foreign key to one of the tables in the list.
@@ -16,14 +16,12 @@ public class ModelHelper {
      */
     public static void checkForForeignKeysToAndFromTables(Database model, Table[] tables) throws ModelException {
         List<Table> tableList = Arrays.asList(tables);
-
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table curTable = model.getTable(tableIdx);
             boolean curTableIsInList = tableList.contains(curTable);
 
             for (int fkIdx = 0; fkIdx < curTable.getForeignKeyCount(); fkIdx++) {
                 ForeignKey curFk = curTable.getForeignKey(fkIdx);
-
                 if (curTableIsInList != tableList.contains(curFk.getForeignTable())) {
                     throw new ModelException("The table " + curTable.getName() + " has a foreign key to table " + curFk.getForeignTable().getName());
                 }
@@ -40,15 +38,12 @@ public class ModelHelper {
      */
     public static void removeForeignKeysToAndFromTables(Database model, Table[] tables) {
         List<Table> tableList = Arrays.asList(tables);
-
         for (int tableIdx = 0; tableIdx < model.getTableCount(); tableIdx++) {
             Table curTable = model.getTable(tableIdx);
             boolean curTableIsInList = tableList.contains(curTable);
-            ArrayList<ForeignKey> fksToRemove = new ArrayList<>();
-
+            List<ForeignKey> fksToRemove = new ArrayList<>();
             for (int fkIdx = 0; fkIdx < curTable.getForeignKeyCount(); fkIdx++) {
                 ForeignKey curFk = curTable.getForeignKey(fkIdx);
-
                 if (curTableIsInList != tableList.contains(curFk.getForeignTable())) {
                     fksToRemove.add(curFk);
                 }

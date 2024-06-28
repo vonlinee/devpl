@@ -2,7 +2,6 @@ package org.apache.ddlutils.platform;
 
 /**
  * 对应平台类型
- * TODO 已经废弃的数据库不再使用
  */
 public enum DBTypeEnum implements DBType {
 

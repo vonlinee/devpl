@@ -2,7 +2,7 @@ package org.apache.ddlutils.platform.mysql;
 
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class MySql5xModelReader extends MySqlModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, RowData values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
         // make sure the default-value is null when an empty is returned.
         if ("".equals(column.getDefaultValue())) {

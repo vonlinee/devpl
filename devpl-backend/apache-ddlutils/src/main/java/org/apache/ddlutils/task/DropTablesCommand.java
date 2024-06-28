@@ -58,7 +58,6 @@ public class DropTablesCommand extends DatabaseCommand {
 
         Platform platform = getPlatform();
         Database targetModel = new Database();
-
         if (_tableNames != null || _tableNameRegExp != null) {
             targetModel = new DefaultModelCopier().copy(model);
             targetModel.initialize();

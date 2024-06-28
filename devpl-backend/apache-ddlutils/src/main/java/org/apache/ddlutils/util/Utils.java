@@ -75,4 +75,11 @@ public class Utils {
         }
         return cl;
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] swallowCopy(T[] src) {
+        Object[] result = new Object[src.length];
+        System.arraycopy(src, 0, result, 0, src.length);
+        return (T[]) result;
+    }
 }

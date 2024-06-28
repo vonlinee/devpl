@@ -52,37 +52,37 @@ public class TestDataReaderAndWriter {
     }
 
     /**
-     * Uses a {@link DataReader} with default settings to read dyna beans from the given xml data.
+     * Uses a {@link DataReader} with default settings to read dyna rows from the given xml data.
      *
      * @param model   The database model to use
      * @param dataXml The raw xml data
      * @return The read dyna beans
      */
     private List<TableRow> readBeans(Database model, byte[] dataXml) {
-        List<TableRow> beans = new ArrayList<>();
+        List<TableRow> rows = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setModel(model);
-        dataReader.setSink(new TestDataSink(beans));
+        dataReader.setSink(new TestDataSink(rows));
         dataReader.read(new ByteArrayInputStream(dataXml));
-        return beans;
+        return rows;
     }
 
     /**
-     * Uses a {@link DataReader} with default settings to read dyna beans from the given xml data.
+     * Uses a {@link DataReader} with default settings to read dyna rows from the given xml data.
      *
      * @param model   The database model to use
      * @param dataXml The xml data
      * @return The read dyna beans
      */
     private List<TableRow> readBeans(Database model, String dataXml) {
-        List<TableRow> beans = new ArrayList<>();
+        List<TableRow> rows = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setModel(model);
-        dataReader.setSink(new TestDataSink(beans));
+        dataReader.setSink(new TestDataSink(rows));
         dataReader.read(new StringReader(dataXml));
-        return beans;
+        return rows;
     }
 
     /**
@@ -98,10 +98,10 @@ public class TestDataReaderAndWriter {
 
         Assertions.assertEquals(expectedDataXml, new String(xmlData, encoding));
 
-        List<TableRow> beans = readBeans(model, xmlData);
+        List<TableRow> rows = readBeans(model, xmlData);
 
-        Assertions.assertEquals(1, beans.size());
-        Assertions.assertEquals(bean, beans.get(0));
+        Assertions.assertEquals(1, rows.size());
+        Assertions.assertEquals(bean, rows.get(0));
     }
 
     /**
@@ -131,7 +131,7 @@ public class TestDataReaderAndWriter {
                 </index>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <data>
               <author author_id='1' name='Ernest Hemingway'/>
               <author author_id='2' name='William Shakespeare'/>
@@ -152,13 +152,13 @@ public class TestDataReaderAndWriter {
               </book>
             </data>""");
 
-        Assertions.assertEquals(5, beans.size());
+        Assertions.assertEquals(5, rows.size());
 
-        TableRow obj1 = beans.get(0);
-        TableRow obj2 = beans.get(1);
-        TableRow obj3 = beans.get(2);
-        TableRow obj4 = beans.get(3);
-        TableRow obj5 = beans.get(4);
+        TableRow obj1 = rows .get(0);
+        TableRow obj2 = rows.get(1);
+        TableRow obj3 = rows.get(2);
+        TableRow obj4 = rows.get(3);
+        TableRow obj5 = rows.get(4);
 
         Assertions.assertEquals("author", obj1.getTableModel().getName());
         Assertions.assertEquals("1", obj1.getColumnValue("author_id").toString());
@@ -212,16 +212,16 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<TableRow> beans = new ArrayList<>();
+            List<TableRow> rows = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
-            dataReader.setSink(new TestDataSink(beans));
+            dataReader.setSink(new TestDataSink(rows));
             dataReader.read(tmpFile.getAbsolutePath());
 
-            Assertions.assertEquals(1, beans.size());
+            Assertions.assertEquals(1, rows.size());
 
-            TableRow obj = beans.get(0);
+            TableRow obj = rows .get(0);
 
             Assertions.assertEquals("test", obj.getTableModel().getName());
             Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -257,16 +257,16 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<TableRow> beans = new ArrayList<>();
+            List<TableRow> rows = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
-            dataReader.setSink(new TestDataSink(beans));
+            dataReader.setSink(new TestDataSink(rows));
             dataReader.read(tmpFile);
 
-            Assertions.assertEquals(1, beans.size());
+            Assertions.assertEquals(1, rows.size());
 
-            TableRow obj = beans.get(0);
+            TableRow obj = rows .get(0);
 
             Assertions.assertEquals("test", obj.getTableModel().getName());
             Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -302,16 +302,16 @@ public class TestDataReaderAndWriter {
             writer.write(testDataXml);
             writer.close();
 
-            List<TableRow> beans = new ArrayList<>();
+            List<TableRow> rows = new ArrayList<>();
             DataReader dataReader = new DataReader();
 
             dataReader.setModel(model);
-            dataReader.setSink(new TestDataSink(beans));
+            dataReader.setSink(new TestDataSink(rows));
             dataReader.read(new FileInputStream(tmpFile));
 
-            Assertions.assertEquals(1, beans.size());
+            Assertions.assertEquals(1, rows.size());
 
-            TableRow obj = beans.get(0);
+            TableRow obj = rows .get(0);
 
             Assertions.assertEquals("test", obj.getTableModel().getName());
             Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -334,7 +334,7 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <data>
               <test id='1'>
                 <value>foo</value>
@@ -346,21 +346,21 @@ public class TestDataReaderAndWriter {
               </test>
             </data>""");
 
-        Assertions.assertEquals(3, beans.size());
+        Assertions.assertEquals(3, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("id").toString());
         Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
 
-        obj = beans.get(1);
+        obj = rows.get(1);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("2", obj.getColumnValue("id").toString());
         Assertions.assertEquals("bar", obj.getColumnValue("value").toString());
 
-        obj = beans.get(2);
+        obj = rows.get(2);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("3", obj.getColumnValue("id").toString());
@@ -380,14 +380,14 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <someRandomName>
               <test id='1' value='foo'/>
             </someRandomName>""");
 
-        Assertions.assertEquals(1, beans.size());
+        Assertions.assertEquals(1, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -407,22 +407,22 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <data>
               <test id='1' value='foo'/>
               <other id='2' value='bar'/>
               <test id='3' value='baz'/>
             </data>""");
 
-        Assertions.assertEquals(2, beans.size());
+        Assertions.assertEquals(2, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("id").toString());
         Assertions.assertEquals("foo", obj.getColumnValue("value").toString());
 
-        obj = beans.get(1);
+        obj = rows.get(1);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("3", obj.getColumnValue("id").toString());
@@ -442,14 +442,14 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <data>
               <test id='1' value1='foo'/>
             </data>""");
 
-        Assertions.assertEquals(1, beans.size());
+        Assertions.assertEquals(1, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -469,16 +469,16 @@ public class TestDataReaderAndWriter {
                 <column name='value' type='VARCHAR' size='50' required='true'/>
               </table>
             </database>""");
-        List<TableRow> beans = readBeans(model, """
+        List<TableRow> rows = readBeans(model, """
             <data>
               <test id='1'>
                 <value2>foo</value2>
               </test>
             </data>""");
 
-        Assertions.assertEquals(1, beans.size());
+        Assertions.assertEquals(1, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("id").toString());
@@ -504,17 +504,17 @@ public class TestDataReaderAndWriter {
               <Test Id='2' value='baz'/>
             </data>""";
 
-        List<TableRow> beans = new ArrayList<>();
+        List<TableRow> rows = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setCaseSensitive(true);
         dataReader.setModel(model);
-        dataReader.setSink(new TestDataSink(beans));
+        dataReader.setSink(new TestDataSink(rows));
         dataReader.read(new StringReader(testDataXml));
 
-        Assertions.assertEquals(1, beans.size());
+        Assertions.assertEquals(1, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("Test", obj.getTableModel().getName());
         Assertions.assertEquals("2", obj.getColumnValue("Id").toString());
@@ -541,29 +541,29 @@ public class TestDataReaderAndWriter {
               <Test id='3' Value='baz'/>
             </data>""";
 
-        List<TableRow> beans = new ArrayList<>();
+        List<TableRow> rows = new ArrayList<>();
         DataReader dataReader = new DataReader();
 
         dataReader.setCaseSensitive(false);
         dataReader.setModel(model);
-        dataReader.setSink(new TestDataSink(beans));
+        dataReader.setSink(new TestDataSink(rows));
         dataReader.read(new StringReader(testDataXml));
 
-        Assertions.assertEquals(3, beans.size());
+        Assertions.assertEquals(3, rows.size());
 
-        TableRow obj = beans.get(0);
+        TableRow obj = rows .get(0);
 
         Assertions.assertEquals("Test", obj.getTableModel().getName());
         Assertions.assertEquals("1", obj.getColumnValue("Id").toString());
         Assertions.assertEquals("foo", obj.getColumnValue("Value").toString());
 
-        obj = beans.get(1);
+        obj = rows.get(1);
 
         Assertions.assertEquals("Test", obj.getTableModel().getName());
         Assertions.assertEquals("2", obj.getColumnValue("Id").toString());
         Assertions.assertEquals("bar", obj.getColumnValue("Value").toString());
 
-        obj = beans.get(2);
+        obj = rows.get(2);
 
         Assertions.assertEquals("Test", obj.getTableModel().getName());
         Assertions.assertEquals("3", obj.getColumnValue("Id").toString());
@@ -585,7 +585,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Special Characters: \u0001\u0009\u0010";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -619,7 +619,7 @@ public class TestDataReaderAndWriter {
         // \t = \u0009
         String testedValue = "Some Special Characters: \u0001\t\u0010";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -650,7 +650,7 @@ public class TestDataReaderAndWriter {
         String testedValue4 = "<![CDATA[" + StringUtils.repeat("b \n", 1000) + "]]>";
         String testedValue5 = "<<![CDATA[" + StringUtils.repeat("b \n", 500) + "]]>><![CDATA[" + StringUtils.repeat("c \n", 500) + "]]>";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value1", testedValue1);
@@ -660,10 +660,10 @@ public class TestDataReaderAndWriter {
         bean.setColumnValue("value5", testedValue5);
 
         byte[] xmlData = writeBean(model, bean, "UTF-8");
-        List<TableRow> beans = readBeans(model, xmlData);
+        List<TableRow> rows = readBeans(model, xmlData);
 
-        Assertions.assertEquals(1, beans.size());
-        Assertions.assertEquals(bean, beans.get(0));
+        Assertions.assertEquals(1, rows.size());
+        Assertions.assertEquals(bean, rows.get(0));
     }
 
     /**
@@ -675,7 +675,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -698,7 +698,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -715,7 +715,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='" + tableName + "'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='value' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -747,7 +747,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -780,7 +780,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -813,7 +813,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -851,7 +851,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -890,7 +890,7 @@ public class TestDataReaderAndWriter {
 
         modelIO.setValidateXml(true);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -914,7 +914,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -938,7 +938,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -961,7 +961,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -985,7 +985,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -1010,7 +1010,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1028,7 +1028,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='500' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = StringUtils.repeat("Some Text", 40);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1046,7 +1046,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1070,7 +1070,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("the value", testedValue);
@@ -1088,7 +1088,7 @@ public class TestDataReaderAndWriter {
         Database model = readModel("<?xml version='1.0' encoding='UTF-8'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='test'>\n" + "  <table name='test'>\n" + "    <column name='id' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='" + columnName + "' type='VARCHAR' size='50' required='true'/>\n" + "  </table>\n" + "</database>");
         String testedValue = "the\u0000value";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(columnName, testedValue);
@@ -1121,7 +1121,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = StringUtils.repeat("the\u0000value", 40);
 
         bean.setColumnValue("id", (1));
@@ -1145,7 +1145,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "the\u0000value";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("value", testedValue);
@@ -1177,7 +1177,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1219,7 +1219,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1252,7 +1252,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1285,7 +1285,7 @@ public class TestDataReaderAndWriter {
         table.addColumn(valueColumn);
         model.addTable(table);
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
         String testedValue = "Some Text";
 
         bean.setColumnValue("id", (1));
@@ -1316,7 +1316,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("column", testedValue);
@@ -1339,7 +1339,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("column-name", testedValue);
@@ -1362,7 +1362,7 @@ public class TestDataReaderAndWriter {
             </database>""");
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue("table-name", testedValue);
@@ -1385,7 +1385,7 @@ public class TestDataReaderAndWriter {
             </database>""".formatted(DatabaseIO.BASE64_ATTR_NAME));
         String testedValue = "Some Text";
 
-        TableRow bean = model.createObjectForTable(model.getTable(0));
+        TableRow bean = model.createTableRow(model.getTable(0));
 
         bean.setColumnValue("id", (1));
         bean.setColumnValue(DatabaseIO.BASE64_ATTR_NAME, testedValue);
@@ -1429,7 +1429,7 @@ public class TestDataReaderAndWriter {
          * {@inheritDoc}
          */
         @Override
-        public void addBean(TableRow bean) throws DataSinkException {
+        public void addRow(TableRow bean) throws DataSinkException {
             readObjects.add(bean);
         }
 

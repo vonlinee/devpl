@@ -4,7 +4,6 @@ import org.apache.ddlutils.PlatformFactory;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * Specifies a parameter for the creation of the database. These are usually platform specific.
@@ -73,12 +72,9 @@ public class Parameter {
      */
     public void setPlatforms(String platforms) {
         _platforms.clear();
-        if (platforms != null) {
-            StringTokenizer tokenizer = new StringTokenizer(platforms, ",");
-
-            while (tokenizer.hasMoreTokens()) {
-                String platform = tokenizer.nextToken().trim();
-
+        if (platforms != null && !platforms.isEmpty()) {
+            for (String platform : platforms.split(",")) {
+                platform = platform.trim();
                 if (PlatformFactory.isPlatformSupported(platform)) {
                     _platforms.add(platform.toLowerCase());
                 } else {

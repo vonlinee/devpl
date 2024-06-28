@@ -1,29 +1,39 @@
 package io.devpl.fxui.utils;
 
-import io.devpl.fxui.components.table.FXTableViewColumn;
-import io.devpl.fxui.components.table.FXTableViewModel;
-import io.devpl.fxui.components.table.TableColumninitializer;
+import io.devpl.fxui.components.table.TableColumnInitializer;
+import io.devpl.fxui.components.table.TableViewColumn;
+import io.devpl.fxui.components.table.TableViewModel;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-public class FXUtils {
+public final class FXUtils {
 
     /**
      * @return 屏幕尺寸
@@ -58,8 +68,8 @@ public class FXUtils {
      * @param rowClass 行数据类型
      * @param <R>      行数据类型
      * @return TableView
-     * @see FXTableViewColumn
-     * @see FXTableViewModel
+     * @see TableViewColumn
+     * @see TableViewModel
      */
     public static <R> TableView<R> createTableView(Class<R> rowClass) {
         return initTableViewColumns(new TableView<>(), rowClass);
@@ -71,11 +81,11 @@ public class FXUtils {
      * @param rowClass 行数据类型
      * @param <R>      行数据类型
      * @return TableView
-     * @see FXTableViewColumn
-     * @see FXTableViewModel
+     * @see TableViewColumn
+     * @see TableViewModel
      */
     public static <R> TableView<R> initTableViewColumns(TableView<R> tableView, Class<R> rowClass) {
-        tableView.getColumns().addAll(createTableViewColumns(tableView, rowClass, new TableColumninitializer<>()));
+        tableView.getColumns().addAll(createTableViewColumns(tableView, rowClass, new TableColumnInitializer<>()));
         return tableView;
     }
 
@@ -84,12 +94,12 @@ public class FXUtils {
      *
      * @param tableView         表格
      * @param rowClass          行数据类型
-     * @param columninitializer 列初始化
+     * @param columnInitializer 列初始化
      * @param <R>               行数据类型
      * @return TableColumn 列
      */
-    public static <R, C> List<TableColumn<R, C>> createTableViewColumns(TableView<R> tableView, Class<R> rowClass, TableColumninitializer<R> columninitializer) {
-        FXTableViewModel tableViewModel = rowClass.getAnnotation(FXTableViewModel.class);
+    public static <R, C> List<TableColumn<R, C>> createTableViewColumns(TableView<R> tableView, Class<R> rowClass, TableColumnInitializer<R> columnInitializer) {
+        TableViewModel tableViewModel = rowClass.getAnnotation(TableViewModel.class);
         if (tableViewModel == null) {
             tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         } else {
@@ -102,7 +112,7 @@ public class FXUtils {
             tableView.setColumnResizePolicy(tableViewModel.resizePolicy() == 1 ? TableView.CONSTRAINED_RESIZE_POLICY : TableView.UNCONSTRAINED_RESIZE_POLICY);
         }
         boolean order = tableViewModel != null && tableViewModel.orderFields();
-        return columninitializer.initColumns(rowClass, order);
+        return columnInitializer.initColumns(rowClass, order);
     }
 
     public static void setText(Label label, String text) {
@@ -231,5 +241,76 @@ public class FXUtils {
                 expandAll(child);
             }
         }
+    }
+
+    public static void layoutRoot(Region region, Node root) {
+        Region.layoutInArea(root, 0, 0, region.getWidth(), region.getHeight(), 0, new Insets(0), true, true, HPos.CENTER, VPos.CENTER, false);
+    }
+
+    public static Background newBackground(javafx.scene.paint.Paint color) {
+        return new Background(new BackgroundFill(color, new CornerRadii(0), new Insets(0)));
+    }
+
+    public static Border newBorder(Paint color) {
+        return new Border(new BorderStroke(color, BorderStrokeStyle.NONE, new CornerRadii(0), new BorderWidths(0)));
+    }
+
+    /**
+     * 兼容NPE
+     *
+     * @param bool 布尔值
+     * @return 是否为true
+     */
+    public static boolean isTrue(Boolean bool) {
+        return bool != null && bool;
+    }
+
+    /**
+     * 兼容NPE
+     *
+     * @param bool 布尔值
+     * @return 是否为false
+     */
+    public static boolean isFalse(Boolean bool) {
+        return bool != null && !bool;
+    }
+
+    /**
+     * 获取Stage
+     *
+     * @param event 事件对象
+     * @return Stage
+     */
+    @Nullable
+    public static Stage getStage(Event event) {
+        Object eventSource = event.getSource();
+        if (eventSource instanceof Node node) {
+            Scene scene = node.getScene();
+            if (scene != null) {
+                Window window = scene.getWindow();
+                if (window instanceof Stage stage) {
+                    return stage;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Button newButton(String title, EventHandler<ActionEvent> activeEventEventHandler) {
+        Button button = new Button(title);
+        button.setOnAction(activeEventEventHandler);
+        return button;
+    }
+
+    public static boolean isStringHasText(String str) {
+        return str != null && !str.isBlank();
+    }
+
+    public static boolean isEmpty(Collection<?> collection) {
+        return collection == null || collection.isEmpty();
+    }
+
+    public static boolean isEmpty(Map<?, ?> map) {
+        return map == null || map.isEmpty();
     }
 }

@@ -79,7 +79,7 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
 
                 platform.alterModel(currentModel, model, params, true);
             } else {
-                platform.createModel(model,
+                platform.createDatabase(model,
                     params,
                     _doDrops,
                     true);

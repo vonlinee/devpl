@@ -11,14 +11,16 @@ import java.io.FileWriter;
  * Creates a DTD that specifies the layout for data XML files.<br/>
  * This sub-task does not require a database connection, so the <code>dataSource</code>
  * sub element of the enclosing task can be omitted.
- *
- * @ant.task name="writeDtdToFile"
  */
 public class WriteDtdToFileCommand extends Command {
     /**
      * The file to output the DTD to.
      */
     private File _outputFile;
+
+    public WriteDtdToFileCommand(File _outputFile) {
+        this._outputFile = _outputFile;
+    }
 
     /**
      * Specifies the name of the file to write the DTD to.

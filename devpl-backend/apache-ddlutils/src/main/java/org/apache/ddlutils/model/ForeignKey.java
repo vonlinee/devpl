@@ -1,6 +1,6 @@
 package org.apache.ddlutils.model;
 
-import org.apache.ddlutils.util.ListOrderedSet;
+import org.apache.ddlutils.util.OrderedSet;
 import org.apache.ddlutils.util.StringUtils;
 
 import java.io.Serial;
@@ -21,7 +21,7 @@ public class ForeignKey extends SchemaObject implements Serializable {
     /**
      * The references between local and remote columns.
      */
-    private final ListOrderedSet<Reference> _references = new ListOrderedSet<>();
+    private final OrderedSet<Reference> _references = new OrderedSet<>();
     /**
      * The target table.
      */

@@ -129,9 +129,9 @@ public class DataWriter extends PrettyPrintingXmlWriter {
     }
 
     /**
-     * Writes the beans contained in the given iterator.
+     * Writes the rows contained in the given iterator.
      *
-     * @param beans The beans iterator
+     * @param rows The rows iterator
      */
     public void write(Iterator<TableRow> beans) throws DataWriterException {
         while (beans.hasNext()) {
@@ -143,9 +143,9 @@ public class DataWriter extends PrettyPrintingXmlWriter {
     }
 
     /**
-     * Writes the beans contained in the given collection.
+     * Writes the rows contained in the given collection.
      *
-     * @param beans The beans
+     * @param rows The beans
      */
     public void write(Collection<TableRow> beans) throws DataWriterException {
         write(beans.iterator());

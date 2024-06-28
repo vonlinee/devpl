@@ -11,15 +11,15 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Data sink that directly inserts the beans into the database. If configured, it will make
- * sure that the beans are inserted in the correct order according to the foreign keys. Note
+ * Data sink that directly inserts the data into the database. If configured, it will make
+ * sure that the data are inserted in the correct order according to the foreign keys. Note
  * that this will only work if there are no circles.
  */
 public class DataToDatabaseSink implements DataSink {
     /**
      * Our log.
      */
-    private final Logger _log = LoggerFactory.getLogger(DataToDatabaseSink.class);
+    private final Logger _log = LoggerFactory.getLogger(getClass());
 
     /**
      * Generates the sql and writes it to the database.
@@ -36,23 +36,23 @@ public class DataToDatabaseSink implements DataSink {
     /**
      * Stores the tables that are target of a foreign key.
      */
-    private final HashSet<Table> _fkTables = new HashSet<>();
+    private final Set<Table> _fkTables = new HashSet<>();
     /**
      * Contains the tables that have a self-referencing foreign key to a (partially) identity primary key.
      */
-    private final HashSet<Table> _tablesWithSelfIdentityReference = new HashSet<>();
+    private final Set<Table> _tablesWithSelfIdentityReference = new HashSet<>();
     /**
      * Contains the tables that have a self-referencing foreign key that is required.
      */
-    private final HashSet<Table> _tablesWithRequiredSelfReference = new HashSet<>();
+    private final Set<Table> _tablesWithRequiredSelfReference = new HashSet<>();
     /**
      * Maps original to processed identities.
      */
-    private final HashMap<Identity, Identity> _identityMap = new HashMap<>();
+    private final Map<Identity, Identity> _identityMap = new HashMap<>();
     /**
      * Stores the objects that are waiting for other objects to be inserted.
      */
-    private final ArrayList<WaitingObject> _waitingObjects = new ArrayList<>();
+    private final List<WaitingObject> _waitingObjects = new ArrayList<>();
     /**
      * The connection to the database.
      */
@@ -62,7 +62,7 @@ public class DataToDatabaseSink implements DataSink {
      */
     private boolean _haltOnErrors = true;
     /**
-     * Whether to delay the insertion of beans so that the beans referenced by it via foreign keys, are already inserted into the database.
+     * Whether to delay the insertion of rows so that the rows referenced by it via foreign keys, are already inserted into the database.
      */
     private boolean _ensureFkOrder = true;
     /**
@@ -70,7 +70,7 @@ public class DataToDatabaseSink implements DataSink {
      */
     private boolean _useBatchMode = false;
     /**
-     * The number of beans to insert in one batch.
+     * The number of rows to insert in one batch.
      */
     private int _batchSize = 1024;
 
@@ -127,23 +127,23 @@ public class DataToDatabaseSink implements DataSink {
     }
 
     /**
-     * Determines whether the sink delays the insertion of beans so that the beans referenced by it
+     * Determines whether the sink delays the insertion of rows so that the rows referenced by it
      * via foreign keys are already inserted into the database.
      *
-     * @return <code>true</code> if beans are inserted after its foreign key-references
+     * @return <code>true</code> if rows are inserted after its foreign key-references
      */
     public boolean isEnsureFkOrder() {
         return _ensureFkOrder;
     }
 
     /**
-     * Specifies whether the sink shall delay the insertion of beans so that the beans referenced by it
+     * Specifies whether the sink shall delay the insertion of rows so that the rows referenced by it
      * via foreign keys are already inserted into the database.<br/>
      * Note that you should careful with setting <code>haltOnErrors</code> to false as this might
-     * result in beans not inserted at all. The sink will then throw an appropriate exception at the end
+     * result in rows not inserted at all. The sink will then throw an appropriate exception at the end
      * of the insertion process (method {@link #end()}).
      *
-     * @param ensureFkOrder <code>true</code> if beans shall be inserted after its foreign key-references
+     * @param ensureFkOrder <code>true</code> if rows shall be inserted after its foreign key-references
      */
     public void setEnsureForeignKeyOrder(boolean ensureFkOrder) {
         _ensureFkOrder = ensureFkOrder;
@@ -169,7 +169,7 @@ public class DataToDatabaseSink implements DataSink {
     }
 
     /**
-     * Returns the (maximum) number of beans to insert in one batch.
+     * Returns the (maximum) number of rows to insert in one batch.
      *
      * @return The number of beans
      */
@@ -178,7 +178,7 @@ public class DataToDatabaseSink implements DataSink {
     }
 
     /**
-     * Sets the (maximum) number of beans to insert in one batch.
+     * Sets the (maximum) number of rows to insert in one batch.
      *
      * @param batchSize The number of beans
      */
@@ -199,16 +199,14 @@ public class DataToDatabaseSink implements DataSink {
         if (!_waitingObjects.isEmpty()) {
             if (_log.isDebugEnabled()) {
                 for (WaitingObject obj : _waitingObjects) {
-                    Table table = _model.getClassForTable(obj.getObject()).getTable();
+                    Table table = _model.getTableModel(obj.getObject()).getTable();
                     Identity objId = buildIdentityFromPKs(table, obj.getObject());
 
                     _log.debug("Row " + objId + " is still not written because it depends on these yet unwritten rows");
-                    for (Iterator<Identity> fkIt = obj.getPendingFKs(); fkIt.hasNext(); ) {
-                        Identity pendingFkId = fkIt.next();
 
+                    for (Identity pendingFkId : obj.getPendingFKs()) {
                         _log.debug("  " + pendingFkId);
                     }
-
                 }
             }
             if (_waitingObjects.size() == 1) {
@@ -242,13 +240,12 @@ public class DataToDatabaseSink implements DataSink {
     }
 
     @Override
-    public void addBean(TableRow bean) throws DataSinkException {
-        Table table = _model.getClassForTable(bean).getTable();
+    public void addRow(TableRow bean) throws DataSinkException {
+        Table table = _model.getTableModel(bean).getTable();
         Identity origIdentity = buildIdentityFromPKs(table, bean);
 
         if (_ensureFkOrder && (table.getForeignKeyCount() > 0)) {
             WaitingObject waitingObj = new WaitingObject(bean, origIdentity);
-
             for (int idx = 0; idx < table.getForeignKeyCount(); idx++) {
                 ForeignKey fk = table.getForeignKey(idx);
                 Identity fkIdentity = buildIdentityFromFK(table, fk, bean);
@@ -270,9 +267,10 @@ public class DataToDatabaseSink implements DataSink {
                     msg.append("Deferring insertion of row ");
                     msg.append(buildIdentityFromPKs(table, bean));
                     msg.append(" because it is waiting for:");
-                    for (Iterator<Identity> it = waitingObj.getPendingFKs(); it.hasNext(); ) {
+
+                    for (Identity pendingFK : waitingObj.getPendingFKs()) {
                         msg.append("\n  ");
-                        msg.append(it.next().toString());
+                        msg.append(pendingFK.toString());
                     }
                     _log.debug(msg.toString());
                 }
@@ -318,7 +316,7 @@ public class DataToDatabaseSink implements DataSink {
                     }
                 }
                 for (TableRow finishedObj : finishedObjs) {
-                    Table tableForObj = _model.getClassForTable(finishedObj).getTable();
+                    Table tableForObj = _model.getTableModel(finishedObj).getTable();
                     Identity objIdentity = buildIdentityFromPKs(tableForObj, finishedObj);
 
                     insertBeanIntoDatabase(tableForObj, finishedObj);

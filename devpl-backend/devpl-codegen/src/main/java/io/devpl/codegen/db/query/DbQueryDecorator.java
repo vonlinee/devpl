@@ -6,6 +6,7 @@ import io.devpl.codegen.generator.config.LikeTable;
 import io.devpl.codegen.generator.config.StrategyConfiguration;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.sdk.util.StringUtils;
+import org.apache.ddlutils.platform.DBType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class DbQueryDecorator extends AbstractDbQuery {
     private final AbstractDbQuery dbQuery;
     private final Connection connection;
-    private final DBTypeEnum dbType;
+    private final DBType dbType;
     private final StrategyConfiguration strategyConfiguration;
     private final String schema;
     private final Logger logger;
@@ -32,7 +33,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     public DbQueryDecorator(@NotNull JdbcConfiguration jdbcConfiguration, @NotNull StrategyConfiguration strategyConfiguration) {
         AbstractDbQuery iDbQuery = jdbcConfiguration.getDbQuery();
         if (null == iDbQuery) {
-            DBTypeEnum dbType = JdbcUtils.getDbType(jdbcConfiguration.getConnectionUrl());
+            DBType dbType = JdbcUtils.getDbType(jdbcConfiguration.getConnectionUrl());
             // 默认 MYSQL
             AbstractDbQuery dialect = DbQueryRegistry.getDbQuery(dbType);
             if (dialect == null) {
@@ -208,9 +209,9 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         private final ResultSet resultSet;
 
-        private final DBTypeEnum dbType;
+        private final DBType dbType;
 
-        ResultSetWrapper(ResultSet resultSet, AbstractDbQuery dbQuery, DBTypeEnum dbType) {
+        ResultSetWrapper(ResultSet resultSet, AbstractDbQuery dbQuery, DBType dbType) {
             this.resultSet = resultSet;
             this.dbQuery = dbQuery;
             this.dbType = dbType;

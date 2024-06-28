@@ -3,7 +3,6 @@ package org.apache.ddlutils.task;
 import org.apache.ddlutils.io.DataReader;
 import org.apache.ddlutils.io.DataSink;
 import org.apache.ddlutils.io.DataSinkException;
-import org.apache.ddlutils.model.TableModel;
 import org.apache.ddlutils.model.TableRow;
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class TestWriteDataToFileCommand extends TestTaskBase {
      * Adds the writeDataToFile sub-task to the given task, executes it, and checks its output.
      *
      * @param task         The task
-     * @param expectedData A map table name -> list of dyna beans sorted by the pk value that is expected
+     * @param expectedData A map table name -> list of dyna rows sorted by the pk value that is expected
      */
     private void runTask(DatabaseToDdlTask task, Map<String, List<TableRow>> expectedData) throws IOException {
         WriteDataToFileCommand subTask = new WriteDataToFileCommand();
@@ -32,7 +31,7 @@ public class TestWriteDataToFileCommand extends TestTaskBase {
         try {
             subTask.setOutputFile(tmpFile);
             task.addWriteDataToFile(subTask);
-            task.setModelName("roundtriptest");
+            task.setDatabaseName("roundtriptest");
             task.execute();
 
             DataReader dataReader = new DataReader();
@@ -41,10 +40,10 @@ public class TestWriteDataToFileCommand extends TestTaskBase {
             dataReader.setModel(getAdjustedModel());
             dataReader.setSink(new DataSink() {
                 @Override
-                public void addBean(TableRow bean) throws DataSinkException {
-                    String key = ((TableModel) bean.getTableModel()).getTableName();
-                    List<TableRow> beans = readData.computeIfAbsent(key, k -> new ArrayList<>());
-                    beans.add(bean);
+                public void addRow(TableRow bean) throws DataSinkException {
+                    String key = bean.getTableModel().getTableName();
+                    List<TableRow> rows = readData.computeIfAbsent(key, k -> new ArrayList<>());
+                    rows.add(bean);
                 }
 
                 @Override
@@ -89,14 +88,14 @@ public class TestWriteDataToFileCommand extends TestTaskBase {
 
         createDatabase(modelXml);
 
-        List<TableRow> beans = new ArrayList<>();
+        List<TableRow> rows = new ArrayList<>();
 
-        beans.add(insertRow("roundtrip", new Object[]{"test1", (1)}));
-        beans.add(insertRow("roundtrip", new Object[]{"test2", null}));
+        rows.add(insertRow("roundtrip", new Object[]{"test1", (1)}));
+        rows.add(insertRow("roundtrip", new Object[]{"test2", null}));
 
         Map<String, List<TableRow>> expected = new HashMap<>();
 
-        expected.put("roundtrip", beans);
+        expected.put("roundtrip", rows);
         runTask(getDatabaseToDdlTaskInstance(), expected);
     }
 

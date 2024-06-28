@@ -1,9 +1,9 @@
 package org.apache.ddlutils.task;
 
-
 import org.apache.ddlutils.model.Table;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -17,7 +17,7 @@ public class TableSpecificParameter extends Parameter {
     /**
      * The tables for which this parameter is applicable.
      */
-    private final ArrayList<String> _tables = new ArrayList<>();
+    private final List<String> _tables = new ArrayList<>();
 
     /**
      * Specifies the comma-separated list of table names in whose creation this parameter
@@ -29,12 +29,8 @@ public class TableSpecificParameter extends Parameter {
      */
     public void setTables(String tableList) {
         StringTokenizer tokenizer = new StringTokenizer(tableList, ",");
-
         while (tokenizer.hasMoreTokens()) {
-            String tableName = tokenizer.nextToken().trim();
-
-            // TODO: Quotation, escaped characters ?
-            _tables.add(tableName);
+            _tables.add(tokenizer.nextToken().trim());
         }
     }
 

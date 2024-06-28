@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface FXTableViewModel {
+public @interface TableViewModel {
 
     /**
      * @return 1 => CONSTRAINED, 0 -> UNCONSTRAINED

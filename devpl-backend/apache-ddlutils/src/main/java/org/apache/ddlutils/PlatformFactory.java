@@ -25,6 +25,7 @@ import org.apache.ddlutils.platform.sybase.SybasePlatform;
 import org.apache.ddlutils.util.Utils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -69,7 +70,9 @@ public class PlatformFactory {
      * @return The platform or <code>null</code> if the database is not supported
      */
     public static synchronized Platform createNewPlatformInstance(String jdbcDriver, String jdbcConnectionUrl) throws DdlUtilsException {
-        return createNewPlatformInstance(new PlatformUtils().determineDatabaseType(jdbcDriver, jdbcConnectionUrl));
+        String databaseType = PlatformUtils.determineDatabaseType(jdbcDriver, jdbcConnectionUrl);
+        Objects.requireNonNull(databaseType, "db type cannot be null");
+        return createNewPlatformInstance(databaseType);
     }
 
     /**

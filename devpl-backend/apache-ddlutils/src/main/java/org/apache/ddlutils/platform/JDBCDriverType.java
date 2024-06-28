@@ -42,7 +42,7 @@ public interface JDBCDriverType {
     /**
      * 默认端口
      *
-     * @return 默认端口号
+     * @return 默认端口号, -1表示不存在
      */
     default int getDefaultPort() {
         return -1;

@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.devpl.fxui.components.table.FXTableViewColumn;
-import io.devpl.fxui.components.table.FXTableViewModel;
+import io.devpl.fxui.components.table.TableViewColumn;
+import io.devpl.fxui.components.table.TableViewModel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @TableName("data_type_item")
-@FXTableViewModel
+@TableViewModel
 public class DataTypeItem {
 
     /**
@@ -30,7 +30,7 @@ public class DataTypeItem {
     /**
      * 类型分组名称
      */
-    @FXTableViewColumn(title = "类型分组", width = 200)
+    @TableViewColumn(title = "类型分组", width = 200)
     @TableField(value = "type_group_id")
     private String typeGroupId;
 
@@ -38,42 +38,42 @@ public class DataTypeItem {
      * 类型ID
      */
     @TableField(value = "type_key")
-    @FXTableViewColumn(title = "类型Key", width = 200)
+    @TableViewColumn(title = "类型Key", width = 200)
     private String typeKey;
 
     /**
      * 类型名称
      */
     @TableField(value = "type_name")
-    @FXTableViewColumn(title = "类型名称", width = 200)
+    @TableViewColumn(title = "类型名称", width = 200)
     private String typeName;
 
     /**
      * 该数据类型的值类型
      */
     @TableField(value = "value_type")
-    @FXTableViewColumn(title = "值类型", width = 200)
+    @TableViewColumn(title = "值类型", width = 200)
     private String valueType;
 
     /**
      * 最小长度
      */
     @TableField(value = "min_length")
-    @FXTableViewColumn(title = "最小长度")
+    @TableViewColumn(title = "最小长度")
     private Integer minLength;
 
     /**
      * 最大长度
      */
     @TableField(value = "max_length")
-    @FXTableViewColumn(title = "最大长度")
+    @TableViewColumn(title = "最大长度")
     private Integer maxLength;
 
     /**
      * 类型默认值
      */
     @TableField(value = "default_value")
-    @FXTableViewColumn(title = "类型默认值")
+    @TableViewColumn(title = "类型默认值")
     private String defaultValue;
 
     /**
@@ -109,6 +109,6 @@ public class DataTypeItem {
     /**
      * 描述信息
      */
-    @FXTableViewColumn(title = "描述信息")
+    @TableViewColumn(title = "描述信息")
     private String description;
 }

@@ -7,7 +7,7 @@ import org.apache.ddlutils.alteration.AddColumnChange;
 import org.apache.ddlutils.alteration.TableChange;
 import org.apache.ddlutils.alteration.TableDefinitionChangesPredicate;
 import org.apache.ddlutils.model.CascadeActionEnum;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.platform.DBTypeEnum;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
@@ -52,7 +52,7 @@ public class DerbyPlatform extends CloudscapePlatform {
     }
 
     @Override
-    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, RowData parameters) throws DatabaseOperationException, UnsupportedOperationException {
+    public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
         if (JDBCDriverTypeEnum.DERBY.getDriverClassName().equals(jdbcDriverClassName) ||
             JDBCDriverTypeEnum.DERBY_EMBED.getDriverClassName().equals(jdbcDriverClassName)) {

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.platform.DBType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,7 +96,7 @@ public class JdbcConfiguration extends PropertyHolder {
      * @return 类型枚举值
      */
     @NotNull
-    public DBTypeEnum getDbType() {
+    public DBType getDbType() {
         return JdbcUtils.getDbType(this.connectionUrl);
     }
 
@@ -120,18 +121,13 @@ public class JdbcConfiguration extends PropertyHolder {
                         properties.put("user", username);
                         properties.put("password", password);
                         // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
-                        switch (this.getDbType()) {
-                            case MYSQL -> {
-                                properties.put("remarks", "true");
-                                properties.put("useInformationSchema", "true");
-                            }
-                            case ORACLE -> {
-                                properties.put("remarks", "true");
-                                properties.put("remarksReporting", "true");
-                            }
-                            default -> {
-
-                            }
+                        DBType dbType = this.getDbType();
+                        if (dbType.equals(DBTypeEnum.MYSQL)) {
+                            properties.put("remarks", "true");
+                            properties.put("useInformationSchema", "true");
+                        } else if (dbType.equals(DBTypeEnum.ORACLE)) {
+                            properties.put("remarks", "true");
+                            properties.put("remarksReporting", "true");
                         }
                         this.connection = DriverManager.getConnection(connectionUrl, properties);
                     }
@@ -150,7 +146,7 @@ public class JdbcConfiguration extends PropertyHolder {
      */
     @Nullable
     protected String getDefaultSchemaName() {
-        DBTypeEnum dbType = getDbType();
+        DBType dbType = getDbType();
         String schema = null;
         if (DBTypeEnum.POSTGRE_SQL == dbType) {
             // pg 默认 schema=public

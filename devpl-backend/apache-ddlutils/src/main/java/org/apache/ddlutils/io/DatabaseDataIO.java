@@ -5,7 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.OrderedMap;
 
 import java.io.*;
 import java.sql.Connection;
@@ -111,23 +111,23 @@ public class DatabaseDataIO {
     }
 
     /**
-     * Determines whether the sink delays the insertion of beans so that the beans referenced by it
+     * Determines whether the sink delays the insertion of rows so that the rows referenced by it
      * via foreignkeys are already inserted into the database.
      *
-     * @return <code>true</code> if beans are inserted after its foreignkey-references
+     * @return <code>true</code> if rows are inserted after its foreignkey-references
      */
     public boolean isEnsureFKOrder() {
         return _ensureFKOrder;
     }
 
     /**
-     * Specifies whether the sink shall delay the insertion of beans so that the beans referenced by it
+     * Specifies whether the sink shall delay the insertion of rows so that the rows referenced by it
      * via foreignkeys are already inserted into the database.<br/>
      * Note that you should careful with setting <code>haltOnErrors</code> to false as this might
-     * result in beans not inserted at all. The sink will then throw an appropriate exception at the end
+     * result in rows not inserted at all. The sink will then throw an appropriate exception at the end
      * of the insertion process (method {@link DataSink#end()}).
      *
-     * @param ensureFKOrder <code>true</code> if beans shall be inserted after its foreignkey-references
+     * @param ensureFKOrder <code>true</code> if rows shall be inserted after its foreignkey-references
      */
     public void setEnsureFKOrder(boolean ensureFKOrder) {
         _ensureFKOrder = ensureFKOrder;
@@ -334,7 +334,7 @@ public class DatabaseDataIO {
     private List<Table> sortTables(Table[] tables) {
         List<Table> result = new ArrayList<>();
         HashSet<Table> processed = new HashSet<>();
-        ListOrderedMap<Table, Set<Table>> pending = new ListOrderedMap<>();
+        OrderedMap<Table, Set<Table>> pending = new OrderedMap<>();
 
         for (Table table : tables) {
             if (table.getForeignKeyCount() == 0) {

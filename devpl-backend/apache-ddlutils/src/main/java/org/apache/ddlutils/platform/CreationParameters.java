@@ -1,8 +1,8 @@
 package org.apache.ddlutils.platform;
 
-import org.apache.ddlutils.model.RowData;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.OrderedMap;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,8 +25,8 @@ public class CreationParameters {
      * @param table The table
      * @return The parameters
      */
-    public RowData getParametersFor(Table table) {
-        RowData result = new RowData(new LinkedHashMap<>());
+    public ContextMap getParametersFor(Table table) {
+        ContextMap result = new ContextMap(new LinkedHashMap<>());
         Map<String, Object> globalParams = _parametersPerTable.get(null);
         Map<String, Object> tableParams = _parametersPerTable.get(table.getName());
         if (globalParams != null) {
@@ -45,14 +45,18 @@ public class CreationParameters {
      * @param paramName  The name of the parameter
      * @param paramValue The value of the parameter
      */
-    public void addParameter(Table table, String paramName, String paramValue) {
-        String key = table == null ? null : table.getName();
+    public void addParameter(Table table, String paramName, Object paramValue) {
+        final String key = table == null ? null : table.getName();
         Map<String, Object> params = _parametersPerTable.get(key);
         if (params == null) {
             // we're using a list ordered map to retain the order
-            params = new ListOrderedMap<>();
+            params = new OrderedMap<>();
             _parametersPerTable.put(key, params);
         }
         params.put(paramName, paramValue);
+    }
+
+    public void addParameterForAllTable(String paramName, Object paramValue) {
+        this.addParameter(null, paramName, paramValue);
     }
 }

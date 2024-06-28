@@ -5,6 +5,7 @@ import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TableRow;
+import org.apache.ddlutils.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -20,13 +21,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Reads data XML into dyna beans matching a specified database model. Note that
+ * Reads data XML into dyna rows matching a specified database model. Note that
  * the data sink won't be started or ended by the data reader, this has to be done
  * in the code that uses the data reader.
  *
  * @see DataWriter
  */
 public class DataReader {
+
+    public static final String QNAME_TABLE_NAME = "table";
+    public static final String QNAME_ELEMENT_COLUMN = "column";
+    public static final String QNAME_ATTR_TABLE_NAME = "table-name";
+    public static final String QNAME_ATTR_COLUMN_NAME = "column-name";
+    public static final String QNAME_ATTR_COLUMN_VALUE = "column-value";
+
     /**
      * Our log.
      */
@@ -151,17 +159,28 @@ public class DataReader {
      * @param reader The reader that returns the data XML
      */
     public void read(Reader reader) throws DdlUtilsXMLException {
-        BufferedReader bufferedReader;
-        if (reader instanceof BufferedReader) {
-            bufferedReader = (BufferedReader) reader;
-        } else {
-            bufferedReader = new BufferedReader(reader);
-        }
         try {
-            read(getXMLInputFactory().createXMLStreamReader(bufferedReader));
+            read(getXMLInputFactory().createXMLStreamReader(IOUtils.wrapBufferReader(reader)));
         } catch (XMLStreamException ex) {
             throw new DdlUtilsXMLException(ex);
         }
+    }
+
+    /**
+     * sink data to database
+     *
+     * @param dataXml for example:
+     *                <?xml version='1.0' encoding='ISO-8859-1'?>
+     *                <data>
+     *                <TestTable TheId='1' TheText='Text 1'/>
+     *                <TestTable TheId='2' TheText='Text 2'/>
+     *                <TestTable TheId='3' TheText='Text 3'/>
+     *                </data>
+     */
+    public void sink(String dataXml) {
+        _sink.start();
+        this.read(new StringReader(dataXml));
+        _sink.end();
     }
 
     /**
@@ -221,7 +240,7 @@ public class DataReader {
         while (eventType != XMLStreamReader.END_ELEMENT) {
             eventType = xmlReader.next();
             if (eventType == XMLStreamReader.START_ELEMENT) {
-                readBean(xmlReader);
+                readSingleRow(xmlReader);
             }
         }
     }
@@ -231,21 +250,20 @@ public class DataReader {
      *
      * @param xmlReader The reader
      */
-    private void readBean(XMLStreamReader xmlReader) throws XMLStreamException, DdlUtilsXMLException {
+    private void readSingleRow(XMLStreamReader xmlReader) throws XMLStreamException, DdlUtilsXMLException {
         QName elemQName = xmlReader.getName();
         Location location = xmlReader.getLocation();
         Map<String, String> attributes = new HashMap<>();
-        String tableName;
 
         for (int idx = 0; idx < xmlReader.getAttributeCount(); idx++) {
             QName attrQName = xmlReader.getAttributeName(idx);
-
             attributes.put(isCaseSensitive() ? attrQName.getLocalPart() : attrQName.getLocalPart().toLowerCase(), xmlReader.getAttributeValue(idx));
         }
         readColumnSubElements(xmlReader, attributes);
 
-        if ("table".equals(elemQName.getLocalPart())) {
-            tableName = attributes.get("table-name");
+        String tableName;
+        if (QNAME_TABLE_NAME.equals(elemQName.getLocalPart())) {
+            tableName = attributes.get(QNAME_ATTR_TABLE_NAME);
         } else {
             tableName = elemQName.getLocalPart();
         }
@@ -255,16 +273,15 @@ public class DataReader {
         if (table == null) {
             _log.warn("Data XML contains an element " + elemQName + " at location " + location + " but there is no table defined with this name. This element will be ignored.");
         } else {
-            TableRow bean = _model.createObjectForTable(table);
-
+            TableRow row = _model.createTableRow(table);
             for (int idx = 0; idx < table.getColumnCount(); idx++) {
                 Column column = table.getColumn(idx);
                 String value = attributes.get(isCaseSensitive() ? column.getName() : column.getName().toLowerCase());
                 if (value != null) {
-                    setColumnValue(bean, table, column, value);
+                    setColumnValue(row, table, column, value);
                 }
             }
-            getSink().addBean(bean);
+            getSink().addRow(row);
             consumeRestOfElement(xmlReader);
         }
     }
@@ -331,14 +348,14 @@ public class DataReader {
 
         String name = elemQName.getLocalPart();
 
-        if ("table-name".equals(name)) {
-            data.put("table-name", value);
+        if (QNAME_ATTR_TABLE_NAME.equals(name)) {
+            data.put(QNAME_ATTR_TABLE_NAME, value);
         } else {
-            if ("column".equals(name)) {
-                name = attributes.get("column-name");
+            if (QNAME_ELEMENT_COLUMN.equals(name)) {
+                name = attributes.get(QNAME_ATTR_COLUMN_NAME);
             }
-            if (attributes.containsKey("column-value")) {
-                value = attributes.get("column-value");
+            if (attributes.containsKey(QNAME_ATTR_COLUMN_VALUE)) {
+                value = attributes.get(QNAME_ATTR_COLUMN_VALUE);
             }
             data.put(name, value);
         }
@@ -379,10 +396,10 @@ public class DataReader {
 
         String name = elemQName.getLocalPart();
 
-        if ("column-name".equals(name)) {
-            data.put("column-name", value);
-        } else if ("column-value".equals(name)) {
-            data.put("column-value", value);
+        if (QNAME_ATTR_COLUMN_NAME.equals(name)) {
+            data.put(QNAME_ATTR_COLUMN_NAME, value);
+        } else if (QNAME_ATTR_COLUMN_VALUE.equals(name)) {
+            data.put(QNAME_ATTR_COLUMN_VALUE, value);
         }
         consumeRestOfElement(xmlReader);
     }
@@ -390,15 +407,15 @@ public class DataReader {
     /**
      * Converts the column value read from the XML stream to an object and sets it at the given bean.
      *
-     * @param bean   The bean
+     * @param row    The row
      * @param table  The table definition
      * @param column The column definition
      * @param value  The value as a string
      */
-    private void setColumnValue(TableRow bean, Table table, Column column, String value) throws DdlUtilsXMLException {
+    private void setColumnValue(TableRow row, Table table, Column column, String value) throws DdlUtilsXMLException {
         SqlTypeConverter converter = _converterConf.getRegisteredConverter(table, column);
         Object propValue = (converter != null ? converter.fromString(value, column.getTypeCode()) : value);
-        bean.setColumnValue(column.getName(), propValue);
+        row.setColumnValue(column.getName(), propValue);
     }
 
     /**

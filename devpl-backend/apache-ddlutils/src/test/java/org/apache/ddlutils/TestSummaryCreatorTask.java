@@ -2,7 +2,6 @@ package org.apache.ddlutils;
 
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.task.FileSet;
-import org.apache.ddlutils.task.Project;
 import org.apache.ddlutils.task.Task;
 import org.apache.ddlutils.util.BeanUtils;
 import org.apache.ddlutils.util.Utils;
@@ -218,7 +217,6 @@ public class TestSummaryCreatorTask extends Task {
         Properties props = readProperties(jdbcPropertiesFile);
         Connection conn = null;
         DatabaseMetaData metaData;
-        PlatformUtils platformUtils = new PlatformUtils();
         try {
             String dataSourceClass = props.getProperty(TestAgainstLiveDatabaseBase.DATASOURCE_PROPERTY_PREFIX + "class", PooledDataSourceWrapper.class.getName());
             DataSource dataSource = Utils.newInstance(dataSourceClass);
@@ -235,7 +233,7 @@ public class TestSummaryCreatorTask extends Task {
             String platformName = props.getProperty(TestAgainstLiveDatabaseBase.DDLUTILS_PLATFORM_PROPERTY);
 
             if (platformName == null) {
-                platformName = platformUtils.determineDatabaseType(dataSource);
+                platformName = PlatformUtils.determineDatabaseType(dataSource);
                 if (platformName == null) {
                     throw new DdlUtilsTaskException("Could not determine platform from datasource, please specify it in the jdbc.properties via the ddlutils.platform property");
                 }
@@ -328,7 +326,7 @@ public class TestSummaryCreatorTask extends Task {
                 try {
                     propStream.close();
                 } catch (IOException ex) {
-                    log("Could not close the stream used to read the test jdbc properties", Project.MSG_WARN);
+                    log("Could not close the stream used to read the test jdbc properties", Task.MSG_WARN);
                 }
             }
         }
@@ -339,7 +337,7 @@ public class TestSummaryCreatorTask extends Task {
     @Override
     public void execute() throws DdlUtilsTaskException {
         try {
-            log("Processing test results", Project.MSG_INFO);
+            log("Processing test results", Task.MSG_INFO);
 
             Document doc = processInputFiles();
             XMLWriter writer;
@@ -353,7 +351,7 @@ public class TestSummaryCreatorTask extends Task {
             writer.write(doc);
             writer.close();
 
-            log("Processing finished", Project.MSG_INFO);
+            log("Processing finished", Task.MSG_INFO);
         } catch (Exception ex) {
             throw new DdlUtilsTaskException("Error while processing the test results: " + ex.getLocalizedMessage(), ex);
         }

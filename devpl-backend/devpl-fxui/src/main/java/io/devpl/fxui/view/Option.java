@@ -1,7 +1,7 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.components.table.FXTableViewColumn;
-import io.devpl.fxui.components.table.FXTableViewModel;
+import io.devpl.fxui.components.table.TableViewColumn;
+import io.devpl.fxui.components.table.TableViewModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,12 +10,12 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-@FXTableViewModel
+@TableViewModel
 public class Option {
 
-    @FXTableViewColumn(title = "名称")
+    @TableViewColumn(title = "名称")
     private String name;
 
-    @FXTableViewColumn(title = "值")
+    @TableViewColumn(title = "值")
     private Object value;
 }

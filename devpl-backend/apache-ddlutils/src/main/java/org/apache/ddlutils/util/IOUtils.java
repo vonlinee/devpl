@@ -2,7 +2,7 @@ package org.apache.ddlutils.util;
 
 import java.io.*;
 
-public class IOUtils {
+public final class IOUtils {
 
     public static byte[] readAllBytes(InputStream inputStream) {
         try (InputStream input = new BufferedInputStream(inputStream)) {
@@ -30,5 +30,15 @@ public class IOUtils {
             } catch (IOException ignored) {
             }
         }
+    }
+
+    public static BufferedReader wrapBufferReader(Reader reader) {
+        BufferedReader bufferedReader;
+        if (reader instanceof BufferedReader) {
+            bufferedReader = (BufferedReader) reader;
+        } else {
+            bufferedReader = new BufferedReader(reader);
+        }
+        return bufferedReader;
     }
 }

@@ -72,7 +72,6 @@ public class ColumnDefinitionChange extends ColumnChangeBase {
         int targetTypeCode = platformInfo.getTargetJdbcType(targetColumn.getTypeCode());
         boolean sizeMatters = platformInfo.hasSize(targetTypeCode);
         boolean scaleMatters = platformInfo.hasPrecisionAndScale(targetTypeCode);
-
         if (sizeMatters && !StringUtils.equals(sourceColumn.getSize(), targetColumn.getSize())) {
             return true;
         } else return scaleMatters &&

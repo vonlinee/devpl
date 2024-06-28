@@ -16,21 +16,25 @@ import java.util.Map;
 /**
  * Utility functions for dealing with database platforms.
  */
-public class PlatformUtils {
+public final class PlatformUtils {
 
     /**
      * Maps the sub-protocol part of a jdbc connection url to a OJB platform name.
      */
-    private final Map<String, String> jdbcSubProtocolToPlatform = new HashMap<>();
+    private static final Map<String, String> jdbcSubProtocolToPlatform = new HashMap<>();
     /**
      * Maps the jdbc driver name to a OJB platform name.
      */
-    private final Map<String, String> jdbcDriverToPlatform = new HashMap<>();
+    private static final Map<String, String> jdbcDriverToPlatform = new HashMap<>();
+
+    static {
+        init();
+    }
 
     /**
      * Creates a new instance.
      */
-    public PlatformUtils() {
+    public static void init() {
         // Note that currently Sapdb and MaxDB have equal sub-protocols and
         // drivers, so we have no means to distinguish them
         addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.AXION, DBTypeEnum.AXION);
@@ -129,11 +133,11 @@ public class PlatformUtils {
         addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INET_SYBASE, DBTypeEnum.SYBASE);
     }
 
-    void addSubProtocolToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
+    static void addSubProtocolToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
         jdbcSubProtocolToPlatform.put(driverType.getSubProtocol(), dbType.getName());
     }
 
-    void addJdbcDriverToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
+    static void addJdbcDriverToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
         jdbcDriverToPlatform.put(driverType.getSubProtocol(), dbType.getName());
     }
 
@@ -144,7 +148,7 @@ public class PlatformUtils {
      * @param dataSource The data source
      * @return The database type or <code>null</code> if the database type couldn't be determined
      */
-    public String determineDatabaseType(DataSource dataSource) throws DatabaseOperationException {
+    public static String determineDatabaseType(DataSource dataSource) throws DatabaseOperationException {
         return determineDatabaseType(dataSource, null, null);
     }
 
@@ -157,7 +161,7 @@ public class PlatformUtils {
      * @param password   The password to use for connecting to the database
      * @return The database type or <code>null</code> if the database type couldn't be determined
      */
-    public String determineDatabaseType(DataSource dataSource, String username, String password) throws DatabaseOperationException {
+    public static String determineDatabaseType(DataSource dataSource, String username, String password) throws DatabaseOperationException {
         try (Connection conn = JdbcUtils.getConnection(dataSource, username, password)) {
             DatabaseMetaData metaData = conn.getMetaData();
             return determineDatabaseType(metaData.getDriverName(), metaData.getURL());
@@ -173,7 +177,7 @@ public class PlatformUtils {
      * @param jdbcConnectionUrl The connection url
      * @return The database type or <code>null</code> if the database type couldn't be determined
      */
-    public String determineDatabaseType(String driverName, String jdbcConnectionUrl) {
+    public static String determineDatabaseType(String driverName, String jdbcConnectionUrl) {
         if (jdbcDriverToPlatform.containsKey(driverName)) {
             return jdbcDriverToPlatform.get(driverName);
         }

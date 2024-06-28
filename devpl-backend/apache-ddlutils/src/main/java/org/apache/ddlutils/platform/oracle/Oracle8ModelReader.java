@@ -5,7 +5,8 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.ListOrderedMap;
+import org.apache.ddlutils.util.OrderedMap;
+import org.apache.ddlutils.util.ContextMap;
 
 import java.sql.*;
 import java.util.Collection;
@@ -70,7 +71,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, RowData values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {
@@ -230,7 +231,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
         final String queryWithSchema =
             query.substring(0, query.length() - 1) + " AND c.OWNER LIKE ?) AND a.TABLE_OWNER LIKE ?";
 
-        Map<String, Index> indices = new ListOrderedMap<>();
+        Map<String, Index> indices = new OrderedMap<>();
         PreparedStatement stmt = null;
 
         try {
@@ -245,7 +246,7 @@ public class Oracle8ModelReader extends JdbcModelReader {
             }
 
             ResultSet rs = stmt.executeQuery();
-            RowData values = new RowData();
+            ContextMap values = new ContextMap();
 
             while (rs.next()) {
                 values.put("INDEX_NAME", rs.getString(1));

@@ -2,7 +2,7 @@ package org.apache.ddlutils.platform.maxdb;
 
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
-import org.apache.ddlutils.model.RowData;
+import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
 
@@ -26,7 +26,7 @@ public class MaxDbModelReader extends JdbcModelReader {
     }
 
     @Override
-    protected Column readColumn(DatabaseMetaDataWrapper metaData, RowData values) throws SQLException {
+    protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
 
         if (column.getDefaultValue() != null) {

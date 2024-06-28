@@ -1,6 +1,5 @@
 package org.apache.ddlutils.alteration;
 
-
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 

@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FXTableViewColumn {
+public @interface TableViewColumn {
 
     String field() default "";
 

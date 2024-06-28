@@ -6,7 +6,7 @@ import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.mysql.MySql5xModelReader;
 import org.apache.ddlutils.platform.mysql.MySql5xPlatform;
-import org.apache.ddlutils.task.DatabaseToDdlTask;
+import org.apache.ddlutils.util.ContextMap;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileWriter;
@@ -24,52 +24,6 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
     @Override
     protected String getDatabaseName() {
         return DBTypeEnum.MYSQL5.getName();
-    }
-
-    @Test
-    public void testInsertSqlWithRealTable() {
-        MySql5xPlatform platform = new MySql5xPlatform();
-
-        MySql5xModelReader reader = new MySql5xModelReader(platform);
-
-        try (PooledDataSourceWrapper dataSource = new PooledDataSourceWrapper()) {
-            dataSource.setUrl("jdbc:mysql://localhost:3306/devpl?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true");
-            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource.setUsername("root");
-            dataSource.setPassword("123456");
-
-            platform.setDataSource(dataSource);
-
-            try (Connection connection = dataSource.getConnection()) {
-                Database database = reader.getDatabase(connection, "devpl");
-
-                SqlBuilder sqlBuilder = platform.getSqlBuilder();
-
-                System.out.println("sql builder => " + sqlBuilder.getClass());
-                StringWriter stringWriter = new StringWriter();
-
-                sqlBuilder.setWriter(stringWriter);
-
-                Table table = database.getTable(0);
-
-                getLog().info("table => {}", table.getName());
-
-                RowData parameters = new RowData();
-                sqlBuilder.createTable(database, table, parameters);
-
-                TableModel tableModel = TableModel.newInstance(table);
-
-                Map<String, Object> columnValueMap = ModelHelper.emptyColumnValueMap(tableModel);
-                columnValueMap.put("id", "ssdd");
-                String insertSql = sqlBuilder.getInsertSql(table, columnValueMap, false);
-
-                System.out.println(insertSql);
-            } catch (SQLException | IOException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
@@ -101,13 +55,11 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
                 getLog().info("table => {}", table.getName());
 
-                RowData parameters = new RowData();
+                ContextMap parameters = new ContextMap();
                 sqlBuilder.createTable(database, table, parameters);
 
-                TableModel tableModel = TableModel.newInstance(table);
-
-                Map<String, Object> columnValueMap = ModelHelper.emptyColumnValueMap(tableModel);
-                columnValueMap.put("id", "ssdd");
+                ResultSetRow columnValueMap = new ResultSetRow();
+                columnValueMap.addColumn("id", "ssdd");
                 String insertSql = sqlBuilder.getUpdateSql(table, columnValueMap, false);
 
                 System.out.println(insertSql);
@@ -242,7 +194,7 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
      */
     @Test
     public void testCreationParameters1() throws Exception {
-        // MySql-specfic schema
+        // MySql-specific schema
         final String schema = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='columnconstraintstest'>

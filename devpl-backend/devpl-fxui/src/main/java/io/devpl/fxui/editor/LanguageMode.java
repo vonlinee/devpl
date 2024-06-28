@@ -14,6 +14,7 @@ public enum LanguageMode {
     CSS("text/css"),
     HTML("text/html"),
     YAML("text/x-yaml"),
+    PLAIN_TEXT("text/plain"),
     UNKNOWN(null);
 
     private final String modeName;

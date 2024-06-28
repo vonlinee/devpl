@@ -91,11 +91,8 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
         }
 
         Platform platform = getPlatform();
-        boolean isCaseSensitive = platform.isDelimitedIdentifierModeOn();
-        CreationParameters params = getFilteredParameters(model, platform.getName(), isCaseSensitive);
-
+        CreationParameters params = getFilteredParameters(model, platform.getName(), platform.isDelimitedIdentifierModeOn());
         try (FileWriter writer = new FileWriter(_outputFile)) {
-
             platform.setScriptModeOn(true);
             if (platform.getPlatformInfo().isSqlCommentsSupported()) {
                 // we're generating SQL comments if possible
@@ -103,7 +100,6 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
             }
 
             boolean shouldAlter = isAlterDatabase();
-
             if (shouldAlter) {
                 if (getDataSource() == null) {
                     shouldAlter = false;
@@ -118,11 +114,12 @@ public class WriteSchemaSqlToFileCommand extends DatabaseCommandWithCreationPara
                 }
             }
             if (shouldAlter) {
-                Database currentModel = (getCatalogPattern() != null) || (getSchemaPattern() != null) ? platform.readModelFromDatabase("unnamed", getCatalogPattern(), getSchemaPattern(), null) : platform.readModelFromDatabase("unnamed");
-
+                Database currentModel = (getCatalogPattern() != null) || (getSchemaPattern() != null)
+                    ? platform.readModelFromDatabase("unnamed", getCatalogPattern(), getSchemaPattern(), null)
+                    : platform.readModelFromDatabase("unnamed");
                 writer.write(platform.getAlterModelSql(currentModel, model, params));
             } else {
-                writer.write(platform.getCreateModelSql(model, params, _doDrops, !isFailOnError()));
+                writer.write(platform.getCreateDatabaseSql(model, params, _doDrops, !isFailOnError()));
             }
             _log.info("Written schema SQL to " + _outputFile.getAbsolutePath());
         } catch (Exception ex) {

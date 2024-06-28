@@ -1,9 +1,9 @@
 package org.apache.ddlutils.io;
 
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.util.ListOrderedSet;
+import org.apache.ddlutils.util.OrderedSet;
 
-import java.util.Iterator;
+import java.util.Collection;
 
 /**
  * Represents an object waiting for insertion into the database. Is used by the
@@ -22,7 +22,7 @@ public class WaitingObject {
     /**
      * The identities of the waited-for objects.
      */
-    private final ListOrderedSet<Identity> _waitedForIdentities = new ListOrderedSet<>();
+    private final OrderedSet<Identity> _waitedForIdentities = new OrderedSet<>();
 
     /**
      * Creates a new <code>WaitingObject</code> instance for the given object.
@@ -58,8 +58,8 @@ public class WaitingObject {
      *
      * @return The identities
      */
-    public Iterator<Identity> getPendingFKs() {
-        return _waitedForIdentities.iterator();
+    public Collection<Identity> getPendingFKs() {
+        return _waitedForIdentities;
     }
 
     /**

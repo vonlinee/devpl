@@ -231,7 +231,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
         String platformName = props.getProperty(DDLUTILS_PLATFORM_PROPERTY);
         if (platformName == null) {
             // property not set, then try to determine
-            platformName = new PlatformUtils().determineDatabaseType(dataSource);
+            platformName = PlatformUtils.determineDatabaseType(dataSource);
             if (platformName == null) {
                 throw new DatabaseOperationException("Could not determine platform from datasource, please specify it in the jdbc.properties via the ddlutils.platform property");
             }
@@ -432,9 +432,8 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     protected void createDatabase(Database model) throws DatabaseOperationException {
         try {
             _model = model;
-
             getPlatform().setSqlCommentsOn(false);
-            getPlatform().createModel(_model, getTableCreationParameters(_model), false, false);
+            getPlatform().createDatabase(_model, getTableCreationParameters(_model), true, false);
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex);
         }
@@ -461,7 +460,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     protected void alterDatabase(Database desiredModel) throws DatabaseOperationException {
         try {
             _model = desiredModel;
-            _model.resetClassCache();
+            _model.resetTableModelCache();
 
             Database liveModel = readModelFromDatabase(desiredModel.getName());
 
@@ -481,12 +480,9 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
     protected Database insertData(String dataXml) throws DatabaseOperationException {
         try {
             DataReader dataReader = new DataReader();
-
             dataReader.setModel(_model);
             dataReader.setSink(new DataToDatabaseSink(getPlatform(), _model));
-            dataReader.getSink().start();
-            dataReader.read(new StringReader(dataXml));
-            dataReader.getSink().end();
+            dataReader.sink(dataXml);
             return _model;
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex);
@@ -509,11 +505,9 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected TableRow insertRow(String tableName, Object[] columnValues) {
         Table table = getModel().findTable(tableName);
-        TableRow bean = getModel().createObjectForTable(table);
-
+        TableRow bean = getModel().createTableRow(table);
         for (int idx = 0; (idx < table.getColumnCount()) && (idx < columnValues.length); idx++) {
             Column column = table.getColumn(idx);
-
             bean.setColumnValue(column.getName(), columnValues[idx]);
         }
         getPlatform().insert(getModel(), bean);
@@ -530,7 +524,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected TableRow updateRow(String tableName, TableRow oldBean, Object[] columnValues) {
         Table table = getModel().findTable(tableName);
-        TableRow bean = getModel().createObjectForTable(table);
+        TableRow bean = getModel().createTableRow(table);
 
         for (int idx = 0; (idx < table.getColumnCount()) && (idx < columnValues.length); idx++) {
             Column column = table.getColumn(idx);
@@ -549,7 +543,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
      */
     protected void deleteRow(String tableName, Object[] pkColumnValues) {
         Table table = getModel().findTable(tableName);
-        TableRow bean = getModel().createObjectForTable(table);
+        TableRow bean = getModel().createTableRow(table);
         Column[] pkColumns = table.getPrimaryKeyColumns();
 
         for (int idx = 0; (idx < pkColumns.length) && (idx < pkColumnValues.length); idx++) {

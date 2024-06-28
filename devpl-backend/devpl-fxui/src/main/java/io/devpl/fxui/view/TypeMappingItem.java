@@ -1,21 +1,21 @@
 package io.devpl.fxui.view;
 
-import io.devpl.fxui.components.table.FXTableViewColumn;
-import io.devpl.fxui.components.table.FXTableViewModel;
+import io.devpl.fxui.components.table.TableViewColumn;
+import io.devpl.fxui.components.table.TableViewModel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@FXTableViewModel
+@TableViewModel
 public class TypeMappingItem {
 
-    @FXTableViewColumn(title = "JSON")
+    @TableViewColumn(title = "JSON")
     private String jsonType;
 
-    @FXTableViewColumn(title = "JDBC")
+    @TableViewColumn(title = "JDBC")
     private String jdbcType;
 
-    @FXTableViewColumn(title = "JAVA")
+    @TableViewColumn(title = "JAVA")
     private String javaType;
 }

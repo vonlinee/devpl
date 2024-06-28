@@ -9,7 +9,7 @@ import java.sql.Types;
 /**
  * Describes a column in a metadata result set.
  */
-public class MetaDataColumnDescriptor {
+public class ResultSetColumnDescriptor {
     /**
      * The name of the column.
      */
@@ -36,7 +36,7 @@ public class MetaDataColumnDescriptor {
      * @param jdbcType   The jdbc type for reading from the result set, one of
      *                   VARCHAR, INTEGER, TINYINT, BIT
      */
-    public MetaDataColumnDescriptor(String columnName, int jdbcType) {
+    public ResultSetColumnDescriptor(String columnName, int jdbcType) {
         this(columnName, jdbcType, null);
     }
 
@@ -48,7 +48,7 @@ public class MetaDataColumnDescriptor {
      *                     VARCHAR, INTEGER, TINYINT, BIT
      * @param defaultValue The default value if the column is not present in the result set
      */
-    public MetaDataColumnDescriptor(String columnName, int jdbcType, Object defaultValue) {
+    public ResultSetColumnDescriptor(String columnName, int jdbcType, Object defaultValue) {
         _columnName = columnName.toUpperCase();
         _jdbcType = jdbcType;
         _defaultValue = defaultValue;
