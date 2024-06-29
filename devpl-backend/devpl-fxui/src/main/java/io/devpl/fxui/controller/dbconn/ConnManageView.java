@@ -1,14 +1,13 @@
 package io.devpl.fxui.controller.dbconn;
 
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.event.DeleteConnEvent;
-import io.devpl.fxui.model.ConnectionConfig;
-import io.devpl.fxui.model.ConnectionRegistry;
-import io.devpl.fxui.utils.AppConfig;
 import io.devpl.fxui.fxtras.Alerts;
 import io.devpl.fxui.fxtras.mvvm.FxmlBinder;
 import io.devpl.fxui.fxtras.mvvm.FxmlView;
 import io.devpl.fxui.fxtras.utils.StageManager;
+import io.devpl.fxui.model.ConnectionConfig;
+import io.devpl.fxui.model.ConnectionRegistry;
+import io.devpl.fxui.utils.AppConfig;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
