@@ -12,7 +12,9 @@ dependencies {
     api(Libs.jacksonDatabind)
     api(Libs.jacksonAnnotations)
     api(Libs.jacksonCore)
-    api(Libs.dom4j)
+    api(Libs.dom4j) {
+        exclude("pull-parser", "pull-parser")
+    }
 
     api(Libs.lombok)
     annotationProcessor(Libs.lombok)
