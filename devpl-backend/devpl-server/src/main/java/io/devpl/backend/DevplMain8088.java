@@ -2,7 +2,6 @@ package io.devpl.backend;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.Banner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -21,16 +20,12 @@ import java.net.UnknownHostException;
 @EnableScheduling
 @SpringBootApplication
 public class DevplMain8088 extends SpringBootServletInitializer {
-
-    public static void main(String[] args) {
-        SpringApplication app = new SpringApplicationBuilder()
-            .bannerMode(Banner.Mode.OFF)
-            .sources(DevplMain8088.class)
-            .main(DevplMain8088.class)
-            .build();
-        ConfigurableApplicationContext context = app.run(args);
-
-        println(context);
+    /**
+     * SpringBoot打WAR包部署tomcat
+     */
+    @Override
+    public SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(DevplMain8088.class);
     }
 
     public static void println(ConfigurableApplicationContext context) {
@@ -40,22 +35,22 @@ public class DevplMain8088 extends SpringBootServletInitializer {
             String port = env.getProperty("server.port");
             String contextPath = env.getProperty("server.servlet.context-path", "");
             System.out.printf("""
-                ----------------------------------------------------------
                 Application Devpl is running! Access URLs:
                 > Local: 		http://localhost:%s%s
-                > External: 	http://%s:%s%s
-                ----------------------------------------------------------
+                > External: 	https://%s:%s%s
                 %n""", port, contextPath, ip, port, contextPath);
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /**
-     * SpringBoot打WAR包部署tomcat
-     */
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(DevplMain8088.class);
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = new SpringApplicationBuilder()
+            .bannerMode(Banner.Mode.OFF)
+            .sources(DevplMain8088.class)
+            .main(DevplMain8088.class)
+            .build()
+            .run(args);
+        println(context);
     }
 }

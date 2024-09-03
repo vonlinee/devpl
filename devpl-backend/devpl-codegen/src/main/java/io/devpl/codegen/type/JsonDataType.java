@@ -33,6 +33,13 @@ public enum JsonDataType implements EnumBasedDataType<JsonDataType> {
     STRING,
     NUMBER,
     BOOLEAN,
+    /**
+     * 未知数据类型
+     */
+    UNKNOWN,
+    /**
+     * NULL类型
+     */
     NULL;
 
     @Override
