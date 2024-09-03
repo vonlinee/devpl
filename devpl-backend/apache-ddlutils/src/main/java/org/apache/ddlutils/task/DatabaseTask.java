@@ -284,7 +284,7 @@ public abstract class DatabaseTask extends Task {
         try {
             executeCommands(readModel());
         } finally {
-            if ((getDataSource() != null) && isShutdownDatabase()) {
+            if (getDataSource() != null && isShutdownDatabase()) {
                 getPlatform().shutdownDatabase();
             }
             // rollback of our classloader change

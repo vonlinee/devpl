@@ -1059,7 +1059,7 @@ public class JdbcModelReader implements DatabaseModelReader {
      * @param columnsToCheck The columns to check (e.g. the primary key columns)
      */
     protected void determineAutoIncrementFromResultSetMetaData(Table table, Column[] columnsToCheck) throws SQLException {
-        if (Utils.isEmpty(columnsToCheck)) {
+        if (columnsToCheck == null || columnsToCheck.length == 0) {
             return;
         }
 

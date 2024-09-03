@@ -65,7 +65,6 @@ public class FirebirdModelReader extends JdbcModelReader {
 
                 while (columnData.next()) {
                     ContextMap values = readColumns(columnData, getColumnsForColumn());
-
                     if (tableName.equals(values.get("TABLE_NAME"))) {
                         columns.add(readColumn(metaData, values));
                     }

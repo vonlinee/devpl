@@ -40,12 +40,9 @@ public class WriteDtdToFileCommand extends Command {
             throw new DdlUtilsTaskException("Cannot overwrite output file " + _outputFile.getAbsolutePath());
         }
 
-        try {
-            FileWriter outputWriter = new FileWriter(_outputFile);
+        try (FileWriter outputWriter = new FileWriter(_outputFile)){
             DataDtdWriter dtdWriter = new DataDtdWriter();
-
             dtdWriter.writeDtd(model, outputWriter);
-            outputWriter.close();
             _log.info("Written DTD to " + _outputFile.getAbsolutePath());
         } catch (Exception ex) {
             handleException(ex, "Failed to write to output file " + _outputFile.getAbsolutePath());

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 项目名变更
+ * 项目信息
  */
 @Getter
 @Setter

@@ -1,7 +1,7 @@
 package io.devpl.codegen.generator.config;
 
-import io.devpl.codegen.strategy.ProjectArchetype;
-import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
+import io.devpl.codegen.psi.ProjectArchetype;
+import io.devpl.codegen.psi.SimpleMavenProjectArchetype;
 import io.devpl.codegen.util.Utils;
 import lombok.Getter;
 import lombok.Setter;

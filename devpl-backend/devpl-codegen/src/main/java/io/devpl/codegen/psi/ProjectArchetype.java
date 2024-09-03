@@ -1,4 +1,4 @@
-package io.devpl.codegen.strategy;
+package io.devpl.codegen.psi;
 
 import io.devpl.codegen.generator.file.GeneratedFile;
 import io.devpl.codegen.generator.config.PropertyHolder;

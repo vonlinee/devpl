@@ -1,8 +1,5 @@
 package io.devpl.codegen.generator.file;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -10,8 +7,6 @@ import java.nio.charset.Charset;
 /**
  * 包含文件生成信息
  */
-@Getter
-@Setter
 public abstract class GeneratedFile {
 
     /**
@@ -74,5 +69,33 @@ public abstract class GeneratedFile {
      */
     public String getExtension() {
         return extension;
+    }
+
+    public String getTargetProject() {
+        return targetProject;
+    }
+
+    public String getTargetPackageName() {
+        return targetPackageName;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setTargetProject(String targetProject) {
+        this.targetProject = targetProject;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public void setTargetPackageName(String targetPackageName) {
+        this.targetPackageName = targetPackageName;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

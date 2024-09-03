@@ -5,18 +5,12 @@ import org.apache.ddlutils.DdlUtilsTaskException;
 /**
  * Helper class for attributes that can only take one of a fixed list
  * of values.
- *
- * <p>See {@link org.apache.tools.ant.taskdefs.FixCRLF FixCRLF} for an
- * example.
  */
 public abstract class EnumeratedAttribute {
-    // CheckStyle:VisibilityModifier OFF - bc
     /**
      * The selected value in this enumeration.
      */
     protected String value;
-
-    // CheckStyle:VisibilityModifier ON
 
     /**
      * the index of the selected value in the array.

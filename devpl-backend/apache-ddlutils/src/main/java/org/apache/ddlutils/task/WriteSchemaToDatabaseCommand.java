@@ -76,7 +76,6 @@ public class WriteSchemaToDatabaseCommand extends DatabaseCommandWithCreationPar
         try {
             if (isAlterDatabase()) {
                 Database currentModel = platform.readModelFromDatabase(model.getName(), getCatalogPattern(), getSchemaPattern(), null);
-
                 platform.alterModel(currentModel, model, params, true);
             } else {
                 platform.createDatabase(model,

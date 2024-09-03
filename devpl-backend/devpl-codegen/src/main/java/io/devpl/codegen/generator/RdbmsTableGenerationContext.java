@@ -7,8 +7,8 @@ import io.devpl.codegen.generator.file.TargetFile;
 import io.devpl.codegen.generator.plugins.*;
 import io.devpl.codegen.jdbc.JdbcUtils;
 
-import io.devpl.codegen.strategy.ProjectArchetype;
-import io.devpl.codegen.strategy.SimpleMavenProjectArchetype;
+import io.devpl.codegen.psi.ProjectArchetype;
+import io.devpl.codegen.psi.SimpleMavenProjectArchetype;
 import io.devpl.codegen.template.TemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import io.devpl.codegen.util.ClassUtils;

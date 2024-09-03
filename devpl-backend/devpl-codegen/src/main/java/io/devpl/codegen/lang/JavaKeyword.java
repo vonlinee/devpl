@@ -3,7 +3,7 @@ package io.devpl.codegen.lang;
 /**
  * The Java modifier keywords.
  */
-public enum Keyword {
+public enum JavaKeyword {
 
     DEFAULT("default"),
     PUBLIC("public"),
@@ -21,7 +21,7 @@ public enum Keyword {
 
     private final String codeRepresentation;
 
-    Keyword(String codeRepresentation) {
+    JavaKeyword(String codeRepresentation) {
         this.codeRepresentation = codeRepresentation;
     }
 

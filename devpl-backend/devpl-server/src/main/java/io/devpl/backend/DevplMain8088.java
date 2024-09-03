@@ -1,58 +1,56 @@
-package io.devpl.backend
+package io.devpl.backend;
 
-import lombok.extern.slf4j.Slf4j
-import org.springframework.boot.Banner
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
-import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.context.annotation.EnableAspectJAutoProxy
-import org.springframework.core.env.Environment
-import org.springframework.scheduling.annotation.EnableAsync
-import org.springframework.scheduling.annotation.EnableScheduling
-import java.net.InetAddress
-import java.net.UnknownHostException
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.Banner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Slf4j
 @EnableAsync
 @EnableAspectJAutoProxy
 @EnableScheduling
 @SpringBootApplication
-class DevplMain8088 : SpringBootServletInitializer() {
+public class DevplMain8088 extends SpringBootServletInitializer {
     /**
      * SpringBoot打WAR包部署tomcat
      */
     @Override
-    override fun configure(builder: SpringApplicationBuilder): SpringApplicationBuilder {
-        return builder.sources(DevplMain8088::class.java)
+    public SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(DevplMain8088.class);
     }
-}
 
-fun println(context: ConfigurableApplicationContext) {
-    val env: Environment = context.environment
-    try {
-        val ip = InetAddress.getLocalHost().hostAddress
-        val port = env.getProperty("server.port")
-        val contextPath = env.getProperty("server.servlet.context-path", "")
-        println(
-            """
-            Application Devpl is running! Access URLs:
-            > Local: 		http://localhost:${port}${contextPath}
-            > External: 	https://${ip}:${ip}${contextPath}
-        """.trimIndent()
-        )
-    } catch (e: UnknownHostException) {
-        throw RuntimeException(e)
+    public static void println(ConfigurableApplicationContext context) {
+        Environment env = context.getEnvironment();
+        try {
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            String port = env.getProperty("server.port");
+            String contextPath = env.getProperty("server.servlet.context-path", "");
+            System.out.printf("""
+                Application Devpl is running! Access URLs:
+                > Local: 		http://localhost:%s%s
+                > External: 	https://%s:%s%s
+                %n""", port, contextPath, ip, port, contextPath);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
     }
-}
 
-fun main(args: Array<String>) {
-    val context: ConfigurableApplicationContext =
-        SpringApplicationBuilder()
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = new SpringApplicationBuilder()
             .bannerMode(Banner.Mode.OFF)
-            .sources(DevplMain8088::class.java)
-            .main(DevplMain8088::class.java)
+            .sources(DevplMain8088.class)
+            .main(DevplMain8088.class)
             .build()
-            .run(*args)
-    println(context)
+            .run(args);
+        println(context);
+    }
 }

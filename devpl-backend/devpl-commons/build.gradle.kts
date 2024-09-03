@@ -3,12 +3,12 @@ plugins {
 }
 
 dependencies {
-    api(Libs.mybatis)
-    api(Libs.snakeyaml)
+    api(Libs.MYBATIS)
+    api(Libs.SNAKE_YAML)
     api(Libs.jsoup)
-    api(Libs.gson)
+    api(Libs.GSON)
 
-    api(Libs.springWeb)
+    api(Libs.SPRING_WEB)
     api(Libs.jacksonDatabind)
     api(Libs.jacksonAnnotations)
     api(Libs.jacksonCore)
@@ -16,8 +16,8 @@ dependencies {
         exclude("pull-parser", "pull-parser")
     }
 
-    api(Libs.lombok)
-    annotationProcessor(Libs.lombok)
+    api(Libs.LOMBOK)
+    annotationProcessor(Libs.LOMBOK)
 
     api(project(":devpl-codegen"))
 

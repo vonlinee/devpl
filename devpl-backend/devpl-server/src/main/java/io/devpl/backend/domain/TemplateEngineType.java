@@ -1,11 +1,14 @@
 package io.devpl.backend.domain;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 模板引擎类型
  */
+@Getter
 public enum TemplateEngineType {
 
     /**
@@ -36,18 +39,6 @@ public enum TemplateEngineType {
         this.providerName = providerName;
         this.provider = provider;
         this.extension = extension;
-    }
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public String getExtension() {
-        return extension;
     }
 
     public static TemplateEngineType findByName(String providerName) {

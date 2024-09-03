@@ -1,3 +1,6 @@
+/**
+ * @since JDK17
+ */
 module apache.ddlutils {
     requires java.sql;
     requires org.jetbrains.annotations;

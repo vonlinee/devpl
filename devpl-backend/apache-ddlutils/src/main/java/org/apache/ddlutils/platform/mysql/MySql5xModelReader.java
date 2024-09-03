@@ -61,7 +61,6 @@ public class MySql5xModelReader extends MySqlModelReader {
         }
 
         StringBuilder sb = new StringBuilder();
-
         HashSet<String> wrappedDbNames = new HashSet<>();
         for (Table table : tables) {
             sb.setLength(0);
