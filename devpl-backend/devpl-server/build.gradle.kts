@@ -17,12 +17,12 @@ dependencies {
     implementation(Libs.mysqlConnector)
     implementation(Libs.FREEMARKER)
     implementation(Libs.reactiveStreams)
-    implementation(Libs.jsonFlattener)
+    implementation(Libs.JSON_FLATTENER)
     implementation(Libs.FASTJSON2)
     implementation(Libs.DRUID)
     implementation(Libs.GSON)
     implementation(Libs.GUAVA_JRE)
-    implementation(Libs.apacheCommonsText)
+    implementation(Libs.APACHE_COMMONS_TEXT)
     implementation(Libs.dbutils)
     implementation(Libs.JAVA_PARSER_CORE)
     implementation(Libs.JAVA_PARSER_SYMBOL_SOLVER)
@@ -75,6 +75,36 @@ description = "devpl-server"
 
 java {
     withJavadocJar()
+}
+
+tasks.withType<JavaCompile> {
+    // Try to turn them all off automatically
+    options.compilerArgs.add("-Xlint:none")
+    options.compilerArgs.add("-nowarn") // same as '-Xlint:none'
+    // Turn them off manually
+    options.compilerArgs.add("-Xlint:-auxiliaryclass")
+    options.compilerArgs.add("-Xlint:-cast")
+    options.compilerArgs.add("-Xlint:-classfile")
+    options.compilerArgs.add("-Xlint:deprecation")
+    options.compilerArgs.add("-Xlint:-dep-ann")
+    options.compilerArgs.add("-Xlint:-divzero")
+    options.compilerArgs.add("-Xlint:-empty")
+    options.compilerArgs.add("-Xlint:-fallthrough")
+    options.compilerArgs.add("-Xlint:-finally")
+    options.compilerArgs.add("-Xlint:-options")
+    options.compilerArgs.add("-Xlint:-overloads")
+    options.compilerArgs.add("-Xlint:-overrides")
+    options.compilerArgs.add("-Xlint:-path")
+    options.compilerArgs.add("-Xlint:-processing")
+    options.compilerArgs.add("-Xlint:-rawtypes")
+    options.compilerArgs.add("-Xlint:-serial")
+    options.compilerArgs.add("-Xlint:-static")
+    options.compilerArgs.add("-Xlint:-try")
+    options.compilerArgs.add("-Xlint:-unchecked")
+    options.compilerArgs.add("-Xlint:-varargs")
+
+    targetCompatibility = JavaVersion.VERSION_17.majorVersion
+    sourceCompatibility = JavaVersion.VERSION_17.majorVersion
 }
 
 tasks.withType<KotlinCompile> {

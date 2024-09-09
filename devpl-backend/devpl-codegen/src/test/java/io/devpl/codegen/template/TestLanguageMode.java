@@ -1,7 +1,7 @@
 package io.devpl.codegen.template;
 
 import io.devpl.codegen.lang.LanguageMode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestLanguageMode {
 

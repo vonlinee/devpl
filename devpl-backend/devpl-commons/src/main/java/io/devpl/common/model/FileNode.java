@@ -1,5 +1,7 @@
 package io.devpl.common.model;
 
+import lombok.Data;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
  *
  * @see java.io.File
  */
+@Data
 public class FileNode {
 
     /**
@@ -55,26 +58,6 @@ public class FileNode {
      */
     private String extension;
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         if (name != null && !name.isBlank()) {
             this.name = name;
@@ -85,54 +68,6 @@ public class FileNode {
         } else {
             this.name = "Unknown";
         }
-    }
-
-    public boolean isLeaf() {
-        return leaf;
-    }
-
-    public void setLeaf(boolean leaf) {
-        this.leaf = leaf;
-    }
-
-    public boolean isSelectable() {
-        return selectable;
-    }
-
-    public void setSelectable(boolean selectable) {
-        this.selectable = selectable;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public List<FileNode> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<FileNode> children) {
-        this.children = children;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
-
-    public String getAbsolutePath() {
-        return absolutePath;
-    }
-
-    public void setAbsolutePath(String absolutePath) {
-        this.absolutePath = absolutePath;
     }
 
     @Override
@@ -151,14 +86,14 @@ public class FileNode {
     @Override
     public String toString() {
         return "FileNode{" +
-            "key='" + key + '\'' +
-            ", label='" + label + '\'' +
-            ", name='" + name + '\'' +
-            ", leaf=" + leaf +
-            ", selectable=" + selectable +
-            ", path='" + path + '\'' +
-            ", children=" + children +
-            ", extension='" + extension + '\'' +
-            '}';
+               "key='" + key + '\'' +
+               ", label='" + label + '\'' +
+               ", name='" + name + '\'' +
+               ", leaf=" + leaf +
+               ", selectable=" + selectable +
+               ", path='" + path + '\'' +
+               ", children=" + children +
+               ", extension='" + extension + '\'' +
+               '}';
     }
 }

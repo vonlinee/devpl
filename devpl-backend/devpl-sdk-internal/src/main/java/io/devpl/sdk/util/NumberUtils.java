@@ -2,6 +2,7 @@ package io.devpl.sdk.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 /**
  * 数字工具类
@@ -189,5 +190,27 @@ public class NumberUtils {
             throwNumberOverflowException(number, targetClass);
         }
         return number.longValue();
+    }
+
+    /**
+     * 获取3个数中最小的值
+     */
+    public static int min(int one, int two, int three) {
+        return (one = Math.min(one, two)) < three ? one : three;
+    }
+
+    /**
+     * 小数转百分比字符串
+     *
+     * @param num           小数
+     * @param decimalPlaces 保留小数位数
+     * @return 百分比字符串，例如20.45%
+     */
+    public static String percentage(float num, int decimalPlaces) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.##%");
+        // 设置小数位数
+        decimalFormat.setMaximumFractionDigits(decimalPlaces);
+        decimalFormat.setMinimumFractionDigits(decimalPlaces);
+        return decimalFormat.format(num * 100);
     }
 }

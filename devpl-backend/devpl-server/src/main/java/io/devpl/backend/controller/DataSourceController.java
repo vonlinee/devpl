@@ -12,7 +12,6 @@ import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;

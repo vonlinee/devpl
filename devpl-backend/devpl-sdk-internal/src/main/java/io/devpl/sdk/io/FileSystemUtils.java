@@ -101,10 +101,7 @@ public class FileSystemUtils {
             } else if (osName.contains("hp-ux") ||
                 osName.contains("aix")) {
                 os = POSIX_UNIX;
-            } else {
-                os = OTHER;
             }
-
         } catch (Exception ex) {
             os = INIT_PROBLEM;
         }
@@ -128,8 +125,8 @@ public class FileSystemUtils {
      * As this is not very useful, this method is deprecated in favour
      * of {@link #freeSpaceKb(String)} which returns a result in kilobytes.
      * <p>
-     * Note that some OS's are NOT currently supported, including OS/390,
-     * OpenVMS and and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
+     * Note that some OS are NOT currently supported, including OS/390,
+     * OpenVMS and SunOS 5. (SunOS is supported by <code>freeSpaceKb</code>.)
      * <pre>
      * FileSystemUtils.freeSpace("C:");       // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -143,8 +140,6 @@ public class FileSystemUtils {
      * @throws IllegalStateException    if an error occurred in initialisation
      * @throws IOException              if an error occurs when finding the free space
      * @since Commons IO 1.1, enhanced OS support in 1.2 and 1.3
-     * @deprecated Use freeSpaceKb(String)
-     * Deprecated from 1.3, may be removed in 2.0
      */
     public static long freeSpace(String path) throws IOException {
         return INSTANCE.freeSpaceOS(path, OS, false);
@@ -162,7 +157,7 @@ public class FileSystemUtils {
      * The free space is calculated via the command line.
      * It uses 'dir /-c' on Windows, 'df -kP' on AIX/HP-UX and 'df -k' on other Unix.
      * <p>
-     * In order to work, you must be running Windows, or have a implementation of
+     * In order to work, you must be running Windows, or have an implementation of
      * Unix df that supports GNU format when passed -k (or -kP). If you are going
      * to rely on this code, please check that it works on your OS by running
      * some simple tests to compare the command line with the output from this class.
@@ -203,7 +198,7 @@ public class FileSystemUtils {
 
     /**
      * Returns the free space on a drive or volume in a cross-platform manner.
-     * Note that some OS's are NOT currently supported, including OS/390.
+     * Note that some OS are NOT currently supported, including OS/390.
      * <pre>
      * FileSystemUtils.freeSpace("C:");  // Windows
      * FileSystemUtils.freeSpace("/volume");  // *nix
@@ -223,19 +218,14 @@ public class FileSystemUtils {
         if (path == null) {
             throw new IllegalArgumentException("Path must not be empty");
         }
-        switch (os) {
-            case WINDOWS:
-                return (kb ? freeSpaceWindows(path) / 1024 : freeSpaceWindows(path));
-            case UNIX:
-                return freeSpaceUnix(path, kb, false);
-            case POSIX_UNIX:
-                return freeSpaceUnix(path, kb, true);
-            case OTHER:
-                throw new IllegalStateException("Unsupported operating system");
-            default:
-                throw new IllegalStateException(
+        return switch (os) {
+            case WINDOWS -> (kb ? freeSpaceWindows(path) / 1024 : freeSpaceWindows(path));
+            case UNIX -> freeSpaceUnix(path, kb, false);
+            case POSIX_UNIX -> freeSpaceUnix(path, kb, true);
+            case OTHER -> throw new IllegalStateException("Unsupported operating system");
+            default -> throw new IllegalStateException(
                     "Exception caught when determining operating system");
-        }
+        };
     }
 
     /**
@@ -262,8 +252,8 @@ public class FileSystemUtils {
         // of the ArrayList anyway, but this will ensure it works even if it's
         // not, still assuming it is on the last non-blank line)
         for (int i = lines.size() - 1; i >= 0; i--) {
-            String line = (String) lines.get(i);
-            if (line.length() > 0) {
+            String line = lines.get(i);
+            if (!line.isEmpty()) {
                 return parseDir(line, path);
             }
         }
@@ -320,7 +310,7 @@ public class FileSystemUtils {
         }
 
         // remove commas and dots in the bytes count
-        StringBuffer buf = new StringBuffer(line.substring(bytesStart, bytesEnd));
+        StringBuilder buf = new StringBuilder(line.substring(bytesStart, bytesEnd));
         for (int k = 0; k < buf.length(); k++) {
             if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
                 buf.deleteCharAt(k--);
@@ -341,7 +331,7 @@ public class FileSystemUtils {
      * @throws IOException if an error occurs
      */
     long freeSpaceUnix(String path, boolean kb, boolean posix) throws IOException {
-        if (path.length() == 0) {
+        if (path.isEmpty()) {
             throw new IllegalArgumentException("Path must not be empty");
         }
 //        path = FilenameUtils.normalize(path);
@@ -358,21 +348,21 @@ public class FileSystemUtils {
             (flags.length() > 1 ? new String[]{"df", flags, path} : new String[]{"df", path});
 
         // perform the command, asking for up to 3 lines (header, interesting, overflow)
-        List<?> lines = performCommand(cmdAttribs, 3);
+        List<String> lines = performCommand(cmdAttribs, 3);
         if (lines.size() < 2) {
             // unknown problem, throw exception
             throw new IOException(
                 "Command line 'df' did not return info as expected " +
                     "for path '" + path + "'- response was " + lines);
         }
-        String line2 = (String) lines.get(1); // the line we're interested in
+        String line2 = lines.get(1); // the line we're interested in
 
         // Now, we tokenize the string. The fourth element is what we want.
         StringTokenizer tok = new StringTokenizer(line2, " ");
         if (tok.countTokens() < 4) {
             // could be long Filesystem, thus data on third line
             if (tok.countTokens() == 1 && lines.size() >= 3) {
-                String line3 = (String) lines.get(2); // the line may be interested in
+                String line3 = lines.get(2); // the line may be interested in
                 tok = new StringTokenizer(line3, " ");
             } else {
                 throw new IOException(
@@ -429,7 +419,7 @@ public class FileSystemUtils {
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4784692
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4801027
         // http://forum.java.sun.com/thread.jspa?threadID=533029&messageID=2572018
-        // however, its still not perfect as the JDK support is so poor
+        // however, It's still not perfect as the JDK support is so poor
         // (see commond-exec or ant for a better multi-threaded multi-os solution)
 
         List<String> lines = new ArrayList<>(20);
@@ -458,7 +448,7 @@ public class FileSystemUtils {
                     "Command line returned OS error code '" + proc.exitValue() +
                         "' for command " + Arrays.asList(cmdAttribs));
             }
-            if (lines.size() == 0) {
+            if (lines.isEmpty()) {
                 // unknown problem, throw exception
                 throw new IOException(
                     "Command line did not return any info " +

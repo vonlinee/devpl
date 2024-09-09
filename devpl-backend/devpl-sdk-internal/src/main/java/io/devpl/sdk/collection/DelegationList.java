@@ -65,7 +65,7 @@ public interface DelegationList<E> {
         return delegator().addAll(index, c);
     }
 
-    default boolean removeAll(Collection<?> c) {
+    default <T> boolean removeAll(Collection<T> c) {
         return delegator().removeAll(c);
     }
 

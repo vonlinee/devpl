@@ -1259,8 +1259,7 @@ public class IOUtils {
      * @throws IOException          if an I/O error occurs
      * @since Commons IO 1.1
      */
-    public static boolean contentEquals(Reader input1, Reader input2)
-        throws IOException {
+    public static boolean contentEquals(Reader input1, Reader input2) throws IOException {
         if (!(input1 instanceof BufferedReader)) {
             input1 = new BufferedReader(input1);
         }

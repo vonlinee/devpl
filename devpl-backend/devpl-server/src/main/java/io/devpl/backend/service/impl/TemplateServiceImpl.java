@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.backend.boot.CodeGenProperties;
 import io.devpl.backend.common.exception.BusinessException;
 import io.devpl.backend.dao.TemplateInfoMapper;
-import io.devpl.backend.domain.TemplateEngineType;
+import io.devpl.backend.domain.enums.TemplateEngineType;
 import io.devpl.backend.domain.param.TemplateInfoListParam;
 import io.devpl.backend.domain.vo.TemplateProviderVO;
 import io.devpl.backend.domain.vo.TemplateSelectVO;

@@ -21,7 +21,6 @@ public abstract class MappingFieldParserAdapter implements FieldParser {
     @Override
     public List<Map<String, Object>> parse(String content) throws FieldParseException {
         List<String[]> rows = parseRows(content);
-
         if (CollectionUtils.isEmpty(rows)) {
             return Collections.emptyList();
         }

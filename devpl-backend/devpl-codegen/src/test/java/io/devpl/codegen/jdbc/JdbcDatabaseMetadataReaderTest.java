@@ -5,7 +5,7 @@ import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.StringReader;

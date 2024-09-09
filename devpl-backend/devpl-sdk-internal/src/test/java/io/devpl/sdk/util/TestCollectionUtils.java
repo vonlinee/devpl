@@ -1,12 +1,9 @@
-package io.devpl.sdk;
+package io.devpl.sdk.util;
 
 import io.devpl.sdk.collection.ArraySet;
-import io.devpl.sdk.util.ArrayUtils;
-import io.devpl.sdk.util.CollectionUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Set;
 
 public class TestCollectionUtils {
 

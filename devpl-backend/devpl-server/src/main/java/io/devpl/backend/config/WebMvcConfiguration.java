@@ -63,7 +63,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * 利用过滤器配置，把RepeatableFilter设置成第一个调用的过滤器。注意FilterRegistrationBean的setOrder()方法，数值越小越先执行。
+     * 利用过滤器配置，把RepeatableFilter设置成第一个调用的过滤器。
+     * 注意FilterRegistrationBean的setOrder()方法，数值越小越先执行。
      *
      * @return 过滤器配置Bean
      */

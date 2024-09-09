@@ -206,7 +206,7 @@ public interface MyBatisPlusMapper<T> extends BaseMapper<T> {
      * @param ids 主键列表
      * @return 是否成功
      */
-    default boolean deleteByIds(Serializable... ids) {
+    default boolean deleteByIds(Serializable[] ids) {
         if (ids == null || ids.length == 0) {
             return false;
         }

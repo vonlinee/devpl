@@ -3,7 +3,7 @@ package io.devpl.codegen.template;
 import io.devpl.codegen.generator.config.CaseFormat;
 import org.apache.ddlutils.jdbc.meta.ForeignKeyMetadata;
 import org.apache.ddlutils.jdbc.meta.TypeInfoMetadata;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 

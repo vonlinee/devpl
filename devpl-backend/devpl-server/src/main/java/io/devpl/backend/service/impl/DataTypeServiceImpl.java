@@ -218,6 +218,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
 
     @Override
     public boolean removeDataTypeGroupByIds(DataTypeGroupParam param) {
-        return dataTypeGroupMapper.deleteByIds(CollectionUtils.toArray(param.getGroups(), DataTypeGroup::getId, Long[]::new));
+        Long[] ids = param.getGroups().stream().map(DataTypeGroup::getId).toArray(Long[]::new);
+        return dataTypeGroupMapper.deleteByIds(ids);
     }
 }

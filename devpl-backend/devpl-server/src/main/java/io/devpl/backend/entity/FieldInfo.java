@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 @TableName(value = "field_info")
-public final class FieldInfo implements Serializable {
+public class FieldInfo implements Serializable {
 
     /**
      * 主键ID
@@ -47,10 +47,28 @@ public final class FieldInfo implements Serializable {
     private String fieldName;
 
     /**
+     * 字段长度
+     */
+    private Integer length;
+
+    /**
+     * 字段逻辑类型
+     * 文本，长文本，数字，关联字段，用户，部门，公司，字典，日期，自动编号，是/否(布尔值)
+     */
+    @TableField(value = "logical_type")
+    private Integer logicalType;
+
+    /**
+     * 字段标签名
+     */
+    private String fieldLabel;
+
+    /**
      * 数据类型
      *
      * @see DataTypeItem#getTypeKey()
      */
+    @TableField(value = "data_type")
     private String dataType;
 
     /**
@@ -58,10 +76,17 @@ public final class FieldInfo implements Serializable {
      *
      * @see FieldInfo#description
      */
+    @TableField(value = "`comment`")
     private String comment;
 
     /**
-     * 描述信息
+     * 精度，保留几位小数
+     */
+    @TableField(value = "`precision`")
+    private Integer precision;
+
+    /**
+     * 字段描述信息
      */
     private String description;
 
@@ -88,6 +113,12 @@ public final class FieldInfo implements Serializable {
      */
     @TableField(value = "optional")
     private Boolean optional;
+
+    /**
+     * 是否只读字段
+     */
+    @TableField(value = "readonly")
+    private Boolean readOnly;
 
     /**
      * 是否是叶子节点

@@ -1,6 +1,8 @@
 package io.devpl.backend.service.impl;
 
+import io.devpl.backend.domain.param.FieldCopyGenParam;
 import io.devpl.backend.domain.param.JavaPojoCodeGenParam;
+import io.devpl.backend.entity.FieldGroup;
 import io.devpl.backend.entity.FieldInfo;
 import io.devpl.backend.entity.TemplateParam;
 import io.devpl.backend.service.CodeGenerationService;
@@ -14,12 +16,14 @@ import io.devpl.common.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.Data;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CodeGenerationServiceImpl implements CodeGenerationService {
@@ -92,7 +96,6 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         model.setPackageName(param.getPackageName());
         model.addSuperInterfaces(Serializable.class);
         model.setClassName(param.getClassName());
-
         List<FieldData> fieldDataList = new ArrayList<>();
         for (FieldInfo field : param.getFields()) {
             FieldData fieldData = new FieldData();
@@ -105,6 +108,22 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
         model.setFields(fieldDataList);
         // 字段信息
         return templateEngine.render("codegen/templates/vm/easypoi.pojo.vm", mergeGlobalTemplateParams(model));
+    }
+
+    /**
+     * TODO
+     *
+     * @param param FieldCopyGenParam
+     * @return
+     */
+    @Override
+    public String generateFieldCopyCode(FieldCopyGenParam param) {
+
+        FieldGroup fromGroup = param.getFromGroup();
+
+        Set<String> fieldKeys = fromGroup.getFieldKeys();
+
+        return null;
     }
 
     /**

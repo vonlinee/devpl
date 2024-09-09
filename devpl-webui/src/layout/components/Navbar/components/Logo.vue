@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-logo">
-    <!--		<el-avatar src="./favicon.ico"></el-avatar>-->
+    		<el-avatar src="./favicon.ico"></el-avatar>
     <span class="logo-title">Devpl</span>
   </div>
 </template>

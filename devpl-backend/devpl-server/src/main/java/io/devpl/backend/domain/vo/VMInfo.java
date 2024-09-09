@@ -1,4 +1,4 @@
-package io.devpl.backend.domain;
+package io.devpl.backend.domain.vo;
 
 import lombok.Data;
 

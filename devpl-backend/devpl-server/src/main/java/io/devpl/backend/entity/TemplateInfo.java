@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.devpl.backend.domain.TemplateEngineType;
+import io.devpl.backend.domain.enums.TemplateEngineType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.JdbcType;
@@ -16,7 +16,7 @@ import org.apache.ibatis.type.JdbcType;
 @Getter
 @Setter
 @TableName(value = "template_info")
-public class TemplateInfo extends DBEntity {
+public class TemplateInfo extends Entity {
 
     /**
      * 主键

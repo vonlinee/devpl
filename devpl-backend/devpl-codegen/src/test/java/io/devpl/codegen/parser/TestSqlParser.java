@@ -2,7 +2,7 @@ package io.devpl.codegen.parser;
 
 import com.alibaba.druid.DbType;
 import io.devpl.codegen.parser.sql.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestSqlParser {
 

@@ -2,17 +2,15 @@ package io.devpl.codegen;
 
 import com.alibaba.druid.DbType;
 import io.devpl.codegen.parser.sql.DruidSqlParser;
-import io.devpl.codegen.parser.sql.InsertColumn;
 import io.devpl.codegen.parser.sql.InsertSqlParseResult;
 import io.devpl.codegen.parser.sql.SqlParser;
 import io.devpl.sdk.io.CustomLineIterator;
 import io.devpl.sdk.util.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 
 public class ToolsTest {
 

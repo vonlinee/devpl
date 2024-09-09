@@ -136,7 +136,7 @@ public final class Validator {
             throw new IllegalArgumentException(message);
         }
         if (obj instanceof String) {
-            if (((String) obj).length() == 0) {
+            if (((String) obj).isEmpty()) {
                 throw new IllegalArgumentException(message);
             }
         } else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty()) {
@@ -279,7 +279,7 @@ public final class Validator {
         notEmpty(map);
         notExistKey(map, key);
         if (map.get(key) == null) {
-            throw new IllegalArgumentException(String.format("the value of key: {} in the map cannot be null", key));
+            throw new IllegalArgumentException(String.format("the value of key: %s in the map cannot be null", key));
         }
     }
 
@@ -289,7 +289,7 @@ public final class Validator {
         notExistKey(map, key);
         notNullValue(map, key, message);
         if (isBlank(map.get(key))) {
-            throw new IllegalArgumentException(String.format("the value of key:{} in the map cannot be blank", key));
+            throw new IllegalArgumentException(String.format("the value of key:%s in the map cannot be blank", key));
         }
     }
 
@@ -306,7 +306,7 @@ public final class Validator {
 
     public static <T extends CharSequence> T notEmpty(final T chars, final String message, final Object... values) {
         Objects.requireNonNull(chars, () -> String.format(message, values));
-        if (chars.length() == 0) {
+        if (chars.isEmpty()) {
             throw new IllegalArgumentException(String.format(message, values));
         }
         return chars;
@@ -342,7 +342,7 @@ public final class Validator {
     }
 
     public static <T> T[] validIndex(final T[] array, final int index) {
-        return validIndex(array, index, DEFAULT_VALID_INDEX_ARRAY_EX_MESSAGE, Integer.valueOf(index));
+        return validIndex(array, index, DEFAULT_VALID_INDEX_ARRAY_EX_MESSAGE, index);
     }
 
     public static <T extends Collection<?>> T validIndex(final T collection, final int index, final String message, final Object... values) {
@@ -354,7 +354,7 @@ public final class Validator {
     }
 
     public static <T extends Collection<?>> T validIndex(final T collection, final int index) {
-        return validIndex(collection, index, DEFAULT_VALID_INDEX_COLLECTION_EX_MESSAGE, Integer.valueOf(index));
+        return validIndex(collection, index, DEFAULT_VALID_INDEX_COLLECTION_EX_MESSAGE, index);
     }
 
     public static <T extends CharSequence> T validIndex(final T chars, final int index, final String message, final Object... values) {
@@ -366,7 +366,7 @@ public final class Validator {
     }
 
     public static <T extends CharSequence> T validIndex(final T chars, final int index) {
-        return validIndex(chars, index, DEFAULT_VALID_INDEX_CHAR_SEQUENCE_EX_MESSAGE, Integer.valueOf(index));
+        return validIndex(chars, index, DEFAULT_VALID_INDEX_CHAR_SEQUENCE_EX_MESSAGE, index);
     }
 
     public static void validState(final boolean expression) {
@@ -449,7 +449,6 @@ public final class Validator {
         }
     }
 
-    @SuppressWarnings("boxing")
     public static void inclusiveBetween(final double start, final double end, final double value) {
         // TODO when breaking BC, consider returning value
         if (value < start || value > end) {
@@ -528,7 +527,7 @@ public final class Validator {
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type) {
         // TODO when breaking BC, consider returning type
         if (!superType.isAssignableFrom(type)) {
-            throw new IllegalArgumentException(String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE, type == null ? "null" : type.getName(), superType.getName()));
+            throw new IllegalArgumentException(String.format(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE, type.getName(), superType.getName()));
         }
     }
 
@@ -584,7 +583,7 @@ public final class Validator {
         try {
             return LocalDateTime.parse(dt, DateTimeFormatter.ofPattern(format));
         } catch (Exception e) {
-            throw new IllegalArgumentException(String.format("datetime :{} is not suitable for the format:{}", dt, format));
+            throw new IllegalArgumentException(String.format("datetime :%s is not suitable for the format:%s", dt, format));
         }
     }
 
@@ -596,14 +595,14 @@ public final class Validator {
             LocalDateTime dts2 = LocalDateTime.parse(s1, DEFAULT_DATETIME_FORMATTER);
             LocalDateTime dte2 = LocalDateTime.parse(e2, DEFAULT_DATETIME_FORMATTER);
             // 开始时间大于结束时间
-            if (dts1.compareTo(dte2) > 0 || dte1.compareTo(dts2) < 0) {
+            if (dts1.isAfter(dte2) || dte1.isBefore(dts2)) {
                 result = true;
             }
             return result;
         } catch (Exception ignore) {
             // ignore
         }
-        return result;
+        return false;
     }
 
     // 判断：返回true、false
@@ -629,7 +628,7 @@ public final class Validator {
 
     public static <T> boolean isEmpty(final CharSequence sequence) {
         notNull(sequence);
-        return sequence.length() == 0;
+        return sequence.isEmpty();
     }
 
     /**

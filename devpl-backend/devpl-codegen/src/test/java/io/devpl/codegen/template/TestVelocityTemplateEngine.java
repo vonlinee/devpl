@@ -4,8 +4,8 @@ import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.context.InternalContextAdapter;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.Writer;
 
@@ -13,7 +13,7 @@ public class TestVelocityTemplateEngine {
 
     VelocityTemplateEngine engine;
 
-    @Before
+    @BeforeEach
     public void createTemplateEngine() {
         engine = new VelocityTemplateEngine();
     }

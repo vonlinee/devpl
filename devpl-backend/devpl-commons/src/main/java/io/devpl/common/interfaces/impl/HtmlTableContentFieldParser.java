@@ -52,8 +52,7 @@ public class HtmlTableContentFieldParser extends MappingFieldParserAdapter {
             }
         }
 
-        for (int i = 0; i < mergedLines.size(); i++) {
-            String line = mergedLines.get(i);
+        for (String line : mergedLines) {
             String[] columnsOfRow = getTitleRowsOfTableContent(line);
             rows.add(columnsOfRow);
         }

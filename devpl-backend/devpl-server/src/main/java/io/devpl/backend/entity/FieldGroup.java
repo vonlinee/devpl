@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.devpl.sdk.annotations.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 字段组信息表
@@ -47,4 +51,12 @@ public class FieldGroup implements Serializable {
      */
     @TableField(exist = false)
     private List<GroupField> fields;
+
+    @NotNull
+    public Set<String> getFieldKeys() {
+        if (fields == null) {
+            return Collections.emptySet();
+        }
+        return fields.stream().map(GroupField::getFieldKey).collect(Collectors.toSet());
+    }
 }

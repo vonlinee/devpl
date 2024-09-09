@@ -1,7 +1,7 @@
 package io.devpl.codegen.utils;
 
 import io.devpl.codegen.util.JavaBeansUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JavaBeanUtilsTest {
 

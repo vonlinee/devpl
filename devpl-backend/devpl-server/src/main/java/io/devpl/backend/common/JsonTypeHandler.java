@@ -36,7 +36,7 @@ public class JsonTypeHandler extends AbstractJsonTypeHandler<Map<String, Object>
             }
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            return "";
+            return "{}";
         }
     }
 }

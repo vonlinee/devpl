@@ -1,6 +1,6 @@
 package io.devpl.backend.controller;
 
-import io.devpl.backend.domain.VMInfo;
+import io.devpl.backend.domain.vo.VMInfo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

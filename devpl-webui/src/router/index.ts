@@ -7,7 +7,7 @@ import {
 
 /**
  * 菜单路由
- * 
+ * 存放了所有前端页面所有菜单
  * 目录级别的菜单不需要指定component，否则会导致子菜单跳转的路由均为该目录的component指定的组件
  * 
  * https://router.vuejs.org/zh/guide/
@@ -16,7 +16,7 @@ export const menuRoutes: RouteRecordRaw[] = [
   {
     path: "/datasource",
     meta: {
-      title: "数据源",
+      title: "数据源管理",
       icon: "icon-database-fill",
     },
     children: [
@@ -44,7 +44,7 @@ export const menuRoutes: RouteRecordRaw[] = [
   {
     path: "/codegen",
     meta: {
-      title: "代码生成",
+      title: "代码生成器",
       icon: "icon-appstore",
     },
     children: [
@@ -111,15 +111,42 @@ export const menuRoutes: RouteRecordRaw[] = [
     children: [],
   },
   {
-    path: "/model",
-    name: "领域模型",
+    path: "/databaseManager",
     meta: {
-      title: "领域模型",
+      title: "数据库管理",
+      icon: "icon-appstore"
+    },
+    children: [
+      {
+        path: "/databaseManager/model",
+        name: "DatabaseModelManage", // name 字段唯一
+        component: () => import("@/views/dbm/database/index.vue"),
+        meta: {
+          title: "模型管理",
+          icon: "icon-fire",
+        },
+      },
+      {
+        path: "/databaseManager/table",
+        name: "DatabaseTableDesigner",
+        component: () => import("@/views/dbm/table/index.vue"),
+        meta: {
+          title: "数据库表设计",
+          icon: "icon-fire",
+        },
+      }
+    ],
+  },
+  {
+    path: "/model",
+    name: "模型管理",
+    meta: {
+      title: "模型管理",
       icon: "icon-appstore",
     },
     children: [
       {
-        path: "/codegen/datatype",
+        path: "/model/datatype",
         name: "FieldType",
         component: () => import("@/views/datatype/index.vue"),
         meta: {
@@ -128,25 +155,25 @@ export const menuRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: "/fields",
+        path: "/model/fields",
+        name: "FieldInfo",
         meta: {
           title: "字段信息",
           icon: "icon-appstore",
         },
         component: () => import("@/views/fields/index.vue"),
-        children: [],
       },
       {
-        path: "/field/group",
+        path: "/model/field/group",
+        name: "FieldGroup",
         meta: {
           title: "字段分组",
           icon: "icon-appstore",
         },
         component: () => import("@/views/fields/group/index.vue"),
-        children: [],
       },
       {
-        path: "/codegen/model",
+        path: "/model/detail",
         name: "DomainModel",
         component: () => import("@/views/model/index.vue"),
         meta: {
@@ -163,15 +190,6 @@ export const menuRoutes: RouteRecordRaw[] = [
       icon: "icon-appstore",
     },
     children: [
-      {
-        path: "/devtools/database",
-        name: "数据库",
-        component: () => import("@/views/devtools/database/index.vue"),
-        meta: {
-          title: "数据库",
-          icon: "icon-fire",
-        },
-      },
       {
         path: "/devtools/mybatis",
         name: "MyBatis",

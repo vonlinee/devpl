@@ -8,7 +8,7 @@ import io.devpl.codegen.generator.config.GlobalConfiguration;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 import io.devpl.codegen.generator.config.xml.XMLParserException;
 import io.devpl.codegen.util.Utils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;

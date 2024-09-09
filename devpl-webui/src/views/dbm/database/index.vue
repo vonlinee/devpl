@@ -47,9 +47,6 @@ onMounted(() => {
       nextTick(() => fireDatabaseChanged(currentDataSourceId.value!))
     }
   })
-
-  console.log(paneRef.value?.clientHeight);
-
 })
 
 const fillTableData = (data: DBTableDataVO) => {

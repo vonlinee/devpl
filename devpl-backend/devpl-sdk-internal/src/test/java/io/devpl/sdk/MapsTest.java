@@ -1,7 +1,7 @@
 package io.devpl.sdk;
 
 import io.devpl.sdk.collection.Maps;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 

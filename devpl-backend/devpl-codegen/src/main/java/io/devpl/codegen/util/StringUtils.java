@@ -17,7 +17,6 @@ public class StringUtils {
         return s != null && !s.isEmpty();
     }
 
-
     public static String composeFullyQualifiedTableName(String catalog,
                                                         String schema, String tableName, char separator) {
         StringBuilder sb = new StringBuilder();
@@ -113,6 +112,7 @@ public class StringUtils {
     /**
      * 校验字符串是否可以作为数据库名称或表名称。
      * 这是一个通用的校验方法，遵循大多数数据库系统的基本命名规则。
+     *
      * @param name 要校验的字符串
      * @return 如果字符串是有效的数据库或表名称，则返回true；否则返回false。
      */

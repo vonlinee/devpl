@@ -84,19 +84,20 @@ object Libs {
 
     val mybatisPlusBootStarter3 = "com.baomidou:mybatis-plus-spring-boot3-starter:3.5.5"
 
-    val jsonFlattener = "com.github.wnameless:json-flattener:0.7.1"
+    const val jsonFlattener = "com.github.wnameless:json-flattener:0.7.1"
     val reactiveStreams = "org.reactivestreams:reactive-streams:1.0.4"
     val jakartaAnnotationApi = "jakarta.annotation:jakarta.annotation-api:2.1.1"
 
     // Apache Commons
     val dbutils = "commons-dbutils:commons-dbutils:1.7"
-    val apacheCommonsText = "org.apache.commons:commons-text:1.10.0"
-    val APACHE_COMMONS_LANG3 = "org.apache.commons:commons-lang3:3.14.0"
-    val APACHE_COMMONS_IO = "commons-io:commons-io:2.7"
-    val apacheCommonsCollections = "commons-collections:commons-collections:3.2.2"
-    val apacheCommonsCollections4 = "org.apache.commons:commons-collections4:4.4"
+    const val APACHE_COMMONS_TEXT = "org.apache.commons:commons-text:1.12.0"
+    const val APACHE_COMMONS_LANG3 = "org.apache.commons:commons-lang3:3.14.0"
+    const val APACHE_COMMONS_IO = "commons-io:commons-io:2.7"
+    const val APACHE_COMMONS_COLLECTIONS = "commons-collections:commons-collections:3.2.2"
+    const val APACHE_COMMONS_COLLECTIONS4 = "org.apache.commons:commons-collections4:4.4"
     val apacheCommonsDbcp2 = "org.apache.commons:commons-dbcp2:2.11.0"
     val apacheCommonsPool2 = "org.apache.commons:commons-pool2:2.12.0"
+
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     const val APACHE_COMMONS_CLI = "commons-cli:commons-cli:1.9.0"
 
@@ -105,8 +106,8 @@ object Libs {
     const val ANT = "org.apache.ant:ant:1.9.16"
 
     // Apache POI
-    val poi = "org.apache.poi:poi:4.1.2"
-    val poiOoxml = "org.apache.poi:poi-ooxml:4.1.2"
+    const val POI = "org.apache.poi:poi:4.1.2"
+    const val POI_OOXML = "org.apache.poi:poi-ooxml:4.1.2"
 
     // Easypoi
     const val EASY_POI_BASE = "cn.afterturn:easypoi-base:4.4.0"

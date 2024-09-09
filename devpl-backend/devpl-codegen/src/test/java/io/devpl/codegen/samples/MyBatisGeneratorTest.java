@@ -1,6 +1,6 @@
 package io.devpl.codegen.samples;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ProgressCallback;
 import org.mybatis.generator.api.ShellRunner;

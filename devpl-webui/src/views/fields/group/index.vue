@@ -14,7 +14,6 @@
     <el-table-column label="操作" width="500" fixed="right">
       <template #default="scope">
         <el-button link @click="javaPojoGenModal.show(scope.row.id)">Java</el-button>
-        <el-button link @click="showTableCreatorModal(scope.row)">SQL</el-button>
         <el-button link>转为模型</el-button>
         <el-button link @click="otherModal.show(scope.row.id)">其他</el-button>
         <el-button link @click="showFieldGroupEditModal(scope.row)">编辑</el-button>
@@ -34,15 +33,13 @@
   <Other ref="otherModal"></Other>
 
   <FieldGroupEdit ref="fieldGroupEditModalRef"></FieldGroupEdit>
-
-  <TableCreatorModal ref="tableCreatorModalRef"></TableCreatorModal>
 </template>
 
 <script lang="ts" setup>
 import FieldGroupImport from "./FieldGroupImport.vue";
 import { onMounted, ref } from "vue";
 import {
-  apiDeleteFieldGroup, apiListGroupFieldsById,
+  apiDeleteFieldGroup,
   apiNewFieldGroup,
   apiPageFieldGroup
 } from "@/api/fields";
@@ -50,14 +47,12 @@ import JavaPojoGen from "@/views/fields/group/JavaPojoGen.vue";
 import Other from "@/views/fields/group/Other.vue";
 import { Message } from "@/hooks/message";
 import FieldGroupEdit from "@/views/fields/group/FieldGroupEdit.vue";
-import TableCreatorModal from "@/views/fields/group/TableCreatorModal.vue";
 
 const importFieldGroupModal = ref();
 const tableData = ref<FieldGroup[]>([]);
 const javaPojoGenModal = ref();
 const otherModal = ref();
 const fieldGroupEditModalRef = ref();
-const tableCreatorModalRef = ref();
 
 const showFieldImportModal = () => {
   importFieldGroupModal.value.show();
@@ -70,14 +65,6 @@ const onParseFinished = (fields: FieldInfo[]) => {
         Message.info("添加字段组成功");
         refreshTableData();
       }
-    });
-  }
-};
-
-const showTableCreatorModal = (group?: FieldGroup) => {
-  if (group && group.id) {
-    apiListGroupFieldsById(group.id).then((res) => {
-      tableCreatorModalRef.value.show(group.id, res.data);
     });
   }
 };
