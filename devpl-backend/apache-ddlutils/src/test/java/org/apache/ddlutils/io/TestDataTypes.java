@@ -4,7 +4,7 @@ import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -689,7 +689,7 @@ public class TestDataTypes extends TestAgainstLiveDatabaseBase {
      */
     public void testLongVarCharWithDefault() {
         if (!getPlatformInfo().isDefaultValuesForLongTypesSupported() ||
-            DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+            BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             // Some Interbase versions do not like default values for LOB objects
             return;
         }

@@ -1,11 +1,14 @@
 package io.devpl.backend.tools.ddl.enums;
 
+import io.devpl.sdk.annotations.NotEmpty;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public enum SqlTypeAndJavaTypeEnum {
 
     BIGINT("BIGINT", Arrays.asList("long", "Long"), "(20)"),
@@ -31,7 +34,7 @@ public enum SqlTypeAndJavaTypeEnum {
         this.defaultLength = defaultLength;
     }
 
-    public static SqlTypeAndJavaTypeEnum findByJavaType(String javaType) {
+    public static SqlTypeAndJavaTypeEnum findByJavaType(@NotEmpty String javaType) {
         if (StringUtils.isBlank(javaType)) {
             throw new RuntimeException("异常实体");
         }
@@ -41,17 +44,5 @@ public enum SqlTypeAndJavaTypeEnum {
             }
         }
         return VARCHAR;
-    }
-
-    public String getSqlType() {
-        return sqlType;
-    }
-
-    public List<String> getJavaType() {
-        return javaType;
-    }
-
-    public String getDefaultLength() {
-        return defaultLength;
     }
 }

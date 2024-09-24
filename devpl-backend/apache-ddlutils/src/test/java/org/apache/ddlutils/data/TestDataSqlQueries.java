@@ -5,7 +5,7 @@ import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TableModel;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.TableRowIterator;
 import org.apache.ddlutils.util.DatabaseTestHelper;
 import org.junit.jupiter.api.Assertions;
@@ -158,7 +158,7 @@ public class TestDataSqlQueries extends TestAgainstLiveDatabaseBase {
         // we need special catering for Sybase which does not support identity for INTEGER columns
         final String modelXml;
 
-        if (DBTypeEnum.SYBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.SYBASE.getName().equals(getPlatform().getName())) {
             modelXml = """
                 <?xml version='1.0' encoding='ISO-8859-1'?>
                 <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='ddlutils'>

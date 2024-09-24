@@ -10,7 +10,7 @@ public class TestCloudscapePlatform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.CLOUDSCAPE.getName();
+        return BuiltinDBType.CLOUDSCAPE.getName();
     }
 
     /**

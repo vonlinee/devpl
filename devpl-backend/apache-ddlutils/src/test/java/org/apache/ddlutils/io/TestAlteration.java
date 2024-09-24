@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -76,7 +76,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
         final String model1Xml;
         final String model2Xml;
 
-        if (DBTypeEnum.SYBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.SYBASE.getName().equals(getPlatform().getName())) {
             model1Xml = """
                 <?xml version='1.0' encoding='ISO-8859-1'?>
                 <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -152,7 +152,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
         final String model1Xml;
         final String model2Xml;
 
-        if (DBTypeEnum.SYBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.SYBASE.getName().equals(getPlatform().getName())) {
             model1Xml = """
                 <?xml version='1.0' encoding='ISO-8859-1'?>
                 <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -259,7 +259,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml;
         final String model2Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
@@ -880,7 +880,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
      */
     @Test
     public void testDropFKAndCorrespondingIndex() {
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.FIREBIRD.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName())) {
             // Firebird does not allow an index and a foreign key in the same table to have the same name
             return;
         }
@@ -944,7 +944,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
      */
     @Test
     public void testDropFKButNotCorrespondingIndex() {
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.FIREBIRD.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName())) {
             // Firebird does not allow an index and a foreign key in the same table to have the same name
             return;
         }
@@ -1015,7 +1015,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
         // MySql/InnoDB doesn't allow the creation of a foreign key and index with the same name
         // unless the index can be used as the FK's index
         // Firebird does not allow an index and a foreign key in the same table to have the same name at all
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.FIREBIRD.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -1080,7 +1080,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
         // MySql/InnoDB doesn't allow the creation of a foreign key and index with the same name
         // unless the index can be used as the FK's index
         // Firebird does not allow an index and a foreign key in the same table to have the same name at all
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.FIREBIRD.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -1453,7 +1453,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
         final String model2Xml;
 
         // Sybase does not like INTEGER auto-increment columns
-        if (DBTypeEnum.SYBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.SYBASE.getName().equals(getPlatform().getName())) {
             model2Xml = """
                 <?xml version='1.0' encoding='ISO-8859-1'?>
                 <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -1582,7 +1582,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
             </database>""";
 
         // Sybase does not like INTEGER auto-increment columns
-        if (DBTypeEnum.SYBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.SYBASE.getName().equals(getPlatform().getName())) {
             model1Xml = """
                 <?xml version='1.0' encoding='ISO-8859-1'?>
                 <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -1671,7 +1671,7 @@ public class TestAlteration extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             // McKoi can actually handle this, though interestingly it will result in a null value for the pk
             assertEquals((Object) null, rows .get(0), "pk");
             assertEquals((Object) "test", rows .get(0), "avalue");

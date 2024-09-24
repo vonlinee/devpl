@@ -9,40 +9,6 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for column_metadata
--- ----------------------------
-DROP TABLE IF EXISTS `column_metadata`;
-CREATE TABLE `column_metadata`  (
-  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `table_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '所属表的ID',
-  `table_cat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'table catalog (maybe null)',
-  `table_schem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'table schema (maybe null)',
-  `table_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表名称',
-  `column_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '列名称',
-  `data_type` int NULL DEFAULT NULL COMMENT 'SQL type from java.sql.Type',
-  `type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据源独立的类型名称, for a UDT the type name is fully qualified',
-  `column_size` int NULL DEFAULT NULL COMMENT '列大小,有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
-  `buffer_length` int NULL DEFAULT NULL COMMENT '暂未使用(jdbc specification4.3)',
-  `decimal_digits` int NULL DEFAULT NULL COMMENT '小数位数',
-  `num_prec_radix` int NULL DEFAULT NULL COMMENT 'NUM_PREC_RADIX int => Radix (typically either 10 or 2) (基数,即十进制或者二进制)',
-  `nullable` int UNSIGNED NULL DEFAULT NULL COMMENT '是否允许NULL. 0 - Indicates that the column definitely allows NULL values. 1 - Indicates that the column definitely allows NULL values. 2 - Indicates that the nullability of columns is unknown.',
-  `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '该列的描述信息，可为null',
-  `column_def` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串(maybe null)',
-  `sql_data_type` int NULL DEFAULT NULL COMMENT 'unused',
-  `sql_datetime_sub` int NULL DEFAULT NULL COMMENT 'unused',
-  `char_octet_length` int NULL DEFAULT NULL COMMENT '字符类型的最大字节数 CHAR_OCTET_LENGTH int => for char types the maximum number of bytes in the column',
-  `ordinal_position` int NULL DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
-  `is_nullable` tinyint UNSIGNED NULL DEFAULT NULL COMMENT 'ISO rules are used to determine the nullability for a column. YES --- if the column can include NULLs NO --- if the column cannot include NULLs empty string --- if the nullability for the column is unknown',
-  `scope_catalog` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
-  `scope_schema` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-  `scope_table` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
-  `source_data_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
-  `is_autoincrement` tinyint UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this column is auto incremented YES --- if the column is auto incremented NO --- if the column is not auto incremented empty string --- if it cannot be determined whether the column is auto incremented',
-  `is_generated` tinyint UNSIGNED NULL DEFAULT NULL COMMENT 'Indicates whether this is a generated column YES --- if this a generated column NO --- if this not a generated column empty string --- if it cannot be determined whether this is a generated column',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表（对应JDBC的ColumnMetadata）' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for custom_directive
 -- ----------------------------
 DROP TABLE IF EXISTS `custom_directive`;
@@ -490,6 +456,41 @@ CREATE TABLE `table_metadata`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表信息记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
+-- Table structure for column_metadata
+-- ----------------------------
+DROP TABLE IF EXISTS `column_metadata`;
+CREATE TABLE `column_metadata`  (
+    `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `table_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '所属表的ID',
+    `table_cat` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表的catalog',
+    `table_schem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表的schema',
+    `table_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '表名称',
+    `column_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '列名称',
+    `data_type` int NULL DEFAULT NULL COMMENT 'SQL数据类型, 参考java.sql.Type',
+    `type_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '数据源独立的类型名称',
+    `column_size` int NULL DEFAULT NULL COMMENT '列大小,有符号数长度会减少1，比如bigint(20)，此时columnSize=19',
+    `buffer_length` int NULL DEFAULT NULL COMMENT '暂未使用',
+    `decimal_digits` int NULL DEFAULT NULL COMMENT '小数位数',
+    `num_prec_radix` int NULL DEFAULT NULL COMMENT '数字的基数(基数,即十进制或者二进制)',
+    `nullable` int UNSIGNED NULL DEFAULT NULL COMMENT '是否允许NULL.',
+    `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '该列的描述信息',
+    `column_def` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '该列的默认值, 如果值被单引号引起来，则表示该值是字符串',
+    `sql_data_type` int NULL DEFAULT NULL COMMENT '未使用',
+    `sql_datetime_sub` int NULL DEFAULT NULL COMMENT '未使用',
+    `char_octet_length` int NULL DEFAULT NULL COMMENT '字符类型的最大字节数',
+    `ordinal_position` int NULL DEFAULT NULL COMMENT '该列在表中的位置，开始为1',
+    `is_nullable` tinyint UNSIGNED NULL DEFAULT NULL COMMENT 'ISO规则，用于决定列是否可空, YES(可包含NULL)/NO(不能包含NULL)/空字符串(列是否可空未知)',
+    `scope_catalog` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'catalog of table that is the scope of a reference attribute (null if DATA_TYPE is not REF)',
+    `scope_schema` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'schema of table that is the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+    `scope_table` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'table name that this the scope of a reference attribute (null if the DATA_TYPE is not REF)',
+    `source_data_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'source type of distinct type or user-generated Ref type, SQL type from java.sql.Types (null if DATA_TYPE is not DISTINCT or user-generated REF)',
+    `is_autoincrement` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '是否自增',
+    `is_generated` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '是否是生成列',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库表列信息记录表（对应JDBC的ColumnMetadata）' ROW_FORMAT = DYNAMIC;
+
+
+-- ----------------------------
 -- Table structure for target_generation_file
 -- ----------------------------
 DROP TABLE IF EXISTS `target_generation_file`;
@@ -595,5 +596,20 @@ CREATE TABLE `template_variable_metadata`  (
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '模板参数元数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- 驱动文件信息表
+-- ----------------------------
+DROP TABLE IF EXISTS `driver_file_info`;
+CREATE TABLE `driver_file_info` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `tenant_id` bigint DEFAULT NULL COMMENT '租户ID',
+    `file_name` varchar(200) DEFAULT NULL COMMENT '驱动文件名',
+    `file_id` varchar(100) DEFAULT NULL COMMENT '文件ID',
+    `is_deleted` tinyint unsigned DEFAULT '0' COMMENT '是否删除',
+    `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='驱动文件信息表';
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.PropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ddlutils.platform.JDBCDriverType;
+import org.apache.ddlutils.platform.JDBCDriver;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -113,7 +112,7 @@ public class RdbmsConnectionInfo implements Serializable {
     /**
      * 驱动类型
      *
-     * @see JDBCDriver#name()
+     * @see io.devpl.codegen.db.JDBCDriver#name()
      */
     @TableField(value = "driver_type")
     private String driverType;
@@ -125,7 +124,7 @@ public class RdbmsConnectionInfo implements Serializable {
     public String buildConnectionUrl(String databaseName) {
         String connectionUrl = null;
         if (this.driverClassName != null) {
-            JDBCDriver driver = JDBCDriver.findByDriverClassName(this.driverClassName);
+            io.devpl.codegen.db.JDBCDriver driver = io.devpl.codegen.db.JDBCDriver.findByDriverClassName(this.driverClassName);
             connectionUrl = driver.getConnectionUrl(this.host, this.port, databaseName, this.driverProperties);
         }
         return connectionUrl;
@@ -175,9 +174,9 @@ public class RdbmsConnectionInfo implements Serializable {
                         this.setDbType(dbTypeEnum.name().toLowerCase());
                         this.setDriverClassName(dbTypeEnum.getDriverClassName());
 
-                        JDBCDriverType driverType = dbTypeEnum.getDriver();
+                        JDBCDriver driverType = dbTypeEnum.getDriver();
                         if (driverType == null) {
-                            driverType = JDBCDriver.MYSQL5;
+                            driverType = io.devpl.codegen.db.JDBCDriver.MYSQL5;
                         }
                         this.driverType = driverType.getName();
 

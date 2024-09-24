@@ -1,5 +1,8 @@
 package io.devpl.backend.tools.ddl;
 
+import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
+import io.devpl.sdk.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,8 +23,8 @@ public class DdlUtils {
             if (maxFieldStringLength <= field.getTableColumn().length()) {
                 maxFieldStringLength = field.getTableColumn().length();
             }
-            if (maxFieldSqlTypeStringLength <= field.getSqlType().length()) {
-                maxFieldSqlTypeStringLength = field.getSqlType().length();
+            if (maxFieldSqlTypeStringLength <= getSqlType(field).length()) {
+                maxFieldSqlTypeStringLength = getSqlType(field).length();
             }
         }
         maxFieldStringLength++;
@@ -31,7 +34,7 @@ public class DdlUtils {
             String tableColumn = field.getTableColumn();
             builder = builder.space(4)
                 .addColumn(String.format("%-" + maxFieldStringLength + "s", tableColumn))
-                .addType(String.format("%-" + maxFieldSqlTypeStringLength + "s", field.getSqlType()))
+                .addType(String.format("%-" + maxFieldSqlTypeStringLength + "s", getSqlType(field)))
                 .isPrimaryKey(field.isPrimaryKey());
             if (null != field.getComment()) {
                 builder.space().addComment(field.getComment());
@@ -50,5 +53,26 @@ public class DdlUtils {
             builder.space().addComment(tableNameCommend);
         }
         return builder.end();
+    }
+
+    /**
+     * 获取mysql类型
+     */
+    public static String getSqlTypeForMapping(Field field) {
+        return SqlTypeAndJavaTypeEnum.findByJavaType(field.getType()).getSqlType();
+    }
+
+    public static String getSqlTypeSize(Field field) {
+        return SqlTypeAndJavaTypeEnum.findByJavaType(field.getType()).getDefaultLength();
+    }
+
+    @NotNull
+    public static String getSqlType(Field field) {
+        SqlTypeInfo sqlTypeInfo = SqlTypeMapUtil.getInstance().typeConvert(field.getType());
+        if (null != sqlTypeInfo) {
+            return sqlTypeInfo.getSqlType() + sqlTypeInfo.getSqlTypeLength();
+        }
+        /*兜底配置*/
+        return getSqlTypeForMapping(field) + getSqlTypeSize(field);
     }
 }

@@ -8,7 +8,6 @@ import org.apache.ddlutils.jdbc.meta.PrimaryKeyMetadata;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 表字段信息
@@ -201,26 +200,6 @@ public class ColumnGeneration {
         return this;
     }
 
-    public boolean isConvert() {
-        return convert;
-    }
-
-    public boolean isKeyFlag() {
-        return keyFlag;
-    }
-
-    public boolean isKeyIdentityFlag() {
-        return keyIdentityFlag;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPropertyName() {
-        return propertyName;
-    }
-
     /**
      * 设置属性名称
      *
@@ -233,29 +212,9 @@ public class ColumnGeneration {
         return this;
     }
 
-    public JavaType getColumnType() {
-        return columnType;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
     public ColumnGeneration setComment(String comment) {
         this.comment = comment;
         return this;
-    }
-
-    public String getFill() {
-        return fill;
-    }
-
-    public boolean isKeyWords() {
-        return keyWords;
-    }
-
-    public String getColumnName() {
-        return columnName;
     }
 
     public ColumnGeneration setColumnName(String columnName) {
@@ -285,17 +244,5 @@ public class ColumnGeneration {
     public ColumnGeneration setType(String type) {
         this.columnType = CommonJavaType.valueOf(type);
         return this;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ColumnGeneration cg) {
-            return Objects.equals(this.name, cg.name);
-        }
-        return false;
-    }
-
-    public int getJdbcType() {
-        return jdbcType;
     }
 }

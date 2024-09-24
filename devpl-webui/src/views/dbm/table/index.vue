@@ -1,12 +1,32 @@
 <template>
 
-  <div>
-    <el-button type="primary" @click="addColumn">添加字段</el-button>
-  </div>
+  <el-card>
+
+    <DataSourceSelector></DataSourceSelector>
+
+    <el-select v-model="dbType" @select-change="">
+      <el-option key="MySQL" value="MySQL" label="MySQL"></el-option>
+      <el-option key="Oracle" value="Oracle" label="Oracle"></el-option>
+      <el-option key="PostgreSQL" value="PostgreSQL" label="PostgreSQL"></el-option>
+      <el-option key="SqlServer" value="SqlServer" label="SqlServer"></el-option>
+    </el-select>
+
+    <el-dropdown split-button type="primary" @click="addColumn()">
+      添加字段
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item>导入字段信息</el-dropdown-item>
+          <el-dropdown-item>导入字段组</el-dropdown-item>
+          <el-dropdown-item>导入字段模板</el-dropdown-item>
+          <el-dropdown-item>导入数据库表</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </el-card>
 
   <el-tabs v-model="activeTabName" @tab-change="handleTabChanged">
     <el-tab-pane label="字段" name="field">
-      <el-table :loading="loading" height="400px" :data="columns" border style="width: 100%" show-overflow-tooltip>
+      <el-table :loading="loading" :data="columns" border style="width: 100%" show-overflow-tooltip>
         <el-table-column prop="columnName" label="列名" width="180">
           <template #default="scope">
             <el-input v-model="scope.row.columnName"></el-input>
@@ -15,7 +35,7 @@
         <el-table-column prop="dataType" label="数据类型" width="150" show-overflow-tooltip>
           <template #default="scope">
             <el-select v-model="scope.row.dataType" clearable filterable>
-              <el-option :label="dt.label" :value="dt.value" :key="dt.key" v-for="dt in dataTypes"></el-option>
+              <el-option :label="dt.label" :value="dt.value" :key="dt.key" v-for="dt in columnTypeOptions"></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -56,9 +76,15 @@
             <el-input v-model="scope.row.remarks"></el-input>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100" align="center" fixed="right">
+        <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
-            <vxe-button type="text" status="danger" lick="removeRow(scope.row)">删除</vxe-button>
+            <vxe-button type="text" status="danger" @click="removeRow(scope.row)">删除</vxe-button>
+            <vxe-button size="mini" transfer>
+              <template #default>更多</template>
+              <template #dropdowns>
+                <vxe-button mode="text" type="text" content="保存为模板"></vxe-button>
+              </template>
+            </vxe-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,13 +118,15 @@
 </template>
 
 <script setup lang="ts">
+import { apiListColumnDataTypeOptions } from "@/api/dbm";
 import {
   apiGetTableCreatorColumns,
   apiGetTableCreatorDDL,
 } from "@/api/devtools"
 import MonacoEditor from "@/components/editor/MonacoEditor.vue"
+import DataSourceSelector from "@/views/generator/DataSourceSelector.vue";
 import { TabPaneName } from "element-plus"
-import { reactive, ref } from "vue"
+import { onMounted, reactive, ref } from "vue"
 
 const activeTabName = ref("field")
 const ddlEditorRef = ref()
@@ -106,6 +134,10 @@ const columns = ref<ColumnInfo[]>([])
 
 const visible = ref()
 const loading = ref()
+
+const columnTypeOptions = ref<DataTypeSelectOption[]>()
+
+const dbType = ref('MySQL')
 
 defineExpose({
   show(fieldGroupId: number) {
@@ -120,6 +152,20 @@ defineExpose({
   },
 })
 
+onMounted(() => {
+  initColumnDataTypeOptions(dbType.value)
+})
+
+const initColumnDataTypeOptions = (dbType: string) => {
+  apiListColumnDataTypeOptions(dbType).then((res) => {
+    columnTypeOptions.value = res.data || []
+  })
+}
+
+const appendColumnsFromFieldInfos = () => {
+
+}
+
 const addColumn = () => {
   columns.value?.push({
     columnName: "",
@@ -133,9 +179,13 @@ const addColumn = () => {
   })
 }
 
+/**
+ * 删除一行
+ * @param row 
+ */
 const removeRow = (row: ColumnInfo) => {
   let index = columns.value.indexOf(row)
-  if (index >= 0) {
+  if (index !== -1) {
     columns.value.splice(index, 1)
   }
 }

@@ -1,10 +1,5 @@
 package io.devpl.backend.config;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.devpl.backend.common.query.RestfulResult;
 import io.devpl.backend.common.query.Result;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +25,6 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
 
     private final RequestResponseBodyMethodProcessor delegate;
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
     public ControllerRequestResponseProcessor(RequestResponseBodyMethodProcessor delegate) {
         this.delegate = delegate;
     }
@@ -41,13 +34,21 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
         return delegate.supportsReturnType(returnType);
     }
 
+    /**
+     * Controller的返回值不一定是 return 回去的，可以用类似于 ModelAndView 之类的对象传递
+     * TODO 针对使用ModelAndView的场景进行数据包装
+     * @param returnValue
+     * @param returnType
+     * @param mavContainer
+     * @param webRequest
+     * @throws Exception
+     */
     @Override
     public void handleReturnValue(Object returnValue, @NotNull MethodParameter returnType, @NotNull ModelAndViewContainer mavContainer, @NotNull NativeWebRequest webRequest) throws Exception {
         if (returnValue == null) {
             // 如果Controller方法无返回值，不进行处理的话 后台会进行重定向，处理方式: mavContainer.setRequestHandled(true);
             // 比如请求: /api/user/list
             // 那么第二次重定向请求的路径为: /api/user/api/user/list(会报错，Resource Not Found)，即拼接了路径的上级子路径
-            // TODO 具体什么原因未知
             mavContainer.setRequestHandled(true);
             delegate.handleReturnValue(Result.ok(null), returnType, mavContainer, webRequest);
             return;
@@ -73,36 +74,5 @@ public class ControllerRequestResponseProcessor implements HandlerMethodReturnVa
     @Override
     public Object resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer, @NotNull NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         return delegate.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
-    }
-
-    static final String DYNC_INCLUDE = "DYNC_INCLUDE";
-    static final String DYNC_FILTER = "DYNC_FILTER";
-
-    @JsonFilter(DYNC_FILTER)
-    interface DynamicFilter {
-    }
-
-    @JsonFilter(DYNC_INCLUDE)
-    interface DynamicInclude {
-    }
-
-    /**
-     * @param clazz   需要设置规则的Class
-     * @param include 转换时包含哪些字段
-     * @param filter  转换时过滤哪些字段
-     */
-    public void filter(Class<?> clazz, String include, String filter) {
-        if (clazz == null) return;
-        if (include != null && !include.isEmpty()) {
-            mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_INCLUDE, SimpleBeanPropertyFilter.filterOutAllExcept(include.split(","))));
-            mapper.addMixIn(clazz, DynamicInclude.class);
-        } else if (filter != null && !filter.isEmpty()) {
-            mapper.setFilterProvider(new SimpleFilterProvider().addFilter(DYNC_FILTER, SimpleBeanPropertyFilter.serializeAllExcept(filter.split(","))));
-            mapper.addMixIn(clazz, DynamicFilter.class);
-        }
-    }
-
-    public String toJson(Object object) throws JsonProcessingException {
-        return mapper.writeValueAsString(object);
     }
 }

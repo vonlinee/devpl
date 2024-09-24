@@ -8,4 +8,5 @@ package io.devpl.codegen.type;
  */
 public interface EnumBasedDataType<E extends Enum<E>> extends DataType {
 
+    E getEnum();
 }

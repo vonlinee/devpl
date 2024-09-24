@@ -1,7 +1,7 @@
 package org.apache.ddlutils;
 
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.axion.AxionPlatform;
 import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 import org.apache.ddlutils.platform.db2.Db2Platform;
@@ -148,26 +148,26 @@ public class PlatformFactory {
          * Registers the known platforms.
          */
         private static void registerPlatforms() {
-            addPlatform(_platforms, DBTypeEnum.AXION.getName(), AxionPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.CLOUDSCAPE.getName(), CloudscapePlatform.class);
-            addPlatform(_platforms, DBTypeEnum.DB2.getName(), Db2Platform.class);
-            addPlatform(_platforms, DBTypeEnum.DB2V8.getName(), Db2v8Platform.class);
-            addPlatform(_platforms, DBTypeEnum.DERBY.getName(), DerbyPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.FIREBIRD.getName(), FirebirdPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.HSQLDB.getName(), HsqlDbPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.INTERBASE.getName(), InterbasePlatform.class);
-            addPlatform(_platforms, DBTypeEnum.MAXDB.getName(), MaxDbPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.MCKOI.getName(), MckoiPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.MSSQL.getName(), MSSqlPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.MYSQL.getName(), MySqlPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.MYSQL5.getName(), MySql5xPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.ORACLE8.getName(), Oracle8Platform.class);
-            addPlatform(_platforms, DBTypeEnum.ORACLE9.getName(), Oracle9Platform.class);
-            addPlatform(_platforms, DBTypeEnum.ORACLE10.getName(), Oracle10Platform.class);
-            addPlatform(_platforms, DBTypeEnum.POSTGRE_SQL.getName(), PostgreSqlPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.SAPDB.getName(), SapDbPlatform.class);
-            addPlatform(_platforms, DBTypeEnum.SYBASE.getName(), SybasePlatform.class);
-            addPlatform(_platforms, DBTypeEnum.SYBASE_ASE15.getName(), SybaseASE15Platform.class);
+            addPlatform(_platforms, BuiltinDBType.AXION.getName(), AxionPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.CLOUDSCAPE.getName(), CloudscapePlatform.class);
+            addPlatform(_platforms, BuiltinDBType.DB2.getName(), Db2Platform.class);
+            addPlatform(_platforms, BuiltinDBType.DB2V8.getName(), Db2v8Platform.class);
+            addPlatform(_platforms, BuiltinDBType.DERBY.getName(), DerbyPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.FIREBIRD.getName(), FirebirdPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.HSQLDB.getName(), HsqlDbPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.INTERBASE.getName(), InterbasePlatform.class);
+            addPlatform(_platforms, BuiltinDBType.MAXDB.getName(), MaxDbPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.MCKOI.getName(), MckoiPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.MSSQL.getName(), MSSqlPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.MYSQL.getName(), MySqlPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.MYSQL5.getName(), MySql5xPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.ORACLE8.getName(), Oracle8Platform.class);
+            addPlatform(_platforms, BuiltinDBType.ORACLE9.getName(), Oracle9Platform.class);
+            addPlatform(_platforms, BuiltinDBType.ORACLE10.getName(), Oracle10Platform.class);
+            addPlatform(_platforms, BuiltinDBType.POSTGRE_SQL.getName(), PostgreSqlPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.SAPDB.getName(), SapDbPlatform.class);
+            addPlatform(_platforms, BuiltinDBType.SYBASE.getName(), SybasePlatform.class);
+            addPlatform(_platforms, BuiltinDBType.SYBASE_ASE15.getName(), SybaseASE15Platform.class);
         }
     }
 }

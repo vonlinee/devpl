@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.sapdb;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.util.ContextMap;

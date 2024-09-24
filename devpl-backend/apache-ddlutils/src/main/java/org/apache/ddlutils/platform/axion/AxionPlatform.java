@@ -5,8 +5,8 @@ import org.apache.ddlutils.DatabaseOperationException;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.DBTypeEnum;
-import org.apache.ddlutils.platform.JDBCDriverTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
+import org.apache.ddlutils.platform.BuiltinJDBCDriver;
 import org.apache.ddlutils.platform.PlatformImplBase;
 
 import java.sql.*;
@@ -46,13 +46,13 @@ public class AxionPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.AXION;
+        return BuiltinDBType.AXION;
     }
 
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // Axion will create the database automatically when connecting for the first time
-        if (JDBCDriverTypeEnum.AXION.getDriverClassName().equals(jdbcDriverClassName)) {
+        if (BuiltinJDBCDriver.AXION.getDriverClassName().equals(jdbcDriverClassName)) {
             try {
                 Class.forName(jdbcDriverClassName);
             } catch (ClassNotFoundException e) {

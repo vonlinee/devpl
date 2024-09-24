@@ -9,7 +9,7 @@ import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.CreationParameters;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.DefaultValueHelper;
 import org.apache.ddlutils.util.StringUtils;
 import org.apache.ddlutils.util.Utils;
@@ -623,7 +623,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
                 getLog().error("Could not clear database", ex);
             }
         }
-        if (DBTypeEnum.FIREBIRD.getName().equals(getPlatform().getName()) || DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName()) || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             Connection connection = null;
 
             try {

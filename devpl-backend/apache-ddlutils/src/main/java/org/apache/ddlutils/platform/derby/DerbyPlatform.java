@@ -9,9 +9,9 @@ import org.apache.ddlutils.alteration.TableDefinitionChangesPredicate;
 import org.apache.ddlutils.model.CascadeActionEnum;
 import org.apache.ddlutils.util.ContextMap;
 import org.apache.ddlutils.model.Table;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.DefaultTableDefinitionChangesPredicate;
-import org.apache.ddlutils.platform.JDBCDriverTypeEnum;
+import org.apache.ddlutils.platform.BuiltinJDBCDriver;
 import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 
 import java.sql.Connection;
@@ -48,14 +48,14 @@ public class DerbyPlatform extends CloudscapePlatform {
 
     @Override
     public String getName() {
-        return DBTypeEnum.DERBY.getName();
+        return BuiltinDBType.DERBY.getName();
     }
 
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For Derby, you create databases by simply appending ";create=true" to the connection url
-        if (JDBCDriverTypeEnum.DERBY.getDriverClassName().equals(jdbcDriverClassName) ||
-            JDBCDriverTypeEnum.DERBY_EMBED.getDriverClassName().equals(jdbcDriverClassName)) {
+        if (BuiltinJDBCDriver.DERBY.getDriverClassName().equals(jdbcDriverClassName) ||
+            BuiltinJDBCDriver.DERBY_EMBED.getDriverClassName().equals(jdbcDriverClassName)) {
             StringBuilder creationUrl = new StringBuilder();
             Connection connection = null;
 

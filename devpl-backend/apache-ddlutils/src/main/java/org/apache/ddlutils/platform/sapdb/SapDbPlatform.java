@@ -72,7 +72,7 @@ public class SapDbPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.SAPDB;
+        return BuiltinDBType.SAPDB;
     }
 
     /**

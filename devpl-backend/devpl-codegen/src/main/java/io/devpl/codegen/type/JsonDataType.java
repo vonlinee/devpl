@@ -46,4 +46,9 @@ public enum JsonDataType implements EnumBasedDataType<JsonDataType> {
     public String getQualifier() {
         return name();
     }
+
+    @Override
+    public JsonDataType getEnum() {
+        return this;
+    }
 }

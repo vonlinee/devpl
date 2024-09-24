@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestMaxDbPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return DBTypeEnum.MAXDB.getName();
+        return BuiltinDBType.MAXDB.getName();
     }
 
     /**

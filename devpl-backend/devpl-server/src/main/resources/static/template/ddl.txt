@@ -1,0 +1,24 @@
+CREATE TABLE `student1` (
+`id` int(11) PRIMARY KEY  AUTO_INCREMENT  COMMENT '主键',
+`name` varchar(255) COMMENT '姓名',
+`age` int(11) COMMENT '年龄',
+`gender` varchar(255) COMMENT '性别',
+`height` double COMMENT '身高',
+`weight` double COMMENT '体重',
+`color_of_skin` varchar(255) COMMENT '肤色',
+`the_class` varchar(255) COMMENT '班级',
+`student_id` int(11) COMMENT '学号'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT = '学生信息表';
+------------------------------------------------------------------------------------
+CREATE TABLE `student2` (
+`id` int(11) PRIMARY KEY  AUTO_INCREMENT  COMMENT '主键',
+`name` varchar(255) COMMENT '姓名',
+`age` int(11) COMMENT '年龄',
+`gender` varchar(255) COMMENT '性别',
+`height` double COMMENT '身高',
+`weight` double COMMENT '体重',
+`color_of_skin` varchar(255) COMMENT '肤色',
+`the_class` varchar(255) COMMENT '班级',
+`student_id` int(11) COMMENT '学号'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT = '学生信息表';
+------------------------------------------------------------------------------------

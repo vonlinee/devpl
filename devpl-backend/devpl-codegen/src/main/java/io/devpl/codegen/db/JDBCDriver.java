@@ -1,7 +1,5 @@
 package io.devpl.codegen.db;
 
-import org.apache.ddlutils.platform.JDBCDriverType;
-
 import java.util.Map;
 import java.util.Properties;
 
@@ -11,7 +9,7 @@ import java.util.Properties;
  *
  * @see DBTypeEnum
  */
-public enum JDBCDriver implements JDBCDriverType {
+public enum JDBCDriver implements org.apache.ddlutils.platform.JDBCDriver {
 
     MYSQL5("com.mysql.jdbc.Driver", "mysql", "MySQL 5"),
     MYSQL8("com.mysql.cj.jdbc.Driver", MYSQL5.subProtocol, "MySQL 8"),

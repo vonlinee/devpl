@@ -3,7 +3,7 @@ package org.apache.ddlutils.platform;
 /**
  * 对应平台类型
  */
-public enum DBTypeEnum implements DBType {
+public enum BuiltinDBType implements DBType {
 
     /**
      * Axion <a href="https://db.apache.org/ddlutils/databases/axion.html">...</a>
@@ -57,7 +57,7 @@ public enum DBTypeEnum implements DBType {
 
     private final String name;
 
-    DBTypeEnum(String name) {
+    BuiltinDBType(String name) {
         this.name = name;
     }
 
@@ -67,7 +67,7 @@ public enum DBTypeEnum implements DBType {
     }
 
     @Override
-    public JDBCDriverType[] getSupportedDrivers() {
-        return new JDBCDriverType[0];
+    public JDBCDriver[] getSupportedDrivers() {
+        return new JDBCDriver[0];
     }
 }

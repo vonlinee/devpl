@@ -4,7 +4,7 @@ import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -37,7 +37,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -175,7 +175,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -309,12 +309,12 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
      */
     public void testSelfReferenceIdentityOverrideOff() throws Exception {
         // Hsqldb does not allow rows to reference themselves
-        if (DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName())) {
             return;
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -429,7 +429,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -543,7 +543,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -665,7 +665,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
 
         // Sybase does not like INTEGER auto-increment columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String modelXml;
 
         if (isSybase) {
@@ -1139,7 +1139,7 @@ public class TestMisc extends TestAgainstLiveDatabaseBase {
         }
         query.append(")");
         // Some JDBC drivers do not allow us to perform the query without an explicit alias
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.POSTGRE_SQL.getName().equals(getPlatform().getName()) || DBTypeEnum.DERBY.getName().equals(getPlatform().getName()) || DBTypeEnum.MSSQL.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.POSTGRE_SQL.getName().equals(getPlatform().getName()) || BuiltinDBType.DERBY.getName().equals(getPlatform().getName()) || BuiltinDBType.MSSQL.getName().equals(getPlatform().getName())) {
             query.append(" AS ");
             if (getPlatform().isDelimitedIdentifierModeOn()) {
                 query.append(getPlatformInfo().getDelimiterToken());

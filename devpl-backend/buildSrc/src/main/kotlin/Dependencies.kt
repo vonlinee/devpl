@@ -38,65 +38,64 @@ object Libs {
     const val H2 = "com.h2database:h2:2.3.232"
     const val KOTLIN_JACKSON = "com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1"
 
-    val objenesis = "org.objenesis:objenesis:3.3"
+    const val OBJENESIS = "org.objenesis:objenesis:3.3"
 
     const val MYBATIS = "org.mybatis:mybatis:3.5.15"
     const val SNAKE_YAML = "org.yaml:snakeyaml:2.2"
 
     // val json5java = "libs/json5-java/json5-java-2.0.0.jar"
 
-    val dom4j = "org.dom4j:dom4j:2.1.3"
-    val jsoup = "org.jsoup:jsoup:1.17.1"
+    const val DOM4J = "org.dom4j:dom4j:2.1.3"
+    const val JSOUP = "org.jsoup:jsoup:1.17.1"
 
     const val JETBRAINS_ANNOTATION = "org.jetbrains:annotations:24.0.1"
 
     // Jackson
-    val jacksonDatabind = "com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}"
-    val jacksonAnnotations = "com.fasterxml.jackson.core:jackson-annotations:${Versions.JACKSON}"
-    val jacksonCore = "com.fasterxml.jackson.core:jackson-core:${Versions.JACKSON}"
+    const val JACKSON_DATABIND = "com.fasterxml.jackson.core:jackson-databind:${Versions.JACKSON}"
+    const val JACKSON_ANNOTATIONS = "com.fasterxml.jackson.core:jackson-annotations:${Versions.JACKSON}"
+    const val JACKSON_CORE = "com.fasterxml.jackson.core:jackson-core:${Versions.JACKSON}"
 
     // MyBatis-Plus
-    val mybatisPlusAnnotation = "com.baomidou:mybatis-plus-annotation:3.5.5"
-    val mybatisPlusCore = "com.baomidou:mybatis-plus-core:3.5.5"
-    val mybatisPlusExtension = "com.baomidou:mybatis-plus-extension:3.5.5"
+    const val MYBATIS_PLUS_ANNOTATION = "com.baomidou:mybatis-plus-annotation:3.5.5"
+    const val MYBATIS_PLUS_CORE = "com.baomidou:mybatis-plus-core:3.5.5"
+    const val MYBATIS_PLUS_EXTENSION = "com.baomidou:mybatis-plus-extension:3.5.5"
 
     // Spring
     const val SPRING_WEB = "org.springframework:spring-web:${Versions.SPRING}"
     const val SPRING_JDBC = "org.springframework:spring-jdbc:${Versions.SPRING}"
 
     // SpringBoot
-    val springBootStarterWeb = "org.springframework.boot:spring-boot-starter-web:${Versions.SPRING_BOOT}"
-    val springBootStarterTest = "org.springframework.boot:spring-boot-starter-test:${Versions.SPRING_BOOT}"
-    val springBootStarterJdbc = "org.springframework.boot:spring-boot-starter-data-jdbc:${Versions.SPRING_BOOT}"
-    val springBootPropertiesMigrator =
+    const val SPRING_BOOT_STARTER_WEB = "org.springframework.boot:spring-boot-starter-web:${Versions.SPRING_BOOT}"
+    const val SPRING_BOOT_STARTER_TEST = "org.springframework.boot:spring-boot-starter-test:${Versions.SPRING_BOOT}"
+    const val SPRING_BOOT_STARTER_DATA_JDBC = "org.springframework.boot:spring-boot-starter-data-jdbc:${Versions.SPRING_BOOT}"
+    const val SPRING_BOOT_PROPERTIES_MIGRATOR =
         "org.springframework.boot:spring-boot-properties-migrator:${Versions.SPRING_BOOT}"
-    val springBootStarterAop = "org.springframework.boot:spring-boot-starter-aop:${Versions.SPRING_BOOT}"
-    val springBootStarterValidation = "org.springframework.boot:spring-boot-starter-validation:3.2.2"
-    val springBootConfigurationProcessor = "org.springframework.boot:spring-boot-configuration-processor:3.2.2"
-    val tencentcloudSdk = "com.tencentcloudapi:tencentcloud-sdk-java:4.0.11"
+    const val SPRING_BOOT_STARTER_AOP = "org.springframework.boot:spring-boot-starter-aop:${Versions.SPRING_BOOT}"
+    const val SPRING_BOOT_STARTER_VALIDATION = "org.springframework.boot:spring-boot-starter-validation:3.2.2"
+    const val SPRING_BOOT_CONFIGURATION_PROCESSOR = "org.springframework.boot:spring-boot-configuration-processor:3.2.2"
+    const val TENCENT_CLOUD_SDK = "com.tencentcloudapi:tencentcloud-sdk-java:4.0.11"
 
     const val ANTLR_ST4 = "org.antlr:ST4:4.3.4"
 
-    val pagehelper = "com.github.pagehelper:pagehelper:5.3.2"
-    val pageHelperSpringBootStarter = "com.github.pagehelper:pagehelper-spring-boot-starter:1.4.6"
+    const val PAGE_HELPER = "com.github.pagehelper:pagehelper:5.3.2"
+    const val PAGE_HELPER_SPRING_BOOT_STARTER = "com.github.pagehelper:pagehelper-spring-boot-starter:1.4.6"
 
-    val mysqlConnector = "com.mysql:mysql-connector-j:8.0.33"
+    const val MYSQL_CONNECTOR = "com.mysql:mysql-connector-j:8.0.33"
 
-    val mybatisPlusBootStarter3 = "com.baomidou:mybatis-plus-spring-boot3-starter:3.5.5"
+    const val MYBATIS_PLUS_SPRING_BOOT_STATER3 = "com.baomidou:mybatis-plus-spring-boot3-starter:3.5.5"
 
-    const val jsonFlattener = "com.github.wnameless:json-flattener:0.7.1"
-    val reactiveStreams = "org.reactivestreams:reactive-streams:1.0.4"
-    val jakartaAnnotationApi = "jakarta.annotation:jakarta.annotation-api:2.1.1"
+    const val REACTIVE_STREAMS = "org.reactivestreams:reactive-streams:1.0.4"
+    const val JAKARTA_ANNOTATION_API = "jakarta.annotation:jakarta.annotation-api:2.1.1"
 
     // Apache Commons
-    val dbutils = "commons-dbutils:commons-dbutils:1.7"
+    const val COMMONS_DBUTILS = "commons-dbutils:commons-dbutils:1.7"
     const val APACHE_COMMONS_TEXT = "org.apache.commons:commons-text:1.12.0"
     const val APACHE_COMMONS_LANG3 = "org.apache.commons:commons-lang3:3.14.0"
     const val APACHE_COMMONS_IO = "commons-io:commons-io:2.7"
     const val APACHE_COMMONS_COLLECTIONS = "commons-collections:commons-collections:3.2.2"
     const val APACHE_COMMONS_COLLECTIONS4 = "org.apache.commons:commons-collections4:4.4"
-    val apacheCommonsDbcp2 = "org.apache.commons:commons-dbcp2:2.11.0"
-    val apacheCommonsPool2 = "org.apache.commons:commons-pool2:2.12.0"
+    const val APACHE_COMMONS_DBCP2 = "org.apache.commons:commons-dbcp2:2.11.0"
+    const val APACHE_COMMONS_POOL2 = "org.apache.commons:commons-pool2:2.12.0"
 
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     const val APACHE_COMMONS_CLI = "commons-cli:commons-cli:1.9.0"
@@ -121,19 +120,19 @@ object Libs {
     const val JAXB = "javax.xml.bind:jaxb-api:2.3.1"
     const val BEANUTILS = "commons-beanutils:commons-beanutils:1.9.4"
     const val JSON_FLATTENER = "com.github.wnameless.json:json-flattener:0.16.6"
-    val googleJavaFormat = "com.google.googlejavaformat:google-java-format:1.19.2"
+    const val GOOGLE_JAVA_FORMAT = "com.google.googlejavaformat:google-java-format:1.19.2"
     const val JSQL_PARSER = "com.github.jsqlparser:jsqlparser:4.6"
 
     const val MYSQL_CONNECTOR_JAVA = "mysql:mysql-connector-java:8.0.33"
-    val javapoet = "com.squareup:javapoet:1.13.0"
+    const val JAVAPOET = "com.squareup:javapoet:1.13.0"
     const val MYBATIS_GENERATOR = "org.mybatis.generator:mybatis-generator-core:1.4.2"
 
     const val JOOQ = "org.jooq:jooq:3.19.7"
 
-    val jsr250 = "javax.annotation:jsr250-api:1.0"
-    val jna = "com.sun.jna:jna:3.0.9"
+    const val JSR250 = "javax.annotation:jsr250-api:1.0"
+    const val JNA = "com.sun.jna:jna:3.0.9"
 
-    val jakartaInjectApi = "jakarta.inject:jakarta.inject-api:2.0.1"
+    const val JAKARTA_INJECT_API = "jakarta.inject:jakarta.inject-api:2.0.1"
     const val JSCH = "com.jcraft:jsch:0.1.54"
 
     // ORM框架Ktorm

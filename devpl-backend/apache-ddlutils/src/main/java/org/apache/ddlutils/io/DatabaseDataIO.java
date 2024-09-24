@@ -147,7 +147,6 @@ public class DatabaseDataIO {
      * Sets the schema pattern to find the schemas of tables when reading data from a live database.
      *
      * @param schemaPattern The schema pattern
-     * @deprecated Will be removed once proper schema support is in place
      */
     public void setSchemaPattern(String schemaPattern) {
         _schemaPattern = schemaPattern;

@@ -22,8 +22,8 @@ public class TestPlatform extends PlatformImplBase {
             }
 
             @Override
-            public JDBCDriverType[] getSupportedDrivers() {
-                return new JDBCDriverType[0];
+            public JDBCDriver[] getSupportedDrivers() {
+                return new JDBCDriver[0];
             }
         };
     }

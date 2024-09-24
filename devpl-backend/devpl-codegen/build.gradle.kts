@@ -30,9 +30,9 @@ dependencies {
     testImplementation(Libs.MYSQL_CONNECTOR_JAVA)
     testImplementation("com.formdev:flatlaf:1.0")
     testImplementation("com.formdev:flatlaf-intellij-themes:1.0")
-    testImplementation(Libs.apacheCommonsDbcp2)
-    testImplementation(Libs.apacheCommonsPool2)
-    testImplementation(Libs.dom4j)
+    testImplementation(Libs.APACHE_COMMONS_DBCP2)
+    testImplementation(Libs.APACHE_COMMONS_POOL2)
+    testImplementation(Libs.DOM4J)
     testImplementation(Libs.JUPITER)
 
     annotationProcessor(Libs.LOMBOK)

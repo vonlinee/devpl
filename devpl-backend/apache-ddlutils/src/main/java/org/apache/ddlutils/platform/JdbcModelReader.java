@@ -3,6 +3,7 @@ package org.apache.ddlutils.platform;
 import org.apache.ddlutils.Const;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
+import org.apache.ddlutils.jdbc.ConnectionFactory;
 import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.*;
 import org.apache.ddlutils.model.*;
@@ -397,6 +398,11 @@ public class JdbcModelReader implements DatabaseModelReader {
     @Override
     public final void setConnection(Connection connection) {
         this._connection = Objects.requireNonNull(connection, "connection cannot be null");
+    }
+
+    @Override
+    public void setConnectionFactory(ConnectionFactory factory) {
+
     }
 
     /**

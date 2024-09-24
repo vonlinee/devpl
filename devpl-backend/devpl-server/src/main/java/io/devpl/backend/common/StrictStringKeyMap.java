@@ -26,7 +26,7 @@ public class StrictStringKeyMap<V> implements Map<String, V> {
      * @return hash值
      * @see Arrays#hashCode(char[])
      */
-    int hash(String s) {
+    protected int hash(String s) {
         if (s == null)
             return 0;
         int result = 1;

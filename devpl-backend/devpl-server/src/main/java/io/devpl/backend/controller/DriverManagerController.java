@@ -1,6 +1,11 @@
 package io.devpl.backend.controller;
 
+import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
+import io.devpl.backend.domain.param.DriverFileListParam;
+import io.devpl.backend.entity.DriverFileInfo;
+import io.devpl.backend.service.DriverService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +39,12 @@ import java.util.jar.JarFile;
 @RequestMapping("/api/jdbc/driver")
 public class DriverManagerController {
 
+    @Resource
+    DriverService driverService;
+
     /**
      * 上传驱动jar包
+     *
      * @param file 查询参数
      * @return 分页查询结果
      */
@@ -78,7 +87,18 @@ public class DriverManagerController {
     }
 
     /**
+     * 已注册的驱动文件列表
+     *
+     * @return 驱动类名列表
+     */
+    @GetMapping(value = "/files")
+    public ListResult<DriverFileInfo> listDriverFiles(DriverFileListParam param) {
+        return driverService.listDrivers(param);
+    }
+
+    /**
      * 已注册的驱动类名
+     *
      * @return 驱动类名列表
      */
     @GetMapping(value = "/list/registered")

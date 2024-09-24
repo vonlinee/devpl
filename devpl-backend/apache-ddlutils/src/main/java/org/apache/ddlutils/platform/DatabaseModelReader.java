@@ -1,5 +1,6 @@
 package org.apache.ddlutils.platform;
 
+import org.apache.ddlutils.jdbc.ConnectionFactory;
 import org.apache.ddlutils.model.Database;
 
 import java.sql.Connection;
@@ -17,9 +18,16 @@ public interface DatabaseModelReader {
     /**
      * set database connection to read database model from live connection.
      *
-     * @param connection 数据库连接
+     * @param connection database connection, must not be closed
      */
     void setConnection(Connection connection);
+
+    /**
+     * set connection factory
+     *
+     * @param factory ConnectionFactory
+     */
+    void setConnectionFactory(ConnectionFactory factory);
 
     /**
      * Reads the database model from the given connection.

@@ -20,5 +20,10 @@ public enum SimpleDataType implements EnumBasedDataType<SimpleDataType> {
     /**
      * 字符串形式的布尔值， true/false, 1/0, YES/NO等
      */
-    STRING_BOOLEAN
+    STRING_BOOLEAN;
+
+    @Override
+    public SimpleDataType getEnum() {
+        return this;
+    }
 }

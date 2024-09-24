@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestMcKoiPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return DBTypeEnum.MCKOI.getName();
+        return BuiltinDBType.MCKOI.getName();
     }
 
     /**

@@ -2,7 +2,7 @@ package io.devpl.codegen.db;
 
 import lombok.Getter;
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.JDBCDriverType;
+import org.apache.ddlutils.platform.JDBCDriver;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * 抄自 com.baomidou.mybatisplus.annotation.DbType
  *
  * @see com.alibaba.druid.DbType
- * @see JDBCDriver
+ * @see io.devpl.codegen.db.JDBCDriver
  */
 @Getter
 public enum DBTypeEnum implements DBType {
@@ -18,7 +18,7 @@ public enum DBTypeEnum implements DBType {
     /**
      * MYSQL
      */
-    MYSQL("MySQL", 3306, "MySQL数据库", JDBCDriver.MYSQL5, JDBCDriver.MYSQL8),
+    MYSQL("MySQL", 3306, "MySQL数据库", io.devpl.codegen.db.JDBCDriver.MYSQL5, io.devpl.codegen.db.JDBCDriver.MYSQL8),
     /**
      * MARIADB
      */
@@ -26,11 +26,11 @@ public enum DBTypeEnum implements DBType {
     /**
      * ORACLE
      */
-    ORACLE("Oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", JDBCDriver.ORACLE),
+    ORACLE("Oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", io.devpl.codegen.db.JDBCDriver.ORACLE),
     /**
      * oracle12c new pagination
      */
-    ORACLE_12C("Oracle12c", "Oracle12c+数据库", JDBCDriver.ORACLE_12C),
+    ORACLE_12C("Oracle12c", "Oracle12c+数据库", io.devpl.codegen.db.JDBCDriver.ORACLE_12C),
     /**
      * DB2
      */
@@ -46,11 +46,11 @@ public enum DBTypeEnum implements DBType {
     /**
      * SQLITE
      */
-    SQLITE("Sqlite", "SQLite数据库", JDBCDriver.SQLITE),
+    SQLITE("Sqlite", "SQLite数据库", io.devpl.codegen.db.JDBCDriver.SQLITE),
     /**
      * POSTGRE
      */
-    POSTGRE_SQL("PostgreSQL", "Postgre数据库", JDBCDriver.POSTGRE_SQL),
+    POSTGRE_SQL("PostgreSQL", "Postgre数据库", io.devpl.codegen.db.JDBCDriver.POSTGRE_SQL),
     /**
      * SQLSERVER2005
      */
@@ -58,7 +58,7 @@ public enum DBTypeEnum implements DBType {
     /**
      * SQLSERVER
      */
-    SQL_SERVER("SQL Server", "SQLServer数据库", JDBCDriver.SQL_SERVER),
+    SQL_SERVER("SQL Server", "SQLServer数据库", io.devpl.codegen.db.JDBCDriver.SQL_SERVER),
     /**
      * DM
      */
@@ -155,19 +155,19 @@ public enum DBTypeEnum implements DBType {
     /**
      * 支持的驱动列表
      */
-    private final JDBCDriverType[] drivers;
+    private final JDBCDriver[] drivers;
     /**
      * 默认端口号
      */
     private int defaultPort;
 
-    DBTypeEnum(String name, String description, JDBCDriverType... drivers) {
+    DBTypeEnum(String name, String description, JDBCDriver... drivers) {
         this.name = name;
         this.description = description;
         this.drivers = drivers;
     }
 
-    DBTypeEnum(String name, int port, String description, JDBCDriverType... drivers) {
+    DBTypeEnum(String name, int port, String description, JDBCDriver... drivers) {
         this.name = name;
         this.defaultPort = port;
         this.description = description;
@@ -179,7 +179,7 @@ public enum DBTypeEnum implements DBType {
      *
      * @param dbType 数据库类型字符串
      */
-    public static DBTypeEnum getDbType(String dbType) {
+    public static DBType getDbType(String dbType) {
         for (DBTypeEnum type : DBTypeEnum.values()) {
             if (type.name.equalsIgnoreCase(dbType)) {
                 return type;
@@ -220,17 +220,17 @@ public enum DBTypeEnum implements DBType {
 
     @Nullable
     public String getDriverClassName(int index) {
-        JDBCDriverType driver = getDriver(index);
+        JDBCDriver driver = getDriver(index);
         return driver == null ? null : driver.getDriverClassName();
     }
 
     @Nullable
-    public JDBCDriverType getDriver() {
+    public JDBCDriver getDriver() {
         return getDriver(0);
     }
 
     @Nullable
-    public JDBCDriverType getDriver(int index) {
+    public JDBCDriver getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;
         }
@@ -241,7 +241,7 @@ public enum DBTypeEnum implements DBType {
     }
 
     @Override
-    public JDBCDriverType[] getSupportedDrivers() {
-        return drivers == null ? new JDBCDriver[0] : drivers;
+    public JDBCDriver[] getSupportedDrivers() {
+        return drivers == null ? new io.devpl.codegen.db.JDBCDriver[0] : drivers;
     }
 }

@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -66,7 +66,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -198,7 +198,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -285,7 +285,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         // it directly (in which case it might still be NULL)
         Object avalue = rows.get(0).getColumnValue("avalue");
 
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", avalue);
         } else {
@@ -373,7 +373,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testInsertPKAndAutoIncrementColumn() {
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -500,7 +500,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -825,7 +825,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         List<TableRow> rows = getRows("roundtrip");
         Object avalue = rows.get(0).getColumnValue("avalue");
 
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", avalue);
         } else {
@@ -1109,7 +1109,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         List<TableRow> rows = getRows("roundtrip");
         Object avalue = rows.get(0).getColumnValue("avalue");
 
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", avalue);
         } else {
@@ -1434,7 +1434,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         Object avalue2 = rows.get(0).getColumnValue("avalue2");
 
         assertEquals((2), rows.get(0), "avalue1");
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", avalue2);
         } else {
@@ -1765,7 +1765,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         Object avalue2 = rows.get(0).getColumnValue("avalue2");
 
         assertEquals((2), rows.get(0), "avalue1");
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", avalue2);
         } else {
@@ -2100,7 +2100,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         Object avalue = beans2.get(0).getColumnValue("avalue");
 
         assertEquals((1), beans2.get(0), "pk");
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", pk1);
             assertEquals("text", avalue);
@@ -2652,7 +2652,7 @@ public class TestInsertColumn extends TestAgainstLiveDatabaseBase {
         assertEquals((1), beans1.get(0), "pk1");
         assertEquals((2), beans2.get(0), "pk");
         assertEquals((1), beans2.get(0), "avalue1");
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName()) || DBTypeEnum.HSQLDB.getName().equals(getPlatform().getName()) || DBTypeEnum.MAXDB.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName()) || BuiltinDBType.HSQLDB.getName().equals(getPlatform().getName()) || BuiltinDBType.MAXDB.getName().equals(getPlatform().getName())) {
             // Some DBs ignore that the type is CHAR(8) and trim the value
             assertEquals("text", pk2);
             assertEquals("text", avalue2);

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,15 @@ import java.time.LocalDateTime;
  * 所有数据库实体类父类，放一些通用字段
  */
 public abstract class Entity {
+
+    /**
+     * 租户ID
+     * 暂不支持多租户
+     */
+    @Setter
+    @Getter
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE, exist = false)
+    private Long tenantId;
 
     /**
      * 更新时间

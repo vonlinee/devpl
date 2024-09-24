@@ -57,7 +57,7 @@ public class HsqlDbPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.HSQLDB;
+        return BuiltinDBType.HSQLDB;
     }
 
     @Override

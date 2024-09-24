@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
 
-public enum JDBCDriverTypeEnum implements JDBCDriverType {
+public enum BuiltinJDBCDriver implements JDBCDriver {
 
     /**
      * The axion jdbc driver.
@@ -252,11 +252,11 @@ public enum JDBCDriverTypeEnum implements JDBCDriverType {
     private final String subProtocol;
     private final String driverClassName;
 
-    JDBCDriverTypeEnum(String subProtocol) {
+    BuiltinJDBCDriver(String subProtocol) {
         this(subProtocol, null);
     }
 
-    JDBCDriverTypeEnum(String subProtocol, String driverClassName) {
+    BuiltinJDBCDriver(String subProtocol, String driverClassName) {
         this.subProtocol = subProtocol;
         this.driverClassName = driverClassName;
     }

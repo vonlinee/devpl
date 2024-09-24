@@ -19,11 +19,29 @@ public class FileUploadVO {
     private String path;
 
     /**
+     * 已完成数量
+     */
+    private int finished;
+
+    /**
+     * 总文件数
+     */
+    private int total;
+
+    /**
+     * 上传进度
+     */
+    private float progress;
+
+    /**
      * 文件路径列表
      */
-    private List<String> pathList = new ArrayList<>();
+    private List<String> pathList;
 
     public final void addFilePath(String path) {
+        if (pathList == null) {
+            pathList = new ArrayList<>();
+        }
         pathList.add(path);
     }
 }

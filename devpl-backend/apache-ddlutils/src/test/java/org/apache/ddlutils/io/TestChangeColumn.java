@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -2443,7 +2443,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue' type='INTEGER'/>\n") + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue' type='INTEGER' autoIncrement='true'/>\n") + "  </table>\n" + "</database>";
 
@@ -2471,7 +2471,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue' type='INTEGER' autoIncrement='true'/>\n") + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue' type='INTEGER'/>\n") + "  </table>\n" + "</database>";
 
@@ -2494,7 +2494,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
      * Tests making a primary column auto increment.
      */
     public void testPKColumnMakeAutoIncrement() {
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true' autoIncrement='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true' autoIncrement='true'/>\n") + "  </table>\n" + "</database>";
 
@@ -2517,7 +2517,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
      * Tests making a primary column no longer auto increment.
      */
     public void testPKColumnUnmakeAutoIncrement() {
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true' autoIncrement='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true' autoIncrement='true'/>\n") + "    <column name='avalue' type='INTEGER'/>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "    <column name='avalue' type='INTEGER'/>\n" + "  </table>\n" + "</database>";
 
@@ -2544,7 +2544,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0'/>\n" : "    <column name='fk' type='INTEGER'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='fk' type='INTEGER' autoIncrement='true'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
 
@@ -2575,7 +2575,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='fk' type='INTEGER' autoIncrement='true'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0'/>\n" : "    <column name='fk' type='INTEGER'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
 
@@ -2606,7 +2606,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0'/>\n" : "    <column name='fk' type='INTEGER'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true' autoIncrement='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true' autoIncrement='true'/>\n") + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='fk' type='INTEGER' autoIncrement='true'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
 
@@ -2637,7 +2637,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true' autoIncrement='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true' autoIncrement='true'/>\n") + "    <column name='avalue' type='INTEGER'/>\n" + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='fk' type='INTEGER' autoIncrement='true'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip1'>\n" + (isSybase ? "    <column name='pk' type='NUMERIC' size='12,0' primaryKey='true' required='true'/>\n" : "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n") + "    <column name='avalue' type='INTEGER'/>\n" + "  </table>\n" + "  <table name='roundtrip2'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='fk' type='NUMERIC' size='12,0'/>\n" : "    <column name='fk' type='INTEGER'/>\n") + "    <foreign-key foreignTable='roundtrip1'>\n" + "      <reference local='fk' foreign='pk'/>\n" + "    </foreign-key>\n" + "  </table>\n" + "</database>";
 
@@ -2668,7 +2668,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue1' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue1' type='INTEGER'/>\n") + "    <column name='avalue2' type='TIMESTAMP'/>\n" + "    <index name='testindex'>\n" + "      <index-column name='avalue1'/>\n" + "      <index-column name='avalue2'/>\n" + "    </index>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue1' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue1' type='INTEGER' autoIncrement='true'/>\n") + "    <column name='avalue2' type='TIMESTAMP'/>\n" + "    <index name='testindex'>\n" + "      <index-column name='avalue1'/>\n" + "      <index-column name='avalue2'/>\n" + "    </index>\n" + "  </table>\n" + "</database>";
 
@@ -2701,7 +2701,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='avalue1' type='VARCHAR' size='16'/>\n" + (isSybase ? "    <column name='avalue2' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue2' type='INTEGER' autoIncrement='true'/>\n") + "    <index name='testindex'>\n" + "      <index-column name='avalue1'/>\n" + "      <index-column name='avalue2'/>\n" + "    </index>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='avalue1' type='VARCHAR' size='16'/>\n" + (isSybase ? "    <column name='avalue2' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue2' type='INTEGER'/>\n") + "    <index name='testindex'>\n" + "      <index-column name='avalue1'/>\n" + "      <index-column name='avalue2'/>\n" + "    </index>\n" + "  </table>\n" + "</database>";
 
@@ -2729,7 +2729,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='avalue1' type='VARCHAR' size='16'/>\n" + (isSybase ? "    <column name='avalue2' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue2' type='INTEGER'/>\n") + "    <unique name='testindex'>\n" + "      <unique-column name='avalue1'/>\n" + "      <unique-column name='avalue2'/>\n" + "    </unique>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + "    <column name='avalue1' type='VARCHAR' size='16'/>\n" + (isSybase ? "    <column name='avalue2' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue2' type='INTEGER' autoIncrement='true'/>\n") + "    <unique name='testindex'>\n" + "      <unique-column name='avalue1'/>\n" + "      <unique-column name='avalue2'/>\n" + "    </unique>\n" + "  </table>\n" + "</database>";
 
@@ -2758,7 +2758,7 @@ public class TestChangeColumn extends TestAgainstLiveDatabaseBase {
             return;
         }
 
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue1' type='NUMERIC' size='12,0' autoIncrement='true'/>\n" : "    <column name='avalue1' type='INTEGER' autoIncrement='true'/>\n") + "    <column name='avalue2' type='TIMESTAMP'/>\n" + "    <unique name='testindex'>\n" + "      <unique-column name='avalue1'/>\n" + "      <unique-column name='avalue2'/>\n" + "    </unique>\n" + "  </table>\n" + "</database>";
         final String model2Xml = "<?xml version='1.0' encoding='ISO-8859-1'?>\n" + "<database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>\n" + "  <table name='roundtrip'>\n" + "    <column name='pk' type='INTEGER' primaryKey='true' required='true'/>\n" + (isSybase ? "    <column name='avalue1' type='NUMERIC' size='12,0'/>\n" : "    <column name='avalue1' type='INTEGER'/>\n") + "    <column name='avalue2' type='TIMESTAMP'/>\n" + "    <unique name='testindex'>\n" + "      <unique-column name='avalue1'/>\n" + "      <unique-column name='avalue2'/>\n" + "    </unique>\n" + "  </table>\n" + "</database>";
 

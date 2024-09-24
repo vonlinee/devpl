@@ -143,3 +143,8 @@ export const apiListTableNames = (
 export const apiGetTableData = (param: ParamGetDbTableData) => {
   return http.post<DBTableDataVO>("/api/datasource/table/data", param)
 }
+
+
+export const apiListDriverFiles = (param: any) => {
+  return http.get<DBTableDataVO>("/api/jdbc/driver/files", param)
+}

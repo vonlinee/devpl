@@ -76,7 +76,7 @@ public class MySqlPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.MYSQL;
+        return BuiltinDBType.MYSQL;
     }
 
     @Override

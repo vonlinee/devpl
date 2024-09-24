@@ -5,14 +5,14 @@ plugins {
 dependencies {
     api(Libs.MYBATIS)
     api(Libs.SNAKE_YAML)
-    api(Libs.jsoup)
+    api(Libs.JSOUP)
     api(Libs.GSON)
 
     api(Libs.SPRING_WEB)
-    api(Libs.jacksonDatabind)
-    api(Libs.jacksonAnnotations)
-    api(Libs.jacksonCore)
-    api(Libs.dom4j) {
+    api(Libs.JACKSON_DATABIND)
+    api(Libs.JACKSON_ANNOTATIONS)
+    api(Libs.JACKSON_CORE)
+    api(Libs.DOM4J) {
         exclude("pull-parser", "pull-parser")
     }
 

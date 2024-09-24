@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Tests the MySQL platform.
@@ -23,7 +22,7 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.MYSQL5.getName();
+        return BuiltinDBType.MYSQL5.getName();
     }
 
     @Test

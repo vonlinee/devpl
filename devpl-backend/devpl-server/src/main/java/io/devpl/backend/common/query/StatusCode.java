@@ -1,8 +1,11 @@
 package io.devpl.backend.common.query;
 
+import lombok.Getter;
+
 /**
  * 自定义业务状态码
  */
+@Getter
 public enum StatusCode {
 
     OK(2000, "OK"),
@@ -19,13 +22,5 @@ public enum StatusCode {
     StatusCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMsg() {
-        return msg;
     }
 }

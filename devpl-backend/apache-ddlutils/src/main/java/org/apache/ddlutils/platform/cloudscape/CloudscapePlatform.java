@@ -2,7 +2,7 @@ package org.apache.ddlutils.platform.cloudscape;
 
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.PlatformImplBase;
 
 import java.sql.Types;
@@ -53,6 +53,6 @@ public class CloudscapePlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.CLOUDSCAPE;
+        return BuiltinDBType.CLOUDSCAPE;
     }
 }

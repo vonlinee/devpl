@@ -221,4 +221,9 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         Long[] ids = param.getGroups().stream().map(DataTypeGroup::getId).toArray(Long[]::new);
         return dataTypeGroupMapper.deleteByIds(ids);
     }
+
+    @Override
+    public List<DataTypeItem> listByGroupId(String groupId) {
+        return dataTypeItemMapper.listByGroupId(groupId);
+    }
 }

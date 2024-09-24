@@ -2,11 +2,13 @@ package org.apache.ddlutils.jdbc.meta;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * 仅包含表的元数据信息，且所有字段和DatabaseMetaData#getTables返回值一致
  * <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/">JDBC specification</a>
  *
+ * @see ColumnMetadata
  * @see java.sql.DatabaseMetaData#getTables(String, String, String, String[])
  */
 public class TableMetadata implements JdbcMetadataObject {
@@ -61,6 +63,11 @@ public class TableMetadata implements JdbcMetadataObject {
      * REF_GENERATION String => specifies how values in SELF_REFERENCING_COL_NAME are created. Values are "SYSTEM", "USER", "DERIVED". (maybe null)
      */
     private String refGeneration;
+
+    /**
+     * 携带额外的数据
+     */
+    private Map<String, Object> attributes;
 
     @Override
     public void initialize(ResultSet resultSet) throws SQLException {
@@ -154,5 +161,13 @@ public class TableMetadata implements JdbcMetadataObject {
 
     public void setRefGeneration(String refGeneration) {
         this.refGeneration = refGeneration;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }

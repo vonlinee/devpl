@@ -4,6 +4,11 @@ import io.devpl.codegen.type.DataType;
 
 public interface MockValueGenerator {
 
+    /**
+     * init the context
+     *
+     * @param context MockContext
+     */
     void init(MockContext context);
 
     /**

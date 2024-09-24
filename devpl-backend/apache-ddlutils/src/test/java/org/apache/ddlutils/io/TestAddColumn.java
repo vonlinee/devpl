@@ -3,7 +3,7 @@ package org.apache.ddlutils.io;
 import junit.framework.Test;
 import org.apache.ddlutils.TestAgainstLiveDatabaseBase;
 import org.apache.ddlutils.model.TableRow;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -66,7 +66,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -233,7 +233,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -388,7 +388,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             // Mckoi uses null to initialize the new pk column
             assertEquals((Object) null, rows.get(0), "pk");
             assertEquals((1), rows.get(0), "avalue");
@@ -402,7 +402,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddPKAndAutoIncrementColumn() {
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -486,7 +486,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((Object) null, rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals(2.0, rows.get(0), "pk3");
@@ -528,7 +528,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((Object) null, rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals(2.0, rows.get(0), "pk3");
@@ -574,7 +574,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals((Object) null, rows.get(0), "pk3");
@@ -616,7 +616,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals((2), rows.get(0), "avalue");
@@ -634,7 +634,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
         }
 
         // we need special catering for Sybase which does not support identity for INTEGER columns
-        boolean isSybase = DBTypeEnum.SYBASE.getName().equals(getPlatform().getName());
+        boolean isSybase = BuiltinDBType.SYBASE.getName().equals(getPlatform().getName());
         final String model1Xml = """
             <?xml version='1.0' encoding='ISO-8859-1'?>
             <database xmlns='http://db.apache.org/ddlutils/schema/1.1' name='roundtriptest'>
@@ -719,7 +719,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals((Object) null, rows.get(0), "pk3");
@@ -766,7 +766,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), rows.get(0), "pk1");
             assertEquals((Object) null, rows.get(0), "pk2");
             assertEquals((Object) null, rows.get(0), "pk3");
@@ -813,7 +813,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
 
         List<TableRow> rows = getRows("roundtrip");
 
-        if (DBTypeEnum.MCKOI.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MCKOI.getName().equals(getPlatform().getName())) {
             assertEquals((1), rows.get(0), "pk1");
             assertEquals((Object) "text", rows.get(0), "pk2");
             assertEquals((Object) null, rows.get(0), "pk3");
@@ -1114,7 +1114,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddUniqueIndexAndColumn() {
         // TODO
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -1357,7 +1357,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddUniqueIndexAndMultipleColumns() {
         // TODO
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -1774,7 +1774,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddColumnIntoUniqueIndex() {
         // TODO
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -2059,7 +2059,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddMultipleColumnsIntoUniqueIndex() {
         // TODO
-        if (!getPlatformInfo().isIndicesSupported() || DBTypeEnum.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (!getPlatformInfo().isIndicesSupported() || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
             return;
         }
 
@@ -2253,7 +2253,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddFKAndLocalRequiredColumn() {
         // TODO
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName())) {
             // MySql does not allow adding a required column to a fk without a default value
             return;
         }
@@ -2447,7 +2447,7 @@ public class TestAddColumn extends TestAgainstLiveDatabaseBase {
      */
     public void testAddFKAndMultipleLocalColumns() {
         // TODO
-        if (DBTypeEnum.MYSQL.getName().equals(getPlatform().getName()) || DBTypeEnum.MYSQL5.getName().equals(getPlatform().getName())) {
+        if (BuiltinDBType.MYSQL.getName().equals(getPlatform().getName()) || BuiltinDBType.MYSQL5.getName().equals(getPlatform().getName())) {
             // MySql does not allow adding a required column to a fk without a default value
             return;
         }

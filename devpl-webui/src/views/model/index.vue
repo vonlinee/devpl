@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList()">
       <el-form-item>
         <el-form-item>
-          <el-input v-model="state.queryForm.code" placeholder="基类编码"></el-input>
+          <el-input v-model="state.queryForm.code" placeholder="模型编码"></el-input>
         </el-form-item>
       </el-form-item>
       <el-form-item>
@@ -19,10 +19,10 @@
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
       @selection-change="selectionChangeHandle">
       <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="code" label="基类编码" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="packageName" label="基类包名" show-overflow-tooltip header-align="center"
+      <el-table-column prop="code" label="模型编码" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="packageName" label="包名" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
-      <el-table-column prop="fields" label="基类字段" show-overflow-tooltip header-align="center"
+      <el-table-column prop="fields" label="字段" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>
       <el-table-column prop="remark" label="备注" show-overflow-tooltip header-align="center"
         align="center"></el-table-column>

@@ -2,7 +2,7 @@ package org.apache.ddlutils.io;
 
 public interface XmlWriter {
     /**
-     * Returnd the encoding used by this xml writer.
+     * Returned the encoding used by this xml writer.
      *
      * @return The encoding
      */

@@ -55,13 +55,13 @@ public class MckoiPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.MCKOI;
+        return BuiltinDBType.MCKOI;
     }
 
     @Override
     public void createDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters) throws DatabaseOperationException, UnsupportedOperationException {
         // For McKoi, you create databases by simply appending "?create=true" to the connection url
-        if (JDBCDriverTypeEnum.MCKOI.getDriverClassName().equals(jdbcDriverClassName)) {
+        if (BuiltinJDBCDriver.MCKOI.getDriverClassName().equals(jdbcDriverClassName)) {
             StringBuilder creationUrl = new StringBuilder();
             Connection connection = null;
 

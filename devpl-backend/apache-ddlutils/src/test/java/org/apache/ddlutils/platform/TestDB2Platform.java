@@ -10,7 +10,7 @@ public class TestDB2Platform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.DB2.getName();
+        return BuiltinDBType.DB2.getName();
     }
 
     /**

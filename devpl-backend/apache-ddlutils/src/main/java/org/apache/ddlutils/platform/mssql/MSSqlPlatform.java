@@ -70,7 +70,7 @@ public class MSSqlPlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.MSSQL;
+        return BuiltinDBType.MSSQL;
     }
 
     /**

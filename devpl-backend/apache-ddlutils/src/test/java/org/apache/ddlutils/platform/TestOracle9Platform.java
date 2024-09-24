@@ -10,7 +10,7 @@ public class TestOracle9Platform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.ORACLE9.getName();
+        return BuiltinDBType.ORACLE9.getName();
     }
 
     /**

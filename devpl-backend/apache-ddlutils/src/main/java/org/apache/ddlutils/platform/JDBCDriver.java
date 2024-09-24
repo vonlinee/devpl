@@ -5,7 +5,7 @@ import java.util.Properties;
 /**
  * 驱动类型
  */
-public interface JDBCDriverType {
+public interface JDBCDriver {
 
     /**
      * 驱动类型名称

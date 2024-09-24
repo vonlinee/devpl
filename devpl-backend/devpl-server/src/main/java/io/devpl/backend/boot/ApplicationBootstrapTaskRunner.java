@@ -28,6 +28,6 @@ public class ApplicationBootstrapTaskRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 复制模板到本地文件系统
-        CompletableFuture.runAsync(() -> templateService.migrateTemplates(), threadPoolTaskExecutor);
+        // CompletableFuture.runAsync(() -> templateService.migrateTemplates(), threadPoolTaskExecutor);
     }
 }

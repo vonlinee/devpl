@@ -77,39 +77,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: "/codegen/template",
-    meta: {
-      title: "模板管理",
-      icon: "icon-appstore",
-    },
-    children: [
-      {
-        path: "/codegen/template/list",
-        meta: {
-          title: "模板列表",
-          icon: "icon-appstore",
-        },
-        component: () => import("@/views/template/index.vue"),
-      }, {
-        path: "/codegen/template/directives",
-        meta: {
-          title: "模板指令",
-          icon: "icon-appstore",
-        },
-        component: () => import("@/views/template/directive/index.vue"),
-      },
-    ],
-  },
-  {
-    path: "/scripts",
-    meta: {
-      title: "脚本管理",
-      icon: "icon-appstore",
-    },
-    component: () => import("@/views/scripts/index.vue"),
-    children: [],
-  },
+
   {
     path: "/databaseManager",
     meta: {
@@ -202,15 +170,48 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
       {
         path: "/devtools/collection",
-        name: "工具箱",
+        name: "其他",
         component: () => import("@/views/devtools/toolset/index.vue"),
         meta: {
-          title: "工具箱",
+          title: "其他",
           icon: "icon-edit-square",
           keepAlive: true,
         },
       },
     ],
+  },
+  {
+    path: "/codegen/template",
+    meta: {
+      title: "模板管理",
+      icon: "icon-appstore",
+    },
+    children: [
+      {
+        path: "/codegen/template/list",
+        meta: {
+          title: "模板列表",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/template/index.vue"),
+      }, {
+        path: "/codegen/template/directives",
+        meta: {
+          title: "模板指令",
+          icon: "icon-appstore",
+        },
+        component: () => import("@/views/template/directive/index.vue"),
+      },
+    ],
+  },
+  {
+    path: "/scripts",
+    meta: {
+      title: "脚本管理",
+      icon: "icon-appstore",
+    },
+    component: () => import("@/views/scripts/index.vue"),
+    children: [],
   },
   {
     path: "/test",

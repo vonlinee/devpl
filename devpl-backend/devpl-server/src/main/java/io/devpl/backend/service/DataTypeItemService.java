@@ -94,4 +94,12 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
      * @return 是否成功
      */
     boolean removeDataTypeGroupByIds(DataTypeGroupParam param);
+
+    /**
+     * 根据类型分组ID查询
+     *
+     * @param groupId 分组ID
+     * @return 数据类型列表
+     */
+    List<DataTypeItem> listByGroupId(String groupId);
 }

@@ -14,11 +14,15 @@ public class ThreadPoolConfiguration {
 
     public static final String COMMON_POOL = "common-pool";
 
+    /**
+     * 通用线程池配置
+     *
+     * @return ThreadPoolTaskExecutor
+     */
     @Bean(value = COMMON_POOL)
     public ThreadPoolTaskExecutor commonThreadPool() {
         // CPU核心数
         int cpuCount = Runtime.getRuntime().availableProcessors();
-
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 核心线程数
         executor.setCorePoolSize(cpuCount);

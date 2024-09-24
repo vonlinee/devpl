@@ -16,7 +16,7 @@ import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ddlutils.platform.JDBCDriverType;
+import org.apache.ddlutils.platform.JDBCDriver;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -152,9 +152,9 @@ public class DataSourceController {
     public ListResult<DriverTypeVO> getSupportedDriverTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
         for (DBTypeEnum dbType : DBTypeEnum.values()) {
-            JDBCDriverType[] drivers = dbType.getDrivers();
+            JDBCDriver[] drivers = dbType.getDrivers();
             if (drivers != null) {
-                for (JDBCDriverType driver : drivers) {
+                for (JDBCDriver driver : drivers) {
                     result.add(new DriverTypeVO(driver.getName(), driver.getName(), dbType.getDefaultPort()));
                 }
             }

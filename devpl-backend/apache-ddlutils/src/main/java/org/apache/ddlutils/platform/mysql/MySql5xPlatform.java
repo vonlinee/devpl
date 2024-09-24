@@ -2,7 +2,7 @@ package org.apache.ddlutils.platform.mysql;
 
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 /**
  * The platform implementation for MySQL 5 and above.
@@ -28,6 +28,6 @@ public class MySql5xPlatform extends MySqlPlatform {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.MYSQL;
+        return BuiltinDBType.MYSQL;
     }
 }

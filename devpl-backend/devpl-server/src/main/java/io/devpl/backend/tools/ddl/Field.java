@@ -2,9 +2,13 @@ package io.devpl.backend.tools.ddl;
 
 import com.google.common.base.CaseFormat;
 import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
 public class Field {
 
     public String name;
@@ -56,56 +60,4 @@ public class Field {
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, this.name);
     }
 
-    public String getSqlType() {
-        SqlTypeInfo sqlTypeInfo = SqlTypeMapUtil.getInstance().typeConvert(this.type);
-        if (null != sqlTypeInfo) {
-            return sqlTypeInfo.getSqlType() + sqlTypeInfo.getSqlTypeLength();
-        }
-        /*兜底配置*/
-        return getSqlTypeForMapping() + getSqlTypeSize();
-    }
-
-    /**
-     * 获取mysql类型
-     */
-    public String getSqlTypeForMapping() {
-        /*类型映射*/
-        return SqlTypeAndJavaTypeEnum.findByJavaType(this.type).getSqlType();
-    }
-
-    public String getSqlTypeSize() {
-        return SqlTypeAndJavaTypeEnum.findByJavaType(this.type).getDefaultLength();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public boolean isPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(boolean primaryKey) {
-        this.primaryKey = primaryKey;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }

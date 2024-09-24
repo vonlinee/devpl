@@ -5,7 +5,7 @@
         <el-input v-model="dataForm.code" placeholder="名称"></el-input>
       </el-form-item>
       <el-form-item label="包名" prop="packageName">
-        <el-input v-model="dataForm.packageName" placeholder="基类包名"></el-input>
+        <el-input v-model="dataForm.packageName" placeholder="包名"></el-input>
       </el-form-item>
       <el-form-item label="字段信息" prop="fields">
         <template #default>

@@ -56,7 +56,7 @@ public class Db2Platform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.DB2;
+        return BuiltinDBType.DB2;
     }
 
     @Override

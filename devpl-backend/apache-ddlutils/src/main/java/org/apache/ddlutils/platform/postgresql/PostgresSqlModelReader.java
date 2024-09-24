@@ -1,6 +1,5 @@
 package org.apache.ddlutils.platform.postgresql;
 
-
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
@@ -38,7 +37,6 @@ public class PostgresSqlModelReader extends JdbcModelReader {
             Map<String, Index> uniquesByName = new HashMap<>();
             for (int indexIdx = 0; indexIdx < table.getIndexCount(); indexIdx++) {
                 Index index = table.getIndex(indexIdx);
-
                 if (index.isUnique() && (index.getName() != null)) {
                     uniquesByName.put(index.getName(), index);
                 }
@@ -62,7 +60,6 @@ public class PostgresSqlModelReader extends JdbcModelReader {
     @Override
     protected Column readColumn(DatabaseMetaDataWrapper metaData, ContextMap values) throws SQLException {
         Column column = super.readColumn(metaData, values);
-
         if (column.getSize() != null) {
             if (column.getSizeAsInt() <= 0) {
                 column.setSize(null);

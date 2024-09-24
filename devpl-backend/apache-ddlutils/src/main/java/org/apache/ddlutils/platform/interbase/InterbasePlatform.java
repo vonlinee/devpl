@@ -70,7 +70,7 @@ public class InterbasePlatform extends PlatformImplBase {
 
     @Override
     public DBType getDBType() {
-        return DBTypeEnum.INTERBASE;
+        return BuiltinDBType.INTERBASE;
     }
 
     @Override

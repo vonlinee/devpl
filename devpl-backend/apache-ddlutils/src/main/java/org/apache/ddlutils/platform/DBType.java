@@ -27,7 +27,7 @@ public interface DBType {
      *
      * @param driverType 驱动类型
      */
-    default void registerDriver(JDBCDriverType driverType) {
+    default void registerDriver(JDBCDriver driverType) {
         throw new UnsupportedOperationException("this method is not implemented");
     }
 
@@ -36,14 +36,14 @@ public interface DBType {
      *
      * @param driverType 驱动类型
      */
-    default void deregisterDriver(JDBCDriverType driverType) {
+    default void deregisterDriver(JDBCDriver driverType) {
     }
 
     /**
      * the jdbc driver type instance of this database type.
      *
      * @return JDBCDriverType instances
-     * @see JDBCDriverType
+     * @see JDBCDriver
      */
-    JDBCDriverType[] getSupportedDrivers();
+    JDBCDriver[] getSupportedDrivers();
 }

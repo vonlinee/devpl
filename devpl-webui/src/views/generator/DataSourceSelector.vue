@@ -7,6 +7,8 @@
 import { onMounted, ref } from "vue"
 import { apiListSelectableDataSources } from "@/api/datasource"
 
+const selected = ref()
+
 const dataSourceOptions = ref<DataSourceVO[]>()
 
 const emits = defineEmits(["selection-change"])
@@ -18,16 +20,19 @@ const onSelectionChange = (val: DataSourceVO) => {
 onMounted(() => {
   apiListSelectableDataSources().then((res) => {
     dataSourceOptions.value = res.data
+    if (res.data && res.data.length > 0) {
+      selected.value = res.data[0].id
+    }
   })
 })
 </script>
 
 <template>
-  <el-select @change="onSelectionChange">
+  <el-select v-model="selected" @change="onSelectionChange">
     <el-option
       v-for="dataSource in dataSourceOptions"
       :key="dataSource.id"
-      :value="dataSource"
+      :value="dataSource.id"
       :label="dataSource.name"
     ></el-option>
   </el-select>

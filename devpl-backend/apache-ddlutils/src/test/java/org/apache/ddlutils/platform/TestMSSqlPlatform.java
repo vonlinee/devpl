@@ -12,7 +12,7 @@ public class TestMSSqlPlatform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.MSSQL.getName();
+        return BuiltinDBType.MSSQL.getName();
     }
 
     /**

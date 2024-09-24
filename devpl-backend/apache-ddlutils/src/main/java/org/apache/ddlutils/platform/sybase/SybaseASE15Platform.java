@@ -1,7 +1,7 @@
 package org.apache.ddlutils.platform.sybase;
 
 
-import org.apache.ddlutils.platform.DBTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
 
 /**
  * The platform implementation for Sybase ASE 15 and above.
@@ -19,6 +19,6 @@ public class SybaseASE15Platform extends SybasePlatform {
 
     @Override
     public String getName() {
-        return DBTypeEnum.SYBASE_ASE15.getName();
+        return BuiltinDBType.SYBASE_ASE15.getName();
     }
 }

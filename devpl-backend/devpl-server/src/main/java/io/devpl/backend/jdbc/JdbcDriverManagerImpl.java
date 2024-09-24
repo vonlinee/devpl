@@ -1,10 +1,9 @@
 package io.devpl.backend.jdbc;
 
 import io.devpl.codegen.db.DBTypeEnum;
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ddlutils.platform.JDBCDriverType;
+import org.apache.ddlutils.platform.JDBCDriver;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBean {
 
-    private final Map<JDBCDriverType, DriverInfo> drivers = new ConcurrentHashMap<>();
+    private final Map<JDBCDriver, DriverInfo> drivers = new ConcurrentHashMap<>();
 
     @Value("${devpl.db.driver.location:}")
     private String driverLocation;
@@ -42,7 +41,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     @Override
     public Connection getConnection(String driverClassName, String jdbcUrl, String username, String password, Properties properties) throws SQLException {
-        JDBCDriver driveType = JDBCDriver.findByDriverClassName(driverClassName);
+        io.devpl.codegen.db.JDBCDriver driveType = io.devpl.codegen.db.JDBCDriver.findByDriverClassName(driverClassName);
         Connection connection = null;
         if (driveType != null) {
             DriverInfo driverInfo = drivers.get(driveType);
@@ -71,7 +70,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     @Override
     public boolean isRegistered(String driverClassName) {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
+        io.devpl.codegen.db.JDBCDriver driver = io.devpl.codegen.db.JDBCDriver.findByDriverClassName(driverClassName);
         if (driver == null) {
             return false;
         }
@@ -132,7 +131,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
                 final File driverJarFile = driverFiles[0];
 
                 // 判断要加载的驱动全限定类名
-                JDBCDriverType driverType = getBestMatchedDriverType(dbTypeName, version, driverJarFile);
+                JDBCDriver driverType = getBestMatchedDriverType(dbTypeName, version, driverJarFile);
                 if (driverType == null) {
                     continue;
                 }
@@ -167,7 +166,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
      * @param driverJarFile 驱动jar文件
      * @return 驱动类的全限定类名
      */
-    private JDBCDriverType getBestMatchedDriverType(String dbTypeName, String version, File driverJarFile) {
+    private JDBCDriver getBestMatchedDriverType(String dbTypeName, String version, File driverJarFile) {
         DBTypeEnum[] dbTypes = DBTypeEnum.values();
         for (DBTypeEnum dbType : dbTypes) {
             if (dbType.name().equalsIgnoreCase(dbTypeName)) {

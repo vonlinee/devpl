@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestOracle8Platform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return DBTypeEnum.ORACLE8.getName();
+        return BuiltinDBType.ORACLE8.getName();
     }
 
     /**

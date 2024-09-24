@@ -2,9 +2,9 @@ package org.apache.ddlutils;
 
 import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.DBTypeEnum;
-import org.apache.ddlutils.platform.JDBCDriverType;
-import org.apache.ddlutils.platform.JDBCDriverTypeEnum;
+import org.apache.ddlutils.platform.BuiltinDBType;
+import org.apache.ddlutils.platform.JDBCDriver;
+import org.apache.ddlutils.platform.BuiltinJDBCDriver;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -37,107 +37,107 @@ public final class PlatformUtils {
     public static void init() {
         // Note that currently Sapdb and MaxDB have equal sub-protocols and
         // drivers, so we have no means to distinguish them
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.AXION, DBTypeEnum.AXION);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DB2_NETWORK, DBTypeEnum.CLOUDSCAPE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.CLOUDSCAPE_NET, DBTypeEnum.CLOUDSCAPE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.AXION, BuiltinDBType.AXION);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DB2_NETWORK, BuiltinDBType.CLOUDSCAPE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.CLOUDSCAPE_NET, BuiltinDBType.CLOUDSCAPE);
         // db2
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DB2, DBTypeEnum.DB2);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DB2_OS390, DBTypeEnum.DB2);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DB2_OS390_SQLJ, DBTypeEnum.DB2);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.JTOPEN_DB2, DBTypeEnum.DB2);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DATA_DIRECT_DB2, DBTypeEnum.DB2);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_DB2, DBTypeEnum.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DB2, BuiltinDBType.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DB2_OS390, BuiltinDBType.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DB2_OS390_SQLJ, BuiltinDBType.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.JTOPEN_DB2, BuiltinDBType.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DATA_DIRECT_DB2, BuiltinDBType.DB2);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_DB2, BuiltinDBType.DB2);
         // derby
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DERBY, DBTypeEnum.DERBY);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DERBY, BuiltinDBType.DERBY);
         // Firebird
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.FIREBIRD, DBTypeEnum.FIREBIRD);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.HSQLDB, DBTypeEnum.HSQLDB);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INTERBASE, DBTypeEnum.INTERBASE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.SAPDB, DBTypeEnum.SAPDB);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.MCKOI, DBTypeEnum.MCKOI);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.FIREBIRD, BuiltinDBType.FIREBIRD);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.HSQLDB, BuiltinDBType.HSQLDB);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INTERBASE, BuiltinDBType.INTERBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.SAPDB, BuiltinDBType.SAPDB);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.MCKOI, BuiltinDBType.MCKOI);
 
         // mssql
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.SQL_SERVER, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.SQL_SERVER2005_NEW, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.SQL_SERVER2005_INTERNAL, DBTypeEnum.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.SQL_SERVER, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.SQL_SERVER2005_NEW, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.SQL_SERVER2005_INTERNAL, BuiltinDBType.MSSQL);
 
         // sqlserver
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DATA_DIRECT_SQLSERVER, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER6, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7A, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER6_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7A_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER_JDBC_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER6_JDBC_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7_JDBC_POOLED, DBTypeEnum.MSSQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SQLSERVER7A_JDBC_POOLED, DBTypeEnum.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DATA_DIRECT_SQLSERVER, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER6, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7A, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER6_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7A_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER_JDBC_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER6_JDBC_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7_JDBC_POOLED, BuiltinDBType.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SQLSERVER7A_JDBC_POOLED, BuiltinDBType.MSSQL);
 
         // jsqlconnect
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.JSQLCONNECT_SQLSERVER, DBTypeEnum.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.JSQLCONNECT_SQLSERVER, BuiltinDBType.MSSQL);
         // jtds
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.JTDS_SQLSERVER, DBTypeEnum.MSSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.JTDS_SQLSERVER, BuiltinDBType.MSSQL);
         // mysql
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.MYSQL, DBTypeEnum.MYSQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.MYSQL, BuiltinDBType.MYSQL);
 
         // oracle
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.ORACLE_THIN, DBTypeEnum.ORACLE8);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.ORACLE_OCI8, DBTypeEnum.ORACLE8);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.ORACLE_THIN_OLD, DBTypeEnum.ORACLE8);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DATADIRECT_ORACLE, DBTypeEnum.ORACLE8);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_ORACLE, DBTypeEnum.ORACLE8);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.ORACLE_THIN, BuiltinDBType.ORACLE8);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.ORACLE_OCI8, BuiltinDBType.ORACLE8);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.ORACLE_THIN_OLD, BuiltinDBType.ORACLE8);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DATADIRECT_ORACLE, BuiltinDBType.ORACLE8);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_ORACLE, BuiltinDBType.ORACLE8);
 
         // pg
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.POSTGRE_SQL, DBTypeEnum.POSTGRE_SQL);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.SYBASE, DBTypeEnum.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.POSTGRE_SQL, BuiltinDBType.POSTGRE_SQL);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.SYBASE, BuiltinDBType.SYBASE);
 
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.DATADIRECT_SYBASE, DBTypeEnum.SYBASE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SYBASE, DBTypeEnum.SYBASE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SYBASE_POOLED, DBTypeEnum.SYBASE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.INET_SYBASE_JDBC_POOLED, DBTypeEnum.SYBASE);
-        addSubProtocolToPlatformMapping(JDBCDriverTypeEnum.JTDS_SYBASE, DBTypeEnum.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.DATADIRECT_SYBASE, BuiltinDBType.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SYBASE, BuiltinDBType.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SYBASE_POOLED, BuiltinDBType.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.INET_SYBASE_JDBC_POOLED, BuiltinDBType.SYBASE);
+        addSubProtocolToPlatformMapping(BuiltinJDBCDriver.JTDS_SYBASE, BuiltinDBType.SYBASE);
 
         // 驱动映射
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.AXION, DBTypeEnum.AXION);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DB2, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DB2_OLD1, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DB2_OLD2, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.JTOPEN_DB2, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DATA_DIRECT_DB2, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INET_DB2, DBTypeEnum.DB2);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DERBY_EMBED, DBTypeEnum.DERBY);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DERBY, DBTypeEnum.DERBY);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.FIREBIRD, DBTypeEnum.FIREBIRD);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.HSQLDB, DBTypeEnum.HSQLDB);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INTERBASE, DBTypeEnum.INTERBASE);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.SAPDB, DBTypeEnum.SAPDB);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.MCKOI, DBTypeEnum.MCKOI);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.SQL_SERVER, DBTypeEnum.MSSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.SQL_SERVER2005_NEW, DBTypeEnum.MSSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DATADIRECT_SQLSERVER, DBTypeEnum.MSSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INET_SQL_SERVER, DBTypeEnum.MSSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.JNET_DIRECT_SQLSERVER, DBTypeEnum.MSSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.MYSQL, DBTypeEnum.MYSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.MYSQL_OLD, DBTypeEnum.MYSQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.ORACLE_THIN, DBTypeEnum.ORACLE8);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.ORACLE_THIN_OLD, DBTypeEnum.ORACLE8);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DATADIRECT_ORACLE, DBTypeEnum.ORACLE8);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INET_ORACLE, DBTypeEnum.ORACLE8);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.POSTGRE_SQL, DBTypeEnum.POSTGRE_SQL);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.SYBASE, DBTypeEnum.SYBASE);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.SYBASE_OLD, DBTypeEnum.SYBASE);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.DATADIRECT_SYBASE, DBTypeEnum.SYBASE);
-        addJdbcDriverToPlatformMapping(JDBCDriverTypeEnum.INET_SYBASE, DBTypeEnum.SYBASE);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.AXION, BuiltinDBType.AXION);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DB2, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DB2_OLD1, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DB2_OLD2, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.JTOPEN_DB2, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DATA_DIRECT_DB2, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.INET_DB2, BuiltinDBType.DB2);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DERBY_EMBED, BuiltinDBType.DERBY);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DERBY, BuiltinDBType.DERBY);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.FIREBIRD, BuiltinDBType.FIREBIRD);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.HSQLDB, BuiltinDBType.HSQLDB);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.INTERBASE, BuiltinDBType.INTERBASE);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.SAPDB, BuiltinDBType.SAPDB);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.MCKOI, BuiltinDBType.MCKOI);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.SQL_SERVER, BuiltinDBType.MSSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.SQL_SERVER2005_NEW, BuiltinDBType.MSSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DATADIRECT_SQLSERVER, BuiltinDBType.MSSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.INET_SQL_SERVER, BuiltinDBType.MSSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.JNET_DIRECT_SQLSERVER, BuiltinDBType.MSSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.MYSQL, BuiltinDBType.MYSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.MYSQL_OLD, BuiltinDBType.MYSQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.ORACLE_THIN, BuiltinDBType.ORACLE8);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.ORACLE_THIN_OLD, BuiltinDBType.ORACLE8);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DATADIRECT_ORACLE, BuiltinDBType.ORACLE8);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.INET_ORACLE, BuiltinDBType.ORACLE8);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.POSTGRE_SQL, BuiltinDBType.POSTGRE_SQL);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.SYBASE, BuiltinDBType.SYBASE);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.SYBASE_OLD, BuiltinDBType.SYBASE);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.DATADIRECT_SYBASE, BuiltinDBType.SYBASE);
+        addJdbcDriverToPlatformMapping(BuiltinJDBCDriver.INET_SYBASE, BuiltinDBType.SYBASE);
     }
 
-    static void addSubProtocolToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
+    static void addSubProtocolToPlatformMapping(JDBCDriver driverType, DBType dbType) {
         jdbcSubProtocolToPlatform.put(driverType.getSubProtocol(), dbType.getName());
     }
 
-    static void addJdbcDriverToPlatformMapping(JDBCDriverType driverType, DBType dbType) {
+    static void addJdbcDriverToPlatformMapping(JDBCDriver driverType, DBType dbType) {
         jdbcDriverToPlatform.put(driverType.getSubProtocol(), dbType.getName());
     }
 

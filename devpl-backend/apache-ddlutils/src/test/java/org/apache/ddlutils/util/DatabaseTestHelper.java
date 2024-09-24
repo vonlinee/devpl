@@ -1,12 +1,12 @@
 package org.apache.ddlutils.util;
 
-import junit.framework.AssertionFailedError;
 import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.Column;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.Table;
 import org.apache.ddlutils.model.TableRow;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,6 @@ public class DatabaseTestHelper {
         for (int idx = 0; idx < model.getTableCount(); idx++) {
             Table table = model.getTable(idx);
             Column[] pkCols = table.getPrimaryKeyColumns();
-
             for (Iterator<TableRow> it = origDbPlatform.query(model, buildQueryString(origDbPlatform, table, null, null), new Table[]{table}); it.hasNext(); ) {
                 TableRow obj = it.next();
                 Collection<TableRow> result = testedDbPlatform.fetch(model, buildQueryString(origDbPlatform, table, pkCols, obj), new Table[]{table});

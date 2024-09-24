@@ -11,7 +11,7 @@ public class TestMySqlPlatform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return DBTypeEnum.MYSQL.getName();
+        return BuiltinDBType.MYSQL.getName();
     }
 
     /**
