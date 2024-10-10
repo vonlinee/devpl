@@ -60,9 +60,4 @@ public class DatabaseToDdlCommand extends Command {
             throw new DdlUtilsTaskException(e);
         }
     }
-
-    @Override
-    public boolean isRequiringModel() {
-        return true;
-    }
 }

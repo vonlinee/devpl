@@ -4,8 +4,9 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.platform.DatabaseMetaDataWrapper;
 import org.apache.ddlutils.platform.JdbcModelReader;
-import org.apache.ddlutils.util.OrderedMap;
 import org.apache.ddlutils.util.ContextMap;
+import org.apache.ddlutils.util.OrderedMap;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -332,8 +333,7 @@ public class InterbaseModelReader extends JdbcModelReader {
             while (!found && tableData.next()) {
                 ContextMap values = readColumns(tableData, getColumnsForTable());
                 String tableName = values.getString("TABLE_NAME");
-
-                if ((tableName != null) && (tableName.length() > 0)) {
+                if (StringUtils.isNotEmpty(tableName)) {
                     schema = values.getString("TABLE_SCHEM");
                     found = true;
 

@@ -7,6 +7,7 @@ import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.util.IOUtils;
 import org.apache.ddlutils.util.OrderedSet;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -235,7 +236,9 @@ public class DumpMetadataTask extends Task {
         for (Method method : methods) {
             // only no-arg methods that return something and that are not defined in Object
             // we also filter certain methods
-            if (method.getParameterTypes().length == 0 && Object.class != method.getDeclaringClass() && !filtered.contains(method.getName())) {
+            if (method.getParameterTypes().length == 0
+                && Object.class != method.getDeclaringClass()
+                && !filtered.contains(method.getName())) {
                 dumpProperty(xmlWriter, metaData, method);
             }
         }
@@ -949,8 +952,7 @@ public class DumpMetadataTask extends Task {
             public void handleRow(XmlWriter xmlWriter, ResultSet result) throws SQLException {
                 Set<String> columns = getColumnsInResultSet(result);
                 String columnName = result.getString("COLUMN_NAME");
-
-                if ((columnName != null) && (!columnName.isEmpty())) {
+                if (StringUtils.isNotEmpty(columnName)) {
                     xmlWriter.writeElementStart(null, "column");
                     xmlWriter.writeAttribute(null, "name", columnName);
                     if (columns.contains("COLUMN_TYPE")) {

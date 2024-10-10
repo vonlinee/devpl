@@ -40,7 +40,6 @@ public class VerbosityLevel extends EnumeratedAttribute {
     @Override
     public String[] getValues() {
         String[] result = new String[LEVELS.length];
-
         System.arraycopy(LEVELS, 0, result, 0, LEVELS.length);
         return result;
     }

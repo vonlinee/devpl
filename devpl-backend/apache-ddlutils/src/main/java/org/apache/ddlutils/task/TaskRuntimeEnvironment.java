@@ -1,6 +1,6 @@
 package org.apache.ddlutils.task;
 
-public interface RuntimeEnvironment {
+public interface TaskRuntimeEnvironment {
 
     /**
      * classloader runtime environment

@@ -32,7 +32,7 @@ public final class ContextMap implements Map<String, Object> {
         return val == null ? defaultValue : (String) val;
     }
 
-    public boolean getBoolean(String key) {
+    public boolean getPrimitiveBoolean(String key) {
         Object val = map.get(key);
         if (val instanceof Boolean bv) {
             return bv;
@@ -40,11 +40,11 @@ public final class ContextMap implements Map<String, Object> {
         return false;
     }
 
-    public short getShort(String key) {
-        return getShort(key, 0);
+    public short getPrimitiveShort(String key) {
+        return getPrimitiveShort(key, 0);
     }
 
-    public short getShort(String key, int defaultValue) {
+    public short getPrimitiveShort(String key, int defaultValue) {
         Object val = map.get(key);
         if (val instanceof Short) {
             return (short) val;
@@ -54,7 +54,7 @@ public final class ContextMap implements Map<String, Object> {
         return (short) defaultValue;
     }
 
-    public short getShort(String key, short defaultValue) {
+    public short getPrimitiveShort(String key, short defaultValue) {
         Object val = map.get(key);
         if (val instanceof Short) {
             return (short) val;

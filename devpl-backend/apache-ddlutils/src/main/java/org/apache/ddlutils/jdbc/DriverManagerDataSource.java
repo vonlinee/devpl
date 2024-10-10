@@ -104,7 +104,6 @@ public class DriverManagerDataSource extends AbstractDriverBasedDataSource {
         }
     }
 
-
     @Override
     protected Connection getConnectionFromDriver(Properties props) throws SQLException {
         String url = getUrl();

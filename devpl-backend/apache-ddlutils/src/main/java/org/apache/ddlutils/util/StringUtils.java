@@ -5,9 +5,9 @@ import java.util.Objects;
 /**
  * Helper class containing string utility functions.
  */
-public class StringUtils {
+public abstract class StringUtils {
 
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
      * Compares the two given strings in a case-sensitive or insensitive manner
@@ -39,6 +39,14 @@ public class StringUtils {
         return str == null || str.isEmpty();
     }
 
+    public static boolean isEmpty(String str1, String str2) {
+        return str1 == null || str2 == null || str1.isEmpty() || str2.isEmpty();
+    }
+
+    public static boolean isEmpty(String str1, String str2, String str3) {
+        return str1 == null || str2 == null || str3 == null || str1.isEmpty() || str2.isEmpty() || str3.isEmpty();
+    }
+
     public static boolean isEmpty(String[] str) {
         return str == null || str.length == 0;
     }
@@ -52,6 +60,10 @@ public class StringUtils {
             return "";
         }
         return text.replace(repl, with);
+    }
+
+    public static boolean isNotEmpty(String str) {
+        return str != null && !str.isEmpty();
     }
 
     public static String repeat(String str, int count) {
@@ -68,5 +80,22 @@ public class StringUtils {
         String[] dest = new String[src.length];
         System.arraycopy(src, 0, dest, 0, src.length);
         return dest;
+    }
+
+    public static String[] splitToArray(String str, String delim) {
+        return splitToArray(str, delim, true);
+    }
+
+    public static String[] splitToArray(String str, String delim, boolean trim) {
+        if (isEmpty(str) || isEmpty(delim)) {
+            return EMPTY_STRING_ARRAY;
+        }
+        String[] arr = str.split(delim);
+        if (trim) {
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].trim();
+            }
+        }
+        return arr;
     }
 }

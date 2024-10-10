@@ -5,6 +5,7 @@ import org.apache.ddlutils.Platform;
 import org.apache.ddlutils.PlatformInfo;
 import org.apache.ddlutils.jdbc.ConnectionFactory;
 import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
+import org.apache.ddlutils.jdbc.JdbcUtils;
 import org.apache.ddlutils.jdbc.meta.*;
 import org.apache.ddlutils.model.*;
 import org.apache.ddlutils.util.ContextMap;
@@ -909,8 +910,8 @@ public class JdbcModelReader implements DatabaseModelReader {
             fk = new ForeignKey(fkName);
             fk.setForeignTableName(values.getString("PKTABLE_NAME"));
 
-            CascadeActionEnum onUpdateAction = convertAction(values.getShort("UPDATE_RULE", -1));
-            CascadeActionEnum onDeleteAction = convertAction(values.getShort("DELETE_RULE", -1));
+            CascadeActionEnum onUpdateAction = convertAction(values.getPrimitiveShort("UPDATE_RULE", -1));
+            CascadeActionEnum onDeleteAction = convertAction(values.getPrimitiveShort("DELETE_RULE", -1));
 
             if (onUpdateAction == null) {
                 onUpdateAction = getPlatformInfo().getDefaultOnUpdateAction();
@@ -929,7 +930,7 @@ public class JdbcModelReader implements DatabaseModelReader {
         ref.setForeignColumnName(values.getString("PKCOLUMN_NAME"));
         ref.setLocalColumnName(values.getString("FKCOLUMN_NAME"));
         if (values.containsKey("KEY_SEQ")) {
-            ref.setSequenceValue((values.getShort("KEY_SEQ", 0)));
+            ref.setSequenceValue((values.getPrimitiveShort("KEY_SEQ", 0)));
         }
         fk.addReference(ref);
     }
@@ -1014,7 +1015,7 @@ public class JdbcModelReader implements DatabaseModelReader {
      * @param knownIndices The already read indices for the current table
      */
     protected void readIndex(DatabaseMetaDataWrapper metaData, ContextMap values, Map<String, Index> knownIndices) throws SQLException {
-        short indexType = values.getShort("TYPE", Short.MIN_VALUE);
+        short indexType = values.getPrimitiveShort("TYPE", Short.MIN_VALUE);
         // we're ignoring statistic indices
         if (indexType == -1 || indexType == DatabaseMetaData.tableIndexStatistic) {
             return;
@@ -1024,7 +1025,7 @@ public class JdbcModelReader implements DatabaseModelReader {
         if (indexName != null) {
             Index index = knownIndices.get(indexName);
             if (index == null) {
-                if (values.getBoolean("NON_UNIQUE")) {
+                if (values.getPrimitiveBoolean("NON_UNIQUE")) {
                     index = new NonUniqueIndex();
                 } else {
                     index = new UniqueIndex();
@@ -1032,11 +1033,9 @@ public class JdbcModelReader implements DatabaseModelReader {
                 index.setName(indexName);
                 knownIndices.put(indexName, index);
             }
-
-            IndexColumn indexColumn = new IndexColumn();
-            indexColumn.setName(values.getString("COLUMN_NAME"));
+            IndexColumn indexColumn = new IndexColumn(values.getString("COLUMN_NAME"));
             if (values.containsKey("ORDINAL_POSITION")) {
-                indexColumn.setOrdinalPosition(values.getShort("ORDINAL_POSITION", -1));
+                indexColumn.setOrdinalPosition(values.getPrimitiveShort("ORDINAL_POSITION", -1));
             }
             index.addColumn(indexColumn);
         }
@@ -1070,7 +1069,6 @@ public class JdbcModelReader implements DatabaseModelReader {
         }
 
         StringBuilder query = new StringBuilder();
-
         query.append("SELECT ");
         for (int idx = 0; idx < columnsToCheck.length; idx++) {
             if (idx > 0) {
@@ -1097,10 +1095,8 @@ public class JdbcModelReader implements DatabaseModelReader {
         Statement stmt = null;
         try {
             stmt = getConnection().createStatement();
-
             ResultSet rs = stmt.executeQuery(query.toString());
             ResultSetMetaData rsMetaData = rs.getMetaData();
-
             for (int idx = 0; idx < columnsToCheck.length; idx++) {
                 if (rsMetaData.isAutoIncrement(idx + 1)) {
                     columnsToCheck[idx].setAutoIncrement(true);

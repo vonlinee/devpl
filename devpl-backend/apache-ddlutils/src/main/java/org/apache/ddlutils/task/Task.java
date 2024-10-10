@@ -13,13 +13,13 @@ public abstract class Task {
     /**
      * the environment when task is executing.
      */
-    protected RuntimeEnvironment environment;
+    protected TaskRuntimeEnvironment environment;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public abstract void execute() throws DdlUtilsTaskException;
 
-    public void log(String message, int level) {
+    public final void log(String message, int level) {
         if (level == Task.MSG_INFO) {
             logger.info(message);
         } else if (level == Task.MSG_ERR) {
@@ -29,11 +29,11 @@ public abstract class Task {
         }
     }
 
-    public void setRuntimeEnvironment(RuntimeEnvironment environment) {
+    public void setRuntimeEnvironment(TaskRuntimeEnvironment environment) {
         this.environment = environment;
     }
 
-    public RuntimeEnvironment getRuntimeEnvironment() {
+    public TaskRuntimeEnvironment getRuntimeEnvironment() {
         return environment;
     }
 

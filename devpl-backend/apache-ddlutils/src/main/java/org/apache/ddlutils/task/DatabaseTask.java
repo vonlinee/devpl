@@ -261,7 +261,7 @@ public abstract class DatabaseTask extends Task {
     @Override
     public void execute() throws DdlUtilsTaskException {
         if (!hasCommands()) {
-            _log.info("No sub tasks specified, so there is nothing to do.");
+            log("No sub tasks specified, so there is nothing to do.", Task.MSG_INFO);
             return;
         }
         ClassLoader sysClassLoader;

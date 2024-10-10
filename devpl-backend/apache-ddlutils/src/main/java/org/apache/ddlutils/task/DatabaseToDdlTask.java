@@ -4,6 +4,7 @@ import org.apache.ddlutils.DdlUtilsTaskException;
 import org.apache.ddlutils.model.Database;
 import org.apache.ddlutils.model.ModelHelper;
 import org.apache.ddlutils.model.Table;
+import org.apache.ddlutils.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +68,8 @@ public class DatabaseToDdlTask extends DatabaseTask {
      * XML defines a valid model.
      *
      * @param databaseName The database name. Use <code>null</code> or an empty string for the default name
-     *                  By default, DldUtils uses the schema name returned from the database
-     *                  or <code>"default"</code> if no schema name was returned by the database.
+     *                     By default, DldUtils uses the schema name returned from the database
+     *                     or <code>"default"</code> if no schema name was returned by the database.
      */
     public void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
@@ -194,19 +195,7 @@ public class DatabaseToDdlTask extends DatabaseTask {
      * @return The table types
      */
     private String[] getTableTypes() {
-        if ((_tableTypes == null) || (_tableTypes.isEmpty())) {
-            return new String[0];
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(_tableTypes, ",");
-        List<String> result = new ArrayList<>();
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken().trim();
-            if (!token.isEmpty()) {
-                result.add(token);
-            }
-        }
-        return result.toArray(new String[0]);
+        return StringUtils.splitToArray(_tableTypes, ",");
     }
 
     /**
@@ -238,23 +227,19 @@ public class DatabaseToDdlTask extends DatabaseTask {
 
                 if (_includeTableNames != null) {
                     Table[] tables = model.findTables(_includeTableNames, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
-
                     ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeAllTablesExcept(tables);
                 } else if (_includeTableNameRegExp != null) {
                     Table[] tables = model.findTables(_includeTableNameRegExp, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
-
                     ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeAllTablesExcept(tables);
                 }
                 if (_excludeTableNames != null) {
                     Table[] tables = model.findTables(_excludeTableNames, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
-
                     ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeTables(tables);
                 } else if (_excludeTableNameRegExp != null) {
                     Table[] tables = model.findTables(_excludeTableNameRegExp, getPlatformConfiguration().isUseDelimitedSqlIdentifiers());
-
                     ModelHelper.checkForForeignKeysToAndFromTables(model, tables);
                     model.removeTables(tables);
                 }
