@@ -1,86 +1,59 @@
-# 版本要求
 
-JDK: 17.0.5+
-Maven: 3.6.0+
 
-1. element-plus: https://element-plus.gitee.io/zh-CN/component/button.html
-2. vxe-table: https://vxetable.cn/#/table/start/install
 
-# 问题记录
 
-```text
-2023-09-07 09:44:52.994  INFO 18832 --- [nio-8088-exec-8] o.apache.tomcat.util.http.parser.Cookie  :
-A cookie header was received [Hm_lvt_e3522da961ab5db57e945e810f2e3e33=1693878457,1693902301,1693970922,1693993389;]
-that contained an invalid cookie. That cookie will be ignored.
-Note: further occurrences of this error will be logged at DEBUG level.
-```
+# 项目说明
 
-springboot3 直接使用@Resource注解进行依赖注入失效
+代码生成器，可根据自定义模板内容，快速生成代码
 
-# 参考资料
+基于 https://github.com/makunet/maku-generator 项目二次开发
 
-1. 数据库建表规范
-   https://github.com/alibaba/p3c/blob/master/p3c-gitbook/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6.md
+# 本地启动
 
-# TODO
+- 通过git下载源码
+- 初始化数据库：执行db/mysql.sql文件
+- 修改application.yml，更新MySQL账号和密码、数据库名称
+- 运行DevplMain8088.java，则可启动项目
+- 运行前端项目
 
-1.代码生成器自定义模板，尽量做到灵活
 
-2.mock数据工具
 
-生成对应的代码，数据库表mock等等
+## 版本要求
 
-3.
+前端
 
-实体转sql
+1. vue3
+2. element-plus 2.4.2: https://element-plus.gitee.io/zh-CN/component/button.html
+3. vxe-table: https://vxetable.cn/#/table/start/install
 
-sql转实体类等等
 
-Xcheck
 
-https://xcheck.tencent.com/index
+后端
 
-模拟数据生成器
+1. JDK: 17.0.5+
+2. Maven: 3.6.0+
+3. SpringBoot 3.2+
 
-1. 模型内部数据项之间的关联关系
-2. 模型实例与实例之间的关联关系
 
-数据模拟参考文章：
-https://www.jianshu.com/p/533adbc1d37f
 
-TODO
+## 效果图
 
-简化代码
-去掉@RequestBody注解，默认都是JSON形式数据
 
-# 日志转SQL
 
-```plain
-==>  Preparing: SELECT id,project_name,project_code,project_package,project_path,modify_project_name,modify_project_code,modify_project_package,exclusions,modify_suffix,version,backend_path,frontend_path,status,build_tool,update_time,create_time FROM project_info WHERE id=?
-==> Parameters: 89(Long)
-<==    Columns: id, project_name, project_code, project_package, project_path, modify_project_name, modify_project_code, modify_project_package, exclusions, modify_suffix, version, backend_path, frontend_path, status, build_tool, update_time, create_time
-<==        Row: 89, devpl-backend, null, null, D:\Develop\Code\devpl-backend\devpl-backend, null, null, null, null, null, null, null, null, null, null, null, null
-<==      Total: 1
-```
-
-# 数据库迁移工具 TODO
-
-1.表结构转换
-
-https://blog.csdn.net/TIME_1981/article/details/128468035
-
-2.数据转换
-
-解析javadoc
-https://github.com/tangcent/easy-api
+![image-20241013010536677](.\assets\image-20241013010536677.png)
 
 
 
 
 
+![image-20241013010607161](.\assets\image-20241013010607161.png)
 
 
 
 
 
+![image-20241013010915676](.\assets\image-20241013010915676.png)
 
+
+
+![image-20241013011431012](.\assets\image-20241013011431012.png)

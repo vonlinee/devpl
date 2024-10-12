@@ -97,12 +97,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Bean
     public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedMethod("*");
+        // 是否发送 Cookie
+        corsConfiguration.setAllowCredentials(true);
+        //暴露哪些头部信息
+        corsConfiguration.addExposedHeader("*");
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
