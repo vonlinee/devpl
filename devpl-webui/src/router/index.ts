@@ -20,15 +20,15 @@ export const menuRoutes: RouteRecordRaw[] = [
       icon: "icon-database-fill",
     },
     children: [
-      {
-        path: "/datasource/driver",
-        name: "DriverManager",
-        meta: {
-          title: "驱动管理",
-          icon: "icon-appstore",
-        },
-        component: () => import("@/views/datasource/driver/index.vue")
-      },
+      // {
+      //   path: "/datasource/driver",
+      //   name: "DriverManager",
+      //   meta: {
+      //     title: "驱动管理",
+      //     icon: "icon-appstore",
+      //   },
+      //   component: () => import("@/views/datasource/driver/index.vue")
+      // },
       {
         path: "/datasource/connection-info",
         name: "ConnectionInfo",
@@ -168,16 +168,16 @@ export const menuRoutes: RouteRecordRaw[] = [
           keepAlive: true,
         },
       },
-      {
-        path: "/devtools/collection",
-        name: "其他",
-        component: () => import("@/views/devtools/toolset/index.vue"),
-        meta: {
-          title: "其他",
-          icon: "icon-edit-square",
-          keepAlive: true,
-        },
-      },
+      // {
+      //   path: "/devtools/collection",
+      //   name: "其他",
+      //   component: () => import("@/views/devtools/toolset/index.vue"),
+      //   meta: {
+      //     title: "其他",
+      //     icon: "icon-edit-square",
+      //     keepAlive: true,
+      //   },
+      // },
     ],
   },
   {
@@ -204,15 +204,16 @@ export const menuRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: "/scripts",
-    meta: {
-      title: "脚本管理",
-      icon: "icon-appstore",
-    },
-    component: () => import("@/views/scripts/index.vue"),
-    children: [],
-  },
+  // {
+  //   path: "/scripts",
+  //   meta: {
+  //     title: "脚本管理",
+  //     icon: "icon-appstore",
+  //   },
+  //   component: () => import("@/views/scripts/index.vue"),
+  //   children: [],
+  // },
+  /*
   {
     path: "/test",
     name: "测试",
@@ -222,6 +223,7 @@ export const menuRoutes: RouteRecordRaw[] = [
       icon: "icon-edit-square",
     },
   },
+  */
 ]
 
 /**

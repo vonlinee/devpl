@@ -12,3 +12,10 @@ repositories {
 tasks.wrapper {
     gradleVersion = "8.4"
 }
+
+allprojects {
+
+    tasks.compileJava {
+        options.compilerArgs.add("'-Xlint:-deprecation'")
+    }
+}

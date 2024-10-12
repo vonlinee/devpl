@@ -2,7 +2,8 @@
   数据源驱动管理
  -->
 <template>
-  <drvier-manager></drvier-manager>
+  <file-selector ref="fileSelector"></file-selector>
+  <el-button @click="upload">上传</el-button>
 
   <el-table :border="true" height="525" :data="option.dataList">
     <el-table-column type="selection" width="60" header-align="center" align="center"></el-table-column>
@@ -24,22 +25,40 @@
 </template>
 <script lang='ts' setup>
 import { DataTableOption } from "@/hooks/interface";
-import DrvierManager from "./DrvierManager.vue"
 import { useCrud } from "@/hooks";
 import { apiListDriverFiles } from "@/api/datasource";
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
+import FileSelector from "@/components/FileSelector.vue"
+import { ref } from "vue"
+import { apiUploadDriverJar } from "@/api/datasource"
 
+let fileSelector = ref()
 
 const option: DataTableOption = reactive({
   pageSizes: [10, 15, 20],
   queryForm: {
-    dbType: "",
+
   },
+  createdIsNeed: false,
   queryPage: apiListDriverFiles,
 } as DataTableOption)
 
 
 const { getDataList, sizeChangeHandle, currentChangeHandle, deleteHandle } = useCrud(option)
+
+onMounted(() => {
+  getDataList()
+})
+
+
+function upload() {
+  const files = fileSelector.value.getRawFiles()
+  if (files.length > 0) {
+    apiUploadDriverJar(files[0]).then((res) => {
+      getDataList();
+    })
+  }
+}
 
 </script>
 <style lang="scss" scoped></style>

@@ -5,6 +5,7 @@ import io.devpl.backend.domain.param.FileUploadParam;
 import io.devpl.backend.domain.param.MultiFileUploadParam;
 import io.devpl.backend.domain.param.SingleFileUploadParam;
 import io.devpl.backend.domain.vo.FileUploadVO;
+import io.devpl.backend.entity.FileInfo;
 import io.devpl.backend.service.FileInfoService;
 import io.devpl.backend.service.FileUploadService;
 import jakarta.annotation.Resource;
@@ -46,6 +47,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     /**
      * 上传，返回文件相对路径
+     *
      * @param param 单文件上传参数
      * @return 上传结果
      */

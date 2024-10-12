@@ -44,4 +44,11 @@ public class FileUploadVO {
         }
         pathList.add(path);
     }
+
+    public String getPath() {
+        if (pathList == null || pathList.isEmpty()) {
+            return null;
+        }
+        return pathList.get(0);
+    }
 }

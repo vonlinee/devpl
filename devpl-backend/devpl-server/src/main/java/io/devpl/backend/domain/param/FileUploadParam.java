@@ -1,10 +1,14 @@
 package io.devpl.backend.domain.param;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+
+import java.util.Objects;
 
 /**
  * 文件上传参数
  */
+@Getter
 public class FileUploadParam {
 
     /**
@@ -14,11 +18,7 @@ public class FileUploadParam {
     @NotBlank(message = "保存子目录不能为空")
     private String folder;
 
-    public String getFolder() {
-        return folder;
-    }
-
-    public void setFolder(String folder) {
-        this.folder = folder;
+    public final void setFolder(String folder) {
+        this.folder = Objects.requireNonNull(folder, "folder cannot be null");
     }
 }

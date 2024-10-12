@@ -1,6 +1,6 @@
 import { DataTableOption } from "@/hooks/interface";
 import http from "@/utils/http";
-import { isReactive, onMounted, reactive } from "vue";
+import { isReactive, onMounted, reactive, toRaw } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Message } from "./message";
 
@@ -72,10 +72,11 @@ export const useCrud = (options: DataTableOption) => {
     }
     option.dataListLoading = true;
     if (option.queryPage) {
+      const queryForm = toRaw(option.queryForm)
       option.queryPage(
         option.page ? option.page : 1,
         option.limit ? option.limit : 10,
-        option.queryForm
+        queryForm
       ).then((res) => {
         // 分页
         option.dataList = res.data;

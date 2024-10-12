@@ -92,8 +92,7 @@ export const apiGetDatabaseNamesById = (dataSourceId: number) => {
  * @param file
  */
 export const apiUploadDriverJar = (file: File) => {
-  return http.post(
-    "/api/jdbc/driver/upload",
+  return http.post("/api/jdbc/driver/upload",
     {
       file: file,
     },
@@ -144,7 +143,17 @@ export const apiGetTableData = (param: ParamGetDbTableData) => {
   return http.post<DBTableDataVO>("/api/datasource/table/data", param)
 }
 
-
-export const apiListDriverFiles = (param: any) => {
-  return http.get<DBTableDataVO>("/api/jdbc/driver/files", param)
+/**
+ * 查询驱动文件列表
+ * @param page 
+ * @param limit 
+ * @param formParam 
+ * @returns 
+ */
+export const apiListDriverFiles = (page: number, limit: number, formParam: any) => {
+  return http.get("/api/jdbc/driver/files", {
+    page, 
+    limit, 
+    formParam
+  })
 }

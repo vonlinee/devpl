@@ -3,8 +3,11 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.DriverFileListParam;
+import io.devpl.backend.domain.param.SingleFileUploadParam;
+import io.devpl.backend.domain.vo.FileUploadVO;
 import io.devpl.backend.entity.DriverFileInfo;
 import io.devpl.backend.service.DriverService;
+import io.devpl.backend.service.FileUploadService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,21 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 /**
  * 数据库驱动管理
@@ -42,6 +35,9 @@ public class DriverManagerController {
     @Resource
     DriverService driverService;
 
+    @Resource
+    FileUploadService fileUploadService;
+
     /**
      * 上传驱动jar包
      *
@@ -50,40 +46,19 @@ public class DriverManagerController {
      */
     @PostMapping(value = "/upload")
     public Result<?> uploadDriver(MultipartFile file) {
-        Path path = Path.of("D:/Temp/jarfiles", file.getOriginalFilename());
-        if (!Files.exists(path)) {
-            try {
-                Files.createDirectories(path.getParent());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        SingleFileUploadParam param = new SingleFileUploadParam();
+        param.setFile(file);
+        param.setOverride(true);
+        param.setFilename(file.getOriginalFilename());
+        param.setFolder("jdbcDriverJarFile");
+        FileUploadVO result = fileUploadService.uploadSingleFile(param);
+        DriverFileInfo driverFileInfo = new DriverFileInfo();
+        driverFileInfo.setFileName(file.getOriginalFilename());
+        driverFileInfo.setDeleted(false);
+        if (driverService.save(driverFileInfo)) {
+            return Result.ok(result.getPath());
         }
-        try (InputStream is = file.getInputStream()) {
-            Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        findClass(path.toFile(), Objects::isNull);
-
-        return Result.ok(String.valueOf(file));
-    }
-
-    public void findClass(File file, Predicate<JarEntry> condition) {
-        try (JarFile jarFile = new JarFile(file)) {
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry jarEntry = entries.nextElement();
-                if (jarEntry.isDirectory()) {
-                    continue;
-                }
-                if (!jarEntry.getName().endsWith(".class")) {
-                    continue;
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Result.error("上传失败");
     }
 
     /**

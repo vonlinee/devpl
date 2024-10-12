@@ -17,3 +17,15 @@ export enum ResponseStatus {
   FAIL = 999, // 请求失败
   SUCCESS = 2000, // 请求成功，不使用200,与HTTP状态码区分开
 }
+
+/**
+ * 用于 Get 请求
+ */
+export interface GetRequestParam {
+  // 可选参数，表示当前页码
+  page?: number;
+  // 可选参数，表示每页的记录数
+  limit?: number;
+  // 索引签名，表示其他字段
+  [key: string]: any;
+}

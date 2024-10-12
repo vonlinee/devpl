@@ -2,6 +2,7 @@ package io.devpl.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.dao.DriverFileInfoMapper;
 import io.devpl.backend.domain.param.DriverFileListParam;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class DriverServiceImpl implements DriverService {
+public class DriverServiceImpl extends ServiceImpl<DriverFileInfoMapper, DriverFileInfo> implements DriverService {
 
     private final DriverFileInfoMapper driverFileInfoMapper;
 
