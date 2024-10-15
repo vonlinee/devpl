@@ -17,7 +17,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: "/datasource",
     meta: {
       title: "数据源管理",
-      icon: "icon-database-fill",
+      icon: "datasource",
     },
     children: [
       // {
@@ -34,7 +34,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "ConnectionInfo",
         meta: {
           title: "连接信息",
-          icon: "icon-appstore",
+          icon: "database-connection-filled",
         },
         component: () => import("@/views/datasource/index.vue"),
         children: [],
@@ -45,7 +45,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: "/codegen",
     meta: {
       title: "代码生成器",
-      icon: "icon-appstore",
+      icon: "code_generation",
     },
     children: [
       {
@@ -54,7 +54,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/generator/index.vue"),
         meta: {
           title: "文件生成",
-          icon: "icon-fire",
+          icon: "file-create",
         },
       },
       {
@@ -63,7 +63,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/generator/targetfile/index.vue"),
         meta: {
           title: "文件类型",
-          icon: "icon-fire",
+          icon: "file",
         },
       },
       {
@@ -72,17 +72,16 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/project/index.vue"),
         meta: {
           title: "项目管理",
-          icon: "icon-edit-square",
+          icon: "project",
         },
       },
     ],
   },
-
   {
     path: "/databaseManager",
     meta: {
       title: "数据库管理",
-      icon: "icon-appstore"
+      icon: "database-empty"
     },
     children: [
       {
@@ -91,7 +90,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/dbm/database/index.vue"),
         meta: {
           title: "模型管理",
-          icon: "icon-fire",
+          icon: "modelbim",
         },
       },
       {
@@ -100,7 +99,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/dbm/table/index.vue"),
         meta: {
           title: "数据库表设计",
-          icon: "icon-fire",
+          icon: "table-design",
         },
       }
     ],
@@ -110,7 +109,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     name: "模型管理",
     meta: {
       title: "模型管理",
-      icon: "icon-appstore",
+      icon: "domain-model",
     },
     children: [
       {
@@ -119,7 +118,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/datatype/index.vue"),
         meta: {
           title: "类型系统",
-          icon: "icon-menu",
+          icon: "data-type",
         },
       },
       {
@@ -127,7 +126,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "FieldInfo",
         meta: {
           title: "字段信息",
-          icon: "icon-appstore",
+          icon: "fieldset",
         },
         component: () => import("@/views/fields/index.vue"),
       },
@@ -136,7 +135,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "FieldGroup",
         meta: {
           title: "字段分组",
-          icon: "icon-appstore",
+          icon: "fieldset",
         },
         component: () => import("@/views/fields/group/index.vue"),
       },
@@ -146,7 +145,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/model/index.vue"),
         meta: {
           title: "模型信息",
-          icon: "icon-cluster",
+          icon: "class",
         },
       },
     ],
@@ -155,7 +154,7 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: "/devtools",
     meta: {
       title: "开发工具",
-      icon: "icon-appstore",
+      icon: "devtools",
     },
     children: [
       {
@@ -164,7 +163,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/devtools/mybatis/index.vue"),
         meta: {
           title: "MyBatis",
-          icon: "icon-edit-square",
+          icon: "mybatis",
           keepAlive: true,
         },
       },
@@ -184,21 +183,21 @@ export const menuRoutes: RouteRecordRaw[] = [
     path: "/codegen/template",
     meta: {
       title: "模板管理",
-      icon: "icon-appstore",
+      icon: "template-manager",
     },
     children: [
       {
         path: "/codegen/template/list",
         meta: {
           title: "模板列表",
-          icon: "icon-appstore",
+          icon: "template-list-fill",
         },
         component: () => import("@/views/template/index.vue"),
       }, {
         path: "/codegen/template/directives",
         meta: {
           title: "模板指令",
-          icon: "icon-appstore",
+          icon: "template-directive",
         },
         component: () => import("@/views/template/directive/index.vue"),
       },

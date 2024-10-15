@@ -16,7 +16,9 @@ export default defineConfig({
   plugins: [
     vue(),
     createSvgIconsPlugin({
+      // SVG存放的目录
       iconDirs: [resolve(__dirname, "src/icons/svg")],
+      // 指定需要转换的SVG文件，支持正则
       symbolId: "icon-[dir]-[name]",
     }),
   ],
