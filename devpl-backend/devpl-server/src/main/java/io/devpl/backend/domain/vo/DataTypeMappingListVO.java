@@ -1,7 +1,11 @@
 package io.devpl.backend.domain.vo;
 
+import io.devpl.backend.entity.DataTypeItem;
+import io.devpl.sdk.annotations.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * 数据类型映射VO
@@ -25,4 +29,10 @@ public class DataTypeMappingListVO {
     private String anotherTypeKey;
     private String anotherTypeGroupId;
     private String anotherTypeName;
+
+    @NotNull
+    private List<DataTypeItem> types;
+
+    @NotNull
+    private List<List<DataTypeItem>> mappedDataTypes;
 }

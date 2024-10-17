@@ -463,14 +463,14 @@ public class MyBatisServiceImpl implements MyBatisService {
 
     @Override
     public List<String> buildIndex(String projectRootDir) {
-        ClassPathResource resource = new ClassPathResource("mybatis-config.xml");
+        ClassPathResource resource = new ClassPathResource("mybatis/mybatis-config.xml");
         Properties properties = new Properties();
         String environment = "";
 
         try (InputStream inputStream = resource.getInputStream()) {
             XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
             Configuration configuration = parser.parse();
-            try (Stream<Path> mapperFilesStream = Files.list(Path.of(resource.getFile().getParent(), "mapper"))) {
+            try (Stream<Path> mapperFilesStream = Files.list(Path.of(resource.getFile().getParent(), "mybatis/mapping"))) {
                 /**d
                  * mapper文件中的sql标签
                  * key为namespace + <sql>标签的id，val为对应的XNode
@@ -644,7 +644,7 @@ public class MyBatisServiceImpl implements MyBatisService {
              * MyBatis使用XPath进行XML的解析
              */
             XPathParser parser = new XPathParser(inputStream, false, null, new IgnoreDTDEntityResolver());
-            XNode rootNode = parser.evalNode("/mapper");
+            XNode rootNode = parser.evalNode("/mybatis/mapping");
 
             String namespace = rootNode.getStringAttribute("namespace");
 
@@ -778,7 +778,7 @@ public class MyBatisServiceImpl implements MyBatisService {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(mapperFile);
 
-            NodeList mapperNodes = document.getElementsByTagName("mapper");
+            NodeList mapperNodes = document.getElementsByTagName("mybatis/mapping");
             for (int i = 0; i < mapperNodes.getLength(); i++) {
                 Node item = mapperNodes.item(i);
 

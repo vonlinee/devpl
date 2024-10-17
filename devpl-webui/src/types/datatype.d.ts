@@ -117,3 +117,33 @@ type DataTypeMapping = {
    */
   anotherTypeKey: string | undefined
 }
+
+/**
+ * 数据类型映射, 单个组与单个组之间的映射关系
+ */
+type DataTypeMappingByTypeGroup = {
+  /**
+   * 分组ID
+   */
+  groupId: number | null
+  /**
+   * 分组名称
+   */
+  groupName: string
+  /**
+   * 映射类型名称
+   */
+  typeGroupId: number | undefined
+  /**
+   * 映射类型 Key
+   */
+  anotherTypeGroupId: string | undefined
+  /**
+   * 主数据类型
+   */
+  types: DataTypeItem[] | []
+  /**
+   * 映射数据类型
+   */
+  mappedDataTypes: DataTypeItem[][] | [][]
+}

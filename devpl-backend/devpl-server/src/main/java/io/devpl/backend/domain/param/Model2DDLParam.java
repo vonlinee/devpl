@@ -1,5 +1,6 @@
 package io.devpl.backend.domain.param;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,13 @@ public class Model2DDLParam {
     private String content;
 
     /**
-     * 去除的字段
+     * 去除的字段,使用逗号分割
      */
     private String excludeFields;
+
+    /**
+     * 数据库类型
+     */
+    @NotEmpty(message = "数据库类型不能为空")
+    private String targetDbType;
 }

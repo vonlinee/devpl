@@ -104,7 +104,27 @@
                        FROM data_type_mapping dtm
                                 LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id) B
                       ON A.id = B.id
-        WHERE A.type_group_id = #{typeGroupId}
-          AND B.type_group_id = #{anotherTypeGroupId}
+        <where>
+            <if test="typeGroupId != null and typeGroupId != ''">
+                AND A.type_group_id = #{typeGroupId}
+            </if>
+            <if test="anotherTypeGroupId != null and anotherTypeGroupId != ''">
+                AND B.type_group_id = #{anotherTypeGroupId}
+            </if>
+        </where>
+    </select>
+    <select id="selectMappableDataTypesListById" resultType="io.devpl.backend.domain.vo.MappedDataTypeVO">
+        SELECT dtm.id AS id,
+               dtm.group_id AS group_id,
+               dtm.another_type_id AS type_id,
+               dtm.another_type_key AS type_key,
+               dt.type_group_id
+        FROM data_type_mapping dtm
+                 LEFT JOIN data_type_item dt ON dtm.another_type_id = dt.id
+        WHERE dtm.group_id = #{groupId}
+          AND dtm.type_id = #{typeId}
+        <if test="anotherTypeGroup != null and anotherTypeGroup != ''">
+            AND dt.type_group_id = #{anotherTypeGroup}
+        </if>
     </select>
 </mapper>

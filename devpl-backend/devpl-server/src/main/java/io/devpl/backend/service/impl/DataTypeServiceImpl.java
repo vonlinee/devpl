@@ -7,15 +7,11 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import io.devpl.backend.dao.DataTypeGroupMapper;
 import io.devpl.backend.dao.DataTypeItemMapper;
 import io.devpl.backend.dao.DataTypeMappingGroupMapper;
-import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingAddParam;
 import io.devpl.backend.domain.param.DataTypeMappingListParam;
-import io.devpl.backend.domain.vo.DataTypeGroupVO;
-import io.devpl.backend.domain.vo.DataTypeMappingListVO;
-import io.devpl.backend.domain.vo.DataTypeMappingVO;
-import io.devpl.backend.domain.vo.SelectOptionVO;
+import io.devpl.backend.domain.vo.*;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
@@ -43,7 +39,6 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
     CrudService crudService;
     DataTypeGroupMapper dataTypeGroupMapper;
     DataTypeItemMapper dataTypeItemMapper;
-    DataTypeMappingMapper dataTypeMappingMapper;
     DataTypeMappingService dataTypeMappingService;
     DataTypeMappingGroupMapper dataTypeMappingGroupMapper;
 
@@ -121,18 +116,24 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      */
     @Override
     public boolean addDataTypeMapping(DataTypeMappingAddParam param) {
+        // 兼容性处理
         if (param.getTypeId() == null || CollectionUtils.isEmpty(param.getAnotherTypeIds())) {
             return true;
         }
+        // 避免相同的类型进行映射
         param.getAnotherTypeIds().remove(param.getTypeId());
+        // 去重
+        List<Long> mappedTypeIds = dataTypeMappingService.listMappedDataTypeId(param.getGroupId(), param.getTypeId());
+        param.getAnotherTypeIds().removeAll(mappedTypeIds);
         if (param.getAnotherTypeIds().isEmpty()) {
             return true;
         }
         // 查询所有数据类型信息
         Set<Long> ids = Sets.newSet(param.getAnotherTypeIds(), param.getTypeId());
-        List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByIds(ids);
-        Map<Long, DataTypeItem> dataTypeItemMap = CollectionUtils.toMap(dataTypeItems, DataTypeItem::getId);
-
+        Map<Long, DataTypeItem> dataTypeItemMap = CollectionUtils.toMap(dataTypeItemMapper.listByIds(ids), DataTypeItem::getId);
+        if (!dataTypeItemMap.containsKey(param.getTypeId())) {
+            throw new RuntimeException("主数据类型不存在");
+        }
         List<DataTypeMapping> mappings = new ArrayList<>();
         for (Long anotherTypeId : param.getAnotherTypeIds()) {
             DataTypeMapping mapping = new DataTypeMapping(param.getTypeId(), anotherTypeId);
@@ -141,9 +142,6 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
             mapping.setGroupId(param.getGroupId());
             mappings.add(mapping);
         }
-
-        // TODO 重复由前端过滤
-
         return dataTypeMappingService.saveBatch(mappings);
     }
 
@@ -164,7 +162,41 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      */
     @Override
     public List<DataTypeMappingListVO> listDataTypeMappings(DataTypeMappingListParam param) {
-        return dataTypeMappingMapper.selectMappingsByPrimaryType(param);
+        return dataTypeMappingService.selectMappingsByPrimaryType(param);
+    }
+
+    @Override
+    public DataTypeMappingByTypeGroup getDataTypeMappingsByGroup(DataTypeMappingListParam param) {
+        DataTypeMappingByTypeGroup vo = new DataTypeMappingByTypeGroup();
+        vo.setTypeGroupId(param.getTypeGroupId());
+        vo.setAnotherTypeGroupId(param.getAnotherTypeGroupId());
+        List<DataTypeMapping> mappings = dataTypeMappingService.listByTypeGroupKey(param.getGroupId(), param.getTypeGroupId(), param.getAnotherTypeGroupId());
+        if (CollectionUtils.isEmpty(mappings)) {
+            return vo;
+        }
+        // 按主类型分组
+        Map<Long, List<DataTypeMapping>> groupByTypeId = CollectionUtils.groupingBy(mappings, DataTypeMapping::getTypeId);
+        // 映射类型的ID
+        Set<Long> anotherTypeIds = CollectionUtils.toSet(mappings, DataTypeMapping::getAnotherTypeId);
+
+        List<Long> typeIds = CollectionUtils.addAll(new ArrayList<>(), groupByTypeId.keySet(), anotherTypeIds);
+
+        List<DataTypeItem> dataTypeItems = listByIds(typeIds);
+
+        Map<Long, DataTypeItem> typeItemMap = CollectionUtils.toMap(dataTypeItems, DataTypeItem::getId);
+
+        List<DataTypeItem> primaryTypeList = new ArrayList<>();
+        List<Collection<DataTypeItem>> mappedTypesList = new ArrayList<>();
+        for (Map.Entry<Long, List<DataTypeMapping>> entry : groupByTypeId.entrySet()) {
+            Set<Long> set = CollectionUtils.toSet(entry.getValue(), DataTypeMapping::getAnotherTypeId);
+            Collection<DataTypeItem> mappedTypes = CollectionUtils.values(typeItemMap, set);
+            primaryTypeList.add(typeItemMap.get(entry.getKey()));
+            mappedTypesList.add(mappedTypes);
+        }
+        vo.setTypes(CollectionUtils.values(typeItemMap, groupByTypeId.keySet()));
+        vo.setTypes(primaryTypeList);
+        vo.setMappedDataTypes(mappedTypesList);
+        return vo;
     }
 
     /**
@@ -174,11 +206,16 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
      * @return 可映射的数据类型列表
      */
     @Override
-    public List<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
+    public List<DataTypeMappingVO> listMappableDataTypes(@Nullable Long typeId) {
         if (typeId == null) {
-            return dataTypeMappingMapper.listAllUnMappedDataTypes();
+            return dataTypeMappingService.listAllUnMappedDataTypes();
         }
-        return dataTypeMappingMapper.listAllMappableDataTypes(typeId);
+        return dataTypeMappingService.listAllMappableDataTypes(typeId);
+    }
+
+    @Override
+    public List<MappedDataTypeVO> listMappableDataTypes(@NotNull Long groupId, @NotNull Long typeId, @NotNull String anotherTypeGroup) {
+        return dataTypeMappingService.listMappableDataTypes(groupId, typeId, anotherTypeGroup);
     }
 
     /**
@@ -192,7 +229,7 @@ public class DataTypeServiceImpl extends ServiceImpl<DataTypeItemMapper, DataTyp
         List<DataTypeItem> dataTypeItems = dataTypeItemMapper.listByGroupId(typeGroupId);
         List<SelectOptionVO> result = new ArrayList<>();
         for (DataTypeItem item : dataTypeItems) {
-            result.add(new SelectOptionVO(item.getTypeKey(), item.getTypeKey(),
+            result.add(new SelectOptionVO(item.getId(), item.getTypeKey(),
                 StringUtils.whenBlank(item.getFullTypeKey(), item.getTypeKey())));
         }
         return result;

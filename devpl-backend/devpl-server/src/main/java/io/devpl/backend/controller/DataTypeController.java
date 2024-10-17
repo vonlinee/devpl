@@ -3,17 +3,14 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.param.*;
-import io.devpl.backend.domain.vo.DataTypeGroupVO;
-import io.devpl.backend.domain.vo.DataTypeMappingListVO;
-import io.devpl.backend.domain.vo.DataTypeMappingVO;
-import io.devpl.backend.domain.vo.SelectOptionVO;
+import io.devpl.backend.domain.vo.*;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMappingGroup;
+import io.devpl.backend.service.DataTypeGroupService;
 import io.devpl.backend.service.DataTypeItemService;
 import io.devpl.backend.service.DataTypeMappingService;
 import io.devpl.backend.utils.BusinessUtils;
-import io.devpl.sdk.util.CollectionUtils;
 import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,8 @@ public class DataTypeController {
     DataTypeItemService dataTypeService;
     @Resource
     DataTypeMappingService dataTypeMappingService;
+    @Resource
+    DataTypeGroupService dataTypeGroupService;
 
     /**
      * 保存数据类型信息
@@ -93,6 +92,16 @@ public class DataTypeController {
     }
 
     /**
+     * 获取所有类型分组ID
+     *
+     * @return 所有类型分组ID
+     */
+    @GetMapping("/group/ids")
+    public List<String> listAllTypeGroupId() {
+        return dataTypeGroupService.listAllGroupId();
+    }
+
+    /**
      * 保存数据类型分组
      *
      * @return 类型分组信息
@@ -135,6 +144,26 @@ public class DataTypeController {
     }
 
     /**
+     * 按类型分组查询所有数据类型之间的映射关系
+     *
+     * @return 类型分组信息
+     */
+    @GetMapping("/mapping/listByGroup")
+    public DataTypeMappingByTypeGroup getDataTypeMappingsByGroup(DataTypeMappingListParam param) {
+        return dataTypeService.getDataTypeMappingsByGroup(param);
+    }
+
+    /**
+     * 按单个类型查询所有数据类型之间的映射关系
+     *
+     * @return 类型分组信息
+     */
+    @GetMapping("/mapping/listByType")
+    public List<MappedDataTypeVO> listMappedDataTypeByTypeId(DataTypeMappingListParam param) {
+        return dataTypeService.listMappableDataTypes(param.getGroupId(), param.getTypeId(), param.getAnotherTypeGroupId());
+    }
+
+    /**
      * 根据ID删除
      *
      * @return 是否成功
@@ -142,6 +171,16 @@ public class DataTypeController {
     @DeleteMapping("/mapping/remove")
     public boolean removeMappingById(@RequestParam("id") Long id) {
         return dataTypeMappingService.removeById(id);
+    }
+
+    /**
+     * 根据类型ID删除
+     *
+     * @return 是否成功
+     */
+    @DeleteMapping("/mapping/removeByType")
+    public boolean removeMappingByTypeId(@RequestBody DataTypeMappingRemoveParam param) {
+        return dataTypeMappingService.removeMappingByTypeId(param.getGroupId(), param.getTypeId(), param.getAnotherTypeIds());
     }
 
     /**
@@ -153,7 +192,7 @@ public class DataTypeController {
      */
     @GetMapping("/mappable")
     public ListResult<DataTypeMappingVO> listAllMappableDataTypes(@Nullable Long typeId) {
-        return ListResult.ok(dataTypeService.listAllMappableDataTypes(typeId));
+        return ListResult.ok(dataTypeService.listMappableDataTypes(typeId));
     }
 
     /**
@@ -205,12 +244,6 @@ public class DataTypeController {
      */
     @PostMapping("/mapping/add")
     public Result<Boolean> addDataTypeMapping(@RequestBody DataTypeMappingAddParam param) {
-        if (param.getGroupId() == null) {
-            return Result.error("类型映射规则分组为空");
-        }
-        if (param.getTypeId() == null || CollectionUtils.isEmpty(param.getAnotherTypeIds())) {
-            return Result.error("主类型或者映射类型为空");
-        }
         return Result.ok(dataTypeService.addDataTypeMapping(param));
     }
 

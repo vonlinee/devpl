@@ -1,6 +1,6 @@
 import { ElMessage } from "element-plus"
 
-const DEFAULT_DURATION = 500
+const DEFAULT_DURATION = 600
 
 export namespace Message {
   /**

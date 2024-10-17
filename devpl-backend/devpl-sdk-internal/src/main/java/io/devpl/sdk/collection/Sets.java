@@ -8,8 +8,9 @@ import java.util.Set;
 /**
  * Set集合工具类
  */
-public class Sets {
+public abstract class Sets {
 
+    @SafeVarargs
     public static <E> Set<E> of(Collection<E> collection, E... elements) {
         if (collection == null) {
             return new HashSet<>(Arrays.asList(elements));
@@ -18,6 +19,7 @@ public class Sets {
         return new HashSet<>(collection);
     }
 
+    @SafeVarargs
     public static <E> Set<E> newSet(Collection<E> collection, E... elements) {
         if (collection == null) {
             return new HashSet<>(Arrays.asList(elements));

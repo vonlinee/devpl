@@ -2,13 +2,15 @@ package io.devpl.backend.service.impl;
 
 import io.devpl.backend.dao.DataTypeMappingMapper;
 import io.devpl.backend.domain.param.FieldParseParam;
-import io.devpl.backend.domain.param.Model2DDLParam;
 import io.devpl.backend.domain.param.FieldsToTableParam;
+import io.devpl.backend.domain.param.Model2DDLParam;
 import io.devpl.backend.domain.vo.ColumnInfoVO;
+import io.devpl.backend.domain.vo.FieldParseResult;
 import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.tools.ddl.DdlUtils;
 import io.devpl.backend.tools.ddl.Field;
+import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.common.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
@@ -30,8 +32,17 @@ public class DevToolsServiceImpl implements DevToolsService {
         FieldParseParam fieldParseParam = new FieldParseParam();
         fieldParseParam.setContent(param.getContent());
         fieldParseParam.setType("java");
-
-        return "";
+        FieldParseResult result = fieldInfoService.parseFields(fieldParseParam);
+        if (result.isFailed()) {
+            return result.getErrorMsg();
+        }
+        FieldsToTableParam fieldsToTableParam = new FieldsToTableParam();
+        fieldsToTableParam.setFields(result.getFields());
+        fieldsToTableParam.setTableName("Example");
+        fieldsToTableParam.setDbType(DBTypeEnum.MYSQL.getName());
+        fieldsToTableParam.setWrapIdentifier(true);
+        fieldsToTableParam.setDropTable(true);
+        return getCreateTableDDL(fieldsToTableParam);
     }
 
     /**

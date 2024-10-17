@@ -5,11 +5,13 @@ import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingListParam;
 import io.devpl.backend.domain.vo.DataTypeMappingListVO;
 import io.devpl.backend.domain.vo.DataTypeMappingVO;
+import io.devpl.backend.domain.vo.MappedDataTypeVO;
 import io.devpl.backend.entity.DataTypeItem;
 import io.devpl.backend.entity.DataTypeMapping;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -88,4 +90,17 @@ public interface DataTypeMappingMapper extends MyBatisPlusMapper<DataTypeMapping
      * @return 已经映射过的类型ID列表
      */
     Set<Long> selectMappedDataTypeIds(@Param("groupId") Long groupId, @Param("typeId") Long typeId);
+
+    /**
+     * 查询映射的数据类型
+     *
+     * @param groupId          映射配置分组ID
+     * @param typeId           主类型ID
+     * @param anotherTypeGroup 映射类型分组ID
+     * @return 单个类型映射到另外一个类型组的所有数据类型
+     */
+    List<MappedDataTypeVO> selectMappableDataTypesListById(
+        @Param("groupId") Long groupId,
+        @Param("typeId") Long typeId,
+        @Nullable @Param("anotherTypeGroup") String anotherTypeGroup);
 }

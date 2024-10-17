@@ -63,7 +63,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/generator/targetfile/index.vue"),
         meta: {
           title: "文件类型",
-          icon: "file",
+          icon: "file-type",
         },
       },
       {
@@ -135,7 +135,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         name: "FieldGroup",
         meta: {
           title: "字段分组",
-          icon: "fieldset",
+          icon: "field-group",
         },
         component: () => import("@/views/fields/group/index.vue"),
       },
@@ -163,7 +163,7 @@ export const menuRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/devtools/mybatis/index.vue"),
         meta: {
           title: "MyBatis",
-          icon: "mybatis",
+          icon: "mybatis-logo-bird",
           keepAlive: true,
         },
       },

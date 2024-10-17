@@ -177,6 +177,7 @@ public abstract class CollectionUtils {
      * @param <V>         value类型
      * @return Map
      */
+    @NotNull
     public static <E extends Enum<E>, K, V> Map<K, V> toMap(Class<E> enumClass, Function<E, ? extends K> keyMapper, Function<E, ? extends V> valueMapper) {
         return toMap(EnumSet.allOf(enumClass), keyMapper, valueMapper);
     }
@@ -188,7 +189,11 @@ public abstract class CollectionUtils {
      * @param keyMapper 键映射器
      * @return {@link Map}<{@link K}, {@link E}>
      */
+    @NotNull
     public static <E, K> Map<K, E> toMap(Collection<E> list, Function<? super E, ? extends K> keyMapper) {
+        if (isEmpty(list)) {
+            return Collections.emptyMap();
+        }
         return list.stream().collect(Collectors.toMap(keyMapper, Function.identity()));
     }
 
@@ -490,5 +495,29 @@ public abstract class CollectionUtils {
                 target.put(entry.getKey(), entry.getValue());
             }
         }
+    }
+
+    /**
+     * @param target             general an empty collection
+     * @param anotherCollections another collections to be moved into the collection.
+     * @param <C>
+     * @param <E>
+     * @param <NE>
+     * @return the target
+     */
+    @SafeVarargs
+    public static <C extends Collection<E>, E, NE extends Collection<? extends E>> C addAll(@NotNull C target, NE... anotherCollections) {
+        for (NE anotherCollection : anotherCollections) {
+            target.addAll(anotherCollection);
+        }
+        return target;
+    }
+
+    public static <K, V> Collection<V> values(Map<K, V> map, Collection<K> keys) {
+        List<V> list = new ArrayList<>();
+        for (K key : keys) {
+            list.add(map.get(key));
+        }
+        return list;
     }
 }

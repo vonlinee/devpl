@@ -29,6 +29,11 @@ public class DataTypeMappingListParam extends PageParam {
     private String typeGroupId;
 
     /**
+     * 类型分组ID
+     */
+    private String anotherTypeGroupId;
+
+    /**
      * 映射的类型ID
      */
     private Long anotherTypeId;

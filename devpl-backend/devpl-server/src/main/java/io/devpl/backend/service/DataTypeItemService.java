@@ -6,10 +6,7 @@ import io.devpl.backend.domain.param.DataTypeGroupParam;
 import io.devpl.backend.domain.param.DataTypeListParam;
 import io.devpl.backend.domain.param.DataTypeMappingAddParam;
 import io.devpl.backend.domain.param.DataTypeMappingListParam;
-import io.devpl.backend.domain.vo.DataTypeGroupVO;
-import io.devpl.backend.domain.vo.DataTypeMappingListVO;
-import io.devpl.backend.domain.vo.DataTypeMappingVO;
-import io.devpl.backend.domain.vo.SelectOptionVO;
+import io.devpl.backend.domain.vo.*;
 import io.devpl.backend.entity.DataTypeGroup;
 import io.devpl.backend.entity.DataTypeItem;
 
@@ -65,12 +62,22 @@ public interface DataTypeItemService extends IService<DataTypeItem> {
     List<DataTypeMappingListVO> listDataTypeMappings(DataTypeMappingListParam param);
 
     /**
+     * 按组对组的方式查询映射关系
+     *
+     * @param param
+     * @return
+     */
+    DataTypeMappingByTypeGroup getDataTypeMappingsByGroup(DataTypeMappingListParam param);
+
+    /**
      * 查询某个类型映射的所有其他类型
      *
      * @param typeId 主类型ID
      * @return 映射的数据类型
      */
-    List<DataTypeMappingVO> listAllMappableDataTypes(Long typeId);
+    List<DataTypeMappingVO> listMappableDataTypes(Long typeId);
+
+    List<MappedDataTypeVO> listMappableDataTypes(Long groupId, Long typeId, String anotherTypeGroup);
 
     /**
      * 获取某个分组可选择的类型列表，包含名称和ID

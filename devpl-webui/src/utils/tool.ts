@@ -232,3 +232,19 @@ export const addAll = <T>(arr1: T[], arr2?: T[]): T[] => {
   }
   return arr1
 }
+
+/**
+ * 复制对象
+ * @param copyFrom 
+ * @param copyTo 
+ * @returns 
+ */
+export function copyObject(copyFrom: Record<any, any>, copyTo: Record<any, any>): Record<any, any> {
+  const keysTo = Object.keys(copyTo);
+  for (const key of keysTo) {
+    if (copyFrom[key] !== undefined) {
+      copyTo[key] = copyFrom[key];
+    }
+  }
+  return copyTo;
+}

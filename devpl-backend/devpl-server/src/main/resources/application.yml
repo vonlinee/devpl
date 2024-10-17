@@ -28,7 +28,7 @@ codegen:
 
 # mybatis-plus配置
 mybatis-plus:
-    mapper-locations: classpath:/mapper/*.xml
+    mapper-locations: classpath:/mybatis/mapping/*.xml
     typeAliasesPackage: io.devpl.backend.entity
     global-config:
         db-config:

@@ -18,6 +18,8 @@ public @interface NotNull {
      */
     String value() default "";
 
+    String remark() default "";
+
     /**
      * @return Custom exception type that should be thrown when not-nullity contract is violated.
      * The exception class should have a constructor with one String argument (message).

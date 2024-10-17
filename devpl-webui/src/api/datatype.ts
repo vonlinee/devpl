@@ -37,6 +37,13 @@ export const apiSaveDataTypeGroup = (group: any) => {
 }
 
 /**
+ * 获取所有类型分组ID
+ */
+export const apiListTypeGroupIds = () => {
+  return http.get("/api/datatype/group/ids")
+}
+
+/**
  * @returns
  */
 export const apiUpdateDataTypeItem = (dataTypeItem: any) => {
@@ -56,7 +63,7 @@ export interface DataTypeMappingAddParam {
   /**
    * 映射类型分组ID
    */
-  groupId?: number
+  groupId?: string | number
   typeId?: number
   anotherTypeIds?: number[]
   type?: DataTypeItem
@@ -93,6 +100,22 @@ export const apiListAllDataTypeMappings = (param: any) => {
 }
 
 /**
+ * 按类型分组查询所有数据类型之间的映射关系
+ * @returns
+ */
+export const apiListDataTypeMappingByGroup = (param: any) => {
+  return http.get("/api/datatype/mapping/listByGroup", param)
+}
+
+/**
+ * 按单个类型查询所有数据类型之间的映射关系
+ * @returns
+ */
+export const apiListDataTypeMappingByType = (param: any) => {
+  return http.get("/api/datatype/mapping/listByType", param)
+}
+
+/**
  * 保存或更新类型分组信息
  * @returns
  */
@@ -114,7 +137,7 @@ export const apiDeleteDataTypeGroupByIds = (groups: any[]) => {
  * 数据类型选项
  * @param typeGroupId
  */
-export const apiListDataTypeOptions = (typeGroupId: string) => {
+export const apiListDataTypeOptions = (typeGroupId?: string) => {
   return http.get("/api/datatype/options", {
     typeGroupId: typeGroupId || "",
   })
@@ -154,10 +177,17 @@ export const apiListMappableAnotherTypeOptions = (param: DataTypeListParam) => {
 
 
 /**
- * 数据类型组选择下拉列表
+ * 根据主键删除数据类型映射关系
  */
 export const apiRemoveDataMappingById = (id : number) => {
   return http.delete(`/api/datatype/mapping/remove?id=${id}`)
+}
+
+/**
+ * 根据类型ID删除数据类型映射关系
+ */
+export const apiRemoveDataMappingByType = (param: any) => {
+  return http.delete('/api/datatype/mapping/removeByType', param)
 }
 
 export type DataTypeListParam = {

@@ -64,7 +64,7 @@
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update ref="addOrUpdateRef" @refresh-data-list="getDataList"></add-or-update>
 
-    <type-mapping-table ref="typeMappingTableRef"></type-mapping-table>
+    <type-mapping-manager ref="typeMappingManagerRef"></type-mapping-manager>
 
     <!-- 类型分组弹窗 -->
     <type-group-manager ref="typeGroupManagerRef" @close="handleClose"></type-group-manager>
@@ -77,11 +77,11 @@ import { DataTableOption } from "@/hooks/interface"
 import { useCrud } from "@/hooks"
 import AddOrUpdate from "./add-or-update.vue"
 import { ElButton, ElSelect } from "element-plus"
-import { apiListAllDataTypeGroups, apiListDataTypes, apiListTypeGroupOptions } from "@/api/datatype"
-import TypeMappingTable from "@/views/datatype/TypeMappingTable.vue"
+import { apiListAllDataTypeGroups, apiListDataTypes } from "@/api/datatype"
+import TypeMappingManager from "@/views/datatype/mapping/TypeMappingManager.vue"
 import TypeGroupManager from "./TypeGroupManager.vue"
 
-const typeMappingTableRef = ref()
+const typeMappingManagerRef = ref()
 const typeGroupManagerRef = ref()
 const state: DataTableOption = reactive({
   dataListUrl: "/gen/datatype/page",
@@ -96,7 +96,7 @@ const state: DataTableOption = reactive({
 } as DataTableOption)
 
 const showTypeMappingTable = () => {
-  typeMappingTableRef.value.show()
+  typeMappingManagerRef.value.show()
 }
 
 const typeGroupOptions = ref<DataTypeGroup[]>([])

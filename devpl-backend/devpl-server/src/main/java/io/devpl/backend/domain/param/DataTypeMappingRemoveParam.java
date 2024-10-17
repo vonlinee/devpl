@@ -10,12 +10,12 @@ import java.util.List;
  * 数据类型映射添加参数
  */
 @Data
-public class DataTypeMappingAddParam {
+public class DataTypeMappingRemoveParam {
 
     /**
      * 类型映射规则分组
      */
-    @NotEmpty(message = "类型映射规则分组为空")
+    @NotEmpty(message = "类型映射规则分组不能为空")
     private Long groupId;
 
     /**
@@ -23,7 +23,6 @@ public class DataTypeMappingAddParam {
      *
      * @see DataTypeItem#getId()
      */
-    @NotEmpty(message = "主数据类型为空")
     private Long typeId;
 
     /**
@@ -31,7 +30,6 @@ public class DataTypeMappingAddParam {
      *
      * @see DataTypeItem#getId()
      */
-    @NotEmpty(message = "映射数据类型为空")
     private List<Long> anotherTypeIds;
 
     /**
@@ -39,7 +37,6 @@ public class DataTypeMappingAddParam {
      *
      * @see DataTypeItem#getTypeGroupId()
      */
-    @NotEmpty(message = "主数据类型分组为空")
     private String typeGroupId;
 
     /**
@@ -47,6 +44,5 @@ public class DataTypeMappingAddParam {
      *
      * @see DataTypeItem#getTypeGroupId()
      */
-    @NotEmpty(message = "映射数据类型分组为空")
     private String anotherTypeGroupId;
 }
