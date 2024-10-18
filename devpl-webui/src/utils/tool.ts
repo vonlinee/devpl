@@ -248,3 +248,14 @@ export function copyObject(copyFrom: Record<any, any>, copyTo: Record<any, any>)
   }
   return copyTo;
 }
+
+/**
+ * Base64编码
+ * @param content 文本
+ * @returns 
+ */
+export function base64Encode(content: string) {
+  var words = enc.Utf8.parse(content); // WordArray object
+  var base64 = enc.Base64.stringify(words);
+  return base64;
+}

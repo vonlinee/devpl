@@ -182,7 +182,7 @@ public class DataSourceController {
     @PostMapping("/update")
     public boolean save(@RequestBody RdbmsConnectionInfo entity) {
         if (entity.getId() != null) {
-            datasourceService.updateOne(entity);
+            datasourceService.updateConnectionInfo(entity);
             return true;
         }
         return datasourceService.addOne(entity);

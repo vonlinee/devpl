@@ -378,7 +378,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             templateInfo = new TemplateInfo();
         }
         templateInfo.setProvider(templateProviderMap.get(extName));
-        templateInfo.setTemplateId(UUID.randomUUID().toString());
+        templateInfo.setTemplateId(IdUtils.simpleULID());
         templateInfo.setInternal(true);
         templateInfo.setTemplateName(FileUtils.getFileName(templateFile));
         templateInfo.setDeleted(false);

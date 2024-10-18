@@ -16,7 +16,7 @@ public class CustomTemplateDirectiveParam {
     private String directiveName;
 
     /**
-     * 指令实现代码
+     * 指令实现代码, base64加密
      */
     private String sourceCode;
 

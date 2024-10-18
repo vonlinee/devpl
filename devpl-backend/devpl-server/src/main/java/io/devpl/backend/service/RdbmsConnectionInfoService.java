@@ -137,7 +137,7 @@ public interface RdbmsConnectionInfoService extends BaseService<RdbmsConnectionI
 
     TestConnVO testJdbcConnection(RdbmsConnectionInfo connInfo);
 
-    RdbmsConnectionInfo updateOne(RdbmsConnectionInfo entity);
+    RdbmsConnectionInfo updateConnectionInfo(RdbmsConnectionInfo entity);
 
     DBTableDataVO getTableData(DBTableDataParam param);
 }

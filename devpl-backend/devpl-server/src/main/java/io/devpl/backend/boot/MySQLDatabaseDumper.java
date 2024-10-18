@@ -1,8 +1,8 @@
 package io.devpl.backend.boot;
 
 import io.devpl.backend.service.DatabaseBackupService;
-import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.backend.utils.DBUtils;
+import io.devpl.backend.utils.DateTimeUtils;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +37,17 @@ public class MySQLDatabaseDumper implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String databaseName = DBUtils.getDatabaseNameFromConnectionUrl(url);
-        Path path = Path.of(new File("").getAbsolutePath(), "db/backup", databaseName + "-" + DateTimeUtils.nowForFilename() + ".sql");
-        boolean result = databaseBackupService.backup(url, username, password, databaseName, path);
-        if (result) {
-            logger.info("数据库备份成功 {}", path.toAbsolutePath());
+        try {
+            String databaseName = DBUtils.getDatabaseNameFromConnectionUrl(url);
+            Path path = Path.of(new File("").getAbsolutePath(), "db/backup", databaseName + "-" + DateTimeUtils.nowForFilename() + ".sql");
+            boolean result = databaseBackupService.backup(url, username, password, databaseName, path);
+            if (result) {
+                logger.info("数据库备份成功 {}", path.toAbsolutePath());
+            }
+        } catch (Throwable throwable) {
+            throw new RuntimeException(throwable);
         }
+
+        Thread.currentThread().interrupt();
     }
 }

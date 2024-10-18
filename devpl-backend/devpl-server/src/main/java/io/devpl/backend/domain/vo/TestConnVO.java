@@ -29,4 +29,14 @@ public class TestConnVO {
      * 连接失败时的错误信息
      */
     private String errorMsg;
+
+    private String productName;
+    private String productVersion;
+    private String driverName;
+    private String driverVersion;
+    private String userName;
+    private String databaseMajorVersion;
+    private String databaseMinorVersion;
+    private int jdbcMajorVersion;
+    private int jdbcMinorVersion;
 }

@@ -57,7 +57,7 @@
     <template #footer>
       <el-popover placement="left" :width="400" trigger="click">
         <template #reference>
-          <el-button style="margin-right: 116px" @click="testConnection">测试连接</el-button>
+          <el-button @click="testConnection">测试连接</el-button>
         </template>
         <span>{{ testConnResult.status }}</span>
       </el-popover>
@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, toRaw } from "vue"
-import { ElButton, ElCol, ElMessage } from "element-plus/es"
+import { ElButton, ElCol, ElMessage, FormInstance } from "element-plus/es"
 import {
   apiGetDatabaseNames,
   apiListSupportedDbTypes,
@@ -84,7 +84,7 @@ import { DriverTypeVO } from "./types"
 const emit = defineEmits(["refreshDataList"])
 
 const visible = ref(false)
-const dataFormRef = ref()
+const dataFormRef = ref<FormInstance>()
 
 const dataForm = reactive({
   id: "",
@@ -146,14 +146,20 @@ function onDbNameChange(val: string) { }
 /**
  * 测试数据库连接
  */
-const testConnection = () => {
-  apiTestConnection(toRaw(dataForm)).then((res) => {
-    if (!res.data?.failed) {
-      testConnResult.value.status = "成功"
-      testConnResult.value.dbmsType =
-        res.data?.dbmsType == undefined ? "" : res.data?.dbmsType
-    }
-  })
+const testConnection = async () => {
+  if (dataFormRef.value) {
+    dataFormRef.value.validate((valid, fields) => {
+      if (valid) {
+        apiTestConnection(toRaw(dataForm)).then((res) => {
+          if (!res.data?.failed) {
+            testConnResult.value.status = "成功"
+            testConnResult.value.dbmsType =
+              res.data?.dbmsType == undefined ? "" : res.data?.dbmsType
+          }
+        })
+      }
+    })
+  }
 }
 
 let flag = ref(false)
@@ -193,24 +199,26 @@ const dataRules = ref({
 
 // 表单提交
 const submitHandle = () => {
-  dataFormRef.value.validate((valid: boolean) => {
-    if (!valid) {
-      return false
-    }
-    useDataSourceSubmitApi({
-      ...dataForm,
-      password: encrypt(dataForm.password),
-    }).then(() => {
-      ElMessage.success({
-        message: "操作成功",
-        duration: 500,
-        onClose: () => {
-          visible.value = false
-          emit("refreshDataList")
-        },
+  if (dataFormRef.value) {
+    dataFormRef.value.validate((valid: boolean) => {
+      if (!valid) {
+        return false
+      }
+      useDataSourceSubmitApi({
+        ...dataForm,
+        password: encrypt(dataForm.password),
+      }).then(() => {
+        ElMessage.success({
+          message: "操作成功",
+          duration: 500,
+          onClose: () => {
+            visible.value = false
+            emit("refreshDataList")
+          },
+        })
       })
     })
-  })
+  }
 }
 
 defineExpose({

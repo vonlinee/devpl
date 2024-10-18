@@ -301,8 +301,16 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
         }
         TestConnVO vo = new TestConnVO();
         try (Connection connection = getRdbmsConnection(connInfo)) {
+            // TODO API兼容性
             DatabaseMetaData metaData = connection.getMetaData();
             vo.setDbmsType(metaData.getDatabaseProductName());
+            vo.setDriverName(metaData.getDriverName());
+            vo.setDriverVersion(metaData.getDriverVersion());
+            vo.setJdbcMajorVersion(metaData.getJDBCMajorVersion());
+            vo.setJdbcMinorVersion(metaData.getJDBCMinorVersion());
+            vo.setUserName(metaData.getUserName());
+            vo.setProductName(metaData.getDatabaseProductName());
+            vo.setProductVersion(metaData.getDatabaseProductVersion());
             vo.setUseSsl(false);
         } catch (SQLException e) {
             throw RuntimeSQLException.wrap(e);
@@ -311,7 +319,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
     }
 
     @Override
-    public RdbmsConnectionInfo updateOne(RdbmsConnectionInfo entity) {
+    public RdbmsConnectionInfo updateConnectionInfo(RdbmsConnectionInfo entity) {
         updateById(fixMissingConnectionInfo(entity, false));
         return entity;
     }

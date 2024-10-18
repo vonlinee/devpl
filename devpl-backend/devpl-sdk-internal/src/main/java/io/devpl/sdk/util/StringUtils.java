@@ -2760,4 +2760,14 @@ public abstract class StringUtils {
         // 将这两部分和要插入的子字符串拼接起来
         return part1 + toInsert + part2;
     }
+
+    /**
+     * 使用正则表达式检查字符串是否只包含英文字母
+     *
+     * @param str the str to check
+     * @return
+     */
+    public static boolean isAlphabetic(String str) {
+        return str.matches("[a-zA-Z]+");
+    }
 }

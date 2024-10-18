@@ -28,7 +28,7 @@ import { reactive, ref, toRaw, nextTick } from "vue";
 import MonacoEditor from "@/components/editor/MonacoEditor.vue";
 import { apiAddCustomTemplateDirective, apiGetCustomTemplateDirectiveExample } from "@/api/template";
 import { Message } from "@/hooks/message";
-import { hasText } from "@/utils/tool";
+import { base64Encode, hasText } from "@/utils/tool";
 
 const visible = ref();
 const editorRef = ref();
@@ -48,12 +48,17 @@ const submit = () => {
   if (editorRef.value) {
     formObject.sourceCode = editorRef.value.getText()
   }
-  apiAddCustomTemplateDirective(toRaw(formObject)).then((res) => {
-    if (res.data) {
-      Message.info("添加成功")
-      visible.value = false
-      emits("submit")
-    }
+
+  if (!hasText(formObject.sourceCode)) {
+    Message.error("请输入指令实现代码")
+    return;
+  }
+  const param = Object.assign({}, toRaw(formObject))
+  param.sourceCode = base64Encode(param.sourceCode)
+  apiAddCustomTemplateDirective(param).then((res) => {
+    Message.info("操作成功")
+    visible.value = false
+    emits("submit")
   })
 }
 
