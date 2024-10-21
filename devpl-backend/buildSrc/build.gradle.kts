@@ -17,5 +17,6 @@ allprojects {
 
     tasks.compileJava {
         options.compilerArgs.add("'-Xlint:-deprecation'")
+        options.compilerArgs.add("'-Xlint:-unchecked'")
     }
 }

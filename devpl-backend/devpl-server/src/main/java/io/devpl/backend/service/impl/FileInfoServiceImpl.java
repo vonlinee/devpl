@@ -1,11 +1,11 @@
 package io.devpl.backend.service.impl;
 
+import io.devpl.backend.common.mvc.MyBatisPlusServiceImpl;
 import io.devpl.backend.dao.FileInfoMapper;
 import io.devpl.backend.entity.FileConfig;
 import io.devpl.backend.entity.FileInfo;
 import io.devpl.backend.service.FileInfoService;
 import io.devpl.sdk.util.StringUtils;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -20,10 +20,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-public class FileInfoServiceImpl implements FileInfoService {
-
-    @Resource
-    FileInfoMapper fileInfoMapper;
+public class FileInfoServiceImpl extends MyBatisPlusServiceImpl<FileInfoMapper, FileInfo> implements FileInfoService {
 
     /**
      * 文件上传
@@ -50,7 +47,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         String path = fileConf.getPath();  // 文件存储的目录
         // 获取相对路径，由file_conf、额外路径
         String relativePath = fileConf.getResourceRealm() + "/"
-            + (!StringUtils.hasText(extraPath) ? "" : extraPath + "/");
+                              + (!StringUtils.hasText(extraPath) ? "" : extraPath + "/");
 
         // 验证服务器存储路径是否存在，若不存在，则新建文件夹
         File serFile = new File(path + relativePath);
@@ -66,7 +63,7 @@ public class FileInfoServiceImpl implements FileInfoService {
             }
             // 生成新文件名
             String newFileName = "F" + UUID.randomUUID().toString().replace("-", "").toUpperCase()
-                + originalFileName.substring(originalFileName.lastIndexOf("."));
+                                 + originalFileName.substring(originalFileName.lastIndexOf("."));
             // 组装数据
             fileInfo = new FileInfo();
             fileInfo.setOriginalName(originalFileName);
@@ -79,7 +76,7 @@ public class FileInfoServiceImpl implements FileInfoService {
             // 存储文件并记录到数据库
             try {
                 FileCopyUtils.copy(mpf.getBytes(), new FileOutputStream(fileInfo.getFilePath()));
-                fileInfoMapper.insert(fileInfo);
+                save(fileInfo);
             } catch (IOException e) {
                 log.error("upload file error!", e);
                 return null;

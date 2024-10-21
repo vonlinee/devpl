@@ -12,7 +12,7 @@
     </el-select>
 
     <el-dropdown split-button type="primary" @click="addColumn()">
-      添加字段
+      添加列
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item>导入字段信息</el-dropdown-item>
@@ -169,10 +169,10 @@ const appendColumnsFromFieldInfos = () => {
 const addColumn = () => {
   columns.value?.push({
     columnName: "",
-    dataType: "varchar",
-    columnSize: 0,
+    dataType: "VARCHAR",
+    columnSize: 50,
     decimalDigits: 0,
-    nullable: true,
+    nullable: false,
     virtual: false,
     primaryKey: false,
     remarks: "",
@@ -190,6 +190,9 @@ const removeRow = (row: ColumnInfo) => {
   }
 }
 
+/**
+ * 列信息
+ */
 type ColumnInfo = {
   columnName: string
   dataType: string

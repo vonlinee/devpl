@@ -404,6 +404,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
 
     /**
      * 获取单个表渲染的数据模型
+     * TODO 将模板参数填充做成插件形式
      *
      * @param table 表信息
      */
@@ -421,8 +422,21 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         packageConfig.put("Service", table.getPackageName() + ".service");
         packageConfig.put("Entity", table.getPackageName() + ".entity");
         packageConfig.put("ServiceImpl", table.getPackageName() + ".service.impl");
-
         dataModel.put("package", packageConfig);
+
+        dataModel.put("kotlin", false);
+        dataModel.put("enableCache", false);
+        dataModel.put("entityLombokModel", true);
+        dataModel.put("baseResultMap", true);
+        dataModel.put("activeRecord", false);
+        dataModel.put("entitySerialVersionUID", false);
+
+        dataModel.put("springdoc", false);
+        dataModel.put("swagger", false);
+        dataModel.put("chainModel", false);
+
+        dataModel.put("controllerMappingHyphenStyle", false);
+        dataModel.put("restControllerStyle", true);
         // 表配置信息
         Map<String, Object> tableConfig = new HashMap<>();
         tableConfig.put("entityPath", table.getTableName());
@@ -433,6 +447,13 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         tableConfig.put("serviceName", table.getClassName() + "Service");
         tableConfig.put("serviceImplName", table.getClassName() + "ServiceImpl");
         tableConfig.put("mapperName", table.getClassName() + "Mapper");
+
+        tableConfig.put("importPackages", Collections.emptyList());
+        tableConfig.put("convert", false);
+
+        // TODO 不同模板参数格式不同
+        tableConfig.put("fields", table.getFieldList());
+
         dataModel.put("table", tableConfig);
 
         dataModel.put("superServiceClass", "IService");

@@ -16,7 +16,6 @@ import io.devpl.common.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
 import lombok.Data;
-import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 
 import javax.lang.model.element.Modifier;
@@ -132,11 +131,11 @@ public class CodeGenerationServiceImpl implements CodeGenerationService {
      * @param arguments 已有的模板参数
      */
     private TemplateArguments mergeGlobalTemplateParams(TemplateArguments arguments) {
-        List<TemplateParam> globalTemplateParams = templateParamService.getGlobalTemplateParams();
+        List<TemplateParam> globalTemplateParamMetadata = templateParamService.getGlobalTemplateParams();
         if (!arguments.isMap()) {
             arguments = new TemplateArgumentsMap(arguments.asMap());
         }
-        for (TemplateParam param : globalTemplateParams) {
+        for (TemplateParam param : globalTemplateParamMetadata) {
             arguments.add(param.getParamKey(), param.getParamValue());
         }
         return arguments;

@@ -13,7 +13,7 @@
       :model="dataForm"
       :rules="dataRules"
       align="left"
-      label-width="150px"
+      label-width="120px"
       @keyup.enter="submitHandle()"
     >
       <el-form-item label="项目名" prop="projectName">
@@ -46,26 +46,19 @@
           placeholder="项目前端路径"
         ></el-input>
       </el-form-item>
+      <el-form-item label="项目后端路径" prop="projectPath">
+        <el-input
+          v-model="dataForm.backendPath"
+          placeholder="项目后端路径"
+        ></el-input>
+      </el-form-item>
 
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="项目后端路径" prop="projectPath">
-            <el-input
-              v-model="dataForm.backendPath"
-              placeholder="项目后端路径"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="构建工具" prop="projectPath">
-            <el-select v-model="dataForm.buildTool" placeholder="构建工具">
-              <el-option label="Maven" :value="1"></el-option>
-              <el-option label="Gradle" :value="2"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
+      <el-form-item label="构建工具" prop="projectPath">
+        <el-select v-model="dataForm.buildTool" placeholder="构建工具">
+          <el-option label="Maven" :value="1"></el-option>
+          <el-option label="Gradle" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="版本号" prop="version">
         <el-input v-model="dataForm.version" placeholder="版本号"></el-input>
       </el-form-item>

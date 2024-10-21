@@ -21,7 +21,6 @@ import io.devpl.codegen.template.beetl.BeetlTemplateEngine;
 import io.devpl.codegen.template.enjoy.JFinalEnjoyTemplateEngine;
 import io.devpl.codegen.template.freemarker.FreeMarkerTemplateEngine;
 import io.devpl.codegen.template.velocity.VelocityTemplateEngine;
-import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.annotations.Nullable;
 import io.devpl.sdk.annotations.Readonly;
 import io.devpl.sdk.io.FileUtils;
@@ -135,7 +134,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      * @param out          输出位置
      */
     @Override
-    public void render(@NotNull @org.jetbrains.annotations.NotNull TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
+    public void render(TemplateInfo templateInfo, Map<String, Object> dataModel, Writer out) throws TemplateException {
         TemplateEngineType engineType = TemplateEngineType.findByProvider(templateInfo.getProvider());
         if (engineType == null) {
             throw new TemplateException("未注册的模板类型" + templateInfo.getProvider());
@@ -224,7 +223,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         return list(qw);
     }
 
-    public Path getTemplateSaveLocation(String templateLocation, String dir) {
+    private Path getTemplateSaveLocation(String templateLocation, String dir) {
         if (templateLocation == null) {
             templateLocation = codeGenProperties.getTemplateLocation();
         }
@@ -460,6 +459,12 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         return templateInfo;
     }
 
+    /**
+     * TODO 提取模板中引用的变量信息
+     *
+     * @param templateId 模板ID
+     * @return 模板参数列表
+     */
     @Override
     public List<TemplateParam> parseTemplateVariables(Long templateId) {
 

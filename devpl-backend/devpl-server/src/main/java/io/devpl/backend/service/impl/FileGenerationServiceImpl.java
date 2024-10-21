@@ -62,8 +62,8 @@ public class FileGenerationServiceImpl implements FileGenerationService {
         // 生成代码
         final String parentDirectory = DateTimeUtils.stringOfNow("yyyyMMddHHmmssSSS");
         List<TableGeneration> tableGenerations = tableGenerationService.listByIds(param.getTableIds());
-        for (TableGeneration tableGeneration : tableGenerations) {
-            result.addRootDir(this.generateForTable(tableGeneration, parentDirectory));
+        for (TableGeneration table : tableGenerations) {
+            result.addRootDir(this.generateForTable(table, parentDirectory));
         }
         return result;
     }

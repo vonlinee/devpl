@@ -26,7 +26,7 @@ public abstract class PropertyHolder {
         return properties.containsKey(name);
     }
 
-    public Properties getProperties() {
+    public final Properties getProperties() {
         return properties;
     }
 }
