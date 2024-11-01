@@ -8,7 +8,7 @@ import java.util.*;
  * <p>
  * Performs formatting of basic SQL statements (DML + query).
  */
-public class BasicFormatterImpl implements SqlFormatter {
+public class SimpleSqlFormatter implements SqlFormatter {
 
     private static final String WHITESPACE = " \n\r\f\t";
 
@@ -58,6 +58,11 @@ public class BasicFormatterImpl implements SqlFormatter {
 
     private static final String INDENT_STRING = "    ";
     private static final String INITIAL = System.lineSeparator();
+
+    @Override
+    public String getId() {
+        return "simple";
+    }
 
     @Override
     public String format(String dialect, String source) {
@@ -155,9 +160,7 @@ public class BasicFormatterImpl implements SqlFormatter {
 
         private void newline() {
             result.append(System.lineSeparator());
-            for (int i = 0; i < indent; i++) {
-                result.append(INDENT_STRING);
-            }
+            result.append(INDENT_STRING.repeat(Math.max(0, indent)));
             beginLine = true;
         }
 

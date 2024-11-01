@@ -2,7 +2,6 @@ package io.devpl.fxui.tools.mybatis;
 
 import io.devpl.codegen.type.CommonJavaType;
 import io.devpl.common.ParseResult;
-import io.devpl.common.SqlFormat;
 import io.devpl.fxui.utils.DBUtils;
 import io.devpl.fxui.utils.NumberUtils;
 import io.devpl.fxui.utils.TypeUtils;
@@ -96,7 +95,7 @@ public class MyBatisXmlToolPane extends SplitPane {
             MappedStatement mappedStatement = result.getMappedStatement();
             // 预编译执行的SQL
             BoundSql boundSql = mappedStatement.getBoundSql(parameterObject);
-            sqlTextArea.setText(SqlFormat.formatMySql(boundSql.getSql()));
+
         });
 
         btn2.setOnAction(event -> {
@@ -191,6 +190,7 @@ public class MyBatisXmlToolPane extends SplitPane {
      * 界面上输入的值都是字符串
      * 参数都是使用#{}进行指定，在给sql填充参数时字符串会使用引号包裹
      * 而数字不需要使用引号包裹，因此需要推断数据类型
+     *
      * @param value 参数表中的一行数据
      * @return 参数值，将字符串推断为某个数据类型，比如字符串类型的数字，将会转化为数字类型
      */

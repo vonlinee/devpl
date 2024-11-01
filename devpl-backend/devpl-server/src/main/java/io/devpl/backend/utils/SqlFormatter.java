@@ -1,9 +1,14 @@
 package io.devpl.backend.utils;
 
+import io.devpl.sdk.annotations.NotEmpty;
+
 /**
  * Formatter contract
  */
 public interface SqlFormatter {
+
+    String getId();
+
     /**
      * Format the source SQL string.
      *
@@ -11,5 +16,18 @@ public interface SqlFormatter {
      * @param source  The original SQL string
      * @return The formatted version
      */
-    String format(String dialect, String source);
+    String format(@NotEmpty String dialect, @NotEmpty String source);
+
+    SqlFormatter NONE = new SqlFormatter() {
+
+        @Override
+        public String getId() {
+            return "none";
+        }
+
+        @Override
+        public String format(String dialect, String source) {
+            return source;
+        }
+    };
 }

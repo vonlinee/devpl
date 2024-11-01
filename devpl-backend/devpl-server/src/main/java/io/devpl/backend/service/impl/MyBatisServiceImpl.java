@@ -15,12 +15,16 @@ import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
+import io.devpl.backend.utils.DruidSqlFormatter;
 import io.devpl.backend.utils.PathUtils;
+import io.devpl.backend.utils.SimpleSqlFormatter;
+import io.devpl.backend.utils.SqlFormatter;
 import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
 import io.devpl.common.utils.XMLUtils;
 import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.annotations.NotNull;
+import io.devpl.sdk.collection.CaseInsensitiveKeyMap;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
@@ -97,6 +101,16 @@ public class MyBatisServiceImpl implements MyBatisService {
     DynamicMyBatisConfiguration configuration;
     MyMapperBuilderAssistant assistant;
     MapperStatementParser msParser = new MapperStatementParser();
+
+    CaseInsensitiveKeyMap<SqlFormatter> sqlFormatterMap = new CaseInsensitiveKeyMap<>();
+
+    {
+        SimpleSqlFormatter simpleSqlFormatter = new SimpleSqlFormatter();
+        sqlFormatterMap.put(simpleSqlFormatter.getId(), simpleSqlFormatter);
+        DruidSqlFormatter druidSqlFormatter = new DruidSqlFormatter();
+        sqlFormatterMap.put(druidSqlFormatter.getId(), druidSqlFormatter);
+        sqlFormatterMap.put(SqlFormatter.NONE.getId(), SqlFormatter.NONE);
+    }
 
     /**
      * key-项目根路径
@@ -260,6 +274,10 @@ public class MyBatisServiceImpl implements MyBatisService {
             resultSql = boundSql.getSql();
         } else {
             resultSql = this.getExecutableSql(ms, boundSql, map);
+        }
+        if (param.needFormatSql()) {
+            SqlFormatter sqlFormatter = sqlFormatterMap.getOrDefault(param.getFormatter(), SqlFormatter.NONE);
+            resultSql = sqlFormatter.format(param.getDialect(), resultSql);
         }
         return resultSql;
     }

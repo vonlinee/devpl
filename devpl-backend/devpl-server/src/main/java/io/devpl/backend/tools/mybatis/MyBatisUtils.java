@@ -1,6 +1,6 @@
 package io.devpl.backend.tools.mybatis;
 
-import io.devpl.backend.utils.BasicFormatterImpl;
+import io.devpl.backend.utils.SimpleSqlFormatter;
 import io.devpl.backend.utils.SqlFormatter;
 import io.devpl.sdk.util.StringUtils;
 
@@ -14,7 +14,7 @@ public class MyBatisUtils {
     public static Pattern PREPARING_PATTERN = Pattern.compile("Preparing:(.*?)(?=\n|\r|\r\n)");
     public static Pattern PARAMETER_PATTERN = Pattern.compile("Parameters:(.*?)(?=\n|\r|\r\n)");
 
-    private static final SqlFormatter FORMATTER = new BasicFormatterImpl();
+    private static final SqlFormatter FORMATTER = new SimpleSqlFormatter();
 
     /**
      * using Hibernate formatter

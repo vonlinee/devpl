@@ -37,6 +37,12 @@ public class GetSqlParam {
 
     /**
      * 是否需要格式化
+     * none: 不格式化
+     * druid: 使用druid进行格式化
      */
-    private Boolean format = true;
+    private String formatter = "druid";
+
+    public boolean needFormatSql() {
+        return !"none".equals(formatter);
+    }
 }
