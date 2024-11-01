@@ -1,7 +1,7 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.StringUtils;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import java.util.List;
 public class Dm8MetadataReader extends AbstractQueryDatabaseMetadataReader implements SqlMetadataQuery {
 
     @Override
-    public DBTypeEnum dbType() {
-        return DBTypeEnum.MYSQL;
+    public BuiltinDatabaseType dbType() {
+        return BuiltinDatabaseType.MYSQL;
     }
 
     @Override

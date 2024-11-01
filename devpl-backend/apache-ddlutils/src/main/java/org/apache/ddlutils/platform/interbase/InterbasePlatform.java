@@ -69,8 +69,8 @@ public class InterbasePlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.INTERBASE;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.INTERBASE;
     }
 
     @Override

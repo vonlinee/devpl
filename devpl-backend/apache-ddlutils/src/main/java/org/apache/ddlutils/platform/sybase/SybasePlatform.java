@@ -75,8 +75,8 @@ public class SybasePlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.SYBASE;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.SYBASE;
     }
 
     /**

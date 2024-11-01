@@ -1,4 +1,4 @@
-package io.devpl.backend.jdbc;
+package org.apache.ddlutils.platform;
 
 import java.sql.Connection;
 import java.sql.SQLException;

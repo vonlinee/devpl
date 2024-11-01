@@ -67,8 +67,8 @@ public class Oracle8Platform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.ORACLE8;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.ORACLE8;
     }
 
     @Override

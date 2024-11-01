@@ -10,10 +10,9 @@ import io.devpl.backend.domain.vo.DBTableDataVO;
 import io.devpl.backend.domain.vo.DataSourceVO;
 import io.devpl.backend.domain.vo.TestConnVO;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
-import io.devpl.backend.jdbc.JdbcDriverManager;
+import org.apache.ddlutils.platform.*;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.utils.DBUtils;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.common.utils.EncryptUtils;
@@ -22,8 +21,6 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
-import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.JDBCDriver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -120,7 +117,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
     @Override
     public String getDatabaseProductName(Long dataSourceId) {
         if (dataSourceId.intValue() == -1) {
-            return DBTypeEnum.MYSQL.name();
+            return BuiltinDatabaseType.MYSQL.name();
         } else {
             RdbmsConnectionInfo connectionInfo = getById(dataSourceId);
             if (connectionInfo != null) {
@@ -186,7 +183,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
      */
     @Override
     public String getConnectionUrl(RdbmsConnectionInfo entity) {
-        io.devpl.codegen.db.JDBCDriver jdbcDriver = io.devpl.codegen.db.JDBCDriver.findByDriverClassName(entity.getDriverClassName());
+        BuiltinDriverType jdbcDriver = BuiltinDriverType.findByDriverClassName(entity.getDriverClassName());
         if (jdbcDriver == null) {
             return null;
         }
@@ -195,13 +192,12 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
 
     @Override
     public List<String> getDbNames(RdbmsConnectionInfo entity) {
-        DBTypeEnum dbType = DBTypeEnum.getValue(entity.getDbType());
+        BuiltinDatabaseType dbType = BuiltinDatabaseType.getValue(entity.getDbType());
         if (dbType == null) {
             return Collections.emptyList();
         }
         entity.setConnectionUrl(getConnectionUrl(entity));
-        JDBCDriver[] supportedDrivers = dbType.getSupportedDrivers();
-        JDBCDriver driver = dbType.getDriver(0);
+        DriverType driver = dbType.getSupportedDriverType(0);
         if (driver != null) {
             entity.setDriverClassName(driver.getDriverClassName());
         }
@@ -227,7 +223,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
 
     @Override
     public List<String> getTableNames(RdbmsConnectionInfo connInfo, String databaseName) {
-        DBTypeEnum dbType = DBTypeEnum.getValue(connInfo.getDbType());
+        BuiltinDatabaseType dbType = BuiltinDatabaseType.getValue(connInfo.getDbType());
         connInfo.setDbName(databaseName);
         String connectionUrl = this.getConnectionUrl(connInfo);
         if (dbType == null || connectionUrl == null) {
@@ -399,8 +395,8 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
                 connInfo.setPort(3306);
             }
             if (!StringUtils.hasText(connInfo.getDriverType())) {
-                connInfo.setDriverType(io.devpl.codegen.db.JDBCDriver.MYSQL8.name());
-                connInfo.setDbType(DBTypeEnum.MYSQL.name());
+                connInfo.setDriverType(BuiltinDriverType.MYSQL8.name());
+                connInfo.setDbType(BuiltinDatabaseType.MYSQL.name());
             }
             if (!StringUtils.hasText(connInfo.getConnectionName())) {
                 connInfo.setConnectionName(String.join("-", connInfo.getHost(), String.valueOf(connInfo.getPort()), connInfo.getDriverType()));
@@ -408,11 +404,11 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
         } else {
             // 更新
             if (StringUtils.isBlank(connInfo.getDbType()) && StringUtils.hasText(connInfo.getConnectionUrl())) {
-                DBType dbType = JdbcUtils.getDbType(connInfo.getConnectionUrl());
-                if (dbType != null) {
-                    connInfo.setDbType(dbType.getName());
+                DatabaseType databaseType = JdbcUtils.getDbType(connInfo.getConnectionUrl());
+                if (databaseType != null) {
+                    connInfo.setDbType(databaseType.getName());
                     if (!StringUtils.hasText(connInfo.getDriverClassName())) {
-                        for (JDBCDriver driver : dbType.getSupportedDrivers()) {
+                        for (DriverType driver : databaseType.getSupportedDriverTypes()) {
                             connInfo.setDriverClassName(driver.getDriverClassName());
                         }
                     }
@@ -420,7 +416,7 @@ public class RdbmsConnectionInfoServiceImpl extends ServiceImpl<RdbmsConnectionI
             }
         }
         if (!StringUtils.hasText(connInfo.getDriverClassName())) {
-            DBTypeEnum dbType = DBTypeEnum.getValue(connInfo.getDbType(), null);
+            BuiltinDatabaseType dbType = BuiltinDatabaseType.getValue(connInfo.getDbType(), null);
             if (dbType != null) {
                 connInfo.setDriverClassName(dbType.getDriverClassName());
                 connInfo.setDbType(dbType.name());

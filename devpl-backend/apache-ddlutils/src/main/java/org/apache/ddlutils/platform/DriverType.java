@@ -5,7 +5,9 @@ import java.util.Properties;
 /**
  * 驱动类型
  */
-public interface JDBCDriver {
+public interface DriverType {
+
+    String JDBC_PROTOCOL = "jdbc";
 
     /**
      * 驱动类型名称
@@ -31,13 +33,13 @@ public interface JDBCDriver {
     /**
      * 获取连接地址
      *
-     * @param hostname     IP地址
+     * @param host         IP地址
      * @param port         端口号
      * @param databaseName 数据库名称
      * @param props        连接属性
      * @return 连接URL地址
      */
-    String getConnectionUrl(String hostname, int port, String databaseName, Properties props);
+    String getConnectionUrl(String host, int port, String databaseName, Properties props);
 
     /**
      * 默认端口

@@ -1,7 +1,8 @@
 package io.devpl.backend.domain.bo;
 
-import io.devpl.codegen.db.DBTypeEnum;
 import lombok.Data;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ public class TableImportInfo {
     /**
      * 数据库类型
      */
-    private DBTypeEnum dbType;
+    private DatabaseType dbType;
 
     @Override
     public boolean equals(Object o) {

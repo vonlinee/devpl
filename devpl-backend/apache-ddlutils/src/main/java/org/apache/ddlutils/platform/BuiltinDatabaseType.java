@@ -1,24 +1,61 @@
-package io.devpl.codegen.db;
+package org.apache.ddlutils.platform;
 
-import lombok.Getter;
-import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.JDBCDriver;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 支持的数据库类型,主要用于分页方言
- * 抄自 com.baomidou.mybatisplus.annotation.DbType
- *
- * @see com.alibaba.druid.DbType
- * @see io.devpl.codegen.db.JDBCDriver
+ * 对应平台类型
  */
-@Getter
-public enum DBTypeEnum implements DBType {
+public enum BuiltinDatabaseType implements DatabaseType {
 
     /**
-     * MYSQL
+     * Axion <a href="https://db.apache.org/ddlutils/databases/axion.html">...</a>
+     * <p>
+     * the axion project was abandoned in 2006.
      */
-    MYSQL("MySQL", 3306, "MySQL数据库", io.devpl.codegen.db.JDBCDriver.MYSQL5, io.devpl.codegen.db.JDBCDriver.MYSQL8),
+    AXION("Axion"),
+    /**
+     * Cloudscape
+     */
+    CLOUDSCAPE("Cloudscape"),
+    /**
+     * DB2 <a href="https://www.ibm.com/products/db2">DB2</a>
+     */
+    DB2("DB2", "DB2数据库"),
+
+    DB2V8("DB2v8"),
+
+    /**
+     * Microsoft Sql Server
+     */
+    MSSQL("MsSql"),
+
+    SYBASE_ASE15("SybaseASE15"),
+
+    /**
+     * Oracle Database
+     */
+    ORACLE8("Oracle"),
+    ORACLE9("Oracle9"),
+    ORACLE10("Oracle10"),
+
+    HSQLDB("HsqlDb"),
+    INTERBASE("Interbase"),
+    /**
+     * Database name of this platform.
+     */
+    SAPDB("SapDB"),
+    MCKOI("McKoi"),
+    DERBY("Derby"),
+    MAXDB("MaxDB"),
+    /**
+     * POSTGRE
+     */
+    POSTGRE_SQL("PostgreSQL", "Postgre数据库", BuiltinDriverType.POSTGRE_SQL),
+    /**
+     * MySQL Database
+     */
+    MYSQL("MySQL", 3306, "MySQL数据库", BuiltinDriverType.MYSQL5, BuiltinDriverType.MYSQL8),
+    MYSQL5("MySQL5"),
     /**
      * MARIADB
      */
@@ -26,15 +63,12 @@ public enum DBTypeEnum implements DBType {
     /**
      * ORACLE
      */
-    ORACLE("Oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", io.devpl.codegen.db.JDBCDriver.ORACLE),
+    ORACLE("Oracle", "Oracle11g及以下数据库(高版本推荐使用ORACLE_NEW)", BuiltinDriverType.ORACLE),
     /**
      * oracle12c new pagination
      */
-    ORACLE_12C("Oracle12c", "Oracle12c+数据库", io.devpl.codegen.db.JDBCDriver.ORACLE_12C),
-    /**
-     * DB2
-     */
-    DB2("DB2", "DB2数据库"),
+    ORACLE_12C("Oracle12c", "Oracle12c+数据库", BuiltinDriverType.ORACLE_12C),
+
     /**
      * H2
      */
@@ -46,11 +80,8 @@ public enum DBTypeEnum implements DBType {
     /**
      * SQLITE
      */
-    SQLITE("Sqlite", "SQLite数据库", io.devpl.codegen.db.JDBCDriver.SQLITE),
-    /**
-     * POSTGRE
-     */
-    POSTGRE_SQL("PostgreSQL", "Postgre数据库", io.devpl.codegen.db.JDBCDriver.POSTGRE_SQL),
+    SQLITE("Sqlite", "SQLite数据库", BuiltinDriverType.SQLITE),
+
     /**
      * SQLSERVER2005
      */
@@ -58,7 +89,7 @@ public enum DBTypeEnum implements DBType {
     /**
      * SQLSERVER
      */
-    SQL_SERVER("SQL Server", "SQLServer数据库", io.devpl.codegen.db.JDBCDriver.SQL_SERVER),
+    SQL_SERVER("SQL Server", "SQLServer数据库", BuiltinDriverType.SQL_SERVER),
     /**
      * DM
      */
@@ -147,27 +178,31 @@ public enum DBTypeEnum implements DBType {
     /**
      * 数据库名称，不区分版本
      */
-    private final String name;
+    private String name;
     /**
      * 描述
      */
-    private final String description;
+    private String description;
     /**
      * 支持的驱动列表
      */
-    private final JDBCDriver[] drivers;
+    private DriverType[] drivers;
     /**
      * 默认端口号
      */
     private int defaultPort;
 
-    DBTypeEnum(String name, String description, JDBCDriver... drivers) {
+    BuiltinDatabaseType(String name) {
+        this.name = name;
+    }
+
+    BuiltinDatabaseType(String name, String description, DriverType... drivers) {
         this.name = name;
         this.description = description;
         this.drivers = drivers;
     }
 
-    DBTypeEnum(String name, int port, String description, JDBCDriver... drivers) {
+    BuiltinDatabaseType(String name, int port, String description, DriverType... drivers) {
         this.name = name;
         this.defaultPort = port;
         this.description = description;
@@ -179,20 +214,20 @@ public enum DBTypeEnum implements DBType {
      *
      * @param dbType 数据库类型字符串
      */
-    public static DBType getDbType(String dbType) {
-        for (DBTypeEnum type : DBTypeEnum.values()) {
-            if (type.name.equalsIgnoreCase(dbType)) {
+    public static DatabaseType getDbType(String dbType) {
+        for (DatabaseType type : values()) {
+            if (type.getName().equalsIgnoreCase(dbType)) {
                 return type;
             }
         }
         return OTHER;
     }
 
-    public static DBTypeEnum getValue(String dbType) {
-        return getValue(dbType, DBTypeEnum.MYSQL);
+    public static BuiltinDatabaseType getValue(String dbType) {
+        return getValue(dbType, MYSQL);
     }
 
-    public static DBTypeEnum getValue(String dbType, DBTypeEnum defaultType) {
+    public static BuiltinDatabaseType getValue(String dbType, BuiltinDatabaseType defaultType) {
         if ("MySQL".equalsIgnoreCase(dbType)) {
             return MYSQL;
         }
@@ -220,17 +255,17 @@ public enum DBTypeEnum implements DBType {
 
     @Nullable
     public String getDriverClassName(int index) {
-        JDBCDriver driver = getDriver(index);
+        DriverType driver = getDriver(index);
         return driver == null ? null : driver.getDriverClassName();
     }
 
     @Nullable
-    public JDBCDriver getDriver() {
+    public DriverType getDriver() {
         return getDriver(0);
     }
 
     @Nullable
-    public JDBCDriver getDriver(int index) {
+    public DriverType getDriver(int index) {
         if (drivers == null || drivers.length == 0) {
             return null;
         }
@@ -241,7 +276,27 @@ public enum DBTypeEnum implements DBType {
     }
 
     @Override
-    public JDBCDriver[] getSupportedDrivers() {
-        return drivers == null ? new io.devpl.codegen.db.JDBCDriver[0] : drivers;
+    public DriverType[] getSupportedDriverTypes() {
+        return drivers == null ? new BuiltinDriverType[0] : drivers;
+    }
+
+    @Override
+    public @Nullable DriverType getSupportedDriverType(int index) {
+        return getDriver(index);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void registerDriverType(DriverType driverType) {
+
+    }
+
+    @Override
+    public void deregisterDriverType(DriverType driverType) {
+
     }
 }

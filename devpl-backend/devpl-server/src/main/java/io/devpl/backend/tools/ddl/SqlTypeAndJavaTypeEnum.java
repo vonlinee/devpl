@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.enums;
+package io.devpl.backend.tools.ddl;
 
 import io.devpl.sdk.annotations.NotEmpty;
 import lombok.Getter;

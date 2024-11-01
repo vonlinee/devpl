@@ -1,13 +1,13 @@
 package io.devpl.fxui.bridge;
 
 import io.devpl.codegen.generator.config.ProjectConfiguration;
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.common.StringKey;
 import io.devpl.fxui.model.*;
 import io.devpl.fxui.plugins.*;
 import io.devpl.fxui.utils.Helper;
 import io.devpl.sdk.util.StringUtils;
+import org.apache.ddlutils.platform.BuiltinDriverType;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.ProgressCallback;
@@ -143,10 +143,10 @@ public class MyBatisCodeGenerator {
         }
         // 数据库schema
 
-        JDBCDriver driverType = connectionConfig.getDriver();
+        BuiltinDriverType builtinDriverType = connectionConfig.getDriver();
 
         // Oracle的不知道，但是Mysql的Catalog是数据库名，Schema不支持
-        if (driverType == JDBCDriver.MYSQL5 || driverType == JDBCDriver.MYSQL8) {
+        if (builtinDriverType == BuiltinDriverType.MYSQL5 || builtinDriverType == BuiltinDriverType.MYSQL8) {
             tableConfig.setSchema(tableCodeGenConfig.getDatabaseName());
             // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
             context.addProperty(StringKey.BEGINNING_DELIMITER, "`");
@@ -156,14 +156,14 @@ public class MyBatisCodeGenerator {
             tableConfig.setCatalog(tableCodeGenConfig.getDatabaseName());
         }
         // 针对 postgresql 单独配置
-        if (driverType == JDBCDriver.POSTGRE_SQL) {
+        if (builtinDriverType == BuiltinDriverType.POSTGRE_SQL) {
             tableConfig.setDelimitIdentifiers(true);
         }
 
         if (option.isUseSchemaPrefix()) {
-            if (driverType == JDBCDriver.MYSQL5 || driverType == JDBCDriver.MYSQL8) {
+            if (builtinDriverType == BuiltinDriverType.MYSQL5 || builtinDriverType == BuiltinDriverType.MYSQL8) {
                 tableConfig.setSchema(tableCodeGenConfig.getDatabaseName());
-            } else if (driverType == JDBCDriver.ORACLE) {
+            } else if (builtinDriverType == BuiltinDriverType.ORACLE) {
                 // Oracle的schema为用户名，如果连接用户拥有dba等高级权限，若不设schema，会导致把其他用户下同名的表也生成一遍导致mapper中代码重复
                 tableConfig.setSchema(connectionConfig.getUsername());
             } else {
@@ -172,8 +172,8 @@ public class MyBatisCodeGenerator {
         }
         // 添加GeneratedKey主键生成
         if (StringUtils.hasText(option.getGenerateKeys())) {
-            String databaseType = driverType.name();
-            if (driverType == JDBCDriver.MYSQL5 || driverType == JDBCDriver.MYSQL8) {
+            String databaseType = builtinDriverType.name();
+            if (builtinDriverType == BuiltinDriverType.MYSQL5 || builtinDriverType == BuiltinDriverType.MYSQL8) {
                 databaseType = "JDBC";
                 // dbType为JDBC，且配置中开启useGeneratedKeys时，Mybatis会使用Jdbc3KeyGenerator,
                 // 使用该KeyGenerator的好处就是直接在一次INSERT 语句内，通过resultSet获取得到生成的主键值，
@@ -256,7 +256,7 @@ public class MyBatisCodeGenerator {
      * @param context    MyBatis上下文
      * @param generation
      */
-    private void preparePlugins(Context context, TableGeneration generation, JDBCDriver driverInfo) {
+    private void preparePlugins(Context context, TableGeneration generation, BuiltinDriverType driverInfo) {
         CodeGenOption option = generation.getOption();
         // 实体添加序列化
         addPluginConfiguration(context, SerializablePlugin.class);
@@ -271,7 +271,7 @@ public class MyBatisCodeGenerator {
         }
         // limit/offset插件
         if (option.isOffsetLimit()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (BuiltinDriverType.MYSQL5 == driverInfo || BuiltinDriverType.MYSQL8 == driverInfo || BuiltinDriverType.POSTGRE_SQL == driverInfo) {
                 addPluginConfiguration(context, MySQLLimitPlugin.class);
             }
         }
@@ -284,18 +284,18 @@ public class MyBatisCodeGenerator {
         }
         // forUpdate 插件
         if (option.isNeedForUpdate()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (BuiltinDriverType.MYSQL5 == driverInfo || BuiltinDriverType.POSTGRE_SQL == driverInfo) {
                 addPluginConfiguration(context, MySQLForUpdatePlugin.class);
             }
         }
         // repository 插件
         if (option.isAnnotationDAO()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (BuiltinDriverType.MYSQL5 == driverInfo || BuiltinDriverType.MYSQL8 == driverInfo || BuiltinDriverType.POSTGRE_SQL == driverInfo) {
                 addPluginConfiguration(context, RepositoryPlugin.class);
             }
         }
         if (option.isUseDAOExtendStyle()) {
-            if (JDBCDriver.MYSQL5 == driverInfo || JDBCDriver.MYSQL8 == driverInfo || JDBCDriver.POSTGRE_SQL == driverInfo) {
+            if (BuiltinDriverType.MYSQL5 == driverInfo || BuiltinDriverType.MYSQL8 == driverInfo || BuiltinDriverType.POSTGRE_SQL == driverInfo) {
                 PluginConfiguration pf = addPluginConfiguration(context, CommonDAOInterfacePlugin.class);
                 pf.addProperty(StringKey.USE_EXAMPLE, String.valueOf(option.isUseExample()));
             }
@@ -308,19 +308,19 @@ public class MyBatisCodeGenerator {
         }
     }
 
-    private void prepareJdbcConnectionConfig(Context context, TableGeneration tableCodeGenConfig, JDBCDriver driverType, ConnectionConfig connectionConfig) {
+    private void prepareJdbcConnectionConfig(Context context, TableGeneration tableCodeGenConfig, BuiltinDriverType builtinDriverType, ConnectionConfig connectionConfig) {
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
-        if (JDBCDriver.MYSQL5 == driverType || JDBCDriver.MYSQL8 == driverType) {
+        if (BuiltinDriverType.MYSQL5 == builtinDriverType || BuiltinDriverType.MYSQL8 == builtinDriverType) {
             jdbcConfig.addProperty(StringKey.NULL_CATALOG_MEANS_CURRENT, "true");
             // useInformationSchema可以拿到表注释，从而生成类注释可以使用表的注释
             jdbcConfig.addProperty(StringKey.USE_INFORMATION_SCHEMA, "true");
         }
-        jdbcConfig.setDriverClass(driverType.getDriverClassName());
+        jdbcConfig.setDriverClass(builtinDriverType.getDriverClassName());
         // 一定要填入正确的数据库名，不然拿不到该数据库的表信息
         jdbcConfig.setConnectionURL(connectionConfig.getConnectionUrl(tableCodeGenConfig.getDatabaseName()));
         jdbcConfig.setUserId(connectionConfig.getUsername());
         jdbcConfig.setPassword(connectionConfig.getPassword());
-        if (JDBCDriver.ORACLE == driverType) {
+        if (BuiltinDriverType.ORACLE == builtinDriverType) {
             jdbcConfig.getProperties().setProperty(StringKey.REMARKS_REPORTING, "true");
         }
         context.setJdbcConnectionConfiguration(jdbcConfig);

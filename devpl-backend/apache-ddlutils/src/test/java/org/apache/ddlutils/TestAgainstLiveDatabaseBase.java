@@ -8,8 +8,8 @@ import org.apache.ddlutils.io.DataToDatabaseSink;
 import org.apache.ddlutils.io.DatabaseIO;
 import org.apache.ddlutils.jdbc.PooledDataSourceWrapper;
 import org.apache.ddlutils.model.*;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
 import org.apache.ddlutils.platform.CreationParameters;
-import org.apache.ddlutils.platform.BuiltinDBType;
 import org.apache.ddlutils.platform.DefaultValueHelper;
 import org.apache.ddlutils.util.StringUtils;
 import org.apache.ddlutils.util.Utils;
@@ -623,7 +623,7 @@ public abstract class TestAgainstLiveDatabaseBase extends TestPlatformBase {
                 getLog().error("Could not clear database", ex);
             }
         }
-        if (BuiltinDBType.FIREBIRD.getName().equals(getPlatform().getName()) || BuiltinDBType.INTERBASE.getName().equals(getPlatform().getName())) {
+        if (BuiltinDatabaseType.FIREBIRD.getName().equals(getPlatform().getName()) || BuiltinDatabaseType.INTERBASE.getName().equals(getPlatform().getName())) {
             Connection connection = null;
 
             try {

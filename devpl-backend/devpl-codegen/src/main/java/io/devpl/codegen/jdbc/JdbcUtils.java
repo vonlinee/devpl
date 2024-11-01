@@ -1,10 +1,10 @@
 package io.devpl.codegen.jdbc;
 
 import io.devpl.codegen.generator.config.CaseFormat;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.NumberUtils;
 import org.apache.ddlutils.jdbc.meta.ResultSetColumnMetadata;
-import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,42 +53,42 @@ public final class JdbcUtils {
      * @param connectionUrl 数据库连接地址
      * @return 类型枚举值，如果没找到，则返回 null
      */
-    public static DBType getDbType(String connectionUrl) {
+    public static DatabaseType getDbType(String connectionUrl) {
         connectionUrl = connectionUrl.toLowerCase();
         if (connectionUrl.contains(":mysql:") || connectionUrl.contains(":cobar:")) {
-            return DBTypeEnum.MYSQL;
+            return BuiltinDatabaseType.MYSQL;
         } else if (connectionUrl.contains(":oracle:")) {
-            return DBTypeEnum.ORACLE;
+            return BuiltinDatabaseType.ORACLE;
         } else if (connectionUrl.contains(":postgresql:")) {
-            return DBTypeEnum.POSTGRE_SQL;
+            return BuiltinDatabaseType.POSTGRE_SQL;
         } else if (connectionUrl.contains(":sqlserver:")) {
-            return DBTypeEnum.SQL_SERVER;
+            return BuiltinDatabaseType.SQL_SERVER;
         } else if (connectionUrl.contains(":db2:")) {
-            return DBTypeEnum.DB2;
+            return BuiltinDatabaseType.DB2;
         } else if (connectionUrl.contains(":mariadb:")) {
-            return DBTypeEnum.MARIADB;
+            return BuiltinDatabaseType.MARIADB;
         } else if (connectionUrl.contains(":sqlite:")) {
-            return DBTypeEnum.SQLITE;
+            return BuiltinDatabaseType.SQLITE;
         } else if (connectionUrl.contains(":h2:")) {
-            return DBTypeEnum.H2;
+            return BuiltinDatabaseType.H2;
         } else if (connectionUrl.contains(":kingbase:") || connectionUrl.contains(":kingbase8:")) {
-            return DBTypeEnum.KINGBASE_ES;
+            return BuiltinDatabaseType.KINGBASE_ES;
         } else if (connectionUrl.contains(":dm:")) {
-            return DBTypeEnum.DM;
+            return BuiltinDatabaseType.DM;
         } else if (connectionUrl.contains(":zenith:")) {
-            return DBTypeEnum.GAUSS;
+            return BuiltinDatabaseType.GAUSS;
         } else if (connectionUrl.contains(":oscar:")) {
-            return DBTypeEnum.OSCAR;
+            return BuiltinDatabaseType.OSCAR;
         } else if (connectionUrl.contains(":firebird:")) {
-            return DBTypeEnum.FIREBIRD;
+            return BuiltinDatabaseType.FIREBIRD;
         } else if (connectionUrl.contains(":xugu:")) {
-            return DBTypeEnum.XU_GU;
+            return BuiltinDatabaseType.XU_GU;
         } else if (connectionUrl.contains(":clickhouse:")) {
-            return DBTypeEnum.CLICK_HOUSE;
+            return BuiltinDatabaseType.CLICK_HOUSE;
         } else if (connectionUrl.contains(":sybase:")) {
-            return DBTypeEnum.SYBASE;
+            return BuiltinDatabaseType.SYBASE;
         } else {
-            return DBTypeEnum.OTHER;
+            return BuiltinDatabaseType.OTHER;
         }
     }
 

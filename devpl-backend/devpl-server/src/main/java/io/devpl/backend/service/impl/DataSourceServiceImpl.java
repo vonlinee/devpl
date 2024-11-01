@@ -3,12 +3,12 @@ package io.devpl.backend.service.impl;
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import jakarta.annotation.Resource;
 import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.TableMetadata;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     RdbmsConnectionInfoService connectionInfoService;
 
     @Override
-    public DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DBTypeEnum dbType) {
+    public DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DatabaseType dbType) {
         if (dbType == null) {
             return new JdbcDatabaseMetadataReader(connection);
         }

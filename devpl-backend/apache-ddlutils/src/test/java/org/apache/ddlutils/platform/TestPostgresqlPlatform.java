@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestPostgresqlPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.POSTGRE_SQL.getName();
+        return BuiltinDatabaseType.POSTGRE_SQL.getName();
     }
 
     /**

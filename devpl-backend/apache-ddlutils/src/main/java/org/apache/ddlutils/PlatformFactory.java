@@ -1,7 +1,7 @@
 package org.apache.ddlutils;
 
-import org.apache.ddlutils.platform.DBType;
-import org.apache.ddlutils.platform.BuiltinDBType;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.apache.ddlutils.platform.axion.AxionPlatform;
 import org.apache.ddlutils.platform.cloudscape.CloudscapePlatform;
 import org.apache.ddlutils.platform.db2.Db2Platform;
@@ -122,14 +122,14 @@ public class PlatformFactory {
      * Registers a new platform.
      *
      * @param platformMap   The map to add the platform info to
-     * @param dbType        The platform database type
+     * @param databaseType        The platform database type
      * @param platformClass The platform class which must implement the {@link Platform} interface
      */
-    private static synchronized void addPlatform(Map<String, Class<? extends Platform>> platformMap, DBType dbType, Class<? extends Platform> platformClass) {
+    private static synchronized void addPlatform(Map<String, Class<? extends Platform>> platformMap, DatabaseType databaseType, Class<? extends Platform> platformClass) {
         if (!Platform.class.isAssignableFrom(platformClass)) {
             throw new IllegalArgumentException("Cannot register class " + platformClass.getName() + " because it does not implement the " + Platform.class.getName() + " interface");
         }
-        platformMap.put(dbType.getName().toLowerCase(), platformClass);
+        platformMap.put(databaseType.getName().toLowerCase(), platformClass);
     }
 
     static class PlatformHolder {
@@ -148,26 +148,26 @@ public class PlatformFactory {
          * Registers the known platforms.
          */
         private static void registerPlatforms() {
-            addPlatform(_platforms, BuiltinDBType.AXION.getName(), AxionPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.CLOUDSCAPE.getName(), CloudscapePlatform.class);
-            addPlatform(_platforms, BuiltinDBType.DB2.getName(), Db2Platform.class);
-            addPlatform(_platforms, BuiltinDBType.DB2V8.getName(), Db2v8Platform.class);
-            addPlatform(_platforms, BuiltinDBType.DERBY.getName(), DerbyPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.FIREBIRD.getName(), FirebirdPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.HSQLDB.getName(), HsqlDbPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.INTERBASE.getName(), InterbasePlatform.class);
-            addPlatform(_platforms, BuiltinDBType.MAXDB.getName(), MaxDbPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.MCKOI.getName(), MckoiPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.MSSQL.getName(), MSSqlPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.MYSQL.getName(), MySqlPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.MYSQL5.getName(), MySql5xPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.ORACLE8.getName(), Oracle8Platform.class);
-            addPlatform(_platforms, BuiltinDBType.ORACLE9.getName(), Oracle9Platform.class);
-            addPlatform(_platforms, BuiltinDBType.ORACLE10.getName(), Oracle10Platform.class);
-            addPlatform(_platforms, BuiltinDBType.POSTGRE_SQL.getName(), PostgreSqlPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.SAPDB.getName(), SapDbPlatform.class);
-            addPlatform(_platforms, BuiltinDBType.SYBASE.getName(), SybasePlatform.class);
-            addPlatform(_platforms, BuiltinDBType.SYBASE_ASE15.getName(), SybaseASE15Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.AXION.getName(), AxionPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.CLOUDSCAPE.getName(), CloudscapePlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.DB2.getName(), Db2Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.DB2V8.getName(), Db2v8Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.DERBY.getName(), DerbyPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.FIREBIRD.getName(), FirebirdPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.HSQLDB.getName(), HsqlDbPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.INTERBASE.getName(), InterbasePlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.MAXDB.getName(), MaxDbPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.MCKOI.getName(), MckoiPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.MSSQL.getName(), MSSqlPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.MYSQL.getName(), MySqlPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.MYSQL5.getName(), MySql5xPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.ORACLE8.getName(), Oracle8Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.ORACLE9.getName(), Oracle9Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.ORACLE10.getName(), Oracle10Platform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.POSTGRE_SQL.getName(), PostgreSqlPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.SAPDB.getName(), SapDbPlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.SYBASE.getName(), SybasePlatform.class);
+            addPlatform(_platforms, BuiltinDatabaseType.SYBASE_ASE15.getName(), SybaseASE15Platform.class);
         }
     }
 }

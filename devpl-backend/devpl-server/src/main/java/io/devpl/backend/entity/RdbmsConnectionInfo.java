@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.PropertiesUtils;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ddlutils.platform.JDBCDriver;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.BuiltinDriverType;
+import org.apache.ddlutils.platform.DatabaseType;
+import org.apache.ddlutils.platform.DriverType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
@@ -112,7 +114,7 @@ public class RdbmsConnectionInfo implements Serializable {
     /**
      * 驱动类型
      *
-     * @see io.devpl.codegen.db.JDBCDriver#name()
+     * @see BuiltinDriverType#name()
      */
     @TableField(value = "driver_type")
     private String driverType;
@@ -124,7 +126,7 @@ public class RdbmsConnectionInfo implements Serializable {
     public String buildConnectionUrl(String databaseName) {
         String connectionUrl = null;
         if (this.driverClassName != null) {
-            io.devpl.codegen.db.JDBCDriver driver = io.devpl.codegen.db.JDBCDriver.findByDriverClassName(this.driverClassName);
+            BuiltinDriverType driver = BuiltinDriverType.findByDriverClassName(this.driverClassName);
             connectionUrl = driver.getConnectionUrl(this.host, this.port, databaseName, this.driverProperties);
         }
         return connectionUrl;
@@ -170,13 +172,12 @@ public class RdbmsConnectionInfo implements Serializable {
                 for (int i = left; i < right; i++) {
                     if (connectionUrlCharArray[i] == ':') {
                         String dbType = new String(connectionUrlCharArray, left, i - left);
-                        DBTypeEnum dbTypeEnum = DBTypeEnum.getValue(dbType, DBTypeEnum.MYSQL);
-                        this.setDbType(dbTypeEnum.name().toLowerCase());
-                        this.setDriverClassName(dbTypeEnum.getDriverClassName());
-
-                        JDBCDriver driverType = dbTypeEnum.getDriver();
+                        DatabaseType dbTypeEnum = BuiltinDatabaseType.getValue(dbType, BuiltinDatabaseType.MYSQL);
+                        this.setDbType(dbTypeEnum.getName().toLowerCase());
+                        DriverType driverType = dbTypeEnum.getSupportedDriverTypes()[0];
                         if (driverType == null) {
-                            driverType = io.devpl.codegen.db.JDBCDriver.MYSQL5;
+                            this.setDriverClassName(driverType.getDriverClassName());
+                            driverType = BuiltinDriverType.MYSQL5;
                         }
                         this.driverType = driverType.getName();
 

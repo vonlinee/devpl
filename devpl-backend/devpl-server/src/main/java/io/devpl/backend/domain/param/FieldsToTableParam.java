@@ -2,7 +2,6 @@ package io.devpl.backend.domain.param;
 
 import io.devpl.backend.domain.vo.ColumnInfoVO;
 import io.devpl.backend.entity.FieldInfo;
-import io.devpl.codegen.db.DBTypeEnum;
 import lombok.Data;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +32,7 @@ public class FieldsToTableParam {
     /**
      * 数据库类型
      *
-     * @see DBTypeEnum
+     * @see BuiltinDatabaseType
      */
     private String dbType;
 

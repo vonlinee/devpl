@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestSapDbPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.SAPDB.getName();
+        return BuiltinDatabaseType.SAPDB.getName();
     }
 
     /**

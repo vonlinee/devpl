@@ -2,10 +2,10 @@ package io.devpl.backend.domain.param;
 
 import io.devpl.backend.domain.bo.TableImportInfo;
 import io.devpl.backend.entity.RdbmsConnectionInfo;
-import io.devpl.codegen.db.DBTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.platform.DatabaseType;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -54,7 +54,7 @@ public class TableImportParam {
      * 数据库类型
      * 后端填充
      */
-    private DBTypeEnum dbType;
+    private DatabaseType dbType;
 
     /**
      * 数据源连接信息

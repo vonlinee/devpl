@@ -3,12 +3,13 @@ package io.devpl.backend.common.query;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 
 /**
  * @param <T> 携带的数据
  */
-public abstract class RestfulResult<T> {
+public abstract class RestfulResult<T> implements Serializable {
     /**
      * 结果状态码
      */

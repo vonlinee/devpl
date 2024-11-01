@@ -1,12 +1,12 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.jdbc.ConnectionHolder;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ddlutils.jdbc.meta.*;
-import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,19 +27,19 @@ import java.util.function.Function;
 @Slf4j
 public abstract class AbstractQueryDatabaseMetadataReader extends ConnectionHolder implements DatabaseMetadataReader, SqlMetadataQuery {
 
-    public static DatabaseMetadataReader getQuery(DBType dbType) {
+    public static DatabaseMetadataReader getQuery(DatabaseType databaseType) {
         DatabaseMetadataReader dbQuery = null;
-        if (dbType == DBTypeEnum.MYSQL) {
+        if (databaseType == BuiltinDatabaseType.MYSQL) {
             dbQuery = new MySqlMetadataReader();
-        } else if (dbType == DBTypeEnum.ORACLE) {
+        } else if (databaseType == BuiltinDatabaseType.ORACLE) {
             dbQuery = new OracleMetadataReader();
-        } else if (dbType == DBTypeEnum.POSTGRE_SQL) {
+        } else if (databaseType == BuiltinDatabaseType.POSTGRE_SQL) {
             dbQuery = new PostgreSqlMetadataReader();
-        } else if (dbType == DBTypeEnum.SQL_SERVER) {
+        } else if (databaseType == BuiltinDatabaseType.SQL_SERVER) {
             dbQuery = new SQLServerMetadataReader();
-        } else if (dbType == DBTypeEnum.DM) {
+        } else if (databaseType == BuiltinDatabaseType.DM) {
             dbQuery = new Dm8MetadataReader();
-        } else if (dbType == DBTypeEnum.CLICK_HOUSE) {
+        } else if (databaseType == BuiltinDatabaseType.CLICK_HOUSE) {
             dbQuery = new ClickHouseMetadataReader();
         }
         return dbQuery;

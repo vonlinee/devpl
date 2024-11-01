@@ -73,8 +73,8 @@ public class MyBatisToolController {
      * @return {@link Result}<{@link String}>
      */
     @PostMapping("/ms/sql")
-    public Result<String> getSqlOfMappedStatement(@RequestBody GetSqlParam param) {
-        return Result.ok(myBatisService.getSqlOfMappedStatement(param));
+    public String getSqlOfMappedStatement(@RequestBody GetSqlParam param) {
+        return myBatisService.getSqlOfMappedStatement(param);
     }
 
     /**

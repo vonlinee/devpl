@@ -1,10 +1,8 @@
 package io.devpl.fxui.model;
 
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.utils.DBUtils;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import org.apache.ddlutils.platform.BuiltinDriverType;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,7 +18,7 @@ public class ConnectionConfig {
      */
     private String connectionName;
     private String dbType;
-    private JDBCDriver driverInfo;
+    private BuiltinDriverType driverInfo;
     private String host;
     private String port;
     /**
@@ -36,7 +34,7 @@ public class ConnectionConfig {
     private Properties properties;
 
     public String getConnectionUrl() {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
+        BuiltinDriverType driver = BuiltinDriverType.findByDriverClassName(driverClassName);
         String databaseName = schema;
         if (databaseName == null) {
             databaseName = "";
@@ -48,13 +46,13 @@ public class ConnectionConfig {
     }
 
     public String getConnectionUrl(String databaseName) {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
+        BuiltinDriverType driver = BuiltinDriverType.findByDriverClassName(driverClassName);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
 
     public String getConnectionUrl(String databaseName, Properties properties) {
-        JDBCDriver driver = JDBCDriver.findByDriverClassName(driverClassName);
+        BuiltinDriverType driver = BuiltinDriverType.findByDriverClassName(driverClassName);
         assert driver != null;
         return driver.getConnectionUrl(host, port, databaseName, properties);
     }
@@ -124,9 +122,9 @@ public class ConnectionConfig {
         return uniqueKey;
     }
 
-    public JDBCDriver getDriver() {
+    public BuiltinDriverType getDriver() {
         if (this.driverInfo == null) {
-            this.driverInfo = JDBCDriver.findByDriverClassName(driverClassName);
+            this.driverInfo = BuiltinDriverType.findByDriverClassName(driverClassName);
         }
         return driverInfo;
     }

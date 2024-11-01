@@ -31,7 +31,7 @@ public interface Platform {
      *
      * @return enum DBType
      */
-    DBType getDBType();
+    DatabaseType getDBType();
 
     /**
      * Returns the info object for this platform.

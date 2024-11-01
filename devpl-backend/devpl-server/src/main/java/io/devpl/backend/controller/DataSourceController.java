@@ -11,12 +11,12 @@ import io.devpl.backend.entity.TableGeneration;
 import io.devpl.backend.service.DataSourceService;
 import io.devpl.backend.service.RdbmsConnectionInfoService;
 import io.devpl.backend.service.TableGenerationService;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.validation.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ddlutils.platform.JDBCDriver;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DriverType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -151,11 +151,11 @@ public class DataSourceController {
     @GetMapping(value = "/drivers")
     public ListResult<DriverTypeVO> getSupportedDriverTypes() {
         List<DriverTypeVO> result = new ArrayList<>();
-        for (DBTypeEnum dbType : DBTypeEnum.values()) {
-            JDBCDriver[] drivers = dbType.getDrivers();
+        for (BuiltinDatabaseType dbType : BuiltinDatabaseType.values()) {
+            DriverType[] drivers = dbType.getSupportedDriverTypes();
             if (drivers != null) {
-                for (JDBCDriver driver : drivers) {
-                    result.add(new DriverTypeVO(driver.getName(), driver.getName(), dbType.getDefaultPort()));
+                for (DriverType driver : drivers) {
+                    result.add(new DriverTypeVO(driver.getName(), driver.getName(), driver.getDefaultPort()));
                 }
             }
         }
@@ -169,7 +169,7 @@ public class DataSourceController {
      */
     @GetMapping(value = "/dbtypes")
     public Result<List<SelectOptionVO>> getSupportedDBTypes() {
-        return Result.ok(ArrayUtils.asList(DBTypeEnum.values(),
+        return Result.ok(ArrayUtils.asList(BuiltinDatabaseType.values(),
             dbType -> new SelectOptionVO(dbType.name(), dbType.getName(), dbType.name())));
     }
 

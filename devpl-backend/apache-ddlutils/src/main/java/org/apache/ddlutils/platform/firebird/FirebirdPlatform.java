@@ -64,8 +64,8 @@ public class FirebirdPlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.FIREBIRD;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.FIREBIRD;
     }
 
     @Override

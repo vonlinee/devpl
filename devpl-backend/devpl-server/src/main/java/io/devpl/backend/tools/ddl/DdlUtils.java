@@ -1,6 +1,5 @@
 package io.devpl.backend.tools.ddl;
 
-import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
 import io.devpl.sdk.annotations.NotNull;
 
 import java.util.HashMap;

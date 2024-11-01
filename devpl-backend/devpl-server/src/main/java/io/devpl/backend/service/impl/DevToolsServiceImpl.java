@@ -10,10 +10,10 @@ import io.devpl.backend.service.DevToolsService;
 import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.tools.ddl.DdlUtils;
 import io.devpl.backend.tools.ddl.Field;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.common.utils.Utils;
 import io.devpl.sdk.util.StringUtils;
 import jakarta.annotation.Resource;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class DevToolsServiceImpl implements DevToolsService {
         FieldsToTableParam fieldsToTableParam = new FieldsToTableParam();
         fieldsToTableParam.setFields(result.getFields());
         fieldsToTableParam.setTableName("Example");
-        fieldsToTableParam.setDbType(DBTypeEnum.MYSQL.getName());
+        fieldsToTableParam.setDbType(BuiltinDatabaseType.MYSQL.getName());
         fieldsToTableParam.setWrapIdentifier(true);
         fieldsToTableParam.setDropTable(true);
         return getCreateTableDDL(fieldsToTableParam);

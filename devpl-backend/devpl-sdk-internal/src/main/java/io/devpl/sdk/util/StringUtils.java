@@ -970,8 +970,7 @@ public abstract class StringUtils {
      * @see java.lang.String#startsWith
      */
     public static boolean startsWithIgnoreCase(String str, String prefix) {
-        return (str != null && prefix != null && str.length() >= prefix.length()
-                && str.regionMatches(true, 0, prefix, 0, prefix.length()));
+        return (str != null && prefix != null && str.length() >= prefix.length() && str.regionMatches(true, 0, prefix, 0, prefix.length()));
     }
 
     /**
@@ -983,8 +982,7 @@ public abstract class StringUtils {
      * @see java.lang.String#endsWith
      */
     public static boolean endsWithIgnoreCase(String str, String suffix) {
-        return (str != null && suffix != null && str.length() >= suffix.length()
-                && str.regionMatches(true, str.length() - suffix.length(), suffix, 0, suffix.length()));
+        return (str != null && suffix != null && str.length() >= suffix.length() && str.regionMatches(true, str.length() - suffix.length(), suffix, 0, suffix.length()));
     }
 
     /**
@@ -1640,7 +1638,7 @@ public abstract class StringUtils {
         if (ObjectUtils.isEmpty(array)) {
             return array;
         }
-        java.util.Arrays.sort(array);
+        Arrays.sort(array);
         return array;
     }
 
@@ -2286,7 +2284,7 @@ public abstract class StringUtils {
      * @return 结果
      */
     public static String toString(char[] chars, int fromIndex, int endIndex) {
-        return String.valueOf(java.util.Arrays.copyOfRange(chars, fromIndex, endIndex));
+        return String.valueOf(Arrays.copyOfRange(chars, fromIndex, endIndex));
     }
 
     /**

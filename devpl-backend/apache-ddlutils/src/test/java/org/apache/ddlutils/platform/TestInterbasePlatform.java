@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestInterbasePlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.INTERBASE.getName();
+        return BuiltinDatabaseType.INTERBASE.getName();
     }
 
     /**

@@ -1,6 +1,5 @@
 package io.devpl.fxui.controller.dbconn;
 
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.fxui.common.Constants;
 import io.devpl.fxui.event.FillDefaultValueEvent;
 import io.devpl.fxui.model.ConnectionConfig;
@@ -12,6 +11,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.apache.ddlutils.platform.BuiltinDriverType;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,8 +44,8 @@ public class DbConnView extends FxmlView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        dbTypeChoice.setItems(FXCollections.observableArrayList(JDBCDriver.supportedDriverNames()));
-        dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
+        dbTypeChoice.setItems(FXCollections.observableArrayList(BuiltinDriverType.supportedDriverNames()));
+        dbTypeChoice.setValue(BuiltinDriverType.MYSQL5.name());
         encodingChoice.setItems(FXCollections.observableArrayList(Constants.SUPPORTED_ENCODING));
         encodingChoice.setValue(Constants.DEFAULT_ENCODING);
         hostField.setText(Constants.LOCALHOST);
@@ -89,7 +89,7 @@ public class DbConnView extends FxmlView {
         userNameField.setText("root");
         portField.setText("3306");
         passwordField.setText("123456");
-        dbTypeChoice.setValue(JDBCDriver.MYSQL5.name());
+        dbTypeChoice.setValue(BuiltinDriverType.MYSQL5.name());
         hostField.setText("127.0.0.1");
     }
 }

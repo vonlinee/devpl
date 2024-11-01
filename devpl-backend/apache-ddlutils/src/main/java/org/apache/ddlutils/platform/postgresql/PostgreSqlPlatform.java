@@ -63,8 +63,8 @@ public class PostgreSqlPlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.POSTGRE_SQL;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.POSTGRE_SQL;
     }
 
     /**
@@ -78,7 +78,7 @@ public class PostgreSqlPlatform extends PlatformImplBase {
      * @param createDb            Whether to create or drop the database
      */
     private void createOrDropDatabase(String jdbcDriverClassName, String connectionUrl, String username, String password, ContextMap parameters, boolean createDb) throws DatabaseOperationException, UnsupportedOperationException {
-        if (BuiltinJDBCDriver.POSTGRE_SQL.getDriverClassName().equals(jdbcDriverClassName)) {
+        if (BuiltinDriverType.POSTGRE_SQL.getDriverClassName().equals(jdbcDriverClassName)) {
             int slashPos = connectionUrl.lastIndexOf('/');
             if (slashPos < 0) {
                 throw new DatabaseOperationException("Cannot parse the given connection url " + connectionUrl);

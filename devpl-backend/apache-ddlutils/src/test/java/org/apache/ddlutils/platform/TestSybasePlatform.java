@@ -9,7 +9,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestSybasePlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.SYBASE.getName();
+        return BuiltinDatabaseType.SYBASE.getName();
     }
 
     /**

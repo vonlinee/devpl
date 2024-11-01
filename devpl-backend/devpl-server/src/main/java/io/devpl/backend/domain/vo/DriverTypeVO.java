@@ -1,6 +1,5 @@
 package io.devpl.backend.domain.vo;
 
-import io.devpl.codegen.db.JDBCDriver;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,7 @@ public class DriverTypeVO {
     /**
      * id
      *
-     * @see JDBCDriver#name()
+     * @see BuiltinDriverType#name()
      */
     private String id;
 

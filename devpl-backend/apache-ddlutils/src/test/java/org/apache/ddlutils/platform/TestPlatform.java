@@ -14,16 +14,26 @@ public class TestPlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return new DBType() {
+    public DatabaseType getDBType() {
+        return new DatabaseType() {
             @Override
             public String getName() {
                 return "TestDB";
             }
 
             @Override
-            public JDBCDriver[] getSupportedDrivers() {
-                return new JDBCDriver[0];
+            public void registerDriverType(DriverType driverType) {
+
+            }
+
+            @Override
+            public void deregisterDriverType(DriverType driverType) {
+
+            }
+
+            @Override
+            public DriverType[] getSupportedDriverTypes() {
+                return new DriverType[0];
             }
         };
     }

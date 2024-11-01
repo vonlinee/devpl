@@ -3,6 +3,7 @@ package io.devpl.backend.domain.param;
 import io.devpl.backend.domain.MsParamNode;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
 
 import java.util.List;
 
@@ -11,7 +12,16 @@ import java.util.List;
 public class GetSqlParam {
 
     /**
+     * sql的数据库类型
+     */
+    private String dialect = BuiltinDatabaseType.MYSQL.getName();
+
+    /**
      * Mapper Statement
+     * <<select></select>
+     * <<insert></insert>
+     * <update></update>
+     * <delete></delete>
      */
     private String mapperStatement;
 
@@ -24,4 +34,9 @@ public class GetSqlParam {
      * 实际sql还是预编译的sql
      */
     private Integer real;
+
+    /**
+     * 是否需要格式化
+     */
+    private Boolean format = true;
 }

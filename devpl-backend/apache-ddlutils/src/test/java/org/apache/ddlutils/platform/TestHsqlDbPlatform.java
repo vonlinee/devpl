@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TestHsqlDbPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.HSQLDB.getName();
+        return BuiltinDatabaseType.HSQLDB.getName();
     }
 
     /**

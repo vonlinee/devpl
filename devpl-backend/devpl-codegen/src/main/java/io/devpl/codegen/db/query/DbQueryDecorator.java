@@ -1,12 +1,12 @@
 package io.devpl.codegen.db.query;
 
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 import io.devpl.codegen.generator.config.LikeTable;
 import io.devpl.codegen.generator.config.StrategyConfiguration;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.sdk.util.StringUtils;
-import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class DbQueryDecorator extends AbstractDbQuery {
     private final AbstractDbQuery dbQuery;
     private final Connection connection;
-    private final DBType dbType;
+    private final DatabaseType databaseType;
     private final StrategyConfiguration strategyConfiguration;
     private final String schema;
     private final Logger logger;
@@ -33,17 +33,17 @@ public class DbQueryDecorator extends AbstractDbQuery {
     public DbQueryDecorator(@NotNull JdbcConfiguration jdbcConfiguration, @NotNull StrategyConfiguration strategyConfiguration) {
         AbstractDbQuery iDbQuery = jdbcConfiguration.getDbQuery();
         if (null == iDbQuery) {
-            DBType dbType = JdbcUtils.getDbType(jdbcConfiguration.getConnectionUrl());
+            DatabaseType databaseType = JdbcUtils.getDbType(jdbcConfiguration.getConnectionUrl());
             // 默认 MYSQL
-            AbstractDbQuery dialect = DbQueryRegistry.getDbQuery(dbType);
+            AbstractDbQuery dialect = DbQueryRegistry.getDbQuery(databaseType);
             if (dialect == null) {
-                dialect = DbQueryRegistry.getDbQuery(DBTypeEnum.MYSQL);
+                dialect = DbQueryRegistry.getDbQuery(BuiltinDatabaseType.MYSQL);
             }
             iDbQuery = dialect;
         }
         this.dbQuery = iDbQuery;
         this.connection = jdbcConfiguration.getConnection();
-        this.dbType = jdbcConfiguration.getDbType();
+        this.databaseType = jdbcConfiguration.getDbType();
         this.strategyConfiguration = strategyConfiguration;
         this.schema = jdbcConfiguration.getSchemaName();
         this.logger = LoggerFactory.getLogger(dbQuery.getClass());
@@ -52,7 +52,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     @Override
     public String tablesSql() {
         String tablesSql = dbQuery.tablesSql();
-        if (DBTypeEnum.POSTGRE_SQL == dbType || DBTypeEnum.KINGBASE_ES == dbType || DBTypeEnum.DB2 == dbType || DBTypeEnum.ORACLE == dbType) {
+        if (BuiltinDatabaseType.POSTGRE_SQL == databaseType || BuiltinDatabaseType.KINGBASE_ES == databaseType || BuiltinDatabaseType.DB2 == databaseType || BuiltinDatabaseType.ORACLE == databaseType) {
             tablesSql = String.format(tablesSql, this.schema);
         }
         if (strategyConfiguration.isEnableSqlFilter()) {
@@ -90,14 +90,14 @@ public class DbQueryDecorator extends AbstractDbQuery {
      */
     public String tableFieldsSql(String tableName) {
         String tableFieldsSql = this.tableFieldsSql();
-        if (DBTypeEnum.KINGBASE_ES == dbType || DBTypeEnum.DB2 == dbType) {
+        if (BuiltinDatabaseType.KINGBASE_ES == databaseType || BuiltinDatabaseType.DB2 == databaseType) {
             tableFieldsSql = String.format(tableFieldsSql, this.schema, tableName);
-        } else if (DBTypeEnum.ORACLE == dbType) {
+        } else if (BuiltinDatabaseType.ORACLE == databaseType) {
             tableFieldsSql = String.format(tableFieldsSql.replace("#schema", this.schema), tableName, tableName.toUpperCase());
-        } else if (DBTypeEnum.DM == dbType) {
+        } else if (BuiltinDatabaseType.DM == databaseType) {
             tableName = tableName.toUpperCase();
             tableFieldsSql = String.format(tableFieldsSql, tableName);
-        } else if (DBTypeEnum.POSTGRE_SQL == dbType) {
+        } else if (BuiltinDatabaseType.POSTGRE_SQL == databaseType) {
             tableFieldsSql = String.format(tableFieldsSql, tableName, tableName, tableName);
         } else {
             tableFieldsSql = String.format(tableFieldsSql, tableName);
@@ -181,7 +181,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                consumer.accept(new ResultSetWrapper(resultSet, this, this.dbType));
+                consumer.accept(new ResultSetWrapper(resultSet, this, this.databaseType));
                 count++;
             }
             long end = System.nanoTime();
@@ -209,12 +209,12 @@ public class DbQueryDecorator extends AbstractDbQuery {
 
         private final ResultSet resultSet;
 
-        private final DBType dbType;
+        private final DatabaseType databaseType;
 
-        ResultSetWrapper(ResultSet resultSet, AbstractDbQuery dbQuery, DBType dbType) {
+        ResultSetWrapper(ResultSet resultSet, AbstractDbQuery dbQuery, DatabaseType databaseType) {
             this.resultSet = resultSet;
             this.dbQuery = dbQuery;
-            this.dbType = dbType;
+            this.databaseType = databaseType;
         }
 
         public ResultSet getResultSet() {
@@ -268,7 +268,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
          */
         public boolean isPrimaryKey() {
             String key = this.getStringResult(dbQuery.fieldKey());
-            if (DBTypeEnum.DB2 == dbType || DBTypeEnum.SQLITE == dbType || DBTypeEnum.CLICK_HOUSE == dbType) {
+            if (BuiltinDatabaseType.DB2 == databaseType || BuiltinDatabaseType.SQLITE == databaseType || BuiltinDatabaseType.CLICK_HOUSE == databaseType) {
                 return StringUtils.hasText(key) && "1".equals(key);
             } else {
                 return StringUtils.hasText(key) && "PRI".equalsIgnoreCase(key);

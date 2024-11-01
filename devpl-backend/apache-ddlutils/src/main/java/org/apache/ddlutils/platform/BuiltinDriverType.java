@@ -1,10 +1,18 @@
 package org.apache.ddlutils.platform;
 
+import org.apache.ddlutils.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.Properties;
 
-public enum BuiltinJDBCDriver implements JDBCDriver {
+/**
+ * 数据库驱动类型
+ * 连接URL格式：jdbc:mysql://[host:port],[host:port].../[database][?参数名1][=参数值1][&参数名2][=参数值2]...
+ *
+ * @see BuiltinDatabaseType
+ */
+public enum BuiltinDriverType implements DriverType {
 
     /**
      * The axion jdbc driver.
@@ -247,18 +255,49 @@ public enum BuiltinJDBCDriver implements JDBCDriver {
      */
     CLOUDSCAPE_NET("cloudscape:net", ""),
 
-    ;
+    MYSQL5("com.mysql.jdbc.Driver", "mysql", "MySQL 5"), MYSQL8("com.mysql.cj.jdbc.Driver", MYSQL5.subProtocol, "MySQL 8"),
 
-    private final String subProtocol;
-    private final String driverClassName;
+    // Oracle Database
+    ORACLE("oracle.jdbc.OracleDriver", "oracle:thin", "Oracle 11 thin") {
+        @Override
+        public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+            return JDBC_PROTOCOL + ":" + subProtocol + ":@//" + hostname + ":" + port + "/" + databaseName;
+        }
+    }, ORACLE_12C(ORACLE.driverClassName, ORACLE.subProtocol, "Oracle 12 thin") {
+        @Override
+        public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+            return ORACLE.getConnectionUrlPrefix(hostname, port, databaseName);
+        }
+    }, SQLITE("org.sqlite.JDBC", "sqlite");;
 
-    BuiltinJDBCDriver(String subProtocol) {
+
+    /**
+     * 驱动类全类名
+     */
+    protected final String driverClassName;
+
+    /**
+     * 子协议
+     */
+    protected final String subProtocol;
+
+    /**
+     * 描述信息
+     */
+    protected String description;
+
+    BuiltinDriverType(String subProtocol) {
         this(subProtocol, null);
     }
 
-    BuiltinJDBCDriver(String subProtocol, String driverClassName) {
-        this.subProtocol = subProtocol;
+    BuiltinDriverType(String subProtocol, String driverClassName) {
         this.driverClassName = driverClassName;
+        this.subProtocol = subProtocol;
+    }
+
+    BuiltinDriverType(String driverClassName, String subProtocol, String description) {
+        this(driverClassName, subProtocol);
+        this.description = description;
     }
 
     @Override
@@ -273,11 +312,119 @@ public enum BuiltinJDBCDriver implements JDBCDriver {
 
     @Override
     public String getConnectionUrl(String hostname, int port, String databaseName, Properties props) {
-        return null;
+        port = port < 0 ? getDefaultPort() : port;
+        return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, port, databaseName), props);
     }
 
     @Override
     public @NotNull String getDriverClassName() {
         return driverClassName;
+    }
+
+    public static BuiltinDriverType findByDriverClassName(String driverClassName) {
+        if (driverClassName == null || driverClassName.isBlank()) {
+            return null;
+        }
+        for (BuiltinDriverType driver : values()) {
+            if (StringUtils.equalsIgnoreCase(driver.getDriverClassName(), driverClassName)) {
+                return driver;
+            }
+        }
+        return null;
+    }
+
+    public static String[] supportedDriverNames() {
+        String[] names = new String[values().length];
+        BuiltinDriverType[] drivers = values();
+        for (int i = 0; i < drivers.length; i++) {
+            names[i] = drivers[i].name();
+        }
+        return names;
+    }
+
+    /**
+     * 根据名称搜索
+     *
+     * @param name          枚举实例名称
+     * @param caseSensitive 大小写敏感
+     * @param defaultValue  默认值
+     * @return JDBCDriver实例
+     */
+    public static BuiltinDriverType getByName(String name, boolean caseSensitive, BuiltinDriverType defaultValue) {
+        if (caseSensitive) {
+            for (BuiltinDriverType driver : values()) {
+                if (driver.name().equals(name)) {
+                    return driver;
+                }
+            }
+        } else {
+            for (BuiltinDriverType driver : values()) {
+                if (driver.name().equalsIgnoreCase(name)) {
+                    return driver;
+                }
+            }
+        }
+        return defaultValue;
+    }
+
+    /**
+     * 协议名//[host name][/database name][username and password]
+     * 获取JDBC URL连接字符串
+     *
+     * @param hostname     主机IP
+     * @param port         端口号
+     * @param databaseName 数据库名，如果为空则不进行拼接
+     * @return JDBC URL连接字符串
+     */
+    public String getConnectionUrl(String hostname, String port, String databaseName, Properties props) {
+        return appendConnectionUrlParams(getConnectionUrlPrefix(hostname, parsePortNumber(port), databaseName), props);
+    }
+
+    public int parsePortNumber(String port) {
+        int portNum;
+        if (port == null || port.isEmpty()) {
+            portNum = 3306;
+        } else {
+            try {
+                portNum = Integer.parseInt(port);
+            } catch (Exception exception) {
+                portNum = 3306;
+            }
+        }
+        return portNum;
+    }
+
+    /**
+     * 拼接URL的主要部分
+     *
+     * @param hostname     主机IP
+     * @param port         端口号
+     * @param databaseName 数据库名
+     * @return URL的主要部分
+     */
+    public String getConnectionUrlPrefix(String hostname, int port, String databaseName) {
+        String connectionUrl = JDBC_PROTOCOL + ":" + subProtocol + "://" + hostname + ":" + port;
+        if (databaseName != null && !databaseName.isEmpty()) {
+            connectionUrl += "/" + databaseName;
+        }
+        return connectionUrl;
+    }
+
+    /**
+     * 追加JDBC URL连接参数
+     *
+     * @param url        JDBC URL
+     * @param properties 连接参数配置
+     * @return 完整的JDBC URL
+     */
+    protected String appendConnectionUrlParams(String url, Properties properties) {
+        if (properties == null || properties.isEmpty()) {
+            return url;
+        }
+        StringBuilder sb = new StringBuilder(url).append("?");
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            sb.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+        return sb.toString();
     }
 }

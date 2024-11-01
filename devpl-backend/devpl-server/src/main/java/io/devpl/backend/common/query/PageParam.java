@@ -2,6 +2,7 @@ package io.devpl.backend.common.query;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * 分页查询参数父类
  * jackson默认使用setter/getter映射JSON数据而不是字段名
  */
+@Setter
 public class PageParam implements Serializable {
 
     /**
@@ -31,17 +33,17 @@ public class PageParam implements Serializable {
         return page;
     }
 
-    public void setPageIndex(Integer pageIndex) {
+    public final void setPageIndex(Integer pageIndex) {
         if (pageIndex != null) {
             this.page = pageIndex;
         }
     }
 
-    public int getPageSize() {
+    public final int getPageSize() {
         return limit;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public final void setPageSize(Integer pageSize) {
         if (pageSize != null) {
             this.limit = pageSize;
         }
@@ -51,24 +53,12 @@ public class PageParam implements Serializable {
         return new Page<>(page, limit);
     }
 
-    public int getPage() {
+    public final int getPage() {
         return page;
     }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getLimit() {
+    public final int getLimit() {
         return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
-
-    public void setStartRow(long startRow) {
-        this.startRow = startRow;
     }
 
     /**

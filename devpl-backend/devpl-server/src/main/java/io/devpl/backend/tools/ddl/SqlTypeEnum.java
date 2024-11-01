@@ -1,4 +1,4 @@
-package io.devpl.backend.tools.ddl.enums;
+package io.devpl.backend.tools.ddl;
 
 import org.apache.commons.lang3.StringUtils;
 

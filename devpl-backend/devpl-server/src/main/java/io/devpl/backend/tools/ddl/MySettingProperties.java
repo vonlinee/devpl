@@ -1,7 +1,5 @@
 package io.devpl.backend.tools.ddl;
 
-import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
-
 /**
  * 配置数据
  */

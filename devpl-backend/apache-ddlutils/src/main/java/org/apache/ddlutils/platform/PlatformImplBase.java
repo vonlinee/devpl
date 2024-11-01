@@ -1488,7 +1488,7 @@ public abstract class PlatformImplBase extends JdbcSupport implements Platform {
      * prepared statement is build.
      *
      * @param model       The database model
-     * @param tableModel   The type
+     * @param tableModel  The type
      * @param primaryKeys The primary keys
      * @param properties  The properties to write
      * @param bean        Optionally the concrete bean to update

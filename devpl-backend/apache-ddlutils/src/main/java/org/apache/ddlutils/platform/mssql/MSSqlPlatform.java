@@ -69,8 +69,8 @@ public class MSSqlPlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.MSSQL;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.MSSQL;
     }
 
     /**

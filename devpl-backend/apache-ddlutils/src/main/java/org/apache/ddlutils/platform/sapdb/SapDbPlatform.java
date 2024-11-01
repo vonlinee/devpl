@@ -71,8 +71,8 @@ public class SapDbPlatform extends PlatformImplBase {
     }
 
     @Override
-    public DBType getDBType() {
-        return BuiltinDBType.SAPDB;
+    public DatabaseType getDBType() {
+        return BuiltinDatabaseType.SAPDB;
     }
 
     /**

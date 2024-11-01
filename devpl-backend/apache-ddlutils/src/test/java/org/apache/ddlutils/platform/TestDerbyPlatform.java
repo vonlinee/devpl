@@ -11,7 +11,7 @@ public class TestDerbyPlatform extends TestPlatformBase {
 
     @Override
     protected String getDatabaseName() {
-        return BuiltinDBType.DERBY.getName();
+        return BuiltinDatabaseType.DERBY.getName();
     }
 
     /**

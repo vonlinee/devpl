@@ -22,7 +22,7 @@ public class TestMySql50Platform extends TestAgainstLiveDatabaseBase {
 
     @Override
     protected String getDatabaseName() {
-        return BuiltinDBType.MYSQL5.getName();
+        return BuiltinDatabaseType.MYSQL5.getName();
     }
 
     @Test

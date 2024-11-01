@@ -8,7 +8,7 @@ import org.apache.ddlutils.TestPlatformBase;
 public class TestFirebirdPlatform extends TestPlatformBase {
 
     protected String getDatabaseName() {
-        return BuiltinDBType.FIREBIRD.getName();
+        return BuiltinDatabaseType.FIREBIRD.getName();
     }
 
     /**

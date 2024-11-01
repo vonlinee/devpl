@@ -20,7 +20,6 @@ import io.devpl.backend.entity.*;
 import io.devpl.backend.service.*;
 import io.devpl.backend.utils.DateTimeUtils;
 import io.devpl.backend.utils.PathUtils;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.generator.config.CaseFormat;
 import io.devpl.codegen.jdbc.RuntimeSQLException;
 import io.devpl.codegen.template.TemplateArgumentsMap;
@@ -39,6 +38,8 @@ import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.PrimaryKeyMetadata;
 import org.apache.ddlutils.jdbc.meta.TableMetadata;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -528,7 +529,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
         TableGeneration table = this.getById(id);
 
         RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getConnectionInfo(table.getDatasourceId());
-        DBTypeEnum dbType = DBTypeEnum.getValue(connInfo.getDbType());
+        DatabaseType dbType = BuiltinDatabaseType.getValue(connInfo.getDbType());
 
         List<TableGenerationField> tableFields;
         try (Connection connection = rdbmsConnectionInfoService.getRdbmsConnection(connInfo)) {
@@ -583,7 +584,7 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
      * @param connection 连接
      * @return 表的所有字段信息
      */
-    private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataReader loader, DBTypeEnum dbType, Connection connection, TableGeneration table) {
+    private List<TableGenerationField> loadTableGenerationFields(DatabaseMetadataReader loader, DatabaseType dbType, Connection connection, TableGeneration table) {
         List<TableGenerationField> tableFieldList = new ArrayList<>();
         try {
             if (loader == null) {
@@ -619,11 +620,11 @@ public class TableGenerationServiceImpl extends MyBatisPlusServiceImpl<TableGene
     @Override
     public List<TableGeneration> listGenerationTargetTables(Long datasourceId, String databaseName, String tableNamePattern) {
         List<TableGeneration> tableList = new ArrayList<>();
-        DBTypeEnum dbType = DBTypeEnum.MYSQL;
+        DatabaseType dbType = BuiltinDatabaseType.MYSQL;
         if (!rdbmsConnectionInfoService.isSystemDataSource(datasourceId)) {
             RdbmsConnectionInfo connInfo = rdbmsConnectionInfoService.getById(datasourceId);
             if (connInfo != null) {
-                dbType = DBTypeEnum.getValue(connInfo.getDbType());
+                dbType = BuiltinDatabaseType.getValue(connInfo.getDbType());
             }
         }
 

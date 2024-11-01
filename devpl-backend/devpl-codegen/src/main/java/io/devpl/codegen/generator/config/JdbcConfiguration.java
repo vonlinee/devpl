@@ -11,12 +11,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.ddlutils.jdbc.JdbcDatabaseMetadataReader;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
-import org.apache.ddlutils.platform.DBType;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
+import org.apache.ddlutils.platform.DatabaseType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import io.devpl.codegen.db.ColumnKeyWordsHandler;
-import io.devpl.codegen.db.DBTypeEnum;
 import io.devpl.codegen.db.query.AbstractDbQuery;
 import io.devpl.codegen.jdbc.JdbcUtils;
 import io.devpl.codegen.util.Utils;
@@ -96,7 +96,7 @@ public class JdbcConfiguration extends PropertyHolder {
      * @return 类型枚举值
      */
     @NotNull
-    public DBType getDbType() {
+    public DatabaseType getDbType() {
         return JdbcUtils.getDbType(this.connectionUrl);
     }
 
@@ -121,11 +121,11 @@ public class JdbcConfiguration extends PropertyHolder {
                         properties.put("user", username);
                         properties.put("password", password);
                         // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
-                        DBType dbType = this.getDbType();
-                        if (dbType.equals(DBTypeEnum.MYSQL)) {
+                        DatabaseType databaseType = this.getDbType();
+                        if (databaseType.equals(BuiltinDatabaseType.MYSQL)) {
                             properties.put("remarks", "true");
                             properties.put("useInformationSchema", "true");
-                        } else if (dbType.equals(DBTypeEnum.ORACLE)) {
+                        } else if (databaseType.equals(BuiltinDatabaseType.ORACLE)) {
                             properties.put("remarks", "true");
                             properties.put("remarksReporting", "true");
                         }
@@ -146,18 +146,18 @@ public class JdbcConfiguration extends PropertyHolder {
      */
     @Nullable
     protected String getDefaultSchemaName() {
-        DBType dbType = getDbType();
+        DatabaseType databaseType = getDbType();
         String schema = null;
-        if (DBTypeEnum.POSTGRE_SQL == dbType) {
+        if (BuiltinDatabaseType.POSTGRE_SQL == databaseType) {
             // pg 默认 schema=public
             schema = "public";
-        } else if (DBTypeEnum.KINGBASE_ES == dbType) {
+        } else if (BuiltinDatabaseType.KINGBASE_ES == databaseType) {
             // king base 默认 schema=PUBLIC
             schema = "PUBLIC";
-        } else if (DBTypeEnum.DB2 == dbType) {
+        } else if (BuiltinDatabaseType.DB2 == databaseType) {
             // db2 默认 schema=current schema
             schema = "current schema";
-        } else if (DBTypeEnum.ORACLE == dbType) {
+        } else if (BuiltinDatabaseType.ORACLE == databaseType) {
             // oracle 默认 schema=username
             schema = this.username.toUpperCase();
         }

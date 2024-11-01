@@ -1,8 +1,8 @@
 package io.devpl.backend.service;
 
 import io.devpl.backend.domain.param.DataSourceMetadataSyncParam;
-import io.devpl.codegen.db.DBTypeEnum;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.platform.DatabaseType;
 
 import java.sql.Connection;
 
@@ -15,7 +15,7 @@ public interface DataSourceService {
      * @param dbType     数据库类型
      * @return DatabaseMetadataLoader
      */
-    DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DBTypeEnum dbType);
+    DatabaseMetadataReader getDatabaseMetadataLoader(Connection connection, DatabaseType dbType);
 
     void syncTableMetadata(DataSourceMetadataSyncParam param);
 }

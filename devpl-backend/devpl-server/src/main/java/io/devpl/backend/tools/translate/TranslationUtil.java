@@ -1,6 +1,5 @@
 package io.devpl.backend.tools.translate;
 
-import io.devpl.backend.tools.ddl.enums.TranslationAppEnum;
 import io.devpl.backend.tools.ddl.Field;
 import io.devpl.backend.tools.ddl.MainSetting;
 import io.devpl.backend.tools.ddl.MySettingProperties;

@@ -1,6 +1,5 @@
 package io.devpl.fxui.utils;
 
-import io.devpl.codegen.db.JDBCDriver;
 import io.devpl.sdk.util.ResourceUtils;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
@@ -30,7 +29,7 @@ public final class DBUtils {
      * 数据库连接超时时长
      */
     private static final int DB_CONNECTION_TIMEOUTS_SECONDS = 1;
-    private static final Map<JDBCDriver, Driver> drivers = new HashMap<>();
+    private static final Map<BuiltinDriverType, Driver> drivers = new HashMap<>();
     private static final QueryRunner runner = new QueryRunner();
 
     /**
@@ -81,9 +80,9 @@ public final class DBUtils {
      * 加载数据库驱动
      *
      * @param dbType 数据库类型
-     * @see JDBCDriver
+     * @see BuiltinDriverType
      */
-    private static void loadDbDriver(JDBCDriver dbType) {
+    private static void loadDbDriver(BuiltinDriverType dbType) {
         if (drivers.containsKey(dbType)) {
             return;
         }

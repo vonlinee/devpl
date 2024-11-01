@@ -1,5 +1,5 @@
 <#assign dbTime = "now()">
-<#if dbType=="SQLServer">
+<#if databaseType=="SQLServer">
     <#assign dbTime = "getDate()">
 </#if>
 

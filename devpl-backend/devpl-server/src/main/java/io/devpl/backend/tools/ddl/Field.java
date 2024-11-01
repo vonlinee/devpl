@@ -1,7 +1,6 @@
 package io.devpl.backend.tools.ddl;
 
 import com.google.common.base.CaseFormat;
-import io.devpl.backend.tools.ddl.enums.SqlTypeAndJavaTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 

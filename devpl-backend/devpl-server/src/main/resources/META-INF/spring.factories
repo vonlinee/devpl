@@ -1,2 +1,4 @@
-# 系统环境配置处理
-org.springframework.boot.env.EnvironmentPostProcessor=io.devpl.backend.boot.CustomConfigurationFileLoader,io.devpl.backend.boot.ApplicationEnvironmentPostProcessor
+# 系统配置处理
+org.springframework.boot.env.EnvironmentPostProcessor=\
+  io.devpl.backend.boot.CustomConfigurationFileLoader,\
+  io.devpl.backend.boot.ApplicationEnvironmentPostProcessor
