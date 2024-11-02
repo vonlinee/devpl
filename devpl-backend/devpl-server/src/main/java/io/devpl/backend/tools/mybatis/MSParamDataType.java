@@ -1,19 +1,24 @@
 package io.devpl.backend.tools.mybatis;
 
+import io.devpl.codegen.type.DataType;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * 参数数据类型定义
+ * MyBatis Mapper Statement 参数值数据类型
  */
-public enum ParamDataType {
+public enum MSParamDataType implements DataType {
 
     /**
      * 数值类型
      */
-    NUMERIC {
+    NUMERIC(1, "Numeric") {
         @Override
         public boolean isValid(String literalValue, StringBuilder error) {
             return super.isValid(literalValue, error);
@@ -21,7 +26,7 @@ public enum ParamDataType {
 
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             if (literalValue == null) {
                 return null;
             }
@@ -32,15 +37,15 @@ public enum ParamDataType {
     /**
      * 字符串
      */
-    STRING {
+    STRING(2, "String") {
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             return String.format("'%s'", value);
         }
 
@@ -58,46 +63,46 @@ public enum ParamDataType {
             return value;
         }
     },
-    DATE {
+    DATE(3, "Date") {
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             return String.format("'%s'", value);
         }
     },
-    TIME {
+    TIME(4, "Time") {
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             return String.format("'%s'", value);
         }
     },
-    TIMESTAMP {
+    TIMESTAMP(5, "Timestamp") {
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             return String.format("'%s'", value);
         }
     },
-    BOOLEAN {
+    BOOLEAN(6, "Boolean") {
         @Nullable
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             if (literalValue == null || literalValue.isEmpty()) {
                 return null;
             }
@@ -113,14 +118,14 @@ public enum ParamDataType {
     /**
      * 数组，未知元素类型
      */
-    ARRAY {
+    ARRAY(7, "Array") {
         @Override
         public boolean isArray() {
             return true;
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             if (value == null) {
                 return "";
             }
@@ -130,9 +135,9 @@ public enum ParamDataType {
     /**
      * 数值序列
      */
-    NUMBER_ARRAY {
+    NUMBER_ARRAY(8, "NumberArray") {
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             if (literalValue == null || literalValue.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -145,27 +150,22 @@ public enum ParamDataType {
         }
 
         @Override
-        public String decorate(String value) {
-            return value;
-        }
-
-        @Override
         public boolean isArray() {
             return true;
         }
 
         @NotNull
         @Override
-        public Class<?> getComponentType() {
-            return Number.class;
+        public DataType getComponentType() {
+            return MSParamDataType.NUMERIC;
         }
     },
     /**
      * 字符串数组
      */
-    STRING_ARRAY {
+    STRING_ARRAY(9, "StringArray") {
         @Override
-        public Object parseObject(String literalValue, StringBuilder sb) {
+        public Object serialize(String literalValue, StringBuilder sb) {
             if (literalValue == null) {
                 return Collections.emptyList();
             }
@@ -174,7 +174,7 @@ public enum ParamDataType {
         }
 
         @Override
-        public String decorate(String value) {
+        public String normalize(String value) {
             return "'" + value + "'";
         }
 
@@ -185,99 +185,63 @@ public enum ParamDataType {
 
         @NotNull
         @Override
-        public Class<?> getComponentType() {
-            return CharSequence.class;
+        public DataType getComponentType() {
+            return MSParamDataType.STRING;
         }
     },
-    /**
-     * 未知数据类型
-     */
-    UNKNOWN {
-    };
+    COLLECTION(10, "Collection") {
+        @Override
+        public boolean isArray() {
+            return true;
+        }
 
-    /**
-     * 决定字面值是否需要使用引号包裹
-     *
-     * @param value 字面值
-     * @return 字面值
-     */
-    public String quote(String value) {
-        return value;
+        @Override
+        public String normalize(String value) {
+            if (value == null) {
+                return "";
+            }
+            return value.replaceAll(" ", ",");
+        }
+    },
+    NULL(-1, "Null");
+
+    @Getter
+    private final int type;
+    private final String typeName;
+
+    MSParamDataType(int type, String typeName) {
+        this.type = type;
+        this.typeName = typeName;
     }
 
-    /**
-     * 将字面值解析成对应的java对象
-     *
-     * @param literalValue 字面值
-     * @param sb           记录错误信息，如果字面值合法，那么无错误信息
-     * @return java对象
-     */
-    @Nullable
-    public Object parseObject(String literalValue, StringBuilder sb) {
+    public static MSParamDataType valueOfTypeName(String typeName) {
+        if (typeName == null) {
+            return null;
+        }
+        for (MSParamDataType item : values()) {
+            if (item.getQualifier().equals(typeName)) {
+                return item;
+            }
+        }
         return null;
     }
 
-    @NotNull
-    public String getLabel() {
-        return name();
+    public static MSParamDataType valueOfType(int type, MSParamDataType defaultValue) {
+        return Arrays.stream(values()).filter(i -> i.getType() == type).findFirst().orElse(defaultValue);
     }
 
-    /**
-     * 该类型是否是数据类型
-     *
-     * @return 是否是数组
-     */
-    public boolean isArray() {
-        return false;
-    }
-
-    /**
-     * 获取元素类型
-     *
-     * @return 数组元素类型
-     * @see ParamDataType#isArray()
-     */
-    @NotNull
-    public Class<?> getComponentType() {
-        return Object.class;
-    }
-
-    /**
-     * 校验字面值是否合法
-     *
-     * @param literalValue 字面值
-     * @param error        存放错误信息
-     * @return 字面值是否合法
-     */
-    public boolean isValid(String literalValue, StringBuilder error) {
-        return true;
-    }
-
-    /**
-     * 将字面值
-     *
-     * @param value 字面值
-     * @return 处理过的字面值
-     */
-    public String decorate(String value) {
-        return value;
-    }
-
-    public static String[] names() {
-        ParamDataType[] values = values();
-        int len = values.length;
-        String[] names = new String[len];
-        for (int i = 0; i < len; i++) {
-            names[i] = values[i].name();
+    public static MSParamDataType fromType(Class<?> javaType) {
+        if (javaType == null) {
+            return MSParamDataType.STRING;
         }
-        return names;
+        if (Number.class.isAssignableFrom(javaType)) {
+            return MSParamDataType.NUMERIC;
+        }
+        return MSParamDataType.STRING;
     }
 
-    public static Map<String, ParamDataType> asMap() {
-        Map<String, ParamDataType> map = new HashMap<>();
-        for (ParamDataType item : values()) {
-            map.put(item.name(), item);
-        }
-        return map;
+    @Override
+    public final String getQualifier() {
+        return typeName;
     }
 }

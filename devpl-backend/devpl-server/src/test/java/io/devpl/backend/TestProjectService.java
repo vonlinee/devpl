@@ -1,12 +1,11 @@
 package io.devpl.backend;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Comparator;
 import java.util.function.Function;
 
 public class TestProjectService {
-
 
     @Test
     public void test3() {

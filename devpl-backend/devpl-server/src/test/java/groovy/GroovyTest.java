@@ -2,7 +2,7 @@ package groovy;
 
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

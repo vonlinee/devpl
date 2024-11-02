@@ -21,7 +21,7 @@ public class ParseResult {
      *      -> name
      *      -> age
      */
-    private TreeNode<ParamMeta> root;
+    private TreeNode<StatementParam> root;
 
     /**
      * MappedStatement

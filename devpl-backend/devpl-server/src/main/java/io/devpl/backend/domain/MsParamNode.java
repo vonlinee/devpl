@@ -1,6 +1,6 @@
 package io.devpl.backend.domain;
 
-import io.devpl.backend.domain.enums.MSParamDataType;
+import io.devpl.backend.tools.mybatis.MSParamDataType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -84,5 +84,9 @@ public class MsParamNode {
     public void setId(Integer id) {
         this.id = id;
         this.key = id;
+    }
+
+    public boolean hasChildren() {
+        return children != null && !children.isEmpty();
     }
 }

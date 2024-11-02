@@ -3,14 +3,13 @@ package io.devpl.backend.controller;
 import io.devpl.backend.common.query.ListResult;
 import io.devpl.backend.common.query.Result;
 import io.devpl.backend.domain.MsParamNode;
-import io.devpl.backend.domain.enums.MSParamDataType;
+import io.devpl.backend.tools.mybatis.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.domain.param.MyBatisParam;
 import io.devpl.backend.domain.vo.SelectOptionVO;
 import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.service.MyBatisService;
-import io.devpl.backend.tools.mybatis.ParamMeta;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.util.ArrayUtils;
 import io.devpl.sdk.util.StringUtils;
@@ -75,14 +74,6 @@ public class MyBatisToolController {
     @PostMapping("/ms/sql")
     public String getSqlOfMappedStatement(@RequestBody GetSqlParam param) {
         return myBatisService.getSqlOfMappedStatement(param);
-    }
-
-    /**
-     * 获取Mapper Statement结合输入参数获取参数元数据
-     */
-    @PostMapping("/ms/param/meta")
-    public Result<List<ParamMeta>> getParamMetaData(@RequestBody GetSqlParam param) {
-        return Result.ok(myBatisService.getParamMetadata(param.getMapperStatement()));
     }
 
     /**

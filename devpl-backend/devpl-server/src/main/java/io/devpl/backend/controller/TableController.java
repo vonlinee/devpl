@@ -103,8 +103,8 @@ public class TableController {
      * @param id 表ID
      */
     @PostMapping("/sync/{id}")
-    public Result<Boolean> syncTable(@PathVariable("id") Long id) {
-        return Result.ok(tableService.sync(id));
+    public Boolean syncTable(@PathVariable("id") Long id) {
+        return tableService.sync(id);
     }
 
     /**

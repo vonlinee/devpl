@@ -94,4 +94,12 @@ public class TreeNode<T> implements Visitable<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    public void setParent(TreeNode<T> parent) {
+        this.parent = parent;
+    }
+
+    public TreeNode<T> getParent() {
+        return parent;
+    }
 }

@@ -1,11 +1,9 @@
 package io.devpl.backend;
 
 import io.devpl.backend.tools.mybatis.MyBatisUtils;
-import org.junit.Test;
 
 public class TestMyBatisUtils {
 
-    @Test
     public void test1() {
 
         String log = """

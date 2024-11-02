@@ -1,15 +1,15 @@
 package io.devpl.backend.tools.mybatis;
 
-import io.devpl.backend.domain.enums.MSParamDataType;
+import io.devpl.codegen.type.TypeInferenceStrategy;
 import org.apache.ibatis.mapping.MappedStatement;
 
-import java.util.Set;
+import java.util.Collection;
 
 public interface MappedStatementParamExtractor {
 
+    void setTypeInferenceStrategy(TypeInferenceStrategy<StatementParam> strategy);
+
     void apply(MappedStatement mappedStatement);
 
-    MSParamDataType inferType(String paramName);
-
-    Set<ParamMeta> getParams();
+    Collection<StatementParam> getParams();
 }

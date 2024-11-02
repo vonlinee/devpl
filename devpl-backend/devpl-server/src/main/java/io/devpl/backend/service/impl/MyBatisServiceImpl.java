@@ -5,13 +5,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.devpl.backend.dao.MappedStatementItemMapper;
 import io.devpl.backend.domain.MsParamNode;
-import io.devpl.backend.domain.enums.MSParamDataType;
 import io.devpl.backend.domain.param.GetSqlParam;
 import io.devpl.backend.domain.param.MappedStatementListParam;
 import io.devpl.backend.entity.MappedStatementItem;
 import io.devpl.backend.entity.MappedStatementParamMappingItem;
 import io.devpl.backend.service.CrudService;
-import io.devpl.backend.service.FieldInfoService;
 import io.devpl.backend.service.MyBatisService;
 import io.devpl.backend.service.ProjectService;
 import io.devpl.backend.tools.mybatis.*;
@@ -21,30 +19,21 @@ import io.devpl.backend.utils.SimpleSqlFormatter;
 import io.devpl.backend.utils.SqlFormatter;
 import io.devpl.codegen.parser.JavaParserUtils;
 import io.devpl.codegen.util.TypeUtils;
-import io.devpl.common.utils.XMLUtils;
 import io.devpl.sdk.TreeNode;
 import io.devpl.sdk.annotations.NotNull;
 import io.devpl.sdk.collection.CaseInsensitiveKeyMap;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
-import io.devpl.sdk.util.ReflectionUtils;
 import io.devpl.sdk.util.StringUtils;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.builder.xml.XMLConfigBuilder;
 import org.apache.ibatis.builder.xml.XMLMapperBuilder;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
-import org.apache.ibatis.executor.parameter.ParameterHandler;
-import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.parsing.XPathParser;
-import org.apache.ibatis.scripting.xmltags.DynamicContext;
-import org.apache.ibatis.scripting.xmltags.DynamicSqlSource;
-import org.apache.ibatis.scripting.xmltags.SqlNode;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -66,8 +55,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -79,9 +66,6 @@ import java.util.stream.Stream;
 @Service
 public class MyBatisServiceImpl implements MyBatisService {
 
-    /**
-     * 本系统自身的SqlSessionFactory
-     */
     @Resource
     SqlSessionFactory sqlSessionFactory;
     @Resource
@@ -93,14 +77,14 @@ public class MyBatisServiceImpl implements MyBatisService {
     @Resource
     MappedStatementItemMapper mappedStatementItemMapper;
     @Resource
-    FieldInfoService fieldInfoService;
-    @Resource
     ProjectService projectService;
 
-    // 线程安全
-    DynamicMyBatisConfiguration configuration;
-    MyMapperBuilderAssistant assistant;
-    MapperStatementParser msParser = new MapperStatementParser();
+    /**
+     * key-项目根路径
+     * value-缓存的Mapper实例
+     */
+    Map<String, Configuration> cache = new ConcurrentHashMap<>();
+    DynamicMyBatisSupport mybatis = new DynamicMyBatisSupport();
 
     CaseInsensitiveKeyMap<SqlFormatter> sqlFormatterMap = new CaseInsensitiveKeyMap<>();
 
@@ -113,18 +97,6 @@ public class MyBatisServiceImpl implements MyBatisService {
     }
 
     /**
-     * key-项目根路径
-     * value-缓存的Mapper实例
-     */
-    Map<String, Configuration> cache = new ConcurrentHashMap<>();
-
-    @PostConstruct
-    public void init() {
-        configuration = new DynamicMyBatisConfiguration(sqlSessionFactory.getConfiguration());
-        assistant = new MyMapperBuilderAssistant(configuration, null);
-    }
-
-    /**
      * 适配vxe-table的树形结构，根据id和parentId来确定层级关系
      *
      * @param content   MyBatis Mapper Statement
@@ -133,18 +105,28 @@ public class MyBatisServiceImpl implements MyBatisService {
      */
     @Override
     public List<MsParamNode> getMapperStatementParams(String content, boolean inferType) {
-        ParseResult result = this.parseMapperStatement(content, inferType);
+        ParseResult result = this.parseMapperStatement(content, inferType, false);
         // 根节点不使用
-        TreeNode<ParamMeta> root = result.getRoot();
-        final List<MsParamNode> rows = new LinkedList<>();
+        TreeNode<StatementParam> root = result.getRoot();
+        final List<MsParamNode> rows = new ArrayList<>();
         if (root.hasChildren()) {
             // 每层的父节点
             Map<Integer, MsParamNode> parentNodeMap = new HashMap<>();
             int num = 0;
-            for (TreeNode<ParamMeta> node : root.getChildren()) {
+            for (TreeNode<StatementParam> node : root.getChildren()) {
                 recursive(node, rows, 1, num++, parentNodeMap);
             }
         }
+        // 排序
+        rows.sort((o1, o2) -> {
+            if (o1.hasChildren() && o2.hasChildren()) {
+                return o1.getFieldKey().compareTo(o2.getFieldKey());
+            } else if (o1.hasChildren()) {
+                return -1; // 包含嵌套字段的在前
+            }
+            return o1.getFieldKey().compareTo(o2.getFieldKey());
+        });
+
         return rows;
     }
 
@@ -156,8 +138,8 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param nextNum     单层下一个节点的编号
      * @param level       层级，从1开始
      */
-    private void recursive(TreeNode<ParamMeta> currentNode, List<MsParamNode> rows, int level, int nextNum, Map<Integer, MsParamNode> parentMap) {
-        ParamMeta currentParam = currentNode.getData();
+    private void recursive(TreeNode<StatementParam> currentNode, List<MsParamNode> rows, int level, int nextNum, Map<Integer, MsParamNode> parentMap) {
+        StatementParam currentParam = currentNode.getData();
         MsParamNode parentNode = parentMap.get(level);
         if (parentNode == null) {
             // 当前层未初始化父节点S
@@ -180,8 +162,8 @@ public class MyBatisServiceImpl implements MyBatisService {
             }
         }
 
-        if (parentNode.isLeaf() && currentParam.getMsDataType() != null) {
-            parentNode.setDataType(currentParam.getMsDataType().getQualifier());
+        if (parentNode.isLeaf() && currentParam.getDataType() != null) {
+            parentNode.setDataType(currentParam.getDataType().getQualifier());
         }
         MsParamNode ppNode = parentMap.get(level - 1);
         if (ppNode != null) {
@@ -189,7 +171,7 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
         if (currentNode.hasChildren()) {
             nextNum = 0;
-            for (TreeNode<ParamMeta> child : currentNode.getChildren()) {
+            for (TreeNode<StatementParam> child : currentNode.getChildren()) {
                 recursive(child, rows, level + 1, nextNum++, parentMap);
             }
         }
@@ -201,27 +183,28 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @return 解析结果
      */
     @Override
-    public ParseResult parseMapperStatement(String mapperStatement, boolean inferType) {
-        // 直接获取XML中的节点
-        MappedStatement mappedStatement = parseMappedStatement(mapperStatement);
-        MappedStatementParamExtractor extractor = new DefaultMappedStatementParamExtractor();
-        extractor.apply(mappedStatement);
-        return new ParseResult(tree(extractor.getParams()), mappedStatement);
+    public ParseResult parseMapperStatement(String mapperStatement, boolean inferType, boolean enableCache) {
+        XmlFragmentParseParam xmlFragmentParseParam = new XmlFragmentParseParam();
+        xmlFragmentParseParam.setEnableCache(enableCache);
+        xmlFragmentParseParam.setInferType(inferType);
+        xmlFragmentParseParam.setXmlTagContent(mapperStatement);
+        MappedStatementMetadata msm = mybatis.parseXmlStatement(xmlFragmentParseParam);
+        return new ParseResult(buildParamTree(msm.getParams()), msm.getMappedStatement());
     }
 
     /**
      * @param ognlVar ognl变量列表  变量名称可能带有多级嵌套形式
      * @return 转化成树形结构
      */
-    private TreeNode<ParamMeta> tree(Set<ParamMeta> ognlVar) {
-        TreeNode<ParamMeta> forest = new TreeNode<>(new ParamMeta("root"));
-        TreeNode<ParamMeta> current = forest;
-        for (ParamMeta expression : ognlVar) {
-            TreeNode<ParamMeta> root = current;
+    private TreeNode<StatementParam> buildParamTree(Collection<StatementParam> ognlVar) {
+        TreeNode<StatementParam> forest = new TreeNode<>(new StatementParam("root"));
+        TreeNode<StatementParam> current = forest;
+        for (StatementParam expression : ognlVar) {
+            TreeNode<StatementParam> root = current;
             // 包含嵌套结构则继续向下
             if (expression.getName().indexOf(".") > 0) {
                 for (String data : expression.getName().split("\\.")) {
-                    current = current.addChild(new ParamMeta(data));
+                    current = current.addChild(new StatementParam(data));
                 }
                 current = root;
             } else {
@@ -233,48 +216,13 @@ public class MyBatisServiceImpl implements MyBatisService {
     }
 
     @Override
-    public String getExecutableSql(MappedStatement mappedStatement, BoundSql boundSql, Object parameterObject) {
-        Configuration configuration = sqlSessionFactory.getConfiguration();
-
-        ParameterHandler parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(boundSql.getSql())) {
-                /**
-                 * 这里BoundSql.getSql() 获取的sql是预编译的sql,带占位符
-                 * 后续会经过ParameterHandler处理进行参数填充
-                 */
-                parameterHandler.setParameters(preparedStatement);
-                String sql = preparedStatement.toString();
-                int index = sql.indexOf(":");
-                if (index >= 0) {
-                    sql = sql.substring(index + 1);
-                }
-                sql = sql.replace("\n", "").replace("\t", "");
-                return sql;
-            }
-        } catch (Exception exception) {
-            log.error("获取真实sql出错", exception);
-        }
-        return "解析失败";
-    }
-
-    @Override
     public String getSqlOfMappedStatement(GetSqlParam param) {
         final Map<String, Object> map = getParamMapOfMappedStatements(param);
-        ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true);
+        ParseResult result = this.parseMapperStatement(param.getMapperStatement(), true, false);
         MappedStatement ms = result.getMappedStatement();
-        /**
-         * MappedStatement#getBoundSql每次返回的是不同的对象
-         * @see MappedStatement#getBoundSql(Object)
-         */
-        BoundSql boundSql = ms.getBoundSql(map);
-        String resultSql;
-        if (param.getReal() == 0) {
-            // 预编译sql
-            resultSql = boundSql.getSql();
-        } else {
-            resultSql = this.getExecutableSql(ms, boundSql, map);
-        }
+        MappedStatementSqlBuilder sqlBuilder = mybatis;
+        // 预编译sql
+        String resultSql = param.getReal() == 0 ? sqlBuilder.buildPreparedSql(ms, map) : sqlBuilder.buildExecutableSql(ms, map);
         if (param.needFormatSql()) {
             SqlFormatter sqlFormatter = sqlFormatterMap.getOrDefault(param.getFormatter(), SqlFormatter.NONE);
             resultSql = sqlFormatter.format(param.getDialect(), resultSql);
@@ -283,50 +231,10 @@ public class MyBatisServiceImpl implements MyBatisService {
     }
 
     /**
-     * 将字符串的statement解析为MappedStatement对象
-     *
-     * @param statement xml 包含<select/> <delete/> <update/> <insert/> 等标签
-     * @return MappedStatement实例
-     */
-    @Override
-    public MappedStatement parseMappedStatement(String statement) {
-        MissingCompatiableStatementBuilder statementParser = new MissingCompatiableStatementBuilder(configuration, msParser.getNode(statement), assistant);
-        /**
-         * 解析结果会放到 Configuration里
-         * @see DynamicMyBatisConfiguration#addMappedStatement(MappedStatement)
-         */
-        return statementParser.parseMappedStatement();
-    }
-
-    /**
-     * 获取语句中的所有参数元数据
-     *
-     * @param mappedStatement mappedStatement
-     * @return 参数元数据列表
-     */
-    @Override
-    public List<ParamMeta> getParamMetadata(MappedStatement mappedStatement) {
-        SqlSource sqlSource = mappedStatement.getSqlSource();
-        Configuration configuration = new Configuration();
-        DynamicContext visitor = new DynamicContextVisitor(configuration, new HashMap<>());
-        if (sqlSource instanceof DynamicSqlSource dss) {
-            SqlNode rootNode = ReflectionUtils.getTypedValue(dss, "rootSqlNode", null);
-            rootNode.apply(visitor);
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<ParamMeta> getParamMetadata(String statement) {
-        MappedStatement mappedStatement = parseMappedStatement(statement);
-        return getParamMetadata(mappedStatement);
-    }
-
-    /**
      * 填充Mapper Statement参数
      *
      * @param param 参数
-     * @return 形成Map对象形式的参数
+     * @return 形成Map对象形式的参数, 嵌套Map形式
      */
     private Map<String, Object> getParamMapOfMappedStatements(GetSqlParam param) {
         List<TreeNode<MsParamNode>> treeNodes = buildParamNodeTree(param.getMsParams());
@@ -366,9 +274,9 @@ public class MyBatisServiceImpl implements MyBatisService {
         for (MsParamNode curNode : params) {
             // 父节点为null则默认为-1
             if (curNode.isLeaf()) {
-                Integer parentId = curNode.getParentKey();
+                Integer parentId = curNode.getParentId();
                 if (parentId == null) {
-                    parentNodeMap.put(curNode.getKey(), new TreeNode<>(curNode));
+                    parentNodeMap.put(curNode.getId(), new TreeNode<>(curNode));
                 } else {
                     if (parentNodeMap.containsKey(parentId)) {
                         parentNodeMap.get(parentId).addChild(curNode);
@@ -378,7 +286,7 @@ public class MyBatisServiceImpl implements MyBatisService {
                 }
             } else {
                 // 父节点
-                final Integer nodeId = curNode.getKey();
+                final Integer nodeId = curNode.getId();
                 if (parentNodeMap.containsKey(nodeId)) {
                     TreeNode<MsParamNode> treeNode = parentNodeMap.get(nodeId);
                     if (treeNode != null) {
@@ -424,7 +332,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @return 对应类型 {@code paramValueType} 的值
      */
     private Object parseLiteralValue(String literalValue, MSParamDataType paramValueType) {
-        Object val = null;
+        Object val;
         switch (paramValueType) {
             case NUMERIC -> val = Long.parseLong(literalValue);
             case COLLECTION -> {
@@ -655,7 +563,7 @@ public class MyBatisServiceImpl implements MyBatisService {
      * @param mapperFile  XxxMapper.xml文件
      * @return MappedStatementItem信息
      */
-    public List<MappedStatementItem> parseMappedStatements(File projectRoot, File mapperFile) {
+    private List<MappedStatementItem> parseMappedStatements(File projectRoot, File mapperFile) {
         List<MappedStatementItem> items = new ArrayList<>();
         try (InputStream inputStream = FileUtils.openInputStream(mapperFile)) {
             /**
@@ -810,22 +718,6 @@ public class MyBatisServiceImpl implements MyBatisService {
         }
 
         return items;
-    }
-
-    /**
-     * MyBatis使用XML语法，转义字符如下
-     * &lt;<  小于号；
-     * &gt;> 大于号；
-     * &amp; & 和 ；
-     * &apos;  ‘’单引号；
-     * &quot; “”  双引号；
-     *
-     * @param content XML内容
-     * @return 未转义的字符
-     */
-    public String toRawUnEscapedContent(String content) {
-        content = content.replace("<", XMLUtils.wrapWithCDATA("<"));
-        return content;
     }
 
     @Override

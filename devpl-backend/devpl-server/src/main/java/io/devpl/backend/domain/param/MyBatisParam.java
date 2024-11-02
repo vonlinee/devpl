@@ -17,6 +17,8 @@ public class MyBatisParam {
      */
     private Boolean enableTypeInference;
 
+    private Boolean enableCache;
+
     /**
      * 根据参数名称推断类型
      */
@@ -30,5 +32,9 @@ public class MyBatisParam {
 
     public boolean isTypeInferEnabled() {
         return enableTypeInference == null || enableTypeInference;
+    }
+
+    public boolean isCacheEnabled() {
+        return enableCache == null || enableCache;
     }
 }

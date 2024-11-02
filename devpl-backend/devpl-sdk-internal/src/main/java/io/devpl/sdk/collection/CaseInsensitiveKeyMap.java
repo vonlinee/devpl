@@ -1,5 +1,7 @@
 package io.devpl.sdk.collection;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
@@ -49,7 +51,7 @@ public class CaseInsensitiveKeyMap<V> extends AbstractMap<String, V> {
     }
 
     @Override
-    public Set<Entry<String, V>> entrySet() {
+    public @NotNull Set<Entry<String, V>> entrySet() {
         return new EntrySet<>(map.entrySet());
     }
 
@@ -62,7 +64,7 @@ public class CaseInsensitiveKeyMap<V> extends AbstractMap<String, V> {
         }
 
         @Override
-        public Iterator<Entry<String, V>> iterator() {
+        public @NotNull Iterator<Entry<String, V>> iterator() {
             return new EntryIterator<>(entrySet.iterator());
         }
 
@@ -72,13 +74,7 @@ public class CaseInsensitiveKeyMap<V> extends AbstractMap<String, V> {
         }
     }
 
-    private static class EntryIterator<V> implements Iterator<Entry<String, V>> {
-
-        private final Iterator<Entry<Key, V>> iterator;
-
-        EntryIterator(Iterator<Entry<Key, V>> iterator) {
-            this.iterator = iterator;
-        }
+    private record EntryIterator<V>(Iterator<Entry<Key, V>> iterator) implements Iterator<Entry<String, V>> {
 
         @Override
         public boolean hasNext() {
@@ -97,15 +93,7 @@ public class CaseInsensitiveKeyMap<V> extends AbstractMap<String, V> {
         }
     }
 
-    private static class EntryImpl<V> implements Entry<String, V> {
-
-        private final String key;
-        private final V value;
-
-        EntryImpl(String key, V value) {
-            this.key = key;
-            this.value = value;
-        }
+    private record EntryImpl<V>(String key, V value) implements Entry<String, V> {
 
         @Override
         public String getKey() {
