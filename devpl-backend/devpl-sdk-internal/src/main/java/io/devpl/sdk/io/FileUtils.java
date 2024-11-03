@@ -1845,6 +1845,32 @@ public abstract class FileUtils {
         }
     }
 
+    public static List<Path> findPaths(Path start, PathFilter pathFilter) {
+        return findPaths(start, -1, pathFilter);
+    }
+
+    public static List<Path> findPaths(Path start, int maxDepth, PathFilter pathFilter) {
+        final List<Path> paths = new ArrayList<>();
+        if (null == start || !Files.exists(start)) {
+            return paths;
+        } else if (!isDirectory(start)) {
+            if (null != pathFilter && pathFilter.accept(start)) {
+                paths.add(start);
+            }
+            return paths;
+        }
+        walkFiles(start, maxDepth, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) {
+                if (null == pathFilter || pathFilter.accept(path)) {
+                    paths.add(path);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return paths;
+    }
+
     /**
      * 递归遍历目录以及子目录中的所有文件<br>
      * 如果提供file为文件，直接返回过滤结果

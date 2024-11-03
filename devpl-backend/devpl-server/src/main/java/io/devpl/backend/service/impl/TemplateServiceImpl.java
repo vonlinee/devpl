@@ -26,7 +26,6 @@ import io.devpl.sdk.annotations.Readonly;
 import io.devpl.sdk.io.FileUtils;
 import io.devpl.sdk.io.FilenameUtils;
 import io.devpl.sdk.io.IOUtils;
-import io.devpl.sdk.lang.RuntimeIOException;
 import io.devpl.sdk.util.CollectionUtils;
 import io.devpl.sdk.util.IdUtils;
 import io.devpl.sdk.util.ResourceUtils;
@@ -40,8 +39,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -263,8 +263,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             if (!FileUtils.copyDirectories(templateDir, targetLocation)) {
                 log.error("模板迁移至{}失败，复制文件失败", targetLocation);
             }
-
-            updateTemplateOfDB(findTemplateFiles(targetLocation));
+            List<Path> templateFiles = FileUtils.findPaths(targetLocation, Files::isRegularFile);
+            updateTemplateOfDB(templateFiles);
         } catch (Exception e) {
             log.error("模板迁移失败", e);
         }
@@ -331,38 +331,7 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
             List<TemplateInfo> templateInfos = initTemplateInfoList(templateFilePaths);
             sb.append("保存").append(this.saveBatch(templateInfos) ? templateInfos.size() : 0).append("个");
         }
-        log.info("模板迁移结果: {}", sb);
-    }
-
-    public List<Path> findTemplateFiles(Path start) {
-        List<Path> templateFilePaths = new ArrayList<>();
-        try {
-            Files.walkFileTree(start, new FileVisitor<>() {
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                    templateFilePaths.add(file);
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult visitFileFailed(Path file, IOException exc) {
-                    return FileVisitResult.CONTINUE;
-                }
-
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeIOException(e);
-        }
-        return templateFilePaths;
+        log.debug("模板迁移结果: {}", sb);
     }
 
     @Nullable
@@ -382,6 +351,8 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
         templateInfo.setTemplateName(FileUtils.getFileName(templateFile));
         templateInfo.setDeleted(false);
         templateInfo.setTemplateFilePath(formatTemplatePath(templateFile.toAbsolutePath().toString()));
+        // 读取模板文件内容
+        templateInfo.setContent(FileUtils.readStringQuietly(new File(templateInfo.getTemplateFilePath())));
         templateInfo.setType(1);
         templateInfo.setUpdateTime(LocalDateTime.now());
         templateInfo.setRemark("");
@@ -467,8 +438,6 @@ public class TemplateServiceImpl extends ServiceImpl<TemplateInfoMapper, Templat
      */
     @Override
     public List<TemplateParam> parseTemplateVariables(Long templateId) {
-
-
         return null;
     }
 }

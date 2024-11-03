@@ -4,6 +4,7 @@ import io.devpl.codegen.db.query.AbstractQueryDatabaseMetadataReader;
 import io.devpl.codegen.generator.config.JdbcConfiguration;
 import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.apache.ddlutils.jdbc.meta.DatabaseMetadataReader;
+import org.apache.ddlutils.platform.BuiltinDatabaseType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
