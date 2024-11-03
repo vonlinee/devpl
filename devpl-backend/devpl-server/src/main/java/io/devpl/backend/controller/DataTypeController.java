@@ -15,6 +15,7 @@ import jakarta.annotation.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,8 +68,8 @@ public class DataTypeController {
      * @return 数据类型信息
      */
     @DeleteMapping("/delete")
-    public Result<Boolean> deleteDataType(Long typeId) {
-        return Result.ok(dataTypeService.removeById(typeId));
+    public boolean deleteDataType(@RequestBody Long[] typeIds) {
+        return dataTypeService.removeByIds(Arrays.asList(typeIds));
     }
 
     /**
