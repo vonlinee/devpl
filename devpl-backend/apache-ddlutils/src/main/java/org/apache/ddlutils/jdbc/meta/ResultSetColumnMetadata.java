@@ -15,7 +15,7 @@ public class ResultSetColumnMetadata implements Serializable {
     /**
      * 处于结果集的第几列
      */
-    private int columnIndex;
+    private int columnIndex = -1;
 
     /**
      * 列名
@@ -75,6 +75,13 @@ public class ResultSetColumnMetadata implements Serializable {
      * @see java.sql.ResultSetMetaData#getSchemaName(int)
      */
     private String schemaName;
+
+    public ResultSetColumnMetadata() {
+    }
+
+    public ResultSetColumnMetadata(int columnIndex) {
+        this.columnIndex = columnIndex;
+    }
 
     public String getColumnName() {
         return columnName;
@@ -170,6 +177,10 @@ public class ResultSetColumnMetadata implements Serializable {
 
     public void setColumnIndex(int columnIndex) {
         this.columnIndex = columnIndex;
+    }
+
+    public void initialize(ResultSetMetaData resultSetMetaData) throws SQLException {
+        this.initialize(resultSetMetaData, this.columnIndex);
     }
 
     /**

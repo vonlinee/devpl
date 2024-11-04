@@ -42,13 +42,13 @@ public class OrderedSet<E> implements Set<E>, List<E>, RandomAccess {
 
     @NotNull
     @Override
-    public Object[] toArray() {
+    public Object @NotNull [] toArray() {
         return elements.toArray();
     }
 
     @NotNull
     @Override
-    public <T> T[] toArray(@NotNull T[] a) {
+    public <T> T @NotNull [] toArray(@NotNull T[] a) {
         return elements.toArray(a);
     }
 

@@ -72,7 +72,7 @@ public class JdbcDriverManagerImpl implements JdbcDriverManager, InitializingBea
 
     @Override
     public boolean isRegistered(String driverClassName) {
-        DriverType driver = BuiltinDriverType.findByDriverClassName(driverClassName);
+        BuiltinDriverType driver = BuiltinDriverType.findByDriverClassName(driverClassName);
         if (driver == null) {
             return false;
         }

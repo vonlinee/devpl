@@ -88,18 +88,8 @@ public final class JdbcUtils {
         final int colCount = metaData.getColumnCount();
         List<ResultSetColumnMetadata> list = new ArrayList<>(colCount);
         for (int i = 1; i < colCount + 1; i++) {
-            ResultSetColumnMetadata rsc = new ResultSetColumnMetadata();
-            rsc.setColumnName(metaData.getColumnName(i));
-            rsc.setColumnLabel(metaData.getColumnLabel(i));
-            rsc.setColumnClassName(metaData.getColumnClassName(i));
-            rsc.setColumnType(metaData.getColumnType(i));
-            rsc.setTableName(metaData.getTableName(i));
-            rsc.setCatalogName(metaData.getCatalogName(i));
-            rsc.setColumnDisplaySize(metaData.getColumnDisplaySize(i));
-            rsc.setColumnTypeName(metaData.getColumnTypeName(i));
-            rsc.setPrecision(metaData.getPrecision(i));
-            rsc.setScale(metaData.getScale(i));
-            rsc.setSchemaName(metaData.getSchemaName(i));
+            ResultSetColumnMetadata rsc = new ResultSetColumnMetadata(i);
+            rsc.initialize(metaData);
             list.add(rsc);
         }
         return list;

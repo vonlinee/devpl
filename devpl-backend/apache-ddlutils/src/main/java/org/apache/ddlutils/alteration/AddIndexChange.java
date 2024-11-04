@@ -34,12 +34,10 @@ public class AddIndexChange extends TableChangeBase {
     @Override
     public void apply(Database model, boolean caseSensitive) {
         Table table = findChangedTable(model, caseSensitive);
-
         table.addIndex(_newIndex);
         for (int idx = 0; idx < _newIndex.getColumnCount(); idx++) {
             IndexColumn idxColumn = _newIndex.getColumn(idx);
             Column tmpColumn = idxColumn.getColumn();
-
             idxColumn.setColumn(table.findColumn(tmpColumn.getName(), caseSensitive));
         }
     }

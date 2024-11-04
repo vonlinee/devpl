@@ -496,8 +496,8 @@ public final class JdbcUtils {
         final int colCount = metaData.getColumnCount();
         List<ResultSetColumnMetadata> list = new ArrayList<>(colCount);
         for (int i = 1; i < colCount + 1; i++) {
-            ResultSetColumnMetadata rscmd = new ResultSetColumnMetadata();
-            rscmd.initialize(metaData, i);
+            ResultSetColumnMetadata rscmd = new ResultSetColumnMetadata(i);
+            rscmd.initialize(metaData);
             list.add(rscmd);
         }
         return list;
