@@ -72,7 +72,7 @@ public interface DataType {
      * @param error        存放错误信息
      * @return 字面值是否合法
      */
-    default boolean isValid(String literalValue, StringBuilder error) {
+    default boolean matches(String literalValue, StringBuilder error) {
         return true;
     }
 
@@ -94,16 +94,6 @@ public interface DataType {
      * @return java对象
      */
     @Nullable
-    default Object serialize(String literalValue, StringBuilder sb) {
-        return null;
-    }
-
-    /**
-     * 将字符串转换为该数据类型的一个对象
-     *
-     * @param literalValue 字符串表示的该数据类型的一个对象
-     * @return 字符串对应的对象
-     */
     default Object deserialize(String literalValue, StringBuilder sb) {
         return null;
     }
@@ -111,11 +101,11 @@ public interface DataType {
     /**
      * 将字面值
      *
-     * @param value 字面值
+     * @param literalValue 字面值
      * @return 处理过的字面值
      */
-    default String normalize(String value) {
-        return value;
+    default String normalize(String literalValue) {
+        return literalValue;
     }
 
     /**

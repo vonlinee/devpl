@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatterBuilder;
 /**
  * 日期时间工具类
  */
-public class DateTimes {
+public class DateTimeUtils {
 
     public static final String DT_FORMAT_YMDHMS = "yy-MM-dd HH:mm:ss";
     public static final String DT_FORMAT_YMD = "yy-MM-dd";

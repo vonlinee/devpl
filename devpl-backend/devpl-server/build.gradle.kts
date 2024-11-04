@@ -6,6 +6,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.2"
     kotlin("jvm") version "1.9.24"
     kotlin("plugin.spring") version "1.9.24"
+
+    id("war")
 }
 
 dependencies {
@@ -133,5 +135,9 @@ configurations {
     configureEach {
         exclude("commons-logging", "commons-logging")
     }
+}
+
+tasks.bootWar {
+    archiveFileName = "devpl.war"
 }
 

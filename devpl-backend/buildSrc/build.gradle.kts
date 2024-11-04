@@ -13,10 +13,14 @@ tasks.wrapper {
     gradleVersion = "8.4"
 }
 
-allprojects {
+subprojects {
 
     tasks.compileJava {
         options.compilerArgs.add("'-Xlint:-deprecation'")
         options.compilerArgs.add("'-Xlint:-unchecked'")
+    }
+
+    tasks.javadoc {
+        options.encoding = Charsets.UTF_8.name()
     }
 }

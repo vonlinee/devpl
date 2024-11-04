@@ -8,6 +8,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.*;
 import org.apache.ddlutils.jdbc.meta.ColumnMetadata;
 import org.apache.ddlutils.jdbc.meta.TableMetadata;
+import org.apache.ddlutils.platform.BuiltinDriverType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

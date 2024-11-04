@@ -20,13 +20,26 @@ public enum MSParamDataType implements DataType {
      */
     NUMERIC(1, "Numeric") {
         @Override
-        public boolean isValid(String literalValue, StringBuilder error) {
-            return super.isValid(literalValue, error);
+        public boolean matches(String literalValue, StringBuilder error) {
+            literalValue = literalValue.trim();
+            // 支持带符号的小数和科学计数法，例如:
+            // "123", "-123", "+123", "0", "12.34", "-12.34", "3.14e10", "2E+5",
+            // "-2e-3", "0.001", "abc", "1.2.3", "12e3.4", "2.3E-4"
+            // ^：表示字符串的开始。
+            // [+-]?：表示可选的正号或负号。
+            // \\d+：表示一个或多个数字。
+            // (\\.\\d+)?：表示可选的小数部分，. 表示小数点，后面必须跟一个或多个数字
+            // ([eE][+-]?\\d+)?：表示可选的科学计数法部分
+            //      [eE]：表示科学计数法的 e 或 E
+            //      [+-]?：表示可选的正号或负号
+            //      \\d+：表示一个或多个数字
+            // $：表示字符串的结束
+            return "^[+-]?\\d+(\\.\\d+)?([eE][+-]?\\d+)?$".matches(literalValue);
         }
 
         @Nullable
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             if (literalValue == null) {
                 return null;
             }
@@ -38,12 +51,6 @@ public enum MSParamDataType implements DataType {
      * 字符串
      */
     STRING(2, "String") {
-        @Nullable
-        @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
-            return literalValue;
-        }
-
         @Override
         public String normalize(String value) {
             return String.format("'%s'", value);
@@ -62,11 +69,10 @@ public enum MSParamDataType implements DataType {
             }
             return value;
         }
-    },
-    DATE(3, "Date") {
+    }, DATE(3, "Date") {
         @Nullable
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
@@ -74,11 +80,10 @@ public enum MSParamDataType implements DataType {
         public String normalize(String value) {
             return String.format("'%s'", value);
         }
-    },
-    TIME(4, "Time") {
+    }, TIME(4, "Time") {
         @Nullable
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
@@ -86,11 +91,10 @@ public enum MSParamDataType implements DataType {
         public String normalize(String value) {
             return String.format("'%s'", value);
         }
-    },
-    TIMESTAMP(5, "Timestamp") {
+    }, TIMESTAMP(5, "Timestamp") {
         @Nullable
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             return literalValue;
         }
 
@@ -98,14 +102,14 @@ public enum MSParamDataType implements DataType {
         public String normalize(String value) {
             return String.format("'%s'", value);
         }
-    },
-    BOOLEAN(6, "Boolean") {
+    }, BOOLEAN(6, "Boolean") {
         @Nullable
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             if (literalValue == null || literalValue.isEmpty()) {
                 return null;
             }
+            literalValue = literalValue.trim();
             if ("true".equals(literalValue)) {
                 return true;
             }
@@ -137,7 +141,7 @@ public enum MSParamDataType implements DataType {
      */
     NUMBER_ARRAY(8, "NumberArray") {
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             if (literalValue == null || literalValue.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -165,7 +169,7 @@ public enum MSParamDataType implements DataType {
      */
     STRING_ARRAY(9, "StringArray") {
         @Override
-        public Object serialize(String literalValue, StringBuilder sb) {
+        public Object deserialize(String literalValue, StringBuilder sb) {
             if (literalValue == null) {
                 return Collections.emptyList();
             }
@@ -188,8 +192,7 @@ public enum MSParamDataType implements DataType {
         public DataType getComponentType() {
             return MSParamDataType.STRING;
         }
-    },
-    COLLECTION(10, "Collection") {
+    }, COLLECTION(10, "Collection") {
         @Override
         public boolean isArray() {
             return true;
@@ -202,8 +205,7 @@ public enum MSParamDataType implements DataType {
             }
             return value.replaceAll(" ", ",");
         }
-    },
-    NULL(-1, "Null");
+    }, NULL(-1, "Null");
 
     @Getter
     private final int type;

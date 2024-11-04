@@ -4,7 +4,6 @@ import io.devpl.sdk.collection.ConcurrentReferenceHashMap;
 import io.devpl.sdk.validation.Assert;
 
 import java.lang.reflect.*;
-import java.util.Arrays;
 import java.util.*;
 
 /**
@@ -12,14 +11,6 @@ import java.util.*;
  * reflection exceptions.
  *
  * <p>Only intended for internal use.
- *
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Rod Johnson
- * @author Costin Leau
- * @author Sam Brannen
- * @author Chris Beams
- * @since 1.2.2
  */
 public abstract class ReflectionUtils {
 
@@ -183,7 +174,7 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Constructor<?> ctor) {
         if ((!Modifier.isPublic(ctor.getModifiers()) ||
-            !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) && !ctor.isAccessible()) {
+             !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) && !ctor.isAccessible()) {
             ctor.setAccessible(true);
         }
     }
@@ -233,7 +224,7 @@ public abstract class ReflectionUtils {
 
     private static boolean hasSameParams(Method method, Class<?>[] paramTypes) {
         return (paramTypes.length == method.getParameterCount() &&
-            Arrays.equals(paramTypes, method.getParameterTypes()));
+                Arrays.equals(paramTypes, method.getParameterTypes()));
     }
 
     /**
@@ -467,7 +458,7 @@ public abstract class ReflectionUtils {
                 declaredMethodsCache.put(clazz, (result.length == 0 ? EMPTY_METHOD_ARRAY : result));
             } catch (Throwable ex) {
                 throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +
-                    "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
+                                                "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
             }
         }
         return (result.length == 0 || !defensive) ? result : result.clone();
@@ -529,7 +520,7 @@ public abstract class ReflectionUtils {
      */
     public static boolean isObjectMethod(Method method) {
         return (method != null && (method.getDeclaringClass() == Object.class ||
-            isEqualsMethod(method) || isHashCodeMethod(method) || isToStringMethod(method)));
+                                   isEqualsMethod(method) || isHashCodeMethod(method) || isToStringMethod(method)));
     }
 
     /**
@@ -562,7 +553,7 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Method method) {
         if ((!Modifier.isPublic(method.getModifiers()) ||
-            !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
+             !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
             method.setAccessible(true);
         }
     }
@@ -728,7 +719,7 @@ public abstract class ReflectionUtils {
                 declaredFieldsCache.put(clazz, (result.length == 0 ? EMPTY_FIELD_ARRAY : result));
             } catch (Throwable ex) {
                 throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +
-                    "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
+                                                "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
             }
         }
         return result;
@@ -746,7 +737,7 @@ public abstract class ReflectionUtils {
         Assert.notNull(dest, "Destination for field copy cannot be null");
         if (!src.getClass().isAssignableFrom(dest.getClass())) {
             throw new IllegalArgumentException("Destination class [" + dest.getClass().getName() +
-                "] must be same or subclass as source class [" + src.getClass().getName() + "]");
+                                               "] must be same or subclass as source class [" + src.getClass().getName() + "]");
         }
         doWithFields(src.getClass(), field -> {
             makeAccessible(field);
@@ -777,13 +768,11 @@ public abstract class ReflectionUtils {
     @SuppressWarnings("deprecation")  // on JDK 9
     public static void makeAccessible(Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) ||
-            !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
-            Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+             !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
+             Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
             field.setAccessible(true);
         }
     }
-
-    // Cache handling
 
     /**
      * Clear the internal method/field cache.
@@ -793,93 +782,6 @@ public abstract class ReflectionUtils {
     public static void clearCache() {
         declaredMethodsCache.clear();
         declaredFieldsCache.clear();
-    }
-
-    /**
-     * Action to take on each method.
-     */
-    @FunctionalInterface
-    public interface MethodCallback {
-
-        /**
-         * Perform an operation using the given method.
-         *
-         * @param method the method to operate on
-         */
-        void doWith(Method method) throws IllegalArgumentException, IllegalAccessException;
-    }
-
-
-    /**
-     * Callback optionally used to filter methods to be operated on by a method callback.
-     */
-    @FunctionalInterface
-    public interface MethodFilter {
-
-        /**
-         * Determine whether the given method matches.
-         *
-         * @param method the method to check
-         */
-        boolean matches(Method method);
-
-        /**
-         * Create a composite filter based on this filter <em>and</em> the provided filter.
-         * <p>If this filter does not match, the next filter will not be applied.
-         *
-         * @param next the next {@code MethodFilter}
-         * @return a composite {@code MethodFilter}
-         * @throws IllegalArgumentException if the MethodFilter argument is {@code null}
-         * @since 5.3.2
-         */
-        default MethodFilter and(MethodFilter next) {
-            Assert.notNull(next, "Next MethodFilter must not be null");
-            return method -> matches(method) && next.matches(method);
-        }
-    }
-
-
-    /**
-     * Callback interface invoked on each field in the hierarchy.
-     */
-    @FunctionalInterface
-    public interface FieldCallback {
-
-        /**
-         * Perform an operation using the given field.
-         *
-         * @param field the field to operate on
-         */
-        void doWith(Field field) throws IllegalArgumentException, IllegalAccessException;
-    }
-
-
-    /**
-     * Callback optionally used to filter fields to be operated on by a field callback.
-     */
-    @FunctionalInterface
-    public interface FieldFilter {
-
-        /**
-         * Determine whether the given field matches.
-         *
-         * @param field the field to check
-         */
-        boolean matches(Field field);
-
-        /**
-         * Create a composite filter based on this filter <em>and</em> the provided filter.
-         * <p>If this filter does not match, the next filter will not be applied.
-         *
-         * @param next the next {@code FieldFilter}
-         * @return a composite {@code FieldFilter}
-         * @throws IllegalArgumentException if the FieldFilter argument is {@code null}
-         * @since 5.3.2
-         */
-        default FieldFilter and(FieldFilter next) {
-            Assert.notNull(next, "Next FieldFilter must not be null");
-            return field -> matches(field) && next.matches(field);
-        }
     }
 
     /**
